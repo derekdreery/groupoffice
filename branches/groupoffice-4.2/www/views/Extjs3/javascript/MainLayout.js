@@ -127,19 +127,20 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	 * @see fireReady
 	 */
 	initLogoutTimer: function(seconds) { 
-		if(seconds==0) 
-			return;
-		var ms = seconds*1000;
-		var delay = (function(){
-			var timer = 0;
-			return function(ms){
-			  clearTimeout (timer);
-			  timer = setTimeout(function() { window.location = GO.url('core/auth/logout'); }, ms);
-			};
-		  })();
-		window.addEventListener('keyup', function() {delay(ms)});
-		window.addEventListener('click', function() {delay(ms)});
-		delay(ms);
+		//Doesn't work in IE
+//		if(seconds==0) 
+//			return;
+//		var ms = seconds*1000;
+//		var delay = (function(){
+//			var timer = 0;
+//			return function(ms){
+//			  clearTimeout (timer);
+//			  timer = setTimeout(function() { window.location = GO.url('core/auth/logout'); }, ms);
+//			};
+//		  })();
+//		Ext.EventManager.addListener(window,'keyup', function() {delay(ms)});
+//		Ext.EventManager.addListener(window,'click', function() {delay(ms)});
+//		delay(ms);
 	},
 
 	getOpenModules : function(){
