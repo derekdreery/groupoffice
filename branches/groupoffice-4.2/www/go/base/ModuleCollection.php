@@ -71,6 +71,10 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	 * @return boolean
 	 */
 	public function isAvailable($moduleId){
+		
+		if(!$this->_isAllowed($moduleId))
+			return false;
+		
 		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'modules/'.$moduleId);
 		if($folder->exists()){
 			$ucfirst = ucfirst($folder->name());
