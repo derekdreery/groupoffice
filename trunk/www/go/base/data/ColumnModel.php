@@ -185,9 +185,10 @@ class GO_Base_Data_ColumnModel {
 		foreach($this->_summarizedColumns as $col => $config) {
 			$field = $config['fieldName'];
 			$type = $config['type'];
-			$result.="$type($field) AS $field, ";
 			if($col!=$field)
 				$result.="$type($field) AS $col, ";
+			else
+				$result.="$type($field) AS $field, ";
 		}
 		return substr($result, 0, -2);
 	}
