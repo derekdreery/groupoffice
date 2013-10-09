@@ -1012,7 +1012,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //			$p->add('encoding','b');
 //			$e->add($p);	
 			
-			$e->add('photo', encode_base64($this->getPhotoFile()->getContents(), ''),array('type'=>'JPEG','encoding'=>'b'));	
+			$e->add('photo', $this->getPhotoFile()->getContents(),array('type'=>'JPEG','encoding'=>'b'));	
 		}  
 		
 //		$propModels = $this->vcardProperties->fetchAll(PDO::FETCH_ASSOC);
