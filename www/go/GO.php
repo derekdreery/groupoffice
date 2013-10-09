@@ -507,8 +507,34 @@ class GO{
 		GO::session();
 		
 		//set local to utf-8 so functions will behave consistently
-		if ( !empty(GO::config()->locale_all) )
+		if ( !empty(GO::config()->locale_all) ){
 			setlocale(LC_ALL, GO::config()->locale_all);
+		}else{
+			
+			if(!isset(GO::session()->values['locale_all'])){
+				$currentlocale = GO::session()->values['locale_all']= setlocale(LC_ALL, "0");
+
+				if(stripos($currentlocale,'utf')==false){
+					@exec('locale -a', $output);
+//					var_dump($output);
+					if(is_array($output)){
+						foreach($output as $locale){
+							if(stripos($locale,'utf')!==false){
+								setlocale(LC_ALL, $locale);
+
+								GO::session()->values['locale_all']=$locale;
+								break;
+							}
+						}
+					}
+					GO::debug("WARNING: could not find UTF8 locale");
+					
+				}
+			}
+//			exit(GO::session()->values['locale_all']);
+			setlocale(LC_ALL, GO::session()->values['locale_all']);
+
+		}
 		
 		if(!empty(GO::session()->values['debug']))
 			GO::config()->debug=true;
