@@ -407,10 +407,14 @@ GO.customfields.dataTypes={
 			var fieldLabel = customfield.name;
 			if(!GO.util.empty(customfield.required))
 				fieldLabel+='*';
-
+			
+			if(customfield.max_length){
+				config.maxLength=customfield.max_length;
+			}
+			
 			return Ext.apply({
 				xtype:'textfield',
-				name: customfield.dataname,
+				name: customfield.dataname,				
 				fieldLabel: fieldLabel,
 				anchor:'-20',
 				allowBlank: GO.util.empty(customfield.required)

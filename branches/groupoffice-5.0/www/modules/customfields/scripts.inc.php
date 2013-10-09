@@ -102,7 +102,7 @@ foreach($moduleObjects as $moduleObject)
 						$GO_SCRIPTS_JS .= 'GO.customfields.columns["'.$model->extendsModel().'"].push({'.
 								'header: "'.GO_Base_Util_String::escape_javascript($field['name']).'",'.
 								'dataIndex: "'.$field['dataname'].'" ,'.
-								'datatype:"'.$field['datatype'].'", '.
+								'datatype:"'.$field['datatype'].'", '.								
 								'align:"'.$align.'", '.
 								'sortable:true,'.
 								'id: "'.$field['dataname'].'",'.
