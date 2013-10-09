@@ -994,7 +994,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			if (!empty($select) && substr($select,0,1)!=',')
 				$select = ','.$select;
 						
-			if (GO::modules()->customfields)
+			if (GO::modules()->customfields && $cfRecord)
 				$select = 't.*,cf.*'.$select;
 			else
 				$select = 't.*'.$select;
