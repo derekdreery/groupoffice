@@ -22,6 +22,7 @@
 - Fixes of 4.2.22
 
 17-09-2013 5.0.7
+- Disabled custom field will not be displayed in the display panel on not enabled categories
 - Added holidays module
 
 17-09-2013 5.0.6
