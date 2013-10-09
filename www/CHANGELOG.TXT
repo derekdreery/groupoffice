@@ -1,3 +1,4 @@
+- Special statusses of the billing module will be loaden for the current book when the Book dialog opens
 - AbstractModelController::actionExport() will only SELECT custom field column if there is a customfield record available
 - Contact pictures of VCards are working with CardDav sync (were base64 encoded twice)
 
