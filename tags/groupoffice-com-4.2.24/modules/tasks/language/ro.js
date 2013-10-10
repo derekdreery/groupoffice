@@ -1,0 +1,32 @@
+﻿
+
+GO.tasks.lang.task = 'Activitate';
+GO.tasks.lang.noTask = 'Nu sunt activităţi de vizualizat';
+GO.tasks.lang.tasks = 'Activitate';
+GO.tasks.lang.addTask = 'Adaugă o activitate...';
+GO.tasks.lang.tasklist = 'Listă activităţi'
+GO.tasks.lang.tasklists = 'Liste activităţi';
+GO.tasks.lang.showCompletedTasks = 'Arată activităţile completate';
+GO.tasks.lang.filter = 'Filtrează';
+GO.tasks.lang.dueDate = 'Data de scădere';
+GO.tasks.lang.dueAt = 'Scade în ';
+GO.tasks.lang.needsAction = 'Necesită intervenţie';
+GO.tasks.lang.accepted = 'Acceptat';
+GO.tasks.lang.declined = 'Refuzat';
+GO.tasks.lang.tentative = 'Tentativă';
+GO.tasks.lang.delegated = 'Delegat';
+GO.tasks.lang.completed = 'Complet';
+GO.tasks.lang.inProcess = 'In realizare';
+GO.tasks.lang.repeatEvery = 'Repetă de fiecare dată';
+GO.tasks.lang.atDays = 'La ziua';
+GO.tasks.lang.repeatUntil = 'Repetă până când';
+GO.tasks.lang.repeatForever = 'repetă pentru totdeauna';
+GO.tasks.lang.recurrence = 'Repetarea';
+GO.tasks.lang.reminder = 'Promemoria';
+GO.tasks.lang.options = 'Opţiuni';
+GO.tasks.lang.createLink = 'Crează o legătură';
+GO.tasks.lang.startsAt='Începe să';
+GO.tasks.lang.showInactiveTasks='Arată activităţile inactive';
+GO.tasks.lang.remindMe= 'Promemoria';
+GO.tasks.lang.scheduleCall='Planifică telefon';
+GO.tasks.lang.call='Telefon';
