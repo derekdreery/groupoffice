@@ -129,7 +129,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 
 			$this->_daysDone = 0;
 			$weekCounter = 0;
-
+			$yBefore = $this->getY();
 			$tableLeftMargin = $this->lMargin;
 			if (!empty($calendar_name)) {
 				//$this->SetTextColor(125,165, 65);
@@ -137,14 +137,13 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 				$this->MultiCell($nameColWidth, $this->cell_height, $calendar_name, 0, 'L');
 				$tableLeftMargin+=$nameColWidth;
 				$this->setDefaultTextColor();
-
 				$maxY = $this->getY();
 			}
 
 
 			$biggestPageNo = $pageStart;
 			$nCellsOfLongestColumn = 0;
-			$sizeOfLongestColumn = 0;
+			$sizeOfLongestColumn = $this->getY()-$yBefore;
 			
 			for ($i = 0; $i < $this->_days; $i++) {
 				$pos = $i - $this->_daysDone;
