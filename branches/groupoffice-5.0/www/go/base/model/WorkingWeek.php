@@ -72,18 +72,18 @@ class GO_Base_Model_WorkingWeek extends GO_Base_Db_ActiveRecord {
 	public function getNextDate($startDate, $workingHours, &$leftOverHours=0){
 		$hoursForDay = $this->getHoursForDay($startDate);
 
-		GO::debug('getNextDate('.date('Ymd',$startDate).', '.$workingHours.')');
+//		GO::debug('getNextDate('.date('Ymd',$startDate).', '.$workingHours.')');
 		
 //		GO::debug("Left: ".$this->_leftOverHours);
 		
-		GO::debug("Hours for day: ".$hoursForDay);
+//		GO::debug("Hours for day: ".$hoursForDay);
 
 //		$workingHours+=$this->_leftOverHours;
 		
 		$workingHours -= $hoursForDay;
 		
 		
-		GO::debug($workingHours);
+//		GO::debug($workingHours);
 		
 		if($workingHours>=0){
 
