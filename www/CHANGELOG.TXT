@@ -1,3 +1,4 @@
+10-10-2013 5.0.10
 - Images in vcards will be base64 encode without whitespace (for carddav sync iPhone)
 - the database field for dav_contacts that hold data is changed to LONGTEXT for VCARDs with large base64 encode images
 
@@ -56,6 +57,13 @@
 - Address Book module: photos functionality for companies.
 - Projects module: 'show in tree' check box for project statuses.
 
+10-10-2013 4.2.24
+- Disable file manager until upload is complete to avoid change of folder while uploading
+- Contact info panel could crash when appointments were attached
+- Added default parameter to FilesearchController::getStoreColumnModel  so it will be compatible with the AbstractModelController
+- Special statusses of the billing module will be loaden for the current book when the Book dialog opens
+- AbstractModelController::actionExport() will only SELECT custom field column if there is a customfield record available
+- Contact pictures of VCards are working with CardDav sync (were base64 encoded twice)
 
 07-10-2013 4.2.23
 - Fixed the Attachment Context menu on the Email dialog when clicking a .eml attachment

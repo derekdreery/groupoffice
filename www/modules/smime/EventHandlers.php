@@ -68,9 +68,28 @@ class GO_Smime_EventHandlers {
 
 	public static function viewMessage(GO_Email_Controller_Message $controller, array &$response, GO_Email_Model_ImapMessage $imapMessage, GO_Email_Model_Account $account, $params) {
 		
+//		if($imapMessage->content_type == 'application/pkcs7-mime'){
+//			$outfile = GO_Base_Fs_File::tempFile();
+//			
+//			$imapMessage->getImapConnection()->save_to_file($imapMessage->uid,$outfile->path(), 'TEXT', 'base64');
+//			echo $imapMessage->getImapConnection()->get_message_part($imapMessage->uid,'HEADER')."\n".$outfile->getContents();
+//			$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($imapMessage->getImapConnection()->get_message_part($imapMessage->uid,'HEADER')."\n".$outfile->getContents());
+//					$newResponse = $message->toOutputArray(true);
+//					foreach($newResponse as $key=>$value){
+//						if(!empty($value) || $key=='attachments')
+//							$response[$key]=$value;
+//					}
+//					$response['smime_encrypted']=true;
+//					$response['path']=$outfile->stripTempPath();
+//					
+////			echo $response['htmlbody']=$imapMessage->getImapConnection()->get_message_part_decoded($imapMessage->uid, 'TEXT', 'base64');
+//			return;
+////			exit;
+//		}
+		
 		if ($imapMessage->content_type == 'application/pkcs7-mime' || $imapMessage->content_type == 'application/x-pkcs7-mime') {
 
-			$encrypted = !isset($imapMessage->content_type_attributes['smime-type']) || ($imapMessage->content_type_attributes['smime-type'] != 'signed-data' || $imapMessage->content_type_attributes['smime-type'] != 'enveloped-data');
+			$encrypted = !isset($imapMessage->content_type_attributes['smime-type']) || ($imapMessage->content_type_attributes['smime-type'] != 'signed-data' && $imapMessage->content_type_attributes['smime-type'] != 'enveloped-data');
 			if ($encrypted) {
 
 				GO::debug("Message is encrypted");
@@ -126,6 +145,10 @@ class GO_Smime_EventHandlers {
 			if ($encrypted) {
 				GO::debug('Message is encrypted');
 
+				
+//				$imapMessage->getImapConnection()->save_to_file($imapMessage->uid, $infile->path(), 'TEXT', 'base64');
+//				throw new Exception($infile->path());
+								
 				if(!$imapMessage->saveToFile($infile->path()))
 					throw new Exception("Could not save IMAP message to file for decryption");
 				
