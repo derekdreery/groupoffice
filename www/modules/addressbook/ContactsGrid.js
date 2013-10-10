@@ -227,12 +227,13 @@ GO.addressbook.ContactsGrid = function(config){
 	config.enableDragDrop=true;
 	config.ddGroup='AddressBooksDD';
 
-	config.tbar = [this.currentActionsButton = new Ext.Button({
+	config.tbar = config.tbar || [];
+	config.tbar.unshift(this.currentActionsButton = new Ext.Button({
 			text: GO.addressbook.lang['selectCurrentActions'],
 //			disabled: true,
 			tooltip: GO.addressbook.lang['showActieveToolTip'],
 			enableToggle: true
-		})];
+		}));
 
 //		config.bordertrue;
 	GO.addressbook.ContactsGrid.superclass.constructor.call(this, config);
