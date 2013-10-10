@@ -1,4 +1,5 @@
 10-10-2013 5.0.10
+- Searchbar was missing in add contact dialog for the address list
 - Images in vcards will be base64 encode without whitespace (for carddav sync iPhone)
 - the database field for dav_contacts that hold data is changed to LONGTEXT for VCARDs with large base64 encode images
 
