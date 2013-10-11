@@ -1,3 +1,6 @@
+4.2.25
+- Carddav supports viewing readonly addressbooks
+
 10-10-2013 4.2.24
 - Disable file manager until upload is complete to avoid change of folder while uploading
 - Contact info panel could crash when appointments were attached
@@ -8,6 +11,7 @@
 
 07-10-2013 4.2.23
 - Fixed the Attachment Context menu on the Email dialog when clicking a .eml attachment
+- Calendar view export will extends when the calendar name doesn't fit on one row.
 - Signed GOTA with real code signing certificate
 - Handle missing models in search
 - Files: Fixed path display when using the "up" button
