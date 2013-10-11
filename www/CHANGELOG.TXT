@@ -1,5 +1,6 @@
 4.2.25
-- Carddav supports viewing readonly addressbooks
+- Carddav supports viewing readonly address books
+- Fixed Contact pictures of VCards base63 encoding for older vObject libraries
 
 10-10-2013 4.2.24
 - Disable file manager until upload is complete to avoid change of folder while uploading
