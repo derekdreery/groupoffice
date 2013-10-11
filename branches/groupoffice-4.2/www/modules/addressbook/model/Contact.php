@@ -957,8 +957,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		
 		if($this->getPhotoFile()->exists()){
-			$p = new Sabre\VObject\Property('photo', $this->getPhotoFile()->getContents());
-			$p->add('type','jpeg');
+			$p = new Sabre\VObject\Property('photo', base64_encode($this->getPhotoFile()->getContents()));
+			$p->add('type','JPEG');
 			$p->add('encoding','b');
 			$e->add($p);	
 		}
