@@ -514,7 +514,7 @@ class GO{
 			if(!isset(GO::session()->values['locale_all'])){
 				$currentlocale = GO::session()->values['locale_all']= setlocale(LC_ALL, "0");
 
-				if(stripos($currentlocale,'utf')==false){
+				if(stripos($currentlocale,'utf')==false && function_exists('exec')){
 					@exec('locale -a', $output);
 //					var_dump($output);
 					if(is_array($output)){
