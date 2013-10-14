@@ -517,7 +517,7 @@ class GO{
 				if(stripos($currentlocale,'utf')==false && function_exists('exec')){
 					@exec('locale -a', $output);
 //					var_dump($output);
-					if(is_array($output)){
+					if(isset($output) && is_array($output)){
 						foreach($output as $locale){
 							if(stripos($locale,'utf')!==false){
 								setlocale(LC_ALL, $locale);
