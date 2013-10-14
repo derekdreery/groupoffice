@@ -131,9 +131,10 @@ class GO_Base_Router{
 		$this->_action=$action;		
 		
 		if(!class_exists($controllerClass)){
-			header("HTTP/1.0 404 Not Found");
-			header("Status: 404 Not Found");
-			
+			if(!headers_sent()){
+				header("HTTP/1.0 404 Not Found");
+				header("Status: 404 Not Found");
+			}
 			if(empty($_SERVER['QUERY_STRING']))
 				$_SERVER['QUERY_STRING']="[EMPTY QUERY_STRING]";
 
