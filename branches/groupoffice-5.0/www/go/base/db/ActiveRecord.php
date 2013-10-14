@@ -4133,7 +4133,9 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 		//Generate new acl for this model
 		if($this->aclField() && !$this->joinAclField){
-			$copy->setNewAcl($this->user_id);
+			
+			$user_id = isset($this->user_id) ? $this->user_id : GO::user()->id;
+			$copy->setNewAcl($user_id);
 		}
 		
 		if($this->customFieldsRecord){

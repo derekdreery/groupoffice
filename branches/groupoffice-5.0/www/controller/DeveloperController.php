@@ -295,4 +295,70 @@ END:VCALENDAR';
 	}
 	
 	
+	protected function actionDuplicateCF(){
+		
+		$stmt = GO_Customfields_Model_Category::model()->findByModel("GO_Projects2_Model_Project");
+		$stmt->callOnEach('delete');
+		
+		$sql = "DROP TABLE IF EXISTS cf_pr2_projects";
+		GO::getDbConnection()->query($sql);
+		
+		$sql = "CREATE TABLE IF NOT EXISTS `cf_pr2_projects` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=InnoDB;";
+		GO::getDbConnection()->query($sql);
+		
+
+		$stmt = GO_Customfields_Model_Category::model()->findByModel("GO_Projects_Model_Project");
+
+		foreach($stmt as $category){
+			$category->duplicate(array(
+					'extends_model'=>"GO_Projects2_Model_Project"
+			));
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+
+		
+		
+		$sql = "INSERT INTO cf_pr2_projects SELECT * FROM cf_pm_projects";
+		GO::getDbConnection()->query($sql);
+
+
+		$stmt = GO_Customfields_Model_Category::model()->findByModel("GO_Projects2_Model_TimeEntry");
+		$stmt->callOnEach('delete');
+		
+		
+		$sql = "DROP TABLE IF EXISTS cf_pr2_hours";
+		GO::getDbConnection()->query($sql);
+		
+		$sql = "CREATE TABLE IF NOT EXISTS `cf_pr2_hours` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=InnoDB;";
+		GO::getDbConnection()->query($sql);
+
+		$stmt = GO_Customfields_Model_Category::model()->findByModel("GO_Projects_Model_Hour");
+
+		foreach($stmt as $category){
+			$category->duplicate(array(
+					'extends_model'=>"GO_Projects2_Model_TimeEntry"
+			));
+		}
+
+		
+		
+		$sql = "INSERT INTO cf_pr2_hours SELECT * FROM cf_pm_hours";
+		GO::getDbConnection()->query($sql);
+			
+
+	}
+	
 }
