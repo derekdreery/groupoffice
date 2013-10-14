@@ -240,14 +240,14 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 					'type' => 'LEFT' //defaults to INNER,
 							));
 
-			if (!empty($params['requireEmail'])) {
+//			if (!empty($params['requireEmail'])) {
 				$criteria = GO_Base_Db_FindCriteria::newInstance()
 								->addCondition("email", "", "!=")
 								->addCondition("email2", "", "!=", 't', false)
 								->addCondition("email3", "", "!=", 't', false);
 
 				$findParams->getCriteria()->mergeWith($criteria);
-			}
+//			}
 
 			$stmt = GO_Addressbook_Model_Contact::model()->findUsers(GO::user()->id, $findParams);
 
@@ -309,14 +309,14 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 
 					$findParams->getCriteria()->addInCondition('addressbook_id', $abs);
 
-					if (!empty($params['requireEmail'])) {
+//					if (!empty($params['requireEmail'])) {
 						$criteria = GO_Base_Db_FindCriteria::newInstance()
 										->addCondition("email", "", "!=")
 										->addCondition("email2", "", "!=", 't', false)
 										->addCondition("email3", "", "!=", 't', false);
 
 						$findParams->getCriteria()->mergeWith($criteria);
-					}
+//					}
 
 					$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
 
@@ -327,6 +327,35 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 						if ($contact->go_user_id)
 							$user_ids[] = $contact->go_user_id;
 					}
+					
+					
+					if (count($response['results']) < 10) {
+						$findParams = GO_Base_Db_FindParams::newInstance()
+							->searchQuery($query)
+							->limit(10-count($response['results']));
+						
+//						if (!empty($params['requireEmail'])) {
+							$criteria = $findParams->getCriteria()
+										->addCondition("email", "", "!=");
+//						}
+						
+						$stmt = GO_Addressbook_Model_Company::model()->find($findParams);
+
+						foreach ($stmt as $company) {
+							$record=array();
+							$record['name'] = $company->name;							
+							
+							$l = new GO_Base_Mail_EmailRecipients();
+							$l->addRecipient($company->email, $record['name']);
+
+							$record['info'] = htmlspecialchars((string) $l . ' (' . sprintf(GO::t('companyFromAddressbook', 'addressbook'), $company->addressbook->name) . ')', ENT_COMPAT, 'UTF-8');
+							$record['full_email'] = htmlspecialchars((string) $l, ENT_COMPAT, 'UTF-8');
+
+							$response['results'][] = $record;
+							
+						}
+					}
+					
 				}
 			}
 		}else {
@@ -336,6 +365,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 							->searchQuery($query)
 							->select('t.*')
 							->limit(10 - count($response['results']));
+			
+			$findParams->getCriteria()->addCondition('enabled', true);
 
 
 			$stmt = GO_Base_Model_User::model()->find($findParams);
