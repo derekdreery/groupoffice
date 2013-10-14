@@ -506,7 +506,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				tag: 'div',
 				id: Ext.id(),
 				cls: "x-calGrid-indicator",
-				style:"left:0px;top:"+indicatorTop+"px;width:4px;"
+				style:"left:0px;top:"+indicatorTop+"px;width:6px;"
 			},true);
 
 		//the start of the grid
