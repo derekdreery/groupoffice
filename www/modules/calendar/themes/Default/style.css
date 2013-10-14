@@ -311,12 +311,13 @@ background-color: #F1F1F1 !important;
 }
 .x-calGrid-table-wrapper{
 	position:relative;
+	background:transparent;
 }
 
 .x-calGrid-indicator{
 	position:absolute;
 	border-top:1px solid red;
-	z-index:100000;
+	z-index:3001;
 }
 .x-calGrid-table{
 	border-collapse: collapse;
@@ -350,7 +351,9 @@ background-color: #F1F1F1 !important;
 	border-right:1px solid #DDDDDD;
 	text-align:right;
 }
-
+.x-calGrid-today{
+	background-color:#e5f5f9 !important;
+}
 .x-calGrid-selector{
 	background-color:#DFE8F6;
 	position:absolute;
