@@ -318,7 +318,11 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					style: "width:"+(columnWidth-3)+"px",
 					html: dt.format(dateFormat)
 					}]
-				});
+				}, true);
+				
+			if(dtStr==nowStr){
+				this.todaysHeading = heading;
+			}
 
 			allDayColumn = Ext.DomHelper.append(this.allDayRow,
 			{
@@ -482,17 +486,27 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			}
 		}
 		
-		var now = new Date();
+//		var now = new Date();
 		
 		var minutesElapsed = now.getMinutes()+now.getHours()*60;
 		var indicatorTop = Math.ceil((11/15)*minutesElapsed);
+		
+		var x = this.todaysHeading.getX()-this.gridTable.getX()+4;
 		
 		this.timeIndicator = Ext.DomHelper.append(this.gridContainer,
 			{
 				tag: 'div',
 				id: Ext.id(),
 				cls: "x-calGrid-indicator",
-				style:"top:"+indicatorTop+"px;width:"+this.gridTable.getWidth()+"px"
+				style:"left:"+x+"px;top:"+indicatorTop+"px;width:"+(this.todaysHeading.getWidth()-3)+"px;"
+			},true);
+			
+		this.timeIndicator = Ext.DomHelper.append(this.gridContainer,
+			{
+				tag: 'div',
+				id: Ext.id(),
+				cls: "x-calGrid-indicator",
+				style:"left:0px;top:"+indicatorTop+"px;width:4px;"
 			},true);
 
 		//the start of the grid
