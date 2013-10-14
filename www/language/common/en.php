@@ -151,6 +151,8 @@ $l["strRequestError"]= 'Could not connect to the server. Please check your inter
 $l["strSelected"]= 'Selected';
 $l["noItemSelected"]= 'You didn\'t select an item.';
 $l["strDeleteSelectedItems"]= 'Are you sure you want to delete the {count} items?';
+
+$l["areYouSureDeleteItem"]= 'Are you sure you want to delete \'{item}\'?';
 $l["strDeleteSelectedItem"]= 'Are you sure you want to delete the selected item?';
 $l["strNoWritePermissions"]= 'You are not allowed to edit this item.';
 $l["strUnauthorized"]= 'Unauthorized';
