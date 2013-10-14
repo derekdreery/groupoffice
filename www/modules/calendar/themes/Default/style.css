@@ -309,7 +309,15 @@ border:1px solid black;
 .x-calGrid-panel .x-panel-body{
 background-color: #F1F1F1 !important;
 }
+.x-calGrid-table-wrapper{
+	position:relative;
+}
 
+.x-calGrid-indicator{
+	position:absolute;
+	border-top:1px solid red;
+	z-index:100000;
+}
 .x-calGrid-table{
 	border-collapse: collapse;
 }
