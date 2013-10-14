@@ -521,8 +521,11 @@ GO.files.FileBrowser = function(config){
 					this.setDisabled(true);
 					
 					popup.onbeforeunload=function(){
-	
+						
 						this.setDisabled(false);
+						
+						if(popup.uploadSuccess)
+							this.sendOverwrite({upload:true})
 					}.createDelegate(this);
 				}
 			} else {
