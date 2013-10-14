@@ -336,6 +336,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 							->searchQuery($query)
 							->select('t.*')
 							->limit(10 - count($response['results']));
+			
+			$findParams->getCriteria()->addCondition('enabled', true);
 
 
 			$stmt = GO_Base_Model_User::model()->find($findParams);
