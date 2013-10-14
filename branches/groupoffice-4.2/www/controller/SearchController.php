@@ -327,6 +327,35 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 						if ($contact->go_user_id)
 							$user_ids[] = $contact->go_user_id;
 					}
+					
+					
+					if (count($response['results']) < 10) {
+						$findParams = GO_Base_Db_FindParams::newInstance()
+							->searchQuery($query)
+							->limit(10-count($response['results']));
+						
+						if (!empty($params['requireEmail'])) {
+							$criteria = $findParams->getCriteria()
+										->addCondition("email", "", "!=");
+						}
+						
+						$stmt = GO_Addressbook_Model_Company::model()->find($findParams);
+
+						foreach ($stmt as $company) {
+							$record=array();
+							$record['name'] = $company->name;							
+							
+							$l = new GO_Base_Mail_EmailRecipients();
+							$l->addRecipient($company->email, $record['name']);
+
+							$record['info'] = htmlspecialchars((string) $l . ' (' . sprintf(GO::t('companyFromAddressbook', 'addressbook'), $company->addressbook->name) . ')', ENT_COMPAT, 'UTF-8');
+							$record['full_email'] = htmlspecialchars((string) $l, ENT_COMPAT, 'UTF-8');
+
+							$response['results'][] = $record;
+							
+						}
+					}
+					
 				}
 			}
 		}else {
