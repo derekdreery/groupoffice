@@ -1340,6 +1340,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 						$advQueryRecord['value']=GO::getModel(GO::getModel($this->model)->customfieldsModel())->formatInput ($field, $advQueryRecord['value']);
 					}
 					
+					$cfColRecord = GO::getModel($this->model)->getCustomfieldsRecord()->getColumn($field);
+
+					if (!empty($cfColRecord['customfield']->attributes['multiselect']))
+						$advQueryRecord['value']='%'.$advQueryRecord['value'].'%';
+					
 					$criteriaGroup->addCondition($field, $advQueryRecord['value'], $advQueryRecord['comparator'],$tableAlias,$advQueryRecord['andor']=='AND');
 				}
 			}
