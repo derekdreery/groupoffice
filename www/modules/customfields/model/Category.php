@@ -98,4 +98,11 @@ class GO_Customfields_Model_Category extends GO_Base_Db_ActiveRecord{
 		
 		return parent::beforeSave();
 	}
+	
+	protected function afterDuplicate(&$duplicate) {
+		
+		$this->duplicateRelation('fields', $duplicate);
+		
+		return parent::afterDuplicate($duplicate);
+	}
 }
