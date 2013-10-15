@@ -870,6 +870,237 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 		}
 		
+		
+		
+		
+			
+		if(GO::modules()->projects2){
+			
+			$employee = new GO_Projects2_Model_Employee();
+			$employee->user_id=$elmer->id;
+			$employee->fee=120;
+			$employee->save();
+			
+			$employee = new GO_Projects2_Model_Employee();
+			$employee->user_id=$demo->id;
+			$employee->fee=80;
+			$employee->save();
+			
+			$employee = new GO_Projects2_Model_Employee();
+			$employee->user_id=$linda->id;
+			$employee->fee=90;
+			$employee->save();
+			
+			
+			$templates = GO_Projects2_Model_Template::model()->find();
+			
+			$folderTemplate = $templates->fetch();
+			$projectTemplate = $templates->fetch();
+			
+			$status = GO_Projects2_Model_Status::model()->findSingle();
+			
+			$type = GO_Projects2_Model_Type::model()->findSingleByAttribute('name', 'Demo');
+			if(!$type){
+				$type = new GO_Projects2_Model_Type();
+				$type->name='Demo';
+				if(!$type->save())
+				{
+					var_dump($type->getValidationErrors());
+					exit();
+				}
+				$type->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::WRITE_PERMISSION);
+			}
+			
+			
+			$folderProject = GO_Projects2_Model_Project::model()->findSingleByAttribute('name','Demo');
+			if(!$folderProject){
+				$folderProject = new GO_Projects2_Model_Project();
+				$folderProject->name='Demo';
+				$folderProject->start_time=time();
+				$folderProject->description='Just a placeholder for sub projects.';
+				$folderProject->template_id=$folderTemplate->id;
+				$folderProject->type_id=$type->id;
+				$folderProject->status_id=$status->id;
+				if(!$folderProject->save()){
+						var_dump($folderProject->getValidationErrors());
+					exit();
+				}
+				
+			}
+			
+			
+			$rocketProject = GO_Projects2_Model_Project::model()->findSingleByAttribute('name','[001] Develop Rocket 2000');
+			if(!$rocketProject){
+				$rocketProject = new GO_Projects2_Model_Project();
+				$rocketProject->type_id=$type->id;
+				$rocketProject->status_id=$status->id;
+				$rocketProject->name='[001] Develop Rocket 2000';
+				$rocketProject->description='Better range and accuracy';
+				$rocketProject->template_id=$projectTemplate->id;
+				$rocketProject->parent_project_id=$folderProject->id;
+				$rocketProject->start_time=time();
+				$rocketProject->due_time=GO_Base_Util_Date::date_add(time(),0,1);
+				$rocketProject->company_id=$acme->id;
+				$rocketProject->contact_id=$wile->id;
+				$rocketProject->budget=20000;
+				$rocketProject->save();
+				
+				$resource = new GO_Projects2_Model_Resource();
+				$resource->project_id=$rocketProject->id;
+				$resource->user_id=$demo->id;
+				$resource->budgeted_units=100;
+				$resource->fee=80;
+				$resource->save();
+				
+				$resource = new GO_Projects2_Model_Resource();
+				$resource->project_id=$rocketProject->id;
+				$resource->user_id=$elmer->id;
+				$resource->budgeted_units=16;
+				$resource->fee=120;
+				$resource->save();
+				
+				$resource = new GO_Projects2_Model_Resource();
+				$resource->project_id=$rocketProject->id;
+				$resource->user_id=$linda->id;
+				$resource->budgeted_units=16;
+				$resource->fee=90;
+				$resource->save();
+				
+				
+				$groupTask = new GO_Projects2_Model_Task();
+				$groupTask->project_id=$rocketProject->id;
+				$groupTask->description='Design';
+				$groupTask->duration=8*60;
+				$groupTask->user_id=$demo->id;
+				$groupTask->save();
+				
+				
+				$task = new GO_Projects2_Model_Task();
+				$task->parent_id=$groupTask->id;
+				$task->project_id=$rocketProject->id;
+				$task->description='Functional design';
+				$task->percentage_complete=100;
+				$task->duration=8*60;
+				$task->user_id=$demo->id;
+				$task->save();
+				
+				$task = new GO_Projects2_Model_Task();
+				$task->parent_id=$groupTask->id;
+				$task->project_id=$rocketProject->id;
+				$task->description='Technical design';
+				$task->percentage_complete=50;
+				$task->duration=8*60;
+				$task->user_id=$demo->id;
+				$task->save();
+				
+				
+				$groupTask = new GO_Projects2_Model_Task();
+				$groupTask->project_id=$rocketProject->id;
+				$groupTask->description='Implementation';
+				$groupTask->duration=8*60;
+				$groupTask->user_id=$demo->id;
+				$groupTask->save();
+				
+				
+				$task = new GO_Projects2_Model_Task();
+				$task->parent_id=$groupTask->id;
+				$task->project_id=$rocketProject->id;
+				$task->description='Models';
+				$task->duration=4*60;
+				$task->user_id=$demo->id;
+				$task->save();
+				
+				$task = new GO_Projects2_Model_Task();
+				$task->parent_id=$groupTask->id;
+				$task->project_id=$rocketProject->id;
+				$task->description='Controllers';
+				$task->duration=2*60;
+				$task->user_id=$demo->id;
+				$task->save();
+				
+				$task = new GO_Projects2_Model_Task();
+				$task->parent_id=$groupTask->id;
+				$task->project_id=$rocketProject->id;
+				$task->description='Views';
+				$task->duration=6*60;
+				$task->user_id=$demo->id;
+				$task->save();
+				
+				$groupTask = new GO_Projects2_Model_Task();
+				$groupTask->project_id=$rocketProject->id;
+				$groupTask->description='Testing';
+				$groupTask->duration=8*60;
+				$groupTask->user_id=$demo->id;
+				$groupTask->save();
+				
+				
+				$task = new GO_Projects2_Model_Task();
+				$task->parent_id=$groupTask->id;
+				$task->project_id=$rocketProject->id;
+				$task->description='GUI';
+				$task->duration=8*60;
+				$task->user_id=$elmer->id;
+				$task->save();
+				
+				$task = new GO_Projects2_Model_Task();
+				$task->parent_id=$groupTask->id;
+				$task->project_id=$rocketProject->id;
+				$task->description='Security';
+				$task->duration=8*60;
+				$task->user_id=$elmer->id;
+				$task->save();
+				
+				
+				$expenseBudget = new GO_Projects2_Model_ExpenseBudget();
+				$expenseBudget->description='Machinery';
+				$expenseBudget->nett=10000;
+				$expenseBudget->project_id=$rocketProject->id;
+				$expenseBudget->save();
+				
+				$expense = new GO_Projects2_Model_Expense();				
+				$expense->description='Rocket fuel';
+				$expense->project_id=$rocketProject->id;
+				$expense->nett=3000;
+				$expense->save();
+				
+				
+				$expense = new GO_Projects2_Model_Expense();				
+				$expense->expense_budget_id=$expenseBudget->id;
+				$expense->description='Fuse machine';
+				$expense->project_id=$rocketProject->id;
+				$expense->nett=2000;
+				$expense->save();
+			}
+			
+			$launcherProject = GO_Projects2_Model_Project::model()->findSingleByAttribute('name','[001] Develop Rocket Launcher');
+			if(!$launcherProject){
+				$launcherProject = new GO_Projects2_Model_Project();
+				$launcherProject->type_id=$type->id;
+				$launcherProject->status_id=$status->id;
+				$launcherProject->name='[001] Develop Rocket Launcher';
+				$launcherProject->description='Better range and accuracy';
+				$launcherProject->template_id=$projectTemplate->id;
+				$launcherProject->parent_project_id=$folderProject->id;
+				$launcherProject->start_time=time();
+				$launcherProject->due_time=GO_Base_Util_Date::date_add(time(),0,1);
+				$launcherProject->company_id=$acme->id;
+				$launcherProject->contact_id=$wile->id;
+				$launcherProject->save();
+				
+				
+				$resource = new GO_Projects2_Model_Resource();
+				$resource->project_id=$launcherProject->id;
+				$resource->user_id=$demo->id;
+				$resource->fee=80;
+				$resource->budgeted_units=16;
+				$resource->save();
+			}
+			
+		}
+		
+		
+		
+		
 		if(GO::modules()->bookmarks){
 			$category = GO_Bookmarks_Model_Category::model()->findSingleByAttribute('name', GO::t('general','bookmarks'));
 			
@@ -987,6 +1218,20 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			$accountModel->save();
 			$accountModel->addAlias($accountModel->username, $demoMailbox->name);			
 		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+		
+		
+		
+		
 	}
 
 	private function _setUserContact($user) {
