@@ -2920,7 +2920,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * @return \GO_Base_Model_Acl
 	 */
 	public function setNewAcl($user_id=0){
-		
+		if($this->aclField()===false)
+			throw new Exception('Can not create a new ACL for an object that has no ACL field');
 		if(!$user_id)
 			$user_id = GO::user() ? GO::user()->id : 1;
 		
