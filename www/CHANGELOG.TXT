@@ -6,6 +6,7 @@
 - JUpload fixed for IE
 - It was possible to create an event without organizer
 - Include companies in e-mail search
+- Ask for meeting request invitation when new participant was added
 
 10-10-2013 4.2.24
 - Disable file manager until upload is complete to avoid change of folder while uploading
