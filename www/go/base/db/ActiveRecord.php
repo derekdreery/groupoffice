@@ -3342,8 +3342,9 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				
 				if($result instanceof GO_Base_Db_ActiveStatement){	
 					//has_many relations result in a statement.
-					while($child = $result->fetch()){				
-						$child->delete();
+					while($child = $result->fetch()){			
+						if($child->className()!=$this->className() || $child->pk != $this->pk)//prevent delete of self
+							$child->delete();
 					}
 				}elseif($result)
 				{
