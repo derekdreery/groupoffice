@@ -320,11 +320,13 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$ids = array();
 		if (!empty($params['participants'])) {
-			$hasOrganizer=false;
+			//we don't need an organizer if there are no participants so default to true here.
+			$hasOrganizer=true;
 			$participants = json_decode($params['participants'], true);
 			
 			//don't save a single organizer participant
 			if(count($participants)>1){				
+				$hasOrganizer=false;
 				foreach ($participants as $p) {
 					$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
 							'email'=> $p['email'],
