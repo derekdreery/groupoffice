@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `tasklist_id` int(11) NOT NULL DEFAULT '0',
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
   `show_holidays` tinyint(1) NOT NULL DEFAULT '1',
+	`enable_ics_import` tinyint(1) NOT NULL DEFAULT '0',
+	`ics_import_url` varchar(512) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `group_id` (`group_id`),
   KEY `project_id` (`project_id`)

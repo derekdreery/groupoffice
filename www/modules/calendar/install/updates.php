@@ -220,3 +220,6 @@ $updates['201307081131'][]="update cal_events set rrule='' where rrule='RRULE';"
 
 $updates['201308261102'][]="ALTER TABLE  `cal_settings` ADD  `show_statuses` BOOLEAN NOT NULL DEFAULT TRUE";
 $updates['201309121148'][]="ALTER TABLE  `cal_participants` ADD  `contact_id` INT NOT NULL DEFAULT  '0' AFTER  `user_id`";
+
+$updates['201310141130'][]="ALTER TABLE `cal_calendars` ADD `enable_ics_import` TINYINT( 1 ) NOT NULL DEFAULT '0',
+ADD `ics_import_url` VARCHAR( 512 ) NOT NULL DEFAULT '';";
