@@ -841,3 +841,7 @@ background-image: url(images/extjs/toolbar/more.gif)!important;
 .ext-webkit .x-small-editor .x-form-field,.x-small-editor .x-form-field {
 	font-size:13px !important;
 }
+
+.x-date-bottom{
+	border:0px;
+}
