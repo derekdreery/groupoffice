@@ -1473,10 +1473,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param Sabre\VObject\Component $vobject
 	 * @param array $attributes Extra attributes to apply to the event. Raw values should be past. No input formatting is applied.
 	 * @param boolean $dontSave. Don't save the event. WARNING. Event can't be fully imported this way because participants and exceptions need an ID. This option is useful if you want to display info about an ICS file.
-	 * @param boolean $updateExisting Update event if imported event UUID already exists with the same start time in the calendar. Default: false.
+	 * @param boolean $importExternal This should be switched on if importing happens from external ICS calendar.
 	 * @return GO_Calendar_Model_Event 
 	 */
-	public function importVObject(Sabre\VObject\Component $vobject, $attributes=array(), $dontSave=false, $makeSureUserParticipantExists=false, $previouslyImportedEventsArray=false){
+	public function importVObject(Sabre\VObject\Component $vobject, $attributes=array(), $dontSave=false, $makeSureUserParticipantExists=false, $importExternal=false){
 
 		$uid = (string) $vobject->uid;
 		if(!empty($uid))
@@ -1604,24 +1604,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}else
 			{				
 				//exception was not found for this recurrence. Find the recurring series and add the exception.
-				$findParamsRecur = GO_Base_Db_FindParams::newInstance()->criteria(
-					GO_Base_Db_FindCriteria::newInstance()
-						->addCondition('uuid',$this->uuid)
-						->addCondition('calendar_id',$this->calendar_id)
-						->addCondition('rrule','','!=')
-				);
-				$recurringEventsStmt = GO_Calendar_Model_Event::model()->find($findParamsRecur);//->findByAttributes(array('uuid'=>$this->uuid, 'calendar_id'=>$this->calendar_id));
-				foreach ($recurringEventsStmt as $recurringEventModel)
-					if(!empty($recurringEventModel->rrule)){
-						//aftersave will create GO_Calendar_Model_Exception
-						$this->exception_for_event_id=$recurringEventModel->id;
-
-						//will be saved later
-						$exception = new GO_Calendar_Model_Exception();
-						$exception->time=$recurrenceTime;
-						$exception->event_id=$recurringEventModel->id;
-					}
-			}			
+				$recurringEvent = GO_Calendar_Model_Event::model()->findByUuid($this->uuid, 0, $this->calendar_id);
+				if($recurringEvent){
+					//aftersave will create GO_Calendar_Model_Exception
+					$this->exception_for_event_id=$recurringEvent->id;
+					
+					//will be saved later
+					$exception = new GO_Calendar_Model_Exception();
+					$exception->time=$recurrenceTime;
+					$exception->event_id=$recurringEvent->id;
+				}
+			}
 		}
 		
 		if($vobject->valarm){
@@ -1662,7 +1655,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //			try {
 				$this->_isImport=true;
 				
-//				$this->setValidationRule('uuid', 'unique', array('calendar_id','start_time'));
+				if (!$importExternal)
+					$this->setValidationRule('uuid', 'unique', array('calendar_id','start_time'));
 				
 //				//make sure no duplicates are imported
 //				if(!is_array($previouslyImportedEventsArray)){
@@ -1724,34 +1718,38 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					
 				if(!$this->save()){	
 
-					$installationName = !empty(GO::config()->title) ? GO::config()->title : 'Group-Office';
-					$validationErrStr = implode("\n", $this->getValidationErrors())."\n";
-					
-					$mailSubject = str_replace(array('%cal','%event'),array($this->calendar->name,$this->name),GO::t('eventNotSavedSubject','calendar'));
-					$body = GO::t('eventNotSavedBody','calendar');
-					$body = str_replace(
-										array('%goname','%event','%starttime','%cal','%errormessage'),
-										array(
-											$installationName,
-											$this->name,
-											GO_Base_Util_Date::get_timestamp($this->start_time),
-											$this->calendar->name,
-											$validationErrStr
-										),
-										$body
-									);
-					$message = GO_Base_Mail_Message::newInstance(
-													$mailSubject
-													)->setFrom(GO::config()->webmaster_email, GO::config()->title)
-													->addTo($this->calendar->user->email);
+					if ($importExternal) {
+						$installationName = !empty(GO::config()->title) ? GO::config()->title : 'Group-Office';
+						$validationErrStr = implode("\n", $this->getValidationErrors())."\n";
 
-					$message->setHtmlAlternateBody(nl2br($body));
-					
-					if (GO_Base_Mail_Mailer::newGoInstance()->send($message))
-						throw new GO_Base_Exception_Validation('DUE TO ERROR, CRON SENT MAIL TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
-					else
-						throw new GO_Base_Exception_Validation('CRON COULD NOT SEND EMAIL WITH ERROR MESSAGE TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
+						$mailSubject = str_replace(array('%cal','%event'),array($this->calendar->name,$this->name),GO::t('eventNotSavedSubject','calendar'));
+						$body = GO::t('eventNotSavedBody','calendar');
+						$body = str_replace(
+											array('%goname','%event','%starttime','%cal','%errormessage'),
+											array(
+												$installationName,
+												$this->name,
+												GO_Base_Util_Date::get_timestamp($this->start_time),
+												$this->calendar->name,
+												$validationErrStr
+											),
+											$body
+										);
+						$message = GO_Base_Mail_Message::newInstance(
+														$mailSubject
+														)->setFrom(GO::config()->webmaster_email, GO::config()->title)
+														->addTo($this->calendar->user->email);
 
+						$message->setHtmlAlternateBody(nl2br($body));
+
+						if (GO_Base_Mail_Mailer::newGoInstance()->send($message))
+							throw new GO_Base_Exception_Validation('DUE TO ERROR, CRON SENT MAIL TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
+						else
+							throw new GO_Base_Exception_Validation('CRON COULD NOT SEND EMAIL WITH ERROR MESSAGE TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
+					} else {
+						throw new GO_Base_Exception_Validation(implode("\n", $this->getValidationErrors())."\n");
+					}
+					
 				}
 				$this->_isImport=false;
 //			} catch (Exception $e) {
@@ -1819,7 +1817,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				}
 			}
 			
-			if($this->isRecurring()){
+			if($importExternal && $this->isRecurring()){
 				$exceptionEventsStmt = GO_Calendar_Model_Event::model()->find(
 					GO_Base_Db_FindParams::newInstance()->criteria(
 						GO_Base_Db_FindCriteria::newInstance()
@@ -1837,7 +1835,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					$this->addException($exceptionEventModel->start_time, $exceptionEventModel->id);
 					
 					
-					GO::debug('=== EXCEPTION EVENT === ['.GO_Base_Util_Date::get_timestamp($exceptionEventModel->start_time).'] '.$exceptionEventModel->name.' (exception for event: '.$exceptionEventModel->exception_for_event_id.')');
+//					GO::debug('=== EXCEPTION EVENT === ['.GO_Base_Util_Date::get_timestamp($exceptionEventModel->start_time).'] '.$exceptionEventModel->name.' (exception for event: '.$exceptionEventModel->exception_for_event_id.')');
 				}
 			}
 		}
