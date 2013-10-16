@@ -28,6 +28,8 @@
  * @property int $tasklist_id
  * @property int $files_folder_id
  * @property boolean $show_holidays
+ * @property boolean $enable_ics_import
+ * @property string $ics_import_url
  */
 
 class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel {
