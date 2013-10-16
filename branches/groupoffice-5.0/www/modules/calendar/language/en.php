@@ -234,3 +234,7 @@ $l['eventPrivateChecked'] = 'Note that if the event is marked as private, the fi
 $l['show_completed_tasks'] = "Show completed tasks";
 $l['showStatuses']='Show event statuses in views';
 $l['cantMoveRecurringByDay']="Sorry, you can't move events that recur on weekdays to other days like this. Please open the event and adjust the recurrence properties.";
+
+$l['eventNotSavedSubject'] = 'Event not saved in %event calendar "%cal"';
+$l['eventNotSavedBody'] = 'This message is from your %goname calendar. %goname attempted to import an event called "%event" with start time %starttime from an external calendar into calendar "%cal", but that could not be done because the event contained errors. The event may still be in the external calendar.'.
+								"\r\n\r\n".'The following is the error message:'."\r\n".'%errormessage';
