@@ -431,6 +431,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 	}
 	
+	
 	protected function afterDelete() {
 
 		$this->deleteReminders();		
@@ -439,9 +440,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$stmt = $this->getRelatedParticipantEvents();
 			
 			foreach($stmt as $event){
+				//prevent loop for invalid is_organizer flag
+				$event->is_organizer=false;
 				$event->delete(true);
-//				$event->status=self::STATUS_CANCELLED;
-//				$event->save(true);
 			}
 		}else
 		{
@@ -1472,9 +1473,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param Sabre\VObject\Component $vobject
 	 * @param array $attributes Extra attributes to apply to the event. Raw values should be past. No input formatting is applied.
 	 * @param boolean $dontSave. Don't save the event. WARNING. Event can't be fully imported this way because participants and exceptions need an ID. This option is useful if you want to display info about an ICS file.
+	 * @param boolean $updateExisting Update event if imported event UUID already exists with the same start time in the calendar. Default: false.
 	 * @return GO_Calendar_Model_Event 
 	 */
-	public function importVObject(Sabre\VObject\Component $vobject, $attributes=array(), $dontSave=false, $makeSureUserParticipantExists=false){
+	public function importVObject(Sabre\VObject\Component $vobject, $attributes=array(), $dontSave=false, $makeSureUserParticipantExists=false, $previouslyImportedEventsArray=false){
 
 		$uid = (string) $vobject->uid;
 		if(!empty($uid))
@@ -1602,16 +1604,23 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}else
 			{				
 				//exception was not found for this recurrence. Find the recurring series and add the exception.
-				$recurringEvent = GO_Calendar_Model_Event::model()->findByUuid($this->uuid, 0, $this->calendar_id);
-				if($recurringEvent){
-					//aftersave will create GO_Calendar_Model_Exception
-					$this->exception_for_event_id=$recurringEvent->id;
-					
-					//will be saved later
-					$exception = new GO_Calendar_Model_Exception();
-					$exception->time=$recurrenceTime;
-					$exception->event_id=$recurringEvent->id;
-				}
+				$findParamsRecur = GO_Base_Db_FindParams::newInstance()->criteria(
+					GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('uuid',$this->uuid)
+						->addCondition('calendar_id',$this->calendar_id)
+						->addCondition('rrule','','!=')
+				);
+				$recurringEventsStmt = GO_Calendar_Model_Event::model()->find($findParamsRecur);//->findByAttributes(array('uuid'=>$this->uuid, 'calendar_id'=>$this->calendar_id));
+				foreach ($recurringEventsStmt as $recurringEventModel)
+					if(!empty($recurringEventModel->rrule)){
+						//aftersave will create GO_Calendar_Model_Exception
+						$this->exception_for_event_id=$recurringEventModel->id;
+
+						//will be saved later
+						$exception = new GO_Calendar_Model_Exception();
+						$exception->time=$recurrenceTime;
+						$exception->event_id=$recurringEventModel->id;
+					}
 			}			
 		}
 		
@@ -1653,11 +1662,96 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //			try {
 				$this->_isImport=true;
 				
-				//make sure no duplicates are imported.
-				$this->setValidationRule('uuid', 'unique', array('calendar_id','start_time'));
+//				$this->setValidationRule('uuid', 'unique', array('calendar_id','start_time'));
 				
-				if(!$this->save()){
-					throw new GO_Base_Exception_Validation(implode("\n", $this->getValidationErrors())."\n");
+//				//make sure no duplicates are imported
+//				if(!is_array($previouslyImportedEventsArray)){
+//					// We do not take events from previous import iterations into account, and we will do a validation check.
+//					$this->setValidationRule('uuid', 'unique', array('calendar_id','start_time'));
+//				}else
+//				{
+//					
+//					// We take into account the history if imported items to better handle recurring events, exceptions and rescheduled events.
+//					
+//					if (!empty($this->rrule)) {
+//					
+//						GO::debug('=== ['.GO_Base_Util_Date::get_timestamp($this->start_time).'] '.$this->name.' (with rrule)');
+//						
+//						// Handle imported recurring event.
+//						
+//						$existingEventModel = GO_Calendar_Model_Event::model()->find(
+//							GO_Base_Db_FindParams::newInstance()
+//								->single()
+//								->criteria(GO_Base_Db_FindCriteria::newInstance()
+//									->addCondition('calendar_id',$this->calendar_id)
+//									->addCondition('uuid',$this->uuid)
+//									->addCondition('rrule','','!=')
+//								)
+//						);
+//						
+//						if (!empty($existingEventModel)) {
+//							// Update the existing recurring event in the calendar.
+//							$this->id = $existingEventModel->id;
+//							$this->setIsNew(false);
+//						}
+//						
+//					} else {
+//						
+//						GO::debug('=== ['.GO_Base_Util_Date::get_timestamp($this->start_time).'] '.$this->name);
+//						
+//						// Handle imported non-recurring event or exception event.
+//						
+//						$existingEventsStmt = GO_Calendar_Model_Event::model()->find(
+//							GO_Base_Db_FindParams::newInstance()
+//								->criteria(GO_Base_Db_FindCriteria::newInstance()
+//									->addCondition('calendar_id',$this->calendar_id)
+//									->addCondition('uuid',$this->uuid)
+//									->addCondition('rrule','','=')
+//								)
+//						);
+//
+//						foreach ($existingEventsStmt as $existingEventModel) {
+//							if ($existingEventModel && !self::eventIsFromCurrentImport($existingEventModel,$previouslyImportedEventsArray)) {
+//								// The existing event model in the database was previously imported during the current import process.
+//
+//								// We rightfully assume here that the latest version of this event will be saved in Group-Office as a new event later in this function.
+//								$existingEventModel->delete();
+//							}
+//						}
+//					
+//					}
+//				} 
+					
+				if(!$this->save()){	
+
+					$installationName = !empty(GO::config()->title) ? GO::config()->title : 'Group-Office';
+					$validationErrStr = implode("\n", $this->getValidationErrors())."\n";
+					
+					$mailSubject = str_replace(array('%cal','%event'),array($this->calendar->name,$this->name),GO::t('eventNotSavedSubject','calendar'));
+					$body = GO::t('eventNotSavedBody','calendar');
+					$body = str_replace(
+										array('%goname','%event','%starttime','%cal','%errormessage'),
+										array(
+											$installationName,
+											$this->name,
+											GO_Base_Util_Date::get_timestamp($this->start_time),
+											$this->calendar->name,
+											$validationErrStr
+										),
+										$body
+									);
+					$message = GO_Base_Mail_Message::newInstance(
+													$mailSubject
+													)->setFrom(GO::config()->webmaster_email, GO::config()->title)
+													->addTo($this->calendar->user->email);
+
+					$message->setHtmlAlternateBody(nl2br($body));
+					
+					if (GO_Base_Mail_Mailer::newGoInstance()->send($message))
+						throw new GO_Base_Exception_Validation('DUE TO ERROR, CRON SENT MAIL TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
+					else
+						throw new GO_Base_Exception_Validation('CRON COULD NOT SEND EMAIL WITH ERROR MESSAGE TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
+
 				}
 				$this->_isImport=false;
 //			} catch (Exception $e) {
@@ -1724,12 +1818,47 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					}
 				}
 			}
+			
+			if($this->isRecurring()){
+				$exceptionEventsStmt = GO_Calendar_Model_Event::model()->find(
+					GO_Base_Db_FindParams::newInstance()->criteria(
+						GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('calendar_id',$this->calendar_id)
+							->addCondition('uuid',$this->uuid)
+							->addCondition('rrule','','=')
+					)
+				);
+				foreach ($exceptionEventsStmt as $exceptionEventModel) {
+					$exceptionEventModel->exception_for_event_id=$this->id;
+					
+					$exceptionEventModel->save();
+					//TODO: This method only works when an exception takes place on the same day as the original occurence.
+					//We should store the RECURRENCE-ID value so we can find it later.
+					$this->addException($exceptionEventModel->start_time, $exceptionEventModel->id);
+					
+					
+					GO::debug('=== EXCEPTION EVENT === ['.GO_Base_Util_Date::get_timestamp($exceptionEventModel->start_time).'] '.$exceptionEventModel->name.' (exception for event: '.$exceptionEventModel->exception_for_event_id.')');
+				}
+			}
 		}
 				
 		
 
 		return $this;
 	}	
+	
+	
+	public static function eventIsFromCurrentImport(GO_Calendar_Model_Event $eventModel, $importedEventsArray) {
+
+		if (!empty($importedEventsArray))
+			foreach ($importedEventsArray as $importedEventRecord) {
+				if ($importedEventRecord['uuid']==$eventModel->uuid && $importedEventRecord['start_time']==$eventModel->start_time)
+					return true;
+			}
+		
+		return false;
+		
+	}
 	
 	
 	/**
