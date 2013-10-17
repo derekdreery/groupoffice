@@ -295,7 +295,6 @@ GO.addressbook.ContactProfilePanel = function(config)
 		{
 			xtype: 'fieldset',
 			title: GO.addressbook.lang['cmdFieldsetSelectAddressbook'],
-			autoHeight: true,
 			collapsed: false,
 			items: this.formAddressBooks
 		});
@@ -305,7 +304,6 @@ GO.addressbook.ContactProfilePanel = function(config)
 		{
 			xtype: 'fieldset',
 			title: GO.addressbook.lang['cmdFieldsetPersonalDetails'],
-			autoHeight: true,
 			collapsed: false,
 			defaults: {
 				border: false,
@@ -329,7 +327,6 @@ GO.addressbook.ContactProfilePanel = function(config)
 		{
 			xtype: 'fieldset',
 			title: GO.addressbook.lang['cmdFieldsetAddress'],
-			autoHeight: true,
 			collapsed: false,
 			defaults: {
 				border: false,
@@ -342,7 +339,6 @@ GO.addressbook.ContactProfilePanel = function(config)
 		{
 			xtype: 'fieldset',
 			title: GO.addressbook.lang['cmdFieldsetContact'],
-			autoHeight: true,
 			collapsed: false,
 			defaults: {
 				border: false,
@@ -362,7 +358,6 @@ GO.addressbook.ContactProfilePanel = function(config)
 		{
 			xtype: 'fieldset',
 			title: GO.addressbook.lang['cmdFieldsetWork'],
-			autoHeight: true,
 			collapsed: false,
 			defaults: {
 				border: false,
@@ -371,32 +366,51 @@ GO.addressbook.ContactProfilePanel = function(config)
 			items: [this.formCompany,this.formDepartment,this.formFunction]
 		});
  
+		this.actionDateFieldset = new Ext.form.FieldSet({
+			collapsed: false,
+			defaults: {
+				border: false,
+				anchor: '100%'
+			},
+			items: [
+				this.formActionDateField = new Ext.form.DateField({
+					name : 'action_date',
+					format : GO.settings['date_format'],
+					allowBlank : true,
+					fieldLabel: GO.addressbook.lang['actionDate']
+				})
+			]
+		});
+ 
 			var leftColItems = [];
 		
 		//if(!config.forUser)
 			leftColItems.push(this.addressbookFieldset);
 		
-		leftColItems.push(this.personalFieldset,this.workFieldset);
+		leftColItems.push(this.personalFieldset,this.workFieldset,this.actionDateFieldset);
 		
 	
 		this.title= GO.addressbook.lang['cmdPanelContact'];
-		//this.cls='go-form-panel';
 		this.autoScroll=true;
-		this.bodyStyle='padding:5px';
 		this.layout= 'column';
 		this.labelWidth=125;
-		this.defaults= {
-			border: false
+		
+		this.defaults={
+			border: false			
+			
 		};
+		
 		this.items= [
 		{
+			defaults:{
+				style:'margin-right:10px'
+			},
 			itemId:'leftCol',
 			columnWidth: .5,
 			items: leftColItems			
 		},{
 			itemId:'rightCol',
 			columnWidth: .5,
-			style: 'margin-left: 5px;',
 			items: [
 			this.contactFieldset,
 			this.addressFieldset

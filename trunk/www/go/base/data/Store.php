@@ -187,7 +187,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 			$this->response['results'][] = $record;
 		}
 		$this->response['total']=$this->getTotal();
-
+		$this->response['success']=true;
     return $this->response;
   }
   

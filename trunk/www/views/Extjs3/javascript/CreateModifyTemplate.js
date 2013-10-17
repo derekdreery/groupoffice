@@ -1,12 +1,12 @@
 GO.createModifyTemplate =
-	'<div class="display-panel-heading "><div style="float:left;margin-left:3px;">'+GO.lang['createModify']+'</div></div>'+
+	'<div class="display-panel-heading ">'+GO.lang['createModify']+'</div>'+
 //	'{[this.collapsibleSectionHeader(GO.lang.createModify, "createModify-"+values.panelId, "createModify")]}'+
 	'<table>'+
 		'<tr>'+
-			'<td width="80px">'+GO.lang['strCtime']+':</td>'+'<td width="100px">{ctime}</td>'+
-			'<td width="80px">'+GO.lang['strMtime']+':</td>'+'<td width="100px">{mtime}</td>'+
+			'<td width="120">'+GO.lang['strCtime']+':</td>'+'<td style="padding-right:2px">{ctime}</td>'+
+			'<td width="80">'+GO.lang['strMtime']+':</td>'+'<td>{mtime}</td>'+
 		'</tr><tr>'+
-			'<td width="80px" valign="top" style="vertical-align:top;">'+GO.lang['createdBy']+':</td>'+'<td width="100px">{username}</td>'+
-			'<td width="80px" valign="top" style="vertical-align:top;">'+GO.lang['mUser']+':</td>'+'<td width="100px">{musername}</tpl></td>'+
+			'<td width="120" style="vertical-align:top;">'+GO.lang['createdBy']+':</td>'+'<td style="padding-right:2px">{username}</td>'+
+			'<td width="120" style="vertical-align:top;">'+GO.lang['mUser']+':</td>'+'<td>{musername}</td>'+
 		'</tr>'+
 	'</table>';

@@ -301,3 +301,5 @@ $l['orBrowseComputer']='eller ladda upp ifrån din dator';
 $l['currentImage']='Nuvarande bild';
 
 $l['downloadFullImage']='Hämta hela bilden';
+
+$l['bankBicNo']= 'Bank-BIC-nummer';

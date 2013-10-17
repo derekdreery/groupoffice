@@ -817,7 +817,9 @@ class customfields extends db {
 		return $return_values;*/
 		
 		$model = get_model_by_type_id($link_type);
-
+		if(!$model)
+			return array();
+		
 		$table = 'cf_'.$model->tableName();
 
 		$sql = "SELECT * FROM $table WHERE model_id=".intval($link_id);

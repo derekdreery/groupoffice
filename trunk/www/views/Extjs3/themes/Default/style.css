@@ -491,7 +491,13 @@ a.normal-link:hover{
 }
 
 .btn-refresh {
-	background-image:url('images/16x16/reload.png') !important;
+	background-image:url('images/16x16/reload.png') !important;	
+}
+
+.go-display-panel .btn-refresh, .go-display-panel .btn-print{
+	width: 14px !important;
+	overflow: hidden;
+	text-indent: 100px;
 }
 
 .btn-left-arrow {
@@ -830,6 +836,7 @@ hr{
 
 table.display-panel{
 	width:100%;
+	border-collapse:collapse;
 }
 
 table.display-panel td{

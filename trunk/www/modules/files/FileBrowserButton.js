@@ -45,3 +45,6 @@ GO.files.FileBrowserButton = Ext.extend(Ext.Button, {
 	}
 	
 });
+
+
+Ext.reg('filebrowserbutton', GO.files.FileBrowserButton);

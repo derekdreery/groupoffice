@@ -7,21 +7,50 @@ abstract class GO_Customfields_Customfieldtype_Abstract{
 	 * @var GO_Customfields_Model_Field 
 	 */
 	protected $field;
-
+	
+	protected $maxLength=255;
+	
 	public function __construct($field=false){
 		if($field)
 			$this->field=$field;
 	}
 	
 	/**
-	 * The SQL to create the database field.
+	 * The SQL to create the database field. Use '%MAXLENGTH' to be substituted
+	 * by the Field model's 'max_length' attribute.
 	 * 
 	 * @return MySQL field 
 	 */
 	public function fieldSql(){
-		return "VARCHAR(255) NOT NULL default ''";
+		return "VARCHAR(%MAX_LENGTH) NOT NULL default ''";
 	}
 
+	public function hasLength() {
+		$fieldSql = $this->fieldSql();
+		return ( get_class($this)!=='GO_Addressbook_Customfieldtype_Contact'
+				&& get_class($this)!=='GO_Addressbook_Customfieldtype_Company'
+				&& get_class($this)!=='GO_Files_Customfieldtype_File'
+				&& get_class($this)!=='GO_Addressbook_Customfieldtype_Contact'
+				&& get_class($this)!=='GO_Site_Customfieldtype_Sitefile'
+				&& get_class($this)!=='GO_Site_Customfieldtype_Sitemultifile'
+			) && (
+				strpos(strtolower($fieldSql),'varchar')===0
+//			|| strpos(strtolower($fieldSql),'int')===0
+//			|| strpos(strtolower($fieldSql),'tinyint')===0
+//			|| strpos(strtolower($fieldSql),'double')===0
+//			|| strpos(strtolower($fieldSql),'enum')===0
+//			|| strpos(strtolower($fieldSql),'float')===0
+//			|| strpos(strtolower($fieldSql),'smallint')===0
+//			|| strpos(strtolower($fieldSql),'mediumint')===0
+//			|| strpos(strtolower($fieldSql),'integer')===0
+//			|| strpos(strtolower($fieldSql),'bigint')===0
+		);
+	}
+	
+	public function getMaxLength() {
+		return $this->maxLength;
+	}
+	
 	/**
 	 * This function is used when $model->customFieldRecord->att is accessed
 	 * 

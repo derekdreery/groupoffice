@@ -97,6 +97,15 @@ abstract class GO_Base_Storeexport_AbstractExport {
 	}
 	
 	/**
+	 * Add extra lines to the end of the document
+	 * 
+	 * @param array $lines key value array
+	 */
+	public function addLines($lines){
+		
+	}
+	
+	/**
 	 * Output's all data to the browser.
 	 */
 	abstract public function output();

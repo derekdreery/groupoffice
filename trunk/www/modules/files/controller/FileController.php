@@ -39,6 +39,8 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 			$response['data']['expire_time'] = "";
 			$response['data']['download_link'] = "";
 		}
+		
+		$response['data']['url']=GO::url('files/file/download',array('id'=>$model->id), false, true);
 
 		if ($model->fsFile->isImage())
 			$response['data']['thumbnail_url'] = $model->thumbURL;
@@ -211,7 +213,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		}else
 		{
 			if(!GO::user())
-				$this->httpAuth();
+				GO_Base_Util_Http::basicAuth();
 				
 			if(!$file->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
 				throw new GO_Base_Exception_AccessDenied();

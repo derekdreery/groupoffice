@@ -671,8 +671,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			if(col)
 			{
 				var text = '';
-//				if(!GO.util.empty(eventData.status_color))
-//					text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';				
+				if(GO.calendar.showStatuses && !GO.util.empty(eventData.status_color))
+					text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';				
 
 				if(daySpan==1){
 					if(GO.util.empty(eventData.all_day_event))
@@ -700,9 +700,19 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				
 				var cls = "x-calGrid-month-event-container cal-event-partstatus-"+eventData.partstatus;
 
+//				if(eventData.link_count>0){
+//					cls +=' cal-has-links'
+//				}
+
 				if(eventData.link_count>0){
-					cls +=' cal-has-links'
+					text +='<span class="cal-has-links"></span>';
 				}
+				if (eventData["private_enabled"])
+					text += '<span class="cal-is-private"></span>';
+				if (eventData.has_reminder==1)
+					text += '<span class="cal-has-reminders"></span>';
+				if (eventData.repeats)
+					text += '<span class="cal-recurring"></span>';
 				
 				var domCfg = {
 					tag: 'div',

@@ -76,15 +76,27 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 		if(isset($params['username']))
 			$params['username'] .= '@'.$domainModel->domain;
 		
-		if ($model->getIsNew()) {
-			$aliasModel = GO_Postfixadmin_Model_Alias::model()->findSingleByAttribute('address', $params['username']);
-			if (empty($aliasModel)) {
-				$aliasModel = GO_Postfixadmin_Model_Alias::model();
+		if ($model->isNew) {
+//			$aliasModel = GO_Postfixadmin_Model_Alias::model()->findSingleByAttribute('address', $params['username']);
+//			if (empty($aliasModel)) {
+//				$aliasModel = new GO_Postfixadmin_Model_Alias();
+//			}
+//			$aliasModel->domain_id = $params['domain_id'];
+//			$aliasModel->address = $params['username'];
+//			$aliasModel->goto = $params['username'];
+//			$aliasModel->save();
+			
+			
+			if(!empty($params['alias']) && $params['alias']!=$params['username']){
+				$aliasModel = GO_Postfixadmin_Model_Alias::model()->findSingleByAttribute('address', $params['alias']);
+				if (empty($aliasModel)) {
+					$aliasModel = new GO_Postfixadmin_Model_Alias();
+				}
+				$aliasModel->domain_id = $params['domain_id'];
+				$aliasModel->address = $params['alias'];
+				$aliasModel->goto = $params['username'];
+				$aliasModel->save();
 			}
-			$aliasModel->domain_id = $params['domain_id'];
-			$aliasModel->address = $params['username'];
-			$aliasModel->goto = $params['username'];
-			$aliasModel->save();
 		}
 	}
 	

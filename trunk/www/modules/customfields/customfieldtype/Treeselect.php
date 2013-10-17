@@ -7,7 +7,7 @@ class GO_Customfields_Customfieldtype_Treeselect extends GO_Customfields_Customf
 	
 	public function fieldSql(){
 		//needs to be text for multiselect field
-		if($this->field->multiselect)
+		if(!empty($this->field) && $this->field->multiselect)
 			return "TEXT NULL";		
 		else
 			return parent::fieldSql ();
@@ -41,7 +41,12 @@ class GO_Customfields_Customfieldtype_Treeselect extends GO_Customfields_Customf
 				$value = explode(':', $attributes[$key]);			
 				//var_dump(GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport);
 				if(isset($value[1])){
-					$attributes[$key] = $value[1];
+					
+					// Only strip the first part
+					array_shift($value);
+					$attributes[$key] = implode(':', $value);
+					
+					//$attributes[$key] = $value[1];
 				}
 			}
 		}

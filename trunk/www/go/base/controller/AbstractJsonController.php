@@ -117,6 +117,15 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 
 		if (GO::modules()->comments)
 			$response = $this->_processCommentsDisplay($model, $response);
+		
+		if (GO::modules()->lists)
+			$response = GO_Lists_ListsModule::displayResponse($model, $response);
+
+		$this->fireEvent('display', array(
+				&$this,
+				&$response,
+				&$model
+		));
 
 		return new GO_Base_Data_JsonResponse($response);
 	}
@@ -176,11 +185,15 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	 */
 	public function renderStore(GO_Base_Data_AbstractStore $store, $return = false, $buttonParams=false) {
 
-		$response = array(
-				"success" => true,
-				"results" => $store->getRecords(),
-				'total' => $store->getTotal()
-		);
+//		$response = array(
+//				"success" => true,
+//				"results" => $store->getRecords(),
+//				'total' => $store->getTotal()
+//		);
+//		if($summary = $store->getSummary())
+//			$response['summary'] = $summary;
+		
+		$response=$store->getData();
 		if($summary = $store->getSummary())
 			$response['summary'] = $summary;
 
@@ -188,18 +201,18 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		if (!empty($title))
 			$response['title'] = $title;
 
-		if ($store instanceof GO_Base_Data_DbStore) {
-			if ($store->getDeleteSuccess() !== null) {
-				$response['deleteSuccess'] = $store->getDeleteSuccess();
-				if(!$response['deleteSuccess'])
-					$response['deleteFeedback'] = $store->getFeedBack();
-			}
-			if($buttonParams){
-				$buttonParams = $store->getButtonParams();
-				if (!empty($buttonParams))
-					$response['buttonParams'] = $buttonParams;
-			}
-		}
+//		if ($store instanceof GO_Base_Data_DbStore) {
+//			if ($store->getDeleteSuccess() !== null) {
+//				$response['deleteSuccess'] = $store->getDeleteSuccess();
+//				if(!$response['deleteSuccess'])
+//					$response['deleteFeedback'] = $store->getFeedBack();
+//			}
+//			if($buttonParams){
+//				$buttonParams = $store->getButtonParams();
+//				if (!empty($buttonParams))
+//					$response['buttonParams'] = $buttonParams;
+//			}
+//		}
 
 		return new GO_Base_Data_JsonResponse($response);
 	}
@@ -253,6 +266,9 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		}else
 			$export = new GO_Base_Storeexport_ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
 
+		if(isset($params['extraLines']))
+			$export->addLines($params['extraLines']);
+		
 		$export->output();
 	}
 
@@ -433,6 +449,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				}
 				$categories[$field->category->id]['fields'][] = array(
 						'name' => $field->name,
+						'datatype'=>$field->datatype,
 						'value' => $customAttributes[$field->columnName()]
 				);
 			}
@@ -442,9 +459,8 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 			if (count($category['fields']))
 				$response['data']['customfields'][] = $category;
 		}
-		
-		if(isset($response['data']['customfields']) && method_exists($model, 'getDisabledCustomFieldsCategoriesField') && GO_Customfields_Model_DisableCategories::isEnabled($model->className(), $model->getDisabledCustomFieldsCategoriesField())){
 
+		if(isset($response['data']['customfields']) && method_exists($model, 'getDisabledCustomFieldsCategoriesField') && GO_Customfields_Model_DisableCategories::isEnabled($model->className(), $model->disabledCustomFieldsCategoriesField)){
 			$ids = GO_Customfields_Model_EnabledCategory::model()->getEnabledIds($model->className(), $model->getDisabledCustomFieldsCategoriesField());
 			
 			$enabled = array();

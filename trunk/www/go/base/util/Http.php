@@ -227,4 +227,16 @@ class GO_Base_Util_Http {
 		
 		return $url;
 	}	
+	
+	
+	public static function basicAuth(){
+		if (!isset($_SERVER['PHP_AUTH_USER']) && !GO_Base_Util_Http::isAjaxRequest()) {
+			header('WWW-Authenticate: Basic realm="'.GO::config()->product_name.'"');
+			header('HTTP/1.0 401 Unauthorized');
+			
+			
+			throw new GO_Base_Exception_AccessDenied();
+			exit;
+		}
+	}
 }

@@ -19,7 +19,7 @@
 			goDialogId:'user',
 			title:GO.users.lang.userSettings,
 			formControllerUrl: 'users/user',
-			height:580,
+			height:600,
 			width:800,
 			stateId:'go-user-window'
 			

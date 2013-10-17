@@ -61,7 +61,7 @@ class GO_Ldapauth_Authenticator {
 		if (empty(GO::config()->ldap_host) || empty(GO::config()->ldap_peopledn)) {
 			GO::debug("LDAPAUTH: Aborting because one or more of the following " .
 							"required values is not set: \$config['ldap_host'] and \$config['ldap_peopledn'].");
-			return false;
+			return true;
 		}
 		
 		
@@ -91,7 +91,8 @@ class GO_Ldapauth_Authenticator {
 
 		if (!$record) {
 			GO::debug("LDAPAUTH: No LDAP entry found for " . $username);
-			return false;
+			//return true here because this should not block normal authentication
+			return true;
 		}
 
 		$authenticated = $ldapConn->bind($record->getDn(), $password);
@@ -109,14 +110,22 @@ class GO_Ldapauth_Authenticator {
 				$str .= 'unknown';
 			GO::infolog($str);
 			
-			//block user from logging in. If we don't throw the exception here normal Group-Office login will continue.
-			throw new Exception(GO::t('badLogin').' (LDAP)');
+			//Don't throw exception because this won't be catched by cookie login.
+//			throw new Exception(GO::t('badLogin').' (LDAP)');
 			
-			//return false;
+			return false;
 		} else {
 			GO::debug("LDAPAUTH: LDAP authentication SUCCESS for " . $username);
 			
 			$oldIgnoreAcl = GO::setIgnoreAclPermissions(true);
+			
+			if(!empty(GO::config()->ldap_create_mailbox_domains)){
+				
+				if(!GO::modules()->serverclient)
+					throw new Exception("The serverclient module must be installed and configured when using \$config['GO::config()->ldap_create_mailbox_domains']. See https://www.group-office.com/wiki/Mailserver#Optionally_install_the_serverclient");
+				
+				$_POST['serverclient_domains']=GO::config()->ldap_create_mailbox_domains;
+			}
 
 			$user = $this->syncUserWithLdapRecord($record, $password);
 			if(!$user){
@@ -266,6 +275,12 @@ class GO_Ldapauth_Authenticator {
 				GO::debug('LDAPAUTH: No E-mail configuration found for domain: ' . $domain);
 				return false;
 			}
+			
+			if(empty($config['create_email_account'])){
+				GO::debug('LDAPAUTH: E-mail account creation disabled for domain: ' . $domain);
+				return false;
+			}
+				
 
 			GO::debug('LDAPAUTH: E-mail configuration found. Creating e-mail account');
 			$imapUsername = empty($config['ldap_use_email_as_imap_username']) ? $user->username : $user->email;

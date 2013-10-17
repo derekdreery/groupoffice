@@ -96,8 +96,20 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 		
 		$this->_changeTimeParams($params);
-
+		
 		$this->_setEventAttributes($model, $params);
+		
+		if(empty($params['exception_date']) && (!empty($params['offset']) || !empty($params['offset_days']))){
+			//don't move recurring events that are set on weekdays by whole days
+			if($model->isRecurring() && date('dmY', $model->start_time)!=date('dmY', $model->getOldAttributeValue('start_time'))){
+				$rrule = $model->getRecurrencePattern();
+				if(!empty($rrule->byday)){
+					if (!empty($params['duplicate']))
+						$model->delete();
+					throw new Exception(GO::t('cantMoveRecurringByDay', 'calendar'));
+				}
+			}
+		}
 		
 		if(!$this->_checkConflicts($response, $model, $params)){
 			return false;
@@ -216,7 +228,21 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			if($model->hasOtherParticipants())// && isset($modifiedAttributes['start_time']))
 			{			
 				$response['isNewEvent']=$isNewEvent;
-				$response['askForMeetingRequest']=true;
+				
+				if($isNewEvent){
+					$response['askForMeetingRequest']=true;
+				}else
+				{
+					//only ask to send email if a relevant attribute has been altered
+					$attr = $model->getRelevantMeetingAttributes();				
+					foreach($modifiedAttributes as $key=>$value){
+						if(in_array($key, $attr)){
+
+							$response['askForMeetingRequest']=true;
+							break;
+						}
+					}
+				}
 			}
 		}
 		
@@ -294,17 +320,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$ids = array();
 		if (!empty($params['participants'])) {
+			$hasOrganizer=false;
 			$participants = json_decode($params['participants'], true);
 			
 			//don't save a single organizer participant
 			if(count($participants)>1){				
 				foreach ($participants as $p) {
-
-					$participant = false;
-//					if (substr($p['id'], 0, 4) != 'new_') {
-//						$participant = GO_Calendar_Model_Participant::model()->findByPk($p['id']);
-//					}
-					//better to search on e-mail so that when creating exception events won't fail
 					$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
 							'email'=> $p['email'],
 							'event_id'=>$event->id
@@ -318,6 +339,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					if(!$participant->save()){
 						throw new Exception("Could not save participant ".var_export($participant->getValidationErrors(), true));
 					}
+					
+					if(!$hasOrganizer){
+						$hasOrganizer=$participant->is_organizer;
+					}
+					
 					$ids[] = $participant->id;
 
 					$response[]=$participant->toJsonArray($event->start_time, $event->end_time);
@@ -333,102 +359,131 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 											)
 			);
 			$stmt->callOnEach('delete');
+			
+			
+			if(!$hasOrganizer){
+				
+				$organizer = $event->getDefaultOrganizerParticipant();
+				
+				$existing = $event->participants(
+								GO_Base_Db_FindParams::newInstance()
+									->single()
+									->criteria(
+													GO_Base_Db_FindCriteria::newInstance()
+													->addCondition('email',$organizer->email)
+													)
+								);
+				
+				if($existing){
+					$existing->is_organizer=true;
+					$existing->save();
+				}else{				
+					$organizer->save();
+				}
+				
+			}
+			
+		}
+		
+		if(empty($response)){
+			$organizer = $event->getDefaultOrganizerParticipant();
+			$response=array($organizer->toJsonArray($event->start_time, $event->end_time));
 		}
 		
 		return $response;
 	}
-	/**
-	 *
-	 * @param type $newParticipantIds
-	 * @param type $event
-	 * @param type $isNewEvent
-	 * @param type $modifiedAttributes
-	 * @param type $method
-	 * @param GO_Calendar_Model_Participant $sendingParticipant 
-	 */
-	private function _sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes, $method='REQUEST', $sendingParticipant=false) {
-
-		
-			$stmt = $event->participants();
-
-			while ($participant = $stmt->fetch()) {		
-				
-				$shouldSend = ($method=='REQUEST' && !$participant->is_organizer) || 
-					($method=='REPLY' && $participant->is_organizer) || 
-					($method=='CANCEL' && !$participant->is_organizer);
-									
-				if($shouldSend){
-					if($isNewEvent){
-						$subject = GO::t('invitation', 'calendar').': '.$event->name;
-					}elseif($sendingParticipant)
-					{							
-						$updateReponses = GO::t('updateReponses','calendar');
-						$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $event->name);
-					}elseif($method == 'CANCEL')
-					{
-						$subject = GO::t('cancellation','calendar').': '.$event->name;
-					}else
-					{
-						$subject = GO::t('invitation_update', 'calendar').': '.$event->name;
-					}
-
-
-					$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
-					$declineUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
-
-					if($method=='REQUEST' && $isNewEvent){
-						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
-										$event->toHtml() .
-										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
-										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
-										'&nbsp;|&nbsp;' .
-										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
-					}elseif($method=='CANCEL') {
-						$body = '<p>' . GO::t('cancelMessage', 'calendar') . '</p>' .
-										$event->toHtml();
-					}else // on update event
-					{
-						$body = '<p>' . GO::t('invitation_update', 'calendar') . '</p>' .
-										$event->toHtml() .
-										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
-										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
-										'&nbsp;|&nbsp;' .
-										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
-					}
-
-					$fromEmail = GO::user() ? GO::user()->email : $sendingParticipant->email;
-					$fromName = GO::user() ? GO::user()->name : $sendingParticipant->name;
-
-					
-					$toEm = $participant->email;
-          $toName = $participant->name;
-
-          GO::debug("SEND EVENT INVITATION FROM: ".$fromEmail."(".$fromName.") TO: ".$toEm."(".$toName.")");
-
-					$message = GO_Base_Mail_Message::newInstance($subject)
-									->setFrom($fromEmail, $fromName)
-									->addTo($participant->email, $participant->name);
-
-					$ics=$event->toICS($method, $sendingParticipant);
-
-					$message->setHtmlAlternateBody($body);
-					//$message->setBody($body, 'text/html','UTF-8');
-					$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
-					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
-					$a->setDisposition("inline");
-					$message->attach($a);
-					GO_Base_Mail_Mailer::newGoInstance()->send($message);
-				}
-				
-			
-		}
-	}
+//	/**
+//	 *
+//	 * @param type $newParticipantIds
+//	 * @param type $event
+//	 * @param type $isNewEvent
+//	 * @param type $modifiedAttributes
+//	 * @param type $method
+//	 * @param GO_Calendar_Model_Participant $sendingParticipant 
+//	 */
+//	private function _sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes, $method='REQUEST', $sendingParticipant=false) {
+//
+//		
+//			$stmt = $event->participants();
+//
+//			while ($participant = $stmt->fetch()) {		
+//				
+//				$shouldSend = ($method=='REQUEST' && !$participant->is_organizer) || 
+//					($method=='REPLY' && $participant->is_organizer) || 
+//					($method=='CANCEL' && !$participant->is_organizer);
+//									
+//				if($shouldSend){
+//					if($isNewEvent){
+//						$subject = GO::t('invitation', 'calendar').': '.$event->name;
+//					}elseif($sendingParticipant)
+//					{							
+//						$updateReponses = GO::t('updateReponses','calendar');
+//						$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $event->name);
+//					}elseif($method == 'CANCEL')
+//					{
+//						$subject = GO::t('cancellation','calendar').': '.$event->name;
+//					}else
+//					{
+//						$subject = GO::t('invitation_update', 'calendar').': '.$event->name;
+//					}
+//
+//
+//					$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+//					$declineUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+//
+//					if($method=='REQUEST' && $isNewEvent){
+//						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
+//										$event->toHtml() .
+//										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+//										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+//										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+//										'&nbsp;|&nbsp;' .
+//										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+//					}elseif($method=='CANCEL') {
+//						$body = '<p>' . GO::t('cancelMessage', 'calendar') . '</p>' .
+//										$event->toHtml();
+//					}else // on update event
+//					{
+//						$body = '<p>' . GO::t('invitation_update', 'calendar') . '</p>' .
+//										$event->toHtml() .
+//										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+//										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+//										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+//										'&nbsp;|&nbsp;' .
+//										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+//					}
+//
+//					$fromEmail = GO::user() ? GO::user()->email : $sendingParticipant->email;
+//					$fromName = GO::user() ? GO::user()->name : $sendingParticipant->name;
+//
+//					
+//					$toEm = $participant->email;
+//          $toName = $participant->name;
+//
+//          GO::debug("SEND EVENT INVITATION FROM: ".$fromEmail."(".$fromName.") TO: ".$toEm."(".$toName.")");
+//
+//					$message = GO_Base_Mail_Message::newInstance($subject)
+//									->setFrom($fromEmail, $fromName)
+//									->addTo($participant->email, $participant->name);
+//
+//					$ics=$event->toICS($method, $sendingParticipant);
+//
+//					$message->setHtmlAlternateBody($body);
+//					//$message->setBody($body, 'text/html','UTF-8');
+//					$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
+//					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+//					$a->setDisposition("inline");
+//					$message->attach($a);
+//					GO_Base_Mail_Mailer::newGoInstance()->send($message);
+//				}
+//				
+//			
+//		}
+//	}
 	
 	protected function beforeDisplay(&$response, &$model, &$params) {
 		
-		if($model->private && $model->user_id != GO::user()->id)
+		if($model->isPrivate(GO::user()) && $model->user_id != GO::user()->id && $model->calendar->user_id!=GO::user()->id)
 			throw new GO_Base_Exception_AccessDenied();
 		
 		return parent::beforeDisplay($response, $model, $params);
@@ -444,7 +499,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function beforeLoad(&$response, &$model, &$params) {
 		
 	
-		if($model->private && $model->user_id != GO::user()->id)
+		if($model->isPrivate(GO::user()) && $model->user_id != GO::user()->id && $model->calendar->user_id!=GO::user()->id)
 			throw new GO_Base_Exception_AccessDenied();
 	
 		if (!empty($params['exception_date'])) {
@@ -501,6 +556,22 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$participantModel = $model->getDefaultOrganizerParticipant();
 
 			$response['participants']=array('results'=>array($participantModel->toJsonArray($model->start_time, $model->end_time)),'total'=>1,'success'=>true);
+			
+			if(!empty($params['linkModelNameAndId'])){
+				$arr = explode(':', $params['linkModelNameAndId']);
+				
+				if($arr[0]=='GO_Addressbook_Model_Contact'){
+					$contact = GO_Addressbook_Model_Contact::model()->findByPk($arr[1]);
+					
+					if($contact){
+						$participantModel = new GO_Calendar_Model_Participant();
+						$participantModel->setContact($contact);
+						
+						$response['participants']['results'][]=$participantModel->toJsonArray($model->start_time, $model->end_time);
+						$response['participants']['total']=2;
+					}
+				}
+			}
 		}else
 		{
 			$particsStmt = GO_Calendar_Model_Participant::model()->findByAttribute('event_id',$params['id']);
@@ -1127,9 +1198,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @return boolean
 	 * @throws GO_Base_Exception_NotFound
 	 */
-	private function _handleIcalendarReply(Sabre\VObject\Component $vevent, $recurrenceDate){
+	private function _handleIcalendarReply(Sabre\VObject\Component $vevent, $recurrenceDate, GO_Email_Model_Account $account){
 		//find existing event
-		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
+		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, $account->user_id);
 		if(!$masterEvent)
 			throw new GO_Base_Exception_NotFound();
 		
@@ -1160,17 +1231,18 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @return boolean
 	 * @throws GO_Base_Exception_NotFound
 	 */
-	private function _handleIcalendarRequest(Sabre\VObject\Component $vevent, $recurrenceDate){
-		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
+	private function _handleIcalendarRequest(Sabre\VObject\Component $vevent, $recurrenceDate, GO_Email_Model_Account $account){
 		
+		$settings = GO_Calendar_Model_Settings::model()->getDefault($account->user);
 		
+		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, 0, $settings->calendar_id);		
 		
 		//delete existing data		
 		if(!$recurrenceDate){
 			//if no recurring instance was given delete the master event
 			if($masterEvent)
 				$masterEvent->delete();
-		}  else 
+		}  else if($masterEvent)
 		{
 			
 			$exceptionEvent = $masterEvent->findException($recurrenceDate);			
@@ -1185,7 +1257,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$eventUpdated=!$recurrenceDate && $masterEvent || $recurrenceDate && !empty($exceptionEvent);
 		
-		$importAttributes=array('is_organizer'=>false);
+		$importAttributes=array('is_organizer'=>false,'calendar_id'=>$settings->calendar_id);
 		
 		//import it
 		$event = new GO_Calendar_Model_Event();
@@ -1221,8 +1293,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		return $response;
 	}
 	
-	private function _handleIcalendarCancel(Sabre\VObject\Component $vevent, $recurrenceDate){
-		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
+	private function _handleIcalendarCancel(Sabre\VObject\Component $vevent, $recurrenceDate,GO_Email_Model_Account $account){
+		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, $account->user_id);
 				
 		//delete existing data		
 		if(!$recurrenceDate){
@@ -1278,16 +1350,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		switch($vcalendar->method){
 			case 'REPLY':
-				return $this->_handleIcalendarReply($vevent, $recurrenceDate);
+				return $this->_handleIcalendarReply($vevent, $recurrenceDate, $account);
 				break;
 			
 			case 'REQUEST':
 				//$status = !empty($params['status']) ? $params['status'] : false;
-				return $this->_handleIcalendarRequest($vevent, $recurrenceDate);
+				return $this->_handleIcalendarRequest($vevent, $recurrenceDate, $account);
 				break;
 			
 			case 'CANCEL':
-				return $this->_handleIcalendarCancel($vevent, $recurrenceDate);
+				return $this->_handleIcalendarCancel($vevent, $recurrenceDate, $account);
 				break;
 			
 			default:

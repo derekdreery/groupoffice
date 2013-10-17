@@ -4,7 +4,7 @@
  *
  * @return array containing the user row or empty if no auto login should take place
  */
-function login_groupoffice(&$username, &$password)
+function login_groupoffice(&$username, &$password,  $ip = '', $browser = '', $forwarded_for = '')
 {
 	global $db;
 	
@@ -31,7 +31,7 @@ function login_groupoffice(&$username, &$password)
 	{
 		$sql = 'SELECT user_id, username, user_password, user_passchg, user_email, user_type
 			FROM ' . USERS_TABLE . "
-			WHERE username = '" . $db->sql_escape($username) . "'";
+			WHERE username_clean = '" . $db->sql_escape(utf8_clean_string($username)) . "'";
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
@@ -65,16 +65,30 @@ function login_groupoffice(&$username, &$password)
 
 	}else
 	{
-		return array(
-				'status'	=> LOGIN_ERROR_USERNAME,
-				'error_msg'	=> 'LOGIN_ERROR_USERNAME',
-				'user_row'	=> array('user_id' => ANONYMOUS),
-		);
+//		return array(
+//				'status'	=> LOGIN_ERROR_USERNAME,
+//				'error_msg'	=> 'LOGIN_ERROR_USERNAME',
+//				'user_row'	=> array('user_id' => ANONYMOUS),
+//		);
+		//fallback to regular Phpbb db auth.
+		require_once(dirname(__FILE__).'/auth_db.php');
+		return login_db($username, $password, $ip, $browser, $forwarded_for);
 	}
 }
 
+function groupoffice_unserializesession($data) {
+	$vars = preg_split('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',
+									$data, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+	for ($i = 0; isset($vars[$i]); $i++)
+		$result[$vars[$i++]] = unserialize($vars[$i]);
+	return $result;
+}
+
+
 function autologin_groupoffice()
 {
+	$user_id=false;
+	
 	if(isset($_REQUEST['goauth']))
 	{
 		$file = base64_decode($_REQUEST['goauth']);
@@ -82,8 +96,19 @@ function autologin_groupoffice()
 		//$_SESSION['groupoffice_to_phpbb_session_file']=$file;
 
 		$user_id = intval(file_get_contents($file));
+	}elseif(isset($_COOKIE['groupoffice'])){
+		$fname = session_save_path() . "/sess_" . $_COOKIE['groupoffice'];
+		if (file_exists($fname)) {
+			$data = file_get_contents($fname);
+			$data = groupoffice_unserializesession($data);
+			
+			if(isset($data['GO_SESSION']['user_id']))
+				$user_id=$data['GO_SESSION']['user_id'];
+		}
+	}
 		//unlink($file);
 			
+	if($user_id){
 		$gorow = user_row_groupoffice('', '', $user_id);
 
 		if($gorow)
@@ -91,7 +116,7 @@ function autologin_groupoffice()
 			global $db;
 		
 			$sql = 'SELECT * FROM ' . USERS_TABLE . "
-			WHERE username = '" . $db->sql_escape($gorow['username']) . "'";
+			WHERE username_clean = '" . $db->sql_escape(utf8_clean_string($gorow['username'])) . "'";
 			$result = $db->sql_query($sql);
 			$row = $db->sql_fetchrow($result);
 			$db->sql_freeresult($result);
@@ -222,23 +247,23 @@ function acp_groupoffice(&$new)
 	$tpl = '
 
 	<dl>
-		<dt><label for="groupoffice_server">Database server:</label><br /><span></span></dt>
+		<dt><label for="groupoffice_server">Group-Office DB server:</label><br /><span></span></dt>
 		<dd><input type="text" id="groupoffice_server" size="40" name="config[groupoffice_server]" value="' . $new['groupoffice_server'] . '" /></dd>
 	</dl>
 	<dl>
-		<dt><label for="groupoffice_server">Database name:</label><br /><span></span></dt>
+		<dt><label for="groupoffice_server">Group-Office DB name:</label><br /><span></span></dt>
 		<dd><input type="text" id="groupoffice_server" size="40" name="config[groupoffice_database]" value="' . $new['groupoffice_database'] . '" /></dd>
 	</dl>
 	<dl>
-		<dt><label for="groupoffice_server">Database user:</label><br /><span></span></dt>
+		<dt><label for="groupoffice_server">Group-Office DB user:</label><br /><span></span></dt>
 		<dd><input type="text" id="groupoffice_server" size="40" name="config[groupoffice_user]" value="' . $new['groupoffice_user'] . '" /></dd>
 	</dl>
 	<dl>
-		<dt><label for="groupoffice_server">Database password:</label><br /><span></span></dt>
+		<dt><label for="groupoffice_server">Group-Office DB password:</label><br /><span></span></dt>
 		<dd><input type="password" id="groupoffice_server" size="40" name="config[groupoffice_pass]" value="' . $new['groupoffice_pass'] . '" /></dd>
 	</dl>
 	<dl>
-		<dt><label for="groupoffice_server">Database port:</label><br /><span></span></dt>
+		<dt><label for="groupoffice_server">Group-Office DB port:</label><br /><span></span></dt>
 		<dd><input type="text" id="groupoffice_server" size="40" name="config[groupoffice_port]" value="' . $new['groupoffice_port'] . '" /></dd>
 	</dl>
 		';

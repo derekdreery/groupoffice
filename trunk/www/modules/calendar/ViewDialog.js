@@ -20,8 +20,8 @@ GO.calendar.ViewDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			titleField:'name',
 			title:GO.calendar.lang.view,
 			formControllerUrl: 'calendar/view',
-            width: 440,
-            height: 500
+			width: 440,
+			height: 600
 		});
 		
 		GO.calendar.ViewDialog.superclass.initComponent.call(this);	

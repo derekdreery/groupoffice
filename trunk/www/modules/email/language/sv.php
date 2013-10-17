@@ -257,3 +257,5 @@ $l['appointementAlreadyProcessed']='Detta meddelande innehåller en mötesinbjud
 
 $l['noname']= 'Inget namn';
 $l['doNotMarkAsRead']= 'Markera inte mail som lästa automatiskt';
+
+$l['showAll']='Visa alla';

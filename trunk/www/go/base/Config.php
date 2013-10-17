@@ -931,7 +931,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '5.0.0';
+	var $version = '5.0.10';
 	
 	/**
 	 * Modification date
@@ -939,7 +939,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20130815';
+	var $mtime = '20131010';
 
 	#group configuration
 	/**
@@ -1023,7 +1023,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $help_link = 'http://wiki4.group-office.com/wiki/';
+	var $help_link = 'https://www.group-office.com/wiki/';
 	
 	/**
 	 * The link or e-mail address in menu help -> support.

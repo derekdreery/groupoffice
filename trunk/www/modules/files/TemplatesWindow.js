@@ -80,7 +80,7 @@ GO.files.TemplateWindow = function(config){
 		title:GO.files.lang.manageTemplates,
 		layout:'fit',
 		width:500,
-		height:440,
+		height:600,
 		closeAction:'hide',
 		items:this.gridPanel,
 		buttons:[

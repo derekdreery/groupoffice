@@ -52,16 +52,18 @@ class GO_Core_Controller_Reminder extends GO_Base_Controller_AbstractController 
 	
 	public function formatReminderRecord($record, $model, $store){
 		
+		$record['iconCls']='go-icon-reminders';
+		$record['type']=GO::t('other');
+		$record['model_name']='';
+
 		if(!empty($record['model_type_id'])){
 			$modelType = GO_Base_Model_ModelType::model()->findByPk($record['model_type_id']);
-			$record['iconCls']='go-model-icon-'.$modelType->model_name;
-			$record['type']=GO::getModel($modelType->model_name)->localizedName;
-			$record['model_name']=$modelType->model_name;
-		}  else {
-			$record['iconCls']='go-icon-reminders';
-			$record['type']=GO::t('other');
-			$record['model_name']='';
-		}
+			if($modelType && GO::getModel($modelType->model_name)){
+				$record['iconCls']='go-model-icon-'.$modelType->model_name;
+				$record['type']=GO::getModel($modelType->model_name)->localizedName;
+				$record['model_name']=$modelType->model_name;
+			}
+		}  
 		
 		$now = GO_Base_Util_Date::clear_time(time());
 		

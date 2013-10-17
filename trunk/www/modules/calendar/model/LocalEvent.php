@@ -150,9 +150,14 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response['event_id'] = $this->_event->id;
 		//$response['has_other_participants'] = $this->hasOtherParticipants();
 		$response['link_count'] = $this->getLinkCount();
+//		$response['reminder_count'] = $this->_event->countReminders();
+//		$response['reminder'] = $this->_event->reminder;
+		$response['has_reminder'] = $response['reminder']>0 ? 1 : 0;
 		
 		$response['description'] = nl2br(htmlspecialchars(GO_Base_Util_String::cut_string($this->_event->description, 800), ENT_COMPAT, 'UTF-8'));
 		$response['private'] = $this->isPrivate();
+		
+		$response['private_enabled']=$this->_event->private;
 		
 		if($response['private']){
 			$response['name']=GO::t('private','calendar');

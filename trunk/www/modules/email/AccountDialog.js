@@ -442,7 +442,7 @@ GO.email.AccountDialog = function(config) {
 	GO.email.AccountDialog.superclass.constructor.call(this, {
 		layout : 'fit',
 		modal : false,
-		height:440,
+		height: 600,
 		width : 900,
 		closeAction : 'hide',
 		title : GO.email.lang.account,

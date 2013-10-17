@@ -57,8 +57,18 @@ class GO_Base_Session extends GO_Base_Observable{
 				//Avoid session id in url's to prevent session hijacking.
 				ini_set('session.use_only_cookies',1);
 								
+				if(isset($_REQUEST['GOSID'])){
+					session_id($_REQUEST['GOSID']);				
+				}
+								
 				session_name('groupoffice');
 				session_start();				
+			
+				if(isset($_REQUEST['GOSID'])){
+					if(!isset($_REQUEST['security_token']) || $_SESSION['GO_SESSION']['security_token']!=$_REQUEST['security_token']){
+						throw new GO_Base_Exception_SecurityTokenMismatch();
+					}
+				}		
 			}
 			//GO::debug causes endless loop
 			//GO::debug("Started session");
@@ -72,16 +82,6 @@ class GO_Base_Session extends GO_Base_Observable{
 			//$this->_log("security_token");
 			$this->values['security_token']=GO_Base_Util_String::randomPassword(20,'a-z,A-Z,1-9');				
 		}
-		
-//		if (GO::config()->session_inactivity_timeout > 0) {
-//			$now = time();
-//			if (isset($_SESSION['last_activity']) && $_SESSION['last_activity'] + GO::config()->session_inactivity_timeout < $now) {
-//				$GLOBALS['GO_SECURITY']->logout();
-//			} elseif ($_POST['task'] != 'checker') {//don't update on the automatic checker function that runs every 2 mins.
-//				$_SESSION['last_activity'] = $now;
-//			}
-//		}
-
 	}
 	
 	/**

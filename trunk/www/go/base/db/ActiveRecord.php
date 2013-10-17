@@ -967,8 +967,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!is_array($findParams))
 			$findParams = $findParams->getParams();
 		
-		$defaultParams=array('limit'=>1,'ignoreAcl'=>true);
-		$params = array_merge($defaultParams, $findParams);
+		$defaultParams=array('limit'=>1, 'start'=>0,'ignoreAcl'=>true);
+		$params = array_merge($findParams,$defaultParams);
 		
 		$cacheKey = md5(serialize($params));
 		//Use cache so identical findByPk calls are only executed once per script request
@@ -1044,7 +1044,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return $model;
 		}
 		else {
-			$pk = $params[$this->primaryKey()];
+			$pk = isset($params[$this->primaryKey()]) ? $params[$this->primaryKey()] : null;
 			if (empty($pk)) {
 				$model = new static();
 				if ($model->isNew)
@@ -1052,7 +1052,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}else {
 				$model = $this->findByPk($pk);
 				if (!$model)
-					throw new GO_Base_Exception_NotFound();
+					$model = new static();
 			}
 			return $model;
 		}
@@ -1270,7 +1270,15 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 						case self::HAS_ONE:
 						case self::HAS_MANY:
+							if(is_array($r['field'])){
+								$conditions = array();
+								foreach($r['field'] as $my=>$foreign){
+									$conditions[]= '`'.$name.'`.`'.$foreign.'`=t.`'.$my.'`';
+								}
+								$joinRelationjoins .= implode(' AND ', $conditions);
+							}else{
 								$joinRelationjoins .= '`'.$name.'`.`'.$r['field'].'`=t.`'.$this->primaryKey().'`';
+							}
 							break;
 
 						default:
@@ -1901,23 +1909,33 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 		if($r['type']==self::HAS_MANY)
 		{									
-			$remoteFieldThatHoldsMyPk = $r['field'];
+			
 
 			$findParams = GO_Base_Db_FindParams::newInstance();
 			
 			
 			$findParams
 					->mergeWith($r['findParams'])		
-					->ignoreAcl()
+					->ignoreAcl()->debugSql()
 					->relation($name);
 			
 			//the extra find params supplied with call are merged last so that you 
 			//can override the defaults.
 			if(isset($extraFindParams))
 					$findParams->mergeWith($extraFindParams);
-					
-			$findParams->getCriteria()							
-							->addCondition($remoteFieldThatHoldsMyPk, $this->pk);
+			
+			
+			if(is_array($r['field'])){
+				foreach($r['field'] as $my=>$foreign){
+						$findParams->getCriteria()							
+								->addCondition($my, $this->$foreign);
+				}
+			}else{
+				$remoteFieldThatHoldsMyPk = $r['field'];
+
+				$findParams->getCriteria()							
+								->addCondition($remoteFieldThatHoldsMyPk, $this->pk);
+			}
 
 
 		}elseif($r['type']==self::MANY_MANY)
@@ -1945,6 +1963,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	private function _getRelatedCacheKey($relation){
 		//append join attribute so cache is void automatically when this attribute changes.
+		
+		if(is_array($relation['field']))
+			$relation['field']=implode(',', $relation['field']);
+		
 		return $relation['name'].':'.(isset($this->_attributes[$relation['field']]) ? $this->_attributes[$relation['field']] : 0);
 			
 	}
@@ -2043,7 +2065,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			switch($this->columns[$column]['gotype']){
 				case 'unixdate':
 				case 'unixtimestamp':
-					return  GO_Base_Util_Date::to_unixtime($value);
+					if($this->columns[$column]['null'] && ($value=="" || $value==null))
+						return null;
+					else
+						return  GO_Base_Util_Date::to_unixtime($value);
+					
 					break;			
 				case 'number':
 					$value= GO_Base_Util_Number::unlocalize($value);
@@ -2052,6 +2078,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 						$value=0;
 					
 					return $value;
+					break;
+					
+				case 'phone':
+					
+					//if it contains alpha chars then leave it alone.
+					if(preg_match('/[a-z]+/i', $value)){
+						return $value;
+					}else{
+						return trim(preg_replace('/[\s-_\(\)]+/','', $value));
+					}
 					break;
 				case 'boolean':
 					$ret= empty($value) || $value==="false" ? 0 : 1; 
@@ -2152,8 +2188,24 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			case 'html':
 				return $value;
 				break;
+			
+			case 'phone':
+				if($html){
+					if(!preg_match('/[a-z]+/i', $value)){						
+						if(  preg_match( '/^(\+\d{2})(\d{2})(\d{3})(\d{4})$/', $value,  $matches ) )
+						{
+							return $matches[1] . ' ' .$matches[2] . ' ' . $matches[3].' ' . $matches[4];
+						}elseif(preg_match( '/^(\d*)(\d{3})(\d{4})$/', $value,  $matches)){
+							return '('.$matches[1] . ') ' .$matches[2] . ' ' . $matches[3];								
+						}	
+					}
+				}
+				return $value;
+				
+				break;
+			
 			default:
-				if($this->columns[$attributeName]['dbtype']=='int')
+				if(substr($this->columns[$attributeName]['dbtype'],-3)=='int')
 					return $value;
 				else 
 					return $html ? htmlspecialchars($value, ENT_COMPAT,'UTF-8') : $value;
@@ -2247,6 +2299,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		foreach($attributeNames as $attName){
 			if(isset($this->columns[$attName])){
 				$att[$attName]=$this->getAttribute($attName, $outputType);
+			}elseif($this->hasAttribute($attName)){			
+				$att[$attName]=$this->$attName;			
 			}elseif($this->customfieldsRecord)
 			{
 				$att[$attName]=$this->customfieldsRecord->getAttribute($attName, $outputType);
@@ -2346,8 +2400,13 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$r = $this->getRelation($relation);
 		$aclFKfield = $r['field'];
 		
+		$oldValue = $this->getOldAttributeValue($aclFKfield);
+		
+		if(empty($oldValue))
+			return true;
+		
 		$newValue = $this->{$aclFKfield};
-		$this->{$aclFKfield} = $this->getOldAttributeValue($aclFKfield);
+		$this->{$aclFKfield} = $oldValue;
 		
 		//$result = $this->checkPermissionLevel($level);
 		$acl_id = $this->findAclId();
@@ -2861,7 +2920,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * @return \GO_Base_Model_Acl
 	 */
 	public function setNewAcl($user_id=0){
-		
+		if($this->aclField()===false)
+			throw new Exception('Can not create a new ACL for an object that has no ACL field');
 		if(!$user_id)
 			$user_id = GO::user() ? GO::user()->id : 1;
 		
@@ -3282,8 +3342,9 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				
 				if($result instanceof GO_Base_Db_ActiveStatement){	
 					//has_many relations result in a statement.
-					while($child = $result->fetch()){				
-						$child->delete();
+					while($child = $result->fetch()){			
+						if($child->className()!=$this->className() || $child->pk != $this->pk)//prevent delete of self
+							$child->delete();
 					}
 				}elseif($result)
 				{
@@ -3515,6 +3576,25 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 						//isset($this->columns[$name]) || MS: removed this because it returns true when attribute is null. This might break something but it shouldn't return true.
 						($this->_relationExists($name) && $this->_getRelated($name)) || 
 						parent::__isset($name);
+	}
+	
+	/**
+	 * Check if this model has a named attribute
+	 * @param string $name
+	 * @return boolean
+	 */
+	public function hasAttribute($name){
+		
+		if(isset($this->columns[$name]))
+			return true;
+		
+		if($this->_relationExists($name))
+			return true;
+		
+		if(method_exists($this, 'get'.$name))
+			return true;
+		
+		return false;
 	}
 	
 	/**
@@ -4055,7 +4135,9 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 		//Generate new acl for this model
 		if($this->aclField() && !$this->joinAclField){
-			$copy->setNewAcl($this->user_id);
+			
+			$user_id = isset($this->user_id) ? $this->user_id : GO::user()->id;
+			$copy->setNewAcl($user_id);
 		}
 		
 		if($this->customFieldsRecord){

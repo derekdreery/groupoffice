@@ -344,3 +344,33 @@ $updates['201305031735'][]="ALTER TABLE `go_users` ADD `muser_id` int(11) NOT NU
 $updates['201305240933'][]="ALTER TABLE `go_users` ADD `holidayset` VARCHAR( 10 ) NULL ";
 
 $updates['201308151229'][]="UPDATE go_users SET theme='Group-Office' WHERE theme='Default' or theme='ExtJS';";
+
+$updates['201309051015'][]="CREATE TABLE IF NOT EXISTS `go_working_weeks` (
+	`user_id` int(11) NOT NULL DEFAULT '0',
+	`mo_work_hours` int(2) NOT NULL DEFAULT '0',
+	`tu_work_hours` int(2) NOT NULL DEFAULT '0',
+	`we_work_hours` int(2) NOT NULL DEFAULT '0',
+	`th_work_hours` int(2) NOT NULL DEFAULT '0',
+	`fr_work_hours` int(2) NOT NULL DEFAULT '0',
+	`sa_work_hours` int(2) NOT NULL DEFAULT '0',
+	`su_work_hours` int(2) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates['201309111400'][]="ALTER TABLE `go_working_weeks` CHANGE `mo_work_hours` `mo_work_hours` INT( 2 ) NOT NULL DEFAULT '8',
+CHANGE `tu_work_hours` `tu_work_hours` INT( 2 ) NOT NULL DEFAULT '8',
+CHANGE `we_work_hours` `we_work_hours` INT( 2 ) NOT NULL DEFAULT '8',
+CHANGE `th_work_hours` `th_work_hours` INT( 2 ) NOT NULL DEFAULT '8',
+CHANGE `fr_work_hours` `fr_work_hours` INT( 2 ) NOT NULL DEFAULT '8'";
+$updates['201309111400'][]="UPDATE go_working_weeks SET mo_work_hours=8 WHERE mo_work_hours=0;";
+$updates['201309111400'][]="UPDATE go_working_weeks SET tu_work_hours=8 WHERE tu_work_hours=0;";
+$updates['201309111400'][]="UPDATE go_working_weeks SET we_work_hours=8 WHERE we_work_hours=0;";
+$updates['201309111400'][]="UPDATE go_working_weeks SET th_work_hours=8 WHERE th_work_hours=0;";
+$updates['201309111400'][]="UPDATE go_working_weeks SET fr_work_hours=8 WHERE fr_work_hours=0;";
+$updates['201309111700'][]="ALTER TABLE `go_working_weeks` CHANGE `mo_work_hours` `mo_work_hours` DOUBLE NOT NULL DEFAULT '8',
+CHANGE `tu_work_hours` `tu_work_hours` DOUBLE NOT NULL DEFAULT '8',
+CHANGE `we_work_hours` `we_work_hours` DOUBLE NOT NULL DEFAULT '8',
+CHANGE `th_work_hours` `th_work_hours` DOUBLE NOT NULL DEFAULT '8',
+CHANGE `fr_work_hours` `fr_work_hours` DOUBLE NOT NULL DEFAULT '8',
+CHANGE `sa_work_hours` `sa_work_hours` DOUBLE NOT NULL DEFAULT '0',
+CHANGE `su_work_hours` `su_work_hours` DOUBLE NOT NULL DEFAULT '0';";

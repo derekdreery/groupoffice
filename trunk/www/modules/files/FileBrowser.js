@@ -372,30 +372,30 @@ GO.files.FileBrowser = function(config){
 		forceLayout:true,
                 padding: '5px',
 		items: [{
-                      xtype: 'compositefield',
-                      border: false,
-                      anchor: '100%',
-                      fieldLabel:GO.lang.strLocation,
-                      items: [
-                        this.locationTextField = new Ext.form.TextField({
-                                name:'files-location',
-                                flex : 1
-                        }),
-                        this.searchField = new GO.form.SearchField({
-                            store: this.gridStore,
-                            width: 230,
-                            listeners: {
-                              scope : this,
-                              search : function() {
-                                this.fireEvent('search');
-                              },
-                              reset : function() {
-                                this.fireEvent('refresh');
-                              }
-                            }
-                          })
-                      ]
-                    }]
+				xtype: 'compositefield',
+				border: false,
+				anchor: '100%',
+				fieldLabel:GO.lang.strLocation,
+				items: [
+					this.locationTextField = new Ext.form.TextField({
+									name:'files-location',
+									flex : 1
+					}),
+					this.searchField = new GO.form.SearchField({
+							store: this.gridStore,
+							width: 230,
+							listeners: {
+								scope : this,
+								search : function() {
+									this.fireEvent('search');
+								},
+								reset : function() {
+									this.fireEvent('refresh');
+								}
+							}
+						})
+				]
+			}]
 	});
 
 	this.upButton = new Ext.Button({
@@ -403,10 +403,12 @@ GO.files.FileBrowser = function(config){
 		text: GO.lang.up,
 		cls: 'x-btn-text-icon',
 		handler: function(){
-                    if (GO.util.empty(this.gridStore.baseParams['query']))
-                        this.setFolderID(this.parentID);
-                    else
-                        Ext.MessageBox.alert('',GO.files.lang['notInSearchMode']);
+			if (GO.util.empty(this.gridStore.baseParams['query'])){
+					this.setFolderID(this.parentID);
+					this.updateLocation();
+			}else{
+					Ext.MessageBox.alert('',GO.files.lang['notInSearchMode']);
+			}
 		},
 		scope: this,
 		disabled:true
@@ -479,11 +481,14 @@ GO.files.FileBrowser = function(config){
 				scope:this,
 				beforestart: function(uploadpanel) {
 					//uploadpanel.uploader.settings.url = '/path/to/upload/handler?_runtime=' + uploadpanel.runtime;
+					
+					
 				},
 				uploadstarted: function(uploadpanel) {
-
+					this.setDisabled(true);
 				},
 				uploadcomplete: function(uploadpanel, success, failures) {
+					this.setDisabled(false);
 					if ( success.length ) {
 						this.sendOverwrite({
 							upload:true
@@ -503,26 +508,36 @@ GO.files.FileBrowser = function(config){
 		iconCls: 'btn-upload',
 		text : GO.lang.folderUpload,
 		handler : function() {
-                    if ( GO.util.empty(this.gridStore.baseParams['query']) ) {
-			GO.currentFilesStore=this.gridStore;
+			if ( GO.util.empty(this.gridStore.baseParams['query']) ) {
+				GO.currentFilesStore=this.gridStore;
 
-			if (!deployJava.isWebStartInstalled('1.5.0')) {
-				Ext.MessageBox.alert(GO.lang.strError,
-				GO.lang.noJava);
+				if (!deployJava.isWebStartInstalled('1.5.0')) {
+					Ext.MessageBox.alert(GO.lang.strError,
+						GO.lang.noJava);
+				} else {
+					GO.files.juploadFileBrowser=this; //for handling after upload
+					var popup = GO.util.popup({
+						url: GO.url('files/jupload/renderJupload'),
+						//GO.settings.modules.files.url+'jupload/index.php?id='+encodeURIComponent(this.folder_id),
+						width : 660,
+						height: 500,
+						target: 'jupload',
+						allwaysOnTop:true // Not working!!
+					});
+					
+					this.setDisabled(true);
+					
+					popup.onbeforeunload=function(){
+						
+						this.setDisabled(false);
+						
+						if(popup.uploadSuccess)
+							this.sendOverwrite({upload:true})
+					}.createDelegate(this);
+				}
 			} else {
-				GO.files.juploadFileBrowser=this; //for handling after upload
-				GO.util.popup({
-					url: GO.url('files/jupload/renderJupload'),
-					//GO.settings.modules.files.url+'jupload/index.php?id='+encodeURIComponent(this.folder_id),
-					width : 660,
-					height: 500,
-					target: 'jupload',
-					allwaysOnTop:true // Not working!!
-				});
+				Ext.MessageBox.alert('',GO.files.lang['notInSearchMode']);
 			}
-                    } else {
-                        Ext.MessageBox.alert('',GO.files.lang['notInSearchMode']);
-                    }
 		},
 		scope : this
 	});
@@ -822,6 +837,8 @@ GO.files.FileBrowser = function(config){
 }
 
 Ext.extend(GO.files.FileBrowser, Ext.Panel,{
+	
+	cls: 'fs-filebrowser',
 
 	fileClickHandler : false,
 	scope : this,
@@ -1771,7 +1788,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	setFolderID : function(id, expand)
 	{
-      
+    
     this.fireEvent('beforeFolderIdSet');
       
 		this.folder_id = id;
@@ -1811,8 +1828,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				this.treePanel.getSelectionModel().select(activeNode);
 			
 			var path = new String();
+			
 			path = activeNode.getPath('text');
 			path = path.substring(2);
+			
 			this.locationTextField.setValue(path);
 		}
 	},

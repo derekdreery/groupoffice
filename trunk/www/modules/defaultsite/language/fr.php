@@ -4,8 +4,9 @@ $l["ticketMiddlename"] = 'Deuxième prénom';
 $l["ticketLastname"] = 'Nom';
 $l["ticketEmail"] = 'Email';
 $l["ticketPhone"] = 'Téléphone';
+$l["ticketCompany"] = 'Société';
 
-$l["ticketSubject"] = 'Sujet';
+$l["ticketSubject"] = 'Objet';
 
 $l['submit'] = 'Envoyer le message';
 

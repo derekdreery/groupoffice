@@ -67,6 +67,8 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 		));
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()->debugSql()
+						->select("max(a.mtime) AS mtime")
+						->single()
 						->joinModel(array(
 								'model'=>"GO_Base_Model_Acl",
 								'localField'=>'acl_id',
@@ -79,9 +81,9 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 						->addCondition('user_id', $user_id, '!=');
 		
 		
-		$group = GO_Base_Model_Grouped::model()->load("GO_Files_Model_Folder", "max(a.mtime) AS mtime", $findParams);
+		$result = GO_Files_Model_Folder::model()->find($findParams);
 		
-		return $group->fetch()->mtime;		
+		return $result->mtime;		
 	}
 
 	public function rebuildCache($user_id, $force=false) {

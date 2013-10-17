@@ -36,6 +36,7 @@ GO.cron.MainPanel = function(config){
 	});
 	
 	config.layout='border';
+	config.cls='go-white-bg';
 
 	GO.cron.MainPanel.superclass.constructor.call(this, config);	
 };

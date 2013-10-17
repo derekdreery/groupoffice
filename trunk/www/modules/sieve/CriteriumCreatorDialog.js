@@ -40,7 +40,7 @@ GO.sieve.CriteriumCreatorDialog = function(config){
 	config.title=GO.sieve.lang.setFilter;
 	config.border=false;
 	config.layout= 'fit';
-	config.height=95;
+	config.height=120;
 	config.width=640;
 	config.baseParams={
 		task : 'addAction',

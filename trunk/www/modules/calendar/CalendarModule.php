@@ -53,6 +53,7 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 		$settings->background=$params['background'];
 		$settings->reminder=$params['reminder_multiplier'] * $params['reminder_value'];
 		$settings->calendar_id=$params['default_calendar_id'];
+		$settings->show_statuses=$params['show_statuses'];
 	
 
 		$settings->save();

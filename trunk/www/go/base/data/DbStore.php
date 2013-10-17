@@ -133,6 +133,8 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 			$this->_extraFindParams = $findParams;
 		else
 			$this->_extraFindParams = GO_Base_Db_FindParams::newInstance();
+		
+		$this->_readRequestParams();
 	}
 
 	/**
@@ -240,6 +242,8 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 * @return GO_Base_Db_ActiveStatement the PDO statement
 	 */
 	protected function createStatement() {
+	
+		
 		$params = $this->createFindParams();
 		$modelFinder = GO::getModel($this->_modelClass);
 		return $modelFinder->find($params);
@@ -440,6 +444,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 			$this->_stmt = $this->createStatement();
 		return isset($this->_stmt->foundRows) ? $this->_stmt->foundRows : $this->_stmt->rowCount();
 	}
+
 	
 	/**
 	 * If there are summarizeColumn provided select and format them
@@ -451,7 +456,10 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		if($summarySelect===false)
 			return false;
 		
-		$sumParams = GO_Base_Db_FindParams::newInstance()->single()->select($summarySelect)->criteria($this->_extraFindParams->getCriteria());
+//		$sumParams = GO_Base_Db_FindParams::newInstance()->single()->select($summarySelect)->criteria($this->_extraFindParams->getCriteria());
+		
+		$findParams = $this->createFindParams();
+		$sumParams = $findParams->single()->select($summarySelect);
 		
 		$sumRecord = GO::getModel($this->_modelClass)->find($sumParams);
 		if($sumRecord)
@@ -465,7 +473,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 */
 	public function getData() {
 
-		$this->_readRequestParams();
+		
 
 		if (!empty($this->_deleteRecords))
 			$this->response['deleteSuccess'] = $this->processDeleteActions();
@@ -479,15 +487,16 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		if (empty($columns))
 			throw new Exception('No columns given for this store');
 
-		$this->_records = array();
-		while ($record = $this->nextRecord())
-			$this->_records[] = $record;
+		if(!isset($this->response['results']))
+			$this->response['results']=array();
 
 		$this->response['success'] = true;
 		$this->response['total'] = $this->getTotal();
+
 		if($summary = $this->getSummary())
 			$this->response['summary'] = $summary;
-		$this->response['results'] = $this->_records;
+		while ($record = $this->nextRecord())
+			$this->response['results'][] = $record;
 		return $this->response;
 	}
 

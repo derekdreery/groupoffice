@@ -52,8 +52,7 @@
 	public function relations(){
 		return array(
 				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'addressbook_id', 'delete'=>true),
-				'companies' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'addressbook_id', 'delete'=>true),
-				'linkedinAutoImport' => array( 'type'=>self::HAS_ONE, 'model'=>'GO_Linkedin_Model_AutoImport', 'field'=>'addressbook_id', 'delete'=>true)
+				'companies' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'addressbook_id', 'delete'=>true)
 		);
 	}
 	

@@ -643,3 +643,6 @@ $l['skippedDeleteHasFiles']='Hoppase över radering eftersom modellen har mappar
 $l['foundDuplicates']='Hittade %s dubletter.';
 $l['clickToDeleteDuplicates']='Klicka här för att radera de nyaste dubletterna markerade i rött.';
 $l['folderUpload']='Mappars (kräver Java)';
+
+$l['pasteFromWord']='Tvättar text som klistrats in ifrån Word eller andra program med avancerad textformatering';
+$l['th']= 'Thai';

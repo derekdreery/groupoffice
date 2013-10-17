@@ -18,7 +18,7 @@ GO.notes.CategoryDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			titleField:'name',
 			title:GO.notes.lang.category,
 			formControllerUrl: 'notes/category',
-			height:440
+			height:600
 		});
 		
 		GO.notes.CategoryDialog.superclass.initComponent.call(this);	

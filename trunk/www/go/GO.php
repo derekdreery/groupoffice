@@ -353,6 +353,7 @@ class GO{
 
 		if (!isset(self::$_cache)) {
 			if(GO::config()->debug || !GO::isInstalled())
+//			if(!GO::isInstalled())
 				self::$_cache=new GO_Base_Cache_None();
 //			Disable apc cache temporarily because it seems to cause the random logouts
 //			elseif(function_exists("apc_store"))
@@ -506,8 +507,34 @@ class GO{
 		GO::session();
 		
 		//set local to utf-8 so functions will behave consistently
-		if ( !empty(GO::config()->locale_all) )
+		if ( !empty(GO::config()->locale_all) ){
 			setlocale(LC_ALL, GO::config()->locale_all);
+		}else{
+			
+			if(!isset(GO::session()->values['locale_all'])){
+				$currentlocale = GO::session()->values['locale_all']= setlocale(LC_ALL, "0");
+
+				if(stripos($currentlocale,'utf')==false && function_exists('exec')){
+					@exec('locale -a', $output);
+//					var_dump($output);
+					if(isset($output) && is_array($output)){
+						foreach($output as $locale){
+							if(stripos($locale,'utf')!==false){
+								setlocale(LC_ALL, $locale);
+
+								GO::session()->values['locale_all']=$locale;
+								break;
+							}
+						}
+					}
+					GO::debug("WARNING: could not find UTF8 locale");
+					
+				}
+			}
+//			exit(GO::session()->values['locale_all']);
+			setlocale(LC_ALL, GO::session()->values['locale_all']);
+
+		}
 		
 		if(!empty(GO::session()->values['debug']))
 			GO::config()->debug=true;
@@ -519,7 +546,7 @@ class GO{
 		
 		if(GO::config()->debug)
 			ini_set("display_errors","On");
-		else
+		elseif(PHP_SAPI!='cli')
 			ini_set("display_errors","Off");
 
 		date_default_timezone_set(GO::user() ? GO::user()->timezone : GO::config()->default_timezone);

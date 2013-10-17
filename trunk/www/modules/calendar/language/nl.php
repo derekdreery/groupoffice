@@ -63,9 +63,10 @@ $l['rightClickToCopy']='Gebruik de rechtermuisknop om de koppelingslocatie te ko
 $l['invitation']='Uitnodiging';
 $l['invitation_update']='Bijgewerkte uitnodiging';
 $l['cancellation']='Annulering';
-$l['cancelMessage']='De voglende afspraak waar u voor uitgenodigd bent is geannuleerd.';
+$l['cancelMessage']='De volgende afspraak waar u voor uitgenodigd bent is geannuleerd';
 $l['non_selected'] = 'in niet-geselecteerde agenda';
-$l['linkIfCalendarNotSupported']='Gebruik onderstaande links alleen wanneer uw mail programma geen agenda functies ondersteund.';$l["appointment"]= 'Afspraak';
+$l['linkIfCalendarNotSupported']='Gebruik onderstaande links alleen wanneer uw mail programma geen agenda functies ondersteunt.';
+$l["appointment"]= 'Afspraak';
 $l["appointments"]= 'Afspraken';
 $l["recurrence"]= 'Herhaling';
 $l["options"]= 'Opties';
@@ -218,7 +219,7 @@ $l['createPermission']="Toegang aanmaken";
 $l['show_holidays']="Feestdagen tonen";
 
 $l['participant']='Deelnemer';
-$l['clickForAttendance']='Klik hier om uw status voor deelname aan te geven';
+$l['clickForAttendance']='Geef aan of u deelneemt aan deze afspraak';
 
 
 $l['viewDay']='Dag';
@@ -227,3 +228,7 @@ $l['viewAfternoon']='Middag';
 $l['viewEvening']='Avond';
 
 $l['show_completed_tasks'] = "Toon afgeronde taken";
+
+$l['eventNotSavedSubject'] = 'Afspraak "%event" niet opgeslagen in agenda "%cal"';
+$l['eventNotSavedBody'] = 'Deze boodschap komt van uw %goname agenda. %goname heeft een poging gedaan om een afspraak genaamd "%event" met starttijd %starttime te importeren van een externe agenda naar agenda "%cal", maar kon dat niet omdat de afspraak fouten bevatte. De afspraak is wellicht nog terug te vinden in de externe agenda.'.
+								"\r\n\r\n".'Het volgende is de foutmelding:'."\r\n".'%errormessage';

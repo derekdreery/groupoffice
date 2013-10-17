@@ -30,6 +30,31 @@ class GO_Base_Util_Date {
 
 		return $time;
 	}
+	
+	public static function timeStringToMinutes($timeStr){
+		$parts = explode(':', $timeStr);
+		
+		$hours = intval($parts[0]);
+		
+		if(isset($parts[1])){
+			$minutes = intval($parts[1]);
+		}else
+		{
+			$minutes=0;
+		}
+		
+		return $hours*60+$minutes;
+	}
+	
+	public static function minutesToTimeString($minutes){
+		$hours = floor($minutes/60);
+		$minutes = $minutes % 60;
+		
+		if(strlen($minutes)==1)
+			$minutes = '0'.$minutes;
+		
+		return $hours.':'.$minutes;
+	}
 
 	/**
 	 * Returns true if the time is a holiday or in the weekend
@@ -89,10 +114,10 @@ class GO_Base_Util_Date {
 	}
 
 
-	public static function format_long_date($time,$add_time=true){
+	public static function format_long_date($time,$add_time=true,$full_day_names=false,$full_month_names=false){
 
-		$days = GO::t('full_days');
-		$months = GO::t('months');
+		$days = $full_day_names ? GO::t('full_days') : GO::t('short_days');
+		$months = $full_month_names ? GO::t('months') : GO::t('short_months');
 		$str  = $days[date('w', $time)].' '.date('d', $time).' '.$months[date('n', $time)].' ';
 		if ($add_time)
 			return $str.date('Y - '.GO::user()->time_format, $time);
@@ -357,5 +382,20 @@ class GO_Base_Util_Date {
 	public static function getNextSaturday($unixTime) {
 		$lastSunday = self::get_last_sunday($unixTime);
 		return self::date_add($lastSunday,6);
+	}
+	
+	/**
+	 * Check if the current week is an even week or not
+	 * 
+	 * @param $timeStamp A timestamp to get the weeknumber from. Default: false
+	 * 
+	 * @return boolean
+	 */
+	public static function isEvenWeek($timeStamp=false){
+		
+		if(!$timeStamp)
+			$timeStamp = time();
+		
+		return date('W',$timeStamp)%2===0;
 	}
 }

@@ -238,8 +238,8 @@ class GO_Base_Db_FindParams{
 	 * @param string $name Name of the HAS_MANY relation
 	 * @param string $select The select string to add. eg. count(events.id) AS eventCount Note that 'events' must match the name of the relation
 	 */
-	public function groupRelation($name, $select){
-		$this->joinRelation($name);
+	public function groupRelation($name, $select, $joinType='INNER'){
+		$this->joinRelation($name, $joinType);
 		$this->_params['groupRelationSelect']=$select;
 		
 		return $this;

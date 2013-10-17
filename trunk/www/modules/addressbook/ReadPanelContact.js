@@ -212,7 +212,35 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 						'</tr>'+
 
 				'</tpl>'+
-				
+									
+				// SOCIAL MEDIA URLs
+				'<tpl if="this.isSocialMediaFieldset(values)">'+
+						'<tr>'+
+							'<td colspan="2" class="display-panel-heading">' + GO.addressbook.lang['cmdPanelSocialMedia'] + '</td>'+
+						'</tr>'+
+//						'<tr>'+
+//							'<table cellpadding="0" cellspacing="0" border="0">'+
+								'<tpl if="!GO.util.empty(url_linkedin)">'+
+									'<tr>'+
+										'<td>' + GO.addressbook.lang['linkedinUrl'] + ':&nbsp;&nbsp;&nbsp;</td><td><a href="{url_linkedin}" target="_blank">{url_linkedin}</a></td>'+
+									'</tr>'+						
+								'</tpl>'+
+								'<tpl if="!GO.util.empty(url_facebook)">'+
+									'<tr>'+
+										'<td>' + GO.addressbook.lang['facebookUrl'] + ':&nbsp;&nbsp;&nbsp;</td><td><a href="{url_facebook}" target="_blank">{url_facebook}</a></td>'+
+									'</tr>'+						
+								'</tpl>'+
+								'<tpl if="!GO.util.empty(url_twitter)">'+
+									'<tr>'+
+										'<td>' + GO.addressbook.lang['twitterUrl'] + ':&nbsp;&nbsp;&nbsp;</td><td><a href="{url_twitter}" target="_blank">{url_twitter}</a></td>'+
+									'</tr>'+						
+								'</tpl>'+
+//							'</table>'+
+//						'</tr>'+
+				'</tpl>'+
+					
+					
+					
 					
 				'<tpl if="this.isWorkFieldset(values)">'+
 
@@ -266,6 +294,9 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 		
 				'</tpl>'+
 				'</table>';
+				
+				if(GO.lists)
+					this.template += GO.lists.ListTemplate;
 				
 				if(GO.customfields)
 				{
@@ -350,6 +381,17 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 				if(!GO.util.empty(values['company_name']) ||
 					!GO.util.empty(values['function']) ||
 					!GO.util.empty(values['department']))
+				{
+					return true;
+				} else {
+					return false;
+				}
+			},
+			isSocialMediaFieldset : function(values)
+			{
+				if(!GO.util.empty(values['url_linkedin']) ||
+					!GO.util.empty(values['url_facebook']) ||
+					!GO.util.empty(values['url_twitter']))
 				{
 					return true;
 				} else {

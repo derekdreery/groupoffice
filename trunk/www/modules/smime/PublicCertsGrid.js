@@ -16,8 +16,8 @@ GO.smime.PublicCertsGrid = function(config){
 		root: 'results',
 		id: 'id',
 		totalProperty:'total',
-		fields: ['id','email'],
-		autoLoad:true
+		fields: ['id','email']
+		//autoLoad:true
 	});
 	
 	var columnModel =  new Ext.grid.ColumnModel({
@@ -99,8 +99,8 @@ GO.smime.PublicCertsGrid = function(config){
 
 Ext.extend(GO.smime.PublicCertsGrid, GO.grid.GridPanel,{
 	
-	
-	});
+
+});
 
 
 GO.smime.PublicCertsWindow = Ext.extend(GO.Window, {
@@ -110,7 +110,8 @@ GO.smime.PublicCertsWindow = Ext.extend(GO.Window, {
 		this.width=400;
 		this.height=400;
 		this.layout='fit';
-		this.items=new GO.smime.PublicCertsGrid();
+		this.grid=new GO.smime.PublicCertsGrid();
+		this.items=this.grid
 		this.closeAction='hide';
 		
 		this.buttons=[{
@@ -122,6 +123,11 @@ GO.smime.PublicCertsWindow = Ext.extend(GO.Window, {
 		}]
 		
 		GO.smime.PublicCertsWindow.superclass.initComponent.call(this);
+	},
+	show : function(){
+		this.grid.store.reload();
+		
+		GO.smime.PublicCertsWindow.superclass.show.call(this);
 	}
 });
 

@@ -252,7 +252,12 @@ GO.calendar.SettingsPanel = function(config) {
 							selectOnFocus : true,
 							forceSelection : true,
 							allowBlank : false
-						})					
+						}),{
+							xtype:'xcheckbox',
+							name:'show_statuses',
+							boxLabel: GO.calendar.lang.showStatuses,
+							hideLabel:true
+						}		
 					]
 	}];
 

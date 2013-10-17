@@ -90,6 +90,9 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$response['data']['photo_url']=$model->photoThumbURL;		
 		$response['data']['original_photo_url']=$model->photoURL;
 		
+		if ($model->action_date > 0)
+			$response['data']['action_date'] = GO_Base_Util_Date::get_timestamp($model->action_date,false);
+		
 		$stmt = $model->addresslists();
 		while($addresslist = $stmt->fetch()){
 			$response['data']['addresslist_'.$addresslist->id]=1;
@@ -114,7 +117,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$contact->getPhotoFile()->output();
 	}
 	
-
+	
 	protected function afterDisplay(&$response, &$model, &$params) {
 			
 		$response['data']['name']=$model->name;
@@ -136,7 +139,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		$response['data']['formatted_address']=nl2br($model->getFormattedAddress());
 		
-		
+		$response['data']['action_date']=GO_Base_Util_Date::get_timestamp($model->action_date,false);
 		
 		if(GO::modules()->customfields && isset($response['data']['customfields']) && GO_Customfields_Model_DisableCategories::isEnabled("GO_Addressbook_Model_Contact", $model->addressbook_id)){
 
@@ -191,6 +194,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$columnModel->formatColumn('company_name','$model->company_name', array(),'', GO::t('company','addressbook'));
 		$columnModel->formatColumn('ab_name','$model->ab_name', array(),'', GO::t('addressbook','addressbook'));
 		$columnModel->formatColumn('age', '$model->age', array(), 'birthday');
+		$columnModel->formatColumn('action_date', '$model->getActionDate()', array(), 'action_date');
 		
 		$columnModel->formatColumn('cf', '$model->id.":".$model->name');//special field used by custom fields. They need an id an value in one.)
 		return parent::formatColumns($columnModel);
@@ -223,6 +227,12 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 									'ac'
 						);
 				}
+			}
+			
+			if (!empty($params['onlyCurrentActions'])) {
+				$storeParams->getCriteria()
+					->addCondition('action_date', 0, '>', 't')
+					->addCondition('action_date', time(), '<=', 't');
 			}
 		}
 		
@@ -506,26 +516,12 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	}
 	
 	protected function actionHandleAttachedVCard($params) {
-		$outString = '';
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		$imap = $account->openImapConnection($params['mailbox']);
-		$imap->get_message_part_start($params['uid'], $params['number']);
-		while ($line = $imap->get_message_part_line()) {
-			switch (strtolower($params['encoding'])) {
-				case 'base64':
-					$outString .= base64_decode($line);
-					break;
-				case 'quoted-printable':
-					$outString .= quoted_printable_decode($line);
-					break;
-				default:
-					$outString .= $line;
-					break;
-			}
-		}		
-		$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$params['filename']);
-		$tmpFile->tempFile(GO::config()->tmpdir.$params['filename'],'vcf');
-		$tmpFile->putContents($outString);
+		
+		$tmpFile =GO_Base_Fs_File::tempFile($params['filename'], 'vcf');
+		$imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
+				
 		$abController = new GO_Addressbook_Controller_Contact();
 		$response = $abController->run('importVCard', array('file'=>$tmpFile->path(),'readOnly'=>true), false, true);
 		echo json_encode($response);
@@ -551,6 +547,16 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	}
 	
 	
+	private function createStream($data) {
+
+			$stream = fopen('php://memory','r+');
+			fwrite($stream, $data);
+			rewind($stream);
+			return $stream;
+
+	}
+	
+	
 	protected function actionImportVCard($params){
 		
 		$summaryLog = new GO_Base_Component_SummaryLog();
@@ -567,22 +573,18 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		$file = new GO_Base_Fs_File($params['file']);
 		$file->convertToUtf8();
+		
+		$options = \Sabre\VObject\Reader::OPTION_FORGIVING + \Sabre\VObject\Reader::OPTION_IGNORE_INVALID_LINES;
+		$vcards = new Sabre\VObject\Splitter\VCard(fopen($file->path(),'r+'), $options);
 
-		$data = "BEGIN:ADDRESSBOOK\n".$file->getContents()."\nEND:ADDRESSBOOK";
-		GO::debug($data);
-		
-		$vaddressbook = GO_Base_VObject_Reader::read($data);
-		
-//		GO::debug($vObjectsArray);
+
 		unset($params['file']);
 		$nr=0;
 		if ($readOnly)
 			$contactsAttr = array();
-		foreach($vaddressbook->vcard as $vObject) {
+		while($vObject=$vcards->getNext()) {
 			$nr++;
 			GO_Base_VObject_Reader::convertVCard21ToVCard30($vObject);
-			GO::debug($vObject->serialize());
-			
 			$contact = new GO_Addressbook_Model_Contact();
 			try {
 				if ($contact->importVObject($vObject, $params, !$readOnly))
@@ -590,7 +592,6 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				if ($readOnly)
 					$contactsAttr[] = $contact->getAttributes('formatted');
 			} catch (Exception $e) {
-				var_dump($e->getMessage());
 				$summaryLog->addError($nr, $e->getMessage());
 			}
 		}

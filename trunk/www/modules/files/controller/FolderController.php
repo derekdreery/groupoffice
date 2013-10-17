@@ -13,6 +13,17 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			return parent::allowGuests();
 	}
 	
+	protected function actionGetURL($path){
+		
+		if (substr($path,0,1)=='/')
+			$path = substr($path,1);
+		if (substr($path,-1,1)=='/')
+			$path = substr($path,0,-1);
+		
+		$folderModel = GO_Files_Model_Folder::model()->findByPath($path,true);
+		
+		return array('success'=>true,'url'=>  GO_Base_Util_Http::addParamsToUrl($folderModel->getExternalURL(),array('GOSID'=>session_id(), 'security_token'=>GO::session()->values['security_token'])));
+	}
 	
 	protected function actionCache($params){
 		GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id);
@@ -562,8 +573,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	protected function actionList($params) {
 
-            if (!empty($params['query']))
-                return $this->_searchFiles($params);
+		if (!empty($params['query']))
+				return $this->_searchFiles($params);
             
 		if ($params['folder_id'] == 'shared')
 			return $this->_listShares($params);
@@ -700,63 +711,64 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $response;
 	}
 
-        private function _searchFiles($params) {
-            $response['success'] = true;
-            
-            $queryStr = !empty($params['query']) ? '%'.$params['query'].'%' : '%';
-            $limit = !empty($params['limit']) ? $params['limit'] : 30;
-            $start = !empty($params['start']) ? $params['start'] : 0;
-            
-            $aclJoinCriteria = GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.acl_id', 'sc.acl_id', '=', false);
+	private function _searchFiles($params) {
+			$response['success'] = true;
 
-            $aclWhereCriteria = GO_Base_Db_FindCriteria::newInstance()
-                ->addCondition('user_id', GO::user()->id, '=', 'a', false)
-                ->addInCondition("group_id", GO_Base_Model_User::getGroupIds(GO::user()->id), "a", false);
-            
-            $findParams = GO_Base_Db_FindParams::newInstance()
-                ->select('*')
-                ->ignoreAcl()
-                ->joinModel(array(
-                  'model'=>'GO_Base_Model_SearchCacheRecord',
-                  'localTableAlias'=>'t',
-                  'localField'=>'id',
-                  'foreignField'=>'model_id',
-                  'tableAlias'=>'sc'
-                ))
-                ->join(GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'INNER')->debugSql()
-                ->criteria(
-                  GO_Base_Db_FindCriteria::newInstance()
-                    ->addCondition('model_type_id', GO::getModel('GO_Files_Model_File')->modelTypeId(),  '=', 'sc', true)
-                    ->mergeWith(
-                      GO_Base_Db_FindCriteria::newInstance()
-                        ->addCondition('name', $queryStr, 'LIKE', 'sc', false)
-                        ->addCondition('keywords', $queryStr, 'LIKE', 'sc', false)
-                    )
-                    ->mergeWith($aclWhereCriteria)
-                );
-            
-            $filesStmt = GO_Files_Model_File::model()->find($findParams);
-            
-            $response['total'] = $filesStmt->rowCount();
-            
-            $filesStmt = GO_Files_Model_File::model()->find(
-              $findParams
-                ->start($start)
-                ->limit($limit)
-            );
-            
-            $response['results'] = array();
-            $response['cm_state'] = '';
-            $response['may_apply_state'] = false;
-            $response['lock_state'] = false;
-            $response['permission_level'] = 0;
-            
-            foreach ($filesStmt as $searchFileModel) {
-                $response['results'][] = $searchFileModel->getJsonData();
-            }
-            
-            return $response;
-        }
+			$queryStr = !empty($params['query']) ? '%'.$params['query'].'%' : '%';
+			$limit = !empty($params['limit']) ? $params['limit'] : 30;
+			$start = !empty($params['start']) ? $params['start'] : 0;
+
+			$aclJoinCriteria = GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.acl_id', 'sc.acl_id', '=', false);
+
+			$aclWhereCriteria = GO_Base_Db_FindCriteria::newInstance()
+					->addCondition('user_id', GO::user()->id, '=', 'a', false)
+					->addInCondition("group_id", GO_Base_Model_User::getGroupIds(GO::user()->id), "a", false);
+
+			$findParams = GO_Base_Db_FindParams::newInstance()
+					->select('*')
+					->ignoreAcl()
+					->joinCustomFields()
+					->joinModel(array(
+						'model'=>'GO_Base_Model_SearchCacheRecord',
+						'localTableAlias'=>'t',
+						'localField'=>'id',
+						'foreignField'=>'model_id',
+						'tableAlias'=>'sc'
+					))
+					->join(GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'INNER')->debugSql()
+					->criteria(
+						GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('model_type_id', GO::getModel('GO_Files_Model_File')->modelTypeId(),  '=', 'sc', true)
+							->mergeWith(
+								GO_Base_Db_FindCriteria::newInstance()
+									->addCondition('name', $queryStr, 'LIKE', 'sc', false)
+									->addCondition('keywords', $queryStr, 'LIKE', 'sc', false)
+							)
+							->mergeWith($aclWhereCriteria)
+					);
+
+			$filesStmt = GO_Files_Model_File::model()->find($findParams);
+
+			$response['total'] = $filesStmt->rowCount();
+
+			$filesStmt = GO_Files_Model_File::model()->find(
+				$findParams
+					->start($start)
+					->limit($limit)
+			);
+
+			$response['results'] = array();
+			$response['cm_state'] = '';
+			$response['may_apply_state'] = false;
+			$response['lock_state'] = false;
+			$response['permission_level'] = 0;
+
+			foreach ($filesStmt as $searchFileModel) {
+					$response['results'][] = $searchFileModel->getJsonData();
+			}
+
+			return $response;
+	}
         
 	public function formatListRecord($record, $model, $store) {
 
@@ -770,7 +782,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$record['readonly']=$model->readonly;
 		} else {
 			$record['type_id'] = 'f:' . $model->id;
-			$record['type'] = $model->fsFile->typeDescription();
+			$record['type'] = GO_Base_Fs_File::getFileTypeDescription($model->extension);
 			$record['extension'] = strtolower($model->extension);
 			$record['size']=$model->size;
 			$record['permission_level']=$this->_listFolderPermissionLevel;

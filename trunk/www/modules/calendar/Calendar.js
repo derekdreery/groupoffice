@@ -362,7 +362,7 @@ GO.calendar.MainPanel = function(config){
 	this.calendarListPanel.add(this.viewsList);
 	this.calendarListPanel.add(this.resourcesList);
 	
-	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'has_other_participants','participant_ids','ctime','mtime','musername', 'is_organizer', 'partstatus','model_name','permission_level'];
+	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','private_enabled','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count','has_reminder', 'has_other_participants','participant_ids','ctime','mtime','musername', 'is_organizer', 'partstatus','model_name','permission_level'];
 
 	this.daysGridStore = new GO.data.JsonStore({
 		url:GO.url('calendar/event/store'),
@@ -1752,7 +1752,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		GO.request({
 			url: 'calendar/event/submit',
 			params: params,
-			success: function(options, response, responseParams)
+			success: function(response, options, result)
 			{
 
 //				if(event.repeats && !actionData.singleInstance)
@@ -1765,9 +1765,13 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				if(event.repeats)
 					grid.store.reload();
 
-				GO.calendar.handleMeetingRequest(responseParams);
+				GO.calendar.handleMeetingRequest(result);
 				
+			},
+			fail : function(response, options, result){
+				grid.store.reload();
 			}
+			
 		});
 	},
 
@@ -1968,7 +1972,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				tbar: [{					
 					iconCls: 'btn-add',
 					text: GO.lang.cmdAdd,
-					disabled: !GO.settings.modules.calendar.write_permission,
+//					disabled: !GO.settings.modules.calendar.write_permission,
 					cls: 'x-btn-text-icon',
 					handler: function(){
 						this.viewDialog.show();
@@ -1977,7 +1981,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				},{
 					iconCls: 'btn-delete',
 					text: GO.lang.cmdDelete,
-					disabled: !GO.settings.modules.calendar.write_permission,
+//					disabled: !GO.settings.modules.calendar.write_permission,
 					cls: 'x-btn-text-icon',
 					handler: function(){
 						this.viewsGrid.deleteSelected();
