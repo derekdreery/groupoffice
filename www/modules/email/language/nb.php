@@ -248,3 +248,7 @@ $l['appointementAlreadyProcessed']='Denne meldingen inneholder en invitasjon som
 $l['noname']= 'uten_navn';
 $l['doNotMarkAsRead']= 'Ikke sett e-poster som lest automatisk';
 $l['showAll']='Vis alle';
+$l['searchIn']= 'Søk i:';
+$l['searchRecursive']= 'Rekursivt';
+$l['currentFolder']= 'Gjeldende mappe';
+$l['allFolders']= 'Alle mapper';

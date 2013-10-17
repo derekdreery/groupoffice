@@ -1,6 +1,27 @@
 .cal-has-links{
-	background:url(../../../../views/Extjs3/themes/Default/images/attach.gif) no-repeat 0 1px;
-	padding-left:10px !important;
+	background:url(../../../../views/Extjs3/themes/Default/images/attach.gif) no-repeat center 3px;
+	padding:8px !important;
+	float:right;
+}
+
+.cal-has-reminders{
+	background:url(images/16x16/reminder.png) no-repeat 0 1px;
+	padding:8px !important;
+	float:right;
+/*	margin-left: 3px;*/
+}
+
+.cal-is-private{
+	background:url(images/16x16/private.png) no-repeat 0 1px;
+	padding:8px !important;
+	float:right;
+	/*margin-left: 3px;*/
+}
+.cal-recurring{
+	background:url(images/16x16/recurring.png) no-repeat 0 1px;
+	padding:8px !important;
+	float:right;
+	/*margin-left: 3px;*/
 }
 
 .cal-comment{
@@ -288,7 +309,16 @@ border:1px solid black;
 .x-calGrid-panel .x-panel-body{
 background-color: #F1F1F1 !important;
 }
+.x-calGrid-table-wrapper{
+	position:relative;
+	background:transparent;
+}
 
+.x-calGrid-indicator{
+	position:absolute;
+	border-top:2px solid #dd4b39;
+	z-index:3001;
+}
 .x-calGrid-table{
 	border-collapse: collapse;
 }
@@ -321,7 +351,9 @@ background-color: #F1F1F1 !important;
 	border-right:1px solid #DDDDDD;
 	text-align:right;
 }
-
+.x-calGrid-today{
+	background-color:#e5f5f9 !important;
+}
 .x-calGrid-selector{
 	background-color:#DFE8F6;
 	position:absolute;

@@ -114,10 +114,14 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			GO::debug(var_export($returnvar,true));
 		}
 	}
+	
+	private $_sentEmails;
 
 	protected function actionBatchSend($params) {
 
 		$this->requireCli();
+		
+		$this->_sentEmails=array();
 		
 		GO::$disableModelCache=true;
 
@@ -334,7 +338,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		}else
 		{
 			$email = $model->email;
-		}
+		}		
 		
 		echo '['.GO_Base_Util_Date::get_timestamp(time())."] Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
 
@@ -346,9 +350,12 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		}
 
 		try {
-			if($this->dry){
+			if(in_array($email, $this->_sentEmails)){
+				echo "Skipping because this e-mail address already got an e-mail\n";
+			}elseif($this->dry){
 				echo "Not sending because dry is true\n";
 			}else{
+				$this->_sentEmails[]=$email;
 				$mailer->send($message);
 			}
 		} catch (Exception $e) {

@@ -147,6 +147,8 @@ class Site {
 
 		if(!self::$_site)
 			throw new GO_Base_Exception_NotFound('Website for domain '.$_SERVER["SERVER_NAME"].' not found in database');
+		
+		GO::session()->loginWithCookies();
 	
 		if(!empty(self::model()->language))
 			GO::language()->setLanguage(self::model()->language);
@@ -225,6 +227,17 @@ class Site {
 		}else{
 			return self::template()->getUrl().$relativePath;
 		}
+	}
+	
+	
+	/**
+	 * Check if a template or asset exists
+	 * 
+	 * @param string $relativePath
+	 * @return string
+	 */
+	public static function fileExists($relativePath, $template=true){
+		return file_exists(self::filePath($relativePath, $template));
 	}
 	
 	

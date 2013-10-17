@@ -14,7 +14,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 					$key = explode(':',$key);
 
 					$linkedModel = GO::getModel($key[0])->findByPk($key[1]);				
-					$linkedModel->delete();				
+					if($linkedModel)
+						$linkedModel->delete();				
 				}
 				unset($params['delete_keys']);
 				$response['deleteSuccess']=true;
@@ -46,7 +47,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 			$model_names = json_decode($params['model_names'], true);
 			$types = array();
 			foreach($model_names as $model_name){
-				$types[]=GO::getModel($model_name)->modelTypeId();
+				if(class_exists($model_name))
+					$types[]=GO::getModel($model_name)->modelTypeId();
 			}
 			if(count($types))
 			$storeParams->getCriteria()->addInCondition('model_type_id', $types);
@@ -92,10 +94,12 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$types=array();
 		$stmt = GO_Base_Model_ModelType::model()->find();
 		while($modelType = $stmt->fetch()){
-			$model = GO::getModel($modelType->model_name);
-			$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
-			if(GO::modules()->{$module})
-				$types[]=$modelType->id;
+			if(class_exists($modelType->model_name)){
+				$model = GO::getModel($modelType->model_name);
+				$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
+				if(GO::modules()->{$module})
+					$types[]=$modelType->id;
+			}
 		}
 		return $types;
 
@@ -117,12 +121,17 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		
 		$types=array();
 		while($modelType = $stmt->fetch()){
-			$model = GO::getModel($modelType->model_name);
-			
-			$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
-			
-			if(GO::modules()->{$module})
-				$types[$model->localizedName]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
+			if(class_exists($modelType->model_name)){
+				$model = GO::getModel($modelType->model_name);
+
+				$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
+
+				if(GO::modules()->{$module})
+					$types[$model->localizedName]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
+			}else
+			{
+				GO::debug("Missing class ".$modelType->model_name);
+			}
 		}
 		
 		ksort($types);
@@ -169,8 +178,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 //		}
 		
 		//we'll do a full text search in getStoreParams			
-		$params['match']=isset($params["query"]) ? $params["query"] : '';
-		unset($params["query"]);
+//		$params['match']=isset($params["query"]) ? $params["query"] : '';
+//		unset($params["query"]);
 		
 		$storeParams = $store->getDefaultParams($params)->select("t.*,l.description AS link_description");
 		
@@ -231,14 +240,14 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 					'type' => 'LEFT' //defaults to INNER,
 							));
 
-			if (!empty($params['requireEmail'])) {
+//			if (!empty($params['requireEmail'])) {
 				$criteria = GO_Base_Db_FindCriteria::newInstance()
 								->addCondition("email", "", "!=")
 								->addCondition("email2", "", "!=", 't', false)
 								->addCondition("email3", "", "!=", 't', false);
 
 				$findParams->getCriteria()->mergeWith($criteria);
-			}
+//			}
 
 			$stmt = GO_Addressbook_Model_Contact::model()->findUsers(GO::user()->id, $findParams);
 
@@ -300,14 +309,14 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 
 					$findParams->getCriteria()->addInCondition('addressbook_id', $abs);
 
-					if (!empty($params['requireEmail'])) {
+//					if (!empty($params['requireEmail'])) {
 						$criteria = GO_Base_Db_FindCriteria::newInstance()
 										->addCondition("email", "", "!=")
 										->addCondition("email2", "", "!=", 't', false)
 										->addCondition("email3", "", "!=", 't', false);
 
 						$findParams->getCriteria()->mergeWith($criteria);
-					}
+//					}
 
 					$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
 
@@ -318,6 +327,35 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 						if ($contact->go_user_id)
 							$user_ids[] = $contact->go_user_id;
 					}
+					
+					
+					if (count($response['results']) < 10) {
+						$findParams = GO_Base_Db_FindParams::newInstance()
+							->searchQuery($query)
+							->limit(10-count($response['results']));
+						
+//						if (!empty($params['requireEmail'])) {
+							$criteria = $findParams->getCriteria()
+										->addCondition("email", "", "!=");
+//						}
+						
+						$stmt = GO_Addressbook_Model_Company::model()->find($findParams);
+
+						foreach ($stmt as $company) {
+							$record=array();
+							$record['name'] = $company->name;							
+							
+							$l = new GO_Base_Mail_EmailRecipients();
+							$l->addRecipient($company->email, $record['name']);
+
+							$record['info'] = htmlspecialchars((string) $l . ' (' . sprintf(GO::t('companyFromAddressbook', 'addressbook'), $company->addressbook->name) . ')', ENT_COMPAT, 'UTF-8');
+							$record['full_email'] = htmlspecialchars((string) $l, ENT_COMPAT, 'UTF-8');
+
+							$response['results'][] = $record;
+							
+						}
+					}
+					
 				}
 			}
 		}else {
@@ -327,6 +365,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 							->searchQuery($query)
 							->select('t.*')
 							->limit(10 - count($response['results']));
+			
+			$findParams->getCriteria()->addCondition('enabled', true);
 
 
 			$stmt = GO_Base_Model_User::model()->find($findParams);

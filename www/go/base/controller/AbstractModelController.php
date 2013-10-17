@@ -302,9 +302,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param GO_Base_Db_ActiveRecord $model
 	 * @return array The grid record data
 	 */
-	protected function getStoreColumnModel() {
+	protected function getStoreColumnModel($withCustomfields=true) {
 		$cm =  new GO_Base_Data_ColumnModel();
-		$cm->setColumnsFromModel(GO::getModel($this->model), $this->getStoreExcludeColumns());	
+		$cm->setColumnsFromModel(GO::getModel($this->model), $this->getStoreExcludeColumns(),array(),$withCustomfields);	
 		return $cm;
 	}
 	
@@ -471,15 +471,16 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		if (GO::modules()->comments)
 			$response = $this->_processCommentsDisplay($model,$response);
-			
+		
+		if (GO::modules()->lists)
+			$response = GO_Lists_ListsModule::displayResponse($model, $response);
 		
 		$response = $this->afterDisplay($response, $model, $params);
 		
 		$this->fireEvent('display', array(
 				&$this,
 				&$response,
-				&$model,
-				&$params
+				&$model
 		));
 
 		return $response;
@@ -617,6 +618,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				}
 				$categories[$field->category->id]['fields'][]=array(
 						'name'=>$field->name,
+						'datatype'=>$field->datatype,
 						'value'=>$customAttributes[$field->columnName()]
 				);				
 			}
@@ -889,6 +891,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionExport($params) {	
 		
+		GO::setMaxExecutionTime(0);
+		
 		$orientation = false;
 		
 		$showHeader = false;
@@ -964,6 +968,21 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				if(!in_array($c->getDataIndex(), $includeColumns))
 					$columnModel->removeColumn($c->getDataIndex());
 			}
+		} elseif ($includeHidden) {
+			
+			$columnOrder = array();
+			$colNames = $model->getColumns();
+			if (GO::modules()->customfields) {
+				$cfRecord = $model->getCustomfieldsRecord(false);
+				if ($cfRecord) {
+					$cfColNames = $cfRecord->getColumns();
+					unset($cfColNames['model_id']);
+					$colNames = array_merge($colNames,$cfColNames);
+				}
+			}
+			foreach ($colNames as $colName=>$record)
+				$columnOrder[] = $colName;
+			$columnModel->sort($columnOrder);
 		}
 		$extraParams = empty($params['params']) ? array() : json_decode($params['params'], true);
 
@@ -971,7 +990,16 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		if ($includeHidden) {
 			$select = $storeParams->getParam('fields');
-			$findParams->select('t.*,cf.*,'.$select);
+			$select = trim($select);
+			if (!empty($select) && substr($select,0,1)!=',')
+				$select = ','.$select;
+						
+			if (GO::modules()->customfields && $cfRecord)
+				$select = 't.*,cf.*'.$select;
+			else
+				$select = 't.*'.$select;
+
+			$findParams->select($select);
 		}
 		
 		if(!empty($params['type']))
@@ -1311,6 +1339,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					elseif($tableAlias=='cf'){
 						$advQueryRecord['value']=GO::getModel(GO::getModel($this->model)->customfieldsModel())->formatInput ($field, $advQueryRecord['value']);
 					}
+					
+					$cfColRecord = GO::getModel($this->model)->getCustomfieldsRecord()->getColumn($field);
+
+					if (!empty($cfColRecord['customfield']->attributes['multiselect']))
+						$advQueryRecord['value']='%'.$advQueryRecord['value'].'%';
 					
 					$criteriaGroup->addCondition($field, $advQueryRecord['value'], $advQueryRecord['comparator'],$tableAlias,$advQueryRecord['andor']=='AND');
 				}

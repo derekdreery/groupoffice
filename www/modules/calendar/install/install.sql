@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `tasklist_id` int(11) NOT NULL DEFAULT '0',
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
   `show_holidays` tinyint(1) NOT NULL DEFAULT '1',
+	`enable_ics_import` tinyint(1) NOT NULL DEFAULT '0',
+	`ics_import_url` varchar(512) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `group_id` (`group_id`),
   KEY `project_id` (`project_id`)
@@ -165,6 +167,7 @@ CREATE TABLE IF NOT EXISTS `cal_participants` (
   `name` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `user_id` int(11) NOT NULL DEFAULT '0',
+	`contact_id` INT NOT NULL DEFAULT  '0',
   `status` varchar(50) NOT NULL DEFAULT 'NEEDS-ACTION',
   `last_modified` varchar(20) NOT NULL DEFAULT '',
   `is_organizer` tinyint(1) NOT NULL DEFAULT '0',
@@ -185,6 +188,7 @@ CREATE TABLE IF NOT EXISTS `cal_settings` (
   `reminder` int(11) NOT NULL DEFAULT '0',
   `background` char(6) NOT NULL DEFAULT 'EBF1E2',
   `calendar_id` int(11) NOT NULL DEFAULT '0',
+  `show_statuses` BOOLEAN NOT NULL DEFAULT TRUE,
   PRIMARY KEY (`user_id`),
   KEY `calendar_id` (`calendar_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

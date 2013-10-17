@@ -39,6 +39,9 @@ class GO_Base_Util_HttpClient{
 		
 		$this->baseParams=array();
 		
+		if(!function_exists('curl_init'))
+			throw new Exception("Could not initialized HTTP client because PHP is configured withour CURL support.");
+		
 		$this->_curl = curl_init();
 		
 		$cookieFile = GO::user() ? 'cookie_'.GO::user()->id.'.txt' : 'cookie_0.txt';

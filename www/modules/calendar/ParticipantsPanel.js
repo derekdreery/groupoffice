@@ -54,7 +54,7 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		baseParams : {
 			task : "participants"
 		},
-		fields : ['id', 'name', 'email', 'available','status', 'user_id', 'is_organizer','create_permission']
+		fields : ['id', 'name', 'email', 'available','status', 'user_id', 'contact_id','is_organizer','create_permission']
 	});
 		
 	var tbar = [{

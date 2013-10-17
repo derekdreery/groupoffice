@@ -96,60 +96,19 @@ class GO_Core_Controller_Developer extends GO_Base_Controller_AbstractController
 		GO::session()->runAsRoot();
 		
 		$ical_str='BEGIN:VCALENDAR
-METHOD:REQUEST
-PRODID:Microsoft CDO for Microsoft Exchange
-VERSION:2.0
-BEGIN:VTIMEZONE
-TZID:(GMT+01.00) Sarajevo/Warsaw/Zagreb
-X-MICROSOFT-CDO-TZID:2
-BEGIN:STANDARD
-DTSTART:16010101T030000
-TZOFFSETFROM:+0200
-TZOFFSETTO:+0100
-RRULE:FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-END:STANDARD
-BEGIN:DAYLIGHT
-DTSTART:16010101T020000
-TZOFFSETFROM:+0100
-TZOFFSETTO:+0200
-RRULE:FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
-END:DAYLIGHT
-END:VTIMEZONE
+VERSION:1.0
 BEGIN:VEVENT
-DTSTAMP:20130215T103541Z
-DTSTART;TZID="(GMT+01.00) Sarajevo/Warsaw/Zagreb":20130218T160000
-SUMMARY:Bespreken Pitch - BAM / doNow
-UID:040000008200E00074C5B7101A82E00800000000E09F269C4304CE01000000000000000
- 010000000AE722B27E9DB1049BD3C96C8884109A6
-ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN="m.scheri
- ng@intermesh.nl":MAILTO:m.schering@intermesh.nl
-ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;X-REPLYTIME=20130206T07
- 3300Z;RSVP=TRUE;CN="Maurice Vereecken":MAILTO:maurice@salesday.nl
-ORGANIZER;CN="Koen Molenaar":MAILTO:koen@salesday.nl
-LOCATION:Kantoor
-DTEND;TZID="(GMT+01.00) Sarajevo/Warsaw/Zagreb":20130218T163000
-DESCRIPTION:\N
-SEQUENCE:0
-PRIORITY:5
-CLASS:
-CREATED:20130215T103541Z
-LAST-MODIFIED:20130215T103542Z
-STATUS:CONFIRMED
-TRANSP:OPAQUE
-X-MICROSOFT-CDO-BUSYSTATUS:BUSY
-X-MICROSOFT-CDO-INSTTYPE:0
-X-MICROSOFT-CDO-INTENDEDSTATUS:BUSY
-X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
-X-MICROSOFT-CDO-IMPORTANCE:1
-X-MICROSOFT-CDO-OWNERAPPTID:-817485859
-X-MICROSOFT-CDO-APPT-SEQUENCE:1
-X-MICROSOFT-CDO-ATTENDEE-CRITICAL-CHANGE:20130215T103541Z
-X-MICROSOFT-CDO-OWNER-CRITICAL-CHANGE:20130215T103541Z
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:REMINDER
-TRIGGER;RELATED=START:-PT00H15M00S
-END:VALARM
+UID:762
+SUMMARY:weekly test
+DTSTART:20040503T160000Z
+DTEND:20040503T170000Z
+X-EPOCAGENDAENTRYTYPE:APPOINTMENT
+CLASS:PUBLIC
+DCREATED:20040502T220000Z
+RRULE:W1 MO #0
+LAST-MODIFIED:20040503T101900Z
+PRIORITY:0
+STATUS:NEEDS ACTION
 END:VEVENT
 END:VCALENDAR';
 		
@@ -304,4 +263,102 @@ END:VCALENDAR';
 		var_dump($hasDefault);
 		
 	}
+	
+	
+	protected function actionTestDbClose(){
+		
+//		GO::unsetDbConnection();
+		
+		$stmt = GO_Base_Model_User::model()->find();
+		sleep(10);
+		
+		echo "Done";
+		
+	}
+	
+	
+	protected function actionDefaultVat(){
+		
+		$order = GO_Billing_Model_Order::model()->findSingle();
+		
+		$item = new GO_Billing_Model_Item();
+		$item->description="test";
+		$item->amount=1;
+		$item->unit_price=10;
+		$item->order_id=$order->id;
+		$item->save();
+		
+		$order->syncItems();
+		
+		echo $order->order_id;
+		
+	}
+	
+	
+	protected function actionDuplicateCF(){
+		
+		$stmt = GO_Customfields_Model_Category::model()->findByModel("GO_Projects2_Model_Project");
+		$stmt->callOnEach('delete');
+		
+		$sql = "DROP TABLE IF EXISTS cf_pr2_projects";
+		GO::getDbConnection()->query($sql);
+		
+		$sql = "CREATE TABLE IF NOT EXISTS `cf_pr2_projects` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=InnoDB;";
+		GO::getDbConnection()->query($sql);
+		
+
+		$stmt = GO_Customfields_Model_Category::model()->findByModel("GO_Projects_Model_Project");
+
+		foreach($stmt as $category){
+			$category->duplicate(array(
+					'extends_model'=>"GO_Projects2_Model_Project"
+			));
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+
+		
+		
+		$sql = "INSERT INTO cf_pr2_projects SELECT * FROM cf_pm_projects";
+		GO::getDbConnection()->query($sql);
+
+
+		$stmt = GO_Customfields_Model_Category::model()->findByModel("GO_Projects2_Model_TimeEntry");
+		$stmt->callOnEach('delete');
+		
+		
+		$sql = "DROP TABLE IF EXISTS cf_pr2_hours";
+		GO::getDbConnection()->query($sql);
+		
+		$sql = "CREATE TABLE IF NOT EXISTS `cf_pr2_hours` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=InnoDB;";
+		GO::getDbConnection()->query($sql);
+
+		$stmt = GO_Customfields_Model_Category::model()->findByModel("GO_Projects_Model_Hour");
+
+		foreach($stmt as $category){
+			$category->duplicate(array(
+					'extends_model'=>"GO_Projects2_Model_TimeEntry"
+			));
+		}
+
+		
+		
+		$sql = "INSERT INTO cf_pr2_hours SELECT * FROM cf_pm_hours";
+		GO::getDbConnection()->query($sql);
+			
+
+	}
+	
 }

@@ -91,8 +91,15 @@ GO.request = function(config){
 	if(!config.scope)
 		config.scope=this;
 	
-	if(config.maskEl)
-		config.maskEl.mask(GO.lang.waitMsgLoad);
+	
+	
+	
+	if(config.maskEl){
+		if(!config.maskText)
+			config.maskText=GO.lang.waitMsgLoad;
+	
+		config.maskEl.mask(config.maskText);
+	}
 	
 	var origSuccess=config.success;
 	delete config.success;

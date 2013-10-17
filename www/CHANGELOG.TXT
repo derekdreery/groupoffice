@@ -1,13 +1,168 @@
-trunk
-- New theme
+- Added date and time indicator
+- Custom Fields & Addressbook Advanced Search: can now search through multiselect custom fields.
+- Billing: able to import order items from CSV file.
+
+10-10-2013 5.0.10
+- Searchbar was missing in add contact dialog for the address list
+- Images in vcards will be base64 encode without whitespace (for carddav sync iPhone)
+- the database field for dav_contacts that hold data is changed to LONGTEXT for VCARDs with large base64 encode images
+
+07-10-2013 5.0.9
+- Updated Norwegian
+- Customfields of a ticket will appear above the messages in the eastpanel
+- Fixes of 4.2.23
+
+02-10-2013 5.0.8
+- Remove auto phone formatting until matured
+- Double decode of binary vcard data
+- Calendar module: icons for private, recurring and events with reminder(s).
+- Modules tabstrip will always be in the order of the modules module.
+- Address Book module: social media links for contacts.
+- Custom field text field length can be set. Max row length error is handled 
+  when maximum is reached.
+- Small layout tweaks
+- Contacts is extended with an Action date that can be filtered on. It can be 
+  set when you add a comment too.
+- load reject message in sieve dialog
+- Fixed context menu when searching in e-mail
+- Fixes of 4.2.22
+
+17-09-2013 5.0.7
+- Disabled custom field will not be displayed in the display panel on not enabled categories
+- Added holidays module
+
+17-09-2013 5.0.6
+- Icons back in start menu
+- Appointment participants are linked automatically to the contacts
+- Rates in CSV export
+- WebDAV uses file permissions from file_create_mode
+- Fixes from 4.2.20
+
+11-09-2013 5.0.5
+- Fixes from 4.2.19
+- Layout issues
+
+10-09-2013 5.0.4
+- Build error: pro modules missing.
+
+09-09-2013 5.0.3
+- Small theme fixes
+- Fixes from 4.2.17
+
+20-08-2013 5.0.1 (beta)
+- Small theme fixes
+- Fixes from 4.2.12
+
+15-08-2013 5.0.0 (beta)
+- Complete redesigned interface
 - Added recursive search for Imap folders
 - VoIP will rewrite tel: links to callto: in Firefox in Windows
 - Updated VObject to 3.1
 - Updated Sabredav to 1.8.6
+- Address Book module: photos functionality for companies.
+- Projects module: 'show in tree' check box for project statuses.
 
 
+4.2.25
+- Carddav supports viewing readonly address books
+- Fixed Contact pictures of VCards base64 encoding for older vObject libraries
+- Don't include inactive users in e-mail search
+- Signed JUpload java applet
+- JUpload fixed for IE
+- It was possible to create an event without organizer
+- Include companies in e-mail search
 
-15-08-2013 4.2.12
+10-10-2013 4.2.24
+- Disable file manager until upload is complete to avoid change of folder while uploading
+- Contact info panel could crash when appointments were attached
+- Added default parameter to FilesearchController::getStoreColumnModel  so it will be compatible with the AbstractModelController
+- Special statusses of the billing module will be loaden for the current book when the Book dialog opens
+- AbstractModelController::actionExport() will only SELECT custom field column if there is a customfield record available
+- Contact pictures of VCards are working with CardDav sync (were base64 encoded twice)
+
+07-10-2013 4.2.23
+- Fixed the Attachment Context menu on the Email dialog when clicking a .eml attachment
+- Calendar view export will extends when the calendar name doesn't fit on one row.
+- Signed GOTA with real code signing certificate
+- Handle missing models in search
+- Files: Fixed path display when using the "up" button
+- Disabled session_inactivity_timeout because it breaks IE when enabled.
+
+02-10-2013 4.2.22
+- Add redirects for Caldav and carddav service discovery so that iOS7 works.
+- Module access is checked now for WebDAV, CalDAV and CardDAV
+- Updating e-mail accounts with LDAP auth failed.
+- Workaround ActiveSync problem where 'mailto:' is included in the mail address.
+- Fixed disappearing file browser button when making display panel very small
+- odt should not be renamed by google drive module
+- Fixed problem with getting "due time is smaller that start time" error  if you complete a task with a recurrence.
+- Added dependency check in sites module for the customfields module to be installed.
+- Signed GOTA
+- session_inactivity_timeout was reimplemented
+
+17-09-2013 4.2.21
+- Export contacts/projects/etc.: custom fields not exported if current user has no access to custom fields module.
+
+17-09-2013 4.2.20
+- Added sorting on category in the tasks grid.
+- Bug in imapauth auto account creation
+- CRLF Bug in calendar export
+
+11-09-2013 4.2.19
+- Z-Push 2 performance issue. There was a wrong check on changes on the calendar. 
+  This query was slow and caused all devices to sync when anybody made a change in the calendar.
+- Upgraded PEAR net_sieve page to 1.3.2
+- LDAP Auth module blocked login when not configured.
+- Export contacts/tickets/projects/etc: CSV exports will now have no more '<br />' tags.
+- Export contacts/tickets/projects/etc: fixed bug (one comma too many in MySQL query) and added 'max execution time=0'.
+- DAV tables cleaned up
+
+10-09-2013 4.2.18
+- Package build error. Pro modules missing.
+
+09-09-2013 4.2.17
+- Root Addressbook and Project folder read only in files module
+- Peek when viewing attachments
+- SMIME certificated grid will reload on show.
+- Fixed owner that was not showing up in the administration->tickettypes grid of the ticket module.
+- Addressbook: Added pagination to the "Administration"->"Addresslists" grid
+- Fixed default date / time problem on task reminder.
+- Sieve: Rules table is refreshed after every single rearrangement.
+- New LDAP parameter to create mailboxes with the serverclient
+- Charset conversion bug in zip attachments
+- Photo was not saved on vcard import
+- Refuse to move events to other weekdays when they recur by weekday also in month view
+
+03-09-2013 4.2.16
+- IMip handler for CalDAV to support apple invitations better.
+- Don't ask to notify event participants when nothing relevant has been changed
+- Disable address books collapsing when favorites is not installed
+- Changed the default sort of the project templates store so it uses the "name" instead of the "id" to sort.
+- Fixed bug where email got cut of on the word begin
+- Cut of encoded strings on the end of email attachment names
+
+30-08-2013 4.2.15
+- Removed unseen caching. Broke checker.
+- Update Norwegian, German and Swedish translation
+- Could not find relational ACL error in billing module
+
+27-08-2013 4.2.14
+- Everybody may create calendar views
+- Corrected mistake in 4.2.13 release
+
+27-08-2013 4.2.13
+- Z-push 2 did not close DB connection while pinging.
+- Internet Explorer will never open email attachments inline for MS Office mime types.
+- Get capability from IMAP login command
+- Query unseen messages only when modseq changes
+- Option to show event status in views
+- Bug in reminder calculation
+- Refuse to move events to other weekdays when they recur by weekday
+
+20-08-2013 4.2.12
+- Bug in attachment download
+- Fixed security vulnerability
+- Minimized disk access in files module
 - Detect company employees for document templates as well so they don't need to be linked
 - Added participant status to view grid.
 - Added a check for empty "name" property in an email part to determine if it is a mail body or an attachment

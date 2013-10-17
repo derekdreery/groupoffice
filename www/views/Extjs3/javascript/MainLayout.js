@@ -31,7 +31,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	ready : false,
 	
 //	fullscreenPopup : false,
-
+	
 	state : false,
 
 	stateSaveScheduled : false,
@@ -118,7 +118,29 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	
 	fireReady : function(){
 		this.fireEvent('ready', this);
-	 	this.ready=true;		
+	 	this.ready=true;
+		this.initLogoutTimer(GO.settings.config['session_inactivity_timeout']);
+	},
+	
+	/**
+	 * Set a timer that will automatically logout when no mouseclicks of keypresses
+	 * @see fireReady
+	 */
+	initLogoutTimer: function(seconds) { 
+		//Doesn't work in IE
+//		if(seconds==0) 
+//			return;
+//		var ms = seconds*1000;
+//		var delay = (function(){
+//			var timer = 0;
+//			return function(ms){
+//			  clearTimeout (timer);
+//			  timer = setTimeout(function() { window.location = GO.url('core/auth/logout'); }, ms);
+//			};
+//		  })();
+//		Ext.EventManager.addListener(window,'keyup', function() {delay(ms)});
+//		Ext.EventManager.addListener(window,'click', function() {delay(ms)});
+//		delay(ms);
 	},
 
 	getOpenModules : function(){
@@ -274,7 +296,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 		this.state = Ext.state.Manager.get('open-modules');
 
-		
+
 		for(var i=0;i<allPanels.length;i++){
 
 			if(this.state && this.state.indexOf(allPanels[i].moduleName)>-1)
@@ -525,10 +547,18 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		if(!this.tabPanel.items.map[panelId])
 		{
 			panel = GO.moduleManager.getPanel(moduleName);
+			
+			//Find the correct tab order for the tabpanel
+			var volgorde = GO.moduleManager.getAllPanelConfigs(),
+				order=this.tabPanel.items.length;
+			for(var i=0;i<volgorde.length; i++)
+				if(volgorde[i].id == panelId)
+					order=i;
+			
                         if(panel)
                         {
                                 panel.id = panelId;
-                                this.tabPanel.add(panel);
+                                this.tabPanel.insert(order, panel);
 
                                 /*if(!this.hintShown)
                                 {
@@ -551,25 +581,27 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	},
 	
 	setNotification : function(moduleName, number, color){
-		var panel = this.initModule(moduleName);
-//		var el = Ext.get(this.tabPanel.getTabEl(panel));
-//		var text = el.child('.x-tab-strip-text');
-//		var notEl = text.child('.go-tab-notification')
-		
-//		if(!notEl){
-//			text.dom.innerHTML += ' <div class="go-tab-notification" style="background-color:'+color+'">'+number+'</div>';
-//		}else
-//		{
-//			notEl.dom.innerHTML = number;
-//		}
+		var panel = this.getModulePanel(moduleName);
+		if(panel){
+	//		var el = Ext.get(this.tabPanel.getTabEl(panel));
+	//		var text = el.child('.x-tab-strip-text');
+	//		var notEl = text.child('.go-tab-notification')
 
-		if(!panel.origTitle){
-			panel.origTitle=panel.title;
+	//		if(!notEl){
+	//			text.dom.innerHTML += ' <div class="go-tab-notification" style="background-color:'+color+'">'+number+'</div>';
+	//		}else
+	//		{
+	//			notEl.dom.innerHTML = number;
+	//		}
+
+			if(!panel.origTitle){
+				panel.origTitle=panel.title;
+			}
+
+			var newTitle = number ? panel.origTitle+' <div class="go-tab-notification" style="background-color:'+color+'">'+number+'</div>' : panel.origTitle;
+
+			panel.setTitle(newTitle);
 		}
-
-		var newTitle = number ? panel.origTitle+' <div class="go-tab-notification" style="background-color:'+color+'">'+number+'</div>' : panel.origTitle;
-
-		panel.setTitle(newTitle);
 
 	},
 

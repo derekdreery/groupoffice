@@ -79,7 +79,7 @@ GO.postfixadmin.DomainDialog = Ext.extend(GO.dialog.TabbedFormDialog,{
 			title: GO.postfixadmin.lang.domain,
 			formControllerUrl: 'postfixadmin/domain',
 			width:700,
-			height:500
+			height:600
 			//fileUpload:true
 		});
 		GO.postfixadmin.DomainDialog.superclass.initComponent.call(this);	

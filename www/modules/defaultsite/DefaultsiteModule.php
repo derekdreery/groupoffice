@@ -13,6 +13,10 @@ class GO_Defaultsite_DefaultsiteModule extends GO_Base_Module {
 	public function adminModule() {
 		return false;
 	}
+	
+	public function depends() {
+		return array('site');
+	}
 
 	public function install() {
 		

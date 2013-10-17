@@ -69,7 +69,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	
 	private function _loadData(){
 		
-		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(ReflectionProperty::IS_PUBLIC);
 		
 		$propertyNames=array();
 		foreach($properties as $property){
@@ -79,11 +79,12 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 		$values = GO::config()->getSettings($propertyNames,$this->_userId);
 
 		foreach($values as $property=>$value){
-			
-			if(substr($value,0,11)=='serialized:'){
-				$value = unserialize(substr($value,11));
+			if(isset($value)){
+				if(substr($value,0,11)=='serialized:'){
+					$value = unserialize(substr($value,11));
+				}
+				$this->{substr($property,strlen($this->myPrefix()))} = $value;
 			}
-			$this->{substr($property,strlen($this->myPrefix()))} = $value;
 		}
 	} 
 	
@@ -106,7 +107,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 		if(!$this->validate())
 			return false;
 		
-		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(ReflectionProperty::IS_PUBLIC);
 		$success = true;
 		foreach($properties as $property){				
 			$key = $property->name;
@@ -136,7 +137,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	 */
 	public function saveFromArray($data){
 		
-		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(ReflectionProperty::IS_PUBLIC);
 				
 		foreach($properties as $property){
 			$key = $property->name;
@@ -164,7 +165,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	public function getArray(){
 		
 		$data = array();
-		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(ReflectionProperty::IS_PUBLIC);
 		
 		foreach($properties as $property){
 			$key = $property->name;	  

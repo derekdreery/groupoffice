@@ -174,7 +174,7 @@ class GO_Imapauth_Authenticator {
 
 			if (file_exists($conf)) {
 				require($conf);
-				$configs = $config;
+				$configs = isset($config) ? $config : array();
 			} else {
 				$configs = array();
 			}

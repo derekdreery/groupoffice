@@ -59,6 +59,11 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 		}
 		this.setCommentId(comment_id);
 		
+		if (!GO.util.empty(config) && !GO.util.empty(config.link_config))
+			this.toggleActionDate(config.link_config['model_name']);
+		else if (!GO.util.empty(config) && !GO.util.empty(config['model_name']))
+			this.toggleActionDate(config['model_name']);
+		
 		delete this.link_config;
 		
 		if(this.comment_id>0)
@@ -69,6 +74,9 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 				success:function(form, action)
 				{
 					GO.comments.CommentDialog.superclass.show.call(this);
+					var response = Ext.decode(action.response['responseText']);
+					if (response.data['category_id']==0)
+						this.categoriesCB.setValue('');
 				},
 				failure:function(form, action)
 				{
@@ -80,17 +88,32 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 		{
 			this.formPanel.form.reset();
 			GO.comments.CommentDialog.superclass.show.call(this);
+			if (config && config.link_config && !this.actionDateField.disabled) {
+				this.actionDateField.setValue(config.link_config['action_date']);
+			}
 		}
-		if(config && config.model_name)
-			this.formPanel.baseParams.model_name=config.model_name;
 		
-		if(config && config.link_config)
+		if(config)
 		{
-			this.link_config=config.link_config;
-			
-			this.formPanel.baseParams.model_id=config.link_config.model_id;
-			this.formPanel.baseParams.model_name=config.link_config.model_name;
+			if (config.link_config) {
+				this.link_config=config.link_config;
+
+				this.formPanel.baseParams.model_id=config.link_config.model_id;
+				this.formPanel.baseParams.model_name=config.link_config.model_name;
+			} else {
+				if(config.model_name)
+					this.formPanel.baseParams.model_name=config.model_name;
+				if(config.model_id)
+					this.formPanel.baseParams.model_id=config.model_id;
+				if(!this.actionDateField.disabled && config.action_date)
+					this.actionDateField.setValue(config.action_date);
+			}
 		}
+	},
+	toggleActionDate : function(modelName) {
+		var withActionDate = modelName == 'GO_Addressbook_Model_Contact';
+		this.actionDateField.setDisabled(!withActionDate);
+		this.actionDateField.setVisible(withActionDate);
 	},
 	setCommentId : function(comment_id)
 	{
@@ -105,7 +128,6 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 //			params: {'task' : 'save_comment'},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
-//				this.fireEvent('save', this);
 				if(hide)
 				{
 					this.hide();	
@@ -121,7 +143,12 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 				{					
 					this.link_config.callback.call(this);					
 				}
+								
+				if (!GO.util.empty(this.formPanel.baseParams['model_name']) && this.formPanel.baseParams['model_name']=='GO_Addressbook_Model_Contact' && !GO.util.empty(GO.addressbook.contactsGrid)) {
+					GO.addressbook.contactsGrid.store.load();
+				}
 				
+				this.fireEvent('save', this);				
 			},		
 			failure: function(form, action) {
 				if(action.failureType == 'client')
@@ -150,7 +177,13 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 					height: 200,
 					hideLabel:true
 				},
-				this.categoriesCB = new GO.comments.CategoriesComboBox()
+				this.categoriesCB = new GO.comments.CategoriesComboBox(),
+				this.actionDateField = new Ext.form.DateField({
+					name: 'action_date',
+					fieldLabel: GO.comments.lang['actionDate'],
+					format : GO.settings['date_format'],
+					disabled: true
+				})
 			]				
 		});
 	}
@@ -170,7 +203,7 @@ GO.comments.showCommentDialog = function(comment_id, config){
 	GO.comments.commentDialog.show(comment_id, config);
 }
 
-GO.comments.browseComments= function (model_id, model_name)
+GO.comments.browseComments= function (model_id, model_name, action_date)
 {
 	if(!GO.comments.commentsBrowser)
 	{
@@ -180,7 +213,10 @@ GO.comments.browseComments= function (model_id, model_name)
 		GO.comments.commentsBrowser.on(GO.comments.commentDialogListeners);
 	}
 	
-	GO.comments.commentsBrowser.show({model_id: model_id, model_name:model_name});
+	if (!GO.util.empty(action_date))
+		GO.comments.commentsBrowser.show({model_id: model_id, model_name:model_name, action_date: action_date});
+	else
+		GO.comments.commentsBrowser.show({model_id: model_id, model_name:model_name});
 };
 
 

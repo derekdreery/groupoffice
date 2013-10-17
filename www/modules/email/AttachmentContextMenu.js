@@ -15,7 +15,7 @@ GO.email.AttachmentContextMenu = function(config)
 {
 	if(!config)
 		config = {};
-	
+
 	config['shadow']='frame';
 	config['minWidth']=180;
 	
@@ -32,7 +32,7 @@ GO.email.AttachmentContextMenu = function(config)
 					scope: this
 				});
 	config.items=[this.downloadButton];
-	if(GO.files)
+	if(GO.files && !config.removeSaveButton)
 	{
 		this.saveButton = new Ext.menu.Item({
 					iconCls: 'btn-save',

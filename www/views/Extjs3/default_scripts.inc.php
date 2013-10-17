@@ -86,6 +86,7 @@ $settings['config']['max_file_size']=GO::config()->max_file_size;
 $settings['config']['help_link']=GO::config()->help_link;
 $settings['config']['support_link']=GO::config()->support_link;
 $settings['config']['nav_page_size']=intval(GO::config()->nav_page_size);
+$settings['config']['session_inactivity_timeout']=intval(GO::config()->session_inactivity_timeout);
 
 $settings['config']['default_country'] = GO::config()->default_country;
 $settings['config']['checker_interval'] = (int)GO::config()->checker_interval;

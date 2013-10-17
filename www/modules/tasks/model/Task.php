@@ -204,12 +204,13 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($this->due_time, $this->rrule, true);
-			
+		
 			$this->duplicate(array(
 				'completion_time'=>0,
 				'start_time'=>time(),
-				'due_time'=>$rrule->getNextRecurrence($this->due_time+1),
-				'status'=>GO_Tasks_Model_Task::STATUS_NEEDS_ACTION
+				'due_time'=>$rrule->getNextRecurrence(time()),
+				'status'=>GO_Tasks_Model_Task::STATUS_NEEDS_ACTION,
+				'percentage_complete'=>0
 			));
 		}
 	}
@@ -243,7 +244,11 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		$settings = GO_Tasks_Model_Settings::model()->getDefault(GO::user());
 		
 		$tmp = GO_Base_Util_Date::date_add($startTime, -$settings->reminder_days);
-		$dateString = date('Y-m-d', $tmp).' '.$settings->reminder_time;
+		
+		// Set default to 8:00 when reminder_time is not set.
+		$rtime = empty($settings->reminder_time) ? "08:00" : $settings->reminder_time;
+		$dateString = date('Y-m-d', $tmp).' '.$rtime;
+		
 		$time = strtotime($dateString);
 		return $time;
 	}

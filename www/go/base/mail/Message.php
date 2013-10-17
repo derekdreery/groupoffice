@@ -80,6 +80,11 @@ class GO_Base_Mail_Message extends Swift_Message{
 		$to = isset($structure->headers['to']) && strpos($structure->headers['to'],'undisclosed')===false ? $structure->headers['to'] : '';
 		$cc = isset($structure->headers['cc']) && strpos($structure->headers['cc'],'undisclosed')===false ? $structure->headers['cc'] : '';
 		$bcc = isset($structure->headers['bcc']) && strpos($structure->headers['bcc'],'undisclosed')===false ? $structure->headers['bcc'] : '';
+		
+		//workaround activesync problem where 'mailto:' is included in the mail address.		
+		$to = str_replace('mailto:','', $to);
+		$cc = str_replace('mailto:','', $cc);
+		$bcc = str_replace('mailto:','', $bcc);
 	
 		$toList = new GO_Base_Mail_EmailRecipients($to);
 		$to =$toList->getAddresses();
@@ -98,7 +103,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 
 		if(isset($structure->headers['from'])){
 			
-			$fromList = new GO_Base_Mail_EmailRecipients($structure->headers['from']);
+			$fromList = new GO_Base_Mail_EmailRecipients(str_replace('mailto:','',$structure->headers['from']));
 			$from =$fromList->getAddress();
 		
 			if($from)
@@ -136,6 +141,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 	 * Set the HTML body and automatically create an alternate text body
 	 * 
 	 * @param String $htmlBody 
+	 * @return GO_Base_Mail_Message
 	 */
 	public function setHtmlAlternateBody($htmlBody){
 	
@@ -145,6 +151,8 @@ class GO_Base_Mail_Message extends Swift_Message{
 		//add text version of the HTML body
 		$htmlToText = new GO_Base_Util_Html2Text($htmlBody);
 		$this->addPart($htmlToText->get_text(), 'text/plain','UTF-8');
+		
+		return $this;
 	}
 	
 	/**

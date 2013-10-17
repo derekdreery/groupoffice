@@ -211,38 +211,46 @@
 .go-top-panel .x-panel-body{
 	padding:3px;
 	border:0px none;
-  	padding-top:3px;
+	padding-top:3px;
  	padding-left:3px;
-  	color: #666 !important;
-  	height: 84px !important; /*overwrite inline style tags*/
+	color: #666 !important;
+	height: 50px !important; overwrite inline style tags
 }
 
 .go-header-toolbar{
 	background:transparant!important;
 }
-#gologo{
-	float:left;
+#go-logo{
+	position:absolute;
+	top:12px;
+	left:20px;
 	background: url('images/go_logo.gif')  no-repeat;
-	height: 46px;
-	padding-right: 20px;
-	line-height:40px;
-	width: 214px;
+	height: 32px;	
+	width: 150px;
+	font: 20px bold Helvetica, Arial, sans-serif;
+	color:black;
+	padding-left:40px;
+	padding-top:4px;
+	letter-spacing: 2px;
 }
 
-#logged-in-as{
+#go-logged-in-as{
 	float: left;
-	margin-top: 15px;
+	/*margin-top: 15px;*/
 }
 
-#headerLeft{
+#go-header-left{
 	float: left;
-	padding: 20px;
+	padding:17px;
+	padding-left:190px;
+/*	padding: 20px;*/
 	/*width: 60%;*/
 }
-#headerRight {
+#go-header-right{
 	float: right;
-	padding: 20px 20px 20px 0px;
-	height: 46px;
+	padding:17px;
+	/*padding: 20px 20px 20px 0px;*/
+	/*height: 46px;*/
 }
 
 .go-top-panel a:visited, .go-top-panel a:link, .go-top-panel a:active, .go-top-panel a:hover {
@@ -829,6 +837,7 @@ hr{
 
 table.display-panel{
 	width:100%;
+	border-collapse:collapse;
 }
 
 table.display-panel td{
@@ -854,7 +863,7 @@ table.display-panel a:active
 	padding-top: 10px;
 }
 .collapsible-display-panel-header{
-	padding:2px;
+	padding:10px 0px 0px 0px;
 }
 
 .collapsible-display-panel-subheader {
@@ -1043,10 +1052,6 @@ table.display-panel a:active
 
 .go-icon-exclamation .x-grid3-cell-inner{
 	background: url('images/16x16/exclamation.png') no-repeat !important;
-	padding-left:22px !important;
-}
-.go-icon-print .x-grid3-cell-inner{
-	background: url('images/16x16/print.png') no-repeat !important;
 	padding-left:22px !important;
 }
 
@@ -2104,7 +2109,7 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 }
 
 #secondary-menu{
-	margin-top: 15px;
+	/*margin-top: 15px;*/
 }
 
 .go-moduletabs-bwrap{
@@ -2198,3 +2203,37 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 .go-tab-notification{
 	display:inline-block;background-color:green;color:white;border-radius:9px;height:20px;width:20px;line-height:20px;text-align:center;
 }
+
+.go-permissions-panel .x-panel-header{
+	padding: 10px 10px 0 0px;
+	margin-left: 10px;
+	border-bottom: 2px solid black;
+}
+
+.go-permissions-panel .x-panel-header-text{
+	font-size: 13px !important;
+	line-height: 20px;
+}
+
+
+
+
+/*#go-links-panel{
+	background-color:#2a9ac9 !important;
+}*/
+
+#go-links-panel .x-toolbar{
+	padding-bottom:10px !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+

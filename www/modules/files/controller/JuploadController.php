@@ -32,10 +32,10 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 		$afterUploadScript = '
 			<script type="text/javascript">
 				function afterUpload(success){
+//					opener.GO.files.juploadFileBrowser.sendOverwrite({upload:true});	
 					
-					opener.GO.files.juploadFileBrowser.sendOverwrite({upload:true});	
-
 					if(success){
+						window.uploadSuccess=true;
 						setTimeout("self.close();", 1000);
 					}
 				}
@@ -106,6 +106,9 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 					}
 				} else {
 					$files = GO_Base_Fs_File::moveUploadedFiles($uploadedFile, $tmpFolder);
+					if(!$files)
+						throw new Exception("No file received");
+					
 					$file = $files[0];
 				}
 				$subdir = false;

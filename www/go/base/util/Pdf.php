@@ -195,8 +195,11 @@ class GO_Base_Util_Pdf extends TCPDF {
 		for($i=0;$i<count($columns);$i++){
 			
 			if(isset($this->_headers[$headerIndex])){
-				$columns[$i]->width=$this->_headers[$headerIndex]->width;
-				$columns[$i]->align=$this->_headers[$headerIndex]->align;
+				if(!isset($columns[$i]->width))
+					$columns[$i]->width=$this->_headers[$headerIndex]->width;
+				
+				if(!isset($columns[$i]->align))
+					$columns[$i]->align=$this->_headers[$headerIndex]->align;
 			
 				$headerIndex++;
 				if(isset($columns[$i]->colspan)){
@@ -262,6 +265,9 @@ class GO_Base_Util_PdfTableColumn{
 		
 		if(isset($this->align))
 			$html .='text-align:'.$this->align.';';
+		
+		if(isset($this->color))
+			$html .='color:'.$this->color.';';
 		
 		$html .= $this->extraStyle.'"';
 		

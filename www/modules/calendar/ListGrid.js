@@ -40,6 +40,7 @@ GO.calendar.ListGrid = function(config)
 			'task_id',
 			'contact_id',
 			'link_count',
+			'has_reminder',
 			'calendar_id',
 			'calendar_name',
 //			'has_other_participants',
@@ -91,6 +92,13 @@ GO.calendar.ListGrid = function(config)
 			{
 				html +='cal-has-links';
 			}
+			if (record.data.private) {
+				v = v+'<span class="cal-is-private"></span>';
+			}
+			if (record.data.has_reminder==1) {
+				v = v+'<span class="cal-has-reminders"></span>';
+			}
+
 			html +='" style="background-position:1px 3px !important;border:1px solid #c0c0c0;padding:2px;margin:2px;background-color:#'+record.data.background+';">'+v+'</div>';
 			return html;
 		},
@@ -166,7 +174,7 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 	
 	renderName : function(grid, value, record)
 	{
-		return '<div style="font-weight:bold;" ext:qtip="'+Ext.util.Format.htmlEncode(GO.calendar.formatQtip(record.data))+'">'+record.data.name+'</div>'+GO.calendar.formatQtip(record.data,false);
+			return '<div style="font-weight:bold;" ext:qtip="'+Ext.util.Format.htmlEncode(GO.calendar.formatQtip(record.data))+'">'+record.data.name+'</div>'+GO.calendar.formatQtip(record.data,false);
 	},
 		
 	afterRender : function()

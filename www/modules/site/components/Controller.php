@@ -58,7 +58,19 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 	 */
 	private $_action ='';
 	
+	/**
+	 * Set the meta description
+	 * 
+	 * @var string 
+	 */
 	protected $description="";
+	
+	/**
+	 * Set the meta keywords
+	 * 
+	 * @var array 
+	 */
+	protected $keywords=array();
 
 	public function getPageTitle()
 	{
@@ -307,6 +319,9 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 			//$this->render('error', array('error'=>$e));
 		}
 		catch (GO_Base_Exception_NotFound $e){
+			header("HTTP/1.0 404 Not Found");
+      header("Status: 404 Not Found");
+			
 			$this->render('/site/404', array('error' => $e));
 		}
 		catch (Exception $e){

@@ -7,6 +7,14 @@ class GO_Defaultsite_Controller_Installation extends GO_Base_Controller_Abstract
 			'success'=>true,
 			'feedback'=>'' // Needed when an error occurs
 		);
+		
+		if(!GO::modules()->isAvailable('site')){
+			throw new Exception("site module is not available!");
+		}
+		
+		if(!GO::modules()->isAvailable('defaultsite')){
+			throw new Exception("defaultsite module is not available!");
+		}
 
 		$siteModule = new GO_Base_Model_Module();
 		$siteModule->id='site';

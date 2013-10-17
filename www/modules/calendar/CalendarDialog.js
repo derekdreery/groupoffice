@@ -283,7 +283,7 @@ GO.calendar.CalendarDialog = function(config)
 		title: GO.calendar.lang.calendar,
 		layout:'fit',
 		modal:false,
-		height:500,
+		height:600,
 		width:700,
 		closeAction:'hide',
 		items: this.formPanel,

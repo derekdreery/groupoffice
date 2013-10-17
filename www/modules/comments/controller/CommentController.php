@@ -43,6 +43,26 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 		return parent::beforeSubmit($response, $model, $params);
 	}
 	
+	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
+		$modelTypeModel = GO_Base_Model_ModelType::model()->findSingleByAttribute('id',$model->model_type_id);
+		if ($modelTypeModel->model_name == 'GO_Addressbook_Model_Contact') {
+			$modelWithComment = GO::getModel($modelTypeModel->model_name)->findByPk($model->model_id);
+			$modelWithComment->setAttribute('action_date',GO_Base_Util_Date::to_unixtime($params['action_date']));
+			$modelWithComment->save();
+		}
+		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
+	}
+	
+	protected function afterLoad(&$response, &$model, &$params) {
+		$modelTypeModel = GO_Base_Model_ModelType::model()->findSingleByAttribute('id',$model->model_type_id);
+		if ($modelTypeModel->model_name == 'GO_Addressbook_Model_Contact') {
+			$modelWithComment = GO::getModel($modelTypeModel->model_name)->findByPk($model->model_id);
+			$actionDate = $modelWithComment->getAttribute('action_date');
+			$response['data']['action_date'] = GO_Base_Util_Date::get_timestamp($actionDate,false);
+		}
+		return parent::afterLoad($response, $model, $params);
+	}
+	
 	protected function actionCombinedStore($params) {
 		$response = array(
 			'success' => true,

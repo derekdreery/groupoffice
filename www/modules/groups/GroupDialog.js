@@ -20,7 +20,7 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			title:GO.groups.lang.group,
 			formControllerUrl: 'groups/group',
 			titleField:'name',
-			height:440
+			height:600
 		});
 		
 		GO.groups.GroupDialog.superclass.initComponent.call(this);

@@ -206,6 +206,19 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			if (stristr($response, 'A'.$this->command_count.' OK')) {
 				$authed = true;
 				$this->state = 'authed';
+				
+				
+				//some imap servers like dovecot respond with the capability after login.
+				//Set this in the session so we don't need to do an extra capability command.
+				if(($startpos = strpos($response, 'CAPABILITY'))!==false){
+					GO::debug("Use capability from login");					
+					$endpos=  strpos($response, ']', $startpos);
+					if($endpos){
+						$capability = substr($response, $startpos, $endpos-$startpos);
+						GO::session()->values['GO_IMAP'][$this->server]['imap_capability']=$capability;
+					}
+					
+				}
 			}else
 			{
 //				if(!GO::config()->debug)
@@ -229,6 +242,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 */
 
 	public function get_capability() {
+		//Cache capability in the session so this command is not used repeatedly
 		if (isset(GO::session()->values['GO_IMAP'][$this->server]['imap_capability'])) {
 			$this->capability=GO::session()->values['GO_IMAP'][$this->server]['imap_capability'];
 		}else {
@@ -240,9 +254,6 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);			
 		}
-		
-//		GO::debug('IMAP capability: '.$this->capability);
-		
 		return $this->capability;
 	}
 	
@@ -749,6 +760,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		if(!$status)
 			return false;
 		
+		$highestmodseq=false;
 		$uidvalidity = 0;
 		$exists = 0;
 		$uidnext = 0;
@@ -774,6 +786,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				foreach ($vals as $i => $v) {
 					if (intval($v) && isset($vals[($i - 1)]) && $vals[($i - 1)] == 'UIDVALIDITY') {
 						$uidvalidity = $v;
+					}
+				}
+			}
+			
+			if (in_array('HIGHESTMODSEQ', $vals)) {
+				foreach ($vals as $i => $v) {
+					if (intval($v) && isset($vals[($i - 1)]) && $vals[($i - 1)] == 'HIGHESTMODSEQ') {
+						$highestmodseq = $v;
 					}
 				}
 			}
@@ -818,6 +838,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$mailbox['name']=$mailbox_name;
 		$mailbox['uidnext'] = $uidnext;
 		$mailbox['uidvalidity'] = $uidvalidity;
+		$mailbox['highestmodseq'] = $highestmodseq;
 		$mailbox['messages'] = $exists;
 		$mailbox['flags'] = $flags;
 		$mailbox['permanentflags'] = $pflags;
@@ -836,7 +857,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	
 	private $_unseen;
 
-	public function get_unseen($mailbox=false) {
+	public function get_unseen($mailbox=false, $nocache=false) {
 		
 		if(!$mailbox)
 			$mailbox = $this->selected_mailbox['name'];
@@ -850,6 +871,22 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				return false;
 			}
 		}
+		
+//		GO::debug(GO::session()->values['GO_IMAP'][$this->server][$mailbox]);
+//		GO::debug($this->selected_mailbox['uidvalidity']);
+//		GO::debug($this->selected_mailbox['highestmodseq']);
+//		//get from session cache
+//		if(isset(GO::session()->values['GO_IMAP'][$this->server][$mailbox]) && !empty(GO::session()->values['GO_IMAP'][$this->server][$mailbox]['highestmodseq'])){
+//			if(GO::session()->values['GO_IMAP'][$this->server][$mailbox]['uidvalidity']==$this->selected_mailbox['uidvalidity'] && GO::session()->values['GO_IMAP'][$this->server][$mailbox]['highestmodseq']==$this->selected_mailbox['highestmodseq']){
+//				
+//				GO::debug("Returning unseen from cache");
+//							
+//				
+//				return GO::session()->values['GO_IMAP'][$this->server][$mailbox];
+//			}
+//		}
+//		
+//		GO::debug("Getting unseen");
 
 		#some servers don't seem to support brackets
 		#$command = "UID SEARCH (UNSEEN) ALL\r\n";
@@ -876,8 +913,10 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		$this->selected_mailbox['unseen']=$unseen;
 
-		//GO::debug($unseen);
-		$this->_unseen[$mailbox]= array('count'=>$unseen, 'uids'=>$uids);
+		
+//		$this->_unseen[$mailbox]=GO::session()->values['GO_IMAP'][$this->server][$mailbox]=array('count'=>$unseen, 'uids'=>$uids, 'uidvalidity'=>$this->selected_mailbox['uidvalidity'], 'highestmodseq'=>$this->selected_mailbox['highestmodseq']);
+		$this->_unseen[$mailbox]=array('count'=>$unseen, 'uids'=>$uids);
+		
 		
 		return $this->_unseen[$mailbox];
 	}
@@ -1974,16 +2013,18 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			while ($line = $this->get_message_part_line()) {
 
 				switch (strtolower($encoding)) {
-					case 'base64':
-
+					case 'base64':						
+						$line = trim($leftOver.$line);
+						$leftOver = "";
+						
 						if(strlen($line) % 4 == 0){
+							
 							if(!$fp){
 								$str .= base64_decode($line);
 							}  else {
 								fputs($fp, base64_decode($line));
 							}
-						}else{
-							$line = trim($leftOver.$line);
+						}else{						
 
 							$buffer = "";					
 							while(strlen($line)>4){
@@ -1999,9 +2040,6 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 							if(strlen($line)){
 								$leftOver = $line;
-							}else
-							{
-								$leftOver = "";
 							}
 						}
 						break;
@@ -2028,6 +2066,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 			if(!empty($leftOver))
 			{
+				GO::debug($leftOver);
+				
 				if(!$fp){
 					$str .= base64_decode($leftOver);
 				}  else {
@@ -2146,7 +2186,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->message_part_size=$size;
 		$this->message_part_read=0;
 		
-		GO::debug("Part size: ".$size);
+//		GO::debug("Part size: ".$size);
 		return $size;
 	}
 	/**
@@ -2235,6 +2275,48 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 
 	/**
+	 * Runs $command multiple times, with $uids split up in chunks of 500 UIDs
+	 * for each run of $command.
+	 * @param string $command IMAP command
+	 * @param array $uids Array of UIDs
+	 * @param boolean $trackErrors passed as third argument to $this->check_response()
+	 * @return boolean
+	 */
+	private function _runInChunks($command, $uids, $trackErrors=true){
+		$status=false;
+		$uid_strings = array();
+		if (empty($uids))
+			return true;
+			
+		if (count($uids) > 500) {
+			while (count($uids) > 500) {
+				$uid_strings[] = implode(',', array_splice($uids, 0, 2));
+			}
+			if (count($uids)) {
+				$uid_strings[] = implode(',', $uids);
+			}
+		}
+		else {
+			$uid_strings[] = implode(',', $uids);
+		}
+		
+		foreach ($uid_strings as $uid_string) {
+			if ($uid_string) {
+				$this->clean($uid_string, 'uid_list');
+			}
+			$theCommand = sprintf($command,$uid_string);
+			$this->send_command($theCommand);
+			$res = $this->get_response();
+			$status = $this->check_response($res, false, $trackErrors);
+			if (!$status) {
+				return $status;
+			}
+		}
+		
+		return $status;
+	}
+	
+	/**
 	 * Set or clear flags of an UID range. Flags can be:
 	 * 
 	 * \Seen
@@ -2250,43 +2332,16 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 */
 	public function set_message_flag($uids, $flags, $clear=false) {
 		$status=false;
-		$uid_strings = array();
-		if (empty($uids))
-			return true;
-			
-		if (count($uids) > 500) {
-			while (count($uids) > 500) {
-				$uid_strings[] = implode(',', array_splice($uids, 0, 500));
-			}
-			if (count($uids)) {
-				$uid_strings[] = implode(',', $uids);
-			}
-		}
-		else {
-			$uid_strings[] = implode(',', $uids);
-		}
 
-		
-		foreach ($uid_strings as $uid_string) {
-			if ($uid_string) {
-				$this->clean($uid_string, 'uid_list');
-			}
+		if($clear)
+			$command = "UID STORE %s -FLAGS.SILENT ($flags)\r\n";
+		else
+			$command = "UID STORE %s +FLAGS.SILENT ($flags)\r\n";
 
-			if($clear) {
-				$command = "UID STORE $uid_string -FLAGS ($flags)\r\n";
-			}else {
-				$command = "UID STORE $uid_string +FLAGS ($flags)\r\n";
-			}
-			$this->send_command($command);
-			$res = $this->get_response();
-			$status = $this->check_response($res, false, false);
-			if (!$status) {
-				return $status;
-			}
-		}
+		$status = $this->_runInChunks($command,$uids,false);
 		return $status;
 	}
-
+	
 	/**
 	 * Copy a message from the currently selected mailbox to another mailbox
 	 *
@@ -2295,14 +2350,17 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function copy($uids, $mailbox) {
+		
+		if(empty($mailbox))
+			$mailbox='INBOX';
+		
 		$this->clean($mailbox, 'mailbox');
 
 		$uid_string = implode(',',$uids);
 
-		$command = "UID COPY $uid_string \"".$this->utf7_encode($mailbox)."\"\r\n";
-		$this->send_command($command);
-		$res = $this->get_response();
-		return $this->check_response($res);
+		$command = "UID COPY %s \"".$this->utf7_encode($mailbox)."\"\r\n";
+		$status = $this->_runInChunks($command, $uids);
+		return $status;
 	}
 
 	/**
@@ -2314,6 +2372,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function move($uids, $mailbox, $expunge=true) {
+		
+		if(empty($mailbox))
+			$mailbox='INBOX';
 
 		if(!in_array($mailbox, $this->touched_folders)) {
 			$this->touched_folders[]=$mailbox;

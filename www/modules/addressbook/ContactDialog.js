@@ -143,10 +143,35 @@ GO.addressbook.ContactDialog = function(config)
 	
 	//var selectMailingsPanel = new GO.addressbook.SelectMailingsPanel();
 	
+	this.socialMediaPanel = new Ext.Panel({
+		title: GO.addressbook.lang['cmdPanelSocialMedia'], 
+		layout: 'form',
+		border:false,
+		cls : 'go-form-panel',	
+		items: [ new Ext.form.TextField({
+			name: 'url_linkedin',
+			fieldLabel: GO.addressbook.lang['linkedinUrl'],
+			anchor:'-20',
+			maxLength: 100
+		}), new Ext.form.TextField({
+			name: 'url_facebook',
+			fieldLabel: GO.addressbook.lang['facebookUrl'],
+			anchor:'-20',
+			maxLength: 100
+		}), new Ext.form.TextField({
+			name: 'url_twitter',
+			fieldLabel: GO.addressbook.lang['twitterUrl'],
+			anchor:'-20',
+			maxLength: 100
+		}) ]
+	});
+	
 	var items = [
-	this.personalPanel,
-	this.photoPanel,
-	this.commentPanel];
+		this.personalPanel,
+		this.photoPanel,
+		this.socialMediaPanel,
+		this.commentPanel
+	];
 	      
 	this.selectAddresslistsPanel = new GO.addressbook.SelectAddresslistsPanel();
 				

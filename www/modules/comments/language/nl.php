@@ -16,3 +16,5 @@ $l['newCommentText']='Voer hier nieuwe commentaar in ...';
 
 $l['readMore']="Lees meer";
 $l['enableReadMore']="Gebruik \"Lees meer\" links";
+
+$l['actionDate']='Actiedatum';

@@ -17,7 +17,8 @@ GO.tasks.ContinueTaskDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		
 		Ext.apply(this, {
 			//autoHeight:true,
-			goDialogId:'task',
+			height:540,
+			goDialogId:'continuetask',
 			title:GO.tasks.lang.continueTask,
 			formControllerUrl: 'tasks/task'
 		});
@@ -54,14 +55,13 @@ GO.tasks.ContinueTaskDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				this.formPanel.baseParams.due_time=DateObj.format(GO.settings.date_format);		
 		},this);
 		this.propertiesPanel = new Ext.Panel({
-			autoHeight:true,
 			border: false,
 			cls:'go-form-panel',
 			layout:'form',
 			waitMsgTarget:true,			
 			items:[{
 					items:this.datePicker,
-					width:220,
+					width:240,
 					style:'margin:auto;'
 				},new GO.form.HtmlComponent({html:'<br />'}),{
 					xtype:'timefield',
@@ -74,7 +74,7 @@ GO.tasks.ContinueTaskDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				},new GO.tasks.SelectTaskStatus({anchor:'100%'}),{
 					xtype: 'textarea',
 					name: 'comment',
-				anchor: '100%',
+					anchor: '100%',
 					width:300,
 					height:100,
 					fieldLabel: GO.lang.strDescription

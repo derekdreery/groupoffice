@@ -22,6 +22,7 @@
  * @property string $name
  * @property string $email
  * @property int $user_id
+ * @property int $contact_id
  * @property int $status
  * @property string $last_modified
  * @property int $is_organizer
@@ -85,6 +86,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	public function relations() {
 		return array(
 				'event' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Event', 'field' => 'event_id'),
+				'contact' => array('type' => self::BELONGS_TO, 'model' => 'GO_Addressbook_Model_Contact', 'field' => 'contact_id'),
 		);
 	}
 
@@ -384,6 +386,10 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 					$p->save();
 				}
 			}
+			
+			if($this->contact){
+				$this->contact->link($this->event);
+			}
 		}
 
 		return parent::afterSave($wasNew);
@@ -494,6 +500,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 */
 	public function setContact(GO_Addressbook_Model_Contact $contact){
 		$this->user_id=$contact->go_user_id;
+		$this->contact_id=$contact->id;
 		$this->email=$contact->email;
 		$this->name=$contact->name;		
 	}

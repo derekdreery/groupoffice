@@ -233,7 +233,11 @@ Ext.extend(GO.sieve.SieveGrid, GO.grid.GridPanel,{
 			params: {
 				sort_order: Ext.encode(filters),
 				account_id: this.store.baseParams.account_id
-			}
+			},
+			success: function(response, opts) {
+				this.store.load();
+			},
+			scope: this				
 		});
 	}
 });

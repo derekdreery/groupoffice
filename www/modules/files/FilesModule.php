@@ -93,11 +93,19 @@ class GO_Files_FilesModule extends GO_Base_Module{
 	 */
 	public static function getAllFileHandlers(){
 		if(!isset(self::$fileHandlers)){
-			$modules = GO::modules()->getAllModules();
+			
+			self::$fileHandlers = GO::cache()->get('files-file-handlers');
+		
+			
+			if(!self::$fileHandlers){
 
-			self::$fileHandlers=array();
-			foreach($modules as $module){
-				self::$fileHandlers = array_merge(self::$fileHandlers, $module->moduleManager->findClasses('filehandler'));
+				$modules = GO::modules()->getAllModules();
+
+				self::$fileHandlers=array();
+				foreach($modules as $module){
+					self::$fileHandlers = array_merge(self::$fileHandlers, $module->moduleManager->findClasses('filehandler'));
+				}
+				GO::cache()->set('files-file-handlers', self::$fileHandlers);
 			}
 		}
 		return self::$fileHandlers;

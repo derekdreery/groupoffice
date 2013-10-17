@@ -98,14 +98,20 @@ class MimeDir extends Parser {
         $line = $this->readLine();
         switch(strtoupper($line)) {
             case 'BEGIN:VCALENDAR' :
-                $this->root = new VCalendar(array(), false);
+                $class = isset(VCalendar::$componentMap['VCALENDAR'])
+                    ? VCalendar::$componentMap[$name]
+                    : 'Sabre\\VObject\\Component\\VCalendar';
                 break;
             case 'BEGIN:VCARD' :
-                $this->root = new VCard(array(), false);
+                $class = isset(VCard::$componentMap['VCARD'])
+                    ? VCard::$componentMap['VCARD']
+                    : 'Sabre\\VObject\\Component\\VCard';
                 break;
             default :
-                throw new ParseException('This parser only support VCARD and VCALENDAR files');
+                throw new ParseException('This parser only supports VCARD and VCALENDAR files');
         }
+
+        $this->root = new $class(array(), false);
 
         while(true) {
 
@@ -212,6 +218,7 @@ class MimeDir extends Parser {
      *
      * This method strips any newlines and also takes care of unfolding.
      *
+     * @throws \Sabre\VObject\EofException
      * @return string
      */
     protected function readLine() {
@@ -225,8 +232,8 @@ class MimeDir extends Parser {
                 if ($rawLine === false && feof($this->input)) {
                     throw new EofException('End of document reached prematurely');
                 }
-            } while ($rawLine===''); // Skipping empty lines
-            $rawLine = rtrim($rawLine, "\r\n");
+                $rawLine = rtrim($rawLine, "\r\n");
+            } while ($rawLine === ''); // Skipping empty lines
             $this->lineIndex++;
         }
         $line = $rawLine;
@@ -234,7 +241,7 @@ class MimeDir extends Parser {
         $this->startLine = $this->lineIndex;
 
         // Looking ahead for folded lines.
-        while(true) {
+        while (true) {
 
             $nextLine = rtrim(fgets($this->input), "\r\n");
             $this->lineIndex++;
@@ -242,8 +249,8 @@ class MimeDir extends Parser {
                 break;
             }
             if ($nextLine[0] === "\t" || $nextLine[0] === " ") {
-                $line.=substr($nextLine,1);
-                $rawLine.="\n " . substr($nextLine,1);
+                $line .= substr($nextLine, 1);
+                $rawLine .= "\n " . substr($nextLine, 1);
             } else {
                 $this->lineBuffer = $nextLine;
                 break;
@@ -280,7 +287,7 @@ class MimeDir extends Parser {
             ;(?P<paramName> [$paramNameToken]+) (?=[=;:])  # parameter name
             |
             (=|,)(?P<paramValue>                           # parameter value
-                (?: [$safeChar]+) |
+                (?: [$safeChar]*) |
                 \"(?: [$qSafeChar]+)\"
             ) (?=[;:,])
             /xi";
@@ -306,7 +313,7 @@ class MimeDir extends Parser {
         foreach($matches as $match) {
 
             if (isset($match['paramValue'])) {
-                if ($match['paramValue'][0] === '"') {
+                if ($match['paramValue'] && $match['paramValue'][0] === '"') {
                     $value = substr($match['paramValue'], 1, -1);
                 } else {
                     $value = $match['paramValue'];

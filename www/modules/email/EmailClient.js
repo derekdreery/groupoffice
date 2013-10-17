@@ -114,7 +114,8 @@ GO.email.EmailClient = function(config){
 			var query;
 
 			if(search_type=='any'){
-				query='OR OR OR FROM "' + GO.email.search_query + '" SUBJECT "' + GO.email.search_query + '" TO "' + GO.email.search_query + '" CC "' + GO.email.search_query + '"';
+				//query='OR OR OR FROM "' + GO.email.search_query + '" SUBJECT "' + GO.email.search_query + '" TO "' + GO.email.search_query + '" CC "' + GO.email.search_query + '"';
+				query='OR OR FROM "' + GO.email.search_query + '" SUBJECT "' + GO.email.search_query + '" TO "' + GO.email.search_query + '"';
 			}else
 			{
 				query=search_type.toUpperCase() + ' "' + GO.email.search_query + '"';
@@ -372,9 +373,33 @@ GO.email.EmailClient = function(config){
 		shadow: "frame",
 		minWidth: 180,
 		items: [ 
-		  this.contextMenuSource,
+		  new Ext.menu.Item ({
+		  text: GO.email.lang.viewSource,
+		  handler: function(){
+
+			  var record = this.messagesGrid.selModel.getSelected();
+			  if(record)
+			  {
+				  //var win = window.open(GO.url("email/message/source",{account_id:this.account_id,mailbox:this.mailbox,uid:record.data.uid}));
+				  var win = window.open(GO.url("email/message/source",{account_id:this.account_id,mailbox:record.data.mailbox,uid:record.data.uid}));
+				  win.focus();
+			  }
+
+		  },
+		  scope: this
+	  }),
 		  '-',
-		  this.contextMenuCopyTo
+		 new Ext.menu.Item ({
+		  iconCls: 'btn-copy',
+		  text: GO.email.lang['copyMailTo'],
+		  cls: 'x-btn-text-icon',
+		  handler: function(a,b,c){
+			  var selectedEmails = this.messagesGrid.getSelectionModel().getSelections();
+			  this.showCopyMailToDialog(selectedEmails);
+		  },
+		  scope: this,
+		  multiple:true
+	  })
 		]
 	});
 

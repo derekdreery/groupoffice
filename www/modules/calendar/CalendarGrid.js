@@ -295,7 +295,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 		var now = new Date();
 		var nowStr = now.format(dateFormat);
-		var dt, dtStr, heading, allDayColumn, cls;
+		var dt, dtStr, heading, allDayColumn, headingCls, dayCls;
 
 		this.allDayColumns=Array();
 		for(var day=0;day<this.days;day++)
@@ -304,20 +304,25 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 			dtStr = dt.format(dateFormat);
 
-			cls = dtStr==nowStr ? 'x-calGrid-heading x-calGrid-heading-today' :  "x-calGrid-heading";
+			headingCls = dtStr==nowStr ? 'x-calGrid-heading x-calGrid-heading-today' :  "x-calGrid-heading";
 
-
+			
+			
 			//create grid heading
 			heading = Ext.DomHelper.append(this.headingsRow,
 			{
 				tag: 'td',
 				children:[{
 					tag:'div',
-					cls: cls,
+					cls: headingCls,
 					style: "width:"+(columnWidth-3)+"px",
 					html: dt.format(dateFormat)
 					}]
-				});
+				}, true);
+				
+			if(dtStr==nowStr){
+				this.todaysHeading = heading;
+			}
 
 			allDayColumn = Ext.DomHelper.append(this.allDayRow,
 			{
@@ -361,12 +366,19 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 		//this.gridContainer.setSize(ctSize['width'],gridContainerHeight );
 
-		this.gridTable = Ext.DomHelper.append(this.gridContainer,
+		this.gridWrapper = Ext.DomHelper.append(this.gridContainer,
+		{
+			tag: 'div',
+			cls: "x-calGrid-table-wrapper"
+		},true);
+		
+
+
+		this.gridTable = Ext.DomHelper.append(this.gridWrapper,
 		{
 			tag: 'table',
 			id: Ext.id(),
-			cls: "x-calGrid-table",
-			style: "width:"+ctSize['width']-this.scrollWidth+"px;"
+			cls: "x-calGrid-table"
 
 		},true);
 
@@ -420,6 +432,10 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 		for(var day=0;day<this.days;day++)
 		{
+			dt = this.startDate.add(Date.DAY, day);
+
+			dtStr = dt.format(dateFormat);
+			
 			//create array to cache all grid cells later
 			this.gridCells[day]=[];
 
@@ -446,8 +462,10 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				{
 					className = "x-calGrid-blankRow";
 				}
-
-
+				
+				if(dtStr==nowStr){
+					className +=" x-calGrid-today";
+				}
 
 				cell = Ext.DomHelper.append(dayColumn,
 				{
@@ -467,6 +485,29 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				}
 			}
 		}
+		
+//		var now = new Date();
+		
+		var minutesElapsed = now.getMinutes()+now.getHours()*60;
+		var indicatorTop = Math.ceil((11/15)*minutesElapsed);
+		
+		var x = this.todaysHeading.getX()-this.gridTable.getX()+4;
+		
+		this.timeIndicator = Ext.DomHelper.append(this.gridContainer,
+			{
+				tag: 'div',
+				id: Ext.id(),
+				cls: "x-calGrid-indicator",
+				style:"left:"+x+"px;top:"+indicatorTop+"px;width:"+(this.todaysHeading.getWidth()-3)+"px;"
+			},true);
+			
+		this.timeIndicator = Ext.DomHelper.append(this.gridContainer,
+			{
+				tag: 'div',
+				id: Ext.id(),
+				cls: "x-calGrid-indicator",
+				style:"left:0px;top:"+indicatorTop+"px;width:6px;"
+			},true);
 
 		//the start of the grid
 		//var position = FirstCol.getXY();
@@ -1045,8 +1086,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		//var snap = this.getSnap();
 		var text = '';
 
-//		if(!GO.util.empty(eventData.status_color))
-//			text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';
+		if(GO.calendar.showStatuses && !GO.util.empty(eventData.status_color))
+			text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';
 
 		if(startDay!=endDay)
 		{
@@ -1065,8 +1106,15 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			var cls = "x-calGrid-all-day-event-container cal-event-partstatus-"+eventData.partstatus;
 
 			if(eventData.link_count>0){
-				cls +=' cal-has-links'
-			}
+				text +='<span class="cal-has-links"></span>';
+			}			
+			if (eventData["private_enabled"])
+				text += '<span class="cal-is-private"></span>';
+			if (eventData.has_reminder==1)
+				text += '<span class="cal-has-reminders"></span>';
+			
+			if (eventData.repeats)
+				text += '<span class="cal-recurring"></span>';
 			
 			var event = Ext.DomHelper.append(this.allDayColumns[i],
 			{
@@ -1079,7 +1127,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				"ext:qtitle":eventData.name,
 				tabindex:0//tabindex is needed for focussing and events
 			}, true);
-
+			
 			//add the event to the appointments array
 			if(typeof(this.allDayAppointments[i])=='undefined')
 			{
@@ -1162,21 +1210,29 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	{
 		var text = '';
 
-//		if(!GO.util.empty(eventData.status_color))
-//			text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';
+		if(GO.calendar.showStatuses && !GO.util.empty(eventData.status_color))
+			text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';
                 
 		text += '<span class="x-calGrid-event-time';
 
-		if(eventData.link_count>0){
-			text +=' cal-has-links'
-		}
-
+	
+		
 		text += '">'+eventData.startDate.format(GO.settings.time_format)+"</span>&nbsp;"+eventData.name;
 
 		if(eventData.location!='')
 		{
 			text += ' @ '+eventData.location;
 		}
+
+		if(eventData.link_count>0){
+				text +='<span class="cal-has-links"></span>';
+			}
+		if (eventData["private_enabled"])
+			text += '<span class="cal-is-private"></span>';
+		if (eventData.has_reminder==1)
+			text += '<span class="cal-has-reminders"></span>';
+		if (eventData.repeats)
+				text += '<span class="cal-recurring"></span>';
 
 		var domId = this.lastDomId = eventData.domId = Ext.id();
 		this.registerEvent(domId, eventData);
@@ -1187,7 +1243,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		{
 			endRow=this.scale-1;
 		}		
-		var event = this.gridContainer.insertFirst(
+		var event = this.gridWrapper.insertFirst(
 		{
 			tag: 'div',
 			id: domId,

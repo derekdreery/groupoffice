@@ -8,7 +8,7 @@ class GO_Customfields_Customfieldtype_Select extends GO_Customfields_Customfield
 	
 	public function fieldSql(){
 		//needs to be text for multiselect field
-		if($this->field->multiselect)
+		if($this->field && $this->field->multiselect)
 			return "TEXT NULL";		
 		else
 			return parent::fieldSql ();

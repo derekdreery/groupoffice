@@ -30,15 +30,19 @@ GO.form.SelectUser = function(config){
 
 	Ext.apply(this, config);
 	
-	this.store = new GO.data.JsonStore({
-		url: GO.url('core/users'),
-		root: 'results',
-		totalProperty: 'total',
-		id: 'id',
-		fields:['id','name','email','username','company','first_name', 'middle_name', 'last_name', 'address', 'address_no', 'zip', 'city', 'state', 'country','cf'],
-		remoteSort: true
-	});
-	this.store.setDefaultSort('name', 'asc');
+	if (typeof(config.store)=='undefined') {
+		this.store = new GO.data.JsonStore({
+			url: GO.url('core/users'),
+			root: 'results',
+			totalProperty: 'total',
+			id: 'id',
+			fields:['id','name','email','username','company','first_name', 'middle_name', 'last_name', 'address', 'address_no', 'zip', 'city', 'state', 'country','cf'],
+			remoteSort: true
+		});
+		this.store.setDefaultSort('name', 'asc');
+	} else {
+		this.store = config.store;
+	}
 
 	if(!this.hiddenName)
 		this.hiddenName='user_id';
@@ -61,6 +65,7 @@ GO.form.SelectUser = function(config){
 }
 
 Ext.extend(GO.form.SelectUser, GO.form.ComboBoxReset,{
+	fieldLabel:GO.lang.strUser,
 	setRemoteValue : function(user_id, name)
 	{
 		this.setValue(user_id);

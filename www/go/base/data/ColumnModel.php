@@ -98,7 +98,7 @@ class GO_Base_Data_ColumnModel {
 				}
 			}
 
-			if ($model->customfieldsRecord) {
+			if (GO::modules()->customfields && $model->customfieldsRecord) {
 				$cfAttributes = array_keys($model->customfieldsRecord->columns);
 				array_shift($cfAttributes); //remove model_id column
 
@@ -185,10 +185,9 @@ class GO_Base_Data_ColumnModel {
 		foreach($this->_summarizedColumns as $col => $config) {
 			$field = $config['fieldName'];
 			$type = $config['type'];
+			$result.="$type($field) AS $field, ";
 			if($col!=$field)
 				$result.="$type($field) AS $col, ";
-			else
-				$result.="$type($field) AS $field, ";
 		}
 		return substr($result, 0, -2);
 	}
@@ -249,6 +248,11 @@ class GO_Base_Data_ColumnModel {
 		return $this->_columns[$dataindex];
 	}
 	
+	/**
+	 * Sort columns in the given order
+	 * 
+	 * @param array $columnNames Eg. array('id','name','age');
+	 */
 	public function sort($columnNames){
 		
 		

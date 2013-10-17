@@ -47,12 +47,22 @@ GO.site.MainPanel = function(config){
 	config.tbar=new Ext.Toolbar({
 			cls:'go-head-tb',
 			items: [{
-	    xtype:'htmlcomponent',
-			html:GO.site.lang.name,
-			cls:'go-module-title-tbar'
-		},this.reloadButton
+					xtype:'htmlcomponent',
+					html:GO.site.lang.name,
+					cls:'go-module-title-tbar'
+				},this.reloadButton
 			]
 	});
+	
+	if (GO.files) {
+		this.fileBrowserButton = new GO.files.FileBrowserButton({
+			model_name:"GO_Site_Model_Site"
+		});
+		config.tbar.insertButton(2,this.fileBrowserButton);
+		this.treePanel.on('click', function(node,event){
+			this.fileBrowserButton.setId(node.attributes['site_id']);
+		}, this);
+	}
 	
 	GO.site.MainPanel.superclass.constructor.call(this, config);
 }

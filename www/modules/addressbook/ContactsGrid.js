@@ -9,7 +9,7 @@ GO.addressbook.ContactsGrid = function(config){
 	config.border=false;
 	
 	var fields ={
-		fields : ['id','uuid','name','company_name','first_name','middle_name','last_name','title','initials','sex','birthday','age','email','email2','email3','home_phone','work_phone','work_fax','cellular','cellular2','fax','address','address_no','zip','city','state','country','function','department','salutation','ab_name','ctime','mtime'],
+		fields : ['id','uuid','name','company_name','first_name','middle_name','last_name','title','initials','sex','birthday','age','email','email2','email3','home_phone','work_phone','work_fax','cellular','cellular2','fax','address','address_no','zip','city','state','country','function','department','salutation','ab_name','ctime','mtime','action_date'],
 		columns : [
 		{
 			header: GO.addressbook.lang.id,
@@ -111,7 +111,8 @@ GO.addressbook.ContactsGrid = function(config){
 		{
 			header: GO.lang['cellular2'],
 			dataIndex: 'cellular2',
-			width: 100
+			width: 100,
+			hidden:true
 		},
 		{
 			header: GO.lang['strFax'],
@@ -178,6 +179,10 @@ GO.addressbook.ContactsGrid = function(config){
 			dataIndex:'ctime',
 			hidden:true,
 			width:80
+		},{
+			header: GO.addressbook.lang['actionDate'],
+			dataIndex:'action_date',
+			width:100
 		}
 		]
 	}
@@ -222,8 +227,22 @@ GO.addressbook.ContactsGrid = function(config){
 	config.enableDragDrop=true;
 	config.ddGroup='AddressBooksDD';
 
+	config.tbar = config.tbar || [];
+	config.tbar.unshift(this.currentActionsButton = new Ext.Button({
+			text: GO.addressbook.lang['selectCurrentActions'],
+//			disabled: true,
+			tooltip: GO.addressbook.lang['showActieveToolTip'],
+			enableToggle: true
+		}));
+
 //		config.bordertrue;
 	GO.addressbook.ContactsGrid.superclass.constructor.call(this, config);
+	
+	this.currentActionsButton.on('toggle',function(button,pressed){
+		this.store.baseParams['onlyCurrentActions'] = pressed ? 1 : 0;
+		this.store.load();
+	}, this);
+	
 };
 
 

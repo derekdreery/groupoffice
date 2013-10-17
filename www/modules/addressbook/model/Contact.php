@@ -54,13 +54,17 @@
  * @property int $addressbook_id
  * @property int $user_id
  * @property int $id
- * @property int $age;
+ * @property int $age
+ * @property int $action_date
  * 
  * @property string $firstEmail Automatically returns the first filled in e-mail address.
  * @property GO_Addressbook_Model_Addressbook $addressbook
  * @property GO_Addressbook_Model_Company $company
  * @property string $homepage
  * @property string $uuid
+ * @property string $url_linkedin
+ * @property string $url_facebook
+ * @property string $url_twitter
  */
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
@@ -115,6 +119,15 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$this->columns['email']['regex']=GO_Base_Util_String::get_email_validation_regex();
 		$this->columns['email2']['regex']=GO_Base_Util_String::get_email_validation_regex();
 		$this->columns['email3']['regex']=GO_Base_Util_String::get_email_validation_regex();
+		
+//		$this->columns['home_phone']['gotype']='phone';
+//		$this->columns['work_phone']['gotype']='phone';
+//		$this->columns['cellular']['gotype']='phone';
+//		$this->columns['cellular2']['gotype']='phone';
+//		$this->columns['fax']['gotype']='phone';
+//		$this->columns['work_fax']['gotype']='phone';
+		
+		$this->columns['action_date']['gotype'] = 'unixtimestamp';
 		
 		return parent::init();
 	}
@@ -241,6 +254,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeSave() {
 		
+		if(!empty($this->homepage))
+			$this->homepage = GO_Base_Util_Http::checkUrlForHttp($this->homepage);
+		
 		$this->_autoSalutation();
 		
 		if (strtolower($this->sex)==strtolower(GO::t('female','addressbook')))
@@ -265,7 +281,18 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$this->company_id=$company->id;			
 		}
 				
+		$this->_prefixSocialMediaLinks();
+		
 		return parent::beforeSave();
+	}
+	
+	private function _prefixSocialMediaLinks() {
+		if ($this->isModified('url_linkedin') && !empty($this->url_linkedin) && strpos($this->url_linkedin,'http')!==0)
+			$this->url_linkedin = 'http://'.$this->url_linkedin;
+		if ($this->isModified('url_linkedin') && !empty($this->url_facebook) && strpos($this->url_facebook,'http')!==0)
+			$this->url_facebook = 'http://'.$this->url_facebook;
+		if ($this->isModified('url_linkedin') && !empty($this->url_twitter) && strpos($this->url_twitter,'http')!==0)
+			$this->url_twitter = 'http://'.$this->url_twitter;
 	}
 	
 	protected function afterDbInsert() {
@@ -376,7 +403,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @return \GO_Base_Fs_File
 	 */
 	public function getPhotoFile(){
-		if(!isset($_photoFile)){
+		if(!isset($this->_photoFile)){
 			if(empty($this->photo))
 				$this->photo=$this->id.'.jpg';
 		
@@ -405,12 +432,36 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			return GO::url('core/thumb', $urlParams);	
 		}else
 		{
-			return GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
+// TODO: Finish the implementation of gravatar (Scaling gravatar image etc..)
+//			$hash = $this->_getGravatarHash();
+//			if(!empty($hash))
+//				return 'http://www.gravatar.com/avatar/'.$hash.'.jpg?s='.$urlParams['h'].'&d=mm';
+//			else			
+				return GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
 		}
-		
-		
 	}
 	
+// TODO: Finish the implementation of gravatar (Scaling gravatar image etc..)
+//	/**
+//	 * Get the hash to request the gravatar image
+//	 * 
+//	 * @return mixed Hash/Boolean
+//	 */
+//	private function _getGravatarHash(){
+//		
+//		$gravatarEmail = false;
+//		
+//		if(!empty($this->email))
+//			$gravatarEmail = $this->email;
+//		else if(!empty($this->email2))
+//			$gravatarEmail = $this->email2;
+//		else if(!empty($this->email3))
+//			$gravatarEmail = $this->email3;
+//		else
+//			return false;	
+//		
+//		return md5(strtolower(trim($gravatarEmail)));
+//	}
 	
 	/**
 	 * Set new photo file. The file will be converted into JPEG and resized to fit
@@ -504,7 +555,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 				case 'PHOTO':					
 					if($vobjProp->getValue()){
 						$photoFile = GO_Base_Fs_File::tempFile('','jpg');
-						$photoFile->putContents(base64_decode($vobjProp->getValue()));
+						$photoFile->putContents($vobjProp->getValue());
 					}
 					break;
 				case 'N':
@@ -579,8 +630,6 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //				case 'LABEL':
 				case 'ADR':
 					$types = array();
-					
-					GO_Syncml_Server::debug("VALUE: ".$vobjProp->getValue());
 					
 					
 					foreach ($vobjProp->parameters as $param) {
@@ -723,8 +772,13 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		if (!empty($saveToDb))
 			$this->save();
 		
-		if (!empty($photoFile))
+		
+		if (!empty($photoFile) && $saveToDb){			
 			$this->setPhoto($photoFile);
+			$this->save();
+		}
+		
+		
 		
 //		foreach ($remainingVcardProps as $prop) {
 //			if (!empty($this->id) && substr($prop['name'],0,2)=='X-') {
@@ -953,13 +1007,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		
 		if($this->getPhotoFile()->exists()){
-//			$p = new Sabre\VObject\Property('photo', base64_encode($this->getPhotoFile()->getContents()));
-//			$p->add('type','jpeg');
-//			$p->add('encoding','b');
-//			$e->add($p);	
-			
-			$e->add('photo', base64_encode($this->getPhotoFile()->getContents()),array('type'=>'jpeg','encoding'=>'b'));	
-		}
+			$e->add('photo', $this->getPhotoFile()->getContents(),array('type'=>'JPEG','encoding'=>'b'));	
+		}  
+
 		
 //		$propModels = $this->vcardProperties->fetchAll(PDO::FETCH_ASSOC);
 //		
@@ -1000,6 +1050,33 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 										->addCondition('email', $email)
 										->addCondition('email2', $email, '=', 't', false)
 										->addCondition('email3', $email, '=', 't', false)
+		);
+
+		return GO_Addressbook_Model_Contact::model()->find($findParams);		
+	}
+	
+	/**
+	 * Find contacts by e-mail address
+	 * 
+	 * @param string $email
+	 * @param GO_Base_Db_FindParams $findParams Optional
+	 * @return GO_Base_Db_ActiveStatement 
+	 */
+	public function findByPhoneNumber($number, $findParams = false){
+		
+		
+		$number=  '%'.substr($number,-9);
+		
+		if(!$findParams)
+			$findParams = GO_Base_Db_FindParams::newInstance();
+		
+		$findParams->debugSql();
+		
+		$findParams->getCriteria()->mergeWith(GO_Base_Db_FindCriteria::newInstance()
+										->addCondition('home_phone', $number, 'LIKE', 't', false)
+										->addCondition('work_phone', $number, 'LIKE', 't', false)
+										->addCondition('cellular', $number, 'LIKE', 't', false)
+										->addCondition('cellular2', $number, 'LIKE', 't', false)
 		);
 
 		return GO_Addressbook_Model_Contact::model()->find($findParams);		
@@ -1073,6 +1150,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 						->addRawCondition('a.acl_id', 'goUser.acl_id', '=', false);
 
 		$aclWhereCriteria = GO_Base_Db_FindCriteria::newInstance()
+				->addCondition('enabled', true,'=','goUser')
 				->addCondition('user_id', $user_id, '=', 'a', false)
 				->addInCondition("group_id", GO_Base_Model_User::getGroupIds($user_id), "a", false);
 
@@ -1090,6 +1168,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$fp->mergeWith ($findParams);
 		
 		return GO_Addressbook_Model_Contact::model()->find($fp);
+	}
+
+	public function getActionDate() {
+		
+		return GO_Base_Util_Date::get_timestamp($this->action_date,false);
+		
 	}
 	
 }

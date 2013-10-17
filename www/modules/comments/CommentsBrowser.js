@@ -47,6 +47,11 @@ Ext.extend(GO.comments.CommentsBrowser, GO.Window, {
 	
 	show : function(config)
 	{
+		if (!GO.util.empty(config['action_date'])) {
+			this.commentsGrid.actionDate = config['action_date'];
+		} else {
+			this.commentsGrid.actionDate = false;
+		}
 		this.commentsGrid.setLinkId(config.model_id, config.model_name);
 		this.commentsGrid.store.load();
 		

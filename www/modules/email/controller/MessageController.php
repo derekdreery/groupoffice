@@ -179,6 +179,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 	protected function actionStore($params){
 		
+		$this->checkRequiredParameters(array('account_id'), $params);
+		
 		GO::session()->closeWriting();
 		
 		if(!isset($params['start']))
@@ -284,7 +286,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$response['multipleFolders']=false;
 		$searchIn = 'current'; //default to current if not set
-		if(isset($params['searchIn']) && in_array($params['searchIn'], array('all', 'current', 'recursive'))) {
+		if(isset($params['searchIn']) && in_array($params['searchIn'], array('all', 'recursive'))) {
 				$searchIn = $params['searchIn'];
 				$response['multipleFolders'] = true;
 		}
@@ -1224,7 +1226,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$recurrenceDate = isset($vevent->{"recurrence-id"}) ? $vevent->{"recurrence-id"}->getDateTime()->format('U') : 0;
 
 			//find existing event
-			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, $recurrenceDate);
+			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, $imapMessage->account->user_id, $recurrenceDate);
 //			var_dump($event);
 			
 			$uuid = (string) $vevent->uid;
@@ -1460,7 +1462,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		GO::session()->closeWriting();
 		
-		$file = new GO_Base_Fs_File($params['filename']);
+		$file = new GO_Base_Fs_File('/dummypath/'.$params['filename']);
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		//$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
@@ -1473,9 +1475,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if(isset($params['inline']) && $params['inline'] == 0)
 			$inline = false;	
 		
-		//to work around office crap: http://support.microsoft.com/kb/2019105/en-us		
+		//to work around office bug: http://support.microsoft.com/kb/2019105/en-us		
 		//never use inline on IE with office documents because it will prompt for authentication.
-		if(GO_Base_Util_Http::isInternetExplorer() && strlen($file->extension())==4 && substr($file->extension(),-1)=='x'){
+		$officeExtensions = array('doc','dot','docx','dotx','docm','dotm','xls','xlt','xla','xlsx','xltx','xlsm','xltm','xlam','xlsb','ppt','pot','pps','ppa','pptx','potx','ppsx','ppam','pptm','potm','ppsm');
+		if(GO_Base_Util_Http::isInternetExplorer() && in_array($file->extension(), $officeExtensions)){
 			$inline=false;
 		}
 
@@ -1483,8 +1486,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$imap = $account->openImapConnection($params['mailbox']);				
 		$fp =fopen("php://output",'w');
-		$imap->get_message_part_decoded($params['uid'], $params['number'], $params['encoding'], false, false, false, $fp);
+		$imap->get_message_part_decoded($params['uid'], $params['number'], $params['encoding'], false, true, false, $fp);
 		fclose($fp);
+		
+//		echo base64_decode($imap->get_message_part($params['uid'], $params['number']));
 	}
 
 //	Z-push testing
@@ -1541,7 +1546,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
 		$imap = $account->openImapConnection($params['mailbox']);
 		
-		$response['success'] = $imap->save_to_file($params['uid'], $file->path(), $params['number'], $params['encoding']);
+		$response['success'] = $imap->save_to_file($params['uid'], $file->path(), $params['number'], $params['encoding'], true);
 		
 		if(!$folder->hasFile($file->name()))
 			$folder->addFile($file->name());
