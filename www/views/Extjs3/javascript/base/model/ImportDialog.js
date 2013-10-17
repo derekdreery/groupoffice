@@ -24,6 +24,10 @@ GO.base.model.ImportDialog = function(config) {
 	GO.base.model.ImportDialog.superclass.constructor.call(this,config);
 	
 	this._createAttributesStore();
+	
+	this.addEvents({
+		'import' : true
+	});
 }
 
 Ext.extend( GO.base.model.ImportDialog, GO.Window, {
@@ -80,7 +84,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 		this._modelName = controllerNameArr[3].toLowerCase();
 		this._modelContainerIdName = config['modelContainerIdName'];
 		this._fileType = config['fileType'];
-		this._excludedAttributes = config['excludedAttributes'];
+		this._excludedAttributes = config['excludedAttributes'] || new Array();
 		for (var attrName in this._importBaseParams) {
 			this._excludedAttributes.push(attrName);
 		}
@@ -133,6 +137,8 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 							+ errorsText
 						);
 					}
+						
+					this.fireEvent('import');
 						
 					this.hide();
 					if (!GO.util.empty(this._csvFieldDialog))
