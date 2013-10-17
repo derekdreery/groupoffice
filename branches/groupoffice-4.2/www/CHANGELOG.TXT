@@ -1,6 +1,5 @@
+17-10-2013 4.2.25
 - Billing: Order PDF - Extra spacing in top after Page Break, if logo is on every page.
-
-4.2.25
 - Carddav supports viewing readonly address books
 - Fixed Contact pictures of VCards base64 encoding for older vObject libraries
 - Don't include inactive users in e-mail search
