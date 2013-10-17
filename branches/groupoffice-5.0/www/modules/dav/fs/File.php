@@ -64,7 +64,7 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 		$file->putContents($data);
 
 //		file_put_contents($this->path, $data);
-		GO_Files_Model_File::model()->findByPath($this->relpath);
+//		GO_Files_Model_File::model()->findByPath($this->relpath);
 
 		//GO::debug('ADDED FILE WITH WEBDAV -> FILE_ID: ' . $file_id);
 	}
