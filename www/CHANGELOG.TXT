@@ -1,5 +1,6 @@
 - Added date and time indicator
 - Custom Fields & Addressbook Advanced Search: can now search through multiselect custom fields.
+- Billing: able to import order items from CSV file.
 
 10-10-2013 5.0.10
 - Searchbar was missing in add contact dialog for the address list
