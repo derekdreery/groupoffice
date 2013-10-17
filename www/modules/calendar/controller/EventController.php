@@ -206,7 +206,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$isNewEvent = empty($params['id']);
 
 		if (!$model->isResource()) {
-			$response['participants']=$this->_saveParticipants($params, $model, $isNewEvent, $modifiedAttributes);
+			$this->_saveParticipants($params, $model, $response);
 			$this->_saveResources($params, $model, $isNewEvent, $modifiedAttributes);
 		}
 		
@@ -314,24 +314,30 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 	}
 
-	private function _saveParticipants($params, GO_Calendar_Model_Event $event, $isNewEvent, $modifiedAttributes) {
+	private function _saveParticipants($params, GO_Calendar_Model_Event $event, &$response) {
 
-		$response = array();
+		$response['participants'] = array();
 		
 		$ids = array();
 		if (!empty($params['participants'])) {
-			$hasOrganizer=false;
+			//we don't need an organizer if there are no participants so default to true here.
+			$hasOrganizer=true;
 			$participants = json_decode($params['participants'], true);
 			
 			//don't save a single organizer participant
 			if(count($participants)>1){				
+				$hasOrganizer=false;
 				foreach ($participants as $p) {
 					$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
 							'email'=> $p['email'],
 							'event_id'=>$event->id
 					));
-					if (!$participant)
+					if (!$participant){
 						$participant = new GO_Calendar_Model_Participant();
+						
+						//ask for meeting request because there's a new participant
+						$response['askForMeetingRequest']=true;
+					}
 
 					unset($p['id']);
 					$participant->setAttributes($p);
@@ -346,7 +352,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					
 					$ids[] = $participant->id;
 
-					$response[]=$participant->toJsonArray($event->start_time, $event->end_time);
+					$response['participants'][]=$participant->toJsonArray($event->start_time, $event->end_time);
 				}
 			}
 
@@ -385,12 +391,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			
 		}
 		
-		if(empty($response)){
+		if(empty($response['participants'])){
 			$organizer = $event->getDefaultOrganizerParticipant();
-			$response=array($organizer->toJsonArray($event->start_time, $event->end_time));
+			$response['participants']=array($organizer->toJsonArray($event->start_time, $event->end_time));
 		}
-		
-		return $response;
 	}
 //	/**
 //	 *
