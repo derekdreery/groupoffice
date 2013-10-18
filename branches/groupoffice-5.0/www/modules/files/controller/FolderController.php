@@ -41,7 +41,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		GO::session()->runAsRoot();
 
-		$folders = array('users','projects','addressbook','notes','tickets');
+		$folders = !empty($params['path']) ? array($params['path']) : array('users','projects','addressbook','notes','tickets');
 		
 		$billingFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'billing');
 		if($billingFolder->exists()){
