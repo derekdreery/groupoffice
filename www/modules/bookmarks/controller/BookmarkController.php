@@ -32,7 +32,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 					$html = $match[1];
 					//go_debug($html);
 
-					preg_match('/charset=([^"\'>]*)/i', $html, $match);
+                    preg_match('/charset=([^"\'>]*)/i', $c->getContentType(), $match);
 					if (isset($match[1])) {
 
 						$charset = strtolower(trim($match[1]));
