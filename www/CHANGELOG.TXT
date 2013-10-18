@@ -1,3 +1,76 @@
+18-10-2013 5.0.13
+- Fixed deprecated /e modifier in PHP.5.5
+- Calendar hang in IE when browsing other weeks than the current week.
+
+18-10-2013 5.0.12
+- Missing version number in 5.0.11
+
+17-10-2013 5.0.11
+- Added date and time indicator
+- Custom Fields & Addressbook Advanced Search: can now search through multiselect custom fields.
+- Billing: able to import order items from CSV file.
+
+10-10-2013 5.0.10
+- Searchbar was missing in add contact dialog for the address list
+- Images in vcards will be base64 encode without whitespace (for carddav sync iPhone)
+- the database field for dav_contacts that hold data is changed to LONGTEXT for VCARDs with large base64 encode images
+
+07-10-2013 5.0.9
+- Updated Norwegian
+- Customfields of a ticket will appear above the messages in the eastpanel
+- Fixes of 4.2.23
+
+02-10-2013 5.0.8
+- Remove auto phone formatting until matured
+- Double decode of binary vcard data
+- Calendar module: icons for private, recurring and events with reminder(s).
+- Modules tabstrip will always be in the order of the modules module.
+- Address Book module: social media links for contacts.
+- Custom field text field length can be set. Max row length error is handled 
+  when maximum is reached.
+- Small layout tweaks
+- Contacts is extended with an Action date that can be filtered on. It can be 
+  set when you add a comment too.
+- load reject message in sieve dialog
+- Fixed context menu when searching in e-mail
+- Fixes of 4.2.22
+
+17-09-2013 5.0.7
+- Disabled custom field will not be displayed in the display panel on not enabled categories
+- Added holidays module
+
+17-09-2013 5.0.6
+- Icons back in start menu
+- Appointment participants are linked automatically to the contacts
+- Rates in CSV export
+- WebDAV uses file permissions from file_create_mode
+- Fixes from 4.2.20
+
+11-09-2013 5.0.5
+- Fixes from 4.2.19
+- Layout issues
+
+10-09-2013 5.0.4
+- Build error: pro modules missing.
+
+09-09-2013 5.0.3
+- Small theme fixes
+- Fixes from 4.2.17
+
+20-08-2013 5.0.1 (beta)
+- Small theme fixes
+- Fixes from 4.2.12
+
+15-08-2013 5.0.0 (beta)
+- Complete redesigned interface
+- Added recursive search for Imap folders
+- VoIP will rewrite tel: links to callto: in Firefox in Windows
+- Updated VObject to 3.1
+- Updated Sabredav to 1.8.6
+- Address Book module: photos functionality for companies.
+- Projects module: 'show in tree' check box for project statuses.
+
+
 17-10-2013 4.2.25
 - Billing: Order PDF - Extra spacing in top after Page Break, if logo is on every page.
 - Carddav supports viewing readonly address books
