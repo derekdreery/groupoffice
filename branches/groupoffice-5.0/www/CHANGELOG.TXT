@@ -1,4 +1,7 @@
+18-10-2013 5.0.12
+- Missing version number in 5.0.11
 
+17-10-2013 5.0.11
 - Added date and time indicator
 - Custom Fields & Addressbook Advanced Search: can now search through multiselect custom fields.
 - Billing: able to import order items from CSV file.
