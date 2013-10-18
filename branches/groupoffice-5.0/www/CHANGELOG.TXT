@@ -1,3 +1,5 @@
+- Fixed deprecated /e modifier in PHP.5.5
+
 18-10-2013 5.0.12
 - Missing version number in 5.0.11
 
