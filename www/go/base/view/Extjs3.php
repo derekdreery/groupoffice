@@ -32,7 +32,11 @@ class GO_Base_View_Extjs3{
 	private $_stylesheets=array();
 	
 	private function _replaceUrl($css, $baseurl){
-		return preg_replace('/url[\s]*\(([^\)]*)\)/ieU', "GO_Base_View_Extjs3::_replaceUrlCallback('$1', \$baseurl)", $css);
+		return preg_replace_callback('/url[\s]*\(([^\)]*)\)/iU', 
+			function($matches) use($baseurl) { 
+				return GO_Base_View_Extjs3::_replaceUrlCallback($matches[1], $baseurl);
+			}, $css);
+		 //return preg_replace('/url[\s]*\(([^\)]*)\)/ieU', "GO_Base_View_Extjs3::_replaceUrlCallback('$1', \$baseurl)", $css);
 	}
 
 	public static function _replaceUrlCallback($url, $baseurl){
