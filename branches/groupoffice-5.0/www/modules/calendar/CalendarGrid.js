@@ -215,6 +215,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	},
 
 	renderDaysGrid : function(){
+		
+		
+		this.todaysHeading=false;
 
 		this.daysGridRendered=true;
 		this.body.update('');
@@ -488,26 +491,33 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		
 //		var now = new Date();
 		
-		var minutesElapsed = now.getMinutes()+now.getHours()*60;
-		var indicatorTop = Math.ceil((11/15)*minutesElapsed);
-		
-		var x = this.todaysHeading.getX()-this.gridTable.getX()+4;
-		
-		this.timeIndicator = Ext.DomHelper.append(this.gridContainer,
-			{
-				tag: 'div',
-				id: Ext.id(),
-				cls: "x-calGrid-indicator",
-				style:"left:"+x+"px;top:"+indicatorTop+"px;width:"+(this.todaysHeading.getWidth()-3)+"px;"
-			},true);
+		if(this.todaysHeading){
+			var minutesElapsed = now.getMinutes()+now.getHours()*60;
+			var indicatorTop = Math.ceil((11/15)*minutesElapsed);
+
+			var x = this.todaysHeading.getX()-this.gridTable.getX();
 			
-		this.timeIndicator = Ext.DomHelper.append(this.gridContainer,
-			{
-				tag: 'div',
-				id: Ext.id(),
-				cls: "x-calGrid-indicator",
-				style:"left:0px;top:"+indicatorTop+"px;width:6px;"
-			},true);
+			if(!Ext.isIE){
+				x+=4;
+			}
+
+			this.timeIndicator = Ext.DomHelper.append(this.gridContainer,
+				{
+					tag: 'div',
+					id: Ext.id(),
+					cls: "x-calGrid-indicator",
+					style:"left:"+x+"px;top:"+indicatorTop+"px;width:"+(this.todaysHeading.getWidth()-3)+"px;"
+				},true);
+
+			this.timeIndicator = Ext.DomHelper.append(this.gridContainer,
+				{
+					tag: 'div',
+					id: Ext.id(),
+					cls: "x-calGrid-indicator",
+					style:"left:0px;top:"+indicatorTop+"px;width:6px;"
+				},true);
+
+		}
 
 		//the start of the grid
 		//var position = FirstCol.getXY();
