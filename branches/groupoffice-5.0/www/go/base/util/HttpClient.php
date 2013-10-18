@@ -80,7 +80,7 @@ class GO_Base_Util_HttpClient{
 	/**
 	 * Make a POST request to any URL
 	 * 
-	 * @param type $url
+	 * @param string $url
 	 * @param string $params POST parameters
 	 * @return string Response of the server.
 	 * @throws Exception 
@@ -138,7 +138,7 @@ class GO_Base_Util_HttpClient{
 	/**
 	 * Download a file
 	 * 
-	 * @param stirng $url
+	 * @param string $url
 	 * @param GO_Base_Fs_File $outputFile
 	 * @param array $params
 	 * @return boolean
@@ -174,6 +174,10 @@ class GO_Base_Util_HttpClient{
 	public function getHttpCode(){
 		return curl_getinfo($this->_curl, CURLINFO_HTTP_CODE);		
 	}
+
+    public function getContentType(){
+        return curl_getinfo($this->_curl, CURLINFO_CONTENT_TYPE);
+    }
 	
 	/**
 	 * Login to a Group-Office installation
