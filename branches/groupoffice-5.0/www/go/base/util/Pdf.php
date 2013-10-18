@@ -17,6 +17,43 @@ class GO_Base_Util_Pdf extends TCPDF {
 	public $subtitle="";
 	
 	
+	public $style = '
+td.head{
+	font-weight:bold;
+	border-bottom:2px solid #000;
+	font-size:110%;
+	line-height:200%;
+}
+td.total{
+
+border-top:1px solid #000;
+	background-color:#f1f1f1;
+}
+
+td.noborder{
+border-color:white;
+}
+
+td.normal{
+	border-top:1px solid #ccc;
+}
+			
+td.group{
+	border-bottom:1px solid #ccc;
+	font-size:14px;
+	line-height:200%;
+}
+			
+h2{
+color:#000;
+}
+';
+	
+	
+	public function getStyle(){
+		return '<style>'.$this->style.'</style>';
+	}
+	
 	protected function init() {
 		
 		//set image scale factor
@@ -51,8 +88,8 @@ class GO_Base_Util_Pdf extends TCPDF {
 		
 				// set font
 		$this->SetFont($this->font, '', $this->font_size);
-				
 	}
+	
 	
 	public function Footer() {
 		
@@ -68,7 +105,7 @@ class GO_Base_Util_Pdf extends TCPDF {
 		
 		$this->SetY(10); // DEZE WAS T
 
-		$this->SetTextColor(50,135,172);
+//		$this->SetTextColor(50,135,172);
 		$this->SetFont($this->font,'B',16);
 		
 		if(!empty($this->title))
@@ -135,10 +172,10 @@ class GO_Base_Util_Pdf extends TCPDF {
 	function H1($title)
 	{
 		$this->SetFont($this->font,'B',16);
-		$this->SetTextColor(50,135,172);
+//		$this->SetTextColor(50,135,172);
 		//$this->Cell($this->getPageWidth()-$this->lMargin-$this->rMargin,20, $title,0,1);
 		$this->MultiCell($this->getPageWidth()-$this->lMargin-$this->rMargin,20, $title, 0, 'L', false, '1');
-		$this->setDefaultTextColor();
+//		$this->setDefaultTextColor();
 		$this->SetFont($this->font,'',$this->font_size);
 	}
 
@@ -146,7 +183,8 @@ class GO_Base_Util_Pdf extends TCPDF {
 	{
 
 		$this->SetFont($this->font,'',14);
-		$this->SetTextColor(125,165, 65);
+//		$this->SetTextColor(125,165, 65);
+		$this->SetTextColor(50,135,172);
 		//$this->Cell($this->getPageWidth()-$this->lMargin-$this->rMargin,24, $title,0,1);
 		$this->MultiCell($this->getPageWidth()-$this->lMargin-$this->rMargin,24, $title, 0, 'L', false, '1');
 		$this->setDefaultTextColor();
@@ -189,7 +227,7 @@ class GO_Base_Util_Pdf extends TCPDF {
 	
 	
 	public function tableRow($columns){
-		$html = '<tr>';
+		$html = '<tr style="border-top:1px solid black">';
 		
 		$headerIndex=0;
 		for($i=0;$i<count($columns);$i++){
@@ -237,6 +275,7 @@ class GO_Base_Util_PdfTableColumn{
 	public $align;
 	public $bgcolor;
 	public $colspan;
+	public $class;
 	public $extraStyle="";
 	
 	public $isHeader=false;
@@ -246,14 +285,16 @@ class GO_Base_Util_PdfTableColumn{
 		foreach($config as $prop=>$value)
 			$this->$prop = $value;
 		
-		if($this->isHeader && !isset($this->bgcolor)){
-			$this->bgcolor='rgb(248, 248, 248)';
-		}
+//		if($this->isHeader && !isset($this->bgcolor)){
+//			$this->bgcolor='rgb(248, 248, 248)';
+//		}
 	}
 	
 	public function render(){
 		
 		$tag = $this->isHeader ? 'th' : 'td';
+		
+		
 		
 		$html = '<'.$tag.' style="';
 		
@@ -269,10 +310,17 @@ class GO_Base_Util_PdfTableColumn{
 		if(isset($this->color))
 			$html .='color:'.$this->color.';';
 		
+		
+		
 		$html .= $this->extraStyle.'"';
 		
 		if(isset($this->colspan))
 			$html .= ' colspan="'.$this->colspan.'"';
+		
+		if(!isset($this->class))
+			$this->class="normal";
+			
+		$html .=' class="'.$this->class.'"';
 		
 		$html .='>'.$this->text.'</'.$tag.'>';
 		
