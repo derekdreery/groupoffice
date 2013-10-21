@@ -47,6 +47,65 @@ GO.email.AccountDialog = function(config) {
 		);
 	}
 
+	if(GO.addressbook){
+				
+		this.templatesCombo = new Ext.form.ComboBox({
+			fieldLabel : GO.email.lang['defaultEmailTemplate'],
+			hiddenName : 'default_account_template_id',
+			width: '100%',
+			store : new GO.data.JsonStore({
+				url : GO.url("addressbook/template/accountTemplatesStore"),
+				baseParams : {
+					'type':"0"
+				},
+				root : 'results',
+				totalProperty : 'total',
+				id : 'id',
+				fields : ['id', 'name', 'group', 'text','template_id','checked'],
+				remoteSort : true
+			}),
+			value : '',
+			valueField : 'id',
+			displayField : 'name',
+			typeAhead : true,
+			mode : 'local',
+			triggerAction : 'all',
+			editable : false,
+			selectOnFocus : true,
+			forceSelection : true
+		});
+		
+		this.templatesCombo.store.load();
+		
+//		this.templatesBtn = new Ext.Button({
+//
+//			iconCls:'ml-btn-mailings',
+//			text:GO.addressbook.lang.emailTemplate,
+//			menu:this.templatesMenu = new GO.menu.JsonMenu({
+//				store:this.templatesStore,
+//				listeners:{
+//					scope:this,
+//					itemclick : function(item, e ) {
+//						if(item.template_id=='default'){
+//							this.templatesStore.baseParams.default_template_id=this.lastLoadParams.template_id;
+//							this.templatesStore.load();
+//							delete this.templatesStore.baseParams.default_template_id;
+//						}else if(!this.emailEditor.isDirty() || confirm(GO.email.lang.confirmLostChanges))
+//						{							
+//							this.lastLoadParams.template_id=item.template_id;
+//							this.lastLoadParams.keepHeaders=1;
+//							this.loadForm(this.lastLoadUrl, this.lastLoadParams);							
+//						}else
+//						{
+//							return false;							
+//						}
+//					}
+//				}
+//			})
+//		});
+		
+	}
+
 	var incomingTab = {
 		title : GO.email.lang.incomingMail,
 		layout : 'form',
@@ -196,6 +255,8 @@ GO.email.AccountDialog = function(config) {
 	});
 	properties_items.push(this.doNotMarkAsReadCbx);
 
+	if (GO.addressbook)
+		properties_items.push(this.templatesCombo);
 
 	if(GO.settings.modules.email.write_permission || !GO.email.disableAliases)
 		properties_items.push(this.aliasesButton);
