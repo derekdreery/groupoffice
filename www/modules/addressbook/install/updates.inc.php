@@ -394,3 +394,10 @@ $updates['201309161020'][]="ALTER TABLE `ab_contacts` ADD `action_date` INT( 11 
 $updates['201309250930'][]="ALTER TABLE `ab_contacts` ADD `url_linkedin` VARCHAR( 100 ) NULL DEFAULT NULL ,
 ADD `url_facebook` VARCHAR( 100 ) NULL DEFAULT NULL ,
 ADD `url_twitter` VARCHAR( 100 ) NULL DEFAULT NULL;";
+
+$updates['201310171145'][]="CREATE TABLE IF NOT EXISTS `ab_default_email_account_templates` (
+  `account_id` int(11) NOT NULL,
+  `template_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`account_id`),
+  KEY `template_id` (`template_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";

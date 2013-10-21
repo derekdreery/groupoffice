@@ -187,6 +187,20 @@ CREATE TABLE IF NOT EXISTS `ab_default_email_templates` (
 -- --------------------------------------------------------
 
 --
+-- Tabelstructuur voor tabel `ab_default_email_templates`
+--
+
+DROP TABLE IF EXISTS `ab_default_email_account_templates`;
+CREATE TABLE IF NOT EXISTS `ab_default_email_account_templates` (
+  `account_id` int(11) NOT NULL,
+  `template_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`account_id`),
+  KEY `template_id` (`template_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Tabelstructuur voor tabel `ab_email_templates`
 --
 
