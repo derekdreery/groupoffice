@@ -25,7 +25,7 @@ class GO_Base_Mail_Utils{
 				elseif (strtoupper($encoding) == 'Q') {
 					$fld = quoted_printable_decode($fld);
 				}
-				$fld = GO_Base_Util_String::to_utf8($fld, $charset);
+				$fld = GO_Base_Util_String::clean_utf8($fld, $charset);
 
 				$string = str_replace($v, $fld, $string);
 			}
@@ -36,12 +36,12 @@ class GO_Base_Mail_Utils{
 //			throw new Exception($charset.' : '.substr($string, $pos+2));
 			$string = rawurldecode(substr($string, $pos+2));
 
-			$string=GO_Base_Util_String::to_utf8($string, $charset);
+			$string=GO_Base_Util_String::clean_utf8($string, $charset);
 		}else
 		{			
-			$string=GO_Base_Util_String::to_utf8($string, $defaultCharset);
+			$string=GO_Base_Util_String::clean_utf8($string, $defaultCharset);
 		}
-		$string=GO_Base_Util_String::clean_utf8($string);
+//		$string=GO_Base_Util_String::clean_utf8($string);
 		
 		//GO::debug($string);
 		return str_replace(array('\\\\', '\\(', '\\)'), array('\\','(', ')'), $string);
