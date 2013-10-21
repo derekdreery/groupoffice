@@ -85,8 +85,14 @@ class GO_Base_Mail_ImapBodyStruct extends GO_Base_Mail_ImapBase {
 					}
 				}
 			}
-			if(empty($res['name']) && !empty($res['filename']))
+			
+			//Check if $res['name'] is not empty and if $res['name'] has no extension in the name(.pdf,.csv etc.) and 
+			//the $res['filename'] is not empty, then use $res['filename'] as the filename.
+			if(!empty($res['name']) && !substr(strrchr($res['name'],'.'),1) && !empty($res['filename']))
 				$res['name']=$res['filename'];
+
+//			if(empty($res['name']) && !empty($res['filename']))
+//				$res['name']=$res['filename'];
 			
 			if (isset($vals[0]) && $vals[0] != ')') {
 				$res['language'] = array_shift($vals);
