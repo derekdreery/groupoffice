@@ -577,7 +577,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				} else {
 					$a->name = GO_Base_Mail_Utils::mimeHeaderDecode($part['name']);
 					
-					if(!empty($part['filename']) && empty(GO_Base_Fs_File::getExtension($a->name))){
+					$extension = GO_Base_Fs_File::getExtension($a->name);
+					if(!empty($part['filename']) && empty($extension)){
 						$a->name = GO_Base_Mail_Utils::mimeHeaderDecode($part['filename']);
 					}
 				}
