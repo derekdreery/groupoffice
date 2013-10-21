@@ -29,6 +29,7 @@ abstract class GO_Base_Mail_ImapBase {
 	
 	public $lastCommand;
 	
+	var $command_count=0;
 	
 	public function last_error($clear=true){
 		$count=count($this->errors);
