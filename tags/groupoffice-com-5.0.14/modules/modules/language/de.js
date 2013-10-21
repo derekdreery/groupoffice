@@ -1,0 +1,10 @@
+GO.modules.lang.modules='Module';
+GO.modules.lang.cmdSaveChanges='Änderungen speichern';
+GO.modules.lang.cmdInstall='Hinzufügen';
+GO.modules.lang.cmdUninstall='Entfernen';
+GO.modules.lang.cmdAvailableModules='Verfügbare Module';
+GO.modules.lang.cmdModuleName='Name';
+GO.modules.lang.cmdModuleDescription='Beschreibung';
+GO.modules.lang.cmdGridColumnModuleName='Name';
+GO.modules.lang.cmdUninstallMessage='ACHTUNG! Wenn Sie das Modul "{0}" deaktivieren, werden alle zugehörigen Daten gelöscht! Möchten Sie es wirklich deaktivieren?';
+GO.modules.lang.cmdModulesCannotBeDeleted='Dieses Modul kann nicht entfernt werden!';
