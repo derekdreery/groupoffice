@@ -1,3 +1,6 @@
+21-10-2013 5.0.14
+- Included new improved projects and timeregistration modules
+
 18-10-2013 5.0.13
 - Fixed deprecated /e modifier in PHP.5.5
 - Calendar hang in IE when browsing other weeks than the current week.
