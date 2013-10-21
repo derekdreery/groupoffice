@@ -55,6 +55,15 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		$response['data']['name'] = $alias->name;
 		$response['data']['signature'] = $alias->signature;
 
+		if (GO::modules()->isInstalled('addressbook')) {
+			$defaultTemplateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($model->id);
+			if ($defaultTemplateModel) {
+				$response['data']['default_account_template_id'] = $defaultTemplateModel->template_id;
+			} else {
+				$response['data']['default_account_template_id'] = '';
+			}
+		}
+		
 		return parent::afterLoad($response, $model, $params);
 	}
 
@@ -71,6 +80,16 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			
 			$alias->signature = $params['signature'];
 			$alias->save();
+		}
+		
+		if (!empty($params['default_account_template_id']) && GO::modules()->isInstalled('addressbook')) {
+			$defaultTemplateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($model->id);
+			if (!$defaultTemplateModel) {
+				$defaultTemplateModel = new GO_Addressbook_Model_DefaultTemplateForAccount();
+				$defaultTemplateModel->account_id = $model->id;
+			}
+			$defaultTemplateModel->template_id = $params['default_account_template_id'];
+			$defaultTemplateModel->save();
 		}
 
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
