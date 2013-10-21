@@ -150,8 +150,8 @@ class GO_Base_Util_Html2Text
         '/<script[^>]*>.*?<\/script>/i',         // <script>s -- which strip_tags supposedly has problems with
         '/<style[^>]*>.*?<\/style>/i',           // <style>s -- which strip_tags supposedly has problems with
 	//'/<!-- .* -->/',                         // Comments -- which strip_tags might have problem a with
-        '/<h[123][^>]*>(.*?)<\/h[123]>[ \t]*/ie',      // H1 - H3
-        '/<h[456][^>]*>(.*?)<\/h[456]>[ \t]*/ie',      // H4 - H6
+//        '/<h[123][^>]*>(.*?)<\/h[123]>[ \t]*/ie',      // H1 - H3
+//        '/<h[456][^>]*>(.*?)<\/h[456]>[ \t]*/ie',      // H4 - H6
         '/<p[^>]*>(.*?)<\/p>[ \t]*/i',                           // <P>
         '/<\/div[^>]*>[ \t]*/i',                           // <div>
         '/<br[^>]*>[ \t]*/i',                          // <br>
@@ -167,7 +167,7 @@ class GO_Base_Util_Html2Text
         '/(<table[^>]*>|<\/table>)/i',           // <table> and </table>
         '/(<tr[^>]*>|<\/tr>)/i',                 // <tr> and </tr>
         '/<td[^>]*>(.*?)<\/td>/i',               // <td> and </td>
-        '/<th[^>]*>(.*?)<\/th>/ie',              // <th> and </th>
+//        '/<th[^>]*>(.*?)<\/th>/ie',              // <th> and </th>
 				'/<img [^>]*alt="([^"]+)"[^>]*>/i', //img with alt text		
 				'/<blockquote[^>]*>/i',                          // <blockquote>
 				'/<\/blockquote[^>]*>/i',                          // <blockquote>
@@ -204,8 +204,8 @@ class GO_Base_Util_Html2Text
         '',                                     // <script>s -- which strip_tags supposedly has problems with
         '',                                     // <style>s -- which strip_tags supposedly has problems with
 	//'',                                     // Comments -- which strip_tags might have problem a with
-        "strtoupper(\"\n\n\\1\n\")",          // H1 - H3
-        "ucwords(\"\n\n\\1\n\")",             // H4 - H6
+//        "strtoupper(\"\n\n\\1\n\")",          // H1 - H3
+//        "ucwords(\"\n\n\\1\n\")",             // H4 - H6
         "\n\n\\1\n\n",                               // <P>
         "\n",                               // </div>
         "\n",                                   // <br>
@@ -221,7 +221,7 @@ class GO_Base_Util_Html2Text
         "\n\n",                                 // <table> and </table>
         "\n",                                   // <tr> and </tr>
         "\t\t\\1\n",                            // <td> and </td>
-        "strtoupper(\"\t\t\\1\n\")",            // <th> and </th>
+//        "strtoupper(\"\t\t\\1\n\")",            // <th> and </th>
 				"\\1", //img with alt text
 				"\n\n",																	// blockquote start
 				"\n\n"																	// blockquote closing
@@ -436,6 +436,18 @@ class GO_Base_Util_Html2Text
 		// Run our defined search-and-replace
 		$text = preg_replace($this->search, $this->replace, $text);
 
+		$text = preg_replace_callback('/<h[123][^>]*>(.*?)<\/h[123]>[ \t]*/i', function($matches){
+			return strtoupper("\n\n".$matches[1]."\n\n");
+		}, $text);
+		
+		$text = preg_replace_callback('/<h[456][^>]*>(.*?)<\/h[456]>[ \t]*/i', function($matches){
+			return ucwords("\n\n".$matches[1]."\n\n");
+		}, $text);
+		
+		$text = preg_replace_callback('/<th[^>]*>(.*?)<\/th>/i', function($matches){			
+			return strtoupper("\t\t".$matches[1]."\n");
+		}, $text);
+		
 		// Strip any other HTML tags
 		$text = strip_tags($text, $this->allowed_tags);
 
