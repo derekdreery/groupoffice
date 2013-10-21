@@ -555,6 +555,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					exception_event_id : this.formPanel.form.baseParams['exception_event_id']
 //					has_other_participants: this.participantsPanel.invitationRequired()
 				};
+				
+				if(action.result.background){
+					newEvent.background=action.result.background;
+				}
 
 
 				if(!GO.util.empty(action.result.status_color))

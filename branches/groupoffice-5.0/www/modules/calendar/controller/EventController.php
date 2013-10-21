@@ -220,7 +220,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$response['status_color'] = $model->getStatusColor();
 		$response['status'] = $model->status;
 		$response['is_organizer'] = $model->is_organizer?true:false;
-		
+		$response['background']=$model->background;
 		
 		if($model->is_organizer){
 			//$model->sendMeetingRequest();
