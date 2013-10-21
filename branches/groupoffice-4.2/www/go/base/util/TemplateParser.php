@@ -183,23 +183,22 @@ class GO_Base_Util_TemplateParser
 		return $content;
 	}
 	
-	private static function _fixTagsCallback($tag) {
-		//Sometimes people change styles within a {autodata} tag.
-		//Then there are XML tags inside the GO template tag.
-		//We place them outside the tag.
-		//go_debug($tag);
-		$tag = stripslashes($tag);
-		preg_match_all('/<[^>]*>/', $tag, $matches);
-
-		$replacement = implode('', $matches[0]) . strip_tags($tag);
-		//go_debug($replacement);
-		//go_debug('****');
-
-		return $replacement;
-	}
-
+	
 	private function _fixTags($content) {
-		return preg_replace('/{[^}]*}/Ue', "self::_fixTagsCallback('$0')", $content);
+		return preg_replace_callback('/{[^}]*}/U', function($matches) {
+											//Sometimes people change styles within a {autodata} tag.
+											//Then there are XML tags inside the GO template tag.
+											//We place them outside the tag.
+											//go_debug($tag);
+											$tag = stripslashes($matches[0]);
+											preg_match_all('/<[^>]*>/', $tag, $matches);
+
+											$replacement = implode('', $matches[0]) . strip_tags($tag);
+											//go_debug($replacement);
+											//go_debug('****');
+
+											return $replacement;
+										}, $content);
 	}
 
 	private function _parseTags($content)
