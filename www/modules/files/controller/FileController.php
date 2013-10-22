@@ -7,6 +7,25 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	protected function allowGuests() {
 		return array('download'); //permissions will be checked manually in that action
 	}
+    
+	/**
+	 * Will calculate the used diskspace per user
+	 * If no ID is passed diskspace will be recalculated for all user
+	 * @param integer $id id of the user to recalculate used space for
+	 */
+	protected function actionRecalculatedDiskUsage($id=false) {
+		if(!empty($id)) {
+			$user = GO_Base_Model_User::model()->findByPk($id);
+			if(!empty($user) && $user->calculatedDiskUsage()->save())
+				echo $user->getName() . ' uses ' . $user->disk_usage. "<br>\n";
+		} else {
+			$users = GO_Base_Model_User::model()->find();
+			foreach($users as $user) {
+				if($user->calculatedDiskUsage()->save())
+					echo $user->getName() . ' uses ' . $user->disk_usage. "<br>\n";
+			}
+		}
+	}
 	
 	protected function actionDisplay($params) {
 		

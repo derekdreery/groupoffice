@@ -355,6 +355,8 @@ GO.files.FileBrowser = function(config){
 		menu: this.newMenu
 	});
 
+        var quotaPercentage = (GO.settings.disk_quota) ? GO.settings.disk_usage/GO.settings.disk_quota : 0;
+
 	this.locationPanel = new Ext.Panel({
 		region:'north',
 		border:false,
@@ -381,6 +383,11 @@ GO.files.FileBrowser = function(config){
 									name:'files-location',
 									flex : 1
 					}),
+                                        this.quotaBar = new Ext.ProgressBar({
+                                            width: 200,
+                                            value: quotaPercentage,
+                                            text: Math.round(quotaPercentage*100)+'% ('+ GO.settings.disk_usage+' of '+GO.settings.disk_quota+'MB)'
+                                        }),
 					this.searchField = new GO.form.SearchField({
 							store: this.gridStore,
 							width: 230,
@@ -397,6 +404,9 @@ GO.files.FileBrowser = function(config){
 				]
 			}]
 	});
+        
+        if(!GO.settings.disk_quota)
+            this.quotaBar.hidden = true;
 
 	this.upButton = new Ext.Button({
 		iconCls: 'btn-up',
