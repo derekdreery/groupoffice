@@ -1,3 +1,6 @@
+- Rebuid GOTA with permissions attribute in manifest
+- Saving settings cleared addresslists when this tab was not selected and activated in the settings
+
 17-10-2013 4.2.25
 - Billing: Order PDF - Extra spacing in top after Page Break, if logo is on every page.
 - Carddav supports viewing readonly address books
