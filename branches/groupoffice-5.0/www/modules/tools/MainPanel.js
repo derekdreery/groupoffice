@@ -1,7 +1,12 @@
 Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
-    onRender : function(ct, position){
-        this.el = ct.createChild({tag: 'iframe', id: 'iframe-'+ this.id, frameBorder: 0, src: this.url});
-    }
+	onRender : function(ct, position){
+		this.el = ct.createChild({
+			tag: 'iframe', 
+			id: 'iframe-'+ this.id, 
+			frameBorder: 0, 
+			src: this.url
+			});
+	}
 });
 
 
@@ -23,32 +28,42 @@ GO.tools.MainPanel = function(config){
 		layout:'fit'
 	});
 
-	this.cls='tools-panel';
+//	this.cls='tools-panel';
+	
+	config.tbar = new Ext.Toolbar({		
+		cls:'go-head-tb',
+		items: [{
+			xtype:'htmlcomponent',
+			html:GO.tools.lang.tools,
+			cls:'go-module-title-tbar'
+		}]
+	});
 	
 		
 	this.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.tools.url+ 'json.php',
-	    baseParams: {
-	    	task: 'scripts'  	
-	    	},
-	    root: 'results',
-	    id: 'id',
-	    totalProperty:'total',
-	    fields: ['name', 'script'],
-	    remoteSort: true
+		url: GO.settings.modules.tools.url+ 'json.php',
+		baseParams: {
+			task: 'scripts'  	
+		},
+		root: 'results',
+		id: 'id',
+		totalProperty:'total',
+		fields: ['name', 'script'],
+		remoteSort: true
 	});
 	
-	var scriptList = new GO.grid.SimpleSelectList({title: GO.tools.lang.scripts, store: this.store});
+	var scriptList = new GO.grid.SimpleSelectList({
+//		title: GO.tools.lang.scripts, 
+		store: this.store
+		});
 		
 	scriptList.on('click', function(dataview, index){
-				/*this.runWindow.show();
+		/*this.runWindow.show();
 				this.runPanel.el.set({'src' : dataview.store.data.items[index].data.script});*/
-				window.open(dataview.store.data.items[index].data.script);				
-		}, this);
+		window.open(dataview.store.data.items[index].data.script);				
+	}, this);
 		
 	this.items=[
-	new Ext.Panel({html: GO.tools.lang.description}),
-	new GO.form.HtmlComponent({html:'<br />'}),
 	scriptList
 	];
 	
