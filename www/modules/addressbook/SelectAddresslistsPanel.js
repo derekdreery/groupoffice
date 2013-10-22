@@ -56,7 +56,7 @@ GO.addressbook.SelectAddresslistsPanel = Ext.extend(Ext.Panel, {
 			this.add(this.addresslistElements[i]);
 			f.add(this.addresslistElements[i]);
 		}
-		this.doLayout();
+		this.doLayout(false, true);
 		
 	},
 	afterRender : function(){
