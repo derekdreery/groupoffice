@@ -168,6 +168,13 @@ class GO_Base_Config {
 	 */
 	var $default_country = "NL";
 	
+	/**
+	 * Default disk quota for a new user in MBs
+	 *
+	 * @var     integer
+	 * @access  public
+	 */
+	var $default_diskquota = 1000;
 	
 	/**
 	 * Default VAT percentage
