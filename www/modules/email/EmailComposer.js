@@ -900,9 +900,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	
 	
 	_changeTemplate : function(template_id) {
-		this.lastLoadParams.template_id=template_id;
-		this.lastLoadParams.keepHeaders=1;
-		this.loadForm(this.lastLoadUrl, this.lastLoadParams);
+		if (!GO.util.empty(this.lastLoadParams) && !GO.util.empty(this.lastLoadParams.template_id) && this.lastLoadParams.template_id!=template_id) {
+			this.lastLoadParams.template_id=template_id;
+			this.lastLoadParams.keepHeaders=1;
+			this.loadForm(this.lastLoadUrl, this.lastLoadParams);
+		}
 	},
 	
 	loadForm : function(url, params){
