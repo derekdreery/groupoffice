@@ -121,3 +121,8 @@ $l["crn"]='Ettevõtte Reg. nr.';
 $l["iban"]='IBAN';
 $l["unknownEmail"]= 'Tundmatu e-posti aadress';
 $l["strUnknownEmail"]= 'E-posti aadress on tundmatu. Kas soovid lisada uut kontakti, integreerida seda olemasolevale kontaktile või tühistada?';
+
+$l["unsubscription"]='Lahku uudiskirjast';
+$l["unsubscribe"]='Lahku uudiskirjast';
+$l["r_u_sure"] = 'Kas oled kindel, et soovid uudiskirjast lahkuda?';
+$l["delete_success"] = 'Olete uudiskirja nimekirjast eemaldatud.';
