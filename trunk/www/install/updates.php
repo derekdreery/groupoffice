@@ -374,3 +374,6 @@ CHANGE `th_work_hours` `th_work_hours` DOUBLE NOT NULL DEFAULT '8',
 CHANGE `fr_work_hours` `fr_work_hours` DOUBLE NOT NULL DEFAULT '8',
 CHANGE `sa_work_hours` `sa_work_hours` DOUBLE NOT NULL DEFAULT '0',
 CHANGE `su_work_hours` `su_work_hours` DOUBLE NOT NULL DEFAULT '0';";
+
+$updates['201310181613'][]="ALTER TABLE `go_users` ADD COLUMN `disk_quota` INT NULL AFTER `files_folder_id`;";
+$updates['201310181614'][]="ALTER TABLE `go_users` ADD COLUMN `disk_usage` INT NOT NULL DEFAULT '0' AFTER `files_folder_id`;";
