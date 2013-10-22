@@ -218,3 +218,51 @@ td.table_header_links
 	border:1px solid #d0d0d0;
 	margin:5px;
 }
+
+
+
+
+
+
+
+
+.facebook-icon {
+	background:url('images/16x16/facebook-icon-16.png') no-repeat top right !important;
+	width: 16px;
+	height: 16px;
+	margin-left: 3px;
+	margin-top: 2px;
+	margin-right: 5px;
+	float: left;
+}
+
+.linkedin-icon {
+	background:url('images/16x16/linkedin-icon-16.png') no-repeat top right !important;
+	width: 16px;
+	height: 16px;
+	margin-left: 3px;
+	margin-top: 2px;
+	margin-right: 5px;
+	float: left;
+}
+
+.skype-icon {
+	background:url('images/16x16/skype-icon-16.png') no-repeat top right !important;
+	width: 16px;
+	height: 16px;
+	margin-left: 3px;
+	margin-top: 2px;
+	margin-right: 5px;
+	float: left;
+}
+
+
+.twitter-icon {
+	background:url('images/16x16/twitter-icon-16.png') no-repeat top right !important;
+	width: 16px;
+	height: 16px;
+	margin-left: 3px;
+	margin-top: 2px;
+	margin-right: 5px;
+	float: left;
+}

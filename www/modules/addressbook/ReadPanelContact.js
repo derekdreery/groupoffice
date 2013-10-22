@@ -227,7 +227,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 										'<a href="{url_twitter}" target="_blank"><div class="twitter-icon"></div></a>'+
 									'</tpl>'+
 									'<tpl if="!GO.util.empty(skype_name)">'+
-										'<a href="skype:{skype_name}?call" target="_blank">'+GO.addressbook.lang['callOnSkype']+'</a>'+
+										'<a href="skype:{skype_name}?call" target="_blank"><div class="skype-icon" title="'+GO.addressbook.lang['callOnSkype']+'"></div></a>'+
 									'</tpl>'+
 							'</td>'+
 						'</tr>'+
