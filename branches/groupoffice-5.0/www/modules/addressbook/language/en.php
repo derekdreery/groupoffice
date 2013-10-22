@@ -302,6 +302,7 @@ $l['showActieveToolTip']='Show only contacts that have a current action date.';
 $l['linkedinUrl'] = 'LinkedIn URL';
 $l['facebookUrl'] = 'Facebook URL';
 $l['twitterUrl'] = 'Twitter URL';
+$l['skypeName'] = 'Skype name';
 $l['cmdPanelSocialMedia'] = 'Social media';
 
 $l['setCurrentTemplateAsDefaultEAccount']='Set current template as default for this email account';

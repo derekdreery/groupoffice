@@ -338,6 +338,7 @@ $l['showActieveToolTip']='Toon alleen contacten met actuele actiedatum.';
 $l['linkedinUrl'] = 'LinkedIn URL';
 $l['facebookUrl'] = 'Facebook URL';
 $l['twitterUrl'] = 'Twitter URL';
+$l['skypeName'] = 'Skypenaam';
 $l['cmdPanelSocialMedia'] = 'Sociale media';
 
 $l['setCurrentTemplateAsDefaultEAccount']='Stel huidig sjabloon als standaard in voor dit email account';
