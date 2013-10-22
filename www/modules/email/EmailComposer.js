@@ -377,7 +377,7 @@ GO.email.EmailComposer = function(config) {
 						if (record.data['template_id']==template_id) {
 							this.store.getById(record.id).set('checked',true);
 							this.store.getById(record.id).json.checked = true;
-						} else {
+						} else if(record.data['template_id']>=0) {
 							this.store.getById(record.id).set('checked',false);
 							this.store.getById(record.id).json.checked = false;
 						}
