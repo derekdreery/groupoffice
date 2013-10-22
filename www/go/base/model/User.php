@@ -52,6 +52,8 @@
  * @property String $list_separator
  * @property String $text_separator
  * @property int $files_folder_id
+ * @property int $disk_quota The amount of diskspace the user may use in MB
+ * @property int $disk_usage The diskspace used in Bytes (cache column with sum fs_files.size owned by this user)
  * @property int $mail_reminders
  * @property int $popup_reminders
  * @property int $contact_id
@@ -63,6 +65,8 @@
  * @property string $email
  * @property GO_Addressbook_Model_Contact $contact
  * @property string $digest
+ * 
+ * @method GO_Base_Model_User findByPk();
  */
 
 class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
@@ -198,13 +202,15 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		$this->columns['password']['required'] = true;
 		$this->columns['username']['required'] = true;
 		$this->columns['username']['regex'] = '/^[A-Za-z0-9_\-\.\@]*$/';
-
+		
 		$this->columns['first_name']['required'] = true;
 
 		$this->columns['last_name']['required'] = true;
 		$this->columns['timezone']['required']=true;
 		
 		$this->columns['lastlogin']['gotype']='unixtimestamp';
+		$this->columns['disk_quota']['gotype']='number';
+		$this->columns['disk_quota']['decimals']=0;
 		return parent::init();
 	}
 	
@@ -227,6 +233,27 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		return GO::config()->max_users > 0 && $this->count() >= GO::config()->max_users;
 	}
 
+        /**
+         * This method will (re)calculate the used diskspace for this user
+         * @param integer $bytes The amount of bytes to add to the users used diskspace (negative for substraction)
+         * @return GO_Base_Model_User itself for chaining eg. $user->calculatedDiskUsage()->save()
+         */
+        public function calculatedDiskUsage($bytes=false) {
+            if(GO::modules()->isInstalled('files')) {
+                if(!$bytes) { //recalculated
+                    $fp=GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('user_id', $this->id));
+                    $sumFilesize = GO_Base_Model_Grouped::model()->load('GO_Files_Model_File', 'user_id', 'SUM(size) as total_size',$fp)->fetch();
+                    //GO::debug($sumFilesize->total_size);
+                    if($sumFilesize)
+                        $this->disk_usage = $sumFilesize->total_size;
+                } else {
+                    $this->disk_usage+=$bytes;
+                }
+            } else
+                throw new Exceptions('Can not calculated diskusage without the files module');
+            return $this;
+        }
+        
 	public function validate() {
 		
 		if($this->max_rows_list > 250)
@@ -235,6 +262,9 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		if($this->isModified('password') && isset($this->passwordConfirm) && $this->passwordConfirm!=$this->password){
 			$this->setValidationError('passwordConfirm', GO::t('passwordMatchError'));
 		}
+		
+		if($this->isModified('disk_quota') && GO::user()->getModulePermissionLevel('users') < GO_Base_Model_Acl::MANAGE_PERMISSION)
+			$this->setValidationError('disk_quota', 'Only managers of the "users"  module may modify disk quota');
 		
 		if(GO::config()->password_validate && $this->isModified('password')){
 			if(!GO_Base_Util_Validate::strongPassword($this->password)){
