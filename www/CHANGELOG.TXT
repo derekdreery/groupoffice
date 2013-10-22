@@ -1,5 +1,5 @@
 5.0.16
-- Fixed problem with some email attachments that didn't had an extension.
+- Fixed problem with some email attachments that didn't have an extension.
 - Fixed problem with external link not opening the correct folder in the files module
 - Email & Address Book: Default email template for email account.
 - Address Book: Added address book column in Address List Management
