@@ -845,3 +845,7 @@ background-image: url(images/extjs/toolbar/more.gif)!important;
 .x-date-bottom{
 	border:0px;
 }
+
+.x-panel-body .x-tab-strip-closable {
+    padding: 2px 14px 1px 3px;
+}
