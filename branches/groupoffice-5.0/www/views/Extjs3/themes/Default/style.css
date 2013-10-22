@@ -2160,34 +2160,3 @@ box-sizing: border-box;
 	font-size:10px;
 }
 
-
-
-.facebook-icon {
-	background:url('images/16x16/facebook-icon-16.png') no-repeat top right !important;
-	width: 16px;
-	height: 16px;
-	margin-left: 3px;
-	margin-top: 2px;
-	margin-right: 5px;
-	float: left;
-}
-
-.linkedin-icon {
-	background:url('images/16x16/linkedin-icon-16.png') no-repeat top right !important;
-	width: 16px;
-	height: 16px;
-	margin-left: 3px;
-	margin-top: 2px;
-	margin-right: 5px;
-	float: left;
-}
-
-.twitter-icon {
-	background:url('images/16x16/twitter-icon-16.png') no-repeat top right !important;
-	width: 16px;
-	height: 16px;
-	margin-left: 3px;
-	margin-top: 2px;
-	margin-right: 5px;
-	float: left;
-}
