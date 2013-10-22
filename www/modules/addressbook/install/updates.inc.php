@@ -401,3 +401,5 @@ $updates['201310171145'][]="CREATE TABLE IF NOT EXISTS `ab_default_email_account
   PRIMARY KEY (`account_id`),
   KEY `template_id` (`template_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates['201310221010'][]="ALTER TABLE `ab_contacts` ADD `skype_name` VARCHAR( 100 ) NULL DEFAULT NULL;";

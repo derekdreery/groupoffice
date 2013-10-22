@@ -163,6 +163,11 @@ GO.addressbook.ContactDialog = function(config)
 			fieldLabel: GO.addressbook.lang['twitterUrl'],
 			anchor:'-20',
 			maxLength: 100
+		}), new Ext.form.TextField({
+			name: 'skype_name',
+			fieldLabel: GO.addressbook.lang['skypeName'],
+			anchor:'-20',
+			maxLength: 100
 		}) ]
 	});
 	
