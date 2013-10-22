@@ -323,7 +323,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 'decimals'=>2//only for gotype=number)
 	 * 'regex'=>'A preg_match expression for validation',
 	 * 'dbtype'=>'varchar' //mysql database type
-	 * 'unique'=>false //true to enforce a unique value
+	 * 'unique'=>false //true|array to enforce a unique value value can me array of related attributes
 	 * 'greater'=>'start_time' //this column must be greater than column start time
 	 * 'greaterorequal'=>'start_time' //this column must be greater or equal to column start time
 	 * 'customfield'=> 'If this is a custom field this is the custom field model GO_Customfields_Model_Field
