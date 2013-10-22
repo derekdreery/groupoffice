@@ -358,7 +358,7 @@ GO.email.EmailComposer = function(config) {
 							this.templatesStore.baseParams.default_template_id=this.lastLoadParams.template_id;
 							this.templatesStore.baseParams.type = item.template_id;
 							var fromAccountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
-							this.templatesStore.baseParams.account_id = fromAccountRecord['account_id'];
+							this.templatesStore.baseParams.account_id = fromAccountRecord['data']['account_id'];
 							this.templatesStore.load();
 							delete this.templatesStore.baseParams.default_template_id;
 							delete this.templatesStore.baseParams.type;
