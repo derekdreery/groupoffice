@@ -584,6 +584,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		$attr['time_format']=GO::config()->default_time_format;
 		$attr['sort_name']=GO::config()->default_sort_name;
 		$attr['max_rows_list']=GO::config()->default_max_rows_list;
+		$attr['disk_quota']=GO::config()->default_diskquota;
 		
 		
 		return $attr;
