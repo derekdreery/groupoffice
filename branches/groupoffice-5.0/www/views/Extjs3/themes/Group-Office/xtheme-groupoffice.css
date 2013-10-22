@@ -410,9 +410,9 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	color: #000 !important;	
 }
 
-.go-white-bg  .x-btn-text{
+/*.go-white-bg  .x-btn-text{
 	height: 12px !important;
-}
+}*/
 
 #go-module-panel-addressbook .x-panel-bbar .x-toolbar, #go-module-panel-addressbook .x-panel-tbar .x-toolbar{
 	padding: 0;
@@ -852,4 +852,7 @@ background-image: url(images/extjs/toolbar/more.gif)!important;
 
 .x-window-body{
 	padding-top:10px;
+}
+.x-btn-noicon .x-btn-small .x-btn-text{
+	height:16px;
 }
