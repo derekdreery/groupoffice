@@ -125,6 +125,7 @@
 		this.permissionsTab = new GO.users.PermissionsPanel();
 		this.regionalSettingsTab = new GO.users.RegionalSettingsPanel();
 		this.lookAndFeelTab = new GO.users.LookAndFeelPanel();
+		this.diskQuotaPanel = new GO.users.DiskQuotaPanel();
 
 		this.profileTab = new Ext.Panel({
 			title:GO.users.lang.account,
@@ -140,7 +141,7 @@
 			},this.rightCol = new Ext.Panel({
 				columnWidth:.5,
 				bodyStyle:'padding-left:5px',
-				items:[this.loginTab],
+				items:[this.loginTab, this.diskQuotaPanel],
 				border:false
 			}),{
 				xtype:'hidden',

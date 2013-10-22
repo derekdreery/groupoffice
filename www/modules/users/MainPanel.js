@@ -20,7 +20,7 @@ GO.users.MainPanel = function(config)
 	}
 
 	var fields = {
-		fields:['id', 'username', 'name','logins','lastlogin','ctime','address','address_no','zip','city','state','country','home_phone','email',
+		fields:['id', 'username', 'name','logins','lastlogin','disk_quota','disk_usage', 'ctime','address','address_no','zip','city','state','country','home_phone','email',
 	    	'waddress','waddress_no','wzip','wcity','wstate','wcountry','wphone','enabled'],
 		columns:[
         {header: GO.lang['strUsername'], dataIndex: 'username', width: 200},
@@ -29,7 +29,32 @@ GO.users.MainPanel = function(config)
         {header: GO.users.lang['cmdFormLabelLastLogin'], dataIndex: 'lastlogin', width: 100},
         {header: GO.users.lang['cmdFormLabelRegistrationTime'], dataIndex: 'ctime', width: 100},      
         {header: GO.lang['strEmail'], dataIndex: 'email',  hidden: false, width: 150},
-				{header: GO.users.lang['cmdBoxLabelEnabled'], dataIndex: 'enabled',  hidden: false, width: 100} 
+        {
+            header: GO.users.lang['diskQuota'], 
+            dataIndex: 'disk_quota',
+            width: 100, 
+            renderer: function(v, metaData, record){
+                if(v)
+                   return v+' MB';
+            }
+        },
+        {
+            header: GO.users.lang['spaceUsed'], 
+            dataIndex: 'disk_usage',
+            width: 100, 
+            renderer: function(v, metaData, record){
+                var quota = record.data.disk_quota
+                var mb_used = v/1024/1024;
+                if(v) {
+                    return '<div class="go-progressbar">'+
+                            '<div class="go-progress-indicator" style="width:'+Math.ceil(mb_used/GO.util.unlocalizeNumber(quota)*100)+'%"></div>'+
+                            '</div>';
+                }
+                else
+                    return mb_used+' MB';
+            }
+        },
+	{header: GO.users.lang['cmdBoxLabelEnabled'], dataIndex: 'enabled',  hidden: false, width: 100} 
     ]
 	};
 

@@ -135,3 +135,6 @@ $l['enabled_cf_tabs'] = 'Enabled custom field tabs';
 $l['addresslist_panel'] = 'Addresslist panel';
 
 $l['cmdFormLabelHolidaySet'] = 'Bank holidays';
+$l['diskSpace'] = 'Disk Space';
+$l['diskQuota'] = 'Disk Quota';
+$l['spaceUsed'] = 'Space used';
