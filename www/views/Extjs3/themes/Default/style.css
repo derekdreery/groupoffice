@@ -2159,3 +2159,10 @@ box-sizing: border-box;
 	border-radius:2px;
 	font-size:10px;
 }
+.go-progressbar{
+	width:100px;height:10px;border:1px solid #666;
+}
+
+.go-progress-indicator{
+	background-color:#009cc5;height:10px;
+}
