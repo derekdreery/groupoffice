@@ -115,6 +115,18 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 		$labelOptions=isset($htmlOptions['labelOptions'])?$htmlOptions['labelOptions']:array();
 		unset($htmlOptions['labelOptions']);
 
+		if (!empty($htmlOptions['horizontal'])) {
+			if (!empty($labelOptions['style']))
+				$labelOptions['style'] .= ';float:left;';
+			else
+				$labelOptions['style'] = 'float:left;';
+			
+			if (!empty($htmlOptions['style']))
+				$htmlOptions['style'] .= ';float:left;';
+			else
+				$htmlOptions['style'] = 'float:left;';
+		}
+		
 		$items=array();
 		$baseID=$this->_getIdByName($name);
 		$id=0;
@@ -127,7 +139,8 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 			$label=$this->staticLabel($label,$htmlOptions['id'],$labelOptions);
 			$items[]=strtr($template,array('{input}'=>$option,'{label}'=>$label));
 		}
-		return $hidden . $this->_tag('ul',array('id'=>$baseID),implode($separator,$items));
+		$tag = !empty($htmlOptions['horizontal']) ? 'span' : 'ul';
+		return $hidden . $this->_tag($tag,array('id'=>$baseID),implode($separator,$items));
 	}
 	
 	/**
