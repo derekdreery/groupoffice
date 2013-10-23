@@ -923,7 +923,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	
 	
 	_changeTemplate : function(template_id) {
-		if (!GO.util.empty(this.lastLoadParams) && this.lastLoadParams.template_id>=0 && this.lastLoadParams.template_id!=template_id) {
+		if (GO.addressbook && !GO.util.empty(this.lastLoadParams) && this.lastLoadParams.template_id>=0 && this.lastLoadParams.template_id!=template_id) {
 			this.lastLoadParams.template_id=template_id;
 			this.lastLoadParams.keepHeaders=1;
 			this.loadForm(this.lastLoadUrl, this.lastLoadParams);

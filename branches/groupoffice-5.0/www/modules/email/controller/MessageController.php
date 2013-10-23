@@ -709,10 +709,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	}
 
 	public function loadTemplate($params) {
-		if (!empty($params['template_id'])) {
-			$template = GO_Addressbook_Model_Template::model()->findByPk($params['template_id']);
-
-			$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($template->content);
+		if (GO::modules()->addressbook && !empty($params['template_id'])) {
+			try {
+				$template = GO_Addressbook_Model_Template::model()->findByPk($params['template_id']);
+				$templateContent = $template->content;
+			} catch (GO_Base_Exception_AccessDenied $e) {
+				$templateContent = "";
+			}
+			$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($templateContent);
 			$response['data'] = $message->toOutputArray(true, true);
 
 			$presetbody = isset($params['body']) ? $params['body'] : '';
