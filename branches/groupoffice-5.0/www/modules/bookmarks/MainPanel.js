@@ -31,20 +31,6 @@ GO.bookmarks.MainPanel = function(config){
 		config = {};
 	}
 
-	//----------------------------------------------------------------------------
-
-	// MainPanel heeft :
-	// - een northPanel met knoppen.
-	// - een centerPanel met
-	//      * een dataview en een grid (in cardlayout)
-	//			* top toolbar voor sortering
-
-	//----------------------------------------------------------------------------
-
-	//
-	// filter bookmarks op categorie (top toolbar in centerPanel)
-	//
-
 	this.selectCategory = new GO.form.ComboBoxReset({
 		fieldLabel: 'Category',
 		hiddenName:'category_id',
@@ -69,22 +55,12 @@ GO.bookmarks.MainPanel = function(config){
 		}
 	});
 
-	// zoek bookmarks op titel
 	this.searchField = new GO.form.SearchField({
 		store: GO.bookmarks.groupingStore ,
 		width:220
 	});
 
-	// De toolbar voor het centerPanel met filter en zoekfunctie
-	this.toolbar = new Ext.Toolbar({
-		anchor:'100%',
-		cls: 'go-paging-tb',
-		displayMsg: GO.lang['displayingItems'],
-		emptyMsg: GO.lang['strNoItems'],
-		items: [GO.bookmarks.lang.category+':',this.selectCategory,'-',GO.lang.strSearch+':',this.searchField]
-	});
 
-	//----------------------------------------------------------------------------
 
 	// Dataview & Grid
 
@@ -94,21 +70,10 @@ GO.bookmarks.MainPanel = function(config){
 
 	this.bmView=new GO.bookmarks.BookmarksView({
 		store:GO.bookmarks.groupingStore,
-		tbar: this.toolbar
+		tbar: [GO.bookmarks.lang.category+':',this.selectCategory,'-',GO.lang.strSearch+':',this.searchField]
 	});
 
-	// centerPanel met Dataview & Grid (cardlayout)
 
-	/*this.centerPanel = new Ext.Panel({
-		region:'center',
-		layout:'card',
-		tbar: this.toolbar,
-		activeItem: 0,
-		tab:0,
-		items: [this.bmView,this.bmGrid]
-	})*/
-
-	//------------------------------------------------------------------------------
 
 	config.tbar=new Ext.Toolbar({
 		cls:'go-head-tb',
