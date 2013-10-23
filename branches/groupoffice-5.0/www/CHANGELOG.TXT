@@ -3,6 +3,7 @@
 - Fixed problem with external link not opening the correct folder in the files module
 - Email & Address Book: Default email template for email account.
 - Address Book: Added address book column in Address List Management
+- Default Site Module: able to register for Address List from contact form.
 
 21-10-2013 5.0.15
 - Install bug in projects2 module.
