@@ -1,5 +1,5 @@
-groupoffice-servermanager (5.0.15) fivezero; urgency=low
+groupoffice-servermanager (5.0.16) fivezero; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Mon, 21 Oct 2013 10:42:02 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Wed, 23 Oct 2013 17:17:46 +0200
