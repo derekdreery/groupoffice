@@ -456,7 +456,7 @@ class GO_Base_Config {
 	var $limit_usersearch=0;
 
 	/**
-	 * The maximum number KB this Group-Office installation may use. 0 will allow unlimited usage of disk space.
+	 * The maximum number of Bytes this Group-Office installation may use. 0 will allow unlimited usage of disk space.
 	 *
 	 * @var     int
 	 * @access  public
