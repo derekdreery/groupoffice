@@ -253,6 +253,14 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			throw new Exceptions('Can not calculated diskusage without the files module');
 		return $this;
 	}
+	
+	/**
+	 * Get the user disk quota in bytes
+	 * @return int amount of bytes the user may use
+	 */
+	public function getDiskQuota(){
+		return $this->disk_quota*1024*1024;
+	}
 
 	public function validate() {
 		
