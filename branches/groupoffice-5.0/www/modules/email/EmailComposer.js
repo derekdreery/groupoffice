@@ -476,7 +476,6 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 //				{
 
 			var previousAccountRecord = cb.store.getById(cb.getValue());
-			console.log(newAccountRecord.get('template_id')+"!="+previousAccountRecord.get('template_id'));
 			if(newAccountRecord.get('template_id')!=previousAccountRecord.get('template_id')){
 					this.templatesMenu.setChecked(newAccountRecord.get('template_id'));
 					if (!this.emailEditor.isDirty() || confirm(GO.email.lang['confirmLostChanges']))
