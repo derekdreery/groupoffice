@@ -225,22 +225,22 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		return parent::beforeDelete();
 	}
 	
-        /**
-         * Check the disk and user quota
-         * @param integer $newBytes amount of bytes that are added when check succeeds
-         * @return boolean true if the check passed and the file may be added
-         */
-	public static function checkQuota($newBytes){
-            $enoughQuota = true;
-            $userQuota = $this->user->disk_quota;
-            if($userQuota) {
-                $enoughQuota = $this->user->disk_usage+$newBytes<=$userQuota;
-            }
-            if($enoughQuota && GO::config()->quota>0){				
-                $currentQuota = GO::config()->get_setting('file_storage_usage');			
-                $enoughQuota = $currentQuota+$newBytes<=GO::config()->quota;
-            }
-            return $enoughQuota;
+	/**
+	 * Check the disk and user quota
+	 * @param integer $newBytes amount of bytes that are added when check succeeds
+	 * @return boolean true if the check passed and the file may be added
+	 */
+	public static function checkQuota($newBytes) {
+		$enoughQuota = true;
+		$userQuota = GO::user()->disk_quota;
+		if ($userQuota) {
+			$enoughQuota = GO::user()->disk_usage + $newBytes <= $userQuota;
+		}
+		if ($enoughQuota && GO::config()->quota > 0) {
+			$currentQuota = GO::config()->get_setting('file_storage_usage');
+			$enoughQuota = $currentQuota + $newBytes <= GO::config()->quota;
+		}
+		return $enoughQuota;
 	}
 
 	
