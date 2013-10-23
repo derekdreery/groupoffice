@@ -506,6 +506,8 @@ class GO{
 		//Start session here. Important that it's called before GO::config().
 		GO::session();
 		
+		date_default_timezone_set(GO::user() ? GO::user()->timezone : GO::config()->default_timezone);
+		
 		//set local to utf-8 so functions will behave consistently
 		if ( !empty(GO::config()->locale_all) )
 			setlocale(LC_ALL, GO::config()->locale_all);
@@ -523,7 +525,7 @@ class GO{
 		elseif(PHP_SAPI!='cli')
 			ini_set("display_errors","Off");
 
-		date_default_timezone_set(GO::user() ? GO::user()->timezone : GO::config()->default_timezone);
+		
 
 		if (self::config()->firephp) {
 			if (self::requireExists('FirePHPCore/fb.php')) {
