@@ -2,4 +2,4 @@ groupoffice-mailserver (5.0.16) fivezero; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Wed, 23 Oct 2013 17:17:46 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Wed, 23 Oct 2013 17:29:40 +0200
