@@ -73,3 +73,9 @@ $l['ticketCreatedText']="Thank you, we recieved your ticket and we will keep you
 $l['gotoTicket']="Go to ticket";
 
 $l['selectOne']="Select one";
+
+$l['contactformTitle']="Contact form";
+$l['contactformText']="Fill out this form and click on 'Ok' to register. The fields marked with a * are required.";
+
+$l['addressbookNotFound']="No address book found with name '%s'.";
+$l['contactformDoneText']="We have succesfully received your registration.";
