@@ -234,26 +234,26 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	}
 
         /**
-         * This method will (re)calculate the used diskspace for this user
-         * @param integer $bytes The amount of bytes to add to the users used diskspace (negative for substraction)
-         * @return GO_Base_Model_User itself for chaining eg. $user->calculatedDiskUsage()->save()
-         */
-        public function calculatedDiskUsage($bytes=false) {
-            if(GO::modules()->isInstalled('files')) {
-                if(!$bytes) { //recalculated
-                    $fp=GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('user_id', $this->id));
-                    $sumFilesize = GO_Base_Model_Grouped::model()->load('GO_Files_Model_File', 'user_id', 'SUM(size) as total_size',$fp)->fetch();
-                    //GO::debug($sumFilesize->total_size);
-                    if($sumFilesize)
-                        $this->disk_usage = $sumFilesize->total_size;
-                } else {
-                    $this->disk_usage+=$bytes;
-                }
-            } else
-                throw new Exceptions('Can not calculated diskusage without the files module');
-            return $this;
-        }
-        
+	 * This method will (re)calculate the used diskspace for this user
+	 * @param integer $bytes The amount of bytes to add to the users used diskspace (negative for substraction)
+	 * @return GO_Base_Model_User itself for chaining eg. $user->calculatedDiskUsage()->save()
+	 */
+	public function calculatedDiskUsage($bytes = false) {
+		if (GO::modules()->isInstalled('files')) {
+			if (!$bytes) { //recalculated
+				$fp = GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('user_id', $this->id));
+				$sumFilesize = GO_Base_Model_Grouped::model()->load('GO_Files_Model_File', 'user_id', 'SUM(size) as total_size', $fp)->fetch();
+				//GO::debug($sumFilesize->total_size);
+				if ($sumFilesize)
+					$this->disk_usage = $sumFilesize->total_size;
+			} else {
+				$this->disk_usage+=$bytes;
+			}
+		} else
+			throw new Exceptions('Can not calculated diskusage without the files module');
+		return $this;
+	}
+
 	public function validate() {
 		
 		if($this->max_rows_list > 250)
