@@ -1,10 +1,11 @@
-5.0.16
+23-10-2013 5.0.16
 - Fixed problem with some email attachments that didn't have an extension.
 - Fixed problem with external link not opening the correct folder in the files module
 - Email & Address Book: Default email template for email account.
 - Address Book: Added address book column in Address List Management
 - New theme CSS enhancements
 - Default Site Module: able to register for Address List from contact form.
+- 4.2.26 fixes
 
 
 21-10-2013 5.0.15
@@ -85,6 +86,9 @@
 - Address Book module: photos functionality for companies.
 - Projects module: 'show in tree' check box for project statuses.
 
+23-10-2013 4.2.26
+- Rebuild GOTA with permissions attribute in manifest
+- Saving settings cleared addresslists when this tab was not selected and activated in the settings
 
 17-10-2013 4.2.25
 - Billing: Order PDF - Extra spacing in top after Page Break, if logo is on every page.
