@@ -1,4 +1,5 @@
-- Rebuid GOTA with permissions attribute in manifest
+23-10-2013 4.2.26
+- Rebuild GOTA with permissions attribute in manifest
 - Saving settings cleared addresslists when this tab was not selected and activated in the settings
 
 17-10-2013 4.2.25
