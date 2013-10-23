@@ -232,7 +232,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 */
 	public static function checkQuota($newBytes) {
 		$enoughQuota = true;
-		$userQuota = GO::user()->disk_quota;
+		$userQuota = GO::user()->getDiskQuota();
 		if ($userQuota) {
 			$enoughQuota = GO::user()->disk_usage + $newBytes <= $userQuota;
 		}

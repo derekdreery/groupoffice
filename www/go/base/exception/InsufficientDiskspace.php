@@ -21,13 +21,47 @@
 
 class GO_Base_Exception_InsufficientDiskspace extends Exception
 {
-
+	private $_total_file_storage;
+	
 	public function __construct($message='') {
-		
-		$currentQuota = GO::config()->get_setting('file_storage_usage');
-			
-		$message = GO::t('quotaExceeded')."\n".sprintf(GO::t('youAreUsing'),  GO_Base_Util_Number::formatSize($currentQuota), GO_Base_Util_Number::formatSize(GO::config()->quota)).$message;
+
+		$message = GO::t('quotaExceeded')."\n".sprintf(GO::t('youAreUsing'),  GO_Base_Util_Number::formatSize($this->getUsage()), GO_Base_Util_Number::formatSize($this->getQuota())).$message;
 		
 		parent::__construct($message);
+	}
+	
+	/**
+	 * Get the quota limit that was overwritten
+	 * @return integer quota in bytes
+	 */
+	protected function getQuota() {
+		if(GO::config()->quota < $this->getTotalUsage() && GO::config()->quota > 0)
+			return GO::config()->quota;
+		if(GO::user() && GO::user()->disk_quota)
+			return GO::user()->getDiskQuota();
+		return GO::config()->quota;
+	}
+	
+	/**
+	 * Get the amount is diskspace used when exciding quota
+	 * Depending on the quota that is reached
+	 * @return integer Disk uage in bytes
+	 */
+	protected function getUsage() {
+		if(GO::config()->quota < $this->getTotalUsage() && GO::config()->quota > 0)
+			return $this->getTotalUsage();
+		if(GO::user() && GO::user()->disk_usage)
+			return GO::user()->disk_usage;
+		return $this->getTotalUsage();
+	}
+	
+	/**
+	 * Query the file_storage_usage once;
+	 * @return integer total file storage usage in bytes
+	 */
+	protected function getTotalUsage() {
+		if(!isset($this->_total_file_storage))
+			$this->_total_file_storage=GO::config()->get_setting('file_storage_usage');
+		return $this->_total_file_storage;
 	}
 }
