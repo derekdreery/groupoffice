@@ -13,7 +13,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	 * If no ID is passed diskspace will be recalculated for all user
 	 * @param integer $id id of the user to recalculate used space for
 	 */
-	protected function actionRecalculatedDiskUsage($id=false) {
+	protected function actionRecalculateDiskUsage($id=false) {
 		if(!empty($id)) {
 			$user = GO_Base_Model_User::model()->findByPk($id);
 			if(!empty($user) && $user->calculatedDiskUsage()->save())
