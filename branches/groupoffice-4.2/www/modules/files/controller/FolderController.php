@@ -41,17 +41,23 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		GO::session()->runAsRoot();
 
-		$folders = array('users','projects','addressbook','notes','tickets');
-		
-		$billingFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'billing');
-		if($billingFolder->exists()){
-			$bFolders = $billingFolder->ls();
-			
-			foreach($bFolders as $folder){		
-					if($folder->isFolder() && $folder->name()!='notifications'){
-						$folders[]='billing/'.$folder->name();
-					}
-			}		
+		if(isset($params['path'])){
+			$folders = array($params['path']);
+		}else
+		{
+			$folders = array('users','projects','addressbook','notes','tickets');
+
+
+			$billingFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'billing');
+			if($billingFolder->exists()){
+				$bFolders = $billingFolder->ls();
+
+				foreach($bFolders as $folder){		
+						if($folder->isFolder() && $folder->name()!='notifications'){
+							$folders[]='billing/'.$folder->name();
+						}
+				}		
+			}
 		}
 
 		echo "<pre>";
@@ -59,7 +65,13 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			echo "Syncing ".$name."\n";
 			try{
 				$folder = GO_Files_Model_Folder::model()->findByPath($name, true);
+				
+				if(!$folder)
+					throw new Exception("Could not find or create folder");
+				
 				$folder->syncFilesystem(true);
+				
+				
 			}
 			catch(Exception $e){
 				if (PHP_SAPI != 'cli')
@@ -71,24 +83,26 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		echo "Done\n";
 
-		GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
-		$folders = array('email', 'billing/notifications');
+		if(!isset($params['path'])){
+			GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
+			$folders = array('email', 'billing/notifications');
 
-		foreach($folders as $name){
+			foreach($folders as $name){
 
-			echo "Deleting ".$name."\n";
-			GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
-			GO_Files_Model_File::$deleteInDatabaseOnly=true;
-			try{
-				$folder = GO_Files_Model_Folder::model()->findByPath($name);
-				if($folder)
-						$folder->delete();
-			}
-			catch(Exception $e){
-				if (PHP_SAPI != 'cli')
-					echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
-				else
-					echo $e->getMessage()."\n";
+				echo "Deleting ".$name."\n";
+				GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
+				GO_Files_Model_File::$deleteInDatabaseOnly=true;
+				try{
+					$folder = GO_Files_Model_Folder::model()->findByPath($name);
+					if($folder)
+							$folder->delete();
+				}
+				catch(Exception $e){
+					if (PHP_SAPI != 'cli')
+						echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
+					else
+						echo $e->getMessage()."\n";
+				}
 			}
 		}
 	}
