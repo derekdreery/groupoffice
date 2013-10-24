@@ -232,3 +232,5 @@ $l['show_completed_tasks'] = "Toon afgeronde taken";
 $l['eventNotSavedSubject'] = 'Afspraak "%event" niet opgeslagen in agenda "%cal"';
 $l['eventNotSavedBody'] = 'Deze boodschap komt van uw %goname agenda. %goname heeft een poging gedaan om een afspraak genaamd "%event" met starttijd %starttime te importeren van een externe agenda naar agenda "%cal", maar kon dat niet omdat de afspraak fouten bevatte. De afspraak is wellicht nog terug te vinden in de externe agenda.'.
 								"\r\n\r\n".'Het volgende is de foutmelding:'."\r\n".'%errormessage';
+
+$l['usedResources'] = 'Gebruikte hulpmiddelen';

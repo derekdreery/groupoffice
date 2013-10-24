@@ -714,6 +714,9 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				if (eventData.repeats)
 					text += '<span class="cal-recurring"></span>';
 				
+				if (!GO.util.empty(eventData.resources))
+					text += '<span class="cal-resources"></span>';
+				
 				var domCfg = {
 					tag: 'div',
 					id: eventData.domId,
