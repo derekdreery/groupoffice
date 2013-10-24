@@ -1,5 +1,6 @@
-5.0.17
+24-10-2013 5.0.17
 - SMIME decrypt bug
+- iconv error
 
 23-10-2013 5.0.16
 - Fixed problem with some email attachments that didn't have an extension.
