@@ -81,15 +81,21 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			$alias->signature = $params['signature'];
 			$alias->save();
 		}
-		
-		if (!empty($params['default_account_template_id']) && GO::modules()->isInstalled('addressbook')) {
-			$defaultTemplateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($model->id);
-			if (!$defaultTemplateModel) {
-				$defaultTemplateModel = new GO_Addressbook_Model_DefaultTemplateForAccount();
-				$defaultTemplateModel->account_id = $model->id;
+
+		if (GO::modules()->addressbook && isset($params['default_account_template_id'])) {
+			if ($params['default_account_template_id']==-1 || empty($params['default_account_template_id'])) {
+				$defaultTemplateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($model->id);
+				if ($defaultTemplateModel)
+					$defaultTemplateModel->delete();			
+			} elseif ($params['default_account_template_id']>0) {
+				$defaultTemplateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($model->id);
+				if (!$defaultTemplateModel) {
+					$defaultTemplateModel = new GO_Addressbook_Model_DefaultTemplateForAccount();
+					$defaultTemplateModel->account_id = $model->id;
+				}
+				$defaultTemplateModel->template_id = $params['default_account_template_id'];
+				$defaultTemplateModel->save();
 			}
-			$defaultTemplateModel->template_id = $params['default_account_template_id'];
-			$defaultTemplateModel->save();
 		}
 
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
