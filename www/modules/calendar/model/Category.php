@@ -20,6 +20,7 @@
  * @property String $name
  * @property String $color eg. "EBF1E2"
  * @property int $calendar_id
+ * @property int $acl_id
  */
 
 class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
@@ -44,12 +45,9 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 		return $this->name;
 	}
 
-	/**
-	 * Enable this function if you want this model to check the acl's automatically.
-	 */
-	// public function aclField(){
-	//	 return 'acl_id';	
-	// }
+	public function aclField() {
+		return 'acl_id';
+	}
 
 	/**
 	 * Returns the table name

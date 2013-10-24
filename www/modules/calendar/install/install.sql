@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `cal_categories` (
   `name` varchar(255) NOT NULL,
   `color` char(6) NOT NULL DEFAULT 'EBF1E2',
   `calendar_id` int(11) NOT NULL,
+	`acl_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `calendar_id` (`calendar_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
