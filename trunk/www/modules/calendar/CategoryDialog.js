@@ -6,8 +6,8 @@ GO.calendar.CategoryDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			goDialogId:'category',
 			title:GO.calendar.lang.category,
 			formControllerUrl: 'calendar/category',
-      width: 500,
-      height: 300
+      width: 550,
+      height: 600
 		});
 		
 		GO.calendar.CategoryDialog.superclass.initComponent.call(this);	
@@ -172,6 +172,7 @@ GO.calendar.CategoryDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		]});
 
 		this.addPanel(this.propertiesPanel);
+		this.addPermissionsPanel(new GO.grid.PermissionsPanel({}));
 	},
 	
 	setCalendarId : function(id){
