@@ -48,7 +48,8 @@ GO.calendar.ListGrid = function(config)
 			'ctime',
 			'mtime',
 			'username',
-			'musername'
+			'musername',
+			'resources'
 			]
 		}),
 		proxy: new Ext.data.HttpProxy({

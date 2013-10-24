@@ -60,6 +60,9 @@ GO.calendar.CalendarEvent = Ext.data.Record.create([
 },
 {
 	name: 'calendar_id'
+},
+{
+	name: 'resources'
 }
 ]);
 
@@ -1243,6 +1246,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			text += '<span class="cal-has-reminders"></span>';
 		if (eventData.repeats)
 				text += '<span class="cal-recurring"></span>';
+
+		if (!GO.util.empty(eventData.resources))
+			text += '<span class="cal-resources"></span>';
 
 		var domId = this.lastDomId = eventData.domId = Ext.id();
 		this.registerEvent(domId, eventData);
