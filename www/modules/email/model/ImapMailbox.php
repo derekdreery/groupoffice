@@ -324,7 +324,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		
 		$cached = GO::cache()->get($this->_getCacheKey());
 		GO::debug($cached.' = '.$this->unseen);
-		return ($cached != $this->unseen);			
+		return ($cached != $this->unseen && $this->unseen>0);			
 	}
 	
 	/**
