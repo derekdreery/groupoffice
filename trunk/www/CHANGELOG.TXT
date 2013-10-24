@@ -1,3 +1,5 @@
+- Tasks & Reminders: get reminder when another user puts a task in your task list
+
 21-10-2013 5.0.15
 - Install bug in projects2 module.
 
