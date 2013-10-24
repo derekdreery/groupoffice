@@ -1,6 +1,8 @@
-23-10-2013 4.2.26
+24-10-2013 4.2.26
 - Rebuild GOTA with permissions attribute in manifest
 - Saving settings cleared addresslists when this tab was not selected and activated in the settings
+- Fixed SMIME Message view with clear text disabled
+- Add timestamps to backup jobs
 
 17-10-2013 4.2.25
 - Billing: Order PDF - Extra spacing in top after Page Break, if logo is on every page.
