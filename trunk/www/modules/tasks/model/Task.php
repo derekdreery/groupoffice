@@ -133,6 +133,28 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		if($this->isModified('project_id') && $this->project)
 			$this->link($this->project);
 		
+		if ($wasNew && GO::modules()->isInstalled('reminders') && $this->tasklist->user_id!=GO::user()->id ) {		
+			$this->addReminder($this->name, time(), $this->tasklist->user_id, $this->start_time);
+//			
+//			$reminderModel = new GO_Base_Model_Reminder();
+//			$reminderModel->user_id = $this->tasklist->user_id;
+//			$reminderModel->name = $this->name;
+//			$modelType = GO_Base_Model_ModelType::model()->findSingleByAttribute('model_name',get_class($this));
+//			$reminderModel->model_type_id = !empty($modelType) ? $modelType->id : 0;
+//			$reminderModel->model_id = $this->id;
+//			$reminderModel->time = $now;
+//			$reminderModel->vtime = $this->start_time;
+//			$reminderModel->text = $this->description;
+//			$reminderModel->manual = 1;
+//			$reminderModel->save();
+//			
+//			$reminderUserModel = new GO_Base_Model_ReminderUser();
+//			$reminderUserModel->reminder_id = $reminderModel->id;
+//			$reminderUserModel->user_id = $this->tasklist->user_id;
+//			$reminderUserModel->time = $now;
+//			$reminderUserModel->save();
+		}
+		
 		return parent::afterSave($wasNew);
 	}
 	
