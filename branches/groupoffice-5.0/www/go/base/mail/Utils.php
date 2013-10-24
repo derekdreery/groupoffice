@@ -2,7 +2,6 @@
 
 class GO_Base_Mail_Utils{
 	public static function mimeHeaderDecode($string, $defaultCharset='UTF-8') {
-
 		/*
 		 * (=?ISO-8859-1?Q?a?= =?ISO-8859-1?Q?b?=)     (ab)
 		 *  White space between adjacent 'encoded-word's is not displayed.
@@ -29,7 +28,7 @@ class GO_Base_Mail_Utils{
 
 				$string = str_replace($v, $fld, $string);
 			}
-		}	elseif(($pos = strpos($string, "''"))){
+		}	elseif(($pos = strpos($string, "''")) && $pos < 64){ //check pos for not being to great
 			//eg. iso-8859-1''%66%6F%73%73%2D%69%74%2D%73%6D%61%6C%6C%2E%67%69%66
 			$charset = substr($string,0, $pos);
 			
