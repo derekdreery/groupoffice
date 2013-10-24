@@ -1,3 +1,6 @@
+5.0.17
+- SMIME decrypt bug
+
 23-10-2013 5.0.16
 - Fixed problem with some email attachments that didn't have an extension.
 - Fixed problem with external link not opening the correct folder in the files module
@@ -86,9 +89,11 @@
 - Address Book module: photos functionality for companies.
 - Projects module: 'show in tree' check box for project statuses.
 
-23-10-2013 4.2.26
+24-10-2013 4.2.26
 - Rebuild GOTA with permissions attribute in manifest
 - Saving settings cleared addresslists when this tab was not selected and activated in the settings
+- Fixed SMIME Message view with clear text disabled
+- Add timestamps to backup jobs
 
 17-10-2013 4.2.25
 - Billing: Order PDF - Extra spacing in top after Page Break, if logo is on every page.
