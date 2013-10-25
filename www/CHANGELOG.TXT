@@ -1,3 +1,5 @@
+- Custom Fields: Textarea custom field input field has no maximum length.
+
 24-10-2013 5.0.17
 - SMIME decrypt bug
 - iconv error
