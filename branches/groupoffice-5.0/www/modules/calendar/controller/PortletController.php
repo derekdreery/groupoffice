@@ -83,7 +83,7 @@ class GO_Calendar_Controller_Portlet extends GO_Base_Controller_AbstractMultiSel
 		foreach($events as $event){
 			$record = $event->getResponseData();
 			$record['day']=$event->getAlternateStartTime()<$today_end ? GO::t('today') : GO::t('tomorrow');
-			
+			$record['time']=$event->getEvent()->all_day_event==1 ? '-' : $record['time'];
 			$store->addRecord($record);
 		}
 		
