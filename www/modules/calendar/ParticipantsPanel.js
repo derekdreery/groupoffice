@@ -73,14 +73,6 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 			this.gridPanel.deleteSelected();
 		},
 		scope : this
-	}, {
-		iconCls : 'btn-availability',
-		text : GO.calendar.lang.checkAvailability,
-		cls : 'x-btn-text-icon',
-		handler : function() {
-			this.checkAvailability();
-		},
-		scope : this
 	}];
 
 	if(GO.addressbook){
@@ -487,45 +479,22 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 		
 	},
 	
-	checkAvailability : function() {
-		if (!this.availabilityWindow) {
-			this.availabilityWindow = new GO.calendar.AvailabilityCheckWindow();
-			this.availabilityWindow.on('select', function(dataview, index, node) {
-				var d = this.eventDialog;				
-				d.startDate.setValue(Date.parseDate(
-					dataview.store.baseParams.date,
-					GO.settings.date_format));
-				d.endDate.setValue(Date.parseDate(
-					dataview.store.baseParams.date,
-					GO.settings.date_format));
-					
-				var oldStartTime = Date.parseDate(d.startTime.getValue(), GO.settings.time_format);
-				var oldEndTime = Date.parseDate(d.endTime.getValue(), GO.settings.time_format);
-				var elapsed = oldEndTime.getElapsed(oldStartTime);
-
-
-				var time = Date.parseDate(node.id.substr(4), 'G:i');
-				d.startTime.setValue(time.format(GO.settings.time_format));
-				d.endTime.setValue(time.add(Date.MILLI, elapsed).format(GO.settings.time_format));
-				
-				d.tabPanel.setActiveTab(0);
-				this.reloadAvailability();
-				this.availabilityWindow.hide();
-			}, this);
-		}
+	getParticipantEmails : function() {
 		var records = this.store.getRange();
 		var emails = [];
-		var names = [];
 		for (var i = 0; i < records.length; i++) {
 			emails.push(records[i].get('email'));
+		}
+		return emails;
+	},
+					
+	getParticipantNames : function() {
+		var records = this.store.getRange();
+		var names = [];
+		for (var i = 0; i < records.length; i++) {
 			names.push(records[i].get('name'));
 		}
-		this.availabilityWindow.show({
-			date : this.eventDialog.startDate.getRawValue(),
-			event_id : this.event_id,
-			emails : Ext.encode(emails),
-			names : Ext.encode(names)
-		});
+		return names;
 	}
 
 });
