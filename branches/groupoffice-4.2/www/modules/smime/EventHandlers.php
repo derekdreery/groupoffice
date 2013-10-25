@@ -100,7 +100,7 @@ class GO_Smime_EventHandlers {
 				if (!empty($value) || $key == 'attachments')
 					$response[$key] = $value;
 			}
-			$response['path'] = $outfile->stripTempPath();
+//			$response['path'] = $outfile->stripTempPath();
 			return;
 		}
 		
@@ -199,7 +199,7 @@ class GO_Smime_EventHandlers {
 							$response[$key]=$value;
 					}
 					$response['smime_encrypted']=true;
-					$response['path']=$outfile->stripTempPath();
+//					$response['path']=$outfile->stripTempPath();
 					
 					$outfile->delete();
 				}
