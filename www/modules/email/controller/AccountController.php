@@ -100,9 +100,13 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
-
+	
 	protected function remoteComboFields() {
-		return array('user_id' => '$model->user->name');
+		if (GO::modules()->addressbook)
+			return array('user_id' => '$model->user->name',
+					'default_template_id' => '$model->defaultTemplate->emailTemplate->name');
+		else
+			return array('user_id' => '$model->user->name');
 	}
 
 	protected function actionCheckUnseen($params) {
