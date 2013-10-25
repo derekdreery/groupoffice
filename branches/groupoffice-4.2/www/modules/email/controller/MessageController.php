@@ -1097,7 +1097,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 	public function actionView($params) {
 		
-		GO::session()->closeWriting();
+//		Do not close session writing because SMIME stores the password in the session
+//		GO::session()->closeWriting();
 
 		$params['no_max_body_size'] = !empty($params['no_max_body_size']) && $params['no_max_body_size']!=='false' ? true : false;
 		
