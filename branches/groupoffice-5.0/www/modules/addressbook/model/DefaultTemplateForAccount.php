@@ -14,6 +14,14 @@ class GO_Addressbook_Model_DefaultTemplateForAccount extends GO_Base_Db_ActiveRe
 		return 'account_id';
 	}
 	
+	public function relations(){
+		return array(
+			'emailTemplate' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Template', 'field'=>'template_id'),
+			'emailAccount' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Email_Model_Account', 'field'=>'account_id')
+		);
+	}
+
+	
 	protected function defaultAttributes() {
 		$attr = parent::defaultAttributes();
 		
