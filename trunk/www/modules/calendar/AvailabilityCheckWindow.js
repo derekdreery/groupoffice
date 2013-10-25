@@ -100,7 +100,8 @@ GO.calendar.AvailabilityCheckWindow = function(config) {
 								emails:'',
 								names:'',
 								event_id:0,
-								date: ''
+								date: '',
+								resourceIds: ''
 							}
 						}),
 				tpl : tpl,
@@ -181,6 +182,7 @@ Ext.extend(GO.calendar.AvailabilityCheckWindow, GO.Window, {
 			this.dataView.store.baseParams.event_id=config.event_id;
 			this.dataView.store.baseParams.emails=config.emails;
 			this.dataView.store.baseParams.names=config.names;
+			this.dataView.store.baseParams.resourceIds=config.resourceIds;
 			this.dataView.store.load();
 			
 			GO.calendar.AvailabilityCheckWindow.superclass.show.call(this);

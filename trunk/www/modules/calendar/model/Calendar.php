@@ -181,4 +181,33 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	
 		return $default;
 	}
+	
+	public function getFreeBusyInfo($startTimeUnix,$currentModelId=0) {
+		
+		$free_busy = array();
+		for ($i = 0; $i < 1440; $i+=15) {
+			$free_busy[$i] = 0;
+		}
+		
+		
+		foreach ($free_busy as $min=>$busy) {
+			
+			$model = GO_Calendar_Model_Event::model()->find(
+				GO_Base_Db_FindParams::newInstance()
+					->single()
+					->ignoreAcl()
+					->criteria(GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('calendar_id', $this->id, '=')
+						->addCondition('start_time',$startTimeUnix+$min*60+15*60,'<')
+						->addCondition('end_time',$startTimeUnix+$min*60,'>')
+					)
+			);
+			
+			$free_busy[$min] = !empty($model) && $model->id!=$currentModelId ? 1 : 0;
+			
+		}
+		
+		return $free_busy;
+		
+	}
 }

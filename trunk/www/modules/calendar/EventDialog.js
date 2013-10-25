@@ -120,6 +120,16 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			}
 		},this);
 		}
+		
+		tbar.push(this.checkAvailabilityButton = new Ext.Button({
+			iconCls : 'btn-availability',
+			text : GO.calendar.lang.checkAvailability,
+			cls : 'x-btn-text-icon',
+			handler : function() {
+				this.checkAvailability();
+			},
+			scope : this
+		}));
 
 		this.win = new GO.Window({
 			layout : 'fit',
@@ -1486,5 +1496,57 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			this.formPanel.form.findField(days[day])
 			.setDisabled(disabled);
 		}
+	},
+	
+	getResourceIds : function() {
+		var components = this.formPanel.findBy(function(component,container){
+			if (!GO.util.empty(component.checkboxName) && component.checkboxName.substring(0,10)=='resources[' && !component.collapsed) {
+				return true;
+			}
+			return false;
+		}, this);
+		
+		var idsArr = new Array();
+		
+		for (var i=0; i<components.length; i++) {
+			var stringArr = components[i].id.substring(9).split(']');
+			idsArr.push(stringArr[0]);
+		}
+		
+		return idsArr;
+	},
+						
+	checkAvailability : function() {
+		if (!this.availabilityWindow) {
+			this.availabilityWindow = new GO.calendar.AvailabilityCheckWindow();
+			this.availabilityWindow.on('select', function(dataview, index, node) {
+				this.startDate.setValue(Date.parseDate(
+					dataview.store.baseParams.date,
+					GO.settings.date_format));
+				this.endDate.setValue(Date.parseDate(
+					dataview.store.baseParams.date,
+					GO.settings.date_format));
+					
+				var oldStartTime = Date.parseDate(this.startTime.getValue(), GO.settings.time_format);
+				var oldEndTime = Date.parseDate(this.endTime.getValue(), GO.settings.time_format);
+				var elapsed = oldEndTime.getElapsed(oldStartTime);
+
+				var time = Date.parseDate(node.id.substr(4), 'G:i');
+				this.startTime.setValue(time.format(GO.settings.time_format));
+				this.endTime.setValue(time.add(Date.MILLI, elapsed).format(GO.settings.time_format));
+				
+				this.tabPanel.setActiveTab(0);
+				this.reloadAvailability();
+				this.availabilityWindow.hide();
+			}, this);
+		}
+		this.availabilityWindow.show({
+			date : this.startDate.getRawValue(),
+			event_id : this.event_id,
+			emails : Ext.encode(this.participantsPanel.getParticipantEmails()),
+			names : Ext.encode(this.participantsPanel.getParticipantNames()),
+			resourceIds : Ext.encode(this.getResourceIds())
+		});
 	}
+	
 });
