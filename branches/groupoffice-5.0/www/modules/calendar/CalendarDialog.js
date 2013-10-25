@@ -119,7 +119,7 @@ GO.calendar.CalendarDialog = function(config)
 			name:'url',
 			anchor:'100%'
 		},{
-			xtype:'checkbox',
+			xtype:'xcheckbox',
 			hideLabel:true,
 			boxLabel:GO.calendar.lang.publishICS,
 			name:'public'
