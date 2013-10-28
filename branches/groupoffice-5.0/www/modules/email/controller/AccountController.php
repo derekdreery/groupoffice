@@ -262,7 +262,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							//'usage' => "",
 							//"acl_supported"=>false
 					);
-					if($account->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
+					if($node['permission_level']<= GO_Base_Model_Acl::READ_PERMISSION)
 					  $node['cls'] = 'em-readonly';
 		
 //					try{						
