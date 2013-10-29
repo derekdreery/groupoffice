@@ -714,6 +714,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$response['title']= '';
 		$response['results'] = array();
 		
+		//dirty hack to save multiselect grid state
+		if(isset($_REQUEST['calendars']))
+			GO::config()->save_setting('ms_calendars', implode(',', json_decode($_REQUEST['calendars'])), GO::session()->values['user_id']);
+		
 		if(!empty($params['start_time']))
 			$startTime = $params['start_time'];
 		else
