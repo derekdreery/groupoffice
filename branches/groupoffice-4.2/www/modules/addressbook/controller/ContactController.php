@@ -753,7 +753,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->searchQuery('%'.preg_replace ('/[\s*]+/','%', $params['query']).'%')
 						->select('t.*, addressbook.name AS ab_name, c.name AS company_name')
-						->limit(20)
+						//->limit(20)
 						->joinModel(array(
 							'model'=>'GO_Addressbook_Model_Company',					
 							'foreignField'=>'id', //defaults to primary key of the remote model
@@ -762,6 +762,28 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 							'type'=>'LEFT' //defaults to INNER,
 						));
 
+		if(!isset($params['limit']))
+			$findParams->limit(20);
+		else
+			$findParams->limit($params['limit']);
+		
+		$findParams->calcFoundRows();
+		
+		if(isset($params['start']))
+			$findParams->start($params['start']);
+		
+		$sortAlias = GO::user()->sort_name=="first_name" ? array('first_name','last_name') : array('last_name','first_name');
+		
+		if(isset($params['sort']) && isset($params['dir'])){
+			
+			if($params['sort'] == 'name' )
+				$findParams->order($sortAlias,$params['dir']);
+			else
+				$findParams->order($params['sort'],$params['dir']);
+		}else{
+			$findParams->order($sortAlias);
+		}
+		
 		$criteria = GO_Base_Db_FindCriteria::newInstance()
 							->addCondition("email", "","!=")
 							->addCondition("email2", "","!=",'t',false)
@@ -770,7 +792,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$findParams->getCriteria()->mergeWith($criteria);
 
 		$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
-
+		
+		$response['total']= $stmt->foundRows;
 
 		while ($contact = $stmt->fetch()) {
 			
