@@ -1017,7 +1017,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @return array 
 	 */
 	private function _getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime){
-		$adressbooks = GO_Addressbook_Model_Addressbook::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION));
+		$adressbooks = GO_Addressbook_Model_Addressbook::model()->find(
+						GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION, $calendar->user_id)
+						);
 		
 		$resultCount = 0;
 		$dayString = GO::t('full_days');
