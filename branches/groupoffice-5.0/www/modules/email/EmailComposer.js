@@ -482,9 +482,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					this.templatesMenu.setChecked(newAccountRecord.get('template_id'));
 					if (!this.emailEditor.isDirty() || confirm(GO.email.lang['confirmLostChanges']))
 						this._changeTemplate(newAccountRecord.get('template_id'));
-	//				Ext.getBody().unmask();
-					this._setSignature(cb,newAccountRecord);
-}
+			}
+			this._setSignature(cb,newAccountRecord);
 //				},
 //				scope:this
 //			});
