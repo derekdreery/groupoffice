@@ -2,11 +2,16 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 	
 	originalImgSize : false,
 	
+	fullSize:false,
+	
 	viewerImages : Array(),
 	
 	currentImgIndex : 0,
 	
+	stateId : 'go-imageviewer',
+	
 	initComponent : function(){
+		
 		
 		this.border=false;
 		this.plain=true;
@@ -59,7 +64,7 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		})];
 		
 		GO.files.ImageViewer.superclass.initComponent.call(this);
-		this.on('resize', this.syncImgSize, this);
+		this.on('resize', function(){this.syncImgSize(this.fullSize);}, this);
 	},
 
 	
@@ -77,6 +82,9 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		
 	loadImage : function(index, fullSize)
 	{
+		
+		this.fullSize=fullSize;
+		
 		this.body.mask(GO.lang.waitMsgLoad);
 		
 		this.setTitle(this.viewerImages[index].name);
