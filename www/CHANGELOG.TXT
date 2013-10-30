@@ -1,3 +1,4 @@
+- The automatic link email to contact will only link the email once.
 - Calendar: Fix: Able to turn off calendar publishing.
 - Custom Fields: Textarea custom field input field has no maximum length.
 - Summary / Start Page: Times of all-day-events are not displayed, to denote they are all-day-events.
