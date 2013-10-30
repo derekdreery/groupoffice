@@ -733,7 +733,7 @@ GO.addressbook.searchSender = function(sender, name){
 							autoScroll:true,
 							closeAction:'hide',
 							closeable:true,
-							height:120,
+							height:160,
 							width:400,
 							buttons:[{
 								text: GO.addressbook.lang.newContact,
