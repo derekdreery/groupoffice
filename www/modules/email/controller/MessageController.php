@@ -491,7 +491,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						$contact = $stmt->fetch();
 			
 
-						if($contact){					
+						if($contact){
 							$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
 							$linkedEmail->setAttributes($attributes);
 							$linkedEmail->acl_id = $contact->findAclId();
@@ -1151,7 +1151,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$response = $this->_handleInvitations($imapMessage, $params, $response);
 				
 				//Commented out because it would autolink to email every time you read it @see _link() where it's already handeled
-				//$response = $this->_handleAutoContactLinkFromSender($imapMessage, $params, $response);
+				$response = $this->_handleAutoContactLinkFromSender($imapMessage, $params, $response);
 			}
 		}
 		
