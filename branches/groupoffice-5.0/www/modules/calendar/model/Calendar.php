@@ -146,7 +146,8 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 			$stmt = $this->group->admins;
 		 
 		 foreach($stmt as $user){
-			 $this->acl->addUser($user->user_id, GO_Base_Model_Acl::DELETE_PERMISSION);
+			 if($user->user_id!=$this->user_id)//the owner has already been added automatically with manage permission
+				$this->acl->addUser($user->user_id, GO_Base_Model_Acl::DELETE_PERMISSION);
 		 }
 		}
 		return parent::afterSave($wasNew);
