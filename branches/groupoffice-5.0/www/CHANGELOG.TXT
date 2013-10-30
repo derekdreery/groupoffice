@@ -6,6 +6,7 @@
 - Summary / Start Page: Times of all-day-events are not displayed, to denote they are all-day-events.
 - Email composer: always change signature when changing from-email address.
 - Email composer: fix for spontaneous default account template creation on opening Email Composer.
+- Fixes of 4.2.27
 
 24-10-2013 5.0.17
 - SMIME decrypt bug
@@ -99,7 +100,7 @@
 - Address Book module: photos functionality for companies.
 - Projects module: 'show in tree' check box for project statuses.
 
-
+30-10-2013 4.2.27
 - Fixed problem with emailing files from the scanbox and then change the template of the email.
 - Show birthdays of calendar owner instead of logged in user
 - GOTA uses GET parameters and has permissions attribute in manifest
