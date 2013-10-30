@@ -1,3 +1,9 @@
+- Show birthdays of calendar owner instead of logged in user
+- GOTA uses GET parameters and has permissions attribute in manifest
+- JUpload has permissions attribute
+- New resource could have wrong permissions initially
+- Imageview didn't want to resize image
+
 24-10-2013 4.2.26
 - Rebuild GOTA with permissions attribute in manifest
 - Saving settings cleared addresslists when this tab was not selected and activated in the settings
