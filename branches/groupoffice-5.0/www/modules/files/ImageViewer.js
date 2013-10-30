@@ -2,11 +2,16 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 	
 	originalImgSize : false,
 	
+	fullSize:false,
+	
 	viewerImages : Array(),
 	
 	currentImgIndex : 0,
 	
+	stateId : 'go-imageviewer',
+	
 	initComponent : function(){
+		
 		
 		this.border=false;
 		this.plain=true;
@@ -59,7 +64,7 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		})];
 		
 		GO.files.ImageViewer.superclass.initComponent.call(this);
-		this.on('resize', this.syncImgSize, this);
+		this.on('resize', function(){this.syncImgSize(this.fullSize);}, this);
 	},
 
 	
@@ -77,6 +82,9 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		
 	loadImage : function(index, fullSize)
 	{
+		
+		this.fullSize=fullSize;
+		
 		this.body.mask(GO.lang.waitMsgLoad);
 		
 		this.setTitle(this.viewerImages[index].name);
@@ -97,7 +105,7 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		if (!this.viewerImages[index].download_path)
 			this.viewerImages[index].download_path = this.viewerImages[index].src;
 
-		this.imgEl.initDD(null);
+//		this.imgEl.initDD(null);
 		
 		this.syncImgSize(fullSize);
 		
@@ -151,7 +159,7 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 
 				if(!fullSize && (w!=this.originalImgSize.width || h!=this.originalImgSize.height)){
 					this.normalSizeBtn.setDisabled(false);
-					this.fitImageBtn.setDisabled(false);
+//					this.fitImageBtn.setDisabled(false);
 
 					this.imgEl.setWidth(w);
 					this.imgEl.setHeight(h);
@@ -160,8 +168,8 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 					
 				}else
 				{
-					this.normalSizeBtn.setDisabled(!fullSize);
-					this.fitImageBtn.setDisabled(!fullSize);
+					this.normalSizeBtn.setDisabled(fullSize);
+//					this.fitImageBtn.setDisabled(fullSize);
 				}
 
 				if(h<bodySize.height){
