@@ -82,7 +82,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		// 'type' is only set by the client if a template should be selected as default.
 		// The user can choose to set the default template for an email account or
 		// for himself (current user).
-		if ((!empty($params['type']) && $params['type']=='default_for_account') || !empty($params['account_id'])) {
+		if ((!empty($params['type']) && $params['type']=='default_for_account') || (!empty($params['account_id']) && isset($params['default_template_id']))) {
 			$defTempForAccount = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($params['account_id']);
 			if(!$defTempForAccount){
 				$defTempForAccount= new GO_Addressbook_Model_DefaultTemplateForAccount();
