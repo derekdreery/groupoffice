@@ -1,3 +1,4 @@
+30-10-2013 5.0.18
 - Hide disabled fields in projects 2 module
 - The automatic link email to contact will only link the email once.
 - Calendar: Fix: Able to turn off calendar publishing.
@@ -97,6 +98,14 @@
 - Updated Sabredav to 1.8.6
 - Address Book module: photos functionality for companies.
 - Projects module: 'show in tree' check box for project statuses.
+
+
+- Fixed problem with emailing files from the scanbox and then change the template of the email.
+- Show birthdays of calendar owner instead of logged in user
+- GOTA uses GET parameters and has permissions attribute in manifest
+- JUpload has permissions attribute
+- New resource could have wrong permissions initially
+- Imageview didn't want to resize image
 
 24-10-2013 4.2.26
 - Rebuild GOTA with permissions attribute in manifest
