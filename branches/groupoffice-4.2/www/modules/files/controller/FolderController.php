@@ -979,8 +979,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
 
 		$folder = false;
-		if ($model->files_folder_id > 0)
+		if ($model->files_folder_id > 0){
 			$folder = GO_Files_Model_Folder::model()->findByPk($model->files_folder_id, false, true);
+			
+			//record has an ID but the folder is missing from the database. Attempt to create new one.
+			$mustExist = true;
+		}
 
 		if ($folder) {
 			$model->files_folder_id = $this->_checkExistingModelFolder($model, $folder, $mustExist);
