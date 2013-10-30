@@ -97,7 +97,7 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		if (!this.viewerImages[index].download_path)
 			this.viewerImages[index].download_path = this.viewerImages[index].src;
 
-		this.imgEl.initDD(null);
+//		this.imgEl.initDD(null);
 		
 		this.syncImgSize(fullSize);
 		
@@ -151,7 +151,7 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 
 				if(!fullSize && (w!=this.originalImgSize.width || h!=this.originalImgSize.height)){
 					this.normalSizeBtn.setDisabled(false);
-					this.fitImageBtn.setDisabled(false);
+//					this.fitImageBtn.setDisabled(false);
 
 					this.imgEl.setWidth(w);
 					this.imgEl.setHeight(h);
@@ -160,8 +160,8 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 					
 				}else
 				{
-					this.normalSizeBtn.setDisabled(!fullSize);
-					this.fitImageBtn.setDisabled(!fullSize);
+					this.normalSizeBtn.setDisabled(fullSize);
+//					this.fitImageBtn.setDisabled(fullSize);
 				}
 
 				if(h<bodySize.height){
