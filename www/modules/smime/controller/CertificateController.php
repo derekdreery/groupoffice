@@ -47,9 +47,9 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 			$certData=$cert->cert;
 		}else 
 		{
-			if (!empty($params['filepath'])) {
-				$srcFile = new GO_Base_Fs_File(GO::config()->tmpdir.$params['filepath']);
-			}elseif(!empty($params['account_id'])){
+//			if (!empty($params['filepath'])) {
+//				$srcFile = new GO_Base_Fs_File(GO::config()->tmpdir.$params['filepath']);
+			if(!empty($params['account_id'])){
 				$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 
@@ -59,6 +59,8 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 
 				$this->_decryptFile($srcFile, $account);
 			}
+			
+//			throw new Exception($srcFile->path());
 
 			$pubCertFile = GO_Base_Fs_File::tempFile();
 			//Command line:
@@ -197,13 +199,18 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 		$data = $srcFile->getContents();
 		if (strpos($data, "enveloped-data") || strpos($data, 'Encrypted Message')) {
 			$cert = GO_Smime_Model_Certificate::model()->findByPk($account->id);
-			$password = GO::session()->values['smime']['passwords'][$params['account_id']];
+			
+			$password = GO::session()->values['smime']['passwords'][$_REQUEST['account_id']];
 			openssl_pkcs12_read($cert->cert, $certs, $password);
 
 			$decryptedFile = GO_Base_Fs_File::tempFile();
 
 			$ret = openssl_pkcs7_decrypt($srcFile->path(), $decryptedFile->path(), $certs['cert'], array($certs['pkey'], $password));
-			$decryptedFile->move($srcFile->parent()->path(), $srcFile->name());
+			
+			if(!$decryptedFile->exists())
+				throw new Exception("Could not decrypt message: ".openssl_error_string());
+			
+			$decryptedFile->move($srcFile->parent(), $srcFile->name());
 		}
 	}
 

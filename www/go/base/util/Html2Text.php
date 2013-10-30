@@ -452,8 +452,8 @@ class GO_Base_Util_Html2Text
 		$text = strip_tags($text, $this->allowed_tags);
 
 		// Bring down number of empty lines to 2 max
-		$text = preg_replace("/\n\s+\n/", "\n\n", $text);
-		$text = preg_replace("/[\n]{3,}/", "\n\n", $text);
+//		$text = preg_replace("/\n\s+\n/", "\n\n", $text);
+//		$text = preg_replace("/[\n]{3,}/", "\n\n", $text);
 
 		// Add link list
 		if (!empty($this->_link_list) ) {
