@@ -3,6 +3,7 @@
 - Custom Fields: Textarea custom field input field has no maximum length.
 - Summary / Start Page: Times of all-day-events are not displayed, to denote they are all-day-events.
 - Email composer: always change signature when changing from-email address.
+- Email composer: fix for spontaneous default account template creation on opening Email Composer.
 
 24-10-2013 5.0.17
 - SMIME decrypt bug
