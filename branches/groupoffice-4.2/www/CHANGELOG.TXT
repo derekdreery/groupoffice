@@ -1,3 +1,4 @@
+30-10-2013 4.2.27
 - Fixed problem with emailing files from the scanbox and then change the template of the email.
 - Show birthdays of calendar owner instead of logged in user
 - GOTA uses GET parameters and has permissions attribute in manifest
