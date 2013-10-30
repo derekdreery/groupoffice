@@ -119,7 +119,7 @@ GO.customfields.dataTypes={
                         {
                                customfield.height = 40;
                         }
-                        
+												
 			return Ext.apply(f, {
 				xtype:'textarea',
 				height:parseInt(customfield.height),
@@ -134,7 +134,8 @@ GO.customfields.dataTypes={
 
 			return Ext.apply(f, {
 				xtype:'xhtmleditor',
-				height:200
+				height:200,
+				maxLength: Number.MAX_VALUE
 			}, config);
 		}
 	},
