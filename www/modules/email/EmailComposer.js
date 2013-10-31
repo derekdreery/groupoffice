@@ -158,28 +158,7 @@ GO.email.EmailComposer = function(config) {
 		tpl: '<tpl for="."><div class="x-combo-list-item">{from:htmlEncode}</div></tpl>',
 		listeners:{
 			beforeselect: function(cb, newAccountRecord){
-				var oldAccountRecord = cb.store.getById(cb.getValue());
-											
-				var oldSig = oldAccountRecord.get(this.emailEditor.getContentType()+"_signature");
-				var newSig = newAccountRecord.get(this.emailEditor.getContentType()+"_signature");
-
-				var editorValue = this.emailEditor.getActiveEditor().getValue();
-
-				/*
-				 *GO returns <br /> but the browse turns this into <br> so replace those
-				 */
-				if(this.emailEditor.getContentType()=='html'){
-					editorValue = editorValue.replace(/<br>/g, '<br />');
-					oldSig=oldSig.replace(/<br>/g, '<br />')
-					newSig=newSig.replace(/<br>/g, '<br />')
-				}
-				if(GO.util.empty(oldSig))
-				{
-					this.addSignature(newAccountRecord);
-				}else
-				{
-					this.emailEditor.getActiveEditor().setValue(editorValue.replace(oldSig,newSig));
-				}
+				this._checkLoadTemplate(cb,newAccountRecord);
 			},
 			scope:this
 		}
@@ -375,20 +354,42 @@ GO.email.EmailComposer = function(config) {
 				listeners:{
 					scope:this,
 					itemclick : function(item, e ) {
-						if(item.template_id=='default'){
+						if(item.template_id=='default' || item.template_id=='default_for_account'){
 							this.templatesStore.baseParams.default_template_id=this.lastLoadParams.template_id;
+							this.templatesStore.baseParams.type = item.template_id;
+							if (item.template_id=='default_for_account') {
+								var fromAccountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
+								this.templatesStore.baseParams.account_id = fromAccountRecord['data']['account_id'];
+							}
 							this.templatesStore.load();
 							delete this.templatesStore.baseParams.default_template_id;
+							delete this.templatesStore.baseParams.type;
+							delete this.templatesStore.baseParams.account_id;
+							var fromComboValue = this.fromCombo.getValue();
+							this.fromCombo.store.load();
+							this.fromCombo.setValue(fromComboValue);
 						}else if(!this.emailEditor.isDirty() || confirm(GO.email.lang.confirmLostChanges))
 						{							
-							this.lastLoadParams.template_id=item.template_id;
-							this.lastLoadParams.keepHeaders=1;
-							this.loadForm(this.lastLoadUrl, this.lastLoadParams);							
+							this._changeTemplate(item.template_id);			
 						}else
 						{
 							return false;							
 						}
 					}
+				},
+				setChecked: function(template_id) {
+					this.store.each(function(record){
+						if (record.data['template_id']==template_id) {
+							this.store.getById(record.id).set('checked',true);
+							this.store.getById(record.id).json.checked = true;
+						} else if(record.data['template_id']>=0) {
+							this.store.getById(record.id).set('checked',false);
+							this.store.getById(record.id).json.checked = false;
+						}
+					});
+					if (!this.rendered)
+						this.render();
+					this.updateMenuItems();
 				}
 			})
 		}));
@@ -415,6 +416,21 @@ GO.email.EmailComposer = function(config) {
 		tbar : tbar,
 		items : this.formPanel
 	});
+
+	if (GO.addressbook) {
+		this.templatesStore.on('load',function(combo,records){
+			if (this.isVisible()) {
+				if(!this.emailEditor.isDirty() || confirm(GO.email.lang.confirmLostChanges))
+				{
+					var recordId = this.templatesStore.findBy( function(record,id){
+						return record.data['checked'];
+					}, this, 0);
+					var template_id = this.templatesStore.getAt(recordId).get('template_id');
+					this._changeTemplate(template_id);
+				}
+			}
+		}, this);
+	}
 
 	this.addEvents({
 		'dialog_ready' :true,
@@ -451,6 +467,55 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	
 	sendParams : {},
 	
+	_checkLoadTemplate : function(cb,newAccountRecord) {
+		if (GO.addressbook) {
+//			GO.request({
+//				url: 'addressbook/template/defaultTemplateId',
+//				params:{
+//					account_id: newAccountRecord.data['account_id']
+//				},
+//				success: function(options, response, result)
+//				{
+
+			var previousAccountRecord = cb.store.getById(cb.getValue());
+			if(newAccountRecord.get('template_id')!=previousAccountRecord.get('template_id')){
+					this.templatesMenu.setChecked(newAccountRecord.get('template_id'));
+					if (!this.emailEditor.isDirty() || confirm(GO.email.lang['confirmLostChanges']))
+						this._changeTemplate(newAccountRecord.get('template_id'));
+			}
+			this._setSignature(cb,newAccountRecord);
+//				},
+//				scope:this
+//			});
+		} else {
+			this._setSignature(cb,newAccountRecord);
+		}
+	},
+	
+	_setSignature : function(cb,newAccountRecord) {
+		var oldAccountRecord = cb.store.getById(cb.getValue());
+
+		var oldSig = oldAccountRecord.get(this.emailEditor.getContentType()+"_signature");
+		var newSig = newAccountRecord.get(this.emailEditor.getContentType()+"_signature");
+
+		var editorValue = this.emailEditor.getActiveEditor().getValue();
+
+		/*
+		 *GO returns <br /> but the browse turns this into <br> so replace those
+		 */
+		if(this.emailEditor.getContentType()=='html'){
+			editorValue = editorValue.replace(/<br>/g, '<br />');
+			oldSig=oldSig.replace(/<br>/g, '<br />')
+			newSig=newSig.replace(/<br>/g, '<br />')
+		}
+		if(GO.util.empty(oldSig))
+		{
+			this.addSignature(newAccountRecord);
+		}else
+		{
+			this.emailEditor.getActiveEditor().setValue(editorValue.replace(oldSig,newSig));
+		}
+	},
 	
 	addSignature : function(accountRecord){
 		accountRecord = accountRecord || this.fromCombo.store.getById(this.fromCombo.getValue());
@@ -575,14 +640,14 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	},
 
 	initTemplateMenu :  function(config){
-		if (typeof(config.template_id) == 'undefined' && this.templatesStore){
-			var templateRecordIndex = this.templatesStore.findBy(function(record,id){
-				return record.get('checked');
-			});
-
-			if(templateRecordIndex>-1)
-				config.template_id=this.templatesStore.getAt(templateRecordIndex).get('template_id');
-		}
+//		if (typeof(config.template_id) == 'undefined' && this.templatesStore){
+//			var templateRecordIndex = this.templatesStore.findBy(function(record,id){
+//				return record.get('checked');
+//			});
+//
+//			if(templateRecordIndex>-1)
+//				config.template_id=this.templatesStore.getAt(templateRecordIndex).get('template_id');
+//		}
 
 		//check the right template menu item.
 		if(this.templatesStore && config.template_id && this.templatesMenu.items){
@@ -591,6 +656,15 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			});
 			item.setChecked(true);
 		}
+	},
+					
+					
+	getDefaultTemplateId : function(){
+		var fromRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
+		if (fromRecord)
+			return fromRecord.data['template_id'];
+		else
+			return null;
 	},
 	
 	initFrom : function(config){
@@ -612,6 +686,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			index=0;
 		}
 		this.fromCombo.setValue(this.fromCombo.store.data.items[index].id);
+//		this._checkLoadTemplate(this.fromCombo,this.fromCombo.store.getAt(0));
 	},
 
 	show : function(config) {
@@ -630,6 +705,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			
 			if(GO.addressbook){
 				requests.templates={r:'addressbook/template/emailSelection'};
+				if (!GO.util.empty(config.account_id))
+					requests.templates['account_id'] = config.account_id;
 			}
 				
 			GO.request({
@@ -755,6 +832,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				// so that template loading won't replace fields
 				params.addresslist_id = config.addresslist_id;
 			}
+			
+			
+			if(typeof(config.template_id)=='undefined'){
+				config.template_id=this.getDefaultTemplateId();
+			}
 
 			if (config.uid || config.template_id!='undefined' || config.loadUrl || config.loadParams) {
 		
@@ -807,7 +889,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 						if(action.result.sendParams)
 							Ext.apply(this.sendParams, action.result.sendParams);
-						
+
 						this.afterShowAndLoad(config);
 						
 						if(action.result.data.link_value){
@@ -838,6 +920,14 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		}
 	},
 	
+	
+	_changeTemplate : function(template_id) {
+		if (GO.addressbook && !GO.util.empty(this.lastLoadParams) && this.lastLoadParams.template_id>=0 && this.lastLoadParams.template_id!=template_id) {
+			this.lastLoadParams.template_id=template_id;
+			this.lastLoadParams.keepHeaders=1;
+			this.loadForm(this.lastLoadUrl, this.lastLoadParams);
+		}
+	},
 	
 	loadForm : function(url, params){
 		

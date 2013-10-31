@@ -87,6 +87,7 @@ GO.files.FileBrowser = function(config){
 	};
 	
 	//select the first inbox to be displayed in the messages grid
+	
 	this.treePanel.getRootNode().on('load', function(node)
 	{
 		//var grid_id = !this.treePanel.rootVisible && node.childNodes[0] ? node.childNodes[0].id : node.id;
@@ -95,6 +96,9 @@ GO.files.FileBrowser = function(config){
 			this.folder_id=node.childNodes[0].id;
 		}
 		this.setFolderID(this.folder_id);
+		
+		this.ready=true;
+		this.fireEvent('filebrowserready', this);
 	}, this, {single:true});
 	
 	
@@ -847,7 +851,7 @@ GO.files.FileBrowser = function(config){
 }
 
 Ext.extend(GO.files.FileBrowser, Ext.Panel,{
-	
+	ready:false,
 	cls: 'fs-filebrowser',
 
 	fileClickHandler : false,
@@ -1798,7 +1802,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	setFolderID : function(id, expand)
 	{
-    
+    this.expandTree=expand;
     this.fireEvent('beforeFolderIdSet');
       
 		this.folder_id = id;
@@ -1808,7 +1812,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		this.getActiveGridStore().load({
 			callback:function(){
 			
-				if(expand)
+				if(this.expandTree)
 				{
 					var activeNode = this.treePanel.getNodeById(id);
 						
@@ -1870,6 +1874,15 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}else
 		{
 			GO.files.showFilePropertiesDialog(record.data.id);
+		}
+	},
+	
+	onReady : function(fn, scope){
+		if(this.ready){
+			fn.call(scope, this);
+		}else
+		{
+			this.on('filebrowserready', fn, scope);
 		}
 	}
 });
@@ -1988,8 +2001,9 @@ GO.files.showFolder = function(folder_id){
 
 	var fb = GO.mainLayout.openModule("files");
 	
-	fb.setFolderID(folder_id, true);
-		
+	fb.onReady(function(){
+		fb.setFolderID(folder_id, true);
+	}, this);
 }
 
 GO.files.openFolder = function(id, folder_id)

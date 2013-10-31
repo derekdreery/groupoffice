@@ -235,3 +235,4 @@ $l['eventNotSavedBody'] = 'Deze boodschap komt van uw %goname agenda. %goname he
 
 $l['allTogetherForParticipants'] = 'Alle deelnemers samen';
 $l['allTogetherForResources'] = 'Alle hulpmiddelen samen';
+$l['usedResources'] = 'Gebruikte hulpmiddelen';

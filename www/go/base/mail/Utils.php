@@ -2,7 +2,6 @@
 
 class GO_Base_Mail_Utils{
 	public static function mimeHeaderDecode($string, $defaultCharset='UTF-8') {
-
 		/*
 		 * (=?ISO-8859-1?Q?a?= =?ISO-8859-1?Q?b?=)     (ab)
 		 *  White space between adjacent 'encoded-word's is not displayed.
@@ -25,21 +24,23 @@ class GO_Base_Mail_Utils{
 				elseif (strtoupper($encoding) == 'Q') {
 					$fld = quoted_printable_decode($fld);
 				}
-				$fld = GO_Base_Util_String::to_utf8($fld, $charset);
+				$fld = GO_Base_Util_String::clean_utf8($fld, $charset);
 
 				$string = str_replace($v, $fld, $string);
 			}
-//		}elseif(($pos = strpos($string, "''"))){
-//			//eg. iso-8859-1''%66%6F%73%73%2D%69%74%2D%73%6D%61%6C%6C%2E%67%69%66
-//			$charset = substr($string,0, $pos);
-//			$value = rawurldecode(substr($string, $pos+2));
-//
-//			$string=GO_Base_Util_String::to_utf8($string, $charset);
+		}	elseif(($pos = strpos($string, "''")) && $pos < 64){ //check pos for not being to great
+			//eg. iso-8859-1''%66%6F%73%73%2D%69%74%2D%73%6D%61%6C%6C%2E%67%69%66
+			$charset = substr($string,0, $pos);
+			
+//			throw new Exception($charset.' : '.substr($string, $pos+2));
+			$string = rawurldecode(substr($string, $pos+2));
+
+			$string=GO_Base_Util_String::clean_utf8($string, $charset);
 		}else
 		{			
-			$string=GO_Base_Util_String::to_utf8($string, $defaultCharset);
+			$string=GO_Base_Util_String::clean_utf8($string, $defaultCharset);
 		}
-		$string=GO_Base_Util_String::clean_utf8($string);
+//		$string=GO_Base_Util_String::clean_utf8($string);
 		
 		//GO::debug($string);
 		return str_replace(array('\\\\', '\\(', '\\)'), array('\\','(', ')'), $string);

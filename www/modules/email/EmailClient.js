@@ -1364,7 +1364,7 @@ GO.mainLayout.onReady(function(){
 GO.email.aliasesStore = new GO.data.JsonStore({
 	url: GO.url("email/alias/store"),
 	baseParams:{limit:0},
-	fields: ['id','account_id', 'from', 'name','email','html_signature', 'plain_signature'],
+	fields: ['id','account_id', 'from', 'name','email','html_signature', 'plain_signature','template_id'],
 	remoteSort: true
 });
 

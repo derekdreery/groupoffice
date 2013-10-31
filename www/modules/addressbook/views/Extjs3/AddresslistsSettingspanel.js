@@ -56,10 +56,11 @@ GO.addressbook.AddresslistsSettingsPanel = Ext.extend(Ext.Panel, {
 			this.add(this.addresslistElements[i]);
 			f.add(this.addresslistElements[i]);
 		}
-		this.doLayout();
+		this.doLayout(false, true);
 		
 	},
 	afterRender : function(){
+
 		GO.addressbook.AddresslistsSettingsPanel.superclass.afterRender.call(this);
 
 		if(GO.addressbook.readableAddresslistsStore.loaded){

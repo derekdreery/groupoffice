@@ -8,16 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  */
 
-/**
- * The GO_Addressbook_Controller_Site controller
- *
- * @package GO.modules.Addressbook
- * @version $Id: SiteContoller.php 7607 2011-09-20 10:07:50Z wsmits $
- * @copyright Copyright Intermesh BV.
- * @author Wesley Smits wsmits@intermesh.nl
- */
-
-class GO_Addressbook_Controller_Site extends GO_Sites_Components_AbstractFrontController{
+class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
 	
 	/**
 	 * Sets the access permissions for guests
@@ -34,25 +25,76 @@ class GO_Addressbook_Controller_Site extends GO_Sites_Components_AbstractFrontCo
 	}
 	
 	
-	protected function actionContact(){
-		$contact = new GO_Addressbook_Model_Contact();
-		$contact->setValidationRule('first_name', 'required', true);
-		$contact->setValidationRule('last_name', 'required', true);
-		$contact->setValidationRule('email', 'required', true);
-		$contact->setValidationRule('comment', 'required', true);
-		
+	protected function actionContact(){	
 		//GOS::site()->config->contact_addressbook_id;	
 		
 		if (GO_Base_Util_Http::isPostRequest()) {
-			$contact->setAttributes($_POST['Contact']);
+			$addressbookModel = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name', $_POST['Addressbook']['name']);
+			if (!$addressbookModel)
+				throw new Exception(sprintf(GO::t('addressbookNotFound','defaultsite'),$_POST['Addressbook']['name']));
+			
+			$contactModel = GO_Addressbook_Model_Contact::model()->findSingleByAttributes(array('email'=>$_POST['Contact']['email'],'addressbook_id'=>$addressbookModel->id));
+			if (!$contactModel) {
+				$contactModel = new GO_Addressbook_Model_Contact();
+				$contactModel->addressbook_id = $addressbookModel->id;
+			}
+			$contactModel->setValidationRule('first_name', 'required', true);
+			$contactModel->setValidationRule('last_name', 'required', true);
+			$contactModel->setValidationRule('email', 'required', true);
+			
+			$companyModel = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array('name'=>$_POST['Company']['name'],'addressbook_id'=>$addressbookModel->id));
+			if (!$companyModel) {
+				$companyModel = new GO_Addressbook_Model_Company();
+				$companyModel->addressbook_id = $addressbookModel->id;
+			}
+			$companyModel->setValidationRule('name','required',true);
+			
+			$companyModel->setAttributes($_POST['Company']);
+			if ($companyModel->validate())
+				$companyModel->save();
+			
+			$contactModel->setAttributes($_POST['Contact']);
 
-			if($contact->validate()){
-				$contact->save();
+			if($contactModel->validate()){
+				$saveSuccess = $contactModel->save();
+
+				if ($saveSuccess) {
+					// Add to mailings.
+					$addresslists = !empty($_POST['Addresslist']) ? $_POST['Addresslist'] : array();
+					foreach ($addresslists as $addresslistName=>$checked) {
+						if (!empty($checked)) {
+							$addresslistModel = GO_Addressbook_Model_Addresslist::model()->findSingleByAttribute('name',$addresslistName);
+							if ($addresslistModel) {
+								$addresslistContactModel = GO_Addressbook_Model_AddresslistContact::model()->findSingleByAttributes(array('contact_id'=>$contactModel->id,'addresslist_id'=>$addresslistModel->id));
+								if (!$addresslistContactModel) {
+									$addresslistContactModel = new GO_Addressbook_Model_AddresslistContact();
+									$addresslistContactModel->contact_id = $contactModel->id;
+									$addresslistContactModel->addresslist_id = $addresslistModel->id;
+									$addresslistContactModel->save();
+								}
+							}
+						}
+					}
+					$this->render('contactform_done');
+				} else {
+					$this->render('contactform', array('contact'=>$contactModel,'company'=>$companyModel,'addressbook'=>$addressbookModel));
+				}
+			
+				
 			}else
 			{
-//				var_dump($contact->getValidationErrors());
+				$validationErrors = $contactModel->getValidationErrors();
+				foreach ($validationErrors as $valError)
+					echo $valError;
+				$this->render('contactform', array('contact'=>$contactModel,'company'=>$companyModel,'addressbook'=>$addressbookModel));
 			}
-		}			
-		$this->render('contact', array('contact'=>$contact));
+						
+		}	else {
+			$addressbookModel = new GO_Addressbook_Model_Addressbook();
+			$contactModel = new GO_Addressbook_Model_Contact();
+			$companyModel = new GO_Addressbook_Model_Company();
+			$this->render('contactform', array('contact'=>$contactModel,'company'=>$companyModel,'addressbook'=>$addressbookModel));
+		}
 	}
+
 }

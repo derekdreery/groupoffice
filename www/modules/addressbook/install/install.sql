@@ -160,6 +160,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
 	`url_linkedin` VARCHAR( 100 ) NULL DEFAULT NULL,
 	`url_facebook` VARCHAR( 100 ) NULL DEFAULT NULL,
 	`url_twitter` VARCHAR( 100 ) NULL DEFAULT NULL,
+	`skype_name` VARCHAR( 100 ) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `addressbook_id` (`addressbook_id`),
   KEY `email` (`email`),
@@ -181,6 +182,20 @@ CREATE TABLE IF NOT EXISTS `ab_default_email_templates` (
   `user_id` int(11) NOT NULL,
   `template_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`),
+  KEY `template_id` (`template_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ab_default_email_templates`
+--
+
+DROP TABLE IF EXISTS `ab_default_email_account_templates`;
+CREATE TABLE IF NOT EXISTS `ab_default_email_account_templates` (
+  `account_id` int(11) NOT NULL,
+  `template_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`account_id`),
   KEY `template_id` (`template_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

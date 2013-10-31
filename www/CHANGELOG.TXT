@@ -1,6 +1,29 @@
 - Calendar: Overview of participant and resource availability per day.
 - Tasks & Reminders: get reminder when another user puts a task in your task list
 
+30-10-2013 5.0.18
+- Hide disabled fields in projects 2 module
+- The automatic link email to contact will only link the email once.
+- Calendar: Fix: Able to turn off calendar publishing.
+- Custom Fields: Textarea custom field input field has no maximum length.
+- Summary / Start Page: Times of all-day-events are not displayed, to denote they are all-day-events.
+- Email composer: always change signature when changing from-email address.
+- Email composer: fix for spontaneous default account template creation on opening Email Composer.
+- Fixes of 4.2.27
+
+24-10-2013 5.0.17
+- SMIME decrypt bug
+- iconv error
+
+23-10-2013 5.0.16
+- Fixed problem with some email attachments that didn't have an extension.
+- Fixed problem with external link not opening the correct folder in the files module
+- Email & Address Book: Default email template for email account.
+- Address Book: Added address book column in Address List Management
+- New theme CSS enhancements
+- Default Site Module: able to register for Address List from contact form.
+- 4.2.26 fixes
+
 21-10-2013 5.0.15
 - Install bug in projects2 module.
 
@@ -80,6 +103,19 @@
 - Address Book module: photos functionality for companies.
 - Projects module: 'show in tree' check box for project statuses.
 
+30-10-2013 4.2.27
+- Fixed problem with emailing files from the scanbox and then change the template of the email.
+- Show birthdays of calendar owner instead of logged in user
+- GOTA uses GET parameters and has permissions attribute in manifest
+- JUpload has permissions attribute
+- New resource could have wrong permissions initially
+- Imageview didn't want to resize image
+
+24-10-2013 4.2.26
+- Rebuild GOTA with permissions attribute in manifest
+- Saving settings cleared addresslists when this tab was not selected and activated in the settings
+- Fixed SMIME Message view with clear text disabled
+- Add timestamps to backup jobs
 
 17-10-2013 4.2.25
 - Billing: Order PDF - Extra spacing in top after Page Break, if logo is on every page.

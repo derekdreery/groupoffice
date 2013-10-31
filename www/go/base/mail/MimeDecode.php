@@ -757,16 +757,19 @@ class GO_Base_Mail_MimeDecode
      * @return string Decoded body
      * @access private
      */
-    function _quotedPrintableDecode($input)
-    {
-        // Remove soft line breaks
-        $input = preg_replace("/=\r?\n/", '', $input);
+    function _quotedPrintableDecode($input) {
+			// Remove soft line breaks
+			$input = preg_replace("/=\r?\n/", '', $input);
 
-        // Replace encoded characters
-		$input = preg_replace('/=([a-f0-9]{2})/ie', "chr(hexdec('\\1'))", $input);
+			// Replace encoded characters
+	//				$input = preg_replace('/=([a-f0-9]{2})/ie', "chr(hexdec('\\1'))", $input);
+			$input = preg_replace_callback('/=([a-f0-9]{2})/i', function($matches) {
+								return chr(hexdec($matches[1]));
+							}, $input);
 
-        return $input;
-    }
+
+			return $input;
+		}
 
     /**
      * Checks the input for uuencoded files and returns

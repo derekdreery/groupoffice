@@ -163,6 +163,7 @@ $l["manageAliases"]='Beheer afzendaliassen';
 $l["addSendersTo"]='Voeg afzenders toe aan...';
 $l["deleteSendersFrom"]='Verwijder afzenders van...';
 $l["defaultTemplate"]='Stel geselecteerd sjabloon in als standaard';
+$l["defaultEmailTemplate"]='Standaard e-mailsjabloon';
 $l["moving"]='Bezig met verplaatsen...';
 $l["alias"]="Alias";
 $l["aliases"]="Aliasen";

@@ -266,7 +266,7 @@ $l['unsubscribe']='Unsubscribe';
 $l['unsubscription']='Click here to unsubscribe from this address list.';
 $l['r_u_sure'] = 'Are you sure you want to unsubscribe from the address list?';
 $l['delete_success'] = 'You have been successfully unsubscribed from the address list.';
-$l['setCurrentTemplateAsDefault']='Set current template as default';
+$l['setCurrentTemplateAsDefault']='Set current template as default for myself';
 
 $l['contactCustomFields']='Contacts custom fields';
 $l['companyCustomFields']='Company custom fields';
@@ -302,4 +302,9 @@ $l['showActieveToolTip']='Show only contacts that have a current action date.';
 $l['linkedinUrl'] = 'LinkedIn URL';
 $l['facebookUrl'] = 'Facebook URL';
 $l['twitterUrl'] = 'Twitter URL';
+$l['skypeName'] = 'Skype name';
 $l['cmdPanelSocialMedia'] = 'Social media';
+
+$l['setCurrentTemplateAsDefaultEAccount']='Set current template as default for this email account';
+
+$l['callOnSkype'] = 'Call on Skype';

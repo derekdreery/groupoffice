@@ -119,6 +119,7 @@ $l["manageAliases"]='Manage sender aliases';
 $l["addSendersTo"]='Add senders to...';
 $l["deleteSendersFrom"]='Delete senders from...';
 $l["defaultTemplate"]='Set selected template as default';
+$l["defaultEmailTemplate"]='Default e-mail template';
 $l["moving"]='Moving...';
 $l["orderFilters"]='You can change the order of filters by dragging.';
 $l["orderAccounts"]='You can change the order of accounts by dragging.';

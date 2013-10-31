@@ -491,7 +491,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						$contact = $stmt->fetch();
 			
 
-						if($contact){					
+						if($contact){
 							$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
 							$linkedEmail->setAttributes($attributes);
 							$linkedEmail->acl_id = $contact->findAclId();
@@ -709,10 +709,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	}
 
 	public function loadTemplate($params) {
-		if (!empty($params['template_id'])) {
-			$template = GO_Addressbook_Model_Template::model()->findByPk($params['template_id']);
-
-			$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($template->content);
+		if (GO::modules()->addressbook && !empty($params['template_id'])) {
+			try {
+				$template = GO_Addressbook_Model_Template::model()->findByPk($params['template_id']);
+				$templateContent = $template->content;
+			} catch (GO_Base_Exception_AccessDenied $e) {
+				$templateContent = "";
+			}
+			$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($templateContent);
 			$response['data'] = $message->toOutputArray(true, true);
 
 			$presetbody = isset($params['body']) ? $params['body'] : '';
@@ -1105,7 +1109,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 	public function actionView($params) {
 		
-		GO::session()->closeWriting();
+//		Do not close session writing because SMIME stores the password in the session
+//		GO::session()->closeWriting();
 
 		$params['no_max_body_size'] = !empty($params['no_max_body_size']) && $params['no_max_body_size']!=='false' ? true : false;
 		
@@ -1135,13 +1140,17 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		if(!$plaintext){
 			
-			//Don't do these special actions in the special folders
-			if($params['mailbox']!=$account->sent && $params['mailbox']!=$account->trash && $params['mailbox']!=$account->drafts){
+			if($params['mailbox']!=$account->sent && $params['mailbox']!=$account->drafts) {
 				$response = $this->_blockImages($params, $response);
 				$response = $this->_checkXSS($params, $response);
-
+			}
+			
+			//Don't do these special actions in the special folders
+			if($params['mailbox']!=$account->sent && $params['mailbox']!=$account->trash && $params['mailbox']!=$account->drafts){
 				$response = $this->_handleAutoLinkTag($imapMessage, $params, $response);
 				$response = $this->_handleInvitations($imapMessage, $params, $response);
+				
+				//Commented out because it would autolink to email every time you read it @see _link() where it's already handeled
 				$response = $this->_handleAutoContactLinkFromSender($imapMessage, $params, $response);
 			}
 		}

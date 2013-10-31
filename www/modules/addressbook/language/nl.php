@@ -315,7 +315,7 @@ $l['mailingAlreadyExists']= 'De adreslijst bestaat al';
 $l['greet']='Met vriendelijke groet';
 $l['r_u_sure']= 'Weet u zeker dat u zich wilt uitschrijven?';
 $l['delete_success']= 'U bent uitgeschreven.';
-$l['setCurrentTemplateAsDefault']='Stel huidig sjabloon als standaard in';
+$l['setCurrentTemplateAsDefault']='Stel huidig sjabloon als standaard in voor mijzelf';
 $l['contactCustomFields']='Extra velden van contactpersonen';
 $l['companyCustomFields']='Extra velden van bedrijven';
 $l['templateContent']='Document';
@@ -338,4 +338,9 @@ $l['showActieveToolTip']='Toon alleen contacten met actuele actiedatum.';
 $l['linkedinUrl'] = 'LinkedIn URL';
 $l['facebookUrl'] = 'Facebook URL';
 $l['twitterUrl'] = 'Twitter URL';
+$l['skypeName'] = 'Skypenaam';
 $l['cmdPanelSocialMedia'] = 'Sociale media';
+
+$l['setCurrentTemplateAsDefaultEAccount']='Stel huidig sjabloon als standaard in voor dit email account';
+
+$l['callOnSkype'] = 'Bellen met Skype';

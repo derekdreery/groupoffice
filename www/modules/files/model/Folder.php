@@ -629,8 +629,13 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				//GO::debug("FS SYNC: Adding fs ".$item->name()." to database");
 					if ($item->isFile()) {
 						$file = $this->hasFile($item->name());
-						if (!$file)
+						if (!$file){
 							$this->addFile($item->name());
+						}else
+						{
+							//this will update timestamp and size of file
+							$file->save();
+						}
 
 					}else
 					{

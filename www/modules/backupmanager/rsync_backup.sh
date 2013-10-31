@@ -77,6 +77,8 @@ mkdir -p $OUTPUTDIR
 MYSQLDUMP="/usr/bin/mysqldump"
 MYSQL="/usr/bin/mysql"
 
+date
+
 # clean up any old backups - save space
 rm "$OUTPUTDIR/*bak" > /dev/null 2>&1
 
@@ -101,7 +103,11 @@ for db in $databases; do
 	fi
 done
 
+
+
 echo "Done with MySQL backup"
+
+date
 
 
 
@@ -158,6 +164,10 @@ if [ $OLDEST_BACKUP ]; then
 	echo Deleting $OLDEST_BACKUP
 	#ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "find $OLDEST_BACKUP -type d -exec chmod +xw {} \;"
 	ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "rm -Rf $OLDEST_BACKUP"
+
+	echo Done with delete
+	date
+
 fi
 
 ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "mkdir $RTARGET/$BACKUP_DATE"
@@ -166,6 +176,8 @@ ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "mkdir $RTARGET/$BACKUP_DATE"
 if [ $NEWEST_BACKUP ]; then
 	echo Copying all from $NEWEST_BACKUP to $RTARGET/$BACKUP_DATE
 	ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "cp -al $NEWEST_BACKUP. $RTARGET/$BACKUP_DATE"
+	echo Copy done
+	date
 fi
 
 #### END ROTATION SECTION ####
@@ -201,10 +213,15 @@ for source in $SOURCES; do
 		ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "mkdir -p $RTARGET/$BACKUP_DATE/$source"
 	fi
 	#-rl was -a
+
+	date
 	rsync $VERBOSE $EXCLUDE -a --delete -e "ssh -i $RKEY -p$RPORT" $source/ $RUSER@$RMACHINE:$RTARGET/$BACKUP_DATE/$source/
 done
 
 #ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "chmod -R 777 $RTARGET/$BACKUP_DATE"
 #ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "du -sh $RTARGET";
+
+echo All done
+date
 
 exitBackup 0

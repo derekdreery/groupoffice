@@ -497,5 +497,22 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 //		}	
 		return $attr;
 	}
+
+	public function getDefaultTemplate() {
+		if (GO::modules()->addressbook) {
+			$defaultAccountTemplateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($this->id);
+			if (!$defaultAccountTemplateModel) {
+				$defaultUserTemplateModel = GO_Addressbook_Model_DefaultTemplate::model()->findByPk(GO::user()->id);
+				if (!$defaultUserTemplateModel)
+					return false;
+				else
+					return $defaultUserTemplateModel;
+			} else {
+				return $defaultAccountTemplateModel;
+			}
+		} else {
+			return false;
+		}
+	}
 	
 }

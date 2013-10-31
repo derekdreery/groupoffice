@@ -133,11 +133,21 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * @return string  The extension of a filename
 	 */
 	public function extension() {
+		return self::getExtension($this->name());
+	}
+	
+	/**
+	 * Get the extension of a filename
+	 * 
+	 * @param string $filename
+	 * @return string
+	 */
+	public static function getExtension($filename) {
 		$extension = '';
-		$filename = $this->name();
+
 		$pos = strrpos($filename, '.');
 		if ($pos) {
-			$extension = substr($filename, $pos +1);
+			$extension = substr($filename, $pos + 1);
 		}
 		//return trim(strtolower($extension)); // Does not work when extension on disk is in capital letters (.PDF, .XLSX)
 		return trim($extension);

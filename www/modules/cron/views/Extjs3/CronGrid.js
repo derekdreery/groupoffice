@@ -22,6 +22,10 @@ GO.cron.CronGrid = Ext.extend(GO.grid.GridPanel,{
 			tbar : new Ext.Toolbar({
 				cls:'go-head-tb',
 				items: [{
+					xtype:'htmlcomponent',
+					html:GO.cron.lang.name,
+					cls:'go-module-title-tbar'
+				},{
 					itemId:'add',
 					iconCls: 'btn-add',
 					text: GO.lang['cmdAdd'],
@@ -52,18 +56,18 @@ GO.cron.CronGrid = Ext.extend(GO.grid.GridPanel,{
 					},
 					scope: this
 				}]
-//				'-',
-//				{
-//					itemId:'settings',
-//					iconCls: 'btn-settings',
-//					text: GO.lang['cmdSettings'],
-//					cls: 'x-btn-text-icon',
-//					disabled:this.standardTbarDisabled,
-//					handler: function(){
-//						this.showSettingsDialog();
-//					},
-//					scope: this
-//				}]
+			//				'-',
+			//				{
+			//					itemId:'settings',
+			//					iconCls: 'btn-settings',
+			//					text: GO.lang['cmdSettings'],
+			//					cls: 'x-btn-text-icon',
+			//					disabled:this.standardTbarDisabled,
+			//					handler: function(){
+			//						this.showSettingsDialog();
+			//					},
+			//					scope: this
+			//				}]
 			}),
 			store: GO.cron.cronStore,
 			border: false,
@@ -119,12 +123,12 @@ GO.cron.CronGrid = Ext.extend(GO.grid.GridPanel,{
 					sortable: true,
 					width:100
 				},
-//				{
-//					header: GO.cron.lang.years,
-//					dataIndex: 'years',
-//					sortable: true,
-//					width:100
-//				},
+				//				{
+				//					header: GO.cron.lang.years,
+				//					dataIndex: 'years',
+				//					sortable: true,
+				//					width:100
+				//				},
 				{
 					header: GO.cron.lang.job,
 					dataIndex: 'job',

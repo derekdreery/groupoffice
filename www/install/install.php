@@ -95,7 +95,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		$cron->name = 'Email Reminders';
 		$cron->active = true;
 		$cron->runonce = false;
-		$cron->minutes = '0,5,10,15,20,25,30,35,40,45,50,55'; // Every 5 minutes
+		$cron->minutes = '*/5'; // Every 5 minutes
 		$cron->hours = '*';
 		$cron->monthdays = '*';
 		$cron->months = '*';

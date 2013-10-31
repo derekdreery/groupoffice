@@ -218,6 +218,10 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 		this.formPanel.insert(targetIndex, elementToAdd);
 	},
 	
+	beforeSubmit : function(columns, headers){
+		
+	},
+	
 	submitForm : function(hide) {
 		this.formPanel.form.getEl().dom.target='_blank';
 		this.formPanel.form.el.dom.target='_blank';
@@ -238,8 +242,12 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 			}
 		}
 		
+		this.beforeSubmit(columns, headers);
+		
 		this.hiddenColumns.setValue(columns.join(','));
 		this.hiddenHeaders.setValue(headers.join(','));
+		
+		
 
 		this.formPanel.form.submit(
 		{
