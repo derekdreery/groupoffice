@@ -512,9 +512,9 @@ class GO{
 		if ( !empty(GO::config()->locale_all) ){
 			setlocale(LC_ALL, GO::config()->locale_all);
 		}else{
-			
+			//for escape shell arg
 			if(!isset(GO::session()->values['locale_all'])){
-				$currentlocale = GO::session()->values['locale_all']= setlocale(LC_ALL, "0");
+				$currentlocale = GO::session()->values['locale_all']= setlocale(LC_CTYPE, "0");
 
 				if(stripos($currentlocale,'utf')==false && function_exists('exec')){
 					@exec('locale -a', $output);
@@ -522,7 +522,7 @@ class GO{
 					if(isset($output) && is_array($output)){
 						foreach($output as $locale){
 							if(stripos($locale,'utf')!==false){
-								setlocale(LC_ALL, $locale);
+								setlocale(LC_CTYPE, $locale);
 
 								GO::session()->values['locale_all']=$locale;
 								break;
