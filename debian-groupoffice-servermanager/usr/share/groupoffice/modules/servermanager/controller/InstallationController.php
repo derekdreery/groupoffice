@@ -924,7 +924,18 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$stmt = GO_Servermanager_Model_Installation::model()->find();
 		while($installation = $stmt->fetch()){
 			echo "Setting ".$installation->name." config parameter ".$params['name'].'='.$params['value']."\n";
-			$installation->setConfigVariable($params['name'],$params['value']);
+			
+			$set=true;
+			if(isset($params['if'])){
+				
+				$config = $installation->getConfigWithGlobals();
+				
+				if(!isset($config[$params['name']]) || $config[$params['name']]!=$params['if']){
+					$set = false;
+				}
+			}
+			if($set)
+				$installation->setConfigVariable($params['name'],$params['value']);
 		}	
 		
 		echo "All done!\n";
