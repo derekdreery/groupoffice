@@ -65,6 +65,7 @@
  * @property string $url_linkedin
  * @property string $url_facebook
  * @property string $url_twitter
+ * @property string $skype_name
  */
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		

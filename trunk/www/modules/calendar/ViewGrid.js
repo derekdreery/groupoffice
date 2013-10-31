@@ -703,6 +703,9 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				if (eventData.repeats)
 					text += '<span class="cal-recurring"></span>';
 
+				if (!GO.util.empty(eventData.resources))
+					text += '<span class="cal-resources"></span>';
+
 				var event = Ext.DomHelper.append(col,
 				{
 					tag: 'div',

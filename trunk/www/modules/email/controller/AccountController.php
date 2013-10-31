@@ -55,6 +55,15 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		$response['data']['name'] = $alias->name;
 		$response['data']['signature'] = $alias->signature;
 
+		if (GO::modules()->isInstalled('addressbook')) {
+			$defaultTemplateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($model->id);
+			if ($defaultTemplateModel) {
+				$response['data']['default_account_template_id'] = $defaultTemplateModel->template_id;
+			} else {
+				$response['data']['default_account_template_id'] = '';
+			}
+		}
+		
 		return parent::afterLoad($response, $model, $params);
 	}
 
@@ -73,11 +82,31 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			$alias->save();
 		}
 
+		if (GO::modules()->addressbook && isset($params['default_account_template_id'])) {
+			if ($params['default_account_template_id']==-1 || empty($params['default_account_template_id'])) {
+				$defaultTemplateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($model->id);
+				if ($defaultTemplateModel)
+					$defaultTemplateModel->delete();			
+			} elseif ($params['default_account_template_id']>0) {
+				$defaultTemplateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($model->id);
+				if (!$defaultTemplateModel) {
+					$defaultTemplateModel = new GO_Addressbook_Model_DefaultTemplateForAccount();
+					$defaultTemplateModel->account_id = $model->id;
+				}
+				$defaultTemplateModel->template_id = $params['default_account_template_id'];
+				$defaultTemplateModel->save();
+			}
+		}
+
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
-
+	
 	protected function remoteComboFields() {
-		return array('user_id' => '$model->user->name');
+		if (GO::modules()->addressbook)
+			return array('user_id' => '$model->user->name',
+					'default_template_id' => '$model->defaultTemplate->emailTemplate->name');
+		else
+			return array('user_id' => '$model->user->name');
 	}
 
 	protected function actionCheckUnseen($params) {
@@ -233,7 +262,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							//'usage' => "",
 							//"acl_supported"=>false
 					);
-					if($account->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
+					if($node['permission_level']<= GO_Base_Model_Acl::READ_PERMISSION)
 					  $node['cls'] = 'em-readonly';
 		
 //					try{						

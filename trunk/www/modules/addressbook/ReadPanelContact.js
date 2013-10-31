@@ -216,27 +216,21 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 				// SOCIAL MEDIA URLs
 				'<tpl if="this.isSocialMediaFieldset(values)">'+
 						'<tr>'+
-							'<td colspan="2" class="display-panel-heading">' + GO.addressbook.lang['cmdPanelSocialMedia'] + '</td>'+
+							'<td>'+
+									'<tpl if="!GO.util.empty(url_linkedin)">'+
+										'<a href="{url_linkedin}" target="_blank"><div class="linkedin-icon"></div></a>'+
+									'</tpl>'+
+									'<tpl if="!GO.util.empty(url_facebook)">'+
+										'<a href="{url_facebook}" target="_blank"><div class="facebook-icon"></div></a>'+
+									'</tpl>'+
+									'<tpl if="!GO.util.empty(url_twitter)">'+
+										'<a href="{url_twitter}" target="_blank"><div class="twitter-icon"></div></a>'+
+									'</tpl>'+
+									'<tpl if="!GO.util.empty(skype_name)">'+
+										'<a href="skype:{skype_name}?call" target="_blank"><div class="skype-icon" title="'+GO.addressbook.lang['callOnSkype']+'"></div></a>'+
+									'</tpl>'+
+							'</td>'+
 						'</tr>'+
-//						'<tr>'+
-//							'<table cellpadding="0" cellspacing="0" border="0">'+
-								'<tpl if="!GO.util.empty(url_linkedin)">'+
-									'<tr>'+
-										'<td>' + GO.addressbook.lang['linkedinUrl'] + ':&nbsp;&nbsp;&nbsp;</td><td><a href="{url_linkedin}" target="_blank">{url_linkedin}</a></td>'+
-									'</tr>'+						
-								'</tpl>'+
-								'<tpl if="!GO.util.empty(url_facebook)">'+
-									'<tr>'+
-										'<td>' + GO.addressbook.lang['facebookUrl'] + ':&nbsp;&nbsp;&nbsp;</td><td><a href="{url_facebook}" target="_blank">{url_facebook}</a></td>'+
-									'</tr>'+						
-								'</tpl>'+
-								'<tpl if="!GO.util.empty(url_twitter)">'+
-									'<tr>'+
-										'<td>' + GO.addressbook.lang['twitterUrl'] + ':&nbsp;&nbsp;&nbsp;</td><td><a href="{url_twitter}" target="_blank">{url_twitter}</a></td>'+
-									'</tr>'+						
-								'</tpl>'+
-//							'</table>'+
-//						'</tr>'+
 				'</tpl>'+
 					
 					

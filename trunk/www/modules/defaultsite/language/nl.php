@@ -66,3 +66,9 @@ $l['forgotPasswordText']='Vul in het onderstaande formulier uw email-adres in en
 $l['registerformText']="Vul het onderstaande formulier in en klik op 'Ok' om te registreren. De velden met een * zijn verplichte velden.";
 
 $l['selectOne']='Maak een keuze';
+
+$l['contactformTitle']="Contactformulier";
+$l['contactformText']="Vul deze formulier in en klik op 'OK' om te registreren. Velden met een * zijn verplicht.";
+
+$l['addressbookNotFound']="Geen adresboek gevonden met naam '%s'.";
+$l['contactformDoneText']="Wij hebben uw registratie met succes ontvangen.";

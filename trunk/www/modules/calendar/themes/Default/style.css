@@ -23,6 +23,12 @@
 	float:right;
 	/*margin-left: 3px;*/
 }
+.cal-resources{
+	background:url(images/16x16/star-icon-16.png) no-repeat 0 1px;
+	padding:8px !important;
+	float:right;
+	/*margin-left: 3px;*/
+}
 
 .cal-comment{
 	white-space:normal !important;

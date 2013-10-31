@@ -93,7 +93,7 @@ GO.addressbook.createAddresslistGrids = function(){
 				root: 'results',
 				id: 'id',
 				totalProperty:'total',
-				fields: ['id', 'name', 'company_name', 'email', 'home_phone', 'work_phone', 'cellular'],
+				fields: ['id', 'name', 'company_name', 'email', 'home_phone', 'work_phone', 'cellular','addressbook_name'],
 				remoteSort: true
 			});
 
@@ -140,6 +140,12 @@ GO.addressbook.createAddresslistGrids = function(){
 			{
 				header: GO.lang['strCellular'],
 				dataIndex: 'cellular' ,
+				width: 100,
+				hidden:true
+			},
+			{
+				header: GO.addressbook.lang['addressbook'],
+				dataIndex: 'addressbook_name' ,
 				width: 100,
 				hidden:true
 			}
@@ -261,7 +267,7 @@ GO.addressbook.createAddresslistGrids = function(){
 			root: 'results',
 			id: 'id',
 			totalProperty:'total',
-			fields: ['id', 'name', 'homepage', 'email', 'phone', 'fax'],
+			fields: ['id', 'name', 'homepage', 'email', 'phone', 'fax','addressbook_name'],
 			remoteSort: true
 		});
 
@@ -298,6 +304,12 @@ GO.addressbook.createAddresslistGrids = function(){
 			{
 				header: GO.lang['strFax'],
 				dataIndex: 'fax' ,
+				width: 100,
+				hidden:true
+			},
+			{
+				header: GO.addressbook.lang['addressbook'],
+				dataIndex: 'addressbook_name' ,
 				width: 100,
 				hidden:true
 			}

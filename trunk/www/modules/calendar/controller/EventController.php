@@ -730,6 +730,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$response['title']= '';
 		$response['results'] = array();
 		
+		//dirty hack to save multiselect grid state
+		if(isset($_REQUEST['calendars']))
+			GO::config()->save_setting('ms_calendars', implode(',', json_decode($_REQUEST['calendars'])), GO::session()->values['user_id']);
+		
 		if(!empty($params['start_time']))
 			$startTime = $params['start_time'];
 		else
@@ -1029,7 +1033,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @return array 
 	 */
 	private function _getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime){
-		$adressbooks = GO_Addressbook_Model_Addressbook::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION));
+		$adressbooks = GO_Addressbook_Model_Addressbook::model()->find(
+						GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION, $calendar->user_id)
+						);
 		
 		$resultCount = 0;
 		$dayString = GO::t('full_days');

@@ -575,7 +575,12 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 						}
 					}
 				} else {
-					$a->name = $imap->mime_header_decode($part['name']);
+					$a->name = GO_Base_Mail_Utils::mimeHeaderDecode($part['name']);
+					
+					$extension = GO_Base_Fs_File::getExtension($a->name);
+					if(!empty($part['filename']) && empty($extension)){
+						$a->name = GO_Base_Mail_Utils::mimeHeaderDecode($part['filename']);
+					}
 				}
 				
 				$i=1;

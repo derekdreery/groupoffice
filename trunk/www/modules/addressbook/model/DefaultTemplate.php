@@ -36,6 +36,12 @@ class GO_Addressbook_Model_DefaultTemplate extends GO_Base_Db_ActiveRecord {
 		return 'user_id';
 	}
 	
+	public function relations(){
+		return array(
+			'emailTemplate' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Template', 'field'=>'template_id')
+		);
+	}
+	
 	protected function defaultAttributes() {
 		$attr = parent::defaultAttributes();
 		

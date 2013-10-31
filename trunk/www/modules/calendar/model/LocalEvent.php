@@ -195,6 +195,13 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 			$response['duration'] = $duration.'m';
 		}
 		
+		$response['resources'] = array();
+		if ($this->_event->resources)	{
+			foreach ($this->_event->resources as $resourceModel) {
+				$response['resources'][$resourceModel->id] = $resourceModel->calendar->name;
+			}
+		}
+		
 		return $response;
 	}
 	

@@ -43,6 +43,10 @@ class GO_Email_Controller_Alias extends GO_Base_Controller_AbstractModelControll
 		$record['from'] = (string) $r;
 		$record['html_signature'] = GO_Base_Util_String::text_to_html($model->signature);
 		$record['plain_signature'] = $model->signature;
+		
+		$defaultAccountTemplateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($model->account_id);
+		$defaultUserTemplateModel = GO_Addressbook_Model_DefaultTemplate::model()->findByPk(GO::user()->id);
+		$record['template_id']= !empty($defaultAccountTemplateModel) ? $defaultAccountTemplateModel->template_id : ( !empty($defaultUserTemplateModel) ? $defaultUserTemplateModel->template_id : 0 );
 		unset($record['signature']);
 
 		return parent::formatStoreRecord($record, $model, $store);
