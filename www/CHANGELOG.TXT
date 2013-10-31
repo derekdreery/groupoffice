@@ -1,3 +1,4 @@
+- Added email account selection for ticket types. Now you can set up a separate email account for each ticket type to import tickets from email.
 - Billing: able to search invoices/orders by month/year.
 
 30-10-2013 5.0.18
