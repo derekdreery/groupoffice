@@ -1,3 +1,5 @@
+- Zpushadmin can now also work with zpush2.1
+
 30-10-2013 4.2.27
 - Fixed problem with emailing files from the scanbox and then change the template of the email.
 - Show birthdays of calendar owner instead of logged in user
