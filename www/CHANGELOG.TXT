@@ -1,3 +1,5 @@
+- Billing: able to search invoices/orders by month/year.
+
 30-10-2013 5.0.18
 - Hide disabled fields in projects 2 module
 - The automatic link email to contact will only link the email once.
