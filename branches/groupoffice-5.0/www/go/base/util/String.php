@@ -31,7 +31,7 @@ class GO_Base_Util_String {
 	 * @param type $string
 	 * @return type 
 	 */
-	public static function utf8ToASCII($string) {
+		public static function utf8ToASCII($string) {
 
 		//cyrillic
 //		$cyr = array(
@@ -76,7 +76,19 @@ class GO_Base_Util_String {
 				"YU", "YA", "'", "'", "I", "I", "E", "Ue", "ue", "Oe", "oe", "Ae", "ae", "ss");
 		$string = preg_replace($rus, $lat, $string);
 
-		return iconv("UTF-8", "US-ASCII//TRANSLIT", $string);
+		$converted = iconv("UTF-8", "US-ASCII//TRANSLIT", $string);
+		if(!empty($converted)){
+			return $converted;
+		}else
+		{
+			$converted = preg_replace('/[^a-zA-Z0-9 ,-:_]+/','',$string);
+			if(!empty($converted)){
+				return $converted;
+			}else
+			{
+				throw new Exception("Could not convert string to ASCII");
+			}							
+		}
 		//return preg_replace('/[^a-zA-Z0-9 ,-:_]+/','',$string);
 	}
 
