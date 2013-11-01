@@ -61,11 +61,13 @@ GO.notes.NotesGrid = function(config){
 			header: GO.lang.strCtime,
 			dataIndex: 'ctime',
 			hidden:true,
-			sortable: true
+			sortable: true,
+			width:110
 		},		{
 			header: GO.lang.strMtime,
 			dataIndex: 'mtime',
-			sortable: true
+			sortable: true,
+			width:110
 		}
 		];
 	

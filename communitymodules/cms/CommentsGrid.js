@@ -55,7 +55,8 @@ GO.cms.CommentsGrid = function(config){
 			dataIndex: 'comments'
 		},		{
 			header: GO.lang.strCtime, 
-			dataIndex: 'ctime'
+			dataIndex: 'ctime',
+			width:110
 		}
 	]
 	});

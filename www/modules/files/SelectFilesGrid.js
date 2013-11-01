@@ -55,7 +55,7 @@ GO.files.SelectFilesGrid = function(config){
                     id:'mtime',
                     header:GO.lang.strMtime,
                     dataIndex: 'mtime',
-                    width:120
+                    width:110
             }]
         }
 
