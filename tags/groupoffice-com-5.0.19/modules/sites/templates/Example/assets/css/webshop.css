@@ -1,0 +1,74 @@
+
+/* minicart */
+
+table.cart{
+	width:100%;
+}
+
+table.cart th{
+	text-align:left;
+}
+
+table.cart td{
+	vertical-align:top;	
+}
+
+table.cart input.amount{
+	float: left;
+	width:50px;
+}
+
+.minicart_total{
+	border-top:1px solid #494c4b;	
+}
+
+/* defaults for error messages */
+/*.error {
+	color: red;
+}
+
+input.error {
+	border: 1px solid red;
+	background-color: #ffd1d1;
+	width: 250px;
+}*/
+/*
+input.textbox {
+	width: 250px;
+}*/
+
+/* licenses */
+
+.upgrade-link{
+	font-weight:bold;
+		
+}
+table.licenses th{
+	text-align:left;	
+}
+table.licenses td{
+	vertical-align:top;	
+}
+
+/* invoices */
+table.orders{
+width:100%;
+}
+table.orders th{
+	text-align:left;	
+}
+table.orders td{
+	vertical-align:top;	
+}
+
+tr.late td{
+	color:red;
+}
+
+.greytable-odd {
+	
+}
+
+.greytable-even {
+	background-color: #ccc;
+}
