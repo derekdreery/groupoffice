@@ -147,6 +147,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			if(!$folder->fsFolder->exists()){
 
 				echo "Deleting ".$folder->path."\n";
+				$folder->delete();
 			}
 
 		}	
