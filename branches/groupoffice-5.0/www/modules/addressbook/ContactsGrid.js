@@ -173,12 +173,12 @@ GO.addressbook.ContactsGrid = function(config){
 			header: GO.lang.strMtime,
 			dataIndex:'mtime',
 			hidden:true,
-			width:80
+			width:110
 		},{
 			header: GO.lang.strCtime,
 			dataIndex:'ctime',
 			hidden:true,
-			width:80
+			width:110
 		},{
 			header: GO.addressbook.lang['actionDate'],
 			dataIndex:'action_date',

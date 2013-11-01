@@ -567,7 +567,7 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 			{
 				header: 'Available since',
 				dataIndex: 'ctime',
-				width: 160
+				width: 110
 			},
 			{
 				header: 'Trial days left',

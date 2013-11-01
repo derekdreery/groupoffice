@@ -48,10 +48,12 @@ GO.summary.AnnouncementsGrid = function(config){
 		dataIndex: 'due_time'
 	},{
 		header: GO.lang.strCtime,
-		dataIndex: 'ctime'
+		dataIndex: 'ctime',
+		width:110
 	},{
 		header: GO.lang.strMtime,
-		dataIndex: 'mtime'
+		dataIndex: 'mtime',
+		width:110
 	}
 
 	]

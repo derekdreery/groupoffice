@@ -116,7 +116,8 @@ GO.addressbook.SentMailingsGrid = function(config){
 			dataIndex: 'user_name'
 		},	{
 			header: GO.lang.strCtime, 
-			dataIndex: 'ctime'
+			dataIndex: 'ctime',
+			width:110
 		},		{
 			header: GO.addressbook.lang['status'], 
 			dataIndex: 'status',
