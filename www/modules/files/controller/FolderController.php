@@ -115,7 +115,6 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 	
 	public function actionDeleteInvalid(){
-		GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
 		$folders = array('email', 'billing/notifications');
 
 		foreach($folders as $name){
