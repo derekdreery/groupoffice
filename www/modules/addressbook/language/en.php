@@ -308,3 +308,5 @@ $l['cmdPanelSocialMedia'] = 'Social media';
 $l['setCurrentTemplateAsDefaultEAccount']='Set current template as default for this email account';
 
 $l['callOnSkype'] = 'Call on Skype';
+
+$l['exportContactsWithCompanies'] = 'Contacts with companies';
