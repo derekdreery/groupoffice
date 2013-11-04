@@ -20,9 +20,9 @@ class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Cont
 		// Load the data from the session.
 		$findParams = GO::session()->values['contact']['findParams'];
 		$model = GO::getModel(GO::session()->values['contact']['model']);
-				
+		
 		// Include the companies
-		$findParams->joinRelation('company');
+		$findParams->joinRelation('company','LEFT');
 						
 		// Let the export handle all found records without a limit
 		$findParams->limit(0); 
