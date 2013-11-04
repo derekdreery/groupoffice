@@ -1,5 +1,6 @@
 - Billing: optional paging in invoice/order PDFs.
 - Billing: totals row in orders / invoices grid.
+- Address book Email templates: Email Account Settings: Show default templates dropdown in IE (fix).
 
 01-11-2013 5.0.19
 - Bug with decimal values in timeregistration grid.
