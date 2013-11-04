@@ -256,12 +256,12 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 */
 	protected function createFindParams() {
 
-		$sort = !empty($this->_requestParams['sort']) ? $this->_requestParams['sort'] : $this->defaultSort;
-		$dir = !empty($this->_requestParams['dir']) ? $this->_requestParams['dir'] : $this->defaultDirection;
+			$sort = !empty($this->_requestParams['sort']) ? $this->_requestParams['sort'] : $this->defaultSort;
+			$dir = !empty($this->_requestParams['dir']) ? $this->_requestParams['dir'] : $this->defaultDirection;
 
-		if (!is_array($sort))
-			$sort = empty($sort) ? array() : array($sort);
-
+			if (!is_array($sort))
+				$sort = empty($sort) ? array() : array($sort);
+		
 		if (isset($this->_requestParams['groupBy']))
 			array_unshift($sort, $this->_requestParams['groupBy']);
 
@@ -271,18 +271,18 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		if (isset($this->_requestParams['groupDir']))
 			array_unshift($dir, $this->_requestParams['groupDir']);
 
-		$sort = $this->getColumnModel()->getSortColumns($sort);
+			$sort = $this->getColumnModel()->getSortColumns($sort);
 
-		$sortCount = count($sort);
-		$dirCount = count($dir);
-		for ($i = 0; $i < $sortCount - $dirCount; $i++)
-			$dir[] = $dir[0];
+			$sortCount = count($sort);
+			$dirCount = count($dir);
+			for ($i = 0; $i < $sortCount - $dirCount; $i++)
+				$dir[] = $dir[0];
 
 
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->joinCustomFields()
 						->order($sort, $dir);
-
+		
 		if (empty($this->_requestParams['dont_calculate_total'])) {
 			$findParams->calcFoundRows();
 		}
@@ -457,8 +457,8 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		
 //		$sumParams = GO_Base_Db_FindParams::newInstance()->single()->select($summarySelect)->criteria($this->_extraFindParams->getCriteria());
 		
-		$findParams = $this->createFindParams();
-		$sumParams = $findParams->single()->select($summarySelect);
+		$findParams = $this->createFindParams(false);
+		$sumParams = $findParams->single()->export(false)->select($summarySelect);
 		
 		$sumRecord = GO::getModel($this->_modelClass)->find($sumParams);
 		if($sumRecord)
