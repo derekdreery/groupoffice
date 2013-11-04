@@ -88,25 +88,28 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 	afterLoad : function(result) {
 		if(this.data.encrypted){
 			if (!this.passwordPanel){
-				this.passwordPanel = new Ext.Panel({			
+				this.passwordPanel = new Ext.form.CompositeField({			
 					renderTo: 'encryptedNoteDisplaySecure'+this.encryptId,
-					layout: 'column',
-					border: false,
-					keys:[{
-						key: Ext.EventObject.ENTER,
-						fn : function() {
-							this._loadWithPassword();
-						},
-						scope : this
-					}],
+					
 					items: [
 						this.passwordField = new Ext.form.TextField({
 							name: 'password',
-		//						emptyText: GO.lang['password']+' '+GO.lang['decryptContent'],
 							inputType: 'password',
-							width: '60%'
+							flex:2,
+							listeners: {
+                specialkey: function(field, e){
+									// e.HOME, e.END, e.PAGE_UP, e.PAGE_DOWN,
+									// e.TAB, e.ESC, arrow keys: e.LEFT, e.RIGHT, e.UP, e.DOWN
+									if (e.getKey() == e.ENTER) {
+										this._loadWithPassword();
+									}
+								},
+								scope : this
+							}
+							
 						}),
 						this.passwordButton = new Ext.Button({
+								flex:1,
 								text: GO.lang['decryptContent'],
 								handler: function(){
 									this._loadWithPassword();									

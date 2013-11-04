@@ -66,12 +66,17 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 				$params['password'] = crypt($params['userInputPassword1']);
 				$params['content'] = GO_Base_Util_Crypt::encrypt($params['content'],$params['userInputPassword1']);
 				
+				if($params['content']===false)
+					throw new Exception("Could not encrypt content");
+				
 			} else if (!empty($params['currentPassword'])) {
 				
 				// User just entered the previously set password.
 				
 				$params['password'] = crypt($params['currentPassword']);
 				$params['content'] = GO_Base_Util_Crypt::encrypt($params['content'],$params['currentPassword']);
+				if($params['content']===false)
+					throw new Exception("Could not encrypt content");
 				
 			} else {
 				throw new Exception(GO::t('passwordSubmissionError'));
