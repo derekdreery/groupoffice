@@ -1,4 +1,5 @@
 - Billing: optional paging in invoice/order PDFs.
+- Billing: totals row in orders / invoices grid.
 
 01-11-2013 5.0.19
 - Bug with decimal values in timeregistration grid.
