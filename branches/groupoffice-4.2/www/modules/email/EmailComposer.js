@@ -334,7 +334,8 @@ GO.email.EmailComposer = function(config) {
 	tbar.push(this.emailEditor.getAttachmentsButton());
 
 	if (GO.addressbook) {
-		tbar.push({
+		
+		this.btnAddressbook = new Ext.Button({
 			text : GO.addressbook.lang.addressbook,
 			iconCls : 'btn-addressbook',
 			handler : function() {
@@ -350,6 +351,9 @@ GO.email.EmailComposer = function(config) {
 			},
 			scope : this
 		});
+		
+		tbar.push(this.btnAddressbook);
+		
 	}
 
 	if(GO.addressbook){
@@ -720,6 +724,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			if (config.addresslist_id > 0) {
 				this.sendURL = GO.url("addressbook/sentMailing/send");
 
+				if (GO.addressbook) {
+					// Disable the addressbook button when creating newsletters
+					this.btnAddressbook.setDisabled(true);
+				}
+
 				this.toComboVisible = false;
 				this.showMenuButton.setDisabled(true);
 				this.toCombo.getEl().up('.x-form-item').setDisplayed(false);
@@ -731,6 +740,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				this.saveButton.setDisabled(true);
 			}else
 			{
+				
+				if (GO.addressbook) {
+					// Enable the addressbook button when not creating newsletters
+					this.btnAddressbook.setDisabled(false);
+				}
 //				this.ccFieldCheck.setChecked(GO.email.showCCfield == '1');
 //				this.bccFieldCheck.setChecked(GO.email.showBCCfield == '1');
 			}
