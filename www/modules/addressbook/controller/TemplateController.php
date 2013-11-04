@@ -187,8 +187,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		$response = $store->getData();
 			
 		$response['total']++;
-		$response['results'][] = array('id'=>-1,'name'=>'-- '.GO::t('none').' --');
-		
+		$response['results'][] = array('id'=>-1,'name'=>'-- '.GO::t('userDefaultTemplate','addressbook').' --','group'=>'','text'=>'','template_id'=>'','checked'=>false);
 		return $response;
 	}
 	
