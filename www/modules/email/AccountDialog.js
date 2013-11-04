@@ -52,7 +52,7 @@ GO.email.AccountDialog = function(config) {
 		this.templatesCombo = new Ext.form.ComboBox({
 			fieldLabel : GO.email.lang['defaultEmailTemplate'],
 			hiddenName : 'default_account_template_id',
-			width: '100%',
+			width: 300,
 			store : new GO.data.JsonStore({
 				url : GO.url("addressbook/template/accountTemplatesStore"),
 				baseParams : {
@@ -74,8 +74,6 @@ GO.email.AccountDialog = function(config) {
 			selectOnFocus : true,
 			forceSelection : true
 		});
-		
-		this.templatesCombo.store.load();
 		
 //		this.templatesBtn = new Ext.Button({
 //
@@ -640,6 +638,9 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 				this.foldersTab.setDisabled(false);
 
 				this.permissionsTab.setAcl(action.result.data.acl_id);
+				
+				if (this.templatesCombo)
+					this.templatesCombo.store.load();
 			},
 			scope : this
 		});
