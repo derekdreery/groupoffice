@@ -2,6 +2,7 @@
 - Billing: totals row in orders / invoices grid.
 - Address book Email templates: Email Account Settings: Show default templates dropdown in IE (fix).
 - Billing: Cost Code field for Catalog Products.
+- Tickets: Cost Codes for ticket rates. Cost codes in used ticket rates can be invoiced.
 
 01-11-2013 5.0.19
 - Bug with decimal values in timeregistration grid.
