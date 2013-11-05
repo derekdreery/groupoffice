@@ -2226,3 +2226,33 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 	padding-bottom:10px !important;
 }
 
+
+.x-tot2ivn-vr-tab-panel{
+	background: none !important;
+}
+
+.x-tot2ivn-vr-tab-panel .x-tot2ivn-vr-tab-strip-title{
+	border:none !important;
+	background:#009bcb !important;
+}
+
+.x-tot2ivn-vr-tab-panel .x-tot2ivn-vr-tab-strip-top{
+	margin: 0 !important;
+	border-bottom: none !important;
+}
+
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tot2ivn-vr-tab-strip-title .x-tot2ivn-vr-tab-strip-text{
+	color:#FFF !important;
+}
+
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tab-strip-active {
+	background:#FFF !important;
+}
+
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tab-strip-active .x-tot2ivn-vr-tab-strip-text{
+	color:#000 !important;
+}
+
+.x-tot2ivn-vr-tab-panel .x-tot2ivn-vr-tab-panel-body .x-panel-body {
+	border:none !important;
+}
