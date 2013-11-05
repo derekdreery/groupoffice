@@ -39,23 +39,42 @@ GO.tasks.MainPanel = function(config){
 			this.gridPanel.store.reload();
 	}, this);
 
-	this.taskListsPanel.on('change', function(grid, tasklists, records)
-	{                		                
-//		this.gridPanel.store.baseParams.tasks_tasklist_filter = Ext.encode(tasklists);
-//		this.gridPanel.store.load();
-		this.tasklist_ids = tasklists;
+//	this.taskListsPanel.on('change', function(grid, tasklists, records)
+//	{                		                
+////		this.gridPanel.store.baseParams.tasks_tasklist_filter = Ext.encode(tasklists);
+////		this.gridPanel.store.load();
+//		this.tasklist_ids = tasklists;
+//
+//		if(records.length)
+//		{
+//			this.addTaskPanel.populateComboBox(records);
+//
+//			this.tasklist_id = records[0].data.id;
+//			this.tasklist_name = records[0].data.name;
+//		}
+//
+//		// this.gridPanel.store.baseParams.tasklists;
+//	}, this);
 
-		if(records.length)
-		{
-			this.addTaskPanel.populateComboBox(records);
-
-			this.tasklist_id = records[0].data.id;
-			this.tasklist_name = records[0].data.name;
-		}
-
-		// this.gridPanel.store.baseParams.tasklists;
-	}, this);
+this.gridPanel.store.on('load', function(store, records, options)
+	{    
+		var lists = store.reader.jsonData.selectable_tasklists;
 				
+		if(lists && lists.length){
+			this.addTaskPanel.populateComboBox(lists);
+			this.tasklist_id = lists[0].data.id;
+			this.tasklist_name = lists[0].data.name;
+		}
+//		
+//		if(records.length)
+//		{
+//			this.addTaskPanel.populateComboBox(records);
+//
+//			this.tasklist_id = records[0].data.id;
+//			this.tasklist_name = records[0].data.name;
+//		}
+	}, this);
+	
 	var filterPanel = new Ext.form.FormPanel({
 		//title:GO.tasks.lang.filter,
 		height:162,
