@@ -182,8 +182,24 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		//$colModel->formatColumn('project_name','$model->project->name'); TODO: Implement the project from the ID and not from the name
 		return parent::formatColumns($columnModel);
 	}
-	
+
+	protected function afterStore(&$response, &$params, &$store, $storeParams) {
 		
+		if(isset($params['ta-taskslists'])){
+			
+			$findParams = GO_Base_Db_FindParams::newInstance()->select('t.id,t.name')->limit(GO::config()->nav_page_size);
+			$findParams->getCriteria()->addInCondition('id', json_decode($params['ta-taskslists']));
+			$tasklists = GO_Tasks_Model_Tasklist::model()->find($findParams);
+			
+			$response['selectable_tasklists'] = array();
+			foreach($tasklists as $tasklist){
+				$response['selectable_tasklists'][] = array('data'=>array('id'=>$tasklist->id,'name'=>$tasklist->name));
+			}
+		}
+		
+		return parent::afterStore($response, $params, $store, $storeParams);
+	}
+	
 	protected function getStoreParams($params) {
 		
 		if(!isset($params['show'])){
