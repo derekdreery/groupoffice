@@ -673,3 +673,5 @@ $l['skippedDeleteHasFiles']='Skipped delete because model has folder or files';
 $l['foundDuplicates']='Found %s duplicates.';
 $l['clickToDeleteDuplicates']='Click here to delete the newest duplicates marked in red.';
 $l['folderUpload']='Folders (Java required)';
+
+$l["report"]='Report';
