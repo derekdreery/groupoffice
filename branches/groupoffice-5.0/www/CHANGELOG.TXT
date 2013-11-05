@@ -1,3 +1,6 @@
+
+- Ticket module has a report for the average ticket solving time per agent per month
+- Ticket Module has a report for amount of tickets solved per agent per month
 - Billing: optional paging in invoice/order PDFs.
 - Billing: totals row in orders / invoices grid.
 - Address book Email templates: Email Account Settings: Show default templates dropdown in IE (fix).
