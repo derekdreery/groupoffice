@@ -186,6 +186,7 @@ $l['eventUpdatedIn']='The event in calendar %s has been updated with status %s';
 $l['updateReponses']["ACCEPTED"]='%s has accepted the event %s';
 $l['updateReponses']["DECLINED"]='%s has declined the event %s';
 $l['updateReponses']["TENTATIVE"]='%s has marked the event %s as tentative';
+$l['updateReponses']["NEEDS-ACTION"]='%s has marked the event %s as not decided yet';
 
 $l['directUrl']='Direct URL';
 
