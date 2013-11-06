@@ -165,7 +165,13 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 	}
 	
-	
+	/**
+	 * Dumps database in ~/database.sql and copies config.php in ~/config.php 
+	 * then it rsyncs this folder to the target machine.
+	 * 
+	 * @param type $params
+	 * @throws Exception
+	 */
 	public function actionMigrate($params){
 		
 		$this->requireCli();
