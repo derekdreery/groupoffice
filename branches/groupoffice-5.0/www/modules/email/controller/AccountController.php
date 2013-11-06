@@ -21,10 +21,13 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 //		
 //	}
 
+//	protected function headers() {
+//		header('Content-Type: application/json; charset=UTF-8');
+//	}
 	protected function getStoreParams($params) {
 
 		$findParams = GO_Base_Db_FindParams::newInstance()
-						->select("t.*,a.email, a.name")
+						->select("t.id,t.host,t.user_id,t.username,t.smtp_host,a.email, a.name")
 						->searchFields(array('a.email','a.name','t.host'))
 						->joinModel(array(
 				'tableAlias' => 'a',
@@ -44,7 +47,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 	protected function afterLoad(&$response, &$model, &$params) {
 
-		$response['data']['password'] = $model->decryptPassword();
+		//$response['data']['password'] = $model->decryptPassword();
+		unset($response['data']['password']);
 		$response['data']['smtp_password'] = $model->decryptSmtpPassword();
 
 		$alias = $model->getDefaultAlias();
@@ -65,6 +69,13 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		}
 		
 		return parent::afterLoad($response, $model, $params);
+	}
+	
+	protected function beforeSubmit(&$response, &$model, &$params) {
+		if(empty($params['password']))
+			unset($params['password']);
+		
+		return parent::beforeSubmit($response, $model, $params);
 	}
 
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
