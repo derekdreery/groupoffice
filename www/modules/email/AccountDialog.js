@@ -171,7 +171,7 @@ GO.email.AccountDialog = function(config) {
 			fieldLabel : GO.lang.strPassword,
 			name : 'password',
 			inputType : 'password',
-			allowBlank : false,
+//			allowBlank : false,
 			listeners : {
 				change : function() {
 					this.refreshNeeded = true;
@@ -578,6 +578,12 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 				}
 
 				Ext.MessageBox.alert(GO.lang.strError, error);
+				
+				if(action.result.validationErrors){
+					for(var field in action.result.validationErrors){
+						form.findField(field).markInvalid(action.result.validationErrors[field]);
+					}
+				}
 			},
 			scope : this
 
