@@ -1,4 +1,4 @@
-
+- Tickets: Possible to use {agent:*} tags for email templates
 - Ticket module has a report for the average ticket solving time per agent per month
 - Ticket Module has a report for amount of tickets solved per agent per month
 - Billing: optional paging in invoice/order PDFs.
