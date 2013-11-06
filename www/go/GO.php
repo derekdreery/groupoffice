@@ -574,7 +574,7 @@ class GO{
 
 		//Every logged on user get's a personal temp dir.
 		if (!empty(self::session()->values['user_id'])) {
-			self::config()->tmpdir = self::config()->tmpdir . self::session()->values['user_id'] . '/';
+			self::config()->tmpdir = self::config()->getTempFolder()->path().'/';
 		}
 	}
 	
