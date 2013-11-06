@@ -1287,6 +1287,14 @@ class GO_Base_Config {
 	 */
 	public function getTempFolder($autoCreate=true){
 		$user_id = GO::user() ? GO::user()->id : 0;
+		
+		$path = $this->orig_tmpdir;		
+		if(PHP_SAPI=='cli'){
+			$path .= 'cli/';
+		}		
+		$path .= $user_id;		
+		
+		
 		$folder = new GO_Base_Fs_Folder($this->orig_tmpdir.$user_id);
 		if($autoCreate)
 			$folder->create(0777);
