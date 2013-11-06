@@ -308,21 +308,36 @@ GO.email.AccountDialog = function(config) {
 			name : 'smtp_port',
 			value : '25',
 			allowBlank : false
-		}), new Ext.form.TextField({
+		}),{
+			xtype:'xcheckbox',
+			checked: false,
+			name: 'smtp_auth',
+			hideLabel:true,
+			boxLabel:GO.email.lang.useAuth,
+			listeners:{
+				check:function(cb, checked){
+					this.smtpUsername.setDisabled(!checked);
+					this.smtpPassword.setDisabled(!checked);
+				},
+				scope:this
+			}
+		},this.smtpUsername= new Ext.form.TextField({
 			fieldLabel : GO.lang.strUsername,
-			name : 'smtp_username'
+			name : 'smtp_username',
+			disabled:true
 		}),
-		new Ext.ux.form.XCheckbox({
+		this.smtpPasswordStore = new Ext.ux.form.XCheckbox({
 			checked: true,
 			name: 'store_smtp_password',
 			allowBlank: true,
 			hideLabel:true,
 			hidden: true
 		}),
-		new Ext.form.TextField({
+		this.smtpPassword = new Ext.form.TextField({
 			fieldLabel : GO.lang.strPassword,
 			name : 'smtp_password',
-			inputType : 'password'
+			inputType : 'password',
+			disabled:true
 		})]
 	};
 

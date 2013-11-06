@@ -47,9 +47,17 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 	protected function afterLoad(&$response, &$model, &$params) {
 
-		//$response['data']['password'] = $model->decryptPassword();
-		unset($response['data']['password']);
-		$response['data']['smtp_password'] = $model->decryptSmtpPassword();
+		
+		
+		$response['data']['smtp_auth']=!empty($model->smtp_username);
+		
+		//hide passwords
+		$response['data']['password']='';
+		$response['data']['smtp_password']='';
+		
+//		$response['data']['password'] = $model->decryptPassword();
+//		$response['data']['smtp_password'] = $model->decryptSmtpPassword();
+		
 
 		$alias = $model->getDefaultAlias();
 
@@ -74,6 +82,15 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		if(empty($params['password']))
 			unset($params['password']);
+		
+		if(!empty($params['smtp_auth'])){			
+			if(empty($params['smtp_password']))
+				unset($params['smtp_password']);			
+		}else
+		{
+			$params['smtp_password']="";
+			$params['smtp_username']="";
+		}
 		
 		return parent::beforeSubmit($response, $model, $params);
 	}
