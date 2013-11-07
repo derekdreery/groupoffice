@@ -1,3 +1,5 @@
+07-11-2013 5.0.20
+- Hide password in e-mail network response.
 - Tickets: Possible to use {agent:*} tags for email templates
 - Ticket module has a report for the average ticket solving time per agent per month
 - Ticket Module has a report for amount of tickets solved per agent per month
