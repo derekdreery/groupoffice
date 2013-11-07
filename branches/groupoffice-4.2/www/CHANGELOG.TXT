@@ -1,3 +1,4 @@
+- When someone other the the ticket agent add a new message to the ticket it will be marked as unseen
 - Zpushadmin can now also work with zpush2.1
 
 30-10-2013 4.2.27
