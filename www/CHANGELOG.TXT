@@ -1,3 +1,5 @@
+- Tickets: there is now no longer an execution time limit for the ticket invoicing process.
+
 07-11-2013 5.0.20
 - Hide password in e-mail network response.
 - Tickets: Possible to use {agent:*} tags for email templates
