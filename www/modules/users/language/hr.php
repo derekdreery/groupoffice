@@ -128,3 +128,5 @@ $l['enabled_cf_tabs']= 'Omogući kartice prilagođenih polja';
 
 $l['slashymd']='Godina-Mjesec-Dan';
 $l['dotymd']='Godina.Mjesec.Dan';
+
+$l['cmdFormLabelHolidaySet']= 'Bankovni praznici';
