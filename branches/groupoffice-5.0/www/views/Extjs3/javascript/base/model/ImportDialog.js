@@ -54,10 +54,11 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	// Fields that are set while the dialog is being used.
 	_colHeaders : {}, // This is a buffer associative array for all the cell values of the uploaded CSV file's first row.
 	_attributesStore : null, // Also a buffer, an ArrayStore containing all the current model's attributes.
-	_userSelectCSVMappings : {}, // An element of this object is, e.g., this._userSelectCSVMappings[33] = 'first_name';, which says that the 33rd column of the CSV goes to the t.first_name field of the models.
+	_userSelectFieldMappings : {}, // An element of this object is, e.g., this._userSelectFieldMappings[33] = 'first_name';, which says that the 33rd column of the CSV/XLS goes to the t.first_name field of the models.
+	_nColumns : 0, // The number of columns in the CSV / XLS(X) file	
 	
-	_csvFieldDialog : null, // The second dialog in the use case.
-	_inputIdPrefix : '', // Prefix for the input field id's in the _csvFieldDialog.
+	_fieldsDialog : null, // The second dialog in the use case.
+	_inputIdPrefix : '', // Prefix for the input field id's in the _fieldsDialog.
 	
 	/****************************************************************************
 	 ****************************************************************************
@@ -99,8 +100,9 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 		this.formPanel.form.submit({
 			url : GO.url(this._moduleName + '/' + this._modelName + '/import' + this._fileType),
 			params : {
-				attributeIndexMap : Ext.encode(this._userSelectCSVMappings),
-				importBaseParams : Ext.encode(this._importBaseParams)
+				attributeIndexMap : Ext.encode(this._userSelectFieldMappings),
+				importBaseParams : Ext.encode(this._importBaseParams),
+				maxColumnNr : this._nColumns
 			},
 			success : function( success, response, result ) {
 				var errorsText = '';
@@ -141,8 +143,8 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 					this.fireEvent('import');
 						
 					this.hide();
-					if (!GO.util.empty(this._csvFieldDialog))
-						this._csvFieldDialog.close();
+					if (!GO.util.empty(this._fieldsDialog))
+						this._fieldsDialog.close();
 				}
 				this._loadMask.hide();
 			},
@@ -188,7 +190,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 			max:1
 		});
 				
-		if (this._fileType=='CSV')
+		if (this._fileType=='CSV' || this._fileType=='XLS')
 			this.fileSelector.on('fileAdded',function(file){
 //				this.formPanel.form.submit({
 //					url: GO.url(this._moduleName + '/' + this._modelName + '/readCSVHeaders'),
@@ -223,8 +225,8 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 			buttons: [{
 				text: GO.lang.cmdImport,
 				width: '20%',
-				disabled: this._fileType=='CSV',
-				hidden: this._fileType=='CSV',
+				disabled: this._fileType=='CSV' || this._fileType=='XLS',
+				hidden: this._fileType=='CSV' || this._fileType=='XLS',
 				handler: function(){
 					this._submitForm();
 				},
@@ -253,11 +255,11 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	showImportDataSelectionWindow: function()
 	{
 		this.formPanel.form.submit({
-			url: GO.url(this._moduleName + '/' + this._modelName + '/readCSVHeaders'),
+			url: GO.url(this._moduleName + '/' + this._modelName + '/read'+this._fileType+'Headers'),
 			success: function(form, action) {
-				this._buildCsvImportForm(action.result.results);
+				this._buildImportForm(action.result.results);
 				this.el.mask();
-				this._csvFieldDialog.show();
+				this._fieldsDialog.show();
 			},
 			scope: this
 		});
@@ -303,13 +305,13 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	
 	// Create the second dialog, should be done after every new uploaded file
 	// in showImportDataSelectionWindow()
-	_buildCsvImportForm : function(colHeaders) {
+	_buildImportForm : function(colHeaders) {
 
 		this._colHeaders = colHeaders;
 		
 		if (!this.importFieldsFormPanel) {
 			
-			this._inputIdPrefix = this._moduleName+'_'+this._modelName+'_import_combo_';
+			this._inputIdPrefix = this._moduleName+'_'+this._modelName+'_import_combo_'+this._fileType+'_';
 			
 			this.importFieldsFormPanel = new Ext.form.FormPanel({
 				waitMsgTarget:true,
@@ -370,8 +372,8 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 			component.setValue(presetMatchingValue);
 		}
 
-		if (!this._csvFieldDialog) {
-			this._csvFieldDialog = new GO.Window({
+		if (!this._fieldsDialog) {
+			this._fieldsDialog = new GO.Window({
 				autoScroll:true,
 				height: 400,
 				width: 400,
@@ -383,7 +385,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 				buttons: [{
 					text: GO.lang['cmdImport'],
 					handler: function() {
-						this._rememberCSVmappings();
+						this._rememberFieldMappings();
 						this._submitForm();
 						this.hide();
 						this.el.unmask();
@@ -392,7 +394,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 				},{
 					text: GO.lang['cmdCancel'],
 					handler: function(){
-						this._csvFieldDialog.close();
+						this._fieldsDialog.close();
 						this.hide();
 						this.el.unmask();
 					},
@@ -404,18 +406,20 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	
 	/**
 	 * Last bit before the import paramaters are submitted: make ready the array
-	 * this._userSelectCSVMappings as set by the user. That is basically an array
-	 * whose keys are the column number in the uploaded CSV file (starting from 0),
+	 * this._userSelectFieldMappings as set by the user. That is basically an array
+	 * whose keys are the column number in the uploaded CSV/XLS file (starting from 0),
 	 * and whose values are the database field names such as used in the GO
 	 * framework queries (e.g. in the case of contact import: t.address_no,
 	 * companies.name)
 	 */
-	_rememberCSVmappings : function() {
-		this._userSelectCSVMappings = {};
+	_rememberFieldMappings : function() {
+		this._userSelectFieldMappings = {};
+		this._nColumns = 0;
 		Ext.each(this.importFieldsFormPanel.items.items,function(item,index,allItems){
+			this._nColumns++;
 			if (item.value!='-') {
 				var colNr = item.id.replace(this._inputIdPrefix,"");
-				this._userSelectCSVMappings[colNr] = item.value;
+				this._userSelectFieldMappings[colNr] = item.value;
 			}
 		},this);
 	}
