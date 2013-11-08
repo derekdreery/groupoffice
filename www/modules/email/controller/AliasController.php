@@ -43,11 +43,24 @@ class GO_Email_Controller_Alias extends GO_Base_Controller_AbstractModelControll
 		$record['from'] = (string) $r;
 		$record['html_signature'] = GO_Base_Util_String::text_to_html($model->signature);
 		$record['plain_signature'] = $model->signature;
+		$record['template_id']=0;
 		
-		$defaultAccountTemplateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($model->account_id);
-		$defaultUserTemplateModel = GO_Addressbook_Model_DefaultTemplate::model()->findByPk(GO::user()->id);
-		$record['template_id']= !empty($defaultAccountTemplateModel) ? $defaultAccountTemplateModel->template_id : ( !empty($defaultUserTemplateModel) ? $defaultUserTemplateModel->template_id : 0 );
+		if(GO::modules()->addressbook){
+			$defaultAccountTemplateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($model->account_id);
+			if($defaultAccountTemplateModel){
+				$record['template_id']=$defaultAccountTemplateModel->template_id;
+			}else{
+				$defaultUserTemplateModel = GO_Addressbook_Model_DefaultTemplate::model()->findByPk(GO::user()->id);
+				if(!$defaultUserTemplateModel){
+					$defaultUserTemplateModel= new GO_Addressbook_Model_DefaultTemplateForAccount();
+					$defaultUserTemplateModel->account_id = $model->account_id;
+					$defaultUserTemplateModel->save();
+				}
+				$record['template_id']=$defaultUserTemplateModel->template_id;
+			}
+		}
 		unset($record['signature']);
+		
 
 		return parent::formatStoreRecord($record, $model, $store);
 	}
