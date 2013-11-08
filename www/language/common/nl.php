@@ -633,3 +633,7 @@ $l['multiselectSelected']='geselecteerd';
 $l['folderUpload']='Mappen (Java required)';
 
 $l["report"]='Raporteer';
+
+$l['namelessItem'] = 'Naamloze item';
+
+$l['importFileType'] = 'Bestandtype voor import';
