@@ -675,3 +675,6 @@ $l['clickToDeleteDuplicates']='Click here to delete the newest duplicates marked
 $l['folderUpload']='Folders (Java required)';
 
 $l["report"]='Report';
+
+$l['namelessItem'] = 'Nameless item';
+$l['importFileType'] = 'Import file type';
