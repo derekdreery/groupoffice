@@ -2564,8 +2564,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 								->addCondition($field, $this->_attributes[$field]);
 
 					if(is_array($attributes['unique'])){
-						foreach($attributes['unique'] as $f)
-							$criteria->addCondition($f, $this->_attributes[$f]);
+						foreach($attributes['unique'] as $f){
+							if(isset($this->_attributes[$f]))
+								$criteria->addCondition($f, $this->_attributes[$f]);
+						}
 					}
 
 					if(!$this->isNew)
