@@ -1,3 +1,5 @@
+- Tickets: added diagram that shows average response time on new tickets per month
+
 08-11-2013 5.0.21
 - Bug in tickets module when billing module wasn't there.
 - Excel import for billing items
