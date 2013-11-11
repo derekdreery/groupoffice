@@ -2666,7 +2666,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		//GO::debug('save'.$this->className());
 		
 		if(!$ignoreAcl && !$this->checkPermissionLevel($this->isNew?GO_Base_Model_Acl::CREATE_PERMISSION:GO_Base_Model_Acl::WRITE_PERMISSION)){
-			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
+			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true).' acl_id: '.$this->_acl_id : '';
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
 		
