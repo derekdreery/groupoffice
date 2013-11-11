@@ -674,7 +674,7 @@ class GO{
 					break;
 		}		
 		
-		$errorMsg="[".date("Ymd H:i:s")."] PHP $type: $errstr in $errfile on line $errline";
+		$errorMsg="[".@date("Ymd H:i:s")."] PHP $type: $errstr in $errfile on line $errline";
 		
 		$user = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
 		$agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
