@@ -9,4 +9,8 @@ if [ -e /usr/share/groupoffice/modules/z-push2/backend/go ]; then
 	cp -R /usr/share/groupoffice/modules/sync/z-push2/backend/go /usr/share/groupoffice/modules/z-push2/backend/
 fi
 
+if [ -e /usr/share/groupoffice/modules/z-push21/backend/go ]; then
+	cp -R /usr/share/groupoffice/modules/sync/z-push21/backend/go /usr/share/groupoffice/modules/z-push21/backend/
+fi
+
 exit 0
