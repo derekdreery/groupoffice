@@ -2373,11 +2373,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		return $att;
 	}
 	
-	private static $_magicAttributeNames;
+	private $_magicAttributeNames;
 	
 	private function _getMagicAttributeNames(){
-		if(!isset(self::$_magicAttributeNames)){
-			self::$_magicAttributeNames=array();
+		if(!isset($this->_magicAttributeNames)){
+			$this->_magicAttributeNames=array();
 			$r = new ReflectionObject($this);
 			$publicProperties = $r->getProperties(ReflectionProperty::IS_PUBLIC);
 			foreach($publicProperties as $prop){
@@ -2385,7 +2385,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				//$prop = new ReflectionProperty();
 				if(!$prop->isStatic()) {
 					//$this->_magicAttributeNames[]=$prop->getName();
-					self::$_magicAttributeNames[]=$prop->name;
+					$this->_magicAttributeNames[]=$prop->name;
 				}
 			}
 			
@@ -2402,7 +2402,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //			}
 //			
 		}
-		return self::$_magicAttributeNames;
+		return $this->_magicAttributeNames;
 	}
 	
 	/**
