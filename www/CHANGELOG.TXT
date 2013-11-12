@@ -1,3 +1,4 @@
+- Tickets: fixed an issue with the report chart where the flash plugin would not load when GroupOffice was in a sub directory
 - Tickets: added diagram that shows average response time on new tickets per month
 
 08-11-2013 5.0.21
