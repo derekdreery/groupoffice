@@ -252,3 +252,5 @@ $l['searchIn']= 'Søk i:';
 $l['searchRecursive']= 'Rekursivt';
 $l['currentFolder']= 'Gjeldende mappe';
 $l['allFolders']= 'Alle mapper';
+$l['defaultEmailTemplate']='Standard e-postmal';
+$l['useAuth']="Bruk autentisering";

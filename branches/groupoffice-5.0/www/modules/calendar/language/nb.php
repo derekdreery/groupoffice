@@ -233,3 +233,7 @@ $l['eventPrivateChecked']= 'Husk at selv om du merker hendelsen som privat så k
 $l['show_completed_tasks']= "Vis fullførte oppgaver";
 $l['showStatuses']='Vis hendelsstatuser i visninger';
 $l['cantMoveRecurringByDay']="Beklager, men du kan ikke flytte denne type hendelser på denne måten. Du må åpne den for redigering for å flytte den.";
+$l['updateReponses']['NEEDS-ACTION']='%s har satt hendelsen %s til status: Jeg har ikke bestemt meg ennå';
+$l['eventNotSavedSubject']= 'Hendelsen er ikke lagret i %event kalenderen "%cal"';
+$l['eventNotSavedBody']= 'Denne meldingen kommer fra din kalender %goname. %goname forsøkte å importere hendelsen "%event" med starttid %starttime fra en ekstern kalender til kalenderen "%cal", men dette feilet fordi hendelsen inneholder feil. Hendelsen kan fortsatt befinne seg i den eksterne kalenderen.'.
+$l['usedResources']= 'Brukte ressurser';
