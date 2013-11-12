@@ -735,7 +735,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				));
 	//		}
 				
-				$findParams->getCriteria()->addInCondition('id', $userContactIds,'t',true,true);
+				$findParams->getCriteria()->addInTemporaryTableCondition('usercontacts', 'id', $userContactIds,'t',true,true);
 		
 
 			if(!empty($params['addressbook_id'])){		
@@ -747,7 +747,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 
 			if(!empty($abs)){
 
-				$findParams->getCriteria ()->addInCondition('addressbook_id', $abs);
+				$findParams->getCriteria ()->addInTemporaryTableCondition('addressbooks','addressbook_id', $abs);
 
 				if(!empty($params['requireEmail'])){
 					$criteria = GO_Base_Db_FindCriteria::newInstance()
