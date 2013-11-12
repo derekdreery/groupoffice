@@ -1,5 +1,11 @@
+12-11-2013 5.0.22
+- Updated Norwegian
 - Tickets: fixed an issue with the report chart where the flash plugin would not load when GroupOffice was in a sub directory
 - Tickets: added diagram that shows average response time on new tickets per month
+- Removed task  description tooltip
+- Replaced sql_calc_found_rows with separate count() query to improve performance
+- Replaced large IN queries with temporary tables to increase performance.
+- Listing error in billing module when sorting on status.
 
 08-11-2013 5.0.21
 - Bug in tickets module when billing module wasn't there.
