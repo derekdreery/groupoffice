@@ -150,17 +150,42 @@ class GO_Base_Component_MultiSelectGrid {
 	public function addSelectedToFindCriteria(GO_Base_Db_FindParams &$findParams, $columnName, $tableAlias = 't', $useAnd = true, $useNot = false) {
 	
 		
+		$selectedCount = count($this->selectedIds);
+		
 		//ignore here. Permissions are checked in by _setSelectedIds.
 		if($this->_checkPermissions){
 			
 //			$this->_validateSelection();
 		
-			if(count($this->selectedIds))
+			if($selectedCount)
 				$findParams->ignoreAcl();
 		}
 
-		if(count($this->selectedIds))
-			$findParams->getCriteria()->addInCondition($columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
+
+		if($selectedCount){			
+			if($selectedCount>1){
+				
+				//large in queries can be very slow. We'll use a temporary table.				
+				$tableName = "ms_".$this->_requestParamName;
+				$sql = "CREATE TEMPORARY TABLE IF NOT EXISTS `$tableName` (
+					`id` int(11) NOT NULL,
+					PRIMARY KEY (`id`)
+				);";
+				
+				GO::getDbConnection()->query($sql);
+				GO::getDbConnection()->query("TRUNCATE TABLE `$tableName`");
+
+				$sql = "INSERT INTO $tableName (id) VALUES (".implode('),(', $this->selectedIds).")";
+				GO::getDbConnection()->query($sql);
+
+				$findParams->getCriteria()->addRawCondition($tableAlias.'.'.$columnName, '(SELECT id FROM `'.$tableName.'`)' ,'IN');
+			}else
+			{
+				$findParams->getCriteria()->addCondition($columnName, $this->selectedIds[0], $useNot ? '!=' : '=',$tableAlias, $useAnd);
+			}			
+		}
+		
+		
 		
 //		$this->_save();
 	}
