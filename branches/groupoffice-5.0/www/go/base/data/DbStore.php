@@ -262,7 +262,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 			if (!is_array($sort))
 				$sort = empty($sort) ? array() : array($sort);
 		
-		if (isset($this->_requestParams['groupBy']))
+		if (!empty($this->_requestParams['groupBy']))
 			array_unshift($sort, $this->_requestParams['groupBy']);
 
 		if (!is_array($dir))
@@ -458,7 +458,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 //		$sumParams = GO_Base_Db_FindParams::newInstance()->single()->select($summarySelect)->criteria($this->_extraFindParams->getCriteria());
 		
 		$findParams = $this->createFindParams(false);
-		$sumParams = $findParams->single()->export(false)->select($summarySelect);
+		$sumParams = $findParams->single()->export(false)->select($summarySelect)->order(null,"");
 		
 		$sumRecord = GO::getModel($this->_modelClass)->find($sumParams);
 		if($sumRecord)
