@@ -52,7 +52,7 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 			$this->currentPage = $_GET[$this->pageParam];
 		
 		if(empty($this->pageSize))
-			$this->pageSize = GO::config()->nav_page_size;
+			$this->pageSize = GO::user() ? GO::user()->max_rows_list : GO::config()->nav_page_size;
 			
 		if(!($this->store instanceof GO_Base_Data_DbStore))
 			throw new Exception('store needs to be an instance of GO_Base_Data_Store');
