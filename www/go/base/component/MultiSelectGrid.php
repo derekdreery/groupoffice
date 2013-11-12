@@ -175,7 +175,7 @@ class GO_Base_Component_MultiSelectGrid {
 				GO::getDbConnection()->query($sql);
 				GO::getDbConnection()->query("TRUNCATE TABLE `$tableName`");
 
-				$sql = "INSERT INTO $tableName (id) VALUES (".implode('),(', $this->selectedIds).")";
+				$sql = "INSERT INTO `$tableName` (id) VALUES (".implode('),(', $this->selectedIds).")";
 				GO::getDbConnection()->query($sql);
 
 				$findParams->getCriteria()->addRawCondition($tableAlias.'.'.$columnName, '(SELECT id FROM `'.$tableName.'`)' ,'IN');
