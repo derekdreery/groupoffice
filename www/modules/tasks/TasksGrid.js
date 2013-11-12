@@ -49,14 +49,14 @@ GO.tasks.TasksPanel = function(config)
 				id:'name',
 				width:200,
 				header:GO.lang['strName'],
-				dataIndex: 'name',
-				renderer:function(value, p, record){
-					if(!GO.util.empty(record.data.description))
-					{
-						p.attr = 'ext:qtip="'+Ext.util.Format.htmlEncode(record.data.description)+'"';
-					}
-					return value;
-				}
+				dataIndex: 'name'
+//				renderer:function(value, p, record){
+//					if(!GO.util.empty(record.data.description))
+//					{
+//						p.attr = 'ext:qtip="'+Ext.util.Format.htmlEncode(record.data.description)+'"';
+//					}
+//					return value;
+//				}
 			},{
 				header:GO.tasks.lang.tasklist,
 				dataIndex: 'tasklist_name',
