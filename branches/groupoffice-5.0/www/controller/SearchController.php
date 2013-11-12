@@ -296,7 +296,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 				));
 				//		}
 
-				$findParams->getCriteria()->addInCondition('id', $userContactIds, 't', true, true);
+				$findParams->getCriteria()->addInTemporaryTableCondition('usercontacts', 'id', $userContactIds, 't', true, true);
 
 
 				if (!empty($params['addressbook_id'])) {
@@ -307,7 +307,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 
 				if (!empty($abs)) {
 
-					$findParams->getCriteria()->addInCondition('addressbook_id', $abs);
+					$findParams->getCriteria()->addInTemporaryTableCondition('readableaddressbooks', 'addressbook_id', $abs);
 
 //					if (!empty($params['requireEmail'])) {
 						$criteria = GO_Base_Db_FindCriteria::newInstance()
@@ -331,8 +331,11 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 					
 					if (count($response['results']) < 10) {
 						$findParams = GO_Base_Db_FindParams::newInstance()
+							->ignoreAcl()
 							->searchQuery($query)
 							->limit(10-count($response['results']));
+						
+						$findParams->getCriteria()->addInTemporaryTableCondition('readableaddressbooks', 'addressbook_id', $abs);
 						
 //						if (!empty($params['requireEmail'])) {
 							$criteria = $findParams->getCriteria()

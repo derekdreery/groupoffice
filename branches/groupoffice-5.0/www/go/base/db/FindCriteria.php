@@ -241,6 +241,51 @@ class GO_Base_Db_FindCriteria {
 		
 	}
 	
+	
+	private static $_temporaryTables=array();
+	/**
+	 * IN conditions can be slow on large datasets. Creating a temporary table
+	 * for the query can be much faster.
+	 * This function does the same as addInCondition but uses a subselect in a temporary table.
+	 * 
+	 * @param String $tableName The name of the temporary table
+	 * @param String $field The field where this condition is for.
+	 * @param Array $value The value of the field for this condition.
+	 * @param String $tableAlias The alias of the table in this SQL statement.
+	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true.
+	 * @param Boolean $useNot True for 'NOT IN', false for 'IN'. Default: false.
+	 * @return \GO_Base_Db_FindCriteria
+	 * @throws Exception
+	 */
+	public function addInTemporaryTableCondition($tableName, $field, $values, $tableAlias='t', $useAnd=true, $useNot=false){
+		if(!is_array($values))
+			throw new Exception("ERROR: Value for addInCondition must be an array");
+		
+		if(!count($values))
+				return $this;
+		
+			if(!isset(self::$_temporaryTables[$tableName])){
+				$sql = "CREATE TEMPORARY TABLE `$tableName` (
+					`id` int(11) NOT NULL,
+					PRIMARY KEY (`id`)
+				);";
+				GO::getDbConnection()->query($sql);
+				
+				self::$_temporaryTables[$tableName]=true;
+			}else
+			{
+				GO::getDbConnection()->query("TRUNCATE TABLE `$tableName`");
+			}
+			
+
+			$sql = "INSERT INTO `$tableName` (id) VALUES (".implode('),(', $values).")";
+			GO::getDbConnection()->query($sql);
+
+			$this->addRawCondition($tableAlias.'.'.$field, '(SELECT id FROM `'.$tableName.'`)' , $useNot ? 'NOT IN' : 'IN', $useAnd);
+			
+			return $this;
+	}
+	
 	/**
 	 * Add a fulltext search query
 	 * 

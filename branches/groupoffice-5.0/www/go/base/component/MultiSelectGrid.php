@@ -163,22 +163,9 @@ class GO_Base_Component_MultiSelectGrid {
 
 
 		if($selectedCount){			
-			if($selectedCount>1){
-				
-				//large in queries can be very slow. We'll use a temporary table.				
+			if($selectedCount>1){				
 				$tableName = "ms_".$this->_requestParamName;
-				$sql = "CREATE TEMPORARY TABLE IF NOT EXISTS `$tableName` (
-					`id` int(11) NOT NULL,
-					PRIMARY KEY (`id`)
-				);";
-				
-				GO::getDbConnection()->query($sql);
-				GO::getDbConnection()->query("TRUNCATE TABLE `$tableName`");
-
-				$sql = "INSERT INTO `$tableName` (id) VALUES (".implode('),(', $this->selectedIds).")";
-				GO::getDbConnection()->query($sql);
-
-				$findParams->getCriteria()->addRawCondition($tableAlias.'.'.$columnName, '(SELECT id FROM `'.$tableName.'`)' ,'IN');
+				$findParams->getCriteria()->addInTemporaryTableCondition($tableName,$columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
 			}else
 			{
 //				$findParams->getCriteria()->addInCondition($columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
