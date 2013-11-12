@@ -160,8 +160,13 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	}
 	
 	
-	public function nextModel(){
-		return $this->_stmt->fetch();
+	public function nextModel(){		
+		
+		$model = $this->_stmt->fetch();
+		
+//		GO::debugPageLoadTime("fetch");
+		
+		return $model;
 	}
 	
 	public function getTotal() {

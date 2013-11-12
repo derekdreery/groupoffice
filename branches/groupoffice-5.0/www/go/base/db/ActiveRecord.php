@@ -1058,6 +1058,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 	}
 	
+	private $useSqlCalcFoundRows=false;
+	
 	/**
 	 * Find models
 	 * 
@@ -1137,8 +1139,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if(!empty($params['calcFoundRows']) && !empty($params['limit']) && (empty($params['start']) || !isset(GO::session()->values[$queryUid]))){
 			
-			//TODO: This is MySQL only code			
-//			$select .= "SQL_CALC_FOUND_ROWS ";
+			//TODO: This is MySQL only code		
+			if($this->useSqlCalcFoundRows)
+				$select .= "SQL_CALC_FOUND_ROWS ";
 			
 			$calcFoundRows=true;
 		}else
@@ -1519,6 +1522,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 		try{
 			
+			
+			if($this->_debugSql)
+				$start = GO_Base_Util_Date::getmicrotime();
+			
 			$result = $this->getDbConnection()->prepare($sql);
 			
 			if(isset($params['criteriaObject'])){
@@ -1535,6 +1542,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			{
 				$result = $this->getDbConnection()->query($sql);
 			}
+			
+			if($this->_debugSql){
+				$end = GO_Base_Util_Date::getmicrotime();
+				GO::debug("SQL Query took: ".($end-$start));
+			}
+			
 		}catch(Exception $e){
 			$msg = $e->getMessage();
 						
@@ -1570,59 +1583,65 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			if(!empty($params['limit'])){
 				
 				//Total numbers are cached in session when browsing through pages.
-				if($calcFoundRows){
+				if($calcFoundRows){		
+					
+					if($this->useSqlCalcFoundRows){
 //					//TODO: This is MySQL only code
-//					$sql = "SELECT FOUND_ROWS() as found;";		
-//					$r2 = $this->getDbConnection()->query($sql);
-//					$record = $r2->fetch(PDO::FETCH_ASSOC);
-//					//$foundRows = intval($record['found']);
-//					$foundRows = GO::session()->values[$queryUid]=intval($record['found']);						
-//				}
-//				else
-//				{					
-//					$foundRows=GO::session()->values[$queryUid];
-//				}
-					
-					
-					$countField = is_array($this->primaryKey()) ? '*' : 't.'.$this->primaryKey();				
-		
-					
-					$sql = $select.'COUNT('.$countField.') AS found '.$from.$joins.$where;
-					
-					GO::debug($sql);
-					
-					$r2 = $this->getDbConnection()->prepare($sql);
-					
-					if(isset($params['criteriaObject'])){
-						$criteriaObjectParams = $params['criteriaObject']->getParams();
-
-						foreach($criteriaObjectParams as $param=>$value)
-							$r2->bindValue($param, $value[0], $value[1]);
-
-						$r2->execute();
-					}elseif(isset($params['bindParams'])){			
-						$r2 = $this->getDbConnection()->prepare($sql);				
-						$r2->execute($params['bindParams']);
-					}else
-					{
+						$sql = "SELECT FOUND_ROWS() as found;";		
 						$r2 = $this->getDbConnection()->query($sql);
+						$record = $r2->fetch(PDO::FETCH_ASSOC);
+						//$foundRows = intval($record['found']);
+						$foundRows = GO::session()->values[$queryUid]=intval($record['found']);						
+					}else{
+						$countField = is_array($this->primaryKey()) ? '*' : 't.'.$this->primaryKey();				
+			
+						$sql = $select.'COUNT('.$countField.') AS found '.$from.$joins.$where;
+
+//						GO::debug($sql);
+						
+						if($this->_debugSql)
+							$start = GO_Base_Util_Date::getmicrotime();
+
+						$r2 = $this->getDbConnection()->prepare($sql);
+
+						if(isset($params['criteriaObject'])){
+							$criteriaObjectParams = $params['criteriaObject']->getParams();
+
+							foreach($criteriaObjectParams as $param=>$value)
+								$r2->bindValue($param, $value[0], $value[1]);
+
+							$r2->execute();
+						}elseif(isset($params['bindParams'])){			
+							$r2 = $this->getDbConnection()->prepare($sql);				
+							$r2->execute($params['bindParams']);
+						}else
+						{
+							$r2 = $this->getDbConnection()->query($sql);
+						}
+						
+						if($this->_debugSql){
+							$end = GO_Base_Util_Date::getmicrotime();
+							GO::debug("SQL Count Query took: ".($end-$start));
+						}
+
+						$record = $r2->fetch(PDO::FETCH_ASSOC);
+						
+						
+						
+
+
+						//$foundRows = intval($record['found']);
+						$foundRows = GO::session()->values[$queryUid]=intval($record['found']);					
 					}
-					
-					$record = $r2->fetch(PDO::FETCH_ASSOC);
-					
-					//$foundRows = intval($record['found']);
-					$foundRows = GO::session()->values[$queryUid]=intval($record['found']);						
 				}
 				else
 				{					
 					$foundRows=GO::session()->values[$queryUid];
 				}
-						
-			}else
-			{
-				$foundRows = $result->rowCount();       
-      }	
-      $AS->foundRows=$foundRows;
+					
+					
+				$AS->foundRows=$foundRows;
+			}
 		}
 		
 //		//$result->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className());
@@ -2325,7 +2344,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		foreach($this->_getMagicAttributeNames() as $attName){
 			$att[$attName]=$this->$attName;
 		}
-		
+
 		return $att;
 	}
 	
@@ -2354,11 +2373,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		return $att;
 	}
 	
-	private $_magicAttributeNames;
+	private static $_magicAttributeNames;
 	
 	private function _getMagicAttributeNames(){
-		if(!isset($this->_magicAttributeNames)){
-			$this->_magicAttributeNames=array();
+		if(!isset(self::$_magicAttributeNames)){
+			self::$_magicAttributeNames=array();
 			$r = new ReflectionObject($this);
 			$publicProperties = $r->getProperties(ReflectionProperty::IS_PUBLIC);
 			foreach($publicProperties as $prop){
@@ -2366,7 +2385,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				//$prop = new ReflectionProperty();
 				if(!$prop->isStatic()) {
 					//$this->_magicAttributeNames[]=$prop->getName();
-					$this->_magicAttributeNames[]=$prop->name;
+					self::$_magicAttributeNames[]=$prop->name;
 				}
 			}
 			
@@ -2383,7 +2402,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //			}
 //			
 		}
-		return $this->_magicAttributeNames;
+		return self::$_magicAttributeNames;
 	}
 	
 	/**

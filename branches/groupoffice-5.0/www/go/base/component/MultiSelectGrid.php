@@ -181,10 +181,12 @@ class GO_Base_Component_MultiSelectGrid {
 				$findParams->getCriteria()->addRawCondition($tableAlias.'.'.$columnName, '(SELECT id FROM `'.$tableName.'`)' ,'IN');
 			}else
 			{
+//				$findParams->getCriteria()->addInCondition($columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
 				$findParams->getCriteria()->addCondition($columnName, $this->selectedIds[0], $useNot ? '!=' : '=',$tableAlias, $useAnd);
 			}			
 		}
 		
+//		$findParams->debugSql();
 		
 		
 //		$this->_save();
