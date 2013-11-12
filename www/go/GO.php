@@ -482,6 +482,8 @@ class GO{
 			}
 		}
 	}
+	
+	private static $_scriptStartTime;
 
 	private static $initialized=false;
 
@@ -496,6 +498,8 @@ class GO{
 		}
 		self::$initialized=true;
 		
+	
+		
 		//register our custom error handler here
 		error_reporting(E_ALL | E_STRICT);
 		set_error_handler(array('GO','errorHandler'));
@@ -505,6 +509,10 @@ class GO{
 
 		//Start session here. Important that it's called before GO::config().
 		GO::session();
+		
+		if(GO::config()->debug){
+			self::$_scriptStartTime = GO_Base_Util_Date::getmicrotime();			
+		}
 		
 		date_default_timezone_set(GO::user() ? GO::user()->timezone : GO::config()->default_timezone);
 		
@@ -621,6 +629,7 @@ class GO{
 		if(PHP_SAPI=='cli')
 			GO::session()->clearUserTempFiles(false);
 		
+		GO::debugPageLoadTime('shutdown');
 		GO::debug("--------------------\n");
 	}
 	
@@ -791,7 +800,12 @@ class GO{
 		}
 		return false;
 	}
-
+	
+	public static function debugPageLoadTime($id){
+		 $time = GO_Base_Util_Date::getmicrotime()-self::$_scriptStartTime;
+		 
+		 GO::debug("Script running at [$id] for ".$time."ms");
+	}
 	/**
 	 * Write's to a debug log.
 	 *
