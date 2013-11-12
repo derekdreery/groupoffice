@@ -2376,6 +2376,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	private static $_magicAttributeNames;
 	
 	private function _getMagicAttributeNames(){
+		
+		if(!isset(self::$_magicAttributeNames))
+			self::$_magicAttributeNames=GO::cache ()->get('magicattributes');
+		
 		if(!isset(self::$_magicAttributeNames[$this->className()])){
 			self::$_magicAttributeNames[$this->className()]=array();
 			$r = new ReflectionObject($this);
@@ -2401,6 +2405,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //				}
 //			}
 //			
+			GO::cache ()->set('magicattributes', self::$_magicAttributeNames);
 		}
 		return self::$_magicAttributeNames[$this->className()];
 	}
