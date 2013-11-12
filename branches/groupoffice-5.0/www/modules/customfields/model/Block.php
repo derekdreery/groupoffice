@@ -44,6 +44,7 @@ class GO_Customfields_Model_Block extends GO_Base_Db_ActiveRecord{
 		
 		$stmt = $modelUnderBlock->find(
 			GO_Base_Db_FindParams::newInstance()
+				->ignoreAcl()
 				->join(
 					$cfTableName,
 					GO_Base_Db_FindCriteria::newInstance()->addRawCondition('cf.model_id', 't.id'),
