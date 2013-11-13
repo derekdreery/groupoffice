@@ -1,3 +1,5 @@
+- Ticket reports will only be available to users with manage permission to the ticket module.
+
 12-11-2013 5.0.22
 - Updated Norwegian
 - Tickets: fixed an issue with the report chart where the flash plugin would not load when GroupOffice was in a sub directory
