@@ -111,7 +111,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$john->url_facebook='http://www.facebook.com';
 			$john->url_linkedin='http://www.linkedin.com';
 			$john->url_twitter='http://www.twitter.com';
-			$john->skype_name='test';
+			$john->skype_name='echo123';
 			
 			$john->save();
 			$john->setPhoto(new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/noperson.jpg'));
