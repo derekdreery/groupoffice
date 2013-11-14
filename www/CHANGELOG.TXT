@@ -1,4 +1,5 @@
 - Ticket reports will only be available to users with manage permission to the ticket module.
+- Billing: Able to print invoices for costs.
 
 12-11-2013 5.0.22
 - Updated Norwegian
