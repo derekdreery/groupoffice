@@ -264,26 +264,44 @@ class GO_Base_Db_FindCriteria {
 		if(!count($values))
 				return $this;
 		
-			if(!isset(self::$_temporaryTables[$tableName])){
-				$sql = "CREATE TEMPORARY TABLE `$tableName` (
-					`id` int(11) NOT NULL,
-					PRIMARY KEY (`id`)
-				);";
-				GO::getDbConnection()->query($sql);
-				
-				self::$_temporaryTables[$tableName]=true;
-			}else
-			{
-				GO::getDbConnection()->query("TRUNCATE TABLE `$tableName`");
-			}
-			
-
-			$sql = "INSERT INTO `$tableName` (id) VALUES (".implode('),(', $values).")";
-			GO::getDbConnection()->query($sql);
+			$this->_createTemporaryTable($tableName, $values);
 
 			$this->addRawCondition($tableAlias.'.'.$field, '(SELECT id FROM `'.$tableName.'`)' , $useNot ? 'NOT IN' : 'IN', $useAnd);
 			
 			return $this;
+	}
+	
+	private function _createTemporaryTable($tableName, $values){
+		if(!isset(self::$_temporaryTables[$tableName])){
+			$sql = "CREATE TEMPORARY TABLE `$tableName` (
+				`id` int(11) NOT NULL,
+				PRIMARY KEY (`id`)
+			);";
+			GO::getDbConnection()->query($sql);
+
+			self::$_temporaryTables[$tableName]=true;
+		}else
+		{
+			GO::getDbConnection()->query("TRUNCATE TABLE `$tableName`");
+		}
+		
+		$this->sleepingTempTables[$tableName]=$values;
+
+
+		$sql = "INSERT INTO `$tableName` (id) VALUES (".implode('),(', $values).")";
+		GO::getDbConnection()->query($sql);
+	}
+	
+	private $sleepingTempTables;
+
+	
+	public function recreateTemporaryTables() {	
+		
+		//when this object is in session for export we need to recreate the temp tables.
+		
+		foreach($this->sleepingTempTables as $tableName=>$values){
+			$this->_createTemporaryTable($tableName,$values);
+		}
 	}
 	
 	/**

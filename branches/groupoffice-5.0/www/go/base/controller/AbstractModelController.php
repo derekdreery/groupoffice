@@ -934,6 +934,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 		$findParams = GO::session()->values[$params['name']]['findParams'];
 		$findParams->limit(0); // Let the export handle all found records without a limit
+		$findParams->getCriteria()->recreateTemporaryTables();
 		$model = GO::getModel(GO::session()->values[$params['name']]['model']);
 
 		$store = new GO_Base_Data_Store($this->getStoreColumnModel());	
