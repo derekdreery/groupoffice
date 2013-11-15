@@ -28,6 +28,7 @@
  * @package GO
 
  */
+
 class GO{
 
 	/**
@@ -240,7 +241,8 @@ class GO{
 
 //		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***",$options);
 
-		self::$db = new GO_Base_Db_PDO("mysql:host=$dbhost;dbname=$dbname;port=$dbport", $dbuser, $dbpass, $options);
+		
+		self::$db = new GO\Base\Db\PDO("mysql:host=$dbhost;dbname=$dbname;port=$dbport", $dbuser, $dbpass, $options);
 	}
 
 	/**
@@ -392,6 +394,10 @@ class GO{
 	 * @param string $className
 	 */
 	public static function autoload($className) {
+		
+		//for namespaces
+		$className = str_replace('\\', '_', $className);
+		
 		if(isset(self::$_classes[$className])){
 			//don't use GO::config()->root_path here because it might not be autoloaded yet causing an infite loop.
 			require(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
@@ -462,12 +468,12 @@ class GO{
 					}
 					
 					require($fullPath);
-				}elseif(strpos($className,'Sabre\VObject')===0) {
-					$classFile = self::config()->root_path . 'go/vendor/VObject/lib/'.str_replace('\\','/',$className).'.php';
+				}elseif(strpos($className,'Sabre_VObject')===0) {
+					$classFile = self::config()->root_path . 'go/vendor/VObject/lib/'.str_replace('_','/',$className).'.php';
 					require $classFile;
 					return true;
 				}elseif(strpos($className,'Sabre')===0) {
-					require self::config()->root_path . 'go/vendor/SabreDAV/lib/'.str_replace('\\','/',$className). '.php';
+					require self::config()->root_path . 'go/vendor/SabreDAV/lib/'.str_replace('_','/',$className). '.php';
 					return true;					
 				}else	if (0 === strpos($className, 'Swift'))
 				{
@@ -722,6 +728,10 @@ class GO{
 		
 		foreach(self::$_errorLogCallbacks as $callback){
 			call_user_func($callback, $errorMsg);
+		}
+		
+		if(GO::config()->debug){
+			echo nl2br($errorMsg);			
 		}
 		
 		/* Execute PHP internal error handler too */
@@ -1102,5 +1112,9 @@ class GO{
 	}
 
 }
+
+
+
+
 
 require_once('compat.php');
