@@ -639,7 +639,7 @@ GO.addressbook.showContactDialog = function(contact_id, config){
 	GO.addressbook.contactDialog.show(contact_id, config);
 }
 
-GO.addressbook.showCompanyDialog = function(company_id){
+GO.addressbook.showCompanyDialog = function(company_id, config){
 
 	if(!GO.addressbook.companyDialog)
 		GO.addressbook.companyDialog = new GO.addressbook.CompanyDialog();
@@ -649,7 +649,7 @@ GO.addressbook.showCompanyDialog = function(company_id){
 		delete GO.addressbook.companyDialogListeners;
 	}
 
-	GO.addressbook.companyDialog.show(company_id);
+	GO.addressbook.companyDialog.show(company_id, config);
 }
 
 GO.addressbook.searchSenderStore = new GO.data.JsonStore({
