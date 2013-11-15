@@ -1,3 +1,4 @@
+- Fixed setting company image and edit dialog link of company image
 - Company Display panel has proper Rowspan sp picture doesn't overlap the details pane
 - Ticket reports will only be available to users with manage permission to the ticket module.
 - Billing: Able to print invoices for costs.
