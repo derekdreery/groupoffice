@@ -263,3 +263,6 @@ $l['searchIn'] = 'Search in';
 $l['searchRecursive'] = 'Search recursive';
 $l['currentFolder'] = 'Current folder';
 $l['allFolders'] = 'All folders';
+
+
+$l['useAuth']="Use authentication";

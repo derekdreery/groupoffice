@@ -94,6 +94,8 @@
 			$ab->name = GO::t('users');
 			$ab->users = true;
 			$ab->save();
+			
+			$ab->acl->addGroup(GO::config()->group_internal);
 		}
 		return $ab;
 	}

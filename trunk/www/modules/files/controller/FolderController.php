@@ -83,6 +83,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		echo "Done\n";
 
+
 		if(!isset($params['path'])){
 			GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
 			$folders = array('email', 'billing/notifications');
@@ -104,7 +105,52 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 						echo $e->getMessage()."\n";
 				}
 			}
+		}	
+			
+		
+
+	
+		
+		
+	}
+	
+	public function actionDeleteInvalid(){
+		$folders = array('email', 'billing/notifications');
+
+		foreach($folders as $name){
+
+			echo "Deleting ".$name."\n";
+			GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
+			GO_Files_Model_File::$deleteInDatabaseOnly=true;
+			try{
+				$folder = GO_Files_Model_Folder::model()->findByPath($name);
+				if($folder)
+						$folder->delete();
+			}
+			catch(Exception $e){
+				if (PHP_SAPI != 'cli')
+					echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
+				else
+					echo $e->getMessage()."\n";
+			}
 		}
+			
+			
+		$findParams = GO_Base_Db_FindParams::newInstance();
+
+		$findParams->getCriteria()->addCondition('parent_id', null,'IS');
+
+		$stmt = GO_Files_Model_Folder::model()->find($findParams);
+
+		foreach($stmt as $folder){
+
+			if(!$folder->fsFolder->exists()){
+
+				echo "Deleting ".$folder->path."\n";
+				$folder->delete();
+			}
+
+		}	
 	}
 
 	private function _getExpandFolderIds($params){
@@ -828,7 +874,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			GO::debug("Deleting it because filesystem folder doesn't exist");
 			$folder->readonly = 1; //makes sure acl is not deleted
 			$folder->delete(true);
-			if($mustExist || isset($model->acl_id))
+			if($mustExist)
 				return $this->_createNewModelFolder($model);
 			else
 				return 0;

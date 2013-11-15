@@ -37,7 +37,8 @@ abstract class GO_Base_Fs_Base{
 			throw new Exception("Path may not be empty in GO_Base_Fs_Base");
 		
 		//normalize path slashes
-		$path=str_replace('\\','/', $path);
+		if(GO_Base_Util_Common::isWindows())
+			$path=str_replace('\\','/', $path);
 		
 		if(!self::checkPathInput($path))
 			throw new Exception("The supplied path '$path' was invalid");

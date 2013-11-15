@@ -50,6 +50,7 @@ GO.comments.CommentsGrid = function(config){
 		},{
 			header: GO.lang.strCtime, 
 			dataIndex: 'ctime',
+			width:110,
 			align:'right',
 		  renderer: function(v){
 		  	return '<b>'+v+'</b>';

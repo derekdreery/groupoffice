@@ -37,7 +37,7 @@
 			{dataIndex:'used_modules', header:GO.servermanager.lang['modules']},
 			{dataIndex:'enabled',header:GO.servermanager.lang['enabled'],width:100},
 			{dataIndex:'lastlogin',header:GO.servermanager.lang['lastlogin']},
-			{dataIndex:'ctime',header:GO.lang.strCtime},
+			{dataIndex:'ctime',header:GO.lang.strCtime, width:110},
 			{dataIndex:'trialDaysLeft',header:'Trial days left'}
 		];
 		

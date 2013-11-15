@@ -36,7 +36,7 @@
 		config.viewConfig = {'forceFit':true,'autoFill':true};
 		
 		config.columns = [
-			{dataIndex:'ctime', header:GO.lang.strCtime},
+			{dataIndex:'ctime', header:GO.lang.strCtime, width:110},
 			{dataIndex:'count_users',header:GO.servermanager.lang["countUsers"], width:100},
 			{dataIndex:'database_usage',header:GO.servermanager.lang["databaseUsage"]},
 			{dataIndex:'file_storage_usage',header:GO.servermanager.lang["fileStorageUsage"]},

@@ -49,18 +49,18 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 
 				'<tr>'+
 					'<tpl if="this.isCompanySecondColumn(values)">'+
-						'<td colspan="2">'+
+						'<td colspan="2" style="vertical-align:top;">'+
 					'</tpl>'+
 					'<tpl if="this.isCompanySecondColumn(values) == false">'+
 						'<td>'+
 					'</tpl>'+
 					'<table><tr><td>ID:</td><td>{id}</td>'+
-						'<td colspan="2">'+GO.addressbook.lang.addressbook+':</td><td>{addressbook_name}</td>'+'</tr>'+
+						'<td colspan="2" style="vertical-align:top;">'+GO.addressbook.lang.addressbook+':</td><td>{addressbook_name}</td>'+'</tr>'+
 					'</table>'+
 					'</td>'+					
 					
 					'<tpl if="photo_url">'+
-						'<td rowspan="2" align="right">' +
+						'<td align="right">' +
 
 							'<tpl if="write_permission">'+
 								'<img src="{photo_url}" class="ab-photo" style="cursor:pointer;" onClick="GO.addressbook.showContactDialog({id}, \\{activeTab:1\\} );"/>' +

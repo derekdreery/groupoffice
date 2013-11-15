@@ -272,6 +272,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				dismissDelay:0,
 				maxWidth:500
 		});
+		//Ext need to know where this charting swf file is in order to draw charts
+		Ext.chart.Chart.CHART_URL = 'views/Extjs3/ext/resources/charts.swf';
 
 		var allPanels = GO.moduleManager.getAllPanelConfigs();
 

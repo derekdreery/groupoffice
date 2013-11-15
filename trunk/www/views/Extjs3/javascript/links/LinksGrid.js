@@ -103,7 +103,7 @@ GO.grid.LinksGrid = function(config){
 		header: GO.lang['strMtime'],
 		dataIndex: 'mtime',
 		sortable:true,
-		width:80
+		width:110
 	}];
 		    
 		    

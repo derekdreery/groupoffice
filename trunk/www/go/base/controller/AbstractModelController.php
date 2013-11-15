@@ -934,6 +934,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 		$findParams = GO::session()->values[$params['name']]['findParams'];
 		$findParams->limit(0); // Let the export handle all found records without a limit
+		$findParams->getCriteria()->recreateTemporaryTables();
 		$model = GO::getModel(GO::session()->values[$params['name']]['model']);
 
 		$store = new GO_Base_Data_Store($this->getStoreColumnModel());	
@@ -1041,7 +1042,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			: array();
 		
 		if(is_file($params['file'])){
-			$importFile = new GO_Base_Fs_CsvFile($params['file']);
+						
+			$fileClassName = 'GO_Base_Fs_'.$params['importType'].'File';
+			if ($params['importType']=='Xls' && !empty($params['maxColumnNr']))
+				$importFile = new $fileClassName($params['file'],$params['maxColumnNr']);
+			else
+				$importFile = new $fileClassName($params['file']);
 		
 			if(!empty($params['delimiter']))
 				$importFile->delimiter = $params['delimiter'];
@@ -1050,8 +1056,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$importFile->enclosure = $params['enclosure'];
 
 			if(php_sapi_name()=='cli'){
-				echo "Delimiter: ".$importFile->delimiter."\n";
-				echo "Enclosure: ".$importFile->enclosure."\n";
+				if (!empty($importFile->delimiter))
+					echo "Delimiter: ".$importFile->delimiter."\n";
+				if (!empty($importFile->enclosure))
+					echo "Enclosure: ".$importFile->enclosure."\n";
 				echo "File: ".$importFile->path()."\n\n";
 			}
 			
@@ -1137,7 +1145,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					}
 
 					// True is set because import needs to be checked by the model.
-					$model->setAttributes($attributes, true);
+					$model->setAttributes($attributes, $params['importType']!='Xls');
 
 
 
@@ -1148,7 +1156,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 							$this->afterImport($model, $attributes, $record);
 							$summarylog->addSuccessful();
 						} else {
-							$summarylog->addError($record[0], implode("\n", $model->getValidationErrors()));
+							$nameStr = !empty($record[0]) ? $record[0] : '"'.GO::t('namelessItem').'"';
+							$summarylog->addError($nameStr, implode("\n", $model->getValidationErrors()));
 						}
 					}
 					catch(Exception $e){
@@ -1478,6 +1487,19 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$importFile = new GO_Base_Fs_CsvFile($_FILES['files']['tmp_name'][0]);
 		$importFile->delimiter = $params['delimiter'];
 		$importFile->enclosure = $params['enclosure'];
+
+		$response['results'] = $importFile->getRecord();
+		$response['total'] = count($response['results']);
+		
+		return $response;
+	}
+	
+	protected function actionReadXLSHeaders($params) {
+		$response['success'] = true;
+		$response['results'] = array();
+		$response['total'] = 0;
+
+		$importFile = new GO_Base_Fs_XlsFile($_FILES['files']['tmp_name'][0],false,1);
 
 		$response['results'] = $importFile->getRecord();
 		$response['total'] = count($response['results']);

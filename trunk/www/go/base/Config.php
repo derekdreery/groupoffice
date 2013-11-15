@@ -938,7 +938,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '5.0.18';
+	var $version = '5.0.22';
 	
 	/**
 	 * Modification date
@@ -946,7 +946,8 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20131030';
+
+	var $mtime = '20131112';
 
 	#group configuration
 	/**
@@ -1294,6 +1295,14 @@ class GO_Base_Config {
 	 */
 	public function getTempFolder($autoCreate=true){
 		$user_id = GO::user() ? GO::user()->id : 0;
+		
+		$path = $this->orig_tmpdir;		
+		if(PHP_SAPI=='cli'){
+			$path .= 'cli/';
+		}		
+		$path .= $user_id;		
+		
+		
 		$folder = new GO_Base_Fs_Folder($this->orig_tmpdir.$user_id);
 		if($autoCreate)
 			$folder->create(0777);

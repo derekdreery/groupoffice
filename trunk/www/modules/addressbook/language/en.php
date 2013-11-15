@@ -184,6 +184,7 @@ $l["contactWork_phone"] = "Phone (Work)";
 $l["contactFax"] = "Fax (Home)";
 $l["contactWork_fax"] = "Fax (Work)";
 $l["contactCellular"] = "Mobile";
+$l["contactCellular2"] = "2nd Mobile";
 $l["contactCountry"] = "Country";
 $l["contactState"] = "State";
 $l["contactCity"] = "City";
@@ -308,3 +309,6 @@ $l['cmdPanelSocialMedia'] = 'Social media';
 $l['setCurrentTemplateAsDefaultEAccount']='Set current template as default for this email account';
 
 $l['callOnSkype'] = 'Call on Skype';
+
+$l['userDefaultTemplate'] = 'User default template';
+$l['exportContactsWithCompanies'] = 'Contacts with companies';

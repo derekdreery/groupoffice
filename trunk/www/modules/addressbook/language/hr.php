@@ -271,3 +271,10 @@ $l['addContactsSuccess']= '%i kontakta je uspješno dodano u popis adresa.';
 
 $l['newContact']= "Novi kontakt";
 $l['existingContact']= "Postojeći kontakt";
+
+$l['bankBicNo']= 'SWIFT';
+$l['searchForImages']='Pretraži slike';
+$l['downloadPhotoUrl']='Preuzmite sliku sa URL-a';
+$l['orBrowseComputer']='ili prenesite sa svog računala';
+$l['currentImage']='Trenutna slika';
+$l['downloadFullImage']='Preuzmi cijelu sliku';

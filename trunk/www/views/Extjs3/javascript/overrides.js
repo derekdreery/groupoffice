@@ -322,9 +322,9 @@ Ext.override(Ext.Component, {
  * Catch JSON parsing errors and show error dialog
  * @type 
  */
-Ext.decode = Ext.util.JSON.decode = function(json){
+Ext.decode = Ext.util.JSON.decode = function(jsonStr){
 	try{
-		var json = eval("(" + json + ')');
+		var json = eval("(" + jsonStr + ')');
 		if(json && json.redirectToLogin)
 			document.location.href=BaseHref;
 		
@@ -343,9 +343,9 @@ Ext.decode = Ext.util.JSON.decode = function(json){
 				Ext.Msg.alert(GO.lang['strUnauthorized'], GO.lang['strUnauthorizedText']);
 			break;
 
-			default:
+			default:	
 				json += '<br /><br />Ext.decode exception occurred';
-				GO.errorDialog.show(GO.lang.serverError+'<br /><br />'+json);
+				GO.errorDialog.show(GO.lang.serverError+'<br /><br />'+jsonStr);
 				break;
 		}
 	}

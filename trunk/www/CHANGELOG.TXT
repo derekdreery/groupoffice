@@ -1,5 +1,46 @@
 - Calendar: Overview of participant and resource availability per day.
 - Tasks & Reminders: get reminder when another user puts a task in your task list
+- Added user quota support
+- Show ticket template per message
+
+
+
+
+
+- Company Display panel has proper Rowspan sp picture doesn't overlap the details pane
+- Ticket reports will only be available to users with manage permission to the ticket module.
+- Billing: Able to print invoices for costs.
+- Lists: Search bar in Lists Panel.
+
+12-11-2013 5.0.22
+- Updated Norwegian
+- Tickets: fixed an issue with the report chart where the flash plugin would not load when GroupOffice was in a sub directory
+- Tickets: added diagram that shows average response time on new tickets per month
+- Removed task  description tooltip
+- Replaced sql_calc_found_rows with separate count() query to improve performance
+- Replaced large IN queries with temporary tables to increase performance.
+- Listing error in billing module when sorting on status.
+
+08-11-2013 5.0.21
+- Bug in tickets module when billing module wasn't there.
+- Excel import for billing items
+- Tickets: there is now no longer an execution time limit for the ticket invoicing process.
+
+07-11-2013 5.0.20
+- Hide password in e-mail network response.
+- Tickets: Possible to use {agent:*} tags for email templates
+- Ticket module has a report for the average ticket solving time per agent per month
+- Ticket Module has a report for amount of tickets solved per agent per month
+- Billing: optional paging in invoice/order PDFs.
+- Billing: totals row in orders / invoices grid.
+- Address book Email templates: Email Account Settings: Show default templates dropdown in IE (fix).
+- Billing: Cost Code field for Catalog Products.
+- Tickets: Cost Codes for ticket rates. Cost codes in used ticket rates can be invoiced.
+
+01-11-2013 5.0.19
+- Bug with decimal values in timeregistration grid.
+- Added email account selection for ticket types. Now you can set up a separate email account for each ticket type to import tickets from email.
+- Billing: able to search invoices/orders by month/year.
 
 30-10-2013 5.0.18
 - Hide disabled fields in projects 2 module
@@ -104,6 +145,7 @@
 - Projects module: 'show in tree' check box for project statuses.
 
 30-10-2013 4.2.27
+- Zpushadmin can now also work with zpush2.1
 - Fixed problem with emailing files from the scanbox and then change the template of the email.
 - Show birthdays of calendar owner instead of logged in user
 - GOTA uses GET parameters and has permissions attribute in manifest

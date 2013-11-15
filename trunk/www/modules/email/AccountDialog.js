@@ -52,7 +52,7 @@ GO.email.AccountDialog = function(config) {
 		this.templatesCombo = new Ext.form.ComboBox({
 			fieldLabel : GO.email.lang['defaultEmailTemplate'],
 			hiddenName : 'default_account_template_id',
-			width: '100%',
+			width: 300,
 			store : new GO.data.JsonStore({
 				url : GO.url("addressbook/template/accountTemplatesStore"),
 				baseParams : {
@@ -74,8 +74,6 @@ GO.email.AccountDialog = function(config) {
 			selectOnFocus : true,
 			forceSelection : true
 		});
-		
-		this.templatesCombo.store.load();
 		
 //		this.templatesBtn = new Ext.Button({
 //
@@ -173,7 +171,7 @@ GO.email.AccountDialog = function(config) {
 			fieldLabel : GO.lang.strPassword,
 			name : 'password',
 			inputType : 'password',
-			allowBlank : false,
+//			allowBlank : false,
 			listeners : {
 				change : function() {
 					this.refreshNeeded = true;
@@ -310,21 +308,36 @@ GO.email.AccountDialog = function(config) {
 			name : 'smtp_port',
 			value : '25',
 			allowBlank : false
-		}), new Ext.form.TextField({
+		}),{
+			xtype:'xcheckbox',
+			checked: false,
+			name: 'smtp_auth',
+			hideLabel:true,
+			boxLabel:GO.email.lang.useAuth,
+			listeners:{
+				check:function(cb, checked){
+					this.smtpUsername.setDisabled(!checked);
+					this.smtpPassword.setDisabled(!checked);
+				},
+				scope:this
+			}
+		},this.smtpUsername= new Ext.form.TextField({
 			fieldLabel : GO.lang.strUsername,
-			name : 'smtp_username'
+			name : 'smtp_username',
+			disabled:true
 		}),
-		new Ext.ux.form.XCheckbox({
+		this.smtpPasswordStore = new Ext.ux.form.XCheckbox({
 			checked: true,
 			name: 'store_smtp_password',
 			allowBlank: true,
 			hideLabel:true,
 			hidden: true
 		}),
-		new Ext.form.TextField({
+		this.smtpPassword = new Ext.form.TextField({
 			fieldLabel : GO.lang.strPassword,
 			name : 'smtp_password',
-			inputType : 'password'
+			inputType : 'password',
+			disabled:true
 		})]
 	};
 
@@ -580,6 +593,12 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 				}
 
 				Ext.MessageBox.alert(GO.lang.strError, error);
+				
+				if(action.result.validationErrors){
+					for(var field in action.result.validationErrors){
+						form.findField(field).markInvalid(action.result.validationErrors[field]);
+					}
+				}
 			},
 			scope : this
 
@@ -640,6 +659,9 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 				this.foldersTab.setDisabled(false);
 
 				this.permissionsTab.setAcl(action.result.data.acl_id);
+				
+				if (this.templatesCombo)
+					this.templatesCombo.store.load();
 			},
 			scope : this
 		});

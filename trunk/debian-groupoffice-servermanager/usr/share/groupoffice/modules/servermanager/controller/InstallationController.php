@@ -165,7 +165,13 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 	}
 	
-	
+	/**
+	 * Dumps database in ~/database.sql and copies config.php in ~/config.php 
+	 * then it rsyncs this folder to the target machine.
+	 * 
+	 * @param type $params
+	 * @throws Exception
+	 */
 	public function actionMigrate($params){
 		
 		$this->requireCli();
@@ -916,11 +922,26 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	
 	protected function actionSetConfigValue($params){
 		$this->requireCli();
-		$this->checkRequiredParameters(array('name','value'), $params);
+		$this->checkRequiredParameters(array('name'), $params);
+		
+		if(!isset($params['value']))
+			throw new Exception("Parameter value is required");
+		
 		$stmt = GO_Servermanager_Model_Installation::model()->find();
 		while($installation = $stmt->fetch()){
 			echo "Setting ".$installation->name." config parameter ".$params['name'].'='.$params['value']."\n";
-			$installation->setConfigVariable($params['name'],$params['value']);
+			
+			$set=true;
+			if(isset($params['if'])){
+				
+				$config = $installation->getConfigWithGlobals();
+				
+				if(!isset($config[$params['name']]) || $config[$params['name']]!=$params['if']){
+					$set = false;
+				}
+			}
+			if($set)
+				$installation->setConfigVariable($params['name'],$params['value']);
 		}	
 		
 		echo "All done!\n";

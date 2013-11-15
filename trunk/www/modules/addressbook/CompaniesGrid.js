@@ -164,13 +164,13 @@ GO.addressbook.CompaniesGrid = function(config){
 			header: GO.lang.strMtime,
 			dataIndex:'mtime',
 			hidden:true,
-			width:80,
+			width:110,
 			id: 'mtime'
 		},{
 			header: GO.lang.strCtime,
 			dataIndex:'ctime',
 			hidden:true,
-			width:80,
+			width:110,
 			id: 'ctime'
 		},{
 			header: GO.addressbook.lang.addressbook,

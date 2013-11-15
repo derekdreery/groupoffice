@@ -631,3 +631,9 @@ $l['exportOrders']='Orders';
 $l['errorTimeout']="Er is een timeout opgetreden bij het verzoek naar de server. Probeer het opnieuw aub.";
 $l['multiselectSelected']='geselecteerd';
 $l['folderUpload']='Mappen (Java required)';
+
+$l["report"]='Raporteer';
+
+$l['namelessItem'] = 'Naamloze item';
+
+$l['importFileType'] = 'Bestandtype voor import';
