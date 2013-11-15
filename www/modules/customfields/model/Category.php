@@ -49,7 +49,9 @@ class GO_Customfields_Model_Category extends GO_Base_Db_ActiveRecord{
 	
 	public function relations() {
 		return array(
-				'fields' => array('type' => self::HAS_MANY, 'model' => 'GO_Customfields_Model_Field', 'field' => 'category_id', 'delete' => true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('sort_index'))		);
+		'fields' => array('type' => self::HAS_MANY, 'model' => 'GO_Customfields_Model_Field', 'field' => 'category_id', 'delete' => true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('sort_index')),
+		'_fieldsUnsorted' => array('type' => self::HAS_MANY, 'model' => 'GO_Customfields_Model_Field', 'field' => 'category_id'	)
+				);
 	}
 	
 	
@@ -101,7 +103,7 @@ class GO_Customfields_Model_Category extends GO_Base_Db_ActiveRecord{
 	
 	protected function afterDuplicate(&$duplicate) {
 		
-		$this->duplicateRelation('fields', $duplicate);
+		$this->duplicateRelation('_fieldsUnsorted', $duplicate);
 		
 		return parent::afterDuplicate($duplicate);
 	}

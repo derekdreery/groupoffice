@@ -49,7 +49,7 @@ GO.dialog.MergeWindow = Ext.extend(GO.Window,{
 				header: GO.lang['strMtime'],
 				dataIndex: 'mtime',
 				sortable:true,
-				width:100
+				width:110
 			}],
 			autoExpandMax:2500,
 			autoExpandColumn:'name',

@@ -59,7 +59,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$addressbook->save();
 			$addressbook->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::WRITE_PERMISSION);
 		}
-		
+	
 		$company = GO_Addressbook_Model_Company::model()->findSingleByAttribute('email', 'info@smith.demo');
 		if (!$company) {
 			$company = new GO_Addressbook_Model_Company();
@@ -107,6 +107,12 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$john->city = 'Amsterdam';
 			$john->state = 'Noord-Holland';
 			$john->country = 'NL';
+			
+			$john->url_facebook='http://www.facebook.com';
+			$john->url_linkedin='http://www.linkedin.com';
+			$john->url_twitter='http://www.twitter.com';
+			$john->skype_name='echo123';
+			
 			$john->save();
 			$john->setPhoto(new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/noperson.jpg'));
 			$john->save();
@@ -162,6 +168,11 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$wile->city = 'New York';
 			$wile->state = 'NY';
 			$wile->country = 'US';
+			
+			$wile->url_facebook='http://www.facebook.com';
+			$wile->url_linkedin='http://www.linkedin.com';
+			$wile->url_twitter='http://www.twitter.com';
+			$wile->skype_name='test';
 
 			$wile->save();
 			$wile->setPhoto(new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/wecoyote.png'));
@@ -542,6 +553,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				
 				//give demo access
 				$book->acl->addUser($demo->id, GO_Base_Model_Acl::WRITE_PERMISSION);
+				$book->acl->addUser($elmer->id, GO_Base_Model_Acl::WRITE_PERMISSION);
 				
 				
 				$order = new GO_Billing_Model_Order();

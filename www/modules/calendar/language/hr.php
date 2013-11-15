@@ -217,3 +217,8 @@ $l['cronEventAndTaskReportMailerDescription']='Šalje e-poštu sa današnjim dog
 $l['cronEventAndTaskReportMailerPdfSubtitle']='Današnji događaji i zadaci';
 $l['cronEventAndTaskReportMailerSubject']='Današnji događaji i zadaci';
 $l['cronEventAndTaskReportMailerContent']='Možete pronaći popis današnjih događaja i zadataka u priloženom PDF-u.';
+
+$l['eventPrivateChecked']= 'Obavjest: Ukoliko je događaj označen kao privatan, datoteke ovog događaja su još uvijek dostupne korisnicima koji imaju dozvole na kalendar u kojem se nalazi ovaj događaj.';
+$l['show_completed_tasks']= "Prikaži završene zadatke";
+$l['showStatuses']='Prikaži statuse događaja u pregledima';
+$l['cantMoveRecurringByDay']="Ne možete premjestiti događaje koji se ponavljaju tjedno na druge dane na ovaj način. Otvorite događaj i izmjenite postavke ponavljanja.";

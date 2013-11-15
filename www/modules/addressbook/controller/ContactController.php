@@ -615,6 +615,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	 */
 	protected function actionImportCsv($params){		
 		$params['file'] = $_FILES['files']['tmp_name'][0];
+		$params['importType'] = 'Xls';
 		$summarylog = parent::actionImport($params);
 		$response = $summarylog->getErrorsJson();
 		$response['successCount'] = $summarylog->getTotalSuccessful();
@@ -623,6 +624,23 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return $response;
 	}
 	
+	
+	/**
+	 * The actual call to the import XLS function
+	 * 
+	 * @param array $params
+	 * @return array $response 
+	 */
+	protected function actionImportXls($params){		
+		$params['file'] = $_FILES['files']['tmp_name'][0];
+		$params['importType'] = 'Xls';
+		$summarylog = parent::actionImport($params);
+		$response = $summarylog->getErrorsJson();
+		$response['successCount'] = $summarylog->getTotalSuccessful();
+		$response['totalCount'] = $summarylog->getTotal();
+		$response['success'] = true;
+		return $response;
+	}
 	
 	protected function actionSelectContact($params){
 		
@@ -717,7 +735,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				));
 	//		}
 				
-				$findParams->getCriteria()->addInCondition('id', $userContactIds,'t',true,true);
+				$findParams->getCriteria()->addInTemporaryTableCondition('usercontacts', 'id', $userContactIds,'t',true,true);
 		
 
 			if(!empty($params['addressbook_id'])){		
@@ -729,7 +747,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 
 			if(!empty($abs)){
 
-				$findParams->getCriteria ()->addInCondition('addressbook_id', $abs);
+				$findParams->getCriteria ()->addInTemporaryTableCondition('addressbooks','addressbook_id', $abs);
 
 				if(!empty($params['requireEmail'])){
 					$criteria = GO_Base_Db_FindCriteria::newInstance()

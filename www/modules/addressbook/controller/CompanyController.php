@@ -345,6 +345,24 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	 */
 	protected function actionImportCsv($params){
 		$params['file'] = $_FILES['files']['tmp_name'][0];
+		$params['importType'] = 'Csv';
+		$summarylog = parent::actionImport($params);
+		$response = $summarylog->getErrorsJson();
+		$response['successCount'] = $summarylog->getTotalSuccessful();
+		$response['totalCount'] = $summarylog->getTotal();
+		$response['success'] = true;
+		return $response;
+	}
+	
+	/**
+	 * The actual call to the import XLS function
+	 * 
+	 * @param array $params
+	 * @return array $response 
+	 */
+	protected function actionImportXls($params){		
+		$params['file'] = $_FILES['files']['tmp_name'][0];
+		$params['importType'] = 'Xls';
 		$summarylog = parent::actionImport($params);
 		$response = $summarylog->getErrorsJson();
 		$response['successCount'] = $summarylog->getTotalSuccessful();

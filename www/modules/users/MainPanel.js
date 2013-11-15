@@ -26,8 +26,8 @@ GO.users.MainPanel = function(config)
         {header: GO.lang['strUsername'], dataIndex: 'username', width: 200},
         {header: GO.lang['strName'], dataIndex: 'name', width: 250},
         {header: GO.users.lang.numberOfLogins, dataIndex: 'logins', width: 100, align:"right"},
-        {header: GO.users.lang['cmdFormLabelLastLogin'], dataIndex: 'lastlogin', width: 100},
-        {header: GO.users.lang['cmdFormLabelRegistrationTime'], dataIndex: 'ctime', width: 100},      
+        {header: GO.users.lang['cmdFormLabelLastLogin'], dataIndex: 'lastlogin', width: 110},
+        {header: GO.users.lang['cmdFormLabelRegistrationTime'], dataIndex: 'ctime', width: 110},      
         {header: GO.lang['strEmail'], dataIndex: 'email',  hidden: false, width: 150},
         {
             header: GO.users.lang['diskQuota'], 

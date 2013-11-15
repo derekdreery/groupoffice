@@ -150,17 +150,31 @@ class GO_Base_Component_MultiSelectGrid {
 	public function addSelectedToFindCriteria(GO_Base_Db_FindParams &$findParams, $columnName, $tableAlias = 't', $useAnd = true, $useNot = false) {
 	
 		
+		$selectedCount = count($this->selectedIds);
+		
 		//ignore here. Permissions are checked in by _setSelectedIds.
 		if($this->_checkPermissions){
 			
 //			$this->_validateSelection();
 		
-			if(count($this->selectedIds))
+			if($selectedCount)
 				$findParams->ignoreAcl();
 		}
 
-		if(count($this->selectedIds))
-			$findParams->getCriteria()->addInCondition($columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
+
+		if($selectedCount){			
+			if($selectedCount>1){				
+				$tableName = "ms_".$this->_requestParamName;
+				$findParams->getCriteria()->addInTemporaryTableCondition($tableName,$columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
+			}else
+			{
+//				$findParams->getCriteria()->addInCondition($columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
+				$findParams->getCriteria()->addCondition($columnName, $this->selectedIds[0], $useNot ? '!=' : '=',$tableAlias, $useAnd);
+			}			
+		}
+		
+//		$findParams->debugSql();
+		
 		
 //		$this->_save();
 	}

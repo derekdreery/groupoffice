@@ -22,7 +22,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	protected $model = 'GO_Tasks_Model_Task';
 	
 	protected function afterDisplay(&$response, &$model,&$params) {
-		$response['data']['user_name']=$model->user->name;
+		$response['data']['user_name']=$model->user ? $model->user->name : '';
 		$response['data']['tasklist_name']=$model->tasklist->name;
 		$statuses = GO::t('statuses','tasks');
 		$response['data']['status_text']=isset($statuses[$model->status]) ? $statuses[$model->status] : $model->status;
@@ -182,8 +182,24 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		//$colModel->formatColumn('project_name','$model->project->name'); TODO: Implement the project from the ID and not from the name
 		return parent::formatColumns($columnModel);
 	}
-	
+
+	protected function afterStore(&$response, &$params, &$store, $storeParams) {
 		
+		if(isset($params['ta-taskslists'])){
+			
+			$findParams = GO_Base_Db_FindParams::newInstance()->select('t.id,t.name')->limit(GO::config()->nav_page_size);
+			$findParams->getCriteria()->addInCondition('id', json_decode($params['ta-taskslists']));
+			$tasklists = GO_Tasks_Model_Tasklist::model()->find($findParams);
+			
+			$response['selectable_tasklists'] = array();
+			foreach($tasklists as $tasklist){
+				$response['selectable_tasklists'][] = array('data'=>array('id'=>$tasklist->id,'name'=>$tasklist->name));
+			}
+		}
+		
+		return parent::afterStore($response, $params, $store, $storeParams);
+	}
+	
 	protected function getStoreParams($params) {
 		
 		if(!isset($params['show'])){
@@ -195,6 +211,8 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		}
 		GO::config()->save_setting('tasks_filter', $params['show'],GO::user()->id);
 		
+		$fields = GO_Tasks_Model_Task::model()->getDefaultFindSelectFields();
+		
 		$storeParams = GO_Base_Db_FindParams::newInstance()
 			->export("tasks")
 			->joinCustomFields()
@@ -202,7 +220,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 				->addModel(GO_Tasks_Model_Task::model(),'t')
 					)										
 			//->select('t.*, tl.name AS tasklist_name')
-			->select('t.*, tl.name AS tasklist_name, cat.name AS category_name')
+			->select($fields.', tl.name AS tasklist_name, cat.name AS category_name')
 			->joinModel(array(
 					'model'=>'GO_Tasks_Model_Tasklist',					
 					'localField'=>'tasklist_id',

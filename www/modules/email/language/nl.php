@@ -278,3 +278,6 @@ $l['searchIn'] = 'Zoeken in';
 $l['searchRecursive'] = 'Recursief zoeken';
 $l['currentFolder'] = 'Huidige map';
 $l['allFolders'] = 'Alle mappen';
+
+
+$l['useAuth']="Gebruik authenticatie";

@@ -1150,8 +1150,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$aclJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
 						->addRawCondition('a.acl_id', 'goUser.acl_id', '=', false);
 
-		$aclWhereCriteria = GO_Base_Db_FindCriteria::newInstance()
-				->addCondition('enabled', true,'=','goUser')
+		$aclWhereCriteria = GO_Base_Db_FindCriteria::newInstance()				
 				->addCondition('user_id', $user_id, '=', 'a', false)
 				->addInCondition("group_id", GO_Base_Model_User::getGroupIds($user_id), "a", false);
 
@@ -1162,6 +1161,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 				->join(GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'INNER');
 
 		$fp->getCriteria()
+						->addCondition('enabled', true,'=','goUser')
 						->mergeWith($aclWhereCriteria);
 		
 		

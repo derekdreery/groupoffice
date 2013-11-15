@@ -1058,6 +1058,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 	}
 	
+	private $useSqlCalcFoundRows=false;
+	
 	/**
 	 * Find models
 	 * 
@@ -1127,18 +1129,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$params['joinRelations'][$aclJoinProps['relation']['name']]=array('name'=>$aclJoinProps['relation']['name'], 'type'=>'INNER');
 		}
 		
-		$sql = "SELECT ";
+		$select = "SELECT ";
 		
 		if(!empty($params['distinct']))
-			$sql .= "DISTINCT ";
+			$select .= "DISTINCT ";
 		
 		//Unique query ID for storing found rows in session
 		$queryUid = $this->_getFindQueryUid($params);
 		
 		if(!empty($params['calcFoundRows']) && !empty($params['limit']) && (empty($params['start']) || !isset(GO::session()->values[$queryUid]))){
 			
-			//TODO: This is MySQL only code			
-			$sql .= "SQL_CALC_FOUND_ROWS ";
+			//TODO: This is MySQL only code		
+			if($this->useSqlCalcFoundRows)
+				$select .= "SQL_CALC_FOUND_ROWS ";
 			
 			$calcFoundRows=true;
 		}else
@@ -1146,11 +1149,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$calcFoundRows=false;
 		}
 		
+//		$select .= "SQL_NO_CACHE ";
+		
 		if(empty($params['fields']))
 			$params['fields']=$this->getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1);
 
-		
-		$sql .= $params['fields'].' ';
+
+		$fields = $params['fields'].' ';
 		
 		$joinRelationSelectFields='';
 		$joinRelationjoins='';
@@ -1316,18 +1321,18 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			$selectFields = $cfModel->getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1, 'cf');
 			if(!empty($selectFields))
-				$sql .= ", ".$selectFields;
+				$fields .= ", ".$selectFields;
 		}
 		
-		$sql .= $joinRelationSelectFields;		
+		$fields .= $joinRelationSelectFields;		
 		
 		if(!empty($params['groupRelationSelect'])){
-			$sql .= ",\n".$params['groupRelationSelect'];
+			$fields .= ",\n".$params['groupRelationSelect'];
 		}
 		
-		$sql .= "\nFROM `".$this->tableName()."` t ".$joinRelationjoins;
+		$from = "\nFROM `".$this->tableName()."` t ".$joinRelationjoins;
 		
-		
+		$joins = "";
 		if (!empty($params['linkModel'])) { //passed in case of a MANY_MANY relation query
       $linkModel = new $params['linkModel'];
       $primaryKeys = $linkModel->primaryKey();
@@ -1336,18 +1341,18 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				throw new Exception ("Fatal error: Primary key of linkModel '".$params['linkModel']."' in relation '".$params['relation']."' should be an array.");
 			
       $remoteField = $primaryKeys[0]==$params['linkModelLocalField'] ? $primaryKeys[1] : $primaryKeys[0];
-      $sql .= "\nINNER JOIN `".$linkModel->tableName()."` link_t ON t.`".$this->primaryKey()."`= link_t.".$remoteField.' ';
+      $joins .= "\nINNER JOIN `".$linkModel->tableName()."` link_t ON t.`".$this->primaryKey()."`= link_t.".$remoteField.' ';
     }
     
 		
 		if($joinCf)			
-			$sql .= "\nLEFT JOIN `".$cfModel->tableName()."` cf ON cf.model_id=t.id ";	
+			$joins .= "\nLEFT JOIN `".$cfModel->tableName()."` cf ON cf.model_id=t.id ";	
 		  
 		if(isset($aclJoinProps) && empty($params['ignoreAcl']))
-			$sql .= $this->_appendAclJoin($params, $aclJoinProps);
+			$joins .= $this->_appendAclJoin($params, $aclJoinProps);
 			
 		if(isset($params['join']))
-			$sql .= "\n".$params['join'];
+			$joins .= "\n".$params['join'];
 		
 		
 		
@@ -1373,7 +1378,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',$groupIds)."))) ";		
 //		}else
 //		{
-			$sql .= "\nWHERE 1 ";
+			$where = "\nWHERE 1 ";
 //		}
 		
 
@@ -1382,47 +1387,47 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(isset($params['criteriaObject'])){
 			$conditionSql = $params['criteriaObject']->getCondition();
 			if(!empty($conditionSql))
-				$sql .= "\nAND".$conditionSql;
+				$where .= "\nAND".$conditionSql;
 		}
 		
 //		if(!empty($params['criteriaSql']))
 //			$sql .= $params['criteriaSql'];
 		
-		$sql = self::_appendByParamsToSQL($sql, $params);
+		$where = self::_appendByParamsToSQL($where, $params);
 		
 		if(isset($params['where']))
-			$sql .= "\nAND ".$params['where'];
+			$where .= "\nAND ".$params['where'];
     
     if(isset($linkModel)){
       //$primaryKeys = $linkModel->primaryKey();
       //$remoteField = $primaryKeys[0]==$params['linkModelLocalField'] ? $primaryKeys[1] : $primaryKeys[0];
-      $sql .= " \nAND link_t.`".$params['linkModelLocalField']."` = ".intval($params['linkModelLocalPk'])." ";
+      $where .= " \nAND link_t.`".$params['linkModelLocalField']."` = ".intval($params['linkModelLocalPk'])." ";
     }
 		
 		if(!empty($params['searchQuery'])){
-			$sql .= " \nAND (";
+			$where .= " \nAND (";
 			
 			if(empty($params['searchQueryFields'])){
-				$fields = $this->getFindSearchQueryParamFields('t',$joinCf);
+				$searchFields = $this->getFindSearchQueryParamFields('t',$joinCf);
 			}else{
-				$fields = $params['searchQueryFields'];
+				$searchFields = $params['searchQueryFields'];
 			}
 			
 			
-			if(empty($fields))
+			if(empty($searchFields))
 				throw new Exception("No automatic search fields defined for ".$this->className().". Maybe this model has no varchar fields? You can override function getFindSearchQueryParamFields() or you can supply them with GO_Base_Db_FindParams::searchFields()");
 			
 			//`name` LIKE "test" OR `content` LIKE "test"
 			
 			$first = true;
-			foreach($fields as $field){
+			foreach($searchFields as $searchField){
 				if($first){
 					$first=false;
 				}else
 				{
-					$sql .= ' OR ';
+					$where .= ' OR ';
 				}
-				$sql .= $field.' LIKE '.$this->getDbConnection()->quote($params['searchQuery'], PDO::PARAM_STR);
+				$where .= $searchField.' LIKE '.$this->getDbConnection()->quote($params['searchQuery'], PDO::PARAM_STR);
 			}	
 			
 			if($this->primaryKey()=='id'){
@@ -1433,30 +1438,30 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 						$first=false;
 					}else
 					{
-						$sql .= ' OR ';
+						$where .= ' OR ';
 					}
 
-					$sql .= 't.id='.intval($idQuery);
+					$where .= 't.id='.intval($idQuery);
 				}									
 			}
 			
-			$sql .= ') ';
+			$where .= ') ';
 		}
 		
-		
+		$group="";
 		if($this->aclField() && empty($params['ignoreAcl']) && (empty($params['limit']) || $params['limit']!=1)){	
 			
 			//add group by pk so acl join won't return duplicate rows. Don't do this with limit=1 because that makes no sense and causes overhead.
 			
 			$pk = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
 			
-			$sql .= "\nGROUP BY t.`".implode('`,t.`', $pk)."` ";			
+			$group .= "\nGROUP BY t.`".implode('`,t.`', $pk)."` ";			
 			if(isset($params['group']))
-				$sql .= ", ";
+				$group .= ", ";
 			
 							
 		}elseif(isset($params['group'])){
-			$sql .= "\nGROUP BY ";
+			$group .= "\nGROUP BY ";
 		}
 		
 		if(isset($params['group'])){
@@ -1465,17 +1470,19 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			for($i=0;$i<count($params['group']);$i++){
 				if($i>0)
-					$sql .= ', ';
+					$group .= ', ';
 				
-				$sql .= $this->_quoteColumnName($params['group'][$i]).' ';
+				$group .= $this->_quoteColumnName($params['group'][$i]).' ';
 			}
 		}
 		
 		if(isset($params['having']))
-			$sql.="\nHAVING ".$params['having'];
+			$group.="\nHAVING ".$params['having'];
 		
+		
+		$order="";
 		if(!empty($params['order'])){
-			$sql .= "\nORDER BY ";
+			$order .= "\nORDER BY ";
 			
 			if(!is_array($params['order']))
 				$params['order']=array($params['order']);
@@ -1488,29 +1495,36 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			for($i=0;$i<count($params['order']);$i++){
 				if($i>0)
-					$sql .= ',';
+					$order .= ',';
 				
-				$sql .= $this->_quoteColumnName($params['order'][$i]).' ';
+				$order .= $this->_quoteColumnName($params['order'][$i]).' ';
 				if(isset($params['orderDirection'][$i])){
-					$sql .= strtoupper($params['orderDirection'][$i])=='ASC' ? 'ASC ' : 'DESC ';
+					$order .= strtoupper($params['orderDirection'][$i])=='ASC' ? 'ASC ' : 'DESC ';
 				}else{
-					$sql .= strtoupper($params['orderDirection'][0])=='ASC' ? 'ASC ' : 'DESC ';
+					$order .= strtoupper($params['orderDirection'][0])=='ASC' ? 'ASC ' : 'DESC ';
 				}
 			}
 		}
 		
+		$limit="";
 		if(!empty($params['limit'])){
 			if(!isset($params['start']))
 				$params['start']=0;
 			
-			$sql .= "\nLIMIT ".intval($params['start']).','.intval($params['limit']);
+			$limit .= "\nLIMIT ".intval($params['start']).','.intval($params['limit']);
 		}
 		
+		
+		$sql = $select.$fields.$from.$joins.$where.$group.$order.$limit;
 		if($this->_debugSql)
 			$this->_debugSql($params, $sql);
 		
 
 		try{
+			
+			
+			if($this->_debugSql)
+				$start = GO_Base_Util_Date::getmicrotime();
 			
 			$result = $this->getDbConnection()->prepare($sql);
 			
@@ -1528,6 +1542,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			{
 				$result = $this->getDbConnection()->query($sql);
 			}
+			
+			if($this->_debugSql){
+				$end = GO_Base_Util_Date::getmicrotime();
+				GO::debug("SQL Query took: ".($end-$start));
+			}
+			
 		}catch(Exception $e){
 			$msg = $e->getMessage();
 						
@@ -1563,24 +1583,65 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			if(!empty($params['limit'])){
 				
 				//Total numbers are cached in session when browsing through pages.
-				if($calcFoundRows){
-					//TODO: This is MySQL only code
-					$sql = "SELECT FOUND_ROWS() as found;";			
-					$r2 = $this->getDbConnection()->query($sql);
-					$record = $r2->fetch(PDO::FETCH_ASSOC);
-					//$foundRows = intval($record['found']);
-					$foundRows = GO::session()->values[$queryUid]=intval($record['found']);						
+				if($calcFoundRows){		
+					
+					if($this->useSqlCalcFoundRows){
+//					//TODO: This is MySQL only code
+						$sql = "SELECT FOUND_ROWS() as found;";		
+						$r2 = $this->getDbConnection()->query($sql);
+						$record = $r2->fetch(PDO::FETCH_ASSOC);
+						//$foundRows = intval($record['found']);
+						$foundRows = GO::session()->values[$queryUid]=intval($record['found']);						
+					}else{
+						$countField = is_array($this->primaryKey()) ? '*' : 't.'.$this->primaryKey();				
+			
+						$sql = $select.'COUNT('.$countField.') AS found '.$from.$joins.$where;
+
+//						GO::debug($sql);
+						
+						if($this->_debugSql)
+							$start = GO_Base_Util_Date::getmicrotime();
+
+						$r2 = $this->getDbConnection()->prepare($sql);
+
+						if(isset($params['criteriaObject'])){
+							$criteriaObjectParams = $params['criteriaObject']->getParams();
+
+							foreach($criteriaObjectParams as $param=>$value)
+								$r2->bindValue($param, $value[0], $value[1]);
+
+							$r2->execute();
+						}elseif(isset($params['bindParams'])){			
+							$r2 = $this->getDbConnection()->prepare($sql);				
+							$r2->execute($params['bindParams']);
+						}else
+						{
+							$r2 = $this->getDbConnection()->query($sql);
+						}
+						
+						if($this->_debugSql){
+							$end = GO_Base_Util_Date::getmicrotime();
+							GO::debug("SQL Count Query took: ".($end-$start));
+						}
+
+						$record = $r2->fetch(PDO::FETCH_ASSOC);
+						
+						
+						
+
+
+						//$foundRows = intval($record['found']);
+						$foundRows = GO::session()->values[$queryUid]=intval($record['found']);					
+					}
 				}
 				else
 				{					
 					$foundRows=GO::session()->values[$queryUid];
 				}
-						
-			}else
-			{
-				$foundRows = $result->rowCount();       
-      }	
-      $AS->foundRows=$foundRows;
+					
+					
+				$AS->foundRows=$foundRows;
+			}
 		}
 		
 //		//$result->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className());
@@ -2283,7 +2344,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		foreach($this->_getMagicAttributeNames() as $attName){
 			$att[$attName]=$this->$attName;
 		}
-		
+
 		return $att;
 	}
 	
@@ -2312,11 +2373,15 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		return $att;
 	}
 	
-	private $_magicAttributeNames;
+	private static $_magicAttributeNames;
 	
 	private function _getMagicAttributeNames(){
-		if(!isset($this->_magicAttributeNames)){
-			$this->_magicAttributeNames=array();
+		
+		if(!isset(self::$_magicAttributeNames))
+			self::$_magicAttributeNames=GO::cache ()->get('magicattributes');
+		
+		if(!isset(self::$_magicAttributeNames[$this->className()])){
+			self::$_magicAttributeNames[$this->className()]=array();
 			$r = new ReflectionObject($this);
 			$publicProperties = $r->getProperties(ReflectionProperty::IS_PUBLIC);
 			foreach($publicProperties as $prop){
@@ -2324,7 +2389,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				//$prop = new ReflectionProperty();
 				if(!$prop->isStatic()) {
 					//$this->_magicAttributeNames[]=$prop->getName();
-					$this->_magicAttributeNames[]=$prop->name;
+					self::$_magicAttributeNames[$this->className()][]=$prop->name;
 				}
 			}
 			
@@ -2340,9 +2405,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //				}
 //			}
 //			
+			GO::cache ()->set('magicattributes', self::$_magicAttributeNames);
 		}
-		return $this->_magicAttributeNames;
+		return self::$_magicAttributeNames[$this->className()];
 	}
+	
 	
 	/**
 	 * Returns all columns 
@@ -2564,8 +2631,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 								->addCondition($field, $this->_attributes[$field]);
 
 					if(is_array($attributes['unique'])){
-						foreach($attributes['unique'] as $f)
-							$criteria->addCondition($f, $this->_attributes[$f]);
+						foreach($attributes['unique'] as $f){
+							if(isset($this->_attributes[$f]))
+								$criteria->addCondition($f, $this->_attributes[$f]);
+						}
 					}
 
 					if(!$this->isNew)
@@ -2664,7 +2733,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		//GO::debug('save'.$this->className());
 		
 		if(!$ignoreAcl && !$this->checkPermissionLevel($this->isNew?GO_Base_Model_Acl::CREATE_PERMISSION:GO_Base_Model_Acl::WRITE_PERMISSION)){
-			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
+			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true).' acl_id: '.$this->_acl_id : '';
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
 		

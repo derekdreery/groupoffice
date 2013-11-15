@@ -104,6 +104,23 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	public function tableName() {
 		return 'em_accounts';
 	}
+	
+	protected function init() {
+		
+		$this->columns['host']['required']=true;
+		$this->columns['username']['required']=true;
+		$this->columns['password']['required']=true;
+		parent::init();
+	}
+	
+	public function attributeLabels() {
+		$attr = parent::attributeLabels();
+		
+		$attr['username']=GO::t('strUsername');
+		$attr['password']=GO::t('strPassword');
+		
+		return $attr;
+	}
 
 	/**
 	 * Here you can define the relations of this model with other models.

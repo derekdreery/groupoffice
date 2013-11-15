@@ -248,3 +248,6 @@ $l['cronEmailRemindersDescription']='Ovaj cron upravlja podsjetnicima e-pošte';
 
 $l['appointementAlreadyProcessed']='Ova poruka sadržava pozivnicu na sastanak koja je već obrađena.';
 $l['noname']= 'bezimena';
+
+$l['doNotMarkAsRead']= 'Ne označavaj automatski poruke e-pošte kao pročitane';
+$l['showAll']='Prikaži sve';

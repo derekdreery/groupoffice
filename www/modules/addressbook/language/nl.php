@@ -344,3 +344,6 @@ $l['cmdPanelSocialMedia'] = 'Sociale media';
 $l['setCurrentTemplateAsDefaultEAccount']='Stel huidig sjabloon als standaard in voor dit email account';
 
 $l['callOnSkype'] = 'Bellen met Skype';
+
+$l['userDefaultTemplate'] = 'Standaardsjabloon van gebruiker(s)';
+$l['exportContactsWithCompanies'] = 'Contacten met bedrijven';

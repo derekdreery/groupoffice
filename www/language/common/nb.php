@@ -625,3 +625,7 @@ $l['short_months'][9]='Sep';
 $l['short_months'][10]='Okt';
 $l['short_months'][11]='Nov';
 $l['short_months'][12]='Des';
+$l['areYouSureDeleteItem']= 'Er du sikker på at du vil slette \'{item}\'?';
+$l['report']='Rapport';
+$l['namelessItem']= 'Uten navn';
+$l['importFileType']= 'Filtype import';

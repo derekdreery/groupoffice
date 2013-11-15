@@ -139,19 +139,19 @@ GO.cron.CronGrid = Ext.extend(GO.grid.GridPanel,{
 					header: GO.cron.lang.nextrun,
 					dataIndex: 'nextrun',
 					sortable: true,
-					width:100
+					width:110
 				},
 				{
 					header: GO.cron.lang.lastrun,
 					dataIndex: 'lastrun',
 					sortable: true,
-					width:100
+					width:110
 				},
 				{
 					header: GO.cron.lang.completedat,
 					dataIndex: 'completedat',
 					sortable: true,
-					width:100
+					width:110
 				}
 				]
 			})

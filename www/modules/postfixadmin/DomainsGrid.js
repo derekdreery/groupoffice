@@ -74,10 +74,12 @@ GO.postfixadmin.DomainsGrid = function(config){
 			dataIndex: 'backupmx'
 		},	{
 			header: GO.lang.strCtime, 
-			dataIndex: 'ctime'
+			dataIndex: 'ctime',
+			width:110
 		},		{
 			header: GO.lang.strMtime, 
-			dataIndex: 'mtime'
+			dataIndex: 'mtime',
+			width:110
 		}
 	]
 	});

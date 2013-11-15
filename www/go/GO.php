@@ -482,6 +482,8 @@ class GO{
 			}
 		}
 	}
+	
+	private static $_scriptStartTime;
 
 	private static $initialized=false;
 
@@ -496,6 +498,8 @@ class GO{
 		}
 		self::$initialized=true;
 		
+	
+		
 		//register our custom error handler here
 		error_reporting(E_ALL | E_STRICT);
 		set_error_handler(array('GO','errorHandler'));
@@ -506,15 +510,19 @@ class GO{
 		//Start session here. Important that it's called before GO::config().
 		GO::session();
 		
+		if(GO::config()->debug){
+			self::$_scriptStartTime = GO_Base_Util_Date::getmicrotime();			
+		}
+		
 		date_default_timezone_set(GO::user() ? GO::user()->timezone : GO::config()->default_timezone);
 		
 		//set local to utf-8 so functions will behave consistently
 		if ( !empty(GO::config()->locale_all) ){
-			setlocale(LC_ALL, GO::config()->locale_all);
+			setlocale(LC_CTYPE, GO::config()->locale_all);
 		}else{
-			
+			//for escape shell arg
 			if(!isset(GO::session()->values['locale_all'])){
-				$currentlocale = GO::session()->values['locale_all']= setlocale(LC_ALL, "0");
+				$currentlocale = GO::session()->values['locale_all']= setlocale(LC_CTYPE, "0");
 
 				if(stripos($currentlocale,'utf')==false && function_exists('exec')){
 					@exec('locale -a', $output);
@@ -522,7 +530,7 @@ class GO{
 					if(isset($output) && is_array($output)){
 						foreach($output as $locale){
 							if(stripos($locale,'utf')!==false){
-								setlocale(LC_ALL, $locale);
+								setlocale(LC_CTYPE, $locale);
 
 								GO::session()->values['locale_all']=$locale;
 								break;
@@ -534,9 +542,10 @@ class GO{
 				}
 			}
 //			exit(GO::session()->values['locale_all']);
-			setlocale(LC_ALL, GO::session()->values['locale_all']);
+			setlocale(LC_CTYPE, GO::session()->values['locale_all']);
 
 		}
+		
 		
 		if(!empty(GO::session()->values['debug']))
 			GO::config()->debug=true;
@@ -573,7 +582,7 @@ class GO{
 
 		//Every logged on user get's a personal temp dir.
 		if (!empty(self::session()->values['user_id'])) {
-			self::config()->tmpdir = self::config()->tmpdir . self::session()->values['user_id'] . '/';
+			self::config()->tmpdir = self::config()->getTempFolder()->path().'/';
 		}
 	}
 	
@@ -620,6 +629,7 @@ class GO{
 		if(PHP_SAPI=='cli')
 			GO::session()->clearUserTempFiles(false);
 		
+		GO::debugPageLoadTime('shutdown');
 		GO::debug("--------------------\n");
 	}
 	
@@ -673,7 +683,7 @@ class GO{
 					break;
 		}		
 		
-		$errorMsg="[".date("Ymd H:i:s")."] PHP $type: $errstr in $errfile on line $errline";
+		$errorMsg="[".@date("Ymd H:i:s")."] PHP $type: $errstr in $errfile on line $errline";
 		
 		$user = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
 		$agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
@@ -790,7 +800,12 @@ class GO{
 		}
 		return false;
 	}
-
+	
+	public static function debugPageLoadTime($id){
+		 $time = GO_Base_Util_Date::getmicrotime()-self::$_scriptStartTime;
+		 
+		 GO::debug("Script running at [$id] for ".$time."ms");
+	}
 	/**
 	 * Write's to a debug log.
 	 *
