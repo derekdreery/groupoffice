@@ -10,6 +10,7 @@ GO.moduleManager.onModuleReady('customfields', function(){
 
 			return Ext.apply(f, {
 				xtype: 'selectcontact',
+				noUserContacts:true,
 				idValuePair:true,
 				hiddenName:customfield.dataname,
 				forceSelection:true,				
