@@ -62,10 +62,12 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 	 * Here you can define the relations of this model with other models.
 	 * See the parent class for a more detailed description of the relations.
 	 */
-	 public function relations() {
-		 return array();
-	 }
-	 
+	public function relations() {
+		return array(
+			'calendar' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Calendar', 'field' => 'calendar_id')
+		);
+	}
+	 	 
 	 /**
 	  * Find a category by name. It searches the global and calendar categories
 	  * 
@@ -97,5 +99,15 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 						 array('category_id'=>$this->id));
 		 
 		 return parent::afterSave($wasNew);
+	 }
+	 
+	 protected function beforeDelete() {
+		 if (empty($this->calendar))
+			 return true;		 
+		 
+		 if ($this->calendar->getPermissionLevel() >= GO_Base_Model_Acl::DELETE_PERMISSION)
+			 return true;
+		 else
+			 throw new GO_Base_Exception_AccessDenied();
 	 }
 }
