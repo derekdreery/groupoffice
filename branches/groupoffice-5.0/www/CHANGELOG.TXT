@@ -1,3 +1,5 @@
+- Tab notification for new emails and tickets will expand when there is a large number inside
+- German translation for birthday portlet added
 - Fixed setting company image and edit dialog link of company image
 - Company Display panel has proper Rowspan sp picture doesn't overlap the details pane
 - Ticket reports will only be available to users with manage permission to the ticket module.
