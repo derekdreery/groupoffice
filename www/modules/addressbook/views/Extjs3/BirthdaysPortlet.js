@@ -60,7 +60,7 @@ GO.addressbook.BirthdaysPanel = function(config)
 			width:100,
 			sortable:true
 		},{
-			header:GO.addressbook.lang['age'],
+			header:GO.lang['age'],
 			dataIndex: 'age',
 			width:100
 		}];
