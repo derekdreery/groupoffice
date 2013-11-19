@@ -631,7 +631,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		));
 
 		$failedRecipients=array();
-		$success = $mailer->send($message, $failedRecipients);
+		try {
+			$success = $mailer->send($message, $failedRecipients);
+		} catch ( Exception $e ) {
+			$msg = $e->getMessage();
+			preg_match('/(554 5\.7\.1).*:(.*)\"/s', $msg, $matches);
+			if (!empty($matches))
+				throw new Exception($matches[2]);
+		}
 
 		if ($success) {
 			if (!empty($params['reply_uid'])) {
