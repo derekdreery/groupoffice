@@ -269,3 +269,6 @@ $l['downloadPhotoUrl']='URL zum Foto angeben';
 $l['orBrowseComputer']='oder vom Computer hochladen';
 $l['currentImage']='Aktuelles Bild';
 $l['downloadFullImage']='Bild herunterladen';
+
+$l['upcomingBirthdays'] = "anstehende Geburtstage";
+$l['age'] = "Alter";
