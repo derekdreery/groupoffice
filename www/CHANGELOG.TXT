@@ -3,6 +3,7 @@
 - Ticket reports will only be available to users with manage permission to the ticket module.
 - Billing: Able to print invoices for costs.
 - Lists: Search bar in Lists Panel.
+- Z-Push2: Fixed rare issue where task time on device is one hour too early.
 
 12-11-2013 5.0.22
 - Updated Norwegian
