@@ -270,4 +270,4 @@ $l['orBrowseComputer']='oder vom Computer hochladen';
 $l['currentImage']='Aktuelles Bild';
 $l['downloadFullImage']='Bild herunterladen';
 
-$l['upcomingBirthdays'] = "anstehende Geburtstage";
+$l['upcomingBirthdays'] = "Anstehende Geburtstage";
