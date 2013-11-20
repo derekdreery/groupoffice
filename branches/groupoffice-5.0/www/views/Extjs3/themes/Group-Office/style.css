@@ -2116,6 +2116,47 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 	/*margin-top: 15px;*/
 }
 
+#quick-add-menu-collapse {
+	display:inline-block;
+	cursor:pointer;
+	float:left;
+	margin:4px;
+}
+
+#quick-add-menu{
+	position:absolute;
+	border:1px solid #009CC5;
+	background:#FFF;
+	padding:3px;
+	top:-200px;
+	width:auto;
+	/*padding-right:20px;*/
+	/*width:200px;*/
+	/*display:none;*/
+}
+
+.plus-sign{
+/*	position:absolute;
+	top:0;
+	right:0;*/
+        /*float:right;*/
+	display:inline-block;
+	width:16px;
+	height:16px;
+	background: url('images/grey-plus.png') no-repeat center center;
+}
+
+.minus-sign{
+/*	position:absolute;
+	top:0;
+	right:0;*/
+        /*float:right;*/
+	display:inline-block;
+	width:16px;
+	height:16px;
+	background: url('images/grey-minus.png') no-repeat center center;
+}
+
 .go-moduletabs-bwrap{
 	background: #009cc5;
 }
