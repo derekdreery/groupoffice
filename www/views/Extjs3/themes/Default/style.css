@@ -2160,3 +2160,43 @@ box-sizing: border-box;
 	font-size:10px;
 }
 
+#quick-add-menu-collapse {
+	display:inline-block;
+	cursor:pointer;
+	float:left;
+	margin:4px;
+}
+
+#quick-add-menu{
+	position:absolute;
+	border:1px solid #2E80A9;
+	background:#FFF;
+	padding:3px;
+	top:-200px;
+	width:auto;
+	/*padding-right:20px;*/
+	/*width:200px;*/
+	/*display:none;*/
+}
+
+.plus-sign{
+/*	position:absolute;
+	top:0;
+	right:0;*/
+        /*float:right;*/
+	display:inline-block;
+	width:16px;
+	height:16px;
+	background: url('images/elbow-plus-nl.gif') no-repeat center center;
+}
+
+.minus-sign{
+/*	position:absolute;
+	top:0;
+	right:0;*/
+        /*float:right;*/
+	display:inline-block;
+	width:16px;
+	height:16px;
+	background: url('images/elbow-minus-nl.gif') no-repeat center center;
+}
