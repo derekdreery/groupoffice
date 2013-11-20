@@ -12,69 +12,28 @@
  * @author Boy Wijnmaalen <bwijnmaalen@intermesh.nl>
  */
 
+
 GO.users.MainPanel = function(config)
-{	
-	if(!config)
-	{
-		config = {};
-	}
-
-	var fields = {
-		fields:['id', 'username', 'name','logins','lastlogin','ctime','address','address_no','zip','city','state','country','home_phone','email',
-	    	'waddress','waddress_no','wzip','wcity','wstate','wcountry','wphone','enabled'],
-		columns:[
-        {header: GO.lang['strUsername'], dataIndex: 'username', width: 200},
-        {header: GO.lang['strName'], dataIndex: 'name', width: 250},
-        {header: GO.users.lang.numberOfLogins, dataIndex: 'logins', width: 100, align:"right"},
-        {header: GO.users.lang['cmdFormLabelLastLogin'], dataIndex: 'lastlogin', width: 110},
-        {header: GO.users.lang['cmdFormLabelRegistrationTime'], dataIndex: 'ctime', width: 110},      
-        {header: GO.lang['strEmail'], dataIndex: 'email',  hidden: false, width: 150},
-				{header: GO.users.lang['cmdBoxLabelEnabled'], dataIndex: 'enabled',  hidden: false, width: 100} 
-    ]
-	};
-
-	if(GO.customfields)
-	{
-		GO.customfields.addColumns("GO_Base_Model_User", fields);
-	}
-
-	config.store = new GO.data.JsonStore({
-	    url: GO.url('users/user/store'),
-	    baseParams: {task: 'users'},
-	    id: 'id',
-	    totalProperty: 'total',
-	    root: 'results',
-	    fields: fields.fields,
-	    remoteSort: true
+{
+	
+	config.layout='border';
+	config.border=false;
+	
+	this.usersGridPanel = new GO.users.UsersGrid({'region':'center'});
+	
+	this.groupsGrid = new GO.users.GroupsGrid({
+		relatedStore: this.usersGridPanel.store,
+		region:'west',
+		id:'users-groups-panel',
+		width: 250
 	});
-
-	config.loadMask=true;
-						
-	config.store.setDefaultSort('username', 'ASC');
-
+	
   this.searchField = new GO.form.SearchField({
-		store: config.store,
+		store: this.usersGridPanel.store,
 		width:320
-  });			
- 
-	config.view = new Ext.grid.GridView({
-		getRowClass : function(record, rowIndex, p, store){
-			if(record.data.enabled == GO.lang['no']){
-				return 'user-disabled';
-			}
-		}
-	});
-
-	config.deleteConfig={extraWarning:GO.users.lang.deleteWarning+"\n\n"};
-			
-	config.cm = new Ext.grid.ColumnModel({
-		defaults:{
-			sortable:true
-		},
-		columns:fields.columns
-	});	
-		    	
-	config.tbar = new Ext.Toolbar({		
+  });
+	
+	this.tbar = new Ext.Toolbar({		
 			cls:'go-head-tb',
 			items: [{
 		      	 	xtype:'htmlcomponent',
@@ -113,7 +72,7 @@ GO.users.MainPanel = function(config)
 		  			if(!this.importDialog)
 		  			{
 		  				this.importDialog = new GO.users.ImportDialog();
-		  				this.importDialog.on('import', function(){this.store.reload();}, this);
+		  				this.importDialog.on('import', function(){this.usersGridPanel.store.reload();}, this);
 		  			}
 		  			this.importDialog.show();
 		  		},
@@ -143,47 +102,22 @@ GO.users.MainPanel = function(config)
 		         GO.lang['strSearch']+':',
 		        this.searchField
 		    ]});
-    
-   if(GO.settings.config.max_users>0)
-   {
-	   config.bbar = new Ext.PagingToolbar({
-	   			cls: 'go-paging-tb',
-	        store: config.store,
-	        pageSize: parseInt(GO.settings['max_rows_list']),
-	        displayInfo: true,
-	        displayMsg: GO.lang['displayingItems']+'. '+GO.lang.strMax+' '+GO.settings.config.max_users,
-	        emptyMsg: GO.lang['strNoItems']
-	    });
-   }
+	
+	config.items= [
+		this.groupsGrid,
+		this.usersGridPanel
+	];
+	
+	GO.users.MainPanel.superclass.constructor.call(this, config);
 
-		config.sm = new Ext.grid.RowSelectionModel();
-		config.paging=true;		
-				
-		GO.users.MainPanel.superclass.constructor.call(this,config);
 };
-		
-Ext.extend(GO.users.MainPanel, GO.grid.GridPanel,{
-	
-	afterRender : function(){
-		GO.users.MainPanel.superclass.afterRender.call(this);
-		
-		this.on("rowdblclick",this.rowDoubleClick, this);			
-		this.store.load();
 
-
-		GO.dialogListeners.add('user',{
-			scope:this,
-			save:function(){
-				this.store.reload();
-			}
-		});
-	},			
-	
-	rowDoubleClick : function (grid, rowIndex, event)
-	{
-		var selectionModel = grid.getSelectionModel();
-		var record = selectionModel.getSelected();
-		GO.users.showUserDialog(record.data['id']);
+Ext.extend(GO.users.MainPanel, Ext.Panel,{
+	show : function() {
+		
+		GO.users.MainPanel.superclass.show.call(this);
+		this.groupsGrid.store.load();
+		
 	}
 });
 

@@ -294,6 +294,25 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		return parent::afterStore($response, $params, $store, $storeParams);
 	}
 	
+	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+		
+		$storeParams->joinModel(
+			array(
+				'model'=>'GO_Base_Model_UserGroup',
+				'localTableAlias'=>'t',
+				'localField'=>'id',
+				'foreignField'=>'user_id',
+				'tableAlias'=>'ug'
+			));
+		
+		$groupsMultiSel = new GO_Base_Component_MultiSelectGrid(
+			'users-groups-panel', 
+			"GO_Base_Model_Group",$store, $params, true);		
+			$groupsMultiSel->addSelectedToFindCriteria($storeParams, 'group_id','ug');
+			
+		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
+	}
+	
 	/**
 	 * Get an example file for importing users
 	 * 

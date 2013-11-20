@@ -9,5 +9,8 @@ modules/users/views/Extjs3/RegisterEmailPanel.js
 modules/users/views/Extjs3/SelectSettingPanels.js
 modules/users/views/Extjs3/SettingsDialog.js
 
+modules/users/UsersGrid.js
 modules/users/MainPanel.js
 modules/users/UserPanel.js
+
+modules/users/GroupsGrid.js
