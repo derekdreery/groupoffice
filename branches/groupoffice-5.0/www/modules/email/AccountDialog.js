@@ -49,7 +49,7 @@ GO.email.AccountDialog = function(config) {
 
 	if(GO.addressbook){
 				
-		this.templatesCombo = new Ext.form.ComboBox({
+		this.templatesCombo = new GO.form.ComboBox({
 			fieldLabel : GO.email.lang['defaultEmailTemplate'],
 			hiddenName : 'default_account_template_id',
 			width: 300,
@@ -660,8 +660,10 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 
 				this.permissionsTab.setAcl(action.result.data.acl_id);
 				
-				if (this.templatesCombo)
+				if (this.templatesCombo) {
 					this.templatesCombo.store.load();
+					this.templatesCombo.setRemoteText(action.result.remoteComboTexts['default_template_id']);
+				}
 			},
 			scope : this
 		});
