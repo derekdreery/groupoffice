@@ -265,3 +265,43 @@ line-height:20px;
 	vertical-align:top;
 }
 
+#quick-add-menu-collapse {
+	display:inline-block;
+	cursor:pointer;
+	float:left;
+	margin:4px;
+}
+
+#quick-add-menu{
+	position:absolute;
+	border:1px solid #2E80A9;
+	background:#FFF;
+	padding:3px;
+	top:-200px;
+	width:auto;
+	/*padding-right:20px;*/
+	/*width:200px;*/
+	/*display:none;*/
+}
+
+.plus-sign{
+/*	position:absolute;
+	top:0;
+	right:0;*/
+        /*float:right;*/
+	display:inline-block;
+	width:16px;
+	height:16px;
+	background: url('images/16x16/gtk-add.png') no-repeat center center;
+}
+
+.minus-sign{
+/*	position:absolute;
+	top:0;
+	right:0;*/
+        /*float:right;*/
+	display:inline-block;
+	width:16px;
+	height:16px;
+	background: url('images/16x16/gtk-add.png') no-repeat center center;
+}
