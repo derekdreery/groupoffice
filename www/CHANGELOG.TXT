@@ -7,6 +7,7 @@
 - Lists: Search bar in Lists Panel.
 - Z-Push2: Fixed rare issue where task time on device is one hour too early.
 - Users module: filter panel for user groups.
+- Projects 2 : default mileage for time registration.
 
 12-11-2013 5.0.22
 - Updated Norwegian
