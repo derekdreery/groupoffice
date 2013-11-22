@@ -49,6 +49,29 @@ GO.addressbook.SelectContact = function(config){
 	GO.addressbook.SelectContact.superclass.constructor.call(this,config);
 	
 }
-Ext.extend(GO.addressbook.SelectContact, GO.form.ComboBoxReset);
+Ext.extend(GO.addressbook.SelectContact, GO.form.ComboBoxReset,{
+	
+	selectContactById : function(contact_id, callback, scope){
+		this.getStore().load({
+			params:{
+				contact_id:contact_id
+			},
+			callback:function(){
+				this.setValue(contact_id);
+				
+				if(callback){
+					
+					var record = this.store.getAt(0);
+		
+					if(!scope)
+						scope=this;
+					callback.call(scope, this, record);
+				}
+			},
+			scope:this
+		});
+		
+	}
+});
 
 Ext.ComponentMgr.registerType('selectcontact', GO.addressbook.SelectContact);
