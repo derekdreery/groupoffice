@@ -31,8 +31,10 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		this.formPanel.baseParams.remind_date=this.datePicker.getValue().format(GO.settings.date_format);
 	},
 	show : function (remoteModelId, config) {
-		GO.tasks.ScheduleCallDialog.superclass.show.call(this);
 		this.selectContact.clearLastSearch();
+		GO.tasks.ScheduleCallDialog.superclass.show.call(this,remoteModelId, config);
+		if(config && config.link_config)
+			this.setContact(config.link_config.model_id,config.link_config.name);
 	},
 	buildForm : function () {
 
@@ -139,9 +141,9 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			
 				GO.addressbook.showContactDialog(0, {values:attrs});
 				
-				GO.addressbook.contactDialog.on('save',this.setContact,this);
+				GO.addressbook.contactDialog.on('save',this.setContactFromDialog,this);
 				GO.addressbook.contactDialog.on('hide',function(){
-					GO.addressbook.contactDialog.un('save', this.setContact);
+					GO.addressbook.contactDialog.un('save', this.setContactFromDialog);
 				},this, {single:true});
 			},
 			scope: this
@@ -348,10 +350,17 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	capitalize : function(text) {
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 	},
-	setContact : function(dialog,contact_id){
-		this.selectContact.getStore().load();
-		this.selectContact.setValue(contact_id);
-		this.selectContact.setRemoteText(this.getNameFromContactDialog(dialog));
+	setContactFromDialog : function(dialog,contact_id){
+		this.setContact(contact_id,this.getNameFromContactDialog(dialog));
+	},
+	setContact : function(contact_id){
+		this.selectContact.selectContactById(contact_id,function(combo,record){
+			combo.hasTyped = false;
+				
+			this.populatePhoneFields(record);
+			this.btnAddContact.setDisabled(true);
+		},this);
+
 		this.selectContact.hasTyped = false;
 		
 		this.btnAddContact.setDisabled(true);
