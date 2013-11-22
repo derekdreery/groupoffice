@@ -98,7 +98,7 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 		return true;
 	}
 	
-	protected function beforeUpdateRecord($params, &$record) {
+	protected function beforeUpdateRecord($params, &$record, $model) {
 		if ($record['id']==GO::config()->group_root)
 			throw new GO_Base_Exception_AccessDenied();
 		return true;

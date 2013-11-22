@@ -403,3 +403,6 @@ $updates['201310171145'][]="CREATE TABLE IF NOT EXISTS `ab_default_email_account
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $updates['201310221010'][]="ALTER TABLE `ab_contacts` ADD `skype_name` VARCHAR( 100 ) NULL DEFAULT NULL;";
+
+
+$updates["201310221010"][]="ALTER TABLE `ab_contacts` CHANGE `post_address_no` `post_address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";

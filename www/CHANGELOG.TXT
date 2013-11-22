@@ -1,3 +1,4 @@
+22-11-2013 5.0.23
 - Fixed iphone WBXML error when inviting appointment participants in z-push 2.1
 - Tab notification for new emails and tickets will expand when there is a large number inside
 - German translation for birthday portlet added
@@ -12,6 +13,9 @@
 - Tickets: CC input field for ticket notifications.
 - Tickets: Closed ticket will be reopened on receiving ticket email of customer.
 - Link items: prohibited to link a read-only item.
+- When someone other the the ticket agent add a new message to the ticket it will be marked as unseen
+- Zpushadmin can now also work with zpush2.1
+- Projects templates fix: Also use 'days offset' in task action.
 
 12-11-2013 5.0.22
 - Updated Norwegian
