@@ -254,7 +254,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 	 * @return boolean Iff true, the initiating record updating process's brink
 	 * will be crossed. I.e., the record updating process will be initiated.
 	 */
-	protected function beforeUpdateRecord($params,&$record) {
+	protected function beforeUpdateRecord($params,&$record, $linkModel) {
 		return true;
 	}
 	
@@ -274,12 +274,17 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 	public function actionUpdateRecord($params) {
 		$response = array('success'=>true);
 		$record = json_decode($params['record'], true);
-		if ($this->beforeUpdateRecord($params,$record)) {
-			$primaryKeys = array(
-				$this->getRemoteKey()=>$params['model_id'], //eg. user_id
-				$this->linkModelField()=>$record['id'] //eg. calendar_id
-			);
-			$linkModel = GO::getModel($this->linkModelName())->findByPk($primaryKeys);
+		
+		
+		$primaryKeys = array(
+			$this->getRemoteKey()=>$params['model_id'], //eg. user_id
+			$this->linkModelField()=>$record['id'] //eg. calendar_id
+		);
+		$linkModel = GO::getModel($this->linkModelName())->findByPk($primaryKeys);
+		
+		
+		if ($this->beforeUpdateRecord($params,$record, $linkModel)) {
+			
 			$linkModel->setAttributes($record);
 			$linkModel->save();
 		}

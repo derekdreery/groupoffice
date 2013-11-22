@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   `state` varchar(50) DEFAULT '',
   `country` varchar(50) DEFAULT '',
   `post_address` varchar(100) DEFAULT '',
-  `post_address_no` varchar(10) DEFAULT '',
+  `post_address_no` varchar(100) DEFAULT '',
   `post_city` varchar(50) DEFAULT '',
   `post_state` varchar(50) DEFAULT '',
   `post_country` varchar(50) DEFAULT '',
