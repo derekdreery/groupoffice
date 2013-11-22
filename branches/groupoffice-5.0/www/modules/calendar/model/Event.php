@@ -67,6 +67,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	public $sequence;
 	
+	
+	/**
+	 * Indicating that this is an update for a related event.
+	 * eg. The organizer modifies the event and all events for invitees.
+	 * 
+	 * @var boolean
+	 */
+	public $updatingRelatedEvent=false;
+	
 	/**
 	 * Flag used when importing. On import we allow participant events to be 
 	 * modified even when they are not the organizer. Because a meeting request
@@ -395,13 +404,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		//if this is not the organizer event it may only be modified by the organizer
-		if(!$this->_isImport && !$this->isNew && $this->isModified($this->getRelevantMeetingAttributes())){		
-			$organizerEvent = $this->getOrganizerEvent();
-			if($organizerEvent && !$organizerEvent->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION) || !$organizerEvent && !$this->is_organizer){
-				GO::debug($this->getModifiedAttributes());
-				GO::debug($this->_attributes);
+		if(!$this->is_organizer && !$this->updatingRelatedEvent && !$this->_isImport && !$this->isNew && $this->isModified($this->getRelevantMeetingAttributes())){		
+//			$organizerEvent = $this->getOrganizerEvent();
+//			if($organizerEvent && !$organizerEvent->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION) || !$organizerEvent && !$this->is_organizer){
+//				GO::debug($this->getModifiedAttributes());
+//				GO::debug($this->_attributes);
 				throw new GO_Base_Exception_AccessDenied();
-			}			
+//			}			
 		}
 		
 		//Don't set reminders for the superadmin
@@ -585,6 +594,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 					if($event->id!=$this->id && $this->is_organizer!=$event->is_organizer){ //this should never happen but to prevent an endless loop it's here.
 						$event->setAttributes($updateAttr, false);
+						$event->updatingRelatedEvent=true;
 						$event->save(true);
 
 //						$stmt = $event->participants;
