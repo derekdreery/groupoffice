@@ -20,6 +20,7 @@ GO.panels.QuickAddPanel = Ext.extend(Ext.Container, {
 	initComponent : function(){
 		
 		Ext.apply(this, {
+			border:false,
 			hidden:true,
 			layout:{
 				type: 'hbox',

@@ -726,6 +726,7 @@ if(GO.addressbook){
 	GO.quickAddPanel.addButton(new Ext.Button({
 		iconCls:'img-call-add',
 		cls: 'x-btn-icon', 
+		tooltip:GO.tasks.lang.scheduleCall,
 		handler: function(){
 			if(!GO.tasks.scheduleCallDialog)
 				GO.tasks.scheduleCallDialog = new GO.tasks.ScheduleCallDialog();
