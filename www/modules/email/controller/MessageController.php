@@ -473,8 +473,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
 					$linkedEmail->setAttributes($attributes);
 					$linkedEmail->acl_id = $model->findAclId();
-					$linkedEmail->save();
-
+					try {
+						$linkedEmail->save();
+					} catch (GO_Base_Exception_AccessDenied $e) {
+						throw new Exception(GO::t('linkMustHavePermissionToWrite','email'));
+					}
 					$linkedEmail->link($model);
 				}
 				
