@@ -48,7 +48,7 @@ GO.panels.QuickAddPanel = Ext.extend(Ext.Container, {
 
 GO.quickAddPanel = new GO.panels.QuickAddPanel();
 
-GO.mainLayout.on('ready', function(){
+GO.mainLayout.on('render', function(){
 	// Render the quickAddPanel to the div so the DOM elements are created
 	GO.quickAddPanel.render("quick-add-menu",0);
 	
