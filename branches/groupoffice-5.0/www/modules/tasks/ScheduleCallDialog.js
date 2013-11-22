@@ -39,8 +39,8 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	buildForm : function () {
 
 		var now = new Date();
-		var tomorrow = now.add(Date.DAY, 1);
-		var eight = Date.parseDate(tomorrow.format('Y-m-d')+' 08:00', 'Y-m-d G:i' );
+//		var tomorrow = now.add(Date.DAY, 1);
+//		var eight = Date.parseDate(now.format('Y-m-d')+' 08:00', 'Y-m-d G:i' );
 
 		this.datePicker = new Ext.DatePicker({
 			xtype:'this.datePicker',
@@ -49,7 +49,7 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			fieldLabel:GO.lang.strDate
 		});
 
-		this.datePicker.setValue(tomorrow);
+		this.datePicker.setValue(now);
 		
 		this.datePicker.on("select", function(datePicker, DateObj){						
 			this.formPanel.baseParams.remind_date=this.formPanel.baseParams.start_time=this.formPanel.baseParams.due_time=DateObj.format(GO.settings.date_format);	
@@ -64,7 +64,7 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			name:'remind_time',
 			width:220,
 			format: GO.settings.time_format,
-			value:eight.format(GO.settings['time_format']),
+			value:now.format(GO.settings['time_format']),
 			fieldLabel:GO.lang.strTime,
 			anchor:'100%'
 		});
@@ -78,18 +78,23 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		});		
 
 		this.selectContact = new GO.addressbook.SelectContact ({
-			hiddenName: 'contact_id',
+			name: 'contact_name',
 			fieldLabel:GO.addressbook.lang.contact,
 			enableKeyEvents : true,
-			hasTyped:false,
 			remoteSort: true,
+			allowBlank:false,
 			anchor: '100%'
+		});
+		
+		this.contactIdField = new Ext.form.Hidden({
+			name:'contact_id'
 		});
 		
 		this.phoneNumberField = new GO.form.ComboBoxReset({
 			name: 'number',
 			fieldLabel:GO.tasks.lang.phoneNr,
 			anchor: '100%',
+			allowBlank:false,
 			mode:'local',
 			triggerAction:'all',
 			enableKeyEvents : true,
@@ -165,62 +170,27 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			})
 		});
 			
-		this.selectContact.on('select', function(combo, record, index ){
-			combo.hasTyped = false;
-			this.populatePhoneFields(record);
-			this.btnAddContact.setDisabled(true);
-		},this);
-		
-		this.selectContact.on('keyup', function(combo){
-			if(!combo.hasTyped){
-				combo.hasTyped = true;
-				this.populatePhoneFields();
-				this.btnAddContact.setDisabled(false);
-			}
+		this.selectContact.on('change', function(combo, new_val, old_val ){
+
+			var record = this.selectContact.store.getById(new_val);
 			
+			new_val = record ? new_val :  0;
+			
+			this.contactIdField.setValue(new_val);
+			this.populatePhoneFields();
+			this.btnAddContact.setDisabled(new_val!=0);
+
 		},this);
 		
 		this.phoneNumberField.on('keyup', function(combo,e){
-			this.savePhoneNumberField.setDisabled(false);
+			if(e.getKey() !== 9 && e.getKey() !== 13){ // Don't do anything when the tab button is pressed
+				this.savePhoneNumberField.setDisabled(false);
+			}
 		},this);
 		
-		this.phoneNumberField.on('select', function(combo,record,index){
+		this.phoneNumberField.on('select', function(combo,record,index){			
 			this.disableSavePhoneNumberField();
 		},this);
-		
-//		this.propertiesPanel = new Ext.Panel({
-//			border: false,
-//			//			baseParams: {date: tomorrow.format(GO.settings.date_format), name: 'TEST'},			
-//			cls:'go-form-panel',
-//			layout:'form',
-//			waitMsgTarget:true,			
-//			items:[
-//			{
-//				xtype:'fieldset',
-//				title: GO.tasks.lang.task,
-//				items:[
-//				{	
-//					items:this.datePicker,
-//					width:240,
-//					style:'margin:auto;'
-//				},
-//				new GO.form.HtmlComponent({
-//					html:'<br />'
-//				}),
-//				this.timeField,
-//				this.selectTaskList,
-//				this.descriptionField
-//			]},{
-//				xtype:'fieldset',
-//				title: GO.addressbook.lang.contact,
-//				items:[
-//					this.selectContact,
-//					this.phoneNumberField,
-//					this.savePhoneNumberField,
-//					this.btnAddContact,
-//				]}
-//			]			
-//		});
 		
 		this.propertiesPanel = new Ext.Panel({
 			border: false,
@@ -268,6 +238,7 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				xtype:'fieldset',
 				title: GO.addressbook.lang.contact,
 				items:[
+					this.contactIdField,
 					this.selectContact,
 					this.phoneNumberField,
 					this.savePhoneNumberField,
@@ -278,12 +249,8 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
 		this.addPanel(this.propertiesPanel);
 	},
-	
-	beforeSubmit : function(params){
-			this.formPanel.baseParams.is_contact = this.selectContact.hasTyped?false:true;
-	},
-	
-	populatePhoneFields : function(record){
+
+	populatePhoneFields : function(){
 
 		var order = [
 			'work_phone',
@@ -292,6 +259,7 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			'cellular2'
 		];
 		
+		var record = this.selectContact.store.getById(this.contactIdField.getValue());
 		if(GO.util.empty(record)){
 			record = {};
 			record.data = {};
@@ -355,14 +323,13 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	},
 	setContact : function(contact_id){
 		this.selectContact.selectContactById(contact_id,function(combo,record){
-			combo.hasTyped = false;
-				
-			this.populatePhoneFields(record);
+
+			this.contactIdField.setValue(contact_id);
+			this.populatePhoneFields();
 			this.btnAddContact.setDisabled(true);
+			this.disableSavePhoneNumberField();
 		},this);
 
-		this.selectContact.hasTyped = false;
-		
 		this.btnAddContact.setDisabled(true);
 		this.disableSavePhoneNumberField();
 	},

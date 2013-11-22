@@ -18,7 +18,7 @@ class GO_Tasks_Controller_ScheduleCall extends GO_Base_Controller_AbstractJsonCo
 	
 	protected function actionSave($params){		
 		
-		if(empty($params['contact_id']) || empty($params['is_contact']) || empty($params['number']) || empty($params['remind_date']) || empty($params['remind_time']))
+		if(empty($params['number']) || empty($params['remind_date']) || empty($params['remind_time']))
 			throw new Exception('Not all parameters are given');
 
 		$scheduleCall = new GO_Tasks_Model_Task();
@@ -26,7 +26,7 @@ class GO_Tasks_Controller_ScheduleCall extends GO_Base_Controller_AbstractJsonCo
 		$scheduleCall->setAttributes($params);
 				
 		// Check if the contact_id is really an ID or if it is a name. (The is_contact is true when it is an ID) 
-		if($params['is_contact'] == 'true'){
+		if(!empty($params['contact_id'])){
 			$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['contact_id']);
 			
 			if(!empty($params['number']) && !empty($params['save_as'])){
@@ -36,7 +36,7 @@ class GO_Tasks_Controller_ScheduleCall extends GO_Base_Controller_AbstractJsonCo
 			
 			$name = $contact->name;
 		}else{ 
-			$name = $params['contact_id'];
+			$name = $params['contact_name'];
 		}
 		
 		$scheduleCall->name = str_replace(array('{name}','{number}'),array($name, $params['number']),GO::t('scheduleCallTaskName','tasks'));
@@ -44,7 +44,7 @@ class GO_Tasks_Controller_ScheduleCall extends GO_Base_Controller_AbstractJsonCo
 		
 		$scheduleCall->save();
 		
-		if($params['is_contact'] == 'true')
+		if(isset($contact))
 			$scheduleCall->link($contact);
 		
 		echo $this->renderSubmit($scheduleCall);
