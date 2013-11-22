@@ -54,7 +54,8 @@ GO.grid.SearchPanel = function(config){
 			link_id: this.link_id,
 			link_type: this.link_type,
 			folder_id: this.folder_id,
-			type_filter:'true'
+			type_filter:'true',
+			minimumWritePermission: config.minimumWritePermission || false
 		},
 		root: 'results',
 		totalProperty: 'total',
