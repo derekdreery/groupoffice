@@ -21,7 +21,8 @@ GO.dialog.LinksDialog = function(config){
 			noOpenLinks:true,
 			hideDescription:config.hideDescription,
 			dontLoadOnRender:true,
-			singleSelect:config.singleSelect
+			singleSelect:config.singleSelect,
+			minimumWritePermission:true
 		});
 
 	this.grid.searchGrid.on('rowdblclick', this.linkItems, this);
