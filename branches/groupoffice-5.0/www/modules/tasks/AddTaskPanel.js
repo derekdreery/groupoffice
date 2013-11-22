@@ -72,7 +72,7 @@ Ext.extend(GO.tasks.AddTaskPanel, Ext.FormPanel,{
 			for(var i=0; i<records.length; i++)
 			{
 				var tasklist = []
-				tasklist.push(records[i].id);
+				tasklist.push(records[i].data.id);
 				tasklist.push(records[i].data.name);
 
 				data.push(tasklist);
