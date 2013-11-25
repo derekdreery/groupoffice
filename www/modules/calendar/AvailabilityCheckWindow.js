@@ -97,11 +97,10 @@ GO.calendar.AvailabilityCheckWindow = function(config) {
 							url : GO.url('calendar/participant/freeBusyInfo'),						
 							fields : ['name', 'email', 'freebusy'],
 							baseParams : {
-								emails:'',
-								names:'',
 								event_id:0,
 								date: '',
-								resourceIds: ''
+								resourceIds: '',
+								participantData : []
 							}
 						}),
 				tpl : tpl,
@@ -178,10 +177,10 @@ GO.calendar.AvailabilityCheckWindow = function(config) {
 Ext.extend(GO.calendar.AvailabilityCheckWindow, GO.Window, {
 
 		show : function(config){
+			
+			this.dataView.store.baseParams.participantData=config.participantData;
 			this.dataView.store.baseParams.date=config.date;
 			this.dataView.store.baseParams.event_id=config.event_id;
-			this.dataView.store.baseParams.emails=config.emails;
-			this.dataView.store.baseParams.names=config.names;
 			this.dataView.store.baseParams.resourceIds=config.resourceIds;
 			this.dataView.store.load();
 			

@@ -1540,11 +1540,11 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				this.availabilityWindow.hide();
 			}, this);
 		}
+		
 		this.availabilityWindow.show({
+			participantData:Ext.encode(this.participantsPanel.getParticipantData()),
 			date : this.startDate.getRawValue(),
 			event_id : this.event_id,
-			emails : Ext.encode(this.participantsPanel.getParticipantEmails()),
-			names : Ext.encode(this.participantsPanel.getParticipantNames()),
 			resourceIds : Ext.encode(this.getResourceIds())
 		});
 	}
