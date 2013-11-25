@@ -7,9 +7,16 @@ class GO_Base_Mail_EmailRecipients{
 	 * 
 	 * @param string $emailRecipientList 
 	 */
-	public function __construct($emailRecipientList=''){
+	public function __construct($emailRecipientList='', $strict=false){
+		$this->strict=$strict;
 		$this->addString($emailRecipientList);
 	}
+	
+	/**
+	 * Set to true if you want to throw an exception when an e-mail is invalid.
+	 * @var boolean 
+	 */
+	public $strict=false;
 	
 	/**
 	 * Create a list for a sinlge recipient.
@@ -216,7 +223,7 @@ class GO_Base_Mail_EmailRecipients{
 				
 				case ',':
 				case ';':
-					if($this->_quote || (!$this->_emailFound && !GO_Base_Util_String::validate_email(trim($this->_buffer))))
+					if($this->_quote || (!$this->strict && !$this->_emailFound && !GO_Base_Util_String::validate_email(trim($this->_buffer))))
 					{
 						$this->_buffer .= $char;				
 					}else
@@ -245,12 +252,19 @@ class GO_Base_Mail_EmailRecipients{
 	*/
 	private function _addBuffer()
 	{
+		$this->_buffer = trim($this->_buffer);
 		if(!empty($this->_personal) && empty($this->_buffer)){
 			$this->_buffer = 'noaddress';
 		}
+		
 		if(!empty($this->_buffer))
 		{
-			$this->addRecipient($this->_buffer, $this->_personal);
+			if($this->strict && !GO_Base_Util_String::validate_email($this->_buffer)){
+				throw new Exception("Address ".$this->_buffer." is not valid");
+			}else
+			{
+				$this->addRecipient($this->_buffer, $this->_personal);
+			}
 		}
 		$this->_buffer = '';
 		$this->_personal = false;
