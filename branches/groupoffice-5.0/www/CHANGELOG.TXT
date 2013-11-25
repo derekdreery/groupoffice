@@ -1,5 +1,7 @@
+- Tickets: CC input field for ticket notifications: sanity check when submitting CC addresses.
+
 24-11-2013 5.0.24
-- Build error
+- Fixed build error in 5.0.23
 
 24-11-2013 5.0.23
 - Fixed iphone WBXML error when inviting appointment participants in z-push 2.1
