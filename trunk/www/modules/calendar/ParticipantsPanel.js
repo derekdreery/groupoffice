@@ -479,6 +479,20 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 		
 	},
 	
+	// Return array with name, email and user_id
+	getParticipantData : function(){
+		var records = this.store.getRange();
+		var data = [];
+		for (var i = 0; i < records.length; i++) {
+			var participant = {};
+			participant.name = records[i].get('name')
+			participant.email = records[i].get('email');
+			participant.user_id = records[i].get('user_id');
+			data.push(participant);
+		}
+		return data;
+	},
+	
 	getParticipantEmails : function() {
 		var records = this.store.getRange();
 		var emails = [];
