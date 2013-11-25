@@ -165,6 +165,17 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 			$response['security_token']=GO::session()->values["security_token"];
 			$response['sid']=session_id();
 			
+			if(!empty($params['return_user_info'])){
+				$response['modules']=array();
+				
+				foreach(GO::modules()->getAllModules() as $module){
+					$response['modules'][]=$module->id;
+				}
+				
+				$response['user']=GO::user()->getAttributes();
+			}
+			
+			
 			if(!empty($params["login_language"]))
 			{
 				GO::user()->language=$params["login_language"];

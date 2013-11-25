@@ -258,9 +258,24 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 
 			$sort = !empty($this->_requestParams['sort']) ? $this->_requestParams['sort'] : $this->defaultSort;
 			$dir = !empty($this->_requestParams['dir']) ? $this->_requestParams['dir'] : $this->defaultDirection;
+			
+			
+			
 
-			if (!is_array($sort))
-				$sort = empty($sort) ? array() : array($sort);
+			if (!is_array($sort)){
+				if(substr($sort,0,2)=='[{'){ //json sent by Sencha Touch
+
+					$sorters = json_decode($sort);
+
+					$sort = $dir = array();
+					foreach($sorters as $sorter){
+						$sort[]=$sorter->property;
+						$dir[]=$sorter->direction;
+					}
+				}else{
+					$sort = empty($sort) ? array() : array($sort);
+				}
+			}
 		
 		if (!empty($this->_requestParams['groupBy']))
 			array_unshift($sort, $this->_requestParams['groupBy']);
