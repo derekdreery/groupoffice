@@ -142,7 +142,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 		
 		$user = GO::session()->login($params['username'], $params['password']);
 
-		$response['success'] = $user != false;
+		$response['success'] = $user != false;		
 
 		if (!$response['success']) {		
 			$response['feedback']=GO::t('badLogin');			
@@ -161,6 +161,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 				GO_Base_Util_Http::setCookie('GO_PW', $encPassword);
 			}
 			
+			$response['groupoffice_version']=GO::config()->version;
 			$response['user_id']=$user->id;
 			$response['security_token']=GO::session()->values["security_token"];
 			$response['sid']=session_id();
