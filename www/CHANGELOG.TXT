@@ -1,4 +1,5 @@
 - Tickets: CC input field for ticket notifications: sanity check when submitting CC addresses.
+- Files: Prohibited: compress folder that is inside a read-only folder.
 
 24-11-2013 5.0.24
 - Fixed build error in 5.0.23
