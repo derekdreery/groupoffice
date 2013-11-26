@@ -223,3 +223,5 @@ $updates['201309121148'][]="ALTER TABLE  `cal_participants` ADD  `contact_id` IN
 
 $updates['201310141130'][]="ALTER TABLE `cal_calendars` ADD `enable_ics_import` TINYINT( 1 ) NOT NULL DEFAULT '0',
 ADD `ics_import_url` VARCHAR( 512 ) NOT NULL DEFAULT '';";
+
+$updates["201311261700"][]="script:3_install_cron.php";
