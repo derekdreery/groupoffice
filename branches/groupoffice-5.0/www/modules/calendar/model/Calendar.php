@@ -150,6 +150,19 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 				$this->acl->addUser($user->user_id, GO_Base_Model_Acl::DELETE_PERMISSION);
 		 }
 		}
+		
+		$file = new GO_Base_Fs_File($this->getPublicIcsPath());
+		
+		if(!$this->public){
+			if($file->exists())
+				$file->delete ();
+		} else {
+			if(!$file->exists())
+				$file->touch(true);
+			
+			$file->putContents($this->toVObject());
+		}
+		
 		return parent::afterSave($wasNew);
 	}
 
@@ -181,5 +194,49 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		}
 	
 		return $default;
+	}
+	
+	/**
+	 * Get the Vobject of this calendar
+	 * 
+	 * @return string
+	 */
+	public function toVObject(){
+
+		//$stmt = $this->events(GO_Base_Db_FindParams::newInstance()->select("t.*"));
+		$findParams = GO_Base_Db_FindParams::newInstance()->select("t.*");
+		$findParams->getCriteria()->addCondition("calendar_id", $this->id);
+	
+		$stmt = GO_Calendar_Model_Event::model()->findForPeriod($findParams, GO_Base_Util_Date::date_add(time(), 0, -1));
+		
+		$string = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->version."//EN\r\n";
+
+			$t = new GO_Base_VObject_VTimezone();
+			$string .= $t->serialize();
+
+			while($event = $stmt->fetch()){
+				$v = $event->toVObject();
+				$string .= $v->serialize();
+			}
+
+			$string .= "END:VCALENDAR\r\n";
+			
+			return $string;
+	}
+	
+	/**
+	 * Get the url to the published ICS file.
+	 * @return string
+	 */
+	public function getPublicIcsUrl(){
+		return GO::config()->full_url.'public/calendar/'.$this->id.'/calendar.ics';
+	}
+	
+	/**
+	 * Get the url to the published ICS file.
+	 * @return string
+	 */
+	public function getPublicIcsPath(){
+		return GO::config()->file_storage_path.'public/calendar/'.$this->id.'/calendar.ics';
 	}
 }

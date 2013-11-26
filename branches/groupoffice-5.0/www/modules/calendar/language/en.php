@@ -241,3 +241,6 @@ $l['eventNotSavedBody'] = 'This message is from your %goname calendar. %goname a
 								"\r\n\r\n".'The following is the error message:'."\r\n".'%errormessage';
 
 $l['usedResources'] = 'Used resources';
+
+$l['shareCalendarsCron'] = 'Update the shared calendar files';
+$l['shareCalendarsCronDescription'] = 'Update the shared calendar files of the calendars that are published';
