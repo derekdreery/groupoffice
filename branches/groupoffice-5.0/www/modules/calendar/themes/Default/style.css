@@ -687,3 +687,9 @@ background-color:#f6f6f6;
 	padding:0px 13px 0px 0px;
 	background:url(images/arrows.png) no-repeat center center;
 }
+
+.img-calendar-add{
+	background:url('images/16x16/calendar-quickadd.png') no-repeat top right !important;
+	width:16px !important;
+	height:16px !important;
+}
