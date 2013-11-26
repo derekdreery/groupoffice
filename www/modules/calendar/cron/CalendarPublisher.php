@@ -1,6 +1,6 @@
 <?php
 
-class GO_Calendar_Cron_ShareCalendars extends GO_Base_Cron_AbstractCron {
+class GO_Calendar_Cron_CalendarPublisher extends GO_Base_Cron_AbstractCron {
 	
 	/**
 	 * Return true or false to enable the selection fo users and groups for 
