@@ -141,7 +141,7 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 	
 	protected function beforeUpdateRecord($params, &$record, $model) {
 		
-		if($record['id']==GO::user()->id){
+		if($record['id']==GO::user()->id && !GO::user()->isAdmin()){
 			throw new Exception(GO::t('dontChangeOwnersPermissions'));
 		}
 		
