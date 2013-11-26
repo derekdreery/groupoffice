@@ -45,7 +45,7 @@ GO.users.MainPanel = function(config)
 		  		text: GO.lang['cmdAdd'], 
 		  		cls: 'x-btn-text-icon', 
 		  		handler: function(){
-		  			if(GO.settings.config.max_users>0 && this.store.totalLength>=GO.settings.config.max_users)
+		  			if(GO.settings.config.max_users>0 && this.usersGridPanel.store.totalLength>=GO.settings.config.max_users)
 		  			{
 		  				Ext.Msg.alert(GO.lang.strError, GO.users.lang.maxUsersReached);
 		  			}else
