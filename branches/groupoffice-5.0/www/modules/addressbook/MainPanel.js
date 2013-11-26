@@ -860,3 +860,13 @@ GO.linkHandlers["GO_Addressbook_Model_Company"]=function(id){
 	GO.addressbook.linkCompanyWindow.show();
 	return GO.addressbook.linkCompanyWindow;
 }
+
+GO.quickAddPanel.addButton(new Ext.Button({
+	iconCls:'img-contact-add',
+	cls: 'x-btn-icon', 
+	tooltip:GO.addressbook.lang.contact,
+	handler:function(item, e){
+		GO.addressbook.showContactDialog(0,{});
+	},
+	scope: this
+}),0);
