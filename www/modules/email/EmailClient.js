@@ -1585,6 +1585,16 @@ GO.moduleManager.addModule('email', GO.email.EmailClient, {
 	iconCls : 'go-tab-icon-email'
 });
 
+GO.quickAddPanel.addButton(new Ext.Button({
+		iconCls:'img-email-add',
+		cls: 'x-btn-icon',
+		tooltip:GO.email.lang.email,
+		handler: function(){
+			GO.email.showComposer();
+		}, 
+		scope: this
+	}),0);
+
 
 GO.email.showAddressMenu = function(e, email, name)
 {

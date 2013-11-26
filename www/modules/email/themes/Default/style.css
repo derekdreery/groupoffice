@@ -396,3 +396,9 @@ margin:5px 2px;
 .em-contact-link .x-form-check-wrap{
 	line-height:inherit !important;
 }
+
+.img-email-add{
+	background:url('images/16x16/email-quickadd.png') no-repeat top right !important;
+	width:16px !important;
+	height:16px !important;
+}
