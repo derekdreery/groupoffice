@@ -1,9 +1,12 @@
+
 - Change ACL level always allowed for admins
 - User add error when max_users was set in config.php
 - Tickets: CC input field for ticket notifications: sanity check when submitting CC addresses.
 - Files: Prohibited: compress folder that is inside a read-only folder.
 - Address book: Extra check if uploaded photo exceeds the server's limit.
 - Added more information to number and contact field in the schedule-call dialog.
+- Z-push admin didn't work with old 2.0 states in z-push 2.1 because they had to
+  be converted to lowercase.
 
 24-11-2013 5.0.24
 - Fixed build error in 5.0.23
@@ -23,9 +26,15 @@
 - Tickets: CC input field for ticket notifications.
 - Tickets: Closed ticket will be reopened on receiving ticket email of customer.
 - Link items: prohibited to link a read-only item.
+
+27-11-2013 4.2.28
+- Raised post address 2 field to 100 chars
 - When someone other the the ticket agent add a new message to the ticket it will be marked as unseen
 - Zpushadmin can now also work with zpush2.1
+- Prevent deletion of required system folders by non-admins
 - Projects templates fix: Also use 'days offset' in task action.
+- Fixed refreshing Favorites calendar display after permission change
+- Added permissions option to multiselect dialog
 
 12-11-2013 5.0.22
 - Updated Norwegian
