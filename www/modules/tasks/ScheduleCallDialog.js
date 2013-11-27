@@ -27,7 +27,7 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		});
 		
 		GO.tasks.ScheduleCallDialog.superclass.initComponent.call(this);	
-		
+		this.setCurrentDateAndTime();
 		this.formPanel.baseParams.remind_date=this.datePicker.getValue().format(GO.settings.date_format);
 	},
 	show : function (remoteModelId, config) {
@@ -35,12 +35,18 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		GO.tasks.ScheduleCallDialog.superclass.show.call(this,remoteModelId, config);
 		if(config && config.link_config)
 			this.setContact(config.link_config.model_id,config.link_config.name);
+		
+		this.setCurrentDateAndTime();
+	},
+	setCurrentDateAndTime : function(){
+		var now = new Date();
+
+		var time = now.getMinutes() +10; // + 10 minutes
+		now.setMinutes(time);
+		this.datePicker.setValue(now);
+		this.timeField.setValue(now.format(GO.settings['time_format']));
 	},
 	buildForm : function () {
-
-		var now = new Date();
-//		var tomorrow = now.add(Date.DAY, 1);
-//		var eight = Date.parseDate(now.format('Y-m-d')+' 08:00', 'Y-m-d G:i' );
 
 		this.datePicker = new Ext.DatePicker({
 			xtype:'this.datePicker',
@@ -49,8 +55,6 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			fieldLabel:GO.lang.strDate
 		});
 
-		this.datePicker.setValue(now);
-		
 		this.datePicker.on("select", function(datePicker, DateObj){						
 			this.formPanel.baseParams.remind_date=this.formPanel.baseParams.start_time=this.formPanel.baseParams.due_time=DateObj.format(GO.settings.date_format);	
 		},this);
@@ -64,7 +68,6 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			name:'remind_time',
 			width:220,
 			format: GO.settings.time_format,
-			value:now.format(GO.settings['time_format']),
 			fieldLabel:GO.lang.strTime,
 			anchor:'100%'
 		});
