@@ -88,7 +88,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			$this->headers();
 			
 		
-		if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 			GO::debug("OPTIONS request");
 			exit(0);
 		}
