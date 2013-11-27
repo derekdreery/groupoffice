@@ -36,6 +36,9 @@ $tree = new GO_Dav_ObjectTree($root);
 // The rootnode needs in turn to be passed to the server class
 $server = new Sabre\DAV\Server($tree);
 $server->debugExceptions=GO::config()->debug;
+$server->subscribeEvent('exception', function($e){
+	GO::debug((string) $e);
+});
 
 //baseUri can also be /webdav/ with:
 //Alias /webdav/ /path/to/files.php
