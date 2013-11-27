@@ -1,4 +1,4 @@
-
+27-11-2013 5.0.27
 - Change ACL level always allowed for admins
 - User add error when max_users was set in config.php
 - Tickets: CC input field for ticket notifications: sanity check when submitting CC addresses.
