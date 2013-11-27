@@ -373,6 +373,13 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $host = '/groupoffice/';
+	
+	/**
+	 * Set Access-Control-Allow-Origin: * header for example.
+	 * 
+	 * @var string 
+	 */
+	var $access_control_allow_origin="";
 
 //	/**
 //	 * Useful to force https://your.host:433 or something like that

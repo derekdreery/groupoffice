@@ -213,6 +213,10 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 //		{
 //			header('Content-Type: application/json; charset=UTF-8');
 //		}
+			
+			if(!empty(GO::config()->access_control_allow_origin)){
+				header("Access-Control-Allow-Origin: ".GO::config()->access_control_allow_origin);
+			}
 	}
 	
 	/**
