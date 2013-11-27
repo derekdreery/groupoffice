@@ -299,7 +299,7 @@ CREATE TABLE IF NOT EXISTS `go_links_ab_companies` (
   `model_type_id` int(11) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   `ctime` int(11) NOT NULL,
-  UNIQUE KEY `model_id` (`model_id`,`model_type_id`),
+  PRIMARY KEY `model_id` (`id`,`model_id`,`model_type_id`),
   KEY `id` (`id`,`folder_id`),
   KEY `ctime` (`ctime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -318,7 +318,7 @@ CREATE TABLE IF NOT EXISTS `go_links_ab_contacts` (
   `model_type_id` int(11) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   `ctime` int(11) NOT NULL,
-  UNIQUE KEY `model_id` (`model_id`,`model_type_id`),
+  PRIMARY KEY `model_id` (`id`,`model_id`,`model_type_id`),
   KEY `id` (`id`,`folder_id`),
   KEY `ctime` (`ctime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
