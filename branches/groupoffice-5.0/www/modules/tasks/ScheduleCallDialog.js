@@ -86,7 +86,8 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			enableKeyEvents : true,
 			remoteSort: true,
 			allowBlank:false,
-			anchor: '100%'
+			anchor: '100%',
+			tpl:'<tpl for="."><div class="x-combo-list-item">{name} ({ab_name}) <tpl if="email">({email})</tpl></div></tpl>'
 		});
 		
 		this.contactIdField = new Ext.form.Hidden({
@@ -102,11 +103,11 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			triggerAction:'all',
 			enableKeyEvents : true,
 			selectOnFocus:true,
-			displayField:'number',
+			displayField:'label',
 			valueField: 'number',
 			store: new Ext.data.ArrayStore({
 				storeId: 'phoneNumberFieldStore',
-				fields: ['id','number']
+				fields: ['id','number','label']
 			})
 		});
 		
@@ -217,7 +218,7 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 							columnWidth:.5,
 							items:[{
 									layout:'form',
-									labelWidth:55,
+									labelWidth:76,
 									items:[
 										this.timeField,
 										this.selectTaskList
@@ -283,7 +284,7 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			currentNumber = record.data[order[i]];
 			if(!GO.util.empty(currentNumber)){
 				replaceNumbers.push(new Ext.data.Record({'id':order[i],'label':this.createReplaceNumberLabel(order[i],currentNumber),'number':currentNumber},order[i]));
-				foundNumbers.push(new Ext.data.Record({'id':order[i],'number':currentNumber},order[i]));
+				foundNumbers.push(new Ext.data.Record({'id':order[i],'number':currentNumber,'label':currentNumber+' '+GO.addressbook.lang['contact'+this.capitalize(order[i])]},order[i]));
 			} else {
 				replaceNumbers.push(new Ext.data.Record({'id':order[i],'label':this.createReplaceNumberLabel(order[i],''),'number':''},order[i]));
 			}
