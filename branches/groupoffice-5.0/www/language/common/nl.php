@@ -637,3 +637,5 @@ $l["report"]='Raporteer';
 $l['namelessItem'] = 'Naamloze item';
 
 $l['importFileType'] = 'Bestandtype voor import';
+
+$l['maybeMaxUploadExceeded'] = 'De server ontving niet de vereiste parameters van uw browser. Mogelijk is de maximale uploadgrootte van %sMb overschreden.';
