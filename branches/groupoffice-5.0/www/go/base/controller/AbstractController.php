@@ -216,6 +216,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			if(!empty(GO::config()->access_control_allow_origin)){
 				header("Access-Control-Allow-Origin: ".GO::config()->access_control_allow_origin);
+				header('Access-Control-Allow-Headers: X-Requested-With'); 
+				header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 			}
 	}
 	
