@@ -215,21 +215,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 //		}
 			
 			
-			
-			
 			foreach(GO::config()->extra_headers as $header){
 				header($header);
-			}
-			
-			if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-				// return only the headers and not the content
-				// only allow CORS if we're doing a GET - i.e. no saving for now.
-				if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']) &&
-						$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'] == 'GET') {
-					header('Access-Control-Allow-Origin: *');
-					header('Access-Control-Allow-Headers: X-Requested-With');
-				}
-				exit(0);
 			}
 	}
 	
