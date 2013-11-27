@@ -123,6 +123,16 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		return parent::afterLoad($response, $model, $params);
 	}
 
+	protected function beforeSubmit(&$response, &$model, &$params) {
+		
+		//workaroud extjs iframe hack for file upload
+		$_SERVER["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest";
+		
+		$this->checkMaxPostSizeExceeded();
+		
+		return parent::beforeSubmit($response, $model, $params);
+	}	
+	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		$stmt = GO_Addressbook_Model_Addresslist::model()->find();
 		while ($addresslist = $stmt->fetch()) {
