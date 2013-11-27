@@ -264,3 +264,7 @@ line-height:20px;
 	padding-bottom: 5px;
 	vertical-align:top;
 }
+
+.permissions-error .x-grid3-cell-inner{
+	color:red;
+}

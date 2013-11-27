@@ -2109,3 +2109,7 @@ box-sizing: border-box;
 .go-module-title-tbar{
 	display:none;
 }
+
+.permissions-error .x-grid3-cell-inner{
+	color:red;
+}
