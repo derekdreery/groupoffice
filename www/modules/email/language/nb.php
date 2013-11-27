@@ -254,3 +254,4 @@ $l['currentFolder']= 'Gjeldende mappe';
 $l['allFolders']= 'Alle mapper';
 $l['defaultEmailTemplate']='Standard e-postmal';
 $l['useAuth']="Bruk autentisering";
+$l['linkMustHavePermissionToWrite']= 'Du har ikke SKRIVE-rettigheter til dette objektet, derfor kan du ikke lenke ut denne e-posten dit.';
