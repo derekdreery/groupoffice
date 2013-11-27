@@ -81,6 +81,17 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		}	
 		
 		$this->init();
+		
+		
+
+		if(!headers_sent())
+			$this->headers();
+			
+		
+		if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+			GO::debug("OPTIONS request");
+			exit(0);
+		}
 	}
 	
 	protected function init(){
@@ -215,9 +226,13 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 //		}
 			
 			
+			
+			
 			foreach(GO::config()->extra_headers as $header){
 				header($header);
 			}
+			
+			
 	}
 	
 	/**
@@ -234,8 +249,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 */
 	protected function render($viewName, $data=array()){
 		
-		if(!headers_sent())
-			$this->headers();
+//		if(!headers_sent())
+//			$this->headers();
 		
 		$module = $this->getModule();
 		
