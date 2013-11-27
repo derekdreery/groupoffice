@@ -482,30 +482,40 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 				company: company
 			},
 			success:function(form, action){
-				if(action.result.id)
-				{
-					this.contact_id = action.result.id;
+				
+				if (!action.result.success) {
+					
+					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
+					
+				} else {
+				
+					if(action.result.id)
+					{
+						this.contact_id = action.result.id;
+					}
+					this.uploadFile.clearQueue();
+					this.fireEvent('save', this, this.contact_id);
+
+					GO.dialog.TabbedFormDialog.prototype.refreshActiveDisplayPanels.call(this);
+
+					//this.personalPanel.setContactID(this.contact_id);
+					if(!GO.util.empty(action.result.photo_url))
+						this.setPhoto(action.result.photo_url);
+					else
+						this.setPhoto("");
+
+					if(!GO.util.empty(action.result.original_photo_url))
+						this.setOriginalPhoto(action.result.original_photo_url);
+					else
+						this.setOriginalPhoto("");				
+
+					if (hide)
+					{
+						this.hide();
+					}
+				
 				}
-				this.uploadFile.clearQueue();
-				this.fireEvent('save', this, this.contact_id);
 				
-				GO.dialog.TabbedFormDialog.prototype.refreshActiveDisplayPanels.call(this);
-				
-				//this.personalPanel.setContactID(this.contact_id);
-				if(!GO.util.empty(action.result.photo_url))
-					this.setPhoto(action.result.photo_url);
-				else
-					this.setPhoto("");
-				
-				if(!GO.util.empty(action.result.original_photo_url))
-					this.setOriginalPhoto(action.result.original_photo_url);
-				else
-					this.setOriginalPhoto("");				
-				
-				if (hide)
-				{
-					this.hide();
-				}
 			},
 			failure: function(form, action) {				
 				if(action.failureType == 'client')
