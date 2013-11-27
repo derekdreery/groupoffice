@@ -174,6 +174,10 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 		
 		$store = GO_Base_Data_Store::newInstance($model);
 		$this->formatColumns($store->getColumnModel());
+		
+		if($model->aclField())
+			$store->getColumnModel()->formatColumn('permission_level', '$model->permissionLevel');
+		
 		try {
 			if($this->beforeDelete($params)){
 				$store->processDeleteActions(
