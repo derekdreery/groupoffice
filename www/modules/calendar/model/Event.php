@@ -2316,6 +2316,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			throw new Exception("Meeting request can only be send from the organizer's event");
 		
 		$stmt = $this->participants;
+		
+		//handle missing user
+		if(!$this->user){
+			$this->user_id=1;
+			$this->save(true);
+		}
 
 			while ($participant = $stmt->fetch()) {		
 				//don't invite organizer
