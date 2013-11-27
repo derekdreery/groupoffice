@@ -1058,7 +1058,10 @@ table.display-panel a:active
 	background: url('images/16x16/exclamation.png') no-repeat !important;
 	padding-left:22px !important;
 }
-
+.go-icon-print .x-grid3-cell-inner{
+	background: url('images/16x16/print.png') no-repeat !important;
+	padding-left:22px !important;
+}
 
 
 /*IE somtimes clipped first form field somehow*/
@@ -2116,6 +2119,47 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 	/*margin-top: 15px;*/
 }
 
+#quick-add-menu-collapse {
+	display:inline-block;
+	cursor:pointer;
+	float:left;
+	margin:4px;
+}
+
+#quick-add-menu{
+	position:absolute;
+/*	border:1px solid #009CC5;*/
+	background:#FFF;
+	padding:3px;
+	top:-200px;
+	width:auto;
+	/*padding-right:20px;*/
+	/*width:200px;*/
+	/*display:none;*/
+}
+
+.plus-sign{
+/*	position:absolute;
+	top:0;
+	right:0;*/
+        /*float:right;*/
+	display:inline-block;
+	width:16px;
+	height:16px;
+	background: url('images/grey-plus.png') no-repeat center center;
+}
+
+.minus-sign{
+/*	position:absolute;
+	top:0;
+	right:0;*/
+        /*float:right;*/
+	display:inline-block;
+	width:16px;
+	height:16px;
+	background: url('images/grey-minus.png') no-repeat center center;
+}
+
 .go-moduletabs-bwrap{
 	background: #009cc5;
 }
@@ -2205,7 +2249,7 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 
 
 .go-tab-notification{
-	display:inline-block;background-color:green;color:white;border-radius:9px;height:20px;width:20px;line-height:20px;text-align:center;
+	display:inline-block;background-color:green;color:white;border-radius:9px;height:20px;min-width: 14px;padding: 0 3px;line-height:20px;text-align:center;
 }
 
 .go-permissions-panel .x-panel-header{
@@ -2266,4 +2310,8 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 
 .x-tot2ivn-vr-tab-panel .x-tot2ivn-vr-tab-panel-body .x-panel-body {
 	border:none !important;
+}
+
+.permissions-error .x-grid3-cell-inner{
+	color:red;
 }
