@@ -2200,3 +2200,7 @@ box-sizing: border-box;
 	height:16px;
 	background: url('images/elbow-minus-nl.gif') no-repeat center center;
 }
+
+.permissions-error .x-grid3-cell-inner{
+	color:red;
+}

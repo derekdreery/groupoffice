@@ -2,6 +2,11 @@ GO.base.model.multiselect.panel = function(config){
 	
 	config = config || {};
 
+	// Make sure that the permission_level field is in the fields list.
+	if(config.fields && config.fields.indexOf('permission_level') === -1){
+		config.fields.push('permission_level');
+	}
+
 	config.store = new GO.data.JsonStore({
 		url: GO.url(config.url+'/selectedStore'),
 		baseParams:{
@@ -42,12 +47,19 @@ GO.base.model.multiselect.panel = function(config){
 	if(typeof(config.paging)=='undefined')
 		config.paging=true;
 
-	config.view=new Ext.grid.GridView({
+	config.viewConfig = {
 		autoFill: true,
-		forceFit: true
-	});
+		forceFit: true,
+		getRowClass: function(record, rowIndex, rp, ds){ // rp = rowParams
+			var permissionLevel = record.get('permission_level');
 
-	
+			if(permissionLevel === false){
+				return 'permissions-error';
+			} else {
+				return 'permissions-ok';
+			}
+		}
+	};
 
 	config.sm=new Ext.grid.RowSelectionModel();
 	Ext.apply(config,{

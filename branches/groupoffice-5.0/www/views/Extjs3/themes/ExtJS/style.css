@@ -305,3 +305,7 @@ line-height:20px;
 	height:16px;
 	background: url('images/16x16/gtk-add.png') no-repeat center center;
 }
+
+.permissions-error .x-grid3-cell-inner{
+	color:red;
+}
