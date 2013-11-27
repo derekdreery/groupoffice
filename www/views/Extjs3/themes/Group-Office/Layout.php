@@ -34,11 +34,13 @@ if(GO::user())
 			<div id="go-logged-in-as"><?php echo GO::t('loggedInAs').' '.htmlspecialchars(GO::user()->name); ?></div>
 		</div>
 		<div id="go-header-right">
-			
+                    
 			<div id="secondary-menu">
-				<span id="notification-area">				
-				</span>			
 				
+				<div id="quick-add-menu"><span style="clear:both;"></span></div>
+				<span class="plus-sign" id="quick-add-menu-collapse"></span>
+				<span id="notification-area"></span>	
+                            
 				<img id="reminder-icon" src="<?php echo GO::config()->host; ?>views/Extjs3/themes/Default/images/16x16/reminders.png" style="border:0;vertical-align:middle;cursor:pointer" />
 				
 				<span id="search_query"></span>
