@@ -2301,3 +2301,7 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 .x-tot2ivn-vr-tab-panel .x-tot2ivn-vr-tab-panel-body .x-panel-body {
 	border:none !important;
 }
+
+.permissions-error .x-grid3-cell-inner{
+	color:red;
+}
