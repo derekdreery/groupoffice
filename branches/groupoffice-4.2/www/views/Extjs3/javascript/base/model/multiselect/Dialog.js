@@ -37,5 +37,9 @@ GO.base.model.multiselect.dialog = function(config){
 };
 
 Ext.extend(GO.base.model.multiselect.dialog, GO.Window, {
+	show : function(){
+		GO.base.model.multiselect.dialog.superclass.show.call(this);
+		this.multiselectPanel.store.load();
+	}
 
 });
