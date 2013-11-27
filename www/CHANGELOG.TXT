@@ -2,6 +2,7 @@
 - User add error when max_users was set in config.php
 - Tickets: CC input field for ticket notifications: sanity check when submitting CC addresses.
 - Files: Prohibited: compress folder that is inside a read-only folder.
+- Address book: Extra check if uploaded photo exceeds the server's limit.
 - Added more information to number and contact field in the schedule-call dialog.
 
 24-11-2013 5.0.24
