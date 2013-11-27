@@ -82,3 +82,9 @@ $l["taskDue_time"]='Eindigt op';
 $l["taskStatus"]='Status';
 $l["taskCompletion_time"]='Voltooid op';
 $l["taskProject_name"]='Project';
+
+$l['phoneNr']='Telefoonnummer.';
+$l['savePhoneNr']='Nummer opslaan als';
+$l['scheduleCallTaskName']='Bel {name} op {number}';
+$l['overwritePhoneNumber']='Overschrijf {field} ({number})';
+$l['addToPhoneNumber']='Toevoegen aan {field}';
