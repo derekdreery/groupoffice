@@ -602,6 +602,19 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			throw new Exception("The following required controller action params are missing: ".implode(",", $missingParams));
 				
 	}
+
+	protected function checkMaxPostSizeExceeded() {
+		if (empty($_POST) && empty($_FILES)) {
+			$postMaxSize = GO_Base_Util_Number::configSizeToMB(ini_get('post_max_size'));
+			$uploadMaxFileSize = GO_Base_Util_Number::configSizeToMB(ini_get('upload_max_filesize'));
+
+			
+			
+			$maxFileSize = $postMaxSize > $uploadMaxFileSize ? $uploadMaxFileSize : $postMaxSize;
+			
+			throw new Exception(sprintf(GO::t('maybeMaxUploadExceeded'),$maxFileSize));
+		}
+	}
 	
 //	protected function isAjax(){
 //		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']==='XMLHttpRequest';
