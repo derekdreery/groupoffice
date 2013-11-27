@@ -621,7 +621,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	 */
 	protected function actionImportCsv($params){		
 		$params['file'] = $_FILES['files']['tmp_name'][0];
-		$params['importType'] = 'Xls';
+		$params['importType'] = 'Csv';
 		$summarylog = parent::actionImport($params);
 		$response = $summarylog->getErrorsJson();
 		$response['successCount'] = $summarylog->getTotalSuccessful();
