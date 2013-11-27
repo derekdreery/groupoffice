@@ -1,5 +1,8 @@
+27-11-2013 4.2.28
+- Raised post address 2 field to 100 chars
 - When someone other the the ticket agent add a new message to the ticket it will be marked as unseen
 - Zpushadmin can now also work with zpush2.1
+- Prevent deletion of required system folders by non-admins
 - Projects templates fix: Also use 'days offset' in task action.
 - Fixed refreshing Favorites calendar display after permission change
 - Added permissions option to multiselect dialog
