@@ -214,7 +214,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 //			header('Content-Type: application/json; charset=UTF-8');
 //		}
 			
-			foreach(GO::config()->extra_headers as $headers){
+			foreach(GO::config()->extra_headers as $header){
 				header($header);
 			}
 	}
