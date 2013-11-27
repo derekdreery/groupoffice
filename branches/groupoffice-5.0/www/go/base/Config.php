@@ -379,7 +379,7 @@ class GO_Base_Config {
 	 * 
 	 * @var string 
 	 */
-	var $access_control_allow_origin="";
+	var $extra_headers=array();
 
 //	/**
 //	 * Useful to force https://your.host:433 or something like that
