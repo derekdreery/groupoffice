@@ -2169,14 +2169,22 @@ box-sizing: border-box;
 
 #quick-add-menu{
 	position:absolute;
-	border:1px solid #2E80A9;
-	background:#FFF;
+	border:none;
+	background:none;
 	padding:3px;
 	top:-200px;
 	width:auto;
 	/*padding-right:20px;*/
 	/*width:200px;*/
 	/*display:none;*/
+}
+
+/*#quick-add-menu table{
+	padding-left:3px;
+}*/
+
+#quick-add-menu .x-btn-mc,#quick-add-menu .x-btn-ml,#quick-add-menu .x-btn-mr,#quick-add-menu .x-btn-tl,#quick-add-menu .x-btn-tc,#quick-add-menu .x-btn-tr,#quick-add-menu .x-btn-bl,#quick-add-menu .x-btn-bc,#quick-add-menu .x-btn-br{
+	background-image:none;
 }
 
 .plus-sign{
