@@ -1253,10 +1253,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$uuid = (string) $vevent->uid;
 			
 			$alreadyProcessed = false;
-			if($event && $vevent->{"last-modified"}){
+			if($event){
 				
+				//import to check if there are relevant updates
+				$event->importVObject($vevent, array(), true);				
+				$alreadyProcessed=!$event->isModified($event->getRelevantMeetingAttributes());
 //				throw new Exception(GO_Base_Util_Date::get_timestamp($vevent->{"last-modified"}->getDateTime()->format('U')).' < '.GO_Base_Util_Date::get_timestamp($event->mtime));
-				$alreadyProcessed=$vevent->{"last-modified"}->getDateTime()->format('U')<$event->mtime;
+//				$alreadyProcessed=$vevent->{"last-modified"}->getDateTime()->format('U')<$event->mtime;
 			}
 			
 //			if(!$event || $event->is_organizer){
