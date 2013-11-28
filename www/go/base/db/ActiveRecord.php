@@ -78,7 +78,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
    * Example use in the model class relationship array: 'users' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'linkModel'=>'GO_Base_Model_UserGroups', 'field'=>'group_id', 'remoteField'=>'user_id'),
    * 
    */
-  const MANY_MANY=4;	// n:n
+  const MANY_MANY=4; // n:n
+	
+	/**
+	 * Cascade delete relations. Only works on has_one and has_many relations.
+	 */
+	const DELETE_CASCADE = "CASCADE"; 
+	
+	/**
+	 * Restrict delete relations. Only works on has_one and has_many relations.
+	 */
+	const DELETE_RESTRICT = "RESTRICT"; 
   
 //	/**
 //	 * The database connection of this record
@@ -3407,18 +3417,39 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			if(!empty($attr['delete']) && $attr['type']!=self::BELONGS_TO){
 
-				$result = $this->$name;
+				//for backwards compatibility
+				if($attr['delete']===true)
+					$attr['delete']=GO_Base_Db_ActiveRecord::DELETE_CASCADE;
 				
-				if($result instanceof GO_Base_Db_ActiveStatement){	
-					//has_many relations result in a statement.
-					while($child = $result->fetch()){			
-						if($child->className()!=$this->className() || $child->pk != $this->pk)//prevent delete of self
-							$child->delete();
-					}
-				}elseif($result)
-				{
-					//single relations return a model.
-					$result->delete();
+				switch($attr['delete']){
+					
+					case GO_Base_Db_ActiveRecord::DELETE_CASCADE:
+						$result = $this->$name;
+
+						if($result instanceof GO_Base_Db_ActiveStatement){	
+							//has_many relations result in a statement.
+							while($child = $result->fetch()){			
+								if($child->className()!=$this->className() || $child->pk != $this->pk)//prevent delete of self
+									$child->delete();
+							}
+						}elseif($result)
+						{
+							//single relations return a model.
+							$result->delete();
+						}
+						break;
+						
+					case GO_Base_Db_ActiveRecord::DELETE_RESTRICT:
+						if($attr['type']==self::HAS_ONE)
+							$result = $this->$name;
+						else
+							$result = $this->$name(GO_Base_Db_FindParams::newInstance()->single());
+							
+						if($result){
+							throw new GO_Base_Exception_RelationDeleteRestrict($this, $attr);
+						}
+										
+						break;
 				}
 			}
 			
