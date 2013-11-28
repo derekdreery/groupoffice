@@ -1330,9 +1330,6 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 	protected function actionAcceptInvitation($params){
 		
-		$response['success']=false;
-		
-		
 		//todo calendar should be associated with mail account!
 		//GO::user()->id must be replaced with $account->calendar->user_id
 
