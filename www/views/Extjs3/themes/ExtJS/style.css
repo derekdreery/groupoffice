@@ -274,14 +274,18 @@ line-height:20px;
 
 #quick-add-menu{
 	position:absolute;
-	border:1px solid #2E80A9;
-	background:#FFF;
+	border:none;
+	background:none;
 	padding:3px;
 	top:-200px;
 	width:auto;
 	/*padding-right:20px;*/
 	/*width:200px;*/
 	/*display:none;*/
+}
+
+#quick-add-menu table{
+	padding-left:3px;
 }
 
 .plus-sign{
