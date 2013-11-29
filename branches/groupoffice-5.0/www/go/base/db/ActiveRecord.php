@@ -1068,7 +1068,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 	}
 	
-	private $useSqlCalcFoundRows=false;
+	private $useSqlCalcFoundRows=true;
 	
 	/**
 	 * Find models
@@ -1609,8 +1609,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 //						GO::debug($sql);
 						
-						if($this->_debugSql)
+						if($this->_debugSql){
+							$this->_debugSql($params, $sql);
 							$start = GO_Base_Util_Date::getmicrotime();
+						}
 
 						$r2 = $this->getDbConnection()->prepare($sql);
 
