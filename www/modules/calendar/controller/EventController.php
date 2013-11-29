@@ -140,8 +140,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		if(!empty($params["check_conflicts"]) && $event->busy){		
 
-			$params['exception_for_event_id']=empty($params['exception_for_event_id']) ? 0 : $params['exception_for_event_id'];
-			if(count($event->getConflictingEvents($params['exception_for_event_id'])))
+			$exception_for_event_id=empty($params['exception_for_event_id']) ? 0 : $params['exception_for_event_id'];
+			if(count($event->getConflictingEvents($exception_for_event_id)))
 				throw new Exception('Ask permission');
 		}
 //		
