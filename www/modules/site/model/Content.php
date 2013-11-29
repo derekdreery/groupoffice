@@ -97,6 +97,15 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 
 	}
 	
+	public function __isset($name) {
+		if(isset(self::$fields[$name])){
+			$var= $this->getCustomFieldValueByName($name);
+			return isset($var);
+		}  else {
+			return parent::__get($name);
+		}
+	}
+	
 	
 	/*
 	 * Attach the customfield model to this model.
