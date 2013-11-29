@@ -4,6 +4,7 @@
 - User group filter showed wrong total count
 - User delete impossible.
 - Changing project type didn't work on projects v2
+- Fixed problem with exception events that are not removed when the main event is removed.
 - Fixed bug with recurring events that are moved after creating an exception in it. Sometimes it happened that the recurrence was not correct after that.That's fixed now.
 
 27-11-2013 5.0.25
