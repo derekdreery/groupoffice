@@ -305,6 +305,8 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 				'tableAlias'=>'ug'
 			));
 		
+		$storeParams->group('t.id');
+		
 		$groupsMultiSel = new GO_Base_Component_MultiSelectGrid(
 			'users-groups-panel', 
 			"GO_Base_Model_Group",$store, $params, true);		
