@@ -6,7 +6,11 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	}
 	
 	protected function actionContent($params){
-		$content = empty($params['slug']) ? false : GO_Site_Model_Content::model()->findBySlug($params['slug']);
+		
+		if(!isset($params['slug']))
+			$params['slug']='';
+		
+		$content = GO_Site_Model_Content::model()->findBySlug($params['slug']);
 		
 		if(!$content){
 			
