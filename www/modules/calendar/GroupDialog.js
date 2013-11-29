@@ -74,10 +74,14 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 					if(this.group_id == 1)
 					{
 						this.tabPanel.hideTabStripItem('permissions-panel');
+						this.tabPanel.hideTabStripItem(this.groupAdminsPanel);
 						this.setTitle(GO.calendar.lang.calendar_group);
 					}else
 					{
 						this.tabPanel.unhideTabStripItem('permissions-panel');
+						this.tabPanel.unhideTabStripItem(this.groupAdminsPanel);
+						
+						
 						this.setTitle(GO.calendar.lang.resource_group);
 					}
 
