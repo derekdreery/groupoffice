@@ -218,6 +218,8 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 									GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.company_id', '=', 't', true, true), 
 									'ac'
 						);
+					
+					$storeParams->group('t.id');
 				}
 			}
 		}
