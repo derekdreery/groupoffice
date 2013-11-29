@@ -554,7 +554,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		//move exceptions if this event was moved in time
 		if(!$wasNew && !empty($this->rrule) && $this->isModified('start_time')){
-			$diffSeconds = $this->getOldAttributeValue('start_time')-$this->start_time;
+			$diffSeconds = $this->start_time-$this->getOldAttributeValue('start_time');
 			$stmt = $this->exceptions();
 			while($exception = $stmt->fetch()){
 				$exception->time+=$diffSeconds;
