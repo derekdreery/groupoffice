@@ -409,12 +409,6 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return parent::afterDelete();
 	}
 	
-	protected function beforeDelete(){
-		if($this->readonly && !GO::user()->isAdmin()){
-			throw new GO_Base_Exception_AccessDenied();
-		}
-	}
-	
 	
 	private $_folderCache=array();
 
