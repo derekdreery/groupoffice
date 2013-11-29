@@ -1,5 +1,10 @@
+29-11-2013 5.0.26
 - Check if meeting request has relevant updates before reimporting it when accepting in the mail
-- Fixed bug with recurring events that are moved after creating an exeption in it. Sometimes it happened that the recurrence was not correct after that.That's fixed now.
+- Delete folder bug
+- User group filter showed wrong total count
+- User delete impossible.
+- Changing project type didn't work on projects v2
+- Fixed bug with recurring events that are moved after creating an exception in it. Sometimes it happened that the recurrence was not correct after that.That's fixed now.
 
 27-11-2013 5.0.25
 - Change ACL level always allowed for admins
