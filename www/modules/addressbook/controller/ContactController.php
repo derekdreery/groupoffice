@@ -232,6 +232,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 									GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.contact_id', '=', 't', true, true),
 									'ac'
 						);
+					
+					$storeParams->group('t.id');
 				}
 			}
 			
