@@ -113,5 +113,7 @@ GO.site.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		});
 
 		this.addPanel(this.propertiesPanel);
+		
+		this.addPermissionsPanel(new GO.grid.PermissionsPanel());   
 	}
 });
