@@ -185,6 +185,16 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 }
 	 
 	 /**
+	  * Check if the given content model is an ancestor of this content model
+	  * 
+	  * @param GO_Site_Model_Content $parent
+	  * @return boolean
+	  */
+	 public function isChildOf(GO_Site_Model_Content $parent){
+		 return strpos($this->slug, $parent->slug)===0;
+	 }
+	 
+	 /**
 	  * Check if this contentitem has a parent
 	  * 
 	  * @return boolean
