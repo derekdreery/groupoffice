@@ -140,7 +140,6 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 			$response['calendar_name']=$this->_calendarNames[0];
 		}
 		
-//		$response['id'] = $this->displayId;
 		$response['id'] = $this->_event->id.':'.$this->getAlternateStartTime(); // a unique id for the data store. Is not really used.
 		$response['background'] = $this->_backgroundColor;
 		$response['start_time'] = date('Y-m-d H:i', $this->getAlternateStartTime());
@@ -148,27 +147,38 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response['ctime'] = date('Y-m-d H:i',  $this->_event->ctime);
 		$response['mtime'] = date('Y-m-d H:i',  $this->_event->mtime);
 		$response['event_id'] = $this->_event->id;
-		//$response['has_other_participants'] = $this->hasOtherParticipants();
-		$response['link_count'] = $this->getLinkCount();
-//		$response['reminder_count'] = $this->_event->countReminders();
-//		$response['reminder'] = $this->_event->reminder;
-		$response['has_reminder'] = $response['reminder']>0 ? 1 : 0;
-		
 		$response['description'] = nl2br(htmlspecialchars(GO_Base_Util_String::cut_string($this->_event->description, 800), ENT_COMPAT, 'UTF-8'));
 		$response['private'] = $this->isPrivate();
 		
 		$response['private_enabled']=$this->_event->private;
 		
+		$response['resources'] = array();
+		
 		if($response['private']){
 			$response['name']=GO::t('private','calendar');
 			$response['description']="";
 			$response['location']="";
+			$response['repeats'] = false;
+			$response['has_reminder'] = false;
+			$response['link_count'] = false;
+			$response['status_color'] = false;
+			$response['status'] = false;
+		} else {
+			$response['repeats'] = $this->isRepeating();
+			$response['has_reminder'] = $response['reminder']>0 ? 1 : 0;
+			$response['link_count'] = $this->getLinkCount();
+			$response['status_color'] = $this->_event->getStatusColor();
+			
+			if ($this->_event->resources)	{
+				foreach ($this->_event->resources as $resourceModel) {
+					$response['resources'][$resourceModel->id] = $resourceModel->calendar->name;
+				}
+			}
+		
 		}
 		
-		$response['permission_level']=$this->_event->permissionLevel;
 		
-		$response['status_color'] = $this->_event->getStatusColor();		
-		$response['repeats'] = $this->isRepeating();
+		$response['permission_level']=$this->_event->permissionLevel;
 		$response['all_day_event'] = $this->isAllDay();
 		$response['day'] = $dayString[date('w', $this->getAlternateStartTime())].' '.GO_Base_Util_Date::get_timestamp($this->getAlternateStartTime(),false);  // date(implode(GO::user()->date_separator,str_split(GO::user()->date_format,1)), ($eventModel->start_time));
 		$response['read_only'] = $this->isReadOnly();
@@ -184,7 +194,6 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 			}
 		}
 		
-		
 		$duration = $this->getDurationInMinutes();
 
 		if($duration >= 60){
@@ -194,14 +203,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		} else {
 			$response['duration'] = $duration.'m';
 		}
-		
-		$response['resources'] = array();
-		if ($this->_event->resources)	{
-			foreach ($this->_event->resources as $resourceModel) {
-				$response['resources'][$resourceModel->id] = $resourceModel->calendar->name;
-			}
-		}
-		
+			
 		return $response;
 	}
 	
