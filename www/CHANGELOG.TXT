@@ -1,3 +1,5 @@
+- Removed some calendar event data from response when event is private.
+
 29-11-2013 5.0.26
 - Check if meeting request has relevant updates before reimporting it when accepting in the mail
 - Delete folder bug
