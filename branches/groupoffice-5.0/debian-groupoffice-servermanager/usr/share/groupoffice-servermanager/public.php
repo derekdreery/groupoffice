@@ -22,30 +22,37 @@
  * It solves the problem that /public should lead to different home directories
  * on the different servermanager installations.
  */
+$folder = '/home/govhosts/' . $_SERVER['SERVER_NAME'] . '/data';
 
+$path = $folder . rawurldecode($_SERVER['REQUEST_URI']);
 
-$folder = '/home/govhosts/'.$_SERVER['SERVER_NAME'].'/data';
-
-$path = $folder.$_SERVER['REQUEST_URI'];
-
-if(strpos('../', $path) || strpos('..\\', $path))
+if (strpos('../', $path) || strpos('..\\', $path))
 	die("Nice try!");
 
-switch(substr(strtolower($path),-3)){
+if (!file_exists($path)) {
+	header('HTTP/1.0 404 Not found');
+
+	echo 'Not found: ' . $_SERVER['REQUEST_URI'];
+	exit();
+}
+
+
+
+switch (substr(strtolower($path), -3)) {
 	case 'css':
-	$mime = 'text/css';
-	break;
+		$mime = 'text/css';
+		break;
 	case 'js':
-	$mime = 'text/plain';
-	break;
+		$mime = 'text/plain';
+		break;
 	default:
-	$mime = 'application/octet-stream';
-	break;
+		$mime = 'application/octet-stream';
+		break;
 }
 
 header("Expires: " . date("D, j M Y G:i:s ", time() + 86400) . 'GMT'); //expires in 1 day
 header('Cache-Control: cache');
 header('Pragma: cache');
-header('Content-Type: '.$mime);
+header('Content-Type: ' . $mime);
 
 readfile($path);
