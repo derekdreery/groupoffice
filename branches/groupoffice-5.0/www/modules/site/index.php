@@ -17,6 +17,33 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)\?*$ index.php/$1 [L,QSA]
+ * 
+ * 
+ * Example virtual host file for servermanager server.
+ * 
+<VirtualHost *:80>
+
+DocumentRoot /home/govhosts/example.group-office.eu/groupoffice/modules/site
+ServerName example.com
+ServerAlias www.example.com
+ErrorLog /var/log/apache2/example.com.log
+
+#Set explicit config.php location
+SetEnv GO_CONFIG /etc/groupoffice/example.group-office.eu/config.php
+
+#/public alias for resources such as images and css files
+Alias /public /home/govhosts/example.group-office.eu/data/public
+
+#Rewrite rules for site module
+<Directory /home/govhosts/example.group-office.eu/groupoffice/modules/site>
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)\?*$ index.php/$1 [L,QSA]
+</Directory>
+
+</VirtualHost>
 
  */
 
