@@ -96,7 +96,6 @@ $l['error_email']='Podany adres e-mail jest niewłaściwy';
 $l['imported']='Zaimportowano %s użytkowników';
 $l['failed']='Podczas importu wystąpił błąd';
 $l['incorrectFormat']='Format pliku był niepoprawny';
-$lang['link_type'][8]=$us_user = 'Użytkownik';
 $l['error_user']='Użytkownik nie został utworzony';
 $l['register_email_subject']='Szczegóły Twojego konta w {product_name}';
 $l['register_email_body']='Utworzono dla Ciebie konto do {product_name} {url}
@@ -104,3 +103,23 @@ Informacje do zalogowania:
 Użytkownik: {username};
 Hasło: {password}';
 $l['max_users_reached']='Maksymalna liczba użytkowników dla tego systemu została osiągnięta.';
+
+$l['muteNewMailSound']='Wyłącz powiadomienia dźwiękowe o nowej poczcie';
+$l['muteReminderSound']='Wyłącz dźwięk w powiadomieniach';
+$l['showSmilies']='Pokaż emotikonki';
+$l['dashdmy']='Dzień-Miesiąc-Rok';
+$l['slashmdy']='Miesiąc/Dzień/Rok';
+$l['dotdmy']='Dzień.Miesiąc.Rok';
+$l['slashdmy']='Dzień/Miesiąc/Rok';
+$l['slashymd']='Rok-Miesiąc-Dzień';
+$l['dotymd']='Rok.Miesiąc.Dzień';
+$l['generatePassword']='Generuj hasło';
+$l['generatedPasswordIs']='Wygenerowane hasło to';
+$l['openContact']='Otwórz kontakt';
+$l['updateExistingOnImport']='Aktualizuj istniejących użytkowników po nazwie';
+$l['resetState']="Resetuj ustawienia okien i tabel";
+$l['resetStateConfirm']='Czy jesteś pewien, że chcesz przywrócić ustawienia domyślne dla tabel, okien itp.?';
+$l['registrationEmail']='Adres e-mail do rejestracji';
+$l['enabledSettingtabs']='Włącz karty ustawień';
+$l['addresslist_panel']= 'Panel książki adresowej';
+$l['show_addresslists_panel']= 'Pokaż panej książki adresowej';
