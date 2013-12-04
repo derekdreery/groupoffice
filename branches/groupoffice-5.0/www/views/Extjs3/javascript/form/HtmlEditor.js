@@ -22,9 +22,9 @@ GO.form.HtmlEditor = function(config){
 	var rmFormatPlugin = new Ext.ux.form.HtmlEditor.RemoveFormat();	
 	
 	if(GO.settings.pspellSupport)
-		config.plugins.push(spellcheckInsertPlugin);
+		config.plugins.unshift(spellcheckInsertPlugin);
 
-	config.plugins.push(
+	config.plugins.unshift(
 		wordPastePlugin,
 		hrPlugin,
 		ioDentPlugin,
