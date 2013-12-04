@@ -67,14 +67,15 @@ color:#000;
 
 		$this->setJPEGQuality(100);
 		$this->SetMargins(30,60,30);
-		
-		if(!empty(GO::config()->tcpdf_ttf_font)){
-			$this->addTTFfont(GO::config()->tcpdf_ttf_font);
-		}		
-		
+				
 		if (!empty(GO::config()->tcpdf_font)) {
 			$this->font = GO::config()->tcpdf_font;
 		}
+		
+		if(!empty(GO::config()->tcpdf_ttf_font)){
+			$this->font=  TCPDF_FONTS::addTTFfont(GO::config()->tcpdf_ttf_font);
+			//$this->font=  TCPDF_FONTS::addTTFfont(GO::config()->tcpdf_ttf_font,'TrueType'); // 2nd parameter is normally autodetected but sometimes this goes wrong. 
+		}		
 		
 		if (!empty(GO::config()->tcpdf_font_size)) {
 			$this->font_size = GO::config()->tcpdf_font_size;
