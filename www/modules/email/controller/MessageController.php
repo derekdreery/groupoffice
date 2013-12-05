@@ -494,7 +494,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						$contact = $stmt->fetch();
 			
 
-						if($contact){
+						if($contact && (empty($model) || !$model->equals($contact)) ){
 							$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
 							$linkedEmail->setAttributes($attributes);
 							$linkedEmail->acl_id = $contact->findAclId();
