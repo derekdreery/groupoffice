@@ -132,3 +132,6 @@ $l['alwaysAsk']="Altijd vragen";
 $l['openWith']='Open met';
 
 $l['open']='Openen';
+
+
+$l['dontDeleteSystemFolder']="U kunt deze systeemmap niet verwijderen";
