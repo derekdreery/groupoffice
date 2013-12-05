@@ -327,6 +327,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				}, true);
 				
 			if(dtStr==nowStr){
+//			if(day==2){
+				this.theWeekDay=day;
 				this.todaysHeading = heading;
 			}
 
@@ -366,7 +368,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 
 		//calculate gridContainer size
-		var headingsHeight = this.headingsTable.getHeight();
+//		var headingsHeight = this.headingsTable.getHeight();
 
 		//var gridContainerHeight = ctSize['height']-headingsHeight;
 
@@ -498,7 +500,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			var minutesElapsed = now.getMinutes()+now.getHours()*60;
 			var indicatorTop = Math.ceil((11/15)*minutesElapsed);
 
-			var x = this.todaysHeading.getX()-this.gridTable.getX();
+			var x = this.todaysHeading.getX()-this.gridTable.getX()-this.theWeekDay+1;
 			
 			if(!Ext.isIE){
 				x+=4;

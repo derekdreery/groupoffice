@@ -63,7 +63,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 						'<td align="right">' +
 
 							'<tpl if="write_permission">'+
-								'<img src="{photo_url}" class="ab-photo" style="cursor:pointer;" onClick="GO.addressbook.showContactDialog({id}, \\{activeTab:1\\} );"/>' +
+								'<img src="{photo_url}" class="ab-photo" style="cursor:pointer;" onClick="GO.addressbook.showCompanyDialog({id}, \\{activeTab:1\\} );"/>' +
 							'</tpl>'+
 
 							'<tpl if="!write_permission">'+

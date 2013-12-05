@@ -88,6 +88,12 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	public function renderDisplay($model, $extraFields = array()) {
 		$response = array('data' => array(), 'success' => true);
 		$response['data'] = array_merge_recursive($extraFields, $model->getAttributes('html'));
+		
+		if (!empty($model->user))
+			$response['data']['username'] = $model->user->name;
+		if (!empty($model->mUser))
+			$response['data']['musername'] = $model->mUser->name;
+		
 		//$response['data'] = $model->getAttributes('html');
 		//$response['data']['model'] = $model->className();
 		$response['data']['permission_level'] = $model->getPermissionLevel();

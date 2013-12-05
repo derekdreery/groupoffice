@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   `state` varchar(50) DEFAULT '',
   `country` varchar(50) DEFAULT '',
   `post_address` varchar(100) DEFAULT '',
-  `post_address_no` varchar(10) DEFAULT '',
+  `post_address_no` varchar(100) DEFAULT '',
   `post_city` varchar(50) DEFAULT '',
   `post_state` varchar(50) DEFAULT '',
   `post_country` varchar(50) DEFAULT '',
@@ -299,7 +299,7 @@ CREATE TABLE IF NOT EXISTS `go_links_ab_companies` (
   `model_type_id` int(11) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   `ctime` int(11) NOT NULL,
-  KEY `link_id` (`model_id`,`model_type_id`),
+  PRIMARY KEY `model_id` (`id`,`model_id`,`model_type_id`),
   KEY `id` (`id`,`folder_id`),
   KEY `ctime` (`ctime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -318,7 +318,7 @@ CREATE TABLE IF NOT EXISTS `go_links_ab_contacts` (
   `model_type_id` int(11) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   `ctime` int(11) NOT NULL,
-  KEY `link_id` (`model_id`,`model_type_id`),
+  PRIMARY KEY `model_id` (`id`,`model_id`,`model_type_id`),
   KEY `id` (`id`,`folder_id`),
   KEY `ctime` (`ctime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

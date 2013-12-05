@@ -266,3 +266,4 @@ $l['allFolders'] = 'All folders';
 
 
 $l['useAuth']="Use authentication";
+$l['linkMustHavePermissionToWrite'] = 'You do not have the required WRITE permission to that object, so are not allowed to link the email to it.';

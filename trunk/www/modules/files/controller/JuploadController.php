@@ -46,7 +46,7 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 			<applet
 				code="wjhk.jupload2.JUploadApplet"
 				name="JUpload"
-				archive="' . GO::config()->full_url . 'go/vendor/jupload/wjhk.jupload.jar' . '"
+				archive="' . GO::config()->host . 'go/vendor/jupload/wjhk.jupload.jar' . '"
 				width="640"
 				height="480"
 				mayscript="true"

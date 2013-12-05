@@ -2160,10 +2160,64 @@ box-sizing: border-box;
 	font-size:10px;
 }
 
+
 .go-progressbar{
 	width:100px;height:10px;border:1px solid #666;
 }
 
 .go-progress-indicator{
 	background-color:#009cc5;height:10px;
+}
+
+#quick-add-menu-collapse {
+	display:inline-block;
+	cursor:pointer;
+	float:left;
+	margin:4px;
+}
+
+#quick-add-menu{
+	position:absolute;
+	border:none;
+	background:none;
+	padding:3px;
+	top:-200px;
+	width:auto;
+	/*padding-right:20px;*/
+	/*width:200px;*/
+	/*display:none;*/
+}
+
+/*#quick-add-menu table{
+	padding-left:3px;
+}*/
+
+#quick-add-menu .x-btn-mc,#quick-add-menu .x-btn-ml,#quick-add-menu .x-btn-mr,#quick-add-menu .x-btn-tl,#quick-add-menu .x-btn-tc,#quick-add-menu .x-btn-tr,#quick-add-menu .x-btn-bl,#quick-add-menu .x-btn-bc,#quick-add-menu .x-btn-br{
+	background-image:none;
+}
+
+.plus-sign{
+/*	position:absolute;
+	top:0;
+	right:0;*/
+        /*float:right;*/
+	display:inline-block;
+	width:16px;
+	height:16px;
+	background: url('images/elbow-plus-nl.gif') no-repeat center center;
+}
+
+.minus-sign{
+/*	position:absolute;
+	top:0;
+	right:0;*/
+        /*float:right;*/
+	display:inline-block;
+	width:16px;
+	height:16px;
+	background: url('images/elbow-minus-nl.gif') no-repeat center center;
+}
+
+.permissions-error .x-grid3-cell-inner{
+	color:red;
 }

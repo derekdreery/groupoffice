@@ -243,4 +243,8 @@ $l['eventNotSavedBody'] = 'This message is from your %goname calendar. %goname a
 $l['allTogetherForParticipants'] = 'All participants together';
 $l['allTogetherForResources'] = 'All resources together';
 
+
 $l['usedResources'] = 'Used resources';
+
+$l['shareCalendarsCron'] = 'Update the shared calendar files';
+$l['shareCalendarsCronDescription'] = 'Update the shared calendar files of the calendars that are published';

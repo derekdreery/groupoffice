@@ -99,6 +99,15 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 
 	}
 	
+	public function __isset($name) {
+		if(isset(self::$fields[$name])){
+			$var= $this->getCustomFieldValueByName($name);
+			return isset($var);
+		}  else {
+			return parent::__get($name);
+		}
+	}
+	
 	
 	/*
 	 * Attach the customfield model to this model.
@@ -178,6 +187,16 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 }
 	 
 	 /**
+	  * Check if the given content model is an ancestor of this content model
+	  * 
+	  * @param GO_Site_Model_Content $parent
+	  * @return boolean
+	  */
+	 public function isChildOf(GO_Site_Model_Content $parent){
+		 return strpos($this->slug, $parent->slug)===0;
+	 }
+	 
+	 /**
 	  * Check if this contentitem has a parent
 	  * 
 	  * @return boolean
@@ -218,7 +237,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 				'text' => $child->title,
 				'hasChildren' => $hasChildren,
 				//'expanded' => !$hasChildren,
-				'expanded' => GO_Site_Model_Site::isExpandedNode($child->site_id.'_content_'.$child->id),	 
+				'expanded' => !$hasChildren || GO_Site_Model_Site::isExpandedNode($child->site_id.'_content_'.$child->id),	 
 				'children'=> $hasChildren ? null : array(),
 			);
 			 

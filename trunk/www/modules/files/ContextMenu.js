@@ -348,7 +348,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					this.openButton.hide();
 
 					this.decompressButton.hide();
-					clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
+					clickedAt == 'tree' || records[0].store.reader.jsonData['permission_level']<GO.permissionLevels['create'] ? this.compressButton.hide() : this.compressButton.show();
 					
 					if(this.downloadLinkButton)
 						this.downloadLinkButton.hide();

@@ -473,8 +473,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
 					$linkedEmail->setAttributes($attributes);
 					$linkedEmail->acl_id = $model->findAclId();
-					$linkedEmail->save();
-
+					try {
+						$linkedEmail->save();
+					} catch (GO_Base_Exception_AccessDenied $e) {
+						throw new Exception(GO::t('linkMustHavePermissionToWrite','email'));
+					}
 					$linkedEmail->link($model);
 				}
 				
@@ -491,7 +494,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						$contact = $stmt->fetch();
 			
 
-						if($contact){
+						if($contact && (empty($model) || !$model->equals($contact)) ){
 							$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
 							$linkedEmail->setAttributes($attributes);
 							$linkedEmail->acl_id = $contact->findAclId();
@@ -631,7 +634,16 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		));
 
 		$failedRecipients=array();
-		$success = $mailer->send($message, $failedRecipients);
+		try {
+			$success = $mailer->send($message, $failedRecipients);
+		} catch ( Exception $e ) {
+			$msg = $e->getMessage();
+			preg_match('/(554 5\.7\.1).*:(.*)\"/s', $msg, $matches);
+			if (!empty($matches))
+				throw new Exception($matches[2]);
+			
+			$success=false;
+		}
 
 		if ($success) {
 			if (!empty($params['reply_uid'])) {
@@ -1241,10 +1253,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$uuid = (string) $vevent->uid;
 			
 			$alreadyProcessed = false;
-			if($event && $vevent->{"last-modified"}){
+			if($event){
 				
+				//import to check if there are relevant updates
+				$event->importVObject($vevent, array(), true);				
+				$alreadyProcessed=!$event->isModified($event->getRelevantMeetingAttributes());
 //				throw new Exception(GO_Base_Util_Date::get_timestamp($vevent->{"last-modified"}->getDateTime()->format('U')).' < '.GO_Base_Util_Date::get_timestamp($event->mtime));
-				$alreadyProcessed=$vevent->{"last-modified"}->getDateTime()->format('U')<$event->mtime;
+//				$alreadyProcessed=$vevent->{"last-modified"}->getDateTime()->format('U')<$event->mtime;
 			}
 			
 //			if(!$event || $event->is_organizer){

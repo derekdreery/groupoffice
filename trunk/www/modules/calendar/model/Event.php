@@ -67,6 +67,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	public $sequence;
 	
+	
+	/**
+	 * Indicating that this is an update for a related event.
+	 * eg. The organizer modifies the event and all events for invitees.
+	 * 
+	 * @var boolean
+	 */
+	public $updatingRelatedEvent=false;
+	
 	/**
 	 * Flag used when importing. On import we allow participant events to be 
 	 * modified even when they are not the organizer. Because a meeting request
@@ -395,13 +404,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		//if this is not the organizer event it may only be modified by the organizer
-		if(!$this->_isImport && !$this->isNew && $this->isModified($this->getRelevantMeetingAttributes())){		
-			$organizerEvent = $this->getOrganizerEvent();
-			if($organizerEvent && !$organizerEvent->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION) || !$organizerEvent && !$this->is_organizer){
-				GO::debug($this->getModifiedAttributes());
-				GO::debug($this->_attributes);
+		if(!$this->is_organizer && !$this->updatingRelatedEvent && !$this->_isImport && !$this->isNew && $this->isModified($this->getRelevantMeetingAttributes())){		
+//			$organizerEvent = $this->getOrganizerEvent();
+//			if($organizerEvent && !$organizerEvent->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION) || !$organizerEvent && !$this->is_organizer){
+//				GO::debug($this->getModifiedAttributes());
+//				GO::debug($this->_attributes);
 				throw new GO_Base_Exception_AccessDenied();
-			}			
+//			}			
 		}
 		
 		//Don't set reminders for the superadmin
@@ -545,7 +554,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		//move exceptions if this event was moved in time
 		if(!$wasNew && !empty($this->rrule) && $this->isModified('start_time')){
-			$diffSeconds = $this->getOldAttributeValue('start_time')-$this->start_time;
+			$diffSeconds = $this->start_time-$this->getOldAttributeValue('start_time');
 			$stmt = $this->exceptions();
 			while($exception = $stmt->fetch()){
 				$exception->time+=$diffSeconds;
@@ -585,6 +594,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 					if($event->id!=$this->id && $this->is_organizer!=$event->is_organizer){ //this should never happen but to prevent an endless loop it's here.
 						$event->setAttributes($updateAttr, false);
+						$event->updatingRelatedEvent=true;
 						$event->save(true);
 
 //						$stmt = $event->participants;
@@ -1771,6 +1781,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 			if($vobject->organizer)
 				$p = $this->importVObjectAttendee($this, $vobject->organizer, true);
+			else
+				$p=false;
 
 			$calendarParticipantFound=!empty($p) && $p->user_id==$this->calendar->user_id;
 			
@@ -1949,7 +1961,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$this->duplicateRelation('participants', $duplicate);
 
 			if($duplicate->isRecurring() && $this->isRecurring())
-				$this->duplicateRelation('exceptions', $duplicate);		
+				$this->duplicateRelation('exceptions', $duplicate);	
+			
+			$this->duplicateRelation('resources', $duplicate, array('status'=>self::STATUS_NEEDS_ACTION));
 		}
 		
 		return parent::afterDuplicate($duplicate);
@@ -2306,6 +2320,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			throw new Exception("Meeting request can only be send from the organizer's event");
 		
 		$stmt = $this->participants;
+		
+		//handle missing user
+		if(!$this->user){
+			$this->user_id=1;
+			$this->save(true);
+		}
 
 			while ($participant = $stmt->fetch()) {		
 				//don't invite organizer

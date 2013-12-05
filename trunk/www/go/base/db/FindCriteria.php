@@ -292,7 +292,7 @@ class GO_Base_Db_FindCriteria {
 		GO::getDbConnection()->query($sql);
 	}
 	
-	private $sleepingTempTables;
+	private $sleepingTempTables=array();
 
 	
 	public function recreateTemporaryTables() {	
