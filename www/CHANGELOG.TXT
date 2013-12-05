@@ -1,3 +1,5 @@
+- Disallow deleting system folders through files module
+
 29-11-2013 4.2.28
 - Raised post address 2 field to 100 chars
 - When someone other the the ticket agent add a new message to the ticket it will be marked as unseen
