@@ -319,6 +319,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
+	 * Compares this ActiveRecord with $record.
+	 * @param GO_Base_Db_ActiveRecord $record record to compare to
+	 * @return boolean whether the active records are the same database row.
+	 */
+	public function equals($record) {
+		   return $this->tableName()===$record->tableName() && $this->getPk()===$record->getPk();
+	}
+	
+	/**
 	 * The columns array is loaded automatically. Validator rules can be added by
 	 * overriding the init() method.
 	 * 
