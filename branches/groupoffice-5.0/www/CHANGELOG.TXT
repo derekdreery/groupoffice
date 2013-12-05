@@ -1,4 +1,4 @@
-- Hard-deleting a user work again in the Users module
+- Hard-deleting a user works again in the Users module
 - Removed some calendar event data from response when event is private.
 
 29-11-2013 5.0.26
