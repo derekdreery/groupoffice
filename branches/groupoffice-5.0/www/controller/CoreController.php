@@ -651,6 +651,13 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		
 		if (!isset($params['lang']))
 			$params['lang'] = GO::session()->values['language'];
+		
+		$oldLang = GO::language()->setLanguage($params['lang']);
+		
+		$pspellLang = GO::t('pspell_lang', 'base', 'common', $found);
+		
+		if(!$found)
+			$pspellLang = $params['lang'];
 
 		if (   !isset($params['tocheck'])
 			|| empty($params['tocheck'])
@@ -660,7 +667,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			$response['text'] = '';
 		} else {
 
-			$mispeltwords = GO_Base_Util_SpellChecker::check($params['tocheck'], $params['lang']);
+			$mispeltwords = GO_Base_Util_SpellChecker::check($params['tocheck'], $pspellLang);
 			if (!empty($mispeltwords)) {
 				$response['errorcount'] = count($mispeltwords);
 				$response['text'] = GO_Base_Util_SpellChecker::replaceMisspeltWords($mispeltwords, $params['tocheck']);
