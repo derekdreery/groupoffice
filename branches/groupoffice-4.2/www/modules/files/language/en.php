@@ -131,3 +131,5 @@ $l['alwaysAsk']="Always ask";
 $l['openWith']='Open with';
 
 $l['open']='Open';
+
+$l['dontDeleteSystemFolder']="You can't delete this system folder";

@@ -381,6 +381,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return parent::afterSave($wasNew);
 	}
 	
+	
+	public function delete($ignoreAcl = false) {
+		
+		if(!$ignoreAcl && $this->readonly){
+			throw new Exception(GO::t('dontDeleteSystemFolder','files'));
+		}
+		
+		return parent::delete($ignoreAcl);
+	}
 
 	protected function afterDelete() {
 		
