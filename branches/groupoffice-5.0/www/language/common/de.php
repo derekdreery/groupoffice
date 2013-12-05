@@ -631,4 +631,4 @@ $l['sv'] = 'Schweden';
 $l['th'] = 'Thailand';
 
 
-$l['pspell_lang']='de_DE';
+//$l['pspell_lang']='DE_de';
