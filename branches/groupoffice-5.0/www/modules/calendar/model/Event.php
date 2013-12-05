@@ -1961,7 +1961,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$this->duplicateRelation('participants', $duplicate);
 
 			if($duplicate->isRecurring() && $this->isRecurring())
-				$this->duplicateRelation('exceptions', $duplicate);		
+				$this->duplicateRelation('exceptions', $duplicate);	
+			
+			$this->duplicateRelation('resources', $duplicate, array('status'=>self::STATUS_NEEDS_ACTION));
 		}
 		
 		return parent::afterDuplicate($duplicate);
