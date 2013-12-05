@@ -231,7 +231,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		this.editorImageInsertPlugin = new GO.site.HtmlEditorImageInsert();
 		this.editorTablePlugin = new Ext.ux.form.HtmlEditor.Table();
 			
-		return [this.editorImageInsertPlugin,this.editorTablePlugin];
+		return [this.editorImageInsertPlugin,this.editorTablePlugin, new Ext.ux.form.HtmlEditor.HeadingMenu()];
 	}
 });
 

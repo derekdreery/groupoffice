@@ -57,3 +57,9 @@
 	width:16px;
 	height:16px;
 }
+
+.img-call-add{
+	background:url('images/phone-add.png') no-repeat top right !important;
+	width:16px !important;
+	height:16px !important;
+}

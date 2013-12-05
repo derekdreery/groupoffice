@@ -1,5 +1,41 @@
 <?php
 /*
+ * 
+ * Example virtual host file for servermanager server.
+ * 
+<VirtualHost *:80>
+
+#DocumentRoot pointing to site module index.php
+DocumentRoot /home/govhosts/example.group-office.eu/groupoffice/modules/site
+ 
+ServerName example.com
+ServerAlias www.example.com
+
+ErrorLog /var/log/apache2/example.com.log
+
+#Set explicit Group-Office config.php location
+SetEnv GO_CONFIG /etc/groupoffice/example.group-office.eu/config.php
+
+#/public alias for resources such as images and css files. The public folder is 
+#located in $config['file_storage_path']
+Alias /public /home/govhosts/example.group-office.eu/data/public
+
+#Rewrite rules for site module
+<Directory /home/govhosts/example.group-office.eu/groupoffice/modules/site>
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)\?*$ index.php/$1 [L,QSA]
+</Directory>
+
+</VirtualHost>
+ 
+ * 
+ *  
+ * 
+ * Alternatively create a document root for the site:
+ * 
  * 1. Create a symlink or alias to $config['file_storage_path'].'public/' in
  *    the document root
  * 
@@ -17,6 +53,10 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)\?*$ index.php/$1 [L,QSA]
+ * 
+ * 
+ 
+
 
  */
 

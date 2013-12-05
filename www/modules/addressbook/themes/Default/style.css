@@ -266,3 +266,9 @@ td.table_header_links
 	margin-right: 5px;
 	float: left;
 }
+
+.img-contact-add{
+	background:url('images/16x16/contact-quickadd.png') no-repeat top right !important;
+	width:16px !important;
+	height:16px !important;
+}

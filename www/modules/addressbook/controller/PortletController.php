@@ -189,7 +189,6 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractMulti
 		//$response['data']['original_photo_url']=$model->photoURL;
 		$columnModel = new GO_Base_Data_ColumnModel('GO_Addressbook_Model_Contact');
 		$columnModel->formatColumn('addressbook_id', '$model->addressbook->name');
-		$columnModel->formatColumn('birthday', '$model->upcoming');
 		$columnModel->formatColumn('photo_url', '$model->getPhotoThumbURL()');
 		$columnModel->formatColumn('age', '($model->upcoming != date("Y-m-d")) ? $model->age+1 : $model->age');
 		

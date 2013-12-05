@@ -63,9 +63,12 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 				$response['data']['tasklist_id'] = "";
 		
 		$response['data']['url']='<a class="normal-link" target="_blank" href="'.$url.'">'.GO::t('rightClickToCopy','calendar').'</a>';
-		$response['data']['ics_url']='<a class="normal-link" target="_blank" href="'.GO::url("calendar/calendar/exportIcs", array("calendar_id"=>$response['data']['id'],"months_in_past"=>1)).'">'.GO::t('rightClickToCopy','calendar').'</a>';
-
 		
+		// Get a link to the ics exporter
+		//$response['data']['ics_url']='<a class="normal-link" target="_blank" href="'.GO::url("calendar/calendar/exportIcs", array("calendar_id"=>$response['data']['id'],"months_in_past"=>1)).'">'.GO::t('rightClickToCopy','calendar').'</a>';
+
+		// Get a link to the ics file that is exported
+		$response['data']['ics_url'] = '<a class="normal-link" target="_blank" href="'.$model->getPublicIcsUrl().'">'.GO::t('rightClickToCopy','calendar').'</a>';
 		return parent::afterLoad($response, $model, $params);
 	}
 	

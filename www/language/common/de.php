@@ -629,3 +629,6 @@ $l['nl'] = 'Niederlande';
 $l['pt'] = 'Portugal';
 $l['sv'] = 'Schweden';
 $l['th'] = 'Thailand';
+
+
+//$l['pspell_lang']='DE_de';

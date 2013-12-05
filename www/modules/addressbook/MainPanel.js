@@ -639,7 +639,7 @@ GO.addressbook.showContactDialog = function(contact_id, config){
 	GO.addressbook.contactDialog.show(contact_id, config);
 }
 
-GO.addressbook.showCompanyDialog = function(company_id){
+GO.addressbook.showCompanyDialog = function(company_id, config){
 
 	if(!GO.addressbook.companyDialog)
 		GO.addressbook.companyDialog = new GO.addressbook.CompanyDialog();
@@ -649,7 +649,7 @@ GO.addressbook.showCompanyDialog = function(company_id){
 		delete GO.addressbook.companyDialogListeners;
 	}
 
-	GO.addressbook.companyDialog.show(company_id);
+	GO.addressbook.companyDialog.show(company_id, config);
 }
 
 GO.addressbook.searchSenderStore = new GO.data.JsonStore({
@@ -860,3 +860,13 @@ GO.linkHandlers["GO_Addressbook_Model_Company"]=function(id){
 	GO.addressbook.linkCompanyWindow.show();
 	return GO.addressbook.linkCompanyWindow;
 }
+
+GO.quickAddPanel.addButton(new Ext.Button({
+	iconCls:'img-contact-add',
+	cls: 'x-btn-icon', 
+	tooltip:GO.addressbook.lang.contact,
+	handler:function(item, e){
+		GO.addressbook.showContactDialog(0,{});
+	},
+	scope: this
+}),0);

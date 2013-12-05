@@ -117,6 +117,7 @@ views/Extjs3/javascript/panels/GroupTabPanel.js
 views/Extjs3/javascript/panels/Portal.js
 views/Extjs3/javascript/panels/PortalColumn.js
 views/Extjs3/javascript/panels/Portlet.js
+views/Extjs3/javascript/panels/QuickAddPanel.js
 
 views/Extjs3/javascript/SWFObject/swfobject.js
 views/Extjs3/javascript/form/UploadPCForm.js

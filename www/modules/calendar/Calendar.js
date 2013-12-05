@@ -2214,6 +2214,17 @@ GO.linkHandlers["GO_Calendar_Model_Event"]=function(id){
 	GO.calendar.eventLinkWindow.show();
 	return GO.files.eventLinkWindow;
 };
+
+GO.quickAddPanel.addButton(new Ext.Button({
+	iconCls:'img-calendar-add',
+	cls: 'x-btn-icon', 
+	tooltip:GO.calendar.lang.appointment,
+	handler:function(item, e){
+		GO.calendar.showEventDialog({});
+	},
+	scope: this
+}),0);
+
 GO.linkPreviewPanels["GO_Calendar_Model_Event"]=function(config){
 	var config = config || {};
 	return new GO.calendar.EventPanel(config);

@@ -380,6 +380,13 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $host = '/groupoffice/';
+	
+	/**
+	 * Set Access-Control-Allow-Origin: * header for example.
+	 * 
+	 * @var string 
+	 */
+	var $extra_headers=array();
 
 //	/**
 //	 * Useful to force https://your.host:433 or something like that
@@ -938,7 +945,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '5.0.22';
+	var $version = '5.0.26';
 	
 	/**
 	 * Modification date
@@ -947,7 +954,7 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20131112';
+	var $mtime = '20131129';
 
 	#group configuration
 	/**

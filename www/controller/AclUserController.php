@@ -139,9 +139,15 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 		return true;
 	}
 	
-//	protected function beforeUpdateRecord($params, &$record) {
-//		if ($record['id']==1)
-//			$record['level'] = GO_Base_Model_Acl::MANAGE_PERMISSION;
-//		return true;
-//	}
+	protected function beforeUpdateRecord($params, &$record, $model) {
+		
+		if($record['id']==GO::user()->id && !GO::user()->isAdmin()){
+			throw new Exception(GO::t('dontChangeOwnersPermissions'));
+		}
+		
+		if($model->aclItem->user_id==$record['id']){
+			throw new Exception(GO::t('dontChangeOwnersPermissions'));
+		}
+		return true;
+	}
 }

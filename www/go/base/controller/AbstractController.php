@@ -81,6 +81,17 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		}	
 		
 		$this->init();
+		
+		
+
+		if(!headers_sent())
+			$this->headers();
+			
+		
+		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+			GO::debug("OPTIONS request");
+			exit(0);
+		}
 	}
 	
 	protected function init(){
@@ -213,6 +224,15 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 //		{
 //			header('Content-Type: application/json; charset=UTF-8');
 //		}
+			
+			
+			
+			
+			foreach(GO::config()->extra_headers as $header){
+				header($header);
+			}
+			
+			
 	}
 	
 	/**
@@ -229,8 +249,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 */
 	protected function render($viewName, $data=array()){
 		
-		if(!headers_sent())
-			$this->headers();
+//		if(!headers_sent())
+//			$this->headers();
 		
 		$module = $this->getModule();
 		
@@ -581,6 +601,19 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		if(count($missingParams))
 			throw new Exception("The following required controller action params are missing: ".implode(",", $missingParams));
 				
+	}
+
+	protected function checkMaxPostSizeExceeded() {
+		if (empty($_POST) && empty($_FILES)) {
+			$postMaxSize = GO_Base_Util_Number::configSizeToMB(ini_get('post_max_size'));
+			$uploadMaxFileSize = GO_Base_Util_Number::configSizeToMB(ini_get('upload_max_filesize'));
+
+			
+			
+			$maxFileSize = $postMaxSize > $uploadMaxFileSize ? $uploadMaxFileSize : $postMaxSize;
+			
+			throw new Exception(sprintf(GO::t('maybeMaxUploadExceeded'),$maxFileSize));
+		}
 	}
 	
 //	protected function isAjax(){

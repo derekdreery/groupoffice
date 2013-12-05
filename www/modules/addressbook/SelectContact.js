@@ -20,6 +20,7 @@ GO.addressbook.SelectContact = function(config){
 	if(!config.valueField)
 		config.valueField='id';
 
+	if(!config.tpl)
 		config.tpl = '<tpl for="."><div class="x-combo-list-item">{' + config.displayField + '} ({ab_name}) <tpl if="department">({department})</tpl> <tpl if="go_user_id&gt;0"><div class="go-model-icon-GO_Base_Model_User" style="width:16px;height:16px;display:inline-block;vertical-align:middle"></div></tpl></div></tpl>';
 
 	var fields = {fields: ['id', 'cf', 'name', 'salutation', 'email', 'first_name', 'middle_name','last_name', 'home_phone', 'work_phone', 'cellular', 'cellular2', 'company_id','company_name','address','address_no','zip','city','state','country','ab_name','go_user_id','department'], columns:[]};
@@ -49,6 +50,29 @@ GO.addressbook.SelectContact = function(config){
 	GO.addressbook.SelectContact.superclass.constructor.call(this,config);
 	
 }
-Ext.extend(GO.addressbook.SelectContact, GO.form.ComboBoxReset);
+Ext.extend(GO.addressbook.SelectContact, GO.form.ComboBoxReset,{
+	
+	selectContactById : function(contact_id, callback, scope){
+		this.getStore().load({
+			params:{
+				contact_id:contact_id
+			},
+			callback:function(){
+				this.setValue(contact_id);
+				
+				if(callback){
+					
+					var record = this.store.getAt(0);
+		
+					if(!scope)
+						scope=this;
+					callback.call(scope, this, record);
+				}
+			},
+			scope:this
+		});
+		
+	}
+});
 
 Ext.ComponentMgr.registerType('selectcontact', GO.addressbook.SelectContact);

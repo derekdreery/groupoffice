@@ -721,9 +721,21 @@ GO.newMenuItems.push({
 		GO.tasks.showTaskDialog(taskShowConfig);
 	}
 });
-
-
-
+	
+if(GO.addressbook){	
+	GO.quickAddPanel.addButton(new Ext.Button({
+		iconCls:'img-call-add',
+		cls: 'x-btn-icon', 
+		tooltip:GO.tasks.lang.scheduleCall,
+		handler: function(){
+			if(!GO.tasks.scheduleCallDialog)
+				GO.tasks.scheduleCallDialog = new GO.tasks.ScheduleCallDialog();
+			
+			GO.tasks.scheduleCallDialog.show(0,{link_config : this.linkConfig});			
+		}, 
+		scope: this
+	}),0);
+}
 
 //GO.mainLayout.onReady(function(){
 //

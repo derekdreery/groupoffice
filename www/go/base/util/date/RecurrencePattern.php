@@ -178,8 +178,15 @@ class GO_Base_Util_Date_RecurrencePattern{
 			$next = $startTime;
 		}else
 		{
-			$func = '_getNextRecurrence'.ucfirst($this->_freq);		
-			$next=call_user_func(array($this, $func),$startTime);
+			$func = '_getNextRecurrence'.ucfirst($this->_freq);	
+			
+			if(!method_exists($this, $func)){
+				trigger_error("Invalid recurrence pattern: '".$this->_freq."'", E_USER_WARNING);
+				return false;
+			}else
+			{
+				$next=call_user_func(array($this, $func),$startTime);
+			}
 		}
 		if(empty($this->_until) || $next<=$this->_until){
 			

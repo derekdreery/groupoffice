@@ -86,5 +86,21 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 		$group = new GO_Calendar_Model_Group();
 		$group->name=GO::t('calendars','calendar');
 		$group->save();
+		
+		
+		$cron = new GO_Base_Cron_CronJob();
+		
+		$cron->name = 'Calendar publisher';
+		$cron->active = true;
+		$cron->runonce = false;
+		$cron->minutes = '0';
+		$cron->hours = '*';
+		$cron->monthdays = '*';
+		$cron->months = '*';
+		$cron->weekdays = '*';
+		$cron->job = 'GO_Calendar_Cron_CalendarPublisher';		
+
+		$cron->save();
+		
 	}
 }

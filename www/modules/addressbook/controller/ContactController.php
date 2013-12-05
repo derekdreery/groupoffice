@@ -23,7 +23,13 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return array('photo');
 	}
 		
-	protected function beforeSubmit(&$response, &$model, &$params) {		
+	protected function beforeSubmit(&$response, &$model, &$params) {	
+		
+		//workaroud extjs iframe hack for file upload
+		$_SERVER["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest";
+		
+		$this->checkMaxPostSizeExceeded();
+		
 		//if user typed in a new company name manually we set this attribute so a new company will be autocreated.
 		if(!is_numeric($params['company_id'])){
 			$model->company_name = $params['company_id'];
@@ -226,6 +232,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 									GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.contact_id', '=', 't', true, true),
 									'ac'
 						);
+					
+					$storeParams->group('t.id');
 				}
 			}
 			
@@ -615,7 +623,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	 */
 	protected function actionImportCsv($params){		
 		$params['file'] = $_FILES['files']['tmp_name'][0];
-		$params['importType'] = 'Xls';
+		$params['importType'] = 'Csv';
 		$summarylog = parent::actionImport($params);
 		$response = $summarylog->getErrorsJson();
 		$response['successCount'] = $summarylog->getTotalSuccessful();
@@ -645,6 +653,30 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	protected function actionSelectContact($params){
 		
 		$response = array('total'=>0, 'results'=>array());
+		
+		if(isset($params['contact_id'])){
+			
+			$findParams = GO_Base_Db_FindParams::newInstance()
+			->joinModel(array(
+						'model'=>'GO_Addressbook_Model_Company',					
+						'foreignField'=>'id', //defaults to primary key of the remote model
+						'localField'=>'company_id', //defaults to "id"
+						'tableAlias'=>'c', //Optional table alias
+						'type'=>'LEFT' //defaults to INNER,
+
+					));
+			
+			$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['contact_id'],$findParams);
+
+			$record =$contact->getAttributes();
+			//$record['name']=$contact->name;
+			$record['cf']=$contact->id.":".$contact->name;
+
+			$response['results'][]=$record;
+			$response['total']++;			
+
+			return $response;
+		}
 		
 		$query = '%'.preg_replace ('/[\s*]+/','%', $params['query']).'%'; 
 		
@@ -760,7 +792,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 
 				$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
 
-				$user_ids=array();
+//				$user_ids=array();
 				foreach($stmt as $contact){
 					$record =$contact->getAttributes();
 					//$record['name']=$contact->name;
@@ -769,8 +801,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 					$response['results'][]=$record;
 					$response['total']++;			
 
-					if($contact->go_user_id)
-						$user_ids[]=$contact->go_user_id;
+//					if($contact->go_user_id)
+//						$user_ids[]=$contact->go_user_id;
 				}
 			}
 		}

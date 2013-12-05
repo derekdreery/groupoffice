@@ -83,3 +83,9 @@ $l["taskCompletion_time"]='Completed at';
 $l["taskProject_name"]='Project';
 
 $l['taskPercentage_complete']='Percentage complete';
+
+$l['phoneNr']='Phone nr.';
+$l['savePhoneNr']='Save number to';
+$l['scheduleCallTaskName']='Call {name} at {number}';
+$l['overwritePhoneNumber']='Overwrite {field} ({number})';
+$l['addToPhoneNumber']='Add to {field}';

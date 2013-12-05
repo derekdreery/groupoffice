@@ -19,6 +19,7 @@ class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Cont
 
 		// Load the data from the session.
 		$findParams = GO::session()->values['contact']['findParams'];
+		$findParams->getCriteria()->recreateTemporaryTables();
 		$model = GO::getModel(GO::session()->values['contact']['model']);
 		
 		// Include the companies
