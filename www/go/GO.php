@@ -269,8 +269,18 @@ class GO{
 	 * 
 	 */
 	public static function view(){
+		
+		$class = "GO_Base_View_";
+		
+		if(isset(GO::session()->values['view'])){
+			$class .= GO::session()->values['view'];
+		}else
+		{
+			$class .= GO::config()->defaultView;
+		}
+		
 		if(!isset(self::$_view)){
-			self::$_view = new GO_Base_View_Extjs3();
+			self::$_view = new $class();
 		}
 		return self::$_view;//isset(GO::session()->values['view']) ? GO::session()->values['view'] : GO::config()->defaultView;
 	}
@@ -278,8 +288,6 @@ class GO{
 	public static function setView($viewName){
 		GO::session()->values['view']=$viewName;
 	}
-
-	private static $_user;
 
 	/**
 	 * Get the logged in user
