@@ -62,7 +62,8 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController 
 			case 'content':
 				
 				if($parentId === null){
-					$response = GO_Site_Model_Content::getTreeNodes($siteId);
+					$response = GO_Site_Model_Site::getTreeNodes();
+					//$response = GO_Site_Model_Content::getTreeNodes($siteId);
 				} else {
 					$parentNode = GO_Site_Model_Content::model()->findByPk($parentId);
 					if($parentNode)

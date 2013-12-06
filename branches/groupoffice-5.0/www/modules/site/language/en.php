@@ -119,3 +119,17 @@ $l["imageExample"] = "Image example";
 
 $l["notImplementedYet"] = "Not yet implemented";
 $l["otherOptions"] = "Other options";
+
+$l["linkEditor"] = "Insert link";
+
+$l["linkTitle"] = "Link title";
+$l["linkToContent"] = "Link to content item";
+$l["linkToContentText"] = "Link to a content item within this site. Doubleclick on an item to select it.";
+$l["linkToFile"] = "Link to file";
+$l["linkToFileText"] = "Link to a file that you have uploaded within this site.";
+$l["linkToUrl"] = "Link to url";
+$l["linkToUrlText"] = "You can also type in your own url, please make sure you add http(s):// to it to make the url work.";
+$l["url"] = "Url";
+$l["file"] = "File";
+$l["openInNewWindow"] = "Open in new window";
+$l["selectFile"] = "Select file";
