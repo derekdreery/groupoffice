@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS `cf_fs_files`;
 CREATE TABLE IF NOT EXISTS `cf_fs_files` (
   `model_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`model_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS `cf_fs_folders`;
 CREATE TABLE IF NOT EXISTS `cf_fs_folders` (
   `model_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`model_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `fs_files` (
   KEY `folder_id` (`folder_id`),
   KEY `name` (`name`),
   KEY `extension` (`extension`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `fs_folders` (
   KEY `parent_id` (`parent_id`),
   KEY `parent_id_2` (`parent_id`,`name`),
   KEY `visible` (`visible`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `fs_new_files` (
   `file_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   KEY `file_id` (`file_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `fs_notifications` (
   `folder_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`folder_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `fs_shared_cache` (
   `name` varchar(255) NOT NULL,
   `path` text NOT NULL,
   PRIMARY KEY (`user_id`,`folder_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `fs_statuses` (
   `id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `fs_status_history` (
   `comments` text,
   PRIMARY KEY (`id`),
   KEY `link_id` (`link_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `fs_templates` (
   `extension` char(4) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `go_links_fs_files` (
   PRIMARY KEY `model_id` (`id`,`model_id`,`model_type_id`),
   KEY `id` (`id`,`folder_id`),
   KEY `ctime` (`ctime`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -205,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `go_links_fs_folders` (
   PRIMARY KEY `model_id` (`id`,`model_id`,`model_type_id`),
   KEY `id` (`id`,`folder_id`),
   KEY `ctime` (`ctime`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -219,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `fs_versions` (
   `version` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `file_id` (`file_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `fs_folder_pref`;
 CREATE TABLE IF NOT EXISTS `fs_folder_pref` (
@@ -227,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `fs_folder_pref` (
   `user_id` int(11) NOT NULL,
   `thumbs` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`folder_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -243,14 +243,14 @@ CREATE TABLE IF NOT EXISTS `fs_notification_messages` (
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`, `status`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `fs_bookmarks`;
 CREATE TABLE IF NOT EXISTS `fs_bookmarks` (
 	`folder_id` int(11) NOT NULL,
 	`user_id` int(11) NOT NULL,
 	PRIMARY KEY (`folder_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `fs_filehandlers`;
 CREATE TABLE IF NOT EXISTS `fs_filehandlers` (

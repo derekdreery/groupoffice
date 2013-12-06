@@ -159,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `sm_new_trials` (
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`name`),
   KEY `key` (`key`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 

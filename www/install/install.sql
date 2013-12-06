@@ -3,7 +3,7 @@ ALTER DATABASE CHARACTER SET utf8 COLLATE utf8_general_ci;
 CREATE TABLE IF NOT EXISTS `cf_go_users` (
   `model_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`model_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `go_acl` (
   PRIMARY KEY (`acl_id`,`user_id`,`group_id`),
   KEY `acl_id` (`acl_id`,`user_id`),
   KEY `acl_id_2` (`acl_id`,`group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `go_acl_items` (
   `description` varchar(50) DEFAULT NULL,
 	`mtime` INT NOT NULL DEFAULT  '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `go_address_format` (
   `id` int(11) NOT NULL,
   `format` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE IF NOT EXISTS `go_cache` (
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `go_cache` (
   `mtime` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`key`),
   KEY `mtime` (`mtime`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE IF NOT EXISTS `go_countries` (
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `go_countries` (
   `iso_code_2` char(2) NOT NULL DEFAULT '',
   `iso_code_3` char(3) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `go_db_sequence` (
   `seq_name` varchar(50) NOT NULL DEFAULT '',
   `nextid` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`seq_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `go_groups` (
   `acl_id` int(11) NOT NULL,
   `admin_only` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `go_holidays` (
   `region` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `region` (`region`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `go_links_go_users` (
   PRIMARY KEY `model_id` (`id`,`model_id`,`model_type_id`),
   KEY `id` (`id`,`folder_id`),
   KEY `ctime` (`ctime`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `go_link_descriptions` (
   `id` int(11) NOT NULL,
   `description` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `go_link_folders` (
   PRIMARY KEY (`id`),
   KEY `link_id` (`model_id`,`model_type_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `go_log` (
   `action` varchar(20) NOT NULL DEFAULT '',
   `message` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- --------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `go_mail_counter` (
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `go_mail_counter` (
   `count` int(11) NOT NULL,
   PRIMARY KEY (`host`),
   KEY `date` (`date`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `go_model_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `model_name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `go_modules` (
   `acl_id` int(11) NOT NULL DEFAULT '0',
 	`enabled` BOOLEAN NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `go_reminders` (
   `text` text,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -196,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `go_reminders_users` (
   `time` int(11) NOT NULL,
   `mail_sent` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`reminder_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS `go_saved_search_queries` (
   `type` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `type` (`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -229,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `go_search_cache` (
   PRIMARY KEY (`model_id`,`model_type_id`),
   KEY `acl_id` (`acl_id`),
 	INDEX name( `name` )
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `go_search_sync` (
   `module` varchar(50) NOT NULL DEFAULT '',
   `last_sync_time` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`,`module`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -248,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `go_settings` (
   `name` varchar(50) NOT NULL DEFAULT '',
   `value` text,
   PRIMARY KEY (`user_id`,`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -258,7 +258,7 @@ CREATE TABLE IF NOT EXISTS `go_state` (
   `name` varchar(100) NOT NULL DEFAULT '',
   `value` text,
   PRIMARY KEY (`user_id`,`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -306,7 +306,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `password_type` varchar(20) NOT NULL DEFAULT 'crypt',
 	`holidayset` VARCHAR( 10 ) NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- --------------------------------------------------------
 
 
@@ -314,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `go_users_groups` (
   `group_id` int(11) NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`group_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE IF NOT EXISTS `go_advanced_searches` (
@@ -325,7 +325,7 @@ CREATE TABLE IF NOT EXISTS `go_advanced_searches` (
 	`data` TEXT NULL,
 	`model_name` VARCHAR(100) NOT NULL DEFAULT '',
 	PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -386,4 +386,4 @@ CREATE TABLE IF NOT EXISTS `go_working_weeks` (
 	`sa_work_hours` DOUBLE NOT NULL DEFAULT '0',
 	`su_work_hours` DOUBLE NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
