@@ -684,3 +684,5 @@ $l['maybeMaxUploadExceeded'] = 'The server did not receive the required paramete
 $l['relationDeleteRestrict']="You can't delete this %s because it contains '%s' items. Please remove those first.";
 
 $l['pspell_lang']='en';
+
+$l['dependenciesCannotDelete']="You cannot delete the current module, because the following (installed) modules depend on it: %s.";

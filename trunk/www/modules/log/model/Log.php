@@ -41,7 +41,7 @@ class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
 	const ACTION_LOGIN='login';
 	const ACTION_LOGOUT='logout';
 	
-	protected $insertDelayed=true;
+//	protected $insertDelayed=true;
 	
 	/**
 	 * Returns a static model of itself

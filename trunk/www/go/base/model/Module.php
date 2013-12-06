@@ -81,6 +81,28 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 		return parent::afterSave($wasNew);
 	}
 	
+	protected function beforeDelete() {
+		
+		$this->_checkDependencies();
+		return parent::beforeDelete();
+		
+	}
+	
+	private function _checkDependencies() {
+		
+		$dependentModuleNames = array();
+		$modules = GO::modules()->getAllModules(true);
+		foreach ($modules as $module) {
+			$depends = $module->moduleManager->depends();
+			if (in_array($this->id,$depends))
+				$dependentModuleNames[] = $module->moduleManager->name();
+		}
+		
+		if (count($dependentModuleNames)>0)
+			throw new Exception(sprintf(GO::t('dependenciesCannotDelete'),implode(', ',$dependentModuleNames)));
+		
+	}
+	
 	protected function afterDelete() {
 		if($this->moduleManager)
 			$this->moduleManager->uninstall();
@@ -104,4 +126,4 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 //	protected function getDescription() {
 //		return GO::t('description', $this->id);
 //	}
-}
+	}
