@@ -817,8 +817,6 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //						->addCondition('exception_for_event_id', $this->id)
 //						->addCondition('start_time', $startOfDay,'>=')
 //						->addCondition('end_time', $endOfDay,'<=');
-
-		$findParams->debugSql();
 		
 		$event = GO_Calendar_Model_Event::model()->findSingle($findParams);
 
@@ -1812,23 +1810,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					$this->save();
 				}
 			}
-
-			if($vobject->exdate){
-				if (strpos($vobject->exdate,';')!==false) {
-					$timesArr = explode(';',$vobject->exdate->getValue());
-					$exDateTimes = array();
-					foreach ($timesArr as $time) {
-						$dateTime = Sabre\VObject\DateTimeParser::parse($time);
-						$this->addException($dateTime->format('U'));
-					}
-				} else {
-					$exDateTimes = $vobject->exdate->getDateTimes();
-					foreach($exDateTimes as $dt){
-						$this->addException($dt->format('U'));
-					}
-				}
-			}
 			
+			//Add exception dates to Event
+			foreach($vobject->select('EXDATE') as $i => $exdate) {
+				$dt = $exdate->getDateTime();
+				$this->addException($dt->format('U'));
+			}
+
 			if($importExternal && $this->isRecurring()){
 				$exceptionEventsStmt = GO_Calendar_Model_Event::model()->find(
 					GO_Base_Db_FindParams::newInstance()->criteria(
