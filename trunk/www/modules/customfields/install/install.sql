@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `cf_categories` (
   `sort_index` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `type` (`extends_model`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `cf_disable_categories` (
   `model_id` int(11) NOT NULL,
   `model_name` varchar(100) NOT NULL,
   PRIMARY KEY (`model_id`,`model_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `cf_enabled_categories` (
   `model_name` varchar(100) NOT NULL,
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`model_id`,`model_name`,`category_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `cf_fields` (
 	`max_length` INT( 5 ) NOT NULL DEFAULT '50',
   PRIMARY KEY (`id`),
   KEY `type` (`category_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 --
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `cf_select_options` (
   `sort_order` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `field_id` (`field_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `cf_select_tree_options` (
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `parent_id` (`parent_id`,`field_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `cf_tree_select_options` (
   `sort` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `parent_id` (`parent_id`,`field_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `cf_blocks` (
 	`field_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `field_id` (`field_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -139,4 +139,4 @@ CREATE TABLE IF NOT EXISTS `cf_enabled_blocks` (
 	`model_id` int(11) NOT NULL DEFAULT 0,
   `model_type_name` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`block_id`,`model_id`,`model_type_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

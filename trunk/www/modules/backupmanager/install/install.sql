@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `bm_settings` (
   `sources` varchar(255) NOT NULL DEFAULT '/etc /home',
   `running` BOOLEAN NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `bm_settings`

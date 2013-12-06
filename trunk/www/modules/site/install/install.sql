@@ -62,7 +62,7 @@ DROP TABLE IF EXISTS `cf_site_sites`;
 CREATE TABLE IF NOT EXISTS `cf_site_sites` (
   `model_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`model_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -74,7 +74,7 @@ DROP TABLE IF EXISTS `cf_site_content`;
 CREATE TABLE IF NOT EXISTS `cf_site_content` (
   `model_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`model_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 

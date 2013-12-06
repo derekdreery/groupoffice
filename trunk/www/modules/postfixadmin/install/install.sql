@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `pa_aliases` (
   PRIMARY KEY  (`id`),
   KEY `address` (`address`),
   KEY `domain_id` (`domain_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Postfix Admin - Virtual Aliases';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Postfix Admin - Virtual Aliases';
 
 -- --------------------------------------------------------
 
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `pa_domains` (
   `acl_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `domain` (`domain`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Postfix Admin - Virtual Domains';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Postfix Admin - Virtual Domains';
 
 
 -- --------------------------------------------------------
@@ -80,5 +80,5 @@ CREATE TABLE IF NOT EXISTS `pa_mailboxes` (
   PRIMARY KEY  (`id`),
   KEY `username` (`username`),
   KEY `go_installation_id` (`go_installation_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Postfix Admin - Virtual Mailboxes';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Postfix Admin - Virtual Mailboxes';
 

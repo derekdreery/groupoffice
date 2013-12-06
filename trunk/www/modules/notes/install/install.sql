@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS `cf_no_notes`;
 CREATE TABLE IF NOT EXISTS `cf_no_notes` (
   `model_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`model_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `go_links_no_notes` (
   PRIMARY KEY `model_id` (`id`,`model_id`,`model_type_id`),
   KEY `id` (`id`,`folder_id`),
   KEY `ctime` (`ctime`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `no_categories` (
   `name` varchar(100) NOT NULL,
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -65,6 +65,6 @@ CREATE TABLE IF NOT EXISTS `no_notes` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `category_id` (`category_id`),
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

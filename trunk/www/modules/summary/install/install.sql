@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `su_announcements` (
   `content` text,
   PRIMARY KEY  (`id`),
   KEY `due_time` (`due_time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `su_notes` (
   `user_id` int(11) NOT NULL,
   `text` text,
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `su_rss_feeds` (
   `url` varchar(255) default NULL,
   `summary` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `su_visible_lists` (
   `user_id` int(11) NOT NULL,
   `tasklist_id` int(11) NOT NULL,
   PRIMARY KEY  (`user_id`,`tasklist_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -68,4 +68,4 @@ CREATE TABLE IF NOT EXISTS `su_visible_calendars` (
   `user_id` int(11) NOT NULL,
   `calendar_id` int(11) NOT NULL,
   PRIMARY KEY  (`user_id`,`calendar_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
