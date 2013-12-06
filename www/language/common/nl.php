@@ -641,3 +641,5 @@ $l['importFileType'] = 'Bestandtype voor import';
 $l['maybeMaxUploadExceeded'] = 'De server ontving niet de vereiste parameters van uw browser. Mogelijk is de maximale uploadgrootte van %sMb overschreden.';
 
 $l['relationDeleteRestrict']="U kunt dit %s niet verwijderen omdat het '%s' items bevat. Verwijder deze eerst aub.";
+
+$l['dependenciesCannotDelete']="Deze module kan niet verwijderd worden, omdat de volgende (geïnstalleerde) modules het nodig hebben: %s.";
