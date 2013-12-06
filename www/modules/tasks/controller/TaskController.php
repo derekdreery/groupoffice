@@ -172,6 +172,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		
+		$columnModel->formatColumn('completion_time','$model->getAttribute("completion_time","formatted")',array(),array('incomplete','completion_time'));
 		$columnModel->formatColumn('completed','$model->status=="COMPLETED" ? 1 : 0');
 //		$columnModel->formatColumn('status', '$l["statuses[\'".$model->status."\']"');
 		//$columnModel->formatColumn('category_name','$model->category->name',array(),'category_id');
@@ -220,7 +221,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 				->addModel(GO_Tasks_Model_Task::model(),'t')
 					)										
 			//->select('t.*, tl.name AS tasklist_name')
-			->select($fields.', tl.name AS tasklist_name, cat.name AS category_name')
+			->select($fields.', tl.name AS tasklist_name, cat.name AS category_name, completion_time=0 AS incomplete')
 			->joinModel(array(
 					'model'=>'GO_Tasks_Model_Tasklist',					
 					'localField'=>'tasklist_id',

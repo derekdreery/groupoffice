@@ -246,7 +246,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		$sortCount = count($sort);
 		$dirCount = count($dir);
 		for($i=0;$i<$sortCount-$dirCount;$i++){
-			$dir[]=$dir[0];
+			$dir[]=$dir[$dirCount-1];
 		}
 		
 		$sort = array_merge($sort, $this->_extraSortColumnNames);
