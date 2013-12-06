@@ -345,7 +345,20 @@ class GO_Site_Components_UrlManager
 		}
 		return $res;
 	}
-
+	
+	/**
+	 * Checks if the url includes the http/https/ftp :// tag
+	 * If it doesn't include that then it adds http:// to the url
+	 * 
+	 * @param string $url
+	 * @return string
+	 */
+	public function addHttp($url) {
+		if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
+			$url = "http://" . $url;
+		}
+		return $url;
+	}
 }
 
 

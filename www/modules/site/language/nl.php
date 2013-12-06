@@ -119,3 +119,17 @@ $l["imageExample"] = "Voorbeeld afbeelding";
 
 $l["notImplementedYet"] = "Nog niet geimplementeerd";
 $l["otherOptions"] = "Overige opties";
+
+$l["linkEditor"] = "Link invoegen";
+
+$l["linkTitle"] = "Link titel";
+$l["linkToContent"] = "Link naar content";
+$l["linkToContentText"] = "Maak een link naar een content item binnen deze site. Dubbelklik op een item om hem te selecteren.";
+$l["linkToFile"] = "Link naar bestand";
+$l["linkToFileText"] = "Maak een link naar een bestand dat is geupload binnen de site.";
+$l["linkToUrl"] = "Link naar url";
+$l["linkToUrlText"] = "U kunt u ook aangepaste links maken. Begin de url met http(s):// ";
+$l["url"] = "Url";
+$l["file"] = "Bestand";
+$l["openInNewWindow"] = "Openen in nieuw venster";
+$l["selectFile"] = "Bestand selecteren";

@@ -124,5 +124,48 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 
 		return $model;
 	}
+	
+	public function actionContentTree($params){
+		$response=array();
+	
+		if(empty($params['site_id']))
+			Throw new Exception('No Site ID given!');
+				
+		if(!isset($params['node']))
+			return $response;
+		
+		$site = GO_Site_Model_Site::model()->findByPk($params['site_id']);
+		
+		$args = explode('_', $params['node']);
+		
+		$siteId = $args[0];
+		
+		if(!isset($args[1]))
+			$type = 'root';
+		else
+			$type = $args[1];
+		
+		if(isset($args[2]))
+			$parentId = $args[2];
+		else
+			$parentId = null;
+		
+		switch($type){
+			case 'content':
+				if($parentId === null){
+					$response = $site->loadContentNodes();
+				} else {
+					$parentNode = GO_Site_Model_Content::model()->findByPk($parentId);
+					if($parentNode)
+						$response = $parentNode->getChildrenTree();
+				}
+				break;
+//			case 'news':
+//				$response = GO_Site_Model_News::getTreeNodes($site);
+//				break;
+		}
+		
+		echo $this->renderJson($response);
+	}
 }
 ?>

@@ -222,7 +222,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 					'content_id'=>$content->id,
 					'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
 					//'expanded' => !$hasChildren,
-					'expanded' => self::isExpandedNode($this->id.'_content_'.$content->id),
+					'expanded' => !$hasChildren || self::isExpandedNode($this->id.'_content_'.$content->id),
 					'hasChildren' => $hasChildren,
 					'children'=> $hasChildren ? $content->getChildrenTree() : array(),
 					'text' => $content->title

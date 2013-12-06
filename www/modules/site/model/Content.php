@@ -333,6 +333,13 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 
 	 public static function replaceContentTags($content=''){
 
+		 $links = GO_Base_Util_TagParser::getTags('site:link', $content);
+		 
+		 foreach($links as $link){
+			 $template = self::processLink($link['params'],$link['xml']);
+			 $content = str_replace($link['xml'], $template, $content);
+		 }
+		 
 		 $images = GO_Base_Util_TagParser::getTags('site:img', $content);
 		 
 		 foreach($images as $image){
@@ -342,6 +349,64 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 
 		 return $content;
 	 }
+	 
+	 public static function processLink($linkAttr, $completeXml) {
+
+		$html = '<a';
+
+		switch ($linkAttr['linktype']) {
+			case 'content':
+				// $linkAttr['contentid'] = '1';
+
+				if (empty($linkAttr['contentid']))
+					$linkAttr['contentid'] = '0';
+
+				$content = GO_Site_Model_Content::model()->findByPk((int) $linkAttr['contentid']);
+
+				if ($content)
+					$url = $content->url;
+				else
+					$url = '#';
+
+				$html .= ' href="' . $url . '"';
+				break;
+			case 'file':
+				// $linkAttr['path'] = 'public/site/1/files/1/contract.png';
+
+				if (empty($linkAttr['path']))
+					$linkAttr['path'] = '#';
+
+				$html .= ' href="' . Site::file($linkAttr['path'], false) . '"';
+				break;
+			case 'manual':
+				// $linkAttr['url'] = 'www.google.nl';
+
+				if (empty($linkAttr['url']))
+					$linkAttr['url'] = '#';
+
+				$html .= ' href="' . $linkAttr['url'] . '"';
+				break;
+		}
+
+		if (isset($linkAttr['target']))
+			$html .= ' target="_blank"';
+
+		if (!empty($linkAttr['title']))
+			$html .= ' title="' . $linkAttr['title'] . '"';
+
+		$html .= '>';
+
+		preg_match('/(<a[^>]*>)(.*?)(<\/a>)/i', $completeXml, $matches);
+
+		if (isset($matches[2]))
+			$html .= $matches[2];
+		else
+			$html .= 'LINK';
+
+		$html .= '</a>';
+
+		return $html;
+	}
 	 
 	 public static function processImage($imageAttr){
 		 
