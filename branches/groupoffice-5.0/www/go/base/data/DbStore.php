@@ -291,7 +291,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 			$sortCount = count($sort);
 			$dirCount = count($dir);
 			for ($i = 0; $i < $sortCount - $dirCount; $i++)
-				$dir[] = $dir[0];
+				$dir[] = $dir[$dirCount-1];
 
 
 		$findParams = GO_Base_Db_FindParams::newInstance()
