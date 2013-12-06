@@ -67,8 +67,10 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractJsonController
 
 		//add extra fields to 'data' array of jsonresponse
 		$extraFields = array('encrypted' => $model->encrypted);
-		if ($model->encrypted)
+		
+		if ($model->encrypted){
 			$extraFields['content'] = GO::t('contentEncrypted');
+		}
 
 		echo $this->renderForm($model, $remoteComboFields, $extraFields);
 	}
