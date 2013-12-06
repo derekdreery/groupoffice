@@ -11,6 +11,7 @@
 - Autolink a contact will check if the same contact is not already selected in the link field
 - Hard-deleting a user works again in the Users module
 - Removed some calendar event data from response when event is private.
+- Copy resources with event too
 
 29-11-2013 5.0.26
 - Check if meeting request has relevant updates before reimporting it when accepting in the mail

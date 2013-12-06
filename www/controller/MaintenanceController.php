@@ -298,12 +298,12 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
 		
 		//inserting is much faster without full text index. It's faster to add it again afterwards.
-		echo "Dropping full text search index\n";
-		try{
-			GO::getDbConnection()->query("ALTER TABLE go_search_cache DROP INDEX ft_keywords");
-		}catch(Exception $e){
-			echo $e->getMessage()."\n";
-		}
+//		echo "Dropping full text search index\n";
+//		try{
+//			GO::getDbConnection()->query("ALTER TABLE go_search_cache DROP INDEX ft_keywords");
+//		}catch(Exception $e){
+//			echo $e->getMessage()."\n";
+//		}
 				
 		$models=GO::findClasses('model');
 		foreach($models as $model){
@@ -316,8 +316,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
 		
-		echo "Adding full text search index\n";
-		GO::getDbConnection()->query("ALTER TABLE `go_search_cache` ADD FULLTEXT ft_keywords(`name` ,`keywords`);");
+//		echo "Adding full text search index\n";
+//		GO::getDbConnection()->query("ALTER TABLE `go_search_cache` ADD FULLTEXT ft_keywords(`name` ,`keywords`);");
 		
 		echo "\n\nAll done!\n\n";
 		
@@ -1068,5 +1068,21 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			}
 		}
 		
+	}
+	
+	
+	protected function actionConvertToInnoDB(){
+		$stmt = GO::getDbConnection()->query("SHOW TABLES");
+		$stmt->setFetchMode(PDO::FETCH_NUM);
+		
+		foreach($stmt as $record){
+			
+			if($record[0]!='fs_filesearch'){//filesearch requires fulltext index
+				$sql = "ALTER TABLE `".$record[0]."` ENGINE=InnoDB;";
+				echo $sql."\n";
+			}
+			
+			
+		}
 	}
 }
