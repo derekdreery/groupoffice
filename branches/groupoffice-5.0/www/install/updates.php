@@ -374,3 +374,6 @@ CHANGE `th_work_hours` `th_work_hours` DOUBLE NOT NULL DEFAULT '8',
 CHANGE `fr_work_hours` `fr_work_hours` DOUBLE NOT NULL DEFAULT '8',
 CHANGE `sa_work_hours` `sa_work_hours` DOUBLE NOT NULL DEFAULT '0',
 CHANGE `su_work_hours` `su_work_hours` DOUBLE NOT NULL DEFAULT '0';";
+
+
+$updates['201312061137'][]="ALTER TABLE go_search_cache DROP INDEX ft_keywords;";
