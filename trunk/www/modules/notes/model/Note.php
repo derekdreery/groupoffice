@@ -104,7 +104,32 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 		return $attr;
 	}
 	
+	public $userInputPassword1;
+	public $userInputPassword2;
 	
+	public function validate() {
+		
+		if (!empty($this->userInputPassword1) || !empty($this->userInputPassword2)) {
+			if ($this->userInputPassword1 != $this->userInputPassword2){
+				$this->setValidationError('password', GO::t('passwordMatchError'));
+			}				
+		}
+				
+		return parent::validate();
+	}
+	
+	protected function beforeSave() {
+		
+		if(!empty($this->userInputPassword1)){
+			$this->password = crypt($this->userInputPassword1);
+			$this->content = GO_Base_Util_Crypt::encrypt($this->content, $this->userInputPassword1);
+		}else
+		{
+			$this->password="";
+		}		
+		
+		return parent::beforeSave();
+	}
 	
 	
 	
@@ -122,11 +147,5 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 			$this->content = GO_Base_Util_Crypt::decrypt($this->content, $password);
 			return true;
 		}
-	}
-	
-	public function encrypt($password){
-		$this->content = GO_Base_Util_Crypt::encrypt($this->content, $password);
-		$this->password = $password;
-	}
-		
+	}		
 }
