@@ -244,3 +244,13 @@ $l['usedResources'] = 'Used resources';
 
 $l['shareCalendarsCron'] = 'Update the shared calendar files';
 $l['shareCalendarsCronDescription'] = 'Update the shared calendar files of the calendars that are published';
+
+$l['cmdPrintView'] = 'Print current view';
+$l['cmdPrintCategoryCount'] = 'Print count per category';
+$l['startDate'] = 'Start date';
+$l['endDate'] = 'End date';
+$l['eventsPerCategoryCount'] = 'Number of events for each category';
+$l['nextMonth'] = 'Next month';
+$l['previousMonth'] = 'Previous month';
+$l['till'] = 'till';
+$l['total'] = 'Total';
