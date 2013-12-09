@@ -366,7 +366,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //		
 //		if(empty($srcFileName))
 //		{
-//			$file = new \GO_Base_Fs_File($this->_getPhotoPath());
+//			$file = new \GO\Base\Fs\File($this->_getPhotoPath());
 //			return !$file->exists() || $file->delete();
 //		}else
 //		{		
@@ -401,14 +401,14 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * Get the photo file object. It always returns a file even though it doesn't
 	 * exist. Use $contact->photoFile->exists() to detect that.
 	 * 
-	 * @return \GO_Base_Fs_File
+	 * @return \GO\Base\Fs\File
 	 */
 	public function getPhotoFile(){
 		if(!isset($this->_photoFile)){
 			if(empty($this->photo))
 				$this->photo=$this->id.'.jpg';
 		
-			$this->_photoFile = new \GO_Base_Fs_File(\GO::config()->file_storage_path.$this->photo);
+			$this->_photoFile = new \GO\Base\Fs\File(\GO::config()->file_storage_path.$this->photo);
 		}
 		
 		return $this->_photoFile;
@@ -468,9 +468,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * Set new photo file. The file will be converted into JPEG and resized to fit
 	 * a 480x640 pixel box
 	 * 
-	 * @param GO_Base_Fs_File $file
+	 * @param GO\Base\Fs\File $file
 	 */
-	public function setPhoto(GO_Base_Fs_File $file){
+	public function setPhoto(GO\Base\Fs\File $file){
 		
 		if($this->isNew)
 			Throw new \Exception("Cannot save a photo on a new contact that is not yet saved.");
@@ -494,7 +494,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		if(!$img->save($filename, IMAGETYPE_JPEG)){
 			throw new \Exception("Could not save photo!");
 		}
-		$file = new \GO_Base_Fs_File($filename);
+		$file = new \GO\Base\Fs\File($filename);
 //		}else
 //		{		
 //			$file->move($photoPath, $this->id.'.'.strtolower($file->extension()));
@@ -555,7 +555,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			switch ($vobjProp->name) {
 				case 'PHOTO':					
 					if($vobjProp->getValue()){
-						$photoFile = \GO_Base_Fs_File::tempFile('','jpg');
+						$photoFile = \GO\Base\Fs\File::tempFile('','jpg');
 						$photoFile->putContents($vobjProp->getValue());
 					}
 					break;

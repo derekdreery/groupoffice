@@ -88,7 +88,7 @@ class GO_Base_Export_ExportXLS extends GO_Base_Export_AbstractExport {
 		$writer = PHPExcel_IOFactory::createWriter($this->phpExcel, 'Excel5');
 		//$tmpFilename = tempnam('./temp', 'tmp');
 		
-		$file = \GO_Base_Fs_File::tempFile();
+		$file = \GO\Base\Fs\File::tempFile();
 		$writer->save($file->path());
 		
 		$file->output();

@@ -414,7 +414,7 @@ class GO_Base_Module extends GO_Base_Observable {
 			$items = $folder->ls();
 			
 			foreach($items as $item){
-				if($item instanceof GO_Base_Fs_File){
+				if($item instanceof GO\Base\Fs\File){
 					
 					$subParts = explode('/', $subfolder);
 					$subParts=array_map("ucfirst", $subParts);

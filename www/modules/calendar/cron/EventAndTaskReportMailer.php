@@ -78,7 +78,7 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	 */
 	private function _sendEmail(GO_Base_Model_User $user,$pdf){
 		
-		$filename = \GO_Base_Fs_File::stripInvalidChars($user->name).'.pdf'; //Set the PDF filename
+		$filename = \GO\Base\Fs\File::stripInvalidChars($user->name).'.pdf'; //Set the PDF filename
 		$filename = str_replace(',', '', $filename);
 		
 		$mailSubject = \GO::t('cronEventAndTaskReportMailerSubject','calendar');

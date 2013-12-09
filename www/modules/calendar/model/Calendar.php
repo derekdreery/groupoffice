@@ -151,7 +151,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		 }
 		}
 		
-		$file = new \GO_Base_Fs_File($this->getPublicIcsPath());
+		$file = new \GO\Base\Fs\File($this->getPublicIcsPath());
 		
 		if(!$this->public){
 			if($file->exists())

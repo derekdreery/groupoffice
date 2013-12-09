@@ -86,7 +86,7 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	protected function actionThumb($params){
 			
 		$rootFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'site/'.Site::model()->id);
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'site/'.Site::model()->id.'/'.$params['src']);
+		$file = new GO\Base\Fs\File(GO::config()->file_storage_path.'site/'.Site::model()->id.'/'.$params['src']);
 		$folder = $file->parent();
 		
 		$ok = $folder->isSubFolderOf($rootFolder);

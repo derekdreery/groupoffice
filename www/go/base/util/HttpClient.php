@@ -126,7 +126,7 @@ class GO_Base_Util_HttpClient{
 		if(isset($this->lastHeaders['Content-Disposition']) && preg_match('/filename="(.*)"/', $this->lastHeaders['Content-Disposition'], $matches))
 			return $matches[1];
 		
-		$filename = \GO_Base_Fs_File::utf8Basename($this->_lastDownloadUrl);
+		$filename = \GO\Base\Fs\File::utf8Basename($this->_lastDownloadUrl);
 		
 		if(!empty($filename))
 			return $filename;
@@ -139,11 +139,11 @@ class GO_Base_Util_HttpClient{
 	 * Download a file
 	 * 
 	 * @param string $url
-	 * @param GO_Base_Fs_File $outputFile
+	 * @param GO\Base\Fs\File $outputFile
 	 * @param array $params
 	 * @return boolean
 	 */
-	public function downloadFile($url, GO_Base_Fs_File $outputFile, $params=array()){
+	public function downloadFile($url, GO\Base\Fs\File $outputFile, $params=array()){
 		
 		$this->_lastDownloadUrl = $url;
 		

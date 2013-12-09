@@ -114,7 +114,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$john->skype_name='echo123';
 			
 			$john->save();
-			$john->setPhoto(new \GO_Base_Fs_File(\GO::modules()->addressbook->path . 'install/noperson.jpg'));
+			$john->setPhoto(new \GO\Base\Fs\File(\GO::modules()->addressbook->path . 'install/noperson.jpg'));
 			$john->save();
 		}
 
@@ -175,14 +175,14 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$wile->skype_name='test';
 
 			$wile->save();
-			$wile->setPhoto(new \GO_Base_Fs_File(\GO::modules()->addressbook->path . 'install/wecoyote.png'));
+			$wile->setPhoto(new \GO\Base\Fs\File(\GO::modules()->addressbook->path . 'install/wecoyote.png'));
 			$wile->save();
 
 			$wile->addComment("Wile E. Coyote (also known simply as \"The Coyote\") and The Road Runner are a duo of cartoon characters from a series of Looney Tunes and Merrie Melodies cartoons. The characters (a coyote and Greater Roadrunner) were created by animation director Chuck Jones in 1948 for Warner Bros., while the template for their adventures was the work of writer Michael Maltese. The characters star in a long-running series of theatrical cartoon shorts (the first 16 of which were written by Maltese) and occasional made-for-television cartoons.");
 
 			$wile->addComment("In each episode, instead of animal senses and cunning, Wile E. Coyote uses absurdly complex contraptions (sometimes in the manner of Rube Goldberg) and elaborate plans to pursue his quarry. It was originally meant to parody chase cartoons like Tom and Jerry, but became popular in its own right, much to Jones' chagrin.");
 
-			$file = new \GO_Base_Fs_File(\GO::modules()->addressbook->path . 'install/Demo letter.docx');
+			$file = new \GO\Base\Fs\File(\GO::modules()->addressbook->path . 'install/Demo letter.docx');
 			$copy = $file->copy($wile->filesFolder->fsFolder);
 
 			$wile->filesFolder->addFile($copy->name());
@@ -786,21 +786,21 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 		if(\GO::modules()->files){
 			
 			$demoHome = \GO_Files_Model_Folder::model()->findHomeFolder($demo);
-			$file = new \GO_Base_Fs_File(\GO::modules()->files->path.'install/templates/empty.docx');
+			$file = new \GO\Base\Fs\File(\GO::modules()->files->path.'install/templates/empty.docx');
 			$copy = $file->copy($demoHome->fsFolder);
 			
-			$file = new \GO_Base_Fs_File(\GO::modules()->files->path.'install/templates/empty.odt');
-			$copy = $file->copy($demoHome->fsFolder);
-			
-			
-			$file = new \GO_Base_Fs_File(\GO::modules()->addressbook->path . 'install/Demo letter.docx');
+			$file = new \GO\Base\Fs\File(\GO::modules()->files->path.'install/templates/empty.odt');
 			$copy = $file->copy($demoHome->fsFolder);
 			
 			
-			$file = new \GO_Base_Fs_File(\GO::modules()->addressbook->path . 'install/wecoyote.png');
+			$file = new \GO\Base\Fs\File(\GO::modules()->addressbook->path . 'install/Demo letter.docx');
 			$copy = $file->copy($demoHome->fsFolder);
 			
-			$file = new \GO_Base_Fs_File(\GO::modules()->addressbook->path . 'install/noperson.jpg');
+			
+			$file = new \GO\Base\Fs\File(\GO::modules()->addressbook->path . 'install/wecoyote.png');
+			$copy = $file->copy($demoHome->fsFolder);
+			
+			$file = new \GO\Base\Fs\File(\GO::modules()->addressbook->path . 'install/noperson.jpg');
 			$copy = $file->copy($demoHome->fsFolder);
 			
 			//add files to db.
@@ -1170,7 +1170,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 		
 		if(\GO::modules()->savemailas){
 			//link some demo mails
-			$mimeFile = new \GO_Base_Fs_File(\GO::modules()->savemailas->path.'install/demo.eml');			
+			$mimeFile = new \GO\Base\Fs\File(\GO::modules()->savemailas->path.'install/demo.eml');			
 			\GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $wile);
 			\GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $john);
 			if(\GO::modules()->projects){
@@ -1178,7 +1178,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				\GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $launcherProject);
 			}
 			
-			$mimeFile = new \GO_Base_Fs_File(\GO::modules()->savemailas->path.'install/demo2.eml');
+			$mimeFile = new \GO\Base\Fs\File(\GO::modules()->savemailas->path.'install/demo2.eml');
 			\GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $wile);
 			\GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $john);
 			if(\GO::modules()->projects){

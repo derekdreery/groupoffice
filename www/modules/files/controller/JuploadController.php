@@ -87,13 +87,13 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 					$originalFileName = $uploadedFile['name'];
 					$uploadedFile['name'] = $uploadedFile['name'] . '.part' . $params['jupart'];
 					$chunkTmpFolder->create();
-					\GO_Base_Fs_File::moveUploadedFiles($uploadedFile, $chunkTmpFolder);
+					\GO\Base\Fs\File::moveUploadedFiles($uploadedFile, $chunkTmpFolder);
 					if (!empty($params['jufinal'])) {
-						$file = new \GO_Base_Fs_File($tmpFolder . '/' . $originalFileName);
+						$file = new \GO\Base\Fs\File($tmpFolder . '/' . $originalFileName);
 
 						$fp = fopen($file->path(), 'w+');
 						for ($i = 1; $i <= $params['jupart']; $i++) {
-							$part = new \GO_Base_Fs_File($chunkTmpFolder . '/' . $originalFileName . '.part' . $i);
+							$part = new \GO\Base\Fs\File($chunkTmpFolder . '/' . $originalFileName . '.part' . $i);
 							fwrite($fp, $part->contents());
 							$part->delete();
 						}
@@ -105,7 +105,7 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 						return;
 					}
 				} else {
-					$files = \GO_Base_Fs_File::moveUploadedFiles($uploadedFile, $tmpFolder);
+					$files = \GO\Base\Fs\File::moveUploadedFiles($uploadedFile, $tmpFolder);
 					if(!$files)
 						throw new \Exception("No file received");
 					

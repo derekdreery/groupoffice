@@ -24,8 +24,8 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 	protected function beforeSubmit(&$response, &$model, &$params) {
 
 		if (isset($_FILES['attachments']['tmp_name'][0]) && is_uploaded_file($_FILES['attachments']['tmp_name'][0])) {
-			$file = new \GO_Base_Fs_File($_FILES['attachments']['tmp_name'][0]);
-			$fileWithName = new \GO_Base_Fs_File($_FILES['attachments']['name'][0]);
+			$file = new \GO\Base\Fs\File($_FILES['attachments']['tmp_name'][0]);
+			$fileWithName = new \GO\Base\Fs\File($_FILES['attachments']['name'][0]);
 			$model->content = $file->contents();
 			$model->extension = $fileWithName->extension();
 		}
@@ -35,7 +35,7 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		
-		$columnModel->formatColumn('type', '\GO_Base_Fs_File::getFileTypeDescription($model->extension)');
+		$columnModel->formatColumn('type', '\GO\Base\Fs\File::getFileTypeDescription($model->extension)');
 		
 		return parent::formatColumns($columnModel);
 	}
@@ -52,14 +52,14 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 	protected function actionDownload($params){
 		$template = \GO_Files_Model_Template::model()->findByPk($params['id']);
 		
-	  \GO_Base_Util_Http::outputDownloadHeaders(new \GO_Base_Fs_File($template->name.'.'.$template->extension));
+	  \GO_Base_Util_Http::outputDownloadHeaders(new \GO\Base\Fs\File($template->name.'.'.$template->extension));
 		
 		echo $template->content;
 	}
 	
 	protected function actionCreateFile($params){
 		
-		$filename = \GO_Base_Fs_File::stripInvalidChars($params['filename']);
+		$filename = \GO\Base\Fs\File::stripInvalidChars($params['filename']);
 		if(empty($filename))
 			throw new \Exception("Filename can not be empty");
 		
@@ -71,7 +71,7 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 		if(!empty($template->extension))
 			$path .= '.'.$template->extension;
 		
-		$fsFile = new \GO_Base_Fs_File($path);
+		$fsFile = new \GO\Base\Fs\File($path);
 		$fsFile->putContents($template->content);
 		
 		$fileModel = \GO_Files_Model_File::importFromFilesystem($fsFile);

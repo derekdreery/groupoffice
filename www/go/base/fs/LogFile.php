@@ -1,5 +1,5 @@
 <?php
-class GO_Base_Fs_LogFile extends GO_Base_Fs_File{
+class GO_Base_Fs_LogFile extends GO\Base\Fs\File{
 	
 	public function __construct($path) {
 		

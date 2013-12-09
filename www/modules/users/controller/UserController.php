@@ -356,7 +356,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			);
 		}
 		
-		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_Fs_File("users.csv"));
+		GO_Base_Util_Http::outputDownloadHeaders(new GO\Base\Fs\File("users.csv"));
 		
 		$csvFile  = new GO_Base_Csv_Writer('php://output');
 	

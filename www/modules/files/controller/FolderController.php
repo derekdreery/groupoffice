@@ -34,7 +34,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if(!$this->isCli() && !\GO::modules()->tools)
 			throw new \GO_Base_Exception_AccessDenied();
 		
-		$oldAllowDeletes = \GO_Base_Fs_File::setAllowDeletes(false);
+		$oldAllowDeletes = \GO\Base\Fs\File::setAllowDeletes(false);
 
 		\GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '0');
@@ -85,7 +85,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 
 		if(!isset($params['path'])){
-			\GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
+			\GO\Base\Fs\File::setAllowDeletes($oldAllowDeletes);
 			$folders = array('email', 'billing/notifications');
 
 			foreach($folders as $name){
@@ -852,7 +852,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$record['readonly']=$model->readonly;
 		} else {
 			$record['type_id'] = 'f:' . $model->id;
-			$record['type'] = \GO_Base_Fs_File::getFileTypeDescription($model->extension);
+			$record['type'] = \GO\Base\Fs\File::getFileTypeDescription($model->extension);
 			$record['extension'] = strtolower($model->extension);
 			$record['size']=$model->size;
 			$record['permission_level']=$this->_listFolderPermissionLevel;
@@ -1036,7 +1036,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 
 	public function checkModelFolder(GO_Base_Db_ActiveRecord $model, $saveModel=false, $mustExist=false) {
-		$oldAllowDeletes = \GO_Base_Fs_File::setAllowDeletes(false);
+		$oldAllowDeletes = \GO\Base\Fs\File::setAllowDeletes(false);
 
 		$folder = false;
 		if ($model->files_folder_id > 0){
@@ -1065,7 +1065,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if(empty($model->files_folder_id))
 			$model->files_folder_id=0;
 
-		 \GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
+		 \GO\Base\Fs\File::setAllowDeletes($oldAllowDeletes);
 
 		return $model->files_folder_id;
 	}
@@ -1094,7 +1094,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				}
 			} else {
 
-				$file = new \GO_Base_Fs_File($tmpfile);
+				$file = new \GO\Base\Fs\File($tmpfile);
 				if($file->exists()){
 
 					$existingFile = $destinationFolder->hasFile($file->name());
@@ -1141,7 +1141,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$workingFolder = \GO_Files_Model_Folder::model()->findByPk($params['working_folder_id']);
 		$destinationFolder = \GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
-		$archiveFile = new \GO_Base_Fs_File(\GO::config()->file_storage_path.$destinationFolder->path . '/' . $params['archive_name'] . '.zip');
+		$archiveFile = new \GO\Base\Fs\File(\GO::config()->file_storage_path.$destinationFolder->path . '/' . $params['archive_name'] . '.zip');
 		
 		if($archiveFile->exists())
 			throw new \Exception(sprintf(\GO::t('filenameExists','files'), $archiveFile->stripFileStoragePath()));
@@ -1177,7 +1177,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 
 		while ($filePath = array_shift($sources)) {
-			$file = new \GO_Base_Fs_File(\GO::config()->file_storage_path.$filePath);
+			$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.$filePath);
 			switch(strtolower($file->extension())) {
 				case 'zip':					
 					
@@ -1274,7 +1274,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				while ($tmp_file = array_shift($tmp_files)) {
 					if (!empty($tmp_file['tmp_file'])) {
 
-						$file = new \GO_Base_Fs_File(\GO::config()->tmpdir.$tmp_file['tmp_file']);
+						$file = new \GO\Base\Fs\File(\GO::config()->tmpdir.$tmp_file['tmp_file']);
 						$file->move(new \GO_Base_Fs_Folder(\GO::config()->file_storage_path . $folder->path));
 
 						$folder->addFile($file->name());

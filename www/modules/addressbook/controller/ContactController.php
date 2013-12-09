@@ -61,7 +61,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		if (isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
 		
 			
-			$destinationFile = new \GO_Base_Fs_File(\GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
+			$destinationFile = new \GO\Base\Fs\File(\GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
 			
 			move_uploaded_file($_FILES['image']['tmp_name'][0], $destinationFile->path());
 			
@@ -71,7 +71,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			$response['original_photo_url'] = $model->photoURL;
 		}elseif(!empty($params['download_photo_url'])){
 			
-			$file = \GO_Base_Fs_File::tempFile();	
+			$file = \GO\Base\Fs\File::tempFile();	
 			$c = new \GO_Base_Util_HttpClient();
 			
 			if(!$c->downloadFile($params['download_photo_url'], $file))
@@ -527,7 +527,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$account = \GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		$imap = $account->openImapConnection($params['mailbox']);
 		
-		$tmpFile =\GO_Base_Fs_File::tempFile($params['filename'], 'vcf');
+		$tmpFile =\GO\Base\Fs\File::tempFile($params['filename'], 'vcf');
 		$imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
 				
 		$abController = new \GO_Addressbook_Controller_Contact();
@@ -579,7 +579,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			$params['addressbook_id'] = $importBaseParams['addressbook_id'];
 		}
 		
-		$file = new \GO_Base_Fs_File($params['file']);
+		$file = new \GO\Base\Fs\File($params['file']);
 		$file->convertToUtf8();
 		
 		$options = \Sabre\VObject\Reader::OPTION_FORGIVING + \Sabre\VObject\Reader::OPTION_IGNORE_INVALID_LINES;

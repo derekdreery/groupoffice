@@ -24,7 +24,7 @@
  * @copyright Copyright Intermesh BV.
  */
 
-class GO_Base_Fs_CsvFile extends GO_Base_Fs_File{
+class GO_Base_Fs_CsvFile extends GO\Base\Fs\File{
 	public $delimiter=',';
 	
 	public $enclosure='"';

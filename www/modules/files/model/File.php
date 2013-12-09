@@ -37,7 +37,7 @@
  * @property String $downloadUrl
  * 
  * @property String $path
- * @property GO_Base_Fs_File $fsFile
+ * @property GO\Base\Fs\File $fsFile
  * @property GO_Files_Model_Folder $folder
  * @property GO_Base_Model_User $lockedByUser
  */
@@ -195,7 +195,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 
 	/**
 	 * 
-	 * @return \GO_Base_Fs_File
+	 * @return \GO\Base\Fs\File
 	 */
 	private function _getOldFsFile(){
 		
@@ -213,7 +213,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		}else{
 			$oldPath = \GO::config()->file_storage_path . $this->folder->path.'/'.$filename;
 		}
-		return new \GO_Base_Fs_File($oldPath);
+		return new \GO\Base\Fs\File($oldPath);
 	}
 	
 	protected function beforeDelete() {
@@ -326,7 +326,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 
 	protected function getFsFile() {
-		return new \GO_Base_Fs_File(\GO::config()->file_storage_path . $this->path);
+		return new \GO\Base\Fs\File(\GO::config()->file_storage_path . $this->path);
 	}
 	
 	private function _addQuota(){
@@ -480,10 +480,10 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Import a filesystem file into the database.
 	 * 
-	 * @param GO_Base_Fs_File $fsFile
+	 * @param GO\Base\Fs\File $fsFile
 	 * @return GO_Files_Model_File 
 	 */
-	public static function importFromFilesystem(GO_Base_Fs_File $fsFile){
+	public static function importFromFilesystem(GO\Base\Fs\File $fsFile){
 		
 		$folderPath = str_replace(\GO::config()->file_storage_path,"",$fsFile->parent()->path());
 		
@@ -494,9 +494,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Replace filesystem file with given file.
 	 * 
-	 * @param GO_Base_Fs_File $fsFile 
+	 * @param GO\Base\Fs\File $fsFile 
 	 */
-	public function replace(GO_Base_Fs_File $fsFile, $isUploadedFile=false){
+	public function replace(GO\Base\Fs\File $fsFile, $isUploadedFile=false){
 		
 		if($this->isLocked())
 			throw new \GO_Files_Exception_FileLocked();
@@ -546,7 +546,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			return false;
 		else
 		{
-			return $folder->hasFile(\GO_Base_Fs_File::utf8Basename($relpath),$caseSensitive);
+			return $folder->hasFile(\GO\Base\Fs\File::utf8Basename($relpath),$caseSensitive);
 		}
 		
 	}

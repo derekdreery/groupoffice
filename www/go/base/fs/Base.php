@@ -56,11 +56,11 @@ abstract class GO_Base_Fs_Base{
 	 * Create a folder or file from a path string
 	 * 
 	 * @param string $path
-	 * @return GO_Base_Fs_File|GO_Base_Fs_Folder
+	 * @return GO\Base\Fs\File|GO_Base_Fs_Folder
 	 */
 	public static function createFromPath($path){
 		if(is_file($path))
-			return new \GO_Base_Fs_File($path);
+			return new \GO\Base\Fs\File($path);
 		else
 			return new \GO_Base_Fs_Folder ($path);
 	}
@@ -98,12 +98,12 @@ abstract class GO_Base_Fs_Base{
 	 * Get a child file or folder.
 	 * 
 	 * @param string $filename
-	 * @return \GO_Base_Fs_File|\GO_Base_Fs_Folder|boolean 
+	 * @return \GO\Base\Fs\File|\GO_Base_Fs_Folder|boolean 
 	 */
 	public function child($filename){
 		$childPath = $this->path.'/'.$filename;
 		if(is_file($childPath)){
-			return new \GO_Base_Fs_File($childPath);
+			return new \GO\Base\Fs\File($childPath);
 		} elseif(is_dir($childPath)){
 			return new \GO_Base_Fs_Folder($childPath);
 		}else
@@ -117,12 +117,12 @@ abstract class GO_Base_Fs_Base{
 	 * 
 	 * @param string $filename
 	 * @param boolean $isFile
-	 * @return \GO_Base_Fs_File|\GO_Base_Fs_Folder 
+	 * @return \GO\Base\Fs\File|\GO_Base_Fs_Folder 
 	 */
 	public function createChild($filename, $isFile=true){
 		$childPath = $this->path.'/'.$filename;
 		if($isFile){
-			return new \GO_Base_Fs_File($childPath);
+			return new \GO\Base\Fs\File($childPath);
 		} else{
 			return new \GO_Base_Fs_Folder($childPath);
 		}

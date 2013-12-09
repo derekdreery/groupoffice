@@ -332,7 +332,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 		foreach($allMatches as $matches){
 			if($matches[2]=='base64'){
 				$extension = $matches[1];
-				$tmpFile = \GO_Base_Fs_File::tempFile('', $extension);
+				$tmpFile = \GO\Base\Fs\File::tempFile('', $extension);
 				$tmpFile->putContents(base64_decode($matches[3]));
 
 				$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
@@ -421,13 +421,13 @@ class GO_Base_Mail_Message extends Swift_Message{
 				 if(count($inlineAttachments)){
 					foreach ($inlineAttachments as $ia) {
 
-						//$tmpFile = new \GO_Base_Fs_File(\GO::config()->tmpdir.$ia['tmp_file']);
+						//$tmpFile = new \GO\Base\Fs\File(\GO::config()->tmpdir.$ia['tmp_file']);
 						if(empty($ia->tmp_file)){
 							throw new \Exception("No temp file for inline attachment ".$ia->name);
 						}
 
 						$path = empty($ia->from_file_storage) ? \GO::config()->tmpdir.$ia->tmp_file : \GO::config()->file_storage_path.$ia->tmp_file;
-						$tmpFile = new \GO_Base_Fs_File($path);
+						$tmpFile = new \GO\Base\Fs\File($path);
 
 						if ($tmpFile->exists()) {				
 							//Different browsers reformat URL's to absolute or relative. So a pattern match on the filename.
@@ -480,7 +480,7 @@ body p{
 			$attachments = json_decode($params['attachments']);
 			foreach ($attachments as $att) {
 				$path = empty($att->from_file_storage) ? \GO::config()->tmpdir.$att->tmp_file : \GO::config()->file_storage_path.$att->tmp_file;
-				$tmpFile = new \GO_Base_Fs_File($path);
+				$tmpFile = new \GO\Base\Fs\File($path);
 				if ($tmpFile->exists()) {
 					$file = Swift_Attachment::fromPath($tmpFile->path());
 					$file->setContentType($tmpFile->mimeType());

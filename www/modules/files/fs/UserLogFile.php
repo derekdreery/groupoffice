@@ -4,7 +4,7 @@
  * command. It is created in the current user's personal root folder the first
  * time the log() method is used to write data into it.
  */
-class GO_Files_Fs_UserLogFile extends GO_Base_Fs_File{
+class GO_Files_Fs_UserLogFile extends GO\Base\Fs\File{
 	
 	
 	

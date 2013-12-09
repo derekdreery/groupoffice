@@ -56,7 +56,7 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 		if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
 			throw new Exception($lang['common']['noFileUploaded']);
 		}else {
-			$file = new GO_Base_Fs_File($_FILES['ical_file']['tmp_name'][0]);
+			$file = new GO\Base\Fs\File($_FILES['ical_file']['tmp_name'][0]);
 			$file->convertToUtf8();
 			$contents = $file->getContents();
 			$vcal = GO_Base_VObject_Reader::read($contents);
@@ -107,7 +107,7 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 		if(!$tasklist)
 			throw new GO_Base_Exception_NotFound();
 		
-		GO_Base_Fs_File::setAllowDeletes(false);
+		GO\Base\Fs\File::setAllowDeletes(false);
 		//VERY IMPORTANT:
 		GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
 		

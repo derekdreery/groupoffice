@@ -66,7 +66,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 		if($key===false)
 			return true;
 		
-		$key = \GO_Base_Fs_File::stripInvalidChars($key,'-');
+		$key = \GO\Base\Fs\File::stripInvalidChars($key,'-');
 						
 		if($ttl){
 			$this->_ttls[$key]=$this->_time+$ttl;
@@ -85,7 +85,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	 */
 	public function get($key){
 		
-		$key = \GO_Base_Fs_File::stripInvalidChars($key, '-');
+		$key = \GO\Base\Fs\File::stripInvalidChars($key, '-');
 		
 		if(!empty($this->_ttls[$key]) && $this->_ttls[$key]<$this->_time){
 			unlink($this->_dir.$key);
@@ -114,7 +114,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	 * @param string $key 
 	 */
 	public function delete($key){
-		$key = \GO_Base_Fs_File::stripInvalidChars($key, '-');
+		$key = \GO\Base\Fs\File::stripInvalidChars($key, '-');
 		
 		unset($this->_ttls[$key]);
 		$this->_ttlsDirty=true;

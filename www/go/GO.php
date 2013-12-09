@@ -420,6 +420,11 @@ class GO{
 				$path = strtolower(implode('/', $arr));
 				$location =$path.'/'.$file;
 				$baseClassFile = dirname(dirname(__FILE__)) . '/'.$location;
+				if(!file_exists($baseClassFile)){
+					throw new Exception($className);
+					exit();
+				}
+				
 				require($baseClassFile);
 
 			} else if(substr($className,0,4)=='GOFS'){
@@ -1061,7 +1066,7 @@ class GO{
 			$items = $folder->ls();
 
 			foreach($items as $item){
-				if($item instanceof GO_Base_Fs_File){
+				if($item instanceof GO\Base\Fs\File){
 					$className = 'GO_Base_'.ucfirst($subfolder).'_'.$item->nameWithoutExtension();
 					$classes[] = new \ReflectionClass($className);
 				}
@@ -1087,7 +1092,7 @@ class GO{
 			$items = $folder->ls();
 
 			foreach($items as $item){
-				if($item instanceof GO_Base_Fs_File){
+				if($item instanceof GO\Base\Fs\File){
 					$className = 'GOFS_';
 					
 					$subFolders = explode('/', $subfolder);

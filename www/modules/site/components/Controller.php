@@ -175,7 +175,7 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 			$viewName = '/'.$moduleId. '/'.$viewName;	
 		}
 		
-		$file = new GO_Base_Fs_File($module->moduleManager->path() . 'views/site/' . $viewName . '.php');
+		$file = new GO\Base\Fs\File($module->moduleManager->path() . 'views/site/' . $viewName . '.php');
 		if(!$file->exists())
 			throw new Exception("View '$viewName' not found!");
 		

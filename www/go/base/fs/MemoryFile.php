@@ -1,5 +1,5 @@
 <?php
-class GO_Base_Fs_MemoryFile extends GO_Base_Fs_File{
+class GO_Base_Fs_MemoryFile extends GO\Base\Fs\File{
 	
 	private $_data;
 	

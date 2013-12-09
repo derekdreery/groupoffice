@@ -163,7 +163,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		\GO::session()->runAsRoot();
 		
-		\GO_Base_Fs_File::setAllowDeletes(false);
+		\GO\Base\Fs\File::setAllowDeletes(false);
 		//VERY IMPORTANT:
 		\GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
 		
@@ -344,7 +344,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		$response = array();
 		
-		$oldAllowDeletes = \GO_Base_Fs_File::setAllowDeletes(false);
+		$oldAllowDeletes = \GO\Base\Fs\File::setAllowDeletes(false);
 
 		if(!$this->isCli()){
 				echo '<pre>';
@@ -371,7 +371,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				echo '</pre>';
 		}
         
-		\GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
+		\GO\Base\Fs\File::setAllowDeletes($oldAllowDeletes);
 		
 		return $response;
 	}
@@ -623,7 +623,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		echo "Removing cached javascripts...\n\n";	
 		//in some exceptions alowed deletes is still on false here.
-		\GO_Base_Fs_File::setAllowDeletes(true);
+		\GO\Base\Fs\File::setAllowDeletes(true);
 		\GO::clearCache();
 		//rebuild listeners
 		\GO_Base_Observable::cacheListeners();		
@@ -711,7 +711,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				echo '<hr>';
 				
 			} else {
-//				$commonContentEl = new GO_Base_Fs_File();
+//				$commonContentEl = new GO\Base\Fs\File();
 //				$langFileContentString = $commonContentEl->getContents();
 			}
 		}
@@ -770,7 +770,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 */
 	private function _langFieldsToArray($filePath,&$contentArr) {
 		$outputString = '';
-		$langFile = new GO_Base_Fs_File($filePath);
+		$langFile = new GO\Base\Fs\File($filePath);
 		
 		
 		
@@ -939,7 +939,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				if (get_class($commonLangFolder)=='GO_Base_Fs_Folder') {
 					$commonLangFileArr = $commonLangFolder->ls();
 					foreach ($commonLangFileArr as $commonLangFile)
-						if (get_class($commonLangFile)=='GO_Base_Fs_File' && $commonLangFile->name()==$langCode.'.php') {
+						if (get_class($commonLangFile)=='GO\Base\Fs\File' && $commonLangFile->name()==$langCode.'.php') {
 							$fileNames[] = str_replace(\GO::config()->root_path,'',$commonLangFile->path());
 						}
 				}
@@ -957,7 +957,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			}
 		}
 		
-		$tmpFile = \GO_Base_Fs_File::tempFile($langCode.'-'.str_replace('.','-', \GO::config()->version), 'zip');
+		$tmpFile = \GO\Base\Fs\File::tempFile($langCode.'-'.str_replace('.','-', \GO::config()->version), 'zip');
 		
 		//exec zip
 		$cmdString = \GO::config()->cmd_zip.' '.$tmpFile->path().' '.implode(" ", $fileNames);

@@ -355,7 +355,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	
 	protected function actionImportIcs($params){
 		
-		$file = new GO_Base_Fs_File($params['file']);
+		$file = new GO\Base\Fs\File($params['file']);
 		
 		$data = $file->getContents();
 

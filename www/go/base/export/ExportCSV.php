@@ -24,7 +24,7 @@ class GO_Base_Export_ExportCSV extends GO_Base_Export_AbstractExport {
 	public static $useOrientation=false;
 	
 	private function _sendHeaders(){		
-		$file = new \GO_Base_Fs_File($this->title.'.csv');
+		$file = new \GO\Base\Fs\File($this->title.'.csv');
 		\GO_Base_Util_Http::outputDownloadHeaders($file);
 	}
 

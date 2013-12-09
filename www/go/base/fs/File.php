@@ -18,7 +18,9 @@
  * @copyright Copyright Intermesh BV.
  */
 
-class GO_Base_Fs_File extends GO_Base_Fs_Base{
+namespace GO\Base\Fs;
+
+class File extends \GO_Base_Fs_Base{
 	
 	
 	private static $_allowDeletes=true;
@@ -46,7 +48,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * 
 	 * @param string $filename
 	 * @param string $extension
-	 * @return GO_Base_Fs_File 
+	 * @return GO\Base\Fs\File 
 	 */
 	public static function tempFile($filename='',$extension=''){
 		$folder = \GO::config()->getTempFolder();
@@ -59,7 +61,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if(!empty($extension))
 			$p.='.'.$extension;
 		
-		return new \GO_Base_Fs_File($p);
+		return new \GO\Base\Fs\File($p);
 	}
 	
 	
@@ -120,7 +122,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if(self::$_allowDeletes)		
 			return unlink($this->path);
 		else{
-			$errorMsg = "The program tried to delete a file (".$this->stripFileStoragePath().") while \GO_Base_Fs_File::\$allowDeletes is set to false.";
+			$errorMsg = "The program tried to delete a file (".$this->stripFileStoragePath().") while \GO\Base\Fs\File::\$allowDeletes is set to false.";
 			\GO::debug($errorMsg);
 			throw new \Exception($errorMsg);
 		}
@@ -352,7 +354,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		$newPath = $destinationFolder->path().'/'.$newFileName;
 		
 		if($appendNumberToNameIfDestinationExists){
-			$file = new \GO_Base_Fs_File($newPath);
+			$file = new \GO\Base\Fs\File($newPath);
 			$file->appendNumberToNameIfExists();
 			$newPath = $file->path();
 		}
@@ -381,7 +383,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * Copy a file to another folder.
 	 * 
 	 * @param GO_Base_Fs_Folder $destinationFolder 
-	 * @return GO_Base_Fs_File
+	 * @return GO\Base\Fs\File
 	 */
 	public function copy(GO_Base_Fs_Folder $destinationFolder, $newFileName=false){
 		
@@ -403,7 +405,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if(\GO::config()->file_change_group)
 			chgrp($newPath, \GO::config()->file_change_group);
 						
-		return new \GO_Base_Fs_File($newPath);
+		return new \GO\Base\Fs\File($newPath);
 	}
 	
 	/**
@@ -411,7 +413,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * @param array $uploadedFileArray
 	 * @param GO_Base_Fs_Folder  $destinationFolder
 	 * @param boolean $overwrite If false this function will append a number. eg. Filename (1).jpg
-	 * @return GO_Base_Fs_File[]
+	 * @return GO\Base\Fs\File[]
 	 */
 	public static function moveUploadedFiles($uploadedFileArray, $destinationFolder, $overwrite=false){
 		
@@ -423,7 +425,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		$files = array();
 		for($i=0;$i<count($uploadedFileArray['tmp_name']);$i++){
 			if (is_uploaded_file($uploadedFileArray['tmp_name'][$i])) {
-				$destinationFile = new \GO_Base_Fs_File($destinationFolder->path().'/'.$uploadedFileArray['name'][$i]);
+				$destinationFile = new \GO\Base\Fs\File($destinationFolder->path().'/'.$uploadedFileArray['name'][$i]);
 				if(!$overwrite)
 					$destinationFile->appendNumberToNameIfExists();
 
@@ -496,10 +498,10 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	/**
 	 * Compare this file with an other file.
 	 *
-	 * @param GO_Base_Fs_File $file
+	 * @param GO\Base\Fs\File $file
 	 * @return bool True if the file is different, false if file is the same.
 	 */
-	public function diff(GO_Base_Fs_File $file){
+	public function diff(GO\Base\Fs\File $file){
 		if($this->md5Hash() != $file->md5Hash())
 			return true;
 		else

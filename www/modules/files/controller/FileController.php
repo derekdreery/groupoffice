@@ -165,7 +165,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	protected function actionHandlers($params){
 		if(!empty($params['path'])){
 			$folder = \GO_Files_Model_Folder::model()->findByPath(dirname($params['path']));
-			$file = $folder->hasFile(\GO_Base_Fs_File::utf8Basename($params['path']));
+			$file = $folder->hasFile(\GO\Base\Fs\File::utf8Basename($params['path']));
 		}else
 		{
 			$file = \GO_Files_Model_File::model()->findByPk($params['id'], false, true);
@@ -214,7 +214,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		
 		if(isset($params['path'])){
 			$folder = \GO_Files_Model_Folder::model()->findByPath(dirname($params['path']));
-			$file = $folder->hasFile(\GO_Base_Fs_File::utf8Basename($params['path']));
+			$file = $folder->hasFile(\GO\Base\Fs\File::utf8Basename($params['path']));
 		}else
 		{
 			$file = \GO_Files_Model_File::model()->findByPk($params['id'], false, true);

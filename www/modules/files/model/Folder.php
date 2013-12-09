@@ -538,10 +538,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * Add a filesystem file to this folder. The file will be moved to this folder
 	 * and added to the database.
 	 * 
-	 * @param GO_Base_Fs_File $file
+	 * @param GO\Base\Fs\File $file
 	 * @return GO_Files_Model_File 
 	 */
-	public function addFilesystemFile(GO_Base_Fs_File $file){
+	public function addFilesystemFile(GO\Base\Fs\File $file){
 		
 		if(!\GO_Files_Model_File::checkQuota($file->size()))
 			throw new \GO_Base_Exception_InsufficientDiskspace();
@@ -555,7 +555,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * Add a filesystem file to this folder. The file will be moved to this folder
 	 * and added to the database.
 	 * 
-	 * @param GO_Base_Fs_File $file
+	 * @param GO\Base\Fs\File $file
 	 * @return GO_Files_Model_File 
 	 */
 	public function addFilesystemFolder(GO_Base_Fs_Folder $folder){
@@ -571,7 +571,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function addUploadedFile($filesArrayItem){
 		
-		$fsFile = new \GO_Base_Fs_File($filesArrayItem['tmp_name']);
+		$fsFile = new \GO\Base\Fs\File($filesArrayItem['tmp_name']);
 		$fsFile->move($this->fsFolder, $filesArrayItem['name'], true, true);
 		
 		return $this->addFile($fsFile->name());
