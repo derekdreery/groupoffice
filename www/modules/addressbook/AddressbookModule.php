@@ -88,7 +88,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		if (empty($default_language))
 			$default_language = 'US';
 
-		$addressbook = new GO_Addressbook_Model_Addressbook();
+		$addressbook = new \GO_Addressbook_Model_Addressbook();
 		$addressbook->setAttributes(array(
 				'user_id' => 1,
 				'name' => GO::t('prospects','addressbook'),
@@ -98,7 +98,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		$addressbook->save();
 		$addressbook->acl->addGroup(GO::config()->group_internal,GO_Base_Model_Acl::WRITE_PERMISSION);
 
-		$addressbook = new GO_Addressbook_Model_Addressbook();
+		$addressbook = new \GO_Addressbook_Model_Addressbook();
 		$addressbook->setAttributes(array(
 				'user_id' => 1,
 				'name' => GO::t('suppliers','addressbook'),
@@ -111,7 +111,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		if (!is_dir(GO::config()->file_storage_path.'contacts/contact_photos'))
 			mkdir(GO::config()->file_storage_path.'contacts/contact_photos',0755, true);
 
-		$addressbook = new GO_Addressbook_Model_Addressbook();
+		$addressbook = new \GO_Addressbook_Model_Addressbook();
 		$addressbook->setAttributes(array(
 			'user_id' => 1,
 			'name' => GO::t('customers','addressbook'),
@@ -125,7 +125,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		while($user = $stmt->fetch())
 			$user->createContact();
 		
-		$message = new GO_Base_Mail_Message();
+		$message = new \GO_Base_Mail_Message();
 		$message->setHtmlAlternateBody('{salutation},<br />
 <br />
 {body}<br />
@@ -136,7 +136,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 {user:name}<br />
 {usercompany:name}<br />');
 		
-		$template = new GO_Addressbook_Model_Template();
+		$template = new \GO_Addressbook_Model_Template();
 		$template->setAttributes(array(
 			'content' => $message->toString(),
 			'name' => GO::t('default'),
@@ -149,7 +149,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		
 		$dt = GO_Addressbook_Model_Template::model()->findSingleByAttribute('name', 'Letter');
 		if (!$dt) {
-			$dt = new GO_Addressbook_Model_Template();	
+			$dt = new \GO_Addressbook_Model_Template();	
 			$dt->type = GO_Addressbook_Model_Template::TYPE_DOCUMENT;
 			$dt->content = file_get_contents(GO::modules()->addressbook->path . 'install/letter_template.docx');
 			$dt->extension = 'docx';

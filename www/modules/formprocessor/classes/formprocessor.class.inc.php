@@ -93,13 +93,13 @@ class formprocessor{
 
 					if(empty($_POST[$key1][$key2]))
 					{
-						throw new Exception(GO::t('missingField'));
+						throw new \Exception(GO::t('missingField'));
 					}
 				}else
 				{
 					if(empty($_POST[$key]))
 					{
-						throw new Exception(GO::t('missingField'));
+						throw new \Exception(GO::t('missingField'));
 					}
 				}
 			}
@@ -124,7 +124,7 @@ class formprocessor{
 //
 //			if($_POST['password1'] != $_POST['password2'])
 //			{
-//				throw new Exception(GO::t('error_match_pass','users'));
+//				throw new \Exception(GO::t('error_match_pass','users'));
 //			}
 //
 //			foreach($credentials as $key)
@@ -136,7 +136,7 @@ class formprocessor{
 //			}
 //			$userCredentials['password']=$_POST['password1'];
 //
-//			$userModel = new GO_Base_Model_User();
+//			$userModel = new \GO_Base_Model_User();
 //			$userModel->setAttributes($userCredentials);
 //			$userModel->save();
 //			foreach($this->user_groups as $groupId) {
@@ -157,7 +157,7 @@ class formprocessor{
 
 		if(!empty($_POST['email']) && !GO_Base_Util_String::validate_email($_POST['email']))
 		{
-			throw new Exception(GO::t('invalidEmailError'));
+			throw new \Exception(GO::t('invalidEmailError'));
 		}
 
 		if(!empty($_REQUEST['addressbook']))
@@ -171,7 +171,7 @@ class formprocessor{
 				->findSingleByAttribute('name',$_REQUEST['addressbook']);
 			if(!$addressbookModel)
 			{
-				throw new Exception('Addressbook not found!');
+				throw new \Exception('Addressbook not found!');
 			}
 
 			$credentials = array ('first_name','middle_name','last_name','title','initials','sex','email',
@@ -206,7 +206,7 @@ class formprocessor{
 
 
 			if($this->no_urls && isset($contactCredentials['comment']) && stripos($contactCredentials['comment'], 'http')){
-				throw new Exception('Sorry, but to prevent spamming we don\'t allow URL\'s in the message');
+				throw new \Exception('Sorry, but to prevent spamming we don\'t allow URL\'s in the message');
 			}
 
 			$contactCredentials['addressbook_id']=$addressbookModel->id;
@@ -224,7 +224,7 @@ class formprocessor{
 					));
 				if(empty($companyModel))
 				{
-					$companyModel = new GO_Addressbook_Model_Company();
+					$companyModel = new \GO_Addressbook_Model_Company();
 					$companyModel->addressbook_id = $contactCredentials['addressbook_id'];
 					$companyModel->name = $contactCredentials['company']; // bedrijfsnaam
 					$companyModel->user_id = GO::user()->id;
@@ -237,10 +237,10 @@ class formprocessor{
 				try {
 					$contactCredentials['birthday'] = GO_Base_Util_Date::to_db_date($_POST['birthday'], false);
 				} catch (Exception $e) {
-					throw new Exception(GO::t('birthdayFormatMustBe').': '.$_SESSION['GO_SESSION']['date_format'].'.');
+					throw new \Exception(GO::t('birthdayFormatMustBe').': '.$_SESSION['GO_SESSION']['date_format'].'.');
 				}
 				if(!empty($_POST['birthday']) && $contactCredentials['birthday']=='0000-00-00')
-						throw new Exception(GO::t('invalidDateError'));
+						throw new \Exception(GO::t('invalidDateError'));
 			}
 
 			unset($contactCredentials['company']);
@@ -282,7 +282,7 @@ class formprocessor{
 				
 			} else {
 				
-				$newContactModel = new GO_Addressbook_Model_Contact();
+				$newContactModel = new \GO_Addressbook_Model_Contact();
 				$newContactModel->setAttributes($contactCredentials);			
 				$newContactModel->save();
 				
@@ -302,7 +302,7 @@ class formprocessor{
 			}
 			if(!$contactId)
 			{
-				throw new Exception(GO::t('saveError'));
+				throw new \Exception(GO::t('saveError'));
 			}
 
 			if ( GO::modules()->isInstalled('files') )
@@ -320,8 +320,8 @@ class formprocessor{
 					if($key!='photo'){//photo is handled later
 						if (is_uploaded_file($file['tmp_name']))
 						{
-							$fsFile = new GO_Base_Fs_File($file['tmp_name']);
-							$fsFile->move(new GO_Base_Fs_Folder($full_path),$file['name'], false,true);
+							$fsFile = new \GO_Base_Fs_File($file['tmp_name']);
+							$fsFile->move(new \GO_Base_Fs_Folder($full_path),$file['name'], false,true);
 							$fsFile->setDefaultPermissions();
 			
 							GO_Files_Model_File::importFromFilesystem($fsFile);
@@ -339,7 +339,7 @@ class formprocessor{
 
 				$contactCfModel = GO_Addressbook_Customfields_Model_Contact::model()->findByPk($contactId);
 				if (!$contactCfModel) {
-					$contactCfModel = new GO_Addressbook_Customfields_Model_Contact();
+					$contactCfModel = new \GO_Addressbook_Customfields_Model_Contact();
 					$contactCfModel->model_id = $contactId;
 				}
 				$contactCfModel->setAttributes($cfFields);
@@ -353,7 +353,7 @@ class formprocessor{
 					{
 						$addresslistModel = GO_Addressbook_Model_Addresslist::model()->findSingleByAttribute('name', $mailingName);
 						if(empty($addresslistModel))
-							throw new Exception('Addresslist not found!');
+							throw new \Exception('Addresslist not found!');
 						$addresslistModel->addManyMany('contacts', $contactId);
 					}
 				}
@@ -361,8 +361,8 @@ class formprocessor{
 
 			if ($this->contact_id > 0) {
 				if (isset($_FILES['photo']['tmp_name']) && is_uploaded_file($_FILES['photo']['tmp_name'])) {
-					$fsFile = new GO_Base_Fs_File($_FILES['photo']['tmp_name']);
-					$fsFile->move(new GO_Base_Fs_Folder(GO::config()->tmpdir),$_FILES['photo']['name'], false,false);
+					$fsFile = new \GO_Base_Fs_File($_FILES['photo']['tmp_name']);
+					$fsFile->move(new \GO_Base_Fs_Folder(GO::config()->tmpdir),$_FILES['photo']['name'], false,false);
 					$contactModel = GO_Addressbook_Model_Contact::model()->findByPk($contactId);
 					$contactModel->setPhoto(GO::config()->tmpdir . $_FILES['photo']['name']);
 				}
@@ -431,7 +431,7 @@ class formprocessor{
 //			{
 //				if(empty($_POST['email']))
 //				{
-//					throw new Exception('Fatal error: No email given for confirmation e-mail!');
+//					throw new \Exception('Fatal error: No email given for confirmation e-mail!');
 //				}
 //
 //				$url = create_direct_url('addressbook', 'showContact', array($contactId));
@@ -446,7 +446,7 @@ class formprocessor{
 //				$body = trim(substr($email,$pos));
 //
 //				require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
-//				$swift = new GoSwift($_POST['email'], $subject);
+//				$swift = new \GoSwift($_POST['email'], $subject);
 //				$swift->set_body($body);
 //				$swift->set_from(GO::config()->webmaster_email, GO::config()->title);
 //				$swift->sendmail();
@@ -455,7 +455,7 @@ class formprocessor{
 			if(isset($_POST['confirmation_email']) && !empty($_POST['email']))
 			{
 				if (strpos($_POST['confirmation_email'], '../') !== false || strpos($_POST['confirmation_email'], '..\\')!==false)
-					throw new Exception('Invalid path');
+					throw new \Exception('Invalid path');
 				
 				$path = GO::config()->file_storage_path.$_POST['confirmation_email'];
 				if(!file_exists($path))
@@ -497,10 +497,10 @@ class formprocessor{
 		
 		if (empty($_POST['email']) || empty($_POST['subject']))
 		{
-			throw new Exception(GO::t('missingField'));
+			throw new \Exception(GO::t('missingField'));
 		}elseif(!String::validate_email($_POST['email']))
 		{
-			throw new Exception(GO::t('invalidEmailError'));
+			throw new \Exception(GO::t('invalidEmailError'));
 		}
 
 		$body = isset($_POST['body']) ? $_POST['body'] : '';
@@ -519,14 +519,14 @@ class formprocessor{
 			$from_name = isset($_POST['name']) ? $_POST['name'].' (Via website)' : $from_email;		
 
 		if($this->no_urls && stripos($body, 'http')!==false){
-					throw new Exception('Sorry, but to prevent spamming we don\'t allow URL\'s in the message');
+					throw new \Exception('Sorry, but to prevent spamming we don\'t allow URL\'s in the message');
 				}
 
 		//if(empty($body))
-			//throw new Exception(GO::t(''missingField']);
+			//throw new \Exception(GO::t(''missingField']);
 
 		require_once(GO::config()->root_path.'classses/mail/GoSwift.class.inc.php');
-		$swift = new GoSwift($email, $_POST['subject']);
+		$swift = new \GoSwift($email, $_POST['subject']);
 		$swift->set_body($body, 'plain');
 		$swift->set_from($from_email, $from_name);
 		return $swift->sendmail();

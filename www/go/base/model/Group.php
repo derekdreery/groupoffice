@@ -59,10 +59,10 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeDelete() {
 		if($this->id==GO::config()->group_root){
-			throw new Exception(GO::t('noDeleteAdmins','groups'));
+			throw new \Exception(GO::t('noDeleteAdmins','groups'));
 		}	
 		if($this->id==GO::config()->group_everyone){
-			throw new Exception(GO::t('noDeleteEveryone','groups'));
+			throw new \Exception(GO::t('noDeleteEveryone','groups'));
 		}
 		return parent::beforeDelete();
 	}
@@ -92,7 +92,7 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
   
   public function addUser($user_id){
 		if(!$this->hasUser($user_id)){
-			$userGroup = new GO_Base_Model_UserGroup();
+			$userGroup = new \GO_Base_Model_UserGroup();
 			$userGroup->group_id = $this->id;
 			$userGroup->user_id = $user_id;
 			return $userGroup->save();

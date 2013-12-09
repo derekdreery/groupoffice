@@ -31,11 +31,11 @@ class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
 		if (GO_Base_Util_Http::isPostRequest()) {
 			$addressbookModel = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name', $_POST['Addressbook']['name']);
 			if (!$addressbookModel)
-				throw new Exception(sprintf(GO::t('addressbookNotFound','defaultsite'),$_POST['Addressbook']['name']));
+				throw new \Exception(sprintf(GO::t('addressbookNotFound','defaultsite'),$_POST['Addressbook']['name']));
 			
 			$contactModel = GO_Addressbook_Model_Contact::model()->findSingleByAttributes(array('email'=>$_POST['Contact']['email'],'addressbook_id'=>$addressbookModel->id));
 			if (!$contactModel) {
-				$contactModel = new GO_Addressbook_Model_Contact();
+				$contactModel = new \GO_Addressbook_Model_Contact();
 				$contactModel->addressbook_id = $addressbookModel->id;
 			}
 			$contactModel->setValidationRule('first_name', 'required', true);
@@ -44,7 +44,7 @@ class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
 			
 			$companyModel = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array('name'=>$_POST['Company']['name'],'addressbook_id'=>$addressbookModel->id));
 			if (!$companyModel) {
-				$companyModel = new GO_Addressbook_Model_Company();
+				$companyModel = new \GO_Addressbook_Model_Company();
 				$companyModel->addressbook_id = $addressbookModel->id;
 			}
 			$companyModel->setValidationRule('name','required',true);
@@ -67,7 +67,7 @@ class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
 							if ($addresslistModel) {
 								$addresslistContactModel = GO_Addressbook_Model_AddresslistContact::model()->findSingleByAttributes(array('contact_id'=>$contactModel->id,'addresslist_id'=>$addresslistModel->id));
 								if (!$addresslistContactModel) {
-									$addresslistContactModel = new GO_Addressbook_Model_AddresslistContact();
+									$addresslistContactModel = new \GO_Addressbook_Model_AddresslistContact();
 									$addresslistContactModel->contact_id = $contactModel->id;
 									$addresslistContactModel->addresslist_id = $addresslistModel->id;
 									$addresslistContactModel->save();
@@ -90,9 +90,9 @@ class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
 			}
 						
 		}	else {
-			$addressbookModel = new GO_Addressbook_Model_Addressbook();
-			$contactModel = new GO_Addressbook_Model_Contact();
-			$companyModel = new GO_Addressbook_Model_Company();
+			$addressbookModel = new \GO_Addressbook_Model_Addressbook();
+			$contactModel = new \GO_Addressbook_Model_Contact();
+			$companyModel = new \GO_Addressbook_Model_Company();
 			$this->render('contactform', array('contact'=>$contactModel,'company'=>$companyModel,'addressbook'=>$addressbookModel));
 		}
 	}

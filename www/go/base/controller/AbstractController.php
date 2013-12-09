@@ -115,7 +115,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 //		$lockedConfig = 'locked_action_'.$this->_currentAction;
 //		
 //		if(GO::config()->get_setting($lockedConfig)){
-//			throw new Exception("Action ".$this->_currentAction." locked. Another user is currently running this action.");
+//			throw new \Exception("Action ".$this->_currentAction." locked. Another user is currently running this action.");
 //		}else
 //		{
 //			GO::config()->save_setting($lockedConfig,1);
@@ -186,7 +186,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 						(!isset($_REQUEST['security_token']) || $_REQUEST['security_token']!=GO::session()->values['security_token'])
 			){
 			//GO::session()->logout();			
-			throw new GO_Base_Exception_SecurityTokenMismatch();
+			throw new \GO_Base_Exception_SecurityTokenMismatch();
 
 		}
 	}	
@@ -398,11 +398,11 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		$methodName='action'.$action;
 
 		if(!method_exists($this, $methodName))
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO_Base_Exception_NotFound();
 		
 		try {	
 			if($checkPermissions && !$this->_checkPermission($action)){
-				throw new GO_Base_Exception_AccessDenied();
+				throw new \GO_Base_Exception_AccessDenied();
 			}
 			
 			$ignoreAcl = in_array($action, $this->ignoreAclPermissions()) || in_array('*', $this->ignoreAclPermissions());
@@ -514,11 +514,11 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 */
 	protected function callActionMethod($methodName, $params){
 		
-		$method = new ReflectionMethod($this, $methodName);
+		$method = new \ReflectionMethod($this, $methodName);
 		
 		$rParams = $method->getParameters();
 		
-//		$param = new ReflectionParameter();
+//		$param = new \ReflectionParameter();
 		if(count($rParams)==0){
 			return $this->$methodName();
 		}elseif(count($rParams)==1 && $rParams[0]->getName()=='params'){
@@ -530,7 +530,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			$methodArgs = array();
 			foreach($rParams as $param){
 				if(!isset($params[$param->getName()]) && !$param->isOptional())
-					throw new GO_Base_Exception_MissingParameter("Missing argument '".$param->getName()."' for action method '".get_class ($this)."->".$methodName."'");
+					throw new \GO_Base_Exception_MissingParameter("Missing argument '".$param->getName()."' for action method '".get_class ($this)."->".$methodName."'");
 				
 				$methodArgs[]=isset($params[$param->getName()]) ? $params[$param->getName()] : $param->getDefaultValue();
 				
@@ -596,7 +596,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 */
 	public function requireCli(){
 		if(!$this->isCli())
-			throw new GO_Base_Exception_CliOnly();
+			throw new \GO_Base_Exception_CliOnly();
 	}
 	
 	/**
@@ -616,7 +616,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		}
 		
 		if(count($missingParams))
-			throw new Exception("The following required controller action params are missing: ".implode(",", $missingParams));
+			throw new \Exception("The following required controller action params are missing: ".implode(",", $missingParams));
 				
 	}
 
@@ -629,7 +629,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			$maxFileSize = $postMaxSize > $uploadMaxFileSize ? $uploadMaxFileSize : $postMaxSize;
 			
-			throw new Exception(sprintf(GO::t('maybeMaxUploadExceeded'),$maxFileSize));
+			throw new \Exception(sprintf(GO::t('maybeMaxUploadExceeded'),$maxFileSize));
 		}
 	}
 	

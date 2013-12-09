@@ -504,7 +504,7 @@ if(class_exists('PfPdfPlugin')) {
         private $gantt_obj = null;
 
         public function __construct($pdfobj, $config=null, $x=0,$y=0,$w=0,$h=0) {
-            $this->gantt_obj = new PdfGantt($pdfobj,$config,$x,$y,$w,$h);
+            $this->gantt_obj = new \PdfGantt($pdfobj,$config,$x,$y,$w,$h);
         }
         public function Render($data) {
 

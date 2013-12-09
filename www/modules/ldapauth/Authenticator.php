@@ -16,8 +16,8 @@ class GO_Ldapauth_Authenticator {
 			$this->_mapping = $mapping;
 		} else {
 			$this->_mapping = array(
-					'exclude' => new GO_Ldapauth_Mapping_Constant(false),
-					'enabled' => new GO_Ldapauth_Mapping_Constant('1'),
+					'exclude' => new \GO_Ldapauth_Mapping_Constant(false),
+					'enabled' => new \GO_Ldapauth_Mapping_Constant('1'),
 					'username' => 'uid',
 					//'password' => 'userpassword',
 					'first_name' => 'givenname',
@@ -66,7 +66,7 @@ class GO_Ldapauth_Authenticator {
 		
 		
 
-//		$ldapConn = new GO_Base_Ldap_Connection(GO::config()->ldap_host, GO::config()->ldap_port, !empty(GO::config()->ldap_tls));
+//		$ldapConn = new \GO_Base_Ldap_Connection(GO::config()->ldap_host, GO::config()->ldap_port, !empty(GO::config()->ldap_tls));
 //
 //		//support old deprecated config.
 //		if(!empty(GO::config()->ldap_user))
@@ -75,7 +75,7 @@ class GO_Ldapauth_Authenticator {
 //		if (!empty(GO::config()->ldap_bind_rdn)) {
 //			$bound = $ldapConn->bind(GO::config()->ldap_bind_rdn, GO::config()->ldap_pass);
 //			if (!$bound)
-//				throw new Exception("Failed to bind to LDAP server with RDN: " . GO::config()->ldap_bind_rdn);
+//				throw new \Exception("Failed to bind to LDAP server with RDN: " . GO::config()->ldap_bind_rdn);
 //		}
 		$ldapConn = GO_Base_Ldap_Connection::getDefault();
 
@@ -111,7 +111,7 @@ class GO_Ldapauth_Authenticator {
 			GO::infolog($str);
 			
 			//Don't throw exception because this won't be catched by cookie login.
-//			throw new Exception(GO::t('badLogin').' (LDAP)');
+//			throw new \Exception(GO::t('badLogin').' (LDAP)');
 			
 			return false;
 		} else {
@@ -122,7 +122,7 @@ class GO_Ldapauth_Authenticator {
 			if(!empty(GO::config()->ldap_create_mailbox_domains)){
 				
 				if(!GO::modules()->serverclient)
-					throw new Exception("The serverclient module must be installed and configured when using \$config['GO::config()->ldap_create_mailbox_domains']. See https://www.group-office.com/wiki/Mailserver#Optionally_install_the_serverclient");
+					throw new \Exception("The serverclient module must be installed and configured when using \$config['GO::config()->ldap_create_mailbox_domains']. See https://www.group-office.com/wiki/Mailserver#Optionally_install_the_serverclient");
 				
 				$_POST['serverclient_domains']=GO::config()->ldap_create_mailbox_domains;
 			}
@@ -197,19 +197,19 @@ class GO_Ldapauth_Authenticator {
 				}
 
 				if(!$user->save()){
-					throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
+					throw new \Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
 				}
 			} else {
 				GO::debug("LDAPAUTH: Group-Office user does not exist. Attempting to create it.");
 				GO::debug($attr);
 
-				$user = new GO_Base_Model_User();
+				$user = new \GO_Base_Model_User();
 				$user->setAttributes($attr);
 				$user->cutAttributeLengths();
 				$user->password = $password;
 
 				if(!$user->save()){
-					throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
+					throw new \Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
 				}
 				if (!empty(GO::config()->ldap_groups))
 					$user->addToGroups(explode(',', GO::config()->ldap_groups));
@@ -246,7 +246,7 @@ class GO_Ldapauth_Authenticator {
 
 				if (!$company) {
 					GO::debug('LDAPAUTH: creating company for contact');
-					$company = new GO_Addressbook_Model_Company();
+					$company = new \GO_Addressbook_Model_Company();
 					$company->name = $attributes['company'];
 					$company->addressbook_id = $contact->addressbook_id;
 					$company->cutAttributeLengths();
@@ -268,7 +268,7 @@ class GO_Ldapauth_Authenticator {
 			$mailbox = trim($arr[0]);
 			$domain = isset($arr[1]) ? trim($arr[1]) : '';
 
-			$imapauth = new GO_Imapauth_Authenticator();
+			$imapauth = new \GO_Imapauth_Authenticator();
 			$config = $imapauth->config = $imapauth->getDomainConfig($domain);
 
 			if (!$config) {

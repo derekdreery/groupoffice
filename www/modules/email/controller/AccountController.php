@@ -118,7 +118,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			} elseif ($params['default_account_template_id']>0) {
 				$defaultTemplateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($model->id);
 				if (!$defaultTemplateModel) {
-					$defaultTemplateModel = new GO_Addressbook_Model_DefaultTemplateForAccount();
+					$defaultTemplateModel = new \GO_Addressbook_Model_DefaultTemplateForAccount();
 					$defaultTemplateModel->account_id = $model->id;
 				}
 				$defaultTemplateModel->template_id = $params['default_account_template_id'];
@@ -163,7 +163,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					
 					foreach ($checkMailboxArray as $checkMailboxName) {			
 						if(!empty($checkMailboxName)){						
-							$mailbox = new GO_Email_Model_ImapMailbox($account, array('name'=>$checkMailboxName));
+							$mailbox = new \GO_Email_Model_ImapMailbox($account, array('name'=>$checkMailboxName));
 							if($mailbox->exists()){
 								if(!isset($response['email_status']['has_new']) && $mailbox->hasAlarm()){
 									$response['email_status']['has_new']=true;
@@ -215,7 +215,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 			$account = GO_Email_Model_Account::model()->findByPk($accountId);
 
-			$mailbox = new GO_Email_Model_ImapMailbox($account, array('name' => $mailboxName));
+			$mailbox = new \GO_Email_Model_ImapMailbox($account, array('name' => $mailboxName));
 			return $this->_getMailboxTreeNodes($mailbox->getChildren(false, false), true);
 		}
 	}
@@ -328,7 +328,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			if($type=="account"){
 				$response=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
 			}else{
-				$mailbox = new GO_Email_Model_ImapMailbox($account, array('name' => $mailboxName));
+				$mailbox = new \GO_Email_Model_ImapMailbox($account, array('name' => $mailboxName));
 				$response = $this->_getMailboxTreeNodes($mailbox->getChildren());
 			}
 		}
@@ -503,7 +503,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 		for($i=0;$i<$count;$i++) {
 			
-			$as = new GO_Email_Model_AccountSort();
+			$as = new \GO_Email_Model_AccountSort();
 			$as->order=$count-$i;
 			$as->account_id=$sort_order[$i];
 			$as->save();
@@ -565,7 +565,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			$targetAccountModel = GO_Email_Model_Account::model()->findByPk($params['targetAccountId']);
 			
 			if($targetAccountModel->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
-			  throw new GO_Base_Exception_AccessDenied();
+			  throw new \GO_Base_Exception_AccessDenied();
 			
 			$targetImapConnection = $targetAccountModel->openImapConnection($params["targetMailboxPath"]);
 

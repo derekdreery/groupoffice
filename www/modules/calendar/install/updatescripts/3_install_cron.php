@@ -1,5 +1,5 @@
 <?php
-$cron = new GO_Base_Cron_CronJob();
+$cron = new \GO_Base_Cron_CronJob();
 		
 $cron->name = 'Calendar publisher';
 $cron->active = true;

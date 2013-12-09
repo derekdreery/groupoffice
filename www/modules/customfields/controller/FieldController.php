@@ -33,7 +33,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 					if (!empty($select_options[$i]['id'])) {
 						$so = GO_Customfields_Model_FieldSelectOption::model()->findByPk($select_options[$i]['id']);
 					} else {
-						$so = new GO_Customfields_Model_FieldSelectOption();
+						$so = new \GO_Customfields_Model_FieldSelectOption();
 					}
 					$so->sort_order = $i;
 					$so->field_id = $model->id;
@@ -67,11 +67,11 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 			$msg = $e->getMessage();
 			if (strpos($msg,'SQLSTATE[42000]')===0 && strpos($msg,'1118')>14) {
 				$catModel = GO_Customfields_Model_Category::model()->findByPk($params['category_id']);
-				throw new Exception(sprintf(GO::t('tooManyCustomfields','customfields'),  GO::t($catModel->extends_model,'customfields')));
+				throw new \Exception(sprintf(GO::t('tooManyCustomfields','customfields'),  GO::t($catModel->extends_model,'customfields')));
 			} else if (strpos($msg,'SQLSTATE[42000]')===0 && strpos($msg,'1074')>14) {
 				preg_match('/(max = ([0-9]+))/',$msg,$matches);
 				$str = !empty($matches[2]) ? $matches[2] : '';
-				throw new Exception(sprintf(GO::t('customfieldTooLarge','customfields'),$str));
+				throw new \Exception(sprintf(GO::t('customfieldTooLarge','customfields'),$str));
 			} else {
 				throw $e;
 			}
@@ -129,7 +129,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 
 	protected function actionSaveTreeSelectOption($params) {
 		if (empty($params['tree_select_option_id'])) {
-			$model = new GO_Customfields_Model_FieldTreeSelectOption();
+			$model = new \GO_Customfields_Model_FieldTreeSelectOption();
 		} else {
 			$model = GO_Customfields_Model_FieldTreeSelectOption::model()->findByPk($params['tree_select_option_id']);
 		}
@@ -148,12 +148,12 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 		}
 
 		if (!file_exists($importFile)) {
-			throw new Exception('File was not uploaded!');
+			throw new \Exception('File was not uploaded!');
 		}
-		$csv = new GO_Base_Fs_CsvFile($importFile);
+		$csv = new \GO_Base_Fs_CsvFile($importFile);
 		$sortOrder = 0;
 		while ($record = $csv->getRecord()) {
-			$o = new GO_Customfields_Model_FieldSelectOption();
+			$o = new \GO_Customfields_Model_FieldSelectOption();
 			$o->field_id = $params['field_id'];
 			$o->text = $record[0];
 			$o->sort_order = $sortOrder++;
@@ -172,13 +172,13 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 		}
 
 		if (!file_exists($importFile)) {
-			throw new Exception('File was not uploaded!');
+			throw new \Exception('File was not uploaded!');
 		}
 		
 		$field = GO_Customfields_Model_Field::model()->findByPk($params['field_id']);
 		
 		$sort=1;
-		$csv = new GO_Base_Fs_CsvFile($importFile);
+		$csv = new \GO_Base_Fs_CsvFile($importFile);
 		while ($record = $csv->getRecord()) {
 
 			for ($i = 0; $i < count($record); $i++) {
@@ -196,7 +196,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 					if($existingModel)
 						$parent_id=$existingModel->id;
 					else{
-						$o = new GO_Customfields_Model_FieldTreeSelectOption();
+						$o = new \GO_Customfields_Model_FieldTreeSelectOption();
 						
 						$o->checkSlaves=false;
 						

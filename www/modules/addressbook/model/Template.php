@@ -254,7 +254,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 				$attributes[$key]=str_replace("\n", $this->_lineBreak, $attributes[$key]);
 		}
 		
-		$templateParser = new GO_Base_Util_TemplateParser();
+		$templateParser = new \GO_Base_Util_TemplateParser();
 		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
 	}
 	

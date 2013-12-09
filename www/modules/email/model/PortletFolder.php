@@ -58,7 +58,7 @@ class GO_email_Model_PortletFolder extends GO_Base_Db_ActiveRecord{
 	private function _load(){
 		
 		if(!empty($this->account))
-			$this->_imapMailbox = new GO_Email_Model_ImapMailbox($this->account,array('name'=>$this->folder_name));
+			$this->_imapMailbox = new \GO_Email_Model_ImapMailbox($this->account,array('name'=>$this->folder_name));
 		
 		if(!empty($this->_imapMailbox))
 			$this->name =  $this->_imapMailbox->getDisplayName();

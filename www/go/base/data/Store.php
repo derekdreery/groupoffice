@@ -45,7 +45,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	 */
 	public static function newInstance($model, $excludeColumns=array(), $includeColumns=array())
 	{
-		$cm = new GO_Base_Data_ColumnModel($model, $excludeColumns, $includeColumns=array());		
+		$cm = new \GO_Base_Data_ColumnModel($model, $excludeColumns, $includeColumns=array());		
 		$store = new self($cm);
 		return $store;
 		
@@ -98,7 +98,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	public function processDeleteActions($params, $deleteModelName, $extraPkValue=false){
 		
 		if(isset($this->_stmt))
-			throw new Exception("processDeleteActions should be called before setStatement. If you run the statement before the deletes then the deleted items will still be in the result.");
+			throw new \Exception("processDeleteActions should be called before setStatement. If you run the statement before the deletes then the deleted items will still be in the result.");
 		
 		if (isset($params['delete_keys'])) {
       try {
@@ -182,11 +182,11 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
   public function getData() {
 		
 		if(!isset($this->_stmt))
-			throw new Exception('You must provide a statement with setStatement()');
+			throw new \Exception('You must provide a statement with setStatement()');
 
 		$columns = $this->_columnModel->getColumns();
     if (empty($columns))
-      throw new Exception('No columns given for this grid.');   		
+      throw new \Exception('No columns given for this grid.');   		
 		
 		while ($record = $this->nextRecord()) {			
 			$this->response['results'][] = $record;

@@ -64,7 +64,7 @@ class GO_Base_Db_Transaction
 			$this->_active = false;
 		}
 		else
-			throw new GO_Base_Exception_Database('Transaction is inactive and cannot perform commit operation.');
+			throw new \GO_Base_Exception_Database('Transaction is inactive and cannot perform commit operation.');
 	}
 
 	/**
@@ -79,7 +79,7 @@ class GO_Base_Db_Transaction
 			$this->_active = false;
 		}
 		else
-			throw new GO_Base_Exception_Database('Transaction is inactive and cannot perform roll back operation.');
+			throw new \GO_Base_Exception_Database('Transaction is inactive and cannot perform roll back operation.');
 	}
 
 }

@@ -11,7 +11,7 @@
  * <?php
  *    include('Net/SSH2.php');
  *
- *    $ssh = new Net_SSH2('www.domain.tld');
+ *    $ssh = new \Net_SSH2('www.domain.tld');
  *    if (!$ssh->login('username', 'password')) {
  *        exit('Login Failed');
  *    }
@@ -26,11 +26,11 @@
  *    include('Crypt/RSA.php');
  *    include('Net/SSH2.php');
  *
- *    $key = new Crypt_RSA();
+ *    $key = new \Crypt_RSA();
  *    //$key->setPassword('whatever');
  *    $key->loadKey(file_get_contents('privatekey'));
  *
- *    $ssh = new Net_SSH2('www.domain.tld');
+ *    $ssh = new \Net_SSH2('www.domain.tld');
  *    if (!$ssh->login('username', $key)) {
  *        exit('Login Failed');
  *    }
@@ -952,7 +952,7 @@ class Net_SSH2 {
                 $hash = 'sha1';
         }
 
-        $p = new Math_BigInteger($p, 256);
+        $p = new \Math_BigInteger($p, 256);
         //$q = $p->bitwise_rightShift(1);
 
         /* To increase the speed of the key exchange, both client and server may
@@ -962,14 +962,14 @@ class Net_SSH2 {
            [VAN-OORSCHOT].
 
            -- http://tools.ietf.org/html/rfc4419#section-6.2 */
-        $q = new Math_BigInteger(1);
+        $q = new \Math_BigInteger(1);
         $q = $q->bitwise_leftShift(2 * $keyLength);
-        $q = $q->subtract(new Math_BigInteger(1));
+        $q = $q->subtract(new \Math_BigInteger(1));
 
-        $g = new Math_BigInteger(2);
-        $x = new Math_BigInteger();
+        $g = new \Math_BigInteger(2);
+        $x = new \Math_BigInteger();
         $x->setRandomGenerator('crypt_random');
-        $x = $x->random(new Math_BigInteger(1), $q);
+        $x = $x->random(new \Math_BigInteger(1), $q);
         $e = $g->modPow($x, $p);
 
         $eBytes = $e->toBytes(true);
@@ -1000,7 +1000,7 @@ class Net_SSH2 {
 
         $temp = unpack('Nlength', $this->_string_shift($response, 4));
         $fBytes = $this->_string_shift($response, $temp['length']);
-        $f = new Math_BigInteger($fBytes, -256);
+        $f = new \Math_BigInteger($fBytes, -256);
 
         $temp = unpack('Nlength', $this->_string_shift($response, 4));
         $this->signature = $this->_string_shift($response, $temp['length']);
@@ -1059,60 +1059,60 @@ class Net_SSH2 {
 
         switch ($encrypt) {
             case '3des-cbc':
-                $this->encrypt = new Crypt_TripleDES();
+                $this->encrypt = new \Crypt_TripleDES();
                 // $this->encrypt_block_size = 64 / 8 == the default
                 break;
             case '3des-ctr':
-                $this->encrypt = new Crypt_TripleDES(CRYPT_DES_MODE_CTR);
+                $this->encrypt = new \Crypt_TripleDES(CRYPT_DES_MODE_CTR);
                 // $this->encrypt_block_size = 64 / 8 == the default
                 break;
             case 'aes256-cbc':
             case 'aes192-cbc':
             case 'aes128-cbc':
-                $this->encrypt = new Crypt_AES();
+                $this->encrypt = new \Crypt_AES();
                 $this->encrypt_block_size = 16; // eg. 128 / 8
                 break;
             case 'aes256-ctr':
             case 'aes192-ctr':
             case 'aes128-ctr':
-                $this->encrypt = new Crypt_AES(CRYPT_AES_MODE_CTR);
+                $this->encrypt = new \Crypt_AES(CRYPT_AES_MODE_CTR);
                 $this->encrypt_block_size = 16; // eg. 128 / 8
                 break;
             case 'arcfour':
             case 'arcfour128':
             case 'arcfour256':
-                $this->encrypt = new Crypt_RC4();
+                $this->encrypt = new \Crypt_RC4();
                 break;
             case 'none';
-                //$this->encrypt = new Crypt_Null();
+                //$this->encrypt = new \Crypt_Null();
         }
 
         switch ($decrypt) {
             case '3des-cbc':
-                $this->decrypt = new Crypt_TripleDES();
+                $this->decrypt = new \Crypt_TripleDES();
                 break;
             case '3des-ctr':
-                $this->decrypt = new Crypt_TripleDES(CRYPT_DES_MODE_CTR);
+                $this->decrypt = new \Crypt_TripleDES(CRYPT_DES_MODE_CTR);
                 break;
             case 'aes256-cbc':
             case 'aes192-cbc':
             case 'aes128-cbc':
-                $this->decrypt = new Crypt_AES();
+                $this->decrypt = new \Crypt_AES();
                 $this->decrypt_block_size = 16;
                 break;
             case 'aes256-ctr':
             case 'aes192-ctr':
             case 'aes128-ctr':
-                $this->decrypt = new Crypt_AES(CRYPT_AES_MODE_CTR);
+                $this->decrypt = new \Crypt_AES(CRYPT_AES_MODE_CTR);
                 $this->decrypt_block_size = 16;
                 break;
             case 'arcfour':
             case 'arcfour128':
             case 'arcfour256':
-                $this->decrypt = new Crypt_RC4();
+                $this->decrypt = new \Crypt_RC4();
                 break;
             case 'none';
-                //$this->decrypt = new Crypt_Null();
+                //$this->decrypt = new \Crypt_Null();
         }
 
         $keyBytes = pack('Na*', strlen($keyBytes), $keyBytes);
@@ -1174,19 +1174,19 @@ class Net_SSH2 {
         $createKeyLength = 0; // ie. $mac_algorithms[$i] == 'none'
         switch ($mac_algorithms[$i]) {
             case 'hmac-sha1':
-                $this->hmac_create = new Crypt_Hash('sha1');
+                $this->hmac_create = new \Crypt_Hash('sha1');
                 $createKeyLength = 20;
                 break;
             case 'hmac-sha1-96':
-                $this->hmac_create = new Crypt_Hash('sha1-96');
+                $this->hmac_create = new \Crypt_Hash('sha1-96');
                 $createKeyLength = 20;
                 break;
             case 'hmac-md5':
-                $this->hmac_create = new Crypt_Hash('md5');
+                $this->hmac_create = new \Crypt_Hash('md5');
                 $createKeyLength = 16;
                 break;
             case 'hmac-md5-96':
-                $this->hmac_create = new Crypt_Hash('md5-96');
+                $this->hmac_create = new \Crypt_Hash('md5-96');
                 $createKeyLength = 16;
         }
 
@@ -1200,22 +1200,22 @@ class Net_SSH2 {
         $this->hmac_size = 0;
         switch ($mac_algorithms[$i]) {
             case 'hmac-sha1':
-                $this->hmac_check = new Crypt_Hash('sha1');
+                $this->hmac_check = new \Crypt_Hash('sha1');
                 $checkKeyLength = 20;
                 $this->hmac_size = 20;
                 break;
             case 'hmac-sha1-96':
-                $this->hmac_check = new Crypt_Hash('sha1-96');
+                $this->hmac_check = new \Crypt_Hash('sha1-96');
                 $checkKeyLength = 20;
                 $this->hmac_size = 12;
                 break;
             case 'hmac-md5':
-                $this->hmac_check = new Crypt_Hash('md5');
+                $this->hmac_check = new \Crypt_Hash('md5');
                 $checkKeyLength = 16;
                 $this->hmac_size = 16;
                 break;
             case 'hmac-md5-96':
-                $this->hmac_check = new Crypt_Hash('md5-96');
+                $this->hmac_check = new \Crypt_Hash('md5-96');
                 $checkKeyLength = 16;
                 $this->hmac_size = 12;
         }
@@ -2199,16 +2199,16 @@ class Net_SSH2 {
         switch ($this->signature_format) {
             case 'ssh-dss':
                 $temp = unpack('Nlength', $this->_string_shift($server_public_host_key, 4));
-                $p = new Math_BigInteger($this->_string_shift($server_public_host_key, $temp['length']), -256);
+                $p = new \Math_BigInteger($this->_string_shift($server_public_host_key, $temp['length']), -256);
 
                 $temp = unpack('Nlength', $this->_string_shift($server_public_host_key, 4));
-                $q = new Math_BigInteger($this->_string_shift($server_public_host_key, $temp['length']), -256);
+                $q = new \Math_BigInteger($this->_string_shift($server_public_host_key, $temp['length']), -256);
 
                 $temp = unpack('Nlength', $this->_string_shift($server_public_host_key, 4));
-                $g = new Math_BigInteger($this->_string_shift($server_public_host_key, $temp['length']), -256);
+                $g = new \Math_BigInteger($this->_string_shift($server_public_host_key, $temp['length']), -256);
 
                 $temp = unpack('Nlength', $this->_string_shift($server_public_host_key, 4));
-                $y = new Math_BigInteger($this->_string_shift($server_public_host_key, $temp['length']), -256);
+                $y = new \Math_BigInteger($this->_string_shift($server_public_host_key, $temp['length']), -256);
 
                 /* The value for 'dss_signature_blob' is encoded as a string containing
                    r, followed by s (which are 160-bit integers, without lengths or
@@ -2219,8 +2219,8 @@ class Net_SSH2 {
                     return $this->_disconnect(NET_SSH2_DISCONNECT_KEY_EXCHANGE_FAILED);
                 }
 
-                $r = new Math_BigInteger($this->_string_shift($signature, 20), 256);
-                $s = new Math_BigInteger($this->_string_shift($signature, 20), 256);
+                $r = new \Math_BigInteger($this->_string_shift($signature, 20), 256);
+                $s = new \Math_BigInteger($this->_string_shift($signature, 20), 256);
 
                 if ($r->compare($q) >= 0 || $s->compare($q) >= 0) {
                     user_error('Invalid signature', E_USER_NOTICE);
@@ -2229,7 +2229,7 @@ class Net_SSH2 {
 
                 $w = $s->modInverse($q);
 
-                $u1 = $w->multiply(new Math_BigInteger(sha1($this->session_id), 16));
+                $u1 = $w->multiply(new \Math_BigInteger(sha1($this->session_id), 16));
                 list(, $u1) = $u1->divide($q);
 
                 $u2 = $w->multiply($r);
@@ -2250,10 +2250,10 @@ class Net_SSH2 {
                 break;
             case 'ssh-rsa':
                 $temp = unpack('Nlength', $this->_string_shift($server_public_host_key, 4));
-                $e = new Math_BigInteger($this->_string_shift($server_public_host_key, $temp['length']), -256);
+                $e = new \Math_BigInteger($this->_string_shift($server_public_host_key, $temp['length']), -256);
 
                 $temp = unpack('Nlength', $this->_string_shift($server_public_host_key, 4));
-                $n = new Math_BigInteger($this->_string_shift($server_public_host_key, $temp['length']), -256);
+                $n = new \Math_BigInteger($this->_string_shift($server_public_host_key, $temp['length']), -256);
                 $nLength = $temp['length'];
 
                 /*
@@ -2264,7 +2264,7 @@ class Net_SSH2 {
                     require_once('Crypt/RSA.php');
                 }
 
-                $rsa = new Crypt_RSA();
+                $rsa = new \Crypt_RSA();
                 $rsa->setSignatureMode(CRYPT_RSA_SIGNATURE_PKCS1);
                 $rsa->loadKey(array('e' => $e, 'n' => $n), CRYPT_RSA_PUBLIC_FORMAT_RAW);
                 if (!$rsa->verify($this->session_id, $signature)) {
@@ -2274,7 +2274,7 @@ class Net_SSH2 {
                 */
 
                 $temp = unpack('Nlength', $this->_string_shift($signature, 4));
-                $s = new Math_BigInteger($this->_string_shift($signature, $temp['length']), 256);
+                $s = new \Math_BigInteger($this->_string_shift($signature, $temp['length']), 256);
 
                 // validate an RSA signature per "8.2 RSASSA-PKCS1-v1_5", "5.2.2 RSAVP1", and "9.1 EMSA-PSS" in the
                 // following URL:
@@ -2282,7 +2282,7 @@ class Net_SSH2 {
 
                 // also, see SSHRSA.c (rsa2_verifysig) in PuTTy's source.
 
-                if ($s->compare(new Math_BigInteger()) < 0 || $s->compare($n->subtract(new Math_BigInteger(1))) > 0) {
+                if ($s->compare(new \Math_BigInteger()) < 0 || $s->compare($n->subtract(new \Math_BigInteger(1))) > 0) {
                     user_error('Invalid signature', E_USER_NOTICE);
                     return $this->_disconnect(NET_SSH2_DISCONNECT_KEY_EXCHANGE_FAILED);
                 }

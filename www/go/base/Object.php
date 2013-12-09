@@ -56,7 +56,7 @@ abstract class GO_Base_Object extends GO_Base_Observable{
 		}else
 		{
 			if(GO::config()->debug)
-				throw new Exception("Can't get not existing property '$name' in '".$this->className()."'");
+				throw new \Exception("Can't get not existing property '$name' in '".$this->className()."'");
 			else{
 //				TODO Enable this when we're sure all properties exist
 				trigger_error("Can't get not existing property '$name' in '".$this->className()."'", E_USER_NOTICE);
@@ -100,7 +100,7 @@ abstract class GO_Base_Object extends GO_Base_Observable{
 			}
 			
 			if(GO::config()->debug)
-				throw new Exception($errorMsg);
+				throw new \Exception($errorMsg);
 			else{
 				trigger_error($errorMsg, E_USER_NOTICE);
 			}

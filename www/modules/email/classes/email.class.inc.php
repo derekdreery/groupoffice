@@ -109,7 +109,7 @@ class email extends db {
 		$search = new search();
 
 		require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
-		$GO_LINKS = new GO_LINKS();
+		$GO_LINKS = new \GO_LINKS();
 
 		
 		$link_message['ctime']=time();
@@ -137,7 +137,7 @@ class email extends db {
 				$GO_LINKS->add_link($link['link_id'], $link['link_type'], $link_message['link_id'], 9,$to_folder_id,0, $link_description, $link_description);
 			}else {
 				//$imap->disconnect();
-				throw new Exception('Cached record not found!');
+				throw new \Exception('Cached record not found!');
 			}
 		}	
 
@@ -267,7 +267,7 @@ class email extends db {
 			}
 		}
 		catch (Exception $e) {
-			throw new Exception($this->human_connect_error($e->getMessage()));
+			throw new \Exception($this->human_connect_error($e->getMessage()));
 		}
 	}
 
@@ -392,7 +392,7 @@ class email extends db {
 			}
 		}
 		catch (Exception $e) {
-			throw new Exception($this->human_connect_error($e->getMessage()));
+			throw new \Exception($this->human_connect_error($e->getMessage()));
 		}
 		return false;
 	}

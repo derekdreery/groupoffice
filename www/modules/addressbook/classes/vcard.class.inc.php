@@ -563,7 +563,7 @@ class vcard extends addressbook {
 		global $GO_CONFIG;
 
 		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-		$GO_USERS = new GO_USERS();
+		$GO_USERS = new \GO_USERS();
 
 		$records = array ();
 

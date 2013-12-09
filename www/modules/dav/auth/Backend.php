@@ -32,7 +32,7 @@ class GO_Dav_Auth_Backend extends Sabre\DAV\Auth\Backend\AbstractDigest {
 		{
 			$errorMsg = "No '".$this->checkModuleAccess."' module access for user '".$user->username."'";
 			GO::debug($errorMsg);			
-			throw new Sabre\DAV\Exception\Forbidden($errorMsg);			
+			throw new \Sabre\DAV\Exception\Forbidden($errorMsg);			
 		}
 		
 		if(!$user)

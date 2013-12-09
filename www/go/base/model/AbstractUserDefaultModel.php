@@ -163,7 +163,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			$user=$this->user;
 		
 		if(!$user)
-			throw new Exception(" - ".GO::t(get_class($this),'settings')." '".$this->name."' ".GO::t('notRenamedNoUser','settings').".<br />");
+			throw new \Exception(" - ".GO::t(get_class($this),'settings')." '".$this->name."' ".GO::t('notRenamedNoUser','settings').".<br />");
 	
 		$template = self::getNameTemplate($this->className());
 

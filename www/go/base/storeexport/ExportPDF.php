@@ -71,7 +71,7 @@ class GO_Base_Storeexport_ExportPDF extends GO_Base_Storeexport_AbstractExport {
 			$orientation = $this->orientation;
 		}
 		
-		$pdf = new GO_Base_Util_Pdf($orientation, $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false);
+		$pdf = new \GO_Base_Util_Pdf($orientation, $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false);
 
 		$pdf->SetTitle($this->title);
 		$pdf->SetSubject($this->title);

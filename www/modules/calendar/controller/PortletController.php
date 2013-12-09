@@ -78,7 +78,7 @@ class GO_Calendar_Controller_Portlet extends GO_Base_Controller_AbstractMultiSel
 			
 		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime);
 
-		$store = new GO_Base_Data_ArrayStore();
+		$store = new \GO_Base_Data_ArrayStore();
 		
 		foreach($events as $event){
 			$record = $event->getResponseData();

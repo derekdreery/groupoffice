@@ -2,7 +2,7 @@
 	<div class="wrapper">
 		<h2><?php echo GO::t('contactformTitle','defaultsite'); ?></h2>								
 			
-		<?php $form = new GO_Site_Widget_Form(); ?>
+		<?php $form = new \GO_Site_Widget_Form(); ?>
 		<?php echo $form->beginForm(false,false,array('id'=>'contact')); ?>
 		
 		<?php echo GO::t('contactformText','defaultsite'); ?>

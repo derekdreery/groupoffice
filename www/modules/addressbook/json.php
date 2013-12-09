@@ -215,7 +215,7 @@ try
 				$response['data']['write_permission']=$response['data']['permission_level']>1;
 				if(!$response['data']['permission_level'])
 				{
-					throw new AccessDeniedException();
+					throw new \AccessDeniedException();
 				}
 			}
 
@@ -236,7 +236,7 @@ try
 					}
 					if(!count($contacts_deleted))
 					{
-						throw new AccessDeniedException();
+						throw new \AccessDeniedException();
 					}
 					if(count($delete_contacts) != count($contacts_deleted))
 					{
@@ -402,7 +402,7 @@ try
 				$response['data']['write_permission']=$response['data']['permission_level']>1;
 				if(!$response['data']['permission_level'])
 				{
-					throw new AccessDeniedException();
+					throw new \AccessDeniedException();
 				}
 			}
 
@@ -422,7 +422,7 @@ try
 					}
 					if(!count($companies_deleted))
 					{
-						throw new AccessDeniedException();
+						throw new \AccessDeniedException();
 					}
 					if(count($delete_companies) != count($companies_deleted))
 					{
@@ -491,7 +491,7 @@ try
 
 			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $company['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 			{
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}
 				
 			if(isset($_POST['delete_keys']))
@@ -562,7 +562,7 @@ try
 			$response['data']['write_permission']=$perm_lvl>1;
 			if(!$perm_lvl)
 			{
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}
 				
 			if($response['data'])
@@ -683,7 +683,7 @@ try
 			$response['data']['write_permission']=$perm_lvl>1;
 			if(!$perm_lvl)
 			{
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}
 				
 			if($response['data'])
@@ -867,7 +867,7 @@ try
 							
 							if(($GLOBALS['GO_MODULES']->modules['addressbook']['permission_level'] < GO_SECURITY::WRITE_PERMISSION) || ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < GO_SECURITY::DELETE_PERMISSION))
 							{
-								throw new AccessDeniedException();
+								throw new \AccessDeniedException();
 							}
 
 							$ab->delete_addressbook($book_id);
@@ -892,7 +892,7 @@ try
 			$books = ($books) ? explode(',',$books) : array();
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 				
 			$first_record = true;
 			while($ab->next_record())
@@ -934,7 +934,7 @@ try
 		case 'addressbooks_string':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'mail/RFC822.class.inc');
-			$RFC822 = new RFC822();
+			$RFC822 = new \RFC822();
 			$abs = explode(',', $_REQUEST['addressbooks']);
 
 			$response = '';
@@ -1091,7 +1091,7 @@ try
 
 			if (empty($_REQUEST['addressbook_id'])) {
 				require_once($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
-				throw new Exception($lang['addressbook']['no_addressbook_id']);
+				throw new \Exception($lang['addressbook']['no_addressbook_id']);
 			}
 			$addressbook_id = $_REQUEST['addressbook_id'];
 

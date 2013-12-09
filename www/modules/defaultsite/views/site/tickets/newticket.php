@@ -12,7 +12,7 @@
 		
 
 		
-		<?php $form = new GO_Site_Widget_Form(); ?>
+		<?php $form = new \GO_Site_Widget_Form(); ?>
 		<?php echo $form->beginForm(false,false,array('enctype'=>'multipart/form-data')); ?>
 
 		<h3><?php echo GO::t('ticketContactInfo','defaultsite'); ?></h3>
@@ -73,7 +73,7 @@
 		
 		<?php if(!$ticket->isClosed()): ?>
 		
-			<?php $uploader = new GO_Site_Widget_Plupload_Widget(); ?>
+			<?php $uploader = new \GO_Site_Widget_Plupload_Widget(); ?>
 		
 			<h3><?php echo GO::t('ticketYourMessage','defaultsite'); ?></h3>
 

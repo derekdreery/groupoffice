@@ -40,7 +40,7 @@ class GO_Base_Fs_Zip {
 		if (class_exists("ZipArchive") && !$utf8) {
 		
 			GO::debug("Using PHP ZipArchive");
-			$zip = new ZipArchive();
+			$zip = new \ZipArchive();
 			$zip->open($archiveFile->path(), ZIPARCHIVE::CREATE);
 			for ($i = 0; $i < count($sources); $i++) {
 				if ($sources[$i]->isFolder()) {
@@ -56,7 +56,7 @@ class GO_Base_Fs_Zip {
 			
 			
 			if(!$zip->close() || !$archiveFile->exists()){
-				throw new Exception($zip->getStatusString());
+				throw new \Exception($zip->getStatusString());
 			}else
 			{
 				return true;
@@ -80,7 +80,7 @@ class GO_Base_Fs_Zip {
 			exec($cmd, $output, $ret);
 
 			if ($ret!=0 || !$archiveFile->exists()) {
-				throw new Exception('Command failed: ' . $cmd . "<br /><br />" . implode("<br />", $output));
+				throw new \Exception('Command failed: ' . $cmd . "<br /><br />" . implode("<br />", $output));
 			}
 			
 			return true;
@@ -107,7 +107,7 @@ class GO_Base_Fs_Zip {
 		}  else {
 			GO::debug("Add empty dir: ".$relative_path);
 			if(!$zip->addEmptyDir(rtrim($relative_path,'/')))
-				throw new Exception("Could not add emty directory ".$relative_path);
+				throw new \Exception("Could not add emty directory ".$relative_path);
 							
 		}
 		

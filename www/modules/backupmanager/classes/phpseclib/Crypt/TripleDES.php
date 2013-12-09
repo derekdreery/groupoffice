@@ -13,7 +13,7 @@
  * <?php
  *    include('Crypt/TripleDES.php');
  *
- *    $des = new Crypt_TripleDES();
+ *    $des = new \Crypt_TripleDES();
  *
  *    $des->setKey('abcdefghijklmnopqrstuvwx');
  *
@@ -212,9 +212,9 @@ class Crypt_TripleDES {
         if ( $mode == CRYPT_DES_MODE_3CBC ) {
             $this->mode = CRYPT_DES_MODE_3CBC;
             $this->des = array(
-                new Crypt_DES(CRYPT_DES_MODE_CBC),
-                new Crypt_DES(CRYPT_DES_MODE_CBC),
-                new Crypt_DES(CRYPT_DES_MODE_CBC)
+                new \Crypt_DES(CRYPT_DES_MODE_CBC),
+                new \Crypt_DES(CRYPT_DES_MODE_CBC),
+                new \Crypt_DES(CRYPT_DES_MODE_CBC)
             );
 
             // we're going to be doing the padding, ourselves, so disable it in the Crypt_DES objects
@@ -242,9 +242,9 @@ class Crypt_TripleDES {
                 break;
             default:
                 $this->des = array(
-                    new Crypt_DES(CRYPT_DES_MODE_ECB),
-                    new Crypt_DES(CRYPT_DES_MODE_ECB),
-                    new Crypt_DES(CRYPT_DES_MODE_ECB)
+                    new \Crypt_DES(CRYPT_DES_MODE_ECB),
+                    new \Crypt_DES(CRYPT_DES_MODE_ECB),
+                    new \Crypt_DES(CRYPT_DES_MODE_ECB)
                 );
  
                 // we're going to be doing the padding, ourselves, so disable it in the Crypt_DES objects

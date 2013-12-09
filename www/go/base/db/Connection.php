@@ -88,7 +88,7 @@ class GO_Base_Db_Connection
 		if ($this->_pdo === null)
 		{
 //			if (empty($this->connectionString))
-//				throw new GO_Base_Exception_Database('Connection.connectionString cannot be empty.');
+//				throw new \GO_Base_Exception_Database('Connection.connectionString cannot be empty.');
 			try
 			{
 				$this->_pdo = $this->createPdoInstance();
@@ -97,7 +97,7 @@ class GO_Base_Db_Connection
 			}
 			catch (PDOException $e)
 			{
-				throw new GO_Base_Exception_Database('Connection failed to open the DB connection.' . $e->getMessage(), (int) $e->getCode(), $e->errorInfo);
+				throw new \GO_Base_Exception_Database('Connection failed to open the DB connection.' . $e->getMessage(), (int) $e->getCode(), $e->errorInfo);
 			}
 		}
 	}
@@ -124,7 +124,7 @@ class GO_Base_Db_Connection
 		if(empty($this->connectionString))
 			return GO::getDbConnection ();
 		else	
-			return new GO_Base_Db_PDO($this->connectionString, $this->username, $this->password);
+			return new \GO_Base_Db_PDO($this->connectionString, $this->username, $this->password);
 	}
 
 //	/**
@@ -167,7 +167,7 @@ class GO_Base_Db_Connection
 	public function createStatement()
 	{
 		$this->setActive(true);
-		return new GO_Base_Db_Statement($this);
+		return new \GO_Base_Db_Statement($this);
 	}
 	
 	/**
@@ -196,7 +196,7 @@ class GO_Base_Db_Connection
 	{
 		$this->setActive(true);
 		$this->_pdo->beginTransaction();
-		return $this->_transaction = new GO_Base_Db_Transaction($this);
+		return $this->_transaction = new \GO_Base_Db_Transaction($this);
 	}
 
 	/**

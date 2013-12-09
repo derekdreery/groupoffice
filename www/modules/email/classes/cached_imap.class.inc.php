@@ -61,27 +61,27 @@ class cached_imap extends imap{
 		global $GO_SECURITY, $lang;
 
 		if (!$account = $this->email->get_account($account_id)) {
-			throw new Exception($lang['common']['selectError']);
+			throw new \Exception($lang['common']['selectError']);
 		}
 
 		if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $account['acl_id']<GO_SECURITY::READ_PERMISSION) && !$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id)) {
 			//echo "<br>account_user_id: ".$account['user_id']." <br>security_user_id:".$GLOBALS['GO_SECURITY']->user_id."";
-			throw new AccessDeniedException();
+			throw new \AccessDeniedException();
 		}
 		/*if($account['user_id']!=$GLOBALS['GO_SECURITY']->user_id && !$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id)) {
-			throw new AccessDeniedException();
+			throw new \AccessDeniedException();
 		}*/
 		try {
 			if (!$this->open($account, $mailbox)) {
 				if(!$halt_on_error)
 					return false;
 				
-				throw new Exception(printf($lang['email']['feedbackCannotConnect'], $account['host'],  $imap->last_error(), $account['port']));
+				throw new \Exception(printf($lang['email']['feedbackCannotConnect'], $account['host'],  $imap->last_error(), $account['port']));
 
 			}
 		}
 		catch (Exception $e) {
-			throw new Exception($this->email->human_connect_error($e->getMessage()));
+			throw new \Exception($this->email->human_connect_error($e->getMessage()));
 		}
 		return $account;
 
@@ -172,7 +172,7 @@ class cached_imap extends imap{
 		go_debug("cached_imap::sort_mailbox($sort_type, $reverse, $filter)");
 
 		if(!$this->selected_mailbox){
-			throw new Exception('No mailbox selected');
+			throw new \Exception('No mailbox selected');
 		}
 
 		$this->sort_type=$sort_type;
@@ -362,7 +362,7 @@ class cached_imap extends imap{
 
 		if(!$this->handle){
 			if(!$this->open($this->account, $this->folder['name'])){
-				throw new Exception(sprintf($lang['email']['feedbackCannotConnect'], $this->account['host'],  $this->last_error(), $this->account['port']));
+				throw new \Exception(sprintf($lang['email']['feedbackCannotConnect'], $this->account['host'],  $this->last_error(), $this->account['port']));
 			}
 		}
 
@@ -449,25 +449,25 @@ class cached_imap extends imap{
 
 		if(!$this->handle){
 			if(!$this->open($this->account, $this->folder['name'])){
-				throw new Exception(sprintf($lang['email']['feedbackCannotConnect'], $this->account['host'],  $this->last_error(), $this->account['port']));
+				throw new \Exception(sprintf($lang['email']['feedbackCannotConnect'], $this->account['host'],  $this->last_error(), $this->account['port']));
 			}
 		}
 		
 		$headers = parent::get_message_header($uid, true);
 		//go_debug($headers);
 		if(!$headers)
-			throw new Exception($lang['email']['errorGettingMessage']);
+			throw new \Exception($lang['email']['errorGettingMessage']);
 
 		$message=$this->imap_message_to_cache($headers, true);
 		
 		$message['from_cache']=false;
 		
 		if(!$message){
-			throw new Exception($lang['email']['errorGettingMessage']);
+			throw new \Exception($lang['email']['errorGettingMessage']);
 		}
 
 		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/RFC822.class.inc');
-		$RFC822 = new RFC822();
+		$RFC822 = new \RFC822();
 		$address = $RFC822->parse_address_list($message['from']);
 
 		$message['full_from']=$message['from'];
@@ -724,7 +724,7 @@ class cached_imap extends imap{
 
 		if(!$this->handle){
 			if(!$this->open($this->account, $this->folder['name'])){
-				throw new Exception(sprintf($lang['email']['feedbackCannotConnect'], $this->account['host'],  $this->last_error(), $this->account['port']));
+				throw new \Exception(sprintf($lang['email']['feedbackCannotConnect'], $this->account['host'],  $this->last_error(), $this->account['port']));
 			}
 		}
 

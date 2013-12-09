@@ -73,11 +73,11 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	protected $_bodyTruncated;
 	
 	public function __construct() {
-		$this->attributes['to'] = new GO_Base_Mail_EmailRecipients($this->attributes['to']);
-		$this->attributes['cc'] = new GO_Base_Mail_EmailRecipients($this->attributes['cc']);
-		$this->attributes['bcc'] = new GO_Base_Mail_EmailRecipients($this->attributes['bcc']);
-		$this->attributes['from'] = new GO_Base_Mail_EmailRecipients($this->attributes['from']);
-		$this->attributes['reply_to'] = new GO_Base_Mail_EmailRecipients($this->attributes['reply_to']);
+		$this->attributes['to'] = new \GO_Base_Mail_EmailRecipients($this->attributes['to']);
+		$this->attributes['cc'] = new \GO_Base_Mail_EmailRecipients($this->attributes['cc']);
+		$this->attributes['bcc'] = new \GO_Base_Mail_EmailRecipients($this->attributes['bcc']);
+		$this->attributes['from'] = new \GO_Base_Mail_EmailRecipients($this->attributes['from']);
+		$this->attributes['reply_to'] = new \GO_Base_Mail_EmailRecipients($this->attributes['reply_to']);
 	}
 
 	/**
@@ -128,11 +128,11 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 		$this->attributes = array_merge($this->attributes, $attributes);
 
-		$this->attributes['to'] = new GO_Base_Mail_EmailRecipients($this->attributes['to']);
-		$this->attributes['cc'] = new GO_Base_Mail_EmailRecipients($this->attributes['cc']);
-		$this->attributes['bcc'] = new GO_Base_Mail_EmailRecipients($this->attributes['bcc']);
-		$this->attributes['from'] = new GO_Base_Mail_EmailRecipients($this->attributes['from']);
-		$this->attributes['reply_to'] = new GO_Base_Mail_EmailRecipients($this->attributes['reply_to']);
+		$this->attributes['to'] = new \GO_Base_Mail_EmailRecipients($this->attributes['to']);
+		$this->attributes['cc'] = new \GO_Base_Mail_EmailRecipients($this->attributes['cc']);
+		$this->attributes['bcc'] = new \GO_Base_Mail_EmailRecipients($this->attributes['bcc']);
+		$this->attributes['from'] = new \GO_Base_Mail_EmailRecipients($this->attributes['from']);
+		$this->attributes['reply_to'] = new \GO_Base_Mail_EmailRecipients($this->attributes['reply_to']);
 		
 		
 	$this->attributes['x_priority']= isset($this->attributes['x_priority']) ? strtolower($this->attributes['x_priority']) : 3;
@@ -212,7 +212,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		else
 			return $att[$number];
 //			false}else{
-//			//throw new Exception("Attachment number $number not found");
+//			//throw new \Exception("Attachment number $number not found");
 //			return ;
 //		}
 	}
@@ -231,7 +231,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 		if (preg_match_all($regex, $body, $matches, PREG_OFFSET_CAPTURE)) {
 
-//		throw new E$attxception(var_export($matches, true));
+//		throw new \E$attxception(var_export($matches, true));
 //			$body = substr($body, 0, $pos);
 
 			for ($i = 0, $count = count($matches[3]); $i < $count; $i++) {

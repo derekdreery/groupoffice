@@ -162,7 +162,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			while ($currentFolder = $currentFolder->parent) {				
 				
 				if(in_array($currentFolder->id, $ids))
-					throw new Exception("Infinite folder loop detected in ".$this->_path." ".implode(",", $ids));
+					throw new \Exception("Infinite folder loop detected in ".$this->_path." ".implode(",", $ids));
 				else
 					$ids[]=$currentFolder->id;
 				
@@ -195,7 +195,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 
 	protected function getFsFolder() {
-		return new GO_Base_Fs_Folder(GO::config()->file_storage_path . $this->path);
+		return new \GO_Base_Fs_Folder(GO::config()->file_storage_path . $this->path);
 	}
 	
 	
@@ -210,7 +210,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				}
 			}
 			
-			//throw new Exception("test");
+			//throw new \Exception("test");
 		}
 	}
 	
@@ -251,7 +251,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		}else{
 			$oldPath = GO::config()->file_storage_path . $this->parent->path.'/'.$filename;
 		}
-		return new GO_Base_Fs_Folder($oldPath);
+		return new \GO_Base_Fs_Folder($oldPath);
 	}
 	
 	protected function beforeSave() {
@@ -260,13 +260,13 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		//check permissions on the filesystem
 		if($this->isNew){
 			if(!$this->fsFolder->firstExistingParent()->isWritable()){
-				throw new Exception("Folder ".$this->fsFolder->firstExistingParent()->stripFileStoragePath()." (Creating ".$this->name.") is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
+				throw new \Exception("Folder ".$this->fsFolder->firstExistingParent()->stripFileStoragePath()." (Creating ".$this->name.") is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}else
 		{
 			if($this->isModified('name') || $this->isModified('parent_id')){
 				if($this->_getOldFsFolder() && !$this->_getOldFsFolder()->isWritable())
-					throw new Exception("Folder ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
+					throw new \Exception("Folder ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}
 
@@ -278,7 +278,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if($this->parent){
 			$existingFolder = $this->parent->hasFolder($this->name);
 			if($existingFolder && $existingFolder->id!=$this->id)
-				throw new Exception(GO::t('folderExists','files').': '.$this->path);
+				throw new \Exception(GO::t('folderExists','files').': '.$this->path);
 		}
 		
 		return parent::beforeSave();
@@ -330,14 +330,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 
 					$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $oldName;
 
-					$fsFolder = new GO_Base_Fs_Folder($oldPath);
+					$fsFolder = new \GO_Base_Fs_Folder($oldPath);
 
 					$newRelPath = $this->getPath(true);
 
-					$newFsFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($newRelPath));
+					$newFsFolder = new \GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($newRelPath));
 
 					if (!$fsFolder->move($newFsFolder))
-						throw new Exception("Could not rename folder on the filesystem");
+						throw new \Exception("Could not rename folder on the filesystem");
                                         
 					$this->notifyUsers(
 						array(
@@ -358,7 +358,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 					
 					GO::debug("Renaming from ".$this->getOldAttributeValue('name')." to ".$this->name);
 
-					$oldFsFolder = new GO_Base_Fs_Folder(dirname($this->fsFolder->path()).'/'.$this->getOldAttributeValue('name'));
+					$oldFsFolder = new \GO_Base_Fs_Folder(dirname($this->fsFolder->path()).'/'.$this->getOldAttributeValue('name'));
 
 					$oldFsFolder->rename($this->name);
 					
@@ -455,7 +455,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 					if (!$autoCreate)
 						return false;
 
-					$folder = new GO_Files_Model_Folder();
+					$folder = new \GO_Files_Model_Folder();
 					$folder->setAttributes($autoCreateAttributes);
 					$folder->name = $folderName;
 					$folder->parent_id = $parent_id;
@@ -523,7 +523,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Files_Model_File 
 	 */
 	public function addFile($name) {
-		$file = new GO_Files_Model_File();
+		$file = new \GO_Files_Model_File();
 	
 		$file->folder_id = $this->id;
 		$file->name = $name;
@@ -544,7 +544,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public function addFilesystemFile(GO_Base_Fs_File $file){
 		
 		if(!GO_Files_Model_File::checkQuota($file->size()))
-			throw new GO_Base_Exception_InsufficientDiskspace();
+			throw new \GO_Base_Exception_InsufficientDiskspace();
 		
 		$file->move($this->fsFolder);
 		$file->setDefaultPermissions();
@@ -571,7 +571,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function addUploadedFile($filesArrayItem){
 		
-		$fsFile = new GO_Base_Fs_File($filesArrayItem['tmp_name']);
+		$fsFile = new \GO_Base_Fs_File($filesArrayItem['tmp_name']);
 		$fsFile->move($this->fsFolder, $filesArrayItem['name'], true, true);
 		
 		return $this->addFile($fsFile->name());
@@ -584,7 +584,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Files_Model_Folder 
 	 */
 	public function addFolder($name, $syncFileSystem=false, $syncOnNextAccess=false){
-		$folder = new GO_Files_Model_Folder();
+		$folder = new \GO_Files_Model_Folder();
 		$folder->parent_id = $this->id;
 		$folder->name = $name;
 		
@@ -699,7 +699,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public function checkFsSync(){
 		
 		if(!$this->fsFolder->exists())
-			throw new Exception("Folder ".$this->path." doesn't exist on the filesystem! Please run a database check.");
+			throw new \Exception("Folder ".$this->path." doesn't exist on the filesystem! Please run a database check.");
 		
 		GO::debug('checkFsSync '.$this->path.' : '.$this->mtime.' < '.$this->fsFolder->mtime());
 		
@@ -720,7 +720,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function addNotifyUser($user_id,$recursively=false){
 		if(!$this->hasNotifyUser($user_id)){
-			$m = new GO_Files_Model_FolderNotification();
+			$m = new \GO_Files_Model_FolderNotification();
 			$m->folder_id = $this->id;
 			$m->user_id = $user_id;
 			$m->save();
@@ -986,20 +986,20 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				$subfolder->parent_id=$this->id;
 				$subfolder->appendNumberToNameIfExists();
 				if(!$subfolder->save()){
-					throw new Exception("Could not save folder ".$subfolder->name." ".implode("\n", $subfolder->getValidationErrors()));
+					throw new \Exception("Could not save folder ".$subfolder->name." ".implode("\n", $subfolder->getValidationErrors()));
 				}
 			}else
 			{
 				if(($existingFolder = $this->hasFolder($subfolder->name))){
 					$existingFolder->moveContentsFrom($subfolder, true);
 					if(!$subfolder->delete()){
-						throw new Exception("Could not delete folder ".$subfolder->name);
+						throw new \Exception("Could not delete folder ".$subfolder->name);
 					}
 				}else
 				{
 					$subfolder->parent_id=$this->id;
 					if(!$subfolder->save()){
-						throw new Exception("Could not save folder ".$subfolder->name." ".implode("\n", $subfolder->getValidationErrors()));
+						throw new \Exception("Could not save folder ".$subfolder->name." ".implode("\n", $subfolder->getValidationErrors()));
 					}
 				}
 			}			
@@ -1011,7 +1011,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$file->folder_id=$this->id;
 			$file->appendNumberToNameIfExists();
 			if(!$file->save()){
-				throw new Exception("Could not save file ".$file->name." ".implode("\n", $file->getValidationErrors()));
+				throw new \Exception("Could not save file ".$file->name." ".implode("\n", $file->getValidationErrors()));
 			}
 		}
 	}
@@ -1086,7 +1086,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function getTopLevelShares($findParams=false){
 		if(!$findParams)
-			$findParams = new GO_Base_Db_FindParams();
+			$findParams = new \GO_Base_Db_FindParams();
 		
 		$findParams->joinRelation('sharedRootFolders')
 			->ignoreAcl()

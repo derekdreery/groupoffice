@@ -38,7 +38,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
-		$message = new GO_Base_Mail_Message();
+		$message = new \GO_Base_Mail_Message();
 		$message->handleEmailFormInput($params);
 		
 		$model->content = $message->toString();
@@ -51,7 +51,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		$response['htmlbody'] = $message->getHtmlBody();
 		
 		// reset the temp folder created by the core controller
-//		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
+//		$tmpFolder = new \GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
 //		$tmpFolder->delete();
 		
 		parent::afterSubmit($response, $model, $params, $modifiedAttributes);
@@ -85,14 +85,14 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		if ((!empty($params['type']) && $params['type']=='default_for_account') || (!empty($params['account_id']) && isset($params['default_template_id']))) {
 			$defTempForAccount = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($params['account_id']);
 			if(!$defTempForAccount){
-				$defTempForAccount= new GO_Addressbook_Model_DefaultTemplateForAccount();
+				$defTempForAccount= new \GO_Addressbook_Model_DefaultTemplateForAccount();
 				$defTempForAccount->account_id = $params['account_id'];
 				$defTempForAccount->save();
 			}
 		} else {
 			$defTempForUser = GO_Addressbook_Model_DefaultTemplate::model()->findByPk(GO::user()->id);
 			if(!$defTempForUser){
-				$defTempForUser= new GO_Addressbook_Model_DefaultTemplate();
+				$defTempForUser= new \GO_Addressbook_Model_DefaultTemplate();
 				$defTempForUser->user_id = GO::user()->id;
 				$defTempForUser->save();
 			}

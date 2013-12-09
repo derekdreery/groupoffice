@@ -16,10 +16,10 @@
  * a query.
  * 
  * <pre>
- * $columnModel =  new GO_Base_Data_ColumnModel(GO_Notes_Model_Note::model());
+ * $columnModel =  new \GO_Base_Data_ColumnModel(GO_Notes_Model_Note::model());
  * $columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
  * 
- * $store=new GO_Base_Data_Store('GO_Notes_Model_Note', $columnModel, $params);
+ * $store=new \GO_Base_Data_Store('GO_Notes_Model_Note', $columnModel, $params);
  * </pre>
  * 
  * @version $Id$
@@ -398,7 +398,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 */
 	protected function processDeleteActions() {
 		if (isset($this->_records))
-			throw new Exception("deleteRecord should be called before loading data. If you run the statement before the deletes then the deleted items will still be in the result.");
+			throw new \Exception("deleteRecord should be called before loading data. If you run the statement before the deletes then the deleted items will still be in the result.");
 
 		$errors = array();
 		foreach ($this->_deleteRecords as $modelPk) {
@@ -500,7 +500,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 
 		$columns = $this->_columnModel->getColumns();
 		if (empty($columns))
-			throw new Exception('No columns given for this store');
+			throw new \Exception('No columns given for this store');
 
 		if(!isset($this->response['results']))
 			$this->response['results']=array();
@@ -545,7 +545,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 * @param boolean $checkPermissions check Permission for item defaults to true
 	 */
 	public function multiSelect($requestParamName, $selectClassName, $foreignKey, $checkPermissions = true) {
-		$this->_multiSel = new GO_Base_Component_MultiSelectGrid(
+		$this->_multiSel = new \GO_Base_Component_MultiSelectGrid(
 										$requestParamName,
 										$selectClassName,
 										$this,
@@ -563,7 +563,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 * @param string $requestParamName
 	 */
 	public function multiSelectable($requestParamName) {
-		$this->_multiSel = new GO_Base_Component_MultiSelectGrid($requestParamName, $this->_modelClass, $this, $this->_requestParams);
+		$this->_multiSel = new \GO_Base_Component_MultiSelectGrid($requestParamName, $this->_modelClass, $this, $this->_requestParams);
 		$this->_multiSel->setFindParamsForDefaultSelection($this->_extraFindParams);
 		$this->_multiSel->formatCheckedColumn();
 	}

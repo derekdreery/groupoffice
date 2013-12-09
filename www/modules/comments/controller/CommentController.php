@@ -31,7 +31,7 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 		$response['write_permission']=$model->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION);
 		if(!$response['permisson_level'])
 		{
-			throw new AccessDeniedException();
+			throw new \AccessDeniedException();
 		}
 		return $response;
 	}
@@ -70,7 +70,7 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 			'results' => array()
 		);
 
-		$cm = new GO_Base_Data_ColumnModel();
+		$cm = new \GO_Base_Data_ColumnModel();
 		$cm->setColumnsFromModel(GO::getModel('GO_Comments_Model_Comment'));
 		
 		$store = GO_Base_Data_Store::newInstance($cm);

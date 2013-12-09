@@ -152,13 +152,13 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		$count = 0;
 		$failed=array();
 		if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
-			throw new Exception(GO::t('noFileUploaded'));
+			throw new \Exception(GO::t('noFileUploaded'));
 		}else {
-			$file = new GO_Base_Fs_File($_FILES['ical_file']['tmp_name'][0]);
-			$i = new GO_Base_Vobject_Iterator($file, "VEVENT");
+			$file = new \GO_Base_Fs_File($_FILES['ical_file']['tmp_name'][0]);
+			$i = new \GO_Base_Vobject_Iterator($file, "VEVENT");
 			foreach($i as $vevent){					
 			
-				$event = new GO_Calendar_Model_Event();
+				$event = new \GO_Calendar_Model_Event();
 				try{
 					$event->importVObject( $vevent, array('calendar_id'=>$params['calendar_id']) );
 					$count++;
@@ -240,7 +240,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 			$calendarColor = GO_Calendar_Model_CalendarUserColor::model()->findByPk(array('calendar_id'=>$cC->id,'user_id'=>GO::user()->id));
 			
 			if(!$calendarColor){
-				$calendarColor = new GO_Calendar_Model_CalendarUserColor();
+				$calendarColor = new \GO_Calendar_Model_CalendarUserColor();
 				$calendarColor->user_id = GO::user()->id;
 				$calendarColor->calendar_id = $cC->id;
 			}
@@ -260,10 +260,10 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params["calendar_id"],false, true);
 		
 		if(!$calendar->public && !$calendar->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO_Base_Exception_AccessDenied();
 		
-		$c = new GO_Base_VObject_VCalendar();				
-		$c->add(new GO_Base_VObject_VTimezone());
+		$c = new \GO_Base_VObject_VCalendar();				
+		$c->add(new \GO_Base_VObject_VTimezone());
 		
 		$months_in_past = isset($params['months_in_past']) ? intval($params['months_in_past']) : 0;
 		
@@ -275,11 +275,11 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		else
 			$stmt = GO_Calendar_Model_Event::model()->find($findParams);		
 		
-		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File($calendar->name.'.ics'));
+		GO_Base_Util_Http::outputDownloadHeaders(new \GO_Base_FS_File($calendar->name.'.ics'));
 
 		echo "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->version."//EN\r\n";
 
-		$t = new GO_Base_VObject_VTimezone();
+		$t = new \GO_Base_VObject_VTimezone();
 		echo $t->serialize();
 		
 		while($event = $stmt->fetch()){
@@ -294,7 +294,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params['calendar_id']);
 		
 		if(!$calendar)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO_Base_Exception_NotFound();
 		
 		$calendar->truncate();
 		
@@ -313,7 +313,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params['calendar_id']);
 		
 		if(!$calendar)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO_Base_Exception_NotFound();
 		
 		GO_Base_Fs_File::setAllowDeletes(false);
 		//VERY IMPORTANT:

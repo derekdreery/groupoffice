@@ -71,7 +71,7 @@ class comments extends db {
 			return $this->record;
 		}else
 		{
-			throw new DatabaseSelectException();
+			throw new \DatabaseSelectException();
 		}
 	}
 	/**
@@ -125,7 +125,7 @@ class comments extends db {
 		global $GO_CONFIG;
 
 		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-		$GO_USERS = new GO_USERS();
+		$GO_USERS = new \GO_USERS();
 		
 		$comments = array();
 		$this->get_comments($link_id, $link_type, '', 'ctime', 'DESC', 0, 5);

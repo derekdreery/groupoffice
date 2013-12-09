@@ -36,7 +36,7 @@ class GO_Base_Ldap_Result{
 		if(!$this->_entryId)
 			return false;
 		
-		return new GO_Base_Ldap_Record($this->_ldapConn, $this->_entryId);
+		return new \GO_Base_Ldap_Record($this->_ldapConn, $this->_entryId);
 	}
 	
 	/**

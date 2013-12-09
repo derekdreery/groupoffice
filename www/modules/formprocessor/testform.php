@@ -198,7 +198,7 @@ require('../../Group-Office.php');
 
 
 //				require_once($GO_CONFIG->class_path.'smarty/Smarty.class.php');
-//				$smarty = new Smarty();
+//				$smarty = new \Smarty();
 //
 //				require_once($GLOBALS['GO_MODULES']->modules['cms']['path'].'smarty_plugins/function.html_input.php');
 //				require_once($GO_CONFIG->class_path.'smarty/plugins/function.html_options.php');

@@ -41,13 +41,13 @@ class GO_Base_Model_ModelType extends GO_Base_Db_ActiveRecord {
 	public function findByModelName($modelName){
 		
 		if(empty($modelName))
-			throw new Exception("Model name may not be empty");
+			throw new \Exception("Model name may not be empty");
 		
 		$model = $this->findSingleByAttribute('model_name', $modelName);
 		if($model)
 			return $model->id;
 		
-		$model = new GO_Base_Model_ModelType();
+		$model = new \GO_Base_Model_ModelType();
 		$model->model_name=$modelName;
 		$model->save();
 		

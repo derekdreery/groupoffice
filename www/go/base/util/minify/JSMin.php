@@ -80,7 +80,7 @@ class GO_Base_Util_Minify_JSMin {
      */
     public static function minify($js)
     {
-        $GO_Base_Util_Minify_JSMin = new GO_Base_Util_Minify_JSMin($js);
+        $GO_Base_Util_Minify_JSMin = new \GO_Base_Util_Minify_JSMin($js);
         return $GO_Base_Util_Minify_JSMin->min();
     }
 
@@ -200,7 +200,7 @@ class GO_Base_Util_Minify_JSMin {
                             break;
                         }
                         if ($this->isEOF($this->a)) {
-                            throw new GO_Base_Util_Minify_JSMin_UnterminatedStringException(
+                            throw new \GO_Base_Util_Minify_JSMin_UnterminatedStringException(
                                 "GO_Base_Util_Minify_JSMin: Unterminated String at byte {$this->inputIndex}: {$str}");
                         }
                         $str .= $this->a;
@@ -237,7 +237,7 @@ class GO_Base_Util_Minify_JSMin {
                                     $pattern .= $this->a;
                                 }
                                 if ($this->isEOF($this->a)) {
-                                    throw new GO_Base_Util_Minify_JSMin_UnterminatedRegExpException(
+                                    throw new \GO_Base_Util_Minify_JSMin_UnterminatedRegExpException(
                                         "GO_Base_Util_Minify_JSMin: Unterminated set in RegExp at byte "
                                             . $this->inputIndex .": {$pattern}");
                                 }
@@ -251,7 +251,7 @@ class GO_Base_Util_Minify_JSMin {
                             $this->a = $this->get();
                             $pattern .= $this->a;
                         } elseif ($this->isEOF($this->a)) {
-                            throw new GO_Base_Util_Minify_JSMin_UnterminatedRegExpException(
+                            throw new \GO_Base_Util_Minify_JSMin_UnterminatedRegExpException(
                                 "GO_Base_Util_Minify_JSMin: Unterminated RegExp at byte {$this->inputIndex}: {$pattern}");
                         }
                         $this->output .= $this->a;
@@ -401,7 +401,7 @@ class GO_Base_Util_Minify_JSMin {
                     return;
                 }
             } elseif ($get === null) {
-                throw new GO_Base_Util_Minify_JSMin_UnterminatedCommentException(
+                throw new \GO_Base_Util_Minify_JSMin_UnterminatedCommentException(
                     "GO_Base_Util_Minify_JSMin: Unterminated comment at byte {$this->inputIndex}: /*{$comment}");
             }
             $comment .= $get;

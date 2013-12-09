@@ -36,7 +36,7 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 	private $saved_headers=false;
 	
 	 /**
-   * Create a new Message.
+   * Create a new \Message.
    * @param string $subject
    * @param string $body
    * @param string $contentType
@@ -71,11 +71,11 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 	private function _saveHeaders(){	
 		if(!$this->saved_headers){		
 			
-			$tempInFile = new GO_Base_Fs_File(GO::config()->tmpdir."smime_tempin.txt");
+			$tempInFile = new \GO_Base_Fs_File(GO::config()->tmpdir."smime_tempin.txt");
 			$tempInFile->parent()->create();
 			$tempInFile->delete();
 			
-			$tempOutFile = new GO_Base_Fs_File(GO::config()->tmpdir."smime_tempout.txt");
+			$tempOutFile = new \GO_Base_Fs_File(GO::config()->tmpdir."smime_tempout.txt");
 			$tempOutFile->delete();			
 			
 			$this->tempin = $tempInFile->path();
@@ -111,11 +111,11 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 			 * This class will stream the MIME structure to the tempin text file in 
 			 * a memory efficient way.
 			 */
-			$fbs = new Swift_ByteStream_FileByteStream($this->tempin, true);		
+			$fbs = new \Swift_ByteStream_FileByteStream($this->tempin, true);		
 			parent::toByteStream($fbs);
 
 			if(!file_exists($this->tempin))
-				throw new Exception('Could not write temporary message for signing');
+				throw new \Exception('Could not write temporary message for signing');
 		}	
 	}
 	

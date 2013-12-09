@@ -242,7 +242,7 @@ class GO{
 //		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***",$options);
 
 		
-		self::$db = new GO\Base\Db\PDO("mysql:host=$dbhost;dbname=$dbname;port=$dbport", $dbuser, $dbpass, $options);
+		self::$db = new \GO\Base\Db\PDO("mysql:host=$dbhost;dbname=$dbname;port=$dbport", $dbuser, $dbpass, $options);
 	}
 
 	/**
@@ -305,7 +305,7 @@ class GO{
 	 */
 	public static function router() {
 		if (!isset(self::$_router)) {
-			self::$_router=new GO_Base_Router();
+			self::$_router=new \GO_Base_Router();
 		}
 		return self::$_router;
 	}
@@ -325,14 +325,14 @@ class GO{
 //				if(isset(GO::session()->values['modulesObject']) && !isset($GLOBALS['GO_CONFIG'])){
 //					self::$_modules=GO::session()->values['modulesObject'];
 //				}else{
-//					self::$_modules=GO::session()->values['modulesObject']=new GO_Base_ModuleCollection();
+//					self::$_modules=GO::session()->values['modulesObject']=new \GO_Base_ModuleCollection();
 //				}
 //			}else
 //			{
-//				self::$_modules=new GO_Base_ModuleCollection();
+//				self::$_modules=new \GO_Base_ModuleCollection();
 //			}
 			
-			self::$_modules=new GO_Base_ModuleCollection();
+			self::$_modules=new \GO_Base_ModuleCollection();
 		}
 		return self::$_modules;
 	}
@@ -344,7 +344,7 @@ class GO{
 	 */
 	public static function modelCache() {
 		if (!isset(self::$_modelCache)) {
-			self::$_modelCache=new GO_Base_Model_ModelCache();
+			self::$_modelCache=new \GO_Base_Model_ModelCache();
 		}
 		return self::$_modelCache;
 	}
@@ -364,12 +364,12 @@ class GO{
 		if (!isset(self::$_cache)) {
 			if(GO::config()->debug || !GO::isInstalled())
 //			if(!GO::isInstalled())
-				self::$_cache=new GO_Base_Cache_None();
+				self::$_cache=new \GO_Base_Cache_None();
 //			Disable apc cache temporarily because it seems to cause the random logouts
 //			elseif(function_exists("apc_store"))
-//				self::$_cache=new GO_Base_Cache_Apc();
+//				self::$_cache=new \GO_Base_Cache_Apc();
 			else
-				self::$_cache=new GO_Base_Cache_Disk();
+				self::$_cache=new \GO_Base_Cache_Disk();
 		}
 		return self::$_cache;
 	}
@@ -380,7 +380,7 @@ class GO{
 	 */
 	public static function config() {
 		if (!isset(self::$_config)) {
-			self::$_config = new GO_Base_Config();
+			self::$_config = new \GO_Base_Config();
 		}
 		return self::$_config;
 	}
@@ -391,7 +391,7 @@ class GO{
 	 */
 	public static function session() {
 		if (!isset(self::$_session)) {
-			self::$_session = new GO_Base_Session();
+			self::$_session = new \GO_Base_Session();
 		}
 		return self::$_session;
 	}
@@ -471,7 +471,7 @@ class GO{
 //					echo $fullPath."\n";
 
 					if(!file_exists($fullPath) || is_dir($fullPath)){
-						//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
+						//throw new \Exception('Class '.$orgClassName.' not found! ('.$file.')');
 						return false;
 					}
 					
@@ -508,7 +508,7 @@ class GO{
 	public static function init() {
 
 		if(self::$initialized){
-			throw new Exception("Group-Office was already initialized");
+			throw new \Exception("Group-Office was already initialized");
 		}
 		self::$initialized=true;
 		
@@ -785,7 +785,7 @@ class GO{
 		if (!empty(self::config()->info_log)) {
 
 			if (empty(GO::session()->values["logdircheck"])) {
-				$folder = new GO_Base_Fs_Folder(dirname(self::config()->info_log));
+				$folder = new \GO_Base_Fs_Folder(dirname(self::config()->info_log));
 				$folder->create();
 				GO::session()->values["logdircheck"] = true;
 			}
@@ -858,7 +858,7 @@ class GO{
 
 					
 					if ($text == 'undefined')
-						throw new Exception();
+						throw new \Exception();
 					
 					//$username=GO::user() ? GO::user()->username : 'nobody';
 
@@ -924,7 +924,7 @@ class GO{
 	 */
 	public static function language(){
 		if(!isset(self::$_language)){
-			self::$_language=new GO_Base_Language();
+			self::$_language=new \GO_Base_Language();
 		}
 		return self::$_language;
 	}
@@ -953,7 +953,7 @@ class GO{
 	public static function getModel($modelName){
 		//$modelName::model() does not work on php 5.2! That's why we use this function.
 		if(!class_exists($modelName))
-			throw new Exception("Model class '$modelName' not found in GO::getModel()");
+			throw new \Exception("Model class '$modelName' not found in GO::getModel()");
 
 		return call_user_func(array($modelName, 'model'));
 	}
@@ -975,10 +975,10 @@ class GO{
 
 		if(GO::config()->debug){
 			if(!preg_match('/[a-z]+/', $module))
-				throw new Exception('$module param may only contain a-z characters.');
+				throw new \Exception('$module param may only contain a-z characters.');
 
 			if(!preg_match('/[a-z]+/i', $function))
-				throw new Exception('$function param may only contain a-z characters.');
+				throw new \Exception('$function param may only contain a-z characters.');
 		}
 
 		$p = array('m'=>$module,'f'=>$function, 'p'=>$params);
@@ -1055,7 +1055,7 @@ class GO{
 	public static function findClasses($subfolder){
 
 		$classes=array();
-		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'go/base/'.$subfolder);
+		$folder = new \GO_Base_Fs_Folder(GO::config()->root_path.'go/base/'.$subfolder);
 		if($folder->exists()){
 
 			$items = $folder->ls();
@@ -1063,7 +1063,7 @@ class GO{
 			foreach($items as $item){
 				if($item instanceof GO_Base_Fs_File){
 					$className = 'GO_Base_'.ucfirst($subfolder).'_'.$item->nameWithoutExtension();
-					$classes[] = new ReflectionClass($className);
+					$classes[] = new \ReflectionClass($className);
 				}
 			}
 		}
@@ -1081,7 +1081,7 @@ class GO{
 	public static function findFsClasses($subfolder, $subClassOf=null){
 
 		$classes=array();
-		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'php/'.$subfolder);
+		$folder = new \GO_Base_Fs_Folder(GO::config()->file_storage_path.'php/'.$subfolder);
 		if($folder->exists()){
 
 			$items = $folder->ls();
@@ -1098,7 +1098,7 @@ class GO{
 					
 					$className .= $item->nameWithoutExtension();
 					
-					$rc = new ReflectionClass($className);
+					$rc = new \ReflectionClass($className);
 					
 					if($subClassOf==null || $rc->isSubclassOf($subClassOf))
 						$classes[] = $rc;

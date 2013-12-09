@@ -112,10 +112,10 @@
 			
 		<?php if(!$ticket->isClosed()): ?>
 		
-			<?php $form = new GO_Site_Widget_Form(); ?>
+			<?php $form = new \GO_Site_Widget_Form(); ?>
 			<?php echo $form->beginForm(false,false,array('enctype'=>'multipart/form-data')); ?>
 		
-			<?php $uploader = new GO_Site_Widget_Plupload_Widget(); ?>
+			<?php $uploader = new \GO_Site_Widget_Plupload_Widget(); ?>
 		
 			<h3><?php echo GO::t('ticketYourMessage','defaultsite'); ?></h3>
 

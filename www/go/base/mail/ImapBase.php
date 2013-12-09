@@ -93,7 +93,7 @@ abstract class GO_Base_Mail_ImapBase {
 	}
 	function clean($val, $type) {
 		if (!$this->input_validate($val, $type)) {
-			throw new Exception("INVALID IMAP INPUT DETECTED: ".$type.': '.$val);
+			throw new \Exception("INVALID IMAP INPUT DETECTED: ".$type.': '.$val);
 		}
 	}
 
@@ -315,13 +315,13 @@ abstract class GO_Base_Mail_ImapBase {
 			$command = 'A'.$this->command_number().' '.$command;
 		}
 		if (!is_resource($this->handle)){
-				throw new Exception("Lost connection to ".$this->server);
+				throw new \Exception("Lost connection to ".$this->server);
 		}
 		
 		$this->lastCommand=$command;
 
 		if(!fputs($this->handle, $command)){
-			throw new Exception("Lost connection to ".$this->server);
+			throw new \Exception("Lost connection to ".$this->server);
 //				eturn false;
 		}
 		

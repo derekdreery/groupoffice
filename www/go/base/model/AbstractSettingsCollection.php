@@ -154,7 +154,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	 * @return \ReflectionClass
 	 */
 	private function _getReflectionClass(){
-		return new GO_Base_Util_ReflectionClass($this);
+		return new \GO_Base_Util_ReflectionClass($this);
 	}
 	
 	/**

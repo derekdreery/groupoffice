@@ -22,7 +22,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 	 * @return GO_Email_Model_SavedMessage 
 	 */
 	public function createFromMimeData($mimeData) {
-		$m = new GO_Email_Model_SavedMessage();		
+		$m = new \GO_Email_Model_SavedMessage();		
 		$m->setMimeData($mimeData);
 		return $m;
 	}
@@ -38,10 +38,10 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 		
 		$fullPath = $isTempFile ? GO::config()->tmpdir.$path : GO::config()->file_storage_path.$path;
 		
-		$file = new GO_Base_Fs_File($fullPath);
+		$file = new \GO_Base_Fs_File($fullPath);
 		
 		if(!$file->exists()){
-			throw new Exception("E-mail message file does not exist!");
+			throw new \Exception("E-mail message file does not exist!");
 		}
 		
 		$mimeData = $file->contents();
@@ -59,7 +59,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 //		if (!empty($path))
 //			$attributes['path'] = $path;
 		
-		$decoder = new GO_Base_Mail_MimeDecode($mimeData);
+		$decoder = new \GO_Base_Mail_MimeDecode($mimeData);
 		$structure = $decoder->decode(array(
 				'include_bodies' => true,
 				'decode_headers' => true,
@@ -67,7 +67,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 						));
 		
 		if (!$structure)
-			throw new Exception("Could not decode mime data:\n\n $mimeData");
+			throw new \Exception("Could not decode mime data:\n\n $mimeData");
 
 		$attributes=array();
 		
@@ -142,7 +142,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 	
 //	protected function getAttachmentUrl($attachment) {
 //		
-//		$file = new GO_Base_Fs_File($attachment['name']);
+//		$file = new \GO_Base_Fs_File($attachment['name']);
 //		
 //		if($file->extension()=='dat'){			
 //			return GO::url('email/message/tnefAttachmentFromTempFile', array('tmp_file'=>$attachment['tmp_file']));
@@ -211,17 +211,17 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 					}
 					
 					
-					$f = new GO_Base_Fs_File($filename);
+					$f = new \GO_Base_Fs_File($filename);
 					
-					$a = new GO_Email_Model_MessageAttachment();										
+					$a = new \GO_Email_Model_MessageAttachment();										
 					$a->name=$filename;
 					$a->number=$part_number_prefix.$part_number;
 					$a->content_id=$content_id;
 					$a->mime=$mime_type;
 					
-					$tmp_file = new GO_Base_Fs_File($this->_getTempDir().$filename);
+					$tmp_file = new \GO_Base_Fs_File($this->_getTempDir().$filename);
 					if(!empty($part->body)){
-						$tmp_file = new GO_Base_Fs_File($this->_getTempDir().$filename);
+						$tmp_file = new \GO_Base_Fs_File($this->_getTempDir().$filename);
 						if(!$tmp_file->exists())
 							$tmp_file->putContents($part->body);
 						

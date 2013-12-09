@@ -28,7 +28,7 @@ class GO_Base_Util_Date_DateTime extends DateTime {
   public function __construct($time="now", $timezone=null) {
 	if($timezone===null) {
 	  $tz = GO::user() ? GO::user()->timezone : GO::config()->default_timezone;
-	  $timezone = new DateTimeZone($tz);
+	  $timezone = new \DateTimeZone($tz);
 	}
 	parent::__construct($time, $timezone);
   }
@@ -40,7 +40,7 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	 * @return GO_Base_Util_Date_DateTime 
 	 */
 	public static function fromUnixtime($unixtime) {
-		return new self(date('Y-m-d H:i:s', $unixtime), new DateTimeZone(date_default_timezone_get()));
+		return new self(date('Y-m-d H:i:s', $unixtime), new \DateTimeZone(date_default_timezone_get()));
 	}
 	
 	/**
@@ -49,10 +49,10 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	 * @return GO_Base_Util_Date_DateTime
 	 */
 	public static function getEasterDatetime($year) {
-			$base = new GO_Base_Util_Date_DateTime("$year-03-21");
+			$base = new \GO_Base_Util_Date_DateTime("$year-03-21");
 			$days = easter_days($year);
 
-			return $base->add(new DateInterval("P{$days}D"));
+			return $base->add(new \DateInterval("P{$days}D"));
 	}
 	
 	/**

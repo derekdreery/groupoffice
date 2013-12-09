@@ -1108,7 +1108,7 @@ class customfields extends db {
 				
 				if(!empty($field['validation_regex']) && !empty($post_values[$field['dataname']])){
 					if(!preg_match('/'.$field['validation_regex'].'/',$post_values[$field['dataname']])){
-						throw new Exception($field['name'].' is ongeldig');
+						throw new \Exception($field['name'].' is ongeldig');
 					}
 				}
 				

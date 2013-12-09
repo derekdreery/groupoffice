@@ -48,7 +48,7 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 	private function _findShares($user_id) {
 
 
-		$findParams = new GO_Base_Db_FindParams();
+		$findParams = new \GO_Base_Db_FindParams();
 
 		$findParams->getCriteria()
 						->addModel(GO_Files_Model_Folder::model())
@@ -110,7 +110,7 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 				if (!$isSubDir) {
 
 
-					$sharedRoot = new GO_Files_Model_SharedRootFolder();
+					$sharedRoot = new \GO_Files_Model_SharedRootFolder();
 					$sharedRoot->user_id = $user_id;
 					$sharedRoot->folder_id = $folder->id;
 					$sharedRoot->save();

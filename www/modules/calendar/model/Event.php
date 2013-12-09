@@ -248,8 +248,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return array 
 	 */
 	public function getDiff() {
-		$startDateTime = new GO_Base_Util_Date_DateTime(date('c', $this->start_time));
-		$endDateTime = new GO_Base_Util_Date_DateTime(date('c', $this->end_time));
+		$startDateTime = new \GO_Base_Util_Date_DateTime(date('c', $this->start_time));
+		$endDateTime = new \GO_Base_Util_Date_DateTime(date('c', $this->end_time));
 
 		return $startDateTime->diff($endDateTime);
 	}
@@ -263,10 +263,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function addException($date, $exception_event_id=0) {
 		
 		if(!$this->isRecurring())
-			throw new Exception("Can't add exception to non recurring event ".$this->id);
+			throw new \Exception("Can't add exception to non recurring event ".$this->id);
 		
 		if(!$this->hasException($date)){
-			$exception = new GO_Calendar_Model_Exception();
+			$exception = new \GO_Calendar_Model_Exception();
 			$exception->event_id = $this->id;
 			$exception->time = mktime(date('G',$this->start_time),date('i',$this->start_time),0,date('n',$date),date('j',$date),date('Y',$date)); // Needs to be a unix timestamp
 			$exception->exception_event_id=$exception_event_id;
@@ -295,7 +295,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		$att['start_time'] = strtotime($d . ' ' . $t);
 
-		$endTime = new GO_Base_Util_Date_DateTime(date('c', $att['start_time']));
+		$endTime = new \GO_Base_Util_Date_DateTime(date('c', $att['start_time']));
 		$endTime->add($diff);
 		$att['end_time'] = $endTime->format('U');
 		
@@ -322,7 +322,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		
 		if(!$this->isRecurring()){
-			throw new Exception("Can't create exception event for non recurring event ".$this->id);
+			throw new \Exception("Can't create exception event for non recurring event ".$this->id);
 		}
 		
 		$oldIgnore = GO::setIgnoreAclPermissions();
@@ -347,7 +347,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$exceptionEvent->dontSendEmails = $dontSendEmails;
 			$exceptionEvent->setAttributes($attributes);
 			if(!$exceptionEvent->save())
-				throw new Exception("Could not create exception: ".var_export($exceptionEvent->getValidationErrors(), true));
+				throw new \Exception("Could not create exception: ".var_export($exceptionEvent->getValidationErrors(), true));
 			$event->addException($exceptionDate, $exceptionEvent->id);
 
 			$event->duplicateRelation('participants', $exceptionEvent);
@@ -384,7 +384,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	public function validate() {
 		if($this->rrule != ""){			
-			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule = new \GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
 			$this->repeat_end_time = $rrule->until;
 		}		
@@ -398,7 +398,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	protected function beforeSave() {
 		
 		if($this->rrule != ""){			
-			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule = new \GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
 			$this->repeat_end_time = intval($rrule->until);
 		}
@@ -409,7 +409,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //			if($organizerEvent && !$organizerEvent->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION) || !$organizerEvent && !$this->is_organizer){
 //				GO::debug($this->getModifiedAttributes());
 //				GO::debug($this->_attributes);
-				throw new GO_Base_Exception_AccessDenied();
+				throw new \GO_Base_Exception_AccessDenied();
 //			}			
 		}
 		
@@ -535,7 +535,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //			//copy particpants to new exception
 //			$stmt = $newExeptionEvent->participants();
 //			while($participant = $stmt->fetch()){
-//				$newParticipant = new GO_Calendar_Model_Participant();
+//				$newParticipant = new \GO_Calendar_Model_Participant();
 //				$newParticipant->setAttributes($participant->getAttributes());
 //				unset($newParticipant->id);
 //				$newParticipant->event_id=$this->id;
@@ -791,7 +791,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function findException($exceptionDate) {
 
 		if ($this->exception_for_event_id != 0)
-			throw new Exception("This is not a master event");
+			throw new \Exception("This is not a master event");
 
 		$startOfDay = GO_Base_Util_Date::clear_time($exceptionDate);
 		$endOfDay = GO_Base_Util_Date::date_add($startOfDay, 1);
@@ -946,14 +946,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$periodStartTime= GO_Base_Util_Date::clear_time($periodStartTime)-1;
 		$periodEndTime= GO_Base_Util_Date::clear_time(GO_Base_Util_Date::date_add($periodEndTime,1));
 
-		$localEvent = new GO_Calendar_Model_LocalEvent($event, $origPeriodStartTime, $origPeriodEndTime);
+		$localEvent = new \GO_Calendar_Model_LocalEvent($event, $origPeriodStartTime, $origPeriodEndTime);
 		
 		if(!$localEvent->isRepeating()){
 			$this->_calculatedEvents[$event->start_time.'-'.$event->name.'-'.$event->id] = $localEvent;
 		} else {
 			
 			GO::debug("Calculating recurrences for event: ".$event->id);
-			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule = new \GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($localEvent->getEvent()->start_time, $localEvent->getEvent()->rrule, true);
 			
 			//we need to start searching for the next occurrence at the period start
@@ -976,7 +976,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 				$diff = $event->getDiff();
 
-				$endTime = new GO_Base_Util_Date_DateTime(date('c', $occurenceStartTime));
+				$endTime = new \GO_Base_Util_Date_DateTime(date('c', $occurenceStartTime));
 				$endTime->add($diff);
 				
 				$localEvent->setAlternateEndTime($endTime->format('U'));
@@ -986,7 +986,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						$this->_calculatedEvents[$occurenceStartTime.'-'.$origEventAttr['name'].'-'.$origEventAttr['id']] = $localEvent;
 				}
 				
-				$localEvent = new GO_Calendar_Model_LocalEvent($event, $periodStartTime, $periodEndTime);
+				$localEvent = new \GO_Calendar_Model_LocalEvent($event, $periodStartTime, $periodEndTime);
 			}
 		}
 		
@@ -998,7 +998,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //			//not a recurring event
 //			$this->_calculatedEvents[] = $event->getAttributes('formatted');
 //		} else {
-//			$rrule = new GO_Base_Util_Icalendar_Rrule();
+//			$rrule = new \GO_Base_Util_Icalendar_Rrule();
 //			$rrule->readIcalendarRruleString($event->start_time, $event->rrule);
 //
 //			$rrule->setRecurpositionStartTime($periodStartTime);
@@ -1014,7 +1014,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //
 //				$diff = $this->getDiff();
 //
-//				$endTime = new GO_Base_Util_Date_DateTime(date('c', $occurenceStartTime));
+//				$endTime = new \GO_Base_Util_Date_DateTime(date('c', $occurenceStartTime));
 //				$endTime->addDiffCompat($diff);
 //				$origEventAttr['end_time'] = GO_Base_Util_Date::get_timestamp($endTime->format('U'));
 //
@@ -1054,7 +1054,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Calendar_Model_LocalEvent 
 	 */
 	public function getLocalEvent($event, $periodStartTime, $periodEndTime){
-		$localEvent = new GO_Calendar_Model_LocalEvent($event, $periodStartTime, $periodEndTime);
+		$localEvent = new \GO_Calendar_Model_LocalEvent($event, $periodStartTime, $periodEndTime);
 		
 		return $localEvent;
 	}
@@ -1245,7 +1245,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(!$this->isRecurring())
 			return false;
 		
-		$rRule = new GO_Base_Util_Icalendar_Rrule();
+		$rRule = new \GO_Base_Util_Icalendar_Rrule();
 		$rRule->readIcalendarRruleString($this->start_time, $this->rrule);
 		
 		return $rRule;
@@ -1267,7 +1267,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	public function toVObject($method='REQUEST', $updateByParticipant=false, $recurrenceTime=false,$includeExdatesForMovedEvents=false){
 		
-		$calendar = new Sabre\VObject\Component\VCalendar();
+		$calendar = new \Sabre\VObject\Component\VCalendar();
 		 
 		$e=$calendar->createComponent('VEVENT');
 		
@@ -1281,14 +1281,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(isset($this->sequence))
 			$e->sequence=$this->sequence;
 		
-		$e->add('dtstamp', new DateTime("now", new DateTimeZone('UTC')));
+		$e->add('dtstamp', new \DateTime("now", new \DateTimeZone('UTC')));
 		
-		$mtimeDateTime = new DateTime('@'.$this->mtime);
-		$mtimeDateTime->setTimezone(new DateTimeZone('UTC'));		
+		$mtimeDateTime = new \DateTime('@'.$this->mtime);
+		$mtimeDateTime->setTimezone(new \DateTimeZone('UTC'));		
 		$e->add('LAST-MODIFIED', $mtimeDateTime);
 				
-		$ctimeDateTime = new DateTime('@'.$this->mtime);
-		$ctimeDateTime->setTimezone(new DateTimeZone('UTC'));
+		$ctimeDateTime = new \DateTime('@'.$this->mtime);
+		$ctimeDateTime->setTimezone(new \DateTimeZone('UTC'));
 		$e->add('created', $ctimeDateTime);
 	
     $e->summary = (string) $this->name;
@@ -1358,7 +1358,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$stmt = $this->exceptions($findParams);
 			while($exception = $stmt->fetch()){
-//				$exdate = new Sabre\VObject\Property\DateTime('exdate',Sabre\VObject\Property\DateTime::DATE);
+//				$exdate = new \Sabre\VObject\Property\DateTime('exdate',Sabre\VObject\Property\DateTime::DATE);
 				$dt = GO_Base_Util_Date_DateTime::fromUnixtime($exception->getStartTime());				
 //				$exdate->setDateTime($dt);		
 				$e->add('exdate',$dt, array('type'=>'DATE'));
@@ -1425,17 +1425,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	public function toICS($method='REQUEST', $updateByParticipant=false, $recurrenceTime=false) {		
 		
-		$c = new GO_Base_VObject_VCalendar();		
+		$c = new \GO_Base_VObject_VCalendar();		
 		$c->method=$method;
 		
-		$c->add(new GO_Base_VObject_VTimezone());
+		$c->add(new \GO_Base_VObject_VTimezone());
 		
 		$c->add($this->toVObject($method, $updateByParticipant, $recurrenceTime));		
 		return $c->serialize();		
 	}
 	
 	public function toVCS(){
-		$c = new GO_Base_VObject_VCalendar();		
+		$c = new \GO_Base_VObject_VCalendar();		
 		$vobject = $this->toVObject('',false,false,true);
 		$c->add($vobject);		
 		
@@ -1460,14 +1460,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	private function _utcToLocal(DateTime $date){
 		//DateTime from SabreDav is date without time in UTC timezone. We store it in the users timezone so we must
 		//add the timezone offset.
-		$timezone = new DateTimeZone(GO::user()->timezone);
+		$timezone = new \DateTimeZone(GO::user()->timezone);
 
 		$offset = $timezone->getOffset($date);		
 		$sub = $offset>0;
 		if(!$sub)
 			$offset *= -1;
 
-		$interval = new DateInterval('PT'.$offset.'S');	
+		$interval = new \DateInterval('PT'.$offset.'S');	
 		if(!$sub){
 			$date->add($interval);
 		}else{
@@ -1496,8 +1496,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(empty($this->name))
 			$this->name = GO::t('unnamed');
 		
-		$dtstart = $vobject->dtstart ? $vobject->dtstart->getDateTime() : new DateTime();
-		$dtend = $vobject->dtend ? $vobject->dtend->getDateTime() : new DateTime();
+		$dtstart = $vobject->dtstart ? $vobject->dtstart->getDateTime() : new \DateTime();
+		$dtend = $vobject->dtend ? $vobject->dtend->getDateTime() : new \DateTime();
 		
 		//funambol sends this special parameter
 		if((string) $vobject->{"X-FUNAMBOL-ALLDAY"}=="1"){
@@ -1537,7 +1537,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->end_time-=60;
 		
 		if((string) $vobject->rrule != ""){			
-			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule = new \GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);	
 			$rrule->shiftDays(true);
 			$this->rrule = $rrule->createRrule();
@@ -1620,7 +1620,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					$this->exception_for_event_id=$recurringEvent->id;
 					
 					//will be saved later
-					$exception = new GO_Calendar_Model_Exception();
+					$exception = new \GO_Calendar_Model_Exception();
 					$exception->time=$recurrenceTime;
 					$exception->event_id=$recurringEvent->id;
 				}
@@ -1641,7 +1641,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$category = GO_Calendar_Model_Category::model()->findByName($this->calendar_id, $categoryName);
 			if(!$category && !$dontSave && $this->calendar_id){
-				$category = new GO_Calendar_Model_Category();
+				$category = new \GO_Calendar_Model_Category();
 				$category->name=$categoryName;
 				$category->calendar_id=$this->calendar_id;
 				$category->save();
@@ -1753,17 +1753,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						$message->setHtmlAlternateBody(nl2br($body));
 
 						if (GO_Base_Mail_Mailer::newGoInstance()->send($message))
-							throw new GO_Base_Exception_Validation('DUE TO ERROR, CRON SENT MAIL TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
+							throw new \GO_Base_Exception_Validation('DUE TO ERROR, CRON SENT MAIL TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
 						else
-							throw new GO_Base_Exception_Validation('CRON COULD NOT SEND EMAIL WITH ERROR MESSAGE TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
+							throw new \GO_Base_Exception_Validation('CRON COULD NOT SEND EMAIL WITH ERROR MESSAGE TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
 					} else {
-						throw new GO_Base_Exception_Validation(implode("\n", $this->getValidationErrors())."\n");
+						throw new \GO_Base_Exception_Validation(implode("\n", $this->getValidationErrors())."\n");
 					}
 					
 				}
 				$this->_isImport=false;
 //			} catch (Exception $e) {
-//				throw new Exception($this->name.' ['.GO_Base_Util_Date::get_timestamp($this->start_time).' - '.GO_Base_Util_Date::get_timestamp($this->end_time).'] '.$e->getMessage());
+//				throw new \Exception($this->name.' ['.GO_Base_Util_Date::get_timestamp($this->start_time).' - '.GO_Base_Util_Date::get_timestamp($this->end_time).'] '.$e->getMessage());
 //			}
 			
 			if(!empty($exception)){			
@@ -1801,7 +1801,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				if($makeSureUserParticipantExists){
 					//this is a bad situation. The import thould have detected a user for one of the participants.
 					//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
-					$participant = new GO_Calendar_Model_Participant();
+					$participant = new \GO_Calendar_Model_Participant();
 					$participant->event_id=$this->id;
 					$participant->user_id=$this->calendar->user_id;
 					$participant->email=$this->calendar->user->email;	
@@ -1891,7 +1891,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$p= GO_Calendar_Model_Participant::model()
 						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$attributes['email']));
 		if(!$p){
-			$p = new GO_Calendar_Model_Participant();
+			$p = new \GO_Calendar_Model_Participant();
 			$p->is_organizer=$isOrganizer;		
 			$p->event_id=$event->id;			
 			if(GO::modules()->email){
@@ -2032,7 +2032,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$user = $calendar->user_id==1 ? GO::user() : $calendar->user;
 		
-		$participant = new GO_Calendar_Model_Participant();
+		$participant = new \GO_Calendar_Model_Participant();
 		$participant->event_id=$this->id;
 		$participant->user_id=$user->id;
 		
@@ -2100,7 +2100,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	  
 		//in some cases on old databases the repeat_end_time is set but the UNTIL property in the rrule is not. We correct that here.
 		if($this->repeat_end_time>0 && strpos($this->rrule,'UNTIL=')===false){
-			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule = new \GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
 			$rrule->until=$this->repeat_end_time;
 			$this->rrule= $rrule->createRrule();	
@@ -2165,7 +2165,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 //	public function sendReply(){
 //		if($this->is_organizer)
-//			throw new Exception("Meeting reply can only be send from the organizer's event");
+//			throw new \Exception("Meeting reply can only be send from the organizer's event");
 //	}	
 	
 	/**
@@ -2180,7 +2180,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function replyToOrganizer($recurrenceTime=false, $sendingParticipant=false, $includeIcs=true){
 		
 //		if($this->is_organizer)
-//			throw new Exception("Meeting reply can't be send from the organizer's event");
+//			throw new \Exception("Meeting reply can't be send from the organizer's event");
 		
 
 		//we need to pass the sending participant to the toIcs function. 
@@ -2190,11 +2190,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 
 		if(!$sendingParticipant)
-			throw new Exception("Could not find your participant model");
+			throw new \Exception("Could not find your participant model");
 
 		$organizer = $this->getOrganizer();
 		if(!$organizer)
-			throw new Exception("Could not find organizer to send message to!");
+			throw new \Exception("Could not find organizer to send message to!");
 
 		$updateReponses = GO::t('updateReponses','calendar');
 		$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $this->name);
@@ -2218,13 +2218,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if($includeIcs){
 			$ics=$this->toICS("REPLY", $sendingParticipant, $recurrenceTime);				
 			$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REPLY"');
-			$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+			$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 			$a->setDisposition("inline");
 			$message->attach($a);
 			
 			//for outlook 2003 compatibility
 			$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
-			$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+			$a2->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 			$message->attach($a2);
 		}
 //		}
@@ -2238,7 +2238,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	public function sendCancelNotice(){
 //		if(!$this->is_organizer)
-//			throw new Exception("Meeting request can only be send from the organizer's event");
+//			throw new \Exception("Meeting request can only be send from the organizer's event");
 		
 		$stmt = $this->participants;
 
@@ -2275,13 +2275,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 				$ics=$this->toICS("CANCEL");				
 				$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="CANCEL"');
-				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$a->setDisposition("inline");
 				$message->attach($a);
 				
 				//for outlook 2003 compatibility
 				$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
-				$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$a2->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$message->attach($a2);
 				
 //			}else{
@@ -2317,7 +2317,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function sendMeetingRequest(){		
 		
 		if(!$this->is_organizer)
-			throw new Exception("Meeting request can only be send from the organizer's event");
+			throw new \Exception("Meeting request can only be send from the organizer's event");
 		
 		$stmt = $this->participants;
 		
@@ -2388,13 +2388,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 				$ics=$this->toICS("REQUEST");				
 				$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REQUEST"');
-				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$a->setDisposition("inline");
 				$message->attach($a);
 				
 				//for outlook 2003 compatibility
 				$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
-				$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$a2->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$message->attach($a2);
 
 				if($participantEvent){

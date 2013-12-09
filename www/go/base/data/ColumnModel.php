@@ -52,7 +52,7 @@ class GO_Base_Data_ColumnModel {
 	/**
 	 * Constructor of the ColumnModel class.
 	 * 
-	 * Use this to constructor a new ColumnModel. You can give two parameters.
+	 * Use this to constructor a new \ColumnModel. You can give two parameters.
 	 * If you give the $model param then the columns of that model are set automatically in this columnModel.
 	 * The public parameters and the customfield parameters are also set.
 	 * The $excludeColumns are meant to give up the column names that need to be excluded in the columnModel.
@@ -92,7 +92,7 @@ class GO_Base_Data_ColumnModel {
 				if(!in_array($colName, $excludeColumns)){					
 					$sortIndex = empty($includeColumns) ? 0 : array_search($colName, $includeColumns);				
 					if($sortIndex!==false){
-						$column = new GO_Base_Data_Column($colName, $model->getAttributeLabel($colName),$sortIndex);					
+						$column = new \GO_Base_Data_Column($colName, $model->getAttributeLabel($colName),$sortIndex);					
 						$this->addColumn($column);
 					}
 				}
@@ -107,7 +107,7 @@ class GO_Base_Data_ColumnModel {
 					
 						$sortIndex = empty($includeColumns) ? 0 : array_search($colName, $includeColumns);				
 						if($sortIndex!==false){
-							$column = new GO_Base_Data_Column($colName, $model->customfieldsRecord->getAttributeLabel($colName), $sortIndex);
+							$column = new \GO_Base_Data_Column($colName, $model->customfieldsRecord->getAttributeLabel($colName), $sortIndex);
 							$this->addColumn($column);
 						}
 					}
@@ -141,7 +141,7 @@ class GO_Base_Data_ColumnModel {
 		}
 		
 		
-		$column = new GO_Base_Data_Column($column, $label);
+		$column = new \GO_Base_Data_Column($column, $label);
 		$column->setFormat($format, $extraVars);
 		if(!empty($sortAlias))
 			$column->setSortAlias($sortAlias);
@@ -370,7 +370,7 @@ class GO_Base_Data_ColumnModel {
 				{
 					$str = $this->_formatRecordFunction;
 				}
-				throw new Exception("Fatal error: $str should return the record");
+				throw new \Exception("Fatal error: $str should return the record");
 			}
 		}
 

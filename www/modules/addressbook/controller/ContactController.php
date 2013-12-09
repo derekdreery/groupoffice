@@ -61,7 +61,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		if (isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
 		
 			
-			$destinationFile = new GO_Base_Fs_File(GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
+			$destinationFile = new \GO_Base_Fs_File(GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
 			
 			move_uploaded_file($_FILES['image']['tmp_name'][0], $destinationFile->path());
 			
@@ -72,10 +72,10 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		}elseif(!empty($params['download_photo_url'])){
 			
 			$file = GO_Base_Fs_File::tempFile();	
-			$c = new GO_Base_Util_HttpClient();
+			$c = new \GO_Base_Util_HttpClient();
 			
 			if(!$c->downloadFile($params['download_photo_url'], $file))
-				throw new Exception("Could not download photo from: '".$params['download_photo_url']."'");
+				throw new \Exception("Could not download photo from: '".$params['download_photo_url']."'");
 						
 			$model->setPhoto($file);
 			$model->save();					
@@ -210,7 +210,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 
 	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
 		if(!empty($params['filters'])){
-			$abMultiSel = new GO_Base_Component_MultiSelectGrid(
+			$abMultiSel = new \GO_Base_Component_MultiSelectGrid(
 							'books', 
 							"GO_Addressbook_Model_Addressbook",$store, $params, true);		
 			
@@ -218,7 +218,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	//		$abMultiSel->setButtonParams($response);
 	//		$abMultiSel->setStoreTitle();
 
-			$addresslistMultiSel = new GO_Base_Component_MultiSelectGrid(
+			$addresslistMultiSel = new \GO_Base_Component_MultiSelectGrid(
 							'addresslist_filter', 
 							"GO_Addressbook_Model_Addresslist",$store, $params, false);				
 
@@ -347,7 +347,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$company = GO_Addressbook_Model_Company::model()->findByPk($params['company_id']);
 		
 		if(!$company->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO_Base_Exception_AccessDenied();
 		
 		if(isset($params['delete_keys']))
 		{
@@ -383,7 +383,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 
 		$params['field'] = isset($params['field']) ? ($params['field']) : 'addressbook_name';
 
-		$store = new GO_Base_Data_Store($this->getStoreColumnModel());	
+		$store = new \GO_Base_Data_Store($this->getStoreColumnModel());	
 		$this->formatColumns($store->getColumnModel());
 
 		$response['success']=true;
@@ -503,7 +503,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 					)
 			);
 			if (empty($companyModel)) {
-				$companyModel = new GO_Addressbook_Model_Company();
+				$companyModel = new \GO_Addressbook_Model_Company();
 				$companyModel->setAttributes(array(
 					'name' => $companyName,
 					'addressbook_id' => $addressbookId
@@ -530,7 +530,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$tmpFile =GO_Base_Fs_File::tempFile($params['filename'], 'vcf');
 		$imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
 				
-		$abController = new GO_Addressbook_Controller_Contact();
+		$abController = new \GO_Addressbook_Controller_Contact();
 		$response = $abController->run('importVCard', array('file'=>$tmpFile->path(),'readOnly'=>true), false, true);
 		echo json_encode($response);
 	}
@@ -544,7 +544,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		$filename = $contact->name.'.vcf';
 		header("Content-Type: text/plain");
-//		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File($filename));		
+//		GO_Base_Util_Http::outputDownloadHeaders(new \GO_Base_FS_File($filename));		
 		
 		$vobject = $contact->toVObject();
 		
@@ -567,7 +567,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	protected function actionImportVCard($params){
 		
-		$summaryLog = new GO_Base_Component_SummaryLog();
+		$summaryLog = new \GO_Base_Component_SummaryLog();
 		
 		$readOnly = !empty($params['readOnly']);
 		
@@ -579,11 +579,11 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			$params['addressbook_id'] = $importBaseParams['addressbook_id'];
 		}
 		
-		$file = new GO_Base_Fs_File($params['file']);
+		$file = new \GO_Base_Fs_File($params['file']);
 		$file->convertToUtf8();
 		
 		$options = \Sabre\VObject\Reader::OPTION_FORGIVING + \Sabre\VObject\Reader::OPTION_IGNORE_INVALID_LINES;
-		$vcards = new Sabre\VObject\Splitter\VCard(fopen($file->path(),'r+'), $options);
+		$vcards = new \Sabre\VObject\Splitter\VCard(fopen($file->path(),'r+'), $options);
 
 
 		unset($params['file']);
@@ -593,7 +593,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		while($vObject=$vcards->getNext()) {
 			$nr++;
 			GO_Base_VObject_Reader::convertVCard21ToVCard30($vObject);
-			$contact = new GO_Addressbook_Model_Contact();
+			$contact = new \GO_Addressbook_Model_Contact();
 			try {
 				if ($contact->importVObject($vObject, $params, !$readOnly))
 					$summaryLog->addSuccessful();

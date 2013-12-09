@@ -385,7 +385,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 //							'email'=>$this->email
 //					));
 //					if(!$p){
-						$p = new GO_Calendar_Model_Participant();
+						$p = new \GO_Calendar_Model_Participant();
 						$p->setAttributes($this->getAttributes('raw'), false);
 						$p->event_id=$event->id;
 						$p->id=null;
@@ -424,11 +424,11 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 //	private function _notifyOrganizer(){
 //
 ////		if(!$sendingParticipant)
-////			throw new Exception("Could not find your participant model");
+////			throw new \Exception("Could not find your participant model");
 //
 //		$organizer = $this->event->getOrganizer();
 //		if(!$organizer)
-//			throw new Exception("Could not find organizer to send message to!");
+//			throw new \Exception("Could not find organizer to send message to!");
 //
 //		$updateReponses = GO::t('updateReponses','calendar');
 //		$subject= sprintf($updateReponses[$this->status], $this->user->name, $this->event->name);
@@ -445,7 +445,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 //			//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
 //			$ics=$this->event->toICS("REPLY", $this, $this->notifyRecurrenceTime);				
 //			$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->event->name) . '.ics', 'text/calendar; METHOD="REPLY"');
-//			$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+//			$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 //			$a->setDisposition("inline");
 //			$message->attach($a);
 //		}

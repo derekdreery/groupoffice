@@ -17,7 +17,7 @@ Ext.override(GO.dialog.LoginDialog, {
 	initComponent : GO.dialog.LoginDialog.prototype.initComponent.createSequence(function(){
 		var domains = <?php echo $domains ?>;
 		domains.push('');
-		var domainData = new Array();
+		var domainData = new \Array();
 		domainData[0] = ['-', domains[i]]
 		for (var i=0; i<domains.length; i++) {
 			if (domains[i]!='')
@@ -29,7 +29,7 @@ Ext.override(GO.dialog.LoginDialog, {
 		delete usernameField.fieldLabel;
 		usernameField.flex=1;
 
-		this.usernameCompositeField = new Ext.form.CompositeField({
+		this.usernameCompositeField = new \Ext.form.CompositeField({
 			anchor:'100%',
 			fieldLabel: fieldLabel,
 			items:[
@@ -48,7 +48,7 @@ Ext.override(GO.dialog.LoginDialog, {
 					hiddenName : 'domain',
 					valueField : 'value',
 					displayField : 'name',
-					store : new Ext.data.SimpleStore({
+					store : new \Ext.data.SimpleStore({
 							fields: ['name', 'value'],
 							data: domainData
 						})

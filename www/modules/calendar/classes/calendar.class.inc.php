@@ -725,7 +725,7 @@ class calendar extends db {
 
 			global $GO_CONFIG;
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			$calendar['user_id']=$user_id;
 			$user = $GO_USERS->get_user($user_id);
@@ -760,7 +760,7 @@ class calendar extends db {
 			}
 
 			if (!$calendar_id = $this->add_calendar($calendar)) {
-				throw new DatabaseInsertException();
+				throw new \DatabaseInsertException();
 			}else {
 
 				$this->update_row('cal_settings', 'user_id', array('user_id'=>$user_id, 'calendar_id'=>$calendar_id));
@@ -946,7 +946,7 @@ class calendar extends db {
 		global $GO_CONFIG;
 
 		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-		$GO_USERS = new GO_USERS();
+		$GO_USERS = new \GO_USERS();
 
 		//if(!$update)
 			//$this->remove_participants($event['id']);
@@ -1345,7 +1345,7 @@ class calendar extends db {
 		}
 
 		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
-		$swift = new GoSwift($recipient, $subject);
+		$swift = new \GoSwift($recipient, $subject);
 
 		$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
 
@@ -1688,7 +1688,7 @@ class calendar extends db {
 				}
 
 				if($loops==100) {					
-					throw new Exception('Warning: event looped 100 times '.
+					throw new \Exception('Warning: event looped 100 times '.
 									date('Ymd G:i', $calculated_event['start_time']).'  '.
 									$calculated_event['name'].' event_id='.$calculated_event['id']);					
 				}
@@ -2657,7 +2657,7 @@ class calendar extends db {
 
 		global $GO_CONFIG;
 		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-		$GO_USERS = new GO_USERS();
+		$GO_USERS = new \GO_USERS();
 
 		if(!empty($event['user_id'])) {
 			$event['user_name']=$GO_USERS->get_user_realname($event['user_id']);
@@ -3010,7 +3010,7 @@ class calendar extends db {
 		global $GO_SECURITY, $GO_CONFIG;
 
 		require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
-		$GO_LINKS = new GO_LINKS();
+		$GO_LINKS = new \GO_LINKS();
 
 		$records=array();
 
@@ -3057,7 +3057,7 @@ class calendar extends db {
 		global $GO_SECURITY, $GO_CONFIG;
 
 		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-		$GO_USERS = new GO_USERS();
+		$GO_USERS = new \GO_USERS();
 
 		$response['total'] = $this->get_authorized_views($GLOBALS['GO_SECURITY']->user_id);
 		$response['results']=array();
@@ -3139,7 +3139,7 @@ class calendar extends db {
 		
 		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 
-		$RFC822 = new RFC822();
+		$RFC822 = new \RFC822();
 		//$event['id']=empty($event['resource_event_id']) ? $event_id : $event['resource_event_id'];
 		//go_debug($event['id']);
 		if(!$insert){
@@ -3174,14 +3174,14 @@ class calendar extends db {
 
 			$ics_string = $ical->export_event($event['id']);
 
-			$swift = new GoSwift(
+			$swift = new \GoSwift(
 					implode(',', $participants),
 					$subject.': '.$event['name']);
 
 			require_once ($GLOBALS['GO_MODULES']->modules['calendar']['class_path'].'Replacements.class.inc.php');
 
 			//Load the plugin with the extended replacements class
-			$swift->registerPlugin(new Swift_Plugins_DecoratorPlugin(new Cal_Event_Replacements()));
+			$swift->registerPlugin(new \Swift_Plugins_DecoratorPlugin(new \Cal_Event_Replacements()));
 
 			$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
 					$this->event_to_html($event).
@@ -3191,14 +3191,14 @@ class calendar extends db {
 					'&nbsp;|&nbsp;'.
 					'<a href="'.$GLOBALS['GO_MODULES']->modules['calendar']['full_url'].'invitation.php?event_id='.$event['id'].'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
 
-			$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
+			$swift->message->attach(new \Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
 			//$name = File::strip_invalid_chars($event['name']).'.ics';
 			//$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
 
 			$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
 
 			if(!$swift->sendmail(true)) {
-				throw new Exception('Could not send invitation');
+				throw new \Exception('Could not send invitation');
 			}
 		}
 	}

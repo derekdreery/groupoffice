@@ -76,7 +76,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //		}
 		
 		if(empty($password)){
-			throw new GO_Base_Mail_ImapAuthenticationFailedException('Authententication failed for user '.$username.' on IMAP server '.$this->server);
+			throw new \GO_Base_Mail_ImapAuthenticationFailedException('Authententication failed for user '.$username.' on IMAP server '.$this->server);
 		}
 		
 		$this->ssl = $ssl;
@@ -93,7 +93,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		$this->handle = fsockopen($server, $this->port, $errorno, $errorstr, 10);
 		if (!is_resource($this->handle)) {
-			throw new Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
+			throw new \Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
 		}
 		
 		
@@ -224,7 +224,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //				if(!GO::config()->debug)
 //					$this->errors[]=$response;
 				
-				throw new GO_Base_Mail_ImapAuthenticationFailedException('Authententication failed for user '.$username.' on IMAP server '.$this->server."\n\n".$response);
+				throw new \GO_Base_Mail_ImapAuthenticationFailedException('Authententication failed for user '.$username.' on IMAP server '.$this->server."\n\n".$response);
 
 			}
 		}
@@ -312,7 +312,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->clean($mailbox, 'mailbox');
 
 		$command = "SETACL \"$mailbox\" $identifier $permissions\r\n";
-		//throw new Exception($command);
+		//throw new \Exception($command);
 		$this->send_command($command);
 
 		$response = $this->get_response();
@@ -348,7 +348,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //				$this->send_command($cmd);
 //				$result = $this->get_response(false, true);
 //				var_dump($result);
-//				throw new Exception("test");
+//				throw new \Exception("test");
 			}
 		}
 		return $this->delimiter;
@@ -553,7 +553,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //		if($namespace=="" && $pattern=="%" && $listSubscribed && !isset($folders['INBOX'])){
 //			//inbox is not subscribed. Let's fix that/
 //			if(!$this->subscribe('INBOX'))
-//				throw new Exception("Could not subscribe to INBOX folder!");
+//				throw new \Exception("Could not subscribe to INBOX folder!");
 //			return $this->list_folders($listSubscribed, $withStatus, $namespace, $pattern);
 //		}
 		
@@ -937,7 +937,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		}
 		
 		if(!$this->selected_mailbox)
-			throw new Exception('No mailbox selected');
+			throw new \Exception('No mailbox selected');
 
 		$this->get_capability();
 
@@ -1544,7 +1544,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			GO::debug($unseenCheck);
 			//var_dump($unseenCheck);
 			if(isset(GO::session()->values['emailmod'][$key]['unseen']) && GO::session()->values['emailmod'][$key]['unseen']==$unseenCheck){
-					//throw new Exception("From cache");
+					//throw new \Exception("From cache");
 				GO::debug("IMAP sort from session cache");
 				$uids = GO::session()->values['emailmod'][$key]['uids'];
 				$this->sort_count=count($uids);
@@ -1594,7 +1594,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		$list = $this->get_folders('', false,'%');
 //		GO::debug($list);
-//		throw new Exception($mbroot);
+//		throw new \Exception($mbroot);
 		if (is_array($list)) {
 			while ($folder = array_shift($list)) {
 				if (!$this->delimiter && strlen($folder['delimiter']) > 0) {
@@ -1802,7 +1802,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 						//GO::debug($vals);
 						//work around ugly stuff. Some mails contain stuff with type image/gif but it's actually an html file.
 						//so we double check if the image has a filename that it has a valid image extension
-						$file = empty($vals['name']) ? false : new GO_Base_Fs_File($vals['name']);						
+						$file = empty($vals['name']) ? false : new \GO_Base_Fs_File($vals['name']);						
 						if(!$file || $file->isImage()){
 
 							//an inline image without ID. We'll display in the part order. Apple
@@ -2456,11 +2456,11 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$children = $this->get_folders($mailbox.$delim);
 
 		//GO::debug($children);
-		//throw new Exception('test');
+		//throw new \Exception('test');
 
 		$command = 'RENAME "'.$this->addslashes($this->utf7_encode($mailbox)).'" "'.
 						$this->addslashes($this->utf7_encode($new_mailbox)).'"'."\r\n";
-//		throw new Exception($command);
+//		throw new \Exception($command);
 //		GO::debug($command);
 		
 		$this->send_command($command);
@@ -2666,7 +2666,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			
 			$tmpfile = GO_Base_Fs_File::tempFile();
 
-			$is = new Swift_ByteStream_FileByteStream($tmpfile->path(), true);
+			$is = new \Swift_ByteStream_FileByteStream($tmpfile->path(), true);
 			$data->toByteStream($is);			
 
 			unset($data);

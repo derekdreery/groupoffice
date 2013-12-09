@@ -23,14 +23,14 @@ $cal2 = new calendar();
 $start_time = strtotime($_REQUEST['start_time']);
 $end_time = strtotime($_REQUEST['end_time']);
 
-$pdf = new PDF();
+$pdf = new \PDF();
 
 $calendars = isset($_REQUEST['calendars']) ? json_decode($_REQUEST['calendars']) : array();
 
 function insert_events($calendars, $start_time, $end_time) {
 	global $cal, $cal2, $lang, $pdf, $calendar_names, $view, $GO_SECURITY;
 	require_once('../../classes/base/users.class.inc.php');
-	$GO_USERS = new GO_USERS();
+	$GO_USERS = new \GO_USERS();
 
 	$events = $cal->get_events_in_array($calendars, 0, $start_time, $end_time);
 

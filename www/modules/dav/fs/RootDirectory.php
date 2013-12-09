@@ -28,14 +28,14 @@ class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory{
 	public function getChildren() {
 		
 		$children = array();
-		$children[] = new GO_Dav_Fs_Directory('users/' . GO::user()->username);
-		$children[] = new GO_Dav_Fs_SharedDirectory();
+		$children[] = new \GO_Dav_Fs_Directory('users/' . GO::user()->username);
+		$children[] = new \GO_Dav_Fs_SharedDirectory();
 		
 		if(GO::modules()->projects)
-			$children[] = new GO_Dav_Fs_Directory('projects');
+			$children[] = new \GO_Dav_Fs_Directory('projects');
 		
 		if(GO::modules()->addressbook)
-			$children[] = new GO_Dav_Fs_Directory('addressbook');
+			$children[] = new \GO_Dav_Fs_Directory('addressbook');
 
 
 		return $children;
@@ -52,24 +52,24 @@ class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory{
 			
 			switch($name){
 				case GO::user()->username:
-					return new GO_Dav_Fs_Directory('users/' . GO::user()->username);
+					return new \GO_Dav_Fs_Directory('users/' . GO::user()->username);
 					break;
 				
 				case 'Shared':
-						return new GO_Dav_Fs_SharedDirectory();
+						return new \GO_Dav_Fs_SharedDirectory();
 					break;
 				case 'projects':
 					if(GO::modules()->projects)
-						return new GO_Dav_Fs_Directory('projects');
+						return new \GO_Dav_Fs_Directory('projects');
 					break;
 					
 				case 'addressbook':
 					if(GO::modules()->addressbook)
-						return new GO_Dav_Fs_Directory('addressbook');
+						return new \GO_Dav_Fs_Directory('addressbook');
 					break;
 			}
 			
-			throw new Sabre\DAV\Exception\NotFound("$name not found in the root");
+			throw new \Sabre\DAV\Exception\NotFound("$name not found in the root");
 		}
 
 	/**
@@ -83,7 +83,7 @@ class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory{
 	 */
 	public function createFile($name, $data = null) {
 
-		throw new Sabre\DAV\Exception\Forbidden();
+		throw new \Sabre\DAV\Exception\Forbidden();
 	}
 
 	/**
@@ -94,7 +94,7 @@ class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory{
 	 */
 	public function createDirectory($name) {
 
-		throw new Sabre\DAV\Exception\Forbidden();
+		throw new \Sabre\DAV\Exception\Forbidden();
 	}
 
 	/**
@@ -104,7 +104,7 @@ class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory{
 	 */
 	public function delete() {
 
-		throw new Sabre\DAV\Exception\Forbidden();
+		throw new \Sabre\DAV\Exception\Forbidden();
 	}
 
 	/**

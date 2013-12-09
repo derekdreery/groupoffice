@@ -235,7 +235,7 @@ class GO_Base_Util_Http {
 			header('HTTP/1.0 401 Unauthorized');
 			
 			
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO_Base_Exception_AccessDenied();
 			exit;
 		}
 	}

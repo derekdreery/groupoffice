@@ -47,7 +47,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	 * @return array Module class names eg. GO_Calendar_Module
 	 */
 	public function getAvailableModules($returnInstalled=false){
-		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'modules');
+		$folder = new \GO_Base_Fs_Folder(GO::config()->root_path.'modules');
 		
 		$folders = $folder->ls();
 		$modules = array();
@@ -75,7 +75,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		if(!$this->_isAllowed($moduleId))
 			return false;
 		
-		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'modules/'.$moduleId);
+		$folder = new \GO_Base_Fs_Folder(GO::config()->root_path.'modules/'.$moduleId);
 		if($folder->exists()){
 			$ucfirst = ucfirst($folder->name());
 			$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';

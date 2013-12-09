@@ -31,7 +31,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		if(!empty($sub))
 			$path .= '/'.$sub;
 		
-		$folder = new GO_Base_Fs_Folder($path);
+		$folder = new \GO_Base_Fs_Folder($path);
 		$folder->create();
 		return $folder;
 	}
@@ -54,9 +54,9 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 							($getHidden || !(strpos($item, ".") === 0) )) {
 			
 				if(is_file($folderPath))					
-					$o = new GO_Base_Fs_File($folderPath);
+					$o = new \GO_Base_Fs_File($folderPath);
 				else
-					$o = new GO_Base_Fs_Folder($folderPath);
+					$o = new \GO_Base_Fs_Folder($folderPath);
 				
 				if(!$sort){
 					$folders[]=$o;
@@ -110,7 +110,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 			$msg = 'The destination is located inside the source directory.';
 			if(GO::config()->debug)
 				$msg .= "\n\n".$srcPath.' -> '.$destPath;
-			throw new Exception($msg);
+			throw new \Exception($msg);
 		}
 	}
 	
@@ -125,10 +125,10 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 */
 	public function move(GO_Base_Fs_Folder $destinationFolder, $newFolderName=false,$appendNumberToNameIfDestinationExists=false){
 		if(!$this->exists())
-			throw new Exception("Folder '".$this->path()."' does not exist");
+			throw new \Exception("Folder '".$this->path()."' does not exist");
 		
 		if(is_link($this->path)){
-			$link = new GO_Base_Fs_File($this->path);
+			$link = new \GO_Base_Fs_File($this->path);
 			return $link->move($destinationFolder, $newFolderName, false, $appendNumberToNameIfDestinationExists);
 		}
 		
@@ -140,7 +140,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		$newPath = $destinationFolder->path().'/'.$newFolderName;		
 				
 		if($appendNumberToNameIfDestinationExists){
-			$folder = new GO_Base_Fs_Folder($newPath);
+			$folder = new \GO_Base_Fs_Folder($newPath);
 			$folder->appendNumberToNameIfExists();
 			$newPath = $folder->path();
 		}		
@@ -149,7 +149,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		if($newPath==$this->path())
 			return true;
 			
-		$movedFolder = new GO_Base_Fs_Folder($newPath);
+		$movedFolder = new \GO_Base_Fs_Folder($newPath);
 		$movedFolder->create();
 		
 		$ls = $this->ls(true);
@@ -178,14 +178,14 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		
 		GO::debug('folder::copy: '.$this->path().' > '.$destinationFolder->path().'/'.$newFolderName);
 		
-		$copiedFolder = new GO_Base_Fs_Folder($destinationFolder->path().'/'.$newFolderName);
+		$copiedFolder = new \GO_Base_Fs_Folder($destinationFolder->path().'/'.$newFolderName);
 		if(!$copiedFolder->create())
-			throw new Exception ("Could not create ".$destinationFolder->path());
+			throw new \Exception ("Could not create ".$destinationFolder->path());
 		
 		$ls = $this->ls(true);
 		foreach($ls as $fsObject){
 			if($fsObject->isFolder()){				
-				//$newDestinationFolder= new GO_Base_Fs_Folder($destinationFolder->path().'/'.$this->name());				
+				//$newDestinationFolder= new \GO_Base_Fs_Folder($destinationFolder->path().'/'.$this->name());				
 				$fsObject->copy($copiedFolder);
 			}else
 			{
@@ -228,7 +228,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 			return true;
 		}else
 		{			
-			throw new Exception("Could not create folder ".$this->path);
+			throw new \Exception("Could not create folder ".$this->path);
 		}
 	}
 	
@@ -247,12 +247,12 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		
 		$link = $this->createChild($linkName, true);
 		if($link->exists())
-			throw new Exception("Path ".$link->path()." already exists");
+			throw new \Exception("Path ".$link->path()." already exists");
 		
 		if(symlink($target->path(), $link->path()))
 			return $link;
 		else
-			throw new Exception("Failed to create link ".$link->path()." to ".$target->path());
+			throw new \Exception("Failed to create link ".$link->path()." to ".$target->path());
 	}
 	
 	/**

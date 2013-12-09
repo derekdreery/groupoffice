@@ -1,11 +1,11 @@
 <?php
 class GO_Base_View_Extjs3{
 	public function getTheme(){
-		return new GO_Base_View_Theme();
+		return new \GO_Base_View_Theme();
 	}
 	
 	public function getThemeNames(){
-		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'views/Extjs3/themes');
+		$folder = new \GO_Base_Fs_Folder(GO::config()->root_path.'views/Extjs3/themes');
 		$items = $folder->ls();
 		$themes=array();
 		foreach($items as $folder){
@@ -119,7 +119,7 @@ class GO_Base_View_Extjs3{
 			//fclose($fp);
 			
 			if(GO::config()->minify){
-				$cssMin = new GO_Base_Util_Minify_CSSMin();
+				$cssMin = new \GO_Base_Util_Minify_CSSMin();
 				$css = $cssMin->run($css);
 			}
 			

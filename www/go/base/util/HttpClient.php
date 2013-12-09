@@ -40,7 +40,7 @@ class GO_Base_Util_HttpClient{
 		$this->baseParams=array();
 		
 		if(!function_exists('curl_init'))
-			throw new Exception("Could not initialized HTTP client because PHP is configured withour CURL support.");
+			throw new \Exception("Could not initialized HTTP client because PHP is configured withour CURL support.");
 		
 		$this->_curl = curl_init();
 		
@@ -95,7 +95,7 @@ class GO_Base_Util_HttpClient{
 		
 		$error = curl_error($this->_curl);
 		if(!empty($error))
-			throw new Exception("curl error: ".$error);
+			throw new \Exception("curl error: ".$error);
 		
 		return $response;		
 	}	
@@ -213,7 +213,7 @@ class GO_Base_Util_HttpClient{
 			else
 				$feedback .= "\n\n".var_export($response, true);
 			
-			throw new Exception($feedback);
+			throw new \Exception($feedback);
 		}
 		
 		$this->baseParams['security_token']=$response['security_token'];

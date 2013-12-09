@@ -115,7 +115,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Base_Model_User 
 	 */
 	public static function newInstance($attributes, $groups=array(), $modulePermissionLevels=array()){
-		$user = new GO_Base_Model_User();
+		$user = new \GO_Base_Model_User();
 		$user->setAttributes($attributes);
 		$user->save();
 
@@ -150,7 +150,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	public function getWorkingWeek(){
 		$ww = $this->_workingWeek;
 		if(!$ww){
-			$ww = new GO_Base_Model_WorkingWeek();
+			$ww = new \GO_Base_Model_WorkingWeek();
 			$ww->user_id=$this->id;
 			$ww->save();
 		}
@@ -250,7 +250,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 				$this->disk_usage+=$bytes;
 			}
 		} else
-			throw new Exceptions('Can not calculated diskusage without the files module');
+			throw new \Exceptions('Can not calculated diskusage without the files module');
 		return $this;
 	}
 	
@@ -402,9 +402,9 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeDelete() {
 		if($this->id==1){
-			throw new Exception(GO::t('deletePrimaryAdmin','users'));
+			throw new \Exception(GO::t('deletePrimaryAdmin','users'));
 		}elseif($this->id==GO::user()->id){
-			throw new Exception(GO::t('deleteYourself','users'));			
+			throw new \Exception(GO::t('deleteYourself','users'));			
 		}else
 		{
 			return parent::beforeDelete();
@@ -626,7 +626,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			
 			$contact = $this->contact();
 			if (!$contact) {
-				$contact = new GO_Addressbook_Model_Contact();
+				$contact = new \GO_Addressbook_Model_Contact();
 				$addressbook = GO_Addressbook_Model_Addressbook::model()->getUsersAddressbook();
 				$contact->go_user_id = $this->id;
 				$contact->addressbook_id = $addressbook->id;				
@@ -666,7 +666,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupName);
 			
 			if(!$group && $autoCreate){
-				$group = new GO_Base_Model_Group();
+				$group = new \GO_Base_Model_Group();
 				$group->name = $groupName;
 				$group->save();
 			}

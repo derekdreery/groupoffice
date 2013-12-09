@@ -74,8 +74,8 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 			GO::session()->values['files']['uploadqueue'] = array();
 
 		try {
-			$chunkTmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'juploadqueue/chunks');
-			$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'juploadqueue');
+			$chunkTmpFolder = new \GO_Base_Fs_Folder(GO::config()->tmpdir . 'juploadqueue/chunks');
+			$tmpFolder = new \GO_Base_Fs_Folder(GO::config()->tmpdir . 'juploadqueue');
 
 			$tmpFolder->create();
 			$chunkTmpFolder->create();
@@ -89,11 +89,11 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 					$chunkTmpFolder->create();
 					GO_Base_Fs_File::moveUploadedFiles($uploadedFile, $chunkTmpFolder);
 					if (!empty($params['jufinal'])) {
-						$file = new GO_Base_Fs_File($tmpFolder . '/' . $originalFileName);
+						$file = new \GO_Base_Fs_File($tmpFolder . '/' . $originalFileName);
 
 						$fp = fopen($file->path(), 'w+');
 						for ($i = 1; $i <= $params['jupart']; $i++) {
-							$part = new GO_Base_Fs_File($chunkTmpFolder . '/' . $originalFileName . '.part' . $i);
+							$part = new \GO_Base_Fs_File($chunkTmpFolder . '/' . $originalFileName . '.part' . $i);
 							fwrite($fp, $part->contents());
 							$part->delete();
 						}
@@ -107,7 +107,7 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 				} else {
 					$files = GO_Base_Fs_File::moveUploadedFiles($uploadedFile, $tmpFolder);
 					if(!$files)
-						throw new Exception("No file received");
+						throw new \Exception("No file received");
 					
 					$file = $files[0];
 				}
@@ -116,7 +116,7 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 								(!empty($params['relpathinfo' . $count]) && isset($params['jupart']) && !empty($params['jufinal']))) {
 					$fullpath = GO::config()->tmpdir . 'juploadqueue' . '/' . str_replace('\\','/',$params['relpathinfo'.$count]);
 
-					$dir = new GO_Base_Fs_Folder($fullpath);
+					$dir = new \GO_Base_Fs_Folder($fullpath);
 					$dir->create();
 					$subdir = true;
 					$file->move($dir);

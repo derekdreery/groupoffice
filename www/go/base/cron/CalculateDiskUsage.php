@@ -54,7 +54,7 @@ class GO_Base_Cron_CalculateDiskUsage extends GO_Base_Cron_AbstractCron {
 		
 		GO::config()->save_setting('database_usage', $database_usage);
 		
-		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path);
+		$folder = new \GO_Base_Fs_Folder(GO::config()->file_storage_path);
 		GO::config()->save_setting('file_storage_usage', $folder->calculateSize());
 		
 		if(GO::modules()->postfixadmin){

@@ -83,7 +83,7 @@ try {
 			$cal->get_calendars_json($response['resources'], true);
 			
 //			require_once('../../GO.php');
-//			$calCon=new GO_Calendar_Controller_Calendar();
+//			$calCon=new \GO_Calendar_Controller_Calendar();
 //			$response['resources']=$calCon->run("calendarsWithGroup",array(),false);
 
 			$cal->get_calendars_json($response['project_calendars'], false,true);
@@ -100,7 +100,7 @@ try {
 		case 'init_event_window':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			/*$response['writable_calendars']['total'] = $cal->get_writable_calendars($GLOBALS['GO_SECURITY']->user_id, 0, 0, 1, 1, -1, 1, 'name', 'ASC');
 			
@@ -307,7 +307,7 @@ try {
 			require_once($GLOBALS['GO_CONFIG']->class_path.'mail/RFC822.class.inc');
 			require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 
-			$RFC822 = new RFC822();
+			$RFC822 = new \RFC822();
 
 			$response['success']=true;
 
@@ -370,7 +370,7 @@ try {
 
 			$event = $cal->get_event($_REQUEST['event_id']);
 			if(!$event) {
-				throw new DatabaseSelectException();
+				throw new \DatabaseSelectException();
 			}
 			$calendar = $cal->get_calendar($event['calendar_id']);
 
@@ -380,7 +380,7 @@ try {
 			$response['data']['write_permission']=$response['data']['permission_level']>1;
 			if(!$response['data']['permission_level'] ||
 							($event['private']=='1' && $event['user_id']!=$GLOBALS['GO_SECURITY']->user_id)) {
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}
 
 			$response['data']=array_merge($response['data'], $event);
@@ -401,7 +401,7 @@ try {
 			$event = $cal->get_event($_REQUEST['event_id']);
 
 			if(!$event) {
-				throw new DatabaseSelectException();
+				throw new \DatabaseSelectException();
 			}
 			$calendar = $cal->get_calendar($event['calendar_id']);
 
@@ -409,7 +409,7 @@ try {
 			$response['data']['write_permission']=$response['data']['permission_level']>1;
 			if(!$response['data']['permission_level'] ||
 							($event['private']=='1' && $event['user_id']!=$GLOBALS['GO_SECURITY']->user_id)) {
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}
 
 			$has_other_participants = 0;
@@ -485,10 +485,10 @@ try {
 		case 'events':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 		require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
-		$GO_LINKS = new GO_LINKS();
+		$GO_LINKS = new \GO_LINKS();
 
 		//setlocale(LC_ALL, 'nl_NL@euro');
 
@@ -510,7 +510,7 @@ try {
 				}
 
 				if (count($calendars)==0) {
-					throw new Exception($lang['calendar']['noCalSelected']);
+					throw new \Exception($lang['calendar']['noCalSelected']);
 				}
 
 
@@ -808,7 +808,7 @@ try {
 		case 'view_events':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
-			$GO_LINKS = new GO_LINKS();
+			$GO_LINKS = new \GO_LINKS();
 
 			$view_id = ($_REQUEST['view_id']);
 			$start_time=isset($_REQUEST['start_time']) ? strtotime($_REQUEST['start_time']) : 0;
@@ -1018,7 +1018,7 @@ try {
 		case 'writable_calendars':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			if(isset($_REQUEST['delete_keys']))
 			{
@@ -1031,7 +1031,7 @@ try {
 						$calendar = $cal->get_calendar($calendar_id);
 						if(($GLOBALS['GO_MODULES']->modules['calendar']['permission_level'] < GO_SECURITY::WRITE_PERMISSION) || ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id']) < GO_SECURITY::DELETE_PERMISSION))
 						{
-							throw new AccessDeniedException();
+							throw new \AccessDeniedException();
 						}
 						
 						$cal->delete_calendar($calendar_id);
@@ -1074,7 +1074,7 @@ try {
 		case 'view_calendars':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			$view_id = ($_REQUEST['view_id']);
 
@@ -1103,7 +1103,7 @@ try {
 		case 'writable_views':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			if(isset($_REQUEST['delete_keys'])) {
 				try {
@@ -1113,7 +1113,7 @@ try {
 					foreach($views as $view_id) {
 						$view = $cal->get_view($view_id);
 						if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $view['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
-							throw new AccessDeniedException();
+							throw new \AccessDeniedException();
 						}
 						$cal->delete_view($view_id);
 					}
@@ -1140,7 +1140,7 @@ try {
 		case 'view':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			$response['data']=$cal->get_view($_REQUEST['view_id']);
 			$response['data']['user_name'] =$GO_USERS->get_user_realname($response['data']['user_id']);
@@ -1150,7 +1150,7 @@ try {
 		case 'calendar':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			$response['data']=$cal->get_calendar($_REQUEST['calendar_id']);
 			$response['data']['user_name'] =$GO_USERS->get_user_realname($response['data']['user_id']);
@@ -1191,7 +1191,7 @@ try {
 		case 'participants':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			$event_id=$_REQUEST['event_id'];
 
@@ -1259,7 +1259,7 @@ try {
 //		case 'get_default_participant':
 //
 //			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-//			$GO_USERS = new GO_USERS();
+//			$GO_USERS = new \GO_USERS();
 //
 //			$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
 //
@@ -1283,7 +1283,7 @@ try {
 		case 'check_availability':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 			
 
 			$event = empty($_REQUEST['event_id']) ? false : $cal->get_event($_REQUEST['event_id']);
@@ -1316,7 +1316,7 @@ try {
 		case 'availability':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 			
 			$event_id = empty($_REQUEST['event_id']) ? 0 : $_REQUEST['event_id'];
 			$date = Date::to_unixtime($_REQUEST['date']);
@@ -1390,7 +1390,7 @@ try {
 			}
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			$group['user_name'] = $GO_USERS->get_user_realname($group['user_id']);
 			$response['data'] = $group;
@@ -1405,7 +1405,7 @@ try {
 				try {
 					if($GLOBALS['GO_MODULES']->modules['calendar']['permission_level'] < GO_SECURITY::WRITE_PERMISSION)
 					{
-						throw new AccessDeniedException();
+						throw new \AccessDeniedException();
 					}
 
 					$response['deleteSuccess']=true;
@@ -1435,7 +1435,7 @@ try {
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			$response['results']=array();
 			$response['total'] = $cal->get_groups($sort, $dir, $start, $limit);
@@ -1449,7 +1449,7 @@ try {
 		case 'resources':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			$cal->get_groups();
 			$response['results']=array();
@@ -1552,7 +1552,7 @@ try {
 				}
 
 				require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-				$GO_USERS = new GO_USERS();
+				$GO_USERS = new \GO_USERS();
 
 				$response['total'] = $cal->get_group_admins($group_id);
 				while($cal->next_record()) {
@@ -1653,7 +1653,7 @@ try {
 			$response['results'] = array();
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			foreach($ids as $mailing_id) {
 				$mailings->get_contacts_from_mailing_group($mailing_id);
@@ -1690,7 +1690,7 @@ try {
 			$ids = json_decode($_POST['ids']);
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
-			$GO_GROUPS = new GO_GROUPS();
+			$GO_GROUPS = new \GO_GROUPS();
 
 			$response['results'] = array();
 
@@ -1712,7 +1712,7 @@ try {
 		case 'permissions':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			$resources = (isset($_REQUEST['resources']) && $_REQUEST['resources']) ? 1 : 0;
 			$group_id = (isset($_REQUEST['group_id']) && $_REQUEST['group_id']) ? $_REQUEST['group_id'] : 0;
@@ -1759,7 +1759,7 @@ try {
 							$cal->delete_category($category_id);
 						}else
 						{
-							throw new AccessDeniedException();
+							throw new \AccessDeniedException();
 						}						
 					}					
 				}
@@ -1778,7 +1778,7 @@ try {
 			$response['total'] = $cal->get_categories($sort, $dir, $start, $limit);
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 			
 			while($category = $cal->next_record())
 			{

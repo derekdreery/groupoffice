@@ -3,7 +3,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	
 	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
 		$storeParams->debugSql();
-		$multiSel = new GO_Base_Component_MultiSelectGrid(
+		$multiSel = new \GO_Base_Component_MultiSelectGrid(
 						'books', 
 						"GO_Addressbook_Model_Addressbook",$store, $params, true);		
 		$multiSel->setFindParamsForDefaultSelection($storeParams);
@@ -58,7 +58,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
 		
 		$filename = $addressbook->name.'.vcf';
-		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File($filename));		
+		GO_Base_Util_Http::outputDownloadHeaders(new \GO_Base_FS_File($filename));		
 	
 		foreach ($addressbook->contacts(GO_Base_Db_FindParams::newInstance()->select('t.*')) as $contact)
 			echo $contact->toVObject()->serialize();
@@ -89,10 +89,10 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 //		GO::debug($import_filename);
 //
 //		if(!move_uploaded_file($import_filename, $params['file'])) {
-//			throw new Exception('Could not move '.$import_filename);
+//			throw new \Exception('Could not move '.$import_filename);
 //	  }
 
-//		$file = new GO_Base_Fs_File($_FILES['importFiles']['tmp_name']);
+//		$file = new \GO_Base_Fs_File($_FILES['importFiles']['tmp_name']);
 //	  $file->convertToUtf8();
 		$params['file'] = $_FILES['files']['tmp_name'][0];
 		ini_set('max_execution_time', 360);
@@ -106,11 +106,11 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 			default:
 				
 				if($params['controller']=='GO_Addressbook_Controller_Contact')
-					$controller = new GO_Addressbook_Controller_Contact();
+					$controller = new \GO_Addressbook_Controller_Contact();
 				elseif($params['controller']=='GO_Addressbook_Controller_Company')
-					$controller = new GO_Addressbook_Controller_Company();
+					$controller = new \GO_Addressbook_Controller_Company();
 				else
-					throw new Exception("No or wrong controller given");
+					throw new \Exception("No or wrong controller given");
 				
 				$response = array_merge($response,$controller->run("ImportCsv",$params,false));
 				break;
@@ -125,7 +125,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
 		
 		if(!$addressbook)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO_Base_Exception_NotFound();
 		
 		$addressbook->truncate();
 		
@@ -158,12 +158,12 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	 * @param Array $params Parameters. MUST contain string $params['file'].
 	 */
 //	protected function actionImportVcf($params){
-//		$file = new GO_Base_Fs_File($params['file']);
+//		$file = new \GO_Base_Fs_File($params['file']);
 //		$file->convertToUtf8();
 //
 //		$data = $file->getContents();
 //		
-//		$contact = new GO_Addressbook_Model_Contact();
+//		$contact = new \GO_Addressbook_Model_Contact();
 //		$vcard = GO_Base_VObject_Reader::read($data);
 //		
 //		GO_Base_VObject_Reader::convertVCard21ToVCard30($vcard);
@@ -171,7 +171,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 //		
 //		
 //		if(!empty($params["addressbook_id"]))
-//			throw new Exception("Param addressbook_id may not be empty");
+//			throw new \Exception("Param addressbook_id may not be empty");
 //		//$params['addressbook_id'] = !empty($params['a']) ? $params['a'] : 1;
 //		
 //		if (is_array($vcard)) {
@@ -206,7 +206,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
 		
 		if(!$addressbook)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO_Base_Exception_NotFound();
 		
 		GO_Base_Fs_File::setAllowDeletes(false);
 		//VERY IMPORTANT:

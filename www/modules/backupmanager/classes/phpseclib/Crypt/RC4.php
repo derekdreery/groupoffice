@@ -21,7 +21,7 @@
  * <?php
  *    include('Crypt/RC4.php');
  *
- *    $rc4 = new Crypt_RC4();
+ *    $rc4 = new \Crypt_RC4();
  *
  *    $rc4->setKey('abcdefgh');
  *

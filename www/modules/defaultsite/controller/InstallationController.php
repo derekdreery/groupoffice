@@ -9,17 +9,17 @@ class GO_Defaultsite_Controller_Installation extends GO_Base_Controller_Abstract
 		);
 		
 		if(!GO::modules()->isAvailable('site')){
-			throw new Exception("site module is not available!");
+			throw new \Exception("site module is not available!");
 		}
 		
 		if(!GO::modules()->isAvailable('defaultsite')){
-			throw new Exception("defaultsite module is not available!");
+			throw new \Exception("defaultsite module is not available!");
 		}
 
-		$siteModule = new GO_Base_Model_Module();
+		$siteModule = new \GO_Base_Model_Module();
 		$siteModule->id='site';
 		if(GO::modules()->isInstalled('site') || $siteModule->save()){
-			$defaultSiteModule = new GO_Base_Model_Module();
+			$defaultSiteModule = new \GO_Base_Model_Module();
 			$defaultSiteModule->id='defaultsite';
 			if(!$defaultSiteModule->save()){
 				$response['success'] = false;

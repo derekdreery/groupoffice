@@ -64,7 +64,7 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 		$foundCronJobClasses=array();
 		$folderPath = GO::config()->root_path.'go/base/cron';
 		
-		$folder = new GO_Base_Fs_Folder($folderPath);
+		$folder = new \GO_Base_Fs_Folder($folderPath);
 		GO::debug("CRONFILE SEARCH IN FOLDER: ".$folder->path());
 		if($folder->exists()){
 			$items = $folder->ls();
@@ -72,7 +72,7 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 			foreach($items as $item){
 				if(is_file($item)){
 					$className = 'GO_Base_Cron_'.$item->nameWithoutExtension();
-					$reflectionClasses[] = new ReflectionClass($className);
+					$reflectionClasses[] = new \ReflectionClass($className);
 				}
 			}
 			
@@ -92,7 +92,7 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 		$foundCronJobClasses=array();
 		$folderPath = GO::config()->file_storage_path.'php/'.$folderName;
 		
-		$folder = new GO_Base_Fs_Folder($folderPath);
+		$folder = new \GO_Base_Fs_Folder($folderPath);
 		GO::debug("CRONFILE SEARCH IN FOLDER: ".$folder->path());
 		if($folder->exists()){
 			$items = $folder->ls();
@@ -100,7 +100,7 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 			foreach($items as $item){
 				if(is_file($item)){
 					$className = 'GOFS_Cron_'.$item->nameWithoutExtension();
-					$reflectionClasses[] = new ReflectionClass($className);
+					$reflectionClasses[] = new \ReflectionClass($className);
 				}
 			}
 			

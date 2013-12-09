@@ -27,9 +27,9 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
 		$folder = GO_Files_Model_Folder::model()->getTopLevelShare($name);
 		
 		if (!$folder)
-			throw new Sabre\DAV\Exception\NotFound('Shared folder with name ' . $name . ' could not be located');
+			throw new \Sabre\DAV\Exception\NotFound('Shared folder with name ' . $name . ' could not be located');
 
-		return new GO_DAV_FS_Directory($folder->path);
+		return new \GO_DAV_FS_Directory($folder->path);
 	}
 
 	/**
@@ -44,7 +44,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
 
 		$nodes = array();
 		foreach($shares as $folder){
-			$nodes[]=new GO_DAV_FS_Directory($folder->path);
+			$nodes[]=new \GO_DAV_FS_Directory($folder->path);
 		}
 
 		return $nodes;
@@ -61,7 +61,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
 	 */
 	public function createFile($name, $data = null) {
 
-		throw new Sabre\DAV\Exception\Forbidden();
+		throw new \Sabre\DAV\Exception\Forbidden();
 	}
 
 	/**
@@ -72,7 +72,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
 	 */
 	public function createDirectory($name) {
 
-		throw new Sabre\DAV\Exception\Forbidden();
+		throw new \Sabre\DAV\Exception\Forbidden();
 	}
 
 	/**
@@ -82,7 +82,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
 	 */
 	public function delete() {
 
-		throw new Sabre\DAV\Exception\Forbidden();
+		throw new \Sabre\DAV\Exception\Forbidden();
 	}
 
 	/**

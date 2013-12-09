@@ -22,10 +22,10 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractJsonContro
 
 	protected function actionStore($params) {
 
-		$columnModel = new GO_Base_Data_ColumnModel(GO_Notes_Model_Note::model());
+		$columnModel = new \GO_Base_Data_ColumnModel(GO_Notes_Model_Note::model());
 		$columnModel->formatColumn('user_name', '$model->user ? $model->user->name : 0');
 		
-		$store = new GO_Base_Data_DbStore('GO_Notes_Model_Category', $columnModel, $params);
+		$store = new \GO_Base_Data_DbStore('GO_Notes_Model_Category', $columnModel, $params);
 		$store->defaultSort = 'name';
 		$store->multiSelectable('no-multiselect');
 

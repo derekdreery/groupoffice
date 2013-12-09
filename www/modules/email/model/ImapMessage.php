@@ -126,7 +126,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		//find recursive in subfolders
 		if($searchIn==='recursive') {
 			
-			$mailboxObj = new GO_Email_Model_ImapMailbox($account, array('name'=>$mailbox));
+			$mailboxObj = new \GO_Email_Model_ImapMailbox($account, array('name'=>$mailbox));
 			
 			$children = $mailboxObj->getChildren(true, false);
 			foreach($children as $child) {
@@ -164,7 +164,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}else
 		{
 		
-			$imapMessage = new GO_Email_Model_ImapMessage();
+			$imapMessage = new \GO_Email_Model_ImapMessage();
 			$imap = $account->openImapConnection($mailbox);
 
 			$attributes = $imap->get_message_header($uid, true);
@@ -200,7 +200,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	
 	
 	public function createFromHeaders($account, $mailbox, $headers){
-		$imapMessage = new GO_Email_Model_ImapMessage();
+		$imapMessage = new \GO_Email_Model_ImapMessage();
 		
 		$headers['account'] = $account;
 		$headers['mailbox'] = $mailbox;
@@ -441,7 +441,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}
 		
 		if($asText){
-			$htmlToText = new  GO_Base_Util_Html2Text($this->_htmlBody);
+			$htmlToText = new \GO_Base_Util_Html2Text($this->_htmlBody);
 			return $htmlToText->get_text();
 		}
 		
@@ -557,7 +557,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				if($part['subtype']=='applefile')
 					continue;
 					
-				$a = new GO_Email_Model_ImapMessageAttachment();
+				$a = new \GO_Email_Model_ImapMessageAttachment();
 				$a->setImapParams($this->account, $this->mailbox, $this->uid);
 				
 				if (empty($part['name']) || $part['name'] == 'false') {
@@ -587,7 +587,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				
 				$fileName = !empty($a->name) ? $a->name : GO::t('noname','email');
 				
-				$file = new GO_Base_Fs_File($fileName);
+				$file = new \GO_Base_Fs_File($fileName);
 				while(in_array($a->name, $uniqueNames)){
 					$a->name = $file->nameWithoutExtension().' ('.$i.').'.$file->extension();
 					$i++;

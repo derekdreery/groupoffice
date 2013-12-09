@@ -7,7 +7,7 @@
 			<h2><?php echo GO::t('changePassword', 'defaultsite'); ?></h2>
 		<?php endif; ?>
 
-		<?php $form = new GO_Site_Widget_Form(); ?>
+		<?php $form = new \GO_Site_Widget_Form(); ?>
 		<?php echo $form->beginForm(); ?>
 
 		<?php if (Site::notifier()->hasMessage('success')): ?>

@@ -315,7 +315,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		$imap = $this->justConnect();
 		
 		if(!$imap->select_mailbox($mailbox))
-			throw new Exception ("Could not open IMAP mailbox $mailbox\nIMAP error: ".$imap->last_error());
+			throw new \Exception ("Could not open IMAP mailbox $mailbox\nIMAP error: ".$imap->last_error());
 	
 		return $imap;
 	}
@@ -327,7 +327,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 */
 	public function justConnect(){
 		if(empty($this->_imap)){
-			$this->_imap = new GO_Base_Mail_Imap();
+			$this->_imap = new \GO_Base_Mail_Imap();
 			$this->_imap->connect($this->host, $this->port, $this->username, $this->decryptPassword(), $this->use_ssl);
 		}else
 		{
@@ -435,7 +435,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
 
 	public function addAlias($email, $name, $signature='', $default=1){
-		$a = new GO_Email_Model_Alias();
+		$a = new \GO_Email_Model_Alias();
 		$a->account_id=$this->id;
 		$a->email=$email;
 		$a->name=$name;
@@ -458,7 +458,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		$folders = $imap->list_folders($subscribed,$withStatus,"","{$this->mbroot}%", true);		
 //		GO::debug($folders);
 		foreach($folders as $folder){
-			$mailbox = new GO_Email_Model_ImapMailbox($this,$folder);
+			$mailbox = new \GO_Email_Model_ImapMailbox($this,$folder);
 			$rootMailboxes[]=$mailbox;
 		}
 		
@@ -482,7 +482,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		$mailboxModels =array();
 		
 		foreach($folders as $folder){
-			$mailbox = new GO_Email_Model_ImapMailbox($this,$folder);
+			$mailbox = new \GO_Email_Model_ImapMailbox($this,$folder);
 			if($hierarchy){
 				$mailboxModels[$folder['name']]=$mailbox;
 				$parentName = $mailbox->getParentName();

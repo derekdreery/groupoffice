@@ -76,7 +76,7 @@
 	public function beforeDelete() {
 		
 		if($this->users)			
-			throw new Exception("You can't delete the users addressbook");
+			throw new \Exception("You can't delete the users addressbook");
 		
 		return parent::beforeDelete();
 	}
@@ -90,7 +90,7 @@
 	public function getUsersAddressbook(){
 		$ab = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('users', '1'); //GO::t('users','base'));
 		if (!$ab) {
-			$ab = new GO_Addressbook_Model_Addressbook();
+			$ab = new \GO_Addressbook_Model_Addressbook();
 			$ab->name = GO::t('users');
 			$ab->users = true;
 			$ab->save();

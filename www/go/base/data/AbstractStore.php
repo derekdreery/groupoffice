@@ -57,7 +57,7 @@ abstract class GO_Base_Data_AbstractStore {
 		if($columnModel)
 			$this->_columnModel = $columnModel;
 		else
-			$this->_columnModel = new GO_Base_Data_ColumnModel();
+			$this->_columnModel = new \GO_Base_Data_ColumnModel();
 		
 		$this->response['results'] = array();
   }

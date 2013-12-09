@@ -22,7 +22,7 @@
  * <?php
  *    include('Crypt/AES.php');
  *
- *    $aes = new Crypt_AES();
+ *    $aes = new \Crypt_AES();
  *
  *    $aes->setKey('abcdefghijklmnop');
  *

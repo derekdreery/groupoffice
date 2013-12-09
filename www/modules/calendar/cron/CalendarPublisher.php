@@ -54,7 +54,7 @@ class GO_Calendar_Cron_CalendarPublisher extends GO_Base_Cron_AbstractCron {
 		
 		foreach($calendars as $calendar){
 
-			$file = new GO_Base_Fs_File($calendar->getPublicIcsPath());
+			$file = new \GO_Base_Fs_File($calendar->getPublicIcsPath());
 	
 			if(!$file->exists()){
 				GO::debug("Creating ".$file->path().".");

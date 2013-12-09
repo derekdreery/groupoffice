@@ -407,7 +407,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 	private function _loadCurrentCalendar($calendarId) {
 		
 		if(empty($calendarId))
-			throw new FileNotFoundException();
+			throw new \FileNotFoundException();
 		
 		$this->_calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
 	}

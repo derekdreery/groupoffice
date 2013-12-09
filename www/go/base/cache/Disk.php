@@ -126,7 +126,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	public function flush(){
 		$this->_ttls=array();
 		$this->_ttlsDirty=true;
-		$folder = new GO_Base_Fs_Folder($this->_dir);
+		$folder = new \GO_Base_Fs_Folder($this->_dir);
 		$folder->delete();
 		$folder->create(0777);
 	}

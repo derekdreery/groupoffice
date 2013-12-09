@@ -26,7 +26,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 		
 		//		if(!$this->_getFolder()->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION)){
 //			GO::debug("DAV: User ".GO::user()->username." doesn't have write permission for ".$this->relpath);
-//			throw new Sabre\DAV\Exception\Forbidden ("DAV: User ".GO::user()->username." doesn't have write permission for folder '".$this->relpath.'"');
+//			throw new \Sabre\DAV\Exception\Forbidden ("DAV: User ".GO::user()->username." doesn't have write permission for folder '".$this->relpath.'"');
 //		}
 		parent::__construct($path);
 	}
@@ -41,7 +41,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 			$this->_folder = GO_Files_Model_Folder::model()->findByPath($this->relpath);
 
 			if (!$this->_folder) {
-				throw new Sabre\DAV\Exception\NotFound('Folder not found: ' . $this->relpath);
+				throw new \Sabre\DAV\Exception\NotFound('Folder not found: ' . $this->relpath);
 			}
 		}
 		return $this->_folder;
@@ -63,14 +63,14 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 		$folder = $this->_getFolder();
 
 		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new Sabre\DAV\Exception\Forbidden();
+			throw new \Sabre\DAV\Exception\Forbidden();
 
-		$newFile = new GO_Base_Fs_File($this->path . '/' . $name);
+		$newFile = new \GO_Base_Fs_File($this->path . '/' . $name);
 		if($newFile->exists())
-			throw new Exception("File already exists!");
+			throw new \Exception("File already exists!");
 		
 		if(!GO_Files_Model_File::checkQuota(strlen($data)))
-			throw new Sabre\DAV\Exception\InsufficientStorage();
+			throw new \Sabre\DAV\Exception\InsufficientStorage();
 		
 		$newFile->putContents($data);
 		
@@ -89,7 +89,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 		$folder = $this->_getFolder();
 
 		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new Sabre\DAV\Exception\Forbidden();
+			throw new \Sabre\DAV\Exception\Forbidden();
 		
 		$folder->name = $name;
 		$folder->save();
@@ -113,14 +113,14 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 		\GO::debug("FSD::move($newPath)");
 
 		if (!is_dir(dirname($newPath)))
-			throw new Exception('Invalid move!');
+			throw new \Exception('Invalid move!');
 
 		$folder = $this->_getFolder();
 
 		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new Sabre\DAV\Exception\Forbidden();
+			throw new \Sabre\DAV\Exception\Forbidden();
 	
-		$destFsFolder = new GO_Base_Fs_Folder($newPath);		
+		$destFsFolder = new \GO_Base_Fs_Folder($newPath);		
 		
 		//GO::debug("Dest folder: ".$destFsFolder->stripFileStoragePath());
 		
@@ -148,7 +148,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 		$folder = $this->_getFolder();
 
 		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new Sabre\DAV\Exception\Forbidden();
+			throw new \Sabre\DAV\Exception\Forbidden();
 
 		$folder->addFolder($name);
 	}
@@ -167,11 +167,11 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 		GO::debug("FSD:getChild($path)");
 
 		if (is_dir($path)) {
-			return new GO_Dav_Fs_Directory($this->relpath . '/' . $name);
+			return new \GO_Dav_Fs_Directory($this->relpath . '/' . $name);
 		} else if (file_exists($path)) {
-			return new GO_Dav_Fs_File($this->relpath . '/' . $name);
+			return new \GO_Dav_Fs_File($this->relpath . '/' . $name);
 		} else {
-			throw new Sabre\DAV\Exception\NotFound('File with name ' . $path . ' could not be located');
+			throw new \Sabre\DAV\Exception\NotFound('File with name ' . $path . ' could not be located');
 		}
 	}
 
@@ -193,7 +193,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 
 		try {
 			if (!file_exists($path))
-				throw new Sabre\DAV\Exception\NotFound('File with name ' . $path . ' could not be located');
+				throw new \Sabre\DAV\Exception\NotFound('File with name ' . $path . ' could not be located');
 
 			return true;
 		} catch (Sabre\DAV\Exception\NotFound $e) {
@@ -216,7 +216,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 		$f = $this->_getFolder();
 		
 		if (!$f) {
-			throw new Sabre\DAV\Exception\NotFound("Folder not found in database");
+			throw new \Sabre\DAV\Exception\NotFound("Folder not found in database");
 		}
 		
 		$stmt = $f->getSubFolders();
@@ -245,7 +245,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 		$folder = $this->_getFolder();
 		
 		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
-			throw new Sabre\DAV\Exception\Forbidden();
+			throw new \Sabre\DAV\Exception\Forbidden();
 
 
 		$folder->delete();

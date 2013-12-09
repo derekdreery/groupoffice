@@ -15,7 +15,7 @@ class GO_Base_Util_SpellChecker {
         self::$_pLink = pspell_new($language, "", "", "utf-8", PSPELL_FAST);
 				
 				if(!self::$_pLink)
-					throw new Exception("Could not initialize pspell for language ".$language);
+					throw new \Exception("Could not initialize pspell for language ".$language);
 
         $words = self::_getWords($text);
         $checkspelling = self::_checkWords($words);

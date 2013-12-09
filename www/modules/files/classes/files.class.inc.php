@@ -249,7 +249,7 @@ class files extends db {
 		require($GLOBALS['GO_LANGUAGE']->get_language_file('files'));
 
 		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-		$GO_USERS = new GO_USERS();
+		$GO_USERS = new \GO_USERS();
 
 		$modified_by_user_name = $GO_USERS->get_user_realname($modified_by_user_id);
 
@@ -277,7 +277,7 @@ class files extends db {
 			if($this->f('user_id')!=$GLOBALS['GO_SECURITY']->user_id) {
 				$user = $GO_USERS->get_user($this->f('user_id'));
 
-				$swift = new GoSwift($user['email'], $lang['files']['folder_modified_subject'],0,0,'3',$body);
+				$swift = new \GoSwift($user['email'], $lang['files']['folder_modified_subject'],0,0,'3',$body);
 				$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
 				$swift->sendmail();
 			}
@@ -709,7 +709,7 @@ class files extends db {
 		}
 
 		if(!$folder['id']) {
-			throw new Exception('Could not create folder: '.$full_path);
+			throw new \Exception('Could not create folder: '.$full_path);
 		}
 
 		if($levels_recursed<1){
@@ -768,14 +768,14 @@ class files extends db {
 
 		if(!$folder)
 		{
-			throw new FileNotFoundException();
+			throw new \FileNotFoundException();
 		}
 
 		$full_path = $GLOBALS['GO_CONFIG']->file_storage_path.$this->build_path($folder);
 		if(!is_dir($full_path))
 		{
 			echo 'Not found: '.$full_path;
-			throw new FileNotFoundException();
+			throw new \FileNotFoundException();
 		}
 
 		go_debug("files::sync_folder ".$full_path);
@@ -1471,38 +1471,38 @@ class files extends db {
 
 		if($parent==0) {
 			/*if(!$GLOBALS['GO_SECURITY']->has_admin_permission($user_id)) {
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}*/
 		}else {
 			if(is_numeric($parent)) {
 				$parent = $this->get_folder($parent);
 			}
 			if(!$parent) {
-				throw new FileNotFoundException();
+				throw new \FileNotFoundException();
 			}
 			/*if(!$this->has_write_permission($user_id, $parent)) {
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}*/
 		}
 
 
 		if (empty($name)) {
-			throw new Exception($lang['common']['missingField']);
+			throw new \Exception($lang['common']['missingField']);
 		}
 
 		if(strlen($name)>240){
-			throw new Exception('Filename too long: '.$name);
+			throw new \Exception('Filename too long: '.$name);
 		}
 
 		$rel_path=$this->build_path($parent);
 		$full_path = $GLOBALS['GO_CONFIG']->file_storage_path.$rel_path;
 
 		if (!$ignore_existing_filesystem_folder && file_exists($full_path.'/'.$name)) {
-			throw new Exception($lang['files']['folderExists']);
+			throw new \Exception($lang['files']['folderExists']);
 		}
 
 		if (!File::mkdir($full_path.'/'.$name)) {
-			throw new Exception($lang['common']['saveError'].$full_path.'/'.$name);
+			throw new \Exception($lang['common']['saveError'].$full_path.'/'.$name);
 		} else {
 			$folder['readonly']=$readonly;
 			$folder['visible']=$visible;
@@ -1582,7 +1582,7 @@ class files extends db {
 		if(is_numeric($folder)) {
 			$folder = $this->get_folder($folder);
 			if(!$folder) {
-				throw new FileNotFoundException();
+				throw new \FileNotFoundException();
 			}
 		}
 		$files = new files();
@@ -1599,7 +1599,7 @@ class files extends db {
 		$subpath = $this->build_path($folder);
 
 		if(!$subpath) {
-			throw new FileNotFoundException();
+			throw new \FileNotFoundException();
 		}
 
 		$this->remove_notifications($folder['id']);
@@ -1624,7 +1624,7 @@ class files extends db {
 		if(is_numeric($file)) {
 			$file = $this->get_file($file);
 			if(!$file) {
-				throw new FileNotFoundException();
+				throw new \FileNotFoundException();
 			}
 		}
 

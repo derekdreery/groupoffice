@@ -55,7 +55,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 */
 	public function createFromTempFile(GO_Base_Fs_File $file){
 		//		$a['name'] = $file->name();
-		$a = new GO_Email_Model_MessageAttachment();
+		$a = new \GO_Email_Model_MessageAttachment();
 		$a->name=$file->name();
 		$a->mime= $file->mimeType();
 		
@@ -81,7 +81,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 */
 	public function setTempFile(GO_Base_Fs_File $file){
 		if(!$file->isTempFile())
-			throw new Exception("File $file->name is not a temporary file");
+			throw new \Exception("File $file->name is not a temporary file");
 		
 		$this->_tmp_file = $file->stripTempPath();
 	}
@@ -179,7 +179,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 * @return string
 	 */
 	public function getExtension(){
-		$file = new GO_Base_Fs_File($this->name);
+		$file = new \GO_Base_Fs_File($this->name);
 		return strtolower($file->extension());
 	}
 	

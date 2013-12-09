@@ -62,7 +62,7 @@ class GO_Base_Language{
 		
 		//validate given language string
 		if(!preg_match('/^[a-z_-]+$/i', $this->_langIso)){
-			throw new Exception("Invalid language iso code given (".$this->_langIso);
+			throw new \Exception("Invalid language iso code given (".$this->_langIso);
 		}
 		
 		if($oldIso!=$this->_langIso)
@@ -227,7 +227,7 @@ class GO_Base_Language{
 	
 	
 	public function getAllLanguage(){
-		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'language');
+		$folder = new \GO_Base_Fs_Folder(GO::config()->root_path.'language');
 		$items = $folder->ls();
 		foreach($items as $folder){
 			if($folder instanceof GO_Base_Fs_Folder){

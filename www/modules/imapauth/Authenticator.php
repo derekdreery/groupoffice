@@ -49,7 +49,7 @@ class GO_Imapauth_Authenticator {
 		//disable password validation because we can't control the external passwords
 		GO::config()->password_validate=false;
 		
-		$imap = new GO_Base_Mail_Imap();
+		$imap = new \GO_Base_Mail_Imap();
 		try {
 			$imap->connect(
 							$this->config['host'], $this->config['port'], $this->imapUsername, $this->imapPassword, $this->config['ssl']);
@@ -66,7 +66,7 @@ class GO_Imapauth_Authenticator {
 
 					$user->password = $this->imapPassword;
 					if(!$user->save()){
-						throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
+						throw new \Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
 					}
 				}
 				$this->user = $user;
@@ -112,7 +112,7 @@ class GO_Imapauth_Authenticator {
 				$account->smtp_password = $password;
 			}
 			if(!$account->save()){
-				throw new Exception("Could not save e-mail account: ".implode("\n", $account->getValidationErrors()));				
+				throw new \Exception("Could not save e-mail account: ".implode("\n", $account->getValidationErrors()));				
 			}
 		}
 		
@@ -152,11 +152,11 @@ class GO_Imapauth_Authenticator {
 			//set session pass.
 
 
-			$model = new GO_Email_Model_Account();
+			$model = new \GO_Email_Model_Account();
 			$model->setAttributes($account);
 			$model->save();
 			if(!$model->save()){
-				throw new Exception("Could not save e-mail account: ".implode("\n", $model->getValidationErrors()));				
+				throw new \Exception("Could not save e-mail account: ".implode("\n", $model->getValidationErrors()));				
 			}
 			$model->addAlias($user->email, $user->name);
 			

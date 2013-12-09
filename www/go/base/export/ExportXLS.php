@@ -28,8 +28,8 @@ class GO_Base_Export_ExportXLS extends GO_Base_Export_AbstractExport {
 	private function _setupExcel() {
 		// Include PHPExcel
 		require_once GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel.php';
-		// Create new PHPExcel object
-		$this->phpExcel = new PHPExcel();
+		// Create new \PHPExcel object
+		$this->phpExcel = new \PHPExcel();
 
 		// Set document properties
 		$this->phpExcel->getProperties()->setCreator(GO::config()->product_name)

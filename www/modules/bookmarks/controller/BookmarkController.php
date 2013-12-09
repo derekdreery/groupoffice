@@ -13,7 +13,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		if (function_exists('curl_init')) {
 			try{
 
-				$c = new GO_Base_Util_HttpClient();
+				$c = new \GO_Base_Util_HttpClient();
 				$c->setCurlOption(CURLOPT_CONNECTTIMEOUT, 2);
 				$c->setCurlOption(CURLOPT_TIMEOUT, 5);
 				$c->setCurlOption(CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);			
@@ -125,7 +125,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 	protected function actionThumbs() {		
 		$response['results'] = array();
 		
-		$folder = new GO_Base_Fs_Folder(GO::modules()->bookmarks->path."icons");
+		$folder = new \GO_Base_Fs_Folder(GO::modules()->bookmarks->path."icons");
 		
 		$filesystemObjects = $folder->ls();
 		foreach($filesystemObjects as $imgObject) {			
@@ -141,7 +141,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 	
 		$relpath = 'public/bookmarks/';
 		
-		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.$relpath);
+		$folder = new \GO_Base_Fs_Folder(GO::config()->file_storage_path.$relpath);
 		$folder->create();
 		
 		

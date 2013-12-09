@@ -32,7 +32,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	protected function actionSyncFilesystem($params){	
 		
 		if(!$this->isCli() && !GO::modules()->tools)
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO_Base_Exception_AccessDenied();
 		
 		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
 
@@ -48,7 +48,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$folders = array('users','projects','addressbook','notes','tickets');
 
 
-			$billingFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'billing');
+			$billingFolder = new \GO_Base_Fs_Folder(GO::config()->file_storage_path.'billing');
 			if($billingFolder->exists()){
 				$bFolders = $billingFolder->ls();
 
@@ -67,7 +67,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$folder = GO_Files_Model_Folder::model()->findByPath($name, true);
 				
 				if(!$folder)
-					throw new Exception("Could not find or create folder");
+					throw new \Exception("Could not find or create folder");
 				
 				$folder->syncFilesystem(true);
 				
@@ -389,7 +389,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			if ($params['share']==1 && $model->acl_id == 0) {
 				$model->visible = 1;
 
-//				$acl = new GO_Base_Model_Acl();
+//				$acl = new \GO_Base_Model_Acl();
 //				$acl->description = $model->tableName() . '.' . $model->aclField();
 //				$acl->user_id = GO::user() ? GO::user()->id : 1;
 //				$acl->save();
@@ -466,7 +466,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
 
 		if (!$destinationFolder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO_Base_Exception_AccessDenied();
 
 		while ($file_id = array_shift(GO::session()->values['files']['pasteIds']['files'])) {
 			$file = GO_Files_Model_File::model()->findByPk($file_id);
@@ -517,10 +517,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 			if ($params['paste_mode'] == 'cut') {
 				if (!$file->move($destinationFolder))
-					throw new Exception("Could not move " . $file->name);
+					throw new \Exception("Could not move " . $file->name);
 			}else {
 				if (!$file->copy($destinationFolder,$newFileName))
-					throw new Exception("Could not copy " . $file->name);
+					throw new \Exception("Could not copy " . $file->name);
 			}
 		}
 
@@ -566,10 +566,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 			if ($params['paste_mode'] == 'cut') {
 				if (!$folder->move($destinationFolder))
-					throw new Exception("Could not move " . $folder->name);
+					throw new \Exception("Could not move " . $folder->name);
 			}else {
 				if (!$folder->copy($destinationFolder, $folderName))
-					throw new Exception("Could not copy " . $folder->name);
+					throw new \Exception("Could not copy " . $folder->name);
 			}
 		}
 
@@ -612,7 +612,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		
 		//$fp = GO_Base_Db_FindParams::newInstance()->calcFoundRows();
 		
-		$cm = new GO_Base_Data_ColumnModel('GO_Files_Model_Folder');
+		$cm = new \GO_Base_Data_ColumnModel('GO_Files_Model_Folder');
 		$cm->setFormatRecordFunction(array($this, 'formatListRecord'));
 		
 		
@@ -625,7 +625,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					->addCondition('user_id', GO::user()->id,'=','sharedRootFolders');
 		
 		
-		$store = new GO_Base_Data_DbStore('GO_Files_Model_Folder',$cm, $params, $findParams);
+		$store = new \GO_Base_Data_DbStore('GO_Files_Model_Folder',$cm, $params, $findParams);
 		$response = $store->getData();
 		$response['permission_level']=GO_Base_Model_Acl::READ_PERMISSION;
 //		$response['results']=array();
@@ -870,7 +870,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		if(!$folder->fsFolder->exists())
 		{
-			//throw new Exception("Fs folder doesn't exist! ".$folder->fsFolder->path());
+			//throw new \Exception("Fs folder doesn't exist! ".$folder->fsFolder->path());
 			GO::debug("Deleting it because filesystem folder doesn't exist");
 			$folder->readonly = 1; //makes sure acl is not deleted
 			$folder->delete(true);
@@ -940,10 +940,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			}
 
 			if($destinationFolder->id==$folder->id){
-				throw new Exception("Same ID's!");
+				throw new \Exception("Same ID's!");
 			}
 
-			$fsFolder = new GO_Base_Fs_Folder($newPath);
+			$fsFolder = new \GO_Base_Fs_Folder($newPath);
 //          $fsFolder->appendNumberToNameIfExists();
 
 			if(($existingFolder = $destinationFolder->hasFolder($fsFolder->name()))){
@@ -979,7 +979,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$folder->readonly = 1;
 				if($folder->isModified())
 					if(!$folder->save(true)){
-						throw new Exception(var_export($folder->getValidationErrors(), true));
+						throw new \Exception(var_export($folder->getValidationErrors(), true));
 					}
 			}
 		}else
@@ -1007,7 +1007,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$folder = GO_Files_Model_Folder::model()->findByPath($model->buildFilesPath(),true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
 		
 		if(!$folder){
-			throw new Exception("Failed to create folder ".$model->buildFilesPath());
+			throw new \Exception("Failed to create folder ".$model->buildFilesPath());
 		}
 //      if (!empty($model->acl_id))
 //          $folder->acl_id = $model->acl_id;
@@ -1080,21 +1080,21 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
 
 		if (!$destinationFolder->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO_Base_Exception_AccessDenied();
 
 
 		while ($tmpfile = array_shift(GO::session()->values['files']['uploadqueue'])) {
 
 
 			if(is_dir($tmpfile)){
-				$folder = new GO_Base_Fs_Folder($tmpfile);
+				$folder = new \GO_Base_Fs_Folder($tmpfile);
 				if($folder->exists()){
 					$folder->move($destinationFolder->fsFolder,false, true);
 					$destinationFolder->addFileSystemFolder($folder);
 				}
 			} else {
 
-				$file = new GO_Base_Fs_File($tmpfile);
+				$file = new \GO_Base_Fs_File($tmpfile);
 				if($file->exists()){
 
 					$existingFile = $destinationFolder->hasFile($file->name());
@@ -1141,10 +1141,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$workingFolder = GO_Files_Model_Folder::model()->findByPk($params['working_folder_id']);
 		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
-		$archiveFile = new GO_Base_Fs_File(GO::config()->file_storage_path.$destinationFolder->path . '/' . $params['archive_name'] . '.zip');
+		$archiveFile = new \GO_Base_Fs_File(GO::config()->file_storage_path.$destinationFolder->path . '/' . $params['archive_name'] . '.zip');
 		
 		if($archiveFile->exists())
-			throw new Exception(sprintf(GO::t('filenameExists','files'), $archiveFile->stripFileStoragePath()));
+			throw new \Exception(sprintf(GO::t('filenameExists','files'), $archiveFile->stripFileStoragePath()));
 		
 		$sourceObjects = array();
 		for($i=0;$i<count($sources);$i++){			
@@ -1156,7 +1156,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			GO_Files_Model_File::importFromFilesystem($archiveFile);
 			$response['success']=true;
 		}  else {
-			throw new Exception("ZIP creation failed");
+			throw new \Exception("ZIP creation failed");
 		}
 
 		return $response;
@@ -1177,14 +1177,14 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 
 		while ($filePath = array_shift($sources)) {
-			$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$filePath);
+			$file = new \GO_Base_Fs_File(GO::config()->file_storage_path.$filePath);
 			switch(strtolower($file->extension())) {
 				case 'zip':					
 					
 					$folder = GO_Base_Fs_Folder::tempFolder(uniqid());
 					
 					if(class_exists("ZipArchive")){
-						$zip = new ZipArchive;
+						$zip = new \ZipArchive;
 						$zip->open($file->path());
 						$zip->extractTo($folder->path());									
 						$this->_convertZipEncoding($folder);
@@ -1195,14 +1195,14 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 						exec($cmd, $output, $ret);
 						if($ret!=0)
 						{
-							throw new Exception("Could not decompress\n".implode("\n",$output));
+							throw new \Exception("Could not decompress\n".implode("\n",$output));
 						}
 					}
 					
 					$items = $folder->ls();
 					
 					foreach($items as $item){
-						$item->move(new GO_Base_Fs_Folder($workingPath));
+						$item->move(new \GO_Base_Fs_Folder($workingPath));
 					}
 					
 					$folder->delete();
@@ -1215,7 +1215,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 					if($ret!=0)
 					{
-						throw new Exception("Could not decompress\n".implode("\n",$output));
+						throw new \Exception("Could not decompress\n".implode("\n",$output));
 					}
 					break;
 
@@ -1226,7 +1226,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 					if($ret!=0)
 					{
-						throw new Exception("Could not decompress\n".implode("\n",$output));
+						throw new \Exception("Could not decompress\n".implode("\n",$output));
 					}
 					break;
 			}
@@ -1274,8 +1274,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				while ($tmp_file = array_shift($tmp_files)) {
 					if (!empty($tmp_file['tmp_file'])) {
 
-						$file = new GO_Base_Fs_File(GO::config()->tmpdir.$tmp_file['tmp_file']);
-						$file->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . $folder->path));
+						$file = new \GO_Base_Fs_File(GO::config()->tmpdir.$tmp_file['tmp_file']);
+						$file->move(new \GO_Base_Fs_Folder(GO::config()->file_storage_path . $folder->path));
 
 						$folder->addFile($file->name());
 					}

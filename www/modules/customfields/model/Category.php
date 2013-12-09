@@ -84,7 +84,7 @@ class GO_Customfields_Model_Category extends GO_Base_Db_ActiveRecord{
 		$category = GO_Customfields_Model_Category::model()->findSingleByAttributes(array('extends_model'=>$extendsModel, 'name'=>$categoryName));
 		
 		if(!$category){
-			$category = new GO_Customfields_Model_Category();
+			$category = new \GO_Customfields_Model_Category();
 			$category->extends_model=$extendsModel;
 			$category->name=$categoryName;
 			$category->save();

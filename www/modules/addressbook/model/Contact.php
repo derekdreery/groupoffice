@@ -241,7 +241,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	public function beforeDelete() {
 		
 		if($this->goUser())			
-			throw new Exception("This contact belongs to a user account. Please delete this account first.");
+			throw new \Exception("This contact belongs to a user account. Please delete this account first.");
 		
 		return parent::beforeDelete();
 	}
@@ -273,7 +273,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			
 			if(!$company)
 			{
-				$company = new GO_Addressbook_Model_Company();
+				$company = new \GO_Addressbook_Model_Company();
 				$company->name=$this->company_name;
 				$company->addressbook_id=$this->addressbook_id;			
 				$company->save();
@@ -360,29 +360,29 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //	public function setPhoto($srcFileName){
 //		
 //		if(!$this->id)
-//			throw new Exception("Contact must be saved before you can set a photo");
+//			throw new \Exception("Contact must be saved before you can set a photo");
 //
 //		$destination = GO::config()->file_storage_path.'contacts/contact_photos/'.$this->id.'.jpg';
 //		
 //		if(empty($srcFileName))
 //		{
-//			$file = new GO_Base_Fs_File($this->_getPhotoPath());
+//			$file = new \GO_Base_Fs_File($this->_getPhotoPath());
 //			return !$file->exists() || $file->delete();
 //		}else
 //		{		
 //
-//			$f = new GO_Base_Fs_Folder(dirname($this->_getPhotoPath()));
+//			$f = new \GO_Base_Fs_Folder(dirname($this->_getPhotoPath()));
 //			$f->create();
 //
 //
-//			$img = new GO_Base_Util_Image();
+//			$img = new \GO_Base_Util_Image();
 //			if(!$img->load($srcFileName)){
-//				throw new Exception(GO::t('imageNotSupported','addressbook'));
+//				throw new \Exception(GO::t('imageNotSupported','addressbook'));
 //			}
 //
 //			$img->zoomcrop(90,120);
 //			if(!$img->save($destination, IMAGETYPE_JPEG))
-//				throw new Exception("Could not save photo at ".$destination." from ".$srcFileName);
+//				throw new \Exception("Could not save photo at ".$destination." from ".$srcFileName);
 //		}
 //	}
 	
@@ -408,7 +408,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			if(empty($this->photo))
 				$this->photo=$this->id.'.jpg';
 		
-			$this->_photoFile = new GO_Base_Fs_File(GO::config()->file_storage_path.$this->photo);
+			$this->_photoFile = new \GO_Base_Fs_File(GO::config()->file_storage_path.$this->photo);
 		}
 		
 		return $this->_photoFile;
@@ -473,28 +473,28 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	public function setPhoto(GO_Base_Fs_File $file){
 		
 		if($this->isNew)
-			Throw new Exception("Cannot save a photo on a new contact that is not yet saved.");
+			Throw new \Exception("Cannot save a photo on a new contact that is not yet saved.");
 		
 		$this->getPhotoFile()->delete();
 				
-		$photoPath = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'addressbook/photos/'.$this->addressbook_id.'/');
+		$photoPath = new \GO_Base_Fs_Folder(GO::config()->file_storage_path.'addressbook/photos/'.$this->addressbook_id.'/');
 		$photoPath->create();		
 		
 		
 //		if(strtolower($file->extension())!='jpg'){
 		$filename = $photoPath->path().'/'.$this->id.'.jpg';
-		$img = new GO_Base_Util_Image();
+		$img = new \GO_Base_Util_Image();
 		if(!$img->load($file->path())){
-			throw new Exception(GO::t('imageNotSupported','addressbook'));
+			throw new \Exception(GO::t('imageNotSupported','addressbook'));
 		}
 		
 		//resize it to small image so we don't get in trouble with sync clients
 		$img->fitBox(240,320);
 		
 		if(!$img->save($filename, IMAGETYPE_JPEG)){
-			throw new Exception("Could not save photo!");
+			throw new \Exception("Could not save photo!");
 		}
-		$file = new GO_Base_Fs_File($filename);
+		$file = new \GO_Base_Fs_File($filename);
 //		}else
 //		{		
 //			$file->move($photoPath, $this->id.'.'.strtolower($file->extension()));
@@ -518,7 +518,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Addressbook_Model_Contact
 	 */
 	public function importVObject(Sabre\VObject\Component $vobject, $attributes=array(),$saveToDb=true,$ignoreInvalidProperties=true) {
-		//$event = new GO_Calendar_Model_Event();
+		//$event = new \GO_Calendar_Model_Event();
 		$companyAttributes = array();
 //		if (!empty($attributes['addressbook_id'])) {
 //			$companyAttributes['addressbook_id'] = $attributes['addressbook_id'];
@@ -753,7 +753,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		if (isset($companyAttributes['name'])) {
 			$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array('name' => $companyAttributes['name'], 'addressbook_id' => $this->addressbook_id));
 			if (!$company) {
-				$company = new GO_Addressbook_Model_Company();
+				$company = new \GO_Addressbook_Model_Company();
 				$company->setAttributes($companyAttributes, false);
 				$company->addressbook_id = $this->addressbook_id;
 			}
@@ -817,7 +817,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //					)
 //				);
 //			if (empty($propModel))
-//				$propModel = new GO_Addressbook_Model_ContactVcardProperty();
+//				$propModel = new \GO_Addressbook_Model_ContactVcardProperty();
 //			$propModel->contact_id = $this->id;
 //			$propModel->name = $prop['name'];
 //			$propModel->parameters = $prop['parameters'];
@@ -885,7 +885,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	public function toVObject(){
 		
 		
-		$e=new Sabre\VObject\Component\VCard();
+		$e=new \Sabre\VObject\Component\VCard();
 				
 		$e->prodid='-//Intermesh//NONSGML Group-Office '.GO::config()->version.'//EN';		
 		
@@ -899,22 +899,22 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$e->add('FN',$this->name);
 		
 		if (!empty($this->email)) {
-//			$p = new Sabre\VObject\Property('EMAIL',$this->email);
-//			$p->add(new GO_Base_VObject_Parameter('TYPE','INTERNET'));
+//			$p = new \Sabre\VObject\Property('EMAIL',$this->email);
+//			$p->add(new \GO_Base_VObject_Parameter('TYPE','INTERNET'));
 //			$e->add($p);
 			$e->add('email',$this->email, array('type'=>array('INTERNET')));
 			
 		}
 		if (!empty($this->email2)) {
-//			$p = new Sabre\VObject\Property('EMAIL',$this->email2);
-//			$p->add(new GO_Base_VObject_Parameter('TYPE','HOME,INTERNET'));
+//			$p = new \Sabre\VObject\Property('EMAIL',$this->email2);
+//			$p->add(new \GO_Base_VObject_Parameter('TYPE','HOME,INTERNET'));
 //			$e->add($p);
 			
 			$e->add('email',$this->email2, array('type'=>array('HOME','INTERNET')));
 		}
 		if (!empty($this->email3)) {
-//			$p = new Sabre\VObject\Property('EMAIL',$this->email3);
-//			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,INTERNET'));
+//			$p = new \Sabre\VObject\Property('EMAIL',$this->email3);
+//			$p->add(new \GO_Base_VObject_Parameter('TYPE','WORK,INTERNET'));
 //			$e->add($p);
 			
 			$e->add('email',$this->email3, array('type'=>array('WORK','INTERNET')));
@@ -924,43 +924,43 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$e->add('TITLE',$this->function);
 		
 		if (!empty($this->home_phone)) {
-//			$p = new Sabre\VObject\Property('TEL',$this->home_phone);
-//			$p->add(new GO_Base_VObject_Parameter('TYPE','HOME,VOICE'));
+//			$p = new \Sabre\VObject\Property('TEL',$this->home_phone);
+//			$p->add(new \GO_Base_VObject_Parameter('TYPE','HOME,VOICE'));
 //			$e->add($p);
 			
 			$e->add('TEL',$this->home_phone, array('type'=>array('HOME','VOICE')));
 		}
 		if (!empty($this->work_phone)) {
-//			$p = new Sabre\VObject\Property('TEL',$this->work_phone);
-//			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,VOICE'));
+//			$p = new \Sabre\VObject\Property('TEL',$this->work_phone);
+//			$p->add(new \GO_Base_VObject_Parameter('TYPE','WORK,VOICE'));
 //			$e->add($p);	
 			
 			$e->add('TEL',$this->work_phone, array('type'=>array('WORK','VOICE')));
 		}
 		if (!empty($this->work_fax)) {
-//			$p = new Sabre\VObject\Property('TEL',$this->work_fax);
-//			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,FAX'));
+//			$p = new \Sabre\VObject\Property('TEL',$this->work_fax);
+//			$p->add(new \GO_Base_VObject_Parameter('TYPE','WORK,FAX'));
 //			$e->add($p);	
 			
 			$e->add('TEL',$this->work_fax, array('type'=>array('WORK','FAX')));
 		}
 		if (!empty($this->fax)) {
-//			$p = new Sabre\VObject\Property('TEL',$this->fax);
-//			$p->add(new GO_Base_VObject_Parameter('TYPE','HOME,FAX'));
+//			$p = new \Sabre\VObject\Property('TEL',$this->fax);
+//			$p->add(new \GO_Base_VObject_Parameter('TYPE','HOME,FAX'));
 //			$e->add($p);	
 			
 			$e->add('TEL',$this->fax, array('type'=>array('HOME','FAX')));
 		}
 		if (!empty($this->cellular)) {
-//			$p = new Sabre\VObject\Property('TEL',$this->cellular);
-//			$p->add(new GO_Base_VObject_Parameter('TYPE','CELL,VOICE'));
+//			$p = new \Sabre\VObject\Property('TEL',$this->cellular);
+//			$p->add(new \GO_Base_VObject_Parameter('TYPE','CELL,VOICE'));
 //			$e->add($p);	
 			
 			$e->add('TEL',$this->cellular, array('type'=>array('CELL','VOICE')));
 		}
 		if (!empty($this->cellular2)) {
-//			$p = new Sabre\VObject\Property('TEL',$this->cellular2);
-//			$p->add(new GO_Base_VObject_Parameter('TYPE','CELL,VOICE'));
+//			$p = new \Sabre\VObject\Property('TEL',$this->cellular2);
+//			$p->add(new \GO_Base_VObject_Parameter('TYPE','CELL,VOICE'));
 //			$e->add($p);	
 			
 			$e->add('TEL',$this->cellular2, array('type'=>array('CELL','VOICE')));
@@ -971,7 +971,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		if (!empty($this->company)) {
 //			$e->add('ORG',$this->company->name,$this->department,$this->company->name2);
-//			$p = new Sabre\VObject\Property('ADR',';;'.$this->company->address.' '.$this->company->address_no,
+//			$p = new \Sabre\VObject\Property('ADR',';;'.$this->company->address.' '.$this->company->address_no,
 //				$this->company->city,$this->company->state,$this->company->zip,$this->company->country);
 //			$p->add('TYPE','WORK');
 //			$e->add($p);
@@ -979,7 +979,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$e->add('ORG',array($this->company->name,$this->department,$this->company->name2));
 			$e->add('ADR',array('','',$this->company->address.' '.$this->company->address_no,$this->company->city,$this->company->state,$this->company->zip,$this->company->country),array('type'=>'work'));
 			
-//			$p = new Sabre\VObject\Property('ADR',';;'.$this->company->post_address.' '.$this->company->post_address_no,
+//			$p = new \Sabre\VObject\Property('ADR',';;'.$this->company->post_address.' '.$this->company->post_address_no,
 //				$this->company->post_city,$this->company->post_state,$this->company->post_zip,$this->company->post_country);
 //			$e->add($p);
 			$e->add('ADR',array('','',$this->company->post_address.' '.$this->company->post_address_no,
@@ -987,7 +987,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			
 		}
 		
-//		$p = new Sabre\VObject\Property('ADR',';;'.$this->address.' '.$this->address_no,
+//		$p = new \Sabre\VObject\Property('ADR',';;'.$this->address.' '.$this->address_no,
 //			$this->city,$this->state,$this->zip,$this->country);
 //		$p->add('TYPE','HOME');
 //		$e->add($p);
@@ -999,8 +999,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$e->note=$this->comment;
 		}
 		
-//		$mtimeDateTime = new DateTime('@'.$this->mtime);
-//		$rev = new Sabre_VObject_Element_DateTime('LAST-MODIFIED');
+//		$mtimeDateTime = new \DateTime('@'.$this->mtime);
+//		$rev = new \Sabre_VObject_Element_DateTime('LAST-MODIFIED');
 //		$rev->setDateTime($mtimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
 //		$e->add($rev);
 		
@@ -1015,14 +1015,14 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //		$propModels = $this->vcardProperties->fetchAll(PDO::FETCH_ASSOC);
 //		
 //		foreach ($propModels as $propModel) {
-//			$p = new Sabre\VObject\Property($propModel['name'],$propModel['value']);
+//			$p = new \Sabre\VObject\Property($propModel['name'],$propModel['value']);
 //			if(!empty($propModel['parameters'])){
 //				$paramStrings = explode(';',$propModel['parameters']);
 //				foreach ($paramStrings as $paramString) {
 //					if(!empty($paramString)){
 //						$paramStringArr = explode('=',$paramString);
 //
-//						$param = new GO_Base_VObject_Parameter($paramStringArr[0]);
+//						$param = new \GO_Base_VObject_Parameter($paramStringArr[0]);
 //						if (!empty($paramStringArr[1]))
 //							$param->getValue() = $paramStringArr[1];
 //						$p->add($param);
@@ -1133,8 +1133,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		if(empty($this->birthday))
 			return "";
 		
-		$date = new DateTime($this->birthday);
-		$diff = $date->diff(new DateTime());
+		$date = new \DateTime($this->birthday);
+		$diff = $date->diff(new \DateTime());
 		
 		return $diff->y;
 	}

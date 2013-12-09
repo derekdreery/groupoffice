@@ -138,7 +138,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 
 				$acl_id = $this->findAclId();
 				if(!$acl_id){
-					throw new Exception("Could not find ACL for ".$this->className()." with pk: ".$this->pk);
+					throw new \Exception("Could not find ACL for ".$this->className()." with pk: ".$this->pk);
 				}
 
 				$this->_permissionLevel=GO_Base_Model_Acl::getUserPermissionLevel($acl_id);// model()->findByPk($acl_id)->getUserPermissionLevel();
@@ -213,14 +213,14 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		}else{
 			$oldPath = GO::config()->file_storage_path . $this->folder->path.'/'.$filename;
 		}
-		return new GO_Base_Fs_File($oldPath);
+		return new \GO_Base_Fs_File($oldPath);
 	}
 	
 	protected function beforeDelete() {
 		
 		//blocked database check. We check this in the controller now.
 		if($this->isLocked() && !GO::user()->isAdmin())
-			throw new Exception(GO::t("fileIsLocked","files").': '.$this->path);
+			throw new \Exception(GO::t("fileIsLocked","files").': '.$this->path);
 		
 		return parent::beforeDelete();
 	}
@@ -249,13 +249,13 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		//check permissions on the filesystem
 		if($this->isNew){
 			if(!$this->folder->fsFolder->isWritable()){
-				throw new Exception("Folder ".$this->folder->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
+				throw new \Exception("Folder ".$this->folder->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}else
 		{
 			if($this->isModified('name') || $this->isModified('folder_id')){
 				if(!$this->_getOldFsFile()->isWritable())
-					throw new Exception("File ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
+					throw new \Exception("File ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}
 		
@@ -263,7 +263,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			
 			if($this->isModified('name')){				
 				//rename filesystem file.
-				//throw new Exception($this->getOldAttributeValue('name'));
+				//throw new \Exception($this->getOldAttributeValue('name'));
 				$oldFsFile = $this->_getOldFsFile();		
 				if($oldFsFile->exists())
 					$oldFsFile->rename($this->name);
@@ -280,8 +280,8 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 				if(!isset($oldFsFile))
 					$oldFsFile = $this->_getOldFsFile();
 
-				if (!$oldFsFile->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($this->path))))
-					throw new Exception("Could not rename folder on the filesystem");
+				if (!$oldFsFile->move(new \GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($this->path))))
+					throw new \Exception("Could not rename folder on the filesystem");
 				
 				//get old folder objekt
                                 $oldFolderId = $this->getOldAttributeValue('folder_id');
@@ -302,7 +302,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		if($this->isModified('locked_user_id')){
 			$old_locked_user_id = $this->getOldAttributeValue('locked_user_id');
 			if(!empty($old_locked_user_id) && $old_locked_user_id != GO::user()->id && !GO::user()->isAdmin())
-				throw new GO_Files_Exception_FileLocked();
+				throw new \GO_Files_Exception_FileLocked();
 		}
 			
 
@@ -316,7 +316,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		
 		$existingFile = $this->folder->hasFile($this->name);
 		if($existingFile && $existingFile->id!=$this->id)
-			throw new Exception(sprintf(GO::t('filenameExists','files'), $this->path));
+			throw new \Exception(sprintf(GO::t('filenameExists','files'), $this->path));
 		
 		return parent::beforeSave();
 	}
@@ -326,7 +326,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 
 	protected function getFsFile() {
-		return new GO_Base_Fs_File(GO::config()->file_storage_path . $this->path);
+		return new \GO_Base_Fs_File(GO::config()->file_storage_path . $this->path);
 	}
 	
 	private function _addQuota(){
@@ -384,7 +384,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		if(!GO_Files_Model_File::$deleteInDatabaseOnly)			
 			$this->fsFile->delete();
 		
-		$versioningFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'versioning/'.$this->id);
+		$versioningFolder = new \GO_Base_Fs_Folder(GO::config()->file_storage_path.'versioning/'.$this->id);
 		$versioningFolder->delete();
 		
 		$this->notifyUsers(
@@ -499,10 +499,10 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	public function replace(GO_Base_Fs_File $fsFile, $isUploadedFile=false){
 		
 		if($this->isLocked())
-			throw new GO_Files_Exception_FileLocked();
+			throw new \GO_Files_Exception_FileLocked();
 //		for safety allow replace action
 //		if(!GO_Files_Model_File::checkQuota($fsFile->size()-$this->size))
-//			throw new GO_Base_Exception_InsufficientDiskSpace();
+//			throw new \GO_Base_Exception_InsufficientDiskSpace();
 		
 		$this->saveVersion();
 				
@@ -516,7 +516,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	public function putContents($data){
 //		for safety allow replace actions
 //		if(!GO_Files_Model_File::checkQuota(strlen($data)))
-//			throw new GO_Base_Exception_InsufficientDiskSpace();
+//			throw new \GO_Base_Exception_InsufficientDiskSpace();
 		
 		$this->fsFile->putContents($data);		
 		$this->mtime=$this->fsFile->mtime();	
@@ -528,7 +528,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 */
 	public function saveVersion(){		
 		if(GO::config()->max_file_versions>-1){
-			$version = new GO_Files_Model_Version();
+			$version = new \GO_Files_Model_Version();
 			$version->file_id=$this->id;
 			$version->save();
 		}
@@ -691,7 +691,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 				}
 				
 				if(!isset(self::$defaultHandlers[$ex]))
-					self::$defaultHandlers[$ex]=new GO_Files_Filehandler_Download();
+					self::$defaultHandlers[$ex]=new \GO_Files_Filehandler_Download();
 			}
 		}
 		

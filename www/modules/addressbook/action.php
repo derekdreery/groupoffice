@@ -71,7 +71,7 @@ try {
 
 			$addressbook = $ab->get_addressbook($contact_credentials['addressbook_id']);
 			if ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}
 
 			$result['success'] = true;
@@ -105,7 +105,7 @@ try {
 			} else {
 				$old_contact = $ab->get_contact($contact_id);
 				if (($old_contact['addressbook_id'] != $contact_credentials['addressbook_id']) && $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_contact['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
-					throw new AccessDeniedException();
+					throw new \AccessDeniedException();
 				}
 
 				$contact_credentials['id'] = $contact_id;
@@ -182,14 +182,14 @@ try {
 			$addressbook = $ab->get_addressbook($company_credentials['addressbook_id']);
 
 			if ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}
 
 			if ($company_id > 0) {
 				$old_company = $ab->get_company($company_id);
 
 				if (($old_company['addressbook_id'] != $company_credentials['addressbook_id']) && $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_company['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
-					throw new AccessDeniedException();
+					throw new \AccessDeniedException();
 				}
 			}
 
@@ -251,7 +251,7 @@ try {
 			$result['feedback'] = $feedback;
 
 			if (empty($name)) {
-				throw new Exception($lang['common']['missingField']);
+				throw new \Exception($lang['common']['missingField']);
 			} else {
 				//$existing_ab = $ab->get_addressbook_by_name($name);
 
@@ -259,7 +259,7 @@ try {
 				if ($addressbook_id < 1) {
 
 					if (!$GLOBALS['GO_MODULES']->modules['addressbook']['write_permission']) {
-						throw new AccessDeniedException();
+						throw new \AccessDeniedException();
 					}
 
 					$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : $GLOBALS['GO_SECURITY']->user_id;
@@ -298,7 +298,7 @@ try {
 	    go_debug($import_file);
 
 	    if(!move_uploaded_file($import_file, $_SESSION['GO_SESSION']['addressbook']['import_file'])) {
-		throw new Exception('Could not move '.$import_file);
+		throw new \Exception('Could not move '.$import_file);
 	    }
 	    File::convert_to_utf8($_SESSION['GO_SESSION']['addressbook']['import_file']);
 
@@ -318,12 +318,12 @@ try {
 
 		    if (!$fp || !$addressbook = $ab->get_addressbook($addressbook_id)) {
 				unlink($_SESSION['GO_SESSION']['addressbook']['import_file']);
-				throw new Exception($lang['comon']['selectError']);
+				throw new \Exception($lang['comon']['selectError']);
 		    } else {
 				//fgets($fp, 4096);
 
 				if (!$record = fgetcsv($fp, 4096, $separator, $quote)) {
-					throw new Exception('Could not read import file');
+					throw new \Exception('Could not read import file');
 				}
 
 				fclose($fp);
@@ -375,7 +375,7 @@ try {
 
 		    if (!$fp || !$addressbook = $ab->get_addressbook($addressbook_id)) {
 			unlink($_SESSION['GO_SESSION']['addressbook']['import_file']);
-			throw new Exception($lang['comon']['selectError']);
+			throw new \Exception($lang['comon']['selectError']);
 		    }
 
 		    fgets($fp, 4096);
@@ -496,7 +496,7 @@ try {
 
 			$addressbook = $ab->get_addressbook($abook_id);
 			if ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < 3) {
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}
 
 			$result['success'] = true;
@@ -507,7 +507,7 @@ try {
 				if ($contact['id'] > 0) {
 					$old_contact = $ab->get_contact($contact['id']);
 					if (($old_contact['addressbook_id'] != $abook_id) && $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_contact['acl_id']) < 2) {
-						throw new AccessDeniedException();
+						throw new \AccessDeniedException();
 					}
 					$contact['addressbook_id'] = $abook_id;
 					$contact['company_id'] = $old_contact['company_id'];
@@ -529,7 +529,7 @@ try {
 
 			$addressbook = $ab->get_addressbook($abook_id);
 			if ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < 3) {
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}
 
 			$result['success'] = true;
@@ -540,7 +540,7 @@ try {
 				if ($company['id'] > 0) {
 					$old_company = $ab->get_company($company['id']);
 					if (($old_company['addressbook_id'] != $abook_id) && $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_company['acl_id']) < 3) {
-						throw new AccessDeniedException();
+						throw new \AccessDeniedException();
 					}
 
 					$company['addressbook_id'] = $abook_id;
@@ -620,7 +620,7 @@ try {
 
 			if (empty($_REQUEST['addressbook_id'])) {
 				require_once($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
-				throw new Exception($lang['addressbook']['no_addressbook_id']);
+				throw new \Exception($lang['addressbook']['no_addressbook_id']);
 			}
 
 			$addressbook_id = $_REQUEST['addressbook_id'];

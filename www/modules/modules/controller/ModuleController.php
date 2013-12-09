@@ -81,14 +81,14 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		$modules = json_decode($params['modules'], true);
 		foreach($modules as $moduleId)
 		{
-			$module = new GO_Base_Model_Module();
+			$module = new \GO_Base_Model_Module();
 			$module->id=$moduleId;
 			
 			
 			$module->moduleManager->checkDependenciesForInstallation($modules);	
 			
 			if(!$module->save())
-				throw new GO_Base_Exception_Save();
+				throw new \GO_Base_Exception_Save();
 			
 			$response['results'][]=$module->getAttributes();
 		}
@@ -117,10 +117,10 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		//access to the modules module		
 		if ($params['paramIdType']=='groupId'){
 			if(!GO::modules()->groups)
-				throw new GO_Base_Exception_AccessDenied();
+				throw new \GO_Base_Exception_AccessDenied();
 		}else{
 			if(!GO::modules()->users)
-				throw new GO_Base_Exception_AccessDenied();
+				throw new \GO_Base_Exception_AccessDenied();
 		}
 			
 		$response = array(
@@ -202,7 +202,7 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		
 		
 //		if(class_exists("GO_Professional_LicenseCheck")){
-//			$lc = new GO_Professional_LicenseCheck();
+//			$lc = new \GO_Professional_LicenseCheck();
 //			$lc->checkProModules(true);
 //		}
 

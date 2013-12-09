@@ -6,7 +6,7 @@ $GO_SCRIPTS_JS .= 'GO.addressbook.lang.defaultSalutationExpression="'.GO_Base_Ut
 $export_acl_id = GO::config()->get_setting('go_addressbook_export', 0);
 if(!$export_acl_id)
 {
-	$acl = new GO_Base_Model_Acl();
+	$acl = new \GO_Base_Model_Acl();
 	$acl->description='addressbook_export';
 	$acl->save();
 	

@@ -11,7 +11,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 		$this->requireCli();		
 		$this->checkRequiredParameters(array('uid'), $params);
 		
-		$la = new GO_Ldapauth_Authenticator();
+		$la = new \GO_Ldapauth_Authenticator();
 		
 		$ldapConn = GO_Base_Ldap_Connection::getDefault();
 		
@@ -41,7 +41,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 		if($dryRun)
 			echo "Dry run enabled.\n\n";
 		
-		$la = new GO_Ldapauth_Authenticator();
+		$la = new \GO_Ldapauth_Authenticator();
 	
 		$ldapConn = GO_Base_Ldap_Connection::getDefault();
 		
@@ -151,7 +151,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 		$ldapConn = GO_Base_Ldap_Connection::getDefault();
 		
 		if(empty(GO::config()->ldap_groupsdn))
-			throw new Exception('$config[\'ldap_groupsdn\'] is not set!');
+			throw new \Exception('$config[\'ldap_groupsdn\'] is not set!');
 		
 		$result = $ldapConn->search(GO::config()->ldap_groupsdn, 'cn=*');
 		
@@ -173,7 +173,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 				$groupname = $record->cn[0];
 				
 				if(empty($groupname)){
-					throw new Exception("Empty group name in LDAP record!");
+					throw new \Exception("Empty group name in LDAP record!");
 				}
 			
 				$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupname);
@@ -181,7 +181,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 
 					echo "Creating group '".$groupname."'\n";
 
-					$group = new GO_Base_Model_Group();
+					$group = new \GO_Base_Model_Group();
 					$group->name = $groupname;
 					if(!$dryRun && !$group->save()){
 						echo "Error saving group: ".implode("\n", $group->getValidationErrors());

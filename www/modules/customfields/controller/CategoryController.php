@@ -69,7 +69,7 @@ class GO_Customfields_Controller_Category extends GO_Base_Controller_AbstractMod
 			$disableCategories->delete();
 		
 		if($enable && !$disableCategories){
-			$disableCategories = new GO_Customfields_Model_DisableCategories();
+			$disableCategories = new \GO_Customfields_Model_DisableCategories();
 			$disableCategories->model_name=$params['model_name'];
 			$disableCategories->model_id=$params['model_id'];
 			$disableCategories->save();
@@ -109,7 +109,7 @@ class GO_Customfields_Controller_Category extends GO_Base_Controller_AbstractMod
 			));
 			
 			if(!$enabled){
-				$enabled = new GO_Customfields_Model_EnabledCategory();
+				$enabled = new \GO_Customfields_Model_EnabledCategory();
 				$enabled->category_id=$category_id;
 				$enabled->model_name=$params['model_name'];
 				$enabled->model_id=$params['model_id'];

@@ -60,9 +60,9 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractJsonC
 			->having($having)
 			->order('upcoming');
 		
-		$columnModel = new GO_Base_Data_ColumnModel('GO_Addressbook_Model_Contact');
+		$columnModel = new \GO_Base_Data_ColumnModel('GO_Addressbook_Model_Contact');
 		
-		$store = new GO_Base_Data_DbStore('GO_Addressbook_Model_Contact', $columnModel, $_POST, $findParams);
+		$store = new \GO_Base_Data_DbStore('GO_Addressbook_Model_Contact', $columnModel, $_POST, $findParams);
 		
 		echo $this->renderStore($store);
 		
@@ -79,7 +79,7 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractJsonC
 			GO_Addressbook_Model_BirthdayPortletSetting::model()->deleteByAttribute('user_id', GO::user()->id);
 			
 			foreach($_POST['addressbook_ids'] as $addressbook_id) {
-				$setting = new GO_Addressbook_Model_BirthdayPortletSetting();
+				$setting = new \GO_Addressbook_Model_BirthdayPortletSetting();
 				$setting->addressbook_id = $addressbook_id;
 				$setting->user_id = Go::user()->id;
 				$setting->save();
@@ -187,12 +187,12 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractMulti
 		
 		
 		//$response['data']['original_photo_url']=$model->photoURL;
-		$columnModel = new GO_Base_Data_ColumnModel('GO_Addressbook_Model_Contact');
+		$columnModel = new \GO_Base_Data_ColumnModel('GO_Addressbook_Model_Contact');
 		$columnModel->formatColumn('addressbook_id', '$model->addressbook->name');
 		$columnModel->formatColumn('photo_url', '$model->getPhotoThumbURL()');
 		$columnModel->formatColumn('age', '($model->upcoming != date("Y-m-d")) ? $model->age+1 : $model->age');
 		
-		$store = new GO_Base_Data_DbStore('GO_Addressbook_Model_Contact', $columnModel, $_POST, $findParams);
+		$store = new \GO_Base_Data_DbStore('GO_Addressbook_Model_Contact', $columnModel, $_POST, $findParams);
 		
 		return $store->getData();
 		
