@@ -1,6 +1,6 @@
 <?php
 
-class GO_Site_Controller_Multifile extends GO_Base_Controller_AbstractJsonController {
+class GO_Site_Controller_Multifile extends \GO\Base\Controller\AbstractJsonController {
 	
 	public function actionStore($params){
 		

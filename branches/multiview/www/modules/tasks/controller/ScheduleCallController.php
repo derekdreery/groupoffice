@@ -1,6 +1,6 @@
 <?php
 
-class GO_Tasks_Controller_ScheduleCall extends GO_Base_Controller_AbstractJsonController {
+class GO_Tasks_Controller_ScheduleCall extends \GO\Base\Controller\AbstractJsonController {
 
 	protected function actionLoad($params){
 		$scheduleCall = new GO_Tasks_Model_Task();

@@ -19,7 +19,7 @@
  * @author Wesley Smits <wsmits@intermesh.nl> 
  * 
  */
-class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController {
+class GO_Core_Controller_BatchEdit extends \GO\Base\Controller\AbstractController {
 	
 	/**
 	 * Update the given id's with the given data

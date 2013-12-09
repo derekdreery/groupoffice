@@ -1,6 +1,6 @@
 <?php
 
-class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonController {
+class GO_Site_Controller_Content extends \GO\Base\Controller\AbstractJsonController {
 	
 	/**
 	 * 

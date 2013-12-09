@@ -1,5 +1,5 @@
 <?php
-class GO_Users_Controller_Group extends GO_Base_Controller_AbstractJsonController{
+class GO_Users_Controller_Group extends \GO\Base\Controller\AbstractJsonController{
 	
 	protected function actionStore($params) {
 		

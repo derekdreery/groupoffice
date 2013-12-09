@@ -1,5 +1,5 @@
 <?php
-class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractController {
+class GO_Demodata_Controller_Demodata extends \GO\Base\Controller\AbstractController {
 	
 	protected function allowGuests() {
 		return array('create');

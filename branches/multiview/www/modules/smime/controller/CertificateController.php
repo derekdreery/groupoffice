@@ -1,6 +1,6 @@
 <?php
 
-class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractController {
+class GO_Smime_Controller_Certificate extends \GO\Base\Controller\AbstractController {
 
 	public function actionDownload($params) {
 

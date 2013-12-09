@@ -1,6 +1,6 @@
 <?php
 
-class GO_Email_Controller_Register extends GO_Base_Controller_AbstractController {
+class GO_Email_Controller_Register extends \GO\Base\Controller\AbstractController {
 
 	protected function actionDownload($params) {
 		

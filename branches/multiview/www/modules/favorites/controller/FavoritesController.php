@@ -1,6 +1,6 @@
 <?php
 
-class GO_Favorites_Controller_Favorites extends GO_Base_Controller_AbstractJsonController {
+class GO_Favorites_Controller_Favorites extends \GO\Base\Controller\AbstractJsonController {
 	
 	protected function actionCalendarStore(){
 		$colModel = new \GO_Base_Data_ColumnModel(GO_Favorites_Model_Calendar::model());

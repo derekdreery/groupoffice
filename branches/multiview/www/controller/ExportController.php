@@ -19,7 +19,7 @@
  * @author Wesley Smits <wsmits@intermesh.nl> 
  * @abstract
  */
-class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController { 
+class GO_Core_Controller_Export extends \GO\Base\Controller\AbstractController { 
 
 	/**
 	 * Get the exporttypes that can be used and get the data for the checkboxes

@@ -1,6 +1,6 @@
 <?php
 
-class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController {
+class GO_Email_Controller_Message extends \GO\Base\Controller\AbstractController {
 	
 	protected function allowGuests() {
 		return array("mailto");

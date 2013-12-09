@@ -146,7 +146,7 @@ class GO{
 		'GO_Base_Util_String' => 'go/base/util/String.php',
 		'GO_Base_Model_ModelCache' => 'go/base/model/ModelCache.php',
 		'GO_Base_Router' => 'go/base/Router.php',
-		'GO_Base_Controller_AbstractController' => 'go/base/controller/AbstractController.php',
+		'\GO\Base\Controller\AbstractController' => 'go/base/controller/AbstractController.php',
 		'GO_Base_Model_Module' => 'go/base/model/Module.php',
 		'GO_Base_Controller_AbstractModelController' => 'go/base/controller/AbstractModelController.php',
 		'GO_Base_Model_Acl' => 'go/base/model/Acl.php',
@@ -406,7 +406,8 @@ class GO{
 		//for namespaces
 		$className = str_replace('\\', '_', $className);
 		
-		if(isset(self::$_classes[$className])){
+		
+		if(false && isset(self::$_classes[$className])){
 			//don't use \GO::config()->root_path here because it might not be autoloaded yet causing an infite loop.
 			require(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
 		}else

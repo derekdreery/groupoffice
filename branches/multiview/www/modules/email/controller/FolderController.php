@@ -1,6 +1,6 @@
 <?php
 
-class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
+class GO_Email_Controller_Folder extends \GO\Base\Controller\AbstractController {
 	protected function actionCreate($params){
 		
 		$account = \GO_Email_Model_Account::model()->findByPk($params['account_id']);

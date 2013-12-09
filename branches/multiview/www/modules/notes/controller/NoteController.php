@@ -13,10 +13,15 @@
  * @author Michael de Hart <mdhart@intermesh.nl>
  */
 
+
+namespace GO\Notes\Controller;
+
+use GO\Base\Controller;
+
 /**
  * The note controller provides action for basic crud functionality for the note model
  */
-class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractJsonController {
+class Note extends Controller\AbstractJsonController {
 
 	/**
 	 * Load data for the display panel on the right of the screen

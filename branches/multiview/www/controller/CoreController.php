@@ -7,7 +7,7 @@
  * The default_scripts.inc.php file is ugly and bad design. Instead all init
  * views in modules should register client scripts and css files.
  */
-class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
+class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 	
 	protected function allowGuests() {
 		return array('compress','cron');

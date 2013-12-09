@@ -19,7 +19,12 @@
  * @author Michael de Hart <mdhart@intermesh.nl>
  *
  */
-abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Controller_AbstractController {
+
+
+namespace GO\Base\Controller;
+use GO\Base\Controller;
+
+abstract class AbstractJsonController extends Controller\AbstractController {
 
 	/**
 	 * @deprecated
