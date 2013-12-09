@@ -63,8 +63,8 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 	 * @return $response for the client. 
 	 */
 	protected function actionSelectedStore($params) {
-		$currentPermissionLevel = GO_Base_Model_Acl::getUserPermissionLevel($params['model_id'],GO::user()->id);
-		$response['manage_permission'] = $params['currentUserHasManagePermission'] = GO_Base_Model_Acl::hasPermission($currentPermissionLevel,GO_Base_Model_Acl::MANAGE_PERMISSION);
+		$currentPermissionLevel = \GO_Base_Model_Acl::getUserPermissionLevel($params['model_id'],\GO::user()->id);
+		$response['manage_permission'] = $params['currentUserHasManagePermission'] = \GO_Base_Model_Acl::hasPermission($currentPermissionLevel,\GO_Base_Model_Acl::MANAGE_PERMISSION);
 		$response = array_merge($response,parent::actionSelectedStore($params));
 		return $response;
 	}
@@ -88,8 +88,8 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 			if(!$params['currentUserHasManagePermission'])
 					throw new GO_Base_Exception_AccessDenied();
 			foreach ($delKeys as $delKey) {
-				if ($delKey==GO::config()->group_root) {
-					throw new Exception(GO::t('dontChangeAdminsPermissions'));
+				if ($delKey==\GO::config()->group_root) {
+					throw new Exception(\GO::t('dontChangeAdminsPermissions'));
 				}
 			}
 		} else {
@@ -99,7 +99,7 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 	}
 	
 	protected function beforeUpdateRecord($params, &$record, $model) {
-		if ($record['id']==GO::config()->group_root)
+		if ($record['id']==\GO::config()->group_root)
 			throw new GO_Base_Exception_AccessDenied();
 		return true;
 	}

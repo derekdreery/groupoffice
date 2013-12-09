@@ -31,13 +31,13 @@ abstract class GO_Base_Fs_Base{
 	 */
 	public function __construct($path) {
 		
-//		GO::debug("FS construct $path");
+//		\GO::debug("FS construct $path");
 		
 		if(empty($path))
 			throw new \Exception("Path may not be empty in GO_Base_Fs_Base");
 		
 		//normalize path slashes
-		if(GO_Base_Util_Common::isWindows())
+		if(\GO_Base_Util_Common::isWindows())
 			$path=str_replace('\\','/', $path);
 		
 		if(!self::checkPathInput($path))
@@ -307,8 +307,8 @@ abstract class GO_Base_Fs_Base{
 			$filename = 'unnamed';
 		}
 		
-		if(GO::config()->convert_utf8_filenames_to_ascii)
-			$filename = GO_Base_Util_String::utf8ToASCII($filename);
+		if(\GO::config()->convert_utf8_filenames_to_ascii)
+			$filename = \GO_Base_Util_String::utf8ToASCII($filename);
 		
 		if(strlen($filename)>255)
 			$filename = substr($filename, 0,255);
@@ -355,30 +355,30 @@ abstract class GO_Base_Fs_Base{
 	}
 	
 	/**
-	 * Get the path without GO::config()->file_storage_path.
+	 * Get the path without \GO::config()->file_storage_path.
 	 * 
 	 * @return string 
 	 */
 	public function stripFileStoragePath(){
-		return str_replace(GO::config()->file_storage_path,'', $this->path());
+		return str_replace(\GO::config()->file_storage_path,'', $this->path());
 	}
 	
 	/**
-	 * Get the path without GO::config()->root_path.
+	 * Get the path without \GO::config()->root_path.
 	 * 
 	 * @return string 
 	 */
 	public function stripRootPath(){
-		return str_replace(GO::config()->root_path,'', $this->path());
+		return str_replace(\GO::config()->root_path,'', $this->path());
 	}
 	
 	/**
-	 * Get the path without GO::config()->tmpdir.
+	 * Get the path without \GO::config()->tmpdir.
 	 * 
 	 * @return string 
 	 */
 	public function stripTempPath(){
-		return str_replace(GO::config()->tmpdir,'', $this->path());
+		return str_replace(\GO::config()->tmpdir,'', $this->path());
 	}
 	
 	/**
@@ -387,7 +387,7 @@ abstract class GO_Base_Fs_Base{
 	 * @return boolean 
 	 */
 	public function isTempFile(){
-		return strpos($this->path(), GO::config()->tmpdir)===0;
+		return strpos($this->path(), \GO::config()->tmpdir)===0;
 	}
 
 }

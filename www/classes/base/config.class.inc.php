@@ -1049,17 +1049,17 @@ class GO_CONFIG {
 			$_SESSION['GO_SESSION']['decimal_separator'] = $this->default_decimal_separator;
 			$_SESSION['GO_SESSION']['thousands_separator'] = $this->default_thousands_separator;
 			$_SESSION['GO_SESSION']['date_separator'] = $this->default_date_separator;
-			$_SESSION['GO_SESSION']['date_format'] = Date::get_dateformat( $this->default_date_format, $_SESSION['GO_SESSION']['date_separator']);
+			$_SESSION['\GO_SESSION']['date_format'] = Date::get_dateformat( $this->default_date_format, $_SESSION['GO_SESSION']['date_separator']);
 			$_SESSION['GO_SESSION']['time_format'] = $this->default_time_format;
 			$_SESSION['GO_SESSION']['currency'] = $this->default_currency;
 			$_SESSION['GO_SESSION']['timezone'] = $this->default_timezone;
 			$_SESSION['GO_SESSION']['country'] = $this->default_country;
 			$_SESSION['GO_SESSION']['sort_name'] = 'last_name';
-			$_SESSION['GO_SESSION']['auth_token']=String::random_password('a-z,1-9', '', 30);
+			$_SESSION['\GO_SESSION']['auth_token']=String::random_password('a-z,1-9', '', 30);
 			//some url's require this token to be appended
 			
 			if(!isset($_SESSION['GO_SESSION']['security_token']))
-				$_SESSION['GO_SESSION']['security_token']=String::random_password('a-z,1-9', '', 20);
+				$_SESSION['\GO_SESSION']['security_token']=String::random_password('a-z,1-9', '', 20);
 
 			go_debug('Setup new session '.$_SESSION['GO_SESSION']['security_token']);
 		}

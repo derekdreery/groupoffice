@@ -122,7 +122,7 @@ class GO_Base_Db_Connection
 	protected function createPdoInstance()
 	{
 		if(empty($this->connectionString))
-			return GO::getDbConnection ();
+			return \GO::getDbConnection ();
 		else	
 			return new \GO_Base_Db_PDO($this->connectionString, $this->username, $this->password);
 	}
@@ -149,7 +149,7 @@ class GO_Base_Db_Connection
 //
 //		if (in_array($driver, array('mysql', 'mysqli')))
 //			$this->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true); //todo: needed for foundRows
-//		if (GO::config()->debug)
+//		if (\GO::config()->debug)
 //		{
 //			$pdo->exec("SET sql_mode='TRADITIONAL'");
 //		}

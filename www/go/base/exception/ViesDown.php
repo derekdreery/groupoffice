@@ -24,7 +24,7 @@ class GO_Base_Exception_ViesDown extends Exception
 
 	public function __construct($message='') {
 		
-		$message = empty($message) ? GO::t('viesDownException') : GO::t('viesDownException')."\n\n".$message;
+		$message = empty($message) ? \GO::t('viesDownException') : \GO::t('viesDownException')."\n\n".$message;
 		
 		parent::__construct($message);
 	}

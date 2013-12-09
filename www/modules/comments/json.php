@@ -42,7 +42,7 @@ try{
 
 			$record = $search->get_search_result($link_id, $link_type);
 			$response['permisson_level']=$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $record['acl_id']);
-			$response['write_permission']=$response['permisson_level']>GO_SECURITY::WRITE_PERMISSION;
+			$response['write_permission']=$response['permisson_level']>\GO_SECURITY::WRITE_PERMISSION;
 			if(!$response['permisson_level'])
 			{
 				throw new \AccessDeniedException();
@@ -51,7 +51,7 @@ try{
 			if(isset($_POST['delete_keys']))
 			{
 				try{
-					if($response['permisson_level']<GO_SECURITY::DELETE_PERMISSION){
+					if($response['permisson_level']<\GO_SECURITY::DELETE_PERMISSION){
 						throw new \AccessDeniedException();
 					}
 					$response['deleteSuccess']=true;

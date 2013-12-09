@@ -1216,7 +1216,7 @@ class GO_Base_Config {
 
 			$this->db_host='localhost';
 
-			if(GO_Base_Util_Common::isWindows()) {
+			if(\GO_Base_Util_Common::isWindows()) {
 				$this->file_storage_path = substr($this->root_path,0,3).'groupoffice/';
 				$this->tmpdir=substr($this->root_path,0,3).'temp';
 
@@ -1301,7 +1301,7 @@ class GO_Base_Config {
 	 * @return GO_Base_Fs_Folder
 	 */
 	public function getTempFolder($autoCreate=true){
-		$user_id = GO::user() ? GO::user()->id : 0;
+		$user_id = \GO::user() ? \GO::user()->id : 0;
 		
 		$path = $this->orig_tmpdir;		
 		if(PHP_SAPI=='cli'){
@@ -1346,10 +1346,10 @@ class GO_Base_Config {
 
 //	function __destruct() {
 //		if($this->debug_log) {
-//			//GO::debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
+//			//\GO::debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
 //
-//			GO::debug('Page load took: '.(GO_Base_Util_Date::getmicrotime()-$this->loadstart).'ms', $this);
-//			GO::debug('Peak memory usage:'.round(memory_get_peak_usage()/1048576,2).'MB', $this);
+//			\GO::debug('Page load took: '.(\GO_Base_Util_Date::getmicrotime()-$this->loadstart).'ms', $this);
+//			\GO::debug('Peak memory usage:'.round(memory_get_peak_usage()/1048576,2).'MB', $this);
 //			
 //		}		
 ////		$this->_logSlowRequest();
@@ -1357,7 +1357,7 @@ class GO_Base_Config {
 	
 //	private function _logSlowRequest(){
 //		if($this->log_slow_requests){
-//			$time = GO_Base_Util_Date::getmicrotime()-$this->loadstart;
+//			$time = \GO_Base_Util_Date::getmicrotime()-$this->loadstart;
 //			if($time>$this->log_slow_requests_trigger){
 //
 //				$logStr = "URI: ";
@@ -1370,7 +1370,7 @@ class GO_Base_Config {
 //
 //				$logStr .= '; ';
 //
-//				$logStr .= 'r: '.GO::router()->getControllerRoute().';';
+//				$logStr .= 'r: '.\GO::router()->getControllerRoute().';';
 //
 //				$logStr .= 'time: '.$time.';'."\n";
 //
@@ -1547,7 +1547,7 @@ class GO_Base_Config {
 		$attributes['name']=$name;
     $attributes['user_id']=$user_id;
 
-		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
+		$setting = \GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
 		if ($setting) {
 			return $setting->value;
 		}
@@ -1562,13 +1562,13 @@ class GO_Base_Config {
 	 * @return array Key value array('setting name'=>'value');
 	 */
 	public function getSettings($keys, $user_id=0){
-		$findParams = GO_Base_Db_FindParams::newInstance()->select();
+		$findParams = \GO_Base_Db_FindParams::newInstance()->select();
 		
 		$findParams->getCriteria()
 						->addCondition('user_id', $user_id)
 						->addInCondition('name', $keys);
 		
-		$stmt = GO_Base_Model_Setting::model()->find($findParams);
+		$stmt = \GO_Base_Model_Setting::model()->find($findParams);
 		
 		$return = array();
 		foreach($keys as $key){
@@ -1588,9 +1588,9 @@ class GO_Base_Config {
      * @return array all settings in user_id value pairs
      *
     public function get_settings($name) {
-      $params = GO_Base_Db_FindParams::newInstance()->select('*');
+      $params = \GO_Base_Db_FindParams::newInstance()->select('*');
       $params->getCriteria()->addCondition('name',$name);
-      return GO_Base_Model_Setting::model()->find($params)->fetchAll();
+      return \GO_Base_Model_Setting::model()->find($params)->fetchAll();
     }
      * 
      */
@@ -1609,7 +1609,7 @@ class GO_Base_Config {
 		$attributes['name']=$name;
 		$attributes['user_id']=$user_id;
 
-		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
+		$setting = \GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
 		if(!$setting){
 			$setting = new \GO_Base_Model_Setting();
 			$setting->setAttributes($attributes);
@@ -1634,7 +1634,7 @@ class GO_Base_Config {
         if($user_id!==false)
           $attributes['user_id']=$user_id;
 
-		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
+		$setting = \GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
 		return $setting ? $setting->delete() : true;
 	}
 
@@ -1647,7 +1647,7 @@ class GO_Base_Config {
 	 */
 	public function save($extraConfig=array()) {
 
-		$values = get_object_vars(GO::config());
+		$values = get_object_vars(\GO::config());
 		$config=array();
 
 		require($this->get_config_file());
@@ -1664,6 +1664,6 @@ class GO_Base_Config {
 		}
 		$config = array_merge($config, $extraConfig);
 
-		return GO_Base_Util_ConfigEditor::save(new \GO_Base_Fs_File(GO::config()->get_config_file()), $config);
+		return \GO_Base_Util_ConfigEditor::save(new \GO_Base_Fs_File(\GO::config()->get_config_file()), $config);
 	}
 }

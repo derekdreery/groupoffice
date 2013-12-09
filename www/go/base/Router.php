@@ -83,7 +83,7 @@ class GO_Base_Router{
 		
 		if(!$params){
 			if(PHP_SAPI=='cli'){
-				$params = GO_Base_Util_Cli::parseArgs();
+				$params = \GO_Base_Util_Cli::parseArgs();
 			}else
 			{
 				$params=$_REQUEST;				
@@ -93,19 +93,19 @@ class GO_Base_Router{
 		$r = !empty($params['r']) ?  explode('/', $params['r']): array();		
 		$this->_r=isset($params['r']) ? $params['r'] : "";
 					
-		if(GO::config()->debug || GO::config()->debug_log){
+		if(\GO::config()->debug || \GO::config()->debug_log){
 			$log = 'Controller route r=';
 			if(isset($params['r']))
 				$log .= $params['r'];
 			else 
 				$log = 'No r parameter given';				
 
-			GO::debug($log);
+			\GO::debug($log);
 		}
 	
 		$first = isset($r[0]) ? ucfirst($r[0]) : 'Auth';
 
-		if(empty($r[2]) && file_exists(GO::config()->root_path.'controller/'.$first.'Controller.php')){
+		if(empty($r[2]) && file_exists(\GO::config()->root_path.'controller/'.$first.'Controller.php')){
 			//this is a controller name that belongs to the Group-Office framework
 			$module='Core';
 			$controller=$first;
@@ -144,7 +144,7 @@ class GO_Base_Router{
 			echo '<h1>404 Not found</h1>';
 			echo '<p>'.$errorMsg.'</p>';
 			
-			if(GO::config()->debug)
+			if(\GO::config()->debug)
 				trigger_error($errorMsg, E_USER_ERROR);
 		}
 		
@@ -163,7 +163,7 @@ class GO_Base_Router{
 			echo '<h1>404 Not found</h1>';
 			echo '<p>'.$errorMsg.'</p>';
 
-			if(GO::config()->debug)
+			if(\GO::config()->debug)
 				trigger_error($errorMsg, E_USER_ERROR);
 		}
 	}

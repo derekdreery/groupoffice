@@ -25,7 +25,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	
 	protected function actionSearchSender($params) {
 
-		$contacts = GO_Addressbook_Model_Contact::model()->findByEmail($params['email']);
+		$contacts = \GO_Addressbook_Model_Contact::model()->findByEmail($params['email']);
 		$response['success']=true;
 		$response['results']=array();
 
@@ -42,9 +42,9 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	public function formatStoreRecord($record, $model, $store) {
 		
 		$record['user_name']=$model->user ? $model->user->name : 'unknown';
-		if(GO::modules()->customfields){
-			$record['contactCustomfields']=GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Addressbook_Model_Contact", $model->id);
-			$record['companyCustomfields']=GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Addressbook_Model_Company", $model->id);
+		if(\GO::modules()->customfields){
+			$record['contactCustomfields']=\GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Addressbook_Model_Contact", $model->id);
+			$record['companyCustomfields']=\GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Addressbook_Model_Company", $model->id);
 		}
 		
 		return parent::formatStoreRecord($record, $model, $store);
@@ -55,12 +55,12 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	 * @param type $params 
 	 */
 	public function exportVCard($params) {
-		$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
+		$addressbook = \GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
 		
 		$filename = $addressbook->name.'.vcf';
-		GO_Base_Util_Http::outputDownloadHeaders(new \GO_Base_FS_File($filename));		
+		\GO_Base_Util_Http::outputDownloadHeaders(new \GO_Base_FS_File($filename));		
 	
-		foreach ($addressbook->contacts(GO_Base_Db_FindParams::newInstance()->select('t.*')) as $contact)
+		foreach ($addressbook->contacts(\GO_Base_Db_FindParams::newInstance()->select('t.*')) as $contact)
 			echo $contact->toVObject()->serialize();
 	}
 	
@@ -84,9 +84,9 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 //		
 ////		$separator	= isset($params['separator']) ? ($params['separator']) : ',';
 ////		$quote	= isset($params['quote']) ? ($params['quote']) : '"';
-//		$params['file'] = GO::config()->tmpdir.uniqid(time());
+//		$params['file'] = \GO::config()->tmpdir.uniqid(time());
 //		$response['success'] = true;
-//		GO::debug($import_filename);
+//		\GO::debug($import_filename);
 //
 //		if(!move_uploaded_file($import_filename, $params['file'])) {
 //			throw new \Exception('Could not move '.$import_filename);
@@ -122,7 +122,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	
 	
 	public function actionTruncate($params){
-		$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
+		$addressbook = \GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
 		
 		if(!$addressbook)
 			throw new \GO_Base_Exception_NotFound();
@@ -136,7 +136,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	
 	
 	protected function actionCheck($params){
-		$model = GO::getModel($this->model)->findByPk($params["id"]);
+		$model = \GO::getModel($this->model)->findByPk($params["id"]);
 		$model->checkDatabase();
 		
 		$stmt = $model->contacts;
@@ -164,9 +164,9 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 //		$data = $file->getContents();
 //		
 //		$contact = new \GO_Addressbook_Model_Contact();
-//		$vcard = GO_Base_VObject_Reader::read($data);
+//		$vcard = \GO_Base_VObject_Reader::read($data);
 //		
-//		GO_Base_VObject_Reader::convertVCard21ToVCard30($vcard);
+//		\GO_Base_VObject_Reader::convertVCard21ToVCard30($vcard);
 //		
 //		
 //		
@@ -198,22 +198,22 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	
 	public function actionRemoveDuplicates($params){
 		
-		GO::setMaxExecutionTime(300);
-		GO::setMemoryLimit(1024);
+		\GO::setMaxExecutionTime(300);
+		\GO::setMemoryLimit(1024);
 		
 		$this->render('externalHeader');
 		
-		$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
+		$addressbook = \GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
 		
 		if(!$addressbook)
 			throw new \GO_Base_Exception_NotFound();
 		
-		GO_Base_Fs_File::setAllowDeletes(false);
+		\GO_Base_Fs_File::setAllowDeletes(false);
 		//VERY IMPORTANT:
-		GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
+		\GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
 		
 		
-		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
+		\GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
 		$checkModels = array(
 				"GO_Addressbook_Model_Contact"=>array('first_name', 'middle_name', 'last_name', 'company_id', 'email','addressbook_id'),
@@ -223,10 +223,10 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 			
 			if(empty($params['model']) || $modelName==$params['model']){
 
-				echo '<h1>'.GO::t('removeDuplicates').'</h1>';
+				echo '<h1>'.\GO::t('removeDuplicates').'</h1>';
 
 				$checkFieldsStr = 't.'.implode(', t.',$checkFields);
-				$findParams = GO_Base_Db_FindParams::newInstance()
+				$findParams = \GO_Base_Db_FindParams::newInstance()
 								->ignoreAcl()
 								->select('t.id, count(*) AS n, '.$checkFieldsStr)
 								->group($checkFields)
@@ -234,7 +234,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 				
 				$findParams->getCriteria()->addCondition('addressbook_id', $addressbook->id);
 
-				$stmt1 = GO::getModel($modelName)->find($findParams);
+				$stmt1 = \GO::getModel($modelName)->find($findParams);
 
 				echo '<table border="1">';
 				echo '<tr><td>ID</th><th>'.implode('</th><th>',$checkFields).'</th></tr>';
@@ -245,11 +245,11 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 					
 					$select = 't.id';
 					
-					if(GO::getModel($modelName)->hasFiles()){
+					if(\GO::getModel($modelName)->hasFiles()){
 						$select .= ', t.files_folder_id';
 					}
 
-					$findParams = GO_Base_Db_FindParams::newInstance()
+					$findParams = \GO_Base_Db_FindParams::newInstance()
 								->ignoreAcl()
 								->select($select.', '.$checkFieldsStr)
 								->order('id','ASC');
@@ -260,7 +260,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 						$findParams->getCriteria()->addCondition($field, $dupModel->getAttribute($field));
 					}							
 
-					$stmt = GO::getModel($modelName)->find($findParams);
+					$stmt = \GO::getModel($modelName)->find($findParams);
 
 					$first = true;
 
@@ -284,9 +284,9 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 							if(!empty($params['delete'])){
 
 								if($model->hasLinks() && $model->countLinks()){
-									echo '<tr><td colspan="99">'.GO::t('skippedDeleteHasLinks').'</td></tr>';
+									echo '<tr><td colspan="99">'.\GO::t('skippedDeleteHasLinks').'</td></tr>';
 								}elseif(($filesFolder = $model->getFilesFolder(false)) && ($filesFolder->hasFileChildren() || $filesFolder->hasFolderChildren())){
-									echo '<tr><td colspan="99">'.GO::t('skippedDeleteHasFiles').'</td></tr>';
+									echo '<tr><td colspan="99">'.\GO::t('skippedDeleteHasFiles').'</td></tr>';
 								}else{									
 									$model->delete();
 								}
@@ -302,8 +302,8 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 
 				echo '</table>';
 
-				echo '<p>'.sprintf(GO::t('foundDuplicates'),$count).'</p>';
-				echo '<br /><br /><a href="'.GO::url('addressbook/addressbook/removeDuplicates', array('delete'=>true, 'addressbook_id'=>$addressbook->id)).'">'.GO::t('clickToDeleteDuplicates').'</a>';
+				echo '<p>'.sprintf(\GO::t('foundDuplicates'),$count).'</p>';
+				echo '<br /><br /><a href="'.\GO::url('addressbook/addressbook/removeDuplicates', array('delete'=>true, 'addressbook_id'=>$addressbook->id)).'">'.\GO::t('clickToDeleteDuplicates').'</a>';
 				
 			}
 		}

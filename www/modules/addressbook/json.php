@@ -201,7 +201,7 @@ try
 					{
 						$readable_books[] = $book_id;
 					}
-					if($permission_level >= GO_SECURITY::DELETE_PERMISSION)
+					if($permission_level >= \GO_SECURITY::DELETE_PERMISSION)
 					{
 						$writable_books[] = $book_id;
 					}
@@ -388,7 +388,7 @@ try
 					{
 						$readable_books[] = $book_id;
 					}
-					if($permission_level >= GO_SECURITY::DELETE_PERMISSION)
+					if($permission_level >= \GO_SECURITY::DELETE_PERMISSION)
 					{
 						$writable_books[] = $book_id;
 					}
@@ -489,7 +489,7 @@ try
 				
 			$company = $ab->get_company($company_id);
 
-			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $company['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+			if($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $company['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 			{
 				throw new \AccessDeniedException();
 			}
@@ -865,7 +865,7 @@ try
 						{
 							$addressbook = $ab->get_addressbook($book_id);
 							
-							if(($GLOBALS['GO_MODULES']->modules['addressbook']['permission_level'] < GO_SECURITY::WRITE_PERMISSION) || ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < GO_SECURITY::DELETE_PERMISSION))
+							if(($GLOBALS['\GO_MODULES']->modules['addressbook']['permission_level'] < GO_SECURITY::WRITE_PERMISSION) || ($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < GO_SECURITY::DELETE_PERMISSION))
 							{
 								throw new \AccessDeniedException();
 							}
@@ -1038,7 +1038,7 @@ try
 				if (isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
 				require_once($GO_CONFIG->root_path.'GO.php');
 
-				$stmt = GO_Customfields_Model_Category::model()->findByModel($model);
+				$stmt = \GO_Customfields_Model_Category::model()->findByModel($model);
 				while($category = $stmt->fetch()){
 					$fstmt = $category->fields();
 					while($field = $fstmt->fetch()){

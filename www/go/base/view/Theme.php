@@ -7,9 +7,9 @@ class GO_Base_View_Theme{
 	 * @return string
 	 */
 	public function getName(){
-		$theme = GO::config()->allow_themes && GO::user() ? GO::user()->theme : GO::config()->theme;
+		$theme = \GO::config()->allow_themes && \GO::user() ? \GO::user()->theme : \GO::config()->theme;
 		
-		if(!file_exists(GO::view()->getPath().'themes/'.$theme.'/Layout.php')){
+		if(!file_exists(\GO::view()->getPath().'themes/'.$theme.'/Layout.php')){
 			return 'Default';
 		}  else {
 			return $theme;
@@ -22,7 +22,7 @@ class GO_Base_View_Theme{
 	 * @return string
 	 */
 	public function getPath(){
-		return GO::view()->getPath().'themes/'.$this->getName().'/';
+		return \GO::view()->getPath().'themes/'.$this->getName().'/';
 	}
 	
 	/**
@@ -31,7 +31,7 @@ class GO_Base_View_Theme{
 	 * @return string
 	 */
 	public function getUrl(){
-		return GO::view()->getUrl().'themes/'.$this->getName().'/';
+		return \GO::view()->getUrl().'themes/'.$this->getName().'/';
 	}
 	
 	

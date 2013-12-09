@@ -105,7 +105,7 @@ class GO_Base_Util_Http {
 			header('Cache-Control: cache');
 			header('Pragma: cache');
 		}
-		if (GO_Base_Util_Http::isInternetExplorer()) {
+		if (\GO_Base_Util_Http::isInternetExplorer()) {
 			header('Content-Type: application/download');
 			header('Content-Disposition: '.$disposition.'; filename="' .rawurlencode($file->name()). '"');
 
@@ -184,7 +184,7 @@ class GO_Base_Util_Http {
 	 * @param string $name 
 	 */
 	public static function unsetCookie($name){
-		SetCookie($name,"",time()-3600,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
+		SetCookie($name,"",time()-3600,\GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
 		unset($_COOKIE[$name]);
 	}
 	
@@ -196,7 +196,7 @@ class GO_Base_Util_Http {
 	 * @param string $expireTime Defaults to one month
 	 */
 	public static function setCookie($name, $value, $expireTime=2592000){
-		SetCookie($name,$value,time()+$expireTime,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
+		SetCookie($name,$value,time()+$expireTime,\GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
 	}
 	
 	
@@ -230,8 +230,8 @@ class GO_Base_Util_Http {
 	
 	
 	public static function basicAuth(){
-		if (!isset($_SERVER['PHP_AUTH_USER']) && !GO_Base_Util_Http::isAjaxRequest()) {
-			header('WWW-Authenticate: Basic realm="'.GO::config()->product_name.'"');
+		if (!isset($_SERVER['PHP_AUTH_USER']) && !\GO_Base_Util_Http::isAjaxRequest()) {
+			header('WWW-Authenticate: Basic realm="'.\GO::config()->product_name.'"');
 			header('HTTP/1.0 401 Unauthorized');
 			
 			

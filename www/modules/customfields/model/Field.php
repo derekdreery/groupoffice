@@ -87,7 +87,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 			set_error_handler(array($this,"exception_error_handler"));
 			preg_match($this->validation_regex, "");
 			if($this->_regex_has_errors)
-				$this->setValidationError ("validation_regex", GO::t("invalidRegex","customfields"));
+				$this->setValidationError ("validation_regex", \GO::t("invalidRegex","customfields"));
 			
 			restore_error_handler();
 		}
@@ -114,7 +114,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 			
 		}		
 		//don't be strict in upgrade process
-		GO::getDbConnection()->query("SET sql_mode=''");
+		\GO::getDbConnection()->query("SET sql_mode=''");
 		
 		if(!$this->getDbConnection()->query($sql))
 			throw new \Exception("Could not create custom field");
@@ -138,8 +138,8 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	 */
 	private function _clearColumnCache(){
 	  //deleted cached column schema. See GO_Customfields_Model_AbstractCustomFieldsRecord			
-		GO_Base_Db_Columns::clearCache(GO::getModel(GO::getModel($this->category->extends_model)->customfieldsModel()));
-		GO::cache()->delete('customfields_'.$this->category->extends_model);	
+		\GO_Base_Db_Columns::clearCache(\GO::getModel(\GO::getModel($this->category->extends_model)->customfieldsModel()));
+		\GO::cache()->delete('customfields_'.$this->category->extends_model);	
 	}
 	
 	public function hasLength() {
@@ -160,7 +160,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	protected function afterDelete() {
 		
 		//don't be strict in upgrade process
-		GO::getDbConnection()->query("SET sql_mode=''");	
+		\GO::getDbConnection()->query("SET sql_mode=''");	
 		
 		$sql = "ALTER TABLE `".$this->category->customfieldsTableName()."` DROP `".$this->columnName()."`";
 		
@@ -177,7 +177,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	
 	
 	public function getTreeSelectNestingLevel($parentOptionId=0, $nestingLevel=0){
-		$stmt= GO_Customfields_Model_FieldTreeSelectOption::model()->find(array(
+		$stmt= \GO_Customfields_Model_FieldTreeSelectOption::model()->find(array(
 			'where'=>'parent_id=:parent_id AND field_id=:field_id',
 			'bindParams'=>array('parent_id'=>$parentOptionId, 'field_id'=>$this->id),
 			'order'=>'sort'
@@ -200,7 +200,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 		$nestingLevel = $this->getTreeSelectNestingLevel();
 
 		for($i=1;$i<$nestingLevel;$i++){
-			$field =GO_Customfields_Model_Field::model()->findSingleByAttributes(array('treemaster_field_id'=>$this->id,'nesting_level'=>$i));
+			$field =\GO_Customfields_Model_Field::model()->findSingleByAttributes(array('treemaster_field_id'=>$this->id,'nesting_level'=>$i));
 
 			if(!$field){
 				$field = new \GO_Customfields_Model_Field();
@@ -229,7 +229,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	 * @return \GO_Customfields_Model_Field 
 	 */
 	public function createIfNotExists($category_id, $fieldName, $createAttributes=array()){
-		$field = GO_Customfields_Model_Field::model()->findSingleByAttributes(array('category_id'=>$category_id,'name'=>$fieldName));
+		$field = \GO_Customfields_Model_Field::model()->findSingleByAttributes(array('category_id'=>$category_id,'name'=>$fieldName));
 		if(!$field){
 			$field = new \GO_Customfields_Model_Field();
 			$field->setAttributes($createAttributes, false);
@@ -278,8 +278,8 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	 * @param int $permissionLevel Set to false to ignore permissions
 	 * @return GO_Customfields_Model_Field
 	 */
-	public function findByModel($modelName, $permissionLevel=  GO_Base_Model_Acl::READ_PERMISSION){
-		$findParams = GO_Base_Db_FindParams::newInstance()->joinRelation('category')->order('sort_index');
+	public function findByModel($modelName, $permissionLevel=  \GO_Base_Model_Acl::READ_PERMISSION){
+		$findParams = \GO_Base_Db_FindParams::newInstance()->joinRelation('category')->order('sort_index');
 		
 		if($permissionLevel){
 			$findParams->permissionLevel($permissionLevel);

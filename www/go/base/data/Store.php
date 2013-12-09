@@ -145,7 +145,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
       } catch (Exception $e) {
         $this->response['deleteSuccess'] = false;
         $this->response['deleteFeedback'] = $e->getMessage();
-				if(GO::config()->debug)
+				if(\GO::config()->debug)
 					$this->response['deleteTrace'] = $e->getTraceAsString ();
       }
     }
@@ -164,7 +164,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		
 		$model = $this->_stmt->fetch();
 		
-//		GO::debugPageLoadTime("fetch");
+//		\GO::debugPageLoadTime("fetch");
 		
 		return $model;
 	}
@@ -256,7 +256,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 //			$sort[$i] = $this->getColumnModel()->getSortColumn($sort[$i]);
 //		}
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()						
+		$findParams = \GO_Base_Db_FindParams::newInstance()						
 						->joinCustomFields()
 						->order($sort, $dir);
 		
@@ -274,7 +274,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		if(isset($requestParams['limit']))
 			$findParams->limit ($requestParams['limit']);
 		else
-			$findParams->limit (GO::user()->max_rows_list);
+			$findParams->limit (\GO::user()->max_rows_list);
 		
 		if(!empty($requestParams['start']))
 			$findParams->start ($requestParams['start']);

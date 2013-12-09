@@ -20,14 +20,14 @@ class GO_Defaultsite_DefaultsiteModule extends GO_Base_Module {
 
 	public function install() {
 		
-		if(GO::modules()->isInstalled('site')){
-			$alreadyExists = GO_Site_Model_Site::model()->findSingleByAttribute('module','defaultsite');
+		if(\GO::modules()->isInstalled('site')){
+			$alreadyExists = \GO_Site_Model_Site::model()->findSingleByAttribute('module','defaultsite');
 			
 			if(!$alreadyExists){
 				
 				$siteProperties = array(
 					//'id'=>'', ID IS AUTO INCREMENT
-					'name'=>GO::t('name','defaultsite'),
+					'name'=>\GO::t('name','defaultsite'),
 					'user_id'=>1,
 					//'mtime'=>'', AUTOMATIC
 					//'ctime'=>'', AUTOMATIC

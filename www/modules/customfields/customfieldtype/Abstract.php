@@ -106,7 +106,7 @@ abstract class GO_Customfields_Customfieldtype_Abstract{
 	 * @return Mixed 
 	 */
 	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model){
-		return GO_Base_Util_String::text_to_html($attributes[$key]);
+		return \GO_Base_Util_String::text_to_html($attributes[$key]);
 	}
 	
 	/**
@@ -133,7 +133,7 @@ abstract class GO_Customfields_Customfieldtype_Abstract{
 	 * @return string The errormessage for this validator 
 	 */
 	public function getValidationError(){
-		return GO::t('defaultValidationError','customfields');
+		return \GO::t('defaultValidationError','customfields');
 	}
 	
 	

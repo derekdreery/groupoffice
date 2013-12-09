@@ -223,7 +223,7 @@ class addressbook extends db {
 				"FROM ab_addressbooks ".
 
 		"INNER JOIN go_acl a ON (ab_addressbooks.acl_id = a.acl_id";
-		$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
+		$sql .= " AND a.level>".\GO_SECURITY::READ_PERMISSION;
 		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 
 		if(!empty($query)){
@@ -425,7 +425,7 @@ class addressbook extends db {
 
 	function delete_company($company_id, $company=false) {
 		
-		return GO_Addressbook_Model_Company::model()->findByPk($company_id)->delete();
+		return \GO_Addressbook_Model_Company::model()->findByPk($company_id)->delete();
 		
 //		global $GO_CONFIG, $GO_MODULES;
 //
@@ -611,7 +611,7 @@ class addressbook extends db {
 
 	function delete_contact($contact_id, $contact=false) {
 		
-		return GO_Addressbook_Model_Contact::model()->findByPk($contact_id)->delete();
+		return \GO_Addressbook_Model_Contact::model()->findByPk($contact_id)->delete();
 
 //		global $GO_CONFIG, $GO_MODULES;
 //

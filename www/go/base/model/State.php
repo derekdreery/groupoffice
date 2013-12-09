@@ -49,7 +49,7 @@ class GO_Base_Model_State extends GO_Base_Db_ActiveRecord {
 	 */
 	public function getFullClientState($user_id){
 		$state = array();
-		$stmt = $this->findByAttribute('user_id', $user_id, GO_Base_Db_FindParams::newInstance()->select('t.*'));
+		$stmt = $this->findByAttribute('user_id', $user_id, \GO_Base_Db_FindParams::newInstance()->select('t.*'));
 		while($model= $stmt->fetch()){
 			$state[$model->name]=$model->value;
 		}

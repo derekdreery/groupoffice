@@ -44,8 +44,8 @@ class GO_Base_Util_HttpClient{
 		
 		$this->_curl = curl_init();
 		
-		$cookieFile = GO::user() ? 'cookie_'.GO::user()->id.'.txt' : 'cookie_0.txt';
-		$this->_cookieFile = GO::config()->tmpdir.$cookieFile;
+		$cookieFile = \GO::user() ? 'cookie_'.\GO::user()->id.'.txt' : 'cookie_0.txt';
+		$this->_cookieFile = \GO::config()->tmpdir.$cookieFile;
 		
 		
 		curl_setopt($this->_curl, CURLOPT_COOKIEJAR, $this->_cookieFile);
@@ -57,10 +57,10 @@ class GO_Base_Util_HttpClient{
 		@curl_setopt($this->_curl, CURLOPT_FOLLOWLOCATION, TRUE);
 		curl_setopt($this->_curl, CURLOPT_ENCODING, "UTF-8");
 		
-		if(!empty(GO::config()->curl_proxy))
-			curl_setopt($this->_curl, CURLOPT_PROXY, GO::config()->curl_proxy);
+		if(!empty(\GO::config()->curl_proxy))
+			curl_setopt($this->_curl, CURLOPT_PROXY, \GO::config()->curl_proxy);
 		
-		$this->setCurlOption(CURLOPT_USERAGENT, "Group-Office HttpClient ".GO::config()->version. " (curl)");
+		$this->setCurlOption(CURLOPT_USERAGENT, "Group-Office HttpClient ".\GO::config()->version. " (curl)");
 		
 		//set ajax header for Group-Office
 		$this->setCurlOption(CURLOPT_HTTPHEADER, array("X-Requested-With: XMLHttpRequest"));
@@ -126,7 +126,7 @@ class GO_Base_Util_HttpClient{
 		if(isset($this->lastHeaders['Content-Disposition']) && preg_match('/filename="(.*)"/', $this->lastHeaders['Content-Disposition'], $matches))
 			return $matches[1];
 		
-		$filename = GO_Base_Fs_File::utf8Basename($this->_lastDownloadUrl);
+		$filename = \GO_Base_Fs_File::utf8Basename($this->_lastDownloadUrl);
 		
 		if(!empty($filename))
 			return $filename;
@@ -194,11 +194,11 @@ class GO_Base_Util_HttpClient{
 			'password'=>$password
 		);
 
-		GO::debug("Request: ".$baseUrl.'?r=auth/login');
+		\GO::debug("Request: ".$baseUrl.'?r=auth/login');
 		
 		$response =  $this->request($baseUrl.'?r=auth/login', $postfields);
 		
-		GO::debug("Response: ".$response);
+		\GO::debug("Response: ".$response);
 		
 		$response = json_decode($response, true);
 		
@@ -206,8 +206,8 @@ class GO_Base_Util_HttpClient{
 
 		if(!isset($response['success']) || !$response['success'])
 		{
-			GO::debug($response);
-			$feedback = "Could not connect to ".GO::config()->product_name." installation at ".$baseUrl;
+			\GO::debug($response);
+			$feedback = "Could not connect to ".\GO::config()->product_name." installation at ".$baseUrl;
 			if(isset($response['feedback']))
 				$feedback .= "\n\n".$response['feedback'];
 			else

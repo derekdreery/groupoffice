@@ -25,7 +25,7 @@ class GO_Base_Exception_InsufficientDiskspace extends Exception
 	
 	public function __construct($message='') {
 
-		$message = GO::t('quotaExceeded')."\n".sprintf(GO::t('youAreUsing'),  GO_Base_Util_Number::formatSize($this->getUsage()), GO_Base_Util_Number::formatSize($this->getQuota())).$message;
+		$message = \GO::t('quotaExceeded')."\n".sprintf(\GO::t('youAreUsing'),  \GO_Base_Util_Number::formatSize($this->getUsage()), \GO_Base_Util_Number::formatSize($this->getQuota())).$message;
 		
 		parent::__construct($message);
 	}
@@ -35,11 +35,11 @@ class GO_Base_Exception_InsufficientDiskspace extends Exception
 	 * @return integer quota in bytes
 	 */
 	protected function getQuota() {
-		if(GO::config()->quota < $this->getTotalUsage() && GO::config()->quota > 0)
-			return GO::config()->quota;
-		if(GO::user() && GO::user()->disk_quota)
-			return GO::user()->getDiskQuota();
-		return GO::config()->quota;
+		if(\GO::config()->quota < $this->getTotalUsage() && \GO::config()->quota > 0)
+			return \GO::config()->quota;
+		if(\GO::user() && \GO::user()->disk_quota)
+			return \GO::user()->getDiskQuota();
+		return \GO::config()->quota;
 	}
 	
 	/**
@@ -48,10 +48,10 @@ class GO_Base_Exception_InsufficientDiskspace extends Exception
 	 * @return integer Disk uage in bytes
 	 */
 	protected function getUsage() {
-		if(GO::config()->quota < $this->getTotalUsage() && GO::config()->quota > 0)
+		if(\GO::config()->quota < $this->getTotalUsage() && \GO::config()->quota > 0)
 			return $this->getTotalUsage();
-		if(GO::user() && GO::user()->disk_usage)
-			return GO::user()->disk_usage;
+		if(\GO::user() && \GO::user()->disk_usage)
+			return \GO::user()->disk_usage;
 		return $this->getTotalUsage();
 	}
 	
@@ -61,7 +61,7 @@ class GO_Base_Exception_InsufficientDiskspace extends Exception
 	 */
 	protected function getTotalUsage() {
 		if(!isset($this->_total_file_storage))
-			$this->_total_file_storage=GO::config()->get_setting('file_storage_usage');
+			$this->_total_file_storage=\GO::config()->get_setting('file_storage_usage');
 		return $this->_total_file_storage;
 	}
 }

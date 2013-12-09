@@ -11,11 +11,11 @@ $preferences = Swift_Preferences::getInstance();
 $preferences->setCharset('utf-8');
 
 Swift_Preferences::getInstance()
-				->setTempDir(GO::config()->tmpdir)
+				->setTempDir(\GO::config()->tmpdir)
         ->setCacheType('disk');
 
 // this should only be done when Swiftmailer won't use the native QP content encoder
 // see mime_deps.php
 if (version_compare(phpversion(), '5.4.7', '<')) {
-    $preferences->setQPDotEscape(GO::config()->swift_qp_dot_escape);
+    $preferences->setQPDotEscape(\GO::config()->swift_qp_dot_escape);
 }

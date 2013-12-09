@@ -14,7 +14,7 @@ class GO_EVENTS
 			 * Cache listerner in a file because scanning all the modules for
 			 * listeners is a heavy job.
 			 */
-			$cache_file = GO::config()->getCacheFolder()->path().'/listeners.txt';
+			$cache_file = \GO::config()->getCacheFolder()->path().'/listeners.txt';
 			if(!$GLOBALS['GO_CONFIG']->debug && file_exists($cache_file)){
 				$this->listeners = unserialize(file_get_contents($cache_file));
 			}

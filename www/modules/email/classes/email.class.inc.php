@@ -74,7 +74,7 @@ class email extends db {
 
 			$sql .= "INNER JOIN go_acl a ON (ac.acl_id = a.acl_id";
 			if($auth_type=='write'){
-				$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
+				$sql .= " AND a.level>".\GO_SECURITY::READ_PERMISSION;
 			}
 			$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$g)."))) ";
 		}

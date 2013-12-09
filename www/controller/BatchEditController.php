@@ -42,7 +42,7 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 		
 		if(is_array($keys)) {
 			foreach($keys as $key) {
-				$model = GO::getModel($params['model_name'])->findByPk($key);
+				$model = \GO::getModel($params['model_name'])->findByPk($key);
 				if(!empty($model))
 					$this->_updateModel($model, $data);
 			}

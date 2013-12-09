@@ -19,16 +19,16 @@ class GO_Customfields_Controller_FieldTreeSelectOption extends GO_Base_Controlle
 		
 		$field_id = str_replace('col_','',$params['field_id']);
 		
-		$fieldModel = GO_Customfields_Model_Field::model()->findByPk($field_id);
+		$fieldModel = \GO_Customfields_Model_Field::model()->findByPk($field_id);
 		
 		if ($params['parent_id']==0 && $fieldModel->datatype=='GO_Customfields_Customfieldtype_TreeselectSlave') {
-			return GO_Base_Db_FindParams::newInstance()
+			return \GO_Base_Db_FindParams::newInstance()
 						->order(array("parent_id","sort"))
-						->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('field_id', $fieldModel->treemaster_field_id));
+						->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('field_id', $fieldModel->treemaster_field_id));
 		} else {
-			return GO_Base_Db_FindParams::newInstance()
+			return \GO_Base_Db_FindParams::newInstance()
 						->order("sort")
-						->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('field_id', $field_id)->addCondition('parent_id', $parent_id));
+						->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('field_id', $field_id)->addCondition('parent_id', $parent_id));
 		}
 		
 //		return array(

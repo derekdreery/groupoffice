@@ -34,7 +34,7 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractJsonContro
 
 	protected function actionLoad($params) {
 		//Load or create model
-		$model = GO_Notes_Model_Category::model()->createOrFindByParams($params);
+		$model = \GO_Notes_Model_Category::model()->createOrFindByParams($params);
 
 		// return render response
 		$remoteComboFields = array('user_id' => '$model->user->name');
@@ -42,7 +42,7 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractJsonContro
 	}
 
 	protected function actionSubmit($params) {
-		$model = GO_Notes_Model_Category::model()->createOrFindByParams($params);
+		$model = \GO_Notes_Model_Category::model()->createOrFindByParams($params);
 
 		$model->setAttributes($params);
 		$model->save();

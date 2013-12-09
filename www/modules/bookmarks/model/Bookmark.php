@@ -48,9 +48,9 @@ class GO_Bookmarks_Model_Bookmark extends GO_Base_Db_ActiveRecord {
 
 		if ($this->logo!='') {
 			if ($this->public_icon == '1') {
-				return GO::modules()->host .'modules/bookmarks/'.$this->logo;
+				return \GO::modules()->host .'modules/bookmarks/'.$this->logo;
 			} else {
-				return GO::url('core/thumb', array('src'=>$this->logo, 'w'=>16,'h'=>16));
+				return \GO::url('core/thumb', array('src'=>$this->logo, 'w'=>16,'h'=>16));
 			}
 		} else {
 			return false;

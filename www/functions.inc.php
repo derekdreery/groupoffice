@@ -33,7 +33,7 @@ function get_model_by_type_id($model_type_id){
 		if(empty($r['model_name']))
 			return false;
 			
-		return GO::getModel($r['model_name']);
+		return \GO::getModel($r['model_name']);
 }
 
 

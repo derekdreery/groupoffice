@@ -68,7 +68,7 @@
 	protected function beforeSave() {
 		
 		if(!isset($this->default_salutation))
-			$this->default_salutation=GO::t("defaultSalutationTpl","addressbook");
+			$this->default_salutation=\GO::t("defaultSalutationTpl","addressbook");
 			
 		return parent::beforeSave();
 	}
@@ -88,21 +88,21 @@
 	 * @return GO_Addressbook_Model_Addressbook 
 	 */
 	public function getUsersAddressbook(){
-		$ab = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('users', '1'); //GO::t('users','base'));
+		$ab = \GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('users', '1'); //\GO::t('users','base'));
 		if (!$ab) {
 			$ab = new \GO_Addressbook_Model_Addressbook();
-			$ab->name = GO::t('users');
+			$ab->name = \GO::t('users');
 			$ab->users = true;
 			$ab->save();
 			
-			$ab->acl->addGroup(GO::config()->group_internal);
+			$ab->acl->addGroup(\GO::config()->group_internal);
 		}
 		return $ab;
 	}
 	
 	public function defaultAttributes() {
 		$attr = parent::defaultAttributes();
-		$attr['default_salutation']=GO::t('defaultSalutationTpl','addressbook');
+		$attr['default_salutation']=\GO::t('defaultSalutationTpl','addressbook');
 		return $attr;
 	}
 
@@ -130,14 +130,14 @@
 	 * @return array
 	 */
 	public function getAllReadableAddressbookIds(){
-		if(!isset(GO::session()->values['addressbook']['readable_addressbook_ids'])){
-			GO::session()->values['addressbook']['readable_addressbook_ids']=array();
+		if(!isset(\GO::session()->values['addressbook']['readable_addressbook_ids'])){
+			\GO::session()->values['addressbook']['readable_addressbook_ids']=array();
 			$stmt = $this->find();
 			while($ab = $stmt->fetch()){
-				GO::session()->values['addressbook']['readable_addressbook_ids'][]=$ab->id;
+				\GO::session()->values['addressbook']['readable_addressbook_ids'][]=$ab->id;
 			}
 		}
 		
-		return GO::session()->values['addressbook']['readable_addressbook_ids'];
+		return \GO::session()->values['addressbook']['readable_addressbook_ids'];
 	}
 }

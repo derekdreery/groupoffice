@@ -43,7 +43,7 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 	 * @return array
 	 */
 	public function getAllCronJobClasses(){
-		$modules = GO::modules()->getAllModules();
+		$modules = \GO::modules()->getAllModules();
 
 		$foundCronJobClasses=array();
 		foreach($modules as $module){
@@ -62,10 +62,10 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 	
 	public function getCoreCronJobClasses(){
 		$foundCronJobClasses=array();
-		$folderPath = GO::config()->root_path.'go/base/cron';
+		$folderPath = \GO::config()->root_path.'go/base/cron';
 		
 		$folder = new \GO_Base_Fs_Folder($folderPath);
-		GO::debug("CRONFILE SEARCH IN FOLDER: ".$folder->path());
+		\GO::debug("CRONFILE SEARCH IN FOLDER: ".$folder->path());
 		if($folder->exists()){
 			$items = $folder->ls();
 			$reflectionClasses = array();
@@ -78,7 +78,7 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 			
 			foreach($reflectionClasses as $reflectionClass){
 				if($this->_checkIsCronJobClassFile($reflectionClass)){
-					GO::debug("CRONFILE FOUND: ".$reflectionClass->name);
+					\GO::debug("CRONFILE FOUND: ".$reflectionClass->name);
 					$cronJob = new $reflectionClass->name();
 					$foundCronJobClasses[$reflectionClass->name] = $cronJob->getLabel();
 				}
@@ -90,10 +90,10 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 	
 	public function getFileStorageCronJobClasses($folderName='cron'){
 		$foundCronJobClasses=array();
-		$folderPath = GO::config()->file_storage_path.'php/'.$folderName;
+		$folderPath = \GO::config()->file_storage_path.'php/'.$folderName;
 		
 		$folder = new \GO_Base_Fs_Folder($folderPath);
-		GO::debug("CRONFILE SEARCH IN FOLDER: ".$folder->path());
+		\GO::debug("CRONFILE SEARCH IN FOLDER: ".$folder->path());
 		if($folder->exists()){
 			$items = $folder->ls();
 			$reflectionClasses = array();
@@ -106,7 +106,7 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 			
 			foreach($reflectionClasses as $reflectionClass){
 				if($this->_checkIsCronJobClassFile($reflectionClass)){
-					GO::debug("CRONFILE FOUND: ".$reflectionClass->name);
+					\GO::debug("CRONFILE FOUND: ".$reflectionClass->name);
 					$cronJob = new $reflectionClass->name();
 					$foundCronJobClasses[$reflectionClass->name] = $cronJob->getLabel();
 				}

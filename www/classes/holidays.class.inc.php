@@ -60,7 +60,7 @@ class holidays extends db {
 
 	private function add_holiday($region, $date, $name) {
 
-		go_debug("add_holiday($region, ".Date::get_timestamp($date).", $name)");
+		\go_debug("add_holiday($region, ".Date::get_timestamp($date).", $name)");
 		
 		$next_id = $this->nextid("go_holidays");
 		if ($next_id > 0) {

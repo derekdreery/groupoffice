@@ -129,7 +129,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 		{
 			$errorInfo = $e instanceof PDOException ? $e->errorInfo : null;
 			$message = $e->getMessage();
-			GO::debug('DbCommand::execute() failed: '.$message.' The SQL statement executed was: '.$this->getText() . $par);
+			\GO::debug('DbCommand::execute() failed: '.$message.' The SQL statement executed was: '.$this->getText() . $par);
 			throw new \GO_Base_Exception_Database('DbStatement failed to execute the SQL statement: '.$message, (int) $e->getCode(), $errorInfo);
 		}
 	}
@@ -205,7 +205,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 		{
 			$errorInfo = $e instanceof PDOException ? $e->errorInfo : null;
 			$message = $e->getMessage();
-			if (GO::config()->debug)
+			if (\GO::config()->debug)
 				$message .= '. The SQL statement executed was: ' . $this->getText() . $par;
 			throw new \GO_Base_Exception_Database('DbCommand failed to execute the SQL statement: '.$message, (int) $e->getCode(), $errorInfo);
 		}

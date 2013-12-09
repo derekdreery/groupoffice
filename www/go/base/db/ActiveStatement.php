@@ -36,7 +36,7 @@ class GO_Base_Db_ActiveStatement implements IteratorAggregate {
 	public $stmt;
   
   /**
-   * Parameters  that were passed to GO_BaseDb_activeRecord::find()
+   * Parameters  that were passed to \GO_BaseDb_activeRecord::find()
    * 
    * @var array 
    */
@@ -58,7 +58,7 @@ class GO_Base_Db_ActiveStatement implements IteratorAggregate {
 	 * The total number of found rows. Even when specifying a limit it will return 
 	 * the number of rows as if you wouldn't have specified a limit.
 	 * 
-	 * It is only set when calcFoundRows was passed to the GO_Base_Db_ActiveRecord::find() function parameters.
+	 * It is only set when calcFoundRows was passed to the \GO_Base_Db_ActiveRecord::find() function parameters.
    * 
    * @var int 
    */
@@ -155,13 +155,13 @@ class GO_Base_Db_ActiveStatement implements IteratorAggregate {
 //			$sql = preg_replace('/^LIMIT .*$/mi','', $sql);
 //			$sql = preg_replace('/^ORDER BY .*$/mi','', $sql);
 //			$sql = preg_replace('/^LEFT JOIN .*$/mi','', $sql);			
-//			GO::debug($sql);
+//			\GO::debug($sql);
 //		
-//			$r = GO::getDbConnection()->query($sql);
-//			$foundRows = GO::session()->values[$queryUid]=intval($r->fetchColumn(0));	
+//			$r = \GO::getDbConnection()->query($sql);
+//			$foundRows = \GO::session()->values[$queryUid]=intval($r->fetchColumn(0));	
 //		}else
 //		{
-//			$foundRows=GO::session()->values[$queryUid];
+//			$foundRows=\GO::session()->values[$queryUid];
 //		}
 //		
 //		return $foundRows;

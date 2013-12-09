@@ -1,6 +1,6 @@
 <?php
 //require vendor lib SabreDav vobject
-//require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
+//require_once(\GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
 		
 
 class GO_Base_VObject_VTimezone extends Sabre\VObject\Document {
@@ -20,14 +20,14 @@ class GO_Base_VObject_VTimezone extends Sabre\VObject\Document {
 
 		parent::__construct();
 
-		$tz = new \DateTimeZone(GO::user() ? GO::user()->timezone : date_default_timezone_get());
+		$tz = new \DateTimeZone(\GO::user() ? \GO::user()->timezone : date_default_timezone_get());
 		//$tz = new \DateTimeZone("Europe/Amsterdam");
 		$transitions = $tz->getTransitions();
 		
 
 		$start_of_year = mktime(0, 0, 0, 1, 1);
 
-		$to = GO_Base_Util_Date::get_timezone_offset(time());
+		$to = \GO_Base_Util_Date::get_timezone_offset(time());
 		if ($to < 0) {
 			if (strlen($to) == 2)
 				$to = '-0' . ($to * -1);

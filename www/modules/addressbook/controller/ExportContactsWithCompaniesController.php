@@ -18,9 +18,9 @@ class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Cont
 	public function export($params) {
 
 		// Load the data from the session.
-		$findParams = GO::session()->values['contact']['findParams'];
+		$findParams = \GO::session()->values['contact']['findParams'];
 		$findParams->getCriteria()->recreateTemporaryTables();
-		$model = GO::getModel(GO::session()->values['contact']['model']);
+		$model = \GO::getModel(\GO::session()->values['contact']['model']);
 		
 		// Include the companies
 		$findParams->joinRelation('company','LEFT');
@@ -35,7 +35,7 @@ class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Cont
 		$csvFile = new \GO_Base_Fs_CsvFile(GO_Base_Fs_File::stripInvalidChars('export.csv'));
 		
 		// Output the download headers
-		GO_Base_Util_Http::outputDownloadHeaders($csvFile, false);
+		\GO_Base_Util_Http::outputDownloadHeaders($csvFile, false);
 				
 		$csvWriter = new \GO_Base_Csv_Writer('php://output');
 		
@@ -54,8 +54,8 @@ class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Cont
 			}
 			
 			foreach($compAttrs as $cattr=>$cval){
-				$header[GO::t('company','addressbook').$cattr] = GO::t('company','addressbook').':'.$m->company->getAttributeLabel($cattr);
-				$record[GO::t('company','addressbook').$cattr] = $m->company->{$cattr};
+				$header[\GO::t('company','addressbook').$cattr] = \GO::t('company','addressbook').':'.$m->company->getAttributeLabel($cattr);
+				$record[\GO::t('company','addressbook').$cattr] = $m->company->{$cattr};
 			}
 			
 			if(!$headerPrinted){

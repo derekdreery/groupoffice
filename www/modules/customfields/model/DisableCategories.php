@@ -53,7 +53,7 @@ class GO_Customfields_Model_DisableCategories extends GO_Base_Db_ActiveRecord{
 	 * @return boolean 
 	 */
 	public static function isEnabled($model_name, $model_id){
-		$model = GO_Customfields_Model_DisableCategories::model()->findByPk(array('model_id'=>$model_id,'model_name'=>$model_name));
+		$model = \GO_Customfields_Model_DisableCategories::model()->findByPk(array('model_id'=>$model_id,'model_name'=>$model_name));
 		
 		return $model!=false;
 	}

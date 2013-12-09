@@ -5,11 +5,11 @@ require('header.php');
 if($_SERVER['REQUEST_METHOD']=='POST'){
 	try{
 		foreach($_POST as $key=>$value){
-			GO::config()->$key=$value;
+			\GO::config()->$key=$value;
 		}
-		GO::config()->save();
+		\GO::config()->save();
 		
-		$conn = GO::getDbConnection();
+		$conn = \GO::getDbConnection();
 		
 		header('Location: install.php');
 		
@@ -41,32 +41,32 @@ mysql&#62; quit;<br />
 
 <?php
 
-GO_Base_Html_Input::render(array(
+\GO_Base_Html_Input::render(array(
 		"label"=>"Host",
 		"name"=>"db_host",
-		"value"=>GO::config()->db_host
+		"value"=>\GO::config()->db_host
 ));
 
 
-GO_Base_Html_Input::render(array(
+\GO_Base_Html_Input::render(array(
 		"label"=>"Port",
 		"name"=>"db_port",
-		"value"=>GO::config()->db_port
+		"value"=>\GO::config()->db_port
 ));
 
-GO_Base_Html_Input::render(array(
+\GO_Base_Html_Input::render(array(
 		"label"=>"Name",
 		"name"=>"db_name",
-		"value"=>GO::config()->db_name
+		"value"=>\GO::config()->db_name
 ));
 
-GO_Base_Html_Input::render(array(
+\GO_Base_Html_Input::render(array(
 		"label"=>"Username",
 		"name"=>"db_user",
-		"value"=>GO::config()->db_user
+		"value"=>\GO::config()->db_user
 ));
 
-GO_Base_Html_Password::render(array(
+\GO_Base_Html_Password::render(array(
 		"label"=>"Password",
 		"name"=>"db_pass",
 		"value"=>""

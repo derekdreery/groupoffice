@@ -67,7 +67,7 @@ class GO_Base_Model_SearchCacheRecord extends GO_Base_Db_ActiveRecord {
 	 */
 	public function findLinks($model, $findParams=array()){
 		
-		$params = GO_Base_Db_FindParams::newInstance()
+		$params = \GO_Base_Db_FindParams::newInstance()
 						->select("t.*,l.description AS link_description")
 						->order('mtime','DESC')
 						->join('go_links_'.$model->tableName(),  GO_Base_Db_FindCriteria::newInstance()

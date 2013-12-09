@@ -70,10 +70,10 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 	 */
 	public static function newInstance($name, $time, $model_name='', $model_id=0, $vtime=null){
 		$r = new \GO_Base_Model_Reminder();
-		$r->name=	GO_Base_Util_String::cut_string($name, 100);
+		$r->name=	\GO_Base_Util_String::cut_string($name, 100);
 		$r->time=$time;
 		$r->vtime=$vtime;
-		$r->model_type_id=GO::getModel($model_name)->modelTypeId();
+		$r->model_type_id=\GO::getModel($model_name)->modelTypeId();
 		$r->model_id=$model_id;
 		$r->save();
 		
@@ -119,7 +119,7 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Base_Model_ReminderUser 
 	 */
 	public function hasUser($userId){
-		return GO_Base_Model_ReminderUser::model()->findByPk(array(
+		return \GO_Base_Model_ReminderUser::model()->findByPk(array(
 				'reminder_id'=>$this->id,				
 				'user_id'=>$userId
 						));
@@ -127,13 +127,13 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 	
 	public function hasUsers(){
 		
-		$params = GO_Base_Db_FindParams::newInstance()
+		$params = \GO_Base_Db_FindParams::newInstance()
 						->select('count(*) AS count')
 						->single();
 		
-		$params->getCriteria()->addModel(GO_Base_Model_ReminderUser::model())->addCondition('reminder_id', $this->id);
+		$params->getCriteria()->addModel(\GO_Base_Model_ReminderUser::model())->addCondition('reminder_id', $this->id);
 		
-		$record = GO_Base_Model_ReminderUser::model()->find($params);
+		$record = \GO_Base_Model_ReminderUser::model()->find($params);
 		
 		return $record->count > 0;
 	}
@@ -181,32 +181,32 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 		if(!$this->model_type_id || !$this->model_id)
 			return false;
 		
-		$modelType = GO_Base_Model_ModelType::model()->findByPk($this->model_type_id);
+		$modelType = \GO_Base_Model_ModelType::model()->findByPk($this->model_type_id);
 		
-		$model = GO::getModel($modelType->model_name)->findByPk($this->model_id);
+		$model = \GO::getModel($modelType->model_name)->findByPk($this->model_id);
 		
 		return $model;		
 	}
 	
 	
 	public function findByModel($modelName, $id){
-		$model_type_id = GO::getModel($modelName)->modelTypeId();		
+		$model_type_id = \GO::getModel($modelName)->modelTypeId();		
 		
-		return $this->find(GO_Base_Db_FindParams::newInstance()
-						->criteria(GO_Base_Db_FindCriteria::newInstance()
-										->addModel(GO_Base_Model_Reminder::model())
+		return $this->find(\GO_Base_Db_FindParams::newInstance()
+						->criteria(\GO_Base_Db_FindCriteria::newInstance()
+										->addModel(\GO_Base_Model_Reminder::model())
 										->addCondition('model_type_id', $model_type_id)
 										->addCondition('model_id', $id)));
 	}
 	
 	
 //	public function getUsers($findParams=false){
-//		$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()
+//		$stmt = \GO_Base_Model_User::model()->find(\GO_Base_Db_FindParams::newInstance()
 //						->mergeWith($findParams)
 //						->order(array('first_name','last_name'),array('ASC','ASC'))
-//						->criteria(GO_Base_Db_FindCriteria::model()->addModel(GO_Base_Model_ReminderUser::model(),'r')->addCondition('reminder_id',$this->id,'=','r'))
-//						->join(GO_Base_Model_ReminderUser::model()->tableName(), 
-//										GO_Base_Db_FindCriteria::model()->addModel(GO_Base_Model_ReminderUser::model())
+//						->criteria(\GO_Base_Db_FindCriteria::model()->addModel(\GO_Base_Model_ReminderUser::model(),'r')->addCondition('reminder_id',$this->id,'=','r'))
+//						->join(\GO_Base_Model_ReminderUser::model()->tableName(), 
+//										\GO_Base_Db_FindCriteria::model()->addModel(\GO_Base_Model_ReminderUser::model())
 //														->addCondition('id','r.user_id','=','r',true,true)
 //														
 //											)

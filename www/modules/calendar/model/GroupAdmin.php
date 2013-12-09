@@ -66,7 +66,7 @@ class GO_Calendar_Model_GroupAdmin extends GO_Base_Db_ActiveRecord{
 		 $stmt = $this->group->calendars;
 		 
 		 foreach($stmt as $calendar){
-			 $calendar->acl->addUser($this->user_id, GO_Base_Model_Acl::DELETE_PERMISSION);
+			 $calendar->acl->addUser($this->user_id, \GO_Base_Model_Acl::DELETE_PERMISSION);
 		 }
 		 
 		 return parent::afterSave($wasNew);

@@ -1,15 +1,15 @@
 <div class="register-page page">
 	<div class="wrapper">
-		<h2><?php echo GO::t('contactformTitle','defaultsite'); ?></h2>								
+		<h2><?php echo \GO::t('contactformTitle','defaultsite'); ?></h2>								
 			
 		<?php $form = new \GO_Site_Widget_Form(); ?>
 		<?php echo $form->beginForm(false,false,array('id'=>'contact')); ?>
 		
-		<?php echo GO::t('contactformText','defaultsite'); ?>
+		<?php echo \GO::t('contactformText','defaultsite'); ?>
 		
 		<?php echo $form->hiddenField($addressbook,'name',array('value'=>'Persoon, Test (test)')); ?>
 		
-		<h3><?php echo GO::t('contactDetails','defaultsite'); ?></h3>
+		<h3><?php echo \GO::t('contactDetails','defaultsite'); ?></h3>
 		<table class="table-registration-contact">
 			<tr>
 				<td><?php echo $form->label($contact, 'first_name'); ?></td>
@@ -38,7 +38,7 @@
 			</table>
 
 
-			<h3><?php echo GO::t('companyDetails','defaultsite'); ?></h3>
+			<h3><?php echo \GO::t('companyDetails','defaultsite'); ?></h3>
 			<table class="table-registration-company">
 				<tr>
 					<td><?php echo $form->label($company, 'name'); ?></td>
@@ -63,7 +63,7 @@
 			</table>
 
 
-			<h3><?php echo GO::t('address','defaultsite'); ?></h3>
+			<h3><?php echo \GO::t('address','defaultsite'); ?></h3>
 			<table class="table-registration-address">
 				<tr>
 					<td><?php echo $form->label($company, 'address'); ?></td>
@@ -87,7 +87,7 @@
 				</tr>
 				<tr>
 					<td><?php echo $form->label($company, 'country'); ?>
-					<td><?php echo $form->dropDownList($company, 'country', GO::language()->getCountries()); ?><?php echo $form->error($company, 'country'); ?></td>
+					<td><?php echo $form->dropDownList($company, 'country', \GO::language()->getCountries()); ?><?php echo $form->error($company, 'country'); ?></td>
 				</tr>
 <!--				<tr>
 					<td><?php //echo $form->label($company, 'postAddressIsEqual'); ?></td>
@@ -105,7 +105,7 @@
 
 		
 		<div class="button-bar">
-			<?php echo $form->submitbutton(GO::t('register','defaultsite'),array('class'=>'button','id'=>'register-submit-button')); ?>
+			<?php echo $form->submitbutton(\GO::t('register','defaultsite'),array('class'=>'button','id'=>'register-submit-button')); ?>
 			<div class="clear"></div>
 		</div>
 		

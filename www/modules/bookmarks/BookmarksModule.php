@@ -12,9 +12,9 @@ class GO_Bookmarks_BookmarksModule extends GO_Base_Module{
 	public static function head(){
 		echo '<style>';
 
-		$findParams = GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('behave_as_module', 1));
+		$findParams = \GO_Base_Db_FindParams::newInstance()->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('behave_as_module', 1));
 
-		$stmt = GO_Bookmarks_Model_Bookmark::model()->find($findParams);
+		$stmt = \GO_Bookmarks_Model_Bookmark::model()->find($findParams);
 		while ($bookmark = $stmt->fetch()) {			
 			echo '.go-menu-icon-bookmarks-id-'.$bookmark->id.'{background-image:url('.$bookmark->thumbUrl.')}';			
 		}
@@ -26,8 +26,8 @@ class GO_Bookmarks_BookmarksModule extends GO_Base_Module{
 		parent::install();
 		
 		$category = new \GO_Bookmarks_Model_Category();
-		$category->name=GO::t('general','bookmarks');		
+		$category->name=\GO::t('general','bookmarks');		
 		$category->save();
-		$category->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::READ_PERMISSION);
+		$category->acl->addGroup(\GO::config()->group_internal, \GO_Base_Model_Acl::READ_PERMISSION);
 	}
 }

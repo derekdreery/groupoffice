@@ -1,6 +1,6 @@
 <?php
-//chdir(GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/');
-//require_once(GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/Decoder.php');
+//chdir(\GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/');
+//require_once(\GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/Decoder.php');
 class GO_Base_Wbxml_Convertor{
 	
 	private $_wbxmlFile;
@@ -8,7 +8,7 @@ class GO_Base_Wbxml_Convertor{
 	
 	public function __construct(){
 		
-		$tmpFolder = GO::config()->getTempFolder();
+		$tmpFolder = \GO::config()->getTempFolder();
 		
 		$this->_wbxmlFile=$tmpFolder->path().'/'.uniqid(time()).'.wbxml';
 		$this->_xmlFile=$tmpFolder->path().'/'.uniqid(time()).'.xml';
@@ -24,12 +24,12 @@ class GO_Base_Wbxml_Convertor{
 		fclose($fp);
 		//convert temp file
 
-		if(GO_Base_Util_Common::isWindows())
+		if(\GO_Base_Util_Common::isWindows())
 		{
-			$cmd = GO::config()->cmd_wbxml2xml.' -o '.$this->_xmlFile.' '.$this->_wbxmlFile;
+			$cmd = \GO::config()->cmd_wbxml2xml.' -o '.$this->_xmlFile.' '.$this->_wbxmlFile;
 		}else
 		{
-			$cmd = GO::config()->cmd_wbxml2xml.' -o '.$this->_xmlFile.' '.$this->_wbxmlFile.' 2>/dev/null';
+			$cmd = \GO::config()->cmd_wbxml2xml.' -o '.$this->_xmlFile.' '.$this->_wbxmlFile.' 2>/dev/null';
 		}
 		exec($cmd);
 
@@ -49,12 +49,12 @@ class GO_Base_Wbxml_Convertor{
 
 		file_put_contents($this->_xmlFile, $xml);
 
-		if(GO_Base_Util_Common::isWindows())
+		if(\GO_Base_Util_Common::isWindows())
 		{
-			$cmd = GO::config()->cmd_xml2wbxml.' -o '.$this->_wbxmlFile.' '.$this->_xmlFile;
+			$cmd = \GO::config()->cmd_xml2wbxml.' -o '.$this->_wbxmlFile.' '.$this->_xmlFile;
 		}else
 		{
-			$cmd = GO::config()->cmd_xml2wbxml.' -o '.$this->_wbxmlFile.' '.$this->_xmlFile.' 2>/dev/null';
+			$cmd = \GO::config()->cmd_xml2wbxml.' -o '.$this->_wbxmlFile.' '.$this->_xmlFile.' 2>/dev/null';
 		}
 		exec($cmd);
 

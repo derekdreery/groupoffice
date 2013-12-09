@@ -3,7 +3,7 @@
  * GO_Base_Util_Minify_JSMin.php - modified PHP implementation of Douglas Crockford's GO_Base_Util_Minify_JSMin.
  *
  * <code>
- * $minifiedJs = GO_Base_Util_Minify_JSMin::minify($js);
+ * $minifiedJs = \GO_Base_Util_Minify_JSMin::minify($js);
  * </code>
  *
  * This is a modified port of GO_Base_Util_Minify_JSMin.c. Improvements:

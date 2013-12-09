@@ -477,7 +477,7 @@ class GoSwift extends Swift_Mailer{
 		
 		require_once($GO_CONFIG->root_path.'GO.php');
 		
-		$model = GO::getModel($model_name)->findByPk($model_id);
+		$model = \GO::getModel($model_name)->findByPk($model_id);
 		
 		$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
 		$linkedEmail->from = $this->implodeSwiftAddressArray($this->message->getFrom());

@@ -23,7 +23,7 @@ class GO_Base_Mail_EmailRecipients{
 	 * 
 	 * Useful to format a single addres like this:
 	 * 
-	 * (string) GO_Base_Mail_EmailRecipients::createSingle("john@example.com", "John Smith");
+	 * (string) \GO_Base_Mail_EmailRecipients::createSingle("john@example.com", "John Smith");
 	 * 
 	 * @param string $email
 	 * @param string $personal
@@ -223,7 +223,7 @@ class GO_Base_Mail_EmailRecipients{
 				
 				case ',':
 				case ';':
-					if($this->_quote || (!$this->strict && !$this->_emailFound && !GO_Base_Util_String::validate_email(trim($this->_buffer))))
+					if($this->_quote || (!$this->strict && !$this->_emailFound && !\GO_Base_Util_String::validate_email(trim($this->_buffer))))
 					{
 						$this->_buffer .= $char;				
 					}else
@@ -259,7 +259,7 @@ class GO_Base_Mail_EmailRecipients{
 		
 		if(!empty($this->_buffer))
 		{
-			if($this->strict && !GO_Base_Util_String::validate_email($this->_buffer)){
+			if($this->strict && !\GO_Base_Util_String::validate_email($this->_buffer)){
 				throw new \Exception("Address ".$this->_buffer." is not valid");
 			}else
 			{

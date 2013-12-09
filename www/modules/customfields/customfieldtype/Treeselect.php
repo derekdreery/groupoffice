@@ -39,7 +39,7 @@ class GO_Customfields_Customfieldtype_Treeselect extends GO_Customfields_Customf
 				$attributes[$key] = implode(', ', $value_arr);
 			}else {
 				$value = explode(':', $attributes[$key]);			
-				//var_dump(GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport);
+				//var_dump(\GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport);
 				if(isset($value[1])){
 					
 					// Only strip the first part
@@ -56,7 +56,7 @@ class GO_Customfields_Customfieldtype_Treeselect extends GO_Customfields_Customf
     
     public function formatFormOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
 	
-      if(!GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport){
+      if(!\GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport){
           return parent::formatFormOutput($key, $attributes, $model);
       }else
       {

@@ -32,8 +32,8 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 */
 	public static function setAllowDeletes($allowDeletes){
 		
-//		GO::debugCalledFrom();
-//		GO::debug("Allowed deletes is ".($allowedDeletes ? "true" : "false"));
+//		\GO::debugCalledFrom();
+//		\GO::debug("Allowed deletes is ".($allowedDeletes ? "true" : "false"));
 		
 		$old = self::$_allowDeletes;
 		self::$_allowDeletes=$allowDeletes;
@@ -49,7 +49,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * @return GO_Base_Fs_File 
 	 */
 	public static function tempFile($filename='',$extension=''){
-		$folder = GO::config()->getTempFolder();
+		$folder = \GO::config()->getTempFolder();
 		
 		if(!empty($filename))
 			$p=$folder->path().'/'.$filename;
@@ -85,22 +85,22 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		
 		switch ($size) {
 			case ($size > 1073741824) :
-				$size = GO_Base_Util_Number::localize($size / 1073741824, $decimals);
+				$size = \GO_Base_Util_Number::localize($size / 1073741824, $decimals);
 				$size .= " GB";
 				break;
 
 			case ($size > 1048576) :
-				$size = GO_Base_Util_Number::localize($size / 1048576, $decimals);
+				$size = \GO_Base_Util_Number::localize($size / 1048576, $decimals);
 				$size .= " MB";
 				break;
 
 			case ($size > 1024) :
-				$size = GO_Base_Util_Number::localize($size / 1024, $decimals);
+				$size = \GO_Base_Util_Number::localize($size / 1024, $decimals);
 				$size .= " KB";
 				break;
 
 			default :
-				$size = GO_Base_Util_Number::localize($size, $decimals);
+				$size = \GO_Base_Util_Number::localize($size, $decimals);
 				$size .= " bytes";
 				break;
 		}
@@ -120,8 +120,8 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if(self::$_allowDeletes)		
 			return unlink($this->path);
 		else{
-			$errorMsg = "The program tried to delete a file (".$this->stripFileStoragePath().") while GO_Base_Fs_File::\$allowDeletes is set to false.";
-			GO::debug($errorMsg);
+			$errorMsg = "The program tried to delete a file (".$this->stripFileStoragePath().") while \GO_Base_Fs_File::\$allowDeletes is set to false.";
+			\GO::debug($errorMsg);
 			throw new \Exception($errorMsg);
 		}
 	}
@@ -232,10 +232,10 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * @return string 
 	 */
 	public static function getFileTypeDescription($extension) {		
-		$lang = GO::t($extension,'base','filetypes');
+		$lang = \GO::t($extension,'base','filetypes');
 		
 		if($lang==$extension)
-			$lang = GO::t('unknown','base','filetypes');
+			$lang = \GO::t('unknown','base','filetypes');
 		
 		return $lang;
 	}
@@ -254,7 +254,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 */
 	public function mimeType()
 	{
-		$types = file_get_contents(GO::config()->root_path.'mime.types');
+		$types = file_get_contents(\GO::config()->root_path.'mime.types');
 
 		if($this->extension()!='')
 		{			
@@ -265,7 +265,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 			{
 				$pos++;
 
-				$start_of_line = GO_Base_Util_String::rstrpos($types, "\n", $pos);
+				$start_of_line = \GO_Base_Util_String::rstrpos($types, "\n", $pos);
 				$end_of_mime = strpos($types, ' ', $start_of_line);
 				$mime = substr($types, $start_of_line+1, $end_of_mime-$start_of_line-1);
 
@@ -389,19 +389,19 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 			$newFileName=$this->name();
 			
 		$newPath = $destinationFolder->path().'/'.$newFileName;
-		GO::debug('copy: '.$this->path.' > '.$newPath);
+		\GO::debug('copy: '.$this->path.' > '.$newPath);
 		
 		if(!copy($this->path, $newPath)){
 			
-			$old = str_replace(GO::config()->file_storage_path, '', $this->path);
-			$new = str_replace(GO::config()->file_storage_path, '', $newPath);
+			$old = str_replace(\GO::config()->file_storage_path, '', $this->path);
+			$new = str_replace(\GO::config()->file_storage_path, '', $newPath);
 			
 			throw new \Exception("Could not copy ".$old." to ".$new);
 		}
 				
-		chmod($newPath, octdec(GO::config()->file_create_mode));
-		if(GO::config()->file_change_group)
-			chgrp($newPath, GO::config()->file_change_group);
+		chmod($newPath, octdec(\GO::config()->file_create_mode));
+		if(\GO::config()->file_change_group)
+			chgrp($newPath, \GO::config()->file_change_group);
 						
 		return new \GO_Base_Fs_File($newPath);
 	}
@@ -442,9 +442,9 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * Set's default permissions and group ownership
 	 */
 	public function setDefaultPermissions(){
-		@chmod($this->path, octdec(GO::config()->file_create_mode));
-		if(!empty(GO::config()->file_change_group))
-			@chgrp($this->path, GO::config()->file_change_group);
+		@chmod($this->path, octdec(\GO::config()->file_create_mode));
+		if(!empty(\GO::config()->file_change_group))
+			@chgrp($this->path, \GO::config()->file_change_group);
 	}
 	
 	/**
@@ -481,7 +481,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if(!$enc)
 			$enc='UTF-8';
 		
-		return $this->putContents(GO_Base_Util_String::clean_utf8($str, $enc));
+		return $this->putContents(\GO_Base_Util_String::clean_utf8($str, $enc));
 	}
 	
 	/**

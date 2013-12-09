@@ -64,7 +64,7 @@ class GO_Base_Data_ColumnModel {
 		if ($modelName){
 			
 			if(is_string($modelName)){
-				$modelName = GO::getModel($modelName);
+				$modelName = \GO::getModel($modelName);
 			}
 			
 			$this->setColumnsFromModel($modelName, $excludeColumns, $includeColumns);
@@ -98,7 +98,7 @@ class GO_Base_Data_ColumnModel {
 				}
 			}
 
-			if (GO::modules()->customfields && $model->customfieldsRecord) {
+			if (\GO::modules()->customfields && $model->customfieldsRecord) {
 				$cfAttributes = array_keys($model->customfieldsRecord->columns);
 				array_shift($cfAttributes); //remove model_id column
 
@@ -379,7 +379,7 @@ class GO_Base_Data_ColumnModel {
 
 	/**
 	 * Set the format type used in the GO_Base_Db_ActiveRecord
-	 * @param string $type @see GO_Base_Db_ActiveRecord::getAttributes()
+	 * @param string $type @see \GO_Base_Db_ActiveRecord::getAttributes()
 	 */
 	public function setModelFormatType($type) {
 		$this->_modelFormatType = $type;

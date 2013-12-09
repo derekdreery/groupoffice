@@ -9,7 +9,7 @@ class GO_Postfixadmin_Controller_Alias extends GO_Base_Controller_AbstractModelC
 		$storeParams
 			->select('t.*')
 			->criteria(
-				GO_Base_Db_FindCriteria::newInstance()
+				\GO_Base_Db_FindCriteria::newInstance()
 					->addCondition('domain_id',$params['domain_id'])
 			);
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);

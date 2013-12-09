@@ -14,7 +14,7 @@ class GO_Email_Controller_Filter extends GO_Base_Controller_AbstractModelControl
 	protected function getStoreParams($params) {
 		
 	
-		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams = \GO_Base_Db_FindParams::newInstance();
 		$findParams->getCriteria()
 						->addCondition("account_id", $params['account_id']);
 	
@@ -24,7 +24,7 @@ class GO_Email_Controller_Filter extends GO_Base_Controller_AbstractModelControl
 		$fields = json_decode($params['filters'], true);
 
 		foreach ($fields as $id=>$sort) {
-			$model = GO_Email_Model_Filter::model()->findByPk($id);
+			$model = \GO_Email_Model_Filter::model()->findByPk($id);
 			$model->priority=$sort;
 			$model->save();
 		}		

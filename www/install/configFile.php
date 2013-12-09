@@ -2,13 +2,13 @@
 require('header.php');
 
 
-$configFile = GO::config()->get_config_file();
+$configFile = \GO::config()->get_config_file();
 if (!$configFile) {
 
 	//check ifconfig exists and if the config file is writable
 	$config_location1 = '/etc/groupoffice/' . $_SERVER['SERVER_NAME'] . '/config.php';
 	//$config_location2 = dirname(substr($_SERVER['SCRIPT_FILENAME'], 0 ,-strlen($_SERVER['PHP_SELF']))).'/config.php';
-	$config_location2 = GO::config()->root_path . 'config.php';
+	$config_location2 = \GO::config()->root_path . 'config.php';
 
 	printHead();
 	echo '<h1>Create config file</h1>';
@@ -23,7 +23,7 @@ if (!$configFile) {
 	echo '</p>><div class="cmd">';
 	echo '$ touch config.php (Or FTP an empty config.php to the server)<br />';
 	echo '$ chmod 666 config.php</div>';
-	echo '<p>If it does exist and you still see this message then it might be that safe_mode is enabled and the config.php is owned by another user then the ' . GO::config()->product_name . ' files.</p>';
+	echo '<p>If it does exist and you still see this message then it might be that safe_mode is enabled and the config.php is owned by another user then the ' . \GO::config()->product_name . ' files.</p>';
 } else {
 
 
@@ -36,41 +36,41 @@ if (!$configFile) {
 				require('config.php');
 			}
 			
-			if(empty(GO::config()->title))
-				GO::config()->title='Group-Office';
+			if(empty(\GO::config()->title))
+				\GO::config()->title='Group-Office';
 			
 			//set this to a default otherwise GO will keep autodetecting values
-			if(empty(GO::config()->db_user))
-				GO::config()->db_user='groupoffice';
+			if(empty(\GO::config()->db_user))
+				\GO::config()->db_user='groupoffice';
 
 			$f = new GO_Base_Fs_Folder($_POST['file_storage_path']);
 			if (!$f->exists())
-				GO_Base_Html_Input::setError("file_storage_path", "File storage folder doesn't exist. Please make sure it exists and it must be writable for the webserver user.");
+				\GO_Base_Html_Input::setError("file_storage_path", "File storage folder doesn't exist. Please make sure it exists and it must be writable for the webserver user.");
 			elseif(!$f->isWritable())
-				GO_Base_Html_Input::setError("file_storage_path", "File storage must be writable for the webserver user.");
+				\GO_Base_Html_Input::setError("file_storage_path", "File storage must be writable for the webserver user.");
 			
-			GO::config()->file_storage_path = $f->path() . '/';
+			\GO::config()->file_storage_path = $f->path() . '/';
 
 			$f = new GO_Base_Fs_Folder($_POST['tmpdir']);
 			if (!$f->exists() && !$f->create(0777))
-				GO_Base_Html_Input::setError("tmpdir", "Temporary folder doesn't exist. Please make sure it exists and it must be writable for the webserver user.");
+				\GO_Base_Html_Input::setError("tmpdir", "Temporary folder doesn't exist. Please make sure it exists and it must be writable for the webserver user.");
 			elseif(!$f->isWritable())
-				GO_Base_Html_Input::setError("tmpdir", "Temporary folder must be writable for the webserver user.");
+				\GO_Base_Html_Input::setError("tmpdir", "Temporary folder must be writable for the webserver user.");
 
-			GO::config()->tmpdir = $f->path() . '/';
-			GO::config()->save($config);
+			\GO::config()->tmpdir = $f->path() . '/';
+			\GO::config()->save($config);
 
-			if (!GO_Base_Html_Input::hasErrors())
+			if (!\GO_Base_Html_Input::hasErrors())
 				redirect("regional.php");
 		}
 	} catch (Exception $e) {
-		GO_Base_Html_Input::setError("form", $e->getMessage());
+		\GO_Base_Html_Input::setError("form", $e->getMessage());
 	}
 	printHead();
 	//check if config root_path matches the current Group-Office in case an /etc/groupoffice/config.php was found that conflicts with this installation.
 	$filepath = str_replace("\\","/",__FILE__);
-	if (strpos($filepath, GO::config()->root_path) !== 0) {
-		errorMessage("WARNING: The config file $configFile was found but the root path points to another location " . GO::config()->root_path . " while you are installing in " . dirname(dirname($filepath)) . " now. You probably want to create a new config.php file for this installation.");
+	if (strpos($filepath, \GO::config()->root_path) !== 0) {
+		errorMessage("WARNING: The config file $configFile was found but the root path points to another location " . \GO::config()->root_path . " while you are installing in " . dirname(dirname($filepath)) . " now. You probably want to create a new config.php file for this installation.");
 	}
 
 	if (!is_writable($configFile)) {
@@ -84,11 +84,11 @@ if (!$configFile) {
 
 		echo '<h1>File storage</h1>';
 
-		GO_Base_Html_Input::printError("form");
+		\GO_Base_Html_Input::printError("form");
 		?>
 		<input type="hidden" name="submitted" value="1" />
 		<p>
-			<?php echo GO::config()->product_name; ?> needs a place to store protected data. This folder should not be accessible through the webserver. Create a writable path for this purpose now and enter it in the box below.<br />
+			<?php echo \GO::config()->product_name; ?> needs a place to store protected data. This folder should not be accessible through the webserver. Create a writable path for this purpose now and enter it in the box below.<br />
 			The path should be have 0777 permissions or should be owned by the webserver user. You probably need to be root to do the last.
 			<br /><br />
 		<div class="cmd">
@@ -99,23 +99,23 @@ if (!$configFile) {
 		</p>
 
 		<?php
-		GO_Base_Html_Input::render(array(
+		\GO_Base_Html_Input::render(array(
 				"required" => true,
 				"label" => "Protected files path",
 				"name" => "file_storage_path",
-				"value" => GO::config()->file_storage_path
+				"value" => \GO::config()->file_storage_path
 		));
 		?>
 		<p>
-			<?php echo GO::config()->product_name; ?> needs a place to store temporary data such as session data or file uploads. Create a writable path for this purpose now and enter it in the box below.<br />
+			<?php echo \GO::config()->product_name; ?> needs a place to store temporary data such as session data or file uploads. Create a writable path for this purpose now and enter it in the box below.<br />
 			The /tmp directory is a good option.
 		</p>
 		<?php
-		GO_Base_Html_Input::render(array(
+		\GO_Base_Html_Input::render(array(
 				"required" => true,
 				"label" => "Temporary files path",
 				"name" => "tmpdir",
-				"value" => GO::config()->tmpdir
+				"value" => \GO::config()->tmpdir
 		));
 	}
 }

@@ -448,7 +448,7 @@ class calendar extends db {
 		"INNER JOIN go_acl a ON (v.acl_id = a.acl_id";
 
 		if($auth_type=='write'){
-			$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
+			$sql .= " AND a.level>".\GO_SECURITY::READ_PERMISSION;
 		}
 
 		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ".
@@ -1125,7 +1125,7 @@ class calendar extends db {
 
 	function update_event(&$event, $calendar=false, $old_event=false, $update_related=true, $update_related_status=true) {
 
-		go_debug('calendar::update_event');
+		\go_debug('calendar::update_event');
 
 		
 		if(!$old_event) {
@@ -1768,7 +1768,7 @@ class calendar extends db {
 
 	function delete_event($event_id, $delete_related=true) {
 		
-		return GO_Calendar_Model_Event::model()->findByPk($event_id)->delete();
+		return \GO_Calendar_Model_Event::model()->findByPk($event_id)->delete();
 		
 		
 		if($event = $this->get_event($event_id)) {
@@ -2821,7 +2821,7 @@ class calendar extends db {
 
 		$this->get_calendars_by_group_id($group_admin['group_id']);
 		while($calendar = $this->next_record()) {
-			$GLOBALS['GO_SECURITY']->add_user_to_acl($group_admin['user_id'], $calendar['acl_id'], GO_SECURITY::MANAGE_PERMISSION);
+			$GLOBALS['\GO_SECURITY']->add_user_to_acl($group_admin['user_id'], $calendar['acl_id'], GO_SECURITY::MANAGE_PERMISSION);
 		}
 
 		return $this->insert_row('cal_group_admins', $group_admin);
@@ -3223,8 +3223,8 @@ class calendar extends db {
 
 //		$GO_EVENTS->fire_event('has_freebusy_access', array($requesting_user_id, $target_user_id, &$permission));
 		
-		if(GO::modules()->isInstalled("freebusypermissions")){
-			$permission = GO_Freebusypermissions_FreebusypermissionsModule::hasFreebusyAccess($requesting_user_id, $target_user_id)>0;
+		if(\GO::modules()->isInstalled("freebusypermissions")){
+			$permission = \GO_Freebusypermissions_FreebusypermissionsModule::hasFreebusyAccess($requesting_user_id, $target_user_id)>0;
 		}
 
 		return $permission;

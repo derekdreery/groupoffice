@@ -35,7 +35,7 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		
-		$columnModel->formatColumn('type', 'GO_Base_Fs_File::getFileTypeDescription($model->extension)');
+		$columnModel->formatColumn('type', '\GO_Base_Fs_File::getFileTypeDescription($model->extension)');
 		
 		return parent::formatColumns($columnModel);
 	}
@@ -50,31 +50,31 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	protected function actionDownload($params){
-		$template = GO_Files_Model_Template::model()->findByPk($params['id']);
+		$template = \GO_Files_Model_Template::model()->findByPk($params['id']);
 		
-	  GO_Base_Util_Http::outputDownloadHeaders(new \GO_Base_Fs_File($template->name.'.'.$template->extension));
+	  \GO_Base_Util_Http::outputDownloadHeaders(new \GO_Base_Fs_File($template->name.'.'.$template->extension));
 		
 		echo $template->content;
 	}
 	
 	protected function actionCreateFile($params){
 		
-		$filename = GO_Base_Fs_File::stripInvalidChars($params['filename']);
+		$filename = \GO_Base_Fs_File::stripInvalidChars($params['filename']);
 		if(empty($filename))
 			throw new \Exception("Filename can not be empty");
 		
-		$template = GO_Files_Model_Template::model()->findByPk($params['template_id']);
+		$template = \GO_Files_Model_Template::model()->findByPk($params['template_id']);
 		
-		$folder = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
+		$folder = \GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
 		
-		$path = GO::config()->file_storage_path.$folder->path.'/'.$filename;
+		$path = \GO::config()->file_storage_path.$folder->path.'/'.$filename;
 		if(!empty($template->extension))
 			$path .= '.'.$template->extension;
 		
 		$fsFile = new \GO_Base_Fs_File($path);
 		$fsFile->putContents($template->content);
 		
-		$fileModel = GO_Files_Model_File::importFromFilesystem($fsFile);
+		$fileModel = \GO_Files_Model_File::importFromFilesystem($fsFile);
 		
 		return array('id'=>$fileModel->id, 'success'=>true);
 	}

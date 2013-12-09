@@ -23,7 +23,7 @@ class GO_Addressbook_Export_ExportVCard extends GO_Base_Export_AbstractExport {
 	
 	private function _sendHeaders(){		
 		$file = new \GO_Base_Fs_File($this->title.'.vcf');
-		GO_Base_Util_Http::outputDownloadHeaders($file);
+		\GO_Base_Util_Http::outputDownloadHeaders($file);
 	}
 
 	private function _write($data){
@@ -58,7 +58,7 @@ class GO_Addressbook_Export_ExportVCard extends GO_Base_Export_AbstractExport {
 //		}
 		
 		while($record = $this->store->nextRecord()){
-			$model = GO_Addressbook_Model_Contact::model()->findByPk($record['id']);
+			$model = \GO_Addressbook_Model_Contact::model()->findByPk($record['id']);
 			$this->_write($model->toVObject()->serialize());
 		}
 	}

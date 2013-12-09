@@ -5,14 +5,14 @@ class GO_Files_Controller_Bookmark extends GO_Base_Controller_AbstractModelContr
 	
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		// See if folder with this ID can be accessed.
-		$folderModel = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
+		$folderModel = \GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
 		
 		if (empty($folderModel))
 			return false;		
 		
-		$params['user_id'] = $model->user_id = GO::user()->id;
+		$params['user_id'] = $model->user_id = \GO::user()->id;
 		
-		$response['user_id'] = GO::user()->id;
+		$response['user_id'] = \GO::user()->id;
 		$response['folder_id'] = $folderModel->id;
 		
 		return parent::beforeSubmit($params, $folderModel, $params);
@@ -22,7 +22,7 @@ class GO_Files_Controller_Bookmark extends GO_Base_Controller_AbstractModelContr
 		$record['folder_id'] = $model->folder_id;
 		$record['name'] =
 			'<span class="x-tree-node x-tree-node-leaf">'.
-				'<img class="x-tree-node-icon folder-default" unselectable="on" src="'.GO::config()->host.'/views/Extjs3/ext/resources/images/default/s.gif" alt="" style="width:16px;height:16px;">'.
+				'<img class="x-tree-node-icon folder-default" unselectable="on" src="'.\GO::config()->host.'/views/Extjs3/ext/resources/images/default/s.gif" alt="" style="width:16px;height:16px;">'.
 				'&nbsp;&nbsp;'.$model->folder->name.
 			'</span>';
 		return parent::formatStoreRecord($record, $model, $store);
@@ -30,10 +30,10 @@ class GO_Files_Controller_Bookmark extends GO_Base_Controller_AbstractModelContr
 	
 	protected function actionDelete($params) {
 		
-		$pk = array('user_id' => GO::user()->id, 'folder_id' => $params['folder_id']);
+		$pk = array('user_id' => \GO::user()->id, 'folder_id' => $params['folder_id']);
 		
 		
-		$model = GO_Files_Model_Bookmark::model()->findByPk($pk);
+		$model = \GO_Files_Model_Bookmark::model()->findByPk($pk);
 		
 //		$response = array();
 //		$response = $this->beforeDelete($response, $model, $params);
@@ -54,7 +54,7 @@ class GO_Files_Controller_Bookmark extends GO_Base_Controller_AbstractModelContr
               'foreignField'=>'id',
               'tableAlias'=>'f'
             ))
-			->getCriteria()->addCondition('user_id',GO::user()->id);
+			->getCriteria()->addCondition('user_id',\GO::user()->id);
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
 	

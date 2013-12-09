@@ -46,7 +46,7 @@ class GO_Comments_Model_Comment extends GO_Base_Db_ActiveRecord{
 	protected function init() {
 		$this->columns['model_id']['required']=true;
 		$this->columns['model_type_id']['required']=true;
-		$this->columns['category_id']['required']=GO_Comments_CommentsModule::commentsRequired();
+		$this->columns['category_id']['required']=\GO_Comments_CommentsModule::commentsRequired();
 		
 		return parent::init();
 	}
@@ -63,10 +63,10 @@ class GO_Comments_Model_Comment extends GO_Base_Db_ActiveRecord{
 	
 	public function getAttachedObject(){
 		
-		$modelType = GO_Base_Model_ModelType::model()->findByPk($this->model_type_id);
+		$modelType = \GO_Base_Model_ModelType::model()->findByPk($this->model_type_id);
 		
 		if($modelType){
-			$obj = GO::getModel($modelType->model_name)->findByPk($this->model_id);
+			$obj = \GO::getModel($modelType->model_name)->findByPk($this->model_id);
 			
 			if($obj)
 				return $obj;

@@ -4,10 +4,10 @@ class GO_Favorites_Controller_Favorites extends GO_Base_Controller_AbstractJsonC
 	
 	protected function actionCalendarStore(){
 		$colModel = new \GO_Base_Data_ColumnModel(GO_Favorites_Model_Calendar::model());
-		$colModel->setColumnsFromModel(GO_Calendar_Model_Calendar::model());
+		$colModel->setColumnsFromModel(\GO_Calendar_Model_Calendar::model());
 
 		$findParams = new \GO_Base_Db_FindParams();
-		$findParams->getCriteria()->addCondition('user_id', GO::user()->id, '=','cal');
+		$findParams->getCriteria()->addCondition('user_id', \GO::user()->id, '=','cal');
 		$findParams->order('name');
 		$findParams->joinModel(
 			array(
@@ -33,7 +33,7 @@ class GO_Favorites_Controller_Favorites extends GO_Base_Controller_AbstractJsonC
 //		$colModel->formatColumn('type', '$model->customfieldtype->name()');
 		
 		$findParams = new \GO_Base_Db_FindParams();
-		$findParams->getCriteria()->addCondition('user_id', GO::user()->id, '=','tal');
+		$findParams->getCriteria()->addCondition('user_id', \GO::user()->id, '=','tal');
 		$findParams->order('name');
 		$findParams->joinModel(
 			array(
@@ -58,7 +58,7 @@ class GO_Favorites_Controller_Favorites extends GO_Base_Controller_AbstractJsonC
 		
 		$findParams = new \GO_Base_Db_FindParams();
 		$findParams->ignoreAcl();
-		$findParams->getCriteria()->addCondition('user_id', GO::user()->id, '=','f');
+		$findParams->getCriteria()->addCondition('user_id', \GO::user()->id, '=','f');
 		$findParams->order('name');
 		$findParams->joinModel(
 			array(

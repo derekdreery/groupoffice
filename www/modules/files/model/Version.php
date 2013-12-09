@@ -66,7 +66,7 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 	 * @return \GO_Base_Fs_File
 	 */
 	public function getFilesystemFile(){
-		return new \GO_Base_Fs_File(GO::config()->file_storage_path.$this->path);
+		return new \GO_Base_Fs_File(\GO::config()->file_storage_path.$this->path);
 	}
 	
 	protected function beforeSave() {
@@ -82,7 +82,7 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 	}
 	
 	private function _findLastVersion(){
-		$params = GO_Base_Db_FindParams::newInstance()
+		$params = \GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl()
 						->single()
 						->order('mtime','DESC');
@@ -99,7 +99,7 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 		
 		$this->file->fsFile->move($folder, $file->name());
 		
-		GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')+$file->size());
+		\GO::config()->save_setting("file_storage_usage", \GO::config()->get_setting('file_storage_usage')+$file->size());
 		
 		$this->_deleteOld(); 
 		
@@ -110,7 +110,7 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 		
 		$file = $this->getFilesystemFile();
 		
-		GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')-$file->size());
+		\GO::config()->save_setting("file_storage_usage", \GO::config()->get_setting('file_storage_usage')-$file->size());
 		
 		$file->delete();
 		
@@ -119,10 +119,10 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 	
 	private function _deleteOld(){	
 
-		if(!empty(GO::config()->max_file_versions)){
-			$params = GO_Base_Db_FindParams::newInstance()
+		if(!empty(\GO::config()->max_file_versions)){
+			$params = \GO_Base_Db_FindParams::newInstance()
 							->ignoreAcl()
-							->start(GO::config()->max_file_versions)
+							->start(\GO::config()->max_file_versions)
 							->limit(10)
 							->order('mtime','DESC');
 

@@ -390,7 +390,7 @@ class GO_Base_Mail_MimeDecode
                     $_mime_number = ($mime_number == '' ? $i + 1 : sprintf('%s.%s', $mime_number, $i + 1));
                 }
 
-                $arr = &GO_Base_Mail_MimeDecode::getMimeNumbers($structure->parts[$i], $no_refs, $_mime_number, $prepend);
+                $arr = &\GO_Base_Mail_MimeDecode::getMimeNumbers($structure->parts[$i], $no_refs, $_mime_number, $prepend);
                 foreach ($arr as $key => $val) {
                     $no_refs ? $return[$key] = '' : $return[$key] = &$arr[$key];
                 }
@@ -688,7 +688,7 @@ class GO_Base_Mail_MimeDecode
     function _decodeHeader($input)
     {
 			//Merijn: Use this for utf8 support
-			return GO_Base_Mail_Utils::mimeHeaderDecode($input);
+			return \GO_Base_Mail_Utils::mimeHeaderDecode($input);
 			
 //        // Remove white space between encoded-words
 //        $input = preg_replace('/(=\?[^?]+\?(q|b)\?[^?]*\?=)(\s)+=\?/i', '\1=?', $input);
@@ -775,7 +775,7 @@ class GO_Base_Mail_MimeDecode
      * Checks the input for uuencoded files and returns
      * an array of them. Can be called statically, eg:
      *
-     * $files =& GO_Base_Mail_MimeDecode::uudecode($some_text);
+     * $files =& \GO_Base_Mail_MimeDecode::uudecode($some_text);
      *
      * It will check for the begin 666 ... end syntax
      * however and won't just blindly decode whatever you
@@ -894,18 +894,18 @@ class GO_Base_Mail_MimeDecode
 
     /**
      * Returns a xml copy of the output of
-     * GO_Base_Mail_MimeDecode::decode. Pass the output in as the
+     * \GO_Base_Mail_MimeDecode::decode. Pass the output in as the
      * argument. This function can be called statically. Eg:
      *
      * $output = $obj->decode();
-     * $xml    = GO_Base_Mail_MimeDecode::getXML($output);
+     * $xml    = \GO_Base_Mail_MimeDecode::getXML($output);
      *
      * The DTD used for this should have been in the package. Or
      * alternatively you can get it from cvs, or here:
      * http://www.phpguru.org/xmail/xmail.dtd.
      *
      * @param  object Input to convert to xml. This should be the
-     *                output of the GO_Base_Mail_MimeDecode::decode function
+     *                output of the \GO_Base_Mail_MimeDecode::decode function
      * @return string XML version of input
      * @access public
      */
@@ -915,7 +915,7 @@ class GO_Base_Mail_MimeDecode
         $output  = '<?xml version=\'1.0\'?>' . $crlf .
                    '<!DOCTYPE email SYSTEM "http://www.phpguru.org/xmail/xmail.dtd">' . $crlf .
                    '<email>' . $crlf .
-                   GO_Base_Mail_MimeDecode::_getXML($input) .
+                   \GO_Base_Mail_MimeDecode::_getXML($input) .
                    '</email>';
 
         return $output;
@@ -943,19 +943,19 @@ class GO_Base_Mail_MimeDecode
             // Multiple headers with this name
             if (is_array($headers[$hdr_name])) {
                 for ($i = 0; $i < count($hdr_value); $i++) {
-                    $output .= GO_Base_Mail_MimeDecode::_getXML_helper($hdr_name, $hdr_value[$i], $indent);
+                    $output .= \GO_Base_Mail_MimeDecode::_getXML_helper($hdr_name, $hdr_value[$i], $indent);
                 }
 
             // Only one header of this sort
             } else {
-                $output .= GO_Base_Mail_MimeDecode::_getXML_helper($hdr_name, $hdr_value, $indent);
+                $output .= \GO_Base_Mail_MimeDecode::_getXML_helper($hdr_name, $hdr_value, $indent);
             }
         }
 
         if (!empty($input->parts)) {
             for ($i = 0; $i < count($input->parts); $i++) {
                 $output .= $crlf . str_repeat($htab, $indent) . '<mimepart>' . $crlf .
-                           GO_Base_Mail_MimeDecode::_getXML($input->parts[$i], $indent+1) .
+                           \GO_Base_Mail_MimeDecode::_getXML($input->parts[$i], $indent+1) .
                            str_repeat($htab, $indent) . '</mimepart>' . $crlf;
             }
         } elseif (isset($input->body)) {
@@ -981,7 +981,7 @@ class GO_Base_Mail_MimeDecode
         $crlf   = "\r\n";
         $return = '';
 
-        $new_hdr_value = ($hdr_name != 'received') ? GO_Base_GO_Base_Mail_MimeDecode::_parseHeaderValue($hdr_value) : array('value' => $hdr_value);
+        $new_hdr_value = ($hdr_name != 'received') ? \GO_Base_GO_Base_Mail_MimeDecode::_parseHeaderValue($hdr_value) : array('value' => $hdr_value);
         $new_hdr_name  = str_replace(' ', '-', ucwords(str_replace('-', ' ', $hdr_name)));
 
         // Sort out any parameters

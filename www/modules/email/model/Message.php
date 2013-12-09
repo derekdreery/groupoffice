@@ -67,7 +67,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	
 	/**
 	 * True iff the actual message's body is larger than the maximum allowed. See
-	 * also how GO_Base_Mail_Imap::max_read is used.
+	 * also how \GO_Base_Mail_Imap::max_read is used.
 	 * @var boolean
 	 */
 	protected $_bodyTruncated;
@@ -252,11 +252,11 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 					//$size = strlen($matches[4][$i]);
 
-					$file = GO_Base_Fs_File::tempFile($filename);
+					$file = \GO_Base_Fs_File::tempFile($filename);
 					$file->putContents(convert_uudecode($att));
 	//			$file->putContents($att);
 
-					$a = GO_Email_Model_MessageAttachment::model()->createFromTempFile($file);
+					$a = \GO_Email_Model_MessageAttachment::model()->createFromTempFile($file);
 					$a->number = "UU" . $i;
 					$this->addAttachment($a);
 				}
@@ -310,12 +310,12 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$response['to_string'] = (string) $this->to;
 
 		if (!$recipientsAsString && empty($response['to']))
-			$response['to'][] = array('email' => '', 'personal' => GO::t('no_recipients', 'email'));
+			$response['to'][] = array('email' => '', 'personal' => \GO::t('no_recipients', 'email'));
 
 		$response['full_from'] = (string) $this->from;
 		$response['priority'] = intval($this->x_priority);
 		$response['udate'] = $this->udate;
-		$response['date'] = GO_Base_Util_Date::get_timestamp($this->udate);
+		$response['date'] = \GO_Base_Util_Date::get_timestamp($this->udate);
 		$response['size'] = $this->size;
 
 		$response['attachments'] = array();

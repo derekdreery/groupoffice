@@ -127,7 +127,7 @@ try {
 			require_once($file);
 			$eq = new $type();
 
-			$tmp_file = $GLOBALS['GO_CONFIG']->tmpdir.File::strip_invalid_chars($_POST['title']).'.'.$eq->extension;
+			$tmp_file = $GLOBALS['\GO_CONFIG']->tmpdir.File::strip_invalid_chars($_POST['title']).'.'.$eq->extension;
 
 			$fp = fopen($tmp_file, 'w+');
 			$eq->export($fp);
@@ -555,7 +555,7 @@ try {
 //
 //							$record = $search->get_search_result($link[1], $link[0]);
 //
-//							if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $record['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
+//							if($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $record['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
 //								throw new AccessDeniedException();
 //							}
 //

@@ -92,13 +92,13 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	 * @param string $mailbox
 	 * @param int $start
 	 * @param int $limit
-	 * @param sring $sortField See constants in GO_Base_Mail_Imap::SORT_*
+	 * @param sring $sortField See constants in \GO_Base_Mail_Imap::SORT_*
 	 * @param boolean $descending Sort descending
 	 * @param string $query
 	 * @param string $searchIn In what folder(s) are we searching ('current', 'all', 'recursive')
 	 * @return array
 	 */
-	public function find(GO_Email_Model_Account $account, $mailbox="INBOX", $start=0, $limit=50, $sortField=GO_Base_Mail_Imap::SORT_DATE , $descending=true, $query='ALL', $searchIn='current'){
+	public function find(\GO_Email_Model_Account $account, $mailbox="INBOX", $start=0, $limit=50, $sortField=GO_Base_Mail_Imap::SORT_DATE , $descending=true, $query='ALL', $searchIn='current'){
 		
 		$results=array();
 		if($searchIn=="all") {
@@ -117,12 +117,12 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		$imap = $account->openImapConnection($mailbox);
 		$headersSet = $imap->get_message_headers_set($start, $limit, $sortField , $descending, $query);
 		foreach($headersSet as $uid=>$headers){
-			$message = GO_Email_Model_ImapMessage::model()->createFromHeaders(
+			$message = \GO_Email_Model_ImapMessage::model()->createFromHeaders(
 							$account, $mailbox, $headers);	
 			
 			$results[]=$message;
 		}
-		GO::debug($mailbox);
+		\GO::debug($mailbox);
 		//find recursive in subfolders
 		if($searchIn==='recursive') {
 			
@@ -152,11 +152,11 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 
 		$cacheKey='email:'.$account->id.':'.$mailbox.':'.$uid;
 		
-		$cachedMessage = isset($this->_cache[$cacheKey]) ? $this->_cache[$cacheKey] : false;//GO::cache()->get($cacheKey);
+		$cachedMessage = isset($this->_cache[$cacheKey]) ? $this->_cache[$cacheKey] : false;//\GO::cache()->get($cacheKey);
 //		
 		if($cachedMessage)
 		{
-//			GO::debug("Returning message $cacheKey from cache");
+//			\GO::debug("Returning message $cacheKey from cache");
 //			$cachedMessage->cacheOnDestruct=$cacheKey;
 			
 			$imap = $cachedMessage->account->openImapConnection($mailbox);
@@ -194,7 +194,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 //		if($this->cacheOnDestruct){
 //			$cacheKey=$this->cacheOnDestruct;
 //			$this->cacheOnDestruct=false;
-//			GO::cache()->set($cacheKey, $this, 3600*24*2);
+//			\GO::cache()->set($cacheKey, $this, 3600*24*2);
 //		}
 //	}
 	
@@ -228,16 +228,16 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		//$dayEnd = mktime(0,0,0,date('m'),date('d')+1);
 		
 //		if($this->udate<$dayStart)
-			$attributes["date"]=GO_Base_Util_Date::get_timestamp($this->udate, false);
+			$attributes["date"]=\GO_Base_Util_Date::get_timestamp($this->udate, false);
 //		else
-			$attributes["date_time"]=date(GO::user()->time_format, $this->udate);
+			$attributes["date_time"]=date(\GO::user()->time_format, $this->udate);
 		
 		
 		
 //		if($this->internal_udate<$dayStart)
-			$attributes["arrival"]=GO_Base_Util_Date::get_timestamp($this->internal_udate, false);
+			$attributes["arrival"]=\GO_Base_Util_Date::get_timestamp($this->internal_udate, false);
 //		else
-			$attributes["arrival_time"]=date(GO::user()->time_format, $this->internal_udate);		
+			$attributes["arrival_time"]=date(\GO::user()->time_format, $this->internal_udate);		
 		
 		return $attributes;
 	}
@@ -318,7 +318,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			$imap = $this->getImapConnection();
 			$struct = $this->_getStruct();
 			
-			//GO::debug($struct);
+			//\GO::debug($struct);
 
 			$hasAlternative = $imap->has_alternative_body($struct);
 
@@ -366,7 +366,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		unset($this->flag);
 		
 		//refresh the account model because the password may have been changed
-		$this->account = GO_Email_Model_Account::model()->findByPk($this->account->id);
+		$this->account = \GO_Email_Model_Account::model()->findByPk($this->account->id);
 	}
 	
 	protected function getSeen(){
@@ -400,7 +400,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			
 			$this->_htmlBody='';
 			if($this->_htmlParts['text_found']){ //check if we found a html body
-				//GO::debug($this->_htmlParts);
+				//\GO::debug($this->_htmlParts);
 				foreach($this->_htmlParts['parts'] as $htmlPart){
 					if($htmlPart['type']=='text'){
 
@@ -410,8 +410,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 						$maxBodySize = $noMaxBodySize ? false : $this->maxBodySize;
 						
 						$htmlPartStr = $imap->get_message_part_decoded($this->uid, $htmlPart['number'],$htmlPart['encoding'], $htmlPart['charset'],$this->peek,false);
-						$htmlPartStr = GO_Base_Util_String::convertLinks($htmlPartStr);
-						$htmlPartStr = GO_Base_Util_String::sanitizeHtml($htmlPartStr);
+						$htmlPartStr = \GO_Base_Util_String::convertLinks($htmlPartStr);
+						$htmlPartStr = \GO_Base_Util_String::sanitizeHtml($htmlPartStr);
 						
 						$this->_bodyTruncated = $imap->max_read;
 						
@@ -426,10 +426,10 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 					}
 //					else
 //					{
-//						GO::debug("Missing from attachments: ".$htmlPart['number']);	
+//						\GO::debug("Missing from attachments: ".$htmlPart['number']);	
 //					}
 				}
-				//$this->_htmlBody = GO_Base_Util_String::sanitizeHtml($this->_htmlBody);			
+				//$this->_htmlBody = \GO_Base_Util_String::sanitizeHtml($this->_htmlBody);			
 			}
 
 			if(empty($this->_htmlBody) && !$asText){
@@ -499,13 +499,13 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			}
 		}
 		
-		$this->_plainBody = GO_Base_Util_String::normalizeCrlf($this->_plainBody);
+		$this->_plainBody = \GO_Base_Util_String::normalizeCrlf($this->_plainBody);
 		
 		$this->extractUuencodedAttachments($this->_plainBody);
 				
 		if($asHtml){
 			$body = $this->_plainBody;			
-			$body = GO_Base_Util_String::text_to_html($body);
+			$body = \GO_Base_Util_String::text_to_html($body);
 			
 			for($i=0,$max=count($inlineImages);$i<$max;$i++){
 				$body=str_replace('{inline_'.$i.'}', $inlineImages[$i], $body);
@@ -562,11 +562,11 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				
 				if (empty($part['name']) || $part['name'] == 'false') {
 					if (!empty($part['subject'])) {
-						$a->name = GO_Base_Fs_File::stripInvalidChars(GO_Base_Mail_Utils::mimeHeaderDecode($part['subject'])) . '.eml';
+						$a->name = \GO_Base_Fs_File::stripInvalidChars(\GO_Base_Mail_Utils::mimeHeaderDecode($part['subject'])) . '.eml';
 					} elseif ($part['type'] == 'message') {
-						$a->name = isset($part['description']) ? GO_Base_Fs_File::stripInvalidChars($part['description']) . '.eml' : 'message.eml';
+						$a->name = isset($part['description']) ? \GO_Base_Fs_File::stripInvalidChars($part['description']) . '.eml' : 'message.eml';
 					} elseif ($part['subtype'] == 'calendar') {
-						$a->name = GO::t('event','email') . '.ics';
+						$a->name = \GO::t('event','email') . '.ics';
 					} else {
 						if ($part['type'] == 'text') {
 							$a->name = $part['subtype'] . '.txt';
@@ -575,17 +575,17 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 						}
 					}
 				} else {
-					$a->name = GO_Base_Mail_Utils::mimeHeaderDecode($part['name']);
+					$a->name = \GO_Base_Mail_Utils::mimeHeaderDecode($part['name']);
 					
-					$extension = GO_Base_Fs_File::getExtension($a->name);
+					$extension = \GO_Base_Fs_File::getExtension($a->name);
 					if(!empty($part['filename']) && empty($extension)){
-						$a->name = GO_Base_Mail_Utils::mimeHeaderDecode($part['filename']);
+						$a->name = \GO_Base_Mail_Utils::mimeHeaderDecode($part['filename']);
 					}
 				}
 				
 				$i=1;
 				
-				$fileName = !empty($a->name) ? $a->name : GO::t('noname','email');
+				$fileName = !empty($a->name) ? $a->name : \GO::t('noname','email');
 				
 				$file = new \GO_Base_Fs_File($fileName);
 				while(in_array($a->name, $uniqueNames)){
@@ -624,7 +624,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	
 	
 	public function getZipOfAttachmentsUrl(){
-//		return GO::config()->host.'modules/email/'.
+//		return \GO::config()->host.'modules/email/'.
 //		'zip_attachments.php?account_id='.$this->account->id.
 //		'&mailbox='.urlencode($this->mailbox).
 //		'&uid='.$this->uid.'&filename='.urlencode($this->subject);
@@ -635,17 +635,17 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 					"uid"=>$this->uid					
 			);
 		
-		return GO::url('email/message/zipAllAttachments', $params);
+		return \GO::url('email/message/zipAllAttachments', $params);
 	}
 //	
 //	protected function getAttachmentUrl($attachment) {
 //		
 //		if(!empty($attachment['tmp_file']))
-//			return GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
+//			return \GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
 //		
 ////		$mime = explode('/',$attachment['mime']);
 ////		
-////		return  GO::config()->host."modules/email/attachment.php?".
+////		return  \GO::config()->host."modules/email/attachment.php?".
 ////			"account_id=".$this->account->id.
 ////			"&amp;mailbox=".urlencode($this->mailbox).
 ////			"&amp;uid=".$this->uid.
@@ -665,7 +665,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 //				"filename"=>$attachment['name']
 //		);
 //		
-//		return GO::url('email/message/attachment', $params);
+//		return \GO::url('email/message/attachment', $params);
 //	}
 //	
 	
@@ -696,7 +696,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			if($attachment->isVcalendar()){
 				$data = $this->getImapConnection()->get_message_part_decoded($this->uid, $attachment->number, $attachment->encoding);
 				
-				$vcalendar = GO_Base_VObject_Reader::read($data);
+				$vcalendar = \GO_Base_VObject_Reader::read($data);
 				if($vcalendar && isset($vcalendar->vevent[0]))
 					return $vcalendar;
 			}

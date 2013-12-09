@@ -28,7 +28,7 @@ class GO_files_Controller_FolderPreference extends GO_Base_Controller_AbstractMo
 	 * @return mixed 
 	 */
 	protected function getPrimaryKeyFromParams($params){	
-		return empty($params['folder_id']) ? false : array('folder_id'=>$params['folder_id'],'user_id'=>GO::user()->id);
+		return empty($params['folder_id']) ? false : array('folder_id'=>$params['folder_id'],'user_id'=>\GO::user()->id);
 	}
 	
 	protected function getModelFromParams($params){
@@ -36,7 +36,7 @@ class GO_files_Controller_FolderPreference extends GO_Base_Controller_AbstractMo
 		$model=false;
 		$pk = $this->getPrimaryKeyFromParams($params);
 		if(!empty($pk))
-			$model = GO::getModel($modelName)->findByPk($pk);
+			$model = \GO::getModel($modelName)->findByPk($pk);
 			
 		if(!$model){				
 			$model = new $modelName;

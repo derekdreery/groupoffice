@@ -53,7 +53,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function getLocalizedName(){
-		return GO::t('note','notes');
+		return \GO::t('note','notes');
 	}
 	
 	public function aclField(){
@@ -92,13 +92,13 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	 */
 	public function buildFilesPath() {
 
-		return 'notes/' . GO_Base_Fs_Base::stripInvalidChars($this->category->name) . '/' . date('Y', $this->ctime) . '/' . GO_Base_Fs_Base::stripInvalidChars($this->name).' ('.$this->id.')';
+		return 'notes/' . \GO_Base_Fs_Base::stripInvalidChars($this->category->name) . '/' . date('Y', $this->ctime) . '/' . \GO_Base_Fs_Base::stripInvalidChars($this->name).' ('.$this->id.')';
 	}
 	
 	public function defaultAttributes() {
 		$attr = parent::defaultAttributes();
 		
-		$category = GO_Notes_NotesModule::getDefaultNoteCategory(GO::user()->id);
+		$category = \GO_Notes_NotesModule::getDefaultNoteCategory(\GO::user()->id);
 		$attr['category_id']=$category->id;
 		
 		return $attr;
@@ -111,7 +111,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 		
 		if (!empty($this->userInputPassword1) || !empty($this->userInputPassword2)) {
 			if ($this->userInputPassword1 != $this->userInputPassword2){
-				$this->setValidationError('password', GO::t('passwordMatchError'));
+				$this->setValidationError('password', \GO::t('passwordMatchError'));
 			}				
 		}
 				
@@ -122,7 +122,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 		
 		if(!empty($this->userInputPassword1)){
 			$this->password = crypt($this->userInputPassword1);
-			$this->content = GO_Base_Util_Crypt::encrypt($this->content, $this->userInputPassword1);
+			$this->content = \GO_Base_Util_Crypt::encrypt($this->content, $this->userInputPassword1);
 		}else
 		{
 			$this->password="";
@@ -144,7 +144,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 			return false;		
 		}else{
 			$this->_decrypted=true;
-			$this->content = GO_Base_Util_Crypt::decrypt($this->content, $password);
+			$this->content = \GO_Base_Util_Crypt::decrypt($this->content, $password);
 			return true;
 		}
 	}		

@@ -4,7 +4,7 @@ class GO_Email_Controller_Register extends GO_Base_Controller_AbstractController
 
 	protected function actionDownload($params) {
 		
-		$url = GO::url('email/message/mailto', array('mailto'=>'-mailto-'), false, false, false);
+		$url = \GO::url('email/message/mailto', array('mailto'=>'-mailto-'), false, false, false);
 		//this is necessary because we don't want %1 to be urlencoded.
 		$url = str_replace('-mailto-','%1', $url);
 
@@ -32,7 +32,7 @@ class GO_Email_Controller_Register extends GO_Base_Controller_AbstractController
 @="rundll32.exe url.dll,FileProtocolHandler '.$url. '"
 ';
 		
-		GO_Base_Util_Http::downloadFile(new \GO_Base_Fs_MemoryFile('Group-Office_email.reg', $data));
+		\GO_Base_Util_Http::downloadFile(new \GO_Base_Fs_MemoryFile('Group-Office_email.reg', $data));
 		
 	}
 

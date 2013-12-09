@@ -13,7 +13,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 				foreach($keys as $key){
 					$key = explode(':',$key);
 
-					$linkedModel = GO::getModel($key[0])->findByPk($key[1]);				
+					$linkedModel = \GO::getModel($key[0])->findByPk($key[1]);				
 					if($linkedModel)
 						$linkedModel->delete();				
 				}
@@ -41,14 +41,14 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 	}
 	
 	protected function getStoreParams($params) {
-		$storeParams = GO_Base_Db_FindParams::newInstance();
+		$storeParams = \GO_Base_Db_FindParams::newInstance();
 		
 		if(isset($params['model_names'])){
 			$model_names = json_decode($params['model_names'], true);
 			$types = array();
 			foreach($model_names as $model_name){
 				if(class_exists($model_name))
-					$types[]=GO::getModel($model_name)->modelTypeId();
+					$types[]=\GO::getModel($model_name)->modelTypeId();
 			}
 			if(count($types))
 			$storeParams->getCriteria()->addInCondition('model_type_id', $types);
@@ -58,7 +58,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 			if(isset($params['types'])) {
 				$types= json_decode($params['types'], true);				
 			}else {
-				$types = GO::config()->get_setting('link_type_filter', GO::user()->id);
+				$types = \GO::config()->get_setting('link_type_filter', \GO::user()->id);
 				$types = empty($types) ? array() : explode(',', $types);	
 			}
 			
@@ -67,7 +67,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 					$types=$this->_getAllModelTypes();
 			
 			if(!isset($params['no_filter_save']) && isset($params['types']))
-				GO::config()->save_setting ('link_type_filter', implode(',',$types), GO::user()->id);
+				\GO::config()->save_setting ('link_type_filter', implode(',',$types), \GO::user()->id);
 		}else
 		{
 			$types=$this->_getAllModelTypes();
@@ -76,9 +76,9 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$storeParams->getCriteria()->addInCondition('model_type_id', $types);
 		
 		if (!empty($params['minimumWritePermission']) && $params['minimumWritePermission']!='false')
-			$storeParams->getCriteria()->addCondition('level',GO_Base_Model_Acl::WRITE_PERMISSION,'>=','go_acl');
+			$storeParams->getCriteria()->addCondition('level',\GO_Base_Model_Acl::WRITE_PERMISSION,'>=','go_acl');
 		
-//		$subCriteria = GO_Base_Db_FindCriteria::newInstance();
+//		$subCriteria = \GO_Base_Db_FindCriteria::newInstance();
 //		
 //		if(strlen($params['match'])<4){
 //			$subCriteria->addCondition('keywords', '%'.trim($params['match'],' *%').'%', 'LIKE','t',false);
@@ -95,12 +95,12 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 	
 	private function _getAllModelTypes(){
 		$types=array();
-		$stmt = GO_Base_Model_ModelType::model()->find();
+		$stmt = \GO_Base_Model_ModelType::model()->find();
 		while($modelType = $stmt->fetch()){
 			if(class_exists($modelType->model_name)){
-				$model = GO::getModel($modelType->model_name);
+				$model = \GO::getModel($modelType->model_name);
 				$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
-				if(GO::modules()->{$module})
+				if(\GO::modules()->{$module})
 					$types[]=$modelType->id;
 			}
 		}
@@ -117,23 +117,23 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 	
 	protected function actionModelTypes($params){
 		
-		$stmt = GO_Base_Model_ModelType::model()->find();
+		$stmt = \GO_Base_Model_ModelType::model()->find();
 		
-		$typesString = GO::config()->get_setting('link_type_filter',GO::user()->id);
+		$typesString = \GO::config()->get_setting('link_type_filter',\GO::user()->id);
 		$typesArr = explode(',',$typesString);
 		
 		$types=array();
 		while($modelType = $stmt->fetch()){
 			if(class_exists($modelType->model_name)){
-				$model = GO::getModel($modelType->model_name);
+				$model = \GO::getModel($modelType->model_name);
 
 				$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
 
-				if(GO::modules()->{$module})
+				if(\GO::modules()->{$module})
 					$types[$model->localizedName.$modelType->id]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
 			}else
 			{
-				GO::debug("Missing class ".$modelType->model_name);
+				\GO::debug("Missing class ".$modelType->model_name);
 			}
 		}
 		
@@ -150,10 +150,10 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 	
 	protected function actionLinks($params){
 		
-		$model = GO::getModel($params['model_name'])->findByPk($params['model_id']);
+		$model = \GO::getModel($params['model_name'])->findByPk($params['model_id']);
 	
 		
-		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_SearchCacheRecord::model());
+		$store = \GO_Base_Data_Store::newInstance(\GO_Base_Model_SearchCacheRecord::model());
 		
 		//$model->unlink($model);
 		
@@ -163,7 +163,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 			foreach($keys as $key){
 				$key = explode(':',$key);
 				
-				$linkedModel = GO::getModel($key[0])->findByPk($key[1]);				
+				$linkedModel = \GO::getModel($key[0])->findByPk($key[1]);				
 				$model->unlink($linkedModel);				
 			}
 		}
@@ -175,7 +175,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 //			foreach($keys as $key){
 //				$key = explode(':',$key);
 //				
-//				$linkedModel = GO::getModel($key[0])->findByPk($key[1]);				
+//				$linkedModel = \GO::getModel($key[0])->findByPk($key[1]);				
 //				$linkedModel->delete();				
 //			}
 //		}
@@ -198,14 +198,14 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		}
 		
 		
-		$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, $storeParams);
+		$stmt = \GO_Base_Model_SearchCacheRecord::model()->findLinks($model, $storeParams);
 		$store->setStatement($stmt);
 		
 		$cm = $store->getColumnModel();		
 		$cm->formatColumn('iconCls', '"go-model-".$model->model_name');		
 		$cm->formatColumn('name_and_type', '"(".$model->type.") ".$model->name');
 		$cm->formatColumn('model_name_and_id', '$model->model_name.":".$model->model_id');
-		$cm->formatColumn('link_count','GO::getModel($model->model_name)->countLinks($model->model_id)');
+		$cm->formatColumn('link_count','\GO::getModel($model->model_name)->countLinks($model->model_id)');
 
 		$data = $store->getData();
 		
@@ -227,13 +227,13 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 
 
 
-		if (GO::modules()->addressbook) {
+		if (\GO::modules()->addressbook) {
 			$response = array('total' => 0, 'results' => array());
 
 			$userContactIds = array();
-			$findParams = GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO_Base_Db_FindParams::newInstance()
 							->searchQuery($query, array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)", 't.email', 't.email2', 't.email3'))
-							->select('t.*, "' . addslashes(GO::t('strUser')) . '" AS ab_name,c.name AS company_name')
+							->select('t.*, "' . addslashes(\GO::t('strUser')) . '" AS ab_name,c.name AS company_name')
 							->limit(10)
 							->joinModel(array(
 					'model' => 'GO_Addressbook_Model_Company',
@@ -244,7 +244,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 							));
 
 //			if (!empty($params['requireEmail'])) {
-				$criteria = GO_Base_Db_FindCriteria::newInstance()
+				$criteria = \GO_Base_Db_FindCriteria::newInstance()
 								->addCondition("email", "", "!=")
 								->addCondition("email2", "", "!=", 't', false)
 								->addCondition("email3", "", "!=", 't', false);
@@ -252,7 +252,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 				$findParams->getCriteria()->mergeWith($criteria);
 //			}
 
-			$stmt = GO_Addressbook_Model_Contact::model()->findUsers(GO::user()->id, $findParams);
+			$stmt = \GO_Addressbook_Model_Contact::model()->findUsers(\GO::user()->id, $findParams);
 
 			$userContactIds = array();
 
@@ -270,7 +270,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 			if (count($response['results']) < 10) {
 
 
-				$findParams = GO_Base_Db_FindParams::newInstance()
+				$findParams = \GO_Base_Db_FindParams::newInstance()
 								->ignoreAcl()
 								->select('t.*,c.name AS company_name, a.name AS ab_name')
 								->searchQuery($query, array(
@@ -305,7 +305,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 				if (!empty($params['addressbook_id'])) {
 					$abs = array($params['addressbook_id']);
 				} else {
-					$abs = GO_Addressbook_Model_Addressbook::model()->getAllReadableAddressbookIds();
+					$abs = \GO_Addressbook_Model_Addressbook::model()->getAllReadableAddressbookIds();
 				}
 
 				if (!empty($abs)) {
@@ -313,7 +313,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 					$findParams->getCriteria()->addInTemporaryTableCondition('readableaddressbooks', 'addressbook_id', $abs);
 
 //					if (!empty($params['requireEmail'])) {
-						$criteria = GO_Base_Db_FindCriteria::newInstance()
+						$criteria = \GO_Base_Db_FindCriteria::newInstance()
 										->addCondition("email", "", "!=")
 										->addCondition("email2", "", "!=", 't', false)
 										->addCondition("email3", "", "!=", 't', false);
@@ -321,7 +321,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 						$findParams->getCriteria()->mergeWith($criteria);
 //					}
 
-					$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
+					$stmt = \GO_Addressbook_Model_Contact::model()->find($findParams);
 
 					$user_ids = array();
 					foreach ($stmt as $contact) {
@@ -333,7 +333,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 					
 					
 					if (count($response['results']) < 10) {
-						$findParams = GO_Base_Db_FindParams::newInstance()
+						$findParams = \GO_Base_Db_FindParams::newInstance()
 							->ignoreAcl()
 							->searchQuery($query)
 							->limit(10-count($response['results']));
@@ -345,7 +345,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 										->addCondition("email", "", "!=");
 //						}
 						
-						$stmt = GO_Addressbook_Model_Company::model()->find($findParams);
+						$stmt = \GO_Addressbook_Model_Company::model()->find($findParams);
 
 						foreach ($stmt as $company) {
 							$record=array();
@@ -354,7 +354,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 							$l = new GO_Base_Mail_EmailRecipients();
 							$l->addRecipient($company->email, $record['name']);
 
-							$record['info'] = htmlspecialchars((string) $l . ' (' . sprintf(GO::t('companyFromAddressbook', 'addressbook'), $company->addressbook->name) . ')', ENT_COMPAT, 'UTF-8');
+							$record['info'] = htmlspecialchars((string) $l . ' (' . sprintf(\GO::t('companyFromAddressbook', 'addressbook'), $company->addressbook->name) . ')', ENT_COMPAT, 'UTF-8');
 							$record['full_email'] = htmlspecialchars((string) $l, ENT_COMPAT, 'UTF-8');
 
 							$response['results'][] = $record;
@@ -367,7 +367,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		}else {
 
 			//no addressbook module for this user. Fall back to user search.
-			$findParams = GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO_Base_Db_FindParams::newInstance()
 							->searchQuery($query)
 							->select('t.*')
 							->limit(10 - count($response['results']));
@@ -375,7 +375,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 			$findParams->getCriteria()->addCondition('enabled', true);
 
 
-			$stmt = GO_Base_Model_User::model()->find($findParams);
+			$stmt = \GO_Base_Model_User::model()->find($findParams);
 
 			while ($user = $stmt->fetch()) {
 				$record['name'] = $user->name;
@@ -384,7 +384,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 				$l = new GO_Base_Mail_EmailRecipients();
 				$l->addRecipient($user->email, $record['name']);
 
-				$record['info'] = htmlspecialchars((string) $l . ' (' . GO::t('strUser') . ')', ENT_COMPAT, 'UTF-8');
+				$record['info'] = htmlspecialchars((string) $l . ' (' . \GO::t('strUser') . ')', ENT_COMPAT, 'UTF-8');
 				$record['full_email'] = htmlspecialchars((string) $l, ENT_COMPAT, 'UTF-8');
 
 				$response['results'][] = $record;
@@ -403,7 +403,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 			$l = new GO_Base_Mail_EmailRecipients();
 			$l->addRecipient($contact->email, $record['name']);
 
-			$record['info'] = htmlspecialchars((string) $l . ' (' . sprintf(GO::t('contactFromAddressbook', 'addressbook'), $contact->addressbook->name) . ')', ENT_COMPAT, 'UTF-8');
+			$record['info'] = htmlspecialchars((string) $l . ' (' . sprintf(\GO::t('contactFromAddressbook', 'addressbook'), $contact->addressbook->name) . ')', ENT_COMPAT, 'UTF-8');
 			if (!empty($contact->department))
 				$record['info'].=' (' . htmlspecialchars($contact->department, ENT_COMPAT, 'UTF-8') . ')';
 			$record['full_email'] = htmlspecialchars((string) $l, ENT_COMPAT, 'UTF-8');
@@ -415,7 +415,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 			$l = new GO_Base_Mail_EmailRecipients();
 			$l->addRecipient($contact->email2, $record['name']);
 
-			$record['info'] = htmlspecialchars((string) $l . ' (' . sprintf(GO::t('contactFromAddressbook', 'addressbook'), $contact->addressbook->name) . ')', ENT_COMPAT, 'UTF-8');
+			$record['info'] = htmlspecialchars((string) $l . ' (' . sprintf(\GO::t('contactFromAddressbook', 'addressbook'), $contact->addressbook->name) . ')', ENT_COMPAT, 'UTF-8');
 			if (!empty($contact->department))
 				$record['info'].=' (' . htmlspecialchars($contact->department, ENT_COMPAT, 'UTF-8') . ')';
 			$record['full_email'] = htmlspecialchars((string) $l, ENT_COMPAT, 'UTF-8');
@@ -427,7 +427,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 			$l = new GO_Base_Mail_EmailRecipients();
 			$l->addRecipient($contact->email3, $record['name']);
 
-			$record['info'] = htmlspecialchars((string) $l . ' (' . sprintf(GO::t('contactFromAddressbook', 'addressbook'), $contact->addressbook->name) . ')', ENT_COMPAT, 'UTF-8');
+			$record['info'] = htmlspecialchars((string) $l . ' (' . sprintf(\GO::t('contactFromAddressbook', 'addressbook'), $contact->addressbook->name) . ')', ENT_COMPAT, 'UTF-8');
 			if (!empty($contact->department))
 				$record['info'].=' (' . htmlspecialchars($contact->department, ENT_COMPAT, 'UTF-8') . ')';
 			$record['full_email'] = htmlspecialchars((string) $l, ENT_COMPAT, 'UTF-8');

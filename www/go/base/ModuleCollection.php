@@ -36,7 +36,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	private function _isAllowed($moduleid){
 		
 		if(!isset($this->_allowedModules))
-			$this->_allowedModules=empty(GO::config()->allowed_modules) ? array() : explode(',', GO::config()->allowed_modules);
+			$this->_allowedModules=empty(\GO::config()->allowed_modules) ? array() : explode(',', \GO::config()->allowed_modules);
 		
 		return empty($this->_allowedModules) || in_array($moduleid, $this->_allowedModules);			
 	}
@@ -47,7 +47,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	 * @return array Module class names eg. GO_Calendar_Module
 	 */
 	public function getAvailableModules($returnInstalled=false){
-		$folder = new \GO_Base_Fs_Folder(GO::config()->root_path.'modules');
+		$folder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'modules');
 		
 		$folders = $folder->ls();
 		$modules = array();
@@ -55,7 +55,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 			if($folder->isFolder()){
 				$ucfirst = ucfirst($folder->name());
 				$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
-				if(file_exists($moduleClass) && $this->_isAllowed($folder->name()) && ($returnInstalled || !GO_Base_Model_Module::model()->findByPk($folder->name(), false, true))){
+				if(file_exists($moduleClass) && $this->_isAllowed($folder->name()) && ($returnInstalled || !\GO_Base_Model_Module::model()->findByPk($folder->name(), false, true))){
 					$modules[]='GO_'.$ucfirst.'_'.$ucfirst.'Module';
 				}
 			}
@@ -75,7 +75,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		if(!$this->_isAllowed($moduleId))
 			return false;
 		
-		$folder = new \GO_Base_Fs_Folder(GO::config()->root_path.'modules/'.$moduleId);
+		$folder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'modules/'.$moduleId);
 		if($folder->exists()){
 			$ucfirst = ucfirst($folder->name());
 			$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
@@ -86,7 +86,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	
 
 	/**
-	 * Call a method of a module class. eg. GO_Notes_NotesModule::firstRun
+	 * Call a method of a module class. eg. \GO_Notes_NotesModule::firstRun
 	 * 
 	 * @deprecated Preferrably use events with listeners because it has better performance
 	 * @param string $method
@@ -94,7 +94,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	 */
 	public function callModuleMethod($method, $params=array(), $ignoreAclPermissions=true){
 		
-		$oldIgnore = GO::setIgnoreAclPermissions($ignoreAclPermissions);
+		$oldIgnore = \GO::setIgnoreAclPermissions($ignoreAclPermissions);
 		$modules = $this->getAllModules();
 		
 		foreach($modules as $module)
@@ -108,7 +108,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 
 					$object = new $class;
 					if(method_exists($object, $method)){					
-//						GO::debug('Calling '.$class.'::'.$method);
+//						\GO::debug('Calling '.$class.'::'.$method);
 						call_user_func_array(array($object, $method), $params);
 						//$object->$method($params);
 					}
@@ -116,7 +116,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 //			}
 		}
 		
-		GO::setIgnoreAclPermissions($oldIgnore);
+		\GO::setIgnoreAclPermissions($oldIgnore);
 	}
 	
 	private $_modules;
@@ -172,7 +172,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	 */
 	public function getAllModules($ignoreAcl=false){
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()->order("sort_order");
+		$findParams = \GO_Base_Db_FindParams::newInstance()->order("sort_order");
 		
 		if($ignoreAcl)
 			$findParams->ignoreAcl ();

@@ -106,7 +106,7 @@ class GO_Base_Fs_XlsFile extends GO_Base_Fs_File{
 	}
 	
 	protected function init($readSheetNr=0) {
-		require_once GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/IOFactory.php';
+		require_once \GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/IOFactory.php';
 		$this->filetype = PHPExcel_IOFactory::identify($this->path);
 		$xlsReader = PHPExcel_IOFactory::createReader($this->filetype);
 		$xlsReader->setReadDataOnly($this->readOnly);
@@ -143,7 +143,7 @@ class GO_Base_Fs_XlsFile extends GO_Base_Fs_File{
 			$rowRecord = array();
 			for ($col=0;$col<=$HIGHEST_COLUMN_WITH_VALUE;$col++) {
 				$rowRecord[] = $this->phpExcelSheet->getCellByColumnAndRow($col,$row)->getCalculatedValue();
-				GO::debug($this->phpExcelSheet->getCellByColumnAndRow($col,$row)->getCalculatedValue());
+				\GO::debug($this->phpExcelSheet->getCellByColumnAndRow($col,$row)->getCalculatedValue());
 			}
 			$this->rowsBuffer[$row] = $rowRecord;
 		}

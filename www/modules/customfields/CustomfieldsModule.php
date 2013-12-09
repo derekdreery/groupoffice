@@ -10,7 +10,7 @@ class GO_Customfields_CustomfieldsModule extends GO_Base_Module {
 
 		$types = array();
 
-		$modules = GO::modules()->getAllModules();
+		$modules = \GO::modules()->getAllModules();
 
 		while ($module = array_shift($modules)) {
 			if ($module->moduleManager) {
@@ -47,7 +47,7 @@ class GO_Customfields_CustomfieldsModule extends GO_Base_Module {
 	public static function getCustomfieldModels() {
 		
 		$cfModels=array();
-		$moduleObjects = GO::modules()->getAllModules();
+		$moduleObjects = \GO::modules()->getAllModules();
 		foreach ($moduleObjects as $moduleObject) {
 			$file = $moduleObject->path . ucfirst($moduleObject->id) . 'Module.php';
 			//todo load listeners

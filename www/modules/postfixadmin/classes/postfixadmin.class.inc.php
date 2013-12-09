@@ -330,7 +330,7 @@ class postfixadmin extends db {
 				break;
 				
 			case 'write':
-				$sql .= "(pa_domains.acl_id = a.acl_id AND a.level > ".GO_SECURITY::READ_PERMISSION.") ";
+				$sql .= "(pa_domains.acl_id = a.acl_id AND a.level > ".\GO_SECURITY::READ_PERMISSION.") ";
 				break;
 		}
 		

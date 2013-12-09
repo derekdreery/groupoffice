@@ -27,7 +27,7 @@ class GO_Base_Util_Date_DateTime extends DateTime {
    */
   public function __construct($time="now", $timezone=null) {
 	if($timezone===null) {
-	  $tz = GO::user() ? GO::user()->timezone : GO::config()->default_timezone;
+	  $tz = \GO::user() ? \GO::user()->timezone : \GO::config()->default_timezone;
 	  $timezone = new \DateTimeZone($tz);
 	}
 	parent::__construct($time, $timezone);
@@ -65,29 +65,29 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	public function format($format=null)
 	{
 	  if($format===null) {
-		//$format = GO::user() ? GO::user()->date_format . " " . GO::user()->time_format : GO::config()->default_date_format . " " . GO::config()->default_time_format;
-		return GO_Base_Util_Date::get_timestamp($this->getTimestamp());
+		//$format = \GO::user() ? \GO::user()->date_format . " " . \GO::user()->time_format : \GO::config()->default_date_format . " " . \GO::config()->default_time_format;
+		return \GO_Base_Util_Date::get_timestamp($this->getTimestamp());
 	  }
 	  return parent::format($format);
 	}
 	
 	/**
-	 * Format the DateTime object in a GO::user respected time format
+	 * Format the DateTime object in a \GO::user respected time format
 	 * @param DateTimeZone $timezone
 	 * @return string The formatted time
 	 */
 	public function formatTime() {
-	  $timeFormat = GO::user() ? GO::user()->time_format : GO::config()->default_time_format;
+	  $timeFormat = \GO::user() ? \GO::user()->time_format : \GO::config()->default_time_format;
 	  return parent::format($timeFormat);
 	}
 	
 	/**
-	 * Format the DateTime object in a GO::user respected date format
+	 * Format the DateTime object in a \GO::user respected date format
 	 * @param DateTimeZone $timezone
 	 * @return string The formatted time
 	 */
 	public function formatDate() {
-	  $dateFormat = GO::user() ? GO::user()->completeDateFormat : GO::config()->getCompleteDateFormat();
+	  $dateFormat = \GO::user() ? \GO::user()->completeDateFormat : \GO::config()->getCompleteDateFormat();
 	  return parent::format($dateFormat);
 	}
 
@@ -245,22 +245,22 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 		$string = '';
 
 		if (!empty($diff->y))
-			$string .= $diff->y . ' ' . GO::t('strYears') . ', ';
+			$string .= $diff->y . ' ' . \GO::t('strYears') . ', ';
 
 		if (!empty($diff->m))
-			$string .= $diff->m . ' ' . GO::t('strMonths') . ', ';
+			$string .= $diff->m . ' ' . \GO::t('strMonths') . ', ';
 
 		if (!empty($diff->d))
-			$string .= $diff->d . ' ' . GO::t('strDays') . ', ';
+			$string .= $diff->d . ' ' . \GO::t('strDays') . ', ';
 
 		if (!empty($diff->h))
-			$string .= $diff->h . ' ' . GO::t('strHours') . ', ';
+			$string .= $diff->h . ' ' . \GO::t('strHours') . ', ';
 
 		if (!empty($diff->i))
-			$string .= $diff->i . ' ' . GO::t('strMinutes');
+			$string .= $diff->i . ' ' . \GO::t('strMinutes');
 
 //		if(!empty($diff['s']))
-//			$string .= $diff['s'].' '.GO::t('strSeconds');
+//			$string .= $diff['s'].' '.\GO::t('strSeconds');
 
 		return rtrim($string,', ');
 	}

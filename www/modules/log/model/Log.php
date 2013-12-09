@@ -79,8 +79,8 @@ class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
 		else
 			$attr['user_agent']= isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
 		$attr['ip']=isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
-		$attr['controller_route']=GO::router()->getControllerRoute();
-		$attr['username']=GO::user() ? GO::user()->username : 'notloggedin';
+		$attr['controller_route']=\GO::router()->getControllerRoute();
+		$attr['username']=\GO::user() ? \GO::user()->username : 'notloggedin';
 		return $attr;
 	}
 	

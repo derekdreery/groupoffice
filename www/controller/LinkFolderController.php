@@ -8,7 +8,7 @@ class GO_Core_Controller_LinkFolder extends GO_Base_Controller_AbstractModelCont
 
 		$response = array();
 
-		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams = \GO_Base_Db_FindParams::newInstance();
 
 		$folder_id = isset($params['node']) && substr($params['node'], 0, 10) == 'lt-folder-' ? (substr($params['node'], 10)) : 0;
 
@@ -17,10 +17,10 @@ class GO_Core_Controller_LinkFolder extends GO_Base_Controller_AbstractModelCont
 		else
 			$findParams->getCriteria()
 							->addCondition('model_id', $params['model_id'])
-							->addCondition('model_type_id', GO_Base_Model_ModelType::model()->findByModelName($params['model_name']));
+							->addCondition('model_type_id', \GO_Base_Model_ModelType::model()->findByModelName($params['model_name']));
 
 
-		$stmt = GO_Base_Model_LinkFolder::model()->find($findParams);
+		$stmt = \GO_Base_Model_LinkFolder::model()->find($findParams);
 
 		while ($model = $stmt->fetch()) {
 			$node = array(
@@ -42,7 +42,7 @@ class GO_Core_Controller_LinkFolder extends GO_Base_Controller_AbstractModelCont
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		if (empty($params['parent_id'])) {
-			$model->model_type_id = GO_Base_Model_ModelType::model()->findByModelName($params['model_name']);
+			$model->model_type_id = \GO_Base_Model_ModelType::model()->findByModelName($params['model_name']);
 		} else {
 			unset($params['model_id']);
 		}
@@ -64,15 +64,15 @@ class GO_Core_Controller_LinkFolder extends GO_Base_Controller_AbstractModelCont
 
 			if ($modelName == 'GO_Base_Model_LinkFolder') {
 				
-				$moveFolder = GO_Base_Model_LinkFolder::model()->findByPk($modelId);
+				$moveFolder = \GO_Base_Model_LinkFolder::model()->findByPk($modelId);
 				$moveFolder->parent_id=intval($target->folder_id);
 				$moveFolder->save();
 
 			} else {
 				
-				$moveModel = GO::getModel($modelName)->findByPk($modelId);
+				$moveModel = \GO::getModel($modelName)->findByPk($modelId);
 				
-				$targetModel = GO::getModel($target->model_name)->findByPk($target->model_id);
+				$targetModel = \GO::getModel($target->model_name)->findByPk($target->model_id);
 				$targetModel->updateLink($moveModel, array('folder_id'=>intval($target->folder_id)));
 			}
 		}

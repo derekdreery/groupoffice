@@ -46,7 +46,7 @@ class GO_Email_Model_ImapMessageAttachment extends GO_Email_Model_MessageAttachm
 	}
 	
 	public function getTempDir(){
-		$this->_tmpDir=GO::config()->tmpdir.'imap_messages/'.$this->account->id.'-'.$this->mailbox.'-'.$this->uid.'/';
+		$this->_tmpDir=\GO::config()->tmpdir.'imap_messages/'.$this->account->id.'-'.$this->mailbox.'-'.$this->uid.'/';
 		if(!is_dir($this->_tmpDir))
 			mkdir($this->_tmpDir, 0700, true);
 		return $this->_tmpDir;
@@ -95,15 +95,15 @@ class GO_Email_Model_ImapMessageAttachment extends GO_Email_Model_MessageAttachm
 		
 		$nameArr = explode('.',$this->name);
 		
-		if (GO::modules()->isInstalled('addressbook') && $nameArr[count($nameArr)-1]=='vcf')
-			return GO::url('addressbook/contact/handleAttachedVCard', $params);
+		if (\GO::modules()->isInstalled('addressbook') && $nameArr[count($nameArr)-1]=='vcf')
+			return \GO::url('addressbook/contact/handleAttachedVCard', $params);
 		
-		return GO::url('email/message/attachment', $params);
+		return \GO::url('email/message/attachment', $params);
 	}
 	
 
 	public function __wakeup() {	
 		//refresh the account model because the password may have been changed
-		$this->account = GO_Email_Model_Account::model()->findByPk($this->account->id);
+		$this->account = \GO_Email_Model_Account::model()->findByPk($this->account->id);
 	}
 }

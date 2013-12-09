@@ -6,7 +6,7 @@ class GO_Base_Html_Form {
 //	
 //	public function __construct($targetRoute=false) {
 //		if($targetRoute){
-//			$this->_targetRoute = GO::url($targetRoute);
+//			$this->_targetRoute = \GO::url($targetRoute);
 //		}
 //	}
 	
@@ -14,7 +14,7 @@ class GO_Base_Html_Form {
 		$html = '<form method="post" name="'.$formName.'" >';
 	//	$html .= '<input type="hidden" name="formRoute" value="'.$targetRoute.'" />';
 		if($showErrors){
-			$error = GO_Base_Html_Error::getError();
+			$error = \GO_Base_Html_Error::getError();
 			$html .= $error;
 		}
 		return $html;
@@ -26,8 +26,8 @@ class GO_Base_Html_Form {
 	
 	public static function renderEnd($printErrors=true){
 		
-		if($printErrors && GO_Base_Html_Error::hasErrors()){
-			GO_Base_Html_Error::printErrors();
+		if($printErrors && \GO_Base_Html_Error::hasErrors()){
+			\GO_Base_Html_Error::printErrors();
 		}
 		
 		echo self::getHtmlEnd();
@@ -44,7 +44,7 @@ class GO_Base_Html_Form {
 //		echo '<form method="post" >';
 //		echo '<input type="hidden" name="formRoute" value="'.$this->_targetRoute.'" />';
 //		if($showErrors)
-//			echo GO_Base_Html_Error::getError();
+//			echo \GO_Base_Html_Error::getError();
 //	}
 //	
 //	public function renderEnd() {

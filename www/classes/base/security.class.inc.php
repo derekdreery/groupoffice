@@ -287,8 +287,8 @@ class GO_SECURITY extends db {
 
 		$this->insert_row('go_acl_items', $ai);
     $id = $this->insert_id();
-		$this->add_group_to_acl($GLOBALS['GO_CONFIG']->group_root, $id,GO_SECURITY::MANAGE_PERMISSION);
-		$this->add_user_to_acl($user_id, $id,GO_SECURITY::MANAGE_PERMISSION);
+		$this->add_group_to_acl($GLOBALS['\GO_CONFIG']->group_root, $id,GO_SECURITY::MANAGE_PERMISSION);
+		$this->add_user_to_acl($user_id, $id,\GO_SECURITY::MANAGE_PERMISSION);
 		return $id;
 	}
 
@@ -302,7 +302,7 @@ class GO_SECURITY extends db {
 	 */
 	function has_permission_to_manage_acl($user_id, $acl_id) {
 		//return ($this->user_owns_acl($user_id, $acl_id) || $this->has_admin_permission($user_id));
-		return $this->has_permission($user_id, $acl_id)==GO_SECURITY::MANAGE_PERMISSION;
+		return $this->has_permission($user_id, $acl_id)==\GO_SECURITY::MANAGE_PERMISSION;
 	}
 
 	/**
@@ -338,7 +338,7 @@ class GO_SECURITY extends db {
 		$this->query($sql);
 
 		//if(!$this->user_in_acl($user_id, $acl_id)) {
-			$this->add_user_to_acl($user_id, $acl_id, GO_SECURITY::MANAGE_PERMISSION);
+			$this->add_user_to_acl($user_id, $acl_id, \GO_SECURITY::MANAGE_PERMISSION);
 		//}
 
 		return true;

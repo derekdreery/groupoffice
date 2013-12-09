@@ -47,7 +47,7 @@ class GO_Customfields_Model_EnabledBlock extends GO_Base_Db_ActiveRecord{
 			$dataType = 'GO_Addressbook_Customfieldtype_Company';
 		
 		return self::model()->find(
-				GO_Base_Db_FindParams::newInstance()
+				\GO_Base_Db_FindParams::newInstance()
 					->joinModel(array(
 						'model'=>'GO_Customfields_Model_Block',
 						'localTableAlias'=>'t',
@@ -65,7 +65,7 @@ class GO_Customfields_Model_EnabledBlock extends GO_Base_Db_ActiveRecord{
 						'type'=>'INNER'
 					))
 					->criteria(
-						GO_Base_Db_FindCriteria::newInstance()
+						\GO_Base_Db_FindCriteria::newInstance()
 							->addCondition('model_id', $modelId, '=', 't')
 							->addCondition('model_type_name', $listedModelTypeName, '=', 't')
 							->addCondition('datatype', $dataType, '=', 'cf')

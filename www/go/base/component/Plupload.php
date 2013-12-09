@@ -3,18 +3,18 @@
 class GO_Base_Component_Plupload {
 
 	public static function handleUpload() {
-		$tmpFolder = new \GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
+		$tmpFolder = new \GO_Base_Fs_Folder(\GO::config()->tmpdir . 'uploadqueue');
 		//$tmpFolder->delete();
 		$tmpFolder->create();
 
-//		$files = GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $tmpFolder);
-//		GO::session()->values['files']['uploadqueue'] = array();
+//		$files = \GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $tmpFolder);
+//		\GO::session()->values['files']['uploadqueue'] = array();
 //		foreach ($files as $file) {
-//			GO::session()->values['files']['uploadqueue'][] = $file->path();
+//			\GO::session()->values['files']['uploadqueue'][] = $file->path();
 //		}
 
-		if (!isset(GO::session()->values['files']['uploadqueue']))
-			GO::session()->values['files']['uploadqueue'] = array();
+		if (!isset(\GO::session()->values['files']['uploadqueue']))
+			\GO::session()->values['files']['uploadqueue'] = array();
 
 		$targetDir = $tmpFolder->path();
 
@@ -24,7 +24,7 @@ class GO_Base_Component_Plupload {
 		$fileName = isset($_POST["name"]) ? $_POST["name"] : '';
 
 // Clean the fileName for security reasons
-		$fileName = GO_Base_Fs_File::stripInvalidChars($fileName);
+		$fileName = \GO_Base_Fs_File::stripInvalidChars($fileName);
 
 // Make sure the fileName is unique but only if chunking is disabled
 //		if ($chunks < 2 && file_exists($targetDir . DIRECTORY_SEPARATOR . $fileName)) {
@@ -45,11 +45,11 @@ class GO_Base_Component_Plupload {
 		if (isset($_SERVER["CONTENT_TYPE"]))
 			$contentType = $_SERVER["CONTENT_TYPE"];
 
-		if (!in_array($targetDir . DIRECTORY_SEPARATOR . $fileName, GO::session()->values['files']['uploadqueue']))
-			GO::session()->values['files']['uploadqueue'][] = $targetDir . DIRECTORY_SEPARATOR . $fileName;
+		if (!in_array($targetDir . DIRECTORY_SEPARATOR . $fileName, \GO::session()->values['files']['uploadqueue']))
+			\GO::session()->values['files']['uploadqueue'][] = $targetDir . DIRECTORY_SEPARATOR . $fileName;
 
 		$file = new \GO_Base_Fs_File($targetDir . DIRECTORY_SEPARATOR . $fileName);
-		if ($file->exists() && $file->size() > GO::config()->max_file_size)
+		if ($file->exists() && $file->size() > \GO::config()->max_file_size)
 			throw new \Exception("File too large");
 
 // Handle non multipart uploads older WebKit versions didn't support multipart in HTML5

@@ -8,7 +8,7 @@ class GO_Files_Filehandler_Inline implements GO_Files_Filehandler_Interface{
 	}
 	
 	public function getName(){
-		return GO::t('openInBrowser','files');
+		return \GO::t('openInBrowser','files');
 	}
 	
 	public function fileIsSupported(GO_Files_Model_File $file){

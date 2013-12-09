@@ -126,8 +126,8 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	public function hasFreeBusyAccess() {
 		
 		$permission=!empty($this->user_id);
-		if($permission && GO::modules()->isInstalled("freebusypermissions")){
-			$permission = GO_Freebusypermissions_FreebusypermissionsModule::hasFreebusyAccess(GO::user()->id, $this->user_id);
+		if($permission && \GO::modules()->isInstalled("freebusypermissions")){
+			$permission = \GO_Freebusypermissions_FreebusypermissionsModule::hasFreebusyAccess(\GO::user()->id, $this->user_id);
 		}
 		return $permission;
 	}
@@ -143,28 +143,28 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 */
 	public static function userIsAvailable($periodStartTime, $periodEndTime, $userId, $ignoreEvent = false) {
 
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl();
 
-		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
 						->addRawCondition('t.calendar_id', 'c.id');
 
-		$findParams->join(GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
+		$findParams->join(\GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
 
 		$findParams->getCriteria()->addCondition('user_id', $userId, '=', 'c');
 
 		if ($ignoreEvent) {
 			$findParams->getCriteria()
-							->addModel(GO_Calendar_Model_Event::model())
+							->addModel(\GO_Calendar_Model_Event::model())
 							->addCondition('id', $ignoreEvent->id, '!=')
 							->addCondition('uuid', $ignoreEvent->uuid, '!=')
 			;
 		}
 
-		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime, true);
+		$events = \GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime, true);
 
 		foreach ($events as $event) {
-			GO::debug($event->getName());
+			\GO::debug($event->getName());
 		}
 
 		return count($events) == 0;
@@ -192,17 +192,17 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		if(empty($this->user_id))
 			return $freebusy;
 
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl();
 
-		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
 						->addRawCondition('t.calendar_id', 'c.id');
 
-		$findParams->join(GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
+		$findParams->join(\GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
 
 		$findParams->getCriteria()->addCondition('user_id', $this->user_id, '=', 'c');
 		
-		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $starttime, $endtime, true);
+		$events = \GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $starttime, $endtime, true);
 
 
 
@@ -260,19 +260,19 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	public function getStatusName() {
 		switch ($this->status) {
 			case self::STATUS_TENTATIVE :
-				return GO::t('tentative', 'calendar');
+				return \GO::t('tentative', 'calendar');
 				break;
 
 			case self::STATUS_DECLINED :
-				return GO::t('declined', 'calendar');
+				return \GO::t('declined', 'calendar');
 				break;
 
 			case self::STATUS_ACCEPTED :
-				return GO::t('accepted', 'calendar');
+				return \GO::t('accepted', 'calendar');
 				break;
 
 			default:
-				return GO::t('notRespondedYet', 'calendar');
+				return \GO::t('notRespondedYet', 'calendar');
 				break;
 		}
 	}
@@ -289,7 +289,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 			return false;
 		
 		
-		$params = GO_Base_Db_FindParams::newInstance()
+		$params = \GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl()
 						->single();		
 		
@@ -299,14 +299,14 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 						->addCondition("exception_for_event_id", 0, $this->event->exception_for_event_id==0 ? '=' : '!='); //the master event or a single occurrence can start at the same time. Therefore we must check if exception event has a value or is 0.
 
 
-		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('calendar_id', 'c.id','=','t',true, true)
 						->addCondition('user_id', $this->user_id,'=','c');
 
-		$params->join(GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
+		$params->join(\GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
 		
 						
-		return GO_Calendar_Model_Event::model()->find($params);
+		return \GO_Calendar_Model_Event::model()->find($params);
 	
 	}
 
@@ -320,7 +320,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		if ($this->is_organizer)
 			return $this->event;
 		else
-			return GO_Calendar_Model_Event::model()->findSingleByAttributes(array('uuid' => $this->event->uuid, 'is_organizer' => 1));
+			return \GO_Calendar_Model_Event::model()->findSingleByAttributes(array('uuid' => $this->event->uuid, 'is_organizer' => 1));
 	}
 
 	/**
@@ -331,7 +331,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		if (empty($this->user_id))
 			return false;
 
-		return GO_Calendar_Model_Calendar::model()->findDefault($this->user_id);
+		return \GO_Calendar_Model_Calendar::model()->findDefault($this->user_id);
 	}
 
 	public function toJsonArray($start_time = false, $end_time = false) {
@@ -380,7 +380,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 			foreach($stmt as $event){
 				if(empty($newEvent) || $event->id!=$newEvent->id){
 					
-//					$p = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
+//					$p = \GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
 //							'event_id'=>$event->id,
 //							'email'=>$this->email
 //					));
@@ -430,12 +430,12 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 //		if(!$organizer)
 //			throw new \Exception("Could not find organizer to send message to!");
 //
-//		$updateReponses = GO::t('updateReponses','calendar');
+//		$updateReponses = \GO::t('updateReponses','calendar');
 //		$subject= sprintf($updateReponses[$this->status], $this->user->name, $this->event->name);
 //
 //
 //		//create e-mail message
-//		$message = GO_Base_Mail_Message::newInstance($subject)
+//		$message = \GO_Base_Mail_Message::newInstance($subject)
 //							->setFrom($this->user->email, $this->user->name)
 //							->addTo($organizer->email, $organizer->name);
 //
@@ -444,7 +444,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 //		if(!$this->event->getOrganizerEvent()){
 //			//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
 //			$ics=$this->event->toICS("REPLY", $this, $this->notifyRecurrenceTime);				
-//			$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->event->name) . '.ics', 'text/calendar; METHOD="REPLY"');
+//			$a = Swift_Attachment::newInstance($ics, \GO_Base_Fs_File::stripInvalidChars($this->event->name) . '.ics', 'text/calendar; METHOD="REPLY"');
 //			$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 //			$a->setDisposition("inline");
 //			$message->attach($a);
@@ -452,7 +452,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 //
 //		$message->setHtmlAlternateBody($body);
 //
-//		GO_Base_Mail_Mailer::newGoInstance()->send($message);
+//		\GO_Base_Mail_Mailer::newGoInstance()->send($message);
 //		
 //	}
 	
@@ -464,7 +464,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 */
 	public function getRelatedParticipants(){
 		//update all participants with this user and event uuid in the system		
-		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams = \GO_Base_Db_FindParams::newInstance();
 		
 		$findParams->joinModel(array(
 				'model'=>'GO_Calendar_Model_Event',						  
@@ -481,7 +481,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 						->addCondition('start_time', $this->event->start_time,'=','e') //make sure start time matches for recurring series
 						->addCondition("exception_for_event_id", 0, $this->event->exception_for_event_id==0 ? '=' : '!=','e');//the master event or a single occurrence can start at the same time. Therefore we must check if exception event has a value or is 0.
 		
-		return GO_Calendar_Model_Participant::model()->find($findParams);			
+		return \GO_Calendar_Model_Participant::model()->find($findParams);			
 		
 	}
 	
@@ -489,7 +489,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		
 		// Check for a user with this email address
 		if($this->isNew && $this->user_id === null){
-			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $this->email);
+			$user = \GO_Base_Model_User::model()->findSingleByAttribute('email', $this->email);
 			if($user)
 				$this->user_id = $user->id;
 		}

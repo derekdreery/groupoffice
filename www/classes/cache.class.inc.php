@@ -24,7 +24,7 @@ class cache extends db{
 	
 	function cleanup()
 	{
-		return $this->query("DELETE FROM go_cache WHERE mtime<?", 'i', Date::date_add(time(), -7));
+		return $this->query("DELETE FROM \go_cache WHERE mtime<?", 'i', Date::date_add(time(), -7));
 	}
 	
 	function delete_cache($user_id, $key)

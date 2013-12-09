@@ -79,9 +79,9 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	}
 	
 	public function findDefault($userId){
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 						->single()
-						->join("cal_settings", GO_Base_Db_FindCriteria::newInstance()
+						->join("cal_settings", \GO_Base_Db_FindCriteria::newInstance()
 										->addCondition('id', 's.calendar_id','=','t',true,true)
 										->addCondition('user_id', $userId,'=','s'),
 										's');
@@ -105,7 +105,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 * @return string The color or false if no color is found 
 	 */
 	public function getColor($userId){
-		$userColor = GO_Calendar_Model_CalendarUserColor::model()->findByPk(array('calendar_id'=>$this->id,'user_id'=>$userId));
+		$userColor = \GO_Calendar_Model_CalendarUserColor::model()->findByPk(array('calendar_id'=>$this->id,'user_id'=>$userId));
 
 		if($userColor)
 			return $userColor->color;
@@ -130,11 +130,11 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 * @return boolean
 	 */
 	public function userHasCreatePermission(){
-//		if(GO_Base_Model_Acl::hasPermission($this->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION)){
+//		if(\GO_Base_Model_Acl::hasPermission($this->getPermissionLevel(),\GO_Base_Model_Acl::CREATE_PERMISSION)){
 //			return true;
 //		}else 
-		if(GO::modules()->isInstalled('freebusypermissions')){
-			return GO_Freebusypermissions_FreebusypermissionsModule::hasFreebusyAccess(GO::user()->id, $this->user_id);
+		if(\GO::modules()->isInstalled('freebusypermissions')){
+			return \GO_Freebusypermissions_FreebusypermissionsModule::hasFreebusyAccess(\GO::user()->id, $this->user_id);
 		}  else {
 			return true;
 		}
@@ -147,7 +147,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		 
 		 foreach($stmt as $user){
 			 if($user->user_id!=$this->user_id)//the owner has already been added automatically with manage permission
-				$this->acl->addUser($user->user_id, GO_Base_Model_Acl::DELETE_PERMISSION);
+				$this->acl->addUser($user->user_id, \GO_Base_Model_Acl::DELETE_PERMISSION);
 		 }
 		}
 		
@@ -206,11 +206,11 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		
 		foreach ($free_busy as $min=>$busy) {
 			
-			$model = GO_Calendar_Model_Event::model()->find(
-				GO_Base_Db_FindParams::newInstance()
+			$model = \GO_Calendar_Model_Event::model()->find(
+				\GO_Base_Db_FindParams::newInstance()
 					->single()
 					->ignoreAcl()
-					->criteria(GO_Base_Db_FindCriteria::newInstance()
+					->criteria(\GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('calendar_id', $this->id, '=')
 						->addCondition('start_time',$startTimeUnix+$min*60+15*60,'<')
 						->addCondition('end_time',$startTimeUnix+$min*60,'>')
@@ -233,13 +233,13 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 */
 	public function toVObject(){
 
-		//$stmt = $this->events(GO_Base_Db_FindParams::newInstance()->select("t.*"));
-		$findParams = GO_Base_Db_FindParams::newInstance()->select("t.*");
+		//$stmt = $this->events(\GO_Base_Db_FindParams::newInstance()->select("t.*"));
+		$findParams = \GO_Base_Db_FindParams::newInstance()->select("t.*");
 		$findParams->getCriteria()->addCondition("calendar_id", $this->id);
 	
-		$stmt = GO_Calendar_Model_Event::model()->findForPeriod($findParams, GO_Base_Util_Date::date_add(time(), 0, -1));
+		$stmt = \GO_Calendar_Model_Event::model()->findForPeriod($findParams, \GO_Base_Util_Date::date_add(time(), 0, -1));
 		
-		$string = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->version."//EN\r\n";
+		$string = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Intermesh//NONSGML ".\GO::config()->product_name." ".\GO::config()->version."//EN\r\n";
 
 			$t = new \GO_Base_VObject_VTimezone();
 			$string .= $t->serialize();
@@ -259,7 +259,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 * @return string
 	 */
 	public function getPublicIcsUrl(){
-		return GO::config()->full_url.'public/calendar/'.$this->id.'/calendar.ics';
+		return \GO::config()->full_url.'public/calendar/'.$this->id.'/calendar.ics';
 	}
 	
 	/**
@@ -267,6 +267,6 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 * @return string
 	 */
 	public function getPublicIcsPath(){
-		return GO::config()->file_storage_path.'public/calendar/'.$this->id.'/calendar.ics';
+		return \GO::config()->file_storage_path.'public/calendar/'.$this->id.'/calendar.ics';
 	}
 }
