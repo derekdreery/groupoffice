@@ -1,3 +1,4 @@
+- Calendar module: Added print option for event count per category per calendar.
 - Fixed exception dates import from CalDAV
 - Added new create link dialog for the HTML editor in the site module
 - Autolink a contact will check if the same contact is not already selected in the link field
