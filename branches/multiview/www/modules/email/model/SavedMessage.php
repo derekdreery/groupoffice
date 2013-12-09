@@ -36,7 +36,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 	 */
 	public function createFromMimeFile($path, $isTempFile=false) {
 		
-		$fullPath = $isTempFile ? GO::config()->tmpdir.$path : GO::config()->file_storage_path.$path;
+		$fullPath = $isTempFile ? \GO::config()->tmpdir.$path : \GO::config()->file_storage_path.$path;
 		
 		$file = new \GO_Base_Fs_File($fullPath);
 		
@@ -90,7 +90,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 		$attributes['size']=strlen($mimeData);
 
 //		
-//		GO::debug($structure->headers);
+//		\GO::debug($structure->headers);
 //		
 		if(isset($structure->headers['content-type']) && preg_match("/([^\/]*\/[^;]*)(.*)/", $structure->headers['content-type'], $matches)){
 			$attributes['content_type_attributes']=array();
@@ -109,15 +109,15 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 		
 		$this->_getParts($structure);
 		
-		//$this->_loadedBody=  GO_Base_Util_String::clean_utf8($this->_loadedBody);
+		//$this->_loadedBody=  \GO_Base_Util_String::clean_utf8($this->_loadedBody);
 		//
 		//$this->_loadedBody = str_replace("\x80","€", $this->_loadedBody);
 		//TODO make style rules valid in the container.
-		$this->_loadedBody=GO_Base_Util_String::sanitizeHtml($this->_loadedBody);
+		$this->_loadedBody=\GO_Base_Util_String::sanitizeHtml($this->_loadedBody);
 	}
 	
 	private function _getTempDir(){
-		$this->_tmpDir=GO::config()->tmpdir.'saved_messages/'.md5(serialize($this->attributes)).'/';
+		$this->_tmpDir=\GO::config()->tmpdir.'saved_messages/'.md5(serialize($this->attributes)).'/';
 		if(!is_dir($this->_tmpDir))
 			mkdir($this->_tmpDir, 0755, true);
 		return $this->_tmpDir;
@@ -128,7 +128,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 	}
 	
 	public function getPlainBody() {
-		return GO_Base_Util_String::html_to_text($this->_loadedBody);
+		return \GO_Base_Util_String::html_to_text($this->_loadedBody);
 	}
 	
 	public function getSource(){
@@ -136,7 +136,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 	}
 	
 	public function getZipOfAttachmentsUrl(){
-		return GO::url("savemailas/linkedEmail/zipOfAttachments", array("tmpdir"=>str_replace(GO::config()->tmpdir, '', $this->_getTempDir())));
+		return \GO::url("savemailas/linkedEmail/zipOfAttachments", array("tmpdir"=>str_replace(\GO::config()->tmpdir, '', $this->_getTempDir())));
 	}
 	
 	
@@ -145,10 +145,10 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 //		$file = new \GO_Base_Fs_File($attachment['name']);
 //		
 //		if($file->extension()=='dat'){			
-//			return GO::url('email/message/tnefAttachmentFromTempFile', array('tmp_file'=>$attachment['tmp_file']));
+//			return \GO::url('email/message/tnefAttachmentFromTempFile', array('tmp_file'=>$attachment['tmp_file']));
 //		}else
 //		{		
-//			return GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
+//			return \GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
 //		}
 //	}
 
@@ -174,13 +174,13 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 
 				if ($part->ctype_primary == 'text' && ($part->ctype_secondary == 'plain' || $part->ctype_secondary == 'html') && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename'])) {
 					$charset = isset($part->ctype_parameters['charset']) ? $part->ctype_parameters['charset'] : 'UTF-8';
-					$body = GO_Base_Util_String::clean_utf8($part->body, $charset);
+					$body = \GO_Base_Util_String::clean_utf8($part->body, $charset);
 					
 					if (stripos($part->ctype_secondary, 'plain') !== false) {
 						$body = nl2br($body);
 					} else {
-						$body = GO_Base_Util_String::convertLinks($body);
-						$body = GO_Base_Util_String::sanitizeHtml($body);
+						$body = \GO_Base_Util_String::convertLinks($body);
+						$body = \GO_Base_Util_String::sanitizeHtml($body);
 						$body = $body;
 					}
 					$this->_loadedBody .= $body;
@@ -244,14 +244,14 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 			}
 		} elseif (isset($structure->body)) {			
 			$charset = isset($structure->ctype_parameters['charset']) ? $structure->ctype_parameters['charset'] : 'UTF-8';
-			$text_part = GO_Base_Util_String::clean_utf8( $structure->body,$charset);
+			$text_part = \GO_Base_Util_String::clean_utf8( $structure->body,$charset);
 			//convert text to html
 			if (stripos($structure->ctype_secondary, 'plain') !== false) {
 				$this->extractUuencodedAttachments($text_part);
 				$text_part = nl2br($text_part);
 			}else{
-				$text_part = GO_Base_Util_String::convertLinks($text_part);
-				$text_part = GO_Base_Util_String::sanitizeHtml($text_part);
+				$text_part = \GO_Base_Util_String::convertLinks($text_part);
+				$text_part = \GO_Base_Util_String::sanitizeHtml($text_part);
 			}
 			
 			$this->_loadedBody .= $text_part;

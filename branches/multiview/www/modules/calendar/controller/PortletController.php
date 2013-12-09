@@ -62,27 +62,27 @@ class GO_Calendar_Controller_Portlet extends GO_Base_Controller_AbstractMultiSel
 		$today_end = mktime(0, 0, 0, $month, $day+1, $year);
 		
 		
-		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
-						->addCondition('user_id', GO::user()->id,'=','pt')
+		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('user_id', \GO::user()->id,'=','pt')
 						->addCondition('calendar_id', 'pt.calendar_id', '=', 't', true, true);
 		
-		$calendarJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$calendarJoinCriteria = \GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('calendar_id', 'tl.id', '=', 't', true, true);
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 						->select('t.*, tl.name AS calendar_name')
 						->ignoreAcl()
-						->join(GO_Calendar_Model_PortletCalendar::model()->tableName(),$joinCriteria,'pt')
-						->join(GO_Calendar_Model_Calendar::model()->tableName(), $calendarJoinCriteria,'tl');
+						->join(\GO_Calendar_Model_PortletCalendar::model()->tableName(),$joinCriteria,'pt')
+						->join(\GO_Calendar_Model_Calendar::model()->tableName(), $calendarJoinCriteria,'tl');
 		
 			
-		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime);
+		$events = \GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime);
 
 		$store = new \GO_Base_Data_ArrayStore();
 		
 		foreach($events as $event){
 			$record = $event->getResponseData();
-			$record['day']=$event->getAlternateStartTime()<$today_end ? GO::t('today') : GO::t('tomorrow');
+			$record['day']=$event->getAlternateStartTime()<$today_end ? \GO::t('today') : \GO::t('tomorrow');
 			$record['time']=$event->getEvent()->all_day_event==1 ? '-' : $record['time'];
 			$store->addRecord($record);
 		}

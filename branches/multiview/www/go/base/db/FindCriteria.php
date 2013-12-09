@@ -9,7 +9,7 @@
  */
 
 /**
- * Create "where" criteria for the SQL query GO_Base_Db_ActiveRecord::find() function
+ * Create "where" criteria for the SQL query \GO_Base_Db_ActiveRecord::find() function
  *
  * @package GO.base.db
  * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
@@ -87,10 +87,10 @@ class GO_Base_Db_FindCriteria {
 		else{
 			$type= PDO::PARAM_STR;
 			if(!$this->_ignoreUnknownColumns){
-				//GO::debug("WARNING: Could not find column type for $tableAlias. $field in GO_Base_Db_FindCriteria. Using PDO::PARAM_STR. Do you need to use addModel?");
+				//\GO::debug("WARNING: Could not find column type for $tableAlias. $field in \GO_Base_Db_FindCriteria. Using PDO::PARAM_STR. Do you need to use addModel?");
 //				$trace = debug_backtrace();
 //				for($i=0;$i<count($trace);$i++){
-//					GO::debug($trace[$i]['class'].'::'.$trace[$i]['function']);
+//					\GO::debug($trace[$i]['class'].'::'.$trace[$i]['function']);
 //				}
 			
 			}
@@ -277,19 +277,19 @@ class GO_Base_Db_FindCriteria {
 				`id` int(11) NOT NULL,
 				PRIMARY KEY (`id`)
 			);";
-			GO::getDbConnection()->query($sql);
+			\GO::getDbConnection()->query($sql);
 
 			self::$_temporaryTables[$tableName]=true;
 		}else
 		{
-			GO::getDbConnection()->query("TRUNCATE TABLE `$tableName`");
+			\GO::getDbConnection()->query("TRUNCATE TABLE `$tableName`");
 		}
 		
 		$this->sleepingTempTables[$tableName]=$values;
 
 
 		$sql = "INSERT INTO `$tableName` (id) VALUES (".implode('),(', $values).")";
-		GO::getDbConnection()->query($sql);
+		\GO::getDbConnection()->query($sql);
 	}
 	
 	private $sleepingTempTables=array();
@@ -419,7 +419,7 @@ class GO_Base_Db_FindCriteria {
 	}
 	
 	/**
-	 * Add extra params to bind to the query. This is used by GO_Base_Db_FindParams::join()
+	 * Add extra params to bind to the query. This is used by \GO_Base_Db_FindParams::join()
 	 * 
 	 * @var array $params
 	 */

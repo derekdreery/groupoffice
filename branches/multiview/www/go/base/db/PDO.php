@@ -15,8 +15,8 @@ class PDO extends \PDO{
 
 		$this->query("SET NAMES utf8");
 
-		if(GO::config()->debug){
-			//GO::debug("Setting MySQL sql_mode to TRADITIONAL");
+		if(\GO::config()->debug){
+			//\GO::debug("Setting MySQL sql_mode to TRADITIONAL");
 			$this->query("SET sql_mode='TRADITIONAL'");
 		}
 	}

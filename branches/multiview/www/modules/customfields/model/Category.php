@@ -49,7 +49,7 @@ class GO_Customfields_Model_Category extends GO_Base_Db_ActiveRecord{
 	
 	public function relations() {
 		return array(
-		'fields' => array('type' => self::HAS_MANY, 'model' => 'GO_Customfields_Model_Field', 'field' => 'category_id', 'delete' => true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('sort_index')),
+		'fields' => array('type' => self::HAS_MANY, 'model' => '\GO_Customfields_Model_Field', 'field' => 'category_id', 'delete' => true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('sort_index')),
 		'_fieldsUnsorted' => array('type' => self::HAS_MANY, 'model' => 'GO_Customfields_Model_Field', 'field' => 'category_id'	)
 				);
 	}
@@ -58,17 +58,17 @@ class GO_Customfields_Model_Category extends GO_Base_Db_ActiveRecord{
 	public function customfieldsTableName(){
 		
 		
-		$model = GO::getModel($this->extends_model);
+		$model = \GO::getModel($this->extends_model);
 		
 		return 'cf_'.$model->tableName();
 	}
 	
 	
-	public function findByModel($modelName, $permissionLevel=  GO_Base_Model_Acl::READ_PERMISSION){
-		return GO_Customfields_Model_Category::model()->find(
-                    GO_Base_Db_FindParams::newInstance()												
+	public function findByModel($modelName, $permissionLevel=  \GO_Base_Model_Acl::READ_PERMISSION){
+		return \GO_Customfields_Model_Category::model()->find(
+                    \GO_Base_Db_FindParams::newInstance()												
 												->permissionLevel($permissionLevel)
-                        ->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('extends_model', $modelName))
+                        ->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('extends_model', $modelName))
                         ->order('sort_index')
 		);
 	}
@@ -81,7 +81,7 @@ class GO_Customfields_Model_Category extends GO_Base_Db_ActiveRecord{
 	 * @return \GO_Customfields_Model_Category 
 	 */
 	public function createIfNotExists($extendsModel, $categoryName){
-		$category = GO_Customfields_Model_Category::model()->findSingleByAttributes(array('extends_model'=>$extendsModel, 'name'=>$categoryName));
+		$category = \GO_Customfields_Model_Category::model()->findSingleByAttributes(array('extends_model'=>$extendsModel, 'name'=>$categoryName));
 		
 		if(!$category){
 			$category = new \GO_Customfields_Model_Category();

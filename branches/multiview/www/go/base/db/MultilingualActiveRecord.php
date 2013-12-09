@@ -76,7 +76,7 @@ abstract class GO_Base_Db_MultilingualActiveRecord extends GO_Base_Db_ActiveReco
 
 			$relation = $this->getRelation($this->languageRelationName);
 
-			$lmodel = GO::getModel($relation['model']);
+			$lmodel = \GO::getModel($relation['model']);
 
 			$activeLanguages = $this->activeLanguages();
 
@@ -114,7 +114,7 @@ abstract class GO_Base_Db_MultilingualActiveRecord extends GO_Base_Db_ActiveReco
 		if(!isset($this->_attributes[$name])){
 			$lColName = $this->languageIdColumnName;
 			$relation = $this->getRelation($this->languageRelationName);
-			$lmodel = GO::getModel($relation['model']);
+			$lmodel = \GO::getModel($relation['model']);
 
 			$extractedName = $this->_extractMultilingualAttribute($name);
 
@@ -208,7 +208,7 @@ abstract class GO_Base_Db_MultilingualActiveRecord extends GO_Base_Db_ActiveReco
 		$languageRelationArray = $this->_getRelationArray();
 		
 		if($languageRelationArray)
-			$relationModelInstance = GO::getModel($languageRelationArray['model']);
+			$relationModelInstance = \GO::getModel($languageRelationArray['model']);
 		
 		return $relationModelInstance;
 	}

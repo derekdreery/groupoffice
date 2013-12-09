@@ -80,7 +80,7 @@ class GO_USERS extends db
 		if($_SESSION['GO_SESSION']['thousands_separator']=='')
 			$_SESSION['GO_SESSION']['thousands_separator']=' ';
 		$_SESSION['GO_SESSION']['decimal_separator'] = $userdata['decimal_separator'];
-		$_SESSION['GO_SESSION']['date_format'] = Date::get_dateformat($userdata['date_format'], $userdata['date_separator']);
+		$_SESSION['\GO_SESSION']['date_format'] = Date::get_dateformat($userdata['date_format'], $userdata['date_separator']);
 		$_SESSION['GO_SESSION']['date_separator'] = $userdata['date_separator'];
 		$_SESSION['GO_SESSION']['time_format'] = $userdata['time_format'];
 		$_SESSION['GO_SESSION']['currency'] = $userdata['currency'];
@@ -511,9 +511,9 @@ class GO_USERS extends db
 				{
 					$level = 0;
 					if(in_array($mod['id'], $modules_write)){
-						$level = GO_SECURITY::WRITE_PERMISSION;
+						$level = \GO_SECURITY::WRITE_PERMISSION;
 					}elseif(in_array($mod['id'], $modules_read)){
-						$level = GO_SECURITY::READ_PERMISSION;
+						$level = \GO_SECURITY::READ_PERMISSION;
 					}
 
 					if ($level)
@@ -912,7 +912,7 @@ class GO_USERS extends db
 				$module = $GLOBALS['GO_MODULES']->get_module($module_name);
 				if($module)
 				{
-					$GLOBALS['GO_SECURITY']->add_user_to_acl($user['id'], $module['acl_id'], GO_SECURITY::READ_PERMISSION);
+					$GLOBALS['\GO_SECURITY']->add_user_to_acl($user['id'], $module['acl_id'], GO_SECURITY::READ_PERMISSION);
 				}
 			}
 
@@ -921,7 +921,7 @@ class GO_USERS extends db
 				$module = $GLOBALS['GO_MODULES']->get_module($module_name);
 				if($module)
 				{
-					$GLOBALS['GO_SECURITY']->add_user_to_acl($user['id'], $module['acl_id'], GO_SECURITY::WRITE_PERMISSION);
+					$GLOBALS['\GO_SECURITY']->add_user_to_acl($user['id'], $module['acl_id'], GO_SECURITY::WRITE_PERMISSION);
 				}
 			}
 

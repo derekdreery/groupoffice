@@ -16,10 +16,10 @@ if(!$GLOBALS['GO_LANGUAGE']->get_address_format_by_iso($default_language))
 	$default_language = 'US';
 
 $addressbook = $ab->add_addressbook(1, $lang['addressbook']['prospects'], $default_language, $lang['addressbook']['defaultSalutation']);
-$GLOBALS['GO_SECURITY']->add_group_to_acl($GLOBALS['GO_CONFIG']->group_internal, $addressbook['acl_id'], GO_SECURITY::WRITE_PERMISSION);
+$GLOBALS['\GO_SECURITY']->add_group_to_acl($GLOBALS['GO_CONFIG']->group_internal, $addressbook['acl_id'], GO_SECURITY::WRITE_PERMISSION);
 
 $addressbook = $ab->add_addressbook(1, $lang['addressbook']['suppliers'], $default_language, $lang['addressbook']['defaultSalutation']);
-$GLOBALS['GO_SECURITY']->add_group_to_acl($GLOBALS['GO_CONFIG']->group_internal, $addressbook['acl_id'], GO_SECURITY::WRITE_PERMISSION);
+$GLOBALS['\GO_SECURITY']->add_group_to_acl($GLOBALS['GO_CONFIG']->group_internal, $addressbook['acl_id'], GO_SECURITY::WRITE_PERMISSION);
 
 
 $company['addressbook_id']=$addressbook['addressbook_id'];
@@ -70,7 +70,7 @@ if (!is_dir($GLOBALS['GO_CONFIG']->file_storage_path.'contacts/contact_photos'))
 
 
 $addressbook = $ab->add_addressbook(1, $lang['addressbook']['customers'], $default_language, $lang['addressbook']['defaultSalutation']);
-$GLOBALS['GO_SECURITY']->add_group_to_acl($GLOBALS['GO_CONFIG']->group_internal, $addressbook['acl_id'], GO_SECURITY::WRITE_PERMISSION);
+$GLOBALS['\GO_SECURITY']->add_group_to_acl($GLOBALS['GO_CONFIG']->group_internal, $addressbook['acl_id'], GO_SECURITY::WRITE_PERMISSION);
 
 /*
  * Problem if files module is not intalled yet.

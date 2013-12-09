@@ -50,12 +50,12 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getPath(){
-		return GO::config()->root_path . 'modules/' . $this->id . '/';
+		return \GO::config()->root_path . 'modules/' . $this->id . '/';
 	}
 	
 	protected function getModuleManager(){
 		if(!isset($this->_moduleManager))	
-			$this->_moduleManager = GO_Base_Module::findByModuleId ($this->id);
+			$this->_moduleManager = \GO_Base_Module::findByModuleId ($this->id);
 		
 		return $this->_moduleManager;
 	}
@@ -72,7 +72,7 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 		
 		if(!$this->admin_menu)
-			$this->acl->addGroup(GO::config()->group_internal);
+			$this->acl->addGroup(\GO::config()->group_internal);
 		
 		if($wasNew){			
 			if($this->moduleManager)
@@ -91,7 +91,7 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	private function _checkDependencies() {
 		
 		$dependentModuleNames = array();
-		$modules = GO::modules()->getAllModules(true);
+		$modules = \GO::modules()->getAllModules(true);
 		foreach ($modules as $module) {
 			$depends = $module->moduleManager->depends();
 			if (in_array($this->id,$depends))
@@ -99,7 +99,7 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 		}
 		
 		if (count($dependentModuleNames)>0)
-			throw new \Exception(sprintf(GO::t('dependenciesCannotDelete'),implode(', ',$dependentModuleNames)));
+			throw new \Exception(sprintf(\GO::t('dependenciesCannotDelete'),implode(', ',$dependentModuleNames)));
 		
 	}
 	
@@ -120,10 +120,10 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	}
 
 //	protected function getName() {
-//		return GO::t('name', $this->id);// isset($lang[$this->id]['name']) ? $lang[$this->id]['name'] : $this->id;
+//		return \GO::t('name', $this->id);// isset($lang[$this->id]['name']) ? $lang[$this->id]['name'] : $this->id;
 //	}
 //
 //	protected function getDescription() {
-//		return GO::t('description', $this->id);
+//		return \GO::t('description', $this->id);
 //	}
 	}

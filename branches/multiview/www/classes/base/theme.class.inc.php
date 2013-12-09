@@ -103,7 +103,7 @@ class GO_THEME
 
 
 	function replace_url($css, $baseurl){
-		return preg_replace('/url[\s]*\(([^\)]*)\)/ieU', "GO_THEME::replace_url_callback('$1', \$baseurl)", $css);
+		return preg_replace('/url[\s]*\(([^\)]*)\)/ieU', "\GO_THEME::replace_url_callback('$1', \$baseurl)", $css);
 	}
 
 	function replace_url_callback($url, $baseurl){
@@ -167,7 +167,7 @@ class GO_THEME
 
 		$hash = md5($GLOBALS['GO_CONFIG']->file_storage_path.$GLOBALS['GO_CONFIG']->host.$GLOBALS['GO_CONFIG']->mtime.$mods);
 
-		$cacheFolder = GO::config()->getCacheFolder();
+		$cacheFolder = \GO::config()->getCacheFolder();
 		$cssFile = $cacheFolder->createChild($hash.'-'.$this->theme.'-style.css');
 		
 //		$relpath= $cssFile->stripFileStoragePath();
@@ -187,7 +187,7 @@ class GO_THEME
 		}
 
 		//$cssurl = $GLOBALS['GO_CONFIG']->host.'compress.php?file='.basename($relpath);
-		$cssurl = GO::url('core/compress',array('file'=>$cssFile->name()));
+		$cssurl = \GO::url('core/compress',array('file'=>$cssFile->name()));
 		echo '<link href="'.$cssurl.'" type="text/css" rel="stylesheet" />';
 	}
 	

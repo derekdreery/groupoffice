@@ -19,7 +19,7 @@ class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
 	 * @return String
 	 */
 	public function getLabel(){
-		return GO::t('cronEmailReminders','email');
+		return \GO::t('cronEmailReminders','email');
 	}
 	
 	/**
@@ -28,7 +28,7 @@ class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
 	 * @return String
 	 */
 	public function getDescription(){
-		return GO::t('cronEmailRemindersDescription','email');
+		return \GO::t('cronEmailRemindersDescription','email');
 	}
 	
 	/**
@@ -45,14 +45,14 @@ class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
 	 */
 	public function run(GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
 		
-		GO::session()->runAsRoot();
-		$usersStmt = GO_Base_Model_User::model()->findByAttribute('mail_reminders', 1);
+		\GO::session()->runAsRoot();
+		$usersStmt = \GO_Base_Model_User::model()->findByAttribute('mail_reminders', 1);
 		while ($userModel = $usersStmt->fetch()) {
 			
-			GO::debug("Sending mail reminders to ".$userModel->username);
+			\GO::debug("Sending mail reminders to ".$userModel->username);
 			
-			$remindersStmt = GO_Base_Model_Reminder::model()->find(
-				GO_Base_Db_FindParams::newInstance()
+			$remindersStmt = \GO_Base_Model_Reminder::model()->find(
+				\GO_Base_Db_FindParams::newInstance()
 					->joinModel(array(
 						'model' => 'GO_Base_Model_ReminderUser',
 						'localTableAlias' => 't',
@@ -61,7 +61,7 @@ class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
 						'tableAlias' => 'ru'								
 					))
 					->criteria(
-						GO_Base_Db_FindCriteria::newInstance()
+						\GO_Base_Db_FindCriteria::newInstance()
 							->addCondition('user_id', $userModel->id, '=', 'ru')
 							->addCondition('time', time(), '<', 'ru')
 							->addCondition('mail_sent', '0', '=', 'ru')
@@ -73,27 +73,27 @@ class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
 
 //					var_dump($relatedModel->name);
 
-//					$modelName = $relatedModel ? $relatedModel->localizedName : GO::t('unknown');
-				$subject = GO::t('reminder').': '.$reminderModel->name;
+//					$modelName = $relatedModel ? $relatedModel->localizedName : \GO::t('unknown');
+				$subject = \GO::t('reminder').': '.$reminderModel->name;
 
 				$time = !empty($reminderModel->vtime) ? $reminderModel->vtime : $reminderModel->time;
 
 				date_default_timezone_set($userModel->timezone);
 
-				$body = GO::t('time').': '.date($userModel->completeDateFormat.' '.$userModel->time_format,$time)."\n";
-				$body .= GO::t('name').': '.str_replace('<br />',',',$reminderModel->name)."\n";
+				$body = \GO::t('time').': '.date($userModel->completeDateFormat.' '.$userModel->time_format,$time)."\n";
+				$body .= \GO::t('name').': '.str_replace('<br />',',',$reminderModel->name)."\n";
 
-//					date_default_timezone_set(GO::user()->timezone);
+//					date_default_timezone_set(\GO::user()->timezone);
 
-				$message = GO_Base_Mail_Message::newInstance($subject, $body);
-				$message->addFrom(GO::config()->webmaster_email,GO::config()->title);
+				$message = \GO_Base_Mail_Message::newInstance($subject, $body);
+				$message->addFrom(\GO::config()->webmaster_email,\GO::config()->title);
 				$message->addTo($userModel->email,$userModel->name);
-				GO_Base_Mail_Mailer::newGoInstance()->send($message, $failedRecipients);
+				\GO_Base_Mail_Mailer::newGoInstance()->send($message, $failedRecipients);
 				
 				if(!empty($failedRecipients))
 					trigger_error ("Reminder mail failed for recipient: ".implode(',', $failedRecipients), E_USER_NOTICE);
 
-				$reminderUserModelSend = GO_Base_Model_ReminderUser::model()
+				$reminderUserModelSend = \GO_Base_Model_ReminderUser::model()
 					->findSingleByAttributes(array(
 						'user_id' => $userModel->id,
 						'reminder_id' => $reminderModel->id
@@ -102,7 +102,7 @@ class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
 				$reminderUserModelSend->save();
 			}
 
-			date_default_timezone_set(GO::user()->timezone);
+			date_default_timezone_set(\GO::user()->timezone);
 		}
 	}
 	

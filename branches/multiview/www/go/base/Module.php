@@ -58,7 +58,7 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * @return string 
 	 */
 	public function path(){
-		return GO::config()->root_path . 'modules/' . $this->id() . '/';
+		return \GO::config()->root_path . 'modules/' . $this->id() . '/';
 	}
 
 	/**
@@ -67,7 +67,7 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * @return String 
 	 */
 	public function name() {
-		$name = GO::t('name', $this->id());
+		$name = \GO::t('name', $this->id());
 		if($name=='name')
 			$name = $this->id();
 		return $name;
@@ -80,12 +80,12 @@ class GO_Base_Module extends GO_Base_Observable {
 	 */
 	public function icon(){
 		
-		$icon = $this->_findIconByTheme(GO::user()->theme);
+		$icon = $this->_findIconByTheme(\GO::user()->theme);
 		if(!$icon)
 			$icon = $this->_findIconByTheme("Default");
 		
 		if(!$icon)
-			$icon = GO::config()->host.'views/Extjs3/themes/Default/images/16x16/unknown.png';
+			$icon = \GO::config()->host.'views/Extjs3/themes/Default/images/16x16/unknown.png';
 		
 		return $icon;
 	}
@@ -93,9 +93,9 @@ class GO_Base_Module extends GO_Base_Observable {
 	private function _findIconByTheme($theme){
 		$path = $this->path();
 		if(file_exists($path.'/themes/'.$theme.'/images/'.$this->id().'.png')){
-			return GO::config()->host.'modules/'.$this->id().'/themes/'.$theme.'/images/'.$this->id().'.png';
+			return \GO::config()->host.'modules/'.$this->id().'/themes/'.$theme.'/images/'.$this->id().'.png';
 		}elseif(file_exists($path.'views/Extjs3/themes/'.$theme.'/images/'.$this->id().'.png')){
-			return GO::config()->host.'modules/'.$this->id().'/views/Extjs3/themes/'.$theme.'/images/'.$this->id().'.png';
+			return \GO::config()->host.'modules/'.$this->id().'/views/Extjs3/themes/'.$theme.'/images/'.$this->id().'.png';
 		}  else {
 			return false;
 		}
@@ -107,7 +107,7 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * @return String 
 	 */
 	public function description() {
-		return GO::t('description', $this->id());
+		return \GO::t('description', $this->id());
 	}
 	
 	/**
@@ -199,18 +199,18 @@ class GO_Base_Module extends GO_Base_Observable {
 		if(!file_exists($updatesFile))
 			$updatesFile = $this->path() . 'install/updates.inc.php';
 		
-		return GO_Base_Util_Common::countUpgradeQueries($updatesFile);
+		return \GO_Base_Util_Common::countUpgradeQueries($updatesFile);
 	}
 	
 	public function checkDependenciesForInstallation($modulesToBeInstalled=array()){
 		$depends = $this->depends();
 		
 		foreach($depends as $moduleId){
-			if(!GO::modules()->isInstalled($moduleId) && !in_array($moduleId,$modulesToBeInstalled)){
+			if(!\GO::modules()->isInstalled($moduleId) && !in_array($moduleId,$modulesToBeInstalled)){
 				
 				$moduleNames = array();
 				foreach($depends as $moduleId){
-					$modManager = GO_Base_Module::findByModuleId($moduleId);
+					$modManager = \GO_Base_Module::findByModuleId($moduleId);
 					$moduleNames[]=$modManager ? $modManager->name () : $moduleId;
 				}				
 				
@@ -231,20 +231,20 @@ class GO_Base_Module extends GO_Base_Observable {
 		try{
 			if(file_exists($sqlFile))
 			{
-				$queries = GO_Base_Util_SQL::getSqlQueries($sqlFile);
+				$queries = \GO_Base_Util_SQL::getSqlQueries($sqlFile);
 
 				foreach($queries as $query)
-					GO::getDbConnection ()->query($query);
+					\GO::getDbConnection ()->query($query);
 			}
 		}catch(PDOException $e){
 			throw new \Exception("SQL query failed: ".$query."\n\n".$e->getMessage());
 		}
 		
-		GO::clearCache();
+		\GO::clearCache();
 		
 		
 		//call saveUser for each user
-//		$stmt = GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
+//		$stmt = \GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
 //		while($user = $stmt->fetch()){
 //			call_user_func(array(get_class($this),'saveUser'), $user, true);
 //		}
@@ -259,11 +259,11 @@ class GO_Base_Module extends GO_Base_Observable {
 	 */
 	public function uninstall() {
 		
-		$oldIgnore = GO::setIgnoreAclPermissions();
+		$oldIgnore = \GO::setIgnoreAclPermissions();
 		
 		
 //		//call deleteUser for each user
-//		$stmt = GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
+//		$stmt = \GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
 //		while($user = $stmt->fetch()){
 //			call_user_func(array(get_class($this),'deleteUser'), $user);
 //		}
@@ -272,7 +272,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		$cronClasses = $this->findClasses('cron');
 		foreach($cronClasses as $class){
 			
-			$jobs = GO_Base_Cron_CronJob::model()->findByAttribute('job', $class->getName());
+			$jobs = \GO_Base_Cron_CronJob::model()->findByAttribute('job', $class->getName());
 			foreach($jobs as $job)
 				$job->delete();			
 		}
@@ -282,7 +282,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		//They are used for faster linking and search cache. Each linkable model is mapped to an id in this table.
 		$models = $this->getModels();
 		foreach($models as $model){			
-			$modelType = GO_Base_Model_ModelType::model()->findSingleByAttribute('model_name', $model->getName());			
+			$modelType = \GO_Base_Model_ModelType::model()->findSingleByAttribute('model_name', $model->getName());			
 			if($modelType)
 				$modelType->delete();
 		}
@@ -291,14 +291,14 @@ class GO_Base_Module extends GO_Base_Observable {
 		
 		if(file_exists($sqlFile))
 		{
-			$queries = GO_Base_Util_SQL::getSqlQueries($sqlFile);
+			$queries = \GO_Base_Util_SQL::getSqlQueries($sqlFile);
 			foreach($queries as $query)
-				GO::getDbConnection ()->query($query);
+				\GO::getDbConnection ()->query($query);
 		}
 		
-		GO::clearCache();
+		\GO::clearCache();
 		
-		GO::setIgnoreAclPermissions($oldIgnore);
+		\GO::setIgnoreAclPermissions($oldIgnore);
 		
 		return true;
 	}
@@ -307,7 +307,7 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * This class can be overriden by a module class to add listeners to objects
 	 * that extend the GO_Base_Observable class.
 	 * 
-	 * eg. GO_Base_Model_User::model()->addListener('save','SomeClass','someStaticFunction');
+	 * eg. \GO_Base_Model_User::model()->addListener('save','SomeClass','someStaticFunction');
 	 * 	 
 	 */
 	public static function initListeners() {
@@ -341,7 +341,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		foreach($models as $model){
 			if($model->isSubclassOf("GO_Base_Db_ActiveRecord")){
 				echo $response[] = "Processing ".$model->getName()."\n";
-				$stmt = GO::getModel($model->getName())->rebuildSearchCache();
+				$stmt = \GO::getModel($model->getName())->rebuildSearchCache();
 			
 			}
 		}
@@ -363,7 +363,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		
 		foreach($models as $model){	
 			if($model->isSubclassOf("GO_Base_Db_ActiveRecord")){
-				$m = GO::getModel($model->getName());
+				$m = \GO::getModel($model->getName());
 				if($m->checkDatabaseSupported()){					
 					
 					echo "Checking ".$model->getName()."\n";

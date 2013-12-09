@@ -6,7 +6,7 @@ class GO_Files_Filehandler_Download implements GO_Files_Filehandler_Interface{
 	}
 	
 	public function getName(){
-		return GO::t('download');
+		return \GO::t('download');
 	}
 	
 	public function fileIsSupported(GO_Files_Model_File $file){

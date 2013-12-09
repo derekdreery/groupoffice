@@ -6,7 +6,7 @@ $root = dirname(__FILE__) . '/';
 
 require_once($root . 'go/base/util/Cli.php');
 
-$args = GO_Base_Util_Cli::parseArgs();
+$args = \GO_Base_Util_Cli::parseArgs();
 
 if (isset($args['c'])) {
 	define("GO_CONFIG_FILE", $args['c']);
@@ -14,7 +14,7 @@ if (isset($args['c'])) {
 
 //initialize autoloading of library
 require_once($root . 'go/GO.php');
-GO::init();
+\GO::init();
 
 if (!isset($args['q']))
 	echo "\nGroup-Office CLI - Copyright Intermesh BV.\n\n";
@@ -30,9 +30,9 @@ if (empty($args['r'])) {
 	exit();
 } elseif (isset($args['u'])) {// && isset($args['p']))
 	
-	$password = GO_Base_Util_Cli::passwordPrompt("Enter password for user ".$args['u'].":");
+	$password = \GO_Base_Util_Cli::passwordPrompt("Enter password for user ".$args['u'].":");
 
-	$user = GO::session()->login($args['u'], $password);
+	$user = \GO::session()->login($args['u'], $password);
 	if (!$user) {
 		echo "Login failed for user " . $args['u'] . "\n";
 		exit(1);
@@ -40,4 +40,4 @@ if (empty($args['r'])) {
 	unset($args['u']);
 }
 
-GO::router()->runController();
+\GO::router()->runController();

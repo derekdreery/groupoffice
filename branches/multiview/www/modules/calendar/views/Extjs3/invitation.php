@@ -11,27 +11,27 @@
  * @version $Id: invitation.php 7752 2011-07-26 13:48:43Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-//require_once(GO::config()->root_path."Group-Office.php");
+//require_once(\GO::config()->root_path."Group-Office.php");
 
 extract($data);
 
 
 $this->render('externalHeader');
 
-if ($participant->status == GO_Calendar_Model_Participant::STATUS_ACCEPTED) {
+if ($participant->status == \GO_Calendar_Model_Participant::STATUS_ACCEPTED) {
 	?>
-	<p><?php echo GO::t('eventAccepted', 'calendar'); ?></p>		
+	<p><?php echo \GO::t('eventAccepted', 'calendar'); ?></p>		
 	<?php
 	}else
 	{
 	?>
-	<p><?php echo GO::t('eventDeclined', 'calendar'); ?></p>
+	<p><?php echo \GO::t('eventDeclined', 'calendar'); ?></p>
 	<?php
 }
 
 if ($event) {
 	?>
-	<p><?php echo sprintf(GO::t('eventScheduledIn', 'calendar'), $event->calendar->name, $participant->statusName); ?></p>
+	<p><?php echo sprintf(\GO::t('eventScheduledIn', 'calendar'), $event->calendar->name, $participant->statusName); ?></p>
 	<?php
 }
 $this->render('externalFooter');

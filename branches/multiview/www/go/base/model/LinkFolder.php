@@ -47,7 +47,7 @@ class GO_Base_Model_LinkFolder extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function hasChildren(){
-		$first = $this->children(GO_Base_Db_FindParams::newInstance()->single());
+		$first = $this->children(\GO_Base_Db_FindParams::newInstance()->single());
 		
 		return $first!=false;
 	}

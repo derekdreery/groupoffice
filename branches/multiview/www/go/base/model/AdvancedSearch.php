@@ -44,12 +44,12 @@ class GO_Base_Model_AdvancedSearch extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getLocalizedName() {
-		return GO::t('advSearch');
+		return \GO::t('advSearch');
 	}	
 	
 	protected function getPermissionLevelForNewModel() {
 		//everybody may create new advanced searches.
-		return GO_Base_Model_Acl::WRITE_PERMISSION;
+		return \GO_Base_Model_Acl::WRITE_PERMISSION;
 	}
 }
 

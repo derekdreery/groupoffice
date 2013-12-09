@@ -22,14 +22,14 @@ class GO_files_Controller_Version extends GO_Base_Controller_AbstractModelContro
 	protected $model = 'GO_Files_Model_Version';
 
 	protected function actionDownload($params){
-		$version = GO_Files_Model_Version::model()->findByPk($params['id']);
+		$version = \GO_Files_Model_Version::model()->findByPk($params['id']);
 		$file = $version->getFilesystemFile();
-	  GO_Base_Util_Http::outputDownloadHeaders($file);		
+	  \GO_Base_Util_Http::outputDownloadHeaders($file);		
 		$file->output();
 	}
 	
 	protected function getStoreParams($params) {		
-		$findParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
+		$findParams = \GO_Base_Db_FindParams::newInstance()->ignoreAcl();
 		$findParams->getCriteria()->addCondition('file_id', $params['file_id']);		
 		
 		return $findParams;

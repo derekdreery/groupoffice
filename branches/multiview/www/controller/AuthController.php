@@ -27,32 +27,32 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 
 	private function loadInit() {
 		
-		GO_Base_Observable::cacheListeners();
+		\GO_Base_Observable::cacheListeners();
 
 		//when GO initializes modules need to perform their first run actions.
-		unset(GO::session()->values['firstRunDone']);
+		unset(\GO::session()->values['firstRunDone']);
 
-		if (GO::user())
+		if (\GO::user())
 			$this->fireEvent('loadapplication', array(&$this));
 	}
 
 	protected function actionInit($params) {
 		
 		if(!empty($params['SET_LANGUAGE']))
-			GO::config()->language=$params['SET_LANGUAGE'];
+			\GO::config()->language=$params['SET_LANGUAGE'];
 
 		$this->loadInit();
 //		$this->render('index');
 		
-//		$view = GO::view();
+//		$view = \GO::view();
 		
 		$this->layout='html';
 		
-		if(!file_exists(GO::view()->getPath().'Login.php')){
+		if(!file_exists(\GO::view()->getPath().'Login.php')){
 			//for backwards theme compat
-			require(GO::view()->getTheme()->getPath().'Layout.php');
+			require(\GO::view()->getTheme()->getPath().'Layout.php');
 		}  else {
-			if(GO::user()){
+			if(\GO::user()){
 				$this->render('Init');
 			}else
 			{
@@ -66,7 +66,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 	}
 
 	protected function actionSetView($params) {
-		GO::setView($params['view']);
+		\GO::setView($params['view']);
 
 		$this->redirect();
 	}
@@ -79,13 +79,13 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 		
 		$response = array();
 	
-		if(!GO_Base_Util_Http::isPostRequest() || empty($params['email']) || empty($params['usertoken'])){
+		if(!\GO_Base_Util_Http::isPostRequest() || empty($params['email']) || empty($params['usertoken'])){
 			$response['success']=false;
 			$response['feedback']="Invalid request!";
 			return $response;
 		}
 
-		$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
+		$user = \GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
 		if($user){
 			if($params['usertoken'] == $user->getSecurityToken()){
 				
@@ -111,17 +111,17 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 	}
 	
 	protected function actionSendResetPasswordMail($params){
-		$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
+		$user = \GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
 
 		if(!$user){
 			$response['success']=false;
-			$response['feedback']=GO::t('lost_password_error','base','lostpassword');
+			$response['feedback']=\GO::t('lost_password_error','base','lostpassword');
 		}else{
 			
 			$user->sendResetPasswordMail();
 			
 			$response['success']=true;
-			$response['feedback']=GO::t('lost_password_success','base','lostpassword');
+			$response['feedback']=\GO::t('lost_password_success','base','lostpassword');
 		}
 		
 		return $response;
@@ -129,7 +129,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 
 	protected function actionLogout() {
 
-		GO::session()->logout();
+		\GO::session()->logout();
 
 		if (isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN'] == '1') {
 			?>
@@ -154,50 +154,50 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 		if(!$this->fireEvent('beforelogin', array(&$params, &$response)))
 			return $response;		
 		
-		$user = GO::session()->login($params['username'], $params['password']);
+		$user = \GO::session()->login($params['username'], $params['password']);
 
 		$response['success'] = $user != false;		
 
 		if (!$response['success']) {		
-			$response['feedback']=GO::t('badLogin');			
+			$response['feedback']=\GO::t('badLogin');			
 		} else {			
 			if (!empty($params['remind'])) {
 
-				$encUsername = GO_Base_Util_Crypt::encrypt($params['username']);
+				$encUsername = \GO_Base_Util_Crypt::encrypt($params['username']);
 				if (!$encUsername)
 					$encUsername = $params['username'];
 
-				$encPassword = GO_Base_Util_Crypt::encrypt($params['password']);
+				$encPassword = \GO_Base_Util_Crypt::encrypt($params['password']);
 				if (!$encPassword)
 					$encPassword = $params['password'];
 
-				GO_Base_Util_Http::setCookie('GO_UN', $encUsername);
-				GO_Base_Util_Http::setCookie('GO_PW', $encPassword);
+				\GO_Base_Util_Http::setCookie('GO_UN', $encUsername);
+				\GO_Base_Util_Http::setCookie('GO_PW', $encPassword);
 			}
 			
-			$response['groupoffice_version']=GO::config()->version;
+			$response['groupoffice_version']=\GO::config()->version;
 			$response['user_id']=$user->id;
-			$response['security_token']=GO::session()->values["security_token"];
+			$response['security_token']=\GO::session()->values["security_token"];
 			$response['sid']=session_id();
 			
 			if(!empty($params['return_user_info'])){
 				$response['modules']=array();
 				
-				foreach(GO::modules()->getAllModules() as $module){
+				foreach(\GO::modules()->getAllModules() as $module){
 					$response['modules'][]=$module->id;
 				}
 				
-				$response['user']=GO::user()->getAttributes();
+				$response['user']=\GO::user()->getAttributes();
 			}
 			
 			
 			if(!empty($params["login_language"]))
 			{
-				GO::user()->language=$params["login_language"];
-				GO::user()->save();
+				\GO::user()->language=$params["login_language"];
+				\GO::user()->save();
 				
 				//TODO remove when ready				
-				require_once(GO::config()->root_path."Group-Office.php");
+				require_once(\GO::config()->root_path."Group-Office.php");
 				$GLOBALS["GO_LANGUAGE"]->set_language($params["login_language"]);
 			}
 			
@@ -205,7 +205,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 		
 		//return $response;
 
-		if (GO_Base_Util_Http::isAjaxRequest())
+		if (\GO_Base_Util_Http::isAjaxRequest())
 			return $response;
 		else
 			$this->redirect();

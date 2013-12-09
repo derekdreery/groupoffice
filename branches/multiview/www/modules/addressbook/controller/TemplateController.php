@@ -22,7 +22,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 	
 	protected function getStoreParams($params) {
 		if(isset($params['type'])){
-			$findParams = GO_Base_Db_FindParams::newInstance();
+			$findParams = \GO_Base_Db_FindParams::newInstance();
 			
 			$findParams->getCriteria()->addCondition('type', $params['type']);
 			return $findParams;
@@ -47,11 +47,11 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 	}
 	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
-		$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($model->content);
+		$message = \GO_Email_Model_SavedMessage::model()->createFromMimeData($model->content);
 		$response['htmlbody'] = $message->getHtmlBody();
 		
 		// reset the temp folder created by the core controller
-//		$tmpFolder = new \GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
+//		$tmpFolder = new \GO_Base_Fs_Folder(\GO::config()->tmpdir . 'uploadqueue');
 //		$tmpFolder->delete();
 		
 		parent::afterSubmit($response, $model, $params, $modifiedAttributes);
@@ -60,7 +60,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 	protected function afterLoad(&$response, &$model, &$params) {
 		
 		// create message model from client's content field, turned into HTML format
-		$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($model->content);
+		$message = \GO_Email_Model_SavedMessage::model()->createFromMimeData($model->content);
 	
 		$html = empty($params['content_type']) || $params['content_type']=='html';
 		
@@ -83,17 +83,17 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		// The user can choose to set the default template for an email account or
 		// for himself (current user).
 		if ((!empty($params['type']) && $params['type']=='default_for_account') || (!empty($params['account_id']) && isset($params['default_template_id']))) {
-			$defTempForAccount = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($params['account_id']);
+			$defTempForAccount = \GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($params['account_id']);
 			if(!$defTempForAccount){
 				$defTempForAccount= new \GO_Addressbook_Model_DefaultTemplateForAccount();
 				$defTempForAccount->account_id = $params['account_id'];
 				$defTempForAccount->save();
 			}
 		} else {
-			$defTempForUser = GO_Addressbook_Model_DefaultTemplate::model()->findByPk(GO::user()->id);
+			$defTempForUser = \GO_Addressbook_Model_DefaultTemplate::model()->findByPk(\GO::user()->id);
 			if(!$defTempForUser){
 				$defTempForUser= new \GO_Addressbook_Model_DefaultTemplate();
-				$defTempForUser->user_id = GO::user()->id;
+				$defTempForUser->user_id = \GO::user()->id;
 				$defTempForUser->save();
 			}
 		}
@@ -106,19 +106,19 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 			$this->_defaultTemplate->save();
 		}
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()->order('name');			
-		$findParams->getCriteria()->addCondition('type', GO_Addressbook_Model_Template::TYPE_EMAIL);
+		$findParams = \GO_Base_Db_FindParams::newInstance()->order('name');			
+		$findParams->getCriteria()->addCondition('type', \GO_Addressbook_Model_Template::TYPE_EMAIL);
 				
-		$stmt = GO_Addressbook_Model_Template::model()->find($findParams);
+		$stmt = \GO_Addressbook_Model_Template::model()->find($findParams);
 		
-		$store = GO_Base_Data_Store::newInstance(GO_Addressbook_Model_Template::model());		
+		$store = \GO_Base_Data_Store::newInstance(\GO_Addressbook_Model_Template::model());		
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatEmailSelectionRecord'));
 		
 		$store->setStatement($stmt);
 		$store->addRecord(array(
 			'group' => 'templates',
 			'checked'=>isset($this->_defaultTemplate->template_id) && $this->_defaultTemplate->template_id==0,
-			'text' => GO::t('none'),
+			'text' => \GO::t('none'),
 			'template_id'=>0
 		));
 		
@@ -129,14 +129,14 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 			$response['results'][] = '-';
 
 			$record = array(
-				'text' => GO::t('setCurrentTemplateAsDefault','addressbook'),
+				'text' => \GO::t('setCurrentTemplateAsDefault','addressbook'),
 				'template_id'=>'default'
 			);
 
 			$response['results'][] = $record;
 			
 			$record = array(
-				'text' => GO::t('setCurrentTemplateAsDefaultEAccount','addressbook'),
+				'text' => \GO::t('setCurrentTemplateAsDefaultEAccount','addressbook'),
 				'template_id'=>'default_for_account'
 			);
 			
@@ -148,9 +148,9 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 	
 	protected function actionDefaultTemplateId($params) {
 		
-		$templateModel = GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($params['account_id']);
+		$templateModel = \GO_Addressbook_Model_DefaultTemplateForAccount::model()->findByPk($params['account_id']);
 		if (!$templateModel)
-			$templateModel = GO_Addressbook_Model_DefaultTemplate::model()->findByPk(GO::user()->id);
+			$templateModel = \GO_Addressbook_Model_DefaultTemplate::model()->findByPk(\GO::user()->id);
 		
 		if (!$templateModel)
 			return array('success'=>true,'data'=>array('template_id'=>0));
@@ -174,12 +174,12 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 
 	public function actionAccountTemplatesStore($params){	
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()->order('name');			
-		$findParams->getCriteria()->addCondition('type', GO_Addressbook_Model_Template::TYPE_EMAIL);
+		$findParams = \GO_Base_Db_FindParams::newInstance()->order('name');			
+		$findParams->getCriteria()->addCondition('type', \GO_Addressbook_Model_Template::TYPE_EMAIL);
 				
-		$stmt = GO_Addressbook_Model_Template::model()->find($findParams);
+		$stmt = \GO_Addressbook_Model_Template::model()->find($findParams);
 		
-		$store = GO_Base_Data_Store::newInstance(GO_Addressbook_Model_Template::model());		
+		$store = \GO_Base_Data_Store::newInstance(\GO_Addressbook_Model_Template::model());		
 //		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatEmailSelectionRecord'));
 		
 		$store->setStatement($stmt);
@@ -187,7 +187,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		$response = $store->getData();
 			
 		$response['total']++;
-		$response['results'][] = array('id'=>-1,'name'=>'-- '.GO::t('userDefaultTemplate','addressbook').' --','group'=>'','text'=>'','template_id'=>'','checked'=>false);
+		$response['results'][] = array('id'=>-1,'name'=>'-- '.\GO::t('userDefaultTemplate','addressbook').' --','group'=>'','text'=>'','template_id'=>'','checked'=>false);
 		return $response;
 	}
 	

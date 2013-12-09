@@ -25,7 +25,7 @@ class GO_Base_Util_Validate {
 	 * @return bool
 	 */
 	public static function email($email) {
-		return preg_match(GO_Base_Util_String::get_email_validation_regex(), $email);
+		return preg_match(\GO_Base_Util_String::get_email_validation_regex(), $email);
 	}
 	
 /**
@@ -42,7 +42,7 @@ class GO_Base_Util_Validate {
 				$isInternal = true;
 		}
 
-		return $isInternal && GO_Base_Util_Validate::ip($ip);
+		return $isInternal && \GO_Base_Util_Validate::ip($ip);
 	}
 	
 /**
@@ -135,7 +135,7 @@ class GO_Base_Util_Validate {
 	 */
 	public static function vatApplicable($customerCountry, $hasVatNo, $merchantCountry){
 		return strtolower($customerCountry)==strtolower($merchantCountry) || 
-						(GO_Base_Util_Validate::isEUCountry($customerCountry) && !$hasVatNo);
+						(\GO_Base_Util_Validate::isEUCountry($customerCountry) && !$hasVatNo);
 	}
 	
 	/**
@@ -155,7 +155,7 @@ class GO_Base_Util_Validate {
 			$vat = trim(substr($vat,2));
 		
 		//$wsdl = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
-		$wsdl = GO::config()->root_path.'go/vendor/wsdl/checkVatService.wsdl';
+		$wsdl = \GO::config()->root_path.'go/vendor/wsdl/checkVatService.wsdl';
 
 		$vies = new \SoapClient($wsdl);
 		
@@ -222,12 +222,12 @@ class GO_Base_Util_Validate {
 	 * @return boolean
 	 */
 	public static function strongPassword($password){
-		$minLength=GO::config()->password_min_length;
-		$requireUpperCase=GO::config()->password_require_uc;
-		$requireLowerCase=GO::config()->password_require_lc;
-		$requireNumber=GO::config()->password_require_num;
-		$requireSpecialChars=GO::config()->password_require_sc;
-		$minUniqueChars=GO::config()->password_require_uniq;
+		$minLength=\GO::config()->password_min_length;
+		$requireUpperCase=\GO::config()->password_require_uc;
+		$requireLowerCase=\GO::config()->password_require_lc;
+		$requireNumber=\GO::config()->password_require_num;
+		$requireSpecialChars=\GO::config()->password_require_sc;
+		$minUniqueChars=\GO::config()->password_require_uniq;
 		
 		if($minLength && strlen($password)<$minLength){
 			return false;
@@ -270,34 +270,34 @@ class GO_Base_Util_Validate {
 	
 	public static function getPasswordErrorString($password){
 		
-		$minLength=GO::config()->password_min_length;
-		$requireUpperCase=GO::config()->password_require_uc;
-		$requireLowerCase=GO::config()->password_require_lc;
-		$requireNumber=GO::config()->password_require_num;
-		$requireSpecialChars=GO::config()->password_require_sc;
-		$minUniqueChars=GO::config()->password_require_uniq;
+		$minLength=\GO::config()->password_min_length;
+		$requireUpperCase=\GO::config()->password_require_uc;
+		$requireLowerCase=\GO::config()->password_require_lc;
+		$requireNumber=\GO::config()->password_require_num;
+		$requireSpecialChars=\GO::config()->password_require_sc;
+		$minUniqueChars=\GO::config()->password_require_uniq;
 		
 		
-		$str = GO::t('passwordIsWeak')."\n\n";
+		$str = \GO::t('passwordIsWeak')."\n\n";
 		
 		if($minLength && strlen($password)<$minLength){
-			$str .=  sprintf(GO::t('passwordMinLength'),$minLength)."\n";
+			$str .=  sprintf(\GO::t('passwordMinLength'),$minLength)."\n";
 		}
 		
 		if($requireUpperCase && !preg_match('/[A-Z]/', $password)){
-			$str .=  GO::t('passwordRequireUc')."\n";
+			$str .=  \GO::t('passwordRequireUc')."\n";
 		}
 		
 		if($requireLowerCase && !preg_match('/[a-z]/', $password)){
-			$str .=  GO::t('passwordRequireLc')."\n";
+			$str .=  \GO::t('passwordRequireLc')."\n";
 		}
 		
 		if($requireNumber && !preg_match('/[0-9]/', $password)){
-			$str .=  GO::t('passwordRequireNum')."\n";
+			$str .=  \GO::t('passwordRequireNum')."\n";
 		}
 		
 		if($requireSpecialChars && !preg_match('/[^\da-zA-Z]/', $password)){
-			$str .=  GO::t('passwordRequireSc')."\n";
+			$str .=  \GO::t('passwordRequireSc')."\n";
 		}
 		
 		if($minUniqueChars){
@@ -305,7 +305,7 @@ class GO_Base_Util_Validate {
 			$arr = array_unique($arr);
 			
 			if(count($arr)<$minUniqueChars){
-				$str .=  sprintf(GO::t('passwordUnique'),$minLength)."\n";
+				$str .=  sprintf(\GO::t('passwordUnique'),$minLength)."\n";
 			}
 		}
 		return $str;

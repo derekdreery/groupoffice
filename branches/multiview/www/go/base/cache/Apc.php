@@ -23,9 +23,9 @@ class GO_Base_Cache_Apc implements GO_Base_Cache_Interface{
 	private $_prefix;
 	
 	public function __construct() {
-		GO::debug("Using GO_Base_Cache_Apc cache");
+		\GO::debug("Using GO_Base_Cache_Apc cache");
 		
-		$this->_prefix=GO::config()->db_name.'-';
+		$this->_prefix=\GO::config()->db_name.'-';
 	}
 
 	/**

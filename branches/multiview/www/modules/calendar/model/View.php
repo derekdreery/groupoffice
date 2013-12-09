@@ -58,7 +58,7 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
 	 }
 	 
 	 protected function getPermissionLevelForNewModel() {
-		 return GO_Base_Model_Acl::MANAGE_PERMISSION;
+		 return \GO_Base_Model_Acl::MANAGE_PERMISSION;
 	 }
 	 
 
@@ -71,9 +71,9 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
      
      public function getGroupCalendars()
      {
-        $findParams = GO_Base_Db_FindParams::newInstance()
+        $findParams = \GO_Base_Db_FindParams::newInstance()
                 ->select('t.*')
-                ->criteria(GO_Base_Db_FindCriteria::newInstance()
+                ->criteria(\GO_Base_Db_FindCriteria::newInstance()
 				->addCondition('view_id', $this->id,'=', 'vgr'));	
         
         $findParams->joinModel(array(
@@ -104,12 +104,12 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
             'localTableAlias'=>'grp',
             'foreignField'=>'group_id',
             'tableAlias'=>'vgr', 
-            'criteria'=> GO_Base_Db_FindCriteria::newInstance()
+            'criteria'=> \GO_Base_Db_FindCriteria::newInstance()
 				->addCondition('view_id', $this->id,'=', 'vgr')
 		));
         
 		
-        return GO_Calendar_Model_Calendar::model()->find($findParams);
+        return \GO_Calendar_Model_Calendar::model()->find($findParams);
      }
 
 	/**

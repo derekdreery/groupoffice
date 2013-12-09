@@ -561,9 +561,9 @@ try {
 				$calendar = $calendar_props[] = $cal->get_calendar($calendar_id);
 
 				$permissionLevel = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
-				if($permissionLevel>=GO_SECURITY::READ_PERMISSION){
+				if($permissionLevel>=\GO_SECURITY::READ_PERMISSION){
 					if ($GO_SECURITY->user_id==$calendar['user_id']
-							|| ( !isset($response['calendar_id']) && (!isset($response['permission_level']) || $response['permission_level']<GO_SECURITY::WRITE_PERMISSION) )
+							|| ( !isset($response['calendar_id']) && (!isset($response['permission_level']) || $response['permission_level']<\GO_SECURITY::WRITE_PERMISSION) )
 						) {
 							$response['comment']=$calendar['comment'];
 							$response['calendar_id']=$calendar['id'];
@@ -668,7 +668,7 @@ try {
 								'repeats'=>!empty($event['rrule']),
 								'all_day_event'=>$event['all_day_event'],
 								'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time']),
-								'read_only'=> $event['read_only'] || ($event['private']=='1' && $GLOBALS['GO_SECURITY']->user_id != $event['user_id']) || $permission_levels[$event['calendar_id']]<GO_SECURITY::WRITE_PERMISSION ? true : false,
+								'read_only'=> $event['read_only'] || ($event['private']=='1' && $GLOBALS['\GO_SECURITY']->user_id != $event['user_id']) || $permission_levels[$event['calendar_id']]<GO_SECURITY::WRITE_PERMISSION ? true : false,
 								'username' => $username,
 								'duration' => $duration,
 								'has_other_participants' => $has_other_participants,
@@ -931,7 +931,7 @@ try {
 					continue;
 
 				//$response[$cal->f('id')] = $view_calendar;
-				$view_calendar['write_permission'] = $permission_level>GO_SECURITY::READ_PERMISSION;
+				$view_calendar['write_permission'] = $permission_level>\GO_SECURITY::READ_PERMISSION;
 
 				$events = $cal2->get_events_in_array(array($cal->f('id')), 0,
 								$start_time,
@@ -1029,7 +1029,7 @@ try {
 					foreach($calendars as $calendar_id)
 					{
 						$calendar = $cal->get_calendar($calendar_id);
-						if(($GLOBALS['GO_MODULES']->modules['calendar']['permission_level'] < GO_SECURITY::WRITE_PERMISSION) || ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id']) < GO_SECURITY::DELETE_PERMISSION))
+						if(($GLOBALS['\GO_MODULES']->modules['calendar']['permission_level'] < GO_SECURITY::WRITE_PERMISSION) || ($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id']) < GO_SECURITY::DELETE_PERMISSION))
 						{
 							throw new \AccessDeniedException();
 						}
@@ -1112,7 +1112,7 @@ try {
 
 					foreach($views as $view_id) {
 						$view = $cal->get_view($view_id);
-						if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $view['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
+						if($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $view['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
 							throw new \AccessDeniedException();
 						}
 						$cal->delete_view($view_id);
@@ -1403,7 +1403,7 @@ try {
 			if(isset($_POST['delete_keys']))
 			{
 				try {
-					if($GLOBALS['GO_MODULES']->modules['calendar']['permission_level'] < GO_SECURITY::WRITE_PERMISSION)
+					if($GLOBALS['\GO_MODULES']->modules['calendar']['permission_level'] < GO_SECURITY::WRITE_PERMISSION)
 					{
 						throw new \AccessDeniedException();
 					}

@@ -70,7 +70,7 @@ try {
 
 
 			$addressbook = $ab->get_addressbook($contact_credentials['addressbook_id']);
-			if ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
+			if ($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
 				throw new \AccessDeniedException();
 			}
 
@@ -104,7 +104,7 @@ try {
 				$insert = true;
 			} else {
 				$old_contact = $ab->get_contact($contact_id);
-				if (($old_contact['addressbook_id'] != $contact_credentials['addressbook_id']) && $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_contact['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
+				if (($old_contact['addressbook_id'] != $contact_credentials['addressbook_id']) && $GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_contact['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
 					throw new \AccessDeniedException();
 				}
 
@@ -181,14 +181,14 @@ try {
 
 			$addressbook = $ab->get_addressbook($company_credentials['addressbook_id']);
 
-			if ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
+			if ($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
 				throw new \AccessDeniedException();
 			}
 
 			if ($company_id > 0) {
 				$old_company = $ab->get_company($company_id);
 
-				if (($old_company['addressbook_id'] != $company_credentials['addressbook_id']) && $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_company['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
+				if (($old_company['addressbook_id'] != $company_credentials['addressbook_id']) && $GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_company['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
 					throw new \AccessDeniedException();
 				}
 			}

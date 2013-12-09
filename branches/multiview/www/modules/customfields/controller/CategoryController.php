@@ -8,7 +8,7 @@ class GO_Customfields_Controller_Category extends GO_Base_Controller_AbstractMod
 		$fields = json_decode($params['categories'], true);
 		$sort = 0;
 		foreach ($fields as $field) {
-			$model = GO_Customfields_Model_Category::model()->findByPk($field['id']);
+			$model = \GO_Customfields_Model_Category::model()->findByPk($field['id']);
 			$model->sort_index=$sort;
 			$model->save();
 			$sort++;
@@ -19,7 +19,7 @@ class GO_Customfields_Controller_Category extends GO_Base_Controller_AbstractMod
 
 	protected function getStoreParams($params) {
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 						->order('sort_index');
 		
 		$findParams->getCriteria()->addCondition('extends_model', $params['extends_model']);						
@@ -32,22 +32,22 @@ class GO_Customfields_Controller_Category extends GO_Base_Controller_AbstractMod
 	protected function actionEnabled($params){
 		
 		
-		$disableCategories = GO_Customfields_Model_DisableCategories::model()->findByPk(array('model_id'=>$params['model_id'],'model_name'=>$params['model_name']));
+		$disableCategories = \GO_Customfields_Model_DisableCategories::model()->findByPk(array('model_id'=>$params['model_id'],'model_name'=>$params['model_name']));
 
 		$response['enabled_customfield_categories']=$disableCategories!=false;
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 						->order('sort_index');
 		
 		$findParams->getCriteria()->addCondition('extends_model', $params['model_name']);						
 		
-		$stmt = GO_Customfields_Model_Category::model()->find($findParams);
+		$stmt = \GO_Customfields_Model_Category::model()->find($findParams);
 		
 		$response['results']=array();
 		while($category = $stmt->fetch()){
 			$record = $category->getAttributes('formatted');
 			
-			$record['checked']= GO_Customfields_Model_EnabledCategory::model()->findByPk(array(
+			$record['checked']= \GO_Customfields_Model_EnabledCategory::model()->findByPk(array(
 					'category_id'=>$category->id,
 					'model_name'=>$params['model_name'],
 					'model_id'=>$params['model_id']
@@ -59,7 +59,7 @@ class GO_Customfields_Controller_Category extends GO_Base_Controller_AbstractMod
 	}
 	
 	protected function actionEnableDisabledCategories($params){
-		$disableCategories = GO_Customfields_Model_DisableCategories::model()->findByPk(array('model_id'=>$params['model_id'],'model_name'=>$params['model_name']));
+		$disableCategories = \GO_Customfields_Model_DisableCategories::model()->findByPk(array('model_id'=>$params['model_id'],'model_name'=>$params['model_name']));
 		
 		$enable = !empty($params['enabled']) && $params['enabled']!='false';
 		
@@ -89,10 +89,10 @@ class GO_Customfields_Controller_Category extends GO_Base_Controller_AbstractMod
 	 * @return array array("disable_categories"=>true,"enabled_categories"=>array(1,2)) 
 	 */
 	public static function getEnabledCategoryData($modelName, $modelId){
-		$response['disable_categories']=GO_Customfields_Model_DisableCategories::isEnabled($modelName, $modelId);
+		$response['disable_categories']=\GO_Customfields_Model_DisableCategories::isEnabled($modelName, $modelId);
 		
 		if($response['disable_categories'])
-			$response['enabled_categories']=GO_Customfields_Model_EnabledCategory::model()->getEnabledIds($modelName, $modelId);
+			$response['enabled_categories']=\GO_Customfields_Model_EnabledCategory::model()->getEnabledIds($modelName, $modelId);
 		
 		return $response;
 	}
@@ -102,7 +102,7 @@ class GO_Customfields_Controller_Category extends GO_Base_Controller_AbstractMod
 		$categories = json_decode($params['categories'], true);
 		
 		foreach($categories as $category_id){
-			$enabled = GO_Customfields_Model_EnabledCategory::model()->findByPk(array(
+			$enabled = \GO_Customfields_Model_EnabledCategory::model()->findByPk(array(
 					'category_id'=>$category_id,
 					'model_name'=>$params['model_name'],
 					'model_id'=>$params['model_id']
@@ -117,10 +117,10 @@ class GO_Customfields_Controller_Category extends GO_Base_Controller_AbstractMod
 			}
 		}
 		
-		$stmt = GO_Customfields_Model_EnabledCategory::model()->find(
-			GO_Base_Db_FindParams::newInstance()
+		$stmt = \GO_Customfields_Model_EnabledCategory::model()->find(
+			\GO_Base_Db_FindParams::newInstance()
 						->criteria(
-								GO_Base_Db_FindCriteria::newInstance()
+								\GO_Base_Db_FindCriteria::newInstance()
 									->addInCondition('category_id', $categories, 't', true, true)
 									->addCondition('model_name', $params['model_name'])
 										->addCondition('model_id', $params['model_id'])

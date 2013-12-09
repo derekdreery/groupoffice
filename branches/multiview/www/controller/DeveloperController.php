@@ -8,7 +8,7 @@ class GO_Core_Controller_Developer extends GO_Base_Controller_AbstractController
 	
 	protected function init() {
 		
-		if(!GO::config()->debug)
+		if(!\GO::config()->debug)
 			throw new Exception("Developer controller can only be accessed in debug mode");
 		
 		return parent::init();
@@ -16,7 +16,7 @@ class GO_Core_Controller_Developer extends GO_Base_Controller_AbstractController
 
 	public function actionCreateManyUsers($params) {
 		
-		if(!GO::user()->isAdmin())
+		if(!\GO::user()->isAdmin())
 			throw new Exception("You must be logged in as admin");
 		
 		$amount = 1000;
@@ -27,7 +27,7 @@ class GO_Core_Controller_Developer extends GO_Base_Controller_AbstractController
 
 			echo "Creating $prefix$i\n";
 			
-			$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $prefix . $i);
+			$user = \GO_Base_Model_User::model()->findSingleByAttribute('username', $prefix . $i);
 			if(!$user){
 				$user = new GO_Base_Model_User();
 				$user->username = $prefix . $i;
@@ -42,9 +42,9 @@ class GO_Core_Controller_Developer extends GO_Base_Controller_AbstractController
 				$user->checkDefaultModels();
 			}
 
-			if (GO::modules()->isInstalled('email') && GO::modules()->isInstalled('postfixadmin')) {
+			if (\GO::modules()->isInstalled('email') && \GO::modules()->isInstalled('postfixadmin')) {
 
-				$domainModel = GO_Postfixadmin_Model_Domain::model()->findSingleByAttribute('domain', $domain);
+				$domainModel = \GO_Postfixadmin_Model_Domain::model()->findSingleByAttribute('domain', $domain);
 
 				if (!$domainModel) {
 					$domainModel = new GO_Postfixadmin_Model_Domain();
@@ -52,7 +52,7 @@ class GO_Core_Controller_Developer extends GO_Base_Controller_AbstractController
 					$domainModel->save();
 				}
 
-				$mailboxModel = GO_Postfixadmin_Model_Mailbox::model()->findSingleByAttributes(array('domain_id' => $domainModel->id, 'username' => $user->email));
+				$mailboxModel = \GO_Postfixadmin_Model_Mailbox::model()->findSingleByAttributes(array('domain_id' => $domainModel->id, 'username' => $user->email));
 
 				if (!$mailboxModel) {
 					$mailboxModel = new GO_Postfixadmin_Model_Mailbox();
@@ -65,7 +65,7 @@ class GO_Core_Controller_Developer extends GO_Base_Controller_AbstractController
 				
 				
 				
-				$accountModel = GO_Email_Model_Account::model()->findSingleByAttributes(array('user_id'=>$user->id, 'username'=>$user->email));
+				$accountModel = \GO_Email_Model_Account::model()->findSingleByAttributes(array('user_id'=>$user->id, 'username'=>$user->email));
 				
 				if(!$accountModel){
 					$accountModel = new GO_Email_Model_Account();
@@ -93,7 +93,7 @@ class GO_Core_Controller_Developer extends GO_Base_Controller_AbstractController
 	
 	public function actionTestVObject($params){
 		
-		GO::session()->runAsRoot();
+		\GO::session()->runAsRoot();
 		
 		$ical_str='BEGIN:VCALENDAR
 VERSION:1.0
@@ -114,7 +114,7 @@ END:VCALENDAR';
 		
 	
 		
-		$vobject = GO_Base_VObject_Reader::read($ical_str);
+		$vobject = \GO_Base_VObject_Reader::read($ical_str);
 		
 		$event = new GO_Calendar_Model_Event();
 		$event->importVObject($vobject->vevent[0]);
@@ -125,11 +125,11 @@ END:VCALENDAR';
 	
 	protected function actionGrouped($params){
 		
-		$stmt = GO_Base_Model_Grouped::model()->load(
+		$stmt = \GO_Base_Model_Grouped::model()->load(
 						'GO_Calendar_Model_Event',
 						'c.name', 
 						'c.name, count(*) AS count',
-						GO_Base_Db_FindParams::newInstance()
+						\GO_Base_Db_FindParams::newInstance()
 						->joinModel(array(
 								'model'=>'GO_Calendar_Model_Calendar',
 								'localField'=>'calendar_id',
@@ -146,14 +146,14 @@ END:VCALENDAR';
 	}
 	
 	protected function actionAddRelation($params){
-		GO_Base_Model_User::model()->addRelation('events', array(
-				'type'=>  GO_Base_Db_ActiveRecord::HAS_MANY, 
+		\GO_Base_Model_User::model()->addRelation('events', array(
+				'type'=>  \GO_Base_Db_ActiveRecord::HAS_MANY, 
 				'model'=>'GO_Calendar_Model_Event', 
 				'field'=>'user_id'				
 		));
 		
 		
-		$stmt = GO::user()->events;
+		$stmt = \GO::user()->events;
 		
 		foreach($stmt as $event){
 			echo $event->toHtml();
@@ -164,16 +164,16 @@ END:VCALENDAR';
 	
 	
 	protected function actionGroupRelation($params){
-		GO_Base_Model_User::model()->addRelation('events', array(
-				'type'=>  GO_Base_Db_ActiveRecord::HAS_MANY, 
+		\GO_Base_Model_User::model()->addRelation('events', array(
+				'type'=>  \GO_Base_Db_ActiveRecord::HAS_MANY, 
 				'model'=>'GO_Calendar_Model_Event', 
 				'field'=>'user_id'				
 		));
 		
-		$fp = GO_Base_Db_FindParams::newInstance()->groupRelation('events', 'count(events.id) as eventCount');
+		$fp = \GO_Base_Db_FindParams::newInstance()->groupRelation('events', 'count(events.id) as eventCount');
 
 				
-		$stmt = GO_Base_Model_User::model()->find($fp);
+		$stmt = \GO_Base_Model_User::model()->find($fp);
 		
 		foreach($stmt as $user){
 			echo $user->name.': '.$user->eventCount."<br />";
@@ -185,10 +185,10 @@ END:VCALENDAR';
 	
 	protected function actionCreateEvents($params){
 		
-		$now = GO_Base_Util_Date::clear_time(time());
+		$now = \GO_Base_Util_Date::clear_time(time());
 		
 		for($i=0;$i<30;$i++){
-			$time = GO_Base_Util_Date::date_add($now, -$i);
+			$time = \GO_Base_Util_Date::date_add($now, -$i);
 			
 			for($n=0;$n<10;$n++){
 				
@@ -197,8 +197,8 @@ END:VCALENDAR';
 				
 				$event->description = str_repeat('All work and no play, makes Jack a dull boy. ',100);
 				
-				$event->start_time = GO_Base_Util_Date::date_add($time, 0,0,0,$n+7);
-				$event->end_time = GO_Base_Util_Date::date_add($time, 0,0,0,$n+8);
+				$event->start_time = \GO_Base_Util_Date::date_add($time, 0,0,0,$n+7);
+				$event->end_time = \GO_Base_Util_Date::date_add($time, 0,0,0,$n+8);
 				
 				$event->save();
 					
@@ -225,7 +225,7 @@ END:VCALENDAR';
 ';
 		
 		
-		$tags = GO_Base_Util_TagParser::getTags('site:img', $content);
+		$tags = \GO_Base_Util_TagParser::getTags('site:img', $content);
 		
 		var_dump($tags);
 		
@@ -234,9 +234,9 @@ END:VCALENDAR';
 	
 	
 	protected function actionJoinRelation($params){
-		$product = GO_Billing_Model_Product::model()->findByPk(426	);
+		$product = \GO_Billing_Model_Product::model()->findByPk(426	);
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 						->order(array('book.name', 'order.btime'),array('ASC','DESC'))
 						->joinRelation('order.book');
 		
@@ -245,7 +245,7 @@ END:VCALENDAR';
 						->addCondition('btime', time(), '<', 'order')
 						->addCondition('btime', 0, '>', 'order');
 		
-		$stmt = GO_Billing_Model_Item::model()->find($findParams);
+		$stmt = \GO_Billing_Model_Item::model()->find($findParams);
 		
 		$item = $stmt->fetch();
 		
@@ -267,9 +267,9 @@ END:VCALENDAR';
 	
 	protected function actionTestDbClose(){
 		
-//		GO::unsetDbConnection();
+//		\GO::unsetDbConnection();
 		
-		$stmt = GO_Base_Model_User::model()->find();
+		$stmt = \GO_Base_Model_User::model()->find();
 		sleep(10);
 		
 		echo "Done";
@@ -279,7 +279,7 @@ END:VCALENDAR';
 	
 	protected function actionDefaultVat(){
 		
-		$order = GO_Billing_Model_Order::model()->findSingle();
+		$order = \GO_Billing_Model_Order::model()->findSingle();
 		
 		$item = new GO_Billing_Model_Item();
 		$item->description="test";
@@ -297,20 +297,20 @@ END:VCALENDAR';
 	
 	protected function actionDuplicateCF(){
 		
-		$stmt = GO_Customfields_Model_Category::model()->findByModel("GO_Projects2_Model_Project");
+		$stmt = \GO_Customfields_Model_Category::model()->findByModel("GO_Projects2_Model_Project");
 		$stmt->callOnEach('delete');
 		
 		$sql = "DROP TABLE IF EXISTS cf_pr2_projects";
-		GO::getDbConnection()->query($sql);
+		\GO::getDbConnection()->query($sql);
 		
 		$sql = "CREATE TABLE IF NOT EXISTS `cf_pr2_projects` (
   `model_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`model_id`)
 ) ENGINE=InnoDB;";
-		GO::getDbConnection()->query($sql);
+		\GO::getDbConnection()->query($sql);
 		
 
-		$stmt = GO_Customfields_Model_Category::model()->findByModel("GO_Projects_Model_Project");
+		$stmt = \GO_Customfields_Model_Category::model()->findByModel("GO_Projects_Model_Project");
 
 		foreach($stmt as $category){
 			$category->duplicate(array(
@@ -329,23 +329,23 @@ END:VCALENDAR';
 		
 		
 		$sql = "INSERT INTO cf_pr2_projects SELECT * FROM cf_pm_projects";
-		GO::getDbConnection()->query($sql);
+		\GO::getDbConnection()->query($sql);
 
 
-		$stmt = GO_Customfields_Model_Category::model()->findByModel("GO_Projects2_Model_TimeEntry");
+		$stmt = \GO_Customfields_Model_Category::model()->findByModel("GO_Projects2_Model_TimeEntry");
 		$stmt->callOnEach('delete');
 		
 		
 		$sql = "DROP TABLE IF EXISTS cf_pr2_hours";
-		GO::getDbConnection()->query($sql);
+		\GO::getDbConnection()->query($sql);
 		
 		$sql = "CREATE TABLE IF NOT EXISTS `cf_pr2_hours` (
   `model_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`model_id`)
 ) ENGINE=InnoDB;";
-		GO::getDbConnection()->query($sql);
+		\GO::getDbConnection()->query($sql);
 
-		$stmt = GO_Customfields_Model_Category::model()->findByModel("GO_Projects_Model_Hour");
+		$stmt = \GO_Customfields_Model_Category::model()->findByModel("GO_Projects_Model_Hour");
 
 		foreach($stmt as $category){
 			$category->duplicate(array(
@@ -356,7 +356,7 @@ END:VCALENDAR';
 		
 		
 		$sql = "INSERT INTO cf_pr2_hours SELECT * FROM cf_pm_hours";
-		GO::getDbConnection()->query($sql);
+		\GO::getDbConnection()->query($sql);
 			
 
 	}

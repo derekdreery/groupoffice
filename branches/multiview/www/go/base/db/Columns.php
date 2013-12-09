@@ -41,7 +41,7 @@ class GO_Base_Db_Columns{
 	 * @param GO_Base_Db_ActiveRecord $model
 	 */
 	public static function clearCache(GO_Base_Db_ActiveRecord $model){
-		GO::cache()->delete(self::getCacheKey($model));
+		\GO::cache()->delete(self::getCacheKey($model));
 	}
 	
 	/**
@@ -56,18 +56,18 @@ class GO_Base_Db_Columns{
 		
 		if(self::$forceLoad){
 			unset(self::$_columns[$tableName]);
-			GO::cache()->delete($cacheKey);
+			\GO::cache()->delete($cacheKey);
 		}
 		
 		if(isset(self::$_columns[$tableName]) && !self::$forceLoad){
 			return self::$_columns[$tableName];
-		}elseif(($columns = GO::cache()->get($cacheKey))){
-//			GO::debug("Got columns from cache for $tableName");
+		}elseif(($columns = \GO::cache()->get($cacheKey))){
+//			\GO::debug("Got columns from cache for $tableName");
 			self::$_columns[$tableName]=$columns;
 			return self::$_columns[$tableName];
 		}else
 		{	
-//			GO::debug("Loading columns for $tableName");
+//			\GO::debug("Loading columns for $tableName");
 			self::$_columns[$tableName]=array();
 			$sql = "SHOW COLUMNS FROM `" . $tableName. "`;";
 			$stmt = $model->getDbConnection()->query($sql);
@@ -172,7 +172,7 @@ class GO_Base_Db_Columns{
 
 			}
 			
-			GO::cache()->set($cacheKey, self::$_columns[$tableName]);
+			\GO::cache()->set($cacheKey, self::$_columns[$tableName]);
 			
 			return self::$_columns[$tableName];			
 		}		

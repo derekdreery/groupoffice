@@ -18,32 +18,32 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	}
 	
 	protected function actionSaveSetting($params){
-		$response['success']=GO::config()->save_setting($params['name'], $params['value'], $params['user_id']);
+		$response['success']=\GO::config()->save_setting($params['name'], $params['value'], $params['user_id']);
 		
 		return $response;
 	}
 	
 	protected function actionDebug($params){
 		
-		if(empty(GO::session()->values['debug'])){
-//			if(!GO::user()->isAdmin())
+		if(empty(\GO::session()->values['debug'])){
+//			if(!\GO::user()->isAdmin())
 //				throw new GO_Base_Exception_AccessDenied("Debugging can only be enabled by an admin. Tip: You can enable it as admin and switch to any user with the 'Switch user' module.");
 		
-			GO::session()->values['debug']=true;
+			\GO::session()->values['debug']=true;
 		}
 		
-		GO::session()->values['debugSql']=!empty($params['debugSql']);
+		\GO::session()->values['debugSql']=!empty($params['debugSql']);
 		
 		
-		$debugFile = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/debug.log');
+		$debugFile = new \GO_Base_Fs_File(\GO::config()->file_storage_path.'log/debug.log');
 		if(!$debugFile->exists())
 			$debugFile->touch(true);
 		
-		$errorFile = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/error.log');
+		$errorFile = new \GO_Base_Fs_File(\GO::config()->file_storage_path.'log/error.log');
 		if(!$errorFile->exists())
 			$errorFile->touch(true);
 		
-		$debugLog = nl2br(str_replace('['.GO::user()->username.'] ','',  htmlspecialchars($debugFile->tail(300))));
+		$debugLog = nl2br(str_replace('['.\GO::user()->username.'] ','',  htmlspecialchars($debugFile->tail(300))));
 		$debugLog = str_replace('--------------------','<hr />', $debugLog);
 		
 		return array(
@@ -55,17 +55,17 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	protected function actionInfo($params){
 		
-		if(empty(GO::session()->values['debug'])){
+		if(empty(\GO::session()->values['debug'])){
 			throw new GO_Base_Exception_AccessDenied("Debugging can only be enabled by an admin");
 		}
 			
 		$response = array('success'=>true, 'info'=>'');
 		
-		$info['username']=GO::user()->username;
-		$info['config']=GO::config()->get_config_file();
-		$info['database']=GO::config()->db_name;
+		$info['username']=\GO::user()->username;
+		$info['config']=\GO::config()->get_config_file();
+		$info['database']=\GO::config()->db_name;
 		
-		$modules = GO::modules()->getAllModules();		
+		$modules = \GO::modules()->getAllModules();		
 		foreach($modules as $module){
 			if(!isset($info['modules']))
 				$info['modules']=$module->id;
@@ -88,7 +88,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$phpinfo = ob_get_contents();
 		ob_get_clean();
 		
-		$response['info'].= GO_Base_Util_String::sanitizeHtml($phpinfo);
+		$response['info'].= \GO_Base_Util_String::sanitizeHtml($phpinfo);
 		return $response;
 		
 	}
@@ -101,10 +101,10 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$to_folder_id = isset($params['to_folder_id']) ? $params['to_folder_id'] : 0;
 
 		foreach ($fromLinks as $fromLink) {
-			$fromModel = GO::getModel($fromLink['model_name'])->findByPk($fromLink['model_id']);
+			$fromModel = \GO::getModel($fromLink['model_name'])->findByPk($fromLink['model_id']);
 
 			foreach ($toLinks as $toLink) {
-				$model = GO::getModel($toLink['model_name'])->findByPk($toLink['model_id']);
+				$model = \GO::getModel($toLink['model_name'])->findByPk($toLink['model_id']);
 				$fromModel->link($model, $params['description'], $from_folder_id, $to_folder_id);
 			}
 		}
@@ -115,16 +115,16 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	}
 	
 	protected function actionUnlink($params){
-		$linkedModel1 = GO::getModel($params['model_name1'])->findByPk($params['id1']);				
-		$linkedModel2 = GO::getModel($params['model_name2'])->findByPk($params['id2']);			
+		$linkedModel1 = \GO::getModel($params['model_name1'])->findByPk($params['id1']);				
+		$linkedModel2 = \GO::getModel($params['model_name2'])->findByPk($params['id2']);			
 		$linkedModel1->unlink($linkedModel2);	
 		
 		return array('success'=>true);
 	}
 	
 	protected function actionUpdateLink($params){
-		$model1 = GO::getModel($params['model_name1'])->findByPk($params['model_id1']);
-		$model2 = GO::getModel($params['model_name2'])->findByPk($params['model_id2']);
+		$model1 = \GO::getModel($params['model_name1'])->findByPk($params['model_id1']);
+		$model2 = \GO::getModel($params['model_name2'])->findByPk($params['model_id2']);
 		$model1->updateLink($model2, array('description'=>$params['description']));
 		$model2->updateLink($model1, array('description'=>$params['description']));
 		
@@ -134,15 +134,15 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	/**
 	 * Get users
 	 * 
-	 * @param array $params @see GO_Base_Data_Store::getDefaultParams()
+	 * @param array $params @see \GO_Base_Data_Store::getDefaultParams()
 	 * @return  
 	 */
 	protected function actionUsers($params) {
 		
-		if(GO::user()->isAdmin())
-			GO::config()->limit_usersearch=0;
+		if(\GO::user()->isAdmin())
+			\GO::config()->limit_usersearch=0;
 		
-//		GO::config()->limit_usersearch=10;
+//		\GO::config()->limit_usersearch=10;
 		
 //		if(empty($params['query']) && !empty($params['queryRequired'])){
 //			return array(
@@ -159,29 +159,29 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			$params['start']=0;
 		
 		// Check for the value "limit_usersearch" in the group-office config file and then add the limit.
-		if(!empty(GO::config()->limit_usersearch)){
-			if($params['limit']>GO::config()->limit_usersearch)
-				$params['limit'] = GO::config()->limit_usersearch;			
+		if(!empty(\GO::config()->limit_usersearch)){
+			if($params['limit']>\GO::config()->limit_usersearch)
+				$params['limit'] = \GO::config()->limit_usersearch;			
 			
-			if($params['start']+$params['limit']>GO::config()->limit_usersearch)
+			if($params['start']+$params['limit']>\GO::config()->limit_usersearch)
 				$params['start']=0;
 		}
 		
-		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_User::model());
+		$store = \GO_Base_Data_Store::newInstance(\GO_Base_Model_User::model());
 		$store->setDefaultSortOrder('name', 'ASC');
 
 		$store->getColumnModel()->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
 		$store->getColumnModel()->formatColumn('cf', '$model->id.":".$model->name'); //special field used by custom fields. They need an id an value in one.
 		
 		//only get users that are enabled
-		$enabledParam = GO_Base_Db_FindParams::newInstance();
-						//->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('enabled', true));
+		$enabledParam = \GO_Base_Db_FindParams::newInstance();
+						//->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('enabled', true));
 		
-		$store->setStatement (GO_Base_Model_User::model()->find($store->getDefaultParams($params, $enabledParam)));
+		$store->setStatement (\GO_Base_Model_User::model()->find($store->getDefaultParams($params, $enabledParam)));
 		$response = $store->getData();
 		
-		if(!empty(GO::config()->limit_usersearch) && $response['total']>GO::config()->limit_usersearch)
-			$response['total']=GO::config()->limit_usersearch;	
+		if(!empty(\GO::config()->limit_usersearch) && $response['total']>\GO::config()->limit_usersearch)
+			$response['total']=\GO::config()->limit_usersearch;	
 		
 		return $response;
 	}
@@ -191,7 +191,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 * 
 	 */
 	protected function actionGroups($params) {
-		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_Group::model());
+		$store = \GO_Base_Data_Store::newInstance(\GO_Base_Model_Group::model());
 		$store->setDefaultSortOrder('name', 'ASC');
 		
 		$findParams = $store->getDefaultParams($params);
@@ -201,10 +201,10 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 //			//permissions are handled differently. Users may use all groups they are member of.
 //			$findParams->ignoreAcl();
 //			
-//			if(!GO::user()->isAdmin()){
+//			if(!\GO::user()->isAdmin()){
 //				$findParams->getCriteria()
 //								->addCondition('admin_only', 1,'!=')
-//								->addCondition('user_id', GO::user()->id,'=','ug');
+//								->addCondition('user_id', \GO::user()->id,'=','ug');
 //				
 //				$findParams->joinModel(array(
 //						'model'=>"GO_Base_Model_UserGroup",
@@ -217,7 +217,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 //		}
 		
 		
-		$store->setStatement (GO_Base_Model_Group::model()->find($findParams));
+		$store->setStatement (\GO_Base_Model_Group::model()->find($findParams));
 		return $store->getData();
 	}
 	
@@ -225,7 +225,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 * Get the holidayfiles that are available groups
 	 */
 	protected function actionHolidays($params) {
-		$available = GO_Base_Model_Holiday::getAvailableHolidayFiles();
+		$available = \GO_Base_Model_Holiday::getAvailableHolidayFiles();
 		
 		$store = new GO_Base_Data_ArrayStore();
 		$store->setRecords($available);
@@ -237,19 +237,19 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 */
 	protected function actionCompress($params) {
 		
-		GO::session()->closeWriting();
+		\GO::session()->closeWriting();
 		
 		$this->checkRequiredParameters(array('file'), $params);
 	
-		$file = GO::config()->getCacheFolder()->child(basename($params['file']));
+		$file = \GO::config()->getCacheFolder()->child(basename($params['file']));
 
-//		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'cache/'.basename($params['file']));
+//		$file = new \GO_Base_Fs_File(\GO::config()->file_storage_path.'cache/'.basename($params['file']));
 
 		$ext = $file->extension();
 
 		$type = $ext =='js' ? 'text/javascript' : 'text/css';
 
-		$use_compression = GO::config()->use_zlib_compression();
+		$use_compression = \GO::config()->use_zlib_compression();
 
 		if($use_compression){
 			ob_start();
@@ -276,13 +276,13 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 	protected function actionThumb($params) {
 
-		GO::session()->closeWriting();
+		\GO::session()->closeWriting();
 
-		$dir = GO::config()->root_path . 'views/Extjs3/themes/Default/images/128x128/filetypes/';
-		$url = GO::config()->host . 'views/Extjs3/themes/Default/images/128x128/filetypes/';
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path . $params['src']);
+		$dir = \GO::config()->root_path . 'views/Extjs3/themes/Default/images/128x128/filetypes/';
+		$url = \GO::config()->host . 'views/Extjs3/themes/Default/images/128x128/filetypes/';
+		$file = new \GO_Base_Fs_File(\GO::config()->file_storage_path . $params['src']);
 		
-		if (is_dir(GO::config()->file_storage_path . $params['src'])) {
+		if (is_dir(\GO::config()->file_storage_path . $params['src'])) {
 			$src = $dir . 'folder.png';
 		} else {
 
@@ -295,7 +295,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 				case 'png':
 				case 'gif':
 				case 'xmind':
-					$src = GO::config()->file_storage_path . $params['src'];
+					$src = \GO::config()->file_storage_path . $params['src'];
 					break;
 
 
@@ -382,7 +382,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 
 
-		$cacheDir = new GO_Base_Fs_Folder(GO::config()->orig_tmpdir . 'thumbcache');
+		$cacheDir = new \GO_Base_Fs_Folder(\GO::config()->orig_tmpdir . 'thumbcache');
 		$cacheDir->create();
 
 
@@ -397,14 +397,14 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$thumbExists = file_exists($cacheDir->path() . '/' . $cacheFilename);
 		$thumbMtime = $thumbExists ? filemtime($cacheDir->path() . '/' . $cacheFilename) : 0;
 		
-		GO::debug("Thumb mtime: ".$thumbMtime." (".$cacheFilename.")");
+		\GO::debug("Thumb mtime: ".$thumbMtime." (".$cacheFilename.")");
 
 		if (!empty($params['nocache']) || !$thumbExists || $thumbMtime < $file->mtime() || $thumbMtime < $file->ctime()) {
 			
-			GO::debug("Resizing image");
+			\GO::debug("Resizing image");
 			$image = new GO_Base_Util_Image($file->path());
 			if (!$image->load_success) {
-				GO::debug("Failed to load image for thumbnailing");
+				\GO::debug("Failed to load image for thumbnailing");
 				//failed. Stream original image
 				$readfile = $file->path();
 			} else {
@@ -425,7 +425,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 						}
 					}
 					
-					GO::debug($w."x".$h);
+					\GO::debug($w."x".$h);
 
 					if ($w && $h) {
 						$image->resize($w, $h);
@@ -502,7 +502,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	
 	/**
-	 * Download file from GO::config()->tmpdir/user_id/$path
+	 * Download file from \GO::config()->tmpdir/user_id/$path
 	 * Because download is restricted from <user_id> subfolder this is secure.
 	 * The user_id is appended in the config class.
 	 * 
@@ -512,21 +512,21 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		
 		$inline = !isset($params['inline']) || !empty($params['inline']);
 		
-		$file = new GO_Base_Fs_File(GO::config()->tmpdir.$params['path']);
-		GO_Base_Util_Http::outputDownloadHeaders($file, $inline, !empty($params['cache']));
+		$file = new \GO_Base_Fs_File(\GO::config()->tmpdir.$params['path']);
+		\GO_Base_Util_Http::outputDownloadHeaders($file, $inline, !empty($params['cache']));
 		$file->output();		
 	}
 	
 	/**
-	 * Public files are files stored in GO::config()->file_storage_path.'public'
+	 * Public files are files stored in \GO::config()->file_storage_path.'public'
 	 * They are publicly accessible.
 	 * Public files are cached
 	 * 
 	 * @param String $path 
 	 */
 	protected function actionDownloadPublicFile($params){
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'public/'.$params['path']);
-		GO_Base_Util_Http::outputDownloadHeaders($file,false,!empty($params['cache']));
+		$file = new \GO_Base_Fs_File(\GO::config()->file_storage_path.'public/'.$params['path']);
+		\GO_Base_Util_Http::outputDownloadHeaders($file,false,!empty($params['cache']));
 		$file->output();		
 	}
 	
@@ -542,7 +542,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			if(is_array($requests)){
 				foreach($requests as $responseIndex=>$requestParams){
 					ob_start();				
-					GO::router()->runController($requestParams);
+					\GO::router()->runController($requestParams);
 					echo "\n".'"'.$responseIndex.'" : '.ob_get_clean().",\n";
 				}
 			}
@@ -554,7 +554,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 //		
 //		$response['results']=array();
 //		
-//		$model = GO::getModel($params['modelName']);
+//		$model = \GO::getModel($params['modelName']);
 //		$labels = $model->attributeLabels();
 //		
 //		$columns = $model->getColumns();
@@ -582,15 +582,15 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	protected function actionUpload($params) {
 
-		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
+		$tmpFolder = new \GO_Base_Fs_Folder(\GO::config()->tmpdir . 'uploadqueue');
 //		$tmpFolder->delete();
 		$tmpFolder->create();
 
-		$files = GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $tmpFolder);
+		$files = \GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $tmpFolder);
 
 		$relativeFiles = array();
 		foreach ($files as $file) {
-			$relativeFiles[]=str_replace(GO::config()->tmpdir, '', $file->path());
+			$relativeFiles[]=str_replace(\GO::config()->tmpdir, '', $file->path());
 		}
 
 		return array('success' => true, 'files'=>$relativeFiles);
@@ -600,7 +600,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	protected function actionPlupload($params) {
 		
 		
-		GO_Base_Component_Plupload::handleUpload();
+		\GO_Base_Component_Plupload::handleUpload();
 
 		//return array('success' => true);
 	}
@@ -610,13 +610,13 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		if(isset($params['addFileStorageFiles'])){
 			$files = json_decode($params['addFileStorageFiles'],true);
 			foreach($files as $filepath)
-				GO::session()->values['files']['uploadqueue'][]=GO::config()->file_storage_path.$filepath;
+				\GO::session()->values['files']['uploadqueue'][]=\GO::config()->file_storage_path.$filepath;
 		}
 		
 		$response['results']=array();
 		
-		if(!empty(GO::session()->values['files']['uploadqueue'])){
-			foreach(GO::session()->values['files']['uploadqueue'] as $path){
+		if(!empty(\GO::session()->values['files']['uploadqueue'])){
+			foreach(\GO::session()->values['files']['uploadqueue'] as $path){
 				
 				$file = new GO_Base_Fs_File($path);
 				
@@ -642,7 +642,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		}
 		$response['total']=count($response['results']);
 		
-		unset(GO::session()->values['files']['uploadqueue']);
+		unset(\GO::session()->values['files']['uploadqueue']);
 		
 		return $response;
 	}
@@ -650,11 +650,11 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	protected function actionSpellCheck($params) {
 		
 		if (!isset($params['lang']))
-			$params['lang'] = GO::session()->values['language'];
+			$params['lang'] = \GO::session()->values['language'];
 		
-		$oldLang = GO::language()->setLanguage($params['lang']);
+		$oldLang = \GO::language()->setLanguage($params['lang']);
 		
-		$pspellLang = GO::t('pspell_lang', 'base', 'common', $found);
+		$pspellLang = \GO::t('pspell_lang', 'base', 'common', $found);
 		
 		if(!$found)
 			$pspellLang = $params['lang'];
@@ -667,10 +667,10 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			$response['text'] = '';
 		} else {
 
-			$mispeltwords = GO_Base_Util_SpellChecker::check($params['tocheck'], $pspellLang);
+			$mispeltwords = \GO_Base_Util_SpellChecker::check($params['tocheck'], $pspellLang);
 			if (!empty($mispeltwords)) {
 				$response['errorcount'] = count($mispeltwords);
-				$response['text'] = GO_Base_Util_SpellChecker::replaceMisspeltWords($mispeltwords, $params['tocheck']);
+				$response['text'] = \GO_Base_Util_SpellChecker::replaceMisspeltWords($mispeltwords, $params['tocheck']);
 			} else {
 				$response['errorcount'] = 0;
 				$response['text'] = $params['tocheck'];
@@ -684,18 +684,18 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	protected function actionSaveState($params){
 		//close writing to session so other concurrent requests won't be locked out.
-		GO::session()->closeWriting();
+		\GO::session()->closeWriting();
 		
 		if(isset($params['values'])){
 			$values = json_decode($params['values'], true);
 
 			if(!is_array($values)){
-				trigger_error ("Invalid value for GO_Core_Controller_Core::actionSaveState: ".var_export($params, true), E_USER_NOTICE);
+				trigger_error ("Invalid value for \GO_Core_Controller_Core::actionSaveState: ".var_export($params, true), E_USER_NOTICE);
 			}else
 			{
 				foreach($values as $name=>$value){
 
-					$state = GO_Base_Model_State::model()->findByPk(array('name'=>$name,'user_id'=>GO::user()->id));
+					$state = \GO_Base_Model_State::model()->findByPk(array('name'=>$name,'user_id'=>\GO::user()->id));
 
 					if(!$state){
 						$state = new GO_Base_Model_State();
@@ -713,26 +713,26 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	
 	protected function actionAbout($params){	
-		$response['data']['about']=GO::t('about');
+		$response['data']['about']=\GO::t('about');
 		
-		if(GO::config()->product_name=='Group-Office')
+		if(\GO::config()->product_name=='Group-Office')
 			$response['data']['about']=str_replace('{company_name}', 'Intermesh B.V.', $response['data']['about']);
 		else
-			$response['data']['about']=str_replace('{company_name}', GO::config()->product_name, $response['data']['about']);
+			$response['data']['about']=str_replace('{company_name}', \GO::config()->product_name, $response['data']['about']);
 		
-		$response['data']['about']=str_replace('{version}', GO::config()->version, $response['data']['about']);
+		$response['data']['about']=str_replace('{version}', \GO::config()->version, $response['data']['about']);
 		$response['data']['about']=str_replace('{current_year}', date('Y'), $response['data']['about']);
-		$response['data']['about']=str_replace('{product_name}', GO::config()->product_name, $response['data']['about']);
+		$response['data']['about']=str_replace('{product_name}', \GO::config()->product_name, $response['data']['about']);
 
 		
-		$response['data']['mailbox_usage']=GO::config()->get_setting('mailbox_usage');
-		$response['data']['file_storage_usage']=GO::config()->get_setting('file_storage_usage');
-		$response['data']['database_usage']=GO::config()->get_setting('database_usage');
+		$response['data']['mailbox_usage']=\GO::config()->get_setting('mailbox_usage');
+		$response['data']['file_storage_usage']=\GO::config()->get_setting('file_storage_usage');
+		$response['data']['database_usage']=\GO::config()->get_setting('database_usage');
 		$response['data']['total_usage']=$response['data']['database_usage']+$response['data']['file_storage_usage']+$response['data']['mailbox_usage'];
 		$response['data']['has_usage']=$response['data']['total_usage']>0;
 		foreach($response['data'] as $key=>$value){
 			if($key!='has_usage' && $key!='about')
-				$response['data'][$key]=  GO_Base_Util_Number::formatSize($value);
+				$response['data'][$key]=  \GO_Base_Util_Number::formatSize($value);
 		}
 		
 		$response['success']=true;
@@ -754,7 +754,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 //	protected function actionCron($params){		
 //		
 //		$this->requireCli();
-//		GO::session()->runAsRoot();
+//		\GO::session()->runAsRoot();
 //		
 //		$this->_emailReminders();
 //		
@@ -768,11 +768,11 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 // 	 *  @DEPRECATED
 // 	 */
 //	private function _emailReminders(){
-//		$usersStmt = GO_Base_Model_User::model()->find();
+//		$usersStmt = \GO_Base_Model_User::model()->find();
 //		while ($userModel = $usersStmt->fetch()) {
 //			if ($userModel->mail_reminders==1) {
-//				$remindersStmt = GO_Base_Model_Reminder::model()->find(
-//					GO_Base_Db_FindParams::newInstance()
+//				$remindersStmt = \GO_Base_Model_Reminder::model()->find(
+//					\GO_Base_Db_FindParams::newInstance()
 //						->joinModel(array(
 //							'model' => 'GO_Base_Model_ReminderUser',
 //							'localTableAlias' => 't',
@@ -781,7 +781,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 //							'tableAlias' => 'ru'								
 //						))
 //						->criteria(
-//							GO_Base_Db_FindCriteria::newInstance()
+//							\GO_Base_Db_FindCriteria::newInstance()
 //								->addCondition('user_id', $userModel->id, '=', 'ru')
 //								->addCondition('time', time(), '<', 'ru')
 //								->addCondition('mail_sent', '0', '=', 'ru')
@@ -793,24 +793,24 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 //					
 ////					var_dump($relatedModel->name);
 //					
-////					$modelName = $relatedModel ? $relatedModel->localizedName : GO::t('unknown');
-//					$subject = GO::t('reminder').': '.$reminderModel->name;
+////					$modelName = $relatedModel ? $relatedModel->localizedName : \GO::t('unknown');
+//					$subject = \GO::t('reminder').': '.$reminderModel->name;
 //
 //					$time = !empty($reminderModel->vtime) ? $reminderModel->vtime : $reminderModel->time;
 //			
 //					date_default_timezone_set($userModel->timezone);
 //					
-//					$body = GO::t('time').': '.date($userModel->completeDateFormat.' '.$userModel->time_format,$time)."\n";
-//					$body .= GO::t('name').': '.str_replace('<br />',',',$reminderModel->name)."\n";
+//					$body = \GO::t('time').': '.date($userModel->completeDateFormat.' '.$userModel->time_format,$time)."\n";
+//					$body .= \GO::t('name').': '.str_replace('<br />',',',$reminderModel->name)."\n";
 //			
-////					date_default_timezone_set(GO::user()->timezone);
+////					date_default_timezone_set(\GO::user()->timezone);
 //					
-//					$message = GO_Base_Mail_Message::newInstance($subject, $body);
-//					$message->addFrom(GO::config()->webmaster_email,GO::config()->title);
+//					$message = \GO_Base_Mail_Message::newInstance($subject, $body);
+//					$message->addFrom(\GO::config()->webmaster_email,\GO::config()->title);
 //					$message->addTo($userModel->email,$userModel->name);
-//					GO_Base_Mail_Mailer::newGoInstance()->send($message);
+//					\GO_Base_Mail_Mailer::newGoInstance()->send($message);
 //					
-//					$reminderUserModelSend = GO_Base_Model_ReminderUser::model()
+//					$reminderUserModelSend = \GO_Base_Model_ReminderUser::model()
 //						->findSingleByAttributes(array(
 //							'user_id' => $userModel->id,
 //							'reminder_id' => $reminderModel->id
@@ -819,7 +819,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 //					$reminderUserModelSend->save();
 //				}
 //				
-//				date_default_timezone_set(GO::user()->timezone);
+//				date_default_timezone_set(\GO::user()->timezone);
 //			}
 //		}
 //	}
@@ -840,7 +840,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	protected function actionModules($params){
 		$store = new GO_Base_Data_ArrayStore();
 		
-		$modules = GO::modules()->getAllModules(true);
+		$modules = \GO::modules()->getAllModules(true);
 		
 		foreach($modules as $module){
 			$store->addRecord(array('id'=>$module->id,'name'=>$module->moduleManager->name()));

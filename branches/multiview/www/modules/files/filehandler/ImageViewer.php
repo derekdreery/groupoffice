@@ -6,7 +6,7 @@ class GO_Files_Filehandler_ImageViewer implements GO_Files_Filehandler_Interface
 	}
 	
 	public function getName(){
-		return GO::t('imageViewer','files');
+		return \GO::t('imageViewer','files');
 	}
 	
 	public function fileIsSupported(GO_Files_Model_File $file){

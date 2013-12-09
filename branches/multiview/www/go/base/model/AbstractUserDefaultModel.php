@@ -35,27 +35,27 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	 */
 	public static function getAllUserDefaultModels($user_id=0) {
 		
-		$oldIgnoreAcl = GO::setIgnoreAclPermissions(true);
+		$oldIgnoreAcl = \GO::setIgnoreAclPermissions(true);
 
 		if (!isset(self::$_allUserDefaultModels)) {
 			self::$_allUserDefaultModels = array();
-			$modules = GO::modules()->getAllModules();
+			$modules = \GO::modules()->getAllModules();
 			
 			while ($module=array_shift($modules)) {
-			  $permissionLevel=$user_id ? GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $user_id) : 1;
+			  $permissionLevel=$user_id ? \GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $user_id) : 1;
 				if($permissionLevel){
 				  if($module->moduleManager){
 					  $classes = $module->moduleManager->findClasses('model');
 					  foreach($classes as $class){
 						  if($class->isSubclassOf('GO_Base_Model_AbstractUserDefaultModel')){							
-							  self::$_allUserDefaultModels[] = GO::getModel($class->getName());
+							  self::$_allUserDefaultModels[] = \GO::getModel($class->getName());
 						  }					
 					  }
 				  }
 				}
 			}
 		}
-		GO::setIgnoreAclPermissions($oldIgnoreAcl);
+		\GO::setIgnoreAclPermissions($oldIgnoreAcl);
 		return self::$_allUserDefaultModels;
 	}
 	
@@ -97,7 +97,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 		$settingsModelName = $this->settingsModelName();
 		if ($settingsModelName) {
 			
-			$settingsModel = GO::getModel($settingsModelName)->findByPk($user->id);
+			$settingsModel = \GO::getModel($settingsModelName)->findByPk($user->id);
 			if(!$settingsModel){
 				$settingsModel = new $settingsModelName;
 				$settingsModel->user_id=$user->id;
@@ -105,7 +105,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			{
 				$pk = $settingsModel->{$this->settingsPkAttribute()};
 				$defaultModel = $this->findByPk($pk, false, true);
-				if($defaultModel && $defaultModel->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
+				if($defaultModel && $defaultModel->checkPermissionLevel(\GO_Base_Model_Acl::WRITE_PERMISSION))
 					return $defaultModel;
 			}
 		}
@@ -124,9 +124,9 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			}
 			
 			//any user may do this.
-			$oldIgnore = GO::setIgnoreAclPermissions(true);		
+			$oldIgnore = \GO::setIgnoreAclPermissions(true);		
 			$defaultModel->save();			
-			GO::setIgnoreAclPermissions($oldIgnore);
+			\GO::setIgnoreAclPermissions($oldIgnore);
 			
 			$createdNew=true;
 		}
@@ -140,7 +140,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	}
 	
 	public static function getNameTemplate($className){
-		$template = GO::config()->get_setting("name_template_".$className);
+		$template = \GO::config()->get_setting("name_template_".$className);
 		if(!$template)
 			$template = "{first_name} {middle_name} {last_name}";
 		
@@ -148,7 +148,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	}
 	
 	public static function setNameTemplate($className,$templateString){
-		return GO::config()->save_setting("name_template_".$className,$templateString);
+		return \GO::config()->save_setting("name_template_".$className,$templateString);
 	}
 	
 	/**
@@ -163,7 +163,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			$user=$this->user;
 		
 		if(!$user)
-			throw new \Exception(" - ".GO::t(get_class($this),'settings')." '".$this->name."' ".GO::t('notRenamedNoUser','settings').".<br />");
+			throw new \Exception(" - ".\GO::t(get_class($this),'settings')." '".$this->name."' ".\GO::t('notRenamedNoUser','settings').".<br />");
 	
 		$template = self::getNameTemplate($this->className());
 

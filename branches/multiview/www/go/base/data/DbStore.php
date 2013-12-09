@@ -57,7 +57,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	public $limit;
 
 	/**
-	 * offset in limit part of query @see GO_Base_DB_findParams::start()
+	 * offset in limit part of query @see \GO_Base_DB_findParams::start()
 	 * @var integer  
 	 */
 	public $start = 0;
@@ -132,7 +132,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		if ($findParams instanceof GO_Base_Db_FindParams)
 			$this->_extraFindParams = $findParams;
 		else
-			$this->_extraFindParams = GO_Base_Db_FindParams::newInstance();
+			$this->_extraFindParams = \GO_Base_Db_FindParams::newInstance();
 		
 		$this->_readRequestParams();
 	}
@@ -169,7 +169,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 			foreach ($this->_deleteRecords as $i => $modelPk) {
 				if (is_array($modelPk)) {
 					foreach ($modelPk as $col => $val) //format input columnvalues to database
-						$modelPk[$col] = GO::getModel($this->_modelClass)->formatInput($col, $val);
+						$modelPk[$col] = \GO::getModel($this->_modelClass)->formatInput($col, $val);
 					$this->_deleteRecords[$i] = $modelPk;
 				}
 			}
@@ -191,7 +191,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		$advancedQueryData = is_string($advancedQueryData) ? json_decode($advancedQueryData, true) : $advancedQueryData;
 		$findCriteria = $this->_extraFindParams->getCriteria();
 
-		$criteriaGroup = GO_Base_Db_FindCriteria::newInstance();
+		$criteriaGroup = \GO_Base_Db_FindCriteria::newInstance();
 		$criteriaGroupAnd = true;
 		for ($i = 0, $count = count($advancedQueryData); $i < $count; $i++) {
 
@@ -203,7 +203,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 			if ($i == 0 || $advQueryRecord['start_group']) {
 				$findCriteria->mergeWith($criteriaGroup, $criteriaGroupAnd);
 				$criteriaGroupAnd = $advQueryRecord['andor'] == 'AND';
-				$criteriaGroup = GO_Base_Db_FindCriteria::newInstance();
+				$criteriaGroup = \GO_Base_Db_FindCriteria::newInstance();
 			}
 
 			if (!empty($advQueryRecord['field'])) {
@@ -225,9 +225,9 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 				}
 
 				if ($tableAlias == 't')
-					$advQueryRecord['value'] = GO::getModel($this->_modelClass)->formatInput($field, $advQueryRecord['value']);
+					$advQueryRecord['value'] = \GO::getModel($this->_modelClass)->formatInput($field, $advQueryRecord['value']);
 				elseif ($tableAlias == 'cf') {
-					$advQueryRecord['value'] = GO::getModel(GO::getModel($this->_modelClass)->customfieldsModel())->formatInput($field, $advQueryRecord['value']);
+					$advQueryRecord['value'] = \GO::getModel(\GO::getModel($this->_modelClass)->customfieldsModel())->formatInput($field, $advQueryRecord['value']);
 				}
 
 				$criteriaGroup->addCondition($field, $advQueryRecord['value'], $advQueryRecord['comparator'], $tableAlias, $advQueryRecord['andor'] == 'AND');
@@ -245,7 +245,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	
 		
 		$params = $this->createFindParams();
-		$modelFinder = GO::getModel($this->_modelClass);
+		$modelFinder = \GO::getModel($this->_modelClass);
 		return $modelFinder->find($params);
 	}
 
@@ -294,7 +294,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 				$dir[] = $dir[$dirCount-1];
 
 
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 						->joinCustomFields()
 						->order($sort, $dir);
 		
@@ -312,7 +312,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		if (isset($this->limit))
 			$findParams->limit($this->limit);
 		else
-			$findParams->limit(GO::user()->max_rows_list);
+			$findParams->limit(\GO::user()->max_rows_list);
 
 		if (!empty($this->start))
 			$findParams->start($this->start);
@@ -358,7 +358,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 ////			$sort[$i] = $this->getColumnModel()->getSortColumn($sort[$i]);
 ////		}
 //
-//		$findParams = GO_Base_Db_FindParams::newInstance()
+//		$findParams = \GO_Base_Db_FindParams::newInstance()
 //						->joinCustomFields()
 //						->order($sort, $dir);
 //
@@ -376,7 +376,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 //		if (isset($requestParams['limit']))
 //			$findParams->limit($requestParams['limit']);
 //		else
-//			$findParams->limit = 0; //(GO::user()->max_rows_list);
+//			$findParams->limit = 0; //(\GO::user()->max_rows_list);
 //
 //		if (!empty($requestParams['start']))
 //			$findParams->start($requestParams['start']);
@@ -393,7 +393,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	/**
 	 * This method will be called internally before getData().
 	 * It will delete all record that has the pk in $_deleteprimaryKey array
-	 * @see: GO_Base_Db_Store::processDeleteActions()
+	 * @see: \GO_Base_Db_Store::processDeleteActions()
 	 * @return boolean $success true if all went well
 	 */
 	protected function processDeleteActions() {
@@ -403,7 +403,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		$errors = array();
 		foreach ($this->_deleteRecords as $modelPk) {
 			if ($this->extraDeletePk !== null) {
-				$primaryKeyNames = GO::getModel($this->_modelClass)->primaryKey(); //get the primary key names of the delete model in an array
+				$primaryKeyNames = \GO::getModel($this->_modelClass)->primaryKey(); //get the primary key names of the delete model in an array
 				$newPk = array();
 				foreach ($primaryKeyNames as $name) {
 					if (isset($this->extraDeletePk[$name])) //pk is supplied in the extra values
@@ -413,7 +413,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 				}
 				$modelPk = $newPk;
 			}
-			$model = GO::getModel($this->_modelClass)->findByPk($modelPk);
+			$model = \GO::getModel($this->_modelClass)->findByPk($modelPk);
 			if (!empty($model)){
 				try {
 					$key = is_array($model->pk) ? implode('-', $model->pk) : $model->pk;
@@ -431,7 +431,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 			$error_string = '';
 			foreach($errors as $error)
 				$error_string .= implode("<br>", $error)."<br>";
-			$this->response['feedback'] = str_replace("{count}", count($errors), GO::t('deleteErrors')) . "<br><br>" . $error_string;
+			$this->response['feedback'] = str_replace("{count}", count($errors), \GO::t('deleteErrors')) . "<br><br>" . $error_string;
 		}
 		return empty($errors);
 	}
@@ -471,12 +471,12 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		if($summarySelect===false)
 			return false;
 		
-//		$sumParams = GO_Base_Db_FindParams::newInstance()->single()->select($summarySelect)->criteria($this->_extraFindParams->getCriteria());
+//		$sumParams = \GO_Base_Db_FindParams::newInstance()->single()->select($summarySelect)->criteria($this->_extraFindParams->getCriteria());
 		
 		$findParams = $this->createFindParams(false);
 		$sumParams = $findParams->single()->export(false)->select($summarySelect)->order(null,"");
 		
-		$sumRecord = GO::getModel($this->_modelClass)->find($sumParams);
+		$sumRecord = \GO::getModel($this->_modelClass)->find($sumParams);
 		if($sumRecord)
 			return $this->_columnModel->formatSummary($sumRecord);
 	}

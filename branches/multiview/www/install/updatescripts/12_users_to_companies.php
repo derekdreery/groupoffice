@@ -1,8 +1,8 @@
 <?php
-if(GO_Base_Db_Utils::fieldExists('go_users', 'company') && GO::modules()->addressbook){
-	$ab = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('users', '1');//GO::t('users','base'));
+if(\GO_Base_Db_Utils::fieldExists('\go_users', 'company') && \GO::modules()->addressbook){
+	$ab = \GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('users', '1');//\GO::t('users','base'));
 
-	$pdo = GO::getDbConnection();
+	$pdo = \GO::getDbConnection();
 
 	$pdo->query("INSERT INTO ab_companies (`addressbook_id`,`name`, `email`, `country`, `state`, `city`, `zip`, `address`, `address_no`) SELECT {$ab->id},`company`, `email`, `country`, `state`, `city`, `zip`, `address`, `address_no`  FROM `go_users` WHERE company!=''");
 

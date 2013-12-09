@@ -64,7 +64,7 @@ class cached_imap extends imap{
 			throw new \Exception($lang['common']['selectError']);
 		}
 
-		if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $account['acl_id']<GO_SECURITY::READ_PERMISSION) && !$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id)) {
+		if($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $account['acl_id']<GO_SECURITY::READ_PERMISSION) && !$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id)) {
 			//echo "<br>account_user_id: ".$account['user_id']." <br>security_user_id:".$GLOBALS['GO_SECURITY']->user_id."";
 			throw new \AccessDeniedException();
 		}
@@ -169,7 +169,7 @@ class cached_imap extends imap{
 	
 	public function sort_mailbox($sort_type='ARRIVAL', $reverse=false, $filter='ALL') {
 
-		go_debug("cached_imap::sort_mailbox($sort_type, $reverse, $filter)");
+		\go_debug("cached_imap::sort_mailbox($sort_type, $reverse, $filter)");
 
 		if(!$this->selected_mailbox){
 			throw new \Exception('No mailbox selected');
@@ -358,7 +358,7 @@ class cached_imap extends imap{
 
 	public function get_message_part($uid, $message_part=0, $peek=false, $max=false) {
 		
-		go_debug("imap::get_message_part($uid, $message_part, $peek)");
+		\go_debug("imap::get_message_part($uid, $message_part, $peek)");
 
 		if(!$this->handle){
 			if(!$this->open($this->account, $this->folder['name'])){
@@ -383,7 +383,7 @@ class cached_imap extends imap{
 	public function get_message_with_body($uid, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false, $peek=false, $plain_body_requested=true, $html_body_requested=true) {
 		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_EVENTS, $lang;
 
-		go_debug("cached_imap::get_message_with_body($uid, $create_temporary_attachment_files, $create_temporary_inline_attachment_files, $peek, $plain_body_requested, $html_body_requested)");
+		\go_debug("cached_imap::get_message_with_body($uid, $create_temporary_attachment_files, $create_temporary_inline_attachment_files, $peek, $plain_body_requested, $html_body_requested)");
 
 		require($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
 

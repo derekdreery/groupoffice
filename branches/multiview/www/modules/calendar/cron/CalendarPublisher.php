@@ -20,7 +20,7 @@ class GO_Calendar_Cron_CalendarPublisher extends GO_Base_Cron_AbstractCron {
 	 * @return String
 	 */
 	public function getLabel(){
-		return GO::t('shareCalendarsCron','calendar');
+		return \GO::t('shareCalendarsCron','calendar');
 	}
 	
 	/**
@@ -29,7 +29,7 @@ class GO_Calendar_Cron_CalendarPublisher extends GO_Base_Cron_AbstractCron {
 	 * @return String
 	 */
 	public function getDescription(){
-		return GO::t('shareCalendarsCronDescription','calendar');
+		return \GO::t('shareCalendarsCronDescription','calendar');
 	}
 	
 	/**
@@ -46,26 +46,26 @@ class GO_Calendar_Cron_CalendarPublisher extends GO_Base_Cron_AbstractCron {
 	 */
 	public function run(GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
 		
-		GO::session()->runAsRoot();
+		\GO::session()->runAsRoot();
 		
-		GO::debug("Start updating public calendars.");
+		\GO::debug("Start updating public calendars.");
 	
-		$calendars = GO_Calendar_Model_Calendar::model()->findByAttribute('public', true);
+		$calendars = \GO_Calendar_Model_Calendar::model()->findByAttribute('public', true);
 		
 		foreach($calendars as $calendar){
 
 			$file = new \GO_Base_Fs_File($calendar->getPublicIcsPath());
 	
 			if(!$file->exists()){
-				GO::debug("Creating ".$file->path().".");
+				\GO::debug("Creating ".$file->path().".");
 				$file->touch(true);
 			}
 
 			$file->putContents($calendar->toVObject());
 
-			GO::debug("Updating ".$calendar->name." to ".$file->path().".");
+			\GO::debug("Updating ".$calendar->name." to ".$file->path().".");
 		}
 		
-		GO::debug("Finished updating public calendars.");
+		\GO::debug("Finished updating public calendars.");
 	}
 }

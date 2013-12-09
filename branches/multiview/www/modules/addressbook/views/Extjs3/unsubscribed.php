@@ -11,14 +11,14 @@
  * @version $Id: invitation.php 7752 2011-07-26 13:48:43Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-//require_once(GO::config()->root_path."Group-Office.php");
+//require_once(\GO::config()->root_path."Group-Office.php");
 
 extract($data);
 
 
 $this->render('externalHeader');
 ?>
-<p><?php echo GO::t('delete_success','addressbook'); ?></p>
+<p><?php echo \GO::t('delete_success','addressbook'); ?></p>
 <?php
 $this->render('externalFooter');
 

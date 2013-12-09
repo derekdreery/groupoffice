@@ -21,7 +21,7 @@
  * @property int $acl_id
  * @property int $user_id
  * @property int $group_id
- * @property int $level {@see GO_Base_Model_Acl::READ_PERMISSION etc}
+ * @property int $level {@see \GO_Base_Model_Acl::READ_PERMISSION etc}
  */
 class GO_Base_Model_AclUsersGroups extends GO_Base_Db_ActiveRecord {
 

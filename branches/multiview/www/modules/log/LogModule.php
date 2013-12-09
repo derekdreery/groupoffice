@@ -15,7 +15,7 @@ class GO_Log_LogModule extends GO_Base_Module{
 	
 	public static function rotateLog(){
 		
-		echo "Running log rotate for ".GO::config()->id."\n";		
+		echo "Running log rotate for ".\GO::config()->id."\n";		
 		$controller = new \GO_Log_Controller_Log();
 		$controller->run("rotate");			
 	}

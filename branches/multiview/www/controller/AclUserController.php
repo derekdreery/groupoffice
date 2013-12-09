@@ -67,31 +67,31 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 	 * @return $response for the client. 
 	 */
 	protected function actionSelectedStore($params) {
-		$currentPermissionLevel = GO_Base_Model_Acl::getUserPermissionLevel($params['model_id'],GO::user()->id);
-		$response['manage_permission'] = $params['currentUserHasManagePermission'] =  GO_Base_Model_Acl::hasPermission($currentPermissionLevel,GO_Base_Model_Acl::MANAGE_PERMISSION);
+		$currentPermissionLevel = \GO_Base_Model_Acl::getUserPermissionLevel($params['model_id'],\GO::user()->id);
+		$response['manage_permission'] = $params['currentUserHasManagePermission'] =  \GO_Base_Model_Acl::hasPermission($currentPermissionLevel,\GO_Base_Model_Acl::MANAGE_PERMISSION);
 		$response = array_merge($response,parent::actionSelectedStore($params));
 		return $response;
 	}
 	
 	protected function actionSelectNewStore($params) {
-		if(GO::user()->isAdmin())
-			GO::config()->limit_usersearch=0;
-//		echo GO::config()->limit_usersearch;
+		if(\GO::user()->isAdmin())
+			\GO::config()->limit_usersearch=0;
+//		echo \GO::config()->limit_usersearch;
 			// Check for the value "limit_usersearch" in the group-office config file and then add the limit.
-		if(!empty(GO::config()->limit_usersearch)){
-			if($params['limit']>GO::config()->limit_usersearch)
-				$params['limit'] = GO::config()->limit_usersearch;			
+		if(!empty(\GO::config()->limit_usersearch)){
+			if($params['limit']>\GO::config()->limit_usersearch)
+				$params['limit'] = \GO::config()->limit_usersearch;			
 			
 			$params['start']=isset($params['start']) ? $params['start'] : 0;
 			
-			if($params['start']+$params['limit']>GO::config()->limit_usersearch)
+			if($params['start']+$params['limit']>\GO::config()->limit_usersearch)
 				$params['start']=0;
 		}
 		
 		$response = parent::actionSelectNewStore($params);
 		
-		if(!empty(GO::config()->limit_usersearch) && $response['total']>GO::config()->limit_usersearch)
-			$response['total']=GO::config()->limit_usersearch;	
+		if(!empty(\GO::config()->limit_usersearch) && $response['total']>\GO::config()->limit_usersearch)
+			$response['total']=\GO::config()->limit_usersearch;	
 		
 		return $response;
 	}
@@ -117,19 +117,19 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 			
 			foreach ($delKeys as $delKey) {
 //				if ($delKey==1)
-//					throw new Exception(GO::t('dontChangeAdminPermissions'));
+//					throw new Exception(\GO::t('dontChangeAdminPermissions'));
 				
-				$aclItem = GO_Base_Model_Acl::model()->findByPk($params['model_id']);
+				$aclItem = \GO_Base_Model_Acl::model()->findByPk($params['model_id']);
 				if ($aclItem->user_id == $delKey) {
 					// Situation: user with id $delKey is owner of ACL with id $params['model_id']
-					if(GO::user()->isAdmin()){
+					if(\GO::user()->isAdmin()){
 						// Situation: Current user is in root group. Action: set current
 						// user as owner of the ACL
-						$aclItem->user_id = GO::user()->id;
+						$aclItem->user_id = \GO::user()->id;
 						$aclItem->save();
 					}else
 					{
-						throw new Exception(GO::t('dontChangeOwnersPermissions'));
+						throw new Exception(\GO::t('dontChangeOwnersPermissions'));
 					}
 				}
 			}
@@ -141,12 +141,12 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 	
 	protected function beforeUpdateRecord($params, &$record, $model) {
 		
-		if($record['id']==GO::user()->id && !GO::user()->isAdmin()){
-			throw new Exception(GO::t('dontChangeOwnersPermissions'));
+		if($record['id']==\GO::user()->id && !\GO::user()->isAdmin()){
+			throw new Exception(\GO::t('dontChangeOwnersPermissions'));
 		}
 		
 		if($model->aclItem->user_id==$record['id']){
-			throw new Exception(GO::t('dontChangeOwnersPermissions'));
+			throw new Exception(\GO::t('dontChangeOwnersPermissions'));
 		}
 		return true;
 	}

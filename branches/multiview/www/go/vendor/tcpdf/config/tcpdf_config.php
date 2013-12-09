@@ -77,7 +77,7 @@
  * Cache directory for temporary files (full path).
  */
 //define ('K_PATH_CACHE', sys_get_temp_dir().'/');
-define ('K_PATH_CACHE', GO::config()->file_storage_path.'tcpdfcache/');
+define ('K_PATH_CACHE', \GO::config()->file_storage_path.'tcpdfcache/');
 
 $f = new GO_Base_Fs_Folder(K_PATH_CACHE);
 $f->create();

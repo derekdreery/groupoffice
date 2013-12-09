@@ -44,7 +44,7 @@ class GO_Base_Cron_CalculateDiskUsage extends GO_Base_Cron_AbstractCron {
 	 * @param GO_Base_Model_User $user [OPTIONAL]
 	 */
 	public function run(GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
-		$stmt =GO::getDbConnection()->query("SHOW TABLE STATUS FROM `".GO::config()->db_name."`;");
+		$stmt =\GO::getDbConnection()->query("SHOW TABLE STATUS FROM `".\GO::config()->db_name."`;");
 
 		$database_usage=0;
 		while($r=$stmt->fetch()){
@@ -52,21 +52,21 @@ class GO_Base_Cron_CalculateDiskUsage extends GO_Base_Cron_AbstractCron {
 			$database_usage+=$r['Index_length'];
 		}
 		
-		GO::config()->save_setting('database_usage', $database_usage);
+		\GO::config()->save_setting('database_usage', $database_usage);
 		
-		$folder = new \GO_Base_Fs_Folder(GO::config()->file_storage_path);
-		GO::config()->save_setting('file_storage_usage', $folder->calculateSize());
+		$folder = new \GO_Base_Fs_Folder(\GO::config()->file_storage_path);
+		\GO::config()->save_setting('file_storage_usage', $folder->calculateSize());
 		
-		if(GO::modules()->postfixadmin){
+		if(\GO::modules()->postfixadmin){
 			
-			$findParams = GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO_Base_Db_FindParams::newInstance()
 							->select('sum(`usage`) AS `usage`')
 							->ignoreAcl()
 							->single();
 			
-			$result = GO_Postfixadmin_Model_Mailbox::model()->find($findParams);
+			$result = \GO_Postfixadmin_Model_Mailbox::model()->find($findParams);
 	
-			GO::config()->save_setting('mailbox_usage', $result->usage*1024);
+			\GO::config()->save_setting('mailbox_usage', $result->usage*1024);
 		}
 
 	}

@@ -32,7 +32,7 @@ class GO_Addressbook_Model_Addresslist extends GO_Base_Db_ActiveRecord {
 	
 	// TODO : move language from mailings module to addressbook module
 	protected function getLocalizedName() {
-		return GO::t('addresslist', 'addressbook');
+		return \GO::t('addresslist', 'addressbook');
 	}
 	
 	public function relations(){

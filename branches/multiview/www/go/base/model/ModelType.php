@@ -60,7 +60,7 @@ class GO_Base_Model_ModelType extends GO_Base_Db_ActiveRecord {
 		//after module uninstall but in some cases this went wrong.
 		$parts = explode('_',$this->model_name);
 		$module = strtolower($parts[1]);
-		if($module!='base' && !GO::modules()->isInstalled($module)){
+		if($module!='base' && !\GO::modules()->isInstalled($module)){
 			$this->delete();
 		}else
 		{		

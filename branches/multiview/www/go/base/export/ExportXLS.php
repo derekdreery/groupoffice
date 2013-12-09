@@ -27,16 +27,16 @@ class GO_Base_Export_ExportXLS extends GO_Base_Export_AbstractExport {
 
 	private function _setupExcel() {
 		// Include PHPExcel
-		require_once GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel.php';
+		require_once \GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel.php';
 		// Create new \PHPExcel object
 		$this->phpExcel = new \PHPExcel();
 
 		// Set document properties
-		$this->phpExcel->getProperties()->setCreator(GO::config()->product_name)
-						->setLastModifiedBy(GO::config()->product_name)
+		$this->phpExcel->getProperties()->setCreator(\GO::config()->product_name)
+						->setLastModifiedBy(\GO::config()->product_name)
 						->setTitle($this->title)
 						->setSubject("Export")
-						->setDescription("An export from ".GO::config()->product_name)
+						->setDescription("An export from ".\GO::config()->product_name)
 						->setKeywords("")
 						->setCategory("export");
 
@@ -63,7 +63,7 @@ class GO_Base_Export_ExportXLS extends GO_Base_Export_AbstractExport {
 			$col++;
 		}
 		$this->excel_row++;
-		//fputcsv($this->_fp, $data, GO::user()->list_separator, GO::user()->text_separator);
+		//fputcsv($this->_fp, $data, \GO::user()->list_separator, \GO::user()->text_separator);
 	}
 
 	public function output() {
@@ -88,7 +88,7 @@ class GO_Base_Export_ExportXLS extends GO_Base_Export_AbstractExport {
 		$writer = PHPExcel_IOFactory::createWriter($this->phpExcel, 'Excel5');
 		//$tmpFilename = tempnam('./temp', 'tmp');
 		
-		$file = GO_Base_Fs_File::tempFile();
+		$file = \GO_Base_Fs_File::tempFile();
 		$writer->save($file->path());
 		
 		$file->output();

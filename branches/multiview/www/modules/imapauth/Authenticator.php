@@ -10,7 +10,7 @@ class GO_Imapauth_Authenticator {
 	public $user;
 
 	public function setCredentials($username, $password) {
-		GO::debug('IMAPAUTH: module active');
+		\GO::debug('IMAPAUTH: module active');
 		$arr = explode('@', $username);
 
 		$this->email = trim($username);
@@ -20,10 +20,10 @@ class GO_Imapauth_Authenticator {
 		$config = $this->getDomainConfig($domain);
 
 		if (!$config) {
-			GO::debug('IMAPAUTH: No config for domain found');
+			\GO::debug('IMAPAUTH: No config for domain found');
 			return false;
 		} else {
-			GO::debug($config);
+			\GO::debug($config);
 			$this->config = $config;
 
 			$this->goUsername = $this->imapUsername = $this->email;
@@ -33,7 +33,7 @@ class GO_Imapauth_Authenticator {
 
 			$this->imapPassword = $password;
 
-			GO::debug('IMAPAUTH: Attempt IMAP login');
+			\GO::debug('IMAPAUTH: Attempt IMAP login');
 
 			return true;
 		}
@@ -47,22 +47,22 @@ class GO_Imapauth_Authenticator {
 	public function imapAuthenticate() {
 		
 		//disable password validation because we can't control the external passwords
-		GO::config()->password_validate=false;
+		\GO::config()->password_validate=false;
 		
 		$imap = new \GO_Base_Mail_Imap();
 		try {
 			$imap->connect(
 							$this->config['host'], $this->config['port'], $this->imapUsername, $this->imapPassword, $this->config['ssl']);
 
-			GO::debug('IMAPAUTH: IMAP login succesful');
+			\GO::debug('IMAPAUTH: IMAP login succesful');
 			$imap->disconnect();
 
 
-			$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $this->goUsername);
+			$user = \GO_Base_Model_User::model()->findSingleByAttribute('username', $this->goUsername);
 			if ($user) {
-				GO::debug("IMAPAUTH: Group-Office user already exists.");
+				\GO::debug("IMAPAUTH: Group-Office user already exists.");
 				if (!$user->checkPassword($this->imapPassword)) {
-					GO::debug('IMAPAUTH: IMAP password has been changed. Updating Group-Office database');
+					\GO::debug('IMAPAUTH: IMAP password has been changed. Updating Group-Office database');
 
 					$user->password = $this->imapPassword;
 					if(!$user->save()){
@@ -71,7 +71,7 @@ class GO_Imapauth_Authenticator {
 				}
 				$this->user = $user;
 
-				if (GO::modules()->isInstalled('email')) {
+				if (\GO::modules()->isInstalled('email')) {
 					if (!$this->checkEmailAccounts($this->user, $this->config['host'], $this->imapUsername, $this->imapPassword)) {
 						$this->createEmailAccount($this->user, $this->config, $this->imapUsername, $this->imapPassword);
 					}
@@ -80,24 +80,24 @@ class GO_Imapauth_Authenticator {
 
 			return true;
 		} catch (Exception $e) {
-			GO::debug('IMAPAUTH: Authentication to IMAP server failed with Exception: ' . $e->getMessage() . ' IMAP error:' . $imap->last_error());
+			\GO::debug('IMAPAUTH: Authentication to IMAP server failed with Exception: ' . $e->getMessage() . ' IMAP error:' . $imap->last_error());
 			$imap->clear_errors();
 
-			GO::session()->logout(); //for clearing remembered password cookies
+			\GO::session()->logout(); //for clearing remembered password cookies
 
 			return false;
 		}
 	}
 	
 	public function checkEmailAccounts($user, $host, $imapUsername, $password){
-		$stmt = GO_Email_Model_Account::model()->findByAttributes(array(
+		$stmt = \GO_Email_Model_Account::model()->findByAttributes(array(
 					'host' => $host,
 					'username' => $imapUsername
 							));
 		$foundAccount = false;		
 		while ($account = $stmt->fetch()) {
 			
-			GO::debug("IMAPAUTH: Updating account ".$account->id);
+			\GO::debug("IMAPAUTH: Updating account ".$account->id);
 
 			if($account->user_id==$user->id)
 				$foundAccount=true;
@@ -107,7 +107,7 @@ class GO_Imapauth_Authenticator {
 			$account->store_smtp_password = !empty($account->store_password) && !empty($this->config['smtp_use_login_credentials']) ? 1 : 0;
 			
 			if (!empty($this->config['smtp_use_login_credentials'])) {
-				GO::debug("IMAPAUTH: Setting SMTP password too");
+				\GO::debug("IMAPAUTH: Setting SMTP password too");
 				$account->smtp_username = $imapUsername;
 				$account->smtp_password = $password;
 			}
@@ -122,9 +122,9 @@ class GO_Imapauth_Authenticator {
 	public function createEmailAccount($user, $config, $username, $password) {
 		
 		
-		if (GO::modules()->isInstalled('email')) {
+		if (\GO::modules()->isInstalled('email')) {
 			
-			GO::debug('IMAPAUTH: Creating IMAP account for user');
+			\GO::debug('IMAPAUTH: Creating IMAP account for user');
 			$account['user_id'] = $user->id;
 			$account['type'] = 'imap'; //$config['proto'];
 			$account['host'] = $config['host'];
@@ -162,15 +162,15 @@ class GO_Imapauth_Authenticator {
 			
 		}else
 		{
-			GO::debug('IMAPAUTH: E-mail module not installed. Skipping e-mail account creation.');
+			\GO::debug('IMAPAUTH: E-mail module not installed. Skipping e-mail account creation.');
 		}
 	}
 
 	public function getDomainConfig($domain) {
 		
-		GO::debug("IMAPAUTH: Finding config for domain: ".$domain);
+		\GO::debug("IMAPAUTH: Finding config for domain: ".$domain);
 		if (!empty($domain)) {
-			$conf = str_replace('config.php', 'imapauth.config.php', GO::config()->get_config_file());
+			$conf = str_replace('config.php', 'imapauth.config.php', \GO::config()->get_config_file());
 
 			if (file_exists($conf)) {
 				require($conf);

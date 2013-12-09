@@ -38,21 +38,21 @@ class GO_Customfields_Model_Block extends GO_Base_Db_ActiveRecord{
 
 	public function getItemNames($forModelId,$forModelName) {
 		
-		$modelUnderBlock = GO::getModel($this->customField->category->extends_model);
+		$modelUnderBlock = \GO::getModel($this->customField->category->extends_model);
 		
 		$cfTableName = 'cf_'.$modelUnderBlock->tableName();
 		
 		$stmt = $modelUnderBlock->find(
-			GO_Base_Db_FindParams::newInstance()
+			\GO_Base_Db_FindParams::newInstance()
 				->ignoreAcl()
 				->join(
 					$cfTableName,
-					GO_Base_Db_FindCriteria::newInstance()->addRawCondition('cf.model_id', 't.id'),
+					\GO_Base_Db_FindCriteria::newInstance()->addRawCondition('cf.model_id', 't.id'),
 					'cf',
 					'INNER'
 				)
 				->criteria(
-					GO_Base_Db_FindCriteria::newInstance()
+					\GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('col_'.$this->field_id, $forModelId.':%', 'LIKE', 'cf')
 				)
 		);

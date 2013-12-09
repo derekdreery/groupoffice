@@ -27,7 +27,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * @return GO_Base_Fs_Folder 
 	 */
 	public static function tempFolder($sub=''){
-		$path = GO::config()->orig_tmpdir.GO::user()->id;
+		$path = \GO::config()->orig_tmpdir.\GO::user()->id;
 		if(!empty($sub))
 			$path .= '/'.$sub;
 		
@@ -85,7 +85,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 */
 	public function delete(){
 		
-		//GO::debug("DELETE: ".$this->path());
+		//\GO::debug("DELETE: ".$this->path());
 		
 		if(!$this->exists())
 			return true;
@@ -108,7 +108,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		if(strpos($srcPath.'/', $destPath.'/')===0)
 		{
 			$msg = 'The destination is located inside the source directory.';
-			if(GO::config()->debug)
+			if(\GO::config()->debug)
 				$msg .= "\n\n".$srcPath.' -> '.$destPath;
 			throw new \Exception($msg);
 		}
@@ -176,7 +176,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		if(!$newFolderName)
 			$newFolderName=$this->name();
 		
-		GO::debug('folder::copy: '.$this->path().' > '.$destinationFolder->path().'/'.$newFolderName);
+		\GO::debug('folder::copy: '.$this->path().' > '.$destinationFolder->path().'/'.$newFolderName);
 		
 		$copiedFolder = new \GO_Base_Fs_Folder($destinationFolder->path().'/'.$newFolderName);
 		if(!$copiedFolder->create())
@@ -211,19 +211,19 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	public function create($permissionsMode=false){
 	
 		if(!$permissionsMode)
-			$permissionsMode=octdec(GO::config()->folder_create_mode);		
+			$permissionsMode=octdec(\GO::config()->folder_create_mode);		
 		
 		if(is_dir($this->path)){
 			
 			//was trying to chmod /tmp. Best way is to leave existing folders alone.
 //			if(!chmod($this->path, $permissionsMode))
-//				GO::debug("chmod failed on ".$this->path);
+//				\GO::debug("chmod failed on ".$this->path);
 			return true;
 		}		
 		
 		if(mkdir($this->path, $permissionsMode,true)){
-			if(GO::config()->file_change_group)
-				chgrp ($this->path, GO::config()->file_change_group);
+			if(\GO::config()->file_change_group)
+				chgrp ($this->path, \GO::config()->file_change_group);
 			
 			return true;
 		}else
@@ -259,9 +259,9 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * Set's default permissions and group ownership
 	 */
 	public function setDefaultPermissions(){
-		chmod($this->path, octdec(GO::config()->folder_create_mode));
-		if(!empty(GO::config()->file_change_group))
-			chgrp($this->path, GO::config()->file_change_group);
+		chmod($this->path, octdec(\GO::config()->folder_create_mode));
+		if(!empty(\GO::config()->file_change_group))
+			chgrp($this->path, \GO::config()->file_change_group);
 	}
 	
 	

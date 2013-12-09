@@ -176,7 +176,7 @@ class GO_Base_Util_Charset_Xmac {
 
 	public static function toUtf8($string, $charset) {
 
-		if(!GO_Base_Util_String::is8bit($string,$charset))
+		if(!\GO_Base_Util_String::is8bit($string,$charset))
 			return $string;
 		
 //		$searches = array();

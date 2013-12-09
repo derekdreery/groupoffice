@@ -6,7 +6,7 @@ class GO_Postfixadmin_PostfixadminModule extends GO_Base_Module {
 
 		parent::install();		
 		
-		$domains = empty(GO::config()->serverclient_domains) ? array() : explode(',', GO::config()->serverclient_domains);
+		$domains = empty(\GO::config()->serverclient_domains) ? array() : explode(',', \GO::config()->serverclient_domains);
 
 		foreach ($domains as $domain) {
 			if (!empty($domain)) {

@@ -62,7 +62,7 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 		$this->removeAllManyMany('companies');
 
 		// Add company recipients to this list and count them
-		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($this->addresslist_id)->companies();
+		$stmt = \GO_Addressbook_Model_Addresslist::model()->findByPk($this->addresslist_id)->companies();
 		while ($company = $stmt->fetch()) {
 			$this->addManyMany('companies', $company->id);			
 			$nMailsToSend++;			
@@ -72,7 +72,7 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 		$this->removeAllManyMany('contacts');
 
 		// Add contact recipients to this list and count them
-		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($this->addresslist_id)->contacts();
+		$stmt = \GO_Addressbook_Model_Addresslist::model()->findByPk($this->addresslist_id)->contacts();
 		while ($contact = $stmt->fetch()) {
 			$this->addManyMany('contacts', $contact->id);			
 			$nMailsToSend++;			
@@ -88,12 +88,12 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getLogFile(){
-		$file = new \GO_Base_Fs_File(GO::config()->file_storage_path.'log/mailings/'.$this->id.'.log');		
+		$file = new \GO_Base_Fs_File(\GO::config()->file_storage_path.'log/mailings/'.$this->id.'.log');		
 		return $file;
 	}
 	
 	protected function getMessageFile(){
-		$file = new \GO_Base_Fs_File(GO::config()->file_storage_path.$this->message_path);		
+		$file = new \GO_Base_Fs_File(\GO::config()->file_storage_path.$this->message_path);		
 		return $file;
 	}
 	

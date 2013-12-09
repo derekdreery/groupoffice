@@ -22,9 +22,9 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
 
 	public function getChild($name) {
 
-		GO::debug('Shared::getChild('.$name.')');
+		\GO::debug('Shared::getChild('.$name.')');
 		
-		$folder = GO_Files_Model_Folder::model()->getTopLevelShare($name);
+		$folder = \GO_Files_Model_Folder::model()->getTopLevelShare($name);
 		
 		if (!$folder)
 			throw new \Sabre\DAV\Exception\NotFound('Shared folder with name ' . $name . ' could not be located');
@@ -38,9 +38,9 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
 	 * @return Sabre\DAV\INode[]
 	 */
 	public function getChildren() {
-		GO::debug('Shared::getChildren()');
+		\GO::debug('Shared::getChildren()');
 
-		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
+		$shares =\GO_Files_Model_Folder::model()->getTopLevelShares(\GO_Base_Db_FindParams::newInstance()->limit(100));
 
 		$nodes = array();
 		foreach($shares as $folder){
@@ -105,7 +105,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
 	 */
 	public function getLastModified() {
 		//checks the folders and returns build time
-		return GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id, false);
+		return \GO_Files_Model_SharedRootFolder::model()->rebuildCache(\GO::user()->id, false);
 	}
 
 }

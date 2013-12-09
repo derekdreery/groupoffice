@@ -167,7 +167,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 			$this->_recurPositionStartTime=$this->_eventstarttime;
 		
 		
-		GO::debug(date('c', $this->_recurPositionStartTime));
+		\GO::debug(date('c', $this->_recurPositionStartTime));
 		
 		if(!$startTime)
 			$startTime=$this->_recurPositionStartTime;
@@ -191,7 +191,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 		if(empty($this->_until) || $next<=$this->_until){
 			
 			//check next recurrence from one day later
-			$this->_recurPositionStartTime=$next+1;//GO_Base_Util_Date::date_add($next,1);
+			$this->_recurPositionStartTime=$next+1;//\GO_Base_Util_Date::date_add($next,1);
 			//echo "N:".date('c', $this->_recurPositionStartTime)."\n";
 			return $next;
 		}else
@@ -204,7 +204,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	protected function _getNextRecurrenceDaily($startTime){
 							
 		$daysBetweenNextAndFirstEvent=$this->_findNumberOfDays($startTime, $this->_interval);
-		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventstarttime,$daysBetweenNextAndFirstEvent);
+		$recurrenceTime =  \GO_Base_Util_Date::date_add($this->_eventstarttime,$daysBetweenNextAndFirstEvent);
 		
 		if($this->_maxTime>0 && $recurrenceTime>$this->_maxTime)
 			return false;
@@ -232,7 +232,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	
 		$daysBetweenNextAndFirstEvent=$this->_findNumberOfDays($startTime, $period, false);
 		
-		$firstPossibleWeekStart = $recurrenceTime = GO_Base_Util_Date::date_add($this->_eventstarttime,$daysBetweenNextAndFirstEvent);
+		$firstPossibleWeekStart = $recurrenceTime = \GO_Base_Util_Date::date_add($this->_eventstarttime,$daysBetweenNextAndFirstEvent);
 		
 		//check each weekday for a match
 		for($day=0;$day<7;$day++){			
@@ -243,10 +243,10 @@ class GO_Base_Util_Date_RecurrencePattern{
 				}			
 			}
 			
-			$recurrenceTime = GO_Base_Util_Date::date_add($recurrenceTime,1);
+			$recurrenceTime = \GO_Base_Util_Date::date_add($recurrenceTime,1);
 		}
 		
-		$nextStartTime = GO_Base_Util_Date::date_add($firstPossibleWeekStart,$period);
+		$nextStartTime = \GO_Base_Util_Date::date_add($firstPossibleWeekStart,$period);
 		
 		if($this->_maxTime>0 && $nextStartTime>$this->_maxTime)
 			return false;
@@ -266,7 +266,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 			$monthBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval);
 			//echo $monthBetweenNextAndFirstEvent."\n";
 			
-			$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $monthBetweenNextAndFirstEvent);
+			$recurrenceTime =  \GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $monthBetweenNextAndFirstEvent);
 		}else
 		{
 
@@ -276,7 +276,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 			//eg. 3rd monday of the month
 			$monthBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval, false);
 			
-			$recurrenceTime = $firstPossibleTime=GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $monthBetweenNextAndFirstEvent);
+			$recurrenceTime = $firstPossibleTime=\GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $monthBetweenNextAndFirstEvent);
 			
 			$currentMonth = $startMonth = date('m', $recurrenceTime);
 						
@@ -290,7 +290,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 					}
 				}
 				
-				$recurrenceTime =  GO_Base_Util_Date::date_add($recurrenceTime, 1);
+				$recurrenceTime =  \GO_Base_Util_Date::date_add($recurrenceTime, 1);
 				$currentMonth = date('m', $recurrenceTime);
 			}
 			
@@ -337,7 +337,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	
 	protected function _getNextRecurrenceYearly($startTime){
 		$monthsBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval*12);
-		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $monthsBetweenNextAndFirstEvent);
+		$recurrenceTime =  \GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $monthsBetweenNextAndFirstEvent);
 		return $recurrenceTime;
 	}
 	
@@ -356,7 +356,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 		
 		if($ceil){
 			
-			$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $periodsBetweenNextAndFirstEvent);
+			$recurrenceTime =  \GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $periodsBetweenNextAndFirstEvent);
 			if($recurrenceTime<$startTime)
 				$periodsBetweenNextAndFirstEvent+=$interval;
 		}
@@ -455,7 +455,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 		$this->shiftDays(false);
 		$days = array();
 				
-		$fulldays=GO::t('full_days');
+		$fulldays=\GO::t('full_days');
 		foreach($this->_byday as $icalDay){
 			$index = array_search($icalDay, $this->_days);
 			$days[]=$fulldays[$index];
@@ -464,7 +464,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 		if (count($days) == 1) {
 			$daysStr = $days[0];
 		} else {
-			$daysStr = ' '.GO::t('and').' ' . array_pop($days);
+			$daysStr = ' '.\GO::t('and').' ' . array_pop($days);
 			$daysStr = implode(', ', $days) . $daysStr;
 		}
 
@@ -474,58 +474,58 @@ class GO_Base_Util_Date_RecurrencePattern{
 		switch ($this->_freq) {
 			case 'WEEKLY':
 				if ($this->_interval > 1) {
-					$html .= sprintf(GO::t('repeats_at_not_every'), $this->_interval, GO::t('weeks'), $daysStr);
+					$html .= sprintf(\GO::t('repeats_at_not_every'), $this->_interval, \GO::t('weeks'), $daysStr);
 				} else {
-					$html .= sprintf(GO::t('repeats_at'), GO::t('week'), $daysStr);
+					$html .= sprintf(\GO::t('repeats_at'), \GO::t('week'), $daysStr);
 				}
 
 				break;
 
 			case 'DAILY':
 				if ($this->_interval > 1) {
-					$html .= sprintf(GO::t('repeats_at_not_every'), $this->_interval, GO::t('days'));
+					$html .= sprintf(\GO::t('repeats_at_not_every'), $this->_interval, \GO::t('days'));
 				} else {
-					$html .= sprintf(GO::t('repeats'), GO::t('day'));
+					$html .= sprintf(\GO::t('repeats'), \GO::t('day'));
 				}
 				break;
 
 			case 'MONTHLY':
 				if (!$this->_byday) {
 					if ($this->_interval > 1) {
-						$html .= sprintf(GO::t('repeats_at_not_every'), $this->_interval, GO::t('months'));
+						$html .= sprintf(\GO::t('repeats_at_not_every'), $this->_interval, \GO::t('months'));
 					} else {
-						$html .= sprintf(GO::t('repeats'), GO::t('month'));
+						$html .= sprintf(\GO::t('repeats'), \GO::t('month'));
 					}
 				} else {
 
-					$bySetPositions = GO::t('month_times');
+					$bySetPositions = \GO::t('month_times');
 	
 					if (count($days) == 1) {
 						$daysStr = $bySetPositions[$this->_bysetpos] . ' ' . $days[0];
 					} else {
-						$daysStr = ' ' . GO::t('and') . ' ' . array_pop($days);
+						$daysStr = ' ' . \GO::t('and') . ' ' . array_pop($days);
 						$daysStr = $bySetPositions[$this->_bysetpos]. ' ' . implode(', ', $days) . $daysStr;
 					}
 
 					if ($this->_interval > 1) {
-						$html .= sprintf(GO::t('repeats_at_not_every'), $this->_interval, GO::t('months'), $daysStr);
+						$html .= sprintf(\GO::t('repeats_at_not_every'), $this->_interval, \GO::t('months'), $daysStr);
 					} else {
-						$html .= sprintf(GO::t('repeats_at'), GO::t('month'), $daysStr);
+						$html .= sprintf(\GO::t('repeats_at'), \GO::t('month'), $daysStr);
 					}
 				}
 				break;
 
 			case 'YEARLY':
 				if ($this->_interval > 1) {
-					$html .= sprintf(GO::t('repeats_at_not_every'), $this->_interval, GO::t('years'));
+					$html .= sprintf(\GO::t('repeats_at_not_every'), $this->_interval, \GO::t('years'));
 				} else {
-					$html .= sprintf(GO::t('repeats'), GO::t('year'));
+					$html .= sprintf(\GO::t('repeats'), \GO::t('year'));
 				}
 				break;
 		}
 
 		if ($this->until) 
-			$html .= ' ' . GO::t('until') . ' ' . GO_Base_Util_Date::get_timestamp ($this->until, false);
+			$html .= ' ' . \GO::t('until') . ' ' . \GO_Base_Util_Date::get_timestamp ($this->until, false);
 		
 		return $html;
 	}

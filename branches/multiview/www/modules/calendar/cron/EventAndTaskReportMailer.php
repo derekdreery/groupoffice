@@ -20,7 +20,7 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	 * @return String
 	 */
 	public function getLabel(){
-		return GO::t('cronEventAndTaskReportMailer','calendar');
+		return \GO::t('cronEventAndTaskReportMailer','calendar');
 	}
 	
 	/**
@@ -29,7 +29,7 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	 * @return String
 	 */
 	public function getDescription(){
-		return GO::t('cronEventAndTaskReportMailerDescription','calendar');
+		return \GO::t('cronEventAndTaskReportMailerDescription','calendar');
 	}
 	
 	/**
@@ -46,12 +46,12 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	 */
 	public function run(GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
 		
-		GO::session()->runAsRoot();
+		\GO::session()->runAsRoot();
 		$pdf = $this->_getUserPdf($user);
 		if($this->_sendEmail($user,$pdf))
-			GO::debug("CRON MAIL IS SEND!");
+			\GO::debug("CRON MAIL IS SEND!");
 		else
-			GO::debug("CRON MAIL HAS NOT BEEN SEND!");		
+			\GO::debug("CRON MAIL HAS NOT BEEN SEND!");		
 	}
 	
 	/**
@@ -63,7 +63,7 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	private function _getUserPdf(GO_Base_Model_User $user){		
 		$pdf = new eventAndTaskPdf();
 		$pdf->setTitle($user->name); // Set the title in the header of the PDF
-		$pdf->setSubTitle(GO::t('cronEventAndTaskReportMailerPdfSubtitle','calendar')); // Set the subtitle in the header of the PDF
+		$pdf->setSubTitle(\GO::t('cronEventAndTaskReportMailerPdfSubtitle','calendar')); // Set the subtitle in the header of the PDF
 		$pdf->render($user); // Pass the data to the PDF object and let it draw the PDF
 		
 		return $pdf->Output('','s');// Output the pdf
@@ -78,21 +78,21 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	 */
 	private function _sendEmail(GO_Base_Model_User $user,$pdf){
 		
-		$filename = GO_Base_Fs_File::stripInvalidChars($user->name).'.pdf'; //Set the PDF filename
+		$filename = \GO_Base_Fs_File::stripInvalidChars($user->name).'.pdf'; //Set the PDF filename
 		$filename = str_replace(',', '', $filename);
 		
-		$mailSubject = GO::t('cronEventAndTaskReportMailerSubject','calendar');
-		$body = GO::t('cronEventAndTaskReportMailerContent','calendar');
+		$mailSubject = \GO::t('cronEventAndTaskReportMailerSubject','calendar');
+		$body = \GO::t('cronEventAndTaskReportMailerContent','calendar');
 		
-		$message = GO_Base_Mail_Message::newInstance(
+		$message = \GO_Base_Mail_Message::newInstance(
 										$mailSubject
-										)->setFrom(GO::config()->webmaster_email, GO::config()->title)
+										)->setFrom(\GO::config()->webmaster_email, \GO::config()->title)
 										->addTo($user->email);
 
 		$message->setHtmlAlternateBody(nl2br($body));
 		$message->attach(Swift_Attachment::newInstance($pdf,$filename,'application/pdf'));
-		GO::debug('CRON SEND MAIL TO: '.$user->email);
-		return GO_Base_Mail_Mailer::newGoInstance()->send($message);
+		\GO::debug('CRON SEND MAIL TO: '.$user->email);
+		return \GO_Base_Mail_Mailer::newGoInstance()->send($message);
 	}
 }
 
@@ -138,8 +138,8 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 	public function render($user){
 		$this->AddPage();
 		$this->setEqualColumns(2, ($this->pageWidth/2)-10);
-		$eventsString = GO::t('appointments','calendar');
-		$tasksString = GO::t('tasks','tasks');
+		$eventsString = \GO::t('appointments','calendar');
+		$tasksString = \GO::t('tasks','tasks');
 		
 		$textColor = $this->TextColor;
 		$textFont = $this->getFontFamily();
@@ -171,19 +171,19 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 	 * @return GO_Calendar_Model_Event[]
 	 */
 	private function _getEvents($user){
-		$defaultCalendar = GO_Calendar_Model_Calendar::model()->getDefault($user);		
+		$defaultCalendar = \GO_Calendar_Model_Calendar::model()->getDefault($user);		
 		
 		$todayStart = strtotime('today')+1;
 		$todayEnd = strtotime('tomorrow');
 		
 		if($defaultCalendar){
-			$findParams = GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO_Base_Db_FindParams::newInstance()
 			->select()
 			//->order(array('start_time','name'),array('ASC','ASC'))
-			->criteria(GO_Base_Db_FindCriteria::newInstance()
+			->criteria(\GO_Base_Db_FindCriteria::newInstance()
 					->addCondition('calendar_id', $defaultCalendar->id)
 			);
-			$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams,$todayStart,$todayEnd);
+			$events = \GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams,$todayStart,$todayEnd);
 			
 			return $events; //->fetchAll();
 		} else {
@@ -198,21 +198,21 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 	 * @return GO_Tasks_Model_Task[]
 	 */
 	private function _getTasks($user){	
-		$defaultTasklist = GO_Tasks_Model_Tasklist::model()->getDefault($user);
+		$defaultTasklist = \GO_Tasks_Model_Tasklist::model()->getDefault($user);
 		
 		$todayStart = strtotime('today');
 		$todayEnd = strtotime('tomorrow');
 		
 		if($defaultTasklist){
-			$findParams = GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO_Base_Db_FindParams::newInstance()
 			->select()
 			->order(array('start_time','name'),array('ASC','ASC'))
-			->criteria(GO_Base_Db_FindCriteria::newInstance()
+			->criteria(\GO_Base_Db_FindCriteria::newInstance()
 					->addCondition('tasklist_id', $defaultTasklist->id)
 					->addCondition('start_time', $todayStart,'>=')
 					->addCondition('start_time', $todayEnd,'<')
 			);
-			$tasks = GO_Tasks_Model_Task::model()->find($findParams);
+			$tasks = \GO_Tasks_Model_Task::model()->find($findParams);
 			
 			return $tasks->fetchAll();
 		} else {
@@ -229,7 +229,7 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 
 		$html = '';
 		$html .= '<tcpdf method="renderLine" />';
-		$html .= '<b><font style="font-size:'.$this->_timeFontSize.'px">'.GO_Base_Util_Date_DateTime::fromUnixtime($event->getAlternateStartTime())->format('H:i').' - '.GO_Base_Util_Date_DateTime::fromUnixtime($event->getAlternateEndTime())->format('H:i').'</font> <font style="font-size:'.$this->_nameFontSize.'px">'.GO_Base_Util_String::text_to_html($event->getName(), true).'</font></b>';
+		$html .= '<b><font style="font-size:'.$this->_timeFontSize.'px">'.\GO_Base_Util_Date_DateTime::fromUnixtime($event->getAlternateStartTime())->format('H:i').' - '.\GO_Base_Util_Date_DateTime::fromUnixtime($event->getAlternateEndTime())->format('H:i').'</font> <font style="font-size:'.$this->_nameFontSize.'px">'.\GO_Base_Util_String::text_to_html($event->getName(), true).'</font></b>';
 		$realEvent = $event->getEvent();
 		if(!empty($realEvent->description))
 			$html .= 	'<br /><font style="font-size:'.$this->_descriptionFontSize.'px">'.$realEvent->getAttribute('description', 'html').'</font>';
@@ -246,7 +246,7 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 		
 		$html = '';
 		$html .= '<tcpdf method="renderLine" />';
-		$html .= '<b><font style="font-size:'.$this->_nameFontSize.'px">'.GO_Base_Util_String::text_to_html($task->getAttribute('name', 'html'),true).'</font></b>';
+		$html .= '<b><font style="font-size:'.$this->_nameFontSize.'px">'.\GO_Base_Util_String::text_to_html($task->getAttribute('name', 'html'),true).'</font></b>';
 		if(!empty($task->description))
 			$html .= 	'<br /><font style="font-size:'.$this->_descriptionFontSize.'px">'.$task->getAttribute('description', 'html').'</font>';
 

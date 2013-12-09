@@ -82,12 +82,12 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 	 */
 	protected function actionSelectNewStore($params){
 		
-		$model = GO::getModel($this->modelName());
-		$linkModel = GO::getModel($this->linkModelName());
+		$model = \GO::getModel($this->modelName());
+		$linkModel = \GO::getModel($this->linkModelName());
 		
-		$store = GO_Base_Data_Store::newInstance($model);
+		$store = \GO_Base_Data_Store::newInstance($model);
 		
-		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
 			->addCondition($this->getRemoteKey(), $params['model_id'],'=','lt')
 			->addCondition($model->primaryKey(), 'lt.'.$this->linkModelField(), '=', 't', true, true);			
 		
@@ -98,7 +98,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 		if($this->uniqueSelection){
 			$findParams->join($linkModel->tableName(), $joinCriteria, 'lt', 'LEFT');
 
-			$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+			$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
 							->addCondition($this->linkModelField(), null,'IS','lt');
 			$findParams->criteria($findCriteria);
 		}
@@ -169,10 +169,10 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 			}
 		}
 		
-		$model = GO::getModel($this->modelName());
-		$linkModel = GO::getModel($this->linkModelName());
+		$model = \GO::getModel($this->modelName());
+		$linkModel = \GO::getModel($this->linkModelName());
 		
-		$store = GO_Base_Data_Store::newInstance($model);
+		$store = \GO_Base_Data_Store::newInstance($model);
 		$this->formatColumns($store->getColumnModel());
 		
 		if($model->aclField())
@@ -193,7 +193,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 			$response['deleteFeedback'] = $e->getMessage();
 		}
 		
-		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
 			->addCondition(
 							$model->primaryKey(),
 							'lt.'.$this->linkModelField(),
@@ -269,7 +269,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 	 * @return String The remote key 
 	 */
 	protected function getRemoteKey(){
-		$linkModel = GO::getModel($this->linkModelName());
+		$linkModel = \GO::getModel($this->linkModelName());
 		$key = $linkModel->primaryKey();
 		
 		return $key[0]==$this->linkModelField() ? $key[1] : $key[0];
@@ -284,7 +284,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 			$this->getRemoteKey()=>$params['model_id'], //eg. user_id
 			$this->linkModelField()=>$record['id'] //eg. calendar_id
 		);
-		$linkModel = GO::getModel($this->linkModelName())->findByPk($primaryKeys);
+		$linkModel = \GO::getModel($this->linkModelName())->findByPk($primaryKeys);
 		
 		
 		if ($this->beforeUpdateRecord($params,$record, $linkModel)) {

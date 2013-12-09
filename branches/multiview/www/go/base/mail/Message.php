@@ -10,7 +10,7 @@
  */
 
 //make sure temp dir exists
-$cacheFolder = new \GO_Base_Fs_Folder(GO::config()->tmpdir);
+$cacheFolder = new \GO_Base_Fs_Folder(\GO::config()->tmpdir);
 $cacheFolder->create();
 
 /**
@@ -30,8 +30,8 @@ class GO_Base_Mail_Message extends Swift_Message{
 		
 		$headers = $this->getHeaders();
 
-		$headers->addTextHeader("X-Mailer", GO::config()->product_name);
-		$headers->addTextHeader("X-MimeOLE", "Produced by ".GO::config()->product_name);
+		$headers->addTextHeader("X-Mailer", \GO::config()->product_name);
+		$headers->addTextHeader("X-MimeOLE", "Produced by ".\GO::config()->product_name);
 		$remoteAddr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'cli';
 		$headers->addTextHeader("X-Remote-Addr", "[".$remoteAddr."]");
 	}
@@ -185,7 +185,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 		}
 
 		if($charset!='UTF-8'){
-			$part->body = GO_Base_Util_String::to_utf8($part->body, $charset);
+			$part->body = \GO_Base_Util_String::to_utf8($part->body, $charset);
 			
 			$part->body = str_ireplace($charset, 'UTF-8', $part->body);
 			
@@ -229,7 +229,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 				{
 					//attachment
 
-					$dir=GO::config()->tmpdir.'attachments/';
+					$dir=\GO::config()->tmpdir.'attachments/';
 
 					if(!is_dir($dir))
 						mkdir($dir, 0755, true);
@@ -322,7 +322,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 	 * @return type 
 	 */
 	private function _fixRelativeUrls($body){		
-		return str_replace('href="?r=','href="'.GO::config()->full_url, $body);
+		return str_replace('href="?r=','href="'.\GO::config()->full_url, $body);
 	}
 	
 	private function _embedPastedImages($body){
@@ -332,7 +332,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 		foreach($allMatches as $matches){
 			if($matches[2]=='base64'){
 				$extension = $matches[1];
-				$tmpFile = GO_Base_Fs_File::tempFile('', $extension);
+				$tmpFile = \GO_Base_Fs_File::tempFile('', $extension);
 				$tmpFile->putContents(base64_decode($matches[3]));
 
 				$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
@@ -389,7 +389,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 		}
 		
 		if(isset($params['alias_id'])){
-			$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);	
+			$alias = \GO_Email_Model_Alias::model()->findByPk($params['alias_id']);	
 			$this->setFrom($alias->email, $alias->name);
 			
 			if(!empty($params['notification']))
@@ -421,12 +421,12 @@ class GO_Base_Mail_Message extends Swift_Message{
 				 if(count($inlineAttachments)){
 					foreach ($inlineAttachments as $ia) {
 
-						//$tmpFile = new \GO_Base_Fs_File(GO::config()->tmpdir.$ia['tmp_file']);
+						//$tmpFile = new \GO_Base_Fs_File(\GO::config()->tmpdir.$ia['tmp_file']);
 						if(empty($ia->tmp_file)){
 							throw new \Exception("No temp file for inline attachment ".$ia->name);
 						}
 
-						$path = empty($ia->from_file_storage) ? GO::config()->tmpdir.$ia->tmp_file : GO::config()->file_storage_path.$ia->tmp_file;
+						$path = empty($ia->from_file_storage) ? \GO::config()->tmpdir.$ia->tmp_file : \GO::config()->file_storage_path.$ia->tmp_file;
 						$tmpFile = new \GO_Base_Fs_File($path);
 
 						if ($tmpFile->exists()) {				
@@ -439,7 +439,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 								$contentId = $this->embed($img);
 
 								//$tmpFile->delete();								
-								$params['htmlbody'] = GO_Base_Util_String::replaceOnce($matches[1], $contentId, $params['htmlbody']);
+								$params['htmlbody'] = \GO_Base_Util_String::replaceOnce($matches[1], $contentId, $params['htmlbody']);
 							}else
 							{
 								//this may happen when an inline image was attached but deleted in the editor afterwards.
@@ -459,7 +459,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 <head>
 <style type="text/css">
 body,p,td,div,span{
-	'.GO::config()->html_editor_font.'
+	'.\GO::config()->html_editor_font.'
 };
 body p{
 	margin:0px;
@@ -479,7 +479,7 @@ body p{
 		if (!empty($params['attachments'])) {
 			$attachments = json_decode($params['attachments']);
 			foreach ($attachments as $att) {
-				$path = empty($att->from_file_storage) ? GO::config()->tmpdir.$att->tmp_file : GO::config()->file_storage_path.$att->tmp_file;
+				$path = empty($att->from_file_storage) ? \GO::config()->tmpdir.$att->tmp_file : \GO::config()->file_storage_path.$att->tmp_file;
 				$tmpFile = new \GO_Base_Fs_File($path);
 				if ($tmpFile->exists()) {
 					$file = Swift_Attachment::fromPath($tmpFile->path());

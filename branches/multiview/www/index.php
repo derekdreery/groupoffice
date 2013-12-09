@@ -16,58 +16,58 @@ $root = dirname(__FILE__).'/';
 
 //initialize autoloading of library
 require_once('GO.php');
-//GO::init();
+//\GO::init();
 
 if(empty($_REQUEST['r']) && PHP_SAPI!='cli'){	
-	if(GO::config()->force_ssl && !GO_Base_Util_Http::isHttps()){
+	if(\GO::config()->force_ssl && !\GO_Base_Util_Http::isHttps()){
 		 header("HTTP/1.1 301 Moved Permanently");
 		 header("Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
 		 exit();
 	}
 }
 
-if(!GO::user())
-	GO::session()->loginWithCookies();	
+if(!\GO::user())
+	\GO::session()->loginWithCookies();	
 
 //try with HTTP auth
-if(!GO::user() && !empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])){
-	GO::session()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+if(!\GO::user() && !empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])){
+	\GO::session()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
 }
 
 
 //check if GO is installed
 if(empty($_REQUEST['r']) && PHP_SAPI!='cli'){	
 	
-	if(GO::user() && isset($_SESSION['GO_SESSION']['after_login_url'])){
-		$url = GO::session()->values['after_login_url'];
-		unset(GO::session()->values['after_login_url']);
+	if(\GO::user() && isset($_SESSION['GO_SESSION']['after_login_url'])){
+		$url = \GO::session()->values['after_login_url'];
+		unset(\GO::session()->values['after_login_url']);
 		header('Location: '.$url);
 		exit();
 	}
 	
 	$installed=true;
-	if(!GO::config()->get_config_file() || empty(GO::config()->db_user)){			
+	if(!\GO::config()->get_config_file() || empty(\GO::config()->db_user)){			
 		$installed=false;
 	}else
 	{
-		$stmt = GO::getDbConnection()->query("SHOW TABLES");
+		$stmt = \GO::getDbConnection()->query("SHOW TABLES");
 		if(!$stmt->rowCount())
 			$installed=false;
 	}
 	if(!$installed){
-		header('Location: '.GO::config()->host.'install/');				
+		header('Location: '.\GO::config()->host.'install/');				
 		exit();
 	}
 
 	//check for database upgrades
-	$mtime = GO::config()->get_setting('upgrade_mtime');
+	$mtime = \GO::config()->get_setting('upgrade_mtime');
 
-	if($mtime!=GO::config()->mtime)
+	if($mtime!=\GO::config()->mtime)
 	{
-		GO::infolog("Running system update");
-		header('Location: '.GO::url('maintenance/upgrade'));
+		\GO::infolog("Running system update");
+		header('Location: '.\GO::url('maintenance/upgrade'));
 		exit();
 	}
 }
 
-GO::router()->runController();
+\GO::router()->runController();

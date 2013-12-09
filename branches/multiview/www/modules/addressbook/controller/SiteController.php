@@ -28,12 +28,12 @@ class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
 	protected function actionContact(){	
 		//GOS::site()->config->contact_addressbook_id;	
 		
-		if (GO_Base_Util_Http::isPostRequest()) {
-			$addressbookModel = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name', $_POST['Addressbook']['name']);
+		if (\GO_Base_Util_Http::isPostRequest()) {
+			$addressbookModel = \GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name', $_POST['Addressbook']['name']);
 			if (!$addressbookModel)
-				throw new \Exception(sprintf(GO::t('addressbookNotFound','defaultsite'),$_POST['Addressbook']['name']));
+				throw new \Exception(sprintf(\GO::t('addressbookNotFound','defaultsite'),$_POST['Addressbook']['name']));
 			
-			$contactModel = GO_Addressbook_Model_Contact::model()->findSingleByAttributes(array('email'=>$_POST['Contact']['email'],'addressbook_id'=>$addressbookModel->id));
+			$contactModel = \GO_Addressbook_Model_Contact::model()->findSingleByAttributes(array('email'=>$_POST['Contact']['email'],'addressbook_id'=>$addressbookModel->id));
 			if (!$contactModel) {
 				$contactModel = new \GO_Addressbook_Model_Contact();
 				$contactModel->addressbook_id = $addressbookModel->id;
@@ -42,7 +42,7 @@ class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
 			$contactModel->setValidationRule('last_name', 'required', true);
 			$contactModel->setValidationRule('email', 'required', true);
 			
-			$companyModel = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array('name'=>$_POST['Company']['name'],'addressbook_id'=>$addressbookModel->id));
+			$companyModel = \GO_Addressbook_Model_Company::model()->findSingleByAttributes(array('name'=>$_POST['Company']['name'],'addressbook_id'=>$addressbookModel->id));
 			if (!$companyModel) {
 				$companyModel = new \GO_Addressbook_Model_Company();
 				$companyModel->addressbook_id = $addressbookModel->id;
@@ -63,9 +63,9 @@ class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
 					$addresslists = !empty($_POST['Addresslist']) ? $_POST['Addresslist'] : array();
 					foreach ($addresslists as $addresslistName=>$checked) {
 						if (!empty($checked)) {
-							$addresslistModel = GO_Addressbook_Model_Addresslist::model()->findSingleByAttribute('name',$addresslistName);
+							$addresslistModel = \GO_Addressbook_Model_Addresslist::model()->findSingleByAttribute('name',$addresslistName);
 							if ($addresslistModel) {
-								$addresslistContactModel = GO_Addressbook_Model_AddresslistContact::model()->findSingleByAttributes(array('contact_id'=>$contactModel->id,'addresslist_id'=>$addresslistModel->id));
+								$addresslistContactModel = \GO_Addressbook_Model_AddresslistContact::model()->findSingleByAttributes(array('contact_id'=>$contactModel->id,'addresslist_id'=>$addresslistModel->id));
 								if (!$addresslistContactModel) {
 									$addresslistContactModel = new \GO_Addressbook_Model_AddresslistContact();
 									$addresslistContactModel->contact_id = $contactModel->id;

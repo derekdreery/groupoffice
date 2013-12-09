@@ -420,7 +420,7 @@ class files extends db {
 		$user_id = intval($user_id);
 
 		$sql = "SELECT DISTINCT t.id, t.user_id, t.name, t.extension FROM fs_templates t ".
-				"INNER JOIN go_acl a ON a.acl_id=t.acl_id AND a.level>".GO_SECURITY::READ_PERMISSION.' '.
+				"INNER JOIN \go_acl a ON a.acl_id=t.acl_id AND a.level>".GO_SECURITY::READ_PERMISSION.' '.
 				"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
 				"WHERE (a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).") ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
@@ -778,7 +778,7 @@ class files extends db {
 			throw new \FileNotFoundException();
 		}
 
-		go_debug("files::sync_folder ".$full_path);
+		\go_debug("files::sync_folder ".$full_path);
 
 		$dbfolders=array();
 		$dbfolders_names=array();
@@ -1026,7 +1026,7 @@ class files extends db {
 			$parent = $this->get_folder($folder['parent_id']);
 			return $this->has_write_permission($user_id, $parent);
 		}else {
-			return $GLOBALS['GO_SECURITY']->has_permission($user_id, $folder['acl_id'])>GO_SECURITY::READ_PERMISSION;
+			return $GLOBALS['\GO_SECURITY']->has_permission($user_id, $folder['acl_id'])>GO_SECURITY::READ_PERMISSION;
 		}
 	}
 
@@ -1077,7 +1077,7 @@ class files extends db {
 		}else {
 			$level = $GLOBALS['GO_SECURITY']->has_permission($user_id, $folder['acl_id']);
 			//var_dump($level);
-			return $level>GO_SECURITY::WRITE_PERMISSION;
+			return $level>\GO_SECURITY::WRITE_PERMISSION;
 		}
 	}
 

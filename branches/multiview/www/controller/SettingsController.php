@@ -10,7 +10,7 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 			$params['date_format'] = $dateparts[1];
 		}
 		
-		$user = GO_Base_Model_User::model()->findByPk($params['id']);
+		$user = \GO_Base_Model_User::model()->findByPk($params['id']);
 		
 					
 		if (!empty($params["password"]) || !empty($params["passwordConfirm"])) {
@@ -19,7 +19,7 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 				throw new GO_Base_Exception_BadPassword();
 			
 //			if ($params["password"] != $params["passwordConfirm"]) {
-//				throw new Exception(GO::t('error_match_pass', 'users'));
+//				throw new Exception(\GO::t('error_match_pass', 'users'));
 //			}
 //			if (!empty($params["passwordConfirm"])) {
 //				$user->setAttribute('password', $_POST['passwordConfirm']);
@@ -30,12 +30,12 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 		}
 		$user->setAttributes($params);
 		
-		GO::$ignoreAclPermissions = true;
+		\GO::$ignoreAclPermissions = true;
 		$contact = $user->createContact();
 		unset($params['id']);
 		$contact->setAttributes($params);
 		$contact->save();
-		GO::$ignoreAclPermissions = false;
+		\GO::$ignoreAclPermissions = false;
 		
 		$response['success']=$user->save();
 		
@@ -45,10 +45,10 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 			$response['validationErrors']=$user->getValidationErrors();
 		}
 		
-		GO::modules()->callModuleMethod('submitSettings', array(&$this, &$params, &$response, $user), false);
+		\GO::modules()->callModuleMethod('submitSettings', array(&$this, &$params, &$response, $user), false);
 		
 
-//		GO_Base_Session::setCompatibilitySessionVars();
+//		\GO_Base_Session::setCompatibilitySessionVars();
 		
 		
 		return $response;
@@ -56,7 +56,7 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 	
 	protected function actionLoad($params){
 		
-		$user = GO_Base_Model_User::model()->findByPk($params['id']);
+		$user = \GO_Base_Model_User::model()->findByPk($params['id']);
 		
 		
 		$response['data']=$user->getAttributes('formatted');
@@ -71,7 +71,7 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 		
 		$response['success']=true;
 		
-		GO::modules()->callModuleMethod('loadSettings', array(&$this, &$params, &$response, $user));
+		\GO::modules()->callModuleMethod('loadSettings', array(&$this, &$params, &$response, $user));
 		
 		return $response;
 	}

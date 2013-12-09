@@ -24,7 +24,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractJsonController
 	 */
 	protected function actionSubmit($params) {
 
-		$model = GO_Notes_Model_Note::model()->createOrFindByParams($params);
+		$model = \GO_Notes_Model_Note::model()->createOrFindByParams($params);
 
 		if(isset($params['currentPassword'])){
 			//if the note was encrypted and no new password was supplied the current
@@ -35,7 +35,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractJsonController
 		$model->setAttributes($params);
 
 		if ($model->save()) {
-			if (GO::modules()->files) {
+			if (\GO::modules()->files) {
 				$f = new \GO_Files_Controller_Folder();
 				$response = array(); //never used in processAttachements?
 				$f->processAttachments($response, $model, $params);
@@ -54,12 +54,12 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractJsonController
 	protected function actionLoad($params) {
 
 		//Load or create model
-		$model = GO_Notes_Model_Note::model()->createOrFindByParams($params);
+		$model = \GO_Notes_Model_Note::model()->createOrFindByParams($params);
 
 		// BEFORE LOAD: a password is entered to decrypt the content
 		if (isset($params['userInputPassword'])) {
 			if (!$model->decrypt($params['userInputPassword']))
-				throw new \Exception(GO::t('badPassword'));
+				throw new \Exception(\GO::t('badPassword'));
 		}
 
 		// Build remote combo field array
@@ -69,7 +69,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractJsonController
 		$extraFields = array('encrypted' => $model->encrypted);
 		
 		if ($model->encrypted){
-			$extraFields['content'] = GO::t('contentEncrypted');
+			$extraFields['content'] = \GO::t('contentEncrypted');
 		}
 
 		echo $this->renderForm($model, $remoteComboFields, $extraFields);
@@ -84,18 +84,18 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractJsonController
 	 */
 	protected function actionDisplay($params) {
 
-		$model = GO_Notes_Model_Note::model()->findByPk($params['id']);
+		$model = \GO_Notes_Model_Note::model()->findByPk($params['id']);
 		if (!$model)
 			throw new \GO_Base_Exception_NotFound();
 
 		// decrypt model if password provided
 		if (isset($params['userInputPassword'])) {
 			if (!$model->decrypt($params['userInputPassword']))
-				throw new \Exception(GO::t('badPassword'));
+				throw new \Exception(\GO::t('badPassword'));
 		}
 		$extraFields = array();
 		if ($model->encrypted)
-			$extraFields['content'] = GO::t('clickHereToDecrypt');
+			$extraFields['content'] = \GO::t('clickHereToDecrypt');
 		$extraFields['encrypted'] = $model->encrypted;
 
 		echo $this->renderDisplay($model, $extraFields);

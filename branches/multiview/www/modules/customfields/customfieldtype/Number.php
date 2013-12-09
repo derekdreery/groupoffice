@@ -6,14 +6,14 @@ class GO_Customfields_Customfieldtype_Number extends GO_Customfields_Customfield
 	}
 	
 	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
-		return GO_Base_Util_Number::localize($attributes[$key],$this->field->number_decimals);
+		return \GO_Base_Util_Number::localize($attributes[$key],$this->field->number_decimals);
 	}
 	
 	public function formatFormOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {		
 		if (empty($attributes[$key]) && $attributes[$key]!=0)
 			return null;
 		else {
-			return GO_Base_Util_Number::localize($attributes[$key],$this->field->number_decimals);
+			return \GO_Base_Util_Number::localize($attributes[$key],$this->field->number_decimals);
 		}
 	}
 	
@@ -21,7 +21,7 @@ class GO_Customfields_Customfieldtype_Number extends GO_Customfields_Customfield
 		if (empty($attributes[$key]) && $attributes[$key]!=0)
 			return null;
 		else
-			return GO_Base_Util_Number::unlocalize($attributes[$key]);
+			return \GO_Base_Util_Number::unlocalize($attributes[$key]);
 	}
 	
 	public function fieldSql() {
@@ -36,6 +36,6 @@ class GO_Customfields_Customfieldtype_Number extends GO_Customfields_Customfield
 	}
 	
 	public function getValidationError(){
-		return GO::t('numberValidationError','customfields');
+		return \GO::t('numberValidationError','customfields');
 	}
 }

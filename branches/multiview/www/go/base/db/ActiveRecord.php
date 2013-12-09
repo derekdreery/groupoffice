@@ -26,7 +26,7 @@
  * @abstract
  * 
  * @property GO_Base_Model_User $user If this model has a user_id field it will automatically create this property
- * @property GO_Base_Model_Acl $acl If this model has an acl ID configured. See GO_Base_Db_ActiveRecord::aclId it will automatically create this property.
+ * @property \GO_Base_Model_Acl $acl If this model has an acl ID configured. See GO_Base_Db_ActiveRecord::aclId it will automatically create this property.
  * @property bool $joinAclField
  * @property int/array $pk Primary key value(s) for the model
  * @property string $module Name of the module this model belongs to
@@ -136,7 +136,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
 	 */
 	public function modelTypeId(){		
-		return GO_Base_Model_ModelType::model()->findByModelName($this->className());		
+		return \GO_Base_Model_ModelType::model()->findByModelName($this->className());		
 	}
 	
 	/**
@@ -152,7 +152,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$module = strtolower($parts[1]);
 		
-		return GO::t($lastPart, $module);
+		return \GO::t($lastPart, $module);
 	}
 
 	
@@ -183,7 +183,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 * You can also select find parameters that will be applied to the relational query. eg.:
 	 * 
-	 * findParams=>GO_Base_Db_FindParams::newInstance()->order('sort_index');
+	 * findParams=>\GO_Base_Db_FindParams::newInstance()->order('sort_index');
 	 * 
 	 * @return array relational rules.
 	 */
@@ -197,8 +197,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 * Example to add the events relation to a user:
 	 * 
-	 * GO_Base_Model_User::model()->addRelation('events', array(
-	 *		'type'=>  GO_Base_Db_ActiveRecord::HAS_MANY, 
+	 * \GO_Base_Model_User::model()->addRelation('events', array(
+	 *		'type'=>  \GO_Base_Db_ActiveRecord::HAS_MANY, 
 	 *		'model'=>'GO_Calendar_Model_Event', 
 	 *		'field'=>'user_id'				
 	 *	));
@@ -295,7 +295,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$folder_id = $this->files_folder_id;
 			}
 
-			$this->_filesFolder=GO_Files_Model_Folder::model()->findByPk($folder_id);
+			$this->_filesFolder=\GO_Files_Model_Folder::model()->findByPk($folder_id);
 			if(!$this->_filesFolder && $autoCreate)
 				throw new \Exception("Could not create files folder for ".$this->className()." ".$this->pk);
 		}
@@ -364,16 +364,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Constructor for the model
 	 * 
 	 * @param boolean $newRecord true if this is a new model
-	 * @param boolean true if this is the static model returned by GO_Base_Model::model()
+	 * @param boolean true if this is the static model returned by \GO_Base_Model::model()
 	 */
 	public function __construct($newRecord=true, $isStaticModel=false){			
 				
-		if(!empty(GO::session()->values['debugSql']))
+		if(!empty(\GO::session()->values['debugSql']))
 			$this->_debugSql=true;
 		
 		//$pk = $this->pk;
 
-		$this->columns=GO_Base_Db_Columns::getColumns($this);
+		$this->columns=\GO_Base_Db_Columns::getColumns($this);
 		$this->setIsNew($newRecord);
 		
 		$this->init();	
@@ -463,25 +463,25 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$prefix = strtolower(array_pop($classParts));
 			
 			foreach($this->columns as $columnName=>$columnData){
-				$this->_attributeLabels[$columnName] = GO::t($prefix.ucfirst($columnName), $this->getModule(),'common',$found);
+				$this->_attributeLabels[$columnName] = \GO::t($prefix.ucfirst($columnName), $this->getModule(),'common',$found);
 				if(!$found) {
 						switch($columnName){
 							case 'user_id':
-								$this->_attributeLabels[$columnName] = GO::t('strUser');
+								$this->_attributeLabels[$columnName] = \GO::t('strUser');
 								break;
 							case 'muser_id':
-								$this->_attributeLabels[$columnName] = GO::t('mUser');
+								$this->_attributeLabels[$columnName] = \GO::t('mUser');
 								break;
 							
 							case 'ctime':
-								$this->_attributeLabels[$columnName] = GO::t('strCtime');
+								$this->_attributeLabels[$columnName] = \GO::t('strCtime');
 								break;
 
 							case 'mtime':
-								$this->_attributeLabels[$columnName] = GO::t('strMtime');
+								$this->_attributeLabels[$columnName] = \GO::t('strMtime');
 								break;
 							case 'name':
-								$this->_attributeLabels[$columnName] = GO::t('strName');
+								$this->_attributeLabels[$columnName] = \GO::t('strName');
 								break;	
 						}
 					}				
@@ -546,7 +546,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public static function finder($args=null)
 	{
 		//when functions like primaryKey() and tableName() are static this shouldn't be nessasary
-		$ar = GO::getModel(get_called_class());
+		$ar = \GO::getModel(get_called_class());
 		
 		$finder = new \GO_Base_Db_ActiveFinder($ar);
 		if(is_array($args))
@@ -626,7 +626,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(isset($this->_pdo))
 			return $this->_pdo;
 		else
-			return GO::getDbConnection();
+			return \GO::getDbConnection();
 	}
 	
 	/**
@@ -636,7 +636,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function setDbConnection($pdo) {
 		$this->_pdo=$pdo;
-		GO::modelCache()->remove($this->className());
+		\GO::modelCache()->remove($this->className());
 	}
 	
 	private function _getAclJoinProps(){
@@ -644,7 +644,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(count($arr)==2){
 			$r= $this->getRelation($arr[0]);
 
-			return array('table'=>$r['name'], 'relation'=>$r, 'model'=>GO::getModel($r['model']), 'attribute'=>$arr[1]);
+			return array('table'=>$r['name'], 'relation'=>$r, 'model'=>\GO::getModel($r['model']), 'attribute'=>$arr[1]);
 		}else
 		{
 			return array('attribute'=>$this->aclField(), 'table'=>'t');
@@ -657,7 +657,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 //		if(count($arr)==2){
 //			//we need to join a table for the acl field
 //			$r= $this->getRelation($arr[0]);
-//			$model = GO::getModel($r['model']);
+//			$model = \GO::getModel($r['model']);
 //			
 //			$ret['relation']=$arr[0];
 //			$ret['aclField']=$arr[1];
@@ -700,14 +700,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	private function _findExisting($attributeName, $value){
 		
-		$criteria = GO_Base_Db_FindCriteria::newInstance()
-										->addModel(GO::getModel($this->className()))
+		$criteria = \GO_Base_Db_FindCriteria::newInstance()
+										->addModel(\GO::getModel($this->className()))
 										->addCondition($attributeName, $value);
 		
 		if($this->pk)
 			$criteria->addCondition($this->primaryKey(), $this->pk, '!=');
 		
-		$existing = $this->findSingle(GO_Base_Db_FindParams::newInstance()
+		$existing = $this->findSingle(\GO_Base_Db_FindParams::newInstance()
 						->criteria($criteria));
 		
 		return $existing;
@@ -813,27 +813,27 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		//In this case we will check the module permissions.
 		$module = $this->getModule();
 		if ($module == 'base') {
-			return GO::user()->isAdmin() ? GO_Base_Model_Acl::MANAGE_PERMISSION : false;
+			return \GO::user()->isAdmin() ? \GO_Base_Model_Acl::MANAGE_PERMISSION : false;
 		}else
-			return GO::modules()->$module->permissionLevel;
+			return \GO::modules()->$module->permissionLevel;
 	}
 
 	/**
 	 * Returns the permission level if an aclField is defined in the model. Otherwise
-	 * it returns GO_Base_Model_Acl::MANAGE_PERMISSION;
+	 * it returns \GO_Base_Model_Acl::MANAGE_PERMISSION;
 	 * 
-	 * @return int GO_Base_Model_Acl::*_PERMISSION 
+	 * @return int \GO_Base_Model_Acl::*_PERMISSION 
 	 */
 	
 	public function getPermissionLevel(){
 		
-		if(GO::$ignoreAclPermissions)
-			return GO_Base_Model_Acl::MANAGE_PERMISSION;
+		if(\GO::$ignoreAclPermissions)
+			return \GO_Base_Model_Acl::MANAGE_PERMISSION;
 		
 		if(!$this->aclField())
-			return GO_Base_Model_Acl::MANAGE_PERMISSION;
+			return \GO_Base_Model_Acl::MANAGE_PERMISSION;
 		
-		if(!GO::user())
+		if(!\GO::user())
 			return false;
 		
 		//if($this->isNew && !$this->joinAclField){
@@ -848,7 +848,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					throw new \Exception("Could not find ACL for ".$this->className()." with pk: ".$this->pk);
 				}
 
-				$this->_permissionLevel=GO_Base_Model_Acl::getUserPermissionLevel($acl_id);// model()->findByPk($acl_id)->getUserPermissionLevel();
+				$this->_permissionLevel=\GO_Base_Model_Acl::getUserPermissionLevel($acl_id);// model()->findByPk($acl_id)->getUserPermissionLevel();
 			}
 			return $this->_permissionLevel;
 		}
@@ -872,7 +872,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$params['criteriaParams']=$params['criteriaObject']->getCondition();
 			unset($params['criteriaObject']);
 		}
-		//GO::debug($params);
+		//\GO::debug($params);
 		return md5(serialize($params).$this->className());
 	}
 	
@@ -898,7 +898,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @return GO_Base_Db_ActiveStatement 
 	 */
 	public function findByAttributes($attributes, $findParams=false){
-		$newParams = GO_Base_Db_FindParams::newInstance();
+		$newParams = \GO_Base_Db_FindParams::newInstance();
 		$criteria = $newParams->getCriteria()->addModel($this);
 		
 		foreach($attributes as $attributeName=>$value) {
@@ -942,11 +942,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$cacheKey = md5(serialize($attributes));
 		
 		//Use cache so identical findByPk calls are only executed once per script request
-		$cachedModel =  GO::modelCache()->get($this->className(), $cacheKey);
+		$cachedModel =  \GO::modelCache()->get($this->className(), $cacheKey);
 		if($cachedModel)
 			return $cachedModel;
 		
-		$newParams = GO_Base_Db_FindParams::newInstance();
+		$newParams = \GO_Base_Db_FindParams::newInstance();
 		$criteria = $newParams->getCriteria()->addModel($this);
 		
 		foreach($attributes as $attributeName=>$value) {
@@ -965,7 +965,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$model = $stmt->fetch();
 		
-		GO::modelCache()->add($this->className(), $model, $cacheKey);
+		\GO::modelCache()->add($this->className(), $model, $cacheKey);
 		
 		return $model;		
 	}
@@ -991,7 +991,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$cacheKey = md5(serialize($params));
 		//Use cache so identical findByPk calls are only executed once per script request
-		$cachedModel = empty($params['disableModelCache']) ? GO::modelCache()->get($this->className(), $cacheKey) : false;
+		$cachedModel = empty($params['disableModelCache']) ? \GO::modelCache()->get($this->className(), $cacheKey) : false;
 		if($cachedModel)
 			return $cachedModel;
 				
@@ -1000,7 +1000,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$model = isset($models[0]) ? $models[0] : false;
 		
-		GO::modelCache()->add($this->className(), $model, $cacheKey);
+		\GO::modelCache()->add($this->className(), $model, $cacheKey);
 		
 		return $model;		
 	}
@@ -1016,8 +1016,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function getDefaultFindSelectFields($single=false, $tableAlias='t'){
 		
 		//when upgrading we must refresh columns
-		if(GO_Base_Db_Columns::$forceLoad)
-			$this->columns = GO_Base_Db_Columns::getColumns ($this);
+		if(\GO_Base_Db_Columns::$forceLoad)
+			$this->columns = \GO_Base_Db_Columns::getColumns ($this);
 		
 		if($single)
 			return $tableAlias.'.*';
@@ -1086,7 +1086,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 * <code>
 	 * //create new find params object
-	 * $params = GO_Base_Db_FindParams::newInstance()
+	 * $params = \GO_Base_Db_FindParams::newInstance()
 	 *   ->joinCustomFields()
 	 *   ->order('due_time','ASC');
 	 * 
@@ -1094,7 +1094,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * $params->getCriteria()->addCondition('tasklist_id,1);
 	 * 
 	 * //find the tasks
-	 * $stmt = GO_Tasks_Model_Task::model()->find($params);
+	 * $stmt = \GO_Tasks_Model_Task::model()->find($params);
 	 * 
 	 * //print the names
 	 * while($task = $stmt->fetch()){
@@ -1114,7 +1114,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				throw new \Exception('$params parameter for find() must be instance of GO_Base_Db_FindParams');
 			
 			if($params->getParam("export")){
-				GO::session()->values[$params->getParam("export")]=array('name'=>$params->getParam("export"), 'model'=>$this->className(), 'findParams'=>$params);
+				\GO::session()->values[$params->getParam("export")]=array('name'=>$params->getParam("export"), 'model'=>$this->className(), 'findParams'=>$params);
 			}
 			
 			//it must be a GO_Base_Db_FindParams object
@@ -1128,17 +1128,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				
 		if(!empty($params['debugSql'])){
 			$this->_debugSql=true;
-			//GO::debug($params);
+			//\GO::debug($params);
 		}else
 		{
-			$this->_debugSql=!empty(GO::session()->values['debugSql']);
+			$this->_debugSql=!empty(\GO::session()->values['debugSql']);
 		}		
 //		$this->_debugSql=true;
-		if(GO::$ignoreAclPermissions)
+		if(\GO::$ignoreAclPermissions)
 			$params['ignoreAcl']=true;
 		
 		if(empty($params['userId'])){			
-			$params['userId']=!empty(GO::session()->values['user_id']) ? GO::session()->values['user_id'] : 1;
+			$params['userId']=!empty(\GO::session()->values['user_id']) ? \GO::session()->values['user_id'] : 1;
 		}
 		
 		if($this->aclField() && (empty($params['ignoreAcl']) || !empty($params['joinAclFieldTable']))){
@@ -1156,7 +1156,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		//Unique query ID for storing found rows in session
 		$queryUid = $this->_getFindQueryUid($params);
 		
-		if(!empty($params['calcFoundRows']) && !empty($params['limit']) && (empty($params['start']) || !isset(GO::session()->values[$queryUid]))){
+		if(!empty($params['calcFoundRows']) && !empty($params['limit']) && (empty($params['start']) || !isset(\GO::session()->values[$queryUid]))){
 			
 			//TODO: This is MySQL only code		
 			if($this->useSqlCalcFoundRows)
@@ -1284,7 +1284,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					if(!$r)
 						throw new \Exception("Can't join non existing relation '".$name.'"');
 
-					$model = GO::getModel($r['model']);
+					$model = \GO::getModel($r['model']);
 					$joinRelationjoins .= "\n".$joinRelation['type']." JOIN `".$model->tableName().'` `'.$name.'` ON (';
 
 					switch($r['type']){
@@ -1332,11 +1332,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 		
 
-		$joinCf = !empty($params['joinCustomFields']) && $this->customfieldsModel() && GO::modules()->customfields && GO::modules()->customfields->permissionLevel;
+		$joinCf = !empty($params['joinCustomFields']) && $this->customfieldsModel() && \GO::modules()->customfields && \GO::modules()->customfields->permissionLevel;
 		
 		if($joinCf){
 			
-			$cfModel = GO::getModel($this->customfieldsModel());
+			$cfModel = \GO::getModel($this->customfieldsModel());
 			
 			$selectFields = $cfModel->getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1, 'cf');
 			if(!empty($selectFields))
@@ -1381,14 +1381,14 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //			$sql .= "\nWHERE ";
 //		
 //			$sql .= "\nEXISTS (SELECT level FROM go_acl WHERE `".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
-//			if(isset($params['permissionLevel']) && $params['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
+//			if(isset($params['permissionLevel']) && $params['permissionLevel']>\GO_Base_Model_Acl::READ_PERMISSION){
 //				$sql .= " AND go_acl.level>=".intval($params['permissionLevel']);
 //			}
 //
-//			$groupIds = GO_Base_Model_User::getGroupIds($params['userId']);
+//			$groupIds = \GO_Base_Model_User::getGroupIds($params['userId']);
 //
 //			if(!empty($params['ignoreAdminGroup'])){
-//				$key = array_search(GO::config()->group_root, $groupIds);
+//				$key = array_search(\GO::config()->group_root, $groupIds);
 //				if($key!==false)
 //					unset($groupIds[$key]);
 //			}
@@ -1434,7 +1434,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			
 			if(empty($searchFields))
-				throw new \Exception("No automatic search fields defined for ".$this->className().". Maybe this model has no varchar fields? You can override function getFindSearchQueryParamFields() or you can supply them with GO_Base_Db_FindParams::searchFields()");
+				throw new \Exception("No automatic search fields defined for ".$this->className().". Maybe this model has no varchar fields? You can override function getFindSearchQueryParamFields() or you can supply them with \GO_Base_Db_FindParams::searchFields()");
 			
 			//`name` LIKE "test" OR `content` LIKE "test"
 			
@@ -1543,7 +1543,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			
 			if($this->_debugSql)
-				$start = GO_Base_Util_Date::getmicrotime();
+				$start = \GO_Base_Util_Date::getmicrotime();
 			
 			$result = $this->getDbConnection()->prepare($sql);
 			
@@ -1563,14 +1563,14 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			}
 			
 			if($this->_debugSql){
-				$end = GO_Base_Util_Date::getmicrotime();
-				GO::debug("SQL Query took: ".($end-$start));
+				$end = \GO_Base_Util_Date::getmicrotime();
+				\GO::debug("SQL Query took: ".($end-$start));
 			}
 			
 		}catch(Exception $e){
 			$msg = $e->getMessage();
 						
-			if(GO::config()->debug){
+			if(\GO::config()->debug){
 				$msg .= "\n\nFull SQL Query: ".$sql;
 
 				if(isset($params['bindParams'])){	
@@ -1583,13 +1583,13 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 				$msg .= "\n\n".$e->getTraceAsString();
 
-				GO::debug($msg);
+				\GO::debug($msg);
 			}			
 			
 			//SQLSTATE[42S22]: Column not found: 1054 Unknown column 'progress' in 'order clause			
 			if(strpos($msg, 'order clause')!==false && strpos($msg, 'Unknown column')!==false)
 			{
-				$msg = GO::t('sortOrderError');
+				$msg = \GO::t('sortOrderError');
 			}
 			
 			throw new \Exception($msg);
@@ -1610,17 +1610,17 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 						$r2 = $this->getDbConnection()->query($sql);
 						$record = $r2->fetch(PDO::FETCH_ASSOC);
 						//$foundRows = intval($record['found']);
-						$foundRows = GO::session()->values[$queryUid]=intval($record['found']);						
+						$foundRows = \GO::session()->values[$queryUid]=intval($record['found']);						
 					}else{
 						$countField = is_array($this->primaryKey()) ? '*' : 't.'.$this->primaryKey();				
 			
 						$sql = $select.'COUNT('.$countField.') AS found '.$from.$joins.$where;
 
-//						GO::debug($sql);
+//						\GO::debug($sql);
 						
 						if($this->_debugSql){
 							$this->_debugSql($params, $sql);
-							$start = GO_Base_Util_Date::getmicrotime();
+							$start = \GO_Base_Util_Date::getmicrotime();
 						}
 
 						$r2 = $this->getDbConnection()->prepare($sql);
@@ -1641,8 +1641,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 						}
 						
 						if($this->_debugSql){
-							$end = GO_Base_Util_Date::getmicrotime();
-							GO::debug("SQL Count Query took: ".($end-$start));
+							$end = \GO_Base_Util_Date::getmicrotime();
+							\GO::debug("SQL Count Query took: ".($end-$start));
 						}
 
 						$record = $r2->fetch(PDO::FETCH_ASSOC);
@@ -1652,12 +1652,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 
 						//$foundRows = intval($record['found']);
-						$foundRows = GO::session()->values[$queryUid]=intval($record['found']);					
+						$foundRows = \GO::session()->values[$queryUid]=intval($record['found']);					
 					}
 				}
 				else
 				{					
-					$foundRows=GO::session()->values[$queryUid];
+					$foundRows=\GO::session()->values[$queryUid];
 				}
 					
 					
@@ -1709,7 +1709,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			}
 		}
 		
-		GO::debug($sql);				
+		\GO::debug($sql);				
 	}
 	
 	private function _appendAclJoin($findParams, $aclJoinProps){		
@@ -1717,14 +1717,14 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 		
 		$sql = "\nINNER JOIN go_acl ON (`".$aclJoinProps['table']."`.`".$aclJoinProps['attribute']."` = go_acl.acl_id";
-		if(isset($findParams['permissionLevel']) && $findParams['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
+		if(isset($findParams['permissionLevel']) && $findParams['permissionLevel']>\GO_Base_Model_Acl::READ_PERMISSION){
 			$sql .= " AND go_acl.level>=".intval($findParams['permissionLevel']);
 		}
 		
-		$groupIds = GO_Base_Model_User::getGroupIds($findParams['userId']);
+		$groupIds = \GO_Base_Model_User::getGroupIds($findParams['userId']);
 		
 		if(!empty($findParams['ignoreAdminGroup'])){
-			$key = array_search(GO::config()->group_root, $groupIds);
+			$key = array_search(\GO::config()->group_root, $groupIds);
 			if($key!==false)
 				unset($groupIds[$key]);
 		}
@@ -1813,7 +1813,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				$fields[]='`'.$prefixTable.'`.`'.$field.'`';
 		}
 		
-		if($withCustomFields && GO::modules()->customfields && $this->customfieldsRecord)
+		if($withCustomFields && \GO::modules()->customfields && $this->customfieldsRecord)
 		{
 			$fields = array_merge($fields, $this->customfieldsRecord->getFindSearchQueryParamFields('cf'));
 		}
@@ -1863,18 +1863,18 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	public function findByPk($primaryKey, $findParams=false, $ignoreAcl=false, $noCache=false){		
 		
-//		GO::debug($this->className()."::findByPk($primaryKey)");
+//		\GO::debug($this->className()."::findByPk($primaryKey)");
 		if(empty($primaryKey))
 			return false;
 		
 		//Use cache so identical findByPk calls are only executed once per script request
 		if(!$noCache){
-			$cachedModel =  GO::modelCache()->get($this->className(), $primaryKey);
-//			GO::debug("Cached : ".$this->className()."::findByPk($primaryKey)");
+			$cachedModel =  \GO::modelCache()->get($this->className(), $primaryKey);
+//			\GO::debug("Cached : ".$this->className()."::findByPk($primaryKey)");
 			if($cachedModel){
 				
-				if($cachedModel && !$ignoreAcl && !$cachedModel->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION)){
-					$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
+				if($cachedModel && !$ignoreAcl && !$cachedModel->checkPermissionLevel(\GO_Base_Model_Acl::READ_PERMISSION)){
+					$msg = \GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
 					throw new \GO_Base_Exception_AccessDenied($msg);
 				}
 				
@@ -1886,10 +1886,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 		$sql = $this->_appendPkSQL($sql, $primaryKey);
 	
-//		GO::debug("DEBUG SQL: ".var_export($this->_debugSql, true));
+//		\GO::debug("DEBUG SQL: ".var_export($this->_debugSql, true));
 		
 		if($this->_debugSql)
-				GO::debug($sql);
+				\GO::debug($sql);
 		
 		try{
 			$result = $this->getDbConnection()->query($sql);
@@ -1906,13 +1906,13 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			throw new \Exception($msg);
 		}
 
-		if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION)){
-			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
+		if($model && !$ignoreAcl && !$model->checkPermissionLevel(\GO_Base_Model_Acl::READ_PERMISSION)){
+			$msg = \GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
 			throw new \GO_Base_Exception_AccessDenied($msg);
 		}
 
 		if($model)
-			GO::modelCache()->add($this->className(), $model);
+			\GO::modelCache()->add($this->className(), $model);
 
 		return $model;		
 	}
@@ -1956,7 +1956,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	}
 		
 	private function _checkRelations($r){
-		if(GO::config()->debug){
+		if(\GO::config()->debug){
 			foreach($r as $name => $attr){
 				if(!isset($attr['model']))
 					throw new \Exception('model not set in relation '.$name.' '.var_export($attr, true));
@@ -1987,13 +1987,13 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$r = $this->getRelation($name);
 		
 		if(!isset($r['findParams']))
-			$r['findParams']=GO_Base_Db_FindParams::newInstance();
+			$r['findParams']=\GO_Base_Db_FindParams::newInstance();
 		
 		if($r['type']==self::HAS_MANY)
 		{									
 			
 
-			$findParams = GO_Base_Db_FindParams::newInstance();
+			$findParams = \GO_Base_Db_FindParams::newInstance();
 			
 			
 			$findParams
@@ -2023,7 +2023,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		}elseif($r['type']==self::MANY_MANY)
 		{							
 			
-			$findParams = GO_Base_Db_FindParams::newInstance();
+			$findParams = \GO_Base_Db_FindParams::newInstance();
 			
 			if(isset($extraFindParams))
 					$findParams->mergeWith($extraFindParams);
@@ -2096,7 +2096,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			}elseif(!isset($this->_relatedCache[$cacheKey]))
 			{
 				//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
-				$this->_relatedCache[$cacheKey] = !empty($this->_attributes[$joinAttribute]) ? GO::getModel($model)->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true) : null;
+				$this->_relatedCache[$cacheKey] = !empty($this->_attributes[$joinAttribute]) ? \GO::getModel($model)->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true) : null;
 			}
 			return $this->_relatedCache[$cacheKey];
 			
@@ -2104,15 +2104,15 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			//We can't put this in the related cache because there's no reliable way to check if the situation has changed.
 	
 			if(!isset($r['findParams']))
-				$r['findParams']=GO_Base_Db_FindParams::newInstance();
+				$r['findParams']=\GO_Base_Db_FindParams::newInstance();
 			
 			$params =$r['findParams']->relation($name);
 			//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
-			return empty($this->pk) ? false : GO::getModel($model)->findSingleByAttribute($r['field'], $this->pk, $params);			
+			return empty($this->pk) ? false : \GO::getModel($model)->findSingleByAttribute($r['field'], $this->pk, $params);			
 		}else{
 			$findParams = $this->getRelationFindParams($name,$extraFindParams);
 		
-			$stmt = GO::getModel($model)->find($findParams); 
+			$stmt = \GO::getModel($model)->find($findParams); 
       return $stmt;		
 		}
 	}
@@ -2150,11 +2150,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					if($this->columns[$column]['null'] && ($value=="" || $value==null))
 						return null;
 					else
-						return  GO_Base_Util_Date::to_unixtime($value);
+						return  \GO_Base_Util_Date::to_unixtime($value);
 					
 					break;			
 				case 'number':
-					$value= GO_Base_Util_Number::unlocalize($value);
+					$value= \GO_Base_Util_Number::unlocalize($value);
 					
 					if($value===null && !$this->columns[$column]['null'])
 						$value=0;
@@ -2176,7 +2176,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					return $ret;
 					break;				
 				case 'date':
-					return  GO_Base_Util_Date::to_db_date($value);
+					return  \GO_Base_Util_Date::to_db_date($value);
 					break;		
 				case 'textfield':
 					return (string) $value;
@@ -2225,16 +2225,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		switch($this->columns[$attributeName]['gotype']){
 				
 			case 'unixdate':
-				return GO_Base_Util_Date::get_timestamp($value, false);
+				return \GO_Base_Util_Date::get_timestamp($value, false);
 				break;	
 
 			case 'unixtimestamp':
-				return GO_Base_Util_Date::get_timestamp($value);
+				return \GO_Base_Util_Date::get_timestamp($value);
 				break;	
 
 			case 'textarea':
 				if($html){
-					return GO_Base_Util_String::text_to_html($value);
+					return \GO_Base_Util_String::text_to_html($value);
 				}else
 				{
 					return $value;
@@ -2249,20 +2249,20 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					return "";
 				
 				$date = new \DateTime($value);
-				return $date->format(GO::user()?GO::user()->completeDateFormat:GO::config()->getCompleteDateFormat());
+				return $date->format(\GO::user()?\GO::user()->completeDateFormat:\GO::config()->getCompleteDateFormat());
 				
-				//return $value != '0000-00-00' ? GO_Base_Util_Date::get_timestamp(strtotime($value),false) : '';
+				//return $value != '0000-00-00' ? \GO_Base_Util_Date::get_timestamp(strtotime($value),false) : '';
 				break;
 
 			case 'number':
 				$decimals = isset($this->columns[$attributeName]['decimals']) ? $this->columns[$attributeName]['decimals'] : 2;
-				return GO_Base_Util_Number::localize($value, $decimals);
+				return \GO_Base_Util_Number::localize($value, $decimals);
 				break;
 			
 			case 'boolean':
 //				Formatting as yes no breaks many functions
 //				if($html)
-//					return !empty($value) ? GO::t('yes') : GO::t('no');				
+//					return !empty($value) ? \GO::t('yes') : \GO::t('no');				
 //				else					
 					return !empty($value);				
 				break;
@@ -2323,7 +2323,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	public function setAttributes($attributes, $format=true){		
 		
-		//GO::debug($this->className().'::setAttributes(); '.$this->pk);
+		//\GO::debug($this->className().'::setAttributes(); '.$this->pk);
 		
 		if($this->_hasCustomfieldValue($attributes) && $this->customfieldsRecord)
 			$this->customfieldsRecord->setAttributes($attributes, $format);
@@ -2399,7 +2399,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	private function _getMagicAttributeNames(){
 		
 		if(!isset(self::$_magicAttributeNames))
-			self::$_magicAttributeNames=GO::cache ()->get('magicattributes');
+			self::$_magicAttributeNames=\GO::cache ()->get('magicattributes');
 		
 		if(!isset(self::$_magicAttributeNames[$this->className()])){
 			self::$_magicAttributeNames[$this->className()]=array();
@@ -2426,7 +2426,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //				}
 //			}
 //			
-			GO::cache ()->set('magicattributes', self::$_magicAttributeNames);
+			\GO::cache ()->set('magicattributes', self::$_magicAttributeNames);
 		}
 		return self::$_magicAttributeNames[$this->className()];
 	}
@@ -2435,7 +2435,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	/**
 	 * Returns all columns 
 	 * 
-	 * @see GO_Base_Db_ActiveRecord::$columns	
+	 * @see \GO_Base_Db_ActiveRecord::$columns	
 	 * @return array
 	 */
 	public function getColumns()
@@ -2446,7 +2446,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	/**
 	 * Returns a column specification see $this->columns;
 	 * 
-	 * @see GO_Base_Db_ActiveRecord::$columns	
+	 * @see \GO_Base_Db_ActiveRecord::$columns	
 	 * @return array
 	 */
 	public function getColumn($name)
@@ -2500,7 +2500,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$acl_id = $this->findAclId();
 		if(!$acl_id)
 			throw new \Exception("Could not find ACL for ".$this->className()." with pk: ".$this->pk);
-		$result = GO_Base_Model_Acl::getUserPermissionLevel($acl_id)>=$level;
+		$result = \GO_Base_Model_Acl::getUserPermissionLevel($acl_id)>=$level;
 		//end checkpermission level
 		
 		$this->{$aclFKfield} = $newValue;
@@ -2589,19 +2589,19 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			$attributes=$this->columns[$field];
 			
 			if(!empty($attributes['required']) && empty($this->_attributes[$field])){				
-				$this->setValidationError($field, sprintf(GO::t('attributeRequired'),$this->getAttributeLabel($field)));				
-			}elseif(!empty($attributes['length']) && !empty($this->_attributes[$field]) && GO_Base_Util_String::length($this->_attributes[$field])>$attributes['length'])
+				$this->setValidationError($field, sprintf(\GO::t('attributeRequired'),$this->getAttributeLabel($field)));				
+			}elseif(!empty($attributes['length']) && !empty($this->_attributes[$field]) && \GO_Base_Util_String::length($this->_attributes[$field])>$attributes['length'])
 			{
-				$this->setValidationError($field, sprintf(GO::t('attributeTooLong'),$this->getAttributeLabel($field),$attributes['length']));
+				$this->setValidationError($field, sprintf(\GO::t('attributeTooLong'),$this->getAttributeLabel($field),$attributes['length']));
 			}elseif(!empty($attributes['regex']) && !empty($this->_attributes[$field]) && !preg_match($attributes['regex'], $this->_attributes[$field]))
 			{
-				$this->setValidationError($field, sprintf(GO::t('attributeIncorrectFormat'),$this->getAttributeLabel($field)));
+				$this->setValidationError($field, sprintf(\GO::t('attributeIncorrectFormat'),$this->getAttributeLabel($field)));
 			}elseif(!empty($attributes['greater']) && !empty($this->_attributes[$field])){
 				if($this->_attributes[$field]<=$this->_attributes[$attributes['greater']])
-					$this->setValidationError($field, sprintf(GO::t('attributeGreater'), $this->getAttributeLabel($field), $this->getAttributeLabel($attributes['greater'])));
+					$this->setValidationError($field, sprintf(\GO::t('attributeGreater'), $this->getAttributeLabel($field), $this->getAttributeLabel($attributes['greater'])));
 			}elseif(!empty($attributes['greaterorequal']) && !empty($this->_attributes[$field])){
 				if($this->_attributes[$field]<$this->_attributes[$attributes['greaterorequal']])
-					$this->setValidationError($field, sprintf(GO::t('attributeGreaterOrEqual'), $this->getAttributeLabel($field), $this->getAttributeLabel($attributes['greaterorequal'])));
+					$this->setValidationError($field, sprintf(\GO::t('attributeGreaterOrEqual'), $this->getAttributeLabel($field), $this->getAttributeLabel($attributes['greaterorequal'])));
 			}else {
 				$this->_validateValidatorFunc ($attributes, $field);
 			}
@@ -2620,7 +2620,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				$errorMsg = array_pop($attributes['validator']);					
 			}else
 			{
-				$errorMsg = GO::t('attributeInvalid');
+				$errorMsg = \GO::t('attributeInvalid');
 			}
 
 			$valid = call_user_func($attributes['validator'], $this->_attributes[$field]);
@@ -2647,8 +2647,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				}
 				
 				if($modified){
-					$criteria = GO_Base_Db_FindCriteria::newInstance()
-								->addModel(GO::getModel($this->className()))
+					$criteria = \GO_Base_Db_FindCriteria::newInstance()
+								->addModel(\GO::getModel($this->className()))
 								->addCondition($field, $this->_attributes[$field]);
 
 					if(is_array($attributes['unique'])){
@@ -2661,16 +2661,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					if(!$this->isNew)
 						$criteria->addCondition($this->primaryKey(), $this->pk, '!=');
 
-					$existing = $this->findSingle(GO_Base_Db_FindParams::newInstance()
+					$existing = $this->findSingle(\GO_Base_Db_FindParams::newInstance()
 									->ignoreAcl()
 									->criteria($criteria)
 					);
 
 					if($existing) {
 						
-						$msg = str_replace(array('%cf','%val'),array($this->getAttributeLabel($field), $this->_attributes[$field]),GO::t('duplicateExistsFeedback','customfields'));
+						$msg = str_replace(array('%cf','%val'),array($this->getAttributeLabel($field), $this->_attributes[$field]),\GO::t('duplicateExistsFeedback','customfields'));
 						$this->setValidationError($field, $msg);
-//						$this->setValidationError($field, sprintf(GO::t('alreadyExists'),$this->localizedName, $this->_attributes[$field]));
+//						$this->setValidationError($field, sprintf(\GO::t('alreadyExists'),$this->localizedName, $this->_attributes[$field]));
 					}
 				}
 			}
@@ -2702,14 +2702,14 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //		if($this->files_folder_id==0)
 //			return false;
 //		
-//		return GO_Files_Model_Folder::model()->findByPk($this->files_folder_id);
+//		return \GO_Files_Model_Folder::model()->findByPk($this->files_folder_id);
 //		
 //	}
 	
 	/**
 	 * Get the column name of the field this model sorts on.
 	 * It will automatically give the highest number to new models.
-	 * Useful in combination with GO_Base_Controller_AbstractModelController::actionSubmitMultiple().
+	 * Useful in combination with \GO_Base_Controller_AbstractModelController::actionSubmitMultiple().
 	 * Drag and drop actions will save the sort order in that action.
 	 * 
 	 * @return string 
@@ -2751,16 +2751,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	public function save($ignoreAcl=false){
 			
-		//GO::debug('save'.$this->className());
+		//\GO::debug('save'.$this->className());
 		
-		if(!$ignoreAcl && !$this->checkPermissionLevel($this->isNew?GO_Base_Model_Acl::CREATE_PERMISSION:GO_Base_Model_Acl::WRITE_PERMISSION)){
-			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true).' acl_id: '.$this->_acl_id : '';
+		if(!$ignoreAcl && !$this->checkPermissionLevel($this->isNew?\GO_Base_Model_Acl::CREATE_PERMISSION:\GO_Base_Model_Acl::WRITE_PERMISSION)){
+			$msg = \GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true).' acl_id: '.$this->_acl_id : '';
 			throw new \GO_Base_Exception_AccessDenied($msg);
 		}
 		
 		// when foreignkey to acl field changes check PermissionLevel of origional related ACL object as well
-		if(!$ignoreAcl && !$this->isNew && $this->_aclModified() && !$this->checkOldPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
-			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : sprintf(GO::t('cannotMoveError'),'this');
+		if(!$ignoreAcl && !$this->isNew && $this->_aclModified() && !$this->checkOldPermissionLevel(\GO_Base_Model_Acl::DELETE_PERMISSION)){
+			$msg = \GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : sprintf(\GO::t('cannotMoveError'),'this');
 			throw new \GO_Base_Exception_AccessDenied($msg);
 		}
 		
@@ -2773,7 +2773,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		/*
 		 * Set some common column values
 		*/
-//GO::debug($this->mtime);
+//\GO::debug($this->mtime);
 		
 		if($this->dbUpdateRequired() || ($this->_customfieldsRecord && $this->_customfieldsRecord->isModified())){
 			if(isset($this->columns['mtime']) && (!$this->isModified('mtime') || empty($this->mtime)))//Don't update if mtime was manually set.
@@ -2784,12 +2784,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		}
 
 		if (isset($this->columns['muser_id']) && isset($this->_modifiedAttributes['mtime']))
-			$this->muser_id=GO::user() ? GO::user()->id : 1;
+			$this->muser_id=\GO::user() ? \GO::user()->id : 1;
 		
 		//user id is set by defaultAttributes now.
 		//do not use empty() here for checking the user id because some times it must be 0. eg. go_acl
 //		if(isset($this->columns['user_id']) && !isset($this->user_id)){
-//			$this->user_id=GO::user() ? GO::user()->id : 1;
+//			$this->user_id=\GO::user() ? \GO::user()->id : 1;
 //		}
 
 
@@ -2814,17 +2814,17 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				if(!empty($this->user_id))
 					$this->setNewAcl($this->user_id);
 				else
-					$this->setNewAcl(GO::user() ? GO::user()->id : 1);
+					$this->setNewAcl(\GO::user() ? \GO::user()->id : 1);
 			}				
 			
-			if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
+			if ($this->hasFiles() && \GO::modules()->isInstalled('files')) {
 				//ACL must be generated here.
 				$fc = new \GO_Files_Controller_Folder();
 				$this->files_folder_id = $fc->checkModelFolder($this);
 			}
 
 			if(!$this->beforeSave()){
-				GO::debug("WARNING: ".$this->className()."::beforeSave returned false or no value");
+				\GO::debug("WARNING: ".$this->className()."::beforeSave returned false or no value");
 				return false;				
 			}
 
@@ -2848,14 +2848,14 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			$wasNew=false;
 			
 			
-			if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
+			if ($this->hasFiles() && \GO::modules()->isInstalled('files')) {
 				//ACL must be generated here.
 				$fc = new \GO_Files_Controller_Folder();
 				$this->files_folder_id = $fc->checkModelFolder($this);
 			}
 
 			if(!$this->beforeSave()){
-				GO::debug("WARNING: ".$this->className()."::beforeSave returned false or no value");
+				\GO::debug("WARNING: ".$this->className()."::beforeSave returned false or no value");
 				return false;				
 			}
 
@@ -2880,12 +2880,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //				$this->touch(); // If the customfieldsRecord is saved then set the mtime of this record.
 		}
 		
-		$this->_log($wasNew ? GO_Log_Model_Log::ACTION_ADD : GO_Log_Model_Log::ACTION_UPDATE);
+		$this->_log($wasNew ? \GO_Log_Model_Log::ACTION_ADD : \GO_Log_Model_Log::ACTION_UPDATE);
 		
 		
 
 		if(!$this->afterSave($wasNew)){
-			GO::debug("WARNING: ".$this->className()."::afterSave returned false or no value");
+			\GO::debug("WARNING: ".$this->className()."::afterSave returned false or no value");
 			return false;
 		}
 		
@@ -2925,7 +2925,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	private function _log($action){
 	
 		$message = $this->getLogMessage($action);
-		if($message && GO::modules()->isInstalled('log')){			
+		if($message && \GO::modules()->isInstalled('log')){			
 			$log = new \GO_Log_Model_Log();
 			
 			$pk = $this->pk;
@@ -2944,7 +2944,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * When you move a contact to another contact all the acl id's must change. 
 	 */
 	private function _fixLinkedEmailAcls(){
-		if($this->hasLinks() && GO::modules()->isInstalled('savemailas')){
+		if($this->hasLinks() && \GO::modules()->isInstalled('savemailas')){
 			$arr = explode('.', $this->aclField());
 			if (count($arr) > 1) {
 				
@@ -2953,12 +2953,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				if($relation && $this->isModified($relation['field'])){
 					//acl relation changed. We must update linked emails
 					
-					GO::debug("Fixing linked e-mail acl's because relation ".$arr[0]." changed.");
+					\GO::debug("Fixing linked e-mail acl's because relation ".$arr[0]." changed.");
 					
-					$stmt = GO_Savemailas_Model_LinkedEmail::model()->findLinks($this);
+					$stmt = \GO_Savemailas_Model_LinkedEmail::model()->findLinks($this);
 					while($linkedEmail = $stmt->fetch()){
 						
-						GO::debug("Updating ".$linkedEmail->subject);
+						\GO::debug("Updating ".$linkedEmail->subject);
 						
 						$linkedEmail->acl_id=$this->findAclId();
 						$linkedEmail->save();
@@ -3013,7 +3013,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if($this->aclField()===false)
 			throw new \Exception('Can not create a new \ACL for an object that has no ACL field');
 		if(!$user_id)
-			$user_id = GO::user() ? GO::user()->id : 1;
+			$user_id = \GO::user() ? \GO::user()->id : 1;
 		
 		$acl = new \GO_Base_Model_Acl();
 		$acl->description=$this->tableName().'.'.$this->aclField();
@@ -3088,7 +3088,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 */
 	public function buildFilesPath() {
 
-		return isset($this->name) ? $this->getModule().'/' . GO_Base_Fs_Base::stripInvalidChars($this->name) : false;
+		return isset($this->name) ? $this->getModule().'/' . \GO_Base_Fs_Base::stripInvalidChars($this->name) : false;
 	}
 	
 	/**
@@ -3101,16 +3101,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	public function cacheSearchRecord(){
 		
 		//don't do this on datbase checks.
-		if(GO::router()->getControllerAction()=='checkdatabase')
+		if(\GO::router()->getControllerAction()=='checkdatabase')
 			return;
 		
 		$attr = $this->getCacheAttributes();
 		
-		//GO::debug($attr);
+		//\GO::debug($attr);
 		
 		if($attr){
 
-			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()),false,true);
+			$model = \GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()),false,true);
 			
 			if(!$model)
 				$model = new \GO_Base_Model_SearchCacheRecord();
@@ -3121,16 +3121,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			//if model doesn't have an acl we use the acl of the module it belongs to.
 			if(!$acl_id)
-				$acl_id = GO::modules()->{$this->getModule ()}->acl_id;
+				$acl_id = \GO::modules()->{$this->getModule ()}->acl_id;
 				
-			$defaultUserId = isset(GO::session()->values['user_id']) ? GO::session()->values['user_id'] : 1;
+			$defaultUserId = isset(\GO::session()->values['user_id']) ? \GO::session()->values['user_id'] : 1;
 			
 			//cache type in default system language.
-			if(GO::user())
-				GO::language()->setLanguage(GO::config()->language);
+			if(\GO::user())
+				\GO::language()->setLanguage(\GO::config()->language);
 							
 			
-			//GO::debug($model);
+			//\GO::debug($model);
 			$autoAttr = array(
 				'model_id'=>$this->pk,
 				'model_type_id'=>$this->modelTypeId(),
@@ -3148,8 +3148,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			$attr = array_merge($autoAttr, $attr);
 			
-			if(GO::user())
-				GO::language()->setLanguage(GO::user()->language);
+			if(\GO::user())
+				\GO::language()->setLanguage(\GO::user()->language);
 			
 			if($attr['description']==null)
 				$attr['description']="";
@@ -3171,8 +3171,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	public function cutAttributeLengths(){
 		$attr = $this->getModifiedAttributes();
 		foreach($attr as $attributeName=>$oldVal){
-//			if(!empty($this->columns[$attribute]['length']) && GO_Base_Util_String::length($this->_attributes[$attribute])>$this->columns[$attribute]['length']){
-//				$this->_attributes[$attribute]=GO_Base_Util_String::substr($this->_attributes[$attribute], 0, $this->columns[$attribute]['length']);
+//			if(!empty($this->columns[$attribute]['length']) && \GO_Base_Util_String::length($this->_attributes[$attribute])>$this->columns[$attribute]['length']){
+//				$this->_attributes[$attribute]=\GO_Base_Util_String::substr($this->_attributes[$attribute], 0, $this->columns[$attribute]['length']);
 //			}
 			$this->cutAttributeLength($attributeName);
 		}
@@ -3184,13 +3184,13 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * @param string $attributeName
 	 */
 	public function cutAttributeLength($attributeName){
-		if(!empty($this->columns[$attributeName]['length']) && GO_Base_Util_String::length($this->_attributes[$attributeName])>$this->columns[$attributeName]['length']){
-			$this->_attributes[$attributeName]=GO_Base_Util_String::substr($this->_attributes[$attributeName], 0, $this->columns[$attributeName]['length']);
+		if(!empty($this->columns[$attributeName]['length']) && \GO_Base_Util_String::length($this->_attributes[$attributeName])>$this->columns[$attributeName]['length']){
+			$this->_attributes[$attributeName]=\GO_Base_Util_String::substr($this->_attributes[$attributeName], 0, $this->columns[$attributeName]['length']);
 		}
 	}
 	
 	public function getCachedSearchRecord(){
-		$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()));
+		$model = \GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()));
 		if($model)
 			return $model;
 		else
@@ -3298,12 +3298,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			$msg = $e->getMessage();
 						
-			if(GO::config()->debug){
+			if(\GO::config()->debug){
 				$msg .= "\n\nFull SQL Query: ".$sql."\n\nParams:\n".var_export($this->_attributes, true);
 
 				$msg .= "\n\n".$e->getTraceAsString();
 
-				GO::debug($msg);
+				\GO::debug($msg);
 			}
 			throw new \Exception($msg);
 		}
@@ -3376,17 +3376,17 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			$ret = $stmt->execute();
 			if($this->_debugSql){
-				GO::debug("Affected rows: ".$ret);
+				\GO::debug("Affected rows: ".$ret);
 			}
 		}catch(Exception $e){
 			$msg = $e->getMessage();
 						
-			if(GO::config()->debug){
+			if(\GO::config()->debug){
 				$msg .= "\n\nFull SQL Query: ".$sql."\n\nParams:\n".var_export($this->_attributes, true);
 
 				$msg .= "\n\n".$e->getTraceAsString();
 
-				GO::debug($msg);
+				\GO::debug($msg);
 			}
 			throw new \Exception($msg);			
 		}	
@@ -3406,15 +3406,15 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 */
 	public function delete($ignoreAcl=false){
 		
-		GO::setMaxExecutionTime(180); // Added this because the deletion of all relations sometimes takes a lot of time (3 minutes) 
+		\GO::setMaxExecutionTime(180); // Added this because the deletion of all relations sometimes takes a lot of time (3 minutes) 
 		
-		//GO::debug("Delete ".$this->className()." pk: ".$this->pk);
+		//\GO::debug("Delete ".$this->className()." pk: ".$this->pk);
 		
 		if($this->isNew)
 			return true;
 		
-		if(!$ignoreAcl && !$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
-			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
+		if(!$ignoreAcl && !$this->checkPermissionLevel(\GO_Base_Model_Acl::DELETE_PERMISSION)){
+			$msg = \GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
 			throw new \GO_Base_Exception_AccessDenied ($msg);
 		}
 		
@@ -3430,11 +3430,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 				//for backwards compatibility
 				if($attr['delete']===true)
-					$attr['delete']=GO_Base_Db_ActiveRecord::DELETE_CASCADE;
+					$attr['delete']=\GO_Base_Db_ActiveRecord::DELETE_CASCADE;
 				
 				switch($attr['delete']){
 					
-					case GO_Base_Db_ActiveRecord::DELETE_CASCADE:
+					case \GO_Base_Db_ActiveRecord::DELETE_CASCADE:
 						$result = $this->$name;
 
 						if($result instanceof GO_Base_Db_ActiveStatement){	
@@ -3450,11 +3450,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 						}
 						break;
 						
-					case GO_Base_Db_ActiveRecord::DELETE_RESTRICT:
+					case \GO_Base_Db_ActiveRecord::DELETE_RESTRICT:
 						if($attr['type']==self::HAS_ONE)
 							$result = $this->$name;
 						else
-							$result = $this->$name(GO_Base_Db_FindParams::newInstance()->single());
+							$result = $this->$name(\GO_Base_Db_FindParams::newInstance()->single());
 							
 						if($result){
 							throw new \GO_Base_Exception_RelationDeleteRestrict($this, $attr);
@@ -3466,10 +3466,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			//clean up link models for many_many relations
 			if($attr['type']==self::MANY_MANY){// && class_exists($attr['linkModel'])){
-				$stmt = GO::getModel($attr['linkModel'])->find(
-				 GO_Base_Db_FindParams::newInstance()							
-								->criteria(GO_Base_Db_FindCriteria::newInstance()
-												->addModel(GO::getModel($attr['linkModel']))
+				$stmt = \GO::getModel($attr['linkModel'])->find(
+				 \GO_Base_Db_FindParams::newInstance()							
+								->criteria(\GO_Base_Db_FindCriteria::newInstance()
+												->addModel(\GO::getModel($attr['linkModel']))
 												->addCondition($attr['field'], $this->pk)
 												)											
 								);
@@ -3481,9 +3481,9 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		//We do this in a separate loop because relations that should be deleted should be processed first.
 		//Consider these relation definitions:
 		//
-		// 'messagesCustomer' => array('type'=>self::HAS_MANY, 'model'=>'GO_Tickets_Model_Message', 'field'=>'ticket_id', 'findParams'=>GO_Base_Db_FindParams::newInstance()->order('id','DESC')->select('t.*')->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('is_note', 0))),
-		// 'messagesNotes' => array('type'=>self::HAS_MANY, 'model'=>'GO_Tickets_Model_Message', 'field'=>'ticket_id', 'findParams'=>GO_Base_Db_FindParams::newInstance()->order('id','DESC')->select('t.*')->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('is_note', 0))),
-		// 'messages' => array('type'=>self::HAS_MANY, 'model'=>'GO_Tickets_Model_Message', 'field'=>'ticket_id','delete'=>true, 'findParams'=>GO_Base_Db_FindParams::newInstance()->order('id','DESC')->select('t.*')),
+		// 'messagesCustomer' => array('type'=>self::HAS_MANY, 'model'=>'\GO_Tickets_Model_Message', 'field'=>'ticket_id', 'findParams'=>GO_Base_Db_FindParams::newInstance()->order('id','DESC')->select('t.*')->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('is_note', 0))),
+		// 'messagesNotes' => array('type'=>self::HAS_MANY, 'model'=>'\GO_Tickets_Model_Message', 'field'=>'ticket_id', 'findParams'=>GO_Base_Db_FindParams::newInstance()->order('id','DESC')->select('t.*')->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('is_note', 0))),
+		// 'messages' => array('type'=>self::HAS_MANY, 'model'=>'\GO_Tickets_Model_Message', 'field'=>'ticket_id','delete'=>true, 'findParams'=>GO_Base_Db_FindParams::newInstance()->order('id','DESC')->select('t.*')),
 		//
 		// messagesCustomer and messagesNotes are just subsets of the messages 
 		// relation that must all be deleted anyway. We don't want to clear foreign keys first and then fail to delete them.
@@ -3512,28 +3512,28 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$sql = $this->_appendPkSQL($sql);
 		
 		//remove cached models
-		GO::modelCache()->remove($this->className());
+		\GO::modelCache()->remove($this->className());
 		
 		
 		if($this->_debugSql)
-			GO::debug($sql);
+			\GO::debug($sql);
 
 		$success = $this->getDbConnection()->query($sql);		
 		if(!$success)
 			throw new \Exception("Could not delete from database");
 		
-		$this->_log(GO_Log_Model_Log::ACTION_DELETE);
+		$this->_log(\GO_Log_Model_Log::ACTION_DELETE);
 		
 		$attr = $this->getCacheAttributes();
 		
 		if($attr){
-			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()),false,true);
+			$model = \GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()),false,true);
 			if($model)
 				$model->delete(true);
 		}
 		
-		if($this->hasFiles() && $this->files_folder_id > 0 && GO::modules()->isInstalled('files')){
-			$folder = GO_Files_Model_Folder::model()->findByPk($this->files_folder_id,false,true);
+		if($this->hasFiles() && $this->files_folder_id > 0 && \GO::modules()->isInstalled('files')){
+			$folder = \GO_Files_Model_Folder::model()->findByPk($this->files_folder_id,false,true);
 			if($folder)
 				$folder->delete(true);
 		}		
@@ -3541,7 +3541,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if($this->aclField() && !$this->joinAclField){			
 			//echo 'Deleting acl '.$this->{$this->aclField()}.' '.$this->aclField().'<br />';
 			
-			$acl = GO_Base_Model_Acl::model()->findByPk($this->{$this->aclField()});			
+			$acl = \GO_Base_Model_Acl::model()->findByPk($this->{$this->aclField()});			
 			$acl->delete();
 		}	
 		
@@ -3562,10 +3562,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	private function _deleteLinks(){
 		//cleanup links
 		if($this->hasLinks()){
-			$stmt = GO_Base_Model_ModelType::model()->find();
+			$stmt = \GO_Base_Model_ModelType::model()->find();
 			while($modelType = $stmt->fetch()){
 				if(class_exists($modelType->model_name)){
-					$model = GO::getModel($modelType->model_name);
+					$model = \GO::getModel($modelType->model_name);
 					if($model->hasLinks()){
 
 						$linksTable = "go_links_".$model->tableName();
@@ -3585,7 +3585,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 //	/**
 //	 * Set the output mode for this model. The default value can be set globally 
-//	 * too with GO_Base_Db_ActiveRecord::$attributeOutputMode.
+//	 * too with \GO_Base_Db_ActiveRecord::$attributeOutputMode.
 //	 * It can be 'raw', 'formatted' or 'html'.
 //	 * 
 //	 * @param type $mode 
@@ -3778,19 +3778,19 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 		if(isset($this->columns[$name])){
 			
-			if(GO::config()->debug){
+			if(\GO::config()->debug){
 				if(is_object($value) || is_array($value))
 					throw new \Exception($this->className()."::setAttribute : Invalid attribute value for ".$name.". Type was: ".gettype($value));
 			}
 			
 			//normalize CRLF to prevent issues with exporting to vcard etc.
 			if(isset($this->columns[$name]['gotype']) && ($this->columns[$name]['gotype']=='textfield' || $this->columns[$name]['gotype']=='textarea'))
-				$value=GO_Base_Util_String::normalizeCrlf($value, "\n");
+				$value=\GO_Base_Util_String::normalizeCrlf($value, "\n");
 			
 			if((!isset($this->_attributes[$name]) || (string)$this->_attributes[$name]!==(string)$value) && !$this->isModified($name)){
 				$this->_modifiedAttributes[$name]=isset($this->_attributes[$name]) ? $this->_attributes[$name] : false;
-//				GO::debug("Setting modified attribute $name to ".$this->_modifiedAttributes[$name]);
-//				GO::debugCalledFrom(5);
+//				\GO::debug("Setting modified attribute $name to ".$this->_modifiedAttributes[$name]);
+//				\GO::debugCalledFrom(5);
 			}
 			
 			$this->_attributes[$name]=$value;
@@ -3849,7 +3849,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			$model_type_id = $model->modelTypeId();			
 		}
 		
-		$table = $isSearchCacheModel ? GO::getModel($this->model_name)->tableName() : $this->tableName();
+		$table = $isSearchCacheModel ? \GO::getModel($this->model_name)->tableName() : $this->tableName();
 		
 		$id = $isSearchCacheModel ? $this->model_id : $this->id;
 		
@@ -3875,8 +3875,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		);
 		
 		if($this->_debugSql){
-			GO::debug($sql);
-			GO::debug($values);
+			\GO::debug($sql);
+			\GO::debug($values);
 		}
 
 		$result = $this->getDbConnection()->prepare($sql);
@@ -3901,7 +3901,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //	 * 
 //	 * @param GO_Base_Db_ActiveRecord $model
 //	 * @param boolean $isSearchCacheModel True if the given model is a search cache model. 
-//	 *	In that case you can use the following code to get the real model:  $realModel = $isSearchCacheModel ? GO::getModel($this->model_name)->findByPk($this->model_id) : $this;
+//	 *	In that case you can use the following code to get the real model:  $realModel = $isSearchCacheModel ? \GO::getModel($this->model_name)->findByPk($this->model_id) : $this;
 //	 * @param string $description
 //	 * @param int $this_folder_id
 //	 * @param int $model_folder_id
@@ -3926,7 +3926,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(!$model_id)
 			return false;
 		
-		$table = $this->className()=="GO_Base_Model_SearchCacheRecord" ? GO::getModel($this->model_name)->model()->tableName() : $this->tableName();		
+		$table = $this->className()=="\GO_Base_Model_SearchCacheRecord" ? \GO::getModel($this->model_name)->model()->tableName() : $this->tableName();		
 		$this_id = $this->className()=="GO_Base_Model_SearchCacheRecord" ? $this->model_id : $this->id;
 		
 		$sql = "SELECT count(*) FROM `go_links_$table` WHERE ".
@@ -4013,7 +4013,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * 
 	 * eg.:
 	 * 
-	 * GO_Addressbook_Model_Contact::model()->findLinks($noteModel);
+	 * \GO_Addressbook_Model_Contact::model()->findLinks($noteModel);
 	 * 
 	 * selects all contacts linked to the $noteModel
 	 * 
@@ -4023,11 +4023,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 */
 	public function findLinks($model, $extraFindParams=false){
 		
-		$findParams = GO_Base_Db_FindParams::newInstance ();
+		$findParams = \GO_Base_Db_FindParams::newInstance ();
 		
 		$findParams->select('t.*,l.description AS link_description');
 		
-		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('id', $model->id,'=','l')
 						->addRawCondition("t.id", "l.model_id")
 						->addCondition('model_type_id', $this->modelTypeId(),'=','l');
@@ -4050,7 +4050,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(!$this->hasLinks() || !$targetModel->hasLinks())
 			return false;
 			
-		$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($this);
+		$stmt = \GO_Base_Model_SearchCacheRecord::model()->findLinks($this);
 		while($searchCacheModel = $stmt->fetch()){
 			$targetModel->link($searchCacheModel, $searchCacheModel->link_description);
 		}
@@ -4082,18 +4082,18 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	/**
 	 * Returns the customfields record if module is installed and this model
-	 * supports it (See GO_Base_Db_ActiveRecord::customFieldsModel())
+	 * supports it (See \GO_Base_Db_ActiveRecord::customFieldsModel())
 	 * 
 	 * @return GO_Customfields_Model_AbstractCustomFieldsRecord 
 	 */
 	public function getCustomfieldsRecord($createIfNotExists=true){
 		
-//		GO::debug($this->className().'::getCustomfieldsRecord');
+//		\GO::debug($this->className().'::getCustomfieldsRecord');
 		
-		if($this->customfieldsModel() && GO::modules()->isInstalled('customfields')){			
+		if($this->customfieldsModel() && \GO::modules()->isInstalled('customfields')){			
 			if(!isset($this->_customfieldsRecord)){// && !empty($this->pk)){
 				$customFieldModelName=$this->customfieldsModel();
-				$this->_customfieldsRecord = GO::getModel($customFieldModelName)->findByPk($this->pk);
+				$this->_customfieldsRecord = \GO::getModel($customFieldModelName)->findByPk($this->pk);
 				if(!$this->_customfieldsRecord){
 					//doesn't exist yet. Return a new one
 					$this->_customfieldsRecord = new $customFieldModelName;
@@ -4120,7 +4120,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		{		
 			$aclId = $this->findAclId();
 			if($aclId){
-				$this->_acl=GO_Base_Model_Acl::model()->findByPk($aclId);
+				$this->_acl=\GO_Base_Model_Acl::model()->findByPk($aclId);
 				return $this->_acl;
 			}else{
 				return false;
@@ -4138,7 +4138,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if($this->aclField())
 			return true;
 		
-		if($this->hasFiles() && GO::modules()->isInstalled('files'))
+		if($this->hasFiles() && \GO::modules()->isInstalled('files'))
 			return true;
 		
 		$class = new \GO_Base_Util_ReflectionClass($this->className());
@@ -4169,7 +4169,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			}
 		}
 		
-		if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
+		if ($this->hasFiles() && \GO::modules()->isInstalled('files')) {
 			//ACL must be generated here.
 			$fc = new \GO_Files_Controller_Folder();	
 			$this->files_folder_id = $fc->checkModelFolder($this);
@@ -4178,7 +4178,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		//normalize crlf
 		foreach($this->columns as $field=>$attr){
 			if(($attr['gotype']=='textfield' || $attr['gotype']=='textarea') && !empty($this->_attributes[$field])){				
-				$this->$field=GO_Base_Util_String::normalizeCrlf($this->_attributes[$field], "\n");
+				$this->$field=\GO_Base_Util_String::normalizeCrlf($this->_attributes[$field], "\n");
 			}
 		}
 				
@@ -4202,7 +4202,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$attr = $this->getCacheAttributes();
 		
 		if($attr){			
-			$stmt = $this->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl()->select('t.*'));			
+			$stmt = $this->find(\GO_Base_Db_FindParams::newInstance()->ignoreAcl()->select('t.*'));			
 			$stmt->callOnEach('cacheSearchRecord', true);			
 		}
 	}
@@ -4247,7 +4247,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		//Generate new acl for this model
 		if($this->aclField() && !$this->joinAclField){
 			
-			$user_id = isset($this->user_id) ? $this->user_id : GO::user()->id;
+			$user_id = isset($this->user_id) ? $this->user_id : \GO::user()->id;
 			$copy->setNewAcl($user_id);
 		}
 		
@@ -4301,7 +4301,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$field = $r[$relationName]['field'];
 		
 		if(!$findParams)
-			$findParams=  GO_Base_Db_FindParams::newInstance ();
+			$findParams=  \GO_Base_Db_FindParams::newInstance ();
 		
 		$findParams->select('t.*');		
 		
@@ -4335,7 +4335,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$sql = "LOCK TABLES `".$this->tableName()."` AS t $mode";
 		$this->getDbConnection()->query($sql);
 		
-		if($this->hasFiles() && GO::modules()->isInstalled('files')){
+		if($this->hasFiles() && \GO::modules()->isInstalled('files')){
 			$sql = "LOCK TABLES `fs_folders` AS t $mode";
 			$this->getDbConnection()->query($sql);
 		}
@@ -4367,9 +4367,9 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		}
 		
 		if(isset($this->columns['user_id']))
-			$attr['user_id']=GO::user() ? GO::user()->id : 1;
+			$attr['user_id']=\GO::user() ? \GO::user()->id : 1;
 		if(isset($this->columns['muser_id']))
-			$attr['muser_id']=GO::user() ? GO::user()->id : 1;
+			$attr['muser_id']=\GO::user() ? \GO::user()->id : 1;
 		
 		return array_merge($attr, $this->defaultAttributes());
 	}
@@ -4397,7 +4397,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 */
 	public function deleteReminders(){
 		
-		$stmt = GO_Base_Model_Reminder::model()->findByModel($this->className(), $this->pk);
+		$stmt = \GO_Base_Model_Reminder::model()->findByModel($this->className(), $this->pk);
 		$stmt->callOnEach("delete");
 	}
 	
@@ -4412,7 +4412,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 */
 	public function addReminder($name, $time, $user_id, $vtime=null){	
 	
-		$reminder = GO_Base_Model_Reminder::newInstance($name, $time, $this->className(), $this->pk, $vtime);
+		$reminder = \GO_Base_Model_Reminder::newInstance($name, $time, $this->className(), $this->pk, $vtime);
 		$reminder->setForUser($user_id);
 		
 		return $reminder;
@@ -4440,7 +4440,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				throw new \Exception("Can't add manymany relation to a new model. Call save() first.");
 			
 			if(!$r)
-				throw new \Exception("Relation '$relationName' not found in GO_Base_Db_ActiveRecord::addManyMany()");
+				throw new \Exception("Relation '$relationName' not found in \GO_Base_Db_ActiveRecord::addManyMany()");
 			
 			$linkModel = new $r['linkModel'];
 			$linkModel->{$r['field']} = $this->pk;
@@ -4480,8 +4480,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	public function removeAllManyMany($relationName){
 		$r = $this->getRelation($relationName);
 		if(!$r)
-			throw new \Exception("Relation '$relationName' not found in GO_Base_Db_ActiveRecord::hasManyMany()");
-		$linkModel = GO::getModel($r['linkModel']);
+			throw new \Exception("Relation '$relationName' not found in \GO_Base_Db_ActiveRecord::hasManyMany()");
+		$linkModel = \GO::getModel($r['linkModel']);
 		
 		$linkModel->deleteByAttribute($r['field'],$this->pk);
 	}
@@ -4497,12 +4497,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
   public function hasManyMany($relationName, $foreignPk){
 		$r = $this->getRelation($relationName);
 		if(!$r)
-			throw new \Exception("Relation '$relationName' not found in GO_Base_Db_ActiveRecord::hasManyMany()");
+			throw new \Exception("Relation '$relationName' not found in \GO_Base_Db_ActiveRecord::hasManyMany()");
 		
 		if($this->isNew)
 			throw new \Exception("You can't call hasManyMany on a new model. Call save() first.");
 		
-		$linkModel = GO::getModel($r['linkModel']);
+		$linkModel = \GO::getModel($r['linkModel']);
 		$keys = $linkModel->primaryKey();	
 		if(count($keys)!=2){
 			throw new \Exception("Primary key of many many linkModel ".$r['linkModel']." must be an array of two fields");
@@ -4521,7 +4521,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * @param mixed $value 
 	 */
 	public function deleteByAttribute($name, $value){
-		$stmt = $this->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition($name, $value)));		
+		$stmt = $this->find(\GO_Base_Db_FindParams::newInstance()->ignoreAcl()->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition($name, $value)));		
 		$stmt->callOnEach('delete');	
 	}
 	
@@ -4533,7 +4533,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * @return boolean 
 	 */
 	public function addComment($text){
-		if(!GO::modules()->isInstalled('comments') || !GO::modules()->isInstalled('comments') && !$this->hasLinks())
+		if(!\GO::modules()->isInstalled('comments') || !\GO::modules()->isInstalled('comments') && !$this->hasLinks())
 			return false;
 		
 		$comment = new \GO_Comments_Model_Comment();
@@ -4612,17 +4612,17 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	}
 	
 	private function _copyComments(GO_Base_Db_ActiveRecord $sourceModel) {
-		if (GO::modules()->isInstalled('comments') && $this->hasLinks()) {
-			$findParams = GO_Base_Db_FindParams::newInstance()
+		if (\GO::modules()->isInstalled('comments') && $this->hasLinks()) {
+			$findParams = \GO_Base_Db_FindParams::newInstance()
 							->ignoreAcl()
 							->order('id', 'DESC')
 							->select()
 							->criteria(
-							GO_Base_Db_FindCriteria::newInstance()
+							\GO_Base_Db_FindCriteria::newInstance()
 							->addCondition('model_id', $sourceModel->id)
 							->addCondition('model_type_id', $sourceModel->modelTypeId())
 			);
-			$stmt = GO_Comments_Model_Comment::model()->find($findParams);
+			$stmt = \GO_Comments_Model_Comment::model()->find($findParams);
 			while ($comment = $stmt->fetch()) {
 				$comment->duplicate(
 								array(
@@ -4639,7 +4639,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			return false;
 		}
 
-		$sourceFolder = GO_Files_Model_Folder::model()->findByPk($sourceModel->files_folder_id);
+		$sourceFolder = \GO_Files_Model_Folder::model()->findByPk($sourceModel->files_folder_id);
 		if (!$sourceFolder) {
 			return false;
 		}
@@ -4648,17 +4648,17 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	}
 
 	private function _moveComments(GO_Base_Db_ActiveRecord $sourceModel){
-		if(GO::modules()->isInstalled('comments') && $this->hasLinks()){
-			$findParams = GO_Base_Db_FindParams::newInstance()
+		if(\GO::modules()->isInstalled('comments') && $this->hasLinks()){
+			$findParams = \GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl()	
 						->order('id','DESC')
 						->criteria(
-										GO_Base_Db_FindCriteria::newInstance()
+										\GO_Base_Db_FindCriteria::newInstance()
 											->addCondition('model_id', $sourceModel->id)
 											->addCondition('model_type_id', $sourceModel->modelTypeId())										
 										);
 			
-			$stmt = GO_Comments_Model_Comment::model()->find($findParams);
+			$stmt = \GO_Comments_Model_Comment::model()->find($findParams);
 			while($comment = $stmt->fetch()){
 				$comment->model_type_id=$this->modelTypeId();
 				$comment->model_id=$this->id;
@@ -4671,7 +4671,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(!$this->hasFiles())
 			return false;
 		
-		$sourceFolder = GO_Files_Model_Folder::model()->findByPk($sourceModel->files_folder_id);
+		$sourceFolder = \GO_Files_Model_Folder::model()->findByPk($sourceModel->files_folder_id);
 		if(!$sourceFolder)
 			return false;
 		
@@ -4701,7 +4701,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$this->validate();
 		
 		foreach($this->_validationErrors as $attrib=>$error){
-			GO::debug('Atribute not successfully validated, unsetting '.$attrib);
+			\GO::debug('Atribute not successfully validated, unsetting '.$attrib);
 			$this->_unsetAttribute($attrib);
 		}
 	}

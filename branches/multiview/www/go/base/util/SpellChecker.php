@@ -80,7 +80,7 @@ class GO_Base_Util_SpellChecker {
                 $out .= $before . $sugestion . $after;
             }
         }else{
-            $out .= $before. GO::t('No Sugestions') . $after;
+            $out .= $before. \GO::t('No Sugestions') . $after;
         }
         return $out;
     }

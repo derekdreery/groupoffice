@@ -24,7 +24,7 @@ if(!class_exists('GO_Holidays_Sv')){
 		public static function midsummer($year){
 			$time = mktime(0,0,0,6,26,$year);
 
-			$saturday = GO_Base_Util_Date::get_last_weekday($time, -1);
+			$saturday = \GO_Base_Util_Date::get_last_weekday($time, -1);
 
 			return date('Y-m-d', $saturday);	
 
@@ -33,7 +33,7 @@ if(!class_exists('GO_Holidays_Sv')){
 		public static function allHallowsDay($year){
 			$time = mktime(0,0,0,11,6,$year);
 
-			$saturday = GO_Base_Util_Date::get_last_weekday($time, -1);
+			$saturday = \GO_Base_Util_Date::get_last_weekday($time, -1);
 
 			return date('Y-m-d', $saturday);	
 

@@ -11,13 +11,13 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 	}
 	
 	public static function initListeners() {
-		GO_Base_Model_User::model()->addListener('delete', "GO_Addressbook_AddressbookModule", "deleteUser");
+		\GO_Base_Model_User::model()->addListener('delete', "GO_Addressbook_AddressbookModule", "deleteUser");
 	}
 	
 	// Load the settings for the "Addresslists" tab in the Settings panel
 	public static function loadSettings(&$settingsController, &$params, &$response, $user) {
 
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 						->joinCustomFields();
 		
 		$contact = $user->contact($findParams);
@@ -46,7 +46,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		
 		if($contact){
 		
-			$addresslists = GO_Addressbook_Model_Addresslist::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION));
+			$addresslists = \GO_Addressbook_Model_Addresslist::model()->find(\GO_Base_Db_FindParams::newInstance()->permissionLevel(\GO_Base_Model_Acl::READ_PERMISSION));
 			foreach($addresslists as $addresslist){
 				$linkModel = $addresslist->hasManyMany('contacts', $contact->id);
 				$mustHaveLinkModel = isset($params['addresslist_' . $addresslist->id]);
@@ -73,8 +73,8 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 	}
 	
 	public static function deleteUser($user){
-		GO_Addressbook_Model_Addresslist::model()->deleteByAttribute('user_id', $user->id);
-		GO_Addressbook_Model_Template::model()->deleteByAttribute('user_id', $user->id);		
+		\GO_Addressbook_Model_Addresslist::model()->deleteByAttribute('user_id', $user->id);
+		\GO_Addressbook_Model_Template::model()->deleteByAttribute('user_id', $user->id);		
 	}
 	
 	public function autoInstall() {
@@ -84,44 +84,44 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 	public function install() {
 		parent::install();
 		
-		$default_language = GO::config()->default_country;
+		$default_language = \GO::config()->default_country;
 		if (empty($default_language))
 			$default_language = 'US';
 
 		$addressbook = new \GO_Addressbook_Model_Addressbook();
 		$addressbook->setAttributes(array(
 				'user_id' => 1,
-				'name' => GO::t('prospects','addressbook'),
+				'name' => \GO::t('prospects','addressbook'),
 //				'default_iso_address_format' => $default_language,
-				'default_salutation' => GO::t('defaultSalutation','addressbook')
+				'default_salutation' => \GO::t('defaultSalutation','addressbook')
 		));
 		$addressbook->save();
-		$addressbook->acl->addGroup(GO::config()->group_internal,GO_Base_Model_Acl::WRITE_PERMISSION);
+		$addressbook->acl->addGroup(\GO::config()->group_internal,\GO_Base_Model_Acl::WRITE_PERMISSION);
 
 		$addressbook = new \GO_Addressbook_Model_Addressbook();
 		$addressbook->setAttributes(array(
 				'user_id' => 1,
-				'name' => GO::t('suppliers','addressbook'),
+				'name' => \GO::t('suppliers','addressbook'),
 //				'default_iso_address_format' => $default_language,
-				'default_salutation' => GO::t('defaultSalutation','addressbook')
+				'default_salutation' => \GO::t('defaultSalutation','addressbook')
 		));
 		$addressbook->save();
-		$addressbook->acl->addGroup(GO::config()->group_internal,GO_Base_Model_Acl::WRITE_PERMISSION);
+		$addressbook->acl->addGroup(\GO::config()->group_internal,\GO_Base_Model_Acl::WRITE_PERMISSION);
 
-		if (!is_dir(GO::config()->file_storage_path.'contacts/contact_photos'))
-			mkdir(GO::config()->file_storage_path.'contacts/contact_photos',0755, true);
+		if (!is_dir(\GO::config()->file_storage_path.'contacts/contact_photos'))
+			mkdir(\GO::config()->file_storage_path.'contacts/contact_photos',0755, true);
 
 		$addressbook = new \GO_Addressbook_Model_Addressbook();
 		$addressbook->setAttributes(array(
 			'user_id' => 1,
-			'name' => GO::t('customers','addressbook'),
-			'default_salutation' => GO::t('defaultSalutation','addressbook')
+			'name' => \GO::t('customers','addressbook'),
+			'default_salutation' => \GO::t('defaultSalutation','addressbook')
 		));
 		$addressbook->save();
-		$addressbook->acl->addGroup(GO::config()->group_internal,GO_Base_Model_Acl::WRITE_PERMISSION);
+		$addressbook->acl->addGroup(\GO::config()->group_internal,\GO_Base_Model_Acl::WRITE_PERMISSION);
 		
 		//Each user should have a contact
-		$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
+		$stmt = \GO_Base_Model_User::model()->find(\GO_Base_Db_FindParams::newInstance()->ignoreAcl());
 		while($user = $stmt->fetch())
 			$user->createContact();
 		
@@ -130,7 +130,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 <br />
 {body}<br />
 <br />
-'.GO::t('greet','addressbook').'<br />
+'.\GO::t('greet','addressbook').'<br />
 <br />
 <br />
 {user:name}<br />
@@ -139,24 +139,24 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		$template = new \GO_Addressbook_Model_Template();
 		$template->setAttributes(array(
 			'content' => $message->toString(),
-			'name' => GO::t('default'),
-			'type' => GO_Addressbook_Model_Template::TYPE_EMAIL,
+			'name' => \GO::t('default'),
+			'type' => \GO_Addressbook_Model_Template::TYPE_EMAIL,
 			'user_id' => 1
 		));
 		$template->save();
-		$template->acl->addGroup(GO::config()->group_internal);
+		$template->acl->addGroup(\GO::config()->group_internal);
 		
 		
-		$dt = GO_Addressbook_Model_Template::model()->findSingleByAttribute('name', 'Letter');
+		$dt = \GO_Addressbook_Model_Template::model()->findSingleByAttribute('name', 'Letter');
 		if (!$dt) {
 			$dt = new \GO_Addressbook_Model_Template();	
-			$dt->type = GO_Addressbook_Model_Template::TYPE_DOCUMENT;
-			$dt->content = file_get_contents(GO::modules()->addressbook->path . 'install/letter_template.docx');
+			$dt->type = \GO_Addressbook_Model_Template::TYPE_DOCUMENT;
+			$dt->content = file_get_contents(\GO::modules()->addressbook->path . 'install/letter_template.docx');
 			$dt->extension = 'docx';
 			$dt->name = 'Letter';
 			$dt->save();
 			
-			$dt->acl->addGroup(GO::config()->group_internal);
+			$dt->acl->addGroup(\GO::config()->group_internal);
 		}
 		
 		
@@ -165,15 +165,15 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 	}
 	
 	public function setFolderPermissions(){
-		if(GO::modules()->isInstalled('files')){
-			$folder = GO_Files_Model_Folder::model()->findByPath('addressbook', true);
+		if(\GO::modules()->isInstalled('files')){
+			$folder = \GO_Files_Model_Folder::model()->findByPath('addressbook', true);
 			if($folder){
-				$folder->acl_id=GO_Base_Model_Acl::model()->getReadOnlyAcl()->id;
+				$folder->acl_id=\GO_Base_Model_Acl::model()->getReadOnlyAcl()->id;
 				$folder->readonly=1;
 				$folder->save();
 			}			
 			
-			$folder = GO_Files_Model_Folder::model()->findByPath('addressbook/photos', true);
+			$folder = \GO_Files_Model_Folder::model()->findByPath('addressbook/photos', true);
 			if($folder && !$folder->acl_id){
 				$folder->setNewAcl(1);
 				$folder->readonly=1;
@@ -181,7 +181,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 			}			
 			
 		  //hide old contacts folder if it exists
-			$folder = GO_Files_Model_Folder::model()->findByPath('contacts');
+			$folder = \GO_Files_Model_Folder::model()->findByPath('contacts');
 			if($folder){
 				if(!$folder->acl_id){
 					$folder->setNewAcl(1);
@@ -199,9 +199,9 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 	
 	
 	public function setFolderPermissions2(){
-		if(GO::modules()->isInstalled('files')){
-			GO_Base_Fs_Folder::createFromPath(GO::config()->file_storage_path.'company_photos');
-			$folderModel = GO_Files_Model_Folder::model()->findByPath('company_photos', true);
+		if(\GO::modules()->isInstalled('files')){
+			\GO_Base_Fs_Folder::createFromPath(\GO::config()->file_storage_path.'company_photos');
+			$folderModel = \GO_Files_Model_Folder::model()->findByPath('company_photos', true);
 			if($folderModel && !$folderModel->acl_id){
 				$folderModel->setNewAcl(1);
 				$folderModel->readonly=1;

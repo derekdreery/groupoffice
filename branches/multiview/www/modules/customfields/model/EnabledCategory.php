@@ -55,9 +55,9 @@ class GO_Customfields_Model_EnabledCategory extends GO_Base_Db_ActiveRecord{
 	 */
 	public function getEnabledIds($modelName, $modelId){
 		 $stmt = $this->find(
-			GO_Base_Db_FindParams::newInstance()
+			\GO_Base_Db_FindParams::newInstance()
 						->criteria(
-								GO_Base_Db_FindCriteria::newInstance()							
+								\GO_Base_Db_FindCriteria::newInstance()							
 									->addCondition('model_name', $modelName)
 										->addCondition('model_id', $modelId)
 										)

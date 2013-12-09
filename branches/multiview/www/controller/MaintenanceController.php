@@ -14,8 +14,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	protected function checkSecurityToken(){}
 	
 	protected function init() {
-		GO::$disableModelCache=true; //for less memory usage
-		GO::setMaxExecutionTime(0); //allow long runs		
+		\GO::$disableModelCache=true; //for less memory usage
+		\GO::setMaxExecutionTime(0); //allow long runs		
 		ini_set('memory_limit','512M');
 		ini_set('display_errors','on');
 	}
@@ -149,7 +149,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 	protected function actionGetNewAcl($params){
 		$acl = new GO_Base_Model_Acl();
-		$acl->user_id=isset($params['user_id']) ? $params['user_id'] : GO::user()->id;
+		$acl->user_id=isset($params['user_id']) ? $params['user_id'] : \GO::user()->id;
 		$acl->description=$params['description'];
 		$acl->save();
 		
@@ -158,18 +158,18 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 	protected function actionRemoveDuplicates($params){
 				
-		if(!GO::modules()->tools)
+		if(!\GO::modules()->tools)
 			throw new GO_Base_Exception_AccessDenied();
 		
-		GO::session()->runAsRoot();
+		\GO::session()->runAsRoot();
 		
-		GO_Base_Fs_File::setAllowDeletes(false);
+		\GO_Base_Fs_File::setAllowDeletes(false);
 		//VERY IMPORTANT:
-		GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
+		\GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
 		
 		$this->lockAction();
 		
-		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
+		\GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
 		$checkModels = array(
 				"GO_Calendar_Model_Event"=>array('name', 'start_time', 'end_time', 'calendar_id', 'rrule'),
@@ -189,13 +189,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				echo '<h1>'.$modelName.'</h1>';
 
 				$checkFieldsStr = 't.'.implode(', t.',$checkFields);
-				$findParams = GO_Base_Db_FindParams::newInstance()
+				$findParams = \GO_Base_Db_FindParams::newInstance()
 								->ignoreAcl()
 								->select('t.id, count(*) AS n, '.$checkFieldsStr)
 								->group($checkFields)
 								->having('n>1');
 
-				$stmt1 = GO::getModel($modelName)->find($findParams);
+				$stmt1 = \GO::getModel($modelName)->find($findParams);
 
 				echo '<table border="1">';
 				echo '<tr><td>ID</th><th>'.implode('</th><th>',$checkFields).'</th></tr>';
@@ -206,11 +206,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 					
 					$select = 't.id';
 					
-					if(GO::getModel($modelName)->hasFiles()){
+					if(\GO::getModel($modelName)->hasFiles()){
 						$select .= ', t.files_folder_id';
 					}
 
-					$findParams = GO_Base_Db_FindParams::newInstance()
+					$findParams = \GO_Base_Db_FindParams::newInstance()
 								->ignoreAcl()
 								->select($select.', '.$checkFieldsStr)
 								->order('id','ASC');
@@ -221,7 +221,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 						$criteria->addCondition($field, $dupModel->getAttribute($field));
 					}							
 
-					$stmt = GO::getModel($modelName)->find($findParams);
+					$stmt = \GO::getModel($modelName)->find($findParams);
 
 					$first = true;
 
@@ -264,15 +264,15 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				echo '</table>';
 
 				echo '<p>Found '.$count.' duplicates</p>';
-				echo '<br /><br /><a href="'.GO::url('maintenance/removeDuplicates', array('delete'=>true, 'model'=>$modelName)).'">Click here to delete the newest duplicates marked in red for model '.$modelName.'.</a>';
+				echo '<br /><br /><a href="'.\GO::url('maintenance/removeDuplicates', array('delete'=>true, 'model'=>$modelName)).'">Click here to delete the newest duplicates marked in red for model '.$modelName.'.</a>';
 				
 			}
 		}
 		
 		if(empty($params['model']))
-			echo '<br /><br /><a href="'.GO::url('maintenance/removeDuplicates', array('delete'=>true)).'">Click here to delete the newest duplicates marked in red.</a>';
+			echo '<br /><br /><a href="'.\GO::url('maintenance/removeDuplicates', array('delete'=>true)).'">Click here to delete the newest duplicates marked in red.</a>';
 		else
-			echo '<br /><br /><a href="'.GO::url('maintenance/removeDuplicates').'">Show all models.</a>';
+			echo '<br /><br /><a href="'.\GO::url('maintenance/removeDuplicates').'">Show all models.</a>';
 	}
 	
 	/**
@@ -281,7 +281,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 */
 	protected function actionBuildSearchCache($params) {
 		
-		if(!$this->isCli() && !GO::modules()->tools && GO::router()->getControllerAction()!='upgrade')
+		if(!$this->isCli() && !\GO::modules()->tools && \GO::router()->getControllerAction()!='upgrade')
 			throw new GO_Base_Exception_AccessDenied();
 		
 		$this->lockAction();
@@ -290,34 +290,34 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			echo '<pre>';
 		}
 		
-		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
+		\GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
 		$response = array();
 		
 		if(empty($params['keepexisting']))
-			GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
+			\GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
 		
 		//inserting is much faster without full text index. It's faster to add it again afterwards.
 //		echo "Dropping full text search index\n";
 //		try{
-//			GO::getDbConnection()->query("ALTER TABLE go_search_cache DROP INDEX ft_keywords");
+//			\GO::getDbConnection()->query("ALTER TABLE go_search_cache DROP INDEX ft_keywords");
 //		}catch(Exception $e){
 //			echo $e->getMessage()."\n";
 //		}
 				
-		$models=GO::findClasses('model');
+		$models=\GO::findClasses('model');
 		foreach($models as $model){
 			if($model->isSubclassOf("GO_Base_Db_ActiveRecord") && !$model->isAbstract()){
 				echo "Processing ".$model->getName()."\n";
 				flush();
-				$stmt = GO::getModel($model->getName())->rebuildSearchCache();			
+				$stmt = \GO::getModel($model->getName())->rebuildSearchCache();			
 			}
 		}
 		
-		GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
+		\GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
 		
 //		echo "Adding full text search index\n";
-//		GO::getDbConnection()->query("ALTER TABLE `go_search_cache` ADD FULLTEXT ft_keywords(`name` ,`keywords`);");
+//		\GO::getDbConnection()->query("ALTER TABLE `go_search_cache` ADD FULLTEXT ft_keywords(`name` ,`keywords`);");
 		
 		echo "\n\nAll done!\n\n";
 		
@@ -333,7 +333,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	protected function actionCheckDatabase($params) {
 		
 
-		if(!$this->isCli() && !GO::modules()->tools)
+		if(!$this->isCli() && !\GO::modules()->tools)
 			throw new GO_Base_Exception_AccessDenied();
 		
 		$this->run("upgrade",$params);		
@@ -344,7 +344,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		$response = array();
 		
-		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
+		$oldAllowDeletes = \GO_Base_Fs_File::setAllowDeletes(false);
 
 		if(!$this->isCli()){
 				echo '<pre>';
@@ -362,7 +362,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}else
 		{
 			$this->_checkCoreModels();
-			GO::modules()->callModuleMethod('checkDatabase', array(&$response));
+			\GO::modules()->callModuleMethod('checkDatabase', array(&$response));
 		}
 		
 		echo "All Done!\n";
@@ -371,7 +371,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				echo '</pre>';
 		}
         
-		GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
+		\GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
 		
 		return $response;
 	}
@@ -380,24 +380,24 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		//fix for invalid acl rows.
 		$sql = "insert ignore into go_acl (acl_id,group_id) SELECT acl_id,group_id FROM `go_acl` WHERE user_id>0 && group_id>0;";
-		GO::getDbConnection()->query($sql);
+		\GO::getDbConnection()->query($sql);
 		
 		$sql = "insert ignore into go_acl (acl_id,user_id) SELECT acl_id,user_id FROM `go_acl` WHERE user_id>0 && group_id>0;";
-		GO::getDbConnection()->query($sql);		
+		\GO::getDbConnection()->query($sql);		
 		
 		$sql = "delete from go_acl where user_id>0 and group_id>0;";
-		GO::getDbConnection()->query($sql);
+		\GO::getDbConnection()->query($sql);
 
 		
 		
-		$classes=GO::findClasses('model');
+		$classes=\GO::findClasses('model');
 		foreach($classes as $model){
 			if($model->isSubclassOf('GO_Base_Db_ActiveRecord') && !$model->isAbstract()){
 		
 				echo "Processing ".$model->getName()."\n";
 				flush();
 
-				$m = GO::getModel($model->getName());
+				$m = \GO::getModel($model->getName());
 
 				if($m->checkDatabaseSupported()){		
 					$stmt = $m->find(array(
@@ -411,14 +411,14 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 	private function _checkV3(){
 		
-		if(!GO_Base_Db_Utils::tableExists('go_model_types')){
+		if(!\GO_Base_Db_Utils::tableExists('go_model_types')){
 			
-			$upgrade_mtime = GO::config()->get_setting('upgrade_mtime');
+			$upgrade_mtime = \GO::config()->get_setting('upgrade_mtime');
 			
 			if($upgrade_mtime < 20111222)
-				exit("Old version detected but it's older then ".GO::config()->product_name." 3.7.41. You must upgrade to the latest 3.7 version first.");
+				exit("Old version detected but it's older then ".\GO::config()->product_name." 3.7.41. You must upgrade to the latest 3.7 version first.");
 			
-			echo "Older version of ".GO::config()->product_name." detected. Preparing database for 4.0 upgrade\n";
+			echo "Older version of ".\GO::config()->product_name." detected. Preparing database for 4.0 upgrade\n";
 		
 			$queries[]="TRUNCATE TABLE `go_state`";
 			$queries[]="delete from go_settings where name='version'";
@@ -431,7 +431,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 			foreach($queries as $query){
 				try {
-					GO::getDbConnection()->query($query);
+					\GO::getDbConnection()->query($query);
 				} catch (PDOException $e) {
 					echo $e->getMessage() . "\n";
 				}
@@ -453,26 +453,26 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 		
 		if(!version_compare( phpversion(), "5.3", ">="))
-			exit("You are running a PHP version older than 5.3. PHP 5.3 or greater is required to run Group-Office ".GO::config()->version);
+			exit("You are running a PHP version older than 5.3. PHP 5.3 or greater is required to run Group-Office ".\GO::config()->version);
 		
 		$this->lockAction();
 		
-		GO::session()->runAsRoot();
+		\GO::session()->runAsRoot();
 		
-		GO::clearCache();
+		\GO::clearCache();
 		
 		
 		
-		GO_Base_Db_Columns::$forceLoad=true;
+		\GO_Base_Db_Columns::$forceLoad=true;
 				
 		//don't be strict in upgrade process
-		GO::getDbConnection()->query("SET sql_mode=''");
+		\GO::getDbConnection()->query("SET sql_mode=''");
 		
 		
 		
 		$v3 = $this->_checkV3();
 		
-		$logDir = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'log/upgrade/');
+		$logDir = new \GO_Base_Fs_Folder(\GO::config()->file_storage_path.'log/upgrade/');
 		$logDir->create();
 		global $logFile;
 		
@@ -495,13 +495,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		ob_start("ob_upgrade_log");
 		
 		
-		echo "Updating ".GO::config()->product_name." database\n";
+		echo "Updating ".\GO::config()->product_name." database\n";
 		
 		//build an array of all update files. The queries are indexed by timestamp
 		//so they will all be executed in the right order.
 		$u = array();
 
-		require(GO::config()->root_path . 'install/updates.php');
+		require(\GO::config()->root_path . 'install/updates.php');
 		
 		//put the updates in an extra array dimension so we know to which module
 		//they belong too.
@@ -510,7 +510,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 
 
-		$modules = GO::modules()->getAllModules();
+		$modules = \GO::modules()->getAllModules();
 			
 		while ($module=array_shift($modules)) {
 			$updatesFile = $module->path . 'install/updates.php';
@@ -534,7 +534,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 //		var_dump($u);
 //		exit();
 		
-		$currentCoreVersion = GO::config()->get_setting('version');
+		$currentCoreVersion = \GO::config()->get_setting('version');
 		if (!$currentCoreVersion)
 			$currentCoreVersion = 0;
 		
@@ -553,7 +553,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				if($module=='core')
 					$currentVersion=$currentCoreVersion;
 				else
-					$currentVersion = GO::modules()->$module->version;
+					$currentVersion = \GO::modules()->$module->version;
 				
 				if(!isset($counts[$module]))
 					$counts[$module]=0;			
@@ -563,9 +563,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 					if ($counts[$module] > $currentVersion) {
 						if (substr($query, 0, 7) == 'script:') {
 							if ($module == 'core')
-								$updateScript = GO::config()->root_path . 'install/updatescripts/' . substr($query, 7);
+								$updateScript = \GO::config()->root_path . 'install/updatescripts/' . substr($query, 7);
 							else
-								$updateScript = GO::modules()->$module->path . 'install/updatescripts/' . substr($query, 7);
+								$updateScript = \GO::modules()->$module->path . 'install/updatescripts/' . substr($query, 7);
 
 							if (!file_exists($updateScript)) {
 								die($updateScript . ' not found!');
@@ -580,7 +580,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 							if (empty($params['test'])) {
 								try {
 									if(!empty($query))
-										GO::getDbConnection()->query($query);
+										\GO::getDbConnection()->query($query);
 								} catch (PDOException $e) {
 									//var_dump($e);
 									echo $e->getMessage() . "\n";
@@ -595,12 +595,12 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 						if (empty($params['test'])) {
 							if($module=='core')
-								GO::config()->save_setting('version', $counts[$module]);
+								\GO::config()->save_setting('version', $counts[$module]);
 							else{
 								
 								//echo $module.' updated to '.$counts[$module]."\n";
 								
-								$moduleModel = GO::modules()->$module;
+								$moduleModel = \GO::modules()->$module;
 								
 								$moduleModel->version=$counts[$module];
 								$moduleModel->save();
@@ -613,25 +613,25 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 
 		if (empty($params['test'])) {
-			echo "Database updated to version " . GO::config()->mtime, "\n";
+			echo "Database updated to version " . \GO::config()->mtime, "\n";
 			ob_flush();
 			
-			GO::config()->save_setting('upgrade_mtime', GO::config()->mtime);
+			\GO::config()->save_setting('upgrade_mtime', \GO::config()->mtime);
 		} else {
 			echo "Ran in test mode\n";
 		}
 		
 		echo "Removing cached javascripts...\n\n";	
 		//in some exceptions alowed deletes is still on false here.
-		GO_Base_Fs_File::setAllowDeletes(true);
-		GO::clearCache();
+		\GO_Base_Fs_File::setAllowDeletes(true);
+		\GO::clearCache();
 		//rebuild listeners
-		GO_Base_Observable::cacheListeners();		
+		\GO_Base_Observable::cacheListeners();		
 		if($v3){
 			
-//			if(GO::modules()->isInstalled('projects') && GO::modules()->isInstalled('files')){
+//			if(\GO::modules()->isInstalled('projects') && \GO::modules()->isInstalled('files')){
 //				echo "Renaming projects folder temporarily for new project paths\n";
-//				$folder = GO_Files_Model_Folder::model()->findByPath('projects');
+//				$folder = \GO_Files_Model_Folder::model()->findByPath('projects');
 //				if($folder){
 //					$folder->name='oldprojects';
 //					$folder->systemSave=true;
@@ -645,7 +645,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 //			echo "Done\n\n";
 //			ob_flush();
 			
-			$versioningFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'versioning');
+			$versioningFolder = new \GO_Base_Fs_Folder(\GO::config()->file_storage_path.'versioning');
 			if($versioningFolder->exists())
 				$versioningFolder->rename("versioning_backup_3_7");
 			
@@ -667,7 +667,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		if(!$this->isCli() && basename($_SERVER['PHP_SELF'])!='upgrade.php'){
 			echo '</pre><br /><br />';
-			echo '<a href="'.GO::config()->host.'">'.GO::t('cmdContinue').'</a>';
+			echo '<a href="'.\GO::config()->host.'">'.\GO::t('cmdContinue').'</a>';
 		}
 		
 		ob_end_flush();
@@ -696,13 +696,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		$lang1code = empty($params['lang1']) ? 'en' : $params['lang1'];
 		$lang2code = empty($params['lang2']) ? 'nl' : $params['lang2'];
 		
-		$commonLangFolder = new GO_Base_Fs_Folder(GO::config()->root_path.'language/');
+		$commonLangFolder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'language/');
 		$commonLangFolderContentArr = $commonLangFolder->ls();
-		$moduleModelArr = GO::modules()->getAllModules();
+		$moduleModelArr = \GO::modules()->getAllModules();
 		
 		echo "<h1>Translate tool</h1>";
 				
-		echo '<p><a href="'.GO::url("maintenance/zipLanguage",array("lang"=>$lang2code)).'">Download zip file for '.$lang2code.'</a></p>';
+		echo '<p><a href="'.\GO::url("maintenance/zipLanguage",array("lang"=>$lang2code)).'">Download zip file for '.$lang2code.'</a></p>';
 		
 		foreach ($commonLangFolderContentArr as $commonContentEl) {
 			if (get_class($commonContentEl)=='GO_Base_Fs_Folder') {				
@@ -792,10 +792,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 						}
 					}
 				} else {
-					$outputString .= '<i><font color="red">Could not compare '.str_replace(GO::config()->root_path, '', $langFile->path()).', because it has no translation contents!</font></i><br />';
+					$outputString .= '<i><font color="red">Could not compare '.str_replace(\GO::config()->root_path, '', $langFile->path()).', because it has no translation contents!</font></i><br />';
 				}
 			} else {
-				$outputString .= '<i><font color="red">Could not compare with '.str_replace(GO::config()->root_path, '', $langFile->path()).', because it cannot be made UTF-8!</font></i><br />';
+				$outputString .= '<i><font color="red">Could not compare with '.str_replace(\GO::config()->root_path, '', $langFile->path()).', because it cannot be made UTF-8!</font></i><br />';
 			}
 			
 			//for displaying errors
@@ -839,12 +839,12 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		$files=array();
 		
-		$languages = array_keys(GO::language()->getLanguages());
+		$languages = array_keys(\GO::language()->getLanguages());
 		
-		$commonLangFolder = new GO_Base_Fs_Folder(GO::config()->root_path.'language/');
+		$commonLangFolder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'language/');
 		$folders = $commonLangFolder->ls();
 		
-		$modules = GO::modules()->getAllModules();
+		$modules = \GO::modules()->getAllModules();
 		foreach($modules as $module){
 			$folder = new GO_Base_Fs_Folder($module->path.'language');
 			if($folder->exists())
@@ -930,17 +930,17 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		$fileNames = array();
 		
 		//gather file list in array
-		$commonLangFolder = new GO_Base_Fs_Folder(GO::config()->root_path.'language/');
+		$commonLangFolder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'language/');
 		if($commonLangFolder->exists()){
 			$commonLangFolderContentArr = $commonLangFolder->ls();
-			$moduleModelArr = GO::modules()->getAllModules();
+			$moduleModelArr = \GO::modules()->getAllModules();
 
 			foreach ($commonLangFolderContentArr as $commonLangFolder) {
 				if (get_class($commonLangFolder)=='GO_Base_Fs_Folder') {
 					$commonLangFileArr = $commonLangFolder->ls();
 					foreach ($commonLangFileArr as $commonLangFile)
 						if (get_class($commonLangFile)=='GO_Base_Fs_File' && $commonLangFile->name()==$langCode.'.php') {
-							$fileNames[] = str_replace(GO::config()->root_path,'',$commonLangFile->path());
+							$fileNames[] = str_replace(\GO::config()->root_path,'',$commonLangFile->path());
 						}
 				}
 			}
@@ -952,33 +952,33 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				$modLangFiles = $modLangFolder->ls();
 				foreach ($modLangFiles as $modLangFile) {
 					if ($modLangFile->name()==$langCode.'.php')
-						$fileNames[] = str_replace(GO::config()->root_path,'',$modLangFile->path());
+						$fileNames[] = str_replace(\GO::config()->root_path,'',$modLangFile->path());
 				}
 			}
 		}
 		
-		$tmpFile = GO_Base_Fs_File::tempFile($langCode.'-'.str_replace('.','-', GO::config()->version), 'zip');
+		$tmpFile = \GO_Base_Fs_File::tempFile($langCode.'-'.str_replace('.','-', \GO::config()->version), 'zip');
 		
 		//exec zip
-		$cmdString = GO::config()->cmd_zip.' '.$tmpFile->path().' '.implode(" ", $fileNames);
+		$cmdString = \GO::config()->cmd_zip.' '.$tmpFile->path().' '.implode(" ", $fileNames);
 		exec($cmdString,$outputArr, $retVal);
 		
 		if($retVal>0)
 			trigger_error("Creating ZIP file failed! ".implode("<br />", $outputArr), E_USER_ERROR);
 		
-		GO_Base_Util_Http::outputDownloadHeaders($tmpFile);
+		\GO_Base_Util_Http::outputDownloadHeaders($tmpFile);
 		$tmpFile->output();
 		$tmpFile->delete();
 	}
 	
 	protected function actionCheckDefaultModels(){
 		
-		GO::session()->closeWriting();
+		\GO::session()->closeWriting();
 		
 		if(!$this->isCli())			
 			echo '<pre>';
 		
-		$stmt = GO_Base_Model_User::model()->find();
+		$stmt = \GO_Base_Model_User::model()->find();
 		
 		foreach($stmt as $user){
 			echo "Checking ".$user->username."\n";
@@ -990,7 +990,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 	protected function actionResetState($params){
 		
-		GO::getDbConnection()->query("DELETE FROM go_state WHERE name!='summary-active-portlets' AND user_id=".intval($params['user_id']));
+		\GO::getDbConnection()->query("DELETE FROM go_state WHERE name!='summary-active-portlets' AND user_id=".intval($params['user_id']));
 
 		return array('success'=>true);
 	}
@@ -998,15 +998,15 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 	protected function actionRemoveEmptyStuff($params){
 		
-		GO::session()->closeWriting();
+		\GO::session()->closeWriting();
 		
 		if(!$this->isCli())			
 			echo '<pre>';
 		
-		if(GO::modules()->isInstalled("addressbook")){
+		if(\GO::modules()->isInstalled("addressbook")){
 			echo "\n\nProcessing addressbook\n";
 			flush();
-			$stmt = GO_Addressbook_Model_Addressbook::model()->find();
+			$stmt = \GO_Addressbook_Model_Addressbook::model()->find();
 			while($addressbook = $stmt->fetch()){
 				$contactStmt = $addressbook->contacts();
 				$companiesStmt = $addressbook->companies();
@@ -1019,11 +1019,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			}
 		}
 		
-		if(GO::modules()->isInstalled("calendar")){
+		if(\GO::modules()->isInstalled("calendar")){
 			echo "\n\nProcessing calendar\n";
 			flush();
 			
-			$stmt = GO_Calendar_Model_Calendar::model()->find();
+			$stmt = \GO_Calendar_Model_Calendar::model()->find();
 			while($calendar = $stmt->fetch()){
 				$eventStmt = $calendar->events();
 				
@@ -1035,11 +1035,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			}
 		}
 		
-		if(GO::modules()->isInstalled("tasks")){
+		if(\GO::modules()->isInstalled("tasks")){
 			echo "\n\nProcessing tasks\n";
 			flush();
 			
-			$stmt = GO_Tasks_Model_Tasklist::model()->find();
+			$stmt = \GO_Tasks_Model_Tasklist::model()->find();
 			while($tasklist = $stmt->fetch()){
 				$eventStmt = $tasklist->tasks();
 				
@@ -1052,11 +1052,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 		
 		
-		if(GO::modules()->isInstalled("notes")){
+		if(\GO::modules()->isInstalled("notes")){
 			echo "\n\nProcessing notes\n";
 			flush();
 			
-			$stmt = GO_Notes_Model_Category::model()->find();
+			$stmt = \GO_Notes_Model_Category::model()->find();
 			while($cat = $stmt->fetch()){
 				$eventStmt = $cat->notes();
 				
@@ -1072,7 +1072,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 	
 	protected function actionConvertToInnoDB(){
-		$stmt = GO::getDbConnection()->query("SHOW TABLES");
+		$stmt = \GO::getDbConnection()->query("SHOW TABLES");
 		$stmt->setFetchMode(PDO::FETCH_NUM);
 		
 		foreach($stmt as $record){

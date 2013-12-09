@@ -7,9 +7,9 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 	protected function actionTypes($params) {
 
 		if(isset($params['extend_model']))
-			$response['results'] = GO_Customfields_CustomfieldsModule::getCustomfieldTypes($params['extend_model']);
+			$response['results'] = \GO_Customfields_CustomfieldsModule::getCustomfieldTypes($params['extend_model']);
 		else
-			$response['results'] = GO_Customfields_CustomfieldsModule::getCustomfieldTypes();
+			$response['results'] = \GO_Customfields_CustomfieldsModule::getCustomfieldTypes();
 		$response['success']=true;
 
 		return $response;
@@ -31,7 +31,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 				for ($i = 0; $i < count($select_options); $i++) {
 
 					if (!empty($select_options[$i]['id'])) {
-						$so = GO_Customfields_Model_FieldSelectOption::model()->findByPk($select_options[$i]['id']);
+						$so = \GO_Customfields_Model_FieldSelectOption::model()->findByPk($select_options[$i]['id']);
 					} else {
 						$so = new \GO_Customfields_Model_FieldSelectOption();
 					}
@@ -46,7 +46,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 				}
 
 				//delete all other field options
-				$stmt = GO_Customfields_Model_FieldSelectOption::model()->find(array(
+				$stmt = \GO_Customfields_Model_FieldSelectOption::model()->find(array(
 						'by' => array(
 								array('field_id', $model->id),
 								array('id', $ids, 'NOT IN'),
@@ -66,12 +66,12 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 		} catch (PDOException $e) {
 			$msg = $e->getMessage();
 			if (strpos($msg,'SQLSTATE[42000]')===0 && strpos($msg,'1118')>14) {
-				$catModel = GO_Customfields_Model_Category::model()->findByPk($params['category_id']);
-				throw new \Exception(sprintf(GO::t('tooManyCustomfields','customfields'),  GO::t($catModel->extends_model,'customfields')));
+				$catModel = \GO_Customfields_Model_Category::model()->findByPk($params['category_id']);
+				throw new \Exception(sprintf(\GO::t('tooManyCustomfields','customfields'),  \GO::t($catModel->extends_model,'customfields')));
 			} else if (strpos($msg,'SQLSTATE[42000]')===0 && strpos($msg,'1074')>14) {
 				preg_match('/(max = ([0-9]+))/',$msg,$matches);
 				$str = !empty($matches[2]) ? $matches[2] : '';
-				throw new \Exception(sprintf(GO::t('customfieldTooLarge','customfields'),$str));
+				throw new \Exception(sprintf(\GO::t('customfieldTooLarge','customfields'),$str));
 			} else {
 				throw $e;
 			}
@@ -81,12 +81,12 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 	
 	protected function actionSelectOptions($params) {
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()->order('sort_order');
+		$findParams = \GO_Base_Db_FindParams::newInstance()->order('sort_order');
 		$findParams->getCriteria()->addCondition('field_id', $params["field_id"]);
 		
-		$stmt = GO_Customfields_Model_FieldSelectOption::model()->find($findParams);
+		$stmt = \GO_Customfields_Model_FieldSelectOption::model()->find($findParams);
 
-		$store = GO_Base_Data_Store::newInstance(GO_Customfields_Model_FieldSelectOption::model());
+		$store = \GO_Base_Data_Store::newInstance(\GO_Customfields_Model_FieldSelectOption::model());
 		$store->setStatement($stmt);
 		$store->getColumnModel()->formatColumn('text', 'html_entity_decode($model->text)');
 		return $store->getData();
@@ -96,7 +96,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 		$fields = json_decode($params['fields'], true);
 		$sort = 0;
 		foreach ($fields as $field) {
-			$model = GO_Customfields_Model_Field::model()->findByPk($field['id']);
+			$model = \GO_Customfields_Model_Field::model()->findByPk($field['id']);
 			$model->sort_index = $sort;
 			$model->category_id = $field['category_id'];
 			$model->save();
@@ -113,17 +113,17 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 //
 //		);
 		
-		return GO_Base_Db_FindParams::newInstance()
+		return \GO_Base_Db_FindParams::newInstance()
 						->limit(0)
 						->order(array('category.sort_index', 't.sort_index'), array('ASC', 'ASC'))
-						->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('extends_model', $params['extends_model'],'=','category'));
+						->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('extends_model', $params['extends_model'],'=','category'));
 	}
 
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('category_name', '$model->category->name');
 		$columnModel->formatColumn('column_name', '$model->columnName()');
 		$columnModel->formatColumn('type', '$model->customfieldtype->name()');
-		$columnModel->formatColumn('unique_values', '$model->unique_values ? GO::t("cmdYes") : GO::t("cmdNo")');
+		$columnModel->formatColumn('unique_values', '$model->unique_values ? \GO::t("cmdYes") : \GO::t("cmdNo")');
 		return parent::formatColumns($columnModel);
 	}
 
@@ -131,7 +131,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 		if (empty($params['tree_select_option_id'])) {
 			$model = new \GO_Customfields_Model_FieldTreeSelectOption();
 		} else {
-			$model = GO_Customfields_Model_FieldTreeSelectOption::model()->findByPk($params['tree_select_option_id']);
+			$model = \GO_Customfields_Model_FieldTreeSelectOption::model()->findByPk($params['tree_select_option_id']);
 		}
 
 		$model->setAttributes($params);
@@ -142,7 +142,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 
 	protected function actionImportSelectOptions($params) {
 
-		$importFile = GO::config()->getTempFolder() . 'selectoptionsimport.csv';
+		$importFile = \GO::config()->getTempFolder() . 'selectoptionsimport.csv';
 		if (is_uploaded_file($_FILES['importfile']['tmp_name'][0])) {
 			move_uploaded_file($_FILES['importfile']['tmp_name'][0], $importFile);
 		}
@@ -165,7 +165,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 
 	protected function actionImportTreeSelectOptions($params) {
 
-		$importFile = GO::config()->getTempFolder() . 'selectoptionsimport.csv';
+		$importFile = \GO::config()->getTempFolder() . 'selectoptionsimport.csv';
 		
 		if (is_uploaded_file($_FILES['importfile']['tmp_name'][0])) {
 			move_uploaded_file($_FILES['importfile']['tmp_name'][0], $importFile);
@@ -175,7 +175,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 			throw new \Exception('File was not uploaded!');
 		}
 		
-		$field = GO_Customfields_Model_Field::model()->findByPk($params['field_id']);
+		$field = \GO_Customfields_Model_Field::model()->findByPk($params['field_id']);
 		
 		$sort=1;
 		$csv = new \GO_Base_Fs_CsvFile($importFile);
@@ -187,7 +187,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 					$parent_id=0;
 
 				if (!empty($record[$i])) {
-					$existingModel = GO_Customfields_Model_FieldTreeSelectOption::model()->findSingleByAttributes(array(							
+					$existingModel = \GO_Customfields_Model_FieldTreeSelectOption::model()->findSingleByAttributes(array(							
 						'field_id'=>$params['field_id'],
 						'parent_id'=>$parent_id,
 						'name'=> $record[$i]

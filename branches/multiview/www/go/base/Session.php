@@ -70,8 +70,8 @@ class GO_Base_Session extends GO_Base_Observable{
 					}
 				}		
 			}
-			//GO::debug causes endless loop
-			//GO::debug("Started session");
+			//\GO::debug causes endless loop
+			//\GO::debug("Started session");
 		}
 		
 		$this->values = &$_SESSION['GO_SESSION'];
@@ -80,7 +80,7 @@ class GO_Base_Session extends GO_Base_Observable{
 			
 			//this log here causes endless loop and segfaults
 			//$this->_log("security_token");
-			$this->values['security_token']=GO_Base_Util_String::randomPassword(20,'a-z,A-Z,1-9');				
+			$this->values['security_token']=\GO_Base_Util_String::randomPassword(20,'a-z,A-Z,1-9');				
 		}
 	}
 	
@@ -111,9 +111,9 @@ class GO_Base_Session extends GO_Base_Observable{
 	 * @return GO_Base_Model_User 
 	 */
 	public function loginWithCookies(){
-		if(empty(GO::session()->values['user_id']) && !empty($_COOKIE['GO_UN']) && !empty($_COOKIE['GO_UN'])){
-			$username = GO_Base_Util_Crypt::decrypt($_COOKIE['GO_UN']);
-			$password = GO_Base_Util_Crypt::decrypt($_COOKIE['GO_PW']);
+		if(empty(\GO::session()->values['user_id']) && !empty($_COOKIE['GO_UN']) && !empty($_COOKIE['GO_UN'])){
+			$username = \GO_Base_Util_Crypt::decrypt($_COOKIE['GO_UN']);
+			$password = \GO_Base_Util_Crypt::decrypt($_COOKIE['GO_PW']);
 
 			//decryption might fail if mcrypt is not installed
 			if(!$username){
@@ -121,7 +121,7 @@ class GO_Base_Session extends GO_Base_Observable{
 				$password = $_COOKIE['GO_PW'];
 			}
 			
-			GO::debug("Attempting login with cookies for ".$username);
+			\GO::debug("Attempting login with cookies for ".$username);
 			
 			$user = $this->login($username, $password, false);
 			if(!$user)
@@ -135,16 +135,16 @@ class GO_Base_Session extends GO_Base_Observable{
 	 * Erases the temporary files directory for the currently logged on user. 
 	 */
 	public function clearUserTempFiles($recreate=true){
-		if(GO::user()){					
-			GO::config()->getTempFolder(false)->delete();
+		if(\GO::user()){					
+			\GO::config()->getTempFolder(false)->delete();
 			if($recreate)
-				GO::config()->getTempFolder();
+				\GO::config()->getTempFolder();
 		}
 	}
 	
 	private function _unsetRemindLoginCookies(){
-		GO_Base_Util_Http::unsetCookie('GO_UN');
-		GO_Base_Util_Http::unsetCookie('GO_PW');		
+		\GO_Base_Util_Http::unsetCookie('GO_UN');
+		\GO_Base_Util_Http::unsetCookie('GO_PW');		
 	}
 	
 	/**
@@ -156,9 +156,9 @@ class GO_Base_Session extends GO_Base_Observable{
 	public function logout() {
 		
 //		$username = isset(self::$username) ? self::$username : 'notloggedin';		
-		$username = GO::user() ? GO::user()->username : 'notloggedin';				
+		$username = \GO::user() ? \GO::user()->username : 'notloggedin';				
 		
-		GO::debug("Logout called for ".$username);
+		\GO::debug("Logout called for ".$username);
 
 		$old_session = $_SESSION;
 		$_SESSION=array();
@@ -181,10 +181,10 @@ class GO_Base_Session extends GO_Base_Observable{
 
 		$this->fireEvent('logout', array($old_session));
 		
-		if(!empty(GO::session()->values['countLogin']))
-			$this->_log(GO_Log_Model_Log::ACTION_LOGOUT);
+		if(!empty(\GO::session()->values['countLogin']))
+			$this->_log(\GO_Log_Model_Log::ACTION_LOGOUT);
 		
-		GO::infolog("LOGOUT for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
+		\GO::infolog("LOGOUT for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 	}
 	
 	/**
@@ -197,19 +197,19 @@ class GO_Base_Session extends GO_Base_Observable{
 			return false;
 		}else{		
 			
-			//also check if the user_id matches because GO::session()->runAsRoot() may haver changed it.
+			//also check if the user_id matches because \GO::session()->runAsRoot() may haver changed it.
 			if(empty($this->_user) || $this->_user->id!=$this->values['user_id']){
 				
-//				$cacheKey = 'GO_Base_Model_User:'.GO::session()->values['user_id'];
-//				$cachedUser = GO::cache()->get($cacheKey);
+//				$cacheKey = 'GO_Base_Model_User:'.\GO::session()->values['user_id'];
+//				$cachedUser = \GO::cache()->get($cacheKey);
 //				
 //				if($cachedUser){
-////					GO::debug("Returned cached user");
+////					\GO::debug("Returned cached user");
 //					self::$_user=$cachedUser;
 //				}else
 //				{
-					$this->_user = GO_Base_Model_User::model()->findByPk($this->values['user_id'], array(), true);
-//					GO::cache()->set($cacheKey, self::$_user);
+					$this->_user = \GO_Base_Model_User::model()->findByPk($this->values['user_id'], array(), true);
+//					\GO::cache()->set($cacheKey, self::$_user);
 //				}
 			}
 
@@ -229,18 +229,18 @@ class GO_Base_Session extends GO_Base_Observable{
 		if(!$this->fireEvent('beforelogin', array($username, $password)))
 			return false;			
 		
-		$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $username);
+		$user = \GO_Base_Model_User::model()->findSingleByAttribute('username', $username);
 		
 		$success=true;
 		
 		if (!$user){
-			GO::debug("LOGIN: User ".$username." not found");
+			\GO::debug("LOGIN: User ".$username." not found");
 			$success=false;
 		}elseif(!$user->enabled){
-			GO::debug("LOGIN: User ".$username." is disabled");
+			\GO::debug("LOGIN: User ".$username." is disabled");
 			$success=false;
 		}elseif(!$user->checkPassword($password)){
-			GO::debug("LOGIN: Incorrect password for ".$username);
+			\GO::debug("LOGIN: Incorrect password for ".$username);
 			$success=false;
 		}
 		
@@ -251,8 +251,8 @@ class GO_Base_Session extends GO_Base_Observable{
 			$str .= $_SERVER['REMOTE_ADDR'];
 		else
 			$str .= 'unknown';
-		GO::infolog($str);
-		GO::debug($str);
+		\GO::infolog($str);
+		\GO::debug($str);
 		
 		if(!$success){
 			return false;
@@ -261,7 +261,7 @@ class GO_Base_Session extends GO_Base_Observable{
 			$this->_user=$user;
 			$this->setCurrentUser($user->id);
 			
-			GO::language()->setLanguage($user->language);
+			\GO::language()->setLanguage($user->language);
 
 			if($countLogin){
 				$user->lastlogin=time();
@@ -291,9 +291,9 @@ class GO_Base_Session extends GO_Base_Observable{
 				session_regenerate_id();
 			
 			if($countLogin)
-				$this->_log(GO_Log_Model_Log::ACTION_LOGIN);
+				$this->_log(\GO_Log_Model_Log::ACTION_LOGIN);
 			
-			GO::session()->values['countLogin']=$countLogin;
+			\GO::session()->values['countLogin']=$countLogin;
 			
 			
 			
@@ -302,7 +302,7 @@ class GO_Base_Session extends GO_Base_Observable{
 	}
 	
 	private function _log($action){
-		if(GO::modules()->isInstalled('log')){	
+		if(\GO::modules()->isInstalled('log')){	
 			$log = new \GO_Log_Model_Log();			
 			$log->action=$action;						
 			$log->save();
@@ -315,7 +315,7 @@ class GO_Base_Session extends GO_Base_Observable{
 	 * the session is closed again.
 	 */
 	public function closeWriting(){	
-		GO::debug("Session writing closed");
+		\GO::debug("Session writing closed");
 		session_write_close();
 	}
 	
@@ -333,16 +333,16 @@ class GO_Base_Session extends GO_Base_Observable{
 	 */
 	public function runAs($id){
 		
-		GO::session()->closeWriting();
+		\GO::session()->closeWriting();
 		
 		//Close session writing so that the user won't stay root in browser sessions.
 		if(!isset($this->values['user_id']) || $id!=$this->values['user_id']){
-			$debug = !empty(GO::session()->values['debug']);
-			$debugSql = !empty(GO::session()->values['debugSql']);
+			$debug = !empty(\GO::session()->values['debug']);
+			$debugSql = !empty(\GO::session()->values['debugSql']);
 
 			
-			GO::session()->values=array('debug'=>$debug, 'debugSql'=>$debugSql);
-			GO::session()->setCurrentUser($id);
+			\GO::session()->values=array('debug'=>$debug, 'debugSql'=>$debugSql);
+			\GO::session()->setCurrentUser($id);
 		}
 	}
 	
@@ -352,8 +352,8 @@ class GO_Base_Session extends GO_Base_Observable{
 	 */
 	public function setCurrentUser($user_id) {
 		
-//		if(GO::modules()->isInstalled("log"))
-//			GO_Log_Model_Log::create ("setcurrentuser", "Set user ID to $user_id");
+//		if(\GO::modules()->isInstalled("log"))
+//			\GO_Log_Model_Log::create ("setcurrentuser", "Set user ID to $user_id");
 	
 		if($user_id  instanceof GO_Base_Model_User){
 			$this->_user=$user_id;
@@ -366,10 +366,10 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		
 		
-		if(!GO::user())
-			throw new \Exception("Could not set user with id ".$user_id." in GO_Base_Session::setCurrentUser()!");
+		if(!\GO::user())
+			throw new \Exception("Could not set user with id ".$user_id." in \GO_Base_Session::setCurrentUser()!");
 		
 		//for logging
-		GO::session()->values['username']=GO::user()->username;
+		\GO::session()->values['username']=\GO::user()->username;
 	}
 }

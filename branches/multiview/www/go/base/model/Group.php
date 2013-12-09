@@ -46,7 +46,7 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getLocalizedName() {
-		return GO::t('userGroup');
+		return \GO::t('userGroup');
 	}
 	
   public function aclField(){
@@ -58,11 +58,11 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function beforeDelete() {
-		if($this->id==GO::config()->group_root){
-			throw new \Exception(GO::t('noDeleteAdmins','groups'));
+		if($this->id==\GO::config()->group_root){
+			throw new \Exception(\GO::t('noDeleteAdmins','groups'));
 		}	
-		if($this->id==GO::config()->group_everyone){
-			throw new \Exception(GO::t('noDeleteEveryone','groups'));
+		if($this->id==\GO::config()->group_everyone){
+			throw new \Exception(\GO::t('noDeleteEveryone','groups'));
 		}
 		return parent::beforeDelete();
 	}
@@ -70,7 +70,7 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 		
 		if($wasNew){
-			$this->acl->addGroup($this->id, GO_Base_Model_Acl::READ_PERMISSION);
+			$this->acl->addGroup($this->id, \GO_Base_Model_Acl::READ_PERMISSION);
 		}
 		
 		return parent::afterSave($wasNew);
@@ -103,7 +103,7 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
   }
 	
 	public function removeUser($user_id){
-		$model = GO_Base_Model_UserGroup::model()->findByPk(array('user_id'=>$user_id, 'group_id'=>$this->pk));
+		$model = \GO_Base_Model_UserGroup::model()->findByPk(array('user_id'=>$user_id, 'group_id'=>$this->pk));
 		if($model)
 			return $model->delete();
 		else
@@ -117,18 +117,18 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
    * @return GO_Base_Model_UserGroup or false 
    */
   public function hasUser($user_id){
-    return GO_Base_Model_UserGroup::model()->findByPk(array('user_id'=>$user_id, 'group_id'=>$this->pk));
+    return \GO_Base_Model_UserGroup::model()->findByPk(array('user_id'=>$user_id, 'group_id'=>$this->pk));
   }
 	
 	public function checkDatabase() {
 		
-		if($this->id==GO::config()->group_everyone){
-			$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
+		if($this->id==\GO::config()->group_everyone){
+			$stmt = \GO_Base_Model_User::model()->find(\GO_Base_Db_FindParams::newInstance()->ignoreAcl());
 			while($user = $stmt->fetch())
 				$this->addUser ($user->id);
 		}
 		
-		if($this->id==GO::config()->group_root){
+		if($this->id==\GO::config()->group_root){
 			$this->addUser(1);
 		}
 		

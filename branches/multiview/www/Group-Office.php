@@ -76,7 +76,7 @@ if($GO_CONFIG->debug)
 	
 	if(class_exists('GO')){
 		$trace = debug_backtrace();
-		GO::debug("Warning: old Group-Office.php included\n".var_export($trace[0], true)."\n");
+		\GO::debug("Warning: old Group-Office.php included\n".var_export($trace[0], true)."\n");
 	}	
 }
 
@@ -222,7 +222,7 @@ umask(0);
 
 
 if($GO_SECURITY->user_id && !isset($_SESSION['GO_SESSION']['name'])){
-	require_once(GO::config()->root_path.'classes/base/users.class.inc.php');
+	require_once(\GO::config()->root_path.'classes/base/users.class.inc.php');
 	$GO_USERS = new GO_USERS();
 	$user = $GO_USERS->get_user($GO_SECURITY->user_id);
 	$GO_USERS->update_session($user);
@@ -234,5 +234,5 @@ if($GO_SECURITY->user_id && !isset($_SESSION['GO_SESSION']['name'])){
 //if(!class_exists('GO')){
 //	$root = dirname(__FILE__).'/';
 //	require_once($root.'go/GO.php');
-//	GO::init();
+//	\GO::init();
 //}

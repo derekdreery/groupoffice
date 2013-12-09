@@ -52,14 +52,14 @@ class GO_Base_Model_Grouped extends GO_Base_Model {
 	public function load($modelName, $groupBy, $selectFields, GO_Base_Db_FindParams $findParams=null){
 		
 		if(!isset($findParams))
-			$findParams = GO_Base_Db_FindParams::newInstance ();
+			$findParams = \GO_Base_Db_FindParams::newInstance ();
 		
 		$findParams->ignoreAcl()
 				->select($selectFields)
 				->group($groupBy)
 				->fetchClass(get_class($this));
 
-		$stmt = GO::getModel($modelName)->find($findParams);
+		$stmt = \GO::getModel($modelName)->find($findParams);
 		
 		return $stmt;
 	}

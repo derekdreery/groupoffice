@@ -151,7 +151,7 @@ try {
 
 			$event = $cal->get_event($event_id);
 
-			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $event['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
+			if($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $event['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
 				throw new \AccessDeniedException();
 			}
 
@@ -292,7 +292,7 @@ try {
 				$calendar = $cal->get_calendar($old_event['calendar_id']);
 
 				//an event is moved or resized
-				if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_event['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
+				if($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_event['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 					throw new \AccessDeniedException();
 				}
 
@@ -518,7 +518,7 @@ try {
 
 			$calendar = $cal->get_calendar($event['calendar_id']);
 
-			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
+			if($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 				throw new \AccessDeniedException();
 			}
 
@@ -719,7 +719,7 @@ try {
 
 							if($calendar_id != $calendar['id']) {
 
-								if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id'])>=GO_SECURITY::WRITE_PERMISSION) {
+								if($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id'])>=GO_SECURITY::WRITE_PERMISSION) {
 									$response['cal'] = $calendar;
 
 									$event['calendar_id'] = $calendar['id'];
@@ -748,7 +748,7 @@ try {
 							$calendar = $cal->get_default_import_calendar($participant['user_id']);
 
 							if($calendar_id != $calendar['id']) {
-								if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id'])>=GO_SECURITY::WRITE_PERMISSION) {
+								if($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id'])>=GO_SECURITY::WRITE_PERMISSION) {
 									if(!$cal->has_participants_event($event_id, $calendar['id'])){
 										$event['calendar_id'] = $calendar['id'];
 										/*if(!isset($event['resource_event_id'])) {
@@ -1005,7 +1005,7 @@ try {
 			if($calendar['id']>0) {
 				$old_calendar = $cal->get_calendar($calendar['id']);
 				$insert = false;
-				if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
+				if($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 					throw new \AccessDeniedException();
 				}
 				if(!$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id))
@@ -1028,7 +1028,7 @@ try {
 				if(!empty($calendar['group_id'])){
 					$cal->get_group_admins($calendar['group_id']);
 					while($group_admin = $cal->next_record())
-						$GLOBALS['GO_SECURITY']->add_user_to_acl($group_admin['user_id'], $calendar['acl_id'], GO_SECURITY::MANAGE_PERMISSION);
+						$GLOBALS['\GO_SECURITY']->add_user_to_acl($group_admin['user_id'], $calendar['acl_id'], GO_SECURITY::MANAGE_PERMISSION);
 				}
 			}
 
@@ -1086,7 +1086,7 @@ try {
 			if($view['id']>0) {
 				$old_view = $cal->get_view($view['id']);
 
-				if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_view['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
+				if($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_view['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 					throw new \AccessDeniedException();
 				}
 				$cal->update_view($view);
@@ -1307,7 +1307,7 @@ try {
 					$new_event['calendar_id'] = ($calendar_id) ? $calendar_id : $event['calendar_id'];
 
 					$calendar = $cal->get_calendar($new_event['calendar_id']);
-					if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION){
+					if($GLOBALS['\GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION){
 						throw new \AccessDeniedException();
 					}
 

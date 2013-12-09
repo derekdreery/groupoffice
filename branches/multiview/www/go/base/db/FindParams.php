@@ -15,7 +15,7 @@
  */
 
 /**
- * The parameters for GO_Base_Db_ActiveRecord::find() can be constructed with this class
+ * The parameters for \GO_Base_Db_ActiveRecord::find() can be constructed with this class
  *
  * @package GO.base.db
  * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
@@ -219,16 +219,16 @@ class GO_Base_Db_FindParams{
 	 * 
 	 * For example select all users with their event counts:
 	 * 
-	 *  GO_Base_Model_User::model()->addRelation('events', array(
-	 *		'type'=>  GO_Base_Db_ActiveRecord::HAS_MANY, 
+	 *  \GO_Base_Model_User::model()->addRelation('events', array(
+	 *		'type'=>  \GO_Base_Db_ActiveRecord::HAS_MANY, 
 	 *		'model'=>'GO_Calendar_Model_Event', 
 	 *		'field'=>'user_id'				
 	 *	));
 	 *		
-	 *		$fp = GO_Base_Db_FindParams::newInstance()->groupRelation('events', 'count(events.id) as eventCount');
+	 *		$fp = \GO_Base_Db_FindParams::newInstance()->groupRelation('events', 'count(events.id) as eventCount');
 	 *
 	 *				
-	 *		$stmt = GO_Base_Model_User::model()->find($fp);
+	 *		$stmt = \GO_Base_Model_User::model()->find($fp);
 	 *		
 	 *		foreach($stmt as $user){
 	 *			echo $user->name.': '.$user->eventCount."<br />";
@@ -433,7 +433,7 @@ class GO_Base_Db_FindParams{
 	 */
 	public function joinModel($params){	
 			
-		$joinModel = GO::getModel($params['model']);
+		$joinModel = \GO::getModel($params['model']);
 
 		if(!isset($params['foreignField']))
 			$params['foreignField']=$joinModel->primaryKey();
@@ -501,7 +501,7 @@ class GO_Base_Db_FindParams{
 	 * 
 	 * Note: this is ignored when you use ignoreAcl()
 	 * 
-	 * @param int $level See GO_Base_Model_Acl constants for available levels. It defaults to GO_Base_Model_Acl::READ_PERMISSION
+	 * @param int $level See \GO_Base_Model_Acl constants for available levels. It defaults to GO_Base_Model_Acl::READ_PERMISSION
 	 * @param int $user_id Defaults to the currently logged in user
 	 * @return GO_Base_Db_FindParams 
 	 */

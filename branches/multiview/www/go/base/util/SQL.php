@@ -67,7 +67,7 @@ class GO_Base_Util_SQL {
 		$queries = self::getSqlQueries($file);
 		try{
 			foreach($queries as $query)
-				GO::getDbConnection ()->query($query);
+				\GO::getDbConnection ()->query($query);
 		}catch(Exception $e){
 			throw new \Exception("Could not execute query: ".$query."\n\n".(string) $e);
 		}

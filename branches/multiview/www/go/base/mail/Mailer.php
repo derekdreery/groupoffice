@@ -32,7 +32,7 @@ class GO_Base_Mail_Mailer extends Swift_Mailer{
   public static function newGoInstance($transport=false)
   {
 		if(!$transport)
-			$transport=GO_Base_Mail_Transport::newGoInstance();
+			$transport=\GO_Base_Mail_Transport::newGoInstance();
 		
     $mailer = new self($transport);		
 		return $mailer;
@@ -40,10 +40,10 @@ class GO_Base_Mail_Mailer extends Swift_Mailer{
 	
 	public function send(Swift_Mime_Message $message, &$failedRecipients = null) {
 		
-		if(GO::config()->debug)
-			GO::debug("Sending e-mail to ".implode(",",array_keys($message->getTo())));
+		if(\GO::config()->debug)
+			\GO::debug("Sending e-mail to ".implode(",",array_keys($message->getTo())));
 		
-		if(GO::modules()->isInstalled("log")){
+		if(\GO::modules()->isInstalled("log")){
 			
 			$str = "";
 			
@@ -67,7 +67,7 @@ class GO_Base_Mail_Mailer extends Swift_Mailer{
 			if(!empty($to))
 				$str .= implode(",",array_keys($to));
 			
-			GO_Log_Model_Log::create ("email", $str);
+			\GO_Log_Model_Log::create ("email", $str);
 		}
 		
 //		debug_print_backtrace();

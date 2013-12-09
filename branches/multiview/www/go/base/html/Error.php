@@ -3,12 +3,12 @@
 class GO_Base_Html_Error extends GO_Base_Html_Input {
 	public static function getError($inputName='form') {
 		$error = parent::getError($inputName);
-		unset(GO::session()->values['formErrors'][$inputName]);
+		unset(\GO::session()->values['formErrors'][$inputName]);
 		return $error;
 	}
 	
 	public static function printErrors(){
-		foreach(GO::session()->values['formErrors'] as $inputName=>$error){
+		foreach(\GO::session()->values['formErrors'] as $inputName=>$error){
 			echo self::getError($inputName).'<br />';
 		}
 	}
@@ -46,7 +46,7 @@ class GO_Base_Html_Error extends GO_Base_Html_Input {
 	
 	public static function validateModel($model,$attrmapping=false){
 		
-//		if(GO_Base_Util_Http::isPostRequest()){
+//		if(\GO_Base_Util_Http::isPostRequest()){
 			
 //			if(!empty($attrmapping)){
 //				foreach($attrmapping as $attr=>$replaceattr){
@@ -65,9 +65,9 @@ class GO_Base_Html_Error extends GO_Base_Html_Input {
 					
 					$formAttribute = isset($attrmapping[$attribute]) ? $attrmapping[$attribute] : $attribute;
 					
-					GO_Base_Html_Input::setError($formAttribute, $message); // replace is needed because of a mix up with order model and company model
+					\GO_Base_Html_Input::setError($formAttribute, $message); // replace is needed because of a mix up with order model and company model
 				}
-				GO_Base_Html_Error::setError(GO::t('errorsInForm'));
+				\GO_Base_Html_Error::setError(\GO::t('errorsInForm'));
 				return false;
 			}else
 			{

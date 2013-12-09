@@ -59,12 +59,12 @@ class GO_Favorites_Controller_CalendarFavorites extends GO_Base_Controller_Abstr
 	 */
 	protected function actionSelectNewStore($params){
 		
-		$model = GO::getModel($this->modelName());
-		$linkModel = GO::getModel($this->linkModelName());
+		$model = \GO::getModel($this->modelName());
+		$linkModel = \GO::getModel($this->linkModelName());
 		
-		$store = GO_Base_Data_Store::newInstance($model);
+		$store = \GO_Base_Data_Store::newInstance($model);
 		
-		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
 			->addCondition($this->getRemoteKey(), $params['model_id'],'=','lt')
 			->addCondition('group_id', 1,'=','t') // DEZE DOET NIETS, TODO: CHECKEN
 			->addCondition($model->primaryKey(), 'lt.'.$this->linkModelField(), '=', 't', true, true);			
@@ -76,7 +76,7 @@ class GO_Favorites_Controller_CalendarFavorites extends GO_Base_Controller_Abstr
 		if($this->uniqueSelection){
 			$findParams->join($linkModel->tableName(), $joinCriteria, 'lt', 'LEFT');
 
-			$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+			$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
 							->addCondition($this->linkModelField(), null,'IS','lt');
 			$findParams->criteria($findCriteria);
 		}

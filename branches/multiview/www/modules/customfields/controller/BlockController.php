@@ -9,7 +9,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 		$columnModel->formatColumn('customfield_datatype', '$model->customField->datatype', array(), 'field_id');
 		$columnModel->formatColumn('extends_model', '$model->customField->category->extends_model', array(), 'field_id');
 
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 			->joinModel(array(
 				'model'=>'GO_Customfields_Model_Field',
 				'localTableAlias'=>'t',
@@ -28,19 +28,19 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 			))
 			->join(
 				'go_acl',
-				GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.acl_id', 'cfcat.acl_id'),
+				\GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.acl_id', 'cfcat.acl_id'),
 				'a'
 				)
 			->join(
 				'go_users_groups',
-				GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.group_id', 'ug.group_id'),
+				\GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.group_id', 'ug.group_id'),
 				'ug',
 				'LEFT'
 			)
 			->criteria(
-				GO_Base_Db_FindCriteria::newInstance()
-					->addCondition('user_id', GO::user()->id, '=', 'a', false)
-					->addCondition('user_id', GO::user()->id, '=', 'ug', false)
+				\GO_Base_Db_FindCriteria::newInstance()
+					->addCondition('user_id', \GO::user()->id, '=', 'a', false)
+					->addCondition('user_id', \GO::user()->id, '=', 'ug', false)
 			);
 		
 		$store = new \GO_Base_Data_DbStore('GO_Customfields_Model_Block', $columnModel, $params, $findParams);
@@ -52,7 +52,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 	protected function actionSubmit($params) {
 		
 		if (!empty($params['id']))
-			$blockModel = GO_Customfields_Model_Block::model()->findByPk($params['id']);
+			$blockModel = \GO_Customfields_Model_Block::model()->findByPk($params['id']);
 		else
 			$blockModel = new \GO_Customfields_Model_Block();
 		
@@ -66,11 +66,11 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 	protected function actionLoad($params) {
 		
 		if (!empty($params['id']))
-			$blockModel = GO_Customfields_Model_Block::model()->findByPk($params['id']);
+			$blockModel = \GO_Customfields_Model_Block::model()->findByPk($params['id']);
 		else
 			$blockModel = new \GO_Customfields_Model_Block();
 		
-		$remoteComboFields = array('field_id' => '"[".GO::t($model->customField->category->extends_model,"customfields")."] ".$model->customField->category->name." : ".$model->customField->name." (col_".$model->id.")"');
+		$remoteComboFields = array('field_id' => '"[".\GO::t($model->customField->category->extends_model,"customfields")."] ".$model->customField->category->name." : ".$model->customField->name." (col_".$model->id.")"');
 		
 		echo $this->renderForm($blockModel,$remoteComboFields);
 		
@@ -85,7 +85,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 		$columnModel->formatColumn('extends_model', '$model->customField->category->extends_model', array(), 'field_id');
 		$columnModel->formatColumn('enabled', '!empty($model->enabled_block_id)', array(), 'enabled_block_id');
 
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 			->select('t.*,eb.block_id AS enabled_block_id')
 			->joinModel(array(
 				'model'=>'GO_Customfields_Model_EnabledBlock',
@@ -94,7 +94,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 				'foreignField'=>'block_id',
 				'tableAlias'=>'eb',
 				'type'=>'LEFT',
-				'criteria'=>GO_Base_Db_FindCriteria::newInstance()
+				'criteria'=>\GO_Base_Db_FindCriteria::newInstance()
 					->addCondition('model_type_name',$params['model_name'],'=','eb')
 					->addCondition('model_id',$params['model_id'],'=','eb')
 			))
@@ -116,19 +116,19 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 			))
 			->join(
 				'go_acl',
-				GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.acl_id', 'cfcat.acl_id'),
+				\GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.acl_id', 'cfcat.acl_id'),
 				'a'
 				)
 			->join(
 				'go_users_groups',
-				GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.group_id', 'ug.group_id'),
+				\GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.group_id', 'ug.group_id'),
 				'ug',
 				'LEFT'
 			)
 			->criteria(
-				GO_Base_Db_FindCriteria::newInstance()
-					->addCondition('user_id', GO::user()->id, '=', 'a', false)
-					->addCondition('user_id', GO::user()->id, '=', 'ug', false)
+				\GO_Base_Db_FindCriteria::newInstance()
+					->addCondition('user_id', \GO::user()->id, '=', 'a', false)
+					->addCondition('user_id', \GO::user()->id, '=', 'ug', false)
 			);
 		
 		$store = new \GO_Base_Data_DbStore('GO_Customfields_Model_Block', $columnModel, $params, $findParams);
@@ -141,7 +141,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 		
 		$response['success'] = true;
 		
-		$enableBlockModel = GO_Customfields_Model_EnabledBlock::model()
+		$enableBlockModel = \GO_Customfields_Model_EnabledBlock::model()
 			->findSingleByAttributes(array(
 				'block_id' => $params['block_id'],
 				'model_id' => $params['model_id'],

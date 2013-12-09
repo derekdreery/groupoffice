@@ -67,7 +67,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	/**
 	 * Get the temporary file for this attachment
 	 * 
-	 * @return string Relative to GO::config()->tmp_dir 
+	 * @return string Relative to \GO::config()->tmp_dir 
 	 */
 	public function getTempFile(){
 		return isset($this->_tmp_file) ? $this->_tmp_file : false;
@@ -95,7 +95,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 		if(empty($this->_tmp_file))
 			return false;
 		else {
-			return file_exists(GO::config()->tmpdir.$this->_tmp_file);
+			return file_exists(\GO::config()->tmpdir.$this->_tmp_file);
 		}
 	}
 	
@@ -106,10 +106,10 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 */
 	public function getUrl(){
 		if($this->getExtension()=='dat'){			
-			return GO::url('email/message/tnefAttachmentFromTempFile', array('tmp_file'=>$this->getTempFile()));
+			return \GO::url('email/message/tnefAttachmentFromTempFile', array('tmp_file'=>$this->getTempFile()));
 		}else
 		{		
-			return GO::url('core/downloadTempFile', array('path'=>$this->getTempFile()));		
+			return \GO::url('core/downloadTempFile', array('path'=>$this->getTempFile()));		
 		}		
 	}
 	
@@ -170,7 +170,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 * @return string 
 	 */
 	public function getHumanSize(){
-		return GO_Base_Util_Number::formatSize($this->getEstimatedSize());
+		return \GO_Base_Util_Number::formatSize($this->getEstimatedSize());
 	}
 	
 	/**

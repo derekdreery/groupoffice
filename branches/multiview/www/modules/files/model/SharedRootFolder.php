@@ -51,22 +51,22 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 		$findParams = new \GO_Base_Db_FindParams();
 
 		$findParams->getCriteria()
-						->addModel(GO_Files_Model_Folder::model())
+						->addModel(\GO_Files_Model_Folder::model())
 						->addCondition('visible', 1)
 						->addCondition('user_id', $user_id, '!=');
 
-		return GO_Files_Model_Folder::model()->find($findParams);
+		return \GO_Files_Model_Folder::model()->find($findParams);
 	}
 
 	private function _getLastMtime($user_id) {
 		
-		GO_Files_Model_Folder::model()->addRelation('aclItem',array(
+		\GO_Files_Model_Folder::model()->addRelation('aclItem',array(
 			"type"=>self::BELONGS_TO,
 			"model"=>"GO_Base_Model_Acl",
 			"field"=>'acl_id'
 		));
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()->debugSql()
+		$findParams = \GO_Base_Db_FindParams::newInstance()->debugSql()
 						->select("max(a.mtime) AS mtime")
 						->single()
 						->joinModel(array(
@@ -76,22 +76,22 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 						));
 		
 		$findParams->getCriteria()
-						->addModel(GO_Files_Model_Folder::model())
+						->addModel(\GO_Files_Model_Folder::model())
 						->addCondition('visible', 1)
 						->addCondition('user_id', $user_id, '!=');
 		
 		
-		$result = GO_Files_Model_Folder::model()->find($findParams);
+		$result = \GO_Files_Model_Folder::model()->find($findParams);
 		
 		return $result->mtime;		
 	}
 
 	public function rebuildCache($user_id, $force=false) {
 		
-		$lastBuildTime = $force ? 0 : GO::config()->get_setting('files_shared_cache_ctime', $user_id);
+		$lastBuildTime = $force ? 0 : \GO::config()->get_setting('files_shared_cache_ctime', $user_id);
 		if(!$lastBuildTime || $this->_getLastMtime($user_id)>$lastBuildTime){	
 
-			GO::debug("Rebuilding shared cache");
+			\GO::debug("Rebuilding shared cache");
 			$this->deleteByAttribute('user_id', $user_id);
 
 			$stmt = $this->_findShares($user_id);
@@ -119,7 +119,7 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 				}
 			}
 			
-			GO::config()->save_setting('files_shared_cache_ctime',time(), $user_id);
+			\GO::config()->save_setting('files_shared_cache_ctime',time(), $user_id);
 			
 			return time();
 		}else

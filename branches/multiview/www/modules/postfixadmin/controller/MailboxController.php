@@ -54,7 +54,7 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 				//todo create new domain
 				$domainModel = new	GO_Postfixadmin_Model_Domain();
 				$domainModel->domain = $params['domain'];
-				$domainModel->user_id = GO::user()->id;
+				$domainModel->user_id = \GO::user()->id;
 				$domainModel->save();
 			}
 			$params['domain_id']=$domainModel->id;
@@ -68,7 +68,7 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 		}
 		
 		if ($params['password']!=$params['password2'])
-			throw new Exception(GO::t('passwordMatchError'));
+			throw new Exception(\GO::t('passwordMatchError'));
 		
 		if(empty($params['password']))
 			unset($params['password']);
@@ -110,7 +110,7 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	protected function actionCacheUsage($params){
 		$this->requireCli();
 
-		if(!GO::modules()->isInstalled('postfixadmin'))
+		if(!\GO::modules()->isInstalled('postfixadmin'))
 			trigger_error('Postfixadmin module must be installed',E_USER_ERROR);
 
 		$activeStmt = GO_Postfixadmin_Model_Mailbox::model()->find();

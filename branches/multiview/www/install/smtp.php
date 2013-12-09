@@ -2,12 +2,12 @@
 
 require('header.php');
 
-if($_SERVER['REQUEST_METHOD']=='POST' && GO_Base_Html_Error::checkRequired()){
+if($_SERVER['REQUEST_METHOD']=='POST' && \GO_Base_Html_Error::checkRequired()){
 
 	foreach($_POST as $key=>$value){
-		GO::config()->$key=$value;
+		\GO::config()->$key=$value;
 	}
-	GO::config()->save();
+	\GO::config()->save();
 
 	header('Location: database.php');
 }
@@ -18,23 +18,23 @@ if(isset($error))
 ?>
 <h1>SMTP server</h1>
 <p>
-	<?php echo GO::config()->product_name; ?> needs to connect to an SMTP server to send e-mail. Please fill in the details for your SMTP server.
+	<?php echo \GO::config()->product_name; ?> needs to connect to an SMTP server to send e-mail. Please fill in the details for your SMTP server.
 </p>
 
 <?php
 
-GO_Base_Html_Input::render(array(
+\GO_Base_Html_Input::render(array(
 		"label"=>"SMTP server",
 		"name"=>"smtp_server",
-		"value"=>GO::config()->smtp_server,
+		"value"=>\GO::config()->smtp_server,
 		"required"=>true
 ));
 
 
-GO_Base_Html_Input::render(array(
+\GO_Base_Html_Input::render(array(
 		"label"=>"Port",
 		"name"=>"smtp_port",
-		"value"=>GO::config()->smtp_port,
+		"value"=>\GO::config()->smtp_port,
 		"required"=>true
 ));
 
@@ -44,23 +44,23 @@ If your SMTP server requires authentication please fill in the username and pass
 </p>
 <?php
 
-GO_Base_Html_Input::render(array(
+\GO_Base_Html_Input::render(array(
 		"label"=>"Username",
 		"name"=>"smtp_username",
-		"value"=>GO::config()->smtp_username
+		"value"=>\GO::config()->smtp_username
 ));
 
 
-GO_Base_Html_Input::render(array(
+\GO_Base_Html_Input::render(array(
 		"label"=>"Password",
 		"name"=>"smtp_password",
-		"value"=>GO::config()->smtp_password
+		"value"=>\GO::config()->smtp_password
 ));
 
-GO_Base_Html_Select::render(array(
+\GO_Base_Html_Select::render(array(
 		"label"=>"Encryption",
 		"name"=>"smtp_encryption",
-		"value"=>GO::config()->smtp_encryption,
+		"value"=>\GO::config()->smtp_encryption,
 		"options"=>array(
 				''=>'No encryption',
 				'ssl'=>'SSL',

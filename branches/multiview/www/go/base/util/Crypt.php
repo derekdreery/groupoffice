@@ -180,13 +180,13 @@ class GO_Base_Util_Crypt {
 
 	private static function getKey() {
 
-		$key_file = GO::config()->file_storage_path . 'key.txt';
+		$key_file = \GO::config()->file_storage_path . 'key.txt';
 
 		if (file_exists($key_file)) {
 			$key = file_get_contents($key_file);
 		} else {
 
-			$key = GO_Base_Util_String::randomPassword(20);
+			$key = \GO_Base_Util_String::randomPassword(20);
 			if (file_put_contents($key_file, $key)) {
 				chmod($key_file, 0400);
 			} else {

@@ -50,8 +50,8 @@ class GO_Base_Language{
 		if(!$isoCode){
 			if(isset($_REQUEST['SET_LANGUAGE'])){
 				$this->_langIso=$_REQUEST['SET_LANGUAGE'];
-			}elseif(GO::user()){
-				$this->_langIso=GO::user()->language;
+			}elseif(\GO::user()){
+				$this->_langIso=\GO::user()->language;
 			}else{
 				$this->_langIso=$this->_getDefaultLanguage();
 			}
@@ -82,7 +82,7 @@ class GO_Base_Language{
 				return $lang;
 		}
 		
-		return GO::config()->language;		
+		return \GO::config()->language;		
 	}
 	
 	/**
@@ -105,7 +105,7 @@ class GO_Base_Language{
 	/**
 	 * Translates a language variable name into the local language.
 	 * 
-	 * Note: You can use GO::t() instead. It's a shorter alias.
+	 * Note: You can use \GO::t() instead. It's a shorter alias.
 	 * 
 	 * @param String $name Name of the translation variable
 	 * @param String $module Name of the module to find the translation
@@ -137,12 +137,12 @@ class GO_Base_Language{
 			}
 		}
 		
-		return str_replace('{product_name}',GO::config()->product_name,$translation);
+		return str_replace('{product_name}',\GO::config()->product_name,$translation);
 	}
 	
 	private function _replaceProductName($l){
 		foreach($l as $key=>$value)
-			$l[$key]=str_replace('{product_name}',GO::config()->product_name,$value);
+			$l[$key]=str_replace('{product_name}',\GO::config()->product_name,$value);
 		return $l;
 	}
 	
@@ -153,7 +153,7 @@ class GO_Base_Language{
 			if($file)
 				require($file);
 			
-			//$langcode = GO::user() ? GO::user()->language : GO::config()->language;
+			//$langcode = \GO::user() ? \GO::user()->language : \GO::config()->language;
 			$defaultLang=isset($l) ? $l : array();
 			unset($l);
 			
@@ -163,7 +163,7 @@ class GO_Base_Language{
 				if($file){
 					require($file);
 					if(isset($l)){
-						$defaultLang = GO_Base_Util_Array::mergeRecurive($defaultLang, $l);
+						$defaultLang = \GO_Base_Util_Array::mergeRecurive($defaultLang, $l);
 						unset($l);
 					}
 				}
@@ -173,7 +173,7 @@ class GO_Base_Language{
 			if($file){
 				require($file);
 				if(isset($l)){
-					$defaultLang = GO_Base_Util_Array::mergeRecurive($defaultLang, $l);
+					$defaultLang = \GO_Base_Util_Array::mergeRecurive($defaultLang, $l);
 					unset($l);
 				}
 			}
@@ -191,9 +191,9 @@ class GO_Base_Language{
 	
 	private function _find_file($lang, $module, $basesection){
 		if($module=='base')
-			$dir=GO::config()->root_path.'language/'.$basesection.'/';
+			$dir=\GO::config()->root_path.'language/'.$basesection.'/';
 		else
-			$dir=GO::config()->root_path.'modules/'.$module.'/language/';
+			$dir=\GO::config()->root_path.'modules/'.$module.'/language/';
 				
 		$file = $dir.$lang.'.php';
 		
@@ -205,7 +205,7 @@ class GO_Base_Language{
 	
 	private function _find_override_file($lang, $module, $basesection){
 		
-		$dir=GO::config()->file_storage_path.'users/admin/lang/'.$lang.'/';		
+		$dir=\GO::config()->file_storage_path.'users/admin/lang/'.$lang.'/';		
 		$filename = $module=='base' ? 'base_'.$basesection.'.php' : $module.'.php';
 						
 		$file = $dir.$filename;
@@ -214,7 +214,7 @@ class GO_Base_Language{
 			return $file;
 		
 
-		$dir=GO::config()->file_storage_path.'users/admin/lang/';		
+		$dir=\GO::config()->file_storage_path.'users/admin/lang/';		
 
 		$file = $dir.$filename;
 
@@ -227,7 +227,7 @@ class GO_Base_Language{
 	
 	
 	public function getAllLanguage(){
-		$folder = new \GO_Base_Fs_Folder(GO::config()->root_path.'language');
+		$folder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'language');
 		$items = $folder->ls();
 		foreach($items as $folder){
 			if($folder instanceof GO_Base_Fs_Folder){
@@ -238,7 +238,7 @@ class GO_Base_Language{
 		//always load users lang for settings panels
 		$this->_loadSection('users');
 		
-		$modules = GO::modules()->getAllModules();			
+		$modules = \GO::modules()->getAllModules();			
 		while ($module=array_shift($modules)) {
 			$this->_loadSection($module->id);
 		}
@@ -252,7 +252,7 @@ class GO_Base_Language{
 	 * @return array array('en'=>'English');
 	 */
 	public function getLanguages(){
-		require(GO::config()->root_path.'language/languages.inc.php');
+		require(\GO::config()->root_path.'language/languages.inc.php');
 		asort($languages);
 		return $languages;
 	}

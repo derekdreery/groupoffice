@@ -76,7 +76,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 	public function getHolidaysInPeriod($startDate,$endDate,$locale=false,$check=true,$force=false){
 		
 		if(empty($locale)){		
-			$locale = GO_Base_Model_Holiday::localeFromCountry(GO::user()->createContact()->country);
+			$locale = \GO_Base_Model_Holiday::localeFromCountry(\GO::user()->createContact()->country);
 			if(!$locale)
 				return false;
 		}
@@ -92,16 +92,16 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 				$this->generateHolidays($year,$locale);
 		}
 		
-		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('date', date('Y-m-d',$startDate),'>=')
 						->addCondition('date', date('Y-m-d',$endDate), '<=');	
 					
 		$findCriteria->addCondition('region', $locale);
 			
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 						->criteria($findCriteria);
 		
-		return GO_Base_Model_Holiday::model()->find($findParams);
+		return \GO_Base_Model_Holiday::model()->find($findParams);
 	}
 	
 	/**
@@ -120,15 +120,15 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 //		$startYear = mktime(0, 0, 0, 1, 1, $year);
 //		$endYear   = mktime(23, 59, 59, 12, 31, $year);
 		
-		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
 					->addCondition('date', $year.'-01-01','>=')
 					->addCondition('date', ($year+1).'-01-01', '<')
 					->addCondition('region', $locale);
 
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 					->criteria($findCriteria);
 
-		$result = GO_Base_Model_Holiday::model()->find($findParams);
+		$result = \GO_Base_Model_Holiday::model()->find($findParams);
 
 		return ($result->rowCount() >= 1);
 	}
@@ -148,15 +148,15 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 		$startYear = mktime(0, 0, 0, 1, 1, $year);
 		$endYear   = mktime(23, 59, 59, 12, 31, $year);
 		
-		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
 					->addCondition('date', date('Y-m-d', $startYear),'>=')
 					->addCondition('date',  date('Y-m-d', $endYear), '<=')
 					->addCondition('region', $locale);
 
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 					->criteria($findCriteria);
 
-		$holidays = GO_Base_Model_Holiday::model()->find($findParams);
+		$holidays = \GO_Base_Model_Holiday::model()->find($findParams);
 		
 		while($holiday = $holidays->fetch()){
 			$holiday->delete();
@@ -170,12 +170,12 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 	 */
 	public static function getAvailableHolidayFiles(){
 		$holidays = array();
-		$folderPath = GO::config()->root_path.'language/holidays/';
+		$folderPath = \GO::config()->root_path.'language/holidays/';
 		$folder = new \GO_Base_Fs_Folder($folderPath);
 		
 		$children = $folder->ls();
 		foreach($children as $child){
-			$label = GO::t($child->nameWithoutExtension());
+			$label = \GO::t($child->nameWithoutExtension());
 			$holidays[$label] = array('filename'=>$child->nameWithoutExtension(),'label'=>$label);
 		}
 		ksort($holidays);
@@ -194,8 +194,8 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 		$this->deleteHolidays($year,$locale);
 		
 		// Load the holidays file for the given $locale
-		if(is_file(GO::config()->root_path.'language/holidays/'.$locale.'.php'))
-			require(GO::config()->root_path.'language/holidays/'.$locale.'.php');
+		if(is_file(\GO::config()->root_path.'language/holidays/'.$locale.'.php'))
+			require(\GO::config()->root_path.'language/holidays/'.$locale.'.php');
 //		else
 //			throw new \Exception('No holidays file for this language: '.$locale.'.');
 		
@@ -226,7 +226,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 		if(isset($holidays['var']) && function_exists('easter_date') && $year > 1969 && $year < 2037) {
 //			$easter_day = easter_date($year);
 			
-			$easterDT = GO_Base_Util_Date_DateTime::getEasterDatetime($year);
+			$easterDT = \GO_Base_Util_Date_DateTime::getEasterDatetime($year);
 			$easter_day = $easterDT->format('U');
 			
 			foreach($holidays['var'] as $key => $name) {
@@ -274,19 +274,19 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function getJson(){
-		$dayString = GO::t('full_days');
+		$dayString = \GO::t('full_days');
 		return array(
 //			'id'=>$response['count']++,
 			'name'=>htmlspecialchars($this->name, ENT_COMPAT, 'UTF-8'),
 			'description'=>'',
-			'time'=>date(GO::user()->time_format, strtotime($this->date)),
+			'time'=>date(\GO::user()->time_format, strtotime($this->date)),
 			'all_day_event'=>1,
 			'start_time'=>$this->date.' 00:00',
 			'end_time'=>$this->date.' 23:59',
 			//'background'=>$calendar->displayColor,
 			'background'=>'f1f1f1',
 			'model_name'=>'',
-			'day'=>$dayString[date('w', strtotime($this->date))].' '.GO_Base_Util_Date::get_timestamp(strtotime($this->date),false),
+			'day'=>$dayString[date('w', strtotime($this->date))].' '.\GO_Base_Util_Date::get_timestamp(strtotime($this->date),false),
 			'read_only'=>true
 			);
 	}
@@ -307,7 +307,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 		else if(key_exists(strtolower($countryCode),self::$mapping))
 			$countryCode = self::$mapping[strtolower($countryCode)];
 		
-		$languageFolderPath = GO::config()->root_path.'language/holidays/';
+		$languageFolderPath = \GO::config()->root_path.'language/holidays/';
 		
 		$file = new \GO_Base_Fs_File($languageFolderPath.$countryCode.'.php');
 		

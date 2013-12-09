@@ -31,7 +31,7 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 		$response = array();		
 		$response['data'] = array();
 		
-		$settings =  GO_Base_Export_Settings::load();
+		$settings =  \GO_Base_Export_Settings::load();
 		$data = $settings->getArray();
 		
 		// retreive checkbox settings
@@ -39,10 +39,10 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 		$response['data']['humanHeaders'] = $data['export_human_headers'];
 		$response['data']['includeHidden'] = $data['export_include_hidden'];
 		
-		$response['outputTypes'] = $this->_getExportTypes(GO::config()->root_path.'go/base/export/');
+		$response['outputTypes'] = $this->_getExportTypes(\GO::config()->root_path.'go/base/export/');
 		
 		if(!empty($params['exportClassPath']))
-			$response['outputTypes'] = array_merge($response['outputTypes'], $this->_getExportTypes(GO::config()->root_path.$params['exportClassPath']));
+			$response['outputTypes'] = array_merge($response['outputTypes'], $this->_getExportTypes(\GO::config()->root_path.$params['exportClassPath']));
 		
 		$response['success'] =true;
 		return $response;
@@ -57,10 +57,10 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 //	 */
 //	protected function actionTypes($params) {
 //		$response = array();		
-//		$response['outputTypes'] = $this->_getExportTypes(GO::config()->root_path.'go/base/export/');
+//		$response['outputTypes'] = $this->_getExportTypes(\GO::config()->root_path.'go/base/export/');
 //		
 //		if(!empty($params['exportClassPath']))
-//			$response['outputTypes'] = array_merge($response['outputTypes'], $this->_getExportTypes(GO::config()->root_path.$params['exportClassPath']));
+//			$response['outputTypes'] = array_merge($response['outputTypes'], $this->_getExportTypes(\GO::config()->root_path.$params['exportClassPath']));
 //		
 //		$response['success'] =true;
 //		return $response;

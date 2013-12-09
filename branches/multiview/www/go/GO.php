@@ -62,10 +62,10 @@ class GO{
 	 */
 	public static function setIgnoreAclPermissions($ignore=true){
 		
-		GO::debug("setIgnoreAclPermissions");
+		\GO::debug("setIgnoreAclPermissions");
 		
-		$oldValue = GO::$ignoreAclPermissions;
-		GO::$ignoreAclPermissions=$ignore;
+		$oldValue = \GO::$ignoreAclPermissions;
+		\GO::$ignoreAclPermissions=$ignore;
 
 		return $oldValue;
 	}
@@ -97,7 +97,7 @@ class GO{
 	 * @return boolean
 	 */
 	public static function setMemoryLimit($mb){
-		$max = GO_Base_Util_Number::configSizeToMB(ini_get("memory_limit"));
+		$max = \GO_Base_Util_Number::configSizeToMB(ini_get("memory_limit"));
 
 		if($mb>$max){
 			return ini_set("memory_limit", $mb.'M');
@@ -116,7 +116,7 @@ class GO{
 		$serverName = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : "unknown";
 		
 		//added MD5 because IE doesn't like dots I suspect
-		return md5(GO::config()->id.'AT'.$serverName);
+		return md5(\GO::config()->id.'AT'.$serverName);
 	}
 	
 	/**
@@ -198,10 +198,10 @@ class GO{
 	 * Wierd things happen when using fsockopen. This test case leaves the conneciton open. When removing the fputs call it seems to work.
 	 * 
 	 * 			
-	    GO::session()->login('admin','admin');
+	    \GO::session()->login('admin','admin');
 			
-			$settings = GO_Sync_Model_Settings::model()->findForUser(GO::user());
-			$account = GO_Email_Model_Account::model()->findByPk($settings->account_id);
+			$settings = \GO_Sync_Model_Settings::model()->findForUser(\GO::user());
+			$account = \GO_Email_Model_Account::model()->findByPk($settings->account_id);
 			
 			
 			$handle = stream_socket_client("tcp://localhost:143");
@@ -212,7 +212,7 @@ class GO{
 			
 			echo "Test\n";
 			
-			GO::unsetDbConnection();
+			\GO::unsetDbConnection();
 			sleep(10);
 	 */
 	public static function unsetDbConnection(){
@@ -224,22 +224,22 @@ class GO{
 		self::$db=null;
 
 		if($dbname===false)
-			$dbname=GO::config()->db_name;
+			$dbname=\GO::config()->db_name;
 
 		if($dbuser===false)
-			$dbuser=GO::config()->db_user;
+			$dbuser=\GO::config()->db_user;
 
 		if($dbpass===false)
-			$dbpass=GO::config()->db_pass;
+			$dbpass=\GO::config()->db_pass;
 
 		if($dbhost===false)
-			$dbhost=GO::config()->db_host;
+			$dbhost=\GO::config()->db_host;
 		
 		if($dbport===false)
-			$dbport=GO::config()->db_port;
+			$dbport=\GO::config()->db_port;
 		
 
-//		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***",$options);
+//		\GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***",$options);
 
 		
 		self::$db = new \GO\Base\Db\PDO("mysql:host=$dbhost;dbname=$dbname;port=$dbport", $dbuser, $dbpass, $options);
@@ -248,18 +248,18 @@ class GO{
 	/**
 	 * Clears the:
 	 * 
-	 * 1. GO::config()->cachedir folder. This folder contains mainly cached javascripts.
+	 * 1. \GO::config()->cachedir folder. This folder contains mainly cached javascripts.
 	 * 2. GO_Base_Model objects cached in memory for a single script run
-	 * 3. The permanent cache stored in GO::cache()
+	 * 3. The permanent cache stored in \GO::cache()
 	 * 
 	 */
 	public static function clearCache(){
 		
-		GO::config()->getCacheFolder(false)->delete();		
+		\GO::config()->getCacheFolder(false)->delete();		
 		
-		GO::cache()->flush();
+		\GO::cache()->flush();
 
-		GO_Base_Model::clearCache();
+		\GO_Base_Model::clearCache();
 	}
 
 	/**
@@ -272,21 +272,21 @@ class GO{
 		
 		$class = "GO_Base_View_";
 		
-		if(isset(GO::session()->values['view'])){
-			$class .= GO::session()->values['view'];
+		if(isset(\GO::session()->values['view'])){
+			$class .= \GO::session()->values['view'];
 		}else
 		{
-			$class .= GO::config()->defaultView;
+			$class .= \GO::config()->defaultView;
 		}
 		
 		if(!isset(self::$_view)){
 			self::$_view = new $class();
 		}
-		return self::$_view;//isset(GO::session()->values['view']) ? GO::session()->values['view'] : GO::config()->defaultView;
+		return self::$_view;//isset(\GO::session()->values['view']) ? \GO::session()->values['view'] : \GO::config()->defaultView;
 	}
 
 	public static function setView($viewName){
-		GO::session()->values['view']=$viewName;
+		\GO::session()->values['view']=$viewName;
 	}
 
 	/**
@@ -318,14 +318,14 @@ class GO{
 	 */
 	public static function modules() {
 		if (!isset(self::$_modules)) {
-//			if(GO::user()){
+//			if(\GO::user()){
 //			
 //			Caching caused more problems than benefits
 //			
-//				if(isset(GO::session()->values['modulesObject']) && !isset($GLOBALS['GO_CONFIG'])){
-//					self::$_modules=GO::session()->values['modulesObject'];
+//				if(isset(\GO::session()->values['modulesObject']) && !isset($GLOBALS['GO_CONFIG'])){
+//					self::$_modules=\GO::session()->values['modulesObject'];
 //				}else{
-//					self::$_modules=GO::session()->values['modulesObject']=new \GO_Base_ModuleCollection();
+//					self::$_modules=\GO::session()->values['modulesObject']=new \GO_Base_ModuleCollection();
 //				}
 //			}else
 //			{
@@ -362,8 +362,8 @@ class GO{
 	public static function cache(){
 
 		if (!isset(self::$_cache)) {
-			if(GO::config()->debug || !GO::isInstalled())
-//			if(!GO::isInstalled())
+			if(\GO::config()->debug || !\GO::isInstalled())
+//			if(!\GO::isInstalled())
 				self::$_cache=new \GO_Base_Cache_None();
 //			Disable apc cache temporarily because it seems to cause the random logouts
 //			elseif(function_exists("apc_store"))
@@ -407,7 +407,7 @@ class GO{
 		$className = str_replace('\\', '_', $className);
 		
 		if(isset(self::$_classes[$className])){
-			//don't use GO::config()->root_path here because it might not be autoloaded yet causing an infite loop.
+			//don't use \GO::config()->root_path here because it might not be autoloaded yet causing an infite loop.
 			require(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
 		}else
 		{
@@ -431,7 +431,7 @@ class GO{
 				$file = array_pop($arr).'.php';
 				$path = strtolower(implode('/', $arr));
 				$location =$path.'/'.$file;
-				$baseClassFile = GO::config()->file_storage_path.'php/'.$location;			
+				$baseClassFile = \GO::config()->file_storage_path.'php/'.$location;			
 				require($baseClassFile);
 			} else {
 				//$orgClassName = $className;
@@ -521,22 +521,22 @@ class GO{
 
    	spl_autoload_register(array('GO', 'autoload'));	
 
-		//Start session here. Important that it's called before GO::config().
-		GO::session();
+		//Start session here. Important that it's called before \GO::config().
+		\GO::session();
 		
-		if(GO::config()->debug){
-			self::$_scriptStartTime = GO_Base_Util_Date::getmicrotime();			
+		if(\GO::config()->debug){
+			self::$_scriptStartTime = \GO_Base_Util_Date::getmicrotime();			
 		}
 		
-		date_default_timezone_set(GO::user() ? GO::user()->timezone : GO::config()->default_timezone);
+		date_default_timezone_set(\GO::user() ? \GO::user()->timezone : \GO::config()->default_timezone);
 		
 		//set local to utf-8 so functions will behave consistently
-		if ( !empty(GO::config()->locale_all) ){
-			setlocale(LC_CTYPE, GO::config()->locale_all);
+		if ( !empty(\GO::config()->locale_all) ){
+			setlocale(LC_CTYPE, \GO::config()->locale_all);
 		}else{
 			//for escape shell arg
-			if(!isset(GO::session()->values['locale_all'])){
-				$currentlocale = GO::session()->values['locale_all']= setlocale(LC_CTYPE, "0");
+			if(!isset(\GO::session()->values['locale_all'])){
+				$currentlocale = \GO::session()->values['locale_all']= setlocale(LC_CTYPE, "0");
 
 				if(stripos($currentlocale,'utf')==false && function_exists('exec')){
 					@exec('locale -a', $output);
@@ -546,30 +546,30 @@ class GO{
 							if(stripos($locale,'utf')!==false){
 								setlocale(LC_CTYPE, $locale);
 
-								GO::session()->values['locale_all']=$locale;
+								\GO::session()->values['locale_all']=$locale;
 								break;
 							}
 						}
 					}
-					GO::debug("WARNING: could not find UTF8 locale");
+					\GO::debug("WARNING: could not find UTF8 locale");
 					
 				}
 			}
-//			exit(GO::session()->values['locale_all']);
-			setlocale(LC_CTYPE, GO::session()->values['locale_all']);
+//			exit(\GO::session()->values['locale_all']);
+			setlocale(LC_CTYPE, \GO::session()->values['locale_all']);
 
 		}
 		
 		
-		if(!empty(GO::session()->values['debug']))
-			GO::config()->debug=true;
+		if(!empty(\GO::session()->values['debug']))
+			\GO::config()->debug=true;
 		
-		if(GO::config()->debug || GO::config()->debug_log){
+		if(\GO::config()->debug || \GO::config()->debug_log){
 			$log = '['.date('Y-m-d H:i').'] INIT';
-			GO::debug($log);
+			\GO::debug($log);
 		}
 		
-		if(GO::config()->debug)
+		if(\GO::config()->debug)
 			ini_set("display_errors","On");
 		elseif(PHP_SAPI!='cli')
 			ini_set("display_errors","Off");
@@ -586,7 +586,7 @@ class GO{
 			
 			self::_undoMagicQuotes();
 
-			//set umask to 0 so we can create new files with mask defined in GO::config()->file_create_mode
+			//set umask to 0 so we can create new files with mask defined in \GO::config()->file_create_mode
 			umask(0);
 			
 			//We use UTF8 by default.
@@ -641,10 +641,10 @@ class GO{
 		
 		//clear temp files on the command line because we may run as root
 		if(PHP_SAPI=='cli')
-			GO::session()->clearUserTempFiles(false);
+			\GO::session()->clearUserTempFiles(false);
 		
-		GO::debugPageLoadTime('shutdown');
-		GO::debug("--------------------\n");
+		\GO::debugPageLoadTime('shutdown');
+		\GO::debug("--------------------\n");
 	}
 	
 	/**
@@ -699,7 +699,7 @@ class GO{
 		
 		$errorMsg="[".@date("Ymd H:i:s")."] PHP $type: $errstr in $errfile on line $errline";
 		
-		$user = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
+		$user = isset(\GO::session()->values['username']) ? \GO::session()->values['username'] : 'notloggedin';
 		$agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
 		$ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unknown';
 		
@@ -731,14 +731,14 @@ class GO{
 		}
 		$errorMsg .= "----------------";
 		
-		GO::debug($errorMsg);
-		GO::logError($errorMsg);	
+		\GO::debug($errorMsg);
+		\GO::logError($errorMsg);	
 		
 		foreach(self::$_errorLogCallbacks as $callback){
 			call_user_func($callback, $errorMsg);
 		}
 		
-		if(GO::config()->debug){
+		if(\GO::config()->debug){
 			echo nl2br($errorMsg);			
 		}
 		
@@ -752,9 +752,9 @@ class GO{
 	 * @param string $errorMsg
 	 */
 	public static function logError($errorMsg){		
-		$logDir = GO::config()->file_storage_path . 'log';
+		$logDir = \GO::config()->file_storage_path . 'log';
 		
-		if(is_writable(GO::config()->file_storage_path)){
+		if(is_writable(\GO::config()->file_storage_path)){
 			if(!is_dir($logDir))
 				mkdir($logDir,0755, true);
 
@@ -784,15 +784,15 @@ class GO{
 
 		if (!empty(self::config()->info_log)) {
 
-			if (empty(GO::session()->values["logdircheck"])) {
+			if (empty(\GO::session()->values["logdircheck"])) {
 				$folder = new \GO_Base_Fs_Folder(dirname(self::config()->info_log));
 				$folder->create();
-				GO::session()->values["logdircheck"] = true;
+				\GO::session()->values["logdircheck"] = true;
 			}
 
 			$msg = '[' . date('Y-m-d H:i:s') . ']';
 
-			if (GO::user()) {
+			if (\GO::user()) {
 				$msg .= '[' . self::user()->username . '] ';
 			}
 
@@ -820,9 +820,9 @@ class GO{
 	}
 	
 	public static function debugPageLoadTime($id){
-		 $time = GO_Base_Util_Date::getmicrotime()-self::$_scriptStartTime;
+		 $time = \GO_Base_Util_Date::getmicrotime()-self::$_scriptStartTime;
 		 
-		 GO::debug("Script running at [$id] for ".$time."ms");
+		 \GO::debug("Script running at [$id] for ".$time."ms");
 	}
 	/**
 	 * Write's to a debug log.
@@ -860,7 +860,7 @@ class GO{
 					if ($text == 'undefined')
 						throw new \Exception();
 					
-					//$username=GO::user() ? GO::user()->username : 'nobody';
+					//$username=\GO::user() ? \GO::user()->username : 'nobody';
 
 					//$trace = debug_backtrace();
 
@@ -870,7 +870,7 @@ class GO{
 
 					//$text = $prefix.$text;
 
-					$user = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
+					$user = isset(\GO::session()->values['username']) ? \GO::session()->values['username'] : 'notloggedin';
 
 					$text = "[$user] ".str_replace("\n","\n[$user] ", $text);
 
@@ -883,7 +883,7 @@ class GO{
 	
 	public static function debugCalledFrom($limit=1){
 		
-		GO::debug("--");
+		\GO::debug("--");
 		$trace = debug_backtrace(); 
 		for($i=0;$i<$limit;$i++){
 			if(isset($trace[$i+1])){
@@ -897,10 +897,10 @@ class GO{
 				if(!isset($call["line"]))
 								$call["line"]='unknown';
 				
-				GO::debug("Function: ".$call["function"]." called in file ".$call["file"]." on line ".$call["line"]);
+				\GO::debug("Function: ".$call["function"]." called in file ".$call["file"]." on line ".$call["line"]);
 			}
 		}
-		GO::debug("--");
+		\GO::debug("--");
 	}
 	
 	private static $_language;
@@ -953,7 +953,7 @@ class GO{
 	public static function getModel($modelName){
 		//$modelName::model() does not work on php 5.2! That's why we use this function.
 		if(!class_exists($modelName))
-			throw new \Exception("Model class '$modelName' not found in GO::getModel()");
+			throw new \Exception("Model class '$modelName' not found in \GO::getModel()");
 
 		return call_user_func(array($modelName, 'model'));
 	}
@@ -973,7 +973,7 @@ class GO{
 	{
 		//$p = 'm='.urlencode($module).'&f='.urlencode($function).'&p='.urlencode(base64_encode(json_encode($params)));
 
-		if(GO::config()->debug){
+		if(\GO::config()->debug){
 			if(!preg_match('/[a-z]+/', $module))
 				throw new \Exception('$module param may only contain a-z characters.');
 
@@ -985,7 +985,7 @@ class GO{
 
 		$r = $toLoginDialog ? '' : 'external/index';
 
-		$url = GO::config()->orig_full_url.'?r='.$r.'&f='.urlencode(base64_encode(json_encode($p)));
+		$url = \GO::config()->orig_full_url.'?r='.$r.'&f='.urlencode(base64_encode(json_encode($p)));
 		return $url;
 	}
 
@@ -997,7 +997,7 @@ class GO{
 	 * @param string $url
 	 */
 	public static function setAfterLoginUrl($url){
-		GO::session()->values['after_login_url']=$url;
+		\GO::session()->values['after_login_url']=$url;
 	}
 
 	/**
@@ -1010,7 +1010,7 @@ class GO{
 	 * @return string
 	 */
 	public static function url($path='', $params=array(), $relative=true, $htmlspecialchars=false, $appendSecurityToken=true){
-		$url = $relative ? GO::config()->host : GO::config()->full_url;
+		$url = $relative ? \GO::config()->host : \GO::config()->full_url;
 
 		if(empty($path) && empty($params)){
 			return $url;
@@ -1040,8 +1040,8 @@ class GO{
 
 		$amp = $htmlspecialchars ? '&amp;' : '&';
 
-		if($appendSecurityToken && isset(GO::session()->values['security_token']))
-			$url .= $amp.'security_token='.GO::session()->values['security_token'];
+		if($appendSecurityToken && isset(\GO::session()->values['security_token']))
+			$url .= $amp.'security_token='.\GO::session()->values['security_token'];
 
 		return $url;
 	}
@@ -1055,7 +1055,7 @@ class GO{
 	public static function findClasses($subfolder){
 
 		$classes=array();
-		$folder = new \GO_Base_Fs_Folder(GO::config()->root_path.'go/base/'.$subfolder);
+		$folder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'go/base/'.$subfolder);
 		if($folder->exists()){
 
 			$items = $folder->ls();
@@ -1081,7 +1081,7 @@ class GO{
 	public static function findFsClasses($subfolder, $subClassOf=null){
 
 		$classes=array();
-		$folder = new \GO_Base_Fs_Folder(GO::config()->file_storage_path.'php/'.$subfolder);
+		$folder = new \GO_Base_Fs_Folder(\GO::config()->file_storage_path.'php/'.$subfolder);
 		if($folder->exists()){
 
 			$items = $folder->ls();
@@ -1116,7 +1116,7 @@ class GO{
 	 * @return boolean
 	 */
 	public static function isInstalled(){
-		return !empty(GO::config()->db_user);
+		return !empty(\GO::config()->db_user);
 	}
 
 }

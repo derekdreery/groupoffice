@@ -17,31 +17,31 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		
 		$response['data']['addressbook_name'] = $model->addressbook->name;
 
-		$response['data']['google_maps_link'] = GO_Base_Util_Common::googleMapsLink(
+		$response['data']['google_maps_link'] = \GO_Base_Util_Common::googleMapsLink(
 										$model->address, $model->address_no, $model->city, $model->country);
 
 		$response['data']['formatted_address'] = nl2br($model->getFormattedAddress());
 
-		$response['data']['post_google_maps_link'] = GO_Base_Util_Common::googleMapsLink(
+		$response['data']['post_google_maps_link'] = \GO_Base_Util_Common::googleMapsLink(
 										$model->post_address, $model->post_address_no, $model->post_city, $model->post_country);
 
 		$response['data']['post_formatted_address'] = nl2br($model->getFormattedPostAddress());
 
 		$response['data']['employees'] = array();
-		$sortAlias = GO::user()->sort_name=="first_name" ? array('first_name','last_name') : array('last_name','first_name');
-		$stmt = $model->contacts(GO_Base_Db_FindParams::newInstance()->order($sortAlias));
+		$sortAlias = \GO::user()->sort_name=="first_name" ? array('first_name','last_name') : array('last_name','first_name');
+		$stmt = $model->contacts(\GO_Base_Db_FindParams::newInstance()->order($sortAlias));
 		while ($contact = $stmt->fetch()) {
 			$response['data']['employees'][] = array(
 					'id' => $contact->id,
-					'name' => $contact->getName(GO::user()->sort_name),
+					'name' => $contact->getName(\GO::user()->sort_name),
 					'function' => $contact->function,
 					'email' => $contact->email
 			);
 		}
 		
 		
-		if(GO::modules()->customfields && isset($response['data']['customfields']) && GO_Customfields_Model_DisableCategories::isEnabled("GO_Addressbook_Model_Company", $model->addressbook_id)){
-			$ids = GO_Customfields_Model_EnabledCategory::model()->getEnabledIds("GO_Addressbook_Model_Company", $model->addressbook_id);
+		if(\GO::modules()->customfields && isset($response['data']['customfields']) && \GO_Customfields_Model_DisableCategories::isEnabled("GO_Addressbook_Model_Company", $model->addressbook_id)){
+			$ids = \GO_Customfields_Model_EnabledCategory::model()->getEnabledIds("GO_Addressbook_Model_Company", $model->addressbook_id);
 			
 			$enabled = array();
 			foreach($response['data']['customfields'] as $cat){
@@ -53,11 +53,11 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		}
 		
 		
-		if (GO::modules()->isInstalled('customfields')) {
+		if (\GO::modules()->isInstalled('customfields')) {
 			
 			$response['data']['items_under_blocks'] = array();
 			
-			$enabledBlocksStmt = GO_Customfields_Model_EnabledBlock::getEnabledBlocks($model->addressbook_id, 'GO_Addressbook_Model_Addressbook', $model->className());
+			$enabledBlocksStmt = \GO_Customfields_Model_EnabledBlock::getEnabledBlocks($model->addressbook_id, 'GO_Addressbook_Model_Addressbook', $model->className());
 			foreach ($enabledBlocksStmt as $i => $enabledBlockModel) {
 				
 				$items = $enabledBlockModel->block->getItemNames($model->id,$model->name);
@@ -104,8 +104,8 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 
 	protected function afterLoad(&$response, &$model, &$params) {
 
-		if (GO::modules()->customfields)
-			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Addressbook_Model_Company", $model->addressbook_id);
+		if (\GO::modules()->customfields)
+			$response['customfields'] = \GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Addressbook_Model_Company", $model->addressbook_id);
 
 		$response['data']['photo_url']=$model->photoThumbURL;		
 		$response['data']['original_photo_url']=$model->photoURL;
@@ -134,7 +134,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	}	
 	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
-		$stmt = GO_Addressbook_Model_Addresslist::model()->find();
+		$stmt = \GO_Addressbook_Model_Addresslist::model()->find();
 		while ($addresslist = $stmt->fetch()) {
 			$linkModel = $addresslist->hasManyMany('companies', $model->id);
 			$mustHaveLinkModel = isset($params['addresslist_' . $addresslist->id]);
@@ -155,7 +155,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		if (isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
 		
 			
-			$destinationFile = new \GO_Base_Fs_File(GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
+			$destinationFile = new \GO_Base_Fs_File(\GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
 			
 			move_uploaded_file($_FILES['image']['tmp_name'][0], $destinationFile->path());
 			
@@ -165,7 +165,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 			$response['original_photo_url'] = $model->photoURL;
 		}elseif(!empty($params['download_photo_url'])){
 			
-			$file = GO_Base_Fs_File::tempFile();	
+			$file = \GO_Base_Fs_File::tempFile();	
 			$c = new \GO_Base_Util_HttpClient();
 			
 			if(!$c->downloadFile($params['download_photo_url'], $file))
@@ -184,9 +184,9 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	
 	protected function actionPhoto($params){
 		//fetching contact will check read permission
-		$company = GO_Addressbook_Model_Company::model()->findByPk($params['id']);
+		$company = \GO_Addressbook_Model_Company::model()->findByPk($params['id']);
 		
-		GO_Base_Util_Http::outputDownloadHeaders($company->getPhotoFile(), true, false);
+		\GO_Base_Util_Http::outputDownloadHeaders($company->getPhotoFile(), true, false);
 		$company->getPhotoFile()->output();
 	}
 	
@@ -214,8 +214,8 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 				if(count($addresslistMultiSel->selectedIds)){
 					//we need to join the addresslist link model if a filter for the addresslist is enabled.
 					$storeParams->join(
-									GO_Addressbook_Model_AddresslistCompany::model()->tableName(), 
-									GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.company_id', '=', 't', true, true), 
+									\GO_Addressbook_Model_AddresslistCompany::model()->tableName(), 
+									\GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.company_id', '=', 't', true, true), 
 									'ac'
 						);
 					
@@ -239,8 +239,8 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	protected function getStoreParams($params) {
 
 
-		$criteria = GO_Base_Db_FindCriteria::newInstance()
-						->addModel(GO_Addressbook_Model_Company::model(), 't');
+		$criteria = \GO_Base_Db_FindCriteria::newInstance()
+						->addModel(\GO_Addressbook_Model_Company::model(), 't');
 
 		// Filter by clicked letter
 		if (!empty($params['clicked_letter'])) {
@@ -254,7 +254,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 			$criteria->addCondition('name', $query, $query_type);
 		}
 
-		$storeParams = GO_Base_Db_FindParams::newInstance()
+		$storeParams = \GO_Base_Db_FindParams::newInstance()
 						->export("company")
 						->criteria($criteria)
 						->joinAclFieldTable()
@@ -283,7 +283,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		$response['failedToMove'] = array();
 
 		foreach ($ids as $id) {
-			$model = GO_Addressbook_Model_Company::model()->findByPk($id);
+			$model = \GO_Addressbook_Model_Company::model()->findByPk($id);
 			try {
 				$model->addressbook_id=$params['book_id'];
 				$model->save();
@@ -295,17 +295,17 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		
 		if(!$response['success']){
 			$count = count($response['failedToMove']);
-			$response['feedback'] = sprintf(GO::t('cannotMoveError'),$count);
+			$response['feedback'] = sprintf(\GO::t('cannotMoveError'),$count);
 		}
 		
 		return $response;
 	}
 
 	protected function actionMoveEmployees($params) {
-		$to_company = GO_Addressbook_Model_Company::model()->findByPk($params['to_company_id']);
+		$to_company = \GO_Addressbook_Model_Company::model()->findByPk($params['to_company_id']);
 
-		$contacts = GO_Addressbook_Model_Contacts::model()->find(
-						GO_Base_Db_FindCriteria::newInstance()
+		$contacts = \GO_Addressbook_Model_Contacts::model()->find(
+						\GO_Base_Db_FindCriteria::newInstance()
 										->addCondition('company_id', $params['from_company_id'])
 		);
 
@@ -327,7 +327,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		switch ($advQueryRecord['field']) {
 			case 'employees.name':
 				$storeParams->join(
-								GO_Addressbook_Model_Contact::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addRawCondition('`t`.`id`', '`employees' . $advQueryRecord['id'] . '`.`company_id`'), 'employees' . $advQueryRecord['id']
+								\GO_Addressbook_Model_Contact::model()->tableName(), \GO_Base_Db_FindCriteria::newInstance()->addRawCondition('`t`.`id`', '`employees' . $advQueryRecord['id'] . '`.`company_id`'), 'employees' . $advQueryRecord['id']
 				);
 				$criteriaGroup->addRawCondition(
 								'CONCAT_WS(\' \',`employees' . $advQueryRecord['id'] . '`.`first_name`,`employees' . $advQueryRecord['id'] . '`.`middle_name`,`employees' . $advQueryRecord['id'] . '`.`last_name`)', ':employee' . $advQueryRecord['id'], $advQueryRecord['comparator'], $advQueryRecord['andor'] == 'AND'
@@ -345,7 +345,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 // 
 //	protected function afterAttributes(&$attributes, &$response, &$params, GO_Base_Db_ActiveRecord $model) {
 //		//unset($attributes['t.company_id']);
-//		$attributes['employees.name'] = array('name'=>'employees.name','label'=>GO::t('cmdPanelEmployee', 'addressbook'));
+//		$attributes['employees.name'] = array('name'=>'employees.name','label'=>\GO::t('cmdPanelEmployee', 'addressbook'));
 //		return parent::afterAttributes($attributes, $response, $params, $model);
 //	}
 	
@@ -387,7 +387,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	 * Remove the invalid emails from records to be imported
 	 */
 	protected function beforeImport($params, &$model, &$attributes, $record) {	
-	  if(isset($attributes['email']) && !GO_Base_Util_String::validate_email($attributes['email']))
+	  if(isset($attributes['email']) && !\GO_Base_Util_String::validate_email($attributes['email']))
           unset($attributes['email']);
         
 	  return parent::beforeImport($params, $model, $attributes, $record);

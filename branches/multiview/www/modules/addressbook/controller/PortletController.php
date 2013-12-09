@@ -26,8 +26,8 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractJsonC
 	 *
 	protected function actionBirthdays() {
 
-		$yesterday = GO_Base_Util_Date::date_add(mktime(0,0,0),-1);
-		$next_month = GO_Base_Util_Date::date_add(mktime(0,0,0),30);
+		$yesterday = \GO_Base_Util_Date::date_add(mktime(0,0,0),-1);
+		$next_month = \GO_Base_Util_Date::date_add(mktime(0,0,0),30);
 		
 		$start = date('Y-m-d',strtotime($yesterday));
 		$end = date('Y-m-d',strtotime($next_month));
@@ -38,11 +38,11 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractJsonC
 			."STR_TO_DATE(CONCAT(YEAR('$start')+1,'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e')) "
 			."as upcoming ";
 		
-		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('birthday', '0000-00-00', '!=')
 						->addRawCondition('birthday', 'NULL', 'IS NOT');
 		
-		$settings = GO_Addressbook_Model_BirthdayPortletSetting::model()->findByAttribute('user_id', GO::user()->id);
+		$settings = \GO_Addressbook_Model_BirthdayPortletSetting::model()->findByAttribute('user_id', \GO::user()->id);
 		
 		if(count($settings)) {
 			$abooks=array_map(function($value) {
@@ -53,7 +53,7 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractJsonC
 		
 		$having = "upcoming BETWEEN '$start' AND '$end'";
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 			->distinct()
 			->select($select)
 			->criteria($findCriteria)
@@ -74,19 +74,19 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractJsonC
 	 *
 	protected function actionBirthdaysSettings() {
 		
-		if(GO_Base_Util_Http::isPostRequest() && isset($_POST['addressbook_ids'])) {
+		if(\GO_Base_Util_Http::isPostRequest() && isset($_POST['addressbook_ids'])) {
 			
-			GO_Addressbook_Model_BirthdayPortletSetting::model()->deleteByAttribute('user_id', GO::user()->id);
+			\GO_Addressbook_Model_BirthdayPortletSetting::model()->deleteByAttribute('user_id', \GO::user()->id);
 			
 			foreach($_POST['addressbook_ids'] as $addressbook_id) {
 				$setting = new \GO_Addressbook_Model_BirthdayPortletSetting();
 				$setting->addressbook_id = $addressbook_id;
-				$setting->user_id = Go::user()->id;
+				$setting->user_id = \GO::user()->id;
 				$setting->save();
 			}
 		}
 		
-		$settings = GO_Addressbook_Model_BirthdayPortletSetting::model()->findByAttribute('user_id', GO::user()->id);
+		$settings = \GO_Addressbook_Model_BirthdayPortletSetting::model()->findByAttribute('user_id', \GO::user()->id);
 		$abooks=array_map(function($value) {
 			return $value->addressbook_id;
 		}, $settings);
@@ -150,12 +150,12 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractMulti
 	protected function actionBirthdays($params) {
 		
 		$today = mktime(0,0,0);
-		$next_month = GO_Base_Util_Date::date_add(mktime(0,0,0),30);
-		//GO::debug($yesterday);
+		$next_month = \GO_Base_Util_Date::date_add(mktime(0,0,0),30);
+		//\GO::debug($yesterday);
 		
 		$start = date('Y-m-d',$today);
 		$end = date('Y-m-d',$next_month);
-		//GO::debug($start);
+		//\GO::debug($start);
 		
 		$select = "t.id, birthday, first_name, middle_name, last_name, addressbook_id, photo, "
 			."IF (STR_TO_DATE(CONCAT(YEAR('$start'),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') >= '$start', "
@@ -163,11 +163,11 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractMulti
 			."STR_TO_DATE(CONCAT(YEAR('$start')+1,'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e')) "
 			."as upcoming ";
 		
-		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('birthday', '0000-00-00', '!=')
 						->addRawCondition('birthday', 'NULL', 'IS NOT');
 		
-		$settings = GO_Addressbook_Model_BirthdaysPortletSetting::model()->findByAttribute('user_id', GO::user()->id);
+		$settings = \GO_Addressbook_Model_BirthdaysPortletSetting::model()->findByAttribute('user_id', \GO::user()->id);
 		
 		if(count($settings)) {
 			$abooks=array_map(function($value) {
@@ -178,7 +178,7 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractMulti
 		
 		$having = "upcoming BETWEEN '$start' AND '$end'";
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO_Base_Db_FindParams::newInstance()
 			->distinct()
 			->select($select)
 			->criteria($findCriteria)

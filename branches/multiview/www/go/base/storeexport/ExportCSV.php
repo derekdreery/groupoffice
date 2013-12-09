@@ -32,14 +32,14 @@ class GO_Base_Storeexport_ExportCSV extends GO_Base_Storeexport_AbstractExport {
 	
 	private function _sendHeaders(){		
 		$file = new \GO_Base_Fs_File($this->title.'.csv');
-		GO_Base_Util_Http::outputDownloadHeaders($file);
+		\GO_Base_Util_Http::outputDownloadHeaders($file);
 	}
 
 	private function _write($data){
 		if(!isset($this->_fp)){
 			$this->_fp=fopen('php://output','w+');		
 		}		
-		fputcsv($this->_fp, $data, GO::user()->list_separator, GO::user()->text_separator);
+		fputcsv($this->_fp, $data, \GO::user()->list_separator, \GO::user()->text_separator);
 	}	
 	
 	public function output(){
