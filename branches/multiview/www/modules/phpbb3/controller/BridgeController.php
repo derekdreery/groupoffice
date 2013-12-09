@@ -3,7 +3,7 @@
 class GO_Phpbb3_Controller_Bridge extends GO_Base_Controller_AbstractController {
 
 	protected function actionRedirect() {
-		$tmpFile = \GO_Base_Fs_File::tempFile();
+		$tmpFile = \GO\Base\Fs\File::tempFile();
 		$tmpFile->putContents(\GO::user()->id);
 		
 		if (empty(\GO::config()->phpbb3_url)) {

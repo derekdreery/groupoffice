@@ -437,7 +437,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 			$path = 'email/' . date('mY') . '/sent_' . time() . '.eml';
 
-			$file = new \GO_Base_Fs_File(\GO::config()->file_storage_path . $path);
+			$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path . $path);
 			$file->parent()->create();
 
 			$fbs = new \Swift_ByteStream_FileByteStream($file->path(), true);
@@ -561,7 +561,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$message->handleEmailFormInput($params);
 		$message->setFrom($alias->email, $alias->name);
 
-		$file = new \GO_Base_Fs_File(\GO::config()->file_storage_path.$params['save_to_path']);
+		$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.$params['save_to_path']);
 
 		$fbs = new \Swift_ByteStream_FileByteStream($file->path(), true);
 
@@ -1486,7 +1486,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		\GO::session()->closeWriting();
 		
-		$file = new \GO_Base_Fs_File('/dummypath/'.$params['filename']);
+		$file = new \GO\Base\Fs\File('/dummypath/'.$params['filename']);
 		
 		$account = \GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		//$imapMessage = \GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
@@ -1519,7 +1519,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 //	Z-push testing
 //	public function actionAttachment($uid, $number, $encoding, $account_id, $mailbox, $filename){
 //		
-//		$file = new \GO_Base_Fs_File($filename);
+//		$file = new \GO\Base\Fs\File($filename);
 //		\GO_Base_Util_Http::outputDownloadHeaders($file,true,true);
 //		
 //		$account = \GO_Email_Model_Account::model()->findByPk($account_id);
@@ -1536,7 +1536,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	
 	protected function actionTnefAttachmentFromTempFile($params){
 		$tmpFolder = \GO_Base_Fs_Folder::tempFolder(uniqid(time()));
-		$tmpFile = new \GO_Base_Fs_File(\GO::config()->tmpdir.$params['tmp_file']);
+		$tmpFile = new \GO\Base\Fs\File(\GO::config()->tmpdir.$params['tmp_file']);
 		
 				chdir($tmpFolder->path());
 		exec(\GO::config()->cmd_tnef.' -C '.$tmpFolder->path().' '.$tmpFile->path(), $output, $retVar);
@@ -1563,8 +1563,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			throw new \GO_Base_Exception_NotFound("Specified folder not found");
 		}
 		
-		$params['filename'] = \GO_Base_Fs_File::stripInvalidChars($params['filename']);
-		$file = new \GO_Base_Fs_File(\GO::config()->file_storage_path.$folder->path.'/'.$params['filename']);
+		$params['filename'] = \GO\Base\Fs\File::stripInvalidChars($params['filename']);
+		$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.$folder->path.'/'.$params['filename']);
 		
 		
 		$account = \GO_Email_Model_Account::model()->findByPk($params['account_id']);		
@@ -1587,7 +1587,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$filename = empty($params['download']) ? "message.txt" :"message.eml";
 		
-		\GO_Base_Util_Http::outputDownloadHeaders(new \GO_Base_Fs_File($filename), empty($params['download']));	
+		\GO_Base_Util_Http::outputDownloadHeaders(new \GO\Base\Fs\File($filename), empty($params['download']));	
 
 		/*
 		 * Somehow fetching a message with an empty message part which should fetch it

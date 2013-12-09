@@ -92,7 +92,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 //			throw new \Exception('Could not move '.$import_filename);
 //	  }
 
-//		$file = new \GO_Base_Fs_File($_FILES['importFiles']['tmp_name']);
+//		$file = new \GO\Base\Fs\File($_FILES['importFiles']['tmp_name']);
 //	  $file->convertToUtf8();
 		$params['file'] = $_FILES['files']['tmp_name'][0];
 		ini_set('max_execution_time', 360);
@@ -158,7 +158,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	 * @param Array $params Parameters. MUST contain string $params['file'].
 	 */
 //	protected function actionImportVcf($params){
-//		$file = new \GO_Base_Fs_File($params['file']);
+//		$file = new \GO\Base\Fs\File($params['file']);
 //		$file->convertToUtf8();
 //
 //		$data = $file->getContents();
@@ -208,7 +208,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		if(!$addressbook)
 			throw new \GO_Base_Exception_NotFound();
 		
-		\GO_Base_Fs_File::setAllowDeletes(false);
+		\GO\Base\Fs\File::setAllowDeletes(false);
 		//VERY IMPORTANT:
 		\GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
 		

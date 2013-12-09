@@ -75,7 +75,7 @@ class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelCont
 				$httpclient = new GO_Base_Util_HttpClient();
 				$xml = $httpclient->request($feed);
 			} else {
-				if (!GO_Base_Fs_File::checkPathInput($feed))
+				if (!GO\Base\Fs\File::checkPathInput($feed))
 					throw new Exception("Invalid request");
 
 				$xml = @file_get_contents($feed);

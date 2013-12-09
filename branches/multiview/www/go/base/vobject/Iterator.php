@@ -13,7 +13,7 @@ class GO_Base_Vobject_Iterator implements Iterator {
 	
 	private $header=false;
 	
-	public function __construct(GO_Base_Fs_File $file, $type = "VEVENT") {
+	public function __construct(GO\Base\Fs\File $file, $type = "VEVENT") {
 		$this->file = $file;
 		$this->type = $type;		
 		

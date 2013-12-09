@@ -139,7 +139,7 @@ class GO_Servermanager_Controller_Trial extends GO_Site_Components_Controller {
 		if (!GO_Base_Util_String::validate_email($config['webmaster_email']))
 			throw new Exception(GO::t('invalidEmail','servermanager'));
 		
-		$tmpFile = GO_Base_Fs_File::tempFile('', 'php');
+		$tmpFile = GO\Base\Fs\File::tempFile('', 'php');
 		
 		if(!GO_Base_Util_ConfigEditor::save($tmpFile, $config)){
 			throw new Exception("Failed to save config file!");

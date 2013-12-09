@@ -203,7 +203,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		echo "Done\n";
 		
 		
-		$configFile = new GO_Base_Fs_File($installation->configPath);
+		$configFile = new GO\Base\Fs\File($installation->configPath);
 		$configFile->copy($fsFolder);
 					
 
@@ -325,7 +325,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		//$configFolder->move(new GO_Base_Fs_Folder("/etc/groupoffice"), $installation->name);
 		
-		GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File($installation->configPath), $config);
+		GO_Base_Util_ConfigEditor::save(new GO\Base\Fs\File($installation->configPath), $config);
 		
 		//$installationFolder->move(new GO_Base_Fs_Folder("/home/govhosts"), $installation->name);
 		
@@ -355,7 +355,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		if(!$installation)
 			throw new Exception("Installation ".$params['name']." not found!");
 		
-		$configFile = new GO_Base_Fs_File($installation->configPath);
+		$configFile = new GO\Base\Fs\File($installation->configPath);
 		
 		//if config file already exists then include it so we will keep the manually added config values.
 		if($configFile->exists())
@@ -716,7 +716,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		if (!GO_Base_Util_String::validate_email($config['webmaster_email']))
 			throw new Exception(GO::t('invalidEmail','servermanager'));
 		
-		$tmpFile = GO_Base_Fs_File::tempFile('', 'php');
+		$tmpFile = GO\Base\Fs\File::tempFile('', 'php');
 		
 		if(!GO_Base_Util_ConfigEditor::save($tmpFile, $config)){
 			throw new Exception("Failed to save config file!");

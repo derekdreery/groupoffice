@@ -154,7 +154,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
 			throw new \Exception(\GO::t('noFileUploaded'));
 		}else {
-			$file = new \GO_Base_Fs_File($_FILES['ical_file']['tmp_name'][0]);
+			$file = new \GO\Base\Fs\File($_FILES['ical_file']['tmp_name'][0]);
 			$i = new \GO_Base_Vobject_Iterator($file, "VEVENT");
 			foreach($i as $vevent){					
 			
@@ -315,7 +315,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		if(!$calendar)
 			throw new \GO_Base_Exception_NotFound();
 		
-		\GO_Base_Fs_File::setAllowDeletes(false);
+		\GO\Base\Fs\File::setAllowDeletes(false);
 		//VERY IMPORTANT:
 		\GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
 		

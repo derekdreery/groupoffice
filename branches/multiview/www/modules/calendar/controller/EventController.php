@@ -474,7 +474,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //
 //					$message->setHtmlAlternateBody($body);
 //					//$message->setBody($body, 'text/html','UTF-8');
-//					$a = Swift_Attachment::newInstance($ics, \GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
+//					$a = Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
 //					$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 //					$a->setDisposition("inline");
 //					$message->attach($a);
@@ -1377,7 +1377,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 //	protected function actionImportIcs($params){
 //		
-//		$file = new \GO_Base_Fs_File($params['file']);
+//		$file = new \GO\Base\Fs\File($params['file']);
 //		$file->convertToUtf8();
 //		$data = $file->getContents();
 //		
@@ -1393,7 +1393,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 //	protected function actionImportVcs($params){
 //		
-//		$file = new \GO_Base_Fs_File($params['file']);
+//		$file = new \GO\Base\Fs\File($params['file']);
 //		
 //		$data = $file->getContents();
 //		
@@ -1491,7 +1491,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	private function _createPdf($response, $view=false){
 		$pdf = new \GO_Calendar_Views_Pdf_CalendarPdf('L', $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false);
 		$pdf->setParams($response, $view);
-		$pdf->Output(\GO_Base_Fs_File::stripInvalidChars($response['title']).'.pdf');
+		$pdf->Output(\GO\Base\Fs\File::stripInvalidChars($response['title']).'.pdf');
 	}
 	
 	

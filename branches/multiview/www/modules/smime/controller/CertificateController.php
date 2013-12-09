@@ -13,7 +13,7 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 
 		$filename = str_replace(array('@', '.'), '-', $account->getDefaultAlias()->email) . '.p12';
 
-		$file = new GO_Base_Fs_File($filename);
+		$file = new GO\Base\Fs\File($filename);
 		GO_Base_Util_Http::outputDownloadHeaders($file);
 
 		echo $cert->cert;
@@ -48,12 +48,12 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 		}else 
 		{
 //			if (!empty($params['filepath'])) {
-//				$srcFile = new GO_Base_Fs_File(GO::config()->tmpdir.$params['filepath']);
+//				$srcFile = new GO\Base\Fs\File(GO::config()->tmpdir.$params['filepath']);
 			if(!empty($params['account_id'])){
 				$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 
-				$srcFile = GO_Base_Fs_File::tempFile();
+				$srcFile = GO\Base\Fs\File::tempFile();
 				if (!$imapMessage->saveToFile($srcFile->path()))
 					throw new Exception("Could not fetch message from IMAP server");
 
@@ -62,7 +62,7 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 			
 //			throw new Exception($srcFile->path());
 
-			$pubCertFile = GO_Base_Fs_File::tempFile();
+			$pubCertFile = GO\Base\Fs\File::tempFile();
 			//Command line:
 			//openssl smime -verify -in msg.txt
 			$valid = openssl_pkcs7_verify($srcFile->path(), null, $pubCertFile->path(), $this->_getRootCertificates());
@@ -195,7 +195,7 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 		return $certs;
 	}
 
-	private function _decryptFile(GO_Base_Fs_File $srcFile, GO_Email_Model_Account $account) {
+	private function _decryptFile(GO\Base\Fs\File $srcFile, GO_Email_Model_Account $account) {
 		$data = $srcFile->getContents();
 		if (strpos($data, "enveloped-data") || strpos($data, 'Encrypted Message')) {
 			$cert = GO_Smime_Model_Certificate::model()->findByPk($account->id);
@@ -203,7 +203,7 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 			$password = GO::session()->values['smime']['passwords'][$_REQUEST['account_id']];
 			openssl_pkcs12_read($cert->cert, $certs, $password);
 
-			$decryptedFile = GO_Base_Fs_File::tempFile();
+			$decryptedFile = GO\Base\Fs\File::tempFile();
 
 			$ret = openssl_pkcs7_decrypt($srcFile->path(), $decryptedFile->path(), $certs['cert'], array($certs['pkey'], $password));
 			

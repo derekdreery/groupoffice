@@ -41,7 +41,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * 
 	 * @param boolean $getHidden
 	 * @param boolean|string $sort 'mtime','ctime' or 'name'
-	 * @return GO_Base_Fs_File or GO_Base_Fs_Folder
+	 * @return GO\Base\Fs\File or GO_Base_Fs_Folder
 	 */
 	public function ls($getHidden=false, $sort=false) {
 		if (!$dir = opendir($this->path))
@@ -54,7 +54,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 							($getHidden || !(strpos($item, ".") === 0) )) {
 			
 				if(is_file($folderPath))					
-					$o = new \GO_Base_Fs_File($folderPath);
+					$o = new \GO\Base\Fs\File($folderPath);
 				else
 					$o = new \GO_Base_Fs_Folder($folderPath);
 				
@@ -128,7 +128,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 			throw new \Exception("Folder '".$this->path()."' does not exist");
 		
 		if(is_link($this->path)){
-			$link = new \GO_Base_Fs_File($this->path);
+			$link = new \GO\Base\Fs\File($this->path);
 			return $link->move($destinationFolder, $newFolderName, false, $appendNumberToNameIfDestinationExists);
 		}
 		
@@ -237,7 +237,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * 
 	 * @param GO_Base_Fs_Folder $target
 	 * @param string $linkName optional link name. If omitted the name will be the same as the target folder name
-	 * @return GO_Base_Fs_File
+	 * @return GO\Base\Fs\File
 	 * @throws Exception
 	 */
 	public function createLink(GO_Base_Fs_Folder $target, $linkName=null){

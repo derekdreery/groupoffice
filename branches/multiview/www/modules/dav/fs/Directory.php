@@ -58,14 +58,14 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 	 */
 	public function createFile($name, $data = null) {
 		
-		\\GO::debug("FSD::createFile($name)");
+		\GO::debug("FSD::createFile($name)");
 
 		$folder = $this->_getFolder();
 
 		if (!$folder->checkPermissionLevel(\GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new \Sabre\DAV\Exception\Forbidden();
 
-		$newFile = new \GO_Base_Fs_File($this->path . '/' . $name);
+		$newFile = new \GO\Base\Fs\File($this->path . '/' . $name);
 		if($newFile->exists())
 			throw new \Exception("File already exists!");
 		
@@ -110,7 +110,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 	 */
 	public function move($newPath) {
 
-		\\GO::debug("FSD::move($newPath)");
+		\GO::debug("FSD::move($newPath)");
 
 		if (!is_dir(dirname($newPath)))
 			throw new \Exception('Invalid move!');

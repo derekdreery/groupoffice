@@ -267,7 +267,7 @@ class Site {
 	 */
 	public static function thumb($relativePath, $thumbParams=array("lw"=>100, "ph"=>100, "zc"=>1)) {
 		
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$relativePath);
+		$file = new GO\Base\Fs\File(GO::config()->file_storage_path.$relativePath);
 		
 		$thumbParams['filemtime']=$file->mtime();
 		$thumbParams['src']=$relativePath;

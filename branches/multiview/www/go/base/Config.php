@@ -1664,6 +1664,6 @@ class GO_Base_Config {
 		}
 		$config = array_merge($config, $extraConfig);
 
-		return \GO_Base_Util_ConfigEditor::save(new \GO_Base_Fs_File(\GO::config()->get_config_file()), $config);
+		return \GO_Base_Util_ConfigEditor::save(new \GO\Base\Fs\File(\GO::config()->get_config_file()), $config);
 	}
 }

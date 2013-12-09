@@ -42,7 +42,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 			$this->_view=$view;
 			$this->_start_time = $r['start_time'];
 			$this->_end_time = $r['end_time'];
-			$this->_title = \GO_Base_Fs_File::stripInvalidChars($r['title']);
+			$this->_title = \GO\Base\Fs\File::stripInvalidChars($r['title']);
 			$this->_days = ceil(($this->_end_time - $this->_start_time) / 86400);
 			$this->_date_range_text = $this->_days > 1 ? date(\GO::user()->completeDateFormat,$this->_start_time) . ' - ' . date(\GO::user()->completeDateFormat,$this->_end_time) : date(\GO::user()->completeDateFormat,$this->_start_time);
 

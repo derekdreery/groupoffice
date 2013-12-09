@@ -309,12 +309,12 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 		
 		$languageFolderPath = \GO::config()->root_path.'language/holidays/';
 		
-		$file = new \GO_Base_Fs_File($languageFolderPath.$countryCode.'.php');
+		$file = new \GO\Base\Fs\File($languageFolderPath.$countryCode.'.php');
 		
 		if($file->exists()){
 			return $countryCode;
 		}else{
-			$file = new \GO_Base_Fs_File($languageFolderPath.strtolower($countryCode).'.php');
+			$file = new \GO\Base\Fs\File($languageFolderPath.strtolower($countryCode).'.php');
 			if($file->exists())
 				return strtolower($countryCode);
 		}

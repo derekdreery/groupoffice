@@ -1802,7 +1802,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 						//\GO::debug($vals);
 						//work around ugly stuff. Some mails contain stuff with type image/gif but it's actually an html file.
 						//so we double check if the image has a filename that it has a valid image extension
-						$file = empty($vals['name']) ? false : new \GO_Base_Fs_File($vals['name']);						
+						$file = empty($vals['name']) ? false : new \GO\Base\Fs\File($vals['name']);						
 						if(!$file || $file->isImage()){
 
 							//an inline image without ID. We'll display in the part order. Apple
@@ -2664,7 +2664,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		if($data instanceof Swift_Message){
 			
-			$tmpfile = \GO_Base_Fs_File::tempFile();
+			$tmpfile = \GO\Base\Fs\File::tempFile();
 
 			$is = new \Swift_ByteStream_FileByteStream($tmpfile->path(), true);
 			$data->toByteStream($is);			

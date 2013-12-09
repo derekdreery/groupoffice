@@ -35,11 +35,11 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		\GO::session()->values['debugSql']=!empty($params['debugSql']);
 		
 		
-		$debugFile = new \GO_Base_Fs_File(\GO::config()->file_storage_path.'log/debug.log');
+		$debugFile = new \GO\Base\Fs\File(\GO::config()->file_storage_path.'log/debug.log');
 		if(!$debugFile->exists())
 			$debugFile->touch(true);
 		
-		$errorFile = new \GO_Base_Fs_File(\GO::config()->file_storage_path.'log/error.log');
+		$errorFile = new \GO\Base\Fs\File(\GO::config()->file_storage_path.'log/error.log');
 		if(!$errorFile->exists())
 			$errorFile->touch(true);
 		
@@ -243,7 +243,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 		$file = \GO::config()->getCacheFolder()->child(basename($params['file']));
 
-//		$file = new \GO_Base_Fs_File(\GO::config()->file_storage_path.'cache/'.basename($params['file']));
+//		$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.'cache/'.basename($params['file']));
 
 		$ext = $file->extension();
 
@@ -280,7 +280,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 		$dir = \GO::config()->root_path . 'views/Extjs3/themes/Default/images/128x128/filetypes/';
 		$url = \GO::config()->host . 'views/Extjs3/themes/Default/images/128x128/filetypes/';
-		$file = new \GO_Base_Fs_File(\GO::config()->file_storage_path . $params['src']);
+		$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path . $params['src']);
 		
 		if (is_dir(\GO::config()->file_storage_path . $params['src'])) {
 			$src = $dir . 'folder.png';
@@ -346,7 +346,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			}
 		}
 
-		$file = new GO_Base_Fs_File($src);
+		$file = new GO\Base\Fs\File($src);
 		
 
 		$w = isset($params['w']) ? intval($params['w']) : 0;
@@ -512,7 +512,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		
 		$inline = !isset($params['inline']) || !empty($params['inline']);
 		
-		$file = new \GO_Base_Fs_File(\GO::config()->tmpdir.$params['path']);
+		$file = new \GO\Base\Fs\File(\GO::config()->tmpdir.$params['path']);
 		\GO_Base_Util_Http::outputDownloadHeaders($file, $inline, !empty($params['cache']));
 		$file->output();		
 	}
@@ -525,7 +525,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 * @param String $path 
 	 */
 	protected function actionDownloadPublicFile($params){
-		$file = new \GO_Base_Fs_File(\GO::config()->file_storage_path.'public/'.$params['path']);
+		$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.'public/'.$params['path']);
 		\GO_Base_Util_Http::outputDownloadHeaders($file,false,!empty($params['cache']));
 		$file->output();		
 	}
@@ -586,7 +586,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 //		$tmpFolder->delete();
 		$tmpFolder->create();
 
-		$files = \GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $tmpFolder);
+		$files = \GO\Base\Fs\File::moveUploadedFiles($_FILES['attachments'], $tmpFolder);
 
 		$relativeFiles = array();
 		foreach ($files as $file) {
@@ -618,7 +618,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		if(!empty(\GO::session()->values['files']['uploadqueue'])){
 			foreach(\GO::session()->values['files']['uploadqueue'] as $path){
 				
-				$file = new GO_Base_Fs_File($path);
+				$file = new GO\Base\Fs\File($path);
 				
 				$result = array(						
 						'human_size'=>$file->humanSize(),

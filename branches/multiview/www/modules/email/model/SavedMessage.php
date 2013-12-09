@@ -38,7 +38,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 		
 		$fullPath = $isTempFile ? \GO::config()->tmpdir.$path : \GO::config()->file_storage_path.$path;
 		
-		$file = new \GO_Base_Fs_File($fullPath);
+		$file = new \GO\Base\Fs\File($fullPath);
 		
 		if(!$file->exists()){
 			throw new \Exception("E-mail message file does not exist!");
@@ -142,7 +142,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 	
 //	protected function getAttachmentUrl($attachment) {
 //		
-//		$file = new \GO_Base_Fs_File($attachment['name']);
+//		$file = new \GO\Base\Fs\File($attachment['name']);
 //		
 //		if($file->extension()=='dat'){			
 //			return \GO::url('email/message/tnefAttachmentFromTempFile', array('tmp_file'=>$attachment['tmp_file']));
@@ -211,7 +211,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 					}
 					
 					
-					$f = new \GO_Base_Fs_File($filename);
+					$f = new \GO\Base\Fs\File($filename);
 					
 					$a = new \GO_Email_Model_MessageAttachment();										
 					$a->name=$filename;
@@ -219,9 +219,9 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 					$a->content_id=$content_id;
 					$a->mime=$mime_type;
 					
-					$tmp_file = new \GO_Base_Fs_File($this->_getTempDir().$filename);
+					$tmp_file = new \GO\Base\Fs\File($this->_getTempDir().$filename);
 					if(!empty($part->body)){
-						$tmp_file = new \GO_Base_Fs_File($this->_getTempDir().$filename);
+						$tmp_file = new \GO\Base\Fs\File($this->_getTempDir().$filename);
 						if(!$tmp_file->exists())
 							$tmp_file->putContents($part->body);
 						

@@ -71,11 +71,11 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 	private function _saveHeaders(){	
 		if(!$this->saved_headers){		
 			
-			$tempInFile = new \GO_Base_Fs_File(\GO::config()->tmpdir."smime_tempin.txt");
+			$tempInFile = new \GO\Base\Fs\File(\GO::config()->tmpdir."smime_tempin.txt");
 			$tempInFile->parent()->create();
 			$tempInFile->delete();
 			
-			$tempOutFile = new \GO_Base_Fs_File(\GO::config()->tmpdir."smime_tempout.txt");
+			$tempOutFile = new \GO\Base\Fs\File(\GO::config()->tmpdir."smime_tempout.txt");
 			$tempOutFile->delete();			
 			
 			$this->tempin = $tempInFile->path();
@@ -131,7 +131,7 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 			
 
 			if(!empty($certs['extracerts'])){
-				$extraCertsFile = \GO_Base_Fs_File::tempFile();
+				$extraCertsFile = \GO\Base\Fs\File::tempFile();
 				foreach($certs['extracerts'] as $certData){
 					$extraCertsFile->putContents($certData, FILE_APPEND);
 				}

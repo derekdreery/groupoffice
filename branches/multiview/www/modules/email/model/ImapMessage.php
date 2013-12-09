@@ -562,9 +562,9 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				
 				if (empty($part['name']) || $part['name'] == 'false') {
 					if (!empty($part['subject'])) {
-						$a->name = \GO_Base_Fs_File::stripInvalidChars(\GO_Base_Mail_Utils::mimeHeaderDecode($part['subject'])) . '.eml';
+						$a->name = \GO\Base\Fs\File::stripInvalidChars(\GO_Base_Mail_Utils::mimeHeaderDecode($part['subject'])) . '.eml';
 					} elseif ($part['type'] == 'message') {
-						$a->name = isset($part['description']) ? \GO_Base_Fs_File::stripInvalidChars($part['description']) . '.eml' : 'message.eml';
+						$a->name = isset($part['description']) ? \GO\Base\Fs\File::stripInvalidChars($part['description']) . '.eml' : 'message.eml';
 					} elseif ($part['subtype'] == 'calendar') {
 						$a->name = \GO::t('event','email') . '.ics';
 					} else {
@@ -577,7 +577,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				} else {
 					$a->name = \GO_Base_Mail_Utils::mimeHeaderDecode($part['name']);
 					
-					$extension = \GO_Base_Fs_File::getExtension($a->name);
+					$extension = \GO\Base\Fs\File::getExtension($a->name);
 					if(!empty($part['filename']) && empty($extension)){
 						$a->name = \GO_Base_Mail_Utils::mimeHeaderDecode($part['filename']);
 					}
@@ -587,7 +587,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				
 				$fileName = !empty($a->name) ? $a->name : \GO::t('noname','email');
 				
-				$file = new \GO_Base_Fs_File($fileName);
+				$file = new \GO\Base\Fs\File($fileName);
 				while(in_array($a->name, $uniqueNames)){
 					$a->name = $file->nameWithoutExtension().' ('.$i.').'.$file->extension();
 					$i++;

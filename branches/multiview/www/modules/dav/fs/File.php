@@ -28,7 +28,7 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 
 	public function checkWritePermission($delete=false) {
 
-		$fsFile = new \GO_Base_Fs_File($this->path);
+		$fsFile = new \GO\Base\Fs\File($this->path);
 
 		$this->folder = \GO_Files_Model_Folder::model()->findByPath($fsFile->parent()->stripFileStoragePath());
 		if (!\GO_Base_Model_Acl::hasPermission($this->folder->getPermissionLevel(), \GO_Base_Model_Acl::WRITE_PERMISSION)){
@@ -60,7 +60,7 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 //		$file->putContents($data);
 		
 		
-		$file = new \GO_Base_Fs_File($this->path);
+		$file = new \GO\Base\Fs\File($this->path);
 		$file->putContents($data);
 
 //		file_put_contents($this->path, $data);
@@ -110,7 +110,7 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 		
 		$file = \GO_Files_Model_File::model()->findByPath($this->relpath);
 		$file->folder_id=$destFolder->id;
-		$file->name = \GO_Base_Fs_File::utf8Basename($newPath);
+		$file->name = \GO\Base\Fs\File::utf8Basename($newPath);
 		$file->save();
 		
 		$this->relpath = $file->path;
@@ -170,7 +170,7 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 	 */
 	public function getContentType() {
 		
-		$fsFile = new \GO_Base_Fs_File($this->path);
+		$fsFile = new \GO\Base\Fs\File($this->path);
 
 		return $fsFile->mimeType();	
 

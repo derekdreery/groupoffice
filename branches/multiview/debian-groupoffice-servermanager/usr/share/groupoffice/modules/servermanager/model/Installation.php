@@ -348,7 +348,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		$this->getConfig();
 		
-		$file = new GO_Base_Fs_File($this->configPath);
+		$file = new GO\Base\Fs\File($this->configPath);
 		
 		$this->_config[$name]=$value;
 		

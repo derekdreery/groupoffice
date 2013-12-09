@@ -320,7 +320,7 @@ class formprocessor{
 					if($key!='photo'){//photo is handled later
 						if (is_uploaded_file($file['tmp_name']))
 						{
-							$fsFile = new \GO_Base_Fs_File($file['tmp_name']);
+							$fsFile = new \GO\Base\Fs\File($file['tmp_name']);
 							$fsFile->move(new \GO_Base_Fs_Folder($full_path),$file['name'], false,true);
 							$fsFile->setDefaultPermissions();
 			
@@ -361,7 +361,7 @@ class formprocessor{
 
 			if ($this->contact_id > 0) {
 				if (isset($_FILES['photo']['tmp_name']) && is_uploaded_file($_FILES['photo']['tmp_name'])) {
-					$fsFile = new \GO_Base_Fs_File($_FILES['photo']['tmp_name']);
+					$fsFile = new \GO\Base\Fs\File($_FILES['photo']['tmp_name']);
 					$fsFile->move(new \GO_Base_Fs_Folder(\GO::config()->tmpdir),$_FILES['photo']['name'], false,false);
 					$contactModel = \GO_Addressbook_Model_Contact::model()->findByPk($contactId);
 					$contactModel->setPhoto(\GO::config()->tmpdir . $_FILES['photo']['name']);

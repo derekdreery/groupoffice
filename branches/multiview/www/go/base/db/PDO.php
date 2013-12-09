@@ -1,6 +1,5 @@
 <?php
 namespace GO\Base\Db;
-use GO;
 
 class PDO extends \PDO{
 	public function __construct($dsn, $username, $passwd, $options=null) {

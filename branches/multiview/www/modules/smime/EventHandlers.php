@@ -75,10 +75,10 @@ class GO_Smime_EventHandlers {
 			
 			//signed data but not in clear text. Outlook has this option.
 			
-			$outfile = GO_Base_Fs_File::tempFile();
+			$outfile = GO\Base\Fs\File::tempFile();
 			$imapMessage->getImapConnection()->save_to_file($imapMessage->uid, $outfile->path());
 
-			$verifyOutfile = GO_Base_Fs_File::tempFile();
+			$verifyOutfile = GO\Base\Fs\File::tempFile();
 
 //			$cmd = '/usr/bin/openssl smime -verify -in ' . $outfile->path() . ' -out ' . $verifyOutfile->path();
 //			exec($cmd);
@@ -154,8 +154,8 @@ class GO_Smime_EventHandlers {
 //      'tmp_file' => false,
 //    )
 
-			$infile = GO_Base_Fs_File::tempFile();
-			$outfile = GO_Base_Fs_File::tempFile();
+			$infile = GO\Base\Fs\File::tempFile();
+			$outfile = GO\Base\Fs\File::tempFile();
 
 			//$outfilerel = $reldir . 'unencrypted.txt';
 

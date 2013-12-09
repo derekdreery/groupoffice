@@ -145,7 +145,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		$folder->create();
 		
 		
-		$files= \GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $folder);
+		$files= \GO\Base\Fs\File::moveUploadedFiles($_FILES['attachments'], $folder);
 		$file= $files[0];
 		$file->rename($params['thumb_id'].'.'.$file->extension());
 		

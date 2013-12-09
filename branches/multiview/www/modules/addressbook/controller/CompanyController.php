@@ -155,7 +155,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		if (isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
 		
 			
-			$destinationFile = new \GO_Base_Fs_File(\GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
+			$destinationFile = new \GO\Base\Fs\File(\GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
 			
 			move_uploaded_file($_FILES['image']['tmp_name'][0], $destinationFile->path());
 			
@@ -165,7 +165,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 			$response['original_photo_url'] = $model->photoURL;
 		}elseif(!empty($params['download_photo_url'])){
 			
-			$file = \GO_Base_Fs_File::tempFile();	
+			$file = \GO\Base\Fs\File::tempFile();	
 			$c = new \GO_Base_Util_HttpClient();
 			
 			if(!$c->downloadFile($params['download_photo_url'], $file))

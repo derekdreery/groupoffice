@@ -444,7 +444,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 //		if(!$this->event->getOrganizerEvent()){
 //			//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
 //			$ics=$this->event->toICS("REPLY", $this, $this->notifyRecurrenceTime);				
-//			$a = Swift_Attachment::newInstance($ics, \GO_Base_Fs_File::stripInvalidChars($this->event->name) . '.ics', 'text/calendar; METHOD="REPLY"');
+//			$a = Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->event->name) . '.ics', 'text/calendar; METHOD="REPLY"');
 //			$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 //			$a->setDisposition("inline");
 //			$message->attach($a);

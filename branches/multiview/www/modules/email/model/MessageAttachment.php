@@ -50,10 +50,10 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	/**
 	 * Create a new instance for an GO_Email_Model_ComposerMessage for example.
 	 * 
-	 * @param GO_Base_Fs_File $file The temporary file
+	 * @param GO\Base\Fs\File $file The temporary file
 	 * @return \GO_Email_Model_MessageAttachment 
 	 */
-	public function createFromTempFile(GO_Base_Fs_File $file){
+	public function createFromTempFile(GO\Base\Fs\File $file){
 		//		$a['name'] = $file->name();
 		$a = new \GO_Email_Model_MessageAttachment();
 		$a->name=$file->name();
@@ -76,10 +76,10 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	/**
 	 * Set the temporary file 
 	 * 
-	 * @param GO_Base_Fs_File $file
+	 * @param GO\Base\Fs\File $file
 	 * @throws Exception 
 	 */
-	public function setTempFile(GO_Base_Fs_File $file){
+	public function setTempFile(GO\Base\Fs\File $file){
 		if(!$file->isTempFile())
 			throw new \Exception("File $file->name is not a temporary file");
 		
@@ -179,7 +179,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 * @return string
 	 */
 	public function getExtension(){
-		$file = new \GO_Base_Fs_File($this->name);
+		$file = new \GO\Base\Fs\File($this->name);
 		return strtolower($file->extension());
 	}
 	
