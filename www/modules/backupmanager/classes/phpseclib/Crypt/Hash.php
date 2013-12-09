@@ -49,7 +49,7 @@
  * @author     Jim Wigginton <terrafrost@php.net>
  * @copyright  MMVII Jim Wigginton
  * @license    http://www.gnu.org/licenses/lgpl.txt
- * @version    $Id: Hash.php,v 1.6 2009/11/23 23:37:07 terrafrost Exp $
+ * @version    $Id$
  * @link       http://phpseclib.sourceforge.net
  */
 

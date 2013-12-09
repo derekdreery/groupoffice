@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright Copyright Intermesh
- * @version $Revision: 1.46 $ $Date: 2006/04/12 15:09:08 $
+ * @version $Revision$ $Date: 2006/04/12 15:09:08 $
  *
  * @author Merijn Schering <mschering@intermesh.nl>
 

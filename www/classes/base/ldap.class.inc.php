@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright Copyright &copy; Intermesh 2004
- * @version $Revision: 1.19 $ $Date: 2006/01/20 19:31:47 $
+ * @version $Revision$ $Date: 2006/01/20 19:31:47 $
  *
  * @author Markus Schabel <markus.schabel@tgm.ac.at>
  * @author Michael Borko <michael.borko@tgm.ac.at>

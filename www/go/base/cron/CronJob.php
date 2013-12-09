@@ -8,7 +8,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: CronJob.php 7607 2011-06-15 09:17:42Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  */

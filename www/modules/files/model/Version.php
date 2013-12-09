@@ -13,7 +13,7 @@
  * The GO_files_Model_Template model
  *
  * @package GO.modules.files
- * @version $Id: GO_files_Model_Template.php 7607 2011-09-29 08:41:31Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
  *

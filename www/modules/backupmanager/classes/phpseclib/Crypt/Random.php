@@ -35,7 +35,7 @@
  * @author     Jim Wigginton <terrafrost@php.net>
  * @copyright  MMVII Jim Wigginton
  * @license    http://www.gnu.org/licenses/lgpl.txt
- * @version    $Id: Random.php,v 1.9 2010/04/24 06:40:48 terrafrost Exp $
+ * @version    $Id$
  * @link       http://phpseclib.sourceforge.net
  */
 

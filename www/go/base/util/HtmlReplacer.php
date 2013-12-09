@@ -7,7 +7,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  * @copyright Copyright Intermesh
- * @version $Id: Date.php 8255 2011-10-06 15:19:06Z mschering $
+ * @version $Id$
  * @package GO.base.util
  */
 
@@ -16,7 +16,7 @@
  * It can also be used to highlight keywords.
  *
  * @copyright Copyright Intermesh
- * @version $Id: Date.php 8255 2011-10-06 15:19:06Z mschering $
+ * @version $Id$
  * @package GO.base.util
  * @since Group-Office 3.0
  */

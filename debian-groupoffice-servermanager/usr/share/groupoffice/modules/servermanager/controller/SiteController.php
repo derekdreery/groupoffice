@@ -14,7 +14,7 @@
  * Usage requires the Sites module to be installed
  *
  * @package GO.modules.Addressbook
- * @version $Id: SiteContoller.php 7607 2011-09-20 10:07:50Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  */

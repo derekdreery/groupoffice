@@ -13,7 +13,7 @@
  * 
  * The Reminder model
  * 
- * @version $Id: Reminder.php 7607 2011-08-04 13:41:42Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.model

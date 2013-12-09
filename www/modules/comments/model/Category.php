@@ -11,7 +11,7 @@
  * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
  * @link http://www.group-office.com
  * @package GO.modules.comments.model
- * @version $Id: example.php 7607 20120101Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author WilmarVB wilmar@intermesh.nl
  * @property int $id

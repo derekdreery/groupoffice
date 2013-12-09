@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Logger.php 1088 2008-10-07 13:02:06Z mschering $
+ * $Id$
  *
  * @package MCFileManager.filesystems
  * @author Moxiecode

@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.Site
- * @version $Id: GO_Site_Model_MultifileFile.php 7607 2013-04-16 09:44:35Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  */
@@ -17,7 +17,7 @@
  * The GO_Site_Model_MultifileFile model
  *
  * @package GO.modules.Site
- * @version $Id: GO_Site_Model_MultifileFile.php 7607 2013-04-16 09:44:35Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  *

@@ -13,7 +13,7 @@
  * Abstract class for the datastores * 
  * 
  * @package GO.base.data
- * @version $Id: AbstractStore.php 7607 2011-06-15 09:17:42Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @authorWesley Smits <wsmits@intermesh.nl> 
  * @abstract

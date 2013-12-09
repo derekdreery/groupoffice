@@ -12,7 +12,7 @@
  * The GO_Tasks_Controller_Task controller
  *
  * @package GO.modules.Tasks
- * @version $Id: TaskController.php 7607 2011-09-20 10:09:05Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits <wsmits@intermesh.nl>
  */

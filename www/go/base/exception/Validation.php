@@ -12,7 +12,7 @@
  * Thrown when a model doesn't validate on save
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: exceptions.class.inc.php 6002 2010-10-27 13:21:25Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package GO.base.exception
  * 

@@ -40,7 +40,7 @@ function generateCFModel($extendclassName, $moduleName){
  * If you have questions write an e-mail to info@intermesh.nl
  */
  
- * @version $Id: '.$className.'.php 7607 '.$date.'Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  * @package GO.modules.'.$moduleName.' 
@@ -49,7 +49,7 @@ function generateCFModel($extendclassName, $moduleName){
  * The CustomField Model for the GO_'.$moduleName.'_Model_'.$extendclassName.'
  *
  * @package GO.modules.'.$moduleName.'
- * @version $Id: '.$className.'.php 7607 '.$date.'Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */	

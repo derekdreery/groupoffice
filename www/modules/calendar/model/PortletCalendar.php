@@ -12,7 +12,7 @@
  * The GO_Calendar_Model_PortletCalendar model
  *
  * @package GO.modules.Calendar
- * @version $Id: PortletCalendar.php 7607 2011-09-20 10:07:07Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  *

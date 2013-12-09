@@ -13,7 +13,7 @@
 /**
  * Simple key value store that caches on disk.
  * 
- * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @package GO.base.cache

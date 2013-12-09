@@ -12,7 +12,7 @@
  * Create "where" criteria for the SQL query \GO_Base_Db_ActiveRecord::find() function
  *
  * @package GO.base.db
- * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @author Wesley Smits <wsmits@intermesh.nl> 

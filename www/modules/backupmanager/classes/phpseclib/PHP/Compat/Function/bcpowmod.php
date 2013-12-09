@@ -1,5 +1,5 @@
 <?php
-// $Id: bcpowmod.php,v 1.1 2007/07/02 04:19:55 terrafrost Exp $
+// $Id$
 
 
 /**
@@ -11,7 +11,7 @@
  * @copyright   2004-2007 Aidan Lister <aidan@php.net>, Arpad Ray <arpad@php.net>
  * @link        http://php.net/function.bcpowmod
  * @author      Sara Golemon <pollita@php.net>
- * @version     $Revision: 1.1 $
+ * @version     $Revision$
  * @since       PHP 5.0.0
  * @require     PHP 4.0.0 (user_error)
  */

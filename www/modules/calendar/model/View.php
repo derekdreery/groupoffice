@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.Calendar
- * @version $Id: GO_Calendar_Model_View.php 7607 2012-04-12 11:48:52Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
@@ -17,7 +17,7 @@
  * The GO_Calendar_Model_View model
  *
  * @package GO.modules.Calendar
- * @version $Id: GO_Calendar_Model_View.php 7607 2012-04-12 11:48:52Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *

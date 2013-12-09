@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: go_template_parser.class.inc.php 4966 2010-06-03 13:31:46Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.util
  */
@@ -17,7 +17,7 @@
  * Parses a template
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: go_template_parser.class.inc.php 4966 2010-06-03 13:31:46Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @license AGPL Affero General Public License
  * @package GO.base.util

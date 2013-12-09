@@ -13,7 +13,7 @@
  * The GO_Calendar_Model_Group model
  *
  * @package GO.modules.Calendar
- * @version $Id: GO_Calendar_Model_Group.php 7607 2011-09-28 10:30:15Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *

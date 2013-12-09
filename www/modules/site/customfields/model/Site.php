@@ -12,7 +12,7 @@
  * The CustomField Model for the GO_Site_Customfields_Model_Site
  *
  * @package GO.modules.Site
- * @version $Id: GO_Site_Customfields_Model_Site.php 7607 2013-03-27 15:41:57Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  */	

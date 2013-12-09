@@ -14,7 +14,7 @@
  * 
  * The UserGroup model
  * 
- * @version $Id: Group.php 7607 2011-08-04 13:41:42Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  * 

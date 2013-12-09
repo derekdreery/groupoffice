@@ -39,7 +39,7 @@
  * @copyright 2002-2003 Richard Heyes
  * @copyright 2006-2008 Anish Mistry
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD
- * @version   SVN: $Id: Sieve.php 300898 2010-07-01 09:49:02Z yunosh $
+ * @version   SVN: $Id$
  * @link      http://pear.php.net/package/Net_Sieve
  */
 

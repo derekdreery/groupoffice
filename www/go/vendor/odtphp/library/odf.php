@@ -13,10 +13,10 @@ class OdfException extends Exception {
  * You need PHP 5.2 at least
  * You need Zip Extension or PclZip library
  * Encoding : ISO-8859-1
- * Last commit by $Author: neveldo $
+ * Last commit by $Author$
  * Date - $Date: 2009-06-17 11:11:57 +0200 (mer., 17 juin 2009) $
- * SVN Revision - $Rev: 42 $
- * Id : $Id: odf.php 42 2009-06-17 09:11:57Z neveldo $
+ * SVN Revision - $Rev$
+ * Id : $Id$
  *
  * @copyright  GPL License 2008 - Julien Pauli - Cyril PIERRE de GEYER - Anaska (http://www.anaska.com)
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License

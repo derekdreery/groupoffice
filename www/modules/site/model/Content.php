@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.Site
- * @version $Id: GO_Site_Model_Content.php 7607 2013-03-27 15:36:16Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  */
@@ -17,7 +17,7 @@
  * The GO_Site_Model_Content model
  *
  * @package GO.modules.Site
- * @version $Id: GO_Site_Model_Content.php 7607 2013-03-27 15:36:16Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  *

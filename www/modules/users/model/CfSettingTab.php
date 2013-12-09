@@ -12,7 +12,7 @@
  * The GO_Users_Model_CfSettingTab model
  *
  * @package GO.modules.Users
- * @version $Id: CfSettingTab.php 7607 2011-11-03 10:28:32Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits <wsmits@intermesh.nl>
  *

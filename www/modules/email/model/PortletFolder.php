@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.emailportlet
- * @version $Id: GO_emailportlet_Model_EmailPortletFolder.php 7607 2012-08-24 12:05:55Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
@@ -17,7 +17,7 @@
  * The GO_emailportlet_Model_EmailPortletFolder model
  *
  * @package GO.modules.emailportlet
- * @version $Id: GO_emailportlet_Model_EmailPortletFolder.php 7607 2012-08-24 12:05:55Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *

@@ -7,7 +7,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.model
@@ -21,7 +21,7 @@
  * 
  * replace into go_acl (acl_id, group_id, level) select acl_id,<group_id>,4 from go_users;
  * 
- * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.model

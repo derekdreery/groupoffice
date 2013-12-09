@@ -9,7 +9,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @package GO.base.db
- * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl> 
  */
@@ -18,7 +18,7 @@
  * All Group-Office models should extend this ActiveRecord class.
  *
  * @package GO.base.db
- * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl> 
  */

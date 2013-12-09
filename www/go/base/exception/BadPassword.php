@@ -12,7 +12,7 @@
  * Thrown when a user doesn't have access
  *
  * @author Michal Charvat <mcharvat@zdeno.net>
- * @version $Id:  $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package GO.base.exception
  *
