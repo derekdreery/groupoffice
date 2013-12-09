@@ -73,6 +73,10 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	private $_lockedActions=array();
 	
 	
+	
+	protected $layout='ajax';
+	
+	
 	public function __construct() {
 		
 		if (!GO::config()->enabled) {
@@ -251,7 +255,13 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		
 //		if(!headers_sent())
 //			$this->headers();
+		$layoutFile = GO::view()->getPath().'layout/'.$this->layout.'.php';
+		$masterPage = file_exists($layoutFile);
 		
+		if($masterPage){
+			ob_start();
+			ob_implicit_flush(false);
+		}
 		$module = $this->getModule();
 		
 		if(!$module){
@@ -270,6 +280,13 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		{			
 			$file = GO::config()->root_path.'views/'.GO::view()->getName().'/Default.php';			
 			require($file);
+		}
+		
+		if($masterPage){
+			
+			extract($data);
+			$content = ob_get_clean();			
+			require($layoutFile);
 		}
 	}
 	
