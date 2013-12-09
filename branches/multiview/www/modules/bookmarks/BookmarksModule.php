@@ -5,7 +5,7 @@ class GO_Bookmarks_BookmarksModule extends GO_Base_Module{
 	}
 	
 	public static function initListeners() {
-		$c = new GO_Core_Controller_Auth();
+		$c = new \GO_Core_Controller_Auth();
 		$c->addListener('head', "GO_Bookmarks_BookmarksModule", "head");
 	}
 	
@@ -25,7 +25,7 @@ class GO_Bookmarks_BookmarksModule extends GO_Base_Module{
 	public function install() {
 		parent::install();
 		
-		$category = new GO_Bookmarks_Model_Category();
+		$category = new \GO_Bookmarks_Model_Category();
 		$category->name=GO::t('general','bookmarks');		
 		$category->save();
 		$category->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::READ_PERMISSION);

@@ -30,7 +30,7 @@ class GO_Base_Mail_EmailRecipients{
 	 * @return GO_Base_Mail_EmailRecipients 
 	 */
 	public static function createSingle($email, $personal){
-		$l = new GO_Base_Mail_EmailRecipients();
+		$l = new \GO_Base_Mail_EmailRecipients();
 		$l->addRecipient($email, $personal);
 		return $l;
 	}
@@ -260,7 +260,7 @@ class GO_Base_Mail_EmailRecipients{
 		if(!empty($this->_buffer))
 		{
 			if($this->strict && !GO_Base_Util_String::validate_email($this->_buffer)){
-				throw new Exception("Address ".$this->_buffer." is not valid");
+				throw new \Exception("Address ".$this->_buffer." is not valid");
 			}else
 			{
 				$this->addRecipient($this->_buffer, $this->_personal);

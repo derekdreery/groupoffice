@@ -19,7 +19,7 @@ abstract class GO_Base_Controller_AbstractExportController extends GO_Base_Contr
 	
 	public function actionAttributes($params){
 		
-		$store = new GO_Base_Data_ArrayStore();
+		$store = new \GO_Base_Data_ArrayStore();
 		
 		$attr = $this->exportableAttributes();
 		
@@ -43,7 +43,7 @@ abstract class GO_Base_Controller_AbstractExportController extends GO_Base_Contr
 	}
 	
 //	public function actionParameters($params){
-//		$store = new GO_Base_Data_ArrayStore();
+//		$store = new \GO_Base_Data_ArrayStore();
 //		
 //		$attr = $this->exportParameters();
 //		

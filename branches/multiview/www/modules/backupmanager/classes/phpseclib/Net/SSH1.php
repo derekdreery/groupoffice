@@ -11,7 +11,7 @@
  * <?php
  *    include('Net/SSH1.php');
  *
- *    $ssh = new Net_SSH1('www.domain.tld');
+ *    $ssh = new \Net_SSH1('www.domain.tld');
  *    if (!$ssh->login('username', 'password')) {
  *        exit('Login Failed');
  *    }
@@ -33,7 +33,7 @@
  * <?php
  *    include('Net/SSH1.php');
  *
- *    $ssh = new Net_SSH1('www.domain.tld');
+ *    $ssh = new \Net_SSH1('www.domain.tld');
  *    if (!$ssh->login('username', 'password')) {
  *        exit('Login Failed');
  *    }
@@ -420,21 +420,21 @@ class Net_SSH1 {
         $this->_string_shift($response[NET_SSH1_RESPONSE_DATA], 4);
 
         $temp = unpack('nlen', $this->_string_shift($response[NET_SSH1_RESPONSE_DATA], 2));
-        $server_key_public_exponent = new Math_BigInteger($this->_string_shift($response[NET_SSH1_RESPONSE_DATA], ceil($temp['len'] / 8)), 256);
+        $server_key_public_exponent = new \Math_BigInteger($this->_string_shift($response[NET_SSH1_RESPONSE_DATA], ceil($temp['len'] / 8)), 256);
         $this->server_key_public_exponent = $server_key_public_exponent;
 
         $temp = unpack('nlen', $this->_string_shift($response[NET_SSH1_RESPONSE_DATA], 2));
-        $server_key_public_modulus = new Math_BigInteger($this->_string_shift($response[NET_SSH1_RESPONSE_DATA], ceil($temp['len'] / 8)), 256);
+        $server_key_public_modulus = new \Math_BigInteger($this->_string_shift($response[NET_SSH1_RESPONSE_DATA], ceil($temp['len'] / 8)), 256);
         $this->server_key_public_modulus = $server_key_public_modulus;
 
         $this->_string_shift($response[NET_SSH1_RESPONSE_DATA], 4);
 
         $temp = unpack('nlen', $this->_string_shift($response[NET_SSH1_RESPONSE_DATA], 2));
-        $host_key_public_exponent = new Math_BigInteger($this->_string_shift($response[NET_SSH1_RESPONSE_DATA], ceil($temp['len'] / 8)), 256);
+        $host_key_public_exponent = new \Math_BigInteger($this->_string_shift($response[NET_SSH1_RESPONSE_DATA], ceil($temp['len'] / 8)), 256);
         $this->host_key_public_exponent = $host_key_public_exponent;
 
         $temp = unpack('nlen', $this->_string_shift($response[NET_SSH1_RESPONSE_DATA], 2));
-        $host_key_public_modulus = new Math_BigInteger($this->_string_shift($response[NET_SSH1_RESPONSE_DATA], ceil($temp['len'] / 8)), 256);
+        $host_key_public_modulus = new \Math_BigInteger($this->_string_shift($response[NET_SSH1_RESPONSE_DATA], ceil($temp['len'] / 8)), 256);
         $this->host_key_public_modulus = $host_key_public_modulus;
 
         $this->_string_shift($response[NET_SSH1_RESPONSE_DATA], 4);
@@ -505,22 +505,22 @@ class Net_SSH1 {
 
         switch ($cipher) {
             //case NET_SSH1_CIPHER_NONE:
-            //    $this->crypto = new Crypt_Null();
+            //    $this->crypto = new \Crypt_Null();
             //    break;
             case NET_SSH1_CIPHER_DES:
-                $this->crypto = new Crypt_DES();
+                $this->crypto = new \Crypt_DES();
                 $this->crypto->disablePadding();
                 $this->crypto->enableContinuousBuffer();
                 $this->crypto->setKey(substr($session_key, 0,  8));
                 break;
             case NET_SSH1_CIPHER_3DES:
-                $this->crypto = new Crypt_TripleDES(CRYPT_DES_MODE_3CBC);
+                $this->crypto = new \Crypt_TripleDES(CRYPT_DES_MODE_3CBC);
                 $this->crypto->disablePadding();
                 $this->crypto->enableContinuousBuffer();
                 $this->crypto->setKey(substr($session_key, 0, 24));
                 break;
             //case NET_SSH1_CIPHER_RC4:
-            //    $this->crypto = new Crypt_RC4();
+            //    $this->crypto = new \Crypt_RC4();
             //    $this->crypto->enableContinuousBuffer();
             //    $this->crypto->setKey(substr($session_key, 0,  16));
             //    break;
@@ -597,7 +597,7 @@ class Net_SSH1 {
      * {@link http://www.faqs.org/docs/bashman/bashref_65.html http://www.faqs.org/docs/bashman/bashref_65.html}
      * {@link http://www.faqs.org/docs/bashman/bashref_62.html http://www.faqs.org/docs/bashman/bashref_62.html}
      *
-     * To execute further commands, a new Net_SSH1 object will need to be created.
+     * To execute further commands, a new \Net_SSH1 object will need to be created.
      *
      * Returns false on failure and the output, otherwise.
      *
@@ -653,7 +653,7 @@ class Net_SSH1 {
 
         fclose($this->fsock);
 
-        // reset the execution bitmap - a new Net_SSH1 object needs to be created.
+        // reset the execution bitmap - a new \Net_SSH1 object needs to be created.
         $this->bitmap = 0;
 
         return $output;
@@ -1021,7 +1021,7 @@ class Net_SSH1 {
             require_once('Crypt/RSA.php');
         }
 
-        $rsa = new Crypt_RSA();
+        $rsa = new \Crypt_RSA();
         $rsa->loadKey($key, CRYPT_RSA_PUBLIC_FORMAT_RAW);
         $rsa->setEncryptionMode(CRYPT_RSA_ENCRYPTION_PKCS1);
         return $rsa->encrypt($m);
@@ -1048,7 +1048,7 @@ class Net_SSH1 {
         }
         $temp.= chr(0) . $m;
 
-        $m = new Math_BigInteger($temp, 256);
+        $m = new \Math_BigInteger($temp, 256);
         $m = $m->modPow($key[0], $key[1]);
 
         return $m->toBytes();

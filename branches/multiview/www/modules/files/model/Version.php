@@ -66,7 +66,7 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 	 * @return \GO_Base_Fs_File
 	 */
 	public function getFilesystemFile(){
-		return new GO_Base_Fs_File(GO::config()->file_storage_path.$this->path);
+		return new \GO_Base_Fs_File(GO::config()->file_storage_path.$this->path);
 	}
 	
 	protected function beforeSave() {

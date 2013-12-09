@@ -20,14 +20,14 @@
 //		$file_cf_categories[] = $cat;
 //	}
 //	
-////	$GO_SCRIPTS_JS .= "GO.customfields.file_categories = new Array(); ";
+////	$GO_SCRIPTS_JS .= "GO.customfields.file_categories = new \Array(); ";
 ////	foreach ($file_cf_categories as $cat)
 ////		$GO_SCRIPTS_JS .= "GO.customfields.file_categories.push({id:".$cat['id'].",name:'".$cat['name']."'}); ";
 //
 ////	global $GO_SECURITY;
 ////	$addressbook_limits = $cf->get_addressbooks_limits_array($GLOBALS['GO_SECURITY']->user_id);
 ////	$GO_SCRIPTS_JS .= "GO.customfields.addressbook_limits = ".json_encode($addressbook_limits)."; ";
-////	$GO_SCRIPTS_JS .= "GO.customfields.file_cfields = new Array(); ";
+////	$GO_SCRIPTS_JS .= "GO.customfields.file_cfields = new \Array(); ";
 ////	foreach ($file_cf_fields as $field)
 ////		$GO_SCRIPTS_JS .= "GO.customfields.file_cfields['".$field['id']."'] = ({id:".$field['id'].",name:'".$field['name']."'}); ";
 //

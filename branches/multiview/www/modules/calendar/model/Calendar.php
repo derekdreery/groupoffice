@@ -151,7 +151,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		 }
 		}
 		
-		$file = new GO_Base_Fs_File($this->getPublicIcsPath());
+		$file = new \GO_Base_Fs_File($this->getPublicIcsPath());
 		
 		if(!$this->public){
 			if($file->exists())
@@ -187,7 +187,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		$default = parent::getDefault($user, $createdNew);
 	
 		if($createdNew){
-			$pt = new GO_Calendar_Model_PortletCalendar();
+			$pt = new \GO_Calendar_Model_PortletCalendar();
 			$pt->user_id=$user->id;
 			$pt->calendar_id=$default->id;
 			$pt->save();
@@ -241,7 +241,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		
 		$string = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->version."//EN\r\n";
 
-			$t = new GO_Base_VObject_VTimezone();
+			$t = new \GO_Base_VObject_VTimezone();
 			$string .= $t->serialize();
 
 			while($event = $stmt->fetch()){

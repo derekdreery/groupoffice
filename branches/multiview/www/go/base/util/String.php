@@ -86,7 +86,7 @@ class GO_Base_Util_String {
 				return $converted;
 			}else
 			{
-				throw new Exception("Could not convert string to ASCII");
+				throw new \Exception("Could not convert string to ASCII");
 			}							
 		}
 		//return preg_replace('/[^a-zA-Z0-9 ,-:_]+/','',$string);
@@ -915,7 +915,7 @@ END;
 
 	public static function html_to_text($text, $link_list=true){
 
-		$htmlToText = new GO_Base_Util_Html2Text ($text);
+		$htmlToText = new \GO_Base_Util_Html2Text ($text);
 		return $htmlToText->get_text($link_list);
 	}
 
@@ -1113,7 +1113,7 @@ END;
 		
 		if (!is_string($string)) {
 			GO::debug($string);
-			throw new Exception('Passed parameter is not a string.');
+			throw new \Exception('Passed parameter is not a string.');
 		}
 
 // Keep a copy of the original string before cleaning up

@@ -23,7 +23,7 @@ try{
 			$comment = $comments->get_comment($_REQUEST['comment_id']);
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			$comment['user_name']=$GO_USERS->get_user_realname($comment['user_id']);
 			$comment['mtime']=Date::get_timestamp($comment['mtime']);
@@ -45,14 +45,14 @@ try{
 			$response['write_permission']=$response['permisson_level']>GO_SECURITY::WRITE_PERMISSION;
 			if(!$response['permisson_level'])
 			{
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}
 			
 			if(isset($_POST['delete_keys']))
 			{
 				try{
 					if($response['permisson_level']<GO_SECURITY::DELETE_PERMISSION){
-						throw new AccessDeniedException();
+						throw new \AccessDeniedException();
 					}
 					$response['deleteSuccess']=true;
 					$delete_comments = json_decode(($_POST['delete_keys']));
@@ -74,7 +74,7 @@ try{
 			
 			
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 			
 			$response['total'] = $comments->get_comments($link_id, $link_type, $query, $sort, $dir, $start, $limit);
 			$response['results']=array();

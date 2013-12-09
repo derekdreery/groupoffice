@@ -82,7 +82,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 						$qp = json_decode($params['query_params'], true);
 						if (isset($qp['content_all'])){
 
-							$c = new GO_Filesearch_Controller_Filesearch();
+							$c = new \GO_Filesearch_Controller_Filesearch();
 
 							$response['data']['text'] = $c->highlightSearchParams($qp, $response['data']['text']);
 						}
@@ -147,7 +147,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 						array('extension'=>strtolower($model->extension), 'user_id'=>GO::user()->id));
 		
 		if(!$fh)
-			$fh = new GO_Files_Model_FileHandler();
+			$fh = new \GO_Files_Model_FileHandler();
 		
 		$fh->extension=strtolower($model->extension);
 		
@@ -179,7 +179,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		}
 //	var_dump($fileHandlers);
 		
-		$store = new GO_Base_Data_ArrayStore();
+		$store = new \GO_Base_Data_ArrayStore();
 		
 		foreach($fileHandlers as $fileHandler){	
 			$store->addRecord(array(
@@ -201,7 +201,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 						array('extension'=>strtolower($params['extension']), 'user_id'=>GO::user()->id));
 		
 		if(!$fh)
-			$fh = new GO_Files_Model_FileHandler();
+			$fh = new \GO_Files_Model_FileHandler();
 		
 		$fh->extension=strtolower($params['extension']);
 		$fh->cls=$params['cls'];
@@ -221,21 +221,21 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		}
 		
 		if(!$file)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO_Base_Exception_NotFound();
 		
 		if(!empty($params['random_code'])){
 			if($file->random_code!=$params['random_code'])
-				throw new GO_Base_Exception_NotFound();
+				throw new \GO_Base_Exception_NotFound();
 			
 			if(time()>$file->expire_time)
-				throw new Exception(GO::t('downloadLinkExpired', 'files'));				
+				throw new \Exception(GO::t('downloadLinkExpired', 'files'));				
 		}else
 		{
 			if(!GO::user())
 				GO_Base_Util_Http::basicAuth();
 				
 			if(!$file->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
-				throw new GO_Base_Exception_AccessDenied();
+				throw new \GO_Base_Exception_AccessDenied();
 		}
 
 		

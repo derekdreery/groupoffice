@@ -35,7 +35,7 @@ try {
 			$settings['emailsubject'] = (isset($_REQUEST['emailsubject']) && $_REQUEST['emailsubject']) ? $_REQUEST['emailsubject'] : '';
 
 			if (!$settings['rmachine'] || !$settings['rport'] || !$settings['ruser'] || !$settings['rtarget'] || !$settings['sources'] || !$settings['rotations'] || !$settings['emailaddress'] || !$settings['emailsubject']) {
-				throw new Exception($lang['common']['missingField']);
+				throw new \Exception($lang['common']['missingField']);
 			}
 
 			if (!$backupmanager->save_settings($settings)) {
@@ -58,11 +58,11 @@ try {
 			$ruser = (isset($_REQUEST['ruser']) && $_REQUEST['ruser']) ? $_REQUEST['ruser'] : '';
 
 			if (!$rpassword || !$rmachine || !$rport || !$ruser) {
-				throw new Exception($lang['common']['missingField']);
+				throw new \Exception($lang['common']['missingField']);
 			}
 
 			require_once($GLOBALS['GO_MODULES']->modules['backupmanager']['class_path'] . 'phpseclib/Net/SSH2.php');
-			$ssh = new Net_SSH2($rmachine, $rport);
+			$ssh = new \Net_SSH2($rmachine, $rport);
 
 			if ($ssh->login($ruser, $rpassword)) {
 				if (!file_exists($GLOBALS['GO_CONFIG']->file_storage_path . '.ssh/id_rsa.pub')) {

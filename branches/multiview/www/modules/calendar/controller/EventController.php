@@ -72,7 +72,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 
 		if (!empty($params['freq'])) {
-			$rRule = new GO_Base_Util_Icalendar_Rrule();
+			$rRule = new \GO_Base_Util_Icalendar_Rrule();
 			$rRule->readJsonArray($params);
 			$model->rrule = $rRule->createRrule();
 		} elseif (isset($params['freq'])) {
@@ -106,7 +106,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				if(!empty($rrule->byday)){
 					if (!empty($params['duplicate']))
 						$model->delete();
-					throw new Exception(GO::t('cantMoveRecurringByDay', 'calendar'));
+					throw new \Exception(GO::t('cantMoveRecurringByDay', 'calendar'));
 				}
 			}
 		}
@@ -127,7 +127,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			unset($params['id']);
 			
 			if(!$model)
-				throw new Exception("Could not create exception!");
+				throw new \Exception("Could not create exception!");
 			
 			$this->_setEventAttributes($model, $params);
 		}
@@ -142,7 +142,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 			$exception_for_event_id=empty($params['exception_for_event_id']) ? 0 : $params['exception_for_event_id'];
 			if(count($event->getConflictingEvents($exception_for_event_id)))
-				throw new Exception('Ask permission');
+				throw new \Exception('Ask permission');
 		}
 //		
 //		/* Check for conflicts with other events in the calendar */		
@@ -158,7 +158,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //			GO::debug("Conflict: ".$event->id." ".$event->name);
 //
 //			if($conflictEvent["id"]!=$event->id && (empty($params['exception_for_event_id']) || $params['exception_for_event_id']!=$conflictEvent["id"])){
-//				throw new Exception('Ask permission');
+//				throw new \Exception('Ask permission');
 //			}
 //		}
 		
@@ -212,7 +212,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		if(GO::modules()->files){
 			//handle attachment when event is saved from an email.
-			$f = new GO_Files_Controller_Folder();
+			$f = new \GO_Files_Controller_Folder();
 			$f->processAttachments($response, $model, $params);
 		}
 		 
@@ -278,7 +278,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 						$resourceEvent = false;
 
 					if (empty($resourceEvent))
-						$resourceEvent = new GO_Calendar_Model_Event();
+						$resourceEvent = new \GO_Calendar_Model_Event();
 
 					$resourceEvent->resource_event_id = $model->id;
 					$resourceEvent->calendar_id = $resource_calendar_id;
@@ -333,7 +333,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 							'event_id'=>$event->id
 					));
 					if (!$participant){
-						$participant = new GO_Calendar_Model_Participant();
+						$participant = new \GO_Calendar_Model_Participant();
 						
 						//ask for meeting request because there's a new participant
 						$response['askForMeetingRequest']=true;
@@ -343,7 +343,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					$participant->setAttributes($p);
 					$participant->event_id = $event->id;
 					if(!$participant->save()){
-						throw new Exception("Could not save participant ".var_export($participant->getValidationErrors(), true));
+						throw new \Exception("Could not save participant ".var_export($participant->getValidationErrors(), true));
 					}
 					
 					if(!$hasOrganizer){
@@ -475,7 +475,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //					$message->setHtmlAlternateBody($body);
 //					//$message->setBody($body, 'text/html','UTF-8');
 //					$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
-//					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+//					$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 //					$a->setDisposition("inline");
 //					$message->attach($a);
 //					GO_Base_Mail_Mailer::newGoInstance()->send($message);
@@ -488,7 +488,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function beforeDisplay(&$response, &$model, &$params) {
 		
 		if($model->isPrivate(GO::user()) && $model->user_id != GO::user()->id && $model->calendar->user_id!=GO::user()->id)
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO_Base_Exception_AccessDenied();
 		
 		return parent::beforeDisplay($response, $model, $params);
 	}
@@ -504,7 +504,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 	
 		if($model->isPrivate(GO::user()) && $model->user_id != GO::user()->id && $model->calendar->user_id!=GO::user()->id)
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO_Base_Exception_AccessDenied();
 	
 		if (!empty($params['exception_date'])) {
 			//$params['exception_date'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
@@ -525,7 +525,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$response['data']['end_time'] = date(GO::user()->time_format, $model->end_time);
 
 		if (isset($response['data']['rrule']) && !empty($response['data']['rrule'])) {
-			$rRule = new GO_Base_Util_Icalendar_Rrule();
+			$rRule = new \GO_Base_Util_Icalendar_Rrule();
 			$rRule->readIcalendarRruleString($model->start_time, $model->rrule);
 			$createdRule = $rRule->createJSONOutput();
 
@@ -568,7 +568,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					$contact = GO_Addressbook_Model_Contact::model()->findByPk($arr[1]);
 					
 					if($contact){
-						$participantModel = new GO_Calendar_Model_Participant();
+						$participantModel = new \GO_Calendar_Model_Participant();
 						$participantModel->setContact($contact);
 						
 						$response['participants']['results'][]=$participantModel->toJsonArray($model->start_time, $model->end_time);
@@ -672,7 +672,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function actionViewStore($params) {
 		$view = GO_Calendar_Model_View::model()->findByPk($params['view_id']);
 		if (!$view)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO_Base_Exception_NotFound();
 		
 		$response['title']=$view->name;
 		
@@ -748,7 +748,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if(!empty($params['view_id'])){
 				$view = GO_Calendar_Model_View::model()->findByPk($params['view_id']);
 				if(!$view)
-					throw new GO_Base_Exception_NotFound();
+					throw new \GO_Base_Exception_NotFound();
 				
 				//$calendarModels = $view->calendars;
 				$calendarModels = array_merge($view->getGroupCalendars()->fetchAll(), $view->calendars->fetchAll());
@@ -759,7 +759,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}else
 		{
 			if(!isset($params['calendars']))
-				throw new Exception("Missing parameter 'calendars'");
+				throw new \Exception("Missing parameter 'calendars'");
 			
 			$calendars = json_decode($params['calendars']);
 		}
@@ -782,7 +782,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			try{
 				$calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
 				if(!$calendar)
-					throw new GO_Base_Exception_NotFound();
+					throw new \GO_Base_Exception_NotFound();
 				
 				$calendarModels[]=$calendar;
 				
@@ -1159,7 +1159,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function actionIcs($params) {
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
 		header('Content-Type: text/plain');
-		//GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File('calendar.ics'));
+		//GO_Base_Util_Http::outputDownloadHeaders(new \GO_Base_FS_File('calendar.ics'));
 		echo $event->toICS();
 	}
 	
@@ -1167,7 +1167,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
 		if(!$event)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO_Base_Exception_NotFound();
 		
 		if(!isset($params['send_cancel_notice']) && $event->hasOtherParticipants()){
 			return array(
@@ -1212,7 +1212,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		//find existing event
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, $account->user_id);
 		if(!$masterEvent)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO_Base_Exception_NotFound();
 		
 		if($recurrenceDate){
 			$event = $masterEvent->findException($recurrenceDate);
@@ -1270,7 +1270,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$importAttributes=array('is_organizer'=>false,'calendar_id'=>$settings->calendar_id);
 		
 		//import it
-		$event = new GO_Calendar_Model_Event();
+		$event = new \GO_Calendar_Model_Event();
 		$event->importVObject($vevent, $importAttributes,false,true);
 			
 		//notify orgnizer
@@ -1280,7 +1280,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //		{
 //			//this is a bad situation. The import thould have detected a user for one of the participants.
 //			//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
-//			$participant = new GO_Calendar_Model_Participant();
+//			$participant = new \GO_Calendar_Model_Participant();
 //			$participant->event_id=$event->id;
 //			$participant->user_id=$event->calendar->user_id;
 //			$participant->email=$event->calendar->user->email;	
@@ -1370,14 +1370,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				break;
 			
 			default:
-				throw new Exception("Unsupported method: ".$vcalendar->method);
+				throw new \Exception("Unsupported method: ".$vcalendar->method);
 				
 		}
 	}
 	
 //	protected function actionImportIcs($params){
 //		
-//		$file = new GO_Base_Fs_File($params['file']);
+//		$file = new \GO_Base_Fs_File($params['file']);
 //		$file->convertToUtf8();
 //		$data = $file->getContents();
 //		
@@ -1386,14 +1386,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //		$vcalendar = GO_Base_VObject_Reader::read($data);
 //		
 //		foreach($vcalendar->vevent as $vevent){
-//			$event = new GO_Calendar_Model_Event();
+//			$event = new \GO_Calendar_Model_Event();
 //			$event->importVObject($vevent);
 //		}
 //	}
 	
 //	protected function actionImportVcs($params){
 //		
-//		$file = new GO_Base_Fs_File($params['file']);
+//		$file = new \GO_Base_Fs_File($params['file']);
 //		
 //		$data = $file->getContents();
 //		
@@ -1402,7 +1402,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //		GO_Base_VObject_Reader::convertICalendarToVCalendar($vcalendar);
 //		
 //		foreach($vcalendar->vevent as $vevent){
-//			$event = new GO_Calendar_Model_Event();
+//			$event = new \GO_Calendar_Model_Event();
 //			$event->importVObject($vevent);		
 //		}
 //	}
@@ -1415,11 +1415,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		));
 		
 		if(!$participant){
-			throw new Exception("Could not find the event");
+			throw new \Exception("Could not find the event");
 		}
 		
 		if($participant->getSecurityToken()!=$params['participantToken']){
-			throw new Exception("Invalid request");
+			throw new \Exception("Invalid request");
 		}
 		
 		if(empty($params['accept']))		
@@ -1489,7 +1489,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @param array $response 
 	 */
 	private function _createPdf($response, $view=false){
-		$pdf = new GO_Calendar_Views_Pdf_CalendarPdf('L', $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false);
+		$pdf = new \GO_Calendar_Views_Pdf_CalendarPdf('L', $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false);
 		$pdf->setParams($response, $view);
 		$pdf->Output(GO_Base_Fs_File::stripInvalidChars($response['title']).'.pdf');
 	}
@@ -1500,7 +1500,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
 		$participants = $event->participants;
 		
-		$to = new GO_Base_Mail_EmailRecipients();
+		$to = new \GO_Base_Mail_EmailRecipients();
 		
 		while($participant = $participants->fetch()){
 			$to->addRecipient($participant->email, $participant->name);
@@ -1517,14 +1517,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$this->requireCli();
 		
 		if(!GO::user()->isAdmin())
-			throw new Exception("You must be admin");
+			throw new \Exception("You must be admin");
 		
 		$this->checkRequiredParameters(array('date'), $params);
 
 		$params['date']=strtotime($params['date']);
 		
 		if($params['date']>GO_Base_Util_Date::date_add(time(), 0, 0, -1)){
-			throw new Exception("Please give a date at least one year in the past.");
+			throw new \Exception("Please give a date at least one year in the past.");
 		}
 		
 		$sure = readline("If you continue all events older than '".GO_Base_Util_Date::get_timestamp($params['date'], false)."' will be deleted. Are you sure? (y/n)");

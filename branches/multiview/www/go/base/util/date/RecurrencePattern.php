@@ -126,7 +126,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	
 	protected function _setFreq($freq){
 		if(empty($freq))
-			throw new Exception("Frequency can't be empty!");
+			throw new \Exception("Frequency can't be empty!");
 			
 		$this->_freq=$freq;
 	}
@@ -376,8 +376,8 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 * @return int Number of periods that fall between event start and start time
 	 */
 	protected function _findNumberOfDays($startTime, $interval=1, $ceil=true){
-		$eventStartDateTime = new GO_Base_Util_Date_DateTime(date('c',$this->_eventstarttime));
-		$startDateTime= new GO_Base_Util_Date_DateTime(date('c',$startTime));
+		$eventStartDateTime = new \GO_Base_Util_Date_DateTime(date('c',$this->_eventstarttime));
+		$startDateTime= new \GO_Base_Util_Date_DateTime(date('c',$startTime));
 		
 		//diff is only compatible with 5.3 and we want 5.2 compatibility
 		//$diff = $eventStartDateTime->diff($startDateTime, true); 
@@ -405,7 +405,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 * @param boolean $toGmt Will be converted to GMT time (true) or from GMT time (false).
 	 */
 	public function shiftDays($toGmt=true){
-		$date = new DateTime(date('Y-m-d G:i', $this->_eventstarttime));
+		$date = new \DateTime(date('Y-m-d G:i', $this->_eventstarttime));
 		$timezoneOffset = $date->getOffset();
 				
 		$localStartHour = $date->format('G');

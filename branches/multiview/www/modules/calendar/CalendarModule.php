@@ -46,7 +46,7 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 		
 		$settings = GO_Calendar_Model_Settings::model()->getDefault($user);
 		if(!$settings){
-			$settings = new GO_Calendar_Model_Settings();
+			$settings = new \GO_Calendar_Model_Settings();
 			$settings->user_id=$params['id'];
 		}
 		
@@ -83,12 +83,12 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 	public function install() {
 		parent::install();
 		
-		$group = new GO_Calendar_Model_Group();
+		$group = new \GO_Calendar_Model_Group();
 		$group->name=GO::t('calendars','calendar');
 		$group->save();
 		
 		
-		$cron = new GO_Base_Cron_CronJob();
+		$cron = new \GO_Base_Cron_CronJob();
 		
 		$cron->name = 'Calendar publisher';
 		$cron->active = true;

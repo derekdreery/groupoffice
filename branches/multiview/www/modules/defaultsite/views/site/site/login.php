@@ -1,7 +1,7 @@
 <div class="login-page page">
 	<div class="wrapper">
 		<h2><?php echo GO::t('login', 'defaultsite'); ?></h2>								
-		<?php $form = new GO_Site_Widget_Form(); ?>
+		<?php $form = new \GO_Site_Widget_Form(); ?>
 		<?php echo $form->beginForm(); ?>
 		
 		<?php if (Site::notifier()->hasMessage('error')): ?>

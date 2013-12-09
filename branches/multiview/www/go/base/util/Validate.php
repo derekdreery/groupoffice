@@ -157,7 +157,7 @@ class GO_Base_Util_Validate {
 		//$wsdl = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 		$wsdl = GO::config()->root_path.'go/vendor/wsdl/checkVatService.wsdl';
 
-		$vies = new SoapClient($wsdl);
+		$vies = new \SoapClient($wsdl);
 		
 		//lower the timeout becuase it can hang too long
 		ini_set("default_socket_timeout", 5);
@@ -194,9 +194,9 @@ class GO_Base_Util_Validate {
 			}
 			
 			if($ret!="INVALID_INPUT")
-				throw new GO_Base_Exception_ViesDown();
+				throw new \GO_Base_Exception_ViesDown();
 			
-			throw new Exception("Could not check VAT number: ".$msg);
+			throw new \Exception("Could not check VAT number: ".$msg);
 		}
 
 		return $ret->valid;

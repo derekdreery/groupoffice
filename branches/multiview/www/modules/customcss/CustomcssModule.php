@@ -4,7 +4,7 @@ class GO_Customcss_CustomcssModule extends GO_Base_Module {
 
 	public static function initListeners() {
 		
-		$c = new GO_Core_Controller_Auth();
+		$c = new \GO_Core_Controller_Auth();
 		$c->addListener('head', 'GO_Customcss_CustomcssModule', 'head');
 		
 		return parent::initListeners();

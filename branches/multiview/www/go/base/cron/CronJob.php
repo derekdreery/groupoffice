@@ -245,7 +245,7 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	 * @return int The next run time (timestamp)
 	 */
 	private function _calculateNextRun(){
-		$completeExpression = new GO_Base_Util_Cron($this->_buildExpression());
+		$completeExpression = new \GO_Base_Util_Cron($this->_buildExpression());
 		return $completeExpression->getNextRunDate()->getTimestamp();
 	}
 	
@@ -329,7 +329,7 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 		
 		$returnProperties = array();
 		
-		$jobReflection = new ReflectionClass($this->job);
+		$jobReflection = new \ReflectionClass($this->job);
 		$parentReflection = $jobReflection->getParentClass();
 
 		$jobProperties = $jobReflection->getProperties(ReflectionProperty::IS_PUBLIC);

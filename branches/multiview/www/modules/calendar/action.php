@@ -21,7 +21,7 @@ require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
 $cal = new calendar();
 
 function get_posted_event() {
-	$gmt_tz = new DateTimeZone('GMT');
+	$gmt_tz = new \DateTimeZone('GMT');
 
 	$event['id']=$_POST['event_id'];
 	$event['calendar_id']=$_POST['calendar_id'];
@@ -49,11 +49,11 @@ function get_posted_event() {
 		$end_time = $_POST['end_time'];
 	}
 
-	$start_date = new DateTime(Date::to_input_format($_POST['start_date'].' '.$start_time));
+	$start_date = new \DateTime(Date::to_input_format($_POST['start_date'].' '.$start_time));
 	$start_date->setTimezone($gmt_tz);
 	$event['start_time'] = $start_date->format('U');
 
-	$end_date = new DateTime(Date::to_input_format($_POST['end_date'].' '.$end_time));
+	$end_date = new \DateTime(Date::to_input_format($_POST['end_date'].' '.$end_time));
 	$start_date->setTimezone($gmt_tz);
 	$event['end_time'] = $end_date->format('U');
 
@@ -128,7 +128,7 @@ try {
 			ini_set('memory_limit','100M');
 
 			if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
-				throw new Exception($lang['common']['noFileUploaded']);
+				throw new \Exception($lang['common']['noFileUploaded']);
 			}else {
 				File::mkdir($GLOBALS['GO_CONFIG']->tmpdir);
 				$tmpfile = $GLOBALS['GO_CONFIG']->tmpdir.uniqid(time());
@@ -139,7 +139,7 @@ try {
 					$response['feedback'] = sprintf($lang['calendar']['import_success'], $count);
 					$response['success']=true;
 				}else {
-					throw new Exception($lang['common']['saveError']);
+					throw new \Exception($lang['common']['saveError']);
 				}
 				unlink($tmpfile);
 			}
@@ -152,7 +152,7 @@ try {
 			$event = $cal->get_event($event_id);
 
 			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $event['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}
 
 			if(isset($_POST['create_exception']) && $_POST['create_exception'] =='true') {
@@ -176,7 +176,7 @@ try {
 				if(!empty($_REQUEST['send_cancellation']))
 				{
 					require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
-					$RFC822 = new RFC822();
+					$RFC822 = new \RFC822();
 
 					$participants=array();
 					$cal->get_participants($event_id);
@@ -192,7 +192,7 @@ try {
 					{
 						$cal->update_event_sequence($event['id'], ++$event['sequence']);
 
-						$swift = new GoSwift(
+						$swift = new \GoSwift(
 								implode(',', $participants),
 								$lang['calendar']['cancellation'].': '.$event['name']);
 
@@ -206,14 +206,14 @@ try {
 
 						$swift->set_body($cal->event_to_html($event, false, true));
 
-						$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
+						$swift->message->attach(new \Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
 						//$name = File::strip_invalid_chars($event['name']).'.ics';
 						//$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name, File::get_mime($name)));
 
 						$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
 
 						if(!$swift->sendmail(true)) {
-							throw new Exception('Could not send invitation');
+							throw new \Exception('Could not send invitation');
 						}
 					}
 				}
@@ -227,7 +227,7 @@ try {
 		case 'accept':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			$event_id = ($_REQUEST['event_id']);
 			$calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;
@@ -238,7 +238,7 @@ try {
 
 
 			if(!$cal->is_participant($event_id, $_SESSION['GO_SESSION']['email'])) {
-				throw new Exception($lang['calendar']['not_invited']);
+				throw new \Exception($lang['calendar']['not_invited']);
 			}			
 
 			if(!$event_exists && !empty($calendar_id) && $event['calendar_id']!=$calendar_id) {
@@ -269,7 +269,7 @@ try {
 			$owner = $GO_USERS->get_user($event['user_id']);
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
-			$swift = new GoSwift($owner['email'], sprintf($lang['calendar']['accept_mail_subject'],$event['name']));
+			$swift = new \GoSwift($owner['email'], sprintf($lang['calendar']['accept_mail_subject'],$event['name']));
 
 			$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
 
@@ -293,7 +293,7 @@ try {
 
 				//an event is moved or resized
 				if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_event['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
-					throw new AccessDeniedException();
+					throw new \AccessDeniedException();
 				}
 
 				if(isset($_POST['createException']) && $_POST['createException'] =='true') {
@@ -396,7 +396,7 @@ try {
 					if(isset($update_event))
 					{
 						require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-						$GO_USERS = new GO_USERS();
+						$GO_USERS = new \GO_USERS();
 
 						$update_event['id']=$update_event_id;
 						$cal->update_event($update_event, $calendar, $old_event);
@@ -493,7 +493,7 @@ try {
 
 		case 'save_event':
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			$event = get_posted_event();
 			$event_id=$event['id'];
@@ -513,23 +513,23 @@ try {
 			}
 
 			if(empty($event['calendar_id'])) {
-				throw new Exception($lang['calendar']['exceptionNoCalendarID']);
+				throw new \Exception($lang['calendar']['exceptionNoCalendarID']);
 			}
 
 			$calendar = $cal->get_calendar($event['calendar_id']);
 
 			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}
 
 			if(empty($event['name']) || empty($event['start_time']) || empty($event['end_time'])) {
-				throw new Exception($lang['common']['missingField']);
+				throw new \Exception($lang['common']['missingField']);
 			}
 
-			//throw new Exception(date('Ymd G:i', $cal->get_next_recurrence_time(0,$event['start_time'], $event)));
+			//throw new \Exception(date('Ymd G:i', $cal->get_next_recurrence_time(0,$event['start_time'], $event)));
 			if(!empty($event['rrule']) && Date::get_next_recurrence_time($event['start_time'],$event['start_time'], $event['end_time']-$event['start_time'],$event['rrule']) < $event['end_time']) {
 			//Event will cumulate
-				throw new Exception($lang['calendar']['cumulative']);
+				throw new \Exception($lang['calendar']['cumulative']);
 			}
 
 			/* Check for conflicts regarding resources */
@@ -566,7 +566,7 @@ try {
 
 						go_debug('Conflict with:'.$conflict_event['name'].' starts: '.Date::get_timestamp($conflict_event['start_time']).
 										' ends: '.Date::get_timestamp($conflict_event['end_time']));
-						throw new Exception('Ask permission');
+						throw new \Exception('Ask permission');
 					}
 				}
 			}
@@ -637,7 +637,7 @@ try {
 					if(!empty($_POST['link'])) {
 
 						require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
-						$GO_LINKS = new GO_LINKS();
+						$GO_LINKS = new \GO_LINKS();
 
 						$link_props = explode(':', $_POST['link']);
 						$GO_LINKS->add_link(
@@ -994,19 +994,19 @@ try {
 
 
 			if(empty($calendar['name'])) {
-				throw new Exception($lang['common']['missingField']);
+				throw new \Exception($lang['common']['missingField']);
 			}
 
 			/*$existing_calendar = $cal->get_calendar_by_name($calendar['name']);
 			if($existing_calendar && ($calendar['id']==0 || $existing_calendar['id']!=$calendar['id'])) {
-			//throw new Exception($sc_calendar_exists);
+			//throw new \Exception($sc_calendar_exists);
 			}*/
 
 			if($calendar['id']>0) {
 				$old_calendar = $cal->get_calendar($calendar['id']);
 				$insert = false;
 				if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
-					throw new AccessDeniedException();
+					throw new \AccessDeniedException();
 				}
 				if(!$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id))
 				{
@@ -1015,7 +1015,7 @@ try {
 				$cal->update_calendar($calendar, $old_calendar);
 			}else {
 				if(!$GLOBALS['GO_MODULES']->modules['calendar']['write_permission']) {
-					throw new AccessDeniedException();
+					throw new \AccessDeniedException();
 				}
 				$response['acl_id'] = $calendar['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl('calendar read: '.$calendar['name'], $calendar['user_id']);
 				$response['calendar_id']=$calendar['id']=$cal->add_calendar($calendar);
@@ -1071,23 +1071,23 @@ try {
 
 			$view_calendars = json_decode(($_POST['view_calendars']));
 
-			//throw new Exception(var_export($view_calendars, true));
+			//throw new \Exception(var_export($view_calendars, true));
 
 
 			if(empty($view['name'])) {
-				throw new Exception($lang['common']['missingField']);
+				throw new \Exception($lang['common']['missingField']);
 			}
 
 			/*$existing_view = $cal->get_view_by_name($view['user_id'], $view['name']);
 			if($existing_view && ($view['id']==0 || $existing_view['id']!=$view['id'])) {
-				throw new Exception($sc_view_exists);
+				throw new \Exception($sc_view_exists);
 			}*/
 
 			if($view['id']>0) {
 				$old_view = $cal->get_view($view['id']);
 
 				if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_view['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
-					throw new AccessDeniedException();
+					throw new \AccessDeniedException();
 				}
 				$cal->update_view($view);
 
@@ -1133,7 +1133,7 @@ try {
 
 			if(!$GLOBALS['GO_MODULES']->modules['calendar']['write_permission'])
 			{
-				throw new AccessDeniedException();
+				throw new \AccessDeniedException();
 			}
 
 			if(isset($_POST['user_id']))
@@ -1263,7 +1263,7 @@ try {
 
 			if(empty($category['name']))
 			{
-				throw new Exception($lang['common']['missingField']);
+				throw new \Exception($lang['common']['missingField']);
 			}
 
 			if($category['id']>0)
@@ -1308,7 +1308,7 @@ try {
 
 					$calendar = $cal->get_calendar($new_event['calendar_id']);
 					if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION){
-						throw new AccessDeniedException();
+						throw new \AccessDeniedException();
 					}
 
 					$new_event['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
@@ -1334,7 +1334,7 @@ try {
 
 			if(!$email_sender || !$status_id || !$last_modified)
 			{
-				throw new Exception($lang['common']['missingField']);
+				throw new \Exception($lang['common']['missingField']);
 			}
 
 			$cal->set_event_status($event_id, $status_id, $email_sender, $last_modified);

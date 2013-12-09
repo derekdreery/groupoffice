@@ -36,7 +36,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractJsonController
 
 		if ($model->save()) {
 			if (GO::modules()->files) {
-				$f = new GO_Files_Controller_Folder();
+				$f = new \GO_Files_Controller_Folder();
 				$response = array(); //never used in processAttachements?
 				$f->processAttachments($response, $model, $params);
 			}
@@ -59,7 +59,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractJsonController
 		// BEFORE LOAD: a password is entered to decrypt the content
 		if (isset($params['userInputPassword'])) {
 			if (!$model->decrypt($params['userInputPassword']))
-				throw new Exception(GO::t('badPassword'));
+				throw new \Exception(GO::t('badPassword'));
 		}
 
 		// Build remote combo field array
@@ -86,12 +86,12 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractJsonController
 
 		$model = GO_Notes_Model_Note::model()->findByPk($params['id']);
 		if (!$model)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO_Base_Exception_NotFound();
 
 		// decrypt model if password provided
 		if (isset($params['userInputPassword'])) {
 			if (!$model->decrypt($params['userInputPassword']))
-				throw new Exception(GO::t('badPassword'));
+				throw new \Exception(GO::t('badPassword'));
 		}
 		$extraFields = array();
 		if ($model->encrypted)
@@ -107,11 +107,11 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractJsonController
 	 */
 	protected function actionStore($params) {
 		//Create ColumnModel from model
-		$columnModel = new GO_Base_Data_ColumnModel(GO_Notes_Model_Note::model());
+		$columnModel = new \GO_Base_Data_ColumnModel(GO_Notes_Model_Note::model());
 		$columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
 
 		//Create store
-		$store = new GO_Base_Data_DbStore('GO_Notes_Model_Note', $columnModel, $params);
+		$store = new \GO_Base_Data_DbStore('GO_Notes_Model_Note', $columnModel, $params);
 		$store->multiSelect('no-multiselect', 'GO_Notes_Model_Category', 'category_id');
 
 		echo $this->renderStore($store);

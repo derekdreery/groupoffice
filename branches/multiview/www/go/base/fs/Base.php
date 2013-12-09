@@ -34,14 +34,14 @@ abstract class GO_Base_Fs_Base{
 //		GO::debug("FS construct $path");
 		
 		if(empty($path))
-			throw new Exception("Path may not be empty in GO_Base_Fs_Base");
+			throw new \Exception("Path may not be empty in GO_Base_Fs_Base");
 		
 		//normalize path slashes
 		if(GO_Base_Util_Common::isWindows())
 			$path=str_replace('\\','/', $path);
 		
 		if(!self::checkPathInput($path))
-			throw new Exception("The supplied path '$path' was invalid");
+			throw new \Exception("The supplied path '$path' was invalid");
 		
 		$parent = dirname($path);
 		if($parent != '/')
@@ -60,9 +60,9 @@ abstract class GO_Base_Fs_Base{
 	 */
 	public static function createFromPath($path){
 		if(is_file($path))
-			return new GO_Base_Fs_File($path);
+			return new \GO_Base_Fs_File($path);
 		else
-			return new GO_Base_Fs_Folder ($path);
+			return new \GO_Base_Fs_Folder ($path);
 	}
 	
 	
@@ -77,7 +77,7 @@ abstract class GO_Base_Fs_Base{
 		if($parentPath==$this->path)
 			return false;
 		
-		return new GO_Base_Fs_Folder($parentPath);
+		return new \GO_Base_Fs_Folder($parentPath);
 	}
 	
 	/**
@@ -103,9 +103,9 @@ abstract class GO_Base_Fs_Base{
 	public function child($filename){
 		$childPath = $this->path.'/'.$filename;
 		if(is_file($childPath)){
-			return new GO_Base_Fs_File($childPath);
+			return new \GO_Base_Fs_File($childPath);
 		} elseif(is_dir($childPath)){
-			return new GO_Base_Fs_Folder($childPath);
+			return new \GO_Base_Fs_Folder($childPath);
 		}else
 		{
 			return false;
@@ -122,9 +122,9 @@ abstract class GO_Base_Fs_Base{
 	public function createChild($filename, $isFile=true){
 		$childPath = $this->path.'/'.$filename;
 		if($isFile){
-			return new GO_Base_Fs_File($childPath);
+			return new \GO_Base_Fs_File($childPath);
 		} else{
-			return new GO_Base_Fs_Folder($childPath);
+			return new \GO_Base_Fs_Folder($childPath);
 		}
 	}
 	

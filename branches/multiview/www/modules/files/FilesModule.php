@@ -61,7 +61,7 @@ class GO_Files_FilesModule extends GO_Base_Module{
 	}
 	
 	public static function saveUser($user, $wasNew) {
-		//throw new Exception($user->getOldAttributeValue('username'));
+		//throw new \Exception($user->getOldAttributeValue('username'));
 		if($wasNew){
 			$folder = GO_Files_Model_Folder::model()->findHomeFolder($user);			
 		}elseif($user->isModified('username')){
@@ -70,7 +70,7 @@ class GO_Files_FilesModule extends GO_Base_Module{
 			{
 				$folder->name=$user->username;
 				$folder->systemSave=true;
-				//throw new Exception($folder->path);
+				//throw new \Exception($folder->path);
 				$folder->save();				
 			}
 		}
@@ -114,7 +114,7 @@ class GO_Files_FilesModule extends GO_Base_Module{
 	public function install() {
 		parent::install();
 		
-		$template = new GO_files_Model_Template();
+		$template = new \GO_files_Model_Template();
 		$template->name=GO::t('wordtextdoc','files');
 		$template->content = file_get_contents(GO::modules()->files->path.'install/templates/empty.docx');
 		$template->extension='docx';
@@ -122,7 +122,7 @@ class GO_Files_FilesModule extends GO_Base_Module{
 		$template->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::READ_PERMISSION);
 		
 		
-		$template = new GO_files_Model_Template();
+		$template = new \GO_files_Model_Template();
 		$template->name=GO::t('ootextdoc','files');
 		$template->content = file_get_contents(GO::modules()->files->path.'install/templates/empty.odt');
 		$template->extension='odt';

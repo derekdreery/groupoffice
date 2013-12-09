@@ -23,7 +23,7 @@ class with_companies_export_query extends csv_export_query{
 		global $lang, $GO_MODULES, $GO_SECURITY, $GO_CONFIG;
 
 		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-		$GO_USERS = new GO_USERS();
+		$GO_USERS = new \GO_USERS();
 
 
 		if($GLOBALS['GO_MODULES']->has_module('customfields')) {

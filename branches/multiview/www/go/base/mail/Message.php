@@ -10,7 +10,7 @@
  */
 
 //make sure temp dir exists
-$cacheFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir);
+$cacheFolder = new \GO_Base_Fs_Folder(GO::config()->tmpdir);
 $cacheFolder->create();
 
 /**
@@ -37,7 +37,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 	}
 	
 	/**
-   * Create a new Message.
+   * Create a new \Message.
    * @param string $subject
    * @param string $body
    * @param string $contentType
@@ -58,7 +58,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 	 */
 	public function loadMimeMessage($mimeData, $replaceCallback=false, $replaceCallbackArgs=array()){
 		
-		$decoder = new GO_Base_Mail_MimeDecode($mimeData);
+		$decoder = new \GO_Base_Mail_MimeDecode($mimeData);
 		$structure = $decoder->decode(array(
 				'include_bodies'=>true,
 				'decode_headers'=>true,
@@ -66,7 +66,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 		));
 		
 		if(!$structure)
-			throw new Exception("Could not decode mime data:\n\n $mimeData");
+			throw new \Exception("Could not decode mime data:\n\n $mimeData");
 
 		if(!empty($structure->headers['subject'])){
 			$this->setSubject($structure->headers['subject']);
@@ -86,24 +86,24 @@ class GO_Base_Mail_Message extends Swift_Message{
 		$cc = str_replace('mailto:','', $cc);
 		$bcc = str_replace('mailto:','', $bcc);
 	
-		$toList = new GO_Base_Mail_EmailRecipients($to);
+		$toList = new \GO_Base_Mail_EmailRecipients($to);
 		$to =$toList->getAddresses();
 		foreach($to as $email=>$personal)
 			$this->addTo($email, $personal);
 		
-		$ccList = new GO_Base_Mail_EmailRecipients($cc);
+		$ccList = new \GO_Base_Mail_EmailRecipients($cc);
 		$cc =$ccList->getAddresses();
 		foreach($cc as $email=>$personal)
 			$this->addCc($email, $personal);
 		
-		$bccList = new GO_Base_Mail_EmailRecipients($bcc);
+		$bccList = new \GO_Base_Mail_EmailRecipients($bcc);
 		$bcc =$bccList->getAddresses();
 		foreach($bcc as $email=>$personal)
 			$this->addBcc($email, $personal);
 
 		if(isset($structure->headers['from'])){
 			
-			$fromList = new GO_Base_Mail_EmailRecipients(str_replace('mailto:','',$structure->headers['from']));
+			$fromList = new \GO_Base_Mail_EmailRecipients(str_replace('mailto:','',$structure->headers['from']));
 			$from =$fromList->getAddress();
 		
 			if($from)
@@ -149,7 +149,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 		$this->setBody($htmlBody, 'text/html','UTF-8');
 			
 		//add text version of the HTML body
-		$htmlToText = new GO_Base_Util_Html2Text($htmlBody);
+		$htmlToText = new \GO_Base_Util_Html2Text($htmlBody);
 		$this->addPart($htmlToText->get_text(), 'text/plain','UTF-8');
 		
 		return $this;
@@ -373,17 +373,17 @@ class GO_Base_Mail_Message extends Swift_Message{
 			$this->setSubject($params['subject']);		
 		
 		if(!empty($params['to'])){		
-			$to = new GO_Base_Mail_EmailRecipients($params['to']);
+			$to = new \GO_Base_Mail_EmailRecipients($params['to']);
 			foreach($to->getAddresses() as $email=>$personal)
 				$this->addTo($email,$personal);
 		}
 		if(!empty($params['cc'])){		
-			$cc = new GO_Base_Mail_EmailRecipients($params['cc']);
+			$cc = new \GO_Base_Mail_EmailRecipients($params['cc']);
 			foreach($cc->getAddresses() as $email=>$personal)
 				$this->addCc($email,$personal);
 		}
 		if(!empty($params['bcc'])){		
-			$bcc = new GO_Base_Mail_EmailRecipients($params['bcc']);
+			$bcc = new \GO_Base_Mail_EmailRecipients($params['bcc']);
 			foreach($bcc->getAddresses() as $email=>$personal)
 				$this->addBcc($email,$personal);
 		}
@@ -421,13 +421,13 @@ class GO_Base_Mail_Message extends Swift_Message{
 				 if(count($inlineAttachments)){
 					foreach ($inlineAttachments as $ia) {
 
-						//$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$ia['tmp_file']);
+						//$tmpFile = new \GO_Base_Fs_File(GO::config()->tmpdir.$ia['tmp_file']);
 						if(empty($ia->tmp_file)){
-							throw new Exception("No temp file for inline attachment ".$ia->name);
+							throw new \Exception("No temp file for inline attachment ".$ia->name);
 						}
 
 						$path = empty($ia->from_file_storage) ? GO::config()->tmpdir.$ia->tmp_file : GO::config()->file_storage_path.$ia->tmp_file;
-						$tmpFile = new GO_Base_Fs_File($path);
+						$tmpFile = new \GO_Base_Fs_File($path);
 
 						if ($tmpFile->exists()) {				
 							//Different browsers reformat URL's to absolute or relative. So a pattern match on the filename.
@@ -444,11 +444,11 @@ class GO_Base_Mail_Message extends Swift_Message{
 							{
 								//this may happen when an inline image was attached but deleted in the editor afterwards.
 							//
-								//throw new Exception("Error: inline attachment could not be found in text: ".$ia->token);
+								//throw new \Exception("Error: inline attachment could not be found in text: ".$ia->token);
 							}
 						}else
 						{							
-							throw new Exception("Error: inline attachment missing on server: ".$tmpFile->stripTempPath().".<br /><br />The temporary files folder is cleared on each login. Did you relogin?");
+							throw new \Exception("Error: inline attachment missing on server: ".$tmpFile->stripTempPath().".<br /><br />The temporary files folder is cleared on each login. Did you relogin?");
 						}
 					}
 				}
@@ -480,7 +480,7 @@ body p{
 			$attachments = json_decode($params['attachments']);
 			foreach ($attachments as $att) {
 				$path = empty($att->from_file_storage) ? GO::config()->tmpdir.$att->tmp_file : GO::config()->file_storage_path.$att->tmp_file;
-				$tmpFile = new GO_Base_Fs_File($path);
+				$tmpFile = new \GO_Base_Fs_File($path);
 				if ($tmpFile->exists()) {
 					$file = Swift_Attachment::fromPath($tmpFile->path());
 					$file->setContentType($tmpFile->mimeType());
@@ -490,7 +490,7 @@ body p{
 					//$tmpFile->delete();
 				}else
 				{
-					throw new Exception("Error: attachment missing on server: ".$tmpFile->stripTempPath().".<br /><br />The temporary files folder is cleared on each login. Did you relogin?");
+					throw new \Exception("Error: attachment missing on server: ".$tmpFile->stripTempPath().".<br /><br />The temporary files folder is cleared on each login. Did you relogin?");
 				}
 			}
 		}

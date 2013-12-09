@@ -5,7 +5,7 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
-		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["parent"]));
+		$mailbox = new \GO_Email_Model_ImapMailbox($account, array("name"=>$params["parent"]));
 		$response['success'] = $mailbox->createChild($params["name"]);
 		
 		if(!$response['success'])
@@ -20,7 +20,7 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
-		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
+		$mailbox = new \GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
 		$response['success'] = $mailbox->rename($params["name"]);
 		
 		if(!$response['success'])
@@ -33,7 +33,7 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 	protected function actionSubscribe($params){
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
-		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
+		$mailbox = new \GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
 		$response['success'] = $mailbox->subscribe();
 		
 		if(!$response['success'])
@@ -44,7 +44,7 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 	protected function actionUnsubscribe($params){
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
-		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
+		$mailbox = new \GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
 		$response['success'] = $mailbox->unsubscribe();
 		
 		if(!$response['success'])
@@ -56,9 +56,9 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 	protected function actionDelete($params){
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
-		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
+		$mailbox = new \GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
 		if($mailbox->isSpecial())
-			throw new Exception(GO::t("cantDeleteSpecialFolder","email"));
+			throw new \Exception(GO::t("cantDeleteSpecialFolder","email"));
 		
 		$success = $mailbox->delete();
 		
@@ -68,7 +68,7 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 	protected function actionTruncate($params){
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
-		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
+		$mailbox = new \GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
                 
                 
 		if(!empty($account->trash) && $params["mailbox"] != $account->trash) {
@@ -100,12 +100,12 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
-		$sourceMailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["sourceMailbox"]));
+		$sourceMailbox = new \GO_Email_Model_ImapMailbox($account, array("name"=>$params["sourceMailbox"]));
 		
 		if($sourceMailbox->isSpecial())
-			throw new Exception(GO::t("cantMoveSpecialFolder","email"));
+			throw new \Exception(GO::t("cantMoveSpecialFolder","email"));
 		
-		$targetMailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["targetMailbox"]));
+		$targetMailbox = new \GO_Email_Model_ImapMailbox($account, array("name"=>$params["targetMailbox"]));
 			
 		
 		$response['success'] = $sourceMailbox->move($targetMailbox);

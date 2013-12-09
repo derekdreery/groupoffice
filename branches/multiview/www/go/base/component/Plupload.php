@@ -3,7 +3,7 @@
 class GO_Base_Component_Plupload {
 
 	public static function handleUpload() {
-		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
+		$tmpFolder = new \GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
 		//$tmpFolder->delete();
 		$tmpFolder->create();
 
@@ -48,9 +48,9 @@ class GO_Base_Component_Plupload {
 		if (!in_array($targetDir . DIRECTORY_SEPARATOR . $fileName, GO::session()->values['files']['uploadqueue']))
 			GO::session()->values['files']['uploadqueue'][] = $targetDir . DIRECTORY_SEPARATOR . $fileName;
 
-		$file = new GO_Base_Fs_File($targetDir . DIRECTORY_SEPARATOR . $fileName);
+		$file = new \GO_Base_Fs_File($targetDir . DIRECTORY_SEPARATOR . $fileName);
 		if ($file->exists() && $file->size() > GO::config()->max_file_size)
-			throw new Exception("File too large");
+			throw new \Exception("File too large");
 
 // Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
 		if (strpos($contentType, "multipart") !== false) {

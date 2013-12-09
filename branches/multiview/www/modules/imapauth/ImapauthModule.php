@@ -5,14 +5,14 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 	public static function initListeners() {
 		//GO::session()->addListener('beforelogin', 'GO_Imapauth_ImapauthModule', 'beforeLogin');
 
-		$controller = new GO_Core_Controller_Auth();
+		$controller = new \GO_Core_Controller_Auth();
 		$controller->addListener('beforelogin', 'GO_Imapauth_ImapauthModule', 'beforeLogin');
 	}
 
 //	public static function beforeControllerLogin($params, &$response) {
 //		if (!isset($params['first_name'])) {
 //			try {
-//				$imap = new GO_Base_Mail_Imap();
+//				$imap = new \GO_Base_Mail_Imap();
 //				$imap->connect(
 //								$config['host'], $config['port'], $mail_username, $password, $config['ssl']);
 //
@@ -39,7 +39,7 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 
 		$oldIgnoreAcl = GO::setIgnoreAclPermissions(true);
 
-		$ia = new GO_Imapauth_Authenticator();
+		$ia = new \GO_Imapauth_Authenticator();
 
 		if ($ia->setCredentials($params['username'], $params['password'])) {
 			if ($ia->imapAuthenticate()) {
@@ -53,7 +53,7 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 						return false;
 					} else {
 						//user doesn't exist. create it now
-						$user = new GO_Base_Model_User();
+						$user = new \GO_Base_Model_User();
 						$user->email = $ia->email;
 						$user->username = $ia->goUsername;
 						$user->password = $ia->imapPassword;
@@ -64,7 +64,7 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 						try {
 
 							if(!$user->save()){
-								throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
+								throw new \Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
 							}
 							if (!empty($ia->config['groups']))
 								$user->addToGroups($ia->config['groups']);

@@ -37,13 +37,13 @@ class GO_Freebusypermissions_FreebusypermissionsModule extends GO_Base_Module{
 		
 		if(!$fbAcl){
 			
-			$acl = new GO_Base_Model_Acl();
+			$acl = new \GO_Base_Model_Acl();
 			$acl->user_id = $userId;
 			$acl->description = GO_Freebusypermissions_Model_FreeBusyAcl::model()->tableName();
 			$acl->save();
 			
 			if($acl){
-				$fbAcl = new GO_Freebusypermissions_Model_FreeBusyAcl();
+				$fbAcl = new \GO_Freebusypermissions_Model_FreeBusyAcl();
 				$fbAcl->user_id = $userId;
 				$fbAcl->acl_id = $acl->id;
 				$fbAcl->save();

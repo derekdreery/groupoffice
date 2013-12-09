@@ -68,11 +68,11 @@ class GO_Base_Model_Grouped extends GO_Base_Model {
 		
 		$a = $this->_attributes;
 		
-		$r = new ReflectionObject($this);
+		$r = new \ReflectionObject($this);
 		$publicProperties = $r->getProperties(ReflectionProperty::IS_PUBLIC);
 		foreach($publicProperties as $prop){
 			//$att[$prop->getName()]=$prop->getValue($this);
-			//$prop = new ReflectionProperty();
+			//$prop = new \ReflectionProperty();
 			if(!$prop->isStatic()) {
 				//$this->_magicAttributeNames[]=$prop->getName();
 				$a[$prop->getName()]=$this->{$prop->getName()};

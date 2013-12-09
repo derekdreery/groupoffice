@@ -117,7 +117,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 		GO::getDbConnection()->query("SET sql_mode=''");
 		
 		if(!$this->getDbConnection()->query($sql))
-			throw new Exception("Could not create custom field");
+			throw new \Exception("Could not create custom field");
 		
 //		if ($this->isModified('unique_values')) {
 //			
@@ -127,7 +127,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 //				$sqlUnique = "ALTER TABLE `".$table."` DROP INDEX ".$this->columnName()."_unique";
 //			
 //			if (!$this->getDbConnection()->query($sqlUnique))
-//				throw new Exception("Could not change custom field uniqueness.");
+//				throw new \Exception("Could not change custom field uniqueness.");
 //		}
 		
 		$this->_clearColumnCache();
@@ -203,7 +203,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 			$field =GO_Customfields_Model_Field::model()->findSingleByAttributes(array('treemaster_field_id'=>$this->id,'nesting_level'=>$i));
 
 			if(!$field){
-				$field = new GO_Customfields_Model_Field();
+				$field = new \GO_Customfields_Model_Field();
 				$field->name=$this->name.' '.$i;
 				$field->datatype='GO_Customfields_Customfieldtype_TreeselectSlave';
 				$field->treemaster_field_id=$this->id;
@@ -231,7 +231,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	public function createIfNotExists($category_id, $fieldName, $createAttributes=array()){
 		$field = GO_Customfields_Model_Field::model()->findSingleByAttributes(array('category_id'=>$category_id,'name'=>$fieldName));
 		if(!$field){
-			$field = new GO_Customfields_Model_Field();
+			$field = new \GO_Customfields_Model_Field();
 			$field->setAttributes($createAttributes, false);
 			$field->category_id=$category_id;
 			$field->name=$fieldName;

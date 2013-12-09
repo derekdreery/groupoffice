@@ -23,18 +23,18 @@ require('../../GO.php');
 
 
 // Authentication backend
-$authBackend = new GO_Dav_Auth_Backend();
+$authBackend = new \GO_Dav_Auth_Backend();
 
 if(!GO::modules()->isInstalled("dav"))
 	trigger_error('DAV module not installed. Install it at Start menu -> Modules', E_USER_ERROR);
 
 
-$root = new GO_Dav_Fs_RootDirectory();
+$root = new \GO_Dav_Fs_RootDirectory();
 
-$tree = new GO_Dav_ObjectTree($root);
+$tree = new \GO_Dav_ObjectTree($root);
 
 // The rootnode needs in turn to be passed to the server class
-$server = new Sabre\DAV\Server($tree);
+$server = new \Sabre\DAV\Server($tree);
 $server->debugExceptions=GO::config()->debug;
 $server->subscribeEvent('exception', function($e){
 	GO::debug((string) $e);
@@ -53,22 +53,22 @@ $locksDir = $tmpDir->createChild('locksdb', false);
 $locksDir->create();
 
 // Support for LOCK and UNLOCK
-$lockBackend = new Sabre\DAV\Locks\Backend\FS($locksDir->path());
-$lockPlugin = new Sabre\DAV\Locks\Plugin($lockBackend);
+$lockBackend = new \Sabre\DAV\Locks\Backend\FS($locksDir->path());
+$lockPlugin = new \Sabre\DAV\Locks\Plugin($lockBackend);
 $server->addPlugin($lockPlugin);
 
 // Support for html frontend
-$browser = new Sabre\DAV\Browser\Plugin();
+$browser = new \Sabre\DAV\Browser\Plugin();
 $server->addPlugin($browser);
 
 // Automatically guess (some) contenttypes, based on extesion
 $server->addPlugin(new \Sabre\DAV\Browser\GuessContentType());
 
-$auth = new Sabre\DAV\Auth\Plugin($authBackend,GO::config()->product_name);
+$auth = new \Sabre\DAV\Auth\Plugin($authBackend,GO::config()->product_name);
 $server->addPlugin($auth);
 
 // Temporary file filter
-$tempFF = new Sabre\DAV\TemporaryFileFilterPlugin($tmpDir->path());
+$tempFF = new \Sabre\DAV\TemporaryFileFilterPlugin($tmpDir->path());
 $server->addPlugin($tempFF);
 
 // And off we go!

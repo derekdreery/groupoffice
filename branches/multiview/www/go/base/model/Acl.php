@@ -153,7 +153,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 			if($level==0)
 				return true;
 			
-			$usersGroup = new GO_Base_Model_AclUsersGroups();
+			$usersGroup = new \GO_Base_Model_AclUsersGroups();
 			$usersGroup->acl_id = $this->id;
 			$usersGroup->group_id = 0;
 			$usersGroup->user_id = $userId;
@@ -192,7 +192,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 			if($level==0)
 				return true;
 			
-			$usersGroup = new GO_Base_Model_AclUsersGroups();
+			$usersGroup = new \GO_Base_Model_AclUsersGroups();
 			$usersGroup->acl_id = $this->id;
 			$usersGroup->group_id = $groupId;
 			$usersGroup->user_id = 0;
@@ -487,7 +487,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	public function clear(){
 		
 		if (!GO::user()->isAdmin())
-			throw new AccessDeniedException();
+			throw new \AccessDeniedException();
 		
 		$adminUserRecordExists = false;
 		$adminGroupRecordExists = false;
@@ -506,14 +506,14 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 
 		if($this->description!='readonly'){
 			if (!$adminUserRecordExists) {
-				$aclRecord = new GO_Base_Model_AclUsersGroups();
+				$aclRecord = new \GO_Base_Model_AclUsersGroups();
 				$aclRecord->acl_id = $this->id;
 				$aclRecord->user_id = 1;
 				$aclRecord->level = GO_Base_Model_Acl::MANAGE_PERMISSION;
 				$aclRecord->save();
 			}
 			if (!$adminGroupRecordExists) {
-				$aclRecord = new GO_Base_Model_AclUsersGroups();
+				$aclRecord = new \GO_Base_Model_AclUsersGroups();
 				$aclRecord->acl_id = $this->id;
 				$aclRecord->group_id = GO::config()->group_root;
 				$aclRecord->level = GO_Base_Model_Acl::MANAGE_PERMISSION;
@@ -533,7 +533,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		$acl = GO_Base_Model_Acl::model()->findByPk($acl_id);
 		
 		if(!$acl){
-			$acl = new GO_Base_Model_Acl();
+			$acl = new \GO_Base_Model_Acl();
 			$acl->description='readonly';
 			$acl->save();
 			

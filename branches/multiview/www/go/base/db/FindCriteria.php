@@ -129,7 +129,7 @@ class GO_Base_Db_FindCriteria {
 	
 	private function _validateComparator($comparator){
 		if(!preg_match("/[=!><a-z]/i", $comparator))
-			throw new Exception("Invalid comparator: ".$comparator);
+			throw new \Exception("Invalid comparator: ".$comparator);
 	}
 	
 	/**
@@ -146,7 +146,7 @@ class GO_Base_Db_FindCriteria {
 	public function addCondition($field, $value, $comparator='=',$tableAlias='t', $useAnd=true, $valueIsColumn=false) {
 		
 		if(!is_string($field))
-			throw new Exception("field parameter for addCondition should be a string");
+			throw new \Exception("field parameter for addCondition should be a string");
 		
 		$this->_appendOperator($useAnd);
 		$this->_appendConditionString($tableAlias, $field, $value, $comparator, $valueIsColumn);		
@@ -216,10 +216,10 @@ class GO_Base_Db_FindCriteria {
 	public function addInCondition($field, $values, $tableAlias='t', $useAnd=true, $useNot=false) {	
 				
 		if(!is_array($values))
-			throw new Exception("ERROR: Value for addInCondition must be an array");
+			throw new \Exception("ERROR: Value for addInCondition must be an array");
 		
 //		if(!count($value))
-//			throw new Exception("ERROR: Value for addInCondition can't be empty");
+//			throw new \Exception("ERROR: Value for addInCondition can't be empty");
 		
 		if(!count($values))
 				return $this;
@@ -259,7 +259,7 @@ class GO_Base_Db_FindCriteria {
 	 */
 	public function addInTemporaryTableCondition($tableName, $field, $values, $tableAlias='t', $useAnd=true, $useNot=false){
 		if(!is_array($values))
-			throw new Exception("ERROR: Value for addInCondition must be an array");
+			throw new \Exception("ERROR: Value for addInCondition must be an array");
 		
 		if(!count($values))
 				return $this;

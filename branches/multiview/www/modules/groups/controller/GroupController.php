@@ -24,7 +24,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 		$group = GO_Base_Model_Group::model()->findByPk($params['id'], false, true);
 
 		if (empty($group))
-			$group = new GO_Base_Model_Group();
+			$group = new \GO_Base_Model_Group();
 
 		if (isset($params['add_users']) && !empty($group->id)) {
 			$users = json_decode($params['add_users']);
@@ -83,9 +83,9 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 	protected function actionGetRecipientsAsString($params){
 				
 		if(empty($params['groups']))
-			throw new Exception();
+			throw new \Exception();
 			
-		$recipients = new GO_Base_Mail_EmailRecipients();
+		$recipients = new \GO_Base_Mail_EmailRecipients();
 		
 		$groupIds = json_decode($params['groups']);
 				

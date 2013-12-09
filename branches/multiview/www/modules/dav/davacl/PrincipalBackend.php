@@ -24,8 +24,8 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
 			'uri'=>'principals/'.$user->username,
 			'{DAV:}displayname' => $user->username,
 			'{http://sabredav.org/ns}email-address'=>$user->email,
-//			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL'=>new Sabre\DAV\Property\Href('principals/'.$user->username.'/inbox'),
-//			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL'=>new Sabre\DAV\Property\Href('principals/'.$user->username.'/outbox')
+//			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL'=>new \Sabre\DAV\Property\Href('principals/'.$user->username.'/inbox'),
+//			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL'=>new \Sabre\DAV\Property\Href('principals/'.$user->username.'/outbox')
 		);
 		
 		return $data;
@@ -103,7 +103,7 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
 
 			GO::debug("getGroupMemberSet($principal)");
 //        $principal = $this->getPrincipalByPath($principal);
-//        if (!$principal) throw new Sabre\DAV\Exception('Principal not found');
+//        if (!$principal) throw new \Sabre\DAV\Exception('Principal not found');
 //
 //        $stmt = $this->pdo->prepare('SELECT principals.uri as uri FROM groupmembers LEFT JOIN principals ON groupmembers.member_id = principals.id WHERE groupmembers.principal_id = ?');
 //        $stmt->execute(array($principal['id']));
@@ -129,7 +129,7 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
 			
 			return array();
 //        $principal = $this->getPrincipalByPath($principal);
-//        if (!$principal) throw new Sabre\DAV\Exception('Principal not found');
+//        if (!$principal) throw new \Sabre\DAV\Exception('Principal not found');
 //
 //        $stmt = $this->pdo->prepare('SELECT principals.uri as uri FROM groupmembers LEFT JOIN principals ON groupmembers.principal_id = principals.id WHERE groupmembers.member_id = ?');
 //        $stmt->execute(array($principal['id']));
@@ -167,7 +167,7 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
 //                $memberIds[] = $row['id'];
 //            }
 //        }
-//        if (!$principalId) throw new Sabre\DAV\Exception('Principal not found');
+//        if (!$principalId) throw new \Sabre\DAV\Exception('Principal not found');
 //
 //        // Wiping out old members
 //        $stmt = $this->pdo->prepare('DELETE FROM groupmembers WHERE principal_id = ?;');

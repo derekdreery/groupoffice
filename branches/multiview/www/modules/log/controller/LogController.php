@@ -28,12 +28,12 @@ class GO_Log_Controller_Log extends GO_Base_Controller_AbstractModelController {
 		if($count){
 			$logPath = '/var/log/groupoffice/'.GO::config()->id.'.csv';
 
-			$csvLogFile = new GO_Base_Fs_CsvFile($logPath);
+			$csvLogFile = new \GO_Base_Fs_CsvFile($logPath);
 			$csvLogFile->parent()->create();
 
 			while($log = $stmt->fetch()){
 				if(!$csvLogFile->putRecord(array_values($log->getAttributes('formatted'))))
-					throw new Exception("Could not write to CSV log file: ".$csvLogFile->path());
+					throw new \Exception("Could not write to CSV log file: ".$csvLogFile->path());
 
 				$log->delete();
 			}

@@ -99,7 +99,7 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 		}
 		
 		if (count($dependentModuleNames)>0)
-			throw new Exception(sprintf(GO::t('dependenciesCannotDelete'),implode(', ',$dependentModuleNames)));
+			throw new \Exception(sprintf(GO::t('dependenciesCannotDelete'),implode(', ',$dependentModuleNames)));
 		
 	}
 	

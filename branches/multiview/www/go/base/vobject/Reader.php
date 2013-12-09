@@ -27,7 +27,7 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 //		$currentlyBusy = false;
 //		
 //		if (stripos($lines[count($lines)-2],'END:')!==0)
-//			throw new Sabre_VObject_ParseException('Invalid VCard: it does not end with the END element.');
+//			throw new \Sabre_VObject_ParseException('Invalid VCard: it does not end with the END element.');
 //		
 //		// Make sure the lines are put in an array separately per VCard.		
 //		for ($i=0; $i<count($lines); $i++) {
@@ -35,14 +35,14 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 //			if (stripos($lines[$i],"BEGIN:VCARD")!==false) {
 //			
 //				if ($currentlyBusy)
-//					throw new Sabre_VObject_ParseException('BEGIN element found prematurely in line #'.($i+1).'.');
+//					throw new \Sabre_VObject_ParseException('BEGIN element found prematurely in line #'.($i+1).'.');
 //				$currentlyBusy=true;
 //				$currentVObject = Sabre_VObject_Component::create(strtoupper(substr($lines[$i],6)));
 //				
 //			} elseif (stripos($lines[$i],"END:VCARD")!==false) {
 //			
 //				if (!$currentlyBusy)
-//					throw new Sabre_VObject_ParseException('END element found prematurely in line #'.($i+1).'.');
+//					throw new \Sabre_VObject_ParseException('END element found prematurely in line #'.($i+1).'.');
 //				$currentlyBusy=false;
 //				$outputVObjects[] = $currentVObject;
 //			
@@ -56,11 +56,11 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 //					continue;
 //				}
 //				if (!$currentlyBusy)
-//					throw new Sabre_VObject_ParseException('Before line #'.($i+1).', there must be a BEGIN element.');
+//					throw new \Sabre_VObject_ParseException('Before line #'.($i+1).', there must be a BEGIN element.');
 //
 //				$result = preg_match(self::REGEX_ELEMENT_STRING,$lines[$i],$matches);
 //        if (!$result)
-//          throw new Sabre_VObject_ParseException('Invalid VObject, line ' . ($i+1) . ' did not follow the icalendar/vcard format');
+//          throw new \Sabre_VObject_ParseException('Invalid VObject, line ' . ($i+1) . ' did not follow the icalendar/vcard format');
 //
 //        $vProp = Sabre_VObject_Property::create(
 //					strtoupper($matches['name']),
@@ -100,7 +100,7 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 //			} else {
 //				$value = '';
 //			}
-//			$outParams[] = new Sabre_VObject_Parameter($match['paramName'], preg_replace_callback('#(\\\\(\\\\|N|n|;|,))#',array('self','checkForN'), $value));
+//			$outParams[] = new \Sabre_VObject_Parameter($match['paramName'], preg_replace_callback('#(\\\\(\\\\|N|n|;|,))#',array('self','checkForN'), $value));
 //		}
 //		return $outParams;
 //	}
@@ -183,7 +183,7 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 //					}
 					
 					if(isset($child->rrule) && (string) $child->rrule!=''){
-						$rrule = new GO_Base_Util_Icalendar_Rrule();
+						$rrule = new \GO_Base_Util_Icalendar_Rrule();
 						$rrule->readIcalendarRruleString($child->dtstart->getDateTime()->format('U'), (string) $child->rrule);			
 						$child->rrule = str_replace('RRULE:','',$rrule->createRrule());
 					}					
@@ -211,7 +211,7 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 					}
 					
 					if(isset($child->rrule) && (string) $child->rrule!=''){
-						$rrule = new GO_Base_Util_Icalendar_Rrule();
+						$rrule = new \GO_Base_Util_Icalendar_Rrule();
 						$rrule->readIcalendarRruleString($child->dtstart->getDateTime()->format('U'), (string) $child->rrule);			
 						$child->rrule = str_replace('RRULE:','',$rrule->createVCalendarRrule());
 					}
@@ -247,7 +247,7 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 				
 				//vcard 2.1 is read as EMAIL;INTERNET=;HOME=:mschering@intermesh.nl
 				//We must correct that into EMAIL;TYPE=INTERNET,HOME:mschering@intermesh.nl
-				//$param = new Sabre_VObject_Parameter();
+				//$param = new \Sabre_VObject_Parameter();
 				
 				
 //				if($property->name=='EMAIL' || $property->name=='TEL' || $property->name=='ADR'){

@@ -75,7 +75,7 @@ class GO_Base_Db_FindParams{
 			if($findParams instanceof GO_Base_Db_FindParams)
 				$findParams = $findParams->getParams();
 			else
-				throw new Exception('$findParams must be an instance of GO_Base_Db_FindParams');
+				throw new \Exception('$findParams must be an instance of GO_Base_Db_FindParams');
 		}
 		
 		
@@ -285,7 +285,7 @@ class GO_Base_Db_FindParams{
 	 */
 	public function getCriteria(){
 		if(!isset($this->_params['criteriaObject']))
-			$this->_params['criteriaObject']= new GO_Base_Db_FindCriteria();
+			$this->_params['criteriaObject']= new \GO_Base_Db_FindCriteria();
 		
 		return $this->_params['criteriaObject'];
 	}
@@ -451,7 +451,7 @@ class GO_Base_Db_FindParams{
 			$params['tableAlias']=false;
 
 		if(!isset($params['criteria'])){
-			$params['criteria'] = new GO_Base_Db_FindCriteria();
+			$params['criteria'] = new \GO_Base_Db_FindCriteria();
 		}				
 		
 		$table = $params['tableAlias'] ? $params['tableAlias'] : $joinModel->tableName();
@@ -468,7 +468,7 @@ class GO_Base_Db_FindParams{
 //	 */
 //	public function joinRelation($relationName, $type='INNER'){
 //		if($type!='INNER' && $type!='LEFT' && $type!='RIGHT')
-//			throw new Exception("Must be INNER, LEFT or RIGHT");
+//			throw new \Exception("Must be INNER, LEFT or RIGHT");
 //		
 //		$this->_params['joinRelations'][$relationName] = $type;
 //	}

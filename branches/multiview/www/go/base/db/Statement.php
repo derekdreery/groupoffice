@@ -94,7 +94,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 				$this->_paramLog = array();
 			} catch (Exception $e) {
 				$errorInfo = $e instanceof PDOException ? $e->errorInfo : null;
-				throw new GO_Base_Exception_Database('DbCommand failed to prepare the SQL statement: '. $e->getMessage(), $e->getCode(), $errorInfo);
+				throw new \GO_Base_Exception_Database('DbCommand failed to prepare the SQL statement: '. $e->getMessage(), $e->getCode(), $errorInfo);
 			}
 		}
 	}
@@ -130,7 +130,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 			$errorInfo = $e instanceof PDOException ? $e->errorInfo : null;
 			$message = $e->getMessage();
 			GO::debug('DbCommand::execute() failed: '.$message.' The SQL statement executed was: '.$this->getText() . $par);
-			throw new GO_Base_Exception_Database('DbStatement failed to execute the SQL statement: '.$message, (int) $e->getCode(), $errorInfo);
+			throw new \GO_Base_Exception_Database('DbStatement failed to execute the SQL statement: '.$message, (int) $e->getCode(), $errorInfo);
 		}
 	}
 	
@@ -156,7 +156,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 			return $record['found'];
 		}
 		else
-			throw new GO_Base_Exception_Database('Cannot know total rows before queryAll is executed');
+			throw new \GO_Base_Exception_Database('Cannot know total rows before queryAll is executed');
 	}
 	
 	/**
@@ -207,7 +207,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 			$message = $e->getMessage();
 			if (GO::config()->debug)
 				$message .= '. The SQL statement executed was: ' . $this->getText() . $par;
-			throw new GO_Base_Exception_Database('DbCommand failed to execute the SQL statement: '.$message, (int) $e->getCode(), $errorInfo);
+			throw new \GO_Base_Exception_Database('DbCommand failed to execute the SQL statement: '.$message, (int) $e->getCode(), $errorInfo);
 		}
 	}
 
@@ -227,7 +227,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 		if (isset($query['from']))
 			$sql.="\nFROM " . $query['from'];
 		else
-			throw new GO_Base_Exception_Database('The DB query must contain the "from" portion.');
+			throw new \GO_Base_Exception_Database('The DB query must contain the "from" portion.');
 
 		if(isset($query['join']))
       $sql.="\n".(is_array($query['join']) ? implode("\n",$query['join']) : $query['join']);
@@ -553,7 +553,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 		if (!is_array($conditions))
 			return $conditions;
 		else
-		  throw new GO_Base_Exception_Database('condition should be a string');
+		  throw new \GO_Base_Exception_Database('condition should be a string');
 	}
 
 	/**
@@ -577,7 +577,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 			$this->execute($this->params);
 		//if($this->_statement instanceof PDOStatement)
 			//var_dump($this->_statement);
-		return new IteratorIterator($this->_statement);
+		return new \IteratorIterator($this->_statement);
 	}
 
 }

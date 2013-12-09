@@ -115,7 +115,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 	public function checkHolidaysExist($year,$locale){
 
 		if(empty($year) || empty($locale))
-			Throw new Exception('No year or locale given for the holidays checker.');
+			Throw new \Exception('No year or locale given for the holidays checker.');
 		
 //		$startYear = mktime(0, 0, 0, 1, 1, $year);
 //		$endYear   = mktime(23, 59, 59, 12, 31, $year);
@@ -143,7 +143,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 	public function deleteHolidays($year,$locale='en'){
 		
 		if(empty($year) || empty($locale))
-			Throw new Exception('No year or locale given for the holidays delete function.');
+			Throw new \Exception('No year or locale given for the holidays delete function.');
 		
 		$startYear = mktime(0, 0, 0, 1, 1, $year);
 		$endYear   = mktime(23, 59, 59, 12, 31, $year);
@@ -171,7 +171,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 	public static function getAvailableHolidayFiles(){
 		$holidays = array();
 		$folderPath = GO::config()->root_path.'language/holidays/';
-		$folder = new GO_Base_Fs_Folder($folderPath);
+		$folder = new \GO_Base_Fs_Folder($folderPath);
 		
 		$children = $folder->ls();
 		foreach($children as $child){
@@ -197,7 +197,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 		if(is_file(GO::config()->root_path.'language/holidays/'.$locale.'.php'))
 			require(GO::config()->root_path.'language/holidays/'.$locale.'.php');
 //		else
-//			throw new Exception('No holidays file for this language: '.$locale.'.');
+//			throw new \Exception('No holidays file for this language: '.$locale.'.');
 		
 		if(empty($year)) {			
 			$year = date('Y');
@@ -214,7 +214,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 				$month_day = explode("-", $key);
 				$date = mktime(0,0,0,$month_day[0],$month_day[1],$year);
 				
-				$holiday = new GO_Base_Model_Holiday();
+				$holiday = new \GO_Base_Model_Holiday();
 				$holiday->name = $name;
 				$holiday->date = date('Y-m-d',$date);
 				$holiday->region = $locale;
@@ -233,7 +233,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 				$date = strtotime($key." days", $easter_day);
 		
 				
-				$holiday = new GO_Base_Model_Holiday();
+				$holiday = new \GO_Base_Model_Holiday();
 				$holiday->name = $name;
 				$holiday->date = date('Y-m-d',$date);
 				$holiday->region = $locale;
@@ -247,7 +247,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 				$count = $key - $weekday;
 				$date = strtotime($count." days", mktime(0,0,0,"12","24",$year));
 				
-				$holiday = new GO_Base_Model_Holiday();
+				$holiday = new \GO_Base_Model_Holiday();
 				$holiday->name = $name;
 				$holiday->date = date('Y-m-d',$date);
 				$holiday->region = $locale;
@@ -259,7 +259,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 	
 			foreach($holidays['fn'] as $def) {
 			
-				$holiday = new GO_Base_Model_Holiday();
+				$holiday = new \GO_Base_Model_Holiday();
 				$holiday->name = $def[0];
 				$holiday->date = call_user_func($def[1], $year);
 				$holiday->region = $locale;
@@ -309,12 +309,12 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 		
 		$languageFolderPath = GO::config()->root_path.'language/holidays/';
 		
-		$file = new GO_Base_Fs_File($languageFolderPath.$countryCode.'.php');
+		$file = new \GO_Base_Fs_File($languageFolderPath.$countryCode.'.php');
 		
 		if($file->exists()){
 			return $countryCode;
 		}else{
-			$file = new GO_Base_Fs_File($languageFolderPath.strtolower($countryCode).'.php');
+			$file = new \GO_Base_Fs_File($languageFolderPath.strtolower($countryCode).'.php');
 			if($file->exists())
 				return strtolower($countryCode);
 		}

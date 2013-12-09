@@ -1310,7 +1310,7 @@ class GO_Base_Config {
 		$path .= $user_id;		
 		
 		
-		$folder = new GO_Base_Fs_Folder($this->orig_tmpdir.$user_id);
+		$folder = new \GO_Base_Fs_Folder($this->orig_tmpdir.$user_id);
 		if($autoCreate)
 			$folder->create(0777);
 		return $folder;
@@ -1327,7 +1327,7 @@ class GO_Base_Config {
 			$this->cachefolder=$this->orig_tmpdir.'cache/';
 		}
 		
-		$folder = new GO_Base_Fs_Folder($this->cachefolder);
+		$folder = new \GO_Base_Fs_Folder($this->cachefolder);
 		if($autoCreate)
 			$folder->create(0777);
 		return $folder;
@@ -1611,7 +1611,7 @@ class GO_Base_Config {
 
 		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
 		if(!$setting){
-			$setting = new GO_Base_Model_Setting();
+			$setting = new \GO_Base_Model_Setting();
 			$setting->setAttributes($attributes);
 		}
 
@@ -1664,6 +1664,6 @@ class GO_Base_Config {
 		}
 		$config = array_merge($config, $extraConfig);
 
-		return GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File(GO::config()->get_config_file()), $config);
+		return GO_Base_Util_ConfigEditor::save(new \GO_Base_Fs_File(GO::config()->get_config_file()), $config);
 	}
 }

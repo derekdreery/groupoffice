@@ -32,7 +32,7 @@ class GO_Email_Controller_Register extends GO_Base_Controller_AbstractController
 @="rundll32.exe url.dll,FileProtocolHandler '.$url. '"
 ';
 		
-		GO_Base_Util_Http::downloadFile(new GO_Base_Fs_MemoryFile('Group-Office_email.reg', $data));
+		GO_Base_Util_Http::downloadFile(new \GO_Base_Fs_MemoryFile('Group-Office_email.reg', $data));
 		
 	}
 

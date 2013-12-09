@@ -31,7 +31,7 @@ class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
 		$this->_account = GO_Email_Model_Account::model()->findByPk(GO::config()->smtp_account_id,$findParams,true);
 			
 		if(!$this->_account)
-			throw new GO_Base_Exception_NotFound('The mailaccount given in the Group-Office config file cannot be found');
+			throw new \GO_Base_Exception_NotFound('The mailaccount given in the Group-Office config file cannot be found');
 
 		$this->_alias = $this->_account->defaultAlias;
 
@@ -49,16 +49,16 @@ class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
 		
 		// Check if the smime module is installed
 		if(!GO::modules()->isInstalled("smime"))
-			Throw new Exception('Smime module not installed');
+			Throw new \Exception('Smime module not installed');
 
 		if(empty(GO::config()->smtp_account_smime_password))
-			Throw new Exception('No password for smime set in the Group-Office config file');
+			Throw new \Exception('No password for smime set in the Group-Office config file');
 		
 		// Check for a certificate for the give email account
 		$cert = GO_Smime_Model_Certificate::model()->findByPk($this->_account->id);
 		
 		if(!$cert || empty($cert->cert))
-			Throw new Exception('No certificate enabled for the given account');
+			Throw new \Exception('No certificate enabled for the given account');
 
 		// If the certificate is found, then get the password and attach the certificate to the message
 		$this->setSignParams($cert->cert, GO::config()->smtp_account_smime_password);

@@ -183,7 +183,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		if(class_exists($className))
 			return new $className;
 		else{
-			$modMan =  new GO_Base_Module();
+			$modMan =  new \GO_Base_Module();
 			$modMan->setId($moduleId);
 			return $modMan;
 		}
@@ -214,7 +214,7 @@ class GO_Base_Module extends GO_Base_Observable {
 					$moduleNames[]=$modManager ? $modManager->name () : $moduleId;
 				}				
 				
-				throw new Exception("Module ".$this->name()." depends on ".implode(",",$moduleNames).". Please make sure all dependencies are installed.");
+				throw new \Exception("Module ".$this->name()." depends on ".implode(",",$moduleNames).". Please make sure all dependencies are installed.");
 			}
 		}
 	}
@@ -237,7 +237,7 @@ class GO_Base_Module extends GO_Base_Observable {
 					GO::getDbConnection ()->query($query);
 			}
 		}catch(PDOException $e){
-			throw new Exception("SQL query failed: ".$query."\n\n".$e->getMessage());
+			throw new \Exception("SQL query failed: ".$query."\n\n".$e->getMessage());
 		}
 		
 		GO::clearCache();
@@ -408,7 +408,7 @@ class GO_Base_Module extends GO_Base_Observable {
 	public function findClasses($subfolder){
 		
 		$classes=array();
-		$folder = new GO_Base_Fs_Folder($this->path().$subfolder);
+		$folder = new \GO_Base_Fs_Folder($this->path().$subfolder);
 		if($folder->exists()){
 			
 			$items = $folder->ls();
@@ -421,7 +421,7 @@ class GO_Base_Module extends GO_Base_Observable {
 					
 					$className = 'GO_'.ucfirst($this->id()).'_'.implode('_',$subParts).'_'.$item->nameWithoutExtension();			
 					if(class_exists($className)){
-						$reflectionClass = new ReflectionClass($className);
+						$reflectionClass = new \ReflectionClass($className);
 						if(!$reflectionClass->isAbstract())
 							$classes[] = $reflectionClass;					
 					}

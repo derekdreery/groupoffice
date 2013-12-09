@@ -32,12 +32,12 @@ class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Cont
 		$stmt = $model->find($findParams);
 		
 		// Create the csv file
-		$csvFile = new GO_Base_Fs_CsvFile(GO_Base_Fs_File::stripInvalidChars('export.csv'));
+		$csvFile = new \GO_Base_Fs_CsvFile(GO_Base_Fs_File::stripInvalidChars('export.csv'));
 		
 		// Output the download headers
 		GO_Base_Util_Http::outputDownloadHeaders($csvFile, false);
 				
-		$csvWriter = new GO_Base_Csv_Writer('php://output');
+		$csvWriter = new \GO_Base_Csv_Writer('php://output');
 		
 		$headerPrinted = false; 
 		

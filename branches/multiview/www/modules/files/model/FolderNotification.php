@@ -89,7 +89,7 @@ class GO_Files_Model_FolderNotification extends GO_Base_Db_ActiveRecord {
 
 		if (count($users)) {
 			foreach($users as $user_id) {
-				$notification = new GO_Files_Model_FolderNotificationMessage();
+				$notification = new \GO_Files_Model_FolderNotificationMessage();
 				$notification->type = $type;
 				$notification->arg1 = $arg1;
 				$notification->arg2 = $arg2;
@@ -206,7 +206,7 @@ class GO_Files_Model_FolderNotification extends GO_Base_Db_ActiveRecord {
 			}
 		}
 
-		$message = new GO_Base_Mail_Message();
+		$message = new \GO_Base_Mail_Message();
 		$message->setSubject(GO::t('notificationEmailSubject', 'files'))
 				->setTo(array(GO::user()->email=>GO::user()->name))
 				->setFrom(array(GO::config()->webmaster_email=>GO::config()->title))

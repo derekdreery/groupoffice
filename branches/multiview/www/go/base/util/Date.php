@@ -173,7 +173,7 @@ class GO_Base_Util_Date {
 
 		//$time = strtotime(GO_Base_Util_Date::to_input_format($date_string));
 		//return $time;
-		$date = new DateTime(GO_Base_Util_Date::to_input_format($date_string));
+		$date = new \DateTime(GO_Base_Util_Date::to_input_format($date_string));
 		return intval($date->format("U"));
 	}
 
@@ -298,12 +298,12 @@ class GO_Base_Util_Date {
 		{
 			return '';
 		}
-		/*$d = new DateTime($time, new DateTimeZone($timezone));
+		/*$d = new \DateTime($time, new \DateTimeZone($timezone));
 
 
 		if($timezone!=$_SESSION['GO_SESSION']['timezone'])
 		{
-			$tz = new DateTimeZone(date_default_timezone_get());
+			$tz = new \DateTimeZone(date_default_timezone_get());
 			if($tz)
 			{
 				$d->setTimezone($tz);
@@ -320,8 +320,8 @@ class GO_Base_Util_Date {
 
 	public static function get_timezone_offset($utime)
 	{
-		$d = new DateTime('@'.$utime, new DateTimeZone('GMT'));
-		$tz = new DateTimeZone(date_default_timezone_get());
+		$d = new \DateTime('@'.$utime, new \DateTimeZone('GMT'));
+		$tz = new \DateTimeZone(date_default_timezone_get());
 		if($tz)
 		{
 				$d->setTimezone($tz);

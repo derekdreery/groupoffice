@@ -104,16 +104,16 @@ function crypt_random($min = 0, $max = 0x7FFFFFFF)
         }
         switch (true) {
             case class_exists('Crypt_AES'):
-                $crypto = new Crypt_AES(CRYPT_AES_MODE_CTR);
+                $crypto = new \Crypt_AES(CRYPT_AES_MODE_CTR);
                 break;
             case class_exists('Crypt_TripleDES'):
-                $crypto = new Crypt_TripleDES(CRYPT_DES_MODE_CTR);
+                $crypto = new \Crypt_TripleDES(CRYPT_DES_MODE_CTR);
                 break;
             case class_exists('Crypt_DES'):
-                $crypto = new Crypt_DES(CRYPT_DES_MODE_CTR);
+                $crypto = new \Crypt_DES(CRYPT_DES_MODE_CTR);
                 break;
             case class_exists('Crypt_RC4'):
-                $crypto = new Crypt_RC4();
+                $crypto = new \Crypt_RC4();
                 break;
             default:
                 extract(unpack('Nrandom', pack('H*', sha1(mt_rand(0, 0x7FFFFFFF)))));

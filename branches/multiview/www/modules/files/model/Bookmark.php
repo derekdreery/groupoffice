@@ -54,7 +54,7 @@ class GO_Files_Model_Bookmark extends GO_Base_Db_ActiveRecord {
 				array('user_id'=>GO::user()->id,'folder_id'=>$folderModel->id)
 			);
 		if (!empty($existingBookmarkModel))
-			throw new Exception(str_replace('%fn',$folderModel->name,GO::t('bookmarkAlreadyExists','files')));
+			throw new \Exception(str_replace('%fn',$folderModel->name,GO::t('bookmarkAlreadyExists','files')));
 		
 		
 		return parent::beforeSave();

@@ -59,7 +59,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if(!empty($extension))
 			$p.='.'.$extension;
 		
-		return new GO_Base_Fs_File($p);
+		return new \GO_Base_Fs_File($p);
 	}
 	
 	
@@ -122,7 +122,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		else{
 			$errorMsg = "The program tried to delete a file (".$this->stripFileStoragePath().") while GO_Base_Fs_File::\$allowDeletes is set to false.";
 			GO::debug($errorMsg);
-			throw new Exception($errorMsg);
+			throw new \Exception($errorMsg);
 		}
 	}
 	
@@ -327,7 +327,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		$handle = fopen($this->path(), "rb");
 
 		if (!is_resource($handle))
-			throw new Exception("Could not read file");
+			throw new \Exception("Could not read file");
 		
 		while (!feof($handle)) {
 			echo fread($handle, 1024);
@@ -352,7 +352,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		$newPath = $destinationFolder->path().'/'.$newFileName;
 		
 		if($appendNumberToNameIfDestinationExists){
-			$file = new GO_Base_Fs_File($newPath);
+			$file = new \GO_Base_Fs_File($newPath);
 			$file->appendNumberToNameIfExists();
 			$newPath = $file->path();
 		}
@@ -396,14 +396,14 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 			$old = str_replace(GO::config()->file_storage_path, '', $this->path);
 			$new = str_replace(GO::config()->file_storage_path, '', $newPath);
 			
-			throw new Exception("Could not copy ".$old." to ".$new);
+			throw new \Exception("Could not copy ".$old." to ".$new);
 		}
 				
 		chmod($newPath, octdec(GO::config()->file_create_mode));
 		if(GO::config()->file_change_group)
 			chgrp($newPath, GO::config()->file_change_group);
 						
-		return new GO_Base_Fs_File($newPath);
+		return new \GO_Base_Fs_File($newPath);
 	}
 	
 	/**
@@ -423,7 +423,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		$files = array();
 		for($i=0;$i<count($uploadedFileArray['tmp_name']);$i++){
 			if (is_uploaded_file($uploadedFileArray['tmp_name'][$i])) {
-				$destinationFile = new GO_Base_Fs_File($destinationFolder->path().'/'.$uploadedFileArray['name'][$i]);
+				$destinationFile = new \GO_Base_Fs_File($destinationFolder->path().'/'.$uploadedFileArray['name'][$i]);
 				if(!$overwrite)
 					$destinationFile->appendNumberToNameIfExists();
 

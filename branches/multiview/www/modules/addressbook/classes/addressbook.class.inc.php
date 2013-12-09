@@ -64,10 +64,10 @@ class addressbook extends db {
 
 		File::mkdir(dirname($destination));
 
-		$img = new Image();
+		$img = new \Image();
 		if(!$img->load($tmp_file)){
 			$GLOBALS['GO_LANGUAGE']->require_language_file('addressbook');
-			throw new Exception($lang['addressbook']['imageNotSupported']);
+			throw new \Exception($lang['addressbook']['imageNotSupported']);
 		}
 
 		$img->zoomcrop(90,120);
@@ -119,7 +119,7 @@ class addressbook extends db {
 			}else {
 				global $GO_CONFIG;
 				require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-				$GO_USERS = new GO_USERS();
+				$GO_USERS = new \GO_USERS();
 
 				$user = $GO_USERS->get_user($GLOBALS['GO_SECURITY']->user_id);
 				$addressbook = $this->create_default_addressbook($user);
@@ -848,7 +848,7 @@ class addressbook extends db {
 
 		if(!empty($advanced_query)) {
 			if(!String::check_parentheses($advanced_query)){
-				throw new Exception($GLOBALS['lang']['common']['parentheses_invalid_error']);
+				throw new \Exception($GLOBALS['lang']['common']['parentheses_invalid_error']);
 			}
 			$sql .= ' AND ('.$advanced_query.')';
 			
@@ -1015,7 +1015,7 @@ class addressbook extends db {
 
 		if(!empty($advanced_query)) {
 			if(!String::check_parentheses($advanced_query)){
-				throw new Exception($GLOBALS['lang']['common']['parentheses_invalid_error']);
+				throw new \Exception($GLOBALS['lang']['common']['parentheses_invalid_error']);
 			}
 			$sql .= ' AND ('.$advanced_query.')';
 		}

@@ -24,8 +24,8 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 	protected function beforeSubmit(&$response, &$model, &$params) {
 
 		if (isset($_FILES['attachments']['tmp_name'][0]) && is_uploaded_file($_FILES['attachments']['tmp_name'][0])) {
-			$file = new GO_Base_Fs_File($_FILES['attachments']['tmp_name'][0]);
-			$fileWithName = new GO_Base_Fs_File($_FILES['attachments']['name'][0]);
+			$file = new \GO_Base_Fs_File($_FILES['attachments']['tmp_name'][0]);
+			$fileWithName = new \GO_Base_Fs_File($_FILES['attachments']['name'][0]);
 			$model->content = $file->contents();
 			$model->extension = $fileWithName->extension();
 		}
@@ -52,7 +52,7 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 	protected function actionDownload($params){
 		$template = GO_Files_Model_Template::model()->findByPk($params['id']);
 		
-	  GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_Fs_File($template->name.'.'.$template->extension));
+	  GO_Base_Util_Http::outputDownloadHeaders(new \GO_Base_Fs_File($template->name.'.'.$template->extension));
 		
 		echo $template->content;
 	}
@@ -61,7 +61,7 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 		
 		$filename = GO_Base_Fs_File::stripInvalidChars($params['filename']);
 		if(empty($filename))
-			throw new Exception("Filename can not be empty");
+			throw new \Exception("Filename can not be empty");
 		
 		$template = GO_Files_Model_Template::model()->findByPk($params['template_id']);
 		
@@ -71,7 +71,7 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 		if(!empty($template->extension))
 			$path .= '.'.$template->extension;
 		
-		$fsFile = new GO_Base_Fs_File($path);
+		$fsFile = new \GO_Base_Fs_File($path);
 		$fsFile->putContents($template->content);
 		
 		$fileModel = GO_Files_Model_File::importFromFilesystem($fsFile);

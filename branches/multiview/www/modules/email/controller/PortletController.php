@@ -57,7 +57,7 @@ class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelContro
 			$portletFolder =  $this->_loadPortletFolder($accountId,$mailboxName);
 			
 			if(!$portletFolder){
-				$portletFolder = new GO_email_Model_PortletFolder();
+				$portletFolder = new \GO_email_Model_PortletFolder();
 				$portletFolder->user_id = GO::user()->id;
 				$portletFolder->account_id = $accountId;
 				$portletFolder->folder_name = $mailboxName;
@@ -182,7 +182,7 @@ class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelContro
 			if($type=="account"){
 				$response=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
 			}else{
-				$mailbox = new GO_Email_Model_ImapMailbox($account, array('name' => $mailboxName));
+				$mailbox = new \GO_Email_Model_ImapMailbox($account, array('name' => $mailboxName));
 				$response = $this->_getMailboxTreeNodes($mailbox->getChildren());
 			}
 		}

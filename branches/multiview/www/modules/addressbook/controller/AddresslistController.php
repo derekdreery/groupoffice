@@ -26,7 +26,7 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
 		
 		if (empty($params['forContextMenu'])) {
-			$multiSel = new GO_Base_Component_MultiSelectGrid(
+			$multiSel = new \GO_Base_Component_MultiSelectGrid(
 							'addresslist_filter', 
 							"GO_Addressbook_Model_Addresslist",$store, $params, false);		
 			$multiSel->formatCheckedColumn();
@@ -145,9 +145,9 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 	protected function actionGetRecipientsAsString($params){
 				
 		if(empty($params['addresslists']))
-			throw new Exception();
+			throw new \Exception();
 			
-		$recipients = new GO_Base_Mail_EmailRecipients();
+		$recipients = new \GO_Base_Mail_EmailRecipients();
 		
 		$addresslistIds = json_decode($params['addresslists']);
 				

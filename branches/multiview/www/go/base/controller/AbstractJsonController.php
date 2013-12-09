@@ -28,7 +28,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	 * @return GO_Base_Data_JsonResponse response object
 	 */
 	public function renderJson($data) {
-		return new GO_Base_Data_JsonResponse($data);
+		return new \GO_Base_Data_JsonResponse($data);
 	}
 	
 	/**
@@ -55,7 +55,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 
 		//TODO: check if this can be moved. This methode renders JSON and should not check permissions.
 		if (!$model->checkPermissionLevel($model->isNew ? GO_Base_Model_Acl::CREATE_PERMISSION : GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO_Base_Exception_AccessDenied();
 
 		//Init data array
 		$response['data'] = array_merge($model->getAttributes(), $extraFields);
@@ -76,7 +76,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				&$remoteComboFields
 		));
 
-		return new GO_Base_Data_JsonResponse($response);
+		return new \GO_Base_Data_JsonResponse($response);
 	}
 
 	/**
@@ -133,7 +133,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				&$model
 		));
 
-		return new GO_Base_Data_JsonResponse($response);
+		return new \GO_Base_Data_JsonResponse($response);
 	}
 
 	/**
@@ -179,7 +179,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 					&$model
 			));
 
-		return new GO_Base_Data_JsonResponse($response);
+		return new \GO_Base_Data_JsonResponse($response);
 	}
 
 	/**
@@ -220,7 +220,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 //			}
 //		}
 
-		return new GO_Base_Data_JsonResponse($response);
+		return new \GO_Base_Data_JsonResponse($response);
 	}
 	
 	/**
@@ -254,7 +254,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 			$includeColumns = explode(',',$params['columns']);
 			foreach($includeColumns as $incColumn){
 				if(!$columnModel->getColumn($incColumn))
-					$columnModel->addColumn (new GO_Base_Data_Column($incColumn,$incColumn));
+					$columnModel->addColumn (new \GO_Base_Data_Column($incColumn,$incColumn));
 			}
 				
 			$columnModel->sort($includeColumns);
@@ -270,7 +270,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 			$params['type']=str_replace('GO_Base_Export', 'GO_Base_Storeexport', $params['type']);
 			$export = new $params['type']($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation);
 		}else
-			$export = new GO_Base_Storeexport_ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
+			$export = new \GO_Base_Storeexport_ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
 
 		if(isset($params['extraLines']))
 			$export->addLines($params['extraLines']);
@@ -311,7 +311,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 
 		foreach ($combofields as $property => $map) {
 			if (is_numeric($property))
-				throw new Exception("remoteComboFields() must return a key=>value array.");
+				throw new \Exception("remoteComboFields() must return a key=>value array.");
 
 			$value = '';
 			$eval = '$value = ' . $map . ';';
@@ -485,7 +485,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	private function _processFilesDisplay($model, $response) {
 		if (isset(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id'] > 0) {
 
-			$fc = new GO_Files_Controller_Folder();
+			$fc = new \GO_Files_Controller_Folder();
 			$listResponse = $fc->run("list", array('skip_fs_sync'=>true, 'folder_id' => $response['data']['files_folder_id'], "limit" => 20, "sort" => 'mtime', "dir" => 'DESC'), false);
 			$response['data']['files'] = $listResponse['results'];
 		} else {

@@ -162,7 +162,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$model = GO::getModel($modelName)->findByPk($pk);
 			
 			if(!$model)
-				throw new GO_Base_Exception_NotFound();
+				throw new \GO_Base_Exception_NotFound();
 			
 		}else{
 			$model = new $modelName;
@@ -187,7 +187,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response = array();
 		
 		if(!$model->checkPermissionLevel($model->isNew?GO_Base_Model_Acl::CREATE_PERMISSION:GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO_Base_Exception_AccessDenied();
 		
 		$response = $this->beforeLoad($response, $model, $params);
 
@@ -252,7 +252,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 		foreach ($this->remoteComboFields() as $property => $map) {			
 			if(is_numeric($property))
-				throw new Exception("remoteComboFields() must return a key=>value array.");			
+				throw new \Exception("remoteComboFields() must return a key=>value array.");			
 			
 			$value='';
 			$eval = '$value = '.$map.';';
@@ -303,7 +303,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @return array The grid record data
 	 */
 	protected function getStoreColumnModel($withCustomfields=true) {
-		$cm =  new GO_Base_Data_ColumnModel();
+		$cm =  new \GO_Base_Data_ColumnModel();
 		$cm->setColumnsFromModel(GO::getModel($this->model), $this->getStoreExcludeColumns(),array(),$withCustomfields);	
 		return $cm;
 	}
@@ -346,7 +346,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
   protected function actionStore($params){	
     $modelName = $this->model;  
 
-    $store = new GO_Base_Data_Store($this->getStoreColumnModel());	
+    $store = new \GO_Base_Data_Store($this->getStoreColumnModel());	
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatStoreRecord'));		
 		
 		if(!empty($params["forEditing"]))
@@ -427,7 +427,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$model = GO::getModel($modelName)->findByPk($this->getPrimaryKeyFromParams($params));
 		
 		if(!$model)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO_Base_Exception_NotFound();
 		
 		$response = $this->beforeDisplay($response, $model, $params);
 		
@@ -635,7 +635,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	private function _processFilesDisplay($model,$response){
 		if (!empty(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
 
-			$fc = new GO_Files_Controller_Folder();
+			$fc = new \GO_Files_Controller_Folder();
 			$listResponse = $fc->run("list",array('skip_fs_sync'=>true, 'folder_id'=>$response['data']['files_folder_id'], "limit"=>20,"sort"=>'mtime',"dir"=>'DESC'),false. false);
 			$response['data']['files'] = $listResponse['results'];
 		} else {
@@ -937,7 +937,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$findParams->getCriteria()->recreateTemporaryTables();
 		$model = GO::getModel(GO::session()->values[$params['name']]['model']);
 
-		$store = new GO_Base_Data_Store($this->getStoreColumnModel());	
+		$store = new \GO_Base_Data_Store($this->getStoreColumnModel());	
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatStoreRecord'));		
 		//$store->getColumnModel()->setModelFormatType('formatted'); //no html
 		
@@ -960,7 +960,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 			foreach($includeColumns as $incColumn){
 				if(!$columnModel->getColumn($incColumn))
-					$columnModel->addColumn (new GO_Base_Data_Column($incColumn,$incColumn));
+					$columnModel->addColumn (new \GO_Base_Data_Column($incColumn,$incColumn));
 			}
 			
 			$columnModel->sort($includeColumns);
@@ -1006,7 +1006,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		if(!empty($params['type']))
 			$export = new $params['type']($store, $columnModel,$model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams);
 		else
-			$export = new GO_Base_Export_ExportCSV($store, $columnModel, $model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams); // The default Export is the CSV outputter.
+			$export = new \GO_Base_Export_ExportCSV($store, $columnModel, $model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams); // The default Export is the CSV outputter.
 
 		$export->output();
 	}
@@ -1031,7 +1031,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionImport($params) {
 				
-		$summarylog = new GO_Base_Component_SummaryLog();
+		$summarylog = new \GO_Base_Component_SummaryLog();
 		
 		GO::$disableModelCache=true; //for less memory usage		
 		GO::setMaxExecutionTime(0);
@@ -1484,7 +1484,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['results'] = array();
 		$response['total'] = 0;
 
-		$importFile = new GO_Base_Fs_CsvFile($_FILES['files']['tmp_name'][0]);
+		$importFile = new \GO_Base_Fs_CsvFile($_FILES['files']['tmp_name'][0]);
 		$importFile->delimiter = $params['delimiter'];
 		$importFile->enclosure = $params['enclosure'];
 
@@ -1499,7 +1499,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['results'] = array();
 		$response['total'] = 0;
 
-		$importFile = new GO_Base_Fs_XlsFile($_FILES['files']['tmp_name'][0],false,1);
+		$importFile = new \GO_Base_Fs_XlsFile($_FILES['files']['tmp_name'][0],false,1);
 
 		$response['results'] = $importFile->getRecord();
 		$response['total'] = count($response['results']);

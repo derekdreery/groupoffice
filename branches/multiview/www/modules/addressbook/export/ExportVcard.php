@@ -22,7 +22,7 @@ class GO_Addressbook_Export_ExportVCard extends GO_Base_Export_AbstractExport {
 	public static $useOrientation=false;
 	
 	private function _sendHeaders(){		
-		$file = new GO_Base_Fs_File($this->title.'.vcf');
+		$file = new \GO_Base_Fs_File($this->title.'.vcf');
 		GO_Base_Util_Http::outputDownloadHeaders($file);
 	}
 

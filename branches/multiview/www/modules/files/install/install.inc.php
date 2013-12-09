@@ -39,7 +39,7 @@ $GLOBALS['GO_SECURITY']->add_group_to_acl($GLOBALS['GO_CONFIG']->group_internal,
 $files->add_template($template);
 
 require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-$GO_USERS = new GO_USERS();
+$GO_USERS = new \GO_USERS();
 
 $GO_USERS->get_users();
 

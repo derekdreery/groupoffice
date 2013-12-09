@@ -3,7 +3,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 
 	protected function actionManageStore($params) {
 		
-		$columnModel = new GO_Base_Data_ColumnModel(GO_Customfields_Model_Block::model());
+		$columnModel = new \GO_Base_Data_ColumnModel(GO_Customfields_Model_Block::model());
 		$columnModel->formatColumn('col_id', '"col_".$model->customField->id', array(), 'field_id');
 		$columnModel->formatColumn('customfield_name', '$model->customField->name', array(), 'field_id');
 		$columnModel->formatColumn('customfield_datatype', '$model->customField->datatype', array(), 'field_id');
@@ -43,7 +43,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 					->addCondition('user_id', GO::user()->id, '=', 'ug', false)
 			);
 		
-		$store = new GO_Base_Data_DbStore('GO_Customfields_Model_Block', $columnModel, $params, $findParams);
+		$store = new \GO_Base_Data_DbStore('GO_Customfields_Model_Block', $columnModel, $params, $findParams);
 
 		echo $this->renderStore($store);
 		
@@ -54,7 +54,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 		if (!empty($params['id']))
 			$blockModel = GO_Customfields_Model_Block::model()->findByPk($params['id']);
 		else
-			$blockModel = new GO_Customfields_Model_Block();
+			$blockModel = new \GO_Customfields_Model_Block();
 		
 		$blockModel->setAttributes($params);
 		$blockModel->save();
@@ -68,7 +68,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 		if (!empty($params['id']))
 			$blockModel = GO_Customfields_Model_Block::model()->findByPk($params['id']);
 		else
-			$blockModel = new GO_Customfields_Model_Block();
+			$blockModel = new \GO_Customfields_Model_Block();
 		
 		$remoteComboFields = array('field_id' => '"[".GO::t($model->customField->category->extends_model,"customfields")."] ".$model->customField->category->name." : ".$model->customField->name." (col_".$model->id.")"');
 		
@@ -78,7 +78,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 
 	protected function actionEnableStore($params) {
 				
-		$columnModel = new GO_Base_Data_ColumnModel(GO_Customfields_Model_Block::model());
+		$columnModel = new \GO_Base_Data_ColumnModel(GO_Customfields_Model_Block::model());
 		$columnModel->formatColumn('col_id', '"col_".$model->customField->id', array(), 'field_id');
 		$columnModel->formatColumn('customfield_name', '$model->customField->name', array(), 'field_id');
 		$columnModel->formatColumn('customfield_datatype', '$model->customField->datatype', array(), 'field_id');
@@ -131,7 +131,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 					->addCondition('user_id', GO::user()->id, '=', 'ug', false)
 			);
 		
-		$store = new GO_Base_Data_DbStore('GO_Customfields_Model_Block', $columnModel, $params, $findParams);
+		$store = new \GO_Base_Data_DbStore('GO_Customfields_Model_Block', $columnModel, $params, $findParams);
 
 		echo $this->renderStore($store);
 		
@@ -151,7 +151,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 		if (!empty($params['enable']) && $params['enable']!=='false') {
 			
 			if (!$enableBlockModel) {
-				$enableBlockModel = new GO_Customfields_Model_EnabledBlock();
+				$enableBlockModel = new \GO_Customfields_Model_EnabledBlock();
 				$enableBlockModel->block_id = $params['block_id'];
 				$enableBlockModel->model_id = $params['model_id'];
 				$enableBlockModel->model_type_name = $params['model_name'];

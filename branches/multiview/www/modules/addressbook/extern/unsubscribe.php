@@ -38,7 +38,7 @@ if (!isset($GLOBALS['GO_MODULES']->modules['mailings'])) {
 		case 'user':
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
+			$GO_USERS = new \GO_USERS();
 
 			$user=$GO_USERS->get_user($data['recipient_id']);
 			if($tp->get_unsubscribe_hash($user['registration_time'], $data['addresslist_id'],'user', $user['id'])!=$data['hash']){

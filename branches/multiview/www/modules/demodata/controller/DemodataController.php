@@ -12,7 +12,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			GO::session()->runAsRoot();
 		}elseif(!GO::user()->isAdmin())
 		{
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO_Base_Exception_AccessDenied();
 		}
 	
 		
@@ -49,7 +49,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 
 		$addressbook = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name', GO::t('customers', 'addressbook'));
 		if (!$addressbook) {
-			$addressbook = new GO_Addressbook_Model_Addressbook();
+			$addressbook = new \GO_Addressbook_Model_Addressbook();
 			$addressbook->setAttributes(array(
 					'user_id' => 1,
 					'name' => GO::t('prospects', 'addressbook'),
@@ -62,7 +62,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 	
 		$company = GO_Addressbook_Model_Company::model()->findSingleByAttribute('email', 'info@smith.demo');
 		if (!$company) {
-			$company = new GO_Addressbook_Model_Company();
+			$company = new \GO_Addressbook_Model_Company();
 			$company->setAttributes(array(
 					'addressbook_id' => $addressbook->id,
 					'name' => 'Smith Inc',
@@ -92,7 +92,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 
 		$john = GO_Addressbook_Model_Contact::model()->findSingleByAttribute('email', 'john@smith.demo');
 		if (!$john) {
-			$john = new GO_Addressbook_Model_Contact();
+			$john = new \GO_Addressbook_Model_Contact();
 			$john->addressbook_id = $addressbook->id;
 			$john->company_id = $company->id;
 			$john->salutation = 'Dear Mr. Smith';
@@ -114,13 +114,13 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$john->skype_name='echo123';
 			
 			$john->save();
-			$john->setPhoto(new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/noperson.jpg'));
+			$john->setPhoto(new \GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/noperson.jpg'));
 			$john->save();
 		}
 
 		$acme = GO_Addressbook_Model_Company::model()->findSingleByAttribute('email', 'info@acme.demo');
 		if (!$acme) {
-			$acme = new GO_Addressbook_Model_Company();
+			$acme = new \GO_Addressbook_Model_Company();
 			$acme->setAttributes(array(
 					'addressbook_id' => $addressbook->id,
 					'name' => 'ACME Corporation',
@@ -152,7 +152,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 		}
 		$wile = GO_Addressbook_Model_Contact::model()->findSingleByAttribute('email', 'wile@acme.demo');
 		if (!$wile) {
-			$wile = new GO_Addressbook_Model_Contact();
+			$wile = new \GO_Addressbook_Model_Contact();
 			$wile->addressbook_id = $addressbook->id;
 			$wile->company_id = $acme->id;
 			$wile->salutation = 'Dear Mr. Coyote';
@@ -175,14 +175,14 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$wile->skype_name='test';
 
 			$wile->save();
-			$wile->setPhoto(new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/wecoyote.png'));
+			$wile->setPhoto(new \GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/wecoyote.png'));
 			$wile->save();
 
 			$wile->addComment("Wile E. Coyote (also known simply as \"The Coyote\") and The Road Runner are a duo of cartoon characters from a series of Looney Tunes and Merrie Melodies cartoons. The characters (a coyote and Greater Roadrunner) were created by animation director Chuck Jones in 1948 for Warner Bros., while the template for their adventures was the work of writer Michael Maltese. The characters star in a long-running series of theatrical cartoon shorts (the first 16 of which were written by Maltese) and occasional made-for-television cartoons.");
 
 			$wile->addComment("In each episode, instead of animal senses and cunning, Wile E. Coyote uses absurdly complex contraptions (sometimes in the manner of Rube Goldberg) and elaborate plans to pursue his quarry. It was originally meant to parody chase cartoons like Tom and Jerry, but became popular in its own right, much to Jones' chagrin.");
 
-			$file = new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/Demo letter.docx');
+			$file = new \GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/Demo letter.docx');
 			$copy = $file->copy($wile->filesFolder->fsFolder);
 
 			$wile->filesFolder->addFile($copy->name());
@@ -196,7 +196,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 
 		$elmer = GO_Base_Model_User::model()->findSingleByAttribute('username', 'elmer');
 		if (!$elmer) {
-			$elmer = new GO_Base_Model_User();
+			$elmer = new \GO_Base_Model_User();
 			$elmer->username = 'elmer';
 			$elmer->first_name = 'Elmer';
 			$elmer->last_name = 'Fudd';
@@ -221,7 +221,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 
 		$demo = GO_Base_Model_User::model()->findSingleByAttribute('username', 'demo');
 		if (!$demo) {
-			$demo = new GO_Base_Model_User();
+			$demo = new \GO_Base_Model_User();
 			$demo->username = 'demo';
 			$demo->first_name = 'Demo';
 			$demo->last_name = 'User';
@@ -244,7 +244,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 
 		$linda = GO_Base_Model_User::model()->findSingleByAttribute('username', 'linda');
 		if (!$linda) {
-			$linda = new GO_Base_Model_User();
+			$linda = new \GO_Base_Model_User();
 			$linda->username = 'linda';
 			$linda->first_name = 'Linda';
 			$linda->last_name = 'Smith';
@@ -282,7 +282,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$time = GO_Base_Util_Date::date_add(GO_Base_Util_Date::get_last_sunday(time()),2);
 
 			foreach ($events as $e) {
-				$event = new GO_Calendar_Model_Event();
+				$event = new \GO_Calendar_Model_Event();
 				$event->name = $e[0];
 				$event->location = "ACME NY Office";
 				$event->start_time = GO_Base_Util_Date::clear_time($time, $e[1]);
@@ -291,21 +291,21 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				$event->calendar_id = GO_Calendar_Model_Calendar::model()->getDefault($demo)->id;
 				$event->save();
 
-				$participant = new GO_Calendar_Model_Participant();
+				$participant = new \GO_Calendar_Model_Participant();
 				$participant->is_organizer = true;
 				$participant->setContact($demo->createContact());
 				$event->addParticipant($participant);
 
-				$participant = new GO_Calendar_Model_Participant();
+				$participant = new \GO_Calendar_Model_Participant();
 				$participant->setContact($linda->createContact());
 				$event->addParticipant($participant);
 
-				$participant = new GO_Calendar_Model_Participant();
+				$participant = new \GO_Calendar_Model_Participant();
 				$participant->setContact($elmer->createContact());
 				$event->addParticipant($participant);
 
 
-				$participant = new GO_Calendar_Model_Participant();
+				$participant = new \GO_Calendar_Model_Participant();
 				$participant->setContact($wile);
 				$event->addParticipant($participant);
 
@@ -321,7 +321,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			);
 
 			foreach ($events as $e) {
-				$event = new GO_Calendar_Model_Event();
+				$event = new \GO_Calendar_Model_Event();
 				$event->name = $e[0];
 				$event->location = "ACME NY Office";
 				$event->start_time = GO_Base_Util_Date::date_add(GO_Base_Util_Date::clear_time($time, $e[1]), 1);
@@ -330,18 +330,18 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				$event->calendar_id = GO_Calendar_Model_Calendar::model()->getDefault($linda)->id;
 				$event->save();
 
-				$participant = new GO_Calendar_Model_Participant();
+				$participant = new \GO_Calendar_Model_Participant();
 				$participant->is_organizer = true;
 				$participant->setContact($linda->createContact());
 				$event->addParticipant($participant);
 
 
-				$participant = new GO_Calendar_Model_Participant();
+				$participant = new \GO_Calendar_Model_Participant();
 				$participant->setContact($demo->createContact());
 				$event->addParticipant($participant);
 
 
-				$participant = new GO_Calendar_Model_Participant();
+				$participant = new \GO_Calendar_Model_Participant();
 				$participant->setContact($john);
 				$event->addParticipant($participant);
 
@@ -357,7 +357,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			);
 
 			foreach ($events as $e) {
-				$event = new GO_Calendar_Model_Event();
+				$event = new \GO_Calendar_Model_Event();
 				$event->name = $e[0];
 				$event->location = "ACME Testing fields";
 				$event->start_time = GO_Base_Util_Date::date_add(GO_Base_Util_Date::clear_time(time(), $e[1]), 1);
@@ -366,18 +366,18 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				$event->calendar_id = GO_Calendar_Model_Calendar::model()->getDefault($linda)->id;
 				$event->save();
 
-				$participant = new GO_Calendar_Model_Participant();
+				$participant = new \GO_Calendar_Model_Participant();
 				$participant->is_organizer = true;
 				$participant->setContact($linda->createContact());
 				$event->addParticipant($participant);
 
 
-				$participant = new GO_Calendar_Model_Participant();
+				$participant = new \GO_Calendar_Model_Participant();
 				$participant->setContact($demo->createContact());
 				$event->addParticipant($participant);
 
 
-				$participant = new GO_Calendar_Model_Participant();
+				$participant = new \GO_Calendar_Model_Participant();
 				$participant->setContact($john);
 				$event->addParticipant($participant);
 
@@ -385,7 +385,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			}
 			
 			
-			$view = new GO_Calendar_Model_View();
+			$view = new \GO_Calendar_Model_View();
 			$view->name=GO::t('group_everyone');
 			if($view->save()){
 				$view->addManyMany('groups', GO::config()->group_everyone);
@@ -395,7 +395,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			}
 			
 			
-			$view = new GO_Calendar_Model_View();
+			$view = new \GO_Calendar_Model_View();
 			$view->name=GO::t('group_everyone').' ('.GO::t('merge', 'calendar').')';
 			$view->merge=true;
 			$view->owncolor=true;
@@ -410,7 +410,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			//resource groups
 			$resourceGroup = GO_Calendar_Model_Group::model()->findSingleByAttribute('name', "Meeting rooms");
 			if(!$resourceGroup){
-				$resourceGroup = new GO_Calendar_Model_Group();
+				$resourceGroup = new \GO_Calendar_Model_Group();
 				$resourceGroup->name="Meeting rooms";
 				$resourceGroup->save();
 				
@@ -420,7 +420,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			
 			$resourceCalendar = GO_Calendar_Model_Calendar::model()->findSingleByAttribute('name', 'Road Runner Room');
 			if(!$resourceCalendar){
-				$resourceCalendar = new GO_Calendar_Model_Calendar();
+				$resourceCalendar = new \GO_Calendar_Model_Calendar();
 				$resourceCalendar->group_id=$resourceGroup->id;
 				$resourceCalendar->name='Road Runner Room';
 				$resourceCalendar->save();
@@ -429,7 +429,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			
 			$resourceCalendar = GO_Calendar_Model_Calendar::model()->findSingleByAttribute('name', 'Don Coyote Room');
 			if(!$resourceCalendar){
-				$resourceCalendar = new GO_Calendar_Model_Calendar();
+				$resourceCalendar = new \GO_Calendar_Model_Calendar();
 				$resourceCalendar->group_id=$resourceGroup->id;
 				$resourceCalendar->name='Don Coyote Room';
 				$resourceCalendar->save();
@@ -444,7 +444,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 		}
 		
 		if(GO::modules()->tasks){			
-			$task = new GO_Tasks_Model_Task();
+			$task = new \GO_Tasks_Model_Task();
 			$task->tasklist_id=  GO_Tasks_Model_Tasklist::model()->getDefault($demo)->id;
 			$task->name='Feed the dog';
 			$task->start_time=time();
@@ -452,14 +452,14 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$task->save();			
 			
 			
-			$task = new GO_Tasks_Model_Task();
+			$task = new \GO_Tasks_Model_Task();
 			$task->tasklist_id=  GO_Tasks_Model_Tasklist::model()->getDefault($linda)->id;
 			$task->name='Feed the dog';
 			$task->start_time=time();
 			$task->due_time=GO_Base_Util_Date::date_add(time(),1);
 			$task->save();			
 			
-			$task = new GO_Tasks_Model_Task();
+			$task = new \GO_Tasks_Model_Task();
 			$task->tasklist_id=  GO_Tasks_Model_Tasklist::model()->getDefault($elmer)->id;
 			$task->name='Feed the dog';
 			$task->start_time=time();
@@ -468,7 +468,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			
 			
 			
-			$task = new GO_Tasks_Model_Task();
+			$task = new \GO_Tasks_Model_Task();
 			$task->tasklist_id=  GO_Tasks_Model_Tasklist::model()->getDefault($demo)->id;
 			$task->name='Prepare meeting';
 			$task->start_time=time();
@@ -478,7 +478,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$task->link($event);
 			
 			
-			$task = new GO_Tasks_Model_Task();
+			$task = new \GO_Tasks_Model_Task();
 			$task->tasklist_id=  GO_Tasks_Model_Tasklist::model()->getDefault($linda)->id;
 			$task->name='Prepare meeting';
 			$task->start_time=time();
@@ -487,7 +487,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$task->link($wile);
 			$task->link($event);
 			
-			$task = new GO_Tasks_Model_Task();
+			$task = new \GO_Tasks_Model_Task();
 			$task->tasklist_id=  GO_Tasks_Model_Tasklist::model()->getDefault($elmer)->id;
 			$task->name='Prepare meeting';
 			$task->start_time=time();
@@ -502,7 +502,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			
 			$rocket = GO_Billing_Model_Product::model()->findSingleByAttribute('article_id', '12345');
 			if (!$rocket) {
-				$rocket = new GO_Billing_Model_Product();
+				$rocket = new \GO_Billing_Model_Product();
 				$rocket->article_id=12345;
 				$rocket->supplier_company_id=$acme->id;
 				$rocket->unit='pcs';
@@ -516,7 +516,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			
 			
 			
-				$lang = new GO_Billing_Model_ProductLanguage();
+				$lang = new \GO_Billing_Model_ProductLanguage();
 				$lang->language_id=1;
 				$lang->product_id=$rocket->id;
 				$lang->name='Master Rocket 1000';
@@ -526,7 +526,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			
 			$rocketLauncher = GO_Billing_Model_Product::model()->findSingleByAttribute('article_id', '234567');
 			if (!$rocketLauncher) {
-				$rocketLauncher = new GO_Billing_Model_Product();
+				$rocketLauncher = new \GO_Billing_Model_Product();
 				$rocketLauncher->article_id=234567;
 				$rocketLauncher->supplier_company_id=$acme->id;
 				$rocketLauncher->unit='pcs';
@@ -539,7 +539,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 
 
 
-				$lang = new GO_Billing_Model_ProductLanguage();
+				$lang = new \GO_Billing_Model_ProductLanguage();
 				$lang->language_id=1;
 				$lang->product_id=$rocketLauncher->id;
 				$lang->name='Rocket Launcher 1000';
@@ -556,7 +556,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				$book->acl->addUser($elmer->id, GO_Base_Model_Acl::WRITE_PERMISSION);
 				
 				
-				$order = new GO_Billing_Model_Order();
+				$order = new \GO_Billing_Model_Order();
 				$order->book_id=$book->id;
 				$order->btime=time();
 				$order->setCustomerFromContact($john);			
@@ -572,7 +572,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				
 				
 				
-				$order = new GO_Billing_Model_Order();
+				$order = new \GO_Billing_Model_Order();
 				$order->book_id=$book->id;
 				$order->btime=time();
 				$order->setCustomerFromContact($wile);			
@@ -589,7 +589,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 		}
 		
 		if(GO::modules()->tickets){	
-			$ticket = new GO_Tickets_Model_Ticket();
+			$ticket = new \GO_Tickets_Model_Ticket();
 			$ticket->subject='Malfunctioning rockets';
 			$ticket->setFromContact($wile);
 			if(!$ticket->save()){
@@ -597,7 +597,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				exit();
 			}
 			
-			$message = new GO_Tickets_Model_Message();
+			$message = new \GO_Tickets_Model_Message();
 			$message->sendEmail=false;
 			$message->content="My rocket always circles back right at me? How do I aim right?";
 			$message->is_note=false;			
@@ -613,7 +613,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$ticket->type->acl->addUser($demo->id, GO_Base_Model_Acl::MANAGE_PERMISSION);
 			
 			
-			$message = new GO_Tickets_Model_Message();
+			$message = new \GO_Tickets_Model_Message();
 			$message->sendEmail=false;
 			$message->content="Haha, good thing he doesn't know Accelleratii Incredibus designed this rocket and he can't read this note.";
 			$message->is_note=true;		
@@ -621,7 +621,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$ticket->addMessage($message);
 			
 			
-			$message = new GO_Tickets_Model_Message();
+			$message = new \GO_Tickets_Model_Message();
 			$message->sendEmail=false;
 			$message->content="Gee I don't know how that can happen. I'll send you some new ones!";
 			$message->is_note=false;			
@@ -634,7 +634,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			
 			
 			
-			$ticket = new GO_Tickets_Model_Ticket();
+			$ticket = new \GO_Tickets_Model_Ticket();
 			$ticket->subject='Can I speed up my rockets?';
 			$ticket->setFromContact($wile);
 			$ticket->ctime=$ticket->mtime=GO_Base_Util_Date::date_add(time(), -2);
@@ -644,7 +644,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				exit();
 			}
 			
-			$message = new GO_Tickets_Model_Message();
+			$message = new \GO_Tickets_Model_Message();
 			$message->sendEmail=false;
 			$message->content="The rockets are too slow to hit my fast moving target. Is there a way to speed them up?";
 			$message->is_note=false;			
@@ -659,7 +659,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 		
 			
 			
-			$message = new GO_Tickets_Model_Message();
+			$message = new \GO_Tickets_Model_Message();
 			$message->sendEmail=false;
 			$message->content="Please respond faster. Can't you see this ticket is marked in red?";
 			$message->is_note=false;			
@@ -668,13 +668,13 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			
 			
 			if(!GO::modules()->isInstalled('site') && GO::modules()->isAvailable('site')){
-				$module = new GO_Base_Model_Module();
+				$module = new \GO_Base_Model_Module();
 				$module->id='site';			
 				$module->save();
 			}
 			
 			if(!GO::modules()->isInstalled('defaultsite') && GO::modules()->isAvailable('defaultsite')){
-				$module = new GO_Base_Model_Module();
+				$module = new \GO_Base_Model_Module();
 				$module->id='defaultsite';			
 				$module->save();
 			}
@@ -697,7 +697,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 
 					$newTicketUrl = GO::config()->full_url.'modules/site/index.php?r=tickets/externalpage/newTicket';
 
-					$announcement = new GO_Summary_Model_Announcement();
+					$announcement = new \GO_Summary_Model_Announcement();
 					$announcement->title=$title;
 					$announcement->content='Anyone can submit tickets to the support system here:'.
 									'<br /><br /><a href="'.$newTicketUrl.'">'.$newTicketUrl.'</a><br /><br />Anonymous ticket posting can be disabled in the ticket module settings.';
@@ -716,14 +716,14 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$category = GO_Notes_Model_Category::model()->findSingleByAttribute('name', GO::t('general','notes'));
 			
 			if(!$category){
-				$category = new GO_Notes_Model_Category();
+				$category = new \GO_Notes_Model_Category();
 				$category->name=GO::t('general','notes');
 				$category->save();
 				$category->acl->addGroup(GO::config()->group_everyone, GO_Base_Model_Acl::READ_PERMISSION);
 			}
 			
 			
-			$note = new GO_Notes_Model_Note();
+			$note = new \GO_Notes_Model_Note();
 			$note->user_id=$elmer->id;			
 			
 			//$category = GO_Notes_Model_Category::model()->getDefault($elmer);
@@ -751,7 +751,7 @@ The Coyote is not allowed to catch or eat the Road Runner, unless he escapes fro
 			$note->link($john);
 			
 			
-			$note = new GO_Notes_Model_Note();
+			$note = new \GO_Notes_Model_Note();
 			$note->user_id=$demo->id;			
 			
 			$note->category_id=$category->id;
@@ -772,7 +772,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 			$announcement = GO_Summary_Model_Announcement::model()->findSingleByAttribute('title',$title);
 			if(!$announcement){
-				$announcement = new GO_Summary_Model_Announcement();
+				$announcement = new \GO_Summary_Model_Announcement();
 				$announcement->title=$title;
 				$announcement->content='This is a demo announcements that administrators can set.<br />Have a look around.<br /><br />We hope you\'ll enjoy Group-Office as much as we do!';
 
@@ -786,21 +786,21 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 		if(GO::modules()->files){
 			
 			$demoHome = GO_Files_Model_Folder::model()->findHomeFolder($demo);
-			$file = new GO_Base_Fs_File(GO::modules()->files->path.'install/templates/empty.docx');
+			$file = new \GO_Base_Fs_File(GO::modules()->files->path.'install/templates/empty.docx');
 			$copy = $file->copy($demoHome->fsFolder);
 			
-			$file = new GO_Base_Fs_File(GO::modules()->files->path.'install/templates/empty.odt');
-			$copy = $file->copy($demoHome->fsFolder);
-			
-			
-			$file = new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/Demo letter.docx');
+			$file = new \GO_Base_Fs_File(GO::modules()->files->path.'install/templates/empty.odt');
 			$copy = $file->copy($demoHome->fsFolder);
 			
 			
-			$file = new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/wecoyote.png');
+			$file = new \GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/Demo letter.docx');
 			$copy = $file->copy($demoHome->fsFolder);
 			
-			$file = new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/noperson.jpg');
+			
+			$file = new \GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/wecoyote.png');
+			$copy = $file->copy($demoHome->fsFolder);
+			
+			$file = new \GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/noperson.jpg');
 			$copy = $file->copy($demoHome->fsFolder);
 			
 			//add files to db.
@@ -821,7 +821,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 			$type = GO_Projects_Model_Type::model()->findSingleByAttribute('name', 'Demo');
 			if(!$type){
-				$type = new GO_Projects_Model_Type();
+				$type = new \GO_Projects_Model_Type();
 				$type->name='Demo';
 				if(!$type->save())
 				{
@@ -834,7 +834,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 			$folderProject = GO_Projects_Model_Project::model()->findSingleByAttribute('name','Demo');
 			if(!$folderProject){
-				$folderProject = new GO_Projects_Model_Project();
+				$folderProject = new \GO_Projects_Model_Project();
 				$folderProject->name='Demo';
 				$folderProject->description='Just a placeholder for sub projects.';
 				$folderProject->template_id=$folderTemplate->id;
@@ -850,7 +850,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 			$rocketProject = GO_Projects_Model_Project::model()->findSingleByAttribute('name','[001] Develop Rocket 2000');
 			if(!$rocketProject){
-				$rocketProject = new GO_Projects_Model_Project();
+				$rocketProject = new \GO_Projects_Model_Project();
 				$rocketProject->type_id=$type->id;
 				$rocketProject->status_id=$status->id;
 				$rocketProject->name='[001] Develop Rocket 2000';
@@ -866,7 +866,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 			$launcherProject = GO_Projects_Model_Project::model()->findSingleByAttribute('name','[001] Develop Rocket Launcher');
 			if(!$launcherProject){
-				$launcherProject = new GO_Projects_Model_Project();
+				$launcherProject = new \GO_Projects_Model_Project();
 				$launcherProject->type_id=$type->id;
 				$launcherProject->status_id=$status->id;
 				$launcherProject->name='[001] Develop Rocket Launcher';
@@ -888,17 +888,17 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 		if(GO::modules()->projects2){
 			
-			$employee = new GO_Projects2_Model_Employee();
+			$employee = new \GO_Projects2_Model_Employee();
 			$employee->user_id=$elmer->id;
 			$employee->fee=120;
 			$employee->save();
 			
-			$employee = new GO_Projects2_Model_Employee();
+			$employee = new \GO_Projects2_Model_Employee();
 			$employee->user_id=$demo->id;
 			$employee->fee=80;
 			$employee->save();
 			
-			$employee = new GO_Projects2_Model_Employee();
+			$employee = new \GO_Projects2_Model_Employee();
 			$employee->user_id=$linda->id;
 			$employee->fee=90;
 			$employee->save();
@@ -913,7 +913,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 			$type = GO_Projects2_Model_Type::model()->findSingleByAttribute('name', 'Demo');
 			if(!$type){
-				$type = new GO_Projects2_Model_Type();
+				$type = new \GO_Projects2_Model_Type();
 				$type->name='Demo';
 				if(!$type->save())
 				{
@@ -926,7 +926,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 			$folderProject = GO_Projects2_Model_Project::model()->findSingleByAttribute('name','Demo');
 			if(!$folderProject){
-				$folderProject = new GO_Projects2_Model_Project();
+				$folderProject = new \GO_Projects2_Model_Project();
 				$folderProject->name='Demo';
 				$folderProject->start_time=time();
 				$folderProject->description='Just a placeholder for sub projects.';
@@ -943,7 +943,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 			$rocketProject = GO_Projects2_Model_Project::model()->findSingleByAttribute('name','[001] Develop Rocket 2000');
 			if(!$rocketProject){
-				$rocketProject = new GO_Projects2_Model_Project();
+				$rocketProject = new \GO_Projects2_Model_Project();
 				$rocketProject->type_id=$type->id;
 				$rocketProject->status_id=$status->id;
 				$rocketProject->name='[001] Develop Rocket 2000';
@@ -957,21 +957,21 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$rocketProject->budget=20000;
 				$rocketProject->save();
 				
-				$resource = new GO_Projects2_Model_Resource();
+				$resource = new \GO_Projects2_Model_Resource();
 				$resource->project_id=$rocketProject->id;
 				$resource->user_id=$demo->id;
 				$resource->budgeted_units=100;
 				$resource->fee=80;
 				$resource->save();
 				
-				$resource = new GO_Projects2_Model_Resource();
+				$resource = new \GO_Projects2_Model_Resource();
 				$resource->project_id=$rocketProject->id;
 				$resource->user_id=$elmer->id;
 				$resource->budgeted_units=16;
 				$resource->fee=120;
 				$resource->save();
 				
-				$resource = new GO_Projects2_Model_Resource();
+				$resource = new \GO_Projects2_Model_Resource();
 				$resource->project_id=$rocketProject->id;
 				$resource->user_id=$linda->id;
 				$resource->budgeted_units=16;
@@ -979,7 +979,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$resource->save();
 				
 				
-				$groupTask = new GO_Projects2_Model_Task();
+				$groupTask = new \GO_Projects2_Model_Task();
 				$groupTask->project_id=$rocketProject->id;
 				$groupTask->description='Design';
 				$groupTask->duration=8*60;
@@ -987,7 +987,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$groupTask->save();
 				
 				
-				$task = new GO_Projects2_Model_Task();
+				$task = new \GO_Projects2_Model_Task();
 				$task->parent_id=$groupTask->id;
 				$task->project_id=$rocketProject->id;
 				$task->description='Functional design';
@@ -996,7 +996,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$task->user_id=$demo->id;
 				$task->save();
 				
-				$task = new GO_Projects2_Model_Task();
+				$task = new \GO_Projects2_Model_Task();
 				$task->parent_id=$groupTask->id;
 				$task->project_id=$rocketProject->id;
 				$task->description='Technical design';
@@ -1006,7 +1006,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$task->save();
 				
 				
-				$groupTask = new GO_Projects2_Model_Task();
+				$groupTask = new \GO_Projects2_Model_Task();
 				$groupTask->project_id=$rocketProject->id;
 				$groupTask->description='Implementation';
 				$groupTask->duration=8*60;
@@ -1014,7 +1014,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$groupTask->save();
 				
 				
-				$task = new GO_Projects2_Model_Task();
+				$task = new \GO_Projects2_Model_Task();
 				$task->parent_id=$groupTask->id;
 				$task->project_id=$rocketProject->id;
 				$task->description='Models';
@@ -1022,7 +1022,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$task->user_id=$demo->id;
 				$task->save();
 				
-				$task = new GO_Projects2_Model_Task();
+				$task = new \GO_Projects2_Model_Task();
 				$task->parent_id=$groupTask->id;
 				$task->project_id=$rocketProject->id;
 				$task->description='Controllers';
@@ -1030,7 +1030,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$task->user_id=$demo->id;
 				$task->save();
 				
-				$task = new GO_Projects2_Model_Task();
+				$task = new \GO_Projects2_Model_Task();
 				$task->parent_id=$groupTask->id;
 				$task->project_id=$rocketProject->id;
 				$task->description='Views';
@@ -1038,7 +1038,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$task->user_id=$demo->id;
 				$task->save();
 				
-				$groupTask = new GO_Projects2_Model_Task();
+				$groupTask = new \GO_Projects2_Model_Task();
 				$groupTask->project_id=$rocketProject->id;
 				$groupTask->description='Testing';
 				$groupTask->duration=8*60;
@@ -1046,7 +1046,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$groupTask->save();
 				
 				
-				$task = new GO_Projects2_Model_Task();
+				$task = new \GO_Projects2_Model_Task();
 				$task->parent_id=$groupTask->id;
 				$task->project_id=$rocketProject->id;
 				$task->description='GUI';
@@ -1054,7 +1054,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$task->user_id=$elmer->id;
 				$task->save();
 				
-				$task = new GO_Projects2_Model_Task();
+				$task = new \GO_Projects2_Model_Task();
 				$task->parent_id=$groupTask->id;
 				$task->project_id=$rocketProject->id;
 				$task->description='Security';
@@ -1063,20 +1063,20 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$task->save();
 				
 				
-				$expenseBudget = new GO_Projects2_Model_ExpenseBudget();
+				$expenseBudget = new \GO_Projects2_Model_ExpenseBudget();
 				$expenseBudget->description='Machinery';
 				$expenseBudget->nett=10000;
 				$expenseBudget->project_id=$rocketProject->id;
 				$expenseBudget->save();
 				
-				$expense = new GO_Projects2_Model_Expense();				
+				$expense = new \GO_Projects2_Model_Expense();				
 				$expense->description='Rocket fuel';
 				$expense->project_id=$rocketProject->id;
 				$expense->nett=3000;
 				$expense->save();
 				
 				
-				$expense = new GO_Projects2_Model_Expense();				
+				$expense = new \GO_Projects2_Model_Expense();				
 				$expense->expense_budget_id=$expenseBudget->id;
 				$expense->description='Fuse machine';
 				$expense->project_id=$rocketProject->id;
@@ -1086,7 +1086,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 			$launcherProject = GO_Projects2_Model_Project::model()->findSingleByAttribute('name','[001] Develop Rocket Launcher');
 			if(!$launcherProject){
-				$launcherProject = new GO_Projects2_Model_Project();
+				$launcherProject = new \GO_Projects2_Model_Project();
 				$launcherProject->type_id=$type->id;
 				$launcherProject->status_id=$status->id;
 				$launcherProject->name='[001] Develop Rocket Launcher';
@@ -1100,7 +1100,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$launcherProject->save();
 				
 				
-				$resource = new GO_Projects2_Model_Resource();
+				$resource = new \GO_Projects2_Model_Resource();
 				$resource->project_id=$launcherProject->id;
 				$resource->user_id=$demo->id;
 				$resource->fee=80;
@@ -1117,7 +1117,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			$category = GO_Bookmarks_Model_Category::model()->findSingleByAttribute('name', GO::t('general','bookmarks'));
 			
 			if(!$category){
-				$category = new GO_Bookmarks_Model_Category();
+				$category = new \GO_Bookmarks_Model_Category();
 				$category->name=GO::t('general','bookmarks');		
 				$category->save();
 				$category->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::READ_PERMISSION);
@@ -1125,7 +1125,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			$bookmark = GO_Bookmarks_Model_Bookmark::model()->findSingleByAttribute('name', 'Google Search');
 
 			if(!$bookmark){
-				$bookmark = new GO_Bookmarks_Model_Bookmark();
+				$bookmark = new \GO_Bookmarks_Model_Bookmark();
 				$bookmark->category_id=$category->id;
 				$bookmark->name='Google Search';
 				$bookmark->content='http://www.google.com';
@@ -1139,7 +1139,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			$bookmark = GO_Bookmarks_Model_Bookmark::model()->findSingleByAttribute('name', 'Wikipedia');
 
 			if(!$bookmark){
-				$bookmark = new GO_Bookmarks_Model_Bookmark();
+				$bookmark = new \GO_Bookmarks_Model_Bookmark();
 				$bookmark->category_id=$category->id;
 				$bookmark->name='Wikipedia';
 				$bookmark->content='http://www.wikipedia.com';
@@ -1156,7 +1156,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 			$domainModel= GO_Postfixadmin_Model_Domain::model()->findSingleByAttribute('domain', 'acmerpp.demo');
 			if(!$domainModel){
-				$domainModel = new GO_Postfixadmin_Model_Domain();
+				$domainModel = new \GO_Postfixadmin_Model_Domain();
 				$domainModel->domain='acmerpp.demo';
 				$domainModel->save();
 			}
@@ -1170,7 +1170,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 		
 		if(GO::modules()->savemailas){
 			//link some demo mails
-			$mimeFile = new GO_Base_Fs_File(GO::modules()->savemailas->path.'install/demo.eml');			
+			$mimeFile = new \GO_Base_Fs_File(GO::modules()->savemailas->path.'install/demo.eml');			
 			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $wile);
 			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $john);
 			if(GO::modules()->projects){
@@ -1178,7 +1178,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $launcherProject);
 			}
 			
-			$mimeFile = new GO_Base_Fs_File(GO::modules()->savemailas->path.'install/demo2.eml');
+			$mimeFile = new \GO_Base_Fs_File(GO::modules()->savemailas->path.'install/demo2.eml');
 			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $wile);
 			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $john);
 			if(GO::modules()->projects){
@@ -1206,7 +1206,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 	private function _createMailbox($domainModel, $demo){
 		$demoMailbox = GO_Postfixadmin_Model_Mailbox::model()->findSingleByAttribute('username', $demo->email);
 		if(!$demoMailbox){
-			$demoMailbox = new GO_Postfixadmin_Model_Mailbox();
+			$demoMailbox = new \GO_Postfixadmin_Model_Mailbox();
 			$demoMailbox->domain_id=$domainModel->id;
 			$demoMailbox->username=$demo->email;
 			$demoMailbox->password='demo';
@@ -1216,7 +1216,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 
 		$accountModel = GO_Email_Model_Account::model()->findSingleByAttribute('username', $demoMailbox->username);
 		if(!$accountModel){
-			$accountModel = new GO_Email_Model_Account();
+			$accountModel = new \GO_Email_Model_Account();
 			$accountModel->user_id=$demo->id;
 //			$accountModel->checkImapConnectionOnSave=false;
 			$accountModel->host = 'localhost';
@@ -1251,7 +1251,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 
 		$company = GO_Addressbook_Model_Company::model()->findSingleByAttribute('name', 'ACME Rocket Powered Products');
 		if (!$company) {
-			$company = new GO_Addressbook_Model_Company();
+			$company = new \GO_Addressbook_Model_Company();
 			$company->setAttributes(array(
 					'addressbook_id' => $contact->addressbook_id,
 					'name' => 'ACME Rocket Powered Products',

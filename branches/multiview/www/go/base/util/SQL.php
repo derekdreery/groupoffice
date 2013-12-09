@@ -69,7 +69,7 @@ class GO_Base_Util_SQL {
 			foreach($queries as $query)
 				GO::getDbConnection ()->query($query);
 		}catch(Exception $e){
-			throw new Exception("Could not execute query: ".$query."\n\n".(string) $e);
+			throw new \Exception("Could not execute query: ".$query."\n\n".(string) $e);
 		}
 		
 		return true;

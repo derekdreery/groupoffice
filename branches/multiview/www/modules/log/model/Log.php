@@ -91,7 +91,7 @@ class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
 	 * @param string $message 
 	 */
 	public static function create($action, $message){
-		$log = new GO_Log_Model_Log();
+		$log = new \GO_Log_Model_Log();
 		
 		$log->model_id=0;
 

@@ -19,7 +19,7 @@
  * <?php
  *    include('Crypt/DES.php');
  *
- *    $des = new Crypt_DES();
+ *    $des = new \Crypt_DES();
  *
  *    $des->setKey('abcdefgh');
  *

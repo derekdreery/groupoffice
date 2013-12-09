@@ -50,7 +50,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 	protected function actionSend($params) {
 		if (empty($params['addresslist_id'])) {
-			throw new Exception(GO::t('feedbackNoReciepent', 'email'));
+			throw new \Exception(GO::t('feedbackNoReciepent', 'email'));
 		} else {
 			try {
 				//$params = $this->_convertOldParams($params);
@@ -63,7 +63,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 				$mailing['addresslist_id'] = $params['addresslist_id'];
 				$mailing['message_path'] =  'mailings/' . GO::user()->id . '_' . date('Ymd_Gis') . '.eml';
 
-				$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'mailings');
+				$folder = new \GO_Base_Fs_Folder(GO::config()->file_storage_path.'mailings');
 				$folder->create();
 
 				// Write message MIME source to message path
@@ -72,12 +72,12 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 				GO::debug('===== MAILING PARAMS =====');
 				GO::debug(var_export($mailing,true));
 
-				$sentMailing = new GO_Addressbook_Model_SentMailing();
+				$sentMailing = new \GO_Addressbook_Model_SentMailing();
 				$sentMailing->setAttributes($mailing);
 				if (!$sentMailing->save()) {
 								GO::debug('===== VALIDATION ERRORS =====');
 								GO::debug('Could not create new mailing:<br />'.implode('<br />',$sentMailing->getValidationErrors()));
-								throw new Exception('Could not create new mailing:<br />'.implode('<br />',$sentMailing->getValidationErrors()).'<br />MAILING PARAMS:<br />'.var_export($mailing,true));
+								throw new \Exception('Could not create new mailing:<br />'.implode('<br />',$sentMailing->getValidationErrors()).'<br />MAILING PARAMS:<br />'.var_export($mailing,true));
 				}       
 
 				$this->_launchBatchSend($sentMailing->id);
@@ -127,7 +127,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 		$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($params['mailing_id']);
 		if (!$mailing)
-			throw new Exception("Mailing not found!\n");
+			throw new \Exception("Mailing not found!\n");
 
 		GO::session()->runAs($mailing->user_id);
 		
@@ -145,7 +145,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			$mailing->save();
 		}
 			
-		$htmlToText = new GO_Base_Util_Html2Text();
+		$htmlToText = new \GO_Base_Util_Html2Text();
 		
 
 		//$addresslist = GO_Addressbook_Model_Addresslist::model()->findByPk($mailing->addresslist_id);
@@ -170,10 +170,10 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			GO::config()->mailing_messages_per_minute=30;
 
 		//Rate limit to 100 emails per-minute
-		$mailer->registerPlugin(new Swift_Plugins_ThrottlerPlugin(GO::config()->mailing_messages_per_minute, Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE));
+		$mailer->registerPlugin(new \Swift_Plugins_ThrottlerPlugin(GO::config()->mailing_messages_per_minute, Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE));
 		
 		// Use AntiFlood to re-connect after 50 emails
-		$mailer->registerPlugin(new Swift_Plugins_AntiFloodPlugin(GO::config()->mailing_messages_per_minute));
+		$mailer->registerPlugin(new \Swift_Plugins_AntiFloodPlugin(GO::config()->mailing_messages_per_minute));
 
 		echo 'Sending a maximum of ' . GO::config()->mailing_messages_per_minute . ' messages per minute' . "\n";
 
@@ -299,7 +299,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 				$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['contact_id']);
 				
 				if(md5($contact->ctime.$contact->addressbook_id.$contact->firstEmail) != $params['token'])
-					throw new Exception("Invalid token!");
+					throw new \Exception("Invalid token!");
 				
 				$contact->email_allowed=0;
 				$contact->save();					
@@ -311,7 +311,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 					$company = GO_Addressbook_Model_Company::model()->findByPk($params['company_id']);
 
 					if(md5($company->ctime.$company->addressbook_id.$company->email) != $params['token'])
-						throw new Exception("Invalid token!");
+						throw new \Exception("Invalid token!");
 
 					$company->email_allowed=0;
 					$company->save();
@@ -434,7 +434,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($params['mailing_id']);
 		
 		if($mailing->user_id != GO::user()->id && !GO::user()->isAdmin())
-			throw new GO_Base_Exception_AccessDenied();				
+			throw new \GO_Base_Exception_AccessDenied();				
 		
 		$file = $mailing->logFile;		
 		GO_Base_Util_Http::outputDownloadHeaders($file);

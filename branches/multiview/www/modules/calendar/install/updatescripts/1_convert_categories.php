@@ -20,7 +20,7 @@ while($category = $stmt->fetch()){
 
 			try{
 				// Create the new categories for each calendar
-				$newCategory = new GO_Calendar_Model_Category();
+				$newCategory = new \GO_Calendar_Model_Category();
 				$newCategory->name = $category->name;
 				$newCategory->color = $category->color;
 				$newCategory->calendar_id = $calendar->id;

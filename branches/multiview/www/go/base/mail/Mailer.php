@@ -21,7 +21,7 @@
 class GO_Base_Mail_Mailer extends Swift_Mailer{
 	
 	/**
-   * Create a new Mailer instance.
+   * Create a new \Mailer instance.
    * 
 	 * @var Swift_SmtpTransport $transport. 
 	 * Optionally supply a transport class. If omitted a GO_Base_Mail_Transport 

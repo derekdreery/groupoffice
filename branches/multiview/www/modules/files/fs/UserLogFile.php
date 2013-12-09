@@ -11,16 +11,16 @@ class GO_Files_Fs_UserLogFile extends GO_Base_Fs_File{
 	public function __construct($prefixString='') {
 		
 		if (!GO::modules()->isInstalled('files'))
-			throw new Exception('The current action requires the files module to be activated for the current user.');
+			throw new \Exception('The current action requires the files module to be activated for the current user.');
 		
 		// Make sure the current user's folder exists.
 
 		$userFolderModel = GO_Files_Model_Folder::model()->findHomeFolder(GO::user());
 
 		if (empty($userFolderModel)) {
-			$userFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'users/'.GO::user()->username);
+			$userFolder = new \GO_Base_Fs_Folder(GO::config()->file_storage_path.'users/'.GO::user()->username);
 			$userFolder->create();
-			$userFolderModel = new GO_Files_Model_Folder();
+			$userFolderModel = new \GO_Files_Model_Folder();
 			$userFolderModel->findByPath('users/'.GO::user()->username,true);
 		}
 		

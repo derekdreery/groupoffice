@@ -16,7 +16,7 @@ require_once GO::config()->root_path."go/vendor/Cron/DayOfMonthField.php";
 class GO_Base_Util_Cron extends Cron\CronExpression {
 	
 	public function __construct($expression) {
-		$fieldFactory = new Cron\FieldFactory();		
+		$fieldFactory = new \Cron\FieldFactory();		
 		return parent::__construct($expression, $fieldFactory);
 	}
 	

@@ -155,7 +155,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		if (isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
 		
 			
-			$destinationFile = new GO_Base_Fs_File(GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
+			$destinationFile = new \GO_Base_Fs_File(GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
 			
 			move_uploaded_file($_FILES['image']['tmp_name'][0], $destinationFile->path());
 			
@@ -166,10 +166,10 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		}elseif(!empty($params['download_photo_url'])){
 			
 			$file = GO_Base_Fs_File::tempFile();	
-			$c = new GO_Base_Util_HttpClient();
+			$c = new \GO_Base_Util_HttpClient();
 			
 			if(!$c->downloadFile($params['download_photo_url'], $file))
-				throw new Exception("Could not download photo from: '".$params['download_photo_url']."'");
+				throw new \Exception("Could not download photo from: '".$params['download_photo_url']."'");
 						
 			$model->setPhoto($file);
 			$model->save();					
@@ -194,7 +194,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
 		
 		if(!empty($params['filters'])){
-			$abMultiSel = new GO_Base_Component_MultiSelectGrid(
+			$abMultiSel = new \GO_Base_Component_MultiSelectGrid(
 							'books', 
 							"GO_Addressbook_Model_Addressbook",$store, $params, true);		
 			
@@ -203,7 +203,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 			//$abMultiSel->setButtonParams($response);
 			//$abMultiSel->setStoreTitle();
 
-			$addresslistMultiSel = new GO_Base_Component_MultiSelectGrid(
+			$addresslistMultiSel = new \GO_Base_Component_MultiSelectGrid(
 							'addresslist_filter', 
 							"GO_Addressbook_Model_Addresslist",$store, $params, false);				
 

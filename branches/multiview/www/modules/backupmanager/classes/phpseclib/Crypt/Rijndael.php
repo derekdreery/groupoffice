@@ -30,7 +30,7 @@
  * <?php
  *    include('Crypt/Rijndael.php');
  *
- *    $rijndael = new Crypt_Rijndael();
+ *    $rijndael = new \Crypt_Rijndael();
  *
  *    $rijndael->setKey('abcdefghijklmnop');
  *

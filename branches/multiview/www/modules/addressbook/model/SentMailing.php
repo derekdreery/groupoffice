@@ -88,18 +88,18 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getLogFile(){
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/mailings/'.$this->id.'.log');		
+		$file = new \GO_Base_Fs_File(GO::config()->file_storage_path.'log/mailings/'.$this->id.'.log');		
 		return $file;
 	}
 	
 	protected function getMessageFile(){
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$this->message_path);		
+		$file = new \GO_Base_Fs_File(GO::config()->file_storage_path.$this->message_path);		
 		return $file;
 	}
 	
 	protected function beforeDelete() {
 		if($this->status==self::STATUS_RUNNING)
-			throw new Exception("Can't delete a running mailing. Pause it first.");
+			throw new \Exception("Can't delete a running mailing. Pause it first.");
 		return parent::beforeDelete();
 	}
 	

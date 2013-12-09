@@ -4,15 +4,15 @@ class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractContr
 		
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
 		if(!$event)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO_Base_Exception_NotFound();
 		
 		$participant=$event->getParticipantOfCalendar();
 		if(!$participant)
-			throw new Exception("The participant of this event is missing");
+			throw new \Exception("The participant of this event is missing");
 		
 		$organizer = $event->getOrganizer();
 		if(!$organizer)
-			throw new Exception("The organizer of this event is missing");
+			throw new \Exception("The organizer of this event is missing");
 		
 		$response = array("success"=>true, 'data'=>array(
 				'notify_organizer'=>true,
@@ -28,7 +28,7 @@ class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractContr
 		
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
 		if(!$event)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO_Base_Exception_NotFound();
 		
 		if(!empty($params['exception_date']))
 		{

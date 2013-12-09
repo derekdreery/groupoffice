@@ -66,7 +66,7 @@ class GO_Base_Session extends GO_Base_Observable{
 			
 				if(isset($_REQUEST['GOSID'])){
 					if(!isset($_REQUEST['security_token']) || $_SESSION['GO_SESSION']['security_token']!=$_REQUEST['security_token']){
-						throw new GO_Base_Exception_SecurityTokenMismatch();
+						throw new \GO_Base_Exception_SecurityTokenMismatch();
 					}
 				}		
 			}
@@ -303,7 +303,7 @@ class GO_Base_Session extends GO_Base_Observable{
 	
 	private function _log($action){
 		if(GO::modules()->isInstalled('log')){	
-			$log = new GO_Log_Model_Log();			
+			$log = new \GO_Log_Model_Log();			
 			$log->action=$action;						
 			$log->save();
 		}
@@ -367,7 +367,7 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		
 		if(!GO::user())
-			throw new Exception("Could not set user with id ".$user_id." in GO_Base_Session::setCurrentUser()!");
+			throw new \Exception("Could not set user with id ".$user_id." in GO_Base_Session::setCurrentUser()!");
 		
 		//for logging
 		GO::session()->values['username']=GO::user()->username;

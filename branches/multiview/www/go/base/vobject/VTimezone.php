@@ -20,8 +20,8 @@ class GO_Base_VObject_VTimezone extends Sabre\VObject\Document {
 
 		parent::__construct();
 
-		$tz = new DateTimeZone(GO::user() ? GO::user()->timezone : date_default_timezone_get());
-		//$tz = new DateTimeZone("Europe/Amsterdam");
+		$tz = new \DateTimeZone(GO::user() ? GO::user()->timezone : date_default_timezone_get());
+		//$tz = new \DateTimeZone("Europe/Amsterdam");
 		$transitions = $tz->getTransitions();
 		
 
@@ -95,7 +95,7 @@ class GO_Base_VObject_VTimezone extends Sabre\VObject\Document {
 	
 	private function _getDay($date){
 //		echo $date."\n";
-		$time = new DateTime($date);				
+		$time = new \DateTime($date);				
 		$dayOfMonth = $time->format('j');				
 		$nth = ceil($dayOfMonth/7);				
 		if($nth>2)
