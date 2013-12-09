@@ -53,7 +53,7 @@
  * @author     Jim Wigginton <terrafrost@php.net>
  * @copyright  MMVII Jim Wigginton
  * @license    http://www.gnu.org/licenses/lgpl.txt
- * @version    $Id: DES.php,v 1.12 2010/02/09 06:10:26 terrafrost Exp $
+ * @version    $Id$
  * @link       http://phpseclib.sourceforge.net
  */
 

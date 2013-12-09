@@ -17,7 +17,7 @@ $cacheFolder->create();
  * This class is used to parse and write RFC822 compliant recipient lists
  * 
  * @package GO.base.mail
- * @version $Id: RFC822.class.inc 7536 2011-05-31 08:37:36Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @copyright Copyright Intermesh BV.
  */

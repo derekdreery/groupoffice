@@ -14,7 +14,7 @@
  * 
  * 
  * @package GO.base.controller
- * @version $Id: BatchEditController.php 7607 2011-11-16 09:17:42Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits <wsmits@intermesh.nl> 
  * 

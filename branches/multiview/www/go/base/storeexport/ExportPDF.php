@@ -12,7 +12,7 @@
 /**
  * PDF Output stream.
  * 
- * @version $Id: ExportPDF.php 7607 2011-08-04 13:41:42Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits <wsmits@intermesh.nl>
  * @package GO.base.export

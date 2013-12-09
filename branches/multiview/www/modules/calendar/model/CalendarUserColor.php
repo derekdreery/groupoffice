@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.Calendar
- * @version $Id: GO_Calendar_Model_CalendarUserColors.php 7607 2012-06-27 15:56:46Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  */
@@ -17,7 +17,7 @@
  * The GO_Calendar_Model_CalendarUserColors model
  *
  * @package GO.modules.Calendar
- * @version $Id: GO_Calendar_Model_CalendarUserColor.php 7607 2012-06-27 15:56:46Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  *

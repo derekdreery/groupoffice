@@ -14,7 +14,7 @@
  * 
  * 
  * @package GO.base.controller
- * @version $Id: AbstractExportController.php 7607 2011-06-15 09:17:42Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits <wsmits@intermesh.nl> 
  * @abstract

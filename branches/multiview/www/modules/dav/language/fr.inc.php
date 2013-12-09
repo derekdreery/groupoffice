@@ -9,7 +9,7 @@
 // If you have questions write an e-mail to info@intermesh.nl
 //
 // @copyright Copyright Intermesh
-// @version $Id: fr.inc.php 6616 2011-01-13 09:36:17Z mschering $
+// @version $Id$
 // @author Merijn Schering <mschering@intermesh.nl>
 //
 // French Translation

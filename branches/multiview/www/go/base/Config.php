@@ -11,7 +11,7 @@
  * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
  * @link http://www.group-office.com
  * @copyright Copyright Intermesh BV
- * @version $Id: Number.php 7962 2011-08-24 14:48:45Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base
  */
@@ -34,7 +34,7 @@
  * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
  * @link http://www.group-office.com
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: config.class.inc.php 7687 2011-06-23 12:00:34Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @package GO.base
  */

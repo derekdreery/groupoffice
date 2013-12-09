@@ -56,7 +56,7 @@
  * @author     Jim Wigginton <terrafrost@php.net>
  * @copyright  MMVIII Jim Wigginton
  * @license    http://www.gnu.org/licenses/lgpl.txt
- * @version    $Id: AES.php,v 1.7 2010/02/09 06:10:25 terrafrost Exp $
+ * @version    $Id$
  * @link       http://phpseclib.sourceforge.net
  */
 

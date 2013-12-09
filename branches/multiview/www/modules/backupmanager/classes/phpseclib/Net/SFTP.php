@@ -48,7 +48,7 @@
  * @author     Jim Wigginton <terrafrost@php.net>
  * @copyright  MMIX Jim Wigginton
  * @license    http://www.gnu.org/licenses/lgpl.txt
- * @version    $Id: SFTP.php,v 1.21 2010/04/09 02:31:34 terrafrost Exp $
+ * @version    $Id$
  * @link       http://phpseclib.sourceforge.net
  */
 

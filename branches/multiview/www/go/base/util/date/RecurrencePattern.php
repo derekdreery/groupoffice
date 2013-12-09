@@ -13,7 +13,7 @@
  * A date recurrence pattern to calculate occurence times.
  * 
  * @copyright Copyright Intermesh BV
- * @version $Id: Number.php 7962 2011-08-24 14:48:45Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.util.date
  * 

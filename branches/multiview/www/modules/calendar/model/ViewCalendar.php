@@ -12,7 +12,7 @@
  * The GO_Calendar_Model_CalendarView model
  *
  * @package GO.modules.Calendar
- * @version $Id: CalendarView.php 7607 2011-11-23 15:14:37Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *

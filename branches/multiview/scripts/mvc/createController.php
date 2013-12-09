@@ -45,7 +45,7 @@ function generateController($moduleName, $modelName) {
  * The '.$className.' controller
  *
  * @package GO.modules.'.$moduleName.'
- * @version $Id: '.$className.'.php 7607 '.$date.'Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */

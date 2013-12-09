@@ -7,7 +7,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: GO_Files_Model_FileCustomFieldsRecord.php 7607 2011-09-01 16:00:16Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */  

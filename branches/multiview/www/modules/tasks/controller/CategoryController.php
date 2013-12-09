@@ -12,7 +12,7 @@
  * The GO_Tasks_Controller_Category controller
  *
  * @package GO.modules.Tasks
- * @version $Id: GO_Tasks_Controller_Category.php 7607 2011-09-20 10:07:50Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  */

@@ -14,7 +14,7 @@
  * class helps GO_Base_Db_ActiveRecord->findByPk to return the object from 
  * memory if it has already been fetched from the database.
  * 
- * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.model 

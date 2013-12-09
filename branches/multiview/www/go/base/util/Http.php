@@ -12,7 +12,7 @@
  * Common utilities
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: config.class.inc.php 7687 2011-06-23 12:00:34Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @package GO.base.util 
  */

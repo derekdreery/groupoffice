@@ -27,7 +27,7 @@
  * See php.net/manual/en/book.ftp.php for more information
  * 
  * @author Wesley Smits <wsmits@intermesh.nl>
- * @version $Id: config.class.inc.php 7687 2011-06-23 12:00:34Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @package GO.base.util 
  */

@@ -13,7 +13,7 @@
  * The GO_files_Controller_GO_Files_Model_Template controller
  *
  * @package GO.modules.files
- * @version $Id: GO_files_Controller_GO_Files_Model_Template.php 7607 2011-09-29 08:42:37Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */

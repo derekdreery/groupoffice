@@ -8,7 +8,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: Auth_Backend.class.inc.php 7752 2011-07-26 13:48:43Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */

@@ -7,7 +7,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: GO_Tasks_Model_TaskCustomFieldsRecord.php 7607 2011-09-20 09:51:47Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  * @package GO.modules.Tasks

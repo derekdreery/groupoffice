@@ -11,7 +11,7 @@
  * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
  * @link http://www.group-office.com
  * @copyright Copyright Intermesh BV
- * @version $Id: AbstractSettingsCollection.php 7962 2011-08-24 14:48:45Z wsmits $
+ * @version $Id$
  * @author Wesley Smits <wsmits@intermesh.nl>
  * @package GO.base.model
  */

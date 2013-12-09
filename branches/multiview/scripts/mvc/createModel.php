@@ -90,7 +90,7 @@ function generateModel($className, $table, $moduleName){
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.'.$moduleName.'
- * @version $Id: '.$className.'.php 7607 '.$date.'Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
@@ -99,7 +99,7 @@ function generateModel($className, $table, $moduleName){
  * The '.$className.' model
  *
  * @package GO.modules.'.$moduleName.'
- * @version $Id: '.$className.'.php 7607 '.$date.'Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *

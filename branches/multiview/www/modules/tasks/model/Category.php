@@ -12,7 +12,7 @@
  * The GO_Tasks_Model_Category model
  *
  * @package GO.modules.Tasks
- * @version $Id: GO_Tasks_Model_Category.php 7607 2011-09-20 10:09:35Z <<USERNAME>> $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *

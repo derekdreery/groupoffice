@@ -13,7 +13,7 @@
 /**
  * The ArrayStore provider is useful to generate arrays for output to the view.
  * 
- * @version $Id: ArrayStore.php 7607 2011-08-04 13:41:42Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits <wsmits@intermesh.nl>
  * @author Merijn Schering <mschering@intermesh.nl>

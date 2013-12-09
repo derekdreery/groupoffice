@@ -48,7 +48,7 @@
  * @author    Aleksander Machniak <alec@php.net>
  * @copyright 2003-2006 PEAR <pear-group@php.net>
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version   CVS: $Id: mimePart.php 3837 2010-07-29 06:50:19Z alec $
+ * @version   CVS: $Id$
  * @link      http://pear.php.net/package/Mail_mime
  */
 

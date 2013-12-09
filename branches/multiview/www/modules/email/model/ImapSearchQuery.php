@@ -7,7 +7,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: ImapSearchQuery.php 7607 2011-09-01 15:38:01Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author wsmits@intermesh.nl
  */

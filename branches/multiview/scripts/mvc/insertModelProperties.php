@@ -92,7 +92,7 @@ foreach($classes as $model){
  * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
  * @link http://www.group-office.com
  * @package ".classNameToPackage($model->getName())."
- * @version \$Id: example.php 7607 20120101Z <<USERNAME>> $
+ * @version \$Id$
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */

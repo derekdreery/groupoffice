@@ -12,7 +12,7 @@
  * The GO_Tasks_Controller_Portlet controller
  *
  * @package GO.modules.Tasks
- * @version $Id: PortletController.php 7607 2011-09-20 10:08:21Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits <wsmits@intermesh.nl>
  */

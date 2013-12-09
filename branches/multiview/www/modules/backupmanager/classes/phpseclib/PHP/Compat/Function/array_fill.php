@@ -1,5 +1,5 @@
 <?php
-// $Id: array_fill.php,v 1.1 2007/07/02 04:19:55 terrafrost Exp $
+// $Id$
 
 
 /**
@@ -11,7 +11,7 @@
  * @copyright   2004-2007 Aidan Lister <aidan@php.net>, Arpad Ray <arpad@php.net>
  * @link        http://php.net/function.array_fill
  * @author      Jim Wigginton <terrafrost@php.net>
- * @version     $Revision: 1.1 $
+ * @version     $Revision$
  * @since       PHP 4.2.0
  */
 function php_compat_array_fill($start_index, $num, $value)

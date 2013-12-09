@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.Freebusypermissions
- * @version $Id: GO_Freebusypermissions_Model_FreeBusyAcl.php 7607 2012-07-03 10:31:57Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  */
@@ -17,7 +17,7 @@
  * The GO_Freebusypermissions_Model_FreeBusyAcl model
  *
  * @package GO.modules.Freebusypermissions
- * @version $Id: GO_Freebusypermissions_Model_FreeBusyAcl.php 7607 2012-07-03 10:31:57Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  *

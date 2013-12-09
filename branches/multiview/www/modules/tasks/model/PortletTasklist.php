@@ -12,7 +12,7 @@
  * The GO_Tasks_Model_PortletTasklist model
  *
  * @package GO.modules.Tasks
- * @version $Id: PortletTasklist.php 7607 2011-09-20 10:07:07Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  *

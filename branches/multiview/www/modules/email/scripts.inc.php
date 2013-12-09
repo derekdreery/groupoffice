@@ -1,5 +1,5 @@
 <?php
-$\GO_SCRIPTS_JS .='GO.email.defaultSmtpHost="'.\GO::config()->smtp_server.'";
+$GO_SCRIPTS_JS .='GO.email.defaultSmtpHost="'.\GO::config()->smtp_server.'";
 GO.email.useHtmlMarkup=';
 
 $use_plain_text_markup = \GO::config()->get_setting('email_use_plain_text_markup', \GO::user()->id);
@@ -32,13 +32,13 @@ else
 if (\GO::modules()->isInstalled('sieve')) {
 $GO_SCRIPTS_JS .= 'GO.email.sievePortValue=';
 	if (!empty(\GO::config()->sieve_port))
-		$\GO_SCRIPTS_JS .= \GO::config()->sieve_port . ';';
+		$GO_SCRIPTS_JS .= \GO::config()->sieve_port . ';';
 	else
 		$GO_SCRIPTS_JS .= '4190;';
 
 	$GO_SCRIPTS_JS .= 'GO.email.sieveUseTlsValue=';
 	if (isset(\GO::config()->sieve_usetls))
-		$\GO_SCRIPTS_JS .= !empty(\GO::config()->sieve_usetls) ? 'true;' : 'false;';
+		$GO_SCRIPTS_JS .= !empty(\GO::config()->sieve_usetls) ? 'true;' : 'false;';
 	else
 		$GO_SCRIPTS_JS .= 'true;';
 }

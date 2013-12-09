@@ -29,7 +29,7 @@
  * those variables for use in the view.
  * 
  * @package GO.base.controller
- * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @abstract

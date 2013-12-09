@@ -3,7 +3,7 @@
 /**
  * @copyright Intermesh 2007
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Revision: 1615 $ $Date: 2008-03-26 14:07:35 +0100 (wo, 26 mrt 2008) $3
+ * @version $Revision$ $Date: 2008-03-26 14:07:35 +0100 (wo, 26 mrt 2008) $3
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the

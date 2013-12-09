@@ -13,7 +13,7 @@
  * A folder on the filesystem
  * 
  * @package GO.base.fs
- * @version $Id: RFC822.class.inc 7536 2011-05-31 08:37:36Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @copyright Copyright Intermesh BV.
  */

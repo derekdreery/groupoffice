@@ -11,7 +11,7 @@
  * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
  * @link http://www.group-office.com
  * @copyright Copyright Intermesh BV
- * @version $Id: Number.php 7962 2011-08-24 14:48:45Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.db
  */
@@ -20,7 +20,7 @@
  * All Group-Office models should extend this ActiveRecord class.
  *
  * @package GO.base.db
- * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @abstract
