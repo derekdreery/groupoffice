@@ -46,6 +46,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 		
 //		$view = GO::view();
 		
+		$this->layout='html';
 		
 		if(!file_exists(GO::view()->getPath().'Login.php')){
 			//for backwards theme compat
