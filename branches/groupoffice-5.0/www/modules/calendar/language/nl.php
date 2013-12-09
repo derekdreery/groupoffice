@@ -234,3 +234,13 @@ $l['eventNotSavedBody'] = 'Deze boodschap komt van uw %goname agenda. %goname he
 								"\r\n\r\n".'Het volgende is de foutmelding:'."\r\n".'%errormessage';
 
 $l['usedResources'] = 'Gebruikte hulpmiddelen';
+
+$l['cmdPrintView'] = 'Print huidige weergave';
+$l['cmdPrintCategoryCount'] = 'Print aantal per categorie';
+$l['startDate'] = 'Start datum';
+$l['endDate'] = 'Eind datum';
+$l['eventsPerCategoryCount'] = 'Aantal afspraken per categorie';
+$l['nextMonth'] = 'Volgende maand';
+$l['previousMonth'] = 'Vorige maand';
+$l['till'] = 'tot';
+$l['total'] = 'Totaal';

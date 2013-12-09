@@ -419,4 +419,48 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		
 		
 	}
+	
+	/**
+	 * get a pdf of a count of all categories
+	 * 
+	 * @param array $params
+	 * @return PDF file 
+	 */
+	public function actionPrintCategoryCount($params){
+		
+		// If a year is posted then determine the correct start and end date and set them here
+		if(isset($params['fullYear'])){
+			$params['startDate'] = ''; // TODO: Find this 
+			$params['endDate'] = ''; // TODO: Find this 
+		}
+		
+		if(isset($params['startDate'])){
+			$startDate = $params['startDate'];
+		}else{
+			$startDate = GO_Base_Util_Date::date_add(time(),-14); // - (2 * 7 * 24 * 60 * 60); // -2weken
+			$startDate = GO_Base_Util_Date::get_timestamp($startDate,false);
+		}
+		
+		if(isset($params['endDate'])){
+			$endDate = $params['endDate'];
+		}else{
+			$endDate = time();
+			$endDate = GO_Base_Util_Date::get_timestamp($endDate,false);
+		}
+
+		$categoryCountModel = new GO_Calendar_Model_PrintCategoryCount($startDate,$endDate);
+		
+//		//Set the PDF filename
+		$filename = GO::t('eventsPerCategoryCount','calendar').'.pdf';
+//		
+//		// Start building the PDF file
+		$pdf = new GO_Calendar_Reports_PrintCategoryCount($orientation='L');
+		
+		$pdf->setTitle(GO::t('eventsPerCategoryCount','calendar'));
+		//$pdf->setSubTitle($startDate.' '.GO::t('till','calendar').' '.$endDate);
+		
+		$pdf->render($categoryCountModel);
+
+		return $pdf->Output($filename,'D');
+	}	
 }
