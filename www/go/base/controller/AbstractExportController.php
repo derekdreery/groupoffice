@@ -1,5 +1,5 @@
 <?php
-abstract class GO_Base_Controller_AbstractExportController extends GO_Base_Controller_AbstractController{
+abstract class GO_Base_Controller_AbstractExportController extends \GO\Base\Controller\AbstractController{
 
 	/**
 	 * Attributes that should be exported from the statement result.

@@ -18,7 +18,7 @@
  * @version $Id AbstractFrontController.php 2012-06-05 10:01:09 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Controller_AbstractController
+abstract class GO_Sites_Components_AbstractFrontController extends \GO\Base\Controller\AbstractController
 {
 //	/**
 //	 * Frontend action can be accessed without moduel access

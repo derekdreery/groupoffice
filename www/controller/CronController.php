@@ -16,7 +16,7 @@
  * @package GO.core.controller
  */
 
-class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
+class GO_Core_Controller_Cron extends \GO\Base\Controller\AbstractJsonController{
 
 	protected function allowGuests() {
 		return array('run');

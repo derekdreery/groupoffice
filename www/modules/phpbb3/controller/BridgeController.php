@@ -1,6 +1,6 @@
 <?php
 
-class GO_Phpbb3_Controller_Bridge extends GO_Base_Controller_AbstractController {
+class GO_Phpbb3_Controller_Bridge extends \GO\Base\Controller\AbstractController {
 
 	protected function actionRedirect() {
 		$tmpFile = \GO\Base\Fs\File::tempFile();

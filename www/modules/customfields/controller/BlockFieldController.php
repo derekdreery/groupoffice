@@ -1,5 +1,5 @@
 <?php
-class GO_Customfields_Controller_BlockField extends GO_Base_Controller_AbstractJsonController{
+class GO_Customfields_Controller_BlockField extends \GO\Base\Controller\AbstractJsonController{
 
 	protected function actionSelectStore($params) {
 		

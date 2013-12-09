@@ -1,5 +1,5 @@
 <?php
-class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractController{
+class GO_Calendar_Controller_Attendance extends \GO\Base\Controller\AbstractController{
 	protected function actionLoad($params){
 		
 		$event = \GO_Calendar_Model_Event::model()->findByPk($params['id']);

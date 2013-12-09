@@ -1,5 +1,5 @@
 <?php
-class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
+class GO_Ldapauth_Controller_Sync extends \GO\Base\Controller\AbstractController{
 	
 	protected function allowGuests() {
 		return array("users", "lookupuser","groups");

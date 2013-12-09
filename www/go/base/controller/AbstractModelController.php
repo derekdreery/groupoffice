@@ -20,7 +20,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  *
  */
-class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_AbstractController {
+class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\AbstractController {
 
 	/**
 	 *

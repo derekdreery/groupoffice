@@ -1,5 +1,5 @@
 <?php
-class GO_Users_Controller_Settings extends GO_Base_Controller_AbstractController{
+class GO_Users_Controller_Settings extends \GO\Base\Controller\AbstractController{
 	
 	protected function actionLoad($params) {
 		$response = array();

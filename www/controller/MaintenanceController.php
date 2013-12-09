@@ -4,7 +4,7 @@
  * 
  * Controller with some maintenance functions
  */
-class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
+class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractController {
 	
 	protected function allowGuests() {
 		return array('upgrade','checkdatabase','servermanagerreport','test','downloadfromshop', 'removeduplicates','buildsearchcache');

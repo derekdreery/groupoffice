@@ -1,5 +1,5 @@
 <?php
-class GO_Core_Controller_Reminder extends GO_Base_Controller_AbstractController {
+class GO_Core_Controller_Reminder extends \GO\Base\Controller\AbstractController {
 	
 	protected function actionSnooze($params){
 		$reminderIds = json_decode($params['reminders'], true);

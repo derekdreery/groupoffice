@@ -1,6 +1,6 @@
 <?php
 
-class GO_Settings_Controller_Setting extends GO_Base_Controller_AbstractController {
+class GO_Settings_Controller_Setting extends \GO\Base\Controller\AbstractController {
 
 	protected function actionLoad($params){
 		$response = array();

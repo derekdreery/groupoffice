@@ -34,7 +34,10 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @abstract
  */
-abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable {
+
+namespace GO\Base\Controller;
+
+abstract class AbstractController extends \GO_Base_Observable {
 	
 	
 	
@@ -199,7 +202,13 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 */
 	public function getModule(){
 		if(!isset($this->_module)){
-			$classParts = explode('_',get_class($this));
+			
+			$className = get_class($this);
+			
+			//backwards compatinle namespace support
+			$className = str_replace('\\','_', $className);
+			
+			$classParts = explode('_',$className);
 			
 			$moduleId = strtolower($classParts[1]);
 			

@@ -1,6 +1,6 @@
 <?php
 
-class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController {
+class GO_Files_Controller_Jupload extends \GO\Base\Controller\AbstractController {
 
 //	protected function allowGuests(){ // TODO: REMOVE THIS AND FIX THE ACCESS TO THE ACTIONS
 //		return array('*');

@@ -58,7 +58,7 @@ class GO_Base_Router{
 	/**
 	 * Get the currently active controller for this request.
 	 * 
-	 * @return GO_Base_Controller_AbstractController 
+	 * @return \GO\Base\Controller\AbstractController 
 	 */
 	public function getController(){
 		return $this->_controller;
@@ -129,6 +129,11 @@ class GO_Base_Router{
 		$controllerClass.='Controller_'.$controller;
 		
 		$this->_action=$action;		
+		
+		//Backwards compatible namespace support
+		if(!class_exists($controllerClass)){
+			$controllerClass = str_replace('_','\\', $controllerClass);
+		}
 		
 		if(!class_exists($controllerClass)){
 			if(!headers_sent()){

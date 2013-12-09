@@ -18,7 +18,11 @@
  * The Category controller
  * 
  */
-class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractJsonController {
+namespace GO\Notes\Controller;
+
+use GO\Base\Controller;
+
+class Category extends Controller\AbstractJsonController {
 
 	protected function actionStore($params) {
 

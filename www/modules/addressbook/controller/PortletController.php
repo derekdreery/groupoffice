@@ -17,7 +17,7 @@
  * @author Michael de Hart <mdhart@intermesh.nl>
  *
 
-class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractJsonController {
+class GO_Addressbook_Controller_Portlet extends \GO\Base\Controller\AbstractJsonController {
 	
 	/**
 	 * Get the 10 latest bithdays from the contact in the addressbook

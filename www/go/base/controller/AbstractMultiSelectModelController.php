@@ -42,7 +42,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @abstract
  */
-abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_Base_Controller_AbstractController{
+abstract class GO_Base_Controller_AbstractMultiSelectModelController extends \GO\Base\Controller\AbstractController{
 	
 	
 	protected $uniqueSelection=true;
