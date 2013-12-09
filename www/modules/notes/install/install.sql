@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `no_notes` (
 	`password` varchar(255) DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `category_id` (`category_id`),
+  KEY `category_id` (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
