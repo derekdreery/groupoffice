@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `bm_bookmarks` (
   `behave_as_module` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `category_id` (`category_id`),
+  KEY `category_id` (`category_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
