@@ -50,7 +50,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	 * @return GO_Base_Db_ActiveRecord 
 	 */
 	public function getExtendedModel(){
-		return call_user_func(array($this->extendsModel(),'model'));
+		return GO::getModel($this->extendsModel());
 	}
 	
 	/**

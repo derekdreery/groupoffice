@@ -407,9 +407,9 @@ class GO{
 		$className = str_replace('\\', '_', $className);
 		
 		
-		if(false && isset(self::$_classes[$className])){
+		if(isset(self::$_classes[$className])){
 			//don't use \GO::config()->root_path here because it might not be autoloaded yet causing an infite loop.
-			require(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
+			require_once(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
 		}else
 		{
 //			echo "Autoloading: ".$className."\n";
@@ -426,7 +426,7 @@ class GO{
 					exit();
 				}
 				
-				require($baseClassFile);
+				require_once($baseClassFile);
 
 			} else if(substr($className,0,4)=='GOFS'){
 						
@@ -438,7 +438,7 @@ class GO{
 				$path = strtolower(implode('/', $arr));
 				$location =$path.'/'.$file;
 				$baseClassFile = \GO::config()->file_storage_path.'php/'.$location;			
-				require($baseClassFile);
+				require_once($baseClassFile);
 			} else {
 				//$orgClassName = $className;
 				$forGO = substr($className,0,3)=='GO_';
@@ -481,13 +481,13 @@ class GO{
 						return false;
 					}
 					
-					require($fullPath);
+					require_once($fullPath);
 				}elseif(strpos($className,'Sabre_VObject')===0) {
 					$classFile = self::config()->root_path . 'go/vendor/VObject/lib/'.str_replace('_','/',$className).'.php';
 					require $classFile;
-					return true;
+					require_once true;
 				}elseif(strpos($className,'Sabre')===0) {
-					require self::config()->root_path . 'go/vendor/SabreDAV/lib/'.str_replace('_','/',$className). '.php';
+					require_once self::config()->root_path . 'go/vendor/SabreDAV/lib/'.str_replace('_','/',$className). '.php';
 					return true;					
 				}else	if (0 === strpos($className, 'Swift'))
 				{

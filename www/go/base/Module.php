@@ -41,7 +41,10 @@ class GO_Base_Module extends GO_Base_Observable {
 		
 		if(!isset($this->_id)){
 			$className = get_class($this);
-
+			
+			//backwards compat namespaces
+			$className = str_replace('\\','_', $className);
+			
 			$arr = explode('_', $className);
 			$this->_id=strtolower($arr[1]);
 		}
@@ -180,6 +183,12 @@ class GO_Base_Module extends GO_Base_Observable {
 	 */
 	public static function findByModuleId($moduleId){
 		$className = 'GO_'.ucfirst($moduleId).'_'.ucfirst($moduleId).'Module';
+		
+		//backwards compatibilty for namespaces
+		if(!class_exists($className)){
+			$className = '\\'.str_replace('_','\\',$className);
+		}
+		
 		if(class_exists($className))
 			return new $className;
 		else{
