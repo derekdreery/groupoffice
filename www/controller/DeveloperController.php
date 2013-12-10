@@ -31,7 +31,7 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 		chdir($root);
 		
 		if(!$test){
-			$cmd = 'find controller go/base modules \( ! -name updates.php \)  -name "*.php"';
+			$cmd = 'find controller go/base modules views/Extjs3 \( ! -name updates.php \)  -name "*.php"';
 			exec($cmd, $output);
 			$output[]="go/GO.php";
 		}else
@@ -41,7 +41,7 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 		
 		foreach($output as $file){
 			
-			echo "Replacing in ".$file."\n";
+		
 			
 			$path = GO::config()->root_path.$file;
 			$content = $oldContent = file_get_contents($path);
@@ -53,6 +53,8 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 
 			$content = preg_replace('/\\\\'.preg_quote($className, '/').'([^A-Za-z0-9]+)/', '\\'.$newClass.'$1', $content);
 			
+			$content = preg_replace('/'.preg_quote($className, '/').'([^A-Za-z0-9]+)/', '\\'.$newClass.'$1', $content);
+			
 			
 			if($count>0){				
 				echo "In class declaration\n";				
@@ -63,6 +65,7 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 				echo $content;
 			}else{			
 				if ($content != $oldContent) {
+						echo "Replacing in ".$file."\n";
 					$content = file_put_contents($path, $content);
 				}
 			}
