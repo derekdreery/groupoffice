@@ -1,3 +1,4 @@
+- Calendar printing: removed start time for the 2nd printed instance of events that take longer than 1 day
 - Calendar module: Added print option for event count per category per calendar.
 - Fixed exception dates import from CalDAV
 - Added new create link dialog for the HTML editor in the site module
