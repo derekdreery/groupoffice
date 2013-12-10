@@ -2273,14 +2273,29 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 #go-links-panel .x-toolbar{
 	padding-bottom:10px !important;
 }
-.go-progressbar{
-	width:100%;height:10px;border:1px solid #666;
+.go-progressbar {
+	width:100%;
+	height:10px;
+	border:1px solid #666;
 }
-
-.go-progress-indicator{
-	background-color:#009cc5;height:10px;
+.go-progress-indicator {
+	background-color:#009cc5;
+	height:10px;
+	background-image: none;
 }
-
+.x-progress-bar {
+	background-image: none;
+	background-color:#009cc5;
+	border-color:#009cc5;
+}
+.warning .x-progress-bar, .warning .x-progress-inner {
+	background-color:#FF8800;
+	border-color:#FF8800;
+}
+.error .x-progress-bar, .error .x-progress-inner {
+	background-color:#CC0000;
+	border-color:#CC0000;
+}
 
 .x-tot2ivn-vr-tab-panel{
 	background: none !important;

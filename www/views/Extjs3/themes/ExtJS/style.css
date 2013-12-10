@@ -13,7 +13,19 @@
 .go_logo{
 	padding:2px;	
 }
-
+.x-progress-bar {
+	background-image: none;
+	background-color:#009cc5;
+	border-color:#009cc5;
+}
+.warning .x-progress-bar, .warning .x-progress-inner {
+	background-color:#FF8800;
+	border-color:#FF8800;
+}
+.error .x-progress-bar, .error .x-progress-inner {
+	background-color:#CC0000;
+	border-color:#CC0000;
+}
 
 .go-top-panel .x-panel-body{
 	 padding:3px;
