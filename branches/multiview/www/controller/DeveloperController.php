@@ -35,12 +35,18 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 		}
 	}
 	
-	private function _replaceNamespace($className){
+	
+	public function actionTestNamespace(){
+		
+		$this->_replaceNamespace('GO_Base_Db_ActiveRecord');
+		
+	}
+	
+	private function _replaceNamespace($className, $test = false){
 	
 		echo "Replacing $className\n";
 //		return;
-		
-		$test = false;
+
 			
 		$newClass = str_replace('_','\\', $className);
 		
@@ -57,7 +63,7 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 			$output[]="go/GO.php";
 		}else
 		{		
-			$output = array('go/base/model/Acl.php');
+			$output = array('go/base/db/ActiveRecord.php');
 		}
 		
 		foreach($output as $file){
@@ -68,7 +74,7 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 			$content = $oldContent = file_get_contents($path);
 			
 			$count = 0;
-			$content = preg_replace("/class\s+".preg_quote($className,'/')."([^A-Za-z0-9]+)/", "namespace ".preg_quote($namespace,'/').";\n\nclass $newClassDefinition$1", $content, -1, $count);
+			$content = preg_replace("/(abstract\s+)?class\s+".preg_quote($className,'/')."([^A-Za-z0-9]+)/", "namespace ".preg_quote($namespace,'/').";\n\n$1class $newClassDefinition$2", $content, -1, $count);
 			
 			$content = preg_replace('/class(\s+\w+\s)extends\s([A-Za-z_]+)/',"class$1extends \\\\$2", $content);
 
