@@ -29,8 +29,6 @@ if(GO::user()) {
 	$settings['has_admin_permission']=GO::user()->isAdmin();	
 	$settings['username'] = GO::user()->username;
 	$settings['name'] = GO::user()->name;
-        $settings['disk_quota'] = GO::user()->disk_quota;
-        $settings['disk_usage'] = round(GO::user()->disk_usage/1024/1024,2);
 	
 	$settings['email'] = GO::user()->email;
 	$settings['thousands_separator'] = GO::user()->thousands_separator;

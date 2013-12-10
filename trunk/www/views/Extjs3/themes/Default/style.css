@@ -2168,6 +2168,19 @@ box-sizing: border-box;
 .go-progress-indicator{
 	background-color:#009cc5;height:10px;
 }
+.x-progress-bar {
+	background-image: none;
+	background-color:#009cc5;
+	border-color:#009cc5;
+}
+.warning .x-progress-bar, .warning .x-progress-inner {
+	background-color:#FF8800;
+	border-color:#FF8800;
+}
+.error .x-progress-bar, .error .x-progress-inner {
+	background-color:#CC0000;
+	border-color:#CC0000;
+}
 
 #quick-add-menu-collapse {
 	display:inline-block;
