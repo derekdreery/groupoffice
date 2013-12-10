@@ -16,6 +16,9 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 	
 	
 	public function actionNamespace(){
+		
+		$test = false;
+		
 		$className = 'GO_Base_Model_Acl';
 		
 		$newClass = str_replace('_','\\', $className);
@@ -27,11 +30,14 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 		$root = dirname(__FILE__).'/../';
 		chdir($root);
 		
-		$cmd = 'find controller go/base modules \( ! -name updates.php \)  -name "*.php"';
-		exec($cmd, $output);
-		$output[]="go/GO.php";
-		
-//		$output = array('go/base/model/Acl.php');
+		if(!$test){
+			$cmd = 'find controller go/base modules \( ! -name updates.php \)  -name "*.php"';
+			exec($cmd, $output);
+			$output[]="go/GO.php";
+		}else
+		{		
+			$output = array('go/base/model/Acl.php');
+		}
 		
 		foreach($output as $file){
 			
@@ -41,22 +47,24 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 			$content = $oldContent = file_get_contents($path);
 			
 			$count = 0;
-			$content = preg_replace("/class\s+".preg_quote($className,'/')."([^A-Za-z0-9]*)/", "namespace ".preg_quote($namespace,'/').";\n\nclass $newClassDefinition$1", $content, -1, $count);
+			$content = preg_replace("/class\s+".preg_quote($className,'/')."([^A-Za-z0-9]+)/", "namespace ".preg_quote($namespace,'/').";\n\nclass $newClassDefinition$1", $content, -1, $count);
 			
 			$content = preg_replace('/class(\s+\w+\s)extends\s([A-Za-z_]+)/',"class$1extends \\\\$2", $content);
 
-			$content = preg_replace('/\\\\'.preg_quote($className, '/').'([^A-Za-z0-9]*)/', $newClass.'$1', $content);
+			$content = preg_replace('/\\\\'.preg_quote($className, '/').'([^A-Za-z0-9]+)/', '\\'.$newClass.'$1', $content);
 			
 			
 			if($count>0){				
 				echo "In class declaration\n";				
-				$content = preg_replace('/\\\\'.preg_quote($newClass, '/').'([^A-Za-z0-9]*)/', $newClassDefinition.'$1', $content);
+				$content = preg_replace('/\\\\'.preg_quote($newClass, '/').'([^A-Za-z0-9]+)/', $newClassDefinition.'$1', $content);
 			}
 			
-//			echo $content;
-			
-			if ($content != $oldContent) {
-				$content = file_put_contents($path, $content);
+			if($test){
+				echo $content;
+			}else{			
+				if ($content != $oldContent) {
+					$content = file_put_contents($path, $content);
+				}
 			}
 		}
 		
