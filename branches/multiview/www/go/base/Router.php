@@ -132,7 +132,7 @@ class GO_Base_Router{
 		
 		//Backwards compatible namespace support
 		if(!class_exists($controllerClass)){
-			$controllerClass = str_replace('_','\\', $controllerClass);
+			$controllerClass = str_replace('_','\\', $controllerClass).'Controller';
 		}
 		
 		if(!class_exists($controllerClass)){

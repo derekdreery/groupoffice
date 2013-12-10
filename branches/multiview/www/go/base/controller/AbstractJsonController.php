@@ -161,7 +161,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 
 			//TODO: move the link saving to the model someday
 			if (!empty($_POST['link']) && $model->hasLinks()) {
-				//a link is sent like  GO_Notes_Model_Note:1
+				//a link is sent like  \GO\Notes\Model\Note:1
 				//where 1 is the id of the model
 				$linkProps = explode(':', $_POST['link']);
 				$linkModel = \GO::getModel($linkProps[0])->findByPk($linkProps[1]);

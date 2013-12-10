@@ -16,10 +16,10 @@
  * a query.
  * 
  * <pre>
- * $columnModel =  new \GO_Base_Data_ColumnModel(\GO_Notes_Model_Note::model());
+ * $columnModel =  new \GO_Base_Data_ColumnModel(\GO\Notes\Model\Note::model());
  * $columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
  * 
- * $store=new \GO_Base_Data_Store('GO_Notes_Model_Note', $columnModel, $params);
+ * $store=new \GO_Base_Data_Store('\GO\Notes\Model\Note', $columnModel, $params);
  * </pre>
  * 
  * @version $Id$
@@ -125,6 +125,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 */
 	public function __construct($modelClass, $columnModel, $requestParams, $findParams = null) {
 
+		
 		$this->_modelClass = $modelClass;
 		$this->_columnModel = $columnModel;
 		$this->_requestParams = $requestParams;
@@ -540,7 +541,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 * Select Items that belong to one of the selected Models
 	 * Call this in the grids that get filterable by other selectable stores
 	 * @param string $requestParamName That key that will hold the seleted item in go_setting table
-	 * @param string $selectClassName Name of the related model (eg. GO_Notes_Model_Category)
+	 * @param string $selectClassName Name of the related model (eg. \GO\Notes\Model\Category)
 	 * @param string $foreignKey column name to match the related models PK (eg. category_id)
 	 * @param boolean $checkPermissions check Permission for item defaults to true
 	 */

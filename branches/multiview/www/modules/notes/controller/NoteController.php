@@ -11,17 +11,20 @@
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Michael de Hart <mdhart@intermesh.nl>
+ * @author Merijn Schering <mschering@intermesh.nl>
  */
 
 
 namespace GO\Notes\Controller;
 
+use GO;
 use GO\Base\Controller;
+use GO\Notes\Model\Note;
 
 /**
  * The note controller provides action for basic crud functionality for the note model
  */
-class Note extends Controller\AbstractJsonController {
+class NoteController extends Controller\AbstractJsonController {
 
 	/**
 	 * Load data for the display panel on the right of the screen
@@ -29,18 +32,23 @@ class Note extends Controller\AbstractJsonController {
 	 */
 	protected function actionSubmit($params) {
 
-		$model = \GO_Notes_Model_Note::model()->createOrFindByParams($params);
+		$model = Note::model()->createOrFindByParams($params);
 
-		if(isset($params['currentPassword'])){
-			//if the note was encrypted and no new password was supplied the current
-			//pasword is sent.
-			$params['userInputPassword1']=$params['userInputPassword2']=$params['currentPassword'];
+		if(!empty($params['encrypt'])){
+			if(isset($params['currentPassword'])){
+				//if the note was encrypted and no new password was supplied the current
+				//pasword is sent.
+				$params['userInputPassword1']=$params['userInputPassword2']=$params['currentPassword'];
+			}
+		}else
+		{
+			$params['userInputPassword1']=$params['userInputPassword2']="";
 		}
 		
 		$model->setAttributes($params);
 
 		if ($model->save()) {
-			if (\GO::modules()->files) {
+			if (GO::modules()->files) {
 				$f = new \GO_Files_Controller_Folder();
 				$response = array(); //never used in processAttachements?
 				$f->processAttachments($response, $model, $params);
@@ -59,12 +67,13 @@ class Note extends Controller\AbstractJsonController {
 	protected function actionLoad($params) {
 
 		//Load or create model
-		$model = \GO_Notes_Model_Note::model()->createOrFindByParams($params);
+		$model = Note::model()->createOrFindByParams($params);
 
 		// BEFORE LOAD: a password is entered to decrypt the content
 		if (isset($params['userInputPassword'])) {
-			if (!$model->decrypt($params['userInputPassword']))
-				throw new \Exception(\GO::t('badPassword'));
+			if (!$model->decrypt($params['userInputPassword'])) {
+				throw new \Exception(GO::t('badPassword'));
+			}
 		}
 
 		// Build remote combo field array
@@ -89,18 +98,22 @@ class Note extends Controller\AbstractJsonController {
 	 */
 	protected function actionDisplay($params) {
 
-		$model = \GO_Notes_Model_Note::model()->findByPk($params['id']);
-		if (!$model)
+		$model = Note::model()->findByPk($params['id']);
+		if (!$model){
 			throw new \GO_Base_Exception_NotFound();
+		}
 
 		// decrypt model if password provided
 		if (isset($params['userInputPassword'])) {
-			if (!$model->decrypt($params['userInputPassword']))
-				throw new \Exception(\GO::t('badPassword'));
+			if (!$model->decrypt($params['userInputPassword'])){
+				throw new \Exception(GO::t('badPassword'));
+			}
 		}
 		$extraFields = array();
-		if ($model->encrypted)
-			$extraFields['content'] = \GO::t('clickHereToDecrypt');
+		if ($model->encrypted){
+			$extraFields['content'] = GO::t('clickHereToDecrypt');
+		}
+		
 		$extraFields['encrypted'] = $model->encrypted;
 
 		echo $this->renderDisplay($model, $extraFields);
@@ -112,12 +125,12 @@ class Note extends Controller\AbstractJsonController {
 	 */
 	protected function actionStore($params) {
 		//Create ColumnModel from model
-		$columnModel = new \GO_Base_Data_ColumnModel("GO_Notes_Model_Note");
+		$columnModel = new \GO_Base_Data_ColumnModel("\GO\Notes\Model\Note");
 		$columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
 
 		//Create store
-		$store = new \GO_Base_Data_DbStore('GO_Notes_Model_Note', $columnModel, $params);
-		$store->multiSelect('no-multiselect', 'GO_Notes_Model_Category', 'category_id');
+		$store = new \GO_Base_Data_DbStore("\GO\Notes\Model\Note", $columnModel, $params);
+		$store->multiSelect('no-multiselect', '\GO\Notes\Model\Category', 'category_id');
 
 		echo $this->renderStore($store, true);
 	}

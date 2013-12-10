@@ -321,7 +321,7 @@ class customfields extends db {
 		'1' => 'GO_Calendar_Model_Event',
 		'2' => 'GO_Addressbook_Model_Contact',
 		'3' => 'GO_Addressbook_Model_Company',
-		'4' => 'GO_Notes_Model_Note',
+		'4' => '\GO\Notes\Model\Note',
 		'5' => 'GO_Projects_Model_Project',
 		'6' => 'GO_Files_Model_File',
 		'7' => 'GO_Billing_Model_Order',

@@ -81,7 +81,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 
 				if (!empty($params['link']) && $model->hasLinks()) {
 
-					//a link is sent like  GO_Notes_Model_Note:1
+					//a link is sent like  \GO\Notes\Model\Note:1
 					//where 1 is the id of the model
 
 					$linkProps = explode(':', $params['link']);			

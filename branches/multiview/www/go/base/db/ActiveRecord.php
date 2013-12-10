@@ -3130,13 +3130,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				\GO::language()->setLanguage(\GO::config()->language);
 							
 			
+			//backwards compatibility for namespaces;
+			$modelName=  str_replace('\\', '_', $this->className());
+			
 			//\GO::debug($model);
 			$autoAttr = array(
 				'model_id'=>$this->pk,
 				'model_type_id'=>$this->modelTypeId(),
 				'user_id'=>isset($this->user_id) ? $this->user_id : $defaultUserId,
 				'module'=>$this->module,
-				'model_name'=>$this->className(),
+				'model_name'=>$modelName,
 				'name' => '',
 				'description'=>'',		
 				'type'=>$this->localizedName, //deprecated, for backwards compatibilty
