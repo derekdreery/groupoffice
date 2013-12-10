@@ -112,14 +112,14 @@ class Note extends Controller\AbstractJsonController {
 	 */
 	protected function actionStore($params) {
 		//Create ColumnModel from model
-		$columnModel = new \GO_Base_Data_ColumnModel(GO_Notes_Model_Note::model());
+		$columnModel = new \GO_Base_Data_ColumnModel(\GO_Notes_Model_Note::model());
 		$columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
 
 		//Create store
 		$store = new \GO_Base_Data_DbStore('GO_Notes_Model_Note', $columnModel, $params);
 		$store->multiSelect('no-multiselect', 'GO_Notes_Model_Category', 'category_id');
 
-		echo $this->renderStore($store);
+		echo $this->renderStore($store, true);
 	}
 
 }

@@ -110,7 +110,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		return $storeParams;
 	}
 
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {		
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {		
 		
 		$columnModel->formatColumn('category_name', '$model->category_name');
 		$columnModel->formatColumn('thumb', '$model->thumbURL');

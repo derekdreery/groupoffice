@@ -182,7 +182,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	  * @return boolean
 	  */
 	 public function hasChildren(){
-		 $child = $this->children(GO_Base_Db_FindParams::newInstance()->single());
+		 $child = $this->children(\GO_Base_Db_FindParams::newInstance()->single());
 		 return !empty($child); 
 	 }
 	 
@@ -192,7 +192,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	  * @param GO_Site_Model_Content $parent
 	  * @return boolean
 	  */
-	 public function isChildOf(GO_Site_Model_Content $parent){
+	 public function isChildOf(\GO_Site_Model_Content $parent){
 		 return strpos($this->slug, $parent->slug)===0;
 	 }
 	 

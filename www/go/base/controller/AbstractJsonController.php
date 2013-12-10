@@ -194,7 +194,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 	 * @param mixed $buttonParams ???
 	 * @return GO_Base_Data_JsonResponse Response object
 	 */
-	public function renderStore(GO_Base_Data_AbstractStore $store, $return = false, $buttonParams=false) {
+	public function renderStore(\GO_Base_Data_AbstractStore $store, $buttonParams=false) {
 
 //		$response = array(
 //				"success" => true,
@@ -212,18 +212,20 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 		if (!empty($title))
 			$response['title'] = $title;
 
-//		if ($store instanceof GO_Base_Data_DbStore) {
-//			if ($store->getDeleteSuccess() !== null) {
-//				$response['deleteSuccess'] = $store->getDeleteSuccess();
-//				if(!$response['deleteSuccess'])
-//					$response['deleteFeedback'] = $store->getFeedBack();
-//			}
-//			if($buttonParams){
-//				$buttonParams = $store->getButtonParams();
-//				if (!empty($buttonParams))
-//					$response['buttonParams'] = $buttonParams;
-//			}
-//		}
+		if ($store instanceof GO_Base_Data_DbStore) {
+			if ($store->getDeleteSuccess() !== null) {
+				$response['deleteSuccess'] = $store->getDeleteSuccess();
+				if(!$response['deleteSuccess'])
+					$response['deleteFeedback'] = $store->getFeedBack();
+			}
+			
+		}
+		
+		if($buttonParams){
+				$buttonParams = $store->getButtonParams();
+				if (!empty($buttonParams))
+					$response['buttonParams'] = $buttonParams;
+			}
 
 		return new \GO_Base_Data_JsonResponse($response);
 	}
@@ -233,7 +235,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 	 * @param GO_Base_Data_AbstractStore $store
 	 * @param type $params
 	 */
-	protected function renderExport(GO_Base_Data_AbstractStore $store, $params) {
+	protected function renderExport(\GO_Base_Data_AbstractStore $store, $params) {
 		//define('EXPORTING', true);
 		//used by custom fields to format diffently
 		if(\GO::modules()->customfields)

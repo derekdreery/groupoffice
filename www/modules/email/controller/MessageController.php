@@ -475,7 +475,7 @@ class GO_Email_Controller_Message extends \GO\Base\Controller\AbstractController
 					$linkedEmail->acl_id = $model->findAclId();
 					try {
 						$linkedEmail->save();
-					} catch (GO_Base_Exception_AccessDenied $e) {
+					} catch (\GO_Base_Exception_AccessDenied $e) {
 						throw new \Exception(\GO::t('linkMustHavePermissionToWrite','email'));
 					}
 					$linkedEmail->link($model);
@@ -725,7 +725,7 @@ class GO_Email_Controller_Message extends \GO\Base\Controller\AbstractController
 			try {
 				$template = \GO_Addressbook_Model_Template::model()->findByPk($params['template_id']);
 				$templateContent = $template->content;
-			} catch (GO_Base_Exception_AccessDenied $e) {
+			} catch (\GO_Base_Exception_AccessDenied $e) {
 				$templateContent = "";
 			}
 			$message = \GO_Email_Model_SavedMessage::model()->createFromMimeData($templateContent);
@@ -1104,7 +1104,7 @@ class GO_Email_Controller_Message extends \GO\Base\Controller\AbstractController
 		return $response;
 	}
 
-	private function _getForwardHeaders(GO_Email_Model_ComposerMessage $message) {
+	private function _getForwardHeaders(\GO_Email_Model_ComposerMessage $message) {
 
 		$lines = array();
 
@@ -1182,7 +1182,7 @@ class GO_Email_Controller_Message extends \GO\Base\Controller\AbstractController
 		return $response;
 	}
 	
-	private function _getContactInfo(GO_Email_Model_ImapMessage $imapMessage,$params, $response){
+	private function _getContactInfo(\GO_Email_Model_ImapMessage $imapMessage,$params, $response){
 		$response['sender_contact_id']=0;
 		$response['sender_company_id']=0;
 		$response['allow_quicklink']=1;
@@ -1234,7 +1234,7 @@ class GO_Email_Controller_Message extends \GO\Base\Controller\AbstractController
 		return $response;
 	}
 
-	private function _handleInvitations(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
+	private function _handleInvitations(\GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
 
 		if(!\GO::modules()->isInstalled('calendar'))
 			return $response;
@@ -1355,7 +1355,7 @@ class GO_Email_Controller_Message extends \GO\Base\Controller\AbstractController
 	 * @param string $response
 	 * @return string
 	 */
-	private function _handleAutoLinkTag(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
+	private function _handleAutoLinkTag(\GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
 		//seen flag is expensive because it can't be recovered from cache
 //		if(!$imapMessage->seen){	
 
@@ -1394,7 +1394,7 @@ class GO_Email_Controller_Message extends \GO\Base\Controller\AbstractController
 	 * @param string $response
 	 * @return string
 	 */
-	private function _handleAutoContactLinkFromSender(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
+	private function _handleAutoContactLinkFromSender(\GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
 		
 		if(\GO::modules()->addressbook && \GO::modules()->savemailas && !empty(\GO::config()->email_autolink_contacts)){
 			$from = $imapMessage->from->getAddress();

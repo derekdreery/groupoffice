@@ -59,7 +59,7 @@ function generateYuml($className,$withRelations=false){
 	
 }
 	
-function getModelCodeBlock(GO_Base_Db_ActiveRecord $model, $includeArMethods=false){
+function getModelCodeBlock(\GO_Base_Db_ActiveRecord $model, $includeArMethods=false){
 	$mcoutput='';
 	$mcoutput = '['.$model->className().'|';
 

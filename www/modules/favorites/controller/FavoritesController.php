@@ -3,7 +3,7 @@
 class GO_Favorites_Controller_Favorites extends \GO\Base\Controller\AbstractJsonController {
 	
 	protected function actionCalendarStore(){
-		$colModel = new \GO_Base_Data_ColumnModel(GO_Favorites_Model_Calendar::model());
+		$colModel = new \GO_Base_Data_ColumnModel(\GO_Favorites_Model_Calendar::model());
 		$colModel->setColumnsFromModel(\GO_Calendar_Model_Calendar::model());
 
 		$findParams = new \GO_Base_Db_FindParams();
@@ -29,7 +29,7 @@ class GO_Favorites_Controller_Favorites extends \GO\Base\Controller\AbstractJson
 	}
 	
 	protected function actionTasklistStore(){
-		$colModel = new \GO_Base_Data_ColumnModel(GO_Favorites_Model_Tasklist::model());
+		$colModel = new \GO_Base_Data_ColumnModel(\GO_Favorites_Model_Tasklist::model());
 //		$colModel->formatColumn('type', '$model->customfieldtype->name()');
 		
 		$findParams = new \GO_Base_Db_FindParams();
@@ -53,7 +53,7 @@ class GO_Favorites_Controller_Favorites extends \GO\Base\Controller\AbstractJson
 	}
 	
 	protected function actionAddressbookStore(){
-		$colModel = new \GO_Base_Data_ColumnModel(GO_Addressbook_Model_Addressbook::model());
+		$colModel = new \GO_Base_Data_ColumnModel(\GO_Addressbook_Model_Addressbook::model());
 //		$colModel->formatColumn('type', '$model->customfieldtype->name()');
 		
 		$findParams = new \GO_Base_Db_FindParams();

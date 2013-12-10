@@ -9,7 +9,7 @@ class GO_Files_Filehandler_ImageViewer implements GO_Files_Filehandler_Interface
 		return \GO::t('imageViewer','files');
 	}
 	
-	public function fileIsSupported(GO_Files_Model_File $file){
+	public function fileIsSupported(\GO_Files_Model_File $file){
 		return $file->isImage();
 	}
 	
@@ -17,7 +17,7 @@ class GO_Files_Filehandler_ImageViewer implements GO_Files_Filehandler_Interface
 		return 'fs-imageviewer';
 	}
 	
-	public function getHandler(GO_Files_Model_File $file){
+	public function getHandler(\GO_Files_Model_File $file){
 		return 'GO.files.showImageViewer({id:'.$file->id.'});';
 	}
 }

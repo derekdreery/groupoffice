@@ -116,7 +116,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends \GO
 	 * selectNewStore and selectedStore.
 	 * @param GO_Base_Data_ColumnModel $cm 
 	 */
-	protected function formatColumns(GO_Base_Data_ColumnModel $cm){
+	protected function formatColumns(\GO_Base_Data_ColumnModel $cm){
 		
 	}
 	

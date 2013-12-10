@@ -101,7 +101,7 @@ class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractControl
 	}
 	
 	
-	private function _removeDuplicates(GO_Email_Model_Account $accountModel,$mailboxName) {
+	private function _removeDuplicates(\GO_Email_Model_Account $accountModel,$mailboxName) {
 		
 		if (!GO::user()->isAdmin())
 			throw new AccessDeniedException();
@@ -204,7 +204,7 @@ class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractControl
 
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->single()
-						->join(GO_Email_Model_Alias::model()->tableName(), $joinCriteria,'a')
+						->join(\GO_Email_Model_Alias::model()->tableName(), $joinCriteria,'a')
 						->criteria(
 							GO_Base_Db_FindCriteria::newInstance()
 								->addCondition('email', $email,'=','a')
@@ -219,7 +219,7 @@ class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractControl
 	 *
 	 * @return \GO_Email_Model_ImapMailbox 
 	 */
-	public function _getAllMailboxes(GO_Email_Model_Account $accountModel){
+	public function _getAllMailboxes(\GO_Email_Model_Account $accountModel){
 		$imap = $accountModel->openImapConnection();
 		
 		$folders = $imap->list_folders(false, false,'','*',true);

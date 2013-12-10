@@ -119,7 +119,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 						->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('extends_model', $params['extends_model'],'=','category'));
 	}
 
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('category_name', '$model->category->name');
 		$columnModel->formatColumn('column_name', '$model->columnName()');
 		$columnModel->formatColumn('type', '$model->customfieldtype->name()');

@@ -21,7 +21,7 @@ class GO_Site_Customfieldtype_Sitemultifile extends GO_Customfields_Customfieldt
 		$findParams = GO_Base_Db_FindParams::newInstance()
 				->select('COUNT(*) AS count')
 				->single()
-			->criteria(GO_Base_Db_FindCriteria::newInstance()
+			->criteria(\GO_Base_Db_FindCriteria::newInstance()
 				->addCondition('model_id', $model->model_id)
 				->addCondition('field_id', $fieldId));
 
@@ -51,7 +51,7 @@ class GO_Site_Customfieldtype_Sitemultifile extends GO_Customfields_Customfieldt
 					'foreignField' => 'file_id',
 					'tableAlias' => 'mf'))
 		
-			->criteria(GO_Base_Db_FindCriteria::newInstance()
+			->criteria(\GO_Base_Db_FindCriteria::newInstance()
 				->addCondition('model_id', $model->model_id,'=','mf')
 				->addCondition('field_id', $fieldId,'=','mf'));
 

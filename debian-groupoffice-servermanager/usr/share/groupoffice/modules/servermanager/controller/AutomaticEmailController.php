@@ -55,7 +55,7 @@ class GO_Servermanager_Controller_AutomaticEmail extends GO_Base_Controller_Abst
 		return parent::afterLoad($response, $model, $params);
 	}
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name', '$model->user->name');
 		return parent::formatColumns($columnModel);
 	}
@@ -81,7 +81,7 @@ class GO_Servermanager_Controller_AutomaticEmail extends GO_Base_Controller_Abst
 				
 		$stmt = GO_Addressbook_Model_Template::model()->find($findParams);
 		
-		$store = GO_Base_Data_Store::newInstance(GO_Addressbook_Model_Template::model());		
+		$store = GO_Base_Data_Store::newInstance(\GO_Addressbook_Model_Template::model());		
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatEmailSelectionRecord'));
 		
 		$store->setStatement($stmt);

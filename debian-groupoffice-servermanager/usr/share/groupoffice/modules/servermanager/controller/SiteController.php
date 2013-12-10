@@ -42,7 +42,7 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 		
 		$newTrial =  new GO_ServerManager_Model_NewTrial();
 		
-		if (GO_Base_Util_Http::isPostRequest()) {
+		if (\GO_Base_Util_Http::isPostRequest()) {
 			
 			$newTrial->setAttributes($_POST['NewTrial']);
 			if($newTrial->validate())

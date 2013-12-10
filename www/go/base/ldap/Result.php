@@ -13,7 +13,7 @@ class GO_Base_Ldap_Result{
 	
 	private $_entryId;
 	
-	public function __construct(GO_Base_Ldap_Connection $ldapConn, $searchId) {
+	public function __construct(\GO_Base_Ldap_Connection $ldapConn, $searchId) {
 		$this->_searchId=$searchId;
 		$this->_ldapConn=$ldapConn;
 	}

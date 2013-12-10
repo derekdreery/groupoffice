@@ -30,7 +30,7 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 		return $c;
 	}
 	
-	protected function prepareStore(GO_Base_Data_Store $store) {
+	protected function prepareStore(\GO_Base_Data_Store $store) {
 		
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatParticipantRecord'));
 		

@@ -179,7 +179,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	 * 
 	 * @param GO_Customfields_Model_AbstractCustomFieldsRecord $source
 	 */
-	public function copyAttributesWithMatchingAttributeLabels(GO_Customfields_Model_AbstractCustomFieldsRecord $copyFrom){
+	public function copyAttributesWithMatchingAttributeLabels(\GO_Customfields_Model_AbstractCustomFieldsRecord $copyFrom){
 		$sourceColumns = $copyFrom->attributeLabels();
 		unset($sourceColumns['model_id']);
 		//flip keys and values

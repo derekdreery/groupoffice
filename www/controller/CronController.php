@@ -77,7 +77,7 @@ class GO_Core_Controller_Cron extends \GO\Base\Controller\AbstractJsonController
 	 */
 	public function actionStore($params){
 		
-		$colModel = new \GO_Base_Data_ColumnModel(GO_Base_Cron_CronJob::model());
+		$colModel = new \GO_Base_Data_ColumnModel(\GO_Base_Cron_CronJob::model());
 					
 		$colModel->formatColumn('active', '$model->isRunning()?\GO::t("running","cron"):$model->active');
 		
@@ -124,7 +124,7 @@ class GO_Core_Controller_Cron extends \GO\Base\Controller\AbstractJsonController
 				->addCondition('active', 1,'=')
 			);
 		
-		$colModel = new \GO_Base_Data_ColumnModel(GO_Base_Cron_CronJob::model());
+		$colModel = new \GO_Base_Data_ColumnModel(\GO_Base_Cron_CronJob::model());
 		
 		$store = new GO_Base_Data_DbStore('GO_Base_Cron_CronJob',$colModel , $params, $findParams);
 		$store->defaultSort = 'nextrun';

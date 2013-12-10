@@ -156,7 +156,7 @@ class GO_Base_Router{
 		try{
 			$this->_controller = new $controllerClass;
 			$this->_controller->run($action, $params);		
-		}catch(GO_Base_Exception_NotFound $e){
+		}catch(\GO_Base_Exception_NotFound $e){
 			header("HTTP/1.0 404 Not Found");
 			header("Status: 404 Not Found");
 			

@@ -40,7 +40,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		return $findParams;
 	}
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name', '$model->user->name');
 		return parent::formatColumns($columnModel);
 	}
@@ -220,7 +220,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		}
 	}
 	
-	private function _getUsage(GO_Email_Model_Account $account){
+	private function _getUsage(\GO_Email_Model_Account $account){
 		$usage="";
 		
 		$quota = $account->openImapConnection()->get_quota();
@@ -300,7 +300,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 //							$node['children']=$this->_getMailboxTreeNodes($rootMailboxes);
 //						}
 //						
-//					}catch(GO_Base_Mail_ImapAuthenticationFailedException $e){
+//					}catch(\GO_Base_Mail_ImapAuthenticationFailedException $e){
 //						//$this->_checkImapConnectException($e,$node);
 //						$node['isAccount'] = false;
 //						$node['hasError'] = true;

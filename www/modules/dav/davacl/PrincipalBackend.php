@@ -17,7 +17,7 @@
  */
 class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\BackendInterface {
 
-	private function _modelToDAVUser(GO_Base_Model_User $user){
+	private function _modelToDAVUser(\GO_Base_Model_User $user){
 
 		$data= array(
 			'id'=>$user->id,

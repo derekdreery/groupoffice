@@ -192,7 +192,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	}
 	
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		
 		$sortAlias = \GO::user()->sort_name=="first_name" ? array('first_name','last_name') : array('last_name','first_name');
 		
@@ -413,7 +413,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 					$model->addressbook_id=$params['book_id'];
 					$model->save();				
 				}
-			}catch(GO_Base_Exception_AccessDenied $e){
+			}catch(\GO_Base_Exception_AccessDenied $e){
 				$response['failedToMove'][]=$model->id;
 			}
 		}

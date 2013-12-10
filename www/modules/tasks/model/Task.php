@@ -136,7 +136,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		return parent::afterSave($wasNew);
 	}
 	
-//	public function afterLink(GO_Base_Db_ActiveRecord $model, $isSearchCacheModel, $description = '', $this_folder_id = 0, $model_folder_id = 0, $linkBack = true) {
+//	public function afterLink(\GO_Base_Db_ActiveRecord $model, $isSearchCacheModel, $description = '', $this_folder_id = 0, $model_folder_id = 0, $linkBack = true) {
 //		throw new Exception();
 //		$modelName = $isSearchCacheModel ? $model->model_name : $model->className;
 //		$modelId = $isSearchCacheModel ? $model->model_id : $model->id;
@@ -307,7 +307,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		$dateType = "DATE";
 		
 //		$dtstart = new Sabre\VObject\Property\DateTime('dtstart',$dateType);
-//		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time));		
+//		$dtstart->setDateTime(\GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time));		
 //		$e->add($dtstart);
 //		
 		$e->add('dtstart', GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time), array('type'=>$dateType));
@@ -315,7 +315,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		
 		
 //		$due = new Sabre\VObject\Property\DateTime('due',$dateType);
-//		$due->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->due_time));		
+//		$due->setDateTime(\GO_Base_Util_Date_DateTime::fromUnixtime($this->due_time));		
 //		$e->add($due);
 		
 		$e->add('due', GO_Base_Util_Date_DateTime::fromUnixtime($this->due_time), array('type'=>$dateType));
@@ -324,7 +324,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		
 		if($this->completion_time>0){
 //			$completed = new Sabre\VObject\Property\DateTime('completed',Sabre\VObject\Property\DateTime::LOCALTZ);
-//			$completed->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->completion_time));		
+//			$completed->setDateTime(\GO_Base_Util_Date_DateTime::fromUnixtime($this->completion_time));		
 //			$e->add($completed);
 			
 			$e->add('completed', GO_Base_Util_Date_DateTime::fromUnixtime($this->completion_time), array('type'=>$dateType));

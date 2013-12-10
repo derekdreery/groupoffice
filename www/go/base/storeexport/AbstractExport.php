@@ -61,7 +61,7 @@ abstract class GO_Base_Storeexport_AbstractExport {
 	 * @param String $title
 	 * @param Mixed $orientation ('P' for Portrait,'L' for Landscape of false for none) 
 	 */
-	public function __construct(GO_Base_Data_AbstractStore $store, $header=true,$humanHeaders=true, $title=false, $orientation=false) {
+	public function __construct(\GO_Base_Data_AbstractStore $store, $header=true,$humanHeaders=true, $title=false, $orientation=false) {
 		$this->store = $store;
 		$this->header = $header;
 		$this->title = $title;

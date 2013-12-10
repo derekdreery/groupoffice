@@ -269,7 +269,7 @@ class GO_Base_Db_FindParams{
 	 * @param GO_Base_Db_FindCriteria $criteria
 	 * @return GO_Base_Db_FindParams 
 	 */
-	public function criteria(GO_Base_Db_FindCriteria $criteria){
+	public function criteria(\GO_Base_Db_FindCriteria $criteria){
 		if(!isset($this->_params['criteriaObject']))
 			$this->_params['criteriaObject']=$criteria;
 		else

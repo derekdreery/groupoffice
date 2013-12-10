@@ -3908,11 +3908,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //	 * @param boolean $linkBack 
 //	 * @return boolean
 //	 */
-//	public function afterLink(GO_Base_Db_ActiveRecord $model, $isSearchCacheModel, $description='', $this_folder_id=0, $model_folder_id=0, $linkBack=true){
+//	public function afterLink(\GO_Base_Db_ActiveRecord $model, $isSearchCacheModel, $description='', $this_folder_id=0, $model_folder_id=0, $linkBack=true){
 //		return true;
 //	}
 	
-	public function linkExists(GO_Base_Db_ActiveRecord $model){		
+	public function linkExists(\GO_Base_Db_ActiveRecord $model){		
 		
 		if($model->className()=="GO_Base_Model_SearchCacheRecord"){
 			$model_id = $model->model_id;
@@ -3942,7 +3942,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * @param array $attributes
 	 * @return boolean 
 	 */
-	public function updateLink(GO_Base_Db_ActiveRecord $model, array $attributes){
+	public function updateLink(\GO_Base_Db_ActiveRecord $model, array $attributes){
 		$sql = "UPDATE `go_links_".$this->tableName()."`";
 		
 		$updates=array();
@@ -3989,7 +3989,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		}		
 	}
 	
-	protected function afterUnlink(GO_Base_Db_ActiveRecord $model){
+	protected function afterUnlink(\GO_Base_Db_ActiveRecord $model){
 		
 		return true;
 	}
@@ -4046,7 +4046,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * 
 	 * @param GO_Base_Db_ActiveRecord $targetModel 
 	 */
-	public function copyLinks(GO_Base_Db_ActiveRecord $targetModel){
+	public function copyLinks(\GO_Base_Db_ActiveRecord $targetModel){
 		if(!$this->hasLinks() || !$targetModel->hasLinks())
 			return false;
 			
@@ -4553,7 +4553,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * 
 	 * @param GO_Base_Db_ActiveRecord $model 
 	 */
-	public function mergeWith(GO_Base_Db_ActiveRecord $model, $mergeAttributes=true, $deleteModel=true){
+	public function mergeWith(\GO_Base_Db_ActiveRecord $model, $mergeAttributes=true, $deleteModel=true){
 		
 		if(!($this instanceof GO_Customfields_Model_AbstractCustomFieldsRecord) && $model->id==$this->id && $this->className()==$model->className())
 			return false;
@@ -4611,7 +4611,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			$model->delete();				
 	}
 	
-	private function _copyComments(GO_Base_Db_ActiveRecord $sourceModel) {
+	private function _copyComments(\GO_Base_Db_ActiveRecord $sourceModel) {
 		if (\GO::modules()->isInstalled('comments') && $this->hasLinks()) {
 			$findParams = \GO_Base_Db_FindParams::newInstance()
 							->ignoreAcl()
@@ -4634,7 +4634,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		}
 	}
 
-	private function _copyFiles(GO_Base_Db_ActiveRecord $sourceModel) {
+	private function _copyFiles(\GO_Base_Db_ActiveRecord $sourceModel) {
 		if (!$this->hasFiles()) {
 			return false;
 		}
@@ -4647,7 +4647,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$this->filesFolder->copyContentsFrom($sourceFolder);
 	}
 
-	private function _moveComments(GO_Base_Db_ActiveRecord $sourceModel){
+	private function _moveComments(\GO_Base_Db_ActiveRecord $sourceModel){
 		if(\GO::modules()->isInstalled('comments') && $this->hasLinks()){
 			$findParams = \GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl()	
@@ -4667,7 +4667,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		}
 	}
 	
-	private function _moveFiles(GO_Base_Db_ActiveRecord $sourceModel){
+	private function _moveFiles(\GO_Base_Db_ActiveRecord $sourceModel){
 		if(!$this->hasFiles())
 			return false;
 		
@@ -4692,7 +4692,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * 
 	 * @param GO_Base_Db_ActiveRecord $model The model that will be deleted after merging.
 	 */
-	protected function afterMergeWith(GO_Base_Db_ActiveRecord $model){}
+	protected function afterMergeWith(\GO_Base_Db_ActiveRecord $model){}
 
 	/**
 	 * This function will unset the invalid properties so they will not be saved.

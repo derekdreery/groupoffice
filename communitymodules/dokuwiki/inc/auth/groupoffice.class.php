@@ -191,7 +191,7 @@ class auth_groupoffice extends auth_basic {
    */
   function checkRights()
   {    
-    if(GO::modules()->dokuwiki->checkPermissionLevel(GO_Base_Model_Acl::MANAGE_PERMISSION))
+    if(GO::modules()->dokuwiki->checkPermissionLevel(\GO_Base_Model_Acl::MANAGE_PERMISSION))
       $this->canDo('UserMod');
     else
       $this->canDo('Profile');

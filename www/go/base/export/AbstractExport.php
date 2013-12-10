@@ -83,7 +83,7 @@ abstract class GO_Base_Export_AbstractExport {
 	 * @param String $title
 	 * @param Mixed $orientation ('P' for Portrait,'L' for Landscape of false for none) 
 	 */
-	public function __construct(GO_Base_Data_Store $store, GO_Base_Data_ColumnModel $columnModel, GO_Base_Db_ActiveRecord $model, GO_Base_Db_FindParams $findParams, $header=true,$humanHeaders=true, $title=false, $orientation=false, $params=array()) {
+	public function __construct(\GO_Base_Data_Store $store, GO_Base_Data_ColumnModel $columnModel, GO_Base_Db_ActiveRecord $model, GO_Base_Db_FindParams $findParams, $header=true,$humanHeaders=true, $title=false, $orientation=false, $params=array()) {
 		$this->store = $store;
 		$this->columnModel = $columnModel;
 		$this->header = $header;

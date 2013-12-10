@@ -385,7 +385,7 @@ class File extends \GO_Base_Fs_Base{
 	 * @param GO_Base_Fs_Folder $destinationFolder 
 	 * @return GO\Base\Fs\File
 	 */
-	public function copy(GO_Base_Fs_Folder $destinationFolder, $newFileName=false){
+	public function copy(\GO_Base_Fs_Folder $destinationFolder, $newFileName=false){
 		
 		if(!$newFileName)
 			$newFileName=$this->name();

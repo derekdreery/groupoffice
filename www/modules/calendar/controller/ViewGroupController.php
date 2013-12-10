@@ -21,7 +21,7 @@ class GO_Calendar_Controller_ViewGroup extends GO_Base_Controller_AbstractMultiS
 
 	//protected $model = 'GO_Calendar_Model_ViewGroup';
 	
-	//protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	//protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 	//	$columnModel->formatColumn('group_name','$model->group->name',array(),'group_id');
 	//	return parent::formatColumns($columnModel);
 	//}

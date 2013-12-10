@@ -1000,7 +1000,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $folder->id;
 	}
 
-	private function _createNewModelFolder(GO_Base_Db_ActiveRecord $model) {
+	private function _createNewModelFolder(\GO_Base_Db_ActiveRecord $model) {
 
 		//\GO::debug("Create new model folder ".$model->className()."(ID:".$model->id.")");
 
@@ -1035,7 +1035,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $response;
 	}
 
-	public function checkModelFolder(GO_Base_Db_ActiveRecord $model, $saveModel=false, $mustExist=false) {
+	public function checkModelFolder(\GO_Base_Db_ActiveRecord $model, $saveModel=false, $mustExist=false) {
 		$oldAllowDeletes = \GO\Base\Fs\File::setAllowDeletes(false);
 
 		$folder = false;
@@ -1238,7 +1238,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	}
 	
-	private function _convertZipEncoding(GO_Base_Fs_Folder $folder, $charset='CP850'){
+	private function _convertZipEncoding(\GO_Base_Fs_Folder $folder, $charset='CP850'){
 		$items = $folder->ls();
 		
 		foreach($items as $item){

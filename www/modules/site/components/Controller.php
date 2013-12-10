@@ -300,10 +300,10 @@ abstract class GO_Site_Components_Controller extends \GO\Base\Controller\Abstrac
 			if(isset($oldIgnore))
 				GO::setIgnoreAclPermissions($oldIgnore);
 		}
-		catch (GO_Base_Exception_MissingParameter $e){
+		catch (\GO_Base_Exception_MissingParameter $e){
 			$this->render('/site/404', array('error' => $e));
 		}
-		catch (GO_Base_Exception_AccessDenied $e){
+		catch (\GO_Base_Exception_AccessDenied $e){
 			GO::debug($e->getMessage());
 			GO::debug($e->getTraceAsString());
 			
@@ -318,7 +318,7 @@ abstract class GO_Site_Components_Controller extends \GO\Base\Controller\Abstrac
 			}
 			//$this->render('error', array('error'=>$e));
 		}
-		catch (GO_Base_Exception_NotFound $e){
+		catch (\GO_Base_Exception_NotFound $e){
 			header("HTTP/1.0 404 Not Found");
       header("Status: 404 Not Found");
 			

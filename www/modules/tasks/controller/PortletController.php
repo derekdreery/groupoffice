@@ -64,7 +64,7 @@ class GO_Tasks_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelect
 		$sort = !empty($params['sort']) ? $params['sort'] : 'due_time';
 		$dir = !empty($params['dir']) ? $params['dir'] : 'ASC';
 		
-		$store = GO_Base_Data_Store::newInstance(GO_Tasks_Model_Task::model());
+		$store = GO_Base_Data_Store::newInstance(\GO_Tasks_Model_Task::model());
 		
 		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('start_time', $now, '<')
@@ -82,8 +82,8 @@ class GO_Tasks_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelect
 						->criteria($findCriteria)
 						->order(array('tasklist_name', $sort), $dir)
 						->ignoreAcl()
-						->join(GO_Tasks_Model_PortletTasklist::model()->tableName(),$joinCriteria,'pt')
-						->join(GO_Tasks_Model_Tasklist::model()->tableName(), $tasklistJoinCriteria,'tl');
+						->join(\GO_Tasks_Model_PortletTasklist::model()->tableName(),$joinCriteria,'pt')
+						->join(\GO_Tasks_Model_Tasklist::model()->tableName(), $tasklistJoinCriteria,'tl');
 		
 		$stmt = GO_Tasks_Model_Task::model()->find($findParams);
 		

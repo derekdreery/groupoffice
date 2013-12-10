@@ -33,7 +33,7 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 		return parent::beforeSubmit($response, $model, $params);
 	}
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		
 		$columnModel->formatColumn('type', '\GO\Base\Fs\File::getFileTypeDescription($model->extension)');
 		

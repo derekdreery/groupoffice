@@ -85,7 +85,7 @@ class GO_Base_Data_JsonResponse implements ArrayAccess {
 		return $this->_data;
 	}
 	
-	public function mergeWith(GO_Base_Data_JsonResponse $response){
+	public function mergeWith(\GO_Base_Data_JsonResponse $response){
 		$this->_data = array_merge($this->_data, $response->getData());
 	}
 	

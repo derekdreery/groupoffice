@@ -123,7 +123,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * @param boolean $appendNumberToNameIfDestinationExists Rename the folder like "folder (1)" if it already exists.	 * 
 	 * @return GO_Base_Fs_Folder $destinationFolder
 	 */
-	public function move(GO_Base_Fs_Folder $destinationFolder, $newFolderName=false,$appendNumberToNameIfDestinationExists=false){
+	public function move(\GO_Base_Fs_Folder $destinationFolder, $newFolderName=false,$appendNumberToNameIfDestinationExists=false){
 		if(!$this->exists())
 			throw new \Exception("Folder '".$this->path()."' does not exist");
 		
@@ -240,7 +240,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * @return GO\Base\Fs\File
 	 * @throws Exception
 	 */
-	public function createLink(GO_Base_Fs_Folder $target, $linkName=null){
+	public function createLink(\GO_Base_Fs_Folder $target, $linkName=null){
 		
 		if(!isset($linkName))
 			$linkName = $target->name ();

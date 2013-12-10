@@ -84,7 +84,7 @@ class GO_Base_Data_ColumnModel {
 	 * @param GO_Base_Db_ActiveRecord $model
 	 * @param Array $excludeColumns 
 	 */
-	public function setColumnsFromModel(GO_Base_Db_ActiveRecord $model, $excludeColumns=array(), $includeColumns=array()) {
+	public function setColumnsFromModel(\GO_Base_Db_ActiveRecord $model, $excludeColumns=array(), $includeColumns=array()) {
 
 			$attributes = $model->getColumns();
 
@@ -215,7 +215,7 @@ class GO_Base_Data_ColumnModel {
 	 * @param GO_Base_Data_Column $column
 	 * @return GO_Base_Data_ColumnModel 
 	 */
-	public function addColumn(GO_Base_Data_Column $column){
+	public function addColumn(\GO_Base_Data_Column $column){
 		$this->_columns[$column->getDataIndex()]=$column;
 		$this->_columnSort[$column->getDataIndex()]=$column->getSortIndex();
 		

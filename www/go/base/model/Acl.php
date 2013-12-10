@@ -324,7 +324,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param GO_Base_Model_Acl $targetAcl
 	 */
-	public function copyPermissions(GO_Base_Model_Acl $targetAcl){
+	public function copyPermissions(\GO_Base_Model_Acl $targetAcl){
 		//$this->duplicateRelation('records', $targetAcl);
 		
 		$stmt = $this->records;

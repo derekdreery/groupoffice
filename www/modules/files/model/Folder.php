@@ -558,7 +558,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @param GO\Base\Fs\File $file
 	 * @return GO_Files_Model_File 
 	 */
-	public function addFilesystemFolder(GO_Base_Fs_Folder $folder){
+	public function addFilesystemFolder(\GO_Base_Fs_Folder $folder){
 		$folder->move($this->fsFolder);
 		return $this->addFolder($folder->name(), true);
 	}
@@ -973,7 +973,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param GO_Files_Model_Folder $sourceFolder 
 	 */
-	public function moveContentsFrom(GO_Files_Model_Folder $sourceFolder, $mergeFolders=false){
+	public function moveContentsFrom(\GO_Files_Model_Folder $sourceFolder, $mergeFolders=false){
 		
 		//make sure database is in sync with filesystem.
 		$sourceFolder->syncFilesystem(true);
@@ -1016,7 +1016,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		}
 	}
 	
-	public function copyContentsFrom(GO_Files_Model_Folder $sourceFolder, $mergeFolders=false){
+	public function copyContentsFrom(\GO_Files_Model_Folder $sourceFolder, $mergeFolders=false){
 		//make sure database is in sync with filesystem.
 		$sourceFolder->syncFilesystem(true);
 		

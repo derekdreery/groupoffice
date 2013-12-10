@@ -43,7 +43,7 @@ class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
 	 * @param GO_Base_Cron_CronJob $cronJob
 	 * @param GO_Base_Model_User $user [OPTIONAL]
 	 */
-	public function run(GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
+	public function run(\GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
 		
 		\GO::session()->runAsRoot();
 		$usersStmt = \GO_Base_Model_User::model()->findByAttribute('mail_reminders', 1);

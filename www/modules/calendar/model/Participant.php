@@ -505,7 +505,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param GO_Addressbook_Model_Contact $contact
 	 */
-	public function setContact(GO_Addressbook_Model_Contact $contact){
+	public function setContact(\GO_Addressbook_Model_Contact $contact){
 		$this->user_id=$contact->go_user_id;
 		$this->contact_id=$contact->id;
 		$this->email=$contact->email;

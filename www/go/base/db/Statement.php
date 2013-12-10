@@ -38,7 +38,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 	 * Can only be constructed with a connection
 	 * @param GO_Base_Db_PDO $connection 
 	 */
-	public function __construct(GO_Base_Db_Connection $connection)
+	public function __construct(\GO_Base_Db_Connection $connection)
 	{
 		$this->_connection=$connection;
 	}

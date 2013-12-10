@@ -1176,15 +1176,15 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	public function actionUsersStore($params)
 	{
 		$cm =  new GO_Base_Data_ColumnModel();
-		$cm->setColumnsFromModel(GO_ServerManager_Model_InstallationUser::model());
+		$cm->setColumnsFromModel(\GO_ServerManager_Model_InstallationUser::model());
 		$cm->formatColumn('trialDaysLeft','$model->trialDaysLeft');
 		
 		$store = new GO_Base_Data_Store($cm);
 		$storeParams = $store->getDefaultParams($params);
 		$storeParams = $storeParams->select('t.*'); //makes sure field of type TEXT get loaded
 		$criteria = GO_Base_Db_FindCriteria::newInstance()->addCondition('installation_id', $params['installation_id']);
-		$storeParams->mergeWith(GO_Base_Db_FindParams::newInstance()->criteria($criteria));
-		$store->setStatement(GO_ServerManager_Model_InstallationUser::model()->find($storeParams));
+		$storeParams->mergeWith(\GO_Base_Db_FindParams::newInstance()->criteria($criteria));
+		$store->setStatement(\GO_ServerManager_Model_InstallationUser::model()->find($storeParams));
 		
 		$response=array("success"=>true,"results"=>array());
 		$response = array_merge($response, $store->getData());
@@ -1195,7 +1195,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	public function actionHistoryStore($params)
 	{
 		$cm =  new GO_Base_Data_ColumnModel();
-		$cm->setColumnsFromModel(GO_ServerManager_Model_UsageHistory::model());
+		$cm->setColumnsFromModel(\GO_ServerManager_Model_UsageHistory::model());
 		$cm->formatColumn('total_usage', '$model->totalUsageText');
 		$cm->formatColumn('mailbox_usage', '$model->mailboxUsageText');
 		$cm->formatColumn('database_usage', '$model->databaseUsageText');
@@ -1204,8 +1204,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$store = new GO_Base_Data_Store($cm);
 		$storeParams = $store->getDefaultParams($params);
 		$criteria = GO_Base_Db_FindCriteria::newInstance()->addCondition('installation_id', $params['installation_id']);
-		$storeParams->mergeWith(GO_Base_Db_FindParams::newInstance()->criteria($criteria));
-		$store->setStatement(GO_ServerManager_Model_UsageHistory::model()->find($storeParams));
+		$storeParams->mergeWith(\GO_Base_Db_FindParams::newInstance()->criteria($criteria));
+		$store->setStatement(\GO_ServerManager_Model_UsageHistory::model()->find($storeParams));
 		
 		$response=array("success"=>true,"results"=>array());
 		$response = array_merge($response, $store->getData());

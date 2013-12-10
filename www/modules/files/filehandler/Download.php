@@ -9,7 +9,7 @@ class GO_Files_Filehandler_Download implements GO_Files_Filehandler_Interface{
 		return \GO::t('download');
 	}
 	
-	public function fileIsSupported(GO_Files_Model_File $file){
+	public function fileIsSupported(\GO_Files_Model_File $file){
 		return true;
 	}
 	
@@ -17,7 +17,7 @@ class GO_Files_Filehandler_Download implements GO_Files_Filehandler_Interface{
 		return 'btn-download';
 	}
 	
-	public function getHandler(GO_Files_Model_File $file){
+	public function getHandler(\GO_Files_Model_File $file){
 		return 'window.location.href="'.$file->getDownloadUrl(true, true).'";';
 	}
 }
