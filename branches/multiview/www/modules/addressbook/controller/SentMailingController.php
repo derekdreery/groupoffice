@@ -331,7 +331,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 	private function _sendmail($message, $model, $mailer, $mailing) {
 		
-		$typestring = $model instanceof GO_Addressbook_Model_Company ? 'company' : 'contact';
+		$typestring = $model instanceof \GO_Addressbook_Model_Company ? 'company' : 'contact';
 		
 		if($typestring=='contact'){
 			$email = $model->firstEmail;

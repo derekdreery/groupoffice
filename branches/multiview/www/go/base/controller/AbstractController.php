@@ -471,7 +471,7 @@ abstract class AbstractController extends \GO_Base_Observable {
 			
 			$response['exceptionClass'] = get_class($e);
 			
-			if($e instanceof GO_Base_Exception_AccessDenied){
+			if($e instanceof \GO_Base_Exception_AccessDenied){
 				
 				//doesn't work well with extjs
 //				header("HTTP/1.1 403 Forbidden");
@@ -487,7 +487,7 @@ abstract class AbstractController extends \GO_Base_Observable {
 				$response['redirectToLogin']=empty(\GO::session()->values['user_id']);
 			}
 			
-			if($e instanceof GO_Base_Exception_SecurityTokenMismatch)
+			if($e instanceof \GO_Base_Exception_SecurityTokenMismatch)
 				$response['redirectToLogin']=true;
 
 			if(\GO::config()->debug){

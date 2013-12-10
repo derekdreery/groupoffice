@@ -230,7 +230,7 @@ class GO_Base_Language{
 		$folder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'language');
 		$items = $folder->ls();
 		foreach($items as $folder){
-			if($folder instanceof GO_Base_Fs_Folder){
+			if($folder instanceof \GO_Base_Fs_Folder){
 				$this->_loadSection('base', $folder->name());
 			}
 		}

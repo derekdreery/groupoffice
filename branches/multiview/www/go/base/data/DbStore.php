@@ -129,7 +129,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		$this->_columnModel = $columnModel;
 		$this->_requestParams = $requestParams;
 		//$this->setStoreParams($requestParams);
-		if ($findParams instanceof GO_Base_Db_FindParams)
+		if ($findParams instanceof \GO_Base_Db_FindParams)
 			$this->_extraFindParams = $findParams;
 		else
 			$this->_extraFindParams = \GO_Base_Db_FindParams::newInstance();

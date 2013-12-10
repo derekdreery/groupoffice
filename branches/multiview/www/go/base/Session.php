@@ -355,7 +355,7 @@ class GO_Base_Session extends GO_Base_Observable{
 //		if(\GO::modules()->isInstalled("log"))
 //			\GO_Log_Model_Log::create ("setcurrentuser", "Set user ID to $user_id");
 	
-		if($user_id  instanceof GO_Base_Model_User){
+		if($user_id  instanceof \GO_Base_Model_User){
 			$this->_user=$user_id;
 			$this->values['user_id']=$user_id->id;
 		}else

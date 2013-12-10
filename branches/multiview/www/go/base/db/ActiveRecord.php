@@ -1110,7 +1110,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 		if(!is_array($params))
 		{
-			if(!($params instanceof GO_Base_Db_FindParams))
+			if(!($params instanceof \GO_Base_Db_FindParams))
 				throw new \Exception('$params parameter for find() must be instance of GO_Base_Db_FindParams');
 			
 			if($params->getParam("export")){
@@ -3437,7 +3437,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					case \GO_Base_Db_ActiveRecord::DELETE_CASCADE:
 						$result = $this->$name;
 
-						if($result instanceof GO_Base_Db_ActiveStatement){	
+						if($result instanceof \GO_Base_Db_ActiveStatement){	
 							//has_many relations result in a statement.
 							while($child = $result->fetch()){			
 								if($child->className()!=$this->className() || $child->pk != $this->pk)//prevent delete of self
@@ -3801,7 +3801,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			if($r = $this->getRelation($name)){
 				if($r['type']==self::BELONGS_TO || $r['type']==self::HAS_ONE){
 					
-					if($value instanceof GO_Base_Db_ActiveRecord){				
+					if($value instanceof \GO_Base_Db_ActiveRecord){				
 						
 						$cacheKey = $this->_getRelatedCacheKey($r);
 						$this->_relatedCache[$cacheKey]=$value;
@@ -3832,7 +3832,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	public function link($model, $description='', $this_folder_id=0, $model_folder_id=0, $linkBack=true){
 		
-		$isSearchCacheModel = ($this instanceof GO_Base_Model_SearchCacheRecord);
+		$isSearchCacheModel = ($this instanceof \GO_Base_Model_SearchCacheRecord);
 		
 		if(!$this->hasLinks() && !$isSearchCacheModel)
 			throw new \Exception("Links not supported by ".$this->className ());
@@ -3840,7 +3840,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if($this->linkExists($model))
 			return true;
 		
-		if($model instanceof GO_Base_Model_SearchCacheRecord){
+		if($model instanceof \GO_Base_Model_SearchCacheRecord){
 			$model_id = $model->model_id;
 			$model_type_id = $model->model_type_id;			
 		}else
@@ -4555,7 +4555,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 */
 	public function mergeWith(\GO_Base_Db_ActiveRecord $model, $mergeAttributes=true, $deleteModel=true){
 		
-		if(!($this instanceof GO_Customfields_Model_AbstractCustomFieldsRecord) && $model->id==$this->id && $this->className()==$model->className())
+		if(!($this instanceof \GO_Customfields_Model_AbstractCustomFieldsRecord) && $model->id==$this->id && $this->className()==$model->className())
 			return false;
 				
 		//copy attributes if models are of the same type.

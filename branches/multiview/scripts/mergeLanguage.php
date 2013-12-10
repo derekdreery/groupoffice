@@ -7,7 +7,7 @@ $folder = new GO_Base_Fs_Folder(GO::config()->root_path . 'language');
 $children = $folder->ls();
 
 foreach ($children as $child) {
-	if ($child instanceof GO_Base_Fs_Folder) {
+	if ($child instanceof \GO_Base_Fs_Folder) {
 
 		$section = $child->name();
 
@@ -29,7 +29,7 @@ $folder = new GO_Base_Fs_Folder(GO::config()->root_path . 'modules');
 $children = $folder->ls();
 
 foreach ($children as $moduleFolder) {
-	if ($moduleFolder instanceof GO_Base_Fs_Folder) {
+	if ($moduleFolder instanceof \GO_Base_Fs_Folder) {
 		
 		$section = $moduleFolder->name();
 		

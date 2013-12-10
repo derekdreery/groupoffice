@@ -319,7 +319,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		//caching is required. We don't use the session because we need to close 
 		//session writing when checking email accounts. Otherwise it can block the 
 		//session to long.
-		if(\GO::cache() instanceof GO_Base_Cache_None)
+		if(\GO::cache() instanceof \GO_Base_Cache_None)
 			return false;
 		
 		$cached = \GO::cache()->get($this->_getCacheKey());
