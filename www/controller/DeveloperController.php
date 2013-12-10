@@ -41,16 +41,16 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 			$content = $oldContent = file_get_contents($path);
 			
 			$count = 0;
-			$content = preg_replace("/class\s+".preg_quote($className,'/')."/", "namespace ".preg_quote($namespace,'/').";\n\nclass $newClassDefinition", $content, -1, $count);
+			$content = preg_replace("/class\s+".preg_quote($className,'/')."([^A-Za-z0-9]*)/", "namespace ".preg_quote($namespace,'/').";\n\nclass $newClassDefinition$1", $content, -1, $count);
 			
-			$content = preg_replace('/class(\s+\w+\s)extends\s([A-Z_]+)/i',"class$1extends \\\\$2", $content);
+			$content = preg_replace('/class(\s+\w+\s)extends\s([A-Za-z_]+)/',"class$1extends \\\\$2", $content);
 
-			$content = preg_replace('/\\\\'.preg_quote($className, '/').'([^A-Z]+)/i', $newClass.'$1', $content);
+			$content = preg_replace('/\\\\'.preg_quote($className, '/').'([^A-Za-z0-9]*)/', $newClass.'$1', $content);
 			
 			
 			if($count>0){				
 				echo "In class declaration\n";				
-				$content = preg_replace('/\\\\'.preg_quote($newClass, '/').'([^A-Z]+)/i', $newClassDefinition.'$1', $content);
+				$content = preg_replace('/\\\\'.preg_quote($newClass, '/').'([^A-Za-z0-9]*)/', $newClassDefinition.'$1', $content);
 			}
 			
 //			echo $content;
