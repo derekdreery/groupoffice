@@ -17,10 +17,31 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 	
 	public function actionNamespace(){
 		
+		$root = dirname(__FILE__).'/../';
+		chdir($root);
+		
+		$cmd = 'find go/base -name "*.php"';
+		exec($cmd, $output);
+		
+		foreach($output as $classFile){
+			
+			$parts = explode('/', substr($classFile, 0,-4));
+			
+			for($i=0;$i<count($parts);$i++){
+				$parts[$i]=$i==0 ? 'GO' : ucfirst($parts[$i]);
+			}
+			
+			$this->_replaceNamespace(implode('_', $parts));
+		}
+	}
+	
+	private function _replaceNamespace($className){
+	
+		echo "Replacing $className\n";
+//		return;
+		
 		$test = false;
-		
-		$className = 'GO_Base_Model_Acl';
-		
+			
 		$newClass = str_replace('_','\\', $className);
 		
 		$parts = explode('\\',$newClass);
