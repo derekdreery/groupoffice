@@ -97,17 +97,13 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$types=array();
 		$stmt = \GO_Base_Model_ModelType::model()->find();
 		while($modelType = $stmt->fetch()){
-			
-			//namespaces backwards compat
-			if(!class_exists($modelType->model_name)){
-				$modelType->model_name='\\'.str_replace('_','\\', $modelType->model_name);
-			}
-			
-			if(class_exists($modelType->model_name)){
-				$model = \GO::getModel($modelType->model_name);
+
+			if($model = \GO::getModel($modelType->model_name)){
+
 				$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
-				if(\GO::modules()->{$module})
-					$types[]=$modelType->id;
+				if (\GO::modules()->{$module}) {
+					$types[] = $modelType->id;
+				}
 			}
 		}
 		return $types;
@@ -129,15 +125,9 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$typesArr = explode(',',$typesString);
 		
 		$types=array();
-		while($modelType = $stmt->fetch()){
-			//namespaces backwards compat
-			if(!class_exists($modelType->model_name)){
-				$modelType->model_name='\\'.str_replace('_','\\', $modelType->model_name);
-			}
+		while($modelType = $stmt->fetch()){			
+			if($model = \GO::getModel($modelType->model_name)){
 			
-			if(class_exists($modelType->model_name)){
-				$model = \GO::getModel($modelType->model_name);
-
 				$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
 
 				if(\GO::modules()->{$module})
