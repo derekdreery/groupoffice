@@ -212,20 +212,21 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 		if (!empty($title))
 			$response['title'] = $title;
 
-		if ($store instanceof GO_Base_Data_DbStore) {
+		if ($store instanceof \GO_Base_Data_DbStore) {
 			if ($store->getDeleteSuccess() !== null) {
 				$response['deleteSuccess'] = $store->getDeleteSuccess();
 				if(!$response['deleteSuccess'])
 					$response['deleteFeedback'] = $store->getFeedBack();
 			}
 			
-		}
 		
-		if($buttonParams){
+		
+			if($buttonParams){
 				$buttonParams = $store->getButtonParams();
 				if (!empty($buttonParams))
 					$response['buttonParams'] = $buttonParams;
 			}
+		}
 
 		return new \GO_Base_Data_JsonResponse($response);
 	}

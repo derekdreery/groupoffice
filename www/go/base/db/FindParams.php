@@ -72,7 +72,7 @@ class GO_Base_Db_FindParams{
 			$findParams=array();
 		elseif(!is_array($findParams)){
 			
-			if($findParams instanceof GO_Base_Db_FindParams)
+			if($findParams instanceof \GO_Base_Db_FindParams)
 				$findParams = $findParams->getParams();
 			else
 				throw new \Exception('$findParams must be an instance of GO_Base_Db_FindParams');

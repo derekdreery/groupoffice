@@ -844,7 +844,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$record['path'] = $model->path;
 
-		if ($model instanceof GO_Files_Model_Folder) {
+		if ($model instanceof \GO_Files_Model_Folder) {
 			$record['type_id'] = 'd:' . $model->id;
 			$record['type'] = \GO::t('folder', 'files');
 			$record['size'] = '-';

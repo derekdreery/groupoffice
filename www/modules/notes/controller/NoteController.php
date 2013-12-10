@@ -112,7 +112,7 @@ class Note extends Controller\AbstractJsonController {
 	 */
 	protected function actionStore($params) {
 		//Create ColumnModel from model
-		$columnModel = new \GO_Base_Data_ColumnModel(\GO_Notes_Model_Note::model());
+		$columnModel = new \GO_Base_Data_ColumnModel("GO_Notes_Model_Note");
 		$columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
 
 		//Create store

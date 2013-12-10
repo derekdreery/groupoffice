@@ -896,7 +896,7 @@ class GO_Email_Controller_Message extends \GO\Base\Controller\AbstractController
 
 		if ($html) {
 			//saved messages always create temp files
-			if($message instanceof GO_Email_Model_ImapMessage)
+			if($message instanceof \GO_Email_Model_ImapMessage)
 				$message->createTempFilesForAttachments(true);
 
 			$oldMessage = $message->toOutputArray(true,false,true);
@@ -952,7 +952,7 @@ class GO_Email_Controller_Message extends \GO\Base\Controller\AbstractController
 		}
 
 		//for saving sent items in actionSend
-		if($message instanceof GO_Email_Model_ImapMessage){
+		if($message instanceof \GO_Email_Model_ImapMessage){
 			$response['sendParams']['reply_uid'] = $message->uid;
 			$response['sendParams']['reply_mailbox'] = $params['mailbox'];
 			$response['sendParams']['reply_account_id'] = $params['account_id'];
@@ -1057,7 +1057,7 @@ class GO_Email_Controller_Message extends \GO\Base\Controller\AbstractController
 
 		$headerLines = $this->_getForwardHeaders($message);
 		
-		if($message instanceof GO_Email_Model_ImapMessage){
+		if($message instanceof \GO_Email_Model_ImapMessage){
 			//saved messages always create temp files
 			$message->createTempFilesForAttachments();
 		}
@@ -1092,7 +1092,7 @@ class GO_Email_Controller_Message extends \GO\Base\Controller\AbstractController
 			$response['data']['plainbody'] .= $header . $oldMessage['plainbody'];
 		}
 
-		if($message instanceof GO_Email_Model_ImapMessage){
+		if($message instanceof \GO_Email_Model_ImapMessage){
 			//for saving sent items in actionSend
 			$response['sendParams']['forward_uid'] = $message->uid;
 			$response['sendParams']['forward_mailbox'] = $params['mailbox'];
