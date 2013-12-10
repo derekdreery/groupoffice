@@ -29,8 +29,8 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 		
 		$cmd = 'find controller go/base modules \( ! -name updates.php \)  -name "*.php"';
 		exec($cmd, $output);
-//		
 		$output[]="go/GO.php";
+		
 //		$output = array('go/base/model/Acl.php');
 		
 		foreach($output as $file){
@@ -41,18 +41,16 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 			$content = $oldContent = file_get_contents($path);
 			
 			$count = 0;
-			$content = preg_replace("/class\s+".$className."/", "namespace ".$namespace.";\n\nclass $newClassDefinition", $content, -1, $count);
+			$content = preg_replace("/class\s+".preg_quote($className,'/')."/", "namespace ".preg_quote($namespace,'/').";\n\nclass $newClassDefinition", $content, -1, $count);
 			
 			$content = preg_replace('/class(\s+\w+\s)extends\s([A-Z_]+)/i',"class$1extends \\\\$2", $content);
+
+			$content = preg_replace('/\\\\'.preg_quote($className, '/').'([^A-Z]+)/i', $newClass.'$1', $content);
 			
-			$content = str_replace('\\'.$className, '\\'.$newClass, $content);
 			
-			
-			if($count>0){
-				
-				echo "In class declaration\n";
-				
-				$content = preg_replace('/\\'.$newClass.'(\b)/', $newClassDefinition.'$1', $content);
+			if($count>0){				
+				echo "In class declaration\n";				
+				$content = preg_replace('/\\\\'.preg_quote($newClass, '/').'([^A-Z]+)/i', $newClassDefinition.'$1', $content);
 			}
 			
 //			echo $content;
