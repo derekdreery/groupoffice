@@ -43,6 +43,10 @@ class GO_Base_Model_ModelType extends GO_Base_Db_ActiveRecord {
 		if(empty($modelName))
 			throw new \Exception("Model name may not be empty");
 		
+		//backwards compatibility for namespaces;
+		$modelName=  str_replace('\\', '_', $modelName);
+						
+		
 		$model = $this->findSingleByAttribute('model_name', $modelName);
 		if($model)
 			return $model->id;

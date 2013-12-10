@@ -31,6 +31,6 @@ class GO_Notes_Customfields_Model_Note extends GO_Customfields_Model_AbstractCus
 	}
 
 	public function extendsModel(){
-		return "GO_Notes_Model_Note";
+		return "\GO\Notes\Model\Note";
 	}
 }

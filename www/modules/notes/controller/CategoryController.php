@@ -11,6 +11,7 @@
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Michael de Hart <mdhart@intermesh.nl>
+ * @author Merijn Schering <mschering@intermesh.nl>
  */
 
 /**
@@ -21,15 +22,16 @@
 namespace GO\Notes\Controller;
 
 use GO\Base\Controller;
+use GO\Notes\Model\Category;
 
-class Category extends Controller\AbstractJsonController {
+class CategoryController extends Controller\AbstractJsonController {
 
 	protected function actionStore($params) {
 
-		$columnModel = new \GO_Base_Data_ColumnModel("GO_Notes_Model_Note");
+		$columnModel = new \GO_Base_Data_ColumnModel("\GO\Notes\Model\Note");
 		$columnModel->formatColumn('user_name', '$model->user ? $model->user->name : 0');
 		
-		$store = new \GO_Base_Data_DbStore('GO_Notes_Model_Category', $columnModel, $params);
+		$store = new \GO_Base_Data_DbStore('\GO\Notes\Model\Category', $columnModel, $params);
 		$store->defaultSort = 'name';
 		$store->multiSelectable('no-multiselect');
 
@@ -38,7 +40,7 @@ class Category extends Controller\AbstractJsonController {
 
 	protected function actionLoad($params) {
 		//Load or create model
-		$model = \GO_Notes_Model_Category::model()->createOrFindByParams($params);
+		$model = Category::model()->createOrFindByParams($params);
 
 		// return render response
 		$remoteComboFields = array('user_id' => '$model->user->name');
@@ -46,7 +48,7 @@ class Category extends Controller\AbstractJsonController {
 	}
 
 	protected function actionSubmit($params) {
-		$model = \GO_Notes_Model_Category::model()->createOrFindByParams($params);
+		$model = Category::model()->createOrFindByParams($params);
 
 		$model->setAttributes($params);
 		$model->save();

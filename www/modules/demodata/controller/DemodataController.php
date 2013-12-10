@@ -713,20 +713,20 @@ class GO_Demodata_Controller_Demodata extends \GO\Base\Controller\AbstractContro
 		
 		if(\GO::modules()->notes){
 			
-			$category = \GO_Notes_Model_Category::model()->findSingleByAttribute('name', \GO::t('general','notes'));
+			$category = \GO\Notes\Model\Category::model()->findSingleByAttribute('name', \GO::t('general','notes'));
 			
 			if(!$category){
-				$category = new \GO_Notes_Model_Category();
+				$category = new \GO\Notes\Model\Category();
 				$category->name=\GO::t('general','notes');
 				$category->save();
 				$category->acl->addGroup(\GO::config()->group_everyone, \GO_Base_Model_Acl::READ_PERMISSION);
 			}
 			
 			
-			$note = new \GO_Notes_Model_Note();
+			$note = new \GO\Notes\Model\Note();
 			$note->user_id=$elmer->id;			
 			
-			//$category = \GO_Notes_Model_Category::model()->getDefault($elmer);
+			//$category = \GO\Notes\Model\Category::model()->getDefault($elmer);
 			
 			$note->category_id=$category->id;
 			
@@ -751,7 +751,7 @@ The Coyote is not allowed to catch or eat the Road Runner, unless he escapes fro
 			$note->link($john);
 			
 			
-			$note = new \GO_Notes_Model_Note();
+			$note = new \GO\Notes\Model\Note();
 			$note->user_id=$demo->id;			
 			
 			$note->category_id=$category->id;

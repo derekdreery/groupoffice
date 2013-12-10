@@ -13,6 +13,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+namespace GO\Notes\Model;
+
 /**
  * The Note model
  * 
@@ -29,7 +31,7 @@
  * @property boolean $encrypted
  * @property string $password
  */
-class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
+class Note extends \GO_Base_Db_ActiveRecord {
 	
 	private $_decrypted=false;
 	
@@ -37,7 +39,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Notes_Model_Note 
+	 * @return \GO\Notes\Model\Note 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -76,7 +78,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 
 	public function relations(){
 		return array(	
-				'category' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Notes_Model_Category', 'field'=>'category_id'),		);
+				'category' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Notes\Model\Category', 'field'=>'category_id'),		);
 	}
 
 

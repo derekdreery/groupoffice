@@ -62,9 +62,15 @@ abstract class GO_Base_Model extends GO_Base_Object{
 	 * @return string 
 	 */
 	public function getModule(){
-		$arr = explode('_', $this->className());
 		
-		return strtolower($arr[1]);
+		$className = $this->className();
+			
+		//backwards compatinle namespace support
+		$className = str_replace('\\','_', $className);
+
+		$classParts = explode('_',$className);
+
+		return strtolower($classParts[1]);
 	}
 	
 	/**

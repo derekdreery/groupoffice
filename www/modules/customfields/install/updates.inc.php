@@ -78,7 +78,7 @@ $updates["201109011450"][]="update cf_categories set extends_model='GO_Base_Mode
 $updates["201109011450"][]="update cf_categories set extends_model='GO_Billing_Model_Order' where extends_model=7;";
 $updates["201109011450"][]="update cf_categories set extends_model='GO_Files_Model_File' where extends_model=6;";
 $updates["201109011450"][]="update cf_categories set extends_model='GO_Projects_Model_Project' where extends_model=5;";
-$updates["201109011450"][]="update cf_categories set extends_model='GO_Notes_Model_Note' where extends_model=4;";
+$updates["201109011450"][]="update cf_categories set extends_model='\GO\Notes\Model\Note' where extends_model=4;";
 $updates["201109011450"][]="update cf_categories set extends_model='GO_Addressbook_Model_Contact' where extends_model=2;";
 $updates["201109011450"][]="update cf_categories set extends_model='GO_Addressbook_Model_Company' where extends_model=3;";
 $updates["201109011450"][]="update cf_categories set extends_model='GO_Calendar_Model_Event' where extends_model=1;";

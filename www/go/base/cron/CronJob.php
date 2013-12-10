@@ -42,7 +42,7 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Notes_Model_Note 
+	 * @return \GO\Notes\Model\Note 
 	 */
 	public static function model($className=__CLASS__)
 	{	

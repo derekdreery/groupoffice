@@ -16,7 +16,7 @@ $updates["201108301656"][]="INSERT INTO `go_model_types` (
 `model_name`
 )
 VALUES (
-'4', 'GO_Notes_Model_Note'
+'4', '\GO\Notes\Model\Note'
 );";
 
 

@@ -1056,7 +1056,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 			echo "\n\nProcessing notes\n";
 			flush();
 			
-			$stmt = \GO_Notes_Model_Category::model()->find();
+			$stmt = \GO\Notes\Model\Category::model()->find();
 			while($cat = $stmt->fetch()){
 				$eventStmt = $cat->notes();
 				

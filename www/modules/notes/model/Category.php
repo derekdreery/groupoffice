@@ -12,7 +12,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-
+namespace GO\Notes\Model;
 /**
  * 
  * The Category model
@@ -22,13 +22,13 @@
  * @property int $acl_id
  * @property int $user_id
  */
-class GO_Notes_Model_Category extends GO_Base_Model_AbstractUserDefaultModel {
+class Category extends \GO_Base_Model_AbstractUserDefaultModel {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Notes_Model_Category 
+	 * @return \GO\Notes\Model\Category 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -49,7 +49,7 @@ class GO_Notes_Model_Category extends GO_Base_Model_AbstractUserDefaultModel {
 
 	public function relations() {
 		return array(
-				'notes' => array('type' => self::HAS_MANY, 'model' => 'GO_Notes_Model_Note', 'field' => 'category_id', 'delete' => true)		);
+				'notes' => array('type' => self::HAS_MANY, 'model' => '\GO\Notes\Model\Note', 'field' => 'category_id', 'delete' => true)		);
 	}
 	
 	protected function init() {
