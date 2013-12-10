@@ -41,7 +41,7 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 			$content = $oldContent = file_get_contents($path);
 			
 			$count = 0;
-			$content = preg_replace("/class\s+".$className."/", "use ".$namespace.";\n\nclass $newClassDefinition", $content, -1, $count);
+			$content = preg_replace("/class\s+".$className."/", "namespace ".$namespace.";\n\nclass $newClassDefinition", $content, -1, $count);
 			
 			$content = preg_replace('/class(\s+\w+\s)extends\s([A-Z_]+)/i',"class$1extends \\\\$2", $content);
 			
@@ -52,7 +52,7 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 				
 				echo "In class declaration\n";
 				
-				$content = str_replace('\\'.$newClass, $newClassDefinition, $content);
+				$content = preg_replace('/\\'.$newClass.'(\b)/', $newClassDefinition.'$1', $content);
 			}
 			
 //			echo $content;
