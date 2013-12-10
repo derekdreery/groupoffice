@@ -3,7 +3,7 @@
 class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractController {
 
 	protected function allowGuests() {
-		return array('testvobject');
+		return array('testvobject', 'namespace');
 	}
 	
 	protected function init() {
@@ -12,6 +12,59 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 			throw new Exception("Developer controller can only be accessed in debug mode");
 		
 		return parent::init();
+	}
+	
+	
+	public function actionNamespace(){
+		$className = 'GO_Base_Model_Acl';
+		
+		$newClass = str_replace('_','\\', $className);
+		
+		$parts = explode('\\',$newClass);
+		$newClassDefinition = array_pop($parts);
+		$namespace = implode('\\',$parts);
+		
+		$root = dirname(__FILE__).'/../';
+		chdir($root);
+		
+		$cmd = 'find controller go/base modules \( ! -name updates.php \)  -name "*.php"';
+		exec($cmd, $output);
+//		
+		$output[]="go/GO.php";
+//		$output = array('go/base/model/Acl.php');
+		
+		foreach($output as $file){
+			
+			echo "Replacing in ".$file."\n";
+			
+			$path = GO::config()->root_path.$file;
+			$content = $oldContent = file_get_contents($path);
+			
+			$count = 0;
+			$content = preg_replace("/class\s+".$className."/", "use ".$namespace.";\n\nclass $newClassDefinition", $content, -1, $count);
+			
+			$content = preg_replace('/class(\s+\w+\s)extends\s([A-Z_]+)/i',"class$1extends \\\\$2", $content);
+			
+			$content = str_replace('\\'.$className, '\\'.$newClass, $content);
+			
+			
+			if($count>0){
+				
+				echo "In class declaration\n";
+				
+				$content = str_replace('\\'.$newClass, $newClassDefinition, $content);
+			}
+			
+//			echo $content;
+			
+			if ($content != $oldContent) {
+				$content = file_put_contents($path, $content);
+			}
+		}
+		
+		echo "All done!\n";
+		
+
 	}
 
 	public function actionCreateManyUsers($params) {
