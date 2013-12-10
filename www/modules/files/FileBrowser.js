@@ -384,33 +384,33 @@ GO.files.FileBrowser = function(config){
 				fieldLabel:GO.lang.strLocation,
 				items: [
 					this.locationTextField = new Ext.form.TextField({
-									name:'files-location',
-									flex : 1
+						name:'files-location',
+						flex : 1
 					}),
-                                        this.quotaBar = new Ext.ProgressBar({
-                                            width: 200,
-                                            value: quotaPercentage,
-                                            text: Math.round(quotaPercentage*100)+'% ('+ GO.settings.disk_usage+' of '+GO.settings.disk_quota+'MB)'
-                                        }),
+					this.quotaBar = new Ext.ProgressBar({
+						width: 200,
+						value: quotaPercentage,
+						text: Math.round(quotaPercentage*100)+'% ('+ GO.settings.disk_usage+' of '+GO.settings.disk_quota+'MB)'
+					}),
 					this.searchField = new GO.form.SearchField({
-							store: this.gridStore,
-							width: 230,
-							listeners: {
-								scope : this,
-								search : function() {
-									this.fireEvent('search');
-								},
-								reset : function() {
-									this.fireEvent('refresh');
-								}
+						store: this.gridStore,
+						width: 230,
+						listeners: {
+							scope : this,
+							search : function() {
+								this.fireEvent('search');
+							},
+							reset : function() {
+								this.fireEvent('refresh');
 							}
-						})
+						}
+					})
 				]
 			}]
 	});
         
-        if(!GO.settings.disk_quota)
-            this.quotaBar.hidden = true;
+        //if(!GO.settings.disk_quota)
+          //  this.quotaBar.hidden = true;
 
 	this.upButton = new Ext.Button({
 		iconCls: 'btn-up',
@@ -900,6 +900,26 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}else
 		{
 			state = Ext.state.Manager.get(this.gridPanel.id);
+		}
+		
+		if (store.reader.jsonData.disk_usage && store.reader.jsonData.disk_quota) {
+			GO.settings.disk_usage = store.reader.jsonData.disk_usage;
+			GO.settings.disk_quota = store.reader.jsonData.disk_quota;
+			
+			//Tell plupload the maximun filesize is the disk quota
+			var remainingDiskSpace = Math.floor(GO.settings.disk_quota-GO.settings.disk_usage);
+			this.uploadItem.lowerMaxFileSize(remainingDiskSpace);
+			
+			var quotaPercentage = (GO.settings.disk_quota) ? GO.settings.disk_usage/GO.settings.disk_quota : 0;
+			var text = Math.round(quotaPercentage*100)+'% ('+ GO.settings.disk_usage+' of '+GO.settings.disk_quota+'MB)';
+			this.quotaBar.updateProgress(quotaPercentage, text);
+			this.quotaBar.removeClass('warning');
+			this.quotaBar.removeClass('error');
+			if(quotaPercentage*100 > 99)
+				this.quotaBar.addClass('error');
+			else if(quotaPercentage*100 > 75)
+				this.quotaBar.addClass('warning');
+
 		}
 
 		//state.sort=store.sortInfo;

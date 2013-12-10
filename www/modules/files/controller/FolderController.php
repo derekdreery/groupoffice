@@ -673,6 +673,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$response['thumbs']=0;
 
 		$response['parent_id'] = $folder->parent_id;
+		$response['disk_usage']=round(GO::user()->disk_usage/1024/1024,2);
+		$response['disk_quota']=GO::user()->disk_quota;
 
 		//locked state
 		$response['lock_state']=!empty($folder->apply_state);
