@@ -22,7 +22,7 @@ class GO_Presidents_Controller_President extends GO_Base_Controller_AbstractMode
 	/**
 	 * Tell the controller to change some column values
 	 */
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('party_id','$model->party->name');
 		$columnModel->formatColumn('income_val','$model->income');
 		return parent::formatColumns($columnModel);

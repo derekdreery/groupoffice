@@ -140,7 +140,7 @@ class GO_Files_Controller_Jupload extends \GO\Base\Controller\AbstractController
 		echo "SUCCESS\n";
 	}
 	
-	private function _findHighestParent(GO_Base_Fs_Folder $dir){
+	private function _findHighestParent(\GO_Base_Fs_Folder $dir){
 		$parent = $dir;
 
 		while($parent->parent()->name()!="juploadqueue"){

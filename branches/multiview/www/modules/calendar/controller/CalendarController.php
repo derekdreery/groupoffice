@@ -104,7 +104,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		return $store->getData();
 	}
 		
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		
 		$columnModel->formatColumn('user_name','$model->user->name');
 		

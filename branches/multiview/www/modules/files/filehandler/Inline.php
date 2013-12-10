@@ -11,7 +11,7 @@ class GO_Files_Filehandler_Inline implements GO_Files_Filehandler_Interface{
 		return \GO::t('openInBrowser','files');
 	}
 	
-	public function fileIsSupported(GO_Files_Model_File $file){
+	public function fileIsSupported(\GO_Files_Model_File $file){
 		return $file->isImage() || in_array(strtolower($file->extension),$this->defaultExtensions);
 	}
 	
@@ -19,7 +19,7 @@ class GO_Files_Filehandler_Inline implements GO_Files_Filehandler_Interface{
 		return 'fs-browser';
 	}
 	
-	public function getHandler(GO_Files_Model_File $file){
+	public function getHandler(\GO_Files_Model_File $file){
 		return 'window.open("'.$file->getDownloadUrl(false, true).'");';
 	}
 }

@@ -26,7 +26,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 		$company->setValidationRule('city', 'required', true);
 		$company->setValidationRule('country', 'required', true);
 		
-		if(GO_Base_Util_Http::isPostRequest())
+		if(\GO_Base_Util_Http::isPostRequest())
 		{
 			//if username is deleted from form then use the e-mail adres as username
 			if(!isset($_POST['User']['username']))
@@ -87,7 +87,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 	 */
 	public function actionRecoverPassword() {
 		
-		if (GO_Base_Util_Http::isPostRequest())
+		if (\GO_Base_Util_Http::isPostRequest())
 		{
 			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $_POST['email']);
 			
@@ -120,7 +120,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 
 		if(isset($_GET['usertoken']) && $_GET['usertoken'] == $user->getSecurityToken())
 		{
-			if (GO_Base_Util_Http::isPostRequest())
+			if (\GO_Base_Util_Http::isPostRequest())
 			{
 				$user->password = $_POST['User']['password'];
 				$user->passwordConfirm = $_POST['User']['passwordConfirm'];
@@ -145,7 +145,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 		
 		$model = new GO_Base_Model_User();
 		
-		if (GO_Base_Util_Http::isPostRequest() && isset($_POST['User'])) {
+		if (\GO_Base_Util_Http::isPostRequest() && isset($_POST['User'])) {
 
 			$model->username = $_POST['User']['username'];
 			
@@ -212,7 +212,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 			$company->addressbook_id=$contact->addressbook_id;
 		}
 		
-		if (GO_Base_Util_Http::isPostRequest()) {
+		if (\GO_Base_Util_Http::isPostRequest()) {
 			
 			if(!empty($_POST['currentPassword']) && !empty($_POST['User']['password']))
 			{

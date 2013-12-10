@@ -13,7 +13,7 @@ interface GO_Files_Filehandler_Interface{
 	 * @param GO_Files_Model_File $file
 	 * @return boolean
 	 */
-	public function isDefault(GO_Files_Model_File $file);
+	public function isDefault(\GO_Files_Model_File $file);
 	
 	/**
 	 * Check if the file is supported by this handler
@@ -21,7 +21,7 @@ interface GO_Files_Filehandler_Interface{
 	 * @param GO_Files_Model_File $file
 	 * @return boolean
 	 */
-	public function fileIsSupported(GO_Files_Model_File $file);
+	public function fileIsSupported(\GO_Files_Model_File $file);
 	
 	/**
 	 * Return javascript that will be eval'd by the view to open a file.
@@ -29,5 +29,5 @@ interface GO_Files_Filehandler_Interface{
 	 * @param GO_Files_Model_File $file
 	 * @return string
 	 */
-	public function getHandler(GO_Files_Model_File $file);
+	public function getHandler(\GO_Files_Model_File $file);
 }

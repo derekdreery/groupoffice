@@ -43,7 +43,7 @@ class GO_Servermanager_Cron_SubCron extends GO_Base_Cron_AbstractCron {
 	 * @param GO_Base_Cron_CronJob $cronJob
 	 * @param GO_Base_Model_User $user [OPTIONAL]
 	 */
-	public function run(GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
+	public function run(\GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
 		$stmt = GO_Servermanager_Model_Installation::model()->find();
 		while($installation = $stmt->fetch()){
 			

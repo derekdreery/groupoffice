@@ -73,7 +73,7 @@ class GO_Base_Component_MultiSelectGrid {
 	 * @param GO_Base_Db_FindParams $findParams
 	 * @param boolean $selectAll 
 	 */
-	public function setFindParamsForDefaultSelection(GO_Base_Db_FindParams $findParams, $selectAll=false){
+	public function setFindParamsForDefaultSelection(\GO_Base_Db_FindParams $findParams, $selectAll=false){
 
 		if(empty($this->selectedIds)){
 			$findParamsCopy = clone $findParams;
@@ -147,7 +147,7 @@ class GO_Base_Component_MultiSelectGrid {
 	 * @param boolean $useAnd use AND when adding where condition
 	 * @param boolean $useNot use NOT when adding where condition
 	 */
-	public function addSelectedToFindCriteria(GO_Base_Db_FindParams &$findParams, $columnName, $tableAlias = 't', $useAnd = true, $useNot = false) {
+	public function addSelectedToFindCriteria(\GO_Base_Db_FindParams &$findParams, $columnName, $tableAlias = 't', $useAnd = true, $useNot = false) {
 	
 		
 		$selectedCount = count($this->selectedIds);

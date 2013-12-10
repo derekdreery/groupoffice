@@ -28,7 +28,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	 */
 	private $_attributes;
 
-	public function __construct(GO_Email_Model_Account $account, $attributes) {
+	public function __construct(\GO_Email_Model_Account $account, $attributes) {
 		$this->_account = $account;
 		
 		\GO::debug("GO_Email_Model_ImapMailbox:".$attributes['name']);
@@ -148,7 +148,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		}
 	}
 
-	public function addChild(GO_Email_Model_ImapMailbox $mailbox) {
+	public function addChild(\GO_Email_Model_ImapMailbox $mailbox) {
 		if(!isset($this->_children)){
 			$this->_children = array();
 		}
@@ -243,7 +243,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		return $this->getAccount()->openImapConnection()->create_folder($newMailbox, $subscribe);
 	}
 	
-	public function move(GO_Email_Model_ImapMailbox $targetMailbox){
+	public function move(\GO_Email_Model_ImapMailbox $targetMailbox){
 		if($this->getAccount()->getPermissionLevel() <= \GO_Base_Model_Acl::READ_PERMISSION)
 		  throw new \GO_Base_Exception_AccessDenied();
 		$newMailbox = "";

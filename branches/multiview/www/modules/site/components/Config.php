@@ -3,7 +3,7 @@ class GO_Site_Components_Config{
 
 	private $_configOptions = array();
 	
-	public function __construct(GO_Site_Model_Site $siteModel) {
+	public function __construct(\GO_Site_Model_Site $siteModel) {
 
 		$file = new GO\Base\Fs\File($siteModel->getSiteModule()->moduleManager->path().'siteconfig.php');
 		if($file->exists()){

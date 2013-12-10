@@ -315,7 +315,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	 * @param GO_Base_Db_ActiveRecord $model
 	 * @return array The grid record data
 	 */
-	protected function prepareStore(GO_Base_Data_Store $store) {
+	protected function prepareStore(\GO_Base_Data_Store $store) {
 		
 		return $store;
 	}
@@ -327,7 +327,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
    * @param GO_Base_Data_ColumnModel $columnModel
    * @return GO_Base_Data_ColumnModel 
    */
-  protected function formatColumns(GO_Base_Data_ColumnModel $columnModel){
+  protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel){
     return $columnModel;
   }
 	

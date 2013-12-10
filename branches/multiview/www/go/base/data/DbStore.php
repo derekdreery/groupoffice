@@ -16,7 +16,7 @@
  * a query.
  * 
  * <pre>
- * $columnModel =  new \GO_Base_Data_ColumnModel(GO_Notes_Model_Note::model());
+ * $columnModel =  new \GO_Base_Data_ColumnModel(\GO_Notes_Model_Note::model());
  * $columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
  * 
  * $store=new \GO_Base_Data_Store('GO_Notes_Model_Note', $columnModel, $params);
@@ -419,7 +419,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 					$key = is_array($model->pk) ? implode('-', $model->pk) : $model->pk;
 					if(!$model->delete())
 						$errors[$key] = $model->getValidationErrors();
-				} catch (GO_Base_Exception_AccessDenied $e) {
+				} catch (\GO_Base_Exception_AccessDenied $e) {
 					$errors[$key] = array('access_denied'=>$e->getMessage());
 				}
 			}

@@ -150,7 +150,7 @@ class GO_Ldapauth_Authenticator {
 	 * @param type $password
 	 * @return \GO_Base_Model_User
 	 */
-	public function syncUserWithLdapRecord(GO_Base_Ldap_Record $record, $password = null) {
+	public function syncUserWithLdapRecord(\GO_Base_Ldap_Record $record, $password = null) {
 		
 		//disable password validation because we can't control the external passwords
 		\GO::config()->password_validate=false;
@@ -261,7 +261,7 @@ class GO_Ldapauth_Authenticator {
 		}
 	}
 
-	private function _checkEmailAccounts(GO_Base_Model_User $user, $password) {
+	private function _checkEmailAccounts(\GO_Base_Model_User $user, $password) {
 		if (\GO::modules()->isInstalled('email')) {
 
 			$arr = explode('@', $user->email);
@@ -291,7 +291,7 @@ class GO_Ldapauth_Authenticator {
 		}
 	}
 
-	public function getUserAttributes(GO_Base_Ldap_Record $record) {
+	public function getUserAttributes(\GO_Base_Ldap_Record $record) {
 
 		$userAttributes = array();
 
@@ -337,7 +337,7 @@ class GO_Ldapauth_Authenticator {
 	 * @param array $validAddresses
 	 * @return type 
 	 */
-	public function validateUserEmail(GO_Base_Ldap_Record $record, $email, &$validAddresses = array()) {
+	public function validateUserEmail(\GO_Base_Ldap_Record $record, $email, &$validAddresses = array()) {
 
 		$mapping = $this->_getMapping();
 

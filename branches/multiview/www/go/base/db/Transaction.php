@@ -46,7 +46,7 @@ class GO_Base_Db_Transaction
 	 * @param CDbConnection $connection the connection associated with this transaction
 	 * @see CDbConnection::beginTransaction
 	 */
-	public function __construct(GO_Base_Db_Connection $connection)
+	public function __construct(\GO_Base_Db_Connection $connection)
 	{
 		$this->_connection = $connection;
 		$this->_active = true;

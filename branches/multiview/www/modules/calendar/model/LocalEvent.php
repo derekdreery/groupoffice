@@ -79,7 +79,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	 * @param string $periodStartTime
 	 * @param string $periodEndTime 
 	 */
-	public function GO_Calendar_Model_LocalEvent(GO_Calendar_Model_Event $event, $periodStartTime, $periodEndTime){
+	public function GO_Calendar_Model_LocalEvent(\GO_Calendar_Model_Event $event, $periodStartTime, $periodEndTime){
 		$this->_event = $event;
 		$this->_startTime = $periodStartTime;
 		$this->_endTime = $periodEndTime;

@@ -183,7 +183,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Returns all available modules that can be activated
 	 * Find InstallationModules that are saved in the database and merge them with the rest
-	 * @return array(GO_ServerManager_Model_InstallationModule) 
+	 * @return array(\GO_ServerManager_Model_InstallationModule) 
 	 */
 	public function getModulesList()
 	{
@@ -515,7 +515,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 //		// set data from db
 //
 //		//load modules from installation database with ctime
-//		$modules = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
+//		$modules = GO_Base_Model_Module::model()->find(\GO_Base_Db_FindParams::newInstance()->ignoreAcl());
 //		foreach($modules as $module)
 //		{
 //			if(empty($this->first_installation_time))
@@ -552,7 +552,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	 * this will load the users used and the modules they have access to
 	 * this will load the installed module with there ctime
 	 * this will load last login, total users and total logins
-	 * @return $installationUsers Array(GO_ServerManager_Model_InstallationUser)
+	 * @return $installationUsers Array(\GO_ServerManager_Model_InstallationUser)
 	 * @throws Exception 
 	 */
 	
@@ -589,7 +589,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			
 			$allowedModules = empty($this->config['allowed_modules']) ? array() : explode(',', $this->config['allowed_modules']);
 			$this->_installationUsers=array();
-			$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
+			$stmt = GO_Base_Model_User::model()->find(\GO_Base_Db_FindParams::newInstance()->ignoreAcl());
 			
 			while($user = $stmt->fetch()){
 				$installationUser = new GO_ServerManager_Model_InstallationUser();
@@ -598,7 +598,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 				
 				$oldIgnore = GO::setIgnoreAclPermissions(false);
 				
-				$modStmt = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION, $user->id));
+				$modStmt = GO_Base_Model_Module::model()->find(\GO_Base_Db_FindParams::newInstance()->permissionLevel(\GO_Base_Model_Acl::READ_PERMISSION, $user->id));
 				while($module = $modStmt->fetch()){			
 					if(empty($allowedModules) || in_array($module->id, $allowedModules)){
 						$installationUser->addModule($module->id);
@@ -961,7 +961,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	}
 	
 	private $_autoInvoice;
-	public function setAutoInvoice(GO_ServerManager_Model_AutomaticInvoice $value)
+	public function setAutoInvoice(\GO_ServerManager_Model_AutomaticInvoice $value)
 	{
 		$this->_autoInvoice = $value;
 	}

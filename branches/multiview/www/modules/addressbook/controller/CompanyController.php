@@ -287,7 +287,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 			try {
 				$model->addressbook_id=$params['book_id'];
 				$model->save();
-			}catch(GO_Base_Exception_AccessDenied $e){
+			}catch(\GO_Base_Exception_AccessDenied $e){
 				$response['failedToMove'][]=$model->id;
 			}
 		}

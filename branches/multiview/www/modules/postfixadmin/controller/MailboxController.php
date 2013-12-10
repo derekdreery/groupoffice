@@ -11,7 +11,7 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 		
 	protected function getStoreParams($params) {
 		return GO_Base_Db_FindParams::newInstance()
-						->criteria(GO_Base_Db_FindCriteria::newInstance()
+						->criteria(\GO_Base_Db_FindCriteria::newInstance()
 				->addCondition('domain_id',$params['domain_id']));		
 	}
 	

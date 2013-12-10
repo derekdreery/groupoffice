@@ -3,7 +3,7 @@ class GO_Customfields_Controller_Block extends \GO\Base\Controller\AbstractJsonC
 
 	protected function actionManageStore($params) {
 		
-		$columnModel = new \GO_Base_Data_ColumnModel(GO_Customfields_Model_Block::model());
+		$columnModel = new \GO_Base_Data_ColumnModel(\GO_Customfields_Model_Block::model());
 		$columnModel->formatColumn('col_id', '"col_".$model->customField->id', array(), 'field_id');
 		$columnModel->formatColumn('customfield_name', '$model->customField->name', array(), 'field_id');
 		$columnModel->formatColumn('customfield_datatype', '$model->customField->datatype', array(), 'field_id');
@@ -78,7 +78,7 @@ class GO_Customfields_Controller_Block extends \GO\Base\Controller\AbstractJsonC
 
 	protected function actionEnableStore($params) {
 				
-		$columnModel = new \GO_Base_Data_ColumnModel(GO_Customfields_Model_Block::model());
+		$columnModel = new \GO_Base_Data_ColumnModel(\GO_Customfields_Model_Block::model());
 		$columnModel->formatColumn('col_id', '"col_".$model->customField->id', array(), 'field_id');
 		$columnModel->formatColumn('customfield_name', '$model->customField->name', array(), 'field_id');
 		$columnModel->formatColumn('customfield_datatype', '$model->customField->datatype', array(), 'field_id');

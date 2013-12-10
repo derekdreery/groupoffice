@@ -21,7 +21,7 @@ class GO_Calendar_Controller_View extends GO_Base_Controller_AbstractModelContro
 
 	protected $model = 'GO_Calendar_Model_View';
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name','$model->user->name',array(),'user_id');
 		return parent::formatColumns($columnModel);
 	}

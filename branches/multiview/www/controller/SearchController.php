@@ -108,7 +108,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 
 	}
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('iconCls', '"go-model-".$model->model_name');		
 		$columnModel->formatColumn('name_and_type', '"(".$model->type.") ".$model->name');
 		$columnModel->formatColumn('model_name_and_id', '$model->model_name.":".$model->model_id');

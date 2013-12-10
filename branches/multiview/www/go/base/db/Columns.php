@@ -31,7 +31,7 @@ class GO_Base_Db_Columns{
 	
 	private static $_columns=array();
 	
-	private static function getCacheKey(GO_Base_Db_ActiveRecord $model){
+	private static function getCacheKey(\GO_Base_Db_ActiveRecord $model){
 		$tableName = $model->tableName();
 		return 'modelColumns_'.$tableName;		
 	}
@@ -40,7 +40,7 @@ class GO_Base_Db_Columns{
 	 * 
 	 * @param GO_Base_Db_ActiveRecord $model
 	 */
-	public static function clearCache(GO_Base_Db_ActiveRecord $model){
+	public static function clearCache(\GO_Base_Db_ActiveRecord $model){
 		\GO::cache()->delete(self::getCacheKey($model));
 	}
 	
@@ -50,7 +50,7 @@ class GO_Base_Db_Columns{
 	 * @param GO_Base_Db_ActiveRecord $model
 	 * @return array
 	 */
-	public static function getColumns(GO_Base_Db_ActiveRecord $model) {
+	public static function getColumns(\GO_Base_Db_ActiveRecord $model) {
 		$tableName = $model->tableName();
 		$cacheKey = self::getCacheKey($model);
 		

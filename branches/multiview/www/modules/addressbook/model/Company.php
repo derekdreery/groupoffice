@@ -195,7 +195,7 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		return parent::afterSave($wasNew);
 	}
 	
-	protected function afterMergeWith(GO_Base_Db_ActiveRecord $model) {
+	protected function afterMergeWith(\GO_Base_Db_ActiveRecord $model) {
 		
 		//move company employees to this model too.
 		if($model->className()==$this->className()){

@@ -26,7 +26,7 @@ class Category extends Controller\AbstractJsonController {
 
 	protected function actionStore($params) {
 
-		$columnModel = new \GO_Base_Data_ColumnModel(GO_Notes_Model_Note::model());
+		$columnModel = new \GO_Base_Data_ColumnModel("GO_Notes_Model_Note");
 		$columnModel->formatColumn('user_name', '$model->user ? $model->user->name : 0');
 		
 		$store = new \GO_Base_Data_DbStore('GO_Notes_Model_Category', $columnModel, $params);

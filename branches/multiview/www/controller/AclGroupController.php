@@ -50,7 +50,7 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 		return array($this->getRemoteKey()=>$params['model_id'], 'user_id'=>0);
 	}
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $cm) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $cm) {
 		$cm->formatColumn('manage_permission', 'isset($model->level) ? $model->level : ""');
 		return parent::formatColumns($cm);
 	}

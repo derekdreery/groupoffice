@@ -34,7 +34,7 @@ class GO_files_Controller_Version extends GO_Base_Controller_AbstractModelContro
 		
 		return $findParams;
 	}
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		
 		$columnModel->formatColumn('user_name', '$model->user->name');
 		

@@ -95,7 +95,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 			$model->reminder= GO_Base_Util_Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
 		
 		if($model->isNew && !isset($params['remind']) && !isset($params['priority'])) //This checks if it is called from the quickadd bar
-		  $model->reminder = $model->getDefaultReminder(GO_Base_Util_Date::to_unixtime ($params['start_time']));
+		  $model->reminder = $model->getDefaultReminder(\GO_Base_Util_Date::to_unixtime ($params['start_time']));
 	  
 		return parent::beforeSubmit($response, $model, $params);
 	}
@@ -170,7 +170,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		return parent::beforeStore($response, $params, $store);
 	}
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		
 		$columnModel->formatColumn('completion_time','$model->getAttribute("completion_time","formatted")',array(),array('incomplete','completion_time'));
 		$columnModel->formatColumn('completed','$model->status=="COMPLETED" ? 1 : 0');
@@ -217,8 +217,8 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		$storeParams = GO_Base_Db_FindParams::newInstance()
 			->export("tasks")
 			->joinCustomFields()
-			->criteria(GO_Base_Db_FindCriteria::newInstance()
-				->addModel(GO_Tasks_Model_Task::model(),'t')
+			->criteria(\GO_Base_Db_FindCriteria::newInstance()
+				->addModel(\GO_Tasks_Model_Task::model(),'t')
 					)										
 			//->select('t.*, tl.name AS tasklist_name')
 			->select($fields.', tl.name AS tasklist_name, cat.name AS category_name, completion_time=0 AS incomplete')
@@ -333,7 +333,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 //		// Check for a given filter on the categories
 //		if(isset($params['categoryFilter'])) {
 //			$categoryCriteria = GO_Base_Db_FindCriteria::newInstance()
-//				->addModel(GO_Tasks_Model_Task::model(),'t');
+//				->addModel(\GO_Tasks_Model_Task::model(),'t');
 //			
 //			$categories = json_decode($params['categoryFilter'], true);
 //			

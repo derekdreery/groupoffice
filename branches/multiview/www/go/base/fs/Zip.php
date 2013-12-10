@@ -87,7 +87,7 @@ class GO_Base_Fs_Zip {
 		}
 	}
 
-	private static function _zipDir(GO_Base_Fs_Folder $dir, ZipArchive $zip, $relative_path) {
+	private static function _zipDir(\GO_Base_Fs_Folder $dir, ZipArchive $zip, $relative_path) {
 		
 		$items = $dir->ls();
 		if(count($items)){

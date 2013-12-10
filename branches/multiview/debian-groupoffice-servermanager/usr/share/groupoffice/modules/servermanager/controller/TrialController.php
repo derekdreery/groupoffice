@@ -23,7 +23,7 @@ class GO_Servermanager_Controller_Trial extends GO_Site_Components_Controller {
 		
 		$newTrial =  new GO_ServerManager_Model_NewTrial();
 		
-		if (GO_Base_Util_Http::isPostRequest()) {
+		if (\GO_Base_Util_Http::isPostRequest()) {
 		
 			$newTrial->setAttributes($_POST['NewTrial']);
 			if($newTrial->validate())
@@ -55,10 +55,10 @@ class GO_Servermanager_Controller_Trial extends GO_Site_Components_Controller {
 		if(!$this->newTrial)
 			throw new Exception("Sorry, Could not find your trial subscription!");
 		
-		if (GO_Base_Util_Http::isPostRequest()) {
+		if (\GO_Base_Util_Http::isPostRequest()) {
 			
 			//clean up old trial requests that were never
-			$stmt = GO_ServerManager_Model_NewTrial::model()->find(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('ctime', GO_Base_Util_Date::date_add(time(),-1), '<')));
+			$stmt = GO_ServerManager_Model_NewTrial::model()->find(\GO_Base_Db_FindParams::newInstance()->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('ctime', GO_Base_Util_Date::date_add(time(),-1), '<')));
 			$stmt->callOnEach("delete");
 			
 			
@@ -66,7 +66,7 @@ class GO_Servermanager_Controller_Trial extends GO_Site_Components_Controller {
 			$installation->status=GO_ServerManager_Model_Installation::STATUS_TRIAL;
 			$installation->name = $this->newTrial->name.'.'.GO::config()->servermanager_wildcard_domain;
 			
-			if(GO_Base_Html_Error::validateModel($installation)){
+			if(\GO_Base_Html_Error::validateModel($installation)){
 
 				$installation->save();
 

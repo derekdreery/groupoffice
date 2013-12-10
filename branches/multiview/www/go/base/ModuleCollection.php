@@ -160,7 +160,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		try{
 			$module = $this->$name;
 			return isset($module);
-		}catch(GO_Base_Exception_AccessDenied $e){
+		}catch(\GO_Base_Exception_AccessDenied $e){
 			return false;
 		}
 	}

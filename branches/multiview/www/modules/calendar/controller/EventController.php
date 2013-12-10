@@ -838,7 +838,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				}
 
 				$response = $this->_getEventResponseForPeriod($response,$calendar,$startTime,$endTime);
-			}	catch(GO_Base_Exception_AccessDenied $e){
+			}	catch(\GO_Base_Exception_AccessDenied $e){
 				//skip calendars without permission
 			}
 		}

@@ -12,7 +12,7 @@ class GO_Ldapauth_Mapping_Function {
 		$this->_function = $function;
 	}
 
-	function getValue(GO_Base_Ldap_Record $record) {
+	function getValue(\GO_Base_Ldap_Record $record) {
 		return call_user_func($this->_function, $record);		
 	}
 

@@ -70,7 +70,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		return parent::afterLoad($response, $model, $params);
 	}
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name', '$model->user->name');
 		return parent::formatColumns($columnModel);
 	}

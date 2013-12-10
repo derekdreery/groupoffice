@@ -44,7 +44,7 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	 * @param GO_Base_Cron_CronJob $cronJob
 	 * @param GO_Base_Model_User $user [OPTIONAL]
 	 */
-	public function run(GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
+	public function run(\GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
 		
 		\GO::session()->runAsRoot();
 		$pdf = $this->_getUserPdf($user);
@@ -60,7 +60,7 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	 * @param GO_Base_Model_User $user
 	 * @return String
 	 */
-	private function _getUserPdf(GO_Base_Model_User $user){		
+	private function _getUserPdf(\GO_Base_Model_User $user){		
 		$pdf = new eventAndTaskPdf();
 		$pdf->setTitle($user->name); // Set the title in the header of the PDF
 		$pdf->setSubTitle(\GO::t('cronEventAndTaskReportMailerPdfSubtitle','calendar')); // Set the subtitle in the header of the PDF
@@ -76,7 +76,7 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	 * @param eventAndTaskPdf $pdf
 	 * @return Boolean
 	 */
-	private function _sendEmail(GO_Base_Model_User $user,$pdf){
+	private function _sendEmail(\GO_Base_Model_User $user,$pdf){
 		
 		$filename = \GO\Base\Fs\File::stripInvalidChars($user->name).'.pdf'; //Set the PDF filename
 		$filename = str_replace(',', '', $filename);
@@ -225,7 +225,7 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 	 * 
 	 * @param GO_Calendar_Model_Event $event
 	 */
-	private function _renderEventRow(GO_Calendar_Model_LocalEvent $event){	
+	private function _renderEventRow(\GO_Calendar_Model_LocalEvent $event){	
 
 		$html = '';
 		$html .= '<tcpdf method="renderLine" />';

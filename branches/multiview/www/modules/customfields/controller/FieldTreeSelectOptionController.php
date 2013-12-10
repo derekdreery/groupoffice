@@ -4,7 +4,7 @@ class GO_Customfields_Controller_FieldTreeSelectOption extends GO_Base_Controlle
 	protected $model = 'GO_Customfields_Model_FieldTreeSelectOption';
 	
 
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		
 		$columnModel->formatColumn('name_with_id', '$model->id.":".$model->name');
 

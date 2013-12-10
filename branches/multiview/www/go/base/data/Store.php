@@ -67,7 +67,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	 * 
 	 * @param GO_Base_Db_ActiveStatement $stmt 
 	 */
-	public function setStatement(GO_Base_Db_ActiveStatement $stmt){
+	public function setStatement(\GO_Base_Db_ActiveStatement $stmt){
 		$this->_stmt = $stmt;
 		
 		

@@ -189,7 +189,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		return $this->attachments;
 	}
 	
-	public function addAttachment(GO_Email_Model_MessageAttachment $a){
+	public function addAttachment(\GO_Email_Model_MessageAttachment $a){
 		$this->attachments[$a->number]=$a;
 	}
 	

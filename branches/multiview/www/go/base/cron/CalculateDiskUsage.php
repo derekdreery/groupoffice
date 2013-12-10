@@ -43,7 +43,7 @@ class GO_Base_Cron_CalculateDiskUsage extends GO_Base_Cron_AbstractCron {
 	 * @param GO_Base_Cron_CronJob $cronJob
 	 * @param GO_Base_Model_User $user [OPTIONAL]
 	 */
-	public function run(GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
+	public function run(\GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
 		$stmt =\GO::getDbConnection()->query("SHOW TABLE STATUS FROM `".\GO::config()->db_name."`;");
 
 		$database_usage=0;

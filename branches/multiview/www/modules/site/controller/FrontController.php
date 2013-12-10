@@ -51,7 +51,7 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 		
 		$searchParams = GO_Base_Db_FindParams::newInstance()
 						->select('*')
-						->criteria(GO_Base_Db_FindCriteria::newInstance()
+						->criteria(\GO_Base_Db_FindCriteria::newInstance()
 										->addSearchCondition('title', $searchString, false)
 										->addSearchCondition('meta_title', $searchString, false)
 										->addSearchCondition('meta_description', $searchString, false)

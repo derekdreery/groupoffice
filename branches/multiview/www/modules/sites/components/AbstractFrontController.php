@@ -320,7 +320,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends \GO\Base\Cont
 			if(isset($oldIgnore))
 				GO::setIgnoreAclPermissions($oldIgnore);
 		}
-		catch (GO_Base_Exception_AccessDenied $e)
+		catch (\GO_Base_Exception_AccessDenied $e)
 		{
 			if(!GO::user()){
 				//Path the page you tried to visit into lastPath session for redirecting after login
@@ -334,7 +334,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends \GO\Base\Cont
 			}
 			//$this->render('error', array('error'=>$e));
 		}
-		catch (GO_Base_Exception_NotFound $e){
+		catch (\GO_Base_Exception_NotFound $e){
 			header("HTTP/1.0 404 Not Found");
       header("Status: 404 Not Found");
 			

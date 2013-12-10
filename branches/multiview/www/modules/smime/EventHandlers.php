@@ -2,7 +2,7 @@
 
 class GO_Smime_EventHandlers {
 
-	public static function loadAccount(GO_Email_Controller_Account $controller, &$response, GO_Email_Model_Account $account, $params) {
+	public static function loadAccount(\GO_Email_Controller_Account $controller, &$response, GO_Email_Model_Account $account, $params) {
 		$cert = GO_Smime_Model_Certificate::model()->findByPk($account->id);
 		if ($cert && !empty($cert->cert)) {
 			$response['data']['cert'] = true;
@@ -10,13 +10,13 @@ class GO_Smime_EventHandlers {
 		}
 	}
 	
-	public static function deleteAccount(GO_Email_Model_Account $account){
+	public static function deleteAccount(\GO_Email_Model_Account $account){
 		$cert = GO_Smime_Model_Certificate::model()->findByPk($account->id);
 		if($cert)
 			$cert->delete();		
 	}
 
-	public static function submitAccount(GO_Email_Controller_Account $controller, &$response, GO_Email_Model_Account $account, $params, $modifiedAttributes) {
+	public static function submitAccount(\GO_Email_Controller_Account $controller, &$response, GO_Email_Model_Account $account, $params, $modifiedAttributes) {
 
 		if (isset($_FILES['cert']['tmp_name'][0]) && is_uploaded_file($_FILES['cert']['tmp_name'][0])) {
 			//check Group-Office password
@@ -54,7 +54,7 @@ class GO_Smime_EventHandlers {
 			$response['cert'] = true;
 	}
 
-	public static function aliasesStore(GO_Email_Controller_Alias $controller, &$response, GO_Base_Data_Store $store, $params) {
+	public static function aliasesStore(\GO_Email_Controller_Alias $controller, &$response, GO_Base_Data_Store $store, $params) {
 
 		foreach ($response['results'] as &$alias) {
 			$cert = GO_Smime_Model_Certificate::model()->findByPk($alias['account_id']);
@@ -66,7 +66,7 @@ class GO_Smime_EventHandlers {
 		}
 	}
 
-	public static function viewMessage(GO_Email_Controller_Message $controller, array &$response, GO_Email_Model_ImapMessage $imapMessage, GO_Email_Model_Account $account, $params) {
+	public static function viewMessage(\GO_Email_Controller_Message $controller, array &$response, GO_Email_Model_ImapMessage $imapMessage, GO_Email_Model_Account $account, $params) {
 		
 		if($imapMessage->content_type == 'application/x-pkcs7-mime')
 			$imapMessage->content_type = 'application/pkcs7-mime';
@@ -210,7 +210,7 @@ class GO_Smime_EventHandlers {
 		}
 	}
 
-	public static function beforeSend(GO_Email_Controller_Message $controller, array &$response, GO_Base_Mail_SmimeMessage $message, GO_Base_Mail_Mailer $mailer, GO_Email_Model_Account $account, GO_Email_Model_Alias $alias, $params) {
+	public static function beforeSend(\GO_Email_Controller_Message $controller, array &$response, GO_Base_Mail_SmimeMessage $message, GO_Base_Mail_Mailer $mailer, GO_Email_Model_Account $account, GO_Email_Model_Alias $alias, $params) {
 		if (!empty($params['sign_smime'])) {
 
 			//$password = trim(file_get_contents("/home/mschering/password.txt"));

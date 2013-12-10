@@ -31,7 +31,7 @@ class GO_Reminders_Controller_Reminder extends GO_Base_Controller_AbstractModelC
 		
 		return GO_Base_Db_FindParams::newInstance()
 						->select('t.*')
-						->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('manual','1'));
+						->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('manual','1'));
 	}
 		
 	protected function beforeSubmit(&$response, &$model, &$params) {

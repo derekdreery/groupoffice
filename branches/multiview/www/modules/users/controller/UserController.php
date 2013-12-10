@@ -29,7 +29,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		}
 	}
 
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('name', '$model->name', array(), 'first_name');
 		$columnModel->formatColumn('enabled', "!empty(\$model->enabled) ? GO::t('yes') : GO::t('no')");
 		return parent::formatColumns($columnModel);
@@ -269,7 +269,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 						'foreignField'=>'user_id',
 						'tableAlias'=>'ug'				
 					))
-					->join(GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria,'a')
+					->join(\GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria,'a')
 					->group('t.id');
 
 				$findParams->getCriteria()->addInCondition('acl_id', $proModuleAcls,'a');

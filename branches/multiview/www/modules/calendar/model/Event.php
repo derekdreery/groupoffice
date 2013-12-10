@@ -667,7 +667,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param GO_Base_Model_User $user
 	 */
-	public function isPrivate(GO_Base_Model_User $user=null){
+	public function isPrivate(\GO_Base_Model_User $user=null){
 		if(!isset($user))
 			$user=\GO::user();
 		
@@ -1858,7 +1858,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}	
 	
 	
-	public static function eventIsFromCurrentImport(GO_Calendar_Model_Event $eventModel, $importedEventsArray) {
+	public static function eventIsFromCurrentImport(\GO_Calendar_Model_Event $eventModel, $importedEventsArray) {
 
 		if (!empty($importedEventsArray))
 			foreach ($importedEventsArray as $importedEventRecord) {
@@ -1880,7 +1880,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param boolean $isOrganizer
 	 * @return GO_Calendar_Model_Participant 
 	 */
-	public function importVObjectAttendee(GO_Calendar_Model_Event $event, Sabre\VObject\Property $vattendee, $isOrganizer=false){
+	public function importVObjectAttendee(\GO_Calendar_Model_Event $event, Sabre\VObject\Property $vattendee, $isOrganizer=false){
 			
 		$attributes = $this->_vobjectAttendeeToParticipantAttributes($vattendee);
 		$attributes['is_organizer']=$isOrganizer;
@@ -1987,7 +1987,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param GO_Calendar_Model_Participant $participant
 	 * @return GO_Calendar_Model_Event 
 	 */
-	public function createCopyForParticipant(GO_Calendar_Model_Participant $participant){
+	public function createCopyForParticipant(\GO_Calendar_Model_Participant $participant){
 //		$calendar = \GO_Calendar_Model_Calendar::model()->getDefault($user);
 //		
 //		return $this->duplicate(array(

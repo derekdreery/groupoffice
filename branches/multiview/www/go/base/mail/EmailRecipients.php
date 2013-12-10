@@ -298,7 +298,7 @@ class GO_Base_Mail_EmailRecipients{
 	 * @param GO_Base_Mail_EmailRecipients $recipients
 	 * @return GO_Base_Mail_EmailRecipients 
 	 */
-	public function mergeWith(GO_Base_Mail_EmailRecipients $recipients){
+	public function mergeWith(\GO_Base_Mail_EmailRecipients $recipients){
 		$this->_addresses = array_merge($this->_addresses, $recipients->getAddresses());
 		
 		return $this;
