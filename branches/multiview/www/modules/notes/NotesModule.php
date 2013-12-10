@@ -12,12 +12,14 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+namespace GO\Notes;
+
 /**
  * 
  * The Notes module maintenance class
  * 
  */
-class GO_Notes_NotesModule extends GO_Base_Module{
+class NotesModule extends \GO_Base_Module{
 	
 	public function autoInstall() {
 		return true;

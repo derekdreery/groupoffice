@@ -99,21 +99,13 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		
 		foreach($modules as $module)
 		{	
-//			if($this->_isAllowed($module->id)){
 				$file = $module->path.ucfirst($module->id).'Module.php';
-				//todo load listeners
-				if(file_exists($file)){
-					//require_once($file);
-					$class='GO_'.ucfirst($module->id).'_'.ucfirst($module->id).'Module';
-
-					$object = new $class;
+				if(file_exists($file)){					
+					$object = $module->moduleManager;
 					if(method_exists($object, $method)){					
-//						\GO::debug('Calling '.$class.'::'.$method);
-						call_user_func_array(array($object, $method), $params);
-						//$object->$method($params);
+						call_user_func_array(array($object, $method), $params);				
 					}
 				}
-//			}
 		}
 		
 		\GO::setIgnoreAclPermissions($oldIgnore);

@@ -53,10 +53,8 @@ foreach($moduleObjects as $moduleObject)
 	//todo load listeners
 	if(file_exists($file)){
 //		require_once($file);
-		$class='GO_'.ucfirst($moduleObject->id).'_'.ucfirst($moduleObject->id).'Module';
 
-		$object = new $class;
-		$models = $object->findClasses("customfields/model");
+		$models = $moduleObject->moduleManager->findClasses("customfields/model");
 		
 		foreach($models as $customFieldModel){
 			
@@ -119,4 +117,3 @@ foreach($moduleObjects as $moduleObject)
 }
 
 
-?>
