@@ -133,7 +133,24 @@ if(GO::config()->debug) {
 
 $scripts[]=$view_root_uri.'javascript/namespaces.js';
 ?>
+<script type="text/javascript">	
+	//hide mask after 10s to display errors is necessary.
+	setTimeout(function(){
+		var loadMask = document.getElementById('loading-mask');
+		var loading = document.getElementById('loading');
+		if(loadMask)
+			loadMask.style.display='none';
+		
+		if(loading)
+			loading.style.display='none';
+		
+	},10000);
+	
+</script>
+
 <script type="text/javascript">
+	
+	
 	var BaseHref = '<?php echo GO::config()->host; ?>';
 
 	GO = {};
@@ -175,7 +192,6 @@ if($extjsLang=='extjs_lang')
 	$extjsLang = GO::language()->getLanguage();
 $file = 'base-'.md5($extjsLang.GO::config()->mtime).'.js';
 $path = $cacheFolder->path().'/'.$file;
-
 
 if(GO::config()->debug || !file_exists($path)) {
 	echo "\n<!-- regenerated script -->\n";
@@ -223,9 +239,14 @@ if(GO::config()->debug || !file_exists($path)) {
 	}
 	
 	if(!GO::config()->debug) {
+		
+		$fp = fopen($path, 'w+');
+		
 		foreach($scripts as $script) {
-			file_put_contents($path,"\n\n".file_get_contents($script),FILE_APPEND);
+			fputs($fp, "\n\n".file_get_contents($script));
+//			file_put_contents($path,"\n\n".file_get_contents($script),FILE_APPEND);
 		}
+		fclose($fp);
 	}
 }
 
@@ -352,10 +373,12 @@ if(count($load_modules)) {
 			file_put_contents($cacheFolder->path().'/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode(GO::view()->exportModules())).'");');
 			array_unshift($scripts, $cacheFolder->path().'/'.$user_id.'-modules.js');
 
-
+			$fp = fopen($path, 'w+');
 			foreach($scripts as $script) {
-				file_put_contents($path,"\n\n".file_get_contents($script),FILE_APPEND);
+				//file_put_contents($path,"\n\n".file_get_contents($script),FILE_APPEND);
+				fputs($fp, "\n\n".file_get_contents($script));
 			}
+			fclose($fp);
 		}
 		
 		$url=GO::url("core/compress", array('file'=>$file, 'mtime'=>filemtime($path)));
