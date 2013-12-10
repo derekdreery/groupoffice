@@ -13,6 +13,8 @@
  */
 
 namespace GO\Notes;
+use GO\Notes\Model\Category;
+
 
 /**
  * 
@@ -61,7 +63,7 @@ class NotesModule extends \GO_Base_Module{
 		$user = \GO_Base_Model_User::model()->findByPk($userId);
 		if(!$user)
 			return false;
-		$category = \GO\Notes\Model\Category::model()->getDefault($user);
+		$category = Category::model()->getDefault($user);
 		
 		return $category;
 	}
@@ -69,7 +71,7 @@ class NotesModule extends \GO_Base_Module{
 	public function install() {
 		parent::install();
 		
-		$category = new \GO\Notes\Model\Category();
+		$category = new Category();
 		$category->name=\GO::t('general','notes');
 		$category->save();
 		$category->acl->addGroup(\GO::config()->group_everyone, \GO_Base_Model_Acl::READ_PERMISSION);
