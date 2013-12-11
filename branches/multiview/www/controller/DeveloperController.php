@@ -57,7 +57,7 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 		chdir($root);
 		
 		if(!$test){
-			$cmd = 'find controller go/base modules views/Extjs3 \( ! -name updates.php \)  -name "*.php"';
+			$cmd = 'find install controller go/base modules views/Extjs3 \( ! -name updates.php \)  -name "*.php"';
 			exec($cmd, $output);
 			$output[]="go/GO.php";
 		}else
@@ -76,7 +76,9 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 			$content = preg_replace("/(abstract\s+)?class\s+".preg_quote($className,'/')."([^A-Za-z0-9]+)/", 
 							"namespace ".preg_quote($namespace,'/').";\n\n$1class $newClassDefinition$2", $content, -1, $count);
 			
-			$content = preg_replace('/class(\s+\w+\s)extends\s([A-Za-z_]+)/',"class$1extends \\\\$2", $content);
+			if($count>0){//todo if is untested
+				$content = preg_replace('/class(\s+\w+\s)extends\s([A-Za-z_]+)/',"class$1extends \\\\$2", $content);
+			}
 
 			$content = preg_replace('/\\\\'.preg_quote($className, '/').'([^A-Za-z0-9]+)/', '\\'.$newClass.'$1',
 							$content);
