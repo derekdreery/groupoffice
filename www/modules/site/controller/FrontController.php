@@ -17,7 +17,7 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 			header("HTTP/1.0 404 Not Found");
       header("Status: 404 Not Found");
 			
-			$this->render('/site/404');
+			echo $this->render('/site/404');
 		}else{
 			
 			$this->setPageTitle($content->metaTitle);
@@ -31,7 +31,7 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 					$content->template = $defaultTemplate;
 			}
 			
-			$this->render($content->template,array('content'=>$content));
+			echo $this->render($content->template,array('content'=>$content));
 		}
 	}
 	
