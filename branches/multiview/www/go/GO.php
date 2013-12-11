@@ -406,6 +406,8 @@ class GO{
 		//for namespaces
 		$className = str_replace('\\', '_', $className);
 		
+		//for leading backslash in namespaces
+		$className = trim($className,'_');	
 		
 		if(isset(self::$_classes[$className])){
 			//don't use \GO::config()->root_path here because it might not be autoloaded yet causing an infite loop.
@@ -484,8 +486,8 @@ class GO{
 					require_once($fullPath);
 				}elseif(strpos($className,'Sabre_VObject')===0) {
 					$classFile = self::config()->root_path . 'go/vendor/VObject/lib/'.str_replace('_','/',$className).'.php';
-					require $classFile;
-					require_once true;
+					require_once $classFile;
+					return true;
 				}elseif(strpos($className,'Sabre')===0) {
 					require_once self::config()->root_path . 'go/vendor/SabreDAV/lib/'.str_replace('_','/',$className). '.php';
 					return true;					
