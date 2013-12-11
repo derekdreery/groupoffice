@@ -16,7 +16,9 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base.util 
  */
-class GO_Base_Csv_Reader{
+namespace GO\Base\Csv;
+
+class Reader{
 	
 	private $filename;
 	public $delimiter=',';

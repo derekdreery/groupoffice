@@ -17,7 +17,7 @@
  * @author Wesley Smits wsmits@intermesh.nl
  */	
  
-class GO_Site_Customfields_Model_Content extends GO_Customfields_Model_AbstractCustomFieldsRecord {
+class GO_Site_Customfields_Model_Content extends \GO_Customfields_Model_AbstractCustomFieldsRecord {
 
 	/**
 	 * Returns a static model of itself

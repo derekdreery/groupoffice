@@ -9,7 +9,9 @@
  * For example: The action to process plupload uploads should be authorised for 
  * users that have created a ticket and are not logged in.
  */
-class GO_Base_Authorized_Actions{
+namespace GO\Base\Authorized;
+
+class Actions{
 	
 	/**
 	 * Check if the current session is authorized to process an controller action.

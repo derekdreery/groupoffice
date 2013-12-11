@@ -23,7 +23,7 @@
  * @property int $files_folder_id
  */
 
-class GO_Tasks_Model_Tasklist extends GO_Base_Model_AbstractUserDefaultModel {
+class GO_Tasks_Model_Tasklist extends \GO\Base\Model\AbstractUserDefaultModel {
 
 	/**
 	 * Returns a static model of itself
@@ -76,10 +76,10 @@ class GO_Tasks_Model_Tasklist extends GO_Base_Model_AbstractUserDefaultModel {
 	
 	/**
 	 * 
-	 * @param \GO_Base_Model_User $user
+	 * @param \GO\Base\Model\User $user
 	 * @return GO_Tasks_Model_Tasklist
 	 */
-	public function getDefault(\GO_Base_Model_User $user, &$createdNew=false) {
+	public function getDefault(\GO\Base\Model\User $user, &$createdNew=false) {
 		$default = parent::getDefault($user, $createdNew);
 	
 		if($createdNew){

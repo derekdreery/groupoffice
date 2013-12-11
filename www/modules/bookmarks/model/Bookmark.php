@@ -13,7 +13,7 @@
  * @property int $category_id
  * @property int $id
  */
-class GO_Bookmarks_Model_Bookmark extends GO_Base_Db_ActiveRecord {
+class GO_Bookmarks_Model_Bookmark extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself

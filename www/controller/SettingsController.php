@@ -10,13 +10,13 @@ class GO_Core_Controller_Settings extends \GO\Base\Controller\AbstractController
 			$params['date_format'] = $dateparts[1];
 		}
 		
-		$user = \GO_Base_Model_User::model()->findByPk($params['id']);
+		$user = \GO\Base\Model\User::model()->findByPk($params['id']);
 		
 					
 		if (!empty($params["password"]) || !empty($params["passwordConfirm"])) {
 			
 			if(!$user->checkPassword($params['current_password']))
-				throw new GO_Base_Exception_BadPassword();
+				throw new \GO\Base\Exception\BadPassword();
 			
 //			if ($params["password"] != $params["passwordConfirm"]) {
 //				throw new Exception(\GO::t('error_match_pass', 'users'));
@@ -48,7 +48,7 @@ class GO_Core_Controller_Settings extends \GO\Base\Controller\AbstractController
 		\GO::modules()->callModuleMethod('submitSettings', array(&$this, &$params, &$response, $user), false);
 		
 
-//		\GO_Base_Session::setCompatibilitySessionVars();
+//		\GO\Base\Session::setCompatibilitySessionVars();
 		
 		
 		return $response;
@@ -56,7 +56,7 @@ class GO_Core_Controller_Settings extends \GO\Base\Controller\AbstractController
 	
 	protected function actionLoad($params){
 		
-		$user = \GO_Base_Model_User::model()->findByPk($params['id']);
+		$user = \GO\Base\Model\User::model()->findByPk($params['id']);
 		
 		
 		$response['data']=$user->getAttributes('formatted');

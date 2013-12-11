@@ -90,7 +90,7 @@ abstract class GO_Customfields_Customfieldtype_Abstract{
 	/**
 	 * Can be overridden if you want. For example, if the extended class entails
 	 * companies, return 'GO_Addressbook_Model_Company'. If it entails users,
-	 * return 'GO_Base_Model_User'.
+	 * return '\GO\Base\Model\User'.
 	 * @return boolean/string
 	 */
 	public static function getModelName() {
@@ -106,7 +106,7 @@ abstract class GO_Customfields_Customfieldtype_Abstract{
 	 * @return Mixed 
 	 */
 	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model){
-		return \GO_Base_Util_String::text_to_html($attributes[$key]);
+		return \GO\Base\Util\String::text_to_html($attributes[$key]);
 	}
 	
 	/**

@@ -18,12 +18,14 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @package GO.base.cache
  */
-class GO_Base_Cache_Apc implements GO_Base_Cache_Interface{
+namespace GO\Base\Cache;
+
+class Apc implements CacheInterface{
 	
 	private $_prefix;
 	
 	public function __construct() {
-		\GO::debug("Using GO_Base_Cache_Apc cache");
+		\GO::debug("Using Apc cache");
 		
 		$this->_prefix=\GO::config()->db_name.'-';
 	}

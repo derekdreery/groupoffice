@@ -1,5 +1,5 @@
 <?php
-class GO_Site_Widget_Form extends GO_Site_Components_Widget {
+class GO_Site_Widget_Form extends \GO_Site_Components_Widget {
 	
 	public $errorCss='error';
 	public $requiredCss='required';
@@ -22,7 +22,7 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	 * The label text is the attribute label and the label is associated with
 	 * the input for the attribute (see {@link CModel::getAttributeLabel}.
 	 * If the attribute has input error, the label's CSS class will be appended with {@link errorCss}.
-	 * @param GO_Base_Model $model the data model
+	 * @param \GO\Base\Model $model the data model
 	 * @param string $attribute the attribute
 	 * @param array $htmlAttributes additional HTML attributes. The following special options are recognized:
 	 * @return string the generated label tag
@@ -77,7 +77,7 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	
 	/**
 	 * Render a list of radio buttons same as a dropdown list
-	 * @param GO_Base_Model $model
+	 * @param \GO\Base\Model $model
 	 * @param string $attribute a propertyname of the model
 	 * @param array $data the keys en values of the button as key=>value of the array
 	 * @param array $htmlOptions extra html attributes
@@ -470,7 +470,7 @@ $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFor
 	/**
 	 * Resolve the name and the ID from 
 	 * 
-	 * @param GO_Base_Model $model
+	 * @param \GO\Base\Model $model
 	 * @param string $attribute
 	 * @param array $htmlAttributes
 	 * 
@@ -544,7 +544,7 @@ $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFor
 	 * Generates input name for a model attribute.
 	 * Note, the attribute name may be modified after calling this method if the name
 	 * contains square brackets (mainly used in tabular input) before the real attribute name.
-	 * @param GO_Base_Model $model the data model
+	 * @param \GO\Base\Model $model the data model
 	 * @param string $attribute the attribute
 	 * @return string the input name
 	 */
@@ -584,7 +584,7 @@ $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFor
 	 * Evaluates the attribute value of the model.
 	 * This method can recognize the attribute name written in array format.
 	 * For example, if the attribute name is 'name[a][b]', the value "$model->name['a']['b']" will be returned.
-	 * @param GO_Base_Model $model the data model
+	 * @param \GO\Base\Model $model the data model
 	 * @param string $attribute the attribute name
 	 * @return mixed the attribute value
 	 */

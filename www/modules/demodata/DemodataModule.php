@@ -1,6 +1,6 @@
 <?php
 
-class GO_Demodata_DemodataModule extends GO_Base_Module {
+class GO_Demodata_DemodataModule extends \GO\Base\Module {
 
 	public function author() {
 		return 'Merijn Schering';

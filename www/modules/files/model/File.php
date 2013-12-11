@@ -39,9 +39,9 @@
  * @property String $path
  * @property GO\Base\Fs\File $fsFile
  * @property GO_Files_Model_Folder $folder
- * @property GO_Base_Model_User $lockedByUser
+ * @property \GO\Base\Model\User $lockedByUser
  */
-class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
+class GO_Files_Model_File extends \GO\Base\Db\ActiveRecord {
 	
 	
 	public static $deleteInDatabaseOnly=false;
@@ -105,7 +105,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'lockedByUser' => array('type' => self::BELONGS_TO, 'model' => 'GO_Base_Model_User', 'field' => 'locked_user_id'),
+				'lockedByUser' => array('type' => self::BELONGS_TO, 'model' => '\GO\Base\Model\User', 'field' => 'locked_user_id'),
 				'folder' => array('type' => self::BELONGS_TO, 'model' => 'GO_Files_Model_Folder', 'field' => 'folder_id'),
 				'versions' => array('type'=>self::HAS_MANY, 'model'=>'GO_Files_Model_Version', 'field'=>'file_id', 'delete'=>true),
 		);
@@ -114,7 +114,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	public function getPermissionLevel(){
 		
 		if(\GO::$ignoreAclPermissions)
-			return \GO_Base_Model_Acl::MANAGE_PERMISSION;
+			return \GO\Base\Model\Acl::MANAGE_PERMISSION;
 		
 		if(!$this->aclField())
 			return -1;	
@@ -128,7 +128,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			//In this case we will check the module permissions.
 			$module = $this->getModule();
 			if($module=='base'){
-				return \GO::user()->isAdmin() ? \GO_Base_Model_Acl::MANAGE_PERMISSION : false;
+				return \GO::user()->isAdmin() ? \GO\Base\Model\Acl::MANAGE_PERMISSION : false;
 			}else
 				return \GO::modules()->$module->permissionLevel;
 			 
@@ -141,7 +141,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 					throw new \Exception("Could not find ACL for ".$this->className()." with pk: ".$this->pk);
 				}
 
-				$this->_permissionLevel=\GO_Base_Model_Acl::getUserPermissionLevel($acl_id);// model()->findByPk($acl_id)->getUserPermissionLevel();
+				$this->_permissionLevel=\GO\Base\Model\Acl::getUserPermissionLevel($acl_id);// model()->findByPk($acl_id)->getUserPermissionLevel();
 			}
 			return $this->_permissionLevel;
 		}
@@ -164,15 +164,15 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function unlockAllowed(){
-		return ($this->locked_user_id==\GO::user()->id || \GO::user()->isAdmin()) && $this->checkPermissionLevel(\GO_Base_Model_Acl::WRITE_PERMISSION);
+		return ($this->locked_user_id==\GO::user()->id || \GO::user()->isAdmin()) && $this->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION);
 	}
 	
 	public function getJsonData() {
 			$data =  array(
 					'id' => $this->model_id,
 					'name' => $this->path,
-					'ctime' => \GO_Base_Util_Date::get_timestamp($this->ctime),
-					'mtime' => \GO_Base_Util_Date::get_timestamp($this->mtime),
+					'ctime' => \GO\Base\Util\Date::get_timestamp($this->ctime),
+					'mtime' => \GO\Base\Util\Date::get_timestamp($this->mtime),
 					'extension' => $this->extension,
 					'size' => $this->size,
 					'user_id' => $this->user_id,
@@ -183,7 +183,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 					'locked' => $this->isLocked(),
 					'locked_user_id' => $this->locked_user_id,
 					'unlock_allowed' => $this->unlockAllowed(),
-					'expire_time' => $this->expire_time > 0 ? \GO_Base_Util_Date::get_timestamp($this->expire_time,false) : '',
+					'expire_time' => $this->expire_time > 0 ? \GO\Base\Util\Date::get_timestamp($this->expire_time,false) : '',
 					'thumbs' => 0,
 					'thumb_url' => $this->getThumbURL()
 				);
@@ -280,7 +280,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 				if(!isset($oldFsFile))
 					$oldFsFile = $this->_getOldFsFile();
 
-				if (!$oldFsFile->move(new \GO_Base_Fs_Folder(\GO::config()->file_storage_path . dirname($this->path))))
+				if (!$oldFsFile->move(new \GO\Base\Fs\Folder(\GO::config()->file_storage_path . dirname($this->path))))
 					throw new \Exception("Could not rename folder on the filesystem");
 				
 				//get old folder objekt
@@ -384,7 +384,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		if(!\GO_Files_Model_File::$deleteInDatabaseOnly)			
 			$this->fsFile->delete();
 		
-		$versioningFolder = new \GO_Base_Fs_Folder(\GO::config()->file_storage_path.'versioning/'.$this->id);
+		$versioningFolder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'versioning/'.$this->id);
 		$versioningFolder->delete();
 		
 		$this->notifyUsers(
@@ -404,7 +404,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	public function getEmailDownloadURL($html=true, $newExpireTime=false) {
 		
 		if($newExpireTime){
-			$this->random_code=\GO_Base_Util_String::randomPassword(11,'a-z,A-Z,0-9');
+			$this->random_code=\GO\Base\Util\String::randomPassword(11,'a-z,A-Z,0-9');
 			$this->expire_time = $newExpireTime;
 			$this->save();
 		}
@@ -612,32 +612,32 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	
 	
 	public function findRecent($start=false,$limit=false){
-		$storeParams = \GO_Base_Db_FindParams::newInstance()->ignoreAcl();	
+		$storeParams = \GO\Base\Db\FindParams::newInstance()->ignoreAcl();	
 
 		
-		$joinSearchCacheCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$joinSearchCacheCriteria = \GO\Base\Db\FindCriteria::newInstance()
 					->addRawCondition('`t`.`id`', '`sc`.`model_id`')
 					->addCondition('model_type_id', $this->modelTypeId(),'=','sc');
 		
-		$storeParams->join(\GO_Base_Model_SearchCacheRecord::model()->tableName(), $joinSearchCacheCriteria, 'sc', 'INNER');
+		$storeParams->join(\GO\Base\Model\SearchCacheRecord::model()->tableName(), $joinSearchCacheCriteria, 'sc', 'INNER');
 		
 		
-		$aclJoinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$aclJoinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addRawCondition('a.acl_id', 'sc.acl_id','=', false);
 			
-		$aclWhereCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$aclWhereCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('user_id', \GO::user()->id,'=','a', false)
-						->addInCondition("group_id", \GO_Base_Model_User::getGroupIds(\GO::user()->id),"a", false);
+						->addInCondition("group_id", \GO\Base\Model\User::getGroupIds(\GO::user()->id),"a", false);
 
-		$storeParams->join(\GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'INNER');
+		$storeParams->join(\GO\Base\Model\AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'INNER');
 
-		$storeParams->criteria(\GO_Base_Db_FindCriteria::newInstance()
+		$storeParams->criteria(\GO\Base\Db\FindCriteria::newInstance()
 								->addModel(\GO_Files_Model_Folder::model())									
 								->mergeWith($aclWhereCriteria));
 	
 		$storeParams->group(array('t.id'))->order('mtime','DESC');
 		
-		$storeParams->getCriteria()->addCondition('mtime', \GO_Base_Util_Date::date_add(\GO_Base_Util_Date::clear_time(time()),-7),'>');
+		$storeParams->getCriteria()->addCondition('mtime', \GO\Base\Util\Date::date_add(\GO\Base\Util\Date::clear_time(time()),-7),'>');
 		
 		if ($start!==false)
 			$storeParams->start($start);

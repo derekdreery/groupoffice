@@ -26,7 +26,9 @@
  * @property int $eventStartTime Start time of the event
  * @property int $bysetpos The nth day of the mont
  */
-class GO_Base_Util_Date_RecurrencePattern{
+namespace GO\Base\Util;
+
+class Date_RecurrencePattern{
 	
 	protected $_count;
 	/**
@@ -191,7 +193,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 		if(empty($this->_until) || $next<=$this->_until){
 			
 			//check next recurrence from one day later
-			$this->_recurPositionStartTime=$next+1;//\GO_Base_Util_Date::date_add($next,1);
+			$this->_recurPositionStartTime=$next+1;//Date::date_add($next,1);
 			//echo "N:".date('c', $this->_recurPositionStartTime)."\n";
 			return $next;
 		}else
@@ -204,7 +206,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	protected function _getNextRecurrenceDaily($startTime){
 							
 		$daysBetweenNextAndFirstEvent=$this->_findNumberOfDays($startTime, $this->_interval);
-		$recurrenceTime =  \GO_Base_Util_Date::date_add($this->_eventstarttime,$daysBetweenNextAndFirstEvent);
+		$recurrenceTime =  Date::date_add($this->_eventstarttime,$daysBetweenNextAndFirstEvent);
 		
 		if($this->_maxTime>0 && $recurrenceTime>$this->_maxTime)
 			return false;
@@ -232,7 +234,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	
 		$daysBetweenNextAndFirstEvent=$this->_findNumberOfDays($startTime, $period, false);
 		
-		$firstPossibleWeekStart = $recurrenceTime = \GO_Base_Util_Date::date_add($this->_eventstarttime,$daysBetweenNextAndFirstEvent);
+		$firstPossibleWeekStart = $recurrenceTime = Date::date_add($this->_eventstarttime,$daysBetweenNextAndFirstEvent);
 		
 		//check each weekday for a match
 		for($day=0;$day<7;$day++){			
@@ -243,10 +245,10 @@ class GO_Base_Util_Date_RecurrencePattern{
 				}			
 			}
 			
-			$recurrenceTime = \GO_Base_Util_Date::date_add($recurrenceTime,1);
+			$recurrenceTime = Date::date_add($recurrenceTime,1);
 		}
 		
-		$nextStartTime = \GO_Base_Util_Date::date_add($firstPossibleWeekStart,$period);
+		$nextStartTime = Date::date_add($firstPossibleWeekStart,$period);
 		
 		if($this->_maxTime>0 && $nextStartTime>$this->_maxTime)
 			return false;
@@ -266,7 +268,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 			$monthBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval);
 			//echo $monthBetweenNextAndFirstEvent."\n";
 			
-			$recurrenceTime =  \GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $monthBetweenNextAndFirstEvent);
+			$recurrenceTime =  Date::date_add($this->_eventstarttime, 0, $monthBetweenNextAndFirstEvent);
 		}else
 		{
 
@@ -276,7 +278,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 			//eg. 3rd monday of the month
 			$monthBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval, false);
 			
-			$recurrenceTime = $firstPossibleTime=\GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $monthBetweenNextAndFirstEvent);
+			$recurrenceTime = $firstPossibleTime=Date::date_add($this->_eventstarttime, 0, $monthBetweenNextAndFirstEvent);
 			
 			$currentMonth = $startMonth = date('m', $recurrenceTime);
 						
@@ -290,7 +292,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 					}
 				}
 				
-				$recurrenceTime =  \GO_Base_Util_Date::date_add($recurrenceTime, 1);
+				$recurrenceTime =  Date::date_add($recurrenceTime, 1);
 				$currentMonth = date('m', $recurrenceTime);
 			}
 			
@@ -337,7 +339,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	
 	protected function _getNextRecurrenceYearly($startTime){
 		$monthsBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval*12);
-		$recurrenceTime =  \GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $monthsBetweenNextAndFirstEvent);
+		$recurrenceTime =  Date::date_add($this->_eventstarttime, 0, $monthsBetweenNextAndFirstEvent);
 		return $recurrenceTime;
 	}
 	
@@ -356,7 +358,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 		
 		if($ceil){
 			
-			$recurrenceTime =  \GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $periodsBetweenNextAndFirstEvent);
+			$recurrenceTime =  Date::date_add($this->_eventstarttime, 0, $periodsBetweenNextAndFirstEvent);
 			if($recurrenceTime<$startTime)
 				$periodsBetweenNextAndFirstEvent+=$interval;
 		}
@@ -376,8 +378,8 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 * @return int Number of periods that fall between event start and start time
 	 */
 	protected function _findNumberOfDays($startTime, $interval=1, $ceil=true){
-		$eventStartDateTime = new \GO_Base_Util_Date_DateTime(date('c',$this->_eventstarttime));
-		$startDateTime= new \GO_Base_Util_Date_DateTime(date('c',$startTime));
+		$eventStartDateTime = new Date_DateTime(date('c',$this->_eventstarttime));
+		$startDateTime= new Date_DateTime(date('c',$startTime));
 		
 		//diff is only compatible with 5.3 and we want 5.2 compatibility
 		//$diff = $eventStartDateTime->diff($startDateTime, true); 
@@ -525,7 +527,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 		}
 
 		if ($this->until) 
-			$html .= ' ' . \GO::t('until') . ' ' . \GO_Base_Util_Date::get_timestamp ($this->until, false);
+			$html .= ' ' . \GO::t('until') . ' ' . Date::get_timestamp ($this->until, false);
 		
 		return $html;
 	}

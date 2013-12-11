@@ -23,7 +23,9 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  */
 
-class GO_Base_Db_Utils{
+namespace GO\Base\Db;
+
+class Utils{
 	
 	/**
 	 * Check if a database exists

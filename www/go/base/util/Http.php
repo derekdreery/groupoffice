@@ -16,7 +16,9 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base.util 
  */
-class GO_Base_Util_Http {
+namespace GO\Base\Util;
+
+class Http {
 
 	public static function checkUrlForHttp($url,$https=false){
 		
@@ -89,7 +91,7 @@ class GO_Base_Util_Http {
 	/**
 	 * Output the right headers for outputting file data to a browser.
 	 * 
-	 * @param GO\Base\Fs\File $file Use GO_Base_Fs_MemoryFile for outputting variables
+	 * @param GO\Base\Fs\File $file Use \GO\Base\Fs\MemoryFile for outputting variables
 	 * @param boolean $inline
 	 * @param boolean $cache Cache the file for one day in the browser.
 	 * @param array $extraHeaders  Key value array for extra headers
@@ -105,7 +107,7 @@ class GO_Base_Util_Http {
 			header('Cache-Control: cache');
 			header('Pragma: cache');
 		}
-		if (\GO_Base_Util_Http::isInternetExplorer()) {
+		if (Http::isInternetExplorer()) {
 			header('Content-Type: application/download');
 			header('Content-Disposition: '.$disposition.'; filename="' .rawurlencode($file->name()). '"');
 
@@ -138,7 +140,7 @@ class GO_Base_Util_Http {
 	/**
 	 * Download a file to the client
 	 * 
-	 * @param GO\Base\Fs\File $file Use GO_Base_Fs_MemoryFile for outputting variables
+	 * @param GO\Base\Fs\File $file Use \GO\Base\Fs\MemoryFile for outputting variables
 	 * @param boolean $inline
 	 * @param boolean $cache Cache the file for one day in the browser.
 	 * @param array $extraHeaders  Key value array for extra headers
@@ -230,12 +232,12 @@ class GO_Base_Util_Http {
 	
 	
 	public static function basicAuth(){
-		if (!isset($_SERVER['PHP_AUTH_USER']) && !\GO_Base_Util_Http::isAjaxRequest()) {
+		if (!isset($_SERVER['PHP_AUTH_USER']) && !Http::isAjaxRequest()) {
 			header('WWW-Authenticate: Basic realm="'.\GO::config()->product_name.'"');
 			header('HTTP/1.0 401 Unauthorized');
 			
 			
-			throw new \GO_Base_Exception_AccessDenied();
+			throw new \GO\Base\Exception\AccessDenied();
 			exit;
 		}
 	}

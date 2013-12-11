@@ -22,7 +22,7 @@
  * @property int $account_id
  * @property int $order
  */
-class GO_Email_Model_AccountSort extends GO_Base_Db_ActiveRecord {
+class GO_Email_Model_AccountSort extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself

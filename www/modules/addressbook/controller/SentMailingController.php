@@ -1,6 +1,6 @@
 <?php
 
-class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractModelController {
+class GO_Addressbook_Controller_SentMailing extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Addressbook_Model_SentMailing';
 	
@@ -21,9 +21,9 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 	
 	/**
 	 * This function is made specially to convert paramaters from the EmailComposer
-	 * to match \GO_Base_Mail_Message::handleFormInput in actionSendMailing.
+	 * to match \GO\Base\Mail\Message::handleFormInput in actionSendMailing.
 	 * @param Array $params Parameters from EmailComposer
-	 * @return Array $params Parameters for \GO_Base_Mail_Message::handleFormInput 
+	 * @return Array $params Parameters for \GO\Base\Mail\Message::handleFormInput 
 	 */
 //	private function _convertOldParams($params) {
 //		$params['inlineAttachments'] = json_decode($params['inline_attachments']);
@@ -55,7 +55,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			try {
 				//$params = $this->_convertOldParams($params);
 
-				$message = \GO_Base_Mail_Message::newInstance();
+				$message = \GO\Base\Mail\Message::newInstance();
 				$message->handleEmailFormInput($params); // insert the inline and regular attachments in the MIME message
 
 				$mailing['alias_id'] = $params['alias_id'];
@@ -63,7 +63,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 				$mailing['addresslist_id'] = $params['addresslist_id'];
 				$mailing['message_path'] =  'mailings/' . \GO::user()->id . '_' . date('Ymd_Gis') . '.eml';
 
-				$folder = new \GO_Base_Fs_Folder(\GO::config()->file_storage_path.'mailings');
+				$folder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'mailings');
 				$folder->create();
 
 				// Write message MIME source to message path
@@ -98,11 +98,11 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		$log .= $mailing_id . '.log';
 		$cmd = \GO::config()->cmd_php . ' '.\GO::config()->root_path.'groupofficecli.php -r=addressbook/sentMailing/batchSend -c="' . \GO::config()->get_config_file() . '" --mailing_id=' . $mailing_id . ' >> ' . $log;
 
-		if (!\GO_Base_Util_Common::isWindows())
+		if (!\GO\Base\Util\Common::isWindows())
 			$cmd .= ' 2>&1 &';
 
-		file_put_contents($log, \GO_Base_Util_Date::get_timestamp(time()) . "\r\n" . $cmd . "\r\n\r\n", FILE_APPEND);
-		if (\GO_Base_Util_Common::isWindows()) {
+		file_put_contents($log, \GO\Base\Util\Date::get_timestamp(time()) . "\r\n" . $cmd . "\r\n\r\n", FILE_APPEND);
+		if (\GO\Base\Util\Common::isWindows()) {
 			pclose(popen("start /B " . $cmd, "r"));
 		} else {
 			exec($cmd,$outputarr,$returnvar);
@@ -134,35 +134,35 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		echo 'Status: '.$mailing->status."\n";;
 		
 		if(empty($mailing->status)){
-			echo "Starting mailing at ".\GO_Base_Util_Date::get_timestamp(time())."\n";
+			echo "Starting mailing at ".\GO\Base\Util\Date::get_timestamp(time())."\n";
 			$mailing->reset();
 		}elseif (!empty($params['restart'])) {
-			echo "Restarting mailing at ".\GO_Base_Util_Date::get_timestamp(time())."\n";
+			echo "Restarting mailing at ".\GO\Base\Util\Date::get_timestamp(time())."\n";
 			$mailing->reset();
 		}elseif($mailing->status==\GO_Addressbook_Model_SentMailing::STATUS_PAUSED){
-			echo "Resuming mailing at ".\GO_Base_Util_Date::get_timestamp(time())."\n";
+			echo "Resuming mailing at ".\GO\Base\Util\Date::get_timestamp(time())."\n";
 			$mailing->status=\GO_Addressbook_Model_SentMailing::STATUS_RUNNING;
 			$mailing->save();
 		}
 			
-		$htmlToText = new \GO_Base_Util_Html2Text();
+		$htmlToText = new \GO\Base\Util\Html2Text();
 		
 
 		//$addresslist = \GO_Addressbook_Model_Addresslist::model()->findByPk($mailing->addresslist_id);
 		$mimeData = file_get_contents(\GO::config()->file_storage_path .$mailing->message_path);
-		$message = \GO_Base_Mail_Message::newInstance()
+		$message = \GO\Base\Mail\Message::newInstance()
 						->loadMimeMessage($mimeData);
 
 
-		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()->addRawCondition('t.id', 'a.account_id');
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()->addRawCondition('t.id', 'a.account_id');
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->single()
 						->join(\GO_Email_Model_Alias::model()->tableName(), $joinCriteria, 'a')
-						->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('id', $mailing->alias_id, '=', 'a')
+						->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('id', $mailing->alias_id, '=', 'a')
 		);
 		$account = \GO_Email_Model_Account::model()->find($findParams);
 
-		$mailer = \GO_Base_Mail_Mailer::newGoInstance(\GO_Email_Transport::newGoInstance($account));
+		$mailer = \GO\Base\Mail\Mailer::newGoInstance(\GO_Email_Transport::newGoInstance($account));
 
 		echo "Will send emails from " . $account->username . ".\n";
 		
@@ -304,7 +304,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 				$contact->email_allowed=0;
 				$contact->save();					
 				
-				\GO_Base_Mail_AdminNotifier::sendMail("Unsubscribe: ".$contact->email, "Contact ".$contact->email. " unsubscribed from receiving newsletters");
+				\GO\Base\Mail\AdminNotifier::sendMail("Unsubscribe: ".$contact->email, "Contact ".$contact->email. " unsubscribed from receiving newsletters");
 			}else
 			{
 				if($params['contact_id']){
@@ -316,7 +316,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 					$company->email_allowed=0;
 					$company->save();
 					
-					\GO_Base_Mail_AdminNotifier::sendMail("Unsubscribe: ".$company->email, "Company ".$contact->email. " unsubscribed from receiving newsletters");
+					\GO\Base\Mail\AdminNotifier::sendMail("Unsubscribe: ".$company->email, "Company ".$contact->email. " unsubscribed from receiving newsletters");
 				}
 			}
 			
@@ -340,7 +340,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			$email = $model->email;
 		}		
 		
-		echo '['.\GO_Base_Util_Date::get_timestamp(time())."] Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
+		echo '['.\GO\Base\Util\Date::get_timestamp(time())."] Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
 
 		$mailing = \GO_Addressbook_Model_SentMailing::model()->findByPk($mailing->id, array(), true, true);
 		if($mailing->status==\GO_Addressbook_Model_SentMailing::STATUS_PAUSED)
@@ -363,7 +363,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		}
 		if (!empty($status)) {
 			echo "---------\n";
-			echo "Failed at ".\GO_Base_Util_Date::get_timestamp(time())."\n";
+			echo "Failed at ".\GO\Base\Util\Date::get_timestamp(time())."\n";
 			echo $status . "\n";
 			echo "---------\n";
 			
@@ -397,12 +397,12 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 	
 	protected function getStoreParams($params) {
 		
-		$criteria = \GO_Base_Db_FindCriteria::newInstance();
+		$criteria = \GO\Base\Db\FindCriteria::newInstance();
 		
 		if(!\GO::user()->isAdmin())
 			$criteria->addCondition('user_id', \GO::user()->id);
 		
-		return \GO_Base_Db_FindParams::newInstance()->criteria($criteria);
+		return \GO\Base\Db\FindParams::newInstance()->criteria($criteria);
 						
 	}
 
@@ -434,10 +434,10 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		$mailing = \GO_Addressbook_Model_SentMailing::model()->findByPk($params['mailing_id']);
 		
 		if($mailing->user_id != \GO::user()->id && !\GO::user()->isAdmin())
-			throw new \GO_Base_Exception_AccessDenied();				
+			throw new \GO\Base\Exception\AccessDenied();				
 		
 		$file = $mailing->logFile;		
-		\GO_Base_Util_Http::outputDownloadHeaders($file);
+		\GO\Base\Util\Http::outputDownloadHeaders($file);
 		$file->output();
 	}
 

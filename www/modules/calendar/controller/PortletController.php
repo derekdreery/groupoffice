@@ -17,7 +17,7 @@
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
 
-class GO_Calendar_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelectModelController {
+class GO_Calendar_Controller_Portlet extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called
@@ -62,14 +62,14 @@ class GO_Calendar_Controller_Portlet extends GO_Base_Controller_AbstractMultiSel
 		$today_end = mktime(0, 0, 0, $month, $day+1, $year);
 		
 		
-		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('user_id', \GO::user()->id,'=','pt')
 						->addCondition('calendar_id', 'pt.calendar_id', '=', 't', true, true);
 		
-		$calendarJoinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$calendarJoinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('calendar_id', 'tl.id', '=', 't', true, true);
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('t.*, tl.name AS calendar_name')
 						->ignoreAcl()
 						->join(\GO_Calendar_Model_PortletCalendar::model()->tableName(),$joinCriteria,'pt')
@@ -78,7 +78,7 @@ class GO_Calendar_Controller_Portlet extends GO_Base_Controller_AbstractMultiSel
 			
 		$events = \GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime);
 
-		$store = new \GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 		
 		foreach($events as $event){
 			$record = $event->getResponseData();

@@ -1,5 +1,5 @@
 <?php
-class GO_Customfields_Customfieldtype_User extends GO_Customfields_Customfieldtype_Abstract{
+class GO_Customfields_Customfieldtype_User extends \GO_Customfields_Customfieldtype_Abstract{
 	
 	public function name(){
 		return 'User';
@@ -15,7 +15,7 @@ class GO_Customfields_Customfieldtype_User extends GO_Customfields_Customfieldty
 
 			if(!\GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport){
 				$name = htmlspecialchars($this->getName($attributes[$key]), ENT_COMPAT, 'UTF-8');
-				$html='<a href="#" onclick=\'GO.linkHandlers["GO_Base_Model_User"].call(this,'.
+				$html='<a href="#" onclick=\'GO.linkHandlers["\GO\Base\Model\User"].call(this,'.
 					$this->getId($attributes[$key]).');\' title="'.$name.'">'.
 						$name.'</a>';
 			}else

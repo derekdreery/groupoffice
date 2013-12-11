@@ -18,7 +18,9 @@
  * @since Group-Office 3.0
  */
 
-class GO_Base_Util_String {
+namespace GO\Base\Util;
+
+class String {
 	
 	
 	public static function normalizeCrlf($text, $crlf="\r\n"){
@@ -183,7 +185,7 @@ class GO_Base_Util_String {
 			}
 			
 			if(substr($from_charset,0,5)=='x-mac')
-				return \GO_Base_Util_Charset_Xmac::toUtf8($str, $from_charset);
+				return \GO\Base\Util\Charset\Xmac::toUtf8($str, $from_charset);
 			
 			$from_charset = self::fixCharset($from_charset);
 
@@ -643,7 +645,7 @@ END;
 	 * @return bool
 	 */
 	public static function validate_email($email) {
-		return \GO_Base_Util_Validate::email($email);
+		return \GO\Base\Util\Validate::email($email);
 	}
 
 	/**
@@ -915,7 +917,7 @@ END;
 
 	public static function html_to_text($text, $link_list=true){
 
-		$htmlToText = new \GO_Base_Util_Html2Text ($text);
+		$htmlToText = new \GO\Base\Util\Html2Text ($text);
 		return $htmlToText->get_text($link_list);
 	}
 
@@ -1006,7 +1008,7 @@ END;
 		
 		// Check for smilies to be enabled by the user (settings->Look & Feel-> Show Smilies)
 		if(\GO::user() && \GO::user()->show_smilies)
-			$html = \GO_Base_Util_String::replaceEmoticons($html,true);
+			$html = String::replaceEmoticons($html,true);
 
 		return $html;
 	}
@@ -1068,7 +1070,7 @@ END;
 			$imgpath = \GO::config()->host . $rel;
 			$imgstring = '<img src="' . $imgpath . '" alt="' . $emoticon . '" />';
 			if ($html)
-				$string = \GO_Base_Util_String::htmlReplace($emoticon, $imgstring, $string);
+				$string = String::htmlReplace($emoticon, $imgstring, $string);
 			else
 				$string = preg_replace('/([^a-z0-9])' . preg_quote($emoticon) . '([^a-z0-9])/i', "\\1" . $imgstring . "\\2", $string);
 		}
@@ -1084,7 +1086,7 @@ END;
 	 * @return string 
 	 */
 	public static function htmlReplace($search, $replacement, $html){
-    $html = preg_replace_callback('/<[^>]*('.preg_quote($search).')[^>]*>/uis',array('GO_Base_Util_String', '_replaceInTags'), $html);
+    $html = preg_replace_callback('/<[^>]*('.preg_quote($search).')[^>]*>/uis',array('String', '_replaceInTags'), $html);
     $html = preg_replace('/([^a-z0-9])'.preg_quote($search).'([^a-z0-9])/i',"\\1".$replacement."\\2", $html);
     
     //$html = str_ireplace($search, $replacement, $html);
@@ -1423,7 +1425,7 @@ END;
 	{
 		$keys = array_keys($name);
 
-		$editedKeys = array_map(array("GO_Base_Util_String", "_addAccolades"), $keys);
+		$editedKeys = array_map(array("String", "_addAccolades"), $keys);
 
 		$res = trim(preg_replace('/\s+/', ' ',str_replace($editedKeys, array_values($name),$template)));
 

@@ -1,6 +1,6 @@
 <?php
 
-class GO_Calendar_Controller_CalendarTasklist extends GO_Base_Controller_AbstractMultiSelectModelController {
+class GO_Calendar_Controller_CalendarTasklist extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called

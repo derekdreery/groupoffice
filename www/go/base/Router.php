@@ -28,7 +28,9 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base 
  */
-class GO_Base_Router{
+namespace GO\Base;
+
+class Router{
 	
 	/**
 	 * Analyzes the request URL and finds the controller.
@@ -83,7 +85,7 @@ class GO_Base_Router{
 		
 		if(!$params){
 			if(PHP_SAPI=='cli'){
-				$params = \GO_Base_Util_Cli::parseArgs();
+				$params = \GO\Base\Util\Cli::parseArgs();
 			}else
 			{
 				$params=$_REQUEST;				
@@ -156,7 +158,7 @@ class GO_Base_Router{
 		try{
 			$this->_controller = new $controllerClass;
 			$this->_controller->run($action, $params);		
-		}catch(\GO_Base_Exception_NotFound $e){
+		}catch(\GO\Base\Exception\NotFound $e){
 			header("HTTP/1.0 404 Not Found");
 			header("Status: 404 Not Found");
 			

@@ -5,11 +5,11 @@
  * 
  * @package GO.modules.email
  * 
- * @property GO_Base_Mail_EmailRecipients $to
- * @property GO_Base_Mail_EmailRecipients $cc
- * @property GO_Base_Mail_EmailRecipients $bcc
- * @property GO_Base_Mail_EmailRecipients $from
- * @property GO_Base_Mail_EmailRecipients $reply_to
+ * @property \GO\Base\Mail\EmailRecipients $to
+ * @property \GO\Base\Mail\EmailRecipients $cc
+ * @property \GO\Base\Mail\EmailRecipients $bcc
+ * @property \GO\Base\Mail\EmailRecipients $from
+ * @property \GO\Base\Mail\EmailRecipients $reply_to
  * @property string $subject
  * @property int $uid
  * @property int $size
@@ -31,7 +31,7 @@
  * @property GO_Email_Model_Account $account
  * @property String $mailbox
  */
-abstract class GO_Email_Model_Message extends GO_Base_Model {
+abstract class GO_Email_Model_Message extends \GO\Base\Model {
 
 	protected $attributes = array(
 			'to' => '',
@@ -67,17 +67,17 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	
 	/**
 	 * True iff the actual message's body is larger than the maximum allowed. See
-	 * also how \GO_Base_Mail_Imap::max_read is used.
+	 * also how \GO\Base\Mail\Imap::max_read is used.
 	 * @var boolean
 	 */
 	protected $_bodyTruncated;
 	
 	public function __construct() {
-		$this->attributes['to'] = new \GO_Base_Mail_EmailRecipients($this->attributes['to']);
-		$this->attributes['cc'] = new \GO_Base_Mail_EmailRecipients($this->attributes['cc']);
-		$this->attributes['bcc'] = new \GO_Base_Mail_EmailRecipients($this->attributes['bcc']);
-		$this->attributes['from'] = new \GO_Base_Mail_EmailRecipients($this->attributes['from']);
-		$this->attributes['reply_to'] = new \GO_Base_Mail_EmailRecipients($this->attributes['reply_to']);
+		$this->attributes['to'] = new \GO\Base\Mail\EmailRecipients($this->attributes['to']);
+		$this->attributes['cc'] = new \GO\Base\Mail\EmailRecipients($this->attributes['cc']);
+		$this->attributes['bcc'] = new \GO\Base\Mail\EmailRecipients($this->attributes['bcc']);
+		$this->attributes['from'] = new \GO\Base\Mail\EmailRecipients($this->attributes['from']);
+		$this->attributes['reply_to'] = new \GO\Base\Mail\EmailRecipients($this->attributes['reply_to']);
 	}
 
 	/**
@@ -128,11 +128,11 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 		$this->attributes = array_merge($this->attributes, $attributes);
 
-		$this->attributes['to'] = new \GO_Base_Mail_EmailRecipients($this->attributes['to']);
-		$this->attributes['cc'] = new \GO_Base_Mail_EmailRecipients($this->attributes['cc']);
-		$this->attributes['bcc'] = new \GO_Base_Mail_EmailRecipients($this->attributes['bcc']);
-		$this->attributes['from'] = new \GO_Base_Mail_EmailRecipients($this->attributes['from']);
-		$this->attributes['reply_to'] = new \GO_Base_Mail_EmailRecipients($this->attributes['reply_to']);
+		$this->attributes['to'] = new \GO\Base\Mail\EmailRecipients($this->attributes['to']);
+		$this->attributes['cc'] = new \GO\Base\Mail\EmailRecipients($this->attributes['cc']);
+		$this->attributes['bcc'] = new \GO\Base\Mail\EmailRecipients($this->attributes['bcc']);
+		$this->attributes['from'] = new \GO\Base\Mail\EmailRecipients($this->attributes['from']);
+		$this->attributes['reply_to'] = new \GO\Base\Mail\EmailRecipients($this->attributes['reply_to']);
 		
 		
 	$this->attributes['x_priority']= isset($this->attributes['x_priority']) ? strtolower($this->attributes['x_priority']) : 3;
@@ -315,7 +315,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$response['full_from'] = (string) $this->from;
 		$response['priority'] = intval($this->x_priority);
 		$response['udate'] = $this->udate;
-		$response['date'] = \GO_Base_Util_Date::get_timestamp($this->udate);
+		$response['date'] = \GO\Base\Util\Date::get_timestamp($this->udate);
 		$response['size'] = $this->size;
 
 		$response['attachments'] = array();

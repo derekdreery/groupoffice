@@ -1,5 +1,5 @@
 <?php
-class GO_Serverclient_HttpClient extends GO_Base_Util_HttpClient{
+class GO_Serverclient_HttpClient extends \GO\Base\Util\HttpClient{
 	
 	public function postfixLogin(){		
 		return $this->groupofficeLogin(GO::config()->serverclient_server_url, GO::config()->serverclient_username, GO::config()->serverclient_password);		

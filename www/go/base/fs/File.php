@@ -20,7 +20,7 @@
 
 namespace GO\Base\Fs;
 
-class File extends \GO_Base_Fs_Base{
+class File extends \GO\Base\Fs\Base{
 	
 	
 	private static $_allowDeletes=true;
@@ -87,22 +87,22 @@ class File extends \GO_Base_Fs_Base{
 		
 		switch ($size) {
 			case ($size > 1073741824) :
-				$size = \GO_Base_Util_Number::localize($size / 1073741824, $decimals);
+				$size = \GO\Base\Util\Number::localize($size / 1073741824, $decimals);
 				$size .= " GB";
 				break;
 
 			case ($size > 1048576) :
-				$size = \GO_Base_Util_Number::localize($size / 1048576, $decimals);
+				$size = \GO\Base\Util\Number::localize($size / 1048576, $decimals);
 				$size .= " MB";
 				break;
 
 			case ($size > 1024) :
-				$size = \GO_Base_Util_Number::localize($size / 1024, $decimals);
+				$size = \GO\Base\Util\Number::localize($size / 1024, $decimals);
 				$size .= " KB";
 				break;
 
 			default :
-				$size = \GO_Base_Util_Number::localize($size, $decimals);
+				$size = \GO\Base\Util\Number::localize($size, $decimals);
 				$size .= " bytes";
 				break;
 		}
@@ -267,7 +267,7 @@ class File extends \GO_Base_Fs_Base{
 			{
 				$pos++;
 
-				$start_of_line = \GO_Base_Util_String::rstrpos($types, "\n", $pos);
+				$start_of_line = \GO\Base\Util\String::rstrpos($types, "\n", $pos);
 				$end_of_mime = strpos($types, ' ', $start_of_line);
 				$mime = substr($types, $start_of_line+1, $end_of_mime-$start_of_line-1);
 
@@ -340,7 +340,7 @@ class File extends \GO_Base_Fs_Base{
 	/**
 	 * Move a file to another folder.
 	 * 
-	 * @param GO_Base_Fs_Folder $destinationFolder 
+	 * @param \GO\Base\Fs\Folder $destinationFolder 
 	 * @param string $newFileName Optionally rename the file too.
 	 * @param boolean $isUploadedFile Check if this file was upload for security reasons.
 	 * @param boolean $appendNumberToNameIfDestinationExists Rename the file like "File (1)" if it already exists. 
@@ -382,10 +382,10 @@ class File extends \GO_Base_Fs_Base{
 	/**
 	 * Copy a file to another folder.
 	 * 
-	 * @param GO_Base_Fs_Folder $destinationFolder 
+	 * @param \GO\Base\Fs\Folder $destinationFolder 
 	 * @return GO\Base\Fs\File
 	 */
-	public function copy(\GO_Base_Fs_Folder $destinationFolder, $newFileName=false){
+	public function copy(\GO\Base\Fs\Folder $destinationFolder, $newFileName=false){
 		
 		if(!$newFileName)
 			$newFileName=$this->name();
@@ -411,7 +411,7 @@ class File extends \GO_Base_Fs_Base{
 	/**
 	 *
 	 * @param array $uploadedFileArray
-	 * @param GO_Base_Fs_Folder  $destinationFolder
+	 * @param \GO\Base\Fs\Folder  $destinationFolder
 	 * @param boolean $overwrite If false this function will append a number. eg. Filename (1).jpg
 	 * @return GO\Base\Fs\File[]
 	 */
@@ -483,7 +483,7 @@ class File extends \GO_Base_Fs_Base{
 		if(!$enc)
 			$enc='UTF-8';
 		
-		return $this->putContents(\GO_Base_Util_String::clean_utf8($str, $enc));
+		return $this->putContents(\GO\Base\Util\String::clean_utf8($str, $enc));
 	}
 	
 	/**

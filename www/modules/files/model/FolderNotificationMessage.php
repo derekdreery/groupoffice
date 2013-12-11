@@ -29,7 +29,7 @@
  * @property boolean $status
  */
 
-class GO_Files_Model_FolderNotificationMessage extends GO_Base_Db_ActiveRecord {
+class GO_Files_Model_FolderNotificationMessage extends \GO\Base\Db\ActiveRecord {
         
     const ADD_FOLDER = 1;
     const RENAME_FOLDER = 2;

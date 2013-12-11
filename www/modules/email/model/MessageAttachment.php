@@ -24,7 +24,7 @@
  * @var string $encoding Content encoding
  * @var string $disposition Can be attachment or inline.
  */
-class GO_Email_Model_MessageAttachment extends GO_Base_Model{
+class GO_Email_Model_MessageAttachment extends \GO\Base\Model{
 	public $name="";
 	public $number=0;
 	public $content_id="";
@@ -170,7 +170,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 * @return string 
 	 */
 	public function getHumanSize(){
-		return \GO_Base_Util_Number::formatSize($this->getEstimatedSize());
+		return \GO\Base\Util\Number::formatSize($this->getEstimatedSize());
 	}
 	
 	/**

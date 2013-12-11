@@ -1,6 +1,8 @@
 <?php
 
-class GO_Base_Vobject_Iterator implements Iterator {
+namespace GO\Base\Vobject;
+
+class Iterator implements Iterator {
 
 	private $file;
 	private $type;

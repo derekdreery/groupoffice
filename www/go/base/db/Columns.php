@@ -25,32 +25,34 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  */
 
-class GO_Base_Db_Columns{
+namespace GO\Base\Db;
+
+class Columns{
 	
 	public static $forceLoad = false;
 	
 	private static $_columns=array();
 	
-	private static function getCacheKey(\GO_Base_Db_ActiveRecord $model){
+	private static function getCacheKey(\GO\Base\Db\ActiveRecord $model){
 		$tableName = $model->tableName();
 		return 'modelColumns_'.$tableName;		
 	}
 	/**
 	 * Clear the column cache for a particular model.
 	 * 
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param \GO\Base\Db\ActiveRecord $model
 	 */
-	public static function clearCache(\GO_Base_Db_ActiveRecord $model){
+	public static function clearCache(\GO\Base\Db\ActiveRecord $model){
 		\GO::cache()->delete(self::getCacheKey($model));
 	}
 	
 	/**
 	 * Get all columns of a model
 	 * 
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param \GO\Base\Db\ActiveRecord $model
 	 * @return array
 	 */
-	public static function getColumns(\GO_Base_Db_ActiveRecord $model) {
+	public static function getColumns(\GO\Base\Db\ActiveRecord $model) {
 		$tableName = $model->tableName();
 		$cacheKey = self::getCacheKey($model);
 		

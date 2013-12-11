@@ -97,7 +97,7 @@ class GO{
 	 * @return boolean
 	 */
 	public static function setMemoryLimit($mb){
-		$max = \GO_Base_Util_Number::configSizeToMB(ini_get("memory_limit"));
+		$max = \GO\Base\Util\Number::configSizeToMB(ini_get("memory_limit"));
 
 		if($mb>$max){
 			return ini_set("memory_limit", $mb.'M');
@@ -120,7 +120,7 @@ class GO{
 	}
 	
 	/**
-	 * This GO_Base_Model_ModelCache.php mechanism can consume a lot of memory 
+	 * This \GO\Base\Model\ModelCache.php mechanism can consume a lot of memory 
 	 * when running large batch scripts. That's why it can be disabled.
 	 *
 	 * @var boolean
@@ -133,37 +133,37 @@ class GO{
 	 * @var array 
 	 */
 	private static $_classes = array (
-		'GO_Base_Observable' => 'go/base/Observable.php',
-		'GO_Base_Session' => 'go/base/Session.php',
-		'GO_Base_Config' => 'go/base/Config.php',
-		'GO_Base_Model' => 'go/base/Model.php',
-		'GO_Base_Db_ActiveRecord' => 'go/base/db/ActiveRecord.php',
-		'GO_Base_Model_User' => 'go/base/model/User.php',
-		'GO_Base_Cache_Interface' => 'go/base/cache/Interface.php',
-		'GO_Base_Cache_Disk' => 'go/base/cache/Disk.php',
-		'GO_Base_Cache_Apc' => 'go/base/cache/Apc.php',
-		'GO_Base_Db_ActiveStatement' => 'go/base/db/ActiveStatement.php',
-		'GO_Base_Util_String' => 'go/base/util/String.php',
-		'GO_Base_Model_ModelCache' => 'go/base/model/ModelCache.php',
-		'GO_Base_Router' => 'go/base/Router.php',
+		'\GO\Base\Observable' => 'go/base/Observable.php',
+		'\GO\Base\Session' => 'go/base/Session.php',
+		'\GO\Base\Config' => 'go/base/Config.php',
+		'\GO\Base\Model' => 'go/base/Model.php',
+		'\GO\Base\Db\ActiveRecord' => 'go/base/db/ActiveRecord.php',
+		'\GO\Base\Model\User' => 'go/base/model/User.php',
+		'\GO\Base\Cache\Interface' => 'go/base/cache/Interface.php',
+		'\GO\Base\Cache\Disk' => 'go/base/cache/Disk.php',
+		'\GO\Base\Cache\Apc' => 'go/base/cache/Apc.php',
+		'\GO\Base\Db\ActiveStatement' => 'go/base/db/ActiveStatement.php',
+		'\GO\Base\Util\String' => 'go/base/util/String.php',
+		'\GO\Base\Model\ModelCache' => 'go/base/model/ModelCache.php',
+		'\GO\Base\Router' => 'go/base/Router.php',
 		'\GO\Base\Controller\AbstractController' => 'go/base/controller/AbstractController.php',
-		'GO_Base_Model_Module' => 'go/base/model/Module.php',
-		'GO_Base_Controller_AbstractModelController' => 'go/base/controller/AbstractModelController.php',
-		'GO_Base_Model_Acl' => 'go/base/model/Acl.php',
-		'GO_Base_Model_AclUsersGroups' => 'go/base/model/AclUsersGroups.php',
-		'GO_Base_Data_AbstractStore' => 'go/base/data/AbstractStore.php',
-		'GO_Base_Data_Store' => 'go/base/data/Store.php',
-		'GO_Base_Data_ColumnModel' => 'go/base/data/ColumnModel.php',
-		'GO_Base_Module' => 'go/base/Module.php',
-		'GO_Base_Model_AbstractUserDefaultModel' => 'go/base/model/AbstractUserDefaultModel.php',
-		'GO_Base_Db_FindParams' => 'go/base/db/FindParams.php',
-		'GO_Base_Db_FindCriteria' => 'go/base/db/FindCriteria.php',
-		'GO_Base_Util_Date' => 'go/base/util/Date.php',
-		'GO_Base_Data_Column' => 'go/base/data/Column.php',
-		'GO_Base_Language' => 'go/base/Language.php',
-		'GO_Base_Model_ModelCollection' => 'go/base/model/ModelCollection.php',
-		'GO_Base_ModuleCollection' => 'go/base/ModuleCollection.php',
-		'GO_Base_Model_Setting' => 'go/base/model/Setting.php',
+		'\GO\Base\Model\Module' => 'go/base/model/Module.php',
+		'\GO\Base\Controller\AbstractModelController' => 'go/base/controller/AbstractModelController.php',
+		'\GO\Base\Model\Acl' => 'go/base/model/Acl.php',
+		'\GO\Base\Model\AclUsersGroups' => 'go/base/model/AclUsersGroups.php',
+		'\GO\Base\Data\AbstractStore' => 'go/base/data/AbstractStore.php',
+		'\GO\Base\Data\Store' => 'go/base/data/Store.php',
+		'\GO\Base\Data\ColumnModel' => 'go/base/data/ColumnModel.php',
+		'\GO\Base\Module' => 'go/base/Module.php',
+		'\GO\Base\Model\AbstractUserDefaultModel' => 'go/base/model/AbstractUserDefaultModel.php',
+		'\GO\Base\Db\FindParams' => 'go/base/db/FindParams.php',
+		'\GO\Base\Db\FindCriteria' => 'go/base/db/FindCriteria.php',
+		'\GO\Base\Util\Date' => 'go/base/util/Date.php',
+		'\GO\Base\Data\Column' => 'go/base/data/Column.php',
+		'\GO\Base\Language' => 'go/base/Language.php',
+		'\GO\Base\Model\ModelCollection' => 'go/base/model/ModelCollection.php',
+		'\GO\Base\ModuleCollection' => 'go/base/ModuleCollection.php',
+		'\GO\Base\Model\Setting' => 'go/base/model/Setting.php',
 	);
 
 	private static $_config;
@@ -249,7 +249,7 @@ class GO{
 	 * Clears the:
 	 * 
 	 * 1. \GO::config()->cachedir folder. This folder contains mainly cached javascripts.
-	 * 2. GO_Base_Model objects cached in memory for a single script run
+	 * 2. \GO\Base\Model objects cached in memory for a single script run
 	 * 3. The permanent cache stored in \GO::cache()
 	 * 
 	 */
@@ -259,18 +259,18 @@ class GO{
 		
 		\GO::cache()->flush();
 
-		\GO_Base_Model::clearCache();
+		\GO\Base\Model::clearCache();
 	}
 
 	/**
 	 *
-	 * @return GO_Base_View_Extjs3 Returns the currently selected theme.
+	 * @return \GO\Base\View\Extjs3 Returns the currently selected theme.
 	 *
 	 * 
 	 */
 	public static function view(){
 		
-		$class = "GO_Base_View_";
+		$class = '\\GO\\Base\\View\\';
 		
 		if(isset(\GO::session()->values['view'])){
 			$class .= \GO::session()->values['view'];
@@ -292,7 +292,7 @@ class GO{
 	/**
 	 * Get the logged in user
 	 *
-	 * @return GO_Base_Model_User The logged in user model
+	 * @return \GO\Base\Model\User The logged in user model
 	 */
 	public static function user(){
 		return self::session()->user();
@@ -301,11 +301,11 @@ class GO{
 	/**
 	 * Returns the router that routes requests to controller actions.
 	 *
-	 * @return GO_Base_Router
+	 * @return \GO\Base\Router
 	 */
 	public static function router() {
 		if (!isset(self::$_router)) {
-			self::$_router=new \GO_Base_Router();
+			self::$_router=new \GO\Base\Router();
 		}
 		return self::$_router;
 	}
@@ -313,7 +313,7 @@ class GO{
 	/**
 	 * Returns a collection of Group-Office Module objects
 	 *
-	 * @return GO_Base_ModuleCollection
+	 * @return \GO\Base\ModuleCollection
 	 *
 	 */
 	public static function modules() {
@@ -325,14 +325,14 @@ class GO{
 //				if(isset(\GO::session()->values['modulesObject']) && !isset($GLOBALS['GO_CONFIG'])){
 //					self::$_modules=\GO::session()->values['modulesObject'];
 //				}else{
-//					self::$_modules=\GO::session()->values['modulesObject']=new \GO_Base_ModuleCollection();
+//					self::$_modules=\GO::session()->values['modulesObject']=new \GO\Base\ModuleCollection();
 //				}
 //			}else
 //			{
-//				self::$_modules=new \GO_Base_ModuleCollection();
+//				self::$_modules=new \GO\Base\ModuleCollection();
 //			}
 			
-			self::$_modules=new \GO_Base_ModuleCollection();
+			self::$_modules=new \GO\Base\ModuleCollection();
 		}
 		return self::$_modules;
 	}
@@ -340,11 +340,11 @@ class GO{
 	/**
 	 * Models are cached within one script run
 	 *
-	 * @return GO_Base_Model_ModelCache
+	 * @return \GO\Base\Model\ModelCache
 	 */
 	public static function modelCache() {
 		if (!isset(self::$_modelCache)) {
-			self::$_modelCache=new \GO_Base_Model_ModelCache();
+			self::$_modelCache=new \GO\Base\Model\ModelCache();
 		}
 		return self::$_modelCache;
 	}
@@ -357,41 +357,41 @@ class GO{
 	 * available to all users. When debug is enabled a dummy cache driver is used
 	 * that caches nothing.
 	 * 
-	 * @return GO_Base_Cache_Interface
+	 * @return \GO\Base\Cache\Interface
 	 */
 	public static function cache(){
 
 		if (!isset(self::$_cache)) {
 			if(\GO::config()->debug || !\GO::isInstalled())
 //			if(!\GO::isInstalled())
-				self::$_cache=new \GO_Base_Cache_None();
+				self::$_cache=new \GO\Base\Cache\None();
 //			Disable apc cache temporarily because it seems to cause the random logouts
 //			elseif(function_exists("apc_store"))
-//				self::$_cache=new \GO_Base_Cache_Apc();
+//				self::$_cache=new \GO\Base\Cache\Apc();
 			else
-				self::$_cache=new \GO_Base_Cache_Disk();
+				self::$_cache=new \GO\Base\Cache\Disk();
 		}
 		return self::$_cache;
 	}
 
 	/**
 	 *
-	 * @return GO_Base_Config
+	 * @return \GO\Base\Config
 	 */
 	public static function config() {
 		if (!isset(self::$_config)) {
-			self::$_config = new \GO_Base_Config();
+			self::$_config = new \GO\Base\Config();
 		}
 		return self::$_config;
 	}
 
 	/**
 	 *
-	 * @return GO_Base_Session
+	 * @return \GO\Base\Session
 	 */
 	public static function session() {
 		if (!isset(self::$_session)) {
-			self::$_session = new \GO_Base_Session();
+			self::$_session = new \GO\Base\Session();
 		}
 		return self::$_session;
 	}
@@ -531,7 +531,7 @@ class GO{
 		\GO::session();
 		
 		if(\GO::config()->debug){
-			self::$_scriptStartTime = \GO_Base_Util_Date::getmicrotime();			
+			self::$_scriptStartTime = \GO\Base\Util\Date::getmicrotime();			
 		}
 		
 		date_default_timezone_set(\GO::user() ? \GO::user()->timezone : \GO::config()->default_timezone);
@@ -791,7 +791,7 @@ class GO{
 		if (!empty(self::config()->info_log)) {
 
 			if (empty(\GO::session()->values["logdircheck"])) {
-				$folder = new \GO_Base_Fs_Folder(dirname(self::config()->info_log));
+				$folder = new \GO\Base\Fs\Folder(dirname(self::config()->info_log));
 				$folder->create();
 				\GO::session()->values["logdircheck"] = true;
 			}
@@ -826,7 +826,7 @@ class GO{
 	}
 	
 	public static function debugPageLoadTime($id){
-		 $time = \GO_Base_Util_Date::getmicrotime()-self::$_scriptStartTime;
+		 $time = \GO\Base\Util\Date::getmicrotime()-self::$_scriptStartTime;
 		 
 		 \GO::debug("Script running at [$id] for ".$time."ms");
 	}
@@ -926,11 +926,11 @@ class GO{
 
 	/**
 	 *
-	 * @return GO_Base_Language
+	 * @return \GO\Base\Language
 	 */
 	public static function language(){
 		if(!isset(self::$_language)){
-			self::$_language=new \GO_Base_Language();
+			self::$_language=new \GO\Base\Language();
 		}
 		return self::$_language;
 	}
@@ -954,7 +954,7 @@ class GO{
 	 * Get the static model object
 	 *
 	 * @param String $modelName
-	 * @return GO_Base_Db_ActiveRecord
+	 * @return \GO\Base\Db\ActiveRecord
 	 */
 	public static function getModel($modelName){
 		//$modelName::model() does not work on php 5.2! That's why we use this function.
@@ -1068,7 +1068,7 @@ class GO{
 	public static function findClasses($subfolder){
 
 		$classes=array();
-		$folder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'go/base/'.$subfolder);
+		$folder = new \GO\Base\Fs\Folder(\GO::config()->root_path.'go/base/'.$subfolder);
 		if($folder->exists()){
 
 			$items = $folder->ls();
@@ -1094,7 +1094,7 @@ class GO{
 	public static function findFsClasses($subfolder, $subClassOf=null){
 
 		$classes=array();
-		$folder = new \GO_Base_Fs_Folder(\GO::config()->file_storage_path.'php/'.$subfolder);
+		$folder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'php/'.$subfolder);
 		if($folder->exists()){
 
 			$items = $folder->ls();

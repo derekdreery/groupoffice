@@ -17,7 +17,7 @@
  * @property int $id
  */
 
-class GO_Addressbook_Model_Addresslist extends GO_Base_Db_ActiveRecord {
+class GO_Addressbook_Model_Addresslist extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * Returns a static model of itself

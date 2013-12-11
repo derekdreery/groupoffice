@@ -1,5 +1,5 @@
 <?php
-class GO_Sites_Widgets_Uploader extends GO_Sites_Widgets_Component {
+class GO_Sites_Widgets_Uploader extends \GO_Sites_Widgets_Component {
 	
 	public $max_file_size = '100mb';
 	public $chunk_size = '10mb';

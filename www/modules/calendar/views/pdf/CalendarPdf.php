@@ -13,7 +13,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
+class GO_Calendar_Views_Pdf_CalendarPdf extends \GO\Base\Util\Pdf {
 	
 	private $_start_time = '';
 	private $_end_time = '';
@@ -115,7 +115,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 				for ($i = 0; $i < $maxCells; $i++) {
  					$label = $this->_days > $maxCells ? $fullDays[date('w', $time)] : $fullDays[date('w', $time)] . ', ' . date(\GO::user()->completeDateFormat, $time);
 					$this->Cell($cellWidth, 20, $label, 1, 0, 'L', 1);
-					$time = \GO_Base_Util_Date::date_add($time, 1);
+					$time = \GO\Base\Util\Date::date_add($time, 1);
 				}
 				$this->Ln();
 			}
@@ -151,7 +151,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 				$this->setXY($tableLeftMargin + ($pos * $cellWidth), $cellStartY);
 
 				if ($this->_days > 7) {
-					$time = \GO_Base_Util_Date::date_add($this->_start_time, $i);
+					$time = \GO\Base\Util\Date::date_add($this->_start_time, $i);
 					$this->Cell($cellWidth, $this->cell_height, date('d', $time), 0, 1, 'R');
 					$this->setX($tableLeftMargin + ($pos * $cellWidth));
 				}
@@ -399,7 +399,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 						$this->ln(10);
 					}
 				}
-				$time = \GO_Base_Util_Date::date_add($time, 1);
+				$time = \GO\Base\Util\Date::date_add($time, 1);
 			}
 		}
 	}
@@ -427,8 +427,8 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 			}
 
 			//$cellIndex = floor(($index_time-$this->_start_time)/86400);
-			$cellIndex = \GO_Base_Util_Date::date_diff_days($this->_start_time, $index_time);
-			$index_time = \GO_Base_Util_Date::date_add($index_time, 1);
+			$cellIndex = \GO\Base\Util\Date::date_diff_days($this->_start_time, $index_time);
+			$index_time = \GO\Base\Util\Date::date_add($index_time, 1);
 			$cellEvents[$cellIndex][] = $event;
 		}
 	}

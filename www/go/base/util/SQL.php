@@ -16,7 +16,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.util
  */
-class GO_Base_Util_SQL {
+namespace GO\Base\Util;
+
+class SQL {
 
 	/**
 	 * Get's all queries from an SQL dump file in an array

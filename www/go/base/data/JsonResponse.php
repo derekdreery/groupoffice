@@ -17,7 +17,9 @@
  * @author Michael de Hart <mdhart@intermesh.nl>
  * @package GO.base.data
  */
-class GO_Base_Data_JsonResponse implements ArrayAccess {
+namespace GO\Base\Data;
+
+class JsonResponse implements \ArrayAccess {
 	
 	private $_data;
 	
@@ -85,7 +87,7 @@ class GO_Base_Data_JsonResponse implements ArrayAccess {
 		return $this->_data;
 	}
 	
-	public function mergeWith(\GO_Base_Data_JsonResponse $response){
+	public function mergeWith(JsonResponse $response){
 		$this->_data = array_merge($this->_data, $response->getData());
 	}
 	

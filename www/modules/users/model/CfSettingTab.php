@@ -19,7 +19,7 @@
  * @property int $cf_category_id
  */
 
-class GO_Users_Model_CfSettingTab extends GO_Base_Db_ActiveRecord{
+class GO_Users_Model_CfSettingTab extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
@@ -63,11 +63,11 @@ class GO_Users_Model_CfSettingTab extends GO_Base_Db_ActiveRecord{
 	  * Get an activestatement witch includes all the customfieldCategories that 
 	  * will be showed in the settings tab.
 	  * 
-	  * @return GO_Base_Db_ActiveStatement
+	  * @return \GO\Base\Db\ActiveStatement
 	  */
 	 public function getSettingTabs(){
 		 		 
-		 $findParams = GO_Base_Db_FindParams::newInstance()
+		 $findParams = \GO\Base\Db\FindParams::newInstance()
 						 ->ignoreAcl()
 						 ->joinModel(array(
 								'model'=>'GO_Users_Model_CfSettingTab',									
@@ -77,7 +77,7 @@ class GO_Users_Model_CfSettingTab extends GO_Base_Db_ActiveRecord{
 								'tableAlias'=>'cfs', //Optional table alias					
 								'type'=>'INNER' //defaults to INNER,
 						 ))
-						 ->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('extends_model', "GO_Addressbook_Model_Contact"))
+						 ->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('extends_model', "GO_Addressbook_Model_Contact"))
 						 ->order('sort_index');
 		 
 		 $stmt = GO_Customfields_Model_Category::model()->find($findParams);

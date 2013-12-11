@@ -27,7 +27,9 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base 
  */
-class GO_Base_Module extends GO_Base_Observable {
+namespace GO\Base;
+
+class Module extends \GO\Base\Observable {
 
 	private $_id;
 	/**
@@ -179,7 +181,7 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * Find the module manager class by id.
 	 * 
 	 * @param string $moduleId eg. "addressbook"
-	 * @return \GO_Base_Module|boolean 
+	 * @return Module|boolean 
 	 */
 	public static function findByModuleId($moduleId){
 		$className = 'GO_'.ucfirst($moduleId).'_'.ucfirst($moduleId).'Module';
@@ -192,7 +194,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		if(class_exists($className))
 			return new $className;
 		else{
-			$modMan =  new \GO_Base_Module();
+			$modMan =  new Module();
 			$modMan->setId($moduleId);
 			return $modMan;
 		}
@@ -208,7 +210,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		if(!file_exists($updatesFile))
 			$updatesFile = $this->path() . 'install/updates.inc.php';
 		
-		return \GO_Base_Util_Common::countUpgradeQueries($updatesFile);
+		return \GO\Base\Util\Common::countUpgradeQueries($updatesFile);
 	}
 	
 	public function checkDependenciesForInstallation($modulesToBeInstalled=array()){
@@ -219,7 +221,7 @@ class GO_Base_Module extends GO_Base_Observable {
 				
 				$moduleNames = array();
 				foreach($depends as $moduleId){
-					$modManager = \GO_Base_Module::findByModuleId($moduleId);
+					$modManager = Module::findByModuleId($moduleId);
 					$moduleNames[]=$modManager ? $modManager->name () : $moduleId;
 				}				
 				
@@ -240,7 +242,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		try{
 			if(file_exists($sqlFile))
 			{
-				$queries = \GO_Base_Util_SQL::getSqlQueries($sqlFile);
+				$queries = \GO\Base\Util\SQL::getSqlQueries($sqlFile);
 
 				foreach($queries as $query)
 					\GO::getDbConnection ()->query($query);
@@ -253,7 +255,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		
 		
 		//call saveUser for each user
-//		$stmt = \GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
+//		$stmt = \GO\Base\Model\User::model()->find(array('ignoreAcl'=>true));		
 //		while($user = $stmt->fetch()){
 //			call_user_func(array(get_class($this),'saveUser'), $user, true);
 //		}
@@ -272,7 +274,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		
 		
 //		//call deleteUser for each user
-//		$stmt = \GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
+//		$stmt = \GO\Base\Model\User::model()->find(array('ignoreAcl'=>true));		
 //		while($user = $stmt->fetch()){
 //			call_user_func(array(get_class($this),'deleteUser'), $user);
 //		}
@@ -281,17 +283,17 @@ class GO_Base_Module extends GO_Base_Observable {
 		$cronClasses = $this->findClasses('cron');
 		foreach($cronClasses as $class){
 			
-			$jobs = \GO_Base_Cron_CronJob::model()->findByAttribute('job', $class->getName());
+			$jobs = \GO\Base\Cron\CronJob::model()->findByAttribute('job', $class->getName());
 			foreach($jobs as $job)
 				$job->delete();			
 		}
 		
 		
-		//delete all models from the GO_Base_Model_ModelType table.
+		//delete all models from the \GO\Base\Model\ModelType table.
 		//They are used for faster linking and search cache. Each linkable model is mapped to an id in this table.
 		$models = $this->getModels();
 		foreach($models as $model){			
-			$modelType = \GO_Base_Model_ModelType::model()->findSingleByAttribute('model_name', $model->getName());			
+			$modelType = \GO\Base\Model\ModelType::model()->findSingleByAttribute('model_name', $model->getName());			
 			if($modelType)
 				$modelType->delete();
 		}
@@ -300,7 +302,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		
 		if(file_exists($sqlFile))
 		{
-			$queries = \GO_Base_Util_SQL::getSqlQueries($sqlFile);
+			$queries = \GO\Base\Util\SQL::getSqlQueries($sqlFile);
 			foreach($queries as $query)
 				\GO::getDbConnection ()->query($query);
 		}
@@ -314,9 +316,9 @@ class GO_Base_Module extends GO_Base_Observable {
 
 	/**
 	 * This class can be overriden by a module class to add listeners to objects
-	 * that extend the GO_Base_Observable class.
+	 * that extend the \GO\Base\Observable class.
 	 * 
-	 * eg. \GO_Base_Model_User::model()->addListener('save','SomeClass','someStaticFunction');
+	 * eg. \GO\Base\Model\User::model()->addListener('save','SomeClass','someStaticFunction');
 	 * 	 
 	 */
 	public static function initListeners() {
@@ -348,7 +350,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		$models=$this->getModels();
 
 		foreach($models as $model){
-			if($model->isSubclassOf("GO_Base_Db_ActiveRecord")){
+			if($model->isSubclassOf("\GO\Base\Db\ActiveRecord")){
 				echo $response[] = "Processing ".$model->getName()."\n";
 				$stmt = \GO::getModel($model->getName())->rebuildSearchCache();
 			
@@ -371,7 +373,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		
 		
 		foreach($models as $model){	
-			if($model->isSubclassOf("GO_Base_Db_ActiveRecord")){
+			if($model->isSubclassOf("\GO\Base\Db\ActiveRecord")){
 				$m = \GO::getModel($model->getName());
 				if($m->checkDatabaseSupported()){					
 					
@@ -417,7 +419,7 @@ class GO_Base_Module extends GO_Base_Observable {
 	public function findClasses($subfolder){
 		
 		$classes=array();
-		$folder = new \GO_Base_Fs_Folder($this->path().$subfolder);
+		$folder = new \GO\Base\Fs\Folder($this->path().$subfolder);
 		if($folder->exists()){
 			
 			$items = $folder->ls();

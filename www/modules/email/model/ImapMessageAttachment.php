@@ -16,7 +16,7 @@
  * IMAP message attachment model
  */
 
-class GO_Email_Model_ImapMessageAttachment extends GO_Email_Model_MessageAttachment{
+class GO_Email_Model_ImapMessageAttachment extends \GO_Email_Model_MessageAttachment{
 
 	/**
 	 *
@@ -52,7 +52,7 @@ class GO_Email_Model_ImapMessageAttachment extends GO_Email_Model_MessageAttachm
 		return $this->_tmpDir;
 	}
 	
-	public function saveToFile(\GO_Base_Fs_Folder $targetFolder){
+	public function saveToFile(\GO\Base\Fs\Folder $targetFolder){
 		$imap = $this->account->openImapConnection($this->mailbox);
 		return $imap->save_to_file($this->uid, $targetFolder->createChild($this->name)->path(),  $this->number, $this->encoding, true);
 	}

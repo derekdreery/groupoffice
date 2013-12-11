@@ -6,7 +6,7 @@
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
  *
  */
-class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModelController {
+class GO_Addressbook_Controller_Company extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Addressbook_Model_Company';
 
@@ -17,19 +17,19 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		
 		$response['data']['addressbook_name'] = $model->addressbook->name;
 
-		$response['data']['google_maps_link'] = \GO_Base_Util_Common::googleMapsLink(
+		$response['data']['google_maps_link'] = \GO\Base\Util\Common::googleMapsLink(
 										$model->address, $model->address_no, $model->city, $model->country);
 
 		$response['data']['formatted_address'] = nl2br($model->getFormattedAddress());
 
-		$response['data']['post_google_maps_link'] = \GO_Base_Util_Common::googleMapsLink(
+		$response['data']['post_google_maps_link'] = \GO\Base\Util\Common::googleMapsLink(
 										$model->post_address, $model->post_address_no, $model->post_city, $model->post_country);
 
 		$response['data']['post_formatted_address'] = nl2br($model->getFormattedPostAddress());
 
 		$response['data']['employees'] = array();
 		$sortAlias = \GO::user()->sort_name=="first_name" ? array('first_name','last_name') : array('last_name','first_name');
-		$stmt = $model->contacts(\GO_Base_Db_FindParams::newInstance()->order($sortAlias));
+		$stmt = $model->contacts(\GO\Base\Db\FindParams::newInstance()->order($sortAlias));
 		while ($contact = $stmt->fetch()) {
 			$response['data']['employees'][] = array(
 					'id' => $contact->id,
@@ -166,7 +166,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		}elseif(!empty($params['download_photo_url'])){
 			
 			$file = \GO\Base\Fs\File::tempFile();	
-			$c = new \GO_Base_Util_HttpClient();
+			$c = new \GO\Base\Util\HttpClient();
 			
 			if(!$c->downloadFile($params['download_photo_url'], $file))
 				throw new \Exception("Could not download photo from: '".$params['download_photo_url']."'");
@@ -186,15 +186,15 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		//fetching contact will check read permission
 		$company = \GO_Addressbook_Model_Company::model()->findByPk($params['id']);
 		
-		\GO_Base_Util_Http::outputDownloadHeaders($company->getPhotoFile(), true, false);
+		\GO\Base\Util\Http::outputDownloadHeaders($company->getPhotoFile(), true, false);
 		$company->getPhotoFile()->output();
 	}
 	
 	
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		
 		if(!empty($params['filters'])){
-			$abMultiSel = new \GO_Base_Component_MultiSelectGrid(
+			$abMultiSel = new \GO\Base\Component\MultiSelectGrid(
 							'books', 
 							"GO_Addressbook_Model_Addressbook",$store, $params, true);		
 			
@@ -203,7 +203,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 			//$abMultiSel->setButtonParams($response);
 			//$abMultiSel->setStoreTitle();
 
-			$addresslistMultiSel = new \GO_Base_Component_MultiSelectGrid(
+			$addresslistMultiSel = new \GO\Base\Component\MultiSelectGrid(
 							'addresslist_filter', 
 							"GO_Addressbook_Model_Addresslist",$store, $params, false);				
 
@@ -215,7 +215,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 					//we need to join the addresslist link model if a filter for the addresslist is enabled.
 					$storeParams->join(
 									\GO_Addressbook_Model_AddresslistCompany::model()->tableName(), 
-									\GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.company_id', '=', 't', true, true), 
+									\GO\Base\Db\FindCriteria::newInstance()->addCondition('id', 'ac.company_id', '=', 't', true, true), 
 									'ac'
 						);
 					
@@ -239,7 +239,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	protected function getStoreParams($params) {
 
 
-		$criteria = \GO_Base_Db_FindCriteria::newInstance()
+		$criteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addModel(\GO_Addressbook_Model_Company::model(), 't');
 
 		// Filter by clicked letter
@@ -254,7 +254,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 			$criteria->addCondition('name', $query, $query_type);
 		}
 
-		$storeParams = \GO_Base_Db_FindParams::newInstance()
+		$storeParams = \GO\Base\Db\FindParams::newInstance()
 						->export("company")
 						->criteria($criteria)
 						->joinAclFieldTable()
@@ -287,7 +287,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 			try {
 				$model->addressbook_id=$params['book_id'];
 				$model->save();
-			}catch(\GO_Base_Exception_AccessDenied $e){
+			}catch(\GO\Base\Exception\AccessDenied $e){
 				$response['failedToMove'][]=$model->id;
 			}
 		}
@@ -305,7 +305,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		$to_company = \GO_Addressbook_Model_Company::model()->findByPk($params['to_company_id']);
 
 		$contacts = \GO_Addressbook_Model_Contacts::model()->find(
-						\GO_Base_Db_FindCriteria::newInstance()
+						\GO\Base\Db\FindCriteria::newInstance()
 										->addCondition('company_id', $params['from_company_id'])
 		);
 
@@ -322,12 +322,12 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		return $response;
 	}
 
-	protected function beforeHandleAdvancedQuery($advQueryRecord, GO_Base_Db_FindCriteria &$criteriaGroup, GO_Base_Db_FindParams &$storeParams) {
+	protected function beforeHandleAdvancedQuery($advQueryRecord, \GO\Base\Db\FindCriteria &$criteriaGroup, \GO\Base\Db\FindParams &$storeParams) {
 		$storeParams->debugSql();
 		switch ($advQueryRecord['field']) {
 			case 'employees.name':
 				$storeParams->join(
-								\GO_Addressbook_Model_Contact::model()->tableName(), \GO_Base_Db_FindCriteria::newInstance()->addRawCondition('`t`.`id`', '`employees' . $advQueryRecord['id'] . '`.`company_id`'), 'employees' . $advQueryRecord['id']
+								\GO_Addressbook_Model_Contact::model()->tableName(), \GO\Base\Db\FindCriteria::newInstance()->addRawCondition('`t`.`id`', '`employees' . $advQueryRecord['id'] . '`.`company_id`'), 'employees' . $advQueryRecord['id']
 				);
 				$criteriaGroup->addRawCondition(
 								'CONCAT_WS(\' \',`employees' . $advQueryRecord['id'] . '`.`first_name`,`employees' . $advQueryRecord['id'] . '`.`middle_name`,`employees' . $advQueryRecord['id'] . '`.`last_name`)', ':employee' . $advQueryRecord['id'], $advQueryRecord['comparator'], $advQueryRecord['andor'] == 'AND'
@@ -343,7 +343,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 
 // This breaks the company combobox selections (replaces t.name for employees.name (both have the name as ext))
 // 
-//	protected function afterAttributes(&$attributes, &$response, &$params, GO_Base_Db_ActiveRecord $model) {
+//	protected function afterAttributes(&$attributes, &$response, &$params, \GO\Base\Db\ActiveRecord $model) {
 //		//unset($attributes['t.company_id']);
 //		$attributes['employees.name'] = array('name'=>'employees.name','label'=>\GO::t('cmdPanelEmployee', 'addressbook'));
 //		return parent::afterAttributes($attributes, $response, $params, $model);
@@ -387,7 +387,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	 * Remove the invalid emails from records to be imported
 	 */
 	protected function beforeImport($params, &$model, &$attributes, $record) {	
-	  if(isset($attributes['email']) && !\GO_Base_Util_String::validate_email($attributes['email']))
+	  if(isset($attributes['email']) && !\GO\Base\Util\String::validate_email($attributes['email']))
           unset($attributes['email']);
         
 	  return parent::beforeImport($params, $model, $attributes, $record);

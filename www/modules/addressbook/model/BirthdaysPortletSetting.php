@@ -20,7 +20,7 @@
  * @property int $addressbook_id
  */
 
-class GO_Addressbook_Model_BirthdaysPortletSetting extends GO_Base_Db_ActiveRecord {
+class GO_Addressbook_Model_BirthdaysPortletSetting extends \GO\Base\Db\ActiveRecord {
 
 	public function tableName() { return 'ab_portlet_birthdays'; }
 	public function primaryKey() { return array('addressbook_id','user_id');}

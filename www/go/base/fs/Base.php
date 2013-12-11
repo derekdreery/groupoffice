@@ -17,7 +17,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @copyright Copyright Intermesh BV.
  */
-abstract class GO_Base_Fs_Base{
+namespace GO\Base\Fs;
+
+abstract class Base{
 	
 	protected $path;
 	
@@ -34,10 +36,10 @@ abstract class GO_Base_Fs_Base{
 //		\GO::debug("FS construct $path");
 		
 		if(empty($path))
-			throw new \Exception("Path may not be empty in GO_Base_Fs_Base");
+			throw new \Exception("Path may not be empty in Base");
 		
 		//normalize path slashes
-		if(\GO_Base_Util_Common::isWindows())
+		if(\GO\Base\Util\Common::isWindows())
 			$path=str_replace('\\','/', $path);
 		
 		if(!self::checkPathInput($path))
@@ -56,20 +58,20 @@ abstract class GO_Base_Fs_Base{
 	 * Create a folder or file from a path string
 	 * 
 	 * @param string $path
-	 * @return GO\Base\Fs\File|GO_Base_Fs_Folder
+	 * @return GO\Base\Fs\File|\GO\Base\Fs\Folder
 	 */
 	public static function createFromPath($path){
 		if(is_file($path))
 			return new \GO\Base\Fs\File($path);
 		else
-			return new \GO_Base_Fs_Folder ($path);
+			return new \GO\Base\Fs\Folder ($path);
 	}
 	
 	
 	/**
 	 * Get the parent folder object
 	 * 
-	 * @return GO_Base_Fs_Folder Parent folder object
+	 * @return \GO\Base\Fs\Folder Parent folder object
 	 */
 	public function parent(){
 		
@@ -77,13 +79,13 @@ abstract class GO_Base_Fs_Base{
 		if($parentPath==$this->path)
 			return false;
 		
-		return new \GO_Base_Fs_Folder($parentPath);
+		return new \GO\Base\Fs\Folder($parentPath);
 	}
 	
 	/**
 	 * Find the first existing parent folder.
 	 * 
-	 * @return GO_Base_Fs_Folder
+	 * @return \GO\Base\Fs\Folder
 	 */
 	public function firstExistingParent(){
 		$parent=$this;
@@ -98,14 +100,14 @@ abstract class GO_Base_Fs_Base{
 	 * Get a child file or folder.
 	 * 
 	 * @param string $filename
-	 * @return \GO\Base\Fs\File|\GO_Base_Fs_Folder|boolean 
+	 * @return \GO\Base\Fs\File|\GO\Base\Fs\Folder|boolean 
 	 */
 	public function child($filename){
 		$childPath = $this->path.'/'.$filename;
 		if(is_file($childPath)){
 			return new \GO\Base\Fs\File($childPath);
 		} elseif(is_dir($childPath)){
-			return new \GO_Base_Fs_Folder($childPath);
+			return new \GO\Base\Fs\Folder($childPath);
 		}else
 		{
 			return false;
@@ -117,14 +119,14 @@ abstract class GO_Base_Fs_Base{
 	 * 
 	 * @param string $filename
 	 * @param boolean $isFile
-	 * @return \GO\Base\Fs\File|\GO_Base_Fs_Folder 
+	 * @return \GO\Base\Fs\File|\GO\Base\Fs\Folder 
 	 */
 	public function createChild($filename, $isFile=true){
 		$childPath = $this->path.'/'.$filename;
 		if($isFile){
 			return new \GO\Base\Fs\File($childPath);
 		} else{
-			return new \GO_Base_Fs_Folder($childPath);
+			return new \GO\Base\Fs\Folder($childPath);
 		}
 	}
 	
@@ -308,7 +310,7 @@ abstract class GO_Base_Fs_Base{
 		}
 		
 		if(\GO::config()->convert_utf8_filenames_to_ascii)
-			$filename = \GO_Base_Util_String::utf8ToASCII($filename);
+			$filename = \GO\Base\Util\String::utf8ToASCII($filename);
 		
 		if(strlen($filename)>255)
 			$filename = substr($filename, 0,255);

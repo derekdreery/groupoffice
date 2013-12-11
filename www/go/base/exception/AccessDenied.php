@@ -19,7 +19,9 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_AccessDenied extends Exception
+namespace GO\Base\Exception;
+
+class AccessDenied extends \Exception
 {
 
 	public function __construct($message='') {

@@ -20,12 +20,14 @@
  * @package GO.base.db
  */
 
-class GO_Base_Db_ActiveStatement implements IteratorAggregate {
+namespace GO\Base\Db;
+
+class ActiveStatement implements \IteratorAggregate {
 	
   /**
    * The model type this statement result returns.
    * 
-   * @var GO_Base_Db_ActiveRecord 
+   * @var \GO\Base\Db\ActiveRecord 
    */
   public $model;
 	
@@ -58,7 +60,7 @@ class GO_Base_Db_ActiveStatement implements IteratorAggregate {
 	 * The total number of found rows. Even when specifying a limit it will return 
 	 * the number of rows as if you wouldn't have specified a limit.
 	 * 
-	 * It is only set when calcFoundRows was passed to the \GO_Base_Db_ActiveRecord::find() function parameters.
+	 * It is only set when calcFoundRows was passed to the \GO\Base\Db\ActiveRecord::find() function parameters.
    * 
    * @var int 
    */
@@ -68,7 +70,7 @@ class GO_Base_Db_ActiveStatement implements IteratorAggregate {
 //	public static $idCount=0;
 //	public static $aliveStmts=array();
 
-  public function __construct(PDOStatement $stmt, GO_Base_Db_ActiveRecord $model) {
+  public function __construct(\PDOStatement $stmt, \GO\Base\Db\ActiveRecord $model) {
     $this->stmt=$stmt;
 		
 		$this->model=$model;
@@ -112,7 +114,7 @@ class GO_Base_Db_ActiveStatement implements IteratorAggregate {
 	/**
 	 * Fetch a model from the statement
 	 * 
-	 * @return GO_Base_Db_ActiveRecord
+	 * @return \GO\Base\Db\ActiveRecord
 	 */
 	public function fetch($fetch_style=null){
 		return $this->stmt->fetch($fetch_style);
@@ -121,7 +123,7 @@ class GO_Base_Db_ActiveStatement implements IteratorAggregate {
 	/**
 	 * Get all models from the find result
 	 * 
-	 * @return GO_Base_Db_ActiveRecord[]
+	 * @return \GO\Base\Db\ActiveRecord[]
 	 */
 	public function fetchAll($fetch_style=null){
 		return $this->stmt->fetchAll($fetch_style);

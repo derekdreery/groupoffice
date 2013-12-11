@@ -17,7 +17,7 @@
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
 
-class GO_Tasks_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelectModelController {
+class GO_Tasks_Controller_Portlet extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called
@@ -51,7 +51,7 @@ class GO_Tasks_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelect
 	 */
 	protected function actionPortletGrid($params) {
 		
-		$now = GO_Base_Util_Date::date_add(mktime(0,0,0),1);
+		$now = \GO\Base\Util\Date::date_add(mktime(0,0,0),1);
 		
 		if(isset($params['completed_task_id'])) {
 			$updateTask = GO_Tasks_Model_Task::model()->findByPk($params['completed_task_id']);
@@ -64,17 +64,17 @@ class GO_Tasks_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelect
 		$sort = !empty($params['sort']) ? $params['sort'] : 'due_time';
 		$dir = !empty($params['dir']) ? $params['dir'] : 'ASC';
 		
-		$store = GO_Base_Data_Store::newInstance(\GO_Tasks_Model_Task::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Tasks_Model_Task::model());
 		
-		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('start_time', $now, '<')
 						->addCondition('status',  GO_Tasks_Model_Task::STATUS_COMPLETED , '<>', 't');
 		
-		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('user_id', GO::user()->id,'=','pt')
 						->addCondition('tasklist_id', 'pt.tasklist_id', '=', 't', true, true);
 		
-		$tasklistJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$tasklistJoinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('tasklist_id', 'tl.id', '=', 't', true, true);
 		
 		$findParams = $store->getDefaultParams($params)

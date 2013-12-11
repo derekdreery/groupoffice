@@ -55,7 +55,7 @@ class GO_Core_Controller_BatchEdit extends \GO\Base\Controller\AbstractControlle
 	/**
 	 * Update the model with the given attributes
 	 *  
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param \GO\Base\Db\ActiveRecord $model
 	 * @param array $data
 	 * @return Boolean 
 	 */

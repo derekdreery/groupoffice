@@ -1,9 +1,9 @@
 <?php
-class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractModelController{
+class GO_Addressbook_Controller_Addressbook extends \GO\Base\Controller\AbstractModelController{
 	
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		$storeParams->debugSql();
-		$multiSel = new \GO_Base_Component_MultiSelectGrid(
+		$multiSel = new \GO\Base\Component\MultiSelectGrid(
 						'books', 
 						"GO_Addressbook_Model_Addressbook",$store, $params, true);		
 		$multiSel->setFindParamsForDefaultSelection($storeParams);
@@ -58,9 +58,9 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		$addressbook = \GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
 		
 		$filename = $addressbook->name.'.vcf';
-		\GO_Base_Util_Http::outputDownloadHeaders(new \GO_Base_FS_File($filename));		
+		\GO\Base\Util\Http::outputDownloadHeaders(new \GO_Base_FS_File($filename));		
 	
-		foreach ($addressbook->contacts(\GO_Base_Db_FindParams::newInstance()->select('t.*')) as $contact)
+		foreach ($addressbook->contacts(\GO\Base\Db\FindParams::newInstance()->select('t.*')) as $contact)
 			echo $contact->toVObject()->serialize();
 	}
 	
@@ -125,7 +125,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		$addressbook = \GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
 		
 		if(!$addressbook)
-			throw new \GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		$addressbook->truncate();
 		
@@ -206,7 +206,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		$addressbook = \GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
 		
 		if(!$addressbook)
-			throw new \GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		\GO\Base\Fs\File::setAllowDeletes(false);
 		//VERY IMPORTANT:
@@ -226,7 +226,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 				echo '<h1>'.\GO::t('removeDuplicates').'</h1>';
 
 				$checkFieldsStr = 't.'.implode(', t.',$checkFields);
-				$findParams = \GO_Base_Db_FindParams::newInstance()
+				$findParams = \GO\Base\Db\FindParams::newInstance()
 								->ignoreAcl()
 								->select('t.id, count(*) AS n, '.$checkFieldsStr)
 								->group($checkFields)
@@ -249,7 +249,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 						$select .= ', t.files_folder_id';
 					}
 
-					$findParams = \GO_Base_Db_FindParams::newInstance()
+					$findParams = \GO\Base\Db\FindParams::newInstance()
 								->ignoreAcl()
 								->select($select.', '.$checkFieldsStr)
 								->order('id','ASC');

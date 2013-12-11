@@ -1,5 +1,7 @@
 <?php
-class GO_Base_Util_TagParser{
+namespace GO\Base\Util;
+
+class TagParser{
 	
 	/**
 	 * Parse as string for tags. Tags must be closed.

@@ -41,7 +41,7 @@ class GO_Imapauth_Authenticator {
 
 	/**
 	 * Authenticate to imap and return 
-	 * @return GO_Base_Model_User 
+	 * @return \GO\Base\Model\User 
 	 */
 	
 	public function imapAuthenticate() {
@@ -49,7 +49,7 @@ class GO_Imapauth_Authenticator {
 		//disable password validation because we can't control the external passwords
 		\GO::config()->password_validate=false;
 		
-		$imap = new \GO_Base_Mail_Imap();
+		$imap = new \GO\Base\Mail\Imap();
 		try {
 			$imap->connect(
 							$this->config['host'], $this->config['port'], $this->imapUsername, $this->imapPassword, $this->config['ssl']);
@@ -58,7 +58,7 @@ class GO_Imapauth_Authenticator {
 			$imap->disconnect();
 
 
-			$user = \GO_Base_Model_User::model()->findSingleByAttribute('username', $this->goUsername);
+			$user = \GO\Base\Model\User::model()->findSingleByAttribute('username', $this->goUsername);
 			if ($user) {
 				\GO::debug("IMAPAUTH: Group-Office user already exists.");
 				if (!$user->checkPassword($this->imapPassword)) {

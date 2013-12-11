@@ -23,7 +23,9 @@
  * @package GO.base.util
  * @since Group-Office 3.0
  */
-class GO_Base_Util_TemplateParser
+namespace GO\Base\Util;
+
+class TemplateParser
 {
 	public $openTagSymbol = '&lt;';
 	public $closeTagSymbol = '&gt;';

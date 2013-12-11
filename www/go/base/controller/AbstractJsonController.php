@@ -30,15 +30,15 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 	 * @deprecated
 	 * Get a Json object from the response data
 	 * @param array $data
-	 * @return GO_Base_Data_JsonResponse response object
+	 * @return \GO\Base\Data\JsonResponse response object
 	 */
 	public function renderJson($data) {
-		return new \GO_Base_Data_JsonResponse($data);
+		return new \GO\Base\Data\JsonResponse($data);
 	}
 	
 	/**
 	 * Render JSON response for forms
-	 * @param GO_Base_Db_ActiveRecord $model the AWR to renerated the JSON form data for
+	 * @param \GO\Base\Db\ActiveRecord $model the AWR to renerated the JSON form data for
 	 * @param array $remoteComboField List all fields that require a remote text to load for a remote combobox.
 	 * eg. with a model you want to provide the category name so that that the
 	 * category combo store does not need to be loaded to show it.
@@ -49,18 +49,18 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 	 * 
 	 * The category name would be looked up in the model model ->category->name.
 	 * A relation for this must be defined. See ActiveRecord->relations.
-	 * @see \GO_Base_Controller_AbstractModelController::remoteComboFields()
+	 * @see \GO\Base\Controller\AbstractModelController::remoteComboFields()
 	 * @param array $extraFields the extra fields that should be attached to the data array as key => value
-	 * @return GO_Base_Data_JsonResponse Response object
-	 * @throws GO_Base_Exception_AccessDenied
+	 * @return \GO\Base\Data\JsonResponse Response object
+	 * @throws \GO\Base\Exception\AccessDenied
 	 */
 	public function renderForm($model, $remoteComboFields = array(), $extraFields = array()) {
 
 		$response = array('data' => array(), 'success' => true);
 
 		//TODO: check if this can be moved. This methode renders JSON and should not check permissions.
-		if (!$model->checkPermissionLevel($model->isNew ? \GO_Base_Model_Acl::CREATE_PERMISSION : \GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new \GO_Base_Exception_AccessDenied();
+		if (!$model->checkPermissionLevel($model->isNew ? \GO\Base\Model\Acl::CREATE_PERMISSION : \GO\Base\Model\Acl::WRITE_PERMISSION))
+			throw new \GO\Base\Exception\AccessDenied();
 
 		//Init data array
 		$response['data'] = array_merge($model->getAttributes(), $extraFields);
@@ -81,14 +81,14 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 				&$remoteComboFields
 		));
 
-		return new \GO_Base_Data_JsonResponse($response);
+		return new \GO\Base\Data\JsonResponse($response);
 	}
 
 	/**
 	 * Can be used in actionDisplay like actions
-	 * @param GO_Base_Db_ActiveRecord $model the model to render display data for
+	 * @param \GO\Base\Db\ActiveRecord $model the model to render display data for
 	 * @param array $extraFields the extra fields that should be attached to the data array as key => value
-	 * @return GO_Base_Data_JsonResponse Response object
+	 * @return \GO\Base\Data\JsonResponse Response object
 	 */
 	public function renderDisplay($model, $extraFields = array()) {
 		$response = array('data' => array(), 'success' => true);
@@ -102,7 +102,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 		//$response['data'] = $model->getAttributes('html');
 		//$response['data']['model'] = $model->className();
 		$response['data']['permission_level'] = $model->getPermissionLevel();
-		$response['data']['write_permission'] = \GO_Base_Model_Acl::hasPermission($response['data']['permission_level'], \GO_Base_Model_Acl::WRITE_PERMISSION);
+		$response['data']['write_permission'] = \GO\Base\Model\Acl::hasPermission($response['data']['permission_level'], \GO\Base\Model\Acl::WRITE_PERMISSION);
 
 
 		$response['data']['customfields'] = array();
@@ -138,13 +138,13 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 				&$model
 		));
 
-		return new \GO_Base_Data_JsonResponse($response);
+		return new \GO\Base\Data\JsonResponse($response);
 	}
 
 	/**
 	 * Render the JSON outbut for a submit action to be used by ExtJS Form submit
-	 * @param GO_Base_Db_ActiveRecord $model
-	 * @return GO_Base_Data_JsonResponse Response object
+	 * @param \GO\Base\Db\ActiveRecord $model
+	 * @return \GO\Base\Data\JsonResponse Response object
 	 */
 	public function renderSubmit($model) {
 
@@ -172,7 +172,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 			$response['success'] = false;
 			//can't use <br /> tags in response because this goes wrong with the extjs fileupload hack with an iframe.
 			$response['feedback'] = sprintf(\GO::t('validationErrorsFound'), strtolower($model->localizedName)) . "\n\n" . implode("\n", $model->getValidationErrors()) . "\n";
-			if (\GO_Base_Util_Http::isAjaxRequest(false)) {
+			if (\GO\Base\Util\Http::isAjaxRequest(false)) {
 				$response['feedback'] = nl2br($response['feedback']);
 			}
 			$response['validationErrors'] = $model->getValidationErrors();
@@ -184,7 +184,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 					&$model
 			));
 
-		return new \GO_Base_Data_JsonResponse($response);
+		return new \GO\Base\Data\JsonResponse($response);
 	}
 
 	/**
@@ -192,9 +192,9 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 	 * @param GO_Base_Date_JsonStore $store I JsonStore object to get JSON from
 	 * @deprecated boolean $return still here for buttonParams (should button params be set in DbStore
 	 * @param mixed $buttonParams ???
-	 * @return GO_Base_Data_JsonResponse Response object
+	 * @return \GO\Base\Data\JsonResponse Response object
 	 */
-	public function renderStore(\GO_Base_Data_AbstractStore $store, $buttonParams=false) {
+	public function renderStore(\GO\Base\Data\AbstractStore $store, $buttonParams=false) {
 
 //		$response = array(
 //				"success" => true,
@@ -212,7 +212,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 		if (!empty($title))
 			$response['title'] = $title;
 
-		if ($store instanceof \GO_Base_Data_DbStore) {
+		if ($store instanceof \GO\Base\Data\DbStore) {
 			if ($store->getDeleteSuccess() !== null) {
 				$response['deleteSuccess'] = $store->getDeleteSuccess();
 				if(!$response['deleteSuccess'])
@@ -228,15 +228,15 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 			}
 		}
 
-		return new \GO_Base_Data_JsonResponse($response);
+		return new \GO\Base\Data\JsonResponse($response);
 	}
 	
 	/**
 	 * 
-	 * @param GO_Base_Data_AbstractStore $store
+	 * @param \GO\Base\Data\AbstractStore $store
 	 * @param type $params
 	 */
-	protected function renderExport(\GO_Base_Data_AbstractStore $store, $params) {
+	protected function renderExport(\GO\Base\Data\AbstractStore $store, $params) {
 		//define('EXPORTING', true);
 		//used by custom fields to format diffently
 		if(\GO::modules()->customfields)
@@ -248,7 +248,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 			'export_include_hidden'=>!empty($params['includeHidden'])
 		);
 		
-		$settings =  \GO_Base_Export_Settings::load();
+		$settings =  \GO\Base\Export\Settings::load();
 		$settings->saveFromArray($checkboxSettings);
 		
 		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="H"))
@@ -262,7 +262,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 			$includeColumns = explode(',',$params['columns']);
 			foreach($includeColumns as $incColumn){
 				if(!$columnModel->getColumn($incColumn))
-					$columnModel->addColumn (new \GO_Base_Data_Column($incColumn,$incColumn));
+					$columnModel->addColumn (new \GO\Base\Data\Column($incColumn,$incColumn));
 			}
 				
 			$columnModel->sort($includeColumns);
@@ -278,7 +278,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 			$params['type']=str_replace('GO_Base_Export', 'GO_Base_Storeexport', $params['type']);
 			$export = new $params['type']($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation);
 		}else
-			$export = new \GO_Base_Storeexport_ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
+			$export = new \GO\Base\Storeexport\ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
 
 		if(isset($params['extraLines']))
 			$export->addLines($params['extraLines']);
@@ -403,9 +403,9 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 			}
 
 			$workflowResponse['history'] = array();
-			$historiesStmnt = \GO_Workflow_Model_StepHistory::model()->findByAttribute('process_model_id', $workflowModel->id, \GO_Base_Db_FindParams::newInstance()->select('t.*')->order('ctime', 'DESC'));
+			$historiesStmnt = \GO_Workflow_Model_StepHistory::model()->findByAttribute('process_model_id', $workflowModel->id, \GO\Base\Db\FindParams::newInstance()->select('t.*')->order('ctime', 'DESC'));
 			while ($history = $historiesStmnt->fetch()) {
-				\GO_Base_Db_ActiveRecord::$attributeOutputMode = 'html';
+				\GO\Base\Db\ActiveRecord::$attributeOutputMode = 'html';
 
 
 				if ($history->step_id == '-1')
@@ -423,7 +423,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 						'status_name' => $history->status ? \GO::t('approved', 'workflow') : \GO::t('declined', 'workflow')
 				);
 
-				\GO_Base_Db_ActiveRecord::$attributeOutputMode = 'raw';
+				\GO\Base\Db\ActiveRecord::$attributeOutputMode = 'raw';
 			}
 
 			$response['data']['workflow'][] = $workflowResponse;
@@ -438,7 +438,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 		//Get all field models and build an array of categories with their
 		//fields for display.
 
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->order(array('category.sort_index', 't.sort_index'), array('ASC', 'ASC'));
 		$findParams->getCriteria()
 						->addCondition('extends_model', $model->customfieldsRecord->extendsModel(), '=', 'category');
@@ -503,7 +503,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 	}
 
 	private function _processLinksDisplay($model, $response) {
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->limit(15);
 
 		$ignoreModelTypes = array();
@@ -514,9 +514,9 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 
 		$findParams->getCriteria()->addInCondition('model_type_id', $ignoreModelTypes, 't', true, true);
 
-		$stmt = \GO_Base_Model_SearchCacheRecord::model()->findLinks($model, $findParams);
+		$stmt = \GO\Base\Model\SearchCacheRecord::model()->findLinks($model, $findParams);
 
-		$store = \GO_Base_Data_Store::newInstance(\GO_Base_Model_SearchCacheRecord::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO\Base\Model\SearchCacheRecord::model());
 		$store->setStatement($stmt);
 
 		$columnModel = $store->getColumnModel();
@@ -530,14 +530,14 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 	}
 
 	private function _processEventsDisplay($model, $response) {
-		$startOfDay = \GO_Base_Util_Date::clear_time(time());
+		$startOfDay = \GO\Base\Util\Date::clear_time(time());
 
-		$findParams = \GO_Base_Db_FindParams::newInstance()->order('start_time', 'DESC');
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order('start_time', 'DESC');
 		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=');
 
 		$stmt = \GO_Calendar_Model_Event::model()->findLinks($model, $findParams);
 
-		$store = \GO_Base_Data_Store::newInstance(\GO_Calendar_Model_Event::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Calendar_Model_Event::model());
 		$store->setStatement($stmt);
 
 		$columnModel = $store->getColumnModel();
@@ -552,7 +552,7 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 	}
 
 	private function _processCommentsDisplay($model, $response) {
-		$stmt = \GO_Comments_Model_Comment::model()->find(\GO_Base_Db_FindParams::newInstance()
+		$stmt = \GO_Comments_Model_Comment::model()->find(\GO\Base\Db\FindParams::newInstance()
 										->limit(5)
 										->select('t.*,cat.name AS categoryName')
 										->order('id', 'DESC')
@@ -564,13 +564,13 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 												'tableAlias' => 'cat',
 												'type' => 'LEFT'
 										))
-										->criteria(\GO_Base_Db_FindCriteria::newInstance()
+										->criteria(\GO\Base\Db\FindCriteria::newInstance()
 														->addModel(\GO_Comments_Model_Comment::model())
 														->addCondition('model_id', $model->id)
 														->addCondition('model_type_id', $model->modelTypeId())
 										));
 
-		$store = \GO_Base_Data_Store::newInstance(\GO_Comments_Model_Comment::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Comments_Model_Comment::model());
 		$store->setStatement($stmt);
 
 		$columnModel = $store->getColumnModel();
@@ -586,14 +586,14 @@ abstract class AbstractJsonController extends Controller\AbstractController {
 	}
 
 	private function _processTasksDisplay($model, $response) {
-		//$startOfDay = \GO_Base_Util_Date::clear_time(time());
+		//$startOfDay = \GO\Base\Util\Date::clear_time(time());
 
-		$findParams = \GO_Base_Db_FindParams::newInstance()->order('due_time', 'DESC');
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order('due_time', 'DESC');
 		//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', \GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
 
 		$stmt = \GO_Tasks_Model_Task::model()->findLinks($model, $findParams);
 
-		$store = \GO_Base_Data_Store::newInstance(\GO_Tasks_Model_Task::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Tasks_Model_Task::model());
 		$store->setStatement($stmt);
 
 		$store->getColumnModel()

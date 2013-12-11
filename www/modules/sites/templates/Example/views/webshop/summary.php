@@ -70,23 +70,23 @@
 			</table>
 								
 								<?php
-									GO_Base_Html_Form::renderBegin('webshop/site/summary','confirmSummary',true); 
+									\GO\Base\Html\Form::renderBegin('webshop/site/summary','confirmSummary',true); 
 									
-									GO_Base_Html_Hidden::render(array(
+									\GO\Base\Html\Hidden::render(array(
 										"label" => "",
 										"name" => "submitsummary",
 										"value" => 'Confirm',
 										"renderContainer" => false
 									));
 								
-//									GO_Base_Html_Submit::render(array(
+//									\GO\Base\Html\Submit::render(array(
 //										"label" => "",
 //										"name" => "submitsummary",
 //										"value" => 'Confirm',
 //										"renderContainer" => false
 //									));
 									
-//									GO_Base_Html_Reset::render(array(
+//									\GO\Base\Html\Reset::render(array(
 //										"label" => "",
 //										"name" => "reset",
 //										"value" => 'Cancel',
@@ -113,7 +113,7 @@
 				<?php
 
 
-					GO_Base_Html_Form::renderEnd();
+					\GO\Base\Html\Form::renderEnd();
 
 				?>
 

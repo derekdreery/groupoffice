@@ -1,6 +1,8 @@
 <?php
 
-abstract class GO_Base_Db_MultilingualActiveRecord extends GO_Base_Db_ActiveRecord {
+namespace GO\Base\Db;
+
+abstract class MultilingualActiveRecord extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * An array with all the attributes that contain multilangual values
@@ -39,7 +41,7 @@ abstract class GO_Base_Db_MultilingualActiveRecord extends GO_Base_Db_ActiveReco
 	/**
 	 * Get an activestatement with the available languages
 	 * 
-	 * @return mixed false or an GO_Base_Db_ActiveStatement 
+	 * @return mixed false or an \GO\Base\Db\ActiveStatement 
 	 */
 	public function activeLanguages() {
 		return false;
@@ -199,7 +201,7 @@ abstract class GO_Base_Db_MultilingualActiveRecord extends GO_Base_Db_ActiveReco
 	/**
 	 * Get an instance of the model of the relation
 	 * 
-	 * @return GO_Base_Db_ActiveRecord 
+	 * @return \GO\Base\Db\ActiveRecord 
 	 */
 	private function _getRelationModelInstance(){
 		

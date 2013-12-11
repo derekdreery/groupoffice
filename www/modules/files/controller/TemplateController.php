@@ -17,7 +17,7 @@
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
-class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelController {
+class GO_files_Controller_Template extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Files_Model_Template';
 
@@ -33,7 +33,7 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 		return parent::beforeSubmit($response, $model, $params);
 	}
 	
-	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		
 		$columnModel->formatColumn('type', '\GO\Base\Fs\File::getFileTypeDescription($model->extension)');
 		
@@ -52,7 +52,7 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 	protected function actionDownload($params){
 		$template = \GO_Files_Model_Template::model()->findByPk($params['id']);
 		
-	  \GO_Base_Util_Http::outputDownloadHeaders(new \GO\Base\Fs\File($template->name.'.'.$template->extension));
+	  \GO\Base\Util\Http::outputDownloadHeaders(new \GO\Base\Fs\File($template->name.'.'.$template->extension));
 		
 		echo $template->content;
 	}

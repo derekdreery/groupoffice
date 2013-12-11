@@ -18,7 +18,7 @@
  * The president model custom fields model.
  * 
  */
-class GO_Presidents_Customfields_Model_President extends GO_Customfields_Model_AbstractCustomFieldsRecord{
+class GO_Presidents_Customfields_Model_President extends \GO_Customfields_Model_AbstractCustomFieldsRecord{
 	/**
 	 * Returns a static model of itself
 	 * 

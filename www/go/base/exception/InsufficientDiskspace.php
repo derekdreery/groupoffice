@@ -19,13 +19,15 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_InsufficientDiskspace extends Exception
+namespace GO\Base\Exception;
+
+class InsufficientDiskspace extends \Exception
 {
 	private $_total_file_storage;
 	
 	public function __construct($message='') {
 
-		$message = \GO::t('quotaExceeded')."\n".sprintf(\GO::t('youAreUsing'),  \GO_Base_Util_Number::formatSize($this->getUsage()), \GO_Base_Util_Number::formatSize($this->getQuota())).$message;
+		$message = \GO::t('quotaExceeded')."\n".sprintf(\GO::t('youAreUsing'),  \GO\Base\Util\Number::formatSize($this->getUsage()), \GO\Base\Util\Number::formatSize($this->getQuota())).$message;
 		
 		parent::__construct($message);
 	}

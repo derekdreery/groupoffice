@@ -1,6 +1,8 @@
 <?php
 
-class GO_Base_Storeexport_Settings extends GO_Base_Model_AbstractSettingsCollection{
+namespace GO\Base\Storeexport;
+
+class Settings extends \GO\Base\Model\AbstractSettingsCollection{
 
 	public $export_include_headers;
 	public $export_human_headers;

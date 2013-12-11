@@ -12,7 +12,7 @@ class GO_Ldapauth_Mapping_Constant {
 		$this->_value = $value;
 	}
 
-	function getValue(\GO_Base_Ldap_Record $record) {
+	function getValue(\GO\Base\Ldap\Record $record) {
 		return $this->_value;
 	}
 

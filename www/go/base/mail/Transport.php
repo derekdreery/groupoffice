@@ -18,7 +18,9 @@
  * @copyright Copyright Intermesh BV.
  */
 
-class GO_Base_Mail_Transport extends Swift_SmtpTransport{
+namespace GO\Base\Mail;
+
+class Transport extends \Swift_SmtpTransport{
 	
 	public static function newGoInstance(){
 		$o = self::newInstance(\GO::config()->smtp_server, \GO::config()->smtp_port, \GO::config()->smtp_encryption);

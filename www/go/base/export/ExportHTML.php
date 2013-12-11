@@ -17,7 +17,9 @@
  * @author Wesley Smits <wsmits@intermesh.nl>
  * @package GO.base.export
  */
-class GO_Base_Export_ExportHTML extends GO_Base_Export_AbstractExport {	
+namespace GO\Base\Export;
+
+class ExportHTML extends \GO\Base\Export\AbstractExport {	
 	
 	public static $showInView = true;
 	public static $name = "HTML";

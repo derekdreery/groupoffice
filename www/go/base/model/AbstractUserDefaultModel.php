@@ -23,7 +23,9 @@
  * 
  * @package GO.base.model
  */
-abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveRecord {
+namespace GO\Base\Model;
+
+abstract class AbstractUserDefaultModel extends \GO\Base\Db\ActiveRecord {
 
 	private static $_allUserDefaultModels;
 
@@ -31,7 +33,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	 * Get all models that should exist by default for a user.
 	 * 
 	 * @param int $user_id
-	 * @return GO_Base_Db_ActiveRecord 
+	 * @return \GO\Base\Db\ActiveRecord 
 	 */
 	public static function getAllUserDefaultModels($user_id=0) {
 		
@@ -42,12 +44,12 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			$modules = \GO::modules()->getAllModules();
 			
 			while ($module=array_shift($modules)) {
-			  $permissionLevel=$user_id ? \GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $user_id) : 1;
+			  $permissionLevel=$user_id ? \GO\Base\Model\Acl::getUserPermissionLevel($module->acl_id, $user_id) : 1;
 				if($permissionLevel){
 				  if($module->moduleManager){
 					  $classes = $module->moduleManager->findClasses('model');
 					  foreach($classes as $class){
-						  if($class->isSubclassOf('GO_Base_Model_AbstractUserDefaultModel')){							
+						  if($class->isSubclassOf('AbstractUserDefaultModel')){							
 							  self::$_allUserDefaultModels[] = \GO::getModel($class->getName());
 						  }					
 					  }
@@ -85,10 +87,10 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	 * This function is automaticall called in afterSave of the user model and
 	 * after a module is installed.
 	 * 
-	 * @param GO_Base_Model_User $user
-	 * @return GO_Base_Model_AbstractUserDefaultModel 
+	 * @param \GO\Base\Model\User $user
+	 * @return AbstractUserDefaultModel 
 	 */
-	public function getDefault(\GO_Base_Model_User $user, &$createdNew=false) {	
+	public function getDefault(\GO\Base\Model\User $user, &$createdNew=false) {	
 		
 			
 		if(!$user)
@@ -105,7 +107,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			{
 				$pk = $settingsModel->{$this->settingsPkAttribute()};
 				$defaultModel = $this->findByPk($pk, false, true);
-				if($defaultModel && $defaultModel->checkPermissionLevel(\GO_Base_Model_Acl::WRITE_PERMISSION))
+				if($defaultModel && $defaultModel->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION))
 					return $defaultModel;
 			}
 		}

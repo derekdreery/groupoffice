@@ -1,6 +1,6 @@
 <?php
 
-class GO_Customfields_Customfieldtype_Function extends GO_Customfields_Customfieldtype_Abstract {
+class GO_Customfields_Customfieldtype_Function extends \GO_Customfields_Customfieldtype_Abstract {
 
 	public function name() {
 		return 'Function';
@@ -13,7 +13,7 @@ class GO_Customfields_Customfieldtype_Function extends GO_Customfields_Customfie
 //			$f = $this->field->function;
 //			foreach ($attributes as $key=>$value) {
 //				
-//					$f = str_replace('{' . $key . '}', \GO_Base_Util_Number::unlocalize($value), $f);
+//					$f = str_replace('{' . $key . '}', \GO\Base\Util\Number::unlocalize($value), $f);
 //				
 //			}
 //			$f = preg_replace('/\{[^}]*\}/', '0',$f);
@@ -21,7 +21,7 @@ class GO_Customfields_Customfieldtype_Function extends GO_Customfields_Customfie
 //			@eval("\$result_string=" . $f . ";");
 //		}
 //
-//		$attributes[$key] = \GO_Base_Util_Number::localize($result_string);
+//		$attributes[$key] = \GO\Base\Util\Number::localize($result_string);
 //		return $attributes[$key];
 //	}
 //	
@@ -36,7 +36,7 @@ class GO_Customfields_Customfieldtype_Function extends GO_Customfields_Customfie
 			$f = $this->field->function;
 			foreach ($attributes as $key=>$value) {
 				
-					$f = str_replace('{' . $key . '}', floatval(\GO_Base_Util_Number::unlocalize($value)), $f);
+					$f = str_replace('{' . $key . '}', floatval(\GO\Base\Util\Number::unlocalize($value)), $f);
 				
 			}
 			$f = preg_replace('/\{[^}]*\}/', '0',$f);

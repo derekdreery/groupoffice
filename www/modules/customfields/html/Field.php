@@ -1,6 +1,6 @@
 <?php
 
-class GO_Customfields_Html_Field extends GO_Base_Html_Input {
+class GO_Customfields_Html_Field extends \GO\Base\Html\Input {
 
 	public static function render($attributes,$echo=true) {
 		

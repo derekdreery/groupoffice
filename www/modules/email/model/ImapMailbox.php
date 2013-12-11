@@ -13,7 +13,7 @@
  * @var string $delimiter
 
  */
-class GO_Email_Model_ImapMailbox extends GO_Base_Model {
+class GO_Email_Model_ImapMailbox extends \GO\Base\Model {
 
 	/**
 	 *
@@ -36,7 +36,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		$this->_attributes = $attributes;
 		
 //		if(isset($this->_attributes['name']))
-//			$this->_attributes['name']=\GO_Base_Mail_Utils::utf7_decode($this->_attributes["name"]);
+//			$this->_attributes['name']=\GO\Base\Mail\Utils::utf7_decode($this->_attributes["name"]);
 		
 		//throw new \Exception(var_export($attributes, true));
 
@@ -112,7 +112,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	}
 	
 //	public function getName($decode=false){
-//		return $decode ? \GO_Base_Mail_Utils::utf7_decode($this->_attributes["name"]) : $this->_attributes["name"];
+//		return $decode ? \GO\Base\Mail\Utils::utf7_decode($this->_attributes["name"]) : $this->_attributes["name"];
 //	}
 
 	public function getBaseName() {
@@ -203,8 +203,8 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	
 	public function rename($name){
 		
-	  	if($this->getAccount()->getPermissionLevel() <= \GO_Base_Model_Acl::READ_PERMISSION)
-		  throw new \GO_Base_Exception_AccessDenied();
+	  	if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
+		  throw new \GO\Base\Exception\AccessDenied();
 	  
 		$parentName = $this->getParentName();
 		$newMailbox = empty($parentName) ? $name : $parentName.$this->delimiter.$name;
@@ -215,23 +215,23 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	}
 	
 	public function delete(){	
-	  if($this->getAccount()->getPermissionLevel() <= \GO_Base_Model_Acl::READ_PERMISSION)
-		 throw new \GO_Base_Exception_AccessDenied();
+	  if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
+		 throw new \GO\Base\Exception\AccessDenied();
 	  
 	  return $this->getAccount()->openImapConnection()->delete_folder($this->name);
 	}
 	
 	public function truncate(){
-	  if($this->getAccount()->getPermissionLevel() <= \GO_Base_Model_Acl::READ_PERMISSION)
-		  throw new \GO_Base_Exception_AccessDenied();
+	  if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
+		  throw new \GO\Base\Exception\AccessDenied();
 		$imap = $this->getAccount()->openImapConnection($this->name);
 		$sort = $imap->sort_mailbox();
 		return $imap->delete($sort);
 	}
 	
 	public function createChild($name, $subscribe=true){
-	  if($this->getAccount()->getPermissionLevel() <= \GO_Base_Model_Acl::READ_PERMISSION)
-		  throw new \GO_Base_Exception_AccessDenied();
+	  if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
+		  throw new \GO\Base\Exception\AccessDenied();
 		$newMailbox = empty($this->name) ? $name : $this->name.$this->delimiter.$name;
 		
 		if(preg_match('/[.\/]/', $name)){
@@ -244,8 +244,8 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	}
 	
 	public function move(\GO_Email_Model_ImapMailbox $targetMailbox){
-		if($this->getAccount()->getPermissionLevel() <= \GO_Base_Model_Acl::READ_PERMISSION)
-		  throw new \GO_Base_Exception_AccessDenied();
+		if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
+		  throw new \GO\Base\Exception\AccessDenied();
 		$newMailbox = "";
 		
 		if(!empty($targetMailbox->name))
@@ -319,7 +319,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		//caching is required. We don't use the session because we need to close 
 		//session writing when checking email accounts. Otherwise it can block the 
 		//session to long.
-		if(\GO::cache() instanceof \GO_Base_Cache_None)
+		if(\GO::cache() instanceof \GO\Base\Cache\None)
 			return false;
 		
 		$cached = \GO::cache()->get($this->_getCacheKey());

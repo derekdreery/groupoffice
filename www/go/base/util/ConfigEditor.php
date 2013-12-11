@@ -1,6 +1,8 @@
 <?php
 
-class GO_Base_Util_ConfigEditor {
+namespace GO\Base\Util;
+
+class ConfigEditor {
 
 	public static function save(GO\Base\Fs\File $file, array $config) {
 		$configData = "<?php\n";

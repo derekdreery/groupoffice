@@ -1,6 +1,6 @@
 <?php
 
-class GO_Customcss_CustomcssModule extends GO_Base_Module {
+class GO_Customcss_CustomcssModule extends \GO\Base\Module {
 
 	public static function initListeners() {
 		

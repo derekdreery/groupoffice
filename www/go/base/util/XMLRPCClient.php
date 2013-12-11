@@ -3,7 +3,9 @@
 /**
  * Not ready to be used. Was just for testing
  */
-class GO_Base_Util_XMLRPCClient {
+namespace GO\Base\Util;
+
+class XMLRPCClient {
 
 	private $_user;
 	private $_pass;

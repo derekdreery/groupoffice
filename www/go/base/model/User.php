@@ -66,10 +66,12 @@
  * @property GO_Addressbook_Model_Contact $contact
  * @property string $digest
  * 
- * @method GO_Base_Model_User findByPk();
+ * @method User findByPk();
  */
 
-class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
+namespace GO\Base\Model;
+
+class User extends \GO\Base\Db\ActiveRecord {
   
 	public $generatedRandomPassword = false;
 	public $passwordConfirm;
@@ -94,7 +96,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Base_Model_User 
+	 * @return User 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -112,10 +114,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 * @param array $attributes
 	 * @param array $groups array of group names array('Internal','Some group');
 	 * @param array $modulePermissionLevels array('calendar'=>1,'projects'=>4)
-	 * @return GO_Base_Model_User 
+	 * @return User 
 	 */
 	public static function newInstance($attributes, $groups=array(), $modulePermissionLevels=array()){
-		$user = new \GO_Base_Model_User();
+		$user = new User();
 		$user->setAttributes($attributes);
 		$user->save();
 
@@ -141,16 +143,16 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	public function relations() {
 		return array(
 			'contact' => array('type' => self::HAS_ONE, 'model' => 'GO_Addressbook_Model_Contact', 'field' => 'go_user_id'),
-			'reminders' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_Reminder', 'field'=>'user_id', 'linkModel' => 'GO_Base_Model_ReminderUser'),
-			'groups' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_Group', 'field'=>'user_id', 'linkModel' => 'GO_Base_Model_UserGroup'),
-			'_workingWeek' => array('type' => self::HAS_ONE, 'model' => 'GO_Base_Model_WorkingWeek', 'field' => 'user_id')
+			'reminders' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\Reminder', 'field'=>'user_id', 'linkModel' => '\GO\Base\Model\ReminderUser'),
+			'groups' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\Group', 'field'=>'user_id', 'linkModel' => '\GO\Base\Model\UserGroup'),
+			'_workingWeek' => array('type' => self::HAS_ONE, 'model' => '\GO\Base\Model\WorkingWeek', 'field' => 'user_id')
 		);
 	}
 	
 	public function getWorkingWeek(){
 		$ww = $this->_workingWeek;
 		if(!$ww){
-			$ww = new \GO_Base_Model_WorkingWeek();
+			$ww = new \GO\Base\Model\WorkingWeek();
 			$ww->user_id=$this->id;
 			$ww->save();
 		}
@@ -196,7 +198,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	}
 
 	public function init() {
-		$this->columns['email']['regex'] = \GO_Base_Util_String::get_email_validation_regex();
+		$this->columns['email']['regex'] = \GO\Base\Util\String::get_email_validation_regex();
 		$this->columns['email']['required'] = true;
 
 		$this->columns['password']['required'] = true;
@@ -236,13 +238,13 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
         /**
 	 * This method will (re)calculate the used diskspace for this user
 	 * @param integer $bytes The amount of bytes to add to the users used diskspace (negative for substraction)
-	 * @return GO_Base_Model_User itself for chaining eg. $user->calculatedDiskUsage()->save()
+	 * @return User itself for chaining eg. $user->calculatedDiskUsage()->save()
 	 */
 	public function calculatedDiskUsage($bytes = false) {
 		if (\GO::modules()->isInstalled('files')) {
 			if (!$bytes) { //recalculated
-				$fp = \GO_Base_Db_FindParams::newInstance()->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('user_id', $this->id));
-				$sumFilesize = \GO_Base_Model_Grouped::model()->load('GO_Files_Model_File', 'user_id', 'SUM(size) as total_size', $fp)->fetch();
+				$fp = \GO\Base\Db\FindParams::newInstance()->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('user_id', $this->id));
+				$sumFilesize = \GO\Base\Model\Grouped::model()->load('GO_Files_Model_File', 'user_id', 'SUM(size) as total_size', $fp)->fetch();
 				//\GO::debug($sumFilesize->total_size);
 				if ($sumFilesize)
 					$this->disk_usage = $sumFilesize->total_size;
@@ -271,12 +273,12 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$this->setValidationError('passwordConfirm', \GO::t('passwordMatchError'));
 		}
 		
-		if($this->isModified('disk_quota') && \GO::user()->getModulePermissionLevel('users') < \GO_Base_Model_Acl::MANAGE_PERMISSION)
+		if($this->isModified('disk_quota') && \GO::user()->getModulePermissionLevel('users') < \GO\Base\Model\Acl::MANAGE_PERMISSION)
 			$this->setValidationError('disk_quota', 'Only managers of the "users"  module may modify disk quota');
 		
 		if(\GO::config()->password_validate && $this->isModified('password')){
-			if(!\GO_Base_Util_Validate::strongPassword($this->password)){
-				$this->setValidationError('password', \GO_Base_Util_Validate::getPasswordErrorString($this->password));
+			if(!\GO\Base\Util\Validate::strongPassword($this->password)){
+				$this->setValidationError('password', \GO\Base\Util\Validate::getPasswordErrorString($this->password));
 			}
 		}
 
@@ -294,7 +296,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$this->setValidationError('username', \GO::t('error_username_exists', 'users'));
 
 		if (empty($this->password) && $this->isNew) {
-			$this->password = \GO_Base_Util_String::randomPassword();
+			$this->password = \GO\Base\Util\String::randomPassword();
 			$this->generatedRandomPassword = true;
 		}
 
@@ -308,14 +310,14 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	protected function beforeSave(){
 		
 		if($this->isNew){
-			$holiday = \GO_Base_Model_Holiday::localeFromCountry($this->language);
+			$holiday = \GO\Base\Model\Holiday::localeFromCountry($this->language);
 			
 		if($holiday !== false)
 			$this->holidayset = $holiday; 
 		}
 		
 		if(!$this->isNew && empty($this->holidayset) && ($contact = $this->createContact())){
-			$holiday = \GO_Base_Model_Holiday::localeFromCountry($contact->country);
+			$holiday = \GO\Base\Model\Holiday::localeFromCountry($contact->country);
 
 			if($holiday !== false)
 				$this->holidayset = $holiday; 
@@ -346,7 +348,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 
 		if($wasNew){
-			$everyoneGroup = \GO_Base_Model_Group::model()->findByPk(\GO::config()->group_everyone);		
+			$everyoneGroup = \GO\Base\Model\Group::model()->findByPk(\GO::config()->group_everyone);		
 			$everyoneGroup->addUser($this->id);			
 			
 			$this->acl->user_id=$this->id;
@@ -355,7 +357,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			if(!empty(\GO::config()->register_user_groups)){
 				$groups = explode(',',\GO::config()->register_user_groups);
 				foreach($groups as $groupName){
-					$group = \GO_Base_Model_Group::model()->findSingleByAttribute('name', trim($groupName));
+					$group = \GO\Base\Model\Group::model()->findSingleByAttribute('name', trim($groupName));
 					if($group)
 						$group->addUser($this->id);
 				}
@@ -368,7 +370,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$this->createContact();
 		
 		//remove cache for \GO::user() calls.
-		$cacheKey = 'GO_Base_Model_User:'.$this->id;
+		$cacheKey = 'User:'.$this->id;
 		\GO::cache()->delete($cacheKey);
 		
 		//		deprecated. It's inefficient and can be done with listeners
@@ -381,9 +383,9 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		if(!empty(\GO::config()->register_visible_user_groups)){
 			$groups = explode(',',\GO::config()->register_visible_user_groups);
 			foreach($groups as $groupName){
-				$group = \GO_Base_Model_Group::model()->findSingleByAttribute('name', trim($groupName));
+				$group = \GO\Base\Model\Group::model()->findSingleByAttribute('name', trim($groupName));
 				if($group)
-					$this->acl->addGroup($group->id, \GO_Base_Model_Acl::MANAGE_PERMISSION);
+					$this->acl->addGroup($group->id, \GO\Base\Model\Acl::MANAGE_PERMISSION);
 			}
 		}
 	}
@@ -393,7 +395,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 */
 	public function checkDefaultModels(){
 		$oldIgnore = \GO::setIgnoreAclPermissions(true);
-	  $defaultModels = \GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels($this->id);	
+	  $defaultModels = \GO\Base\Model\AbstractUserDefaultModel::getAllUserDefaultModels($this->id);	
 		foreach($defaultModels as $model){
 			$model->getDefault($this);
 		}		
@@ -415,14 +417,14 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		
 		
 		//delete all acl records
-		$stmt = \GO_Base_Model_AclUsersGroups::model()->find(array(
+		$stmt = \GO\Base\Model\AclUsersGroups::model()->find(array(
 				"by"=>array(array('user_id',$this->id))
 		));
 		
 		while($r = $stmt->fetch())
 			$r->delete();
 		
-		$defaultModels = \GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels();
+		$defaultModels = \GO\Base\Model\AbstractUserDefaultModel::getAllUserDefaultModels();
 	
 		foreach($defaultModels as $model){
 			$model->deleteByAttribute('user_id',$this->id);
@@ -450,7 +452,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		
-		return \GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name,$sort);
+		return \GO\Base\Util\String::format_name($this->last_name, $this->first_name, $this->middle_name,$sort);
 	}
 	
 	/**
@@ -480,10 +482,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			if (!isset(\GO::session()->values['user_groups'])) {
 				\GO::session()->values['user_groups'] = array();
 
-				$stmt= \GO_Base_Model_UserGroup::model()->find(
-								\GO_Base_Db_FindParams::newInstance()
+				$stmt= \GO\Base\Model\UserGroup::model()->find(
+								\GO\Base\Db\FindParams::newInstance()
 								->select('t.group_id')
-								->criteria(\GO_Base_Db_FindCriteria::newInstance()
+								->criteria(\GO\Base\Db\FindCriteria::newInstance()
 												->addCondition("user_id", $userId))
 								);
 				while ($r = $stmt->fetch()) {
@@ -494,11 +496,11 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			return \GO::session()->values['user_groups'];
 		} else {
 			$ids = array();
-			$stmt= \GO_Base_Model_UserGroup::model()->find(
-								\GO_Base_Db_FindParams::newInstance()
+			$stmt= \GO\Base\Model\UserGroup::model()->find(
+								\GO\Base\Db\FindParams::newInstance()
 								->select('t.group_id')
 								->debugSql()
-								->criteria(\GO_Base_Db_FindCriteria::newInstance()
+								->criteria(\GO\Base\Db\FindCriteria::newInstance()
 												->addCondition("user_id", $userId))
 								);
 			
@@ -517,7 +519,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 * @return boolean 
 	 */
 	public function isAdmin() {
-		return in_array(\GO::config()->group_root, \GO_Base_Model_User::getGroupIds($this->id));
+		return in_array(\GO::config()->group_root, User::getGroupIds($this->id));
 	}
 
 	
@@ -663,10 +665,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 */
 	public function addToGroups(array $groupNames, $autoCreate=false){		
 		foreach($groupNames as $groupName){
-			$group = \GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupName);
+			$group = \GO\Base\Model\Group::model()->findSingleByAttribute('name', $groupName);
 			
 			if(!$group && $autoCreate){
-				$group = new \GO_Base_Model_Group();
+				$group = new \GO\Base\Model\Group();
 				$group->name = $groupName;
 				$group->save();
 			}
@@ -681,7 +683,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 * @param boolean $internal Use go to reset the password(internal) or use a website/webpage to reset the password
 	 */
 	public function sendResetPasswordMail($siteTitle=false,$url=false,$fromName=false,$fromEmail=false){
-		$message = \GO_Base_Mail_Message::newInstance();
+		$message = \GO\Base\Mail\Message::newInstance();
 		$message->setSubject(\GO::t('lost_password_subject','base','lostpassword'));
 		
 		if(!$siteTitle)
@@ -691,7 +693,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$url=\GO::url("auth/resetPassword", array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()),false);
 //			$url = \GO::config()->full_url."index.php".$url;		
 		}else{
-			$url=\GO_Base_Util_Http::addParamsToUrl($url, array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()),false);
+			$url=\GO\Base\Util\Http::addParamsToUrl($url, array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()),false);
 		}
 		//$url="<a href='".$url."'>".$url."</a>";
 		
@@ -709,7 +711,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		$message->addFrom($fromEmail,$fromName);
 		$message->addTo($this->email,$this->getName());
 
-		\GO_Base_Mail_Mailer::newGoInstance()->send($message);
+		\GO\Base\Mail\Mailer::newGoInstance()->send($message);
 	}
 	
 	/**

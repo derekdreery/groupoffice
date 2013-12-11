@@ -9,7 +9,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  */
 
-class GO_Summary_Controller_Note extends GO_Base_Controller_AbstractModelController{
+class GO_Summary_Controller_Note extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO_Summary_Model_Note';
 	

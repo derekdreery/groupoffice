@@ -19,7 +19,9 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_NotFound extends Exception
+namespace GO\Base\Exception;
+
+class NotFound extends \Exception
 {
 
 	public function __construct($message='') {

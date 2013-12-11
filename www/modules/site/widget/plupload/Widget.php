@@ -5,7 +5,7 @@
  * $pluploader = new GO_Site_Widgets_Plupload_Widget();
  * echo $pluploader->render();
  */
-class GO_Site_Widget_Plupload_Widget extends GO_Site_Components_Widget {
+class GO_Site_Widget_Plupload_Widget extends \GO_Site_Components_Widget {
 	
 	public $max_file_size; //The maximun filesize of a single file [defaults to GO::config()->max_file_size]
 	public $chunk_size = '2mb'; //Large files will be chunked to this size
@@ -83,6 +83,6 @@ EOD;
 	} 	
 	
 	public static function upload($params){
-		GO_Base_Component_Plupload::handleUpload();
+		\GO\Base\Component\Plupload::handleUpload();
 	}
 }

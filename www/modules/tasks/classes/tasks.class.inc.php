@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-class tasks extends db
+class tasks extends \db
 {
 
 	public static function notification_icon(&$response) {

@@ -20,6 +20,8 @@ namespace GO\Notes\Controller;
 use GO;
 use GO\Base\Controller;
 use GO\Notes\Model\Note;
+use GO\Base\Data\ColumnModel;
+use GO\Base\Data\DbStore;
 
 /**
  * The note controller provides action for basic crud functionality for the note model
@@ -61,7 +63,7 @@ class NoteController extends Controller\AbstractJsonController {
 	/**
 	 * Action for fetchin a JSON array to be loaded into a ExtJS form
 	 * @param array $params the $_REQUEST data
-	 * @throws GO_Base_Exception_AccessDenied When no create or write permissions for the loaded model
+	 * @throws \GO\Base\Exception\AccessDenied When no create or write permissions for the loaded model
 	 * @throws Exception when the notes decriptiopn password is incorrect
 	 */
 	protected function actionLoad($params) {
@@ -93,14 +95,14 @@ class NoteController extends Controller\AbstractJsonController {
 	 * Load a note model from the database and call the renderDisplay function to render the JSON
 	 * output for a ExtJS Display Panel
 	 * @param array $params the $_REQUEST object
-	 * @throws GO_Base_Exception_NotFound when the note model cant be found in database
+	 * @throws \GO\Base\Exception\NotFound when the note model cant be found in database
 	 * @throws Exception When the encryption password provided is incorrect
 	 */
 	protected function actionDisplay($params) {
 
 		$model = Note::model()->findByPk($params['id']);
 		if (!$model){
-			throw new \GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		}
 
 		// decrypt model if password provided
@@ -125,11 +127,11 @@ class NoteController extends Controller\AbstractJsonController {
 	 */
 	protected function actionStore($params) {
 		//Create ColumnModel from model
-		$columnModel = new \GO_Base_Data_ColumnModel("\GO\Notes\Model\Note");
+		$columnModel = new ColumnModel("\GO\Notes\Model\Note");
 		$columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
 
 		//Create store
-		$store = new \GO_Base_Data_DbStore("\GO\Notes\Model\Note", $columnModel, $params);
+		$store = new DbStore("\GO\Notes\Model\Note", $columnModel, $params);
 		$store->multiSelect('no-multiselect', '\GO\Notes\Model\Category', 'category_id');
 
 		echo $this->renderStore($store, true);

@@ -82,7 +82,7 @@ class GO_Site_Components_AssetManager
 	public function getBasePath()
 	{
 		if($this->_basePath===null){
-			$basePath= new GO_Base_Fs_Folder(Site::model()->getPublicPath().'assets');					
+			$basePath= new \GO\Base\Fs\Folder(Site::model()->getPublicPath().'assets');					
 			$basePath->create();
 			
 			$this->_basePath=$basePath->path();
@@ -176,9 +176,9 @@ class GO_Site_Components_AssetManager
 				}
 				else if(!is_dir($dstDir))
 				{
-					$dstF = new GO_Base_Fs_Folder($dstDir);
+					$dstF = new \GO\Base\Fs\Folder($dstDir);
 
-					$folder = new GO_Base_Fs_Folder($src);
+					$folder = new \GO\Base\Fs\Folder($src);
 					$folder->copy($dstF);
 				}
 

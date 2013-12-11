@@ -40,7 +40,7 @@ class GO_Tasks_Controller_ScheduleCall extends \GO\Base\Controller\AbstractJsonC
 		}
 		
 		$scheduleCall->name = str_replace(array('{name}','{number}'),array($name, $params['number']),GO::t('scheduleCallTaskName','tasks'));
-		$scheduleCall->reminder= GO_Base_Util_Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
+		$scheduleCall->reminder= \GO\Base\Util\Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
 		
 		$scheduleCall->save();
 		

@@ -21,7 +21,7 @@
  * @property int $time The time of the day of the exception. Use getStartTime() for the acurate time.
  * @property int $exception_event_id
  */
-class GO_Calendar_Model_Exception extends GO_Base_Db_ActiveRecord {
+class GO_Calendar_Model_Exception extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
@@ -81,7 +81,7 @@ class GO_Calendar_Model_Exception extends GO_Base_Db_ActiveRecord {
 	 * @return int 
 	 */
 	public function getStartTime(){
-		return \GO_Base_Util_Date::clear_time($this->time, date('H',$this->mainevent->start_time), date('i',$this->mainevent->start_time));
+		return \GO\Base\Util\Date::clear_time($this->time, date('H',$this->mainevent->start_time), date('i',$this->mainevent->start_time));
 	}
 
 }

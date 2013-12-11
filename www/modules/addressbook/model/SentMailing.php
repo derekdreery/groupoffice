@@ -25,7 +25,7 @@
  * @property GO\Base\Fs\File $logFile
  * @property GO\Base\Fs\File $messageFile
  */
-class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
+class GO_Addressbook_Model_SentMailing extends \GO\Base\Db\ActiveRecord {
 	const STATUS_RUNNING=1;
 	const STATUS_FINISHED=2;
 	const STATUS_PAUSED=3;

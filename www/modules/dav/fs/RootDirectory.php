@@ -11,7 +11,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory{
+class GO_Dav_Fs_RootDirectory extends \Sabre\DAV\FS\Directory{
 
 	public function __construct($path="") {
 		parent::__construct(\GO::config()->file_storage_path);

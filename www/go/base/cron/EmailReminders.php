@@ -1,5 +1,7 @@
 <?php
-class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
+namespace GO\Base\Cron;
+
+class EmailReminders extends \GO\Base\Cron\AbstractCron {
 	
 	/**
 	 * Return true or false to enable the selection for users and groups for 
@@ -40,28 +42,28 @@ class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
 	 * If $this->enableUserAndGroupSupport() returns FALSE then the 
 	 * $user parameter is null and the run function will be called only once.
 	 * 
-	 * @param GO_Base_Cron_CronJob $cronJob
-	 * @param GO_Base_Model_User $user [OPTIONAL]
+	 * @param \GO\Base\Cron\CronJob $cronJob
+	 * @param \GO\Base\Model\User $user [OPTIONAL]
 	 */
-	public function run(\GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
+	public function run(\GO\Base\Cron\CronJob $cronJob,\GO\Base\Model\User $user = null){
 		
 		\GO::session()->runAsRoot();
-		$usersStmt = \GO_Base_Model_User::model()->findByAttribute('mail_reminders', 1);
+		$usersStmt = \GO\Base\Model\User::model()->findByAttribute('mail_reminders', 1);
 		while ($userModel = $usersStmt->fetch()) {
 			
 			\GO::debug("Sending mail reminders to ".$userModel->username);
 			
-			$remindersStmt = \GO_Base_Model_Reminder::model()->find(
-				\GO_Base_Db_FindParams::newInstance()
+			$remindersStmt = \GO\Base\Model\Reminder::model()->find(
+				\GO\Base\Db\FindParams::newInstance()
 					->joinModel(array(
-						'model' => 'GO_Base_Model_ReminderUser',
+						'model' => '\GO\Base\Model\ReminderUser',
 						'localTableAlias' => 't',
 						'localField' => 'id',
 						'foreignField' => 'reminder_id',
 						'tableAlias' => 'ru'								
 					))
 					->criteria(
-						\GO_Base_Db_FindCriteria::newInstance()
+						\GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('user_id', $userModel->id, '=', 'ru')
 							->addCondition('time', time(), '<', 'ru')
 							->addCondition('mail_sent', '0', '=', 'ru')
@@ -85,15 +87,15 @@ class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
 
 //					date_default_timezone_set(\GO::user()->timezone);
 
-				$message = \GO_Base_Mail_Message::newInstance($subject, $body);
+				$message = \GO\Base\Mail\Message::newInstance($subject, $body);
 				$message->addFrom(\GO::config()->webmaster_email,\GO::config()->title);
 				$message->addTo($userModel->email,$userModel->name);
-				\GO_Base_Mail_Mailer::newGoInstance()->send($message, $failedRecipients);
+				\GO\Base\Mail\Mailer::newGoInstance()->send($message, $failedRecipients);
 				
 				if(!empty($failedRecipients))
 					trigger_error ("Reminder mail failed for recipient: ".implode(',', $failedRecipients), E_USER_NOTICE);
 
-				$reminderUserModelSend = \GO_Base_Model_ReminderUser::model()
+				$reminderUserModelSend = \GO\Base\Model\ReminderUser::model()
 					->findSingleByAttributes(array(
 						'user_id' => $userModel->id,
 						'reminder_id' => $reminderModel->id

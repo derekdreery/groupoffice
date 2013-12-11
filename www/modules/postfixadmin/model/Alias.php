@@ -28,7 +28,7 @@
  * @property boolean $active
  */
 
-class GO_Postfixadmin_Model_Alias extends GO_Base_Db_ActiveRecord {
+class GO_Postfixadmin_Model_Alias extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself

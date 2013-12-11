@@ -1,5 +1,5 @@
 <?php
-if(\GO_Base_Util_Http::isAjaxRequest()){
+if(\GO\Base\Util\Http::isAjaxRequest()){
 	echo json_encode($data);
 }elseif(PHP_SAPI=='cli'){
 	echo "ERROR: ".trim($data['feedback'])."\n\n";

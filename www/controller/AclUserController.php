@@ -15,7 +15,7 @@
  * assumed to be user input $params['model_id']).
  */
 
-class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectModelController {
+class GO_Core_Controller_AclUser extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	protected function init() {
 		
@@ -26,7 +26,7 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 	 * @return String 
 	 */
 	public function modelName() {
-		return 'GO_Base_Model_User';
+		return '\GO\Base\Model\User';
 	}
 	
 	/**
@@ -34,7 +34,7 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return 'GO_Base_Model_AclUsersGroups';
+		return '\GO\Base\Model\AclUsersGroups';
 	}
 	
 	/**
@@ -53,7 +53,7 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 		return array($this->getRemoteKey()=>$params['model_id'], 'group_id'=>0);
 	}
 	
-	protected function formatColumns(\GO_Base_Data_ColumnModel $cm) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $cm) {
 		$cm->formatColumn('manage_permission', 'isset($model->level) ? $model->level : ""');
 		$cm->formatColumn('name', '$model->name', array(), array('first_name','last_name'));
 		return parent::formatColumns($cm);
@@ -67,8 +67,8 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 	 * @return $response for the client. 
 	 */
 	protected function actionSelectedStore($params) {
-		$currentPermissionLevel = \GO_Base_Model_Acl::getUserPermissionLevel($params['model_id'],\GO::user()->id);
-		$response['manage_permission'] = $params['currentUserHasManagePermission'] =  \GO_Base_Model_Acl::hasPermission($currentPermissionLevel,\GO_Base_Model_Acl::MANAGE_PERMISSION);
+		$currentPermissionLevel = \GO\Base\Model\Acl::getUserPermissionLevel($params['model_id'],\GO::user()->id);
+		$response['manage_permission'] = $params['currentUserHasManagePermission'] =  \GO\Base\Model\Acl::hasPermission($currentPermissionLevel,\GO\Base\Model\Acl::MANAGE_PERMISSION);
 		$response = array_merge($response,parent::actionSelectedStore($params));
 		return $response;
 	}
@@ -101,7 +101,7 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 		if (!empty($addKeys)) {
 			// Only admins may edit the set of linked users.
 			if(!$params['currentUserHasManagePermission'])
-				throw new GO_Base_Exception_AccessDenied();
+				throw new \GO\Base\Exception\AccessDenied();
 		} else {
 			return false;
 		}
@@ -113,13 +113,13 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 		if (!empty($delKeys)) {
 			// Only admins may edit the set of linked users.
 			if(!$params['currentUserHasManagePermission'])
-					throw new GO_Base_Exception_AccessDenied();
+					throw new \GO\Base\Exception\AccessDenied();
 			
 			foreach ($delKeys as $delKey) {
 //				if ($delKey==1)
 //					throw new Exception(\GO::t('dontChangeAdminPermissions'));
 				
-				$aclItem = \GO_Base_Model_Acl::model()->findByPk($params['model_id']);
+				$aclItem = \GO\Base\Model\Acl::model()->findByPk($params['model_id']);
 				if ($aclItem->user_id == $delKey) {
 					// Situation: user with id $delKey is owner of ACL with id $params['model_id']
 					if(\GO::user()->isAdmin()){

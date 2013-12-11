@@ -41,7 +41,7 @@
  * @method GO_Site_Model_Content model()
  */
 
-class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
+class GO_Site_Model_Content extends \GO\Base\Db\ActiveRecord{
 
 	private $_cf=array();	
 	
@@ -134,7 +134,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-			'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'parent_id', 'delete' => true, 'findParams' =>GO_Base_Db_FindParams::newInstance()->select('*')->order(array('sort_order','ptime'))),
+			'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'parent_id', 'delete' => true, 'findParams' =>\GO\Base\Db\FindParams::newInstance()->select('*')->order(array('sort_order','ptime'))),
 			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Site", 'field'=>'site_id'),
 			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Content", 'field'=>'parent_id')
 		 );
@@ -146,7 +146,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	  * @param string $slug
 	  * @param int $siteId
 	  * @return GO_Site_Model_Content
-	  * @throws GO_Base_Exception_NotFound
+	  * @throws \GO\Base\Exception\NotFound
 	  */
 	 public static function findBySlug($slug, $siteId=false){
 		 
@@ -157,7 +157,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		 
 		 if(!$model)
 			 return false;
-			 //Throw new GO_Base_Exception_NotFound('There is no page found with the slug: '.$slug);
+			 //Throw new \GO\Base\Exception\NotFound('There is no page found with the slug: '.$slug);
 		 
 		 return $model;
 	 }
@@ -182,7 +182,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	  * @return boolean
 	  */
 	 public function hasChildren(){
-		 $child = $this->children(\GO_Base_Db_FindParams::newInstance()->single());
+		 $child = $this->children(\GO\Base\Db\FindParams::newInstance()->single());
 		 return !empty($child); 
 	 }
 	 
@@ -283,8 +283,8 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	  */
 	 public function getShortText($length=100,$cutwords=false,$append='...'){
 		 
-		 $text = GO_Base_Util_String::html_to_text($this->content);
-		 $text = GO_Base_Util_String::cut_string($text,$length,!$cutwords,$append);
+		 $text = \GO\Base\Util\String::html_to_text($this->content);
+		 $text = \GO\Base\Util\String::cut_string($text,$length,!$cutwords,$append);
 		 
 		 return $text;
 	 }
@@ -335,7 +335,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 
 	 public static function replaceContentTags($content=''){
 
-		 $images = GO_Base_Util_TagParser::getTags('site:img', $content);
+		 $images = \GO\Base\Util\TagParser::getTags('site:img', $content);
 		 
 		 foreach($images as $image){
 			 $template = self::processImage($image['params']);

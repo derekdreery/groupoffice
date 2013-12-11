@@ -21,7 +21,7 @@
  * @property int $user_id
  */
 
-class GO_Tasks_Model_Category extends GO_Base_Db_ActiveRecord {
+class GO_Tasks_Model_Category extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself

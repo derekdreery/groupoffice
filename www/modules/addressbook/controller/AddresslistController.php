@@ -12,7 +12,7 @@
  * @author WilmarVB <wilmar@intermesh.nl>
  */
 
-class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractModelController {
+class GO_Addressbook_Controller_Addresslist extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Addressbook_Model_Addresslist';
 	
@@ -23,10 +23,10 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		return parent::beforeStore($response, $params, $store);
 	}
 	
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		
 		if (empty($params['forContextMenu'])) {
-			$multiSel = new \GO_Base_Component_MultiSelectGrid(
+			$multiSel = new \GO\Base\Component\MultiSelectGrid(
 							'addresslist_filter', 
 							"GO_Addressbook_Model_Addresslist",$store, $params, false);		
 			$multiSel->formatCheckedColumn();
@@ -44,7 +44,7 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		return $record;
 	}
 	
-	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 
 		$columnModel->formatColumn('user_name', '$model->user->name');
 
@@ -58,7 +58,7 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 
 	protected function actionContacts($params) {
 
-		$store = \GO_Base_Data_Store::newInstance(\GO_Addressbook_Model_Contact::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Addressbook_Model_Contact::model());
 
 		$store->getColumnModel()->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
 		$store->getColumnModel()->formatColumn('company_name', '$model->company->name', array(), 'company_id');
@@ -101,7 +101,7 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 
 	protected function actionCompanies($params) {
 
-		$store = \GO_Base_Data_Store::newInstance(\GO_Addressbook_Model_Company::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Addressbook_Model_Company::model());
 
 		$store->getColumnModel()->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
 		$store->getColumnModel()->formatColumn('addressbook_name', '$model->addressbook->name', array(), 'addressbook_id');
@@ -147,7 +147,7 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		if(empty($params['addresslists']))
 			throw new \Exception();
 			
-		$recipients = new \GO_Base_Mail_EmailRecipients();
+		$recipients = new \GO\Base\Mail\EmailRecipients();
 		
 		$addresslistIds = json_decode($params['addresslists']);
 				
@@ -156,11 +156,11 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 			$addresslist = \GO_Addressbook_Model_Addresslist::model()->findByPk($addresslistId);
 			
 			if($addresslist){
-				$contacts = $addresslist->contacts(\GO_Base_Db_FindParams::newInstance()->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('email', '','!=')));
+				$contacts = $addresslist->contacts(\GO\Base\Db\FindParams::newInstance()->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('email', '','!=')));
 				while($contact = $contacts->fetch())				
 						$recipients->addRecipient($contact->email, $contact->name);
 
-				$companies = $addresslist->companies(\GO_Base_Db_FindParams::newInstance()->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('email', '','!=')));
+				$companies = $addresslist->companies(\GO\Base\Db\FindParams::newInstance()->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('email', '','!=')));
 				while($company = $companies->fetch())
 						$recipients->addRecipient($company->email, $company->name);
 			}
@@ -209,12 +209,12 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 			}
 
 			foreach($senders as $senderEmail => $senderNameArr){
-				$contactNameArr = \GO_Base_Util_String::split_name($senderNameArr);
+				$contactNameArr = \GO\Base\Util\String::split_name($senderNameArr);
 				$contactStmt = \GO_Addressbook_Model_Contact::model()
 					->find(
-						\GO_Base_Db_FindParams::newInstance()
+						\GO\Base\Db\FindParams::newInstance()
 							->criteria(
-								\GO_Base_Db_FindCriteria::newInstance()
+								\GO\Base\Db\FindCriteria::newInstance()
 									->addCondition('email', $senderEmail, '=', 't', false)
 									->addCondition('email2', $senderEmail, '=', 't', false)
 									->addCondition('email3', $senderEmail, '=', 't', false)
@@ -276,9 +276,9 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		foreach($senderEmails as $senderEmail){
 			$contactStmt = \GO_Addressbook_Model_Contact::model()
 				->find(
-						\GO_Base_Db_FindParams::newInstance()
+						\GO\Base\Db\FindParams::newInstance()
 							->criteria(
-								\GO_Base_Db_FindCriteria::newInstance()
+								\GO\Base\Db\FindCriteria::newInstance()
 									->addCondition('email', $senderEmail, '=', 't', false)
 									->addCondition('email2', $senderEmail, '=', 't', false)
 									->addCondition('email3', $senderEmail, '=', 't', false)

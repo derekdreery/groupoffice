@@ -1,6 +1,6 @@
 <?php
 
-class GO_Calendar_Controller_ViewCalendar extends GO_Base_Controller_AbstractMultiSelectModelController {
+class GO_Calendar_Controller_ViewCalendar extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model we are showing and adding to the other model.
@@ -26,7 +26,7 @@ class GO_Calendar_Controller_ViewCalendar extends GO_Base_Controller_AbstractMul
 		return 'calendar_id';
 	}
 	
-	protected function formatColumns(\GO_Base_Data_ColumnModel $cm) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $cm) {
 		$cm->formatColumn('username', '$model->user->username');
 		return parent::formatColumns($cm);
 	}

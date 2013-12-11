@@ -1,5 +1,5 @@
 <?php
-class GO_Smime_SmimeModule extends GO_Base_Module{
+class GO_Smime_SmimeModule extends \GO\Base\Module{
 	public static function initListeners() {		
 		$accountController = new GO_Email_Controller_Account();
 		$accountController->addListener('load', "GO_Smime_EventHandlers", "loadAccount");
@@ -14,7 +14,7 @@ class GO_Smime_SmimeModule extends GO_Base_Module{
 		
 		GO_Email_Model_Account::model()->addListener('delete', "GO_Smime_EventHandlers", "deleteAccount");
 		
-		GO_Base_Model_User::model()->addListener('delete', "GO_Smime_SmimeModule", "deleteUser");
+		\GO\Base\Model\User::model()->addListener('delete', "GO_Smime_SmimeModule", "deleteUser");
 		
 	}
 	

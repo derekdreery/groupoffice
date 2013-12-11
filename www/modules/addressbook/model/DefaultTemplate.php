@@ -15,7 +15,7 @@
  * @property int $user_id
  */
 
-class GO_Addressbook_Model_DefaultTemplate extends GO_Base_Db_ActiveRecord {
+class GO_Addressbook_Model_DefaultTemplate extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * Returns a static model of itself
@@ -45,7 +45,7 @@ class GO_Addressbook_Model_DefaultTemplate extends GO_Base_Db_ActiveRecord {
 	protected function defaultAttributes() {
 		$attr = parent::defaultAttributes();
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()->limit(1);
+		$findParams = \GO\Base\Db\FindParams::newInstance()->limit(1);
 		$stmt = \GO_Addressbook_Model_Template::model()->find($findParams);
 		
 		if($template=$stmt->fetch())

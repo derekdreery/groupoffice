@@ -17,19 +17,19 @@
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
 
-class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelController{
+class GO_Tasks_Controller_Tasklist extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO_Tasks_Model_Tasklist';
 	
-	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name','$model->user->name');
 		
 		return parent::formatColumns($columnModel);
 	}
 	
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		
-		$multiSel = new GO_Base_Component_MultiSelectGrid(
+		$multiSel = new \GO\Base\Component\MultiSelectGrid(
 						'ta-taskslists', 
 						"GO_Tasks_Model_Tasklist",$store, $params);		
 		$multiSel->setFindParamsForDefaultSelection($storeParams);
@@ -85,7 +85,7 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 		$tasklist = GO_Tasks_Model_Tasklist::model()->findByPk($params['tasklist_id']);
 		
 		if(!$tasklist)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		$tasklist->truncate();
 		
@@ -105,7 +105,7 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 		$tasklist = GO_Tasks_Model_Tasklist::model()->findByPk($params['tasklist_id']);
 		
 		if(!$tasklist)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		GO\Base\Fs\File::setAllowDeletes(false);
 		//VERY IMPORTANT:
@@ -125,7 +125,7 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 				echo '<h1>'.GO::t('removeDuplicates').'</h1>';
 
 				$checkFieldsStr = 't.'.implode(', t.',$checkFields);
-				$findParams = GO_Base_Db_FindParams::newInstance()
+				$findParams = \GO\Base\Db\FindParams::newInstance()
 								->ignoreAcl()
 								->select('t.id, count(*) AS n, '.$checkFieldsStr)
 								->group($checkFields)
@@ -148,7 +148,7 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 						$select .= ', t.files_folder_id';
 					}
 
-					$findParams = GO_Base_Db_FindParams::newInstance()
+					$findParams = \GO\Base\Db\FindParams::newInstance()
 								->ignoreAcl()
 								->select($select.', '.$checkFieldsStr)
 								->order('id','ASC');

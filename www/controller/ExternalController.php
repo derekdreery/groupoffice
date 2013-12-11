@@ -6,10 +6,10 @@ class GO_Core_Controller_External extends \GO\Base\Controller\AbstractController
 	}
 	protected function actionIndex($params) {
 		
-		//$funcParams = \GO_Base_Util_Crypt::decrypt($params['f']);
+		//$funcParams = \GO\Base\Util\Crypt::decrypt($params['f']);
 		
 		if(substr($_REQUEST['f'],0,9)=='{GOCRYPT}')
-			$funcParams = \GO_Base_Util_Crypt::decrypt($_REQUEST['f']);
+			$funcParams = \GO\Base\Util\Crypt::decrypt($_REQUEST['f']);
 		else
 			$funcParams = json_decode(base64_decode($_REQUEST['f']),true);
 		

@@ -17,7 +17,7 @@ if($weekday!=0 && $weekday!=6){
 	}
 }
 
-//if(!GO_Base_Util_Date::is_on_free_day(time())){
+//if(!\GO\Base\Util\Date::is_on_free_day(time())){
 //	$officehours = true;
 //}
 ?>

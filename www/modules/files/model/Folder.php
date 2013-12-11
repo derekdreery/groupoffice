@@ -37,10 +37,10 @@
  * @property boolean $readonly Means this folder is readonly even to the administrator! eg. Home folders may never be edited.
  * @property string $cm_state The stored state of the column model whebn apply state is true
  * @property boolean $apply_state Apply the configured state of the column model to everybody.
- * @property GO_Base_Fs_Folder $fsFolder
+ * @property \GO\Base\Fs\Folder $fsFolder
  * @property int $acl_write
  */
-class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
+class GO_Files_Model_Folder extends \GO\Base\Db\ActiveRecord {
     
 	private $_path;
 	
@@ -131,7 +131,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public function relations() {
 		return array(
                         'parent' => array('type' => self::BELONGS_TO, 'model' => 'GO_Files_Model_Folder', 'field' => 'parent_id'),
-                        'folders' => array('type' => self::HAS_MANY, 'model' => '\GO_Files_Model_Folder', 'field' => 'parent_id', 'delete' => true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('name','ASC')),
+                        'folders' => array('type' => self::HAS_MANY, 'model' => '\GO_Files_Model_Folder', 'field' => 'parent_id', 'delete' => true, 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order('name','ASC')),
                         'files' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_File', 'field' => 'folder_id', 'delete' => true),
                         'notifyUsers'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderNotification', 'field' => 'folder_id', 'delete' => true),
                         'preferences'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderPreference', 'field' => 'folder_id', 'delete' => true),
@@ -195,7 +195,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 
 	protected function getFsFolder() {
-		return new \GO_Base_Fs_Folder(\GO::config()->file_storage_path . $this->path);
+		return new \GO\Base\Fs\Folder(\GO::config()->file_storage_path . $this->path);
 	}
 	
 	
@@ -228,7 +228,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	
 	/**
 	 * 
-	 * @return \GO_Base_Fs_Folder
+	 * @return \GO\Base\Fs\Folder
 	 */
 	private function _getOldFsFolder(){
 		
@@ -251,7 +251,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		}else{
 			$oldPath = \GO::config()->file_storage_path . $this->parent->path.'/'.$filename;
 		}
-		return new \GO_Base_Fs_Folder($oldPath);
+		return new \GO\Base\Fs\Folder($oldPath);
 	}
 	
 	protected function beforeSave() {
@@ -330,11 +330,11 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 
 					$oldPath = \GO::config()->file_storage_path . $oldRelPath . '/' . $oldName;
 
-					$fsFolder = new \GO_Base_Fs_Folder($oldPath);
+					$fsFolder = new \GO\Base\Fs\Folder($oldPath);
 
 					$newRelPath = $this->getPath(true);
 
-					$newFsFolder = new \GO_Base_Fs_Folder(\GO::config()->file_storage_path . dirname($newRelPath));
+					$newFsFolder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path . dirname($newRelPath));
 
 					if (!$fsFolder->move($newFsFolder))
 						throw new \Exception("Could not rename folder on the filesystem");
@@ -358,7 +358,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 					
 					\GO::debug("Renaming from ".$this->getOldAttributeValue('name')." to ".$this->name);
 
-					$oldFsFolder = new \GO_Base_Fs_Folder(dirname($this->fsFolder->path()).'/'.$this->getOldAttributeValue('name'));
+					$oldFsFolder = new \GO\Base\Fs\Folder(dirname($this->fsFolder->path()).'/'.$this->getOldAttributeValue('name'));
 
 					$oldFsFolder->rename($this->name);
 					
@@ -396,7 +396,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		//Read only flag is set for addressbooks, tasklists etc. They share the same acl so deleting it would make addressbooks inaccessible.
 		if(!$this->readonly){
 			//normally this is done automatically. But we overide $this->joinAclfield to prevent acl management.
-			$acl = \GO_Base_Model_Acl::model()->findByPk($this->{$this->aclField()});			
+			$acl = \GO\Base\Model\Acl::model()->findByPk($this->{$this->aclField()});			
 			if($acl)
 				$acl->delete();
 		}
@@ -444,7 +444,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				
 				$col = $caseSensitive ? 't.name COLLATE utf8_bin' : 't.name';
 
-				$findParams = \GO_Base_Db_FindParams::newInstance();
+				$findParams = \GO\Base\Db\FindParams::newInstance();
 				$findParams->getCriteria()
 								->addCondition('parent_id', $parent_id)
 								->addBindParameter(':name', $folderName)
@@ -483,7 +483,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Return the home folder of a user.
 	 * 
-	 * @param GO_Base_Model_User $user 
+	 * @param \GO\Base\Model\User $user 
 	 */
 	public function findHomeFolder($user){
 		
@@ -544,7 +544,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public function addFilesystemFile(GO\Base\Fs\File $file){
 		
 		if(!\GO_Files_Model_File::checkQuota($file->size()))
-			throw new \GO_Base_Exception_InsufficientDiskspace();
+			throw new \GO\Base\Exception\InsufficientDiskspace();
 		
 		$file->move($this->fsFolder);
 		$file->setDefaultPermissions();
@@ -558,7 +558,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @param GO\Base\Fs\File $file
 	 * @return GO_Files_Model_File 
 	 */
-	public function addFilesystemFolder(\GO_Base_Fs_Folder $folder){
+	public function addFilesystemFolder(\GO\Base\Fs\Folder $folder){
 		$folder->move($this->fsFolder);
 		return $this->addFolder($folder->name(), true);
 	}
@@ -783,7 +783,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function hasFile($filename, $caseSensitive=true){		
 		$col = $caseSensitive ? 't.name COLLATE utf8_bin' : 't.name';
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->single();
 		$findParams->getCriteria()							
 							->addBindParameter(':name', $filename)
@@ -800,7 +800,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function hasFolder($filename){		
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->single();
 		$findParams->getCriteria()							
 							->addBindParameter(':name', $filename)
@@ -906,28 +906,28 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * Get all the subfolders of this folder. This function checks permissions in a
 	 * special way. When folder have acl_id=0 they inherit permissions of the parent folder.
 	 * 
-	 * @return GO_Base_Db_ActiveStatement 
+	 * @return \GO\Base\Db\ActiveStatement 
 	 */
 	public function getSubFolders($findParams=false, $noGrouping=false){			
 			if(!$findParams)
-				$findParams=\GO_Base_Db_FindParams::newInstance();
+				$findParams=\GO\Base\Db\FindParams::newInstance();
 			
 			$findParams->ignoreAcl(); //We'll build a special acl check for folders that inherit permissions here.
 			
 			//$findParams->debugSql();
 			
-			$aclJoinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+			$aclJoinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addRawCondition('a.acl_id', 't.acl_id','=', false);
 			
-			$aclWhereCriteria = \GO_Base_Db_FindCriteria::newInstance()
+			$aclWhereCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							//->addRawCondition('a.acl_id', 'NULL','IS', false)
 							->addCondition('acl_id', 0,'=','t',false)
 							->addCondition('user_id', \GO::user()->id,'=','a', false)
-							->addInCondition("group_id", \GO_Base_Model_User::getGroupIds(\GO::user()->id),"a", false);
+							->addInCondition("group_id", \GO\Base\Model\User::getGroupIds(\GO::user()->id),"a", false);
 			
-			$findParams->join(\GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'LEFT');
+			$findParams->join(\GO\Base\Model\AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'LEFT');
 			
-			$findParams->criteria(\GO_Base_Db_FindCriteria::newInstance()
+			$findParams->criteria(\GO\Base\Db\FindCriteria::newInstance()
 									->addModel(\GO_Files_Model_Folder::model())
 									->addCondition('parent_id', $this->id)
 									->mergeWith($aclWhereCriteria));
@@ -943,7 +943,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @return boolean
 	 */
 	public function hasChildren(){
-		return $this->getSubFolders(\GO_Base_Db_FindParams::newInstance()->single(), true);
+		return $this->getSubFolders(\GO\Base\Db\FindParams::newInstance()->single(), true);
 	}
 	
 	/**
@@ -1054,7 +1054,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		\GO::debug("getTopLevelShare($folderName)");
 		
 		if(!isset($this->_folderCache['Shared/'.$folderName])){
-			$findParams = \GO_Base_Db_FindParams::newInstance();
+			$findParams = \GO\Base\Db\FindParams::newInstance();
 
 			$findParams->joinRelation('sharedRootFolders')
 				->ignoreAcl()
@@ -1081,12 +1081,12 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	
 	/**
 	 * 
-	 * @param GO_Base_Db_FindParams $findParams
-	 * @return GO_Base_Db_ActiveStatement
+	 * @param \GO\Base\Db\FindParams $findParams
+	 * @return \GO\Base\Db\ActiveStatement
 	 */
 	public function getTopLevelShares($findParams=false){
 		if(!$findParams)
-			$findParams = new \GO_Base_Db_FindParams();
+			$findParams = new \GO\Base\Db\FindParams();
 		
 		$findParams->joinRelation('sharedRootFolders')
 			->ignoreAcl()

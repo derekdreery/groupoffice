@@ -135,7 +135,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends \GO\Base\Cont
 				echo $output;
 		}
 		else
-			throw new GO_Base_Exception_NotFound('cannot find the requested view ' . $view);
+			throw new \GO\Base\Exception\NotFound('cannot find the requested view ' . $view);
 	}
 
 	/**
@@ -182,7 +182,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends \GO\Base\Cont
 	 * Will search in root/{templatename}
 	 * Can be used by Views for inserting css or js files from template folder
 	 * @return string  url to template assets
-	 * @throws GO_Base_Exception_NotFound when the template directory doesn't excists
+	 * @throws \GO\Base\Exception\NotFound when the template directory doesn't excists
 	 */
 	public function getTemplateUrl()
 	{
@@ -199,7 +199,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends \GO\Base\Cont
 //		if(file_exists($template_url)) //look in sites module
 //			return $template_url;
 
-		throw new GO_Base_Exception_NotFound('Could not find the template directory '. $template_url);
+		throw new \GO\Base\Exception\NotFound('Could not find the template directory '. $template_url);
 	}
 
 	/**
@@ -309,7 +309,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends \GO\Base\Cont
 			}
 			
 			if (!$this->_checkPermission($action))
-				throw new GO_Base_Exception_AccessDenied();
+				throw new \GO\Base\Exception\AccessDenied();
 
 			$this->beforeAction();
 			
@@ -320,7 +320,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends \GO\Base\Cont
 			if(isset($oldIgnore))
 				GO::setIgnoreAclPermissions($oldIgnore);
 		}
-		catch (\GO_Base_Exception_AccessDenied $e)
+		catch (\GO\Base\Exception\AccessDenied $e)
 		{
 			if(!GO::user()){
 				//Path the page you tried to visit into lastPath session for redirecting after login
@@ -334,7 +334,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends \GO\Base\Cont
 			}
 			//$this->render('error', array('error'=>$e));
 		}
-		catch (\GO_Base_Exception_NotFound $e){
+		catch (\GO\Base\Exception\NotFound $e){
 			header("HTTP/1.0 404 Not Found");
       header("Status: 404 Not Found");
 			

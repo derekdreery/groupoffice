@@ -1,5 +1,5 @@
 <?php
-class GO_Site_Widget_Contactform_Widget extends GO_Site_Components_Widget {
+class GO_Site_Widget_Contactform_Widget extends \GO_Site_Components_Widget {
 
 	public $receipt;						//send to email
 	public $emailFieldOptions=array();		//html attributes for email field

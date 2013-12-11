@@ -16,7 +16,7 @@
  * @property int $id
  */
 
- class GO_Addressbook_Model_SearchQuery extends GO_Base_Db_ActiveRecord{
+ class GO_Addressbook_Model_SearchQuery extends \GO\Base\Db\ActiveRecord{
 		 
 	 /**
 	 * Returns a static model of itself

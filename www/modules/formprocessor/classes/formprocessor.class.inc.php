@@ -136,17 +136,17 @@ class formprocessor{
 //			}
 //			$userCredentials['password']=$_POST['password1'];
 //
-//			$userModel = new \GO_Base_Model_User();
+//			$userModel = new \GO\Base\Model\User();
 //			$userModel->setAttributes($userCredentials);
 //			$userModel->save();
 //			foreach($this->user_groups as $groupId) {
-//				$currentGroupModel = \GO_Base_Model_Group::model()->findByPk($groupId);
+//				$currentGroupModel = \GO\Base\Model\Group::model()->findByPk($groupId);
 //				if($groupId>0 && $groupId!=\GO::config()->group_everyone && !$currentGroupModel->hasUser($userModel->id)) {
 //					$currentGroupModel->addUser($userModel->id);
 //				}
 //			}
 //			foreach($this->visible_user_groups as $groupId) {
-//				$userAclModel = \GO_Base_Model_Acl::model()->findByPk($userModel->acl_id);
+//				$userAclModel = \GO\Base\Model\Acl::model()->findByPk($userModel->acl_id);
 //				if($groupId>0 && !empty($userAclModel) && $userAclModel->hasGroup($groupId)) {
 //					$userAclModel->addGroup($groupId);
 //				}
@@ -155,7 +155,7 @@ class formprocessor{
 //			\GO::session()->login($userCredentials['username'], $userCredentials['password']);
 //		}		
 
-		if(!empty($_POST['email']) && !\GO_Base_Util_String::validate_email($_POST['email']))
+		if(!empty($_POST['email']) && !\GO\Base\Util\String::validate_email($_POST['email']))
 		{
 			throw new \Exception(\GO::t('invalidEmailError'));
 		}
@@ -235,7 +235,7 @@ class formprocessor{
 			if(isset($_POST['birthday']))
 			{
 				try {
-					$contactCredentials['birthday'] = \GO_Base_Util_Date::to_db_date($_POST['birthday'], false);
+					$contactCredentials['birthday'] = \GO\Base\Util\Date::to_db_date($_POST['birthday'], false);
 				} catch (Exception $e) {
 					throw new \Exception(\GO::t('birthdayFormatMustBe').': '.$_SESSION['GO_SESSION']['date_format'].'.');
 				}
@@ -294,7 +294,7 @@ class formprocessor{
 					$userId=$this->user_id=\GO::user()->id;
 
 				if(!empty($userId)){
-					$userModel = \GO_Base_Model_User::model()->findByPk($userId);
+					$userModel = \GO\Base\Model\User::model()->findByPk($userId);
 					$userModel->contact_id=$contactId;
 					$userModel->save();
 				}
@@ -321,7 +321,7 @@ class formprocessor{
 						if (is_uploaded_file($file['tmp_name']))
 						{
 							$fsFile = new \GO\Base\Fs\File($file['tmp_name']);
-							$fsFile->move(new \GO_Base_Fs_Folder($full_path),$file['name'], false,true);
+							$fsFile->move(new \GO\Base\Fs\Folder($full_path),$file['name'], false,true);
 							$fsFile->setDefaultPermissions();
 			
 							\GO_Files_Model_File::importFromFilesystem($fsFile);
@@ -362,7 +362,7 @@ class formprocessor{
 			if ($this->contact_id > 0) {
 				if (isset($_FILES['photo']['tmp_name']) && is_uploaded_file($_FILES['photo']['tmp_name'])) {
 					$fsFile = new \GO\Base\Fs\File($_FILES['photo']['tmp_name']);
-					$fsFile->move(new \GO_Base_Fs_Folder(\GO::config()->tmpdir),$_FILES['photo']['name'], false,false);
+					$fsFile->move(new \GO\Base\Fs\Folder(\GO::config()->tmpdir),$_FILES['photo']['name'], false,false);
 					$contactModel = \GO_Addressbook_Model_Contact::model()->findByPk($contactId);
 					$contactModel->setPhoto(\GO::config()->tmpdir . $_FILES['photo']['name']);
 				}
@@ -381,7 +381,7 @@ class formprocessor{
 				$mailTo = array();
 				foreach($usersToNotify as $userToNotifyId)
 				{
-					$userModel = \GO_Base_Model_User::model()->findByPk($userToNotifyId);
+					$userModel = \GO\Base\Model\User::model()->findByPk($userToNotifyId);
 					$mailTo[]=$userModel->email;
 				}
 				
@@ -397,7 +397,7 @@ class formprocessor{
 					}
 
 					$values = array('address_no', 'address', 'zip', 'city', 'state', 'country');
-					$formatted_address = nl2br(\GO_Base_Util_Common::formatAddress(
+					$formatted_address = nl2br(\GO\Base\Util\Common::formatAddress(
 							'{country}', '{address}', '{address_no}', '{zip}', '{city}', '{state}'
 						));
 					foreach($values as $val)
@@ -414,11 +414,11 @@ class formprocessor{
 
 					$mailFrom = !empty($_POST['mail_from']) ? $_POST['mail_from'] : \GO::config()->webmaster_email;
 					
-					$mailMessage = \GO_Base_Mail_Message::newInstance( \GO::t('newContactAdded','addressbook'), $body, 'text/html' )
+					$mailMessage = \GO\Base\Mail\Message::newInstance( \GO::t('newContactAdded','addressbook'), $body, 'text/html' )
 						->setFrom($mailFrom, \GO::config()->title);
 					foreach ($mailTo as $v)
 						$mailMessage->addTo($v);		
-					\GO_Base_Mail_Mailer::newGoInstance()->send($mailMessage);
+					\GO\Base\Mail\Mailer::newGoInstance()->send($mailMessage);
 				}
 			}
 		
@@ -471,7 +471,7 @@ class formprocessor{
 //												false);
 //				$messageModel->body = 
 				
-				$mailMessage = \GO_Base_Mail_Message::newInstance()->loadMimeMessage(file_get_contents($path));
+				$mailMessage = \GO\Base\Mail\Message::newInstance()->loadMimeMessage(file_get_contents($path));
 				$htmlBodyString = $mailMessage->getBody();
 				foreach ($this->confirmation_replacements as $tag => $replacement)
 					$htmlBodyString = str_replace('{'.$tag.'}',$replacement,$htmlBodyString);				
@@ -486,7 +486,7 @@ class formprocessor{
 				$mailMessage->setBody($htmlBodyString);
 				$mailMessage->setFrom($mailMessage->getFrom(),$mailMessage->getSender());
 				$mailMessage->addTo($_POST['email']);
-				\GO_Base_Mail_Mailer::newGoInstance()->send($mailMessage);
+				\GO\Base\Mail\Mailer::newGoInstance()->send($mailMessage);
 			}
 		}
 	}

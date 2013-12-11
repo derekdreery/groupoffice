@@ -5,9 +5,9 @@ class GO_Addressbook_Utils{
 		$char = '';
 		if (!empty($string)) {
 			if (function_exists('mb_substr')) {
-				$char = strtoupper(mb_substr(\GO_Base_Fs_Base::stripInvalidChars($string),0,1,'UTF-8'));
+				$char = strtoupper(mb_substr(\GO\Base\Fs\Base::stripInvalidChars($string),0,1,'UTF-8'));
 			} else {
-				$char = strtoupper(substr(\GO_Base_Fs_Base::stripInvalidChars($string),0,1));
+				$char = strtoupper(substr(\GO\Base\Fs\Base::stripInvalidChars($string),0,1));
 			}
 		}
 

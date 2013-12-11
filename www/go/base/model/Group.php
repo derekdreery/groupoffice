@@ -24,16 +24,18 @@
  * @property int $acl_id
  * @property bool $admin_only Obsolete!
  * 
- * @method GO_Base_Model_User users
+ * @method \GO\Base\Model\User users
  *
  */
-class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
+namespace GO\Base\Model;
+
+class Group extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Base_Model_Group 
+	 * @return Group 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -70,7 +72,7 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 		
 		if($wasNew){
-			$this->acl->addGroup($this->id, \GO_Base_Model_Acl::READ_PERMISSION);
+			$this->acl->addGroup($this->id, \GO\Base\Model\Acl::READ_PERMISSION);
 		}
 		
 		return parent::afterSave($wasNew);
@@ -86,13 +88,13 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
   public function relations() {
     
     return array(
-				'users' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'group_id', 'linkModel' => 'GO_Base_Model_UserGroup'),
+				'users' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\User', 'field'=>'group_id', 'linkModel' => '\GO\Base\Model\UserGroup'),
 		);
   }
   
   public function addUser($user_id){
 		if(!$this->hasUser($user_id)){
-			$userGroup = new \GO_Base_Model_UserGroup();
+			$userGroup = new \GO\Base\Model\UserGroup();
 			$userGroup->group_id = $this->id;
 			$userGroup->user_id = $user_id;
 			return $userGroup->save();
@@ -103,7 +105,7 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
   }
 	
 	public function removeUser($user_id){
-		$model = \GO_Base_Model_UserGroup::model()->findByPk(array('user_id'=>$user_id, 'group_id'=>$this->pk));
+		$model = \GO\Base\Model\UserGroup::model()->findByPk(array('user_id'=>$user_id, 'group_id'=>$this->pk));
 		if($model)
 			return $model->delete();
 		else
@@ -114,16 +116,16 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
    * Check if this group has a user
    * 
    * @param type $user_id
-   * @return GO_Base_Model_UserGroup or false 
+   * @return \GO\Base\Model\UserGroup or false 
    */
   public function hasUser($user_id){
-    return \GO_Base_Model_UserGroup::model()->findByPk(array('user_id'=>$user_id, 'group_id'=>$this->pk));
+    return \GO\Base\Model\UserGroup::model()->findByPk(array('user_id'=>$user_id, 'group_id'=>$this->pk));
   }
 	
 	public function checkDatabase() {
 		
 		if($this->id==\GO::config()->group_everyone){
-			$stmt = \GO_Base_Model_User::model()->find(\GO_Base_Db_FindParams::newInstance()->ignoreAcl());
+			$stmt = \GO\Base\Model\User::model()->find(\GO\Base\Db\FindParams::newInstance()->ignoreAcl());
 			while($user = $stmt->fetch())
 				$this->addUser ($user->id);
 		}

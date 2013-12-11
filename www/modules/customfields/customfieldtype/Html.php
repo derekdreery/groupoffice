@@ -1,5 +1,5 @@
 <?php
-class GO_Customfields_Customfieldtype_Html extends GO_Customfields_Customfieldtype_Textarea{
+class GO_Customfields_Customfieldtype_Html extends \GO_Customfields_Customfieldtype_Textarea{
 	
 	public function name(){
 		return 'HTML';

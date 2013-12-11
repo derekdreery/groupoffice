@@ -26,7 +26,7 @@
  * @property int $sort
  */
 
-class GO_Favorites_Model_Addressbook extends GO_Base_Db_ActiveRecord{
+class GO_Favorites_Model_Addressbook extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns the table name

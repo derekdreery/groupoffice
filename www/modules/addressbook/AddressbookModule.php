@@ -1,6 +1,6 @@
 <?php
 
-class GO_Addressbook_AddressbookModule extends GO_Base_Module{
+class GO_Addressbook_AddressbookModule extends \GO\Base\Module{
 
 	public function author() {
 		return 'Merijn Schering';
@@ -11,13 +11,13 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 	}
 	
 	public static function initListeners() {
-		\GO_Base_Model_User::model()->addListener('delete', "GO_Addressbook_AddressbookModule", "deleteUser");
+		\GO\Base\Model\User::model()->addListener('delete', "GO_Addressbook_AddressbookModule", "deleteUser");
 	}
 	
 	// Load the settings for the "Addresslists" tab in the Settings panel
 	public static function loadSettings(&$settingsController, &$params, &$response, $user) {
 
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->joinCustomFields();
 		
 		$contact = $user->contact($findParams);
@@ -46,7 +46,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		
 		if($contact){
 		
-			$addresslists = \GO_Addressbook_Model_Addresslist::model()->find(\GO_Base_Db_FindParams::newInstance()->permissionLevel(\GO_Base_Model_Acl::READ_PERMISSION));
+			$addresslists = \GO_Addressbook_Model_Addresslist::model()->find(\GO\Base\Db\FindParams::newInstance()->permissionLevel(\GO\Base\Model\Acl::READ_PERMISSION));
 			foreach($addresslists as $addresslist){
 				$linkModel = $addresslist->hasManyMany('contacts', $contact->id);
 				$mustHaveLinkModel = isset($params['addresslist_' . $addresslist->id]);
@@ -96,7 +96,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 				'default_salutation' => \GO::t('defaultSalutation','addressbook')
 		));
 		$addressbook->save();
-		$addressbook->acl->addGroup(\GO::config()->group_internal,\GO_Base_Model_Acl::WRITE_PERMISSION);
+		$addressbook->acl->addGroup(\GO::config()->group_internal,\GO\Base\Model\Acl::WRITE_PERMISSION);
 
 		$addressbook = new \GO_Addressbook_Model_Addressbook();
 		$addressbook->setAttributes(array(
@@ -106,7 +106,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 				'default_salutation' => \GO::t('defaultSalutation','addressbook')
 		));
 		$addressbook->save();
-		$addressbook->acl->addGroup(\GO::config()->group_internal,\GO_Base_Model_Acl::WRITE_PERMISSION);
+		$addressbook->acl->addGroup(\GO::config()->group_internal,\GO\Base\Model\Acl::WRITE_PERMISSION);
 
 		if (!is_dir(\GO::config()->file_storage_path.'contacts/contact_photos'))
 			mkdir(\GO::config()->file_storage_path.'contacts/contact_photos',0755, true);
@@ -118,14 +118,14 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 			'default_salutation' => \GO::t('defaultSalutation','addressbook')
 		));
 		$addressbook->save();
-		$addressbook->acl->addGroup(\GO::config()->group_internal,\GO_Base_Model_Acl::WRITE_PERMISSION);
+		$addressbook->acl->addGroup(\GO::config()->group_internal,\GO\Base\Model\Acl::WRITE_PERMISSION);
 		
 		//Each user should have a contact
-		$stmt = \GO_Base_Model_User::model()->find(\GO_Base_Db_FindParams::newInstance()->ignoreAcl());
+		$stmt = \GO\Base\Model\User::model()->find(\GO\Base\Db\FindParams::newInstance()->ignoreAcl());
 		while($user = $stmt->fetch())
 			$user->createContact();
 		
-		$message = new \GO_Base_Mail_Message();
+		$message = new \GO\Base\Mail\Message();
 		$message->setHtmlAlternateBody('{salutation},<br />
 <br />
 {body}<br />
@@ -168,7 +168,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		if(\GO::modules()->isInstalled('files')){
 			$folder = \GO_Files_Model_Folder::model()->findByPath('addressbook', true);
 			if($folder){
-				$folder->acl_id=\GO_Base_Model_Acl::model()->getReadOnlyAcl()->id;
+				$folder->acl_id=\GO\Base\Model\Acl::model()->getReadOnlyAcl()->id;
 				$folder->readonly=1;
 				$folder->save();
 			}			
@@ -200,7 +200,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 	
 	public function setFolderPermissions2(){
 		if(\GO::modules()->isInstalled('files')){
-			\GO_Base_Fs_Folder::createFromPath(\GO::config()->file_storage_path.'company_photos');
+			\GO\Base\Fs\Folder::createFromPath(\GO::config()->file_storage_path.'company_photos');
 			$folderModel = \GO_Files_Model_Folder::model()->findByPath('company_photos', true);
 			if($folderModel && !$folderModel->acl_id){
 				$folderModel->setNewAcl(1);

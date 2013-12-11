@@ -18,7 +18,9 @@
  * @author Wesley Smits <wsmits@intermesh.nl>
  * @package GO.base.data
  */
-class GO_Base_Data_ColumnModel {
+namespace GO\Base\Data;
+
+class ColumnModel {
 
 	/**
 	 * The columns that are defined in this column model
@@ -81,10 +83,10 @@ class GO_Base_Data_ColumnModel {
 	 * 
 	 * @TODO: The text parameters need to be excluded.
 	 * 
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param \GO\Base\Db\ActiveRecord $model
 	 * @param Array $excludeColumns 
 	 */
-	public function setColumnsFromModel(\GO_Base_Db_ActiveRecord $model, $excludeColumns=array(), $includeColumns=array()) {
+	public function setColumnsFromModel(\GO\Base\Db\ActiveRecord $model, $excludeColumns=array(), $includeColumns=array()) {
 
 			$attributes = $model->getColumns();
 
@@ -92,7 +94,7 @@ class GO_Base_Data_ColumnModel {
 				if(!in_array($colName, $excludeColumns)){					
 					$sortIndex = empty($includeColumns) ? 0 : array_search($colName, $includeColumns);				
 					if($sortIndex!==false){
-						$column = new \GO_Base_Data_Column($colName, $model->getAttributeLabel($colName),$sortIndex);					
+						$column = new \GO\Base\Data\Column($colName, $model->getAttributeLabel($colName),$sortIndex);					
 						$this->addColumn($column);
 					}
 				}
@@ -107,7 +109,7 @@ class GO_Base_Data_ColumnModel {
 					
 						$sortIndex = empty($includeColumns) ? 0 : array_search($colName, $includeColumns);				
 						if($sortIndex!==false){
-							$column = new \GO_Base_Data_Column($colName, $model->customfieldsRecord->getAttributeLabel($colName), $sortIndex);
+							$column = new \GO\Base\Data\Column($colName, $model->customfieldsRecord->getAttributeLabel($colName), $sortIndex);
 							$this->addColumn($column);
 						}
 					}
@@ -131,7 +133,7 @@ class GO_Base_Data_ColumnModel {
 	 * @param String $sortAlias A string or array of columns to sort on if this column is sorted on.
 	 * @param string $label Label to use on exports.
 	 * 
-	 * @return GO_Base_Data_ColumnModel
+	 * @return ColumnModel
 	 */
 	public function formatColumn($column, $format, $extraVars=array(), $sortAlias='', $label='') {		
 		
@@ -141,7 +143,7 @@ class GO_Base_Data_ColumnModel {
 		}
 		
 		
-		$column = new \GO_Base_Data_Column($column, $label);
+		$column = new \GO\Base\Data\Column($column, $label);
 		$column->setFormat($format, $extraVars);
 		if(!empty($sortAlias))
 			$column->setSortAlias($sortAlias);
@@ -212,10 +214,10 @@ class GO_Base_Data_ColumnModel {
 	
 	/**
 	 *
-	 * @param GO_Base_Data_Column $column
-	 * @return GO_Base_Data_ColumnModel 
+	 * @param \GO\Base\Data\Column $column
+	 * @return ColumnModel 
 	 */
-	public function addColumn(\GO_Base_Data_Column $column){
+	public function addColumn(\GO\Base\Data\Column $column){
 		$this->_columns[$column->getDataIndex()]=$column;
 		$this->_columnSort[$column->getDataIndex()]=$column->getSortIndex();
 		
@@ -228,7 +230,7 @@ class GO_Base_Data_ColumnModel {
 	 * 
 	 * This function returns all columns that are set in this columnModel as an array.
 	 *  
-	 * @return GO_Base_Data_Column[]
+	 * @return \GO\Base\Data\Column[]
 	 */
 	public function getColumns() {
 		$this->_sortColumns();					
@@ -239,7 +241,7 @@ class GO_Base_Data_ColumnModel {
 	 * Get a column by data index
 	 * 
 	 * @param string $dataindex
-	 * @return GO_Base_Data_Column 
+	 * @return \GO\Base\Data\Column 
 	 */
 	public function getColumn($dataindex){
 		
@@ -339,7 +341,7 @@ class GO_Base_Data_ColumnModel {
 
 	/**
 	 *
-	 * @param GO_Base_Model $model
+	 * @param \GO\Base\Model $model
 	 * @return array formatted grid row key value array
 	 */
 	public function formatModel($model) {
@@ -347,7 +349,7 @@ class GO_Base_Data_ColumnModel {
 		$oldLevel = error_reporting(E_ERROR); //suppress errors in the eval'd code
 		
 		$formattedRecord = array();
-		if($model instanceof \GO_Base_Db_ActiveRecord)
+		if($model instanceof \GO\Base\Db\ActiveRecord)
 		  $formattedRecord = $model->getAttributes($this->_modelFormatType);
 		$columns = $this->getColumns();
 
@@ -378,8 +380,8 @@ class GO_Base_Data_ColumnModel {
 	}
 
 	/**
-	 * Set the format type used in the GO_Base_Db_ActiveRecord
-	 * @param string $type @see \GO_Base_Db_ActiveRecord::getAttributes()
+	 * Set the format type used in the \GO\Base\Db\ActiveRecord
+	 * @param string $type @see \GO\Base\Db\ActiveRecord::getAttributes()
 	 */
 	public function setModelFormatType($type) {
 		$this->_modelFormatType = $type;
@@ -389,11 +391,11 @@ class GO_Base_Data_ColumnModel {
 	 * Set a function that will be called with call_user_func to format a record.
 	 * The function will be called with parameters:
 	 * 
-	 * Array $formattedRecord, GO_Base_Db_ActiveRecord $model, GO_Base_Data_ColumnModel $cm
+	 * Array $formattedRecord, \GO\Base\Db\ActiveRecord $model, ColumnModel $cm
 	 * 
 	 * @param mixed $func Function name string or array($object, $functionName)
 	 * 
-	 * @return GO_Base_Data_ColumnModel
+	 * @return ColumnModel
 	 */
 	public function setFormatRecordFunction($func) {
 		$this->_formatRecordFunction = $func;

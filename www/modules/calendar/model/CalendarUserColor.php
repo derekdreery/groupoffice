@@ -26,7 +26,7 @@
  * @property String $color
  */
 
-class GO_Calendar_Model_CalendarUserColor extends GO_Base_Db_ActiveRecord{
+class GO_Calendar_Model_CalendarUserColor extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself

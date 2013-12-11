@@ -18,7 +18,7 @@
  * The content model custom fields model.
  * 
  */
-class GO_Sites_Customfields_Model_Site extends GO_Customfields_Model_AbstractCustomFieldsRecord{
+class GO_Sites_Customfields_Model_Site extends \GO_Customfields_Model_AbstractCustomFieldsRecord{
 	/**
 	 * Returns a static model of itself
 	 * 

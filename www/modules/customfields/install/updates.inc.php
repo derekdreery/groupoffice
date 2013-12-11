@@ -67,14 +67,14 @@ $updates["201108291450"][]="ALTER TABLE `cf_categories` CHANGE `type` `extends_m
 
 $updates["201108291450"][]="ALTER TABLE `cf_8` CHANGE `link_id` `model_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201108291450"][]="RENAME TABLE `cf_8` TO `cf_go_users` ;";
-$updates["201108291450"][]="update cf_categories set extends_model='GO_Base_Model_User' where extends_model=8;";
+$updates["201108291450"][]="update cf_categories set extends_model='\GO\Base\Model\User' where extends_model=8;";
 
 
 $updates["201109011450"][]="update cf_categories set extends_model='GO_Files_Model_Folder' where extends_model=17;";
 $updates["201109011450"][]="update cf_categories set extends_model='GO_Tasks_Model_Task' where extends_model=12;";
 $updates["201109011450"][]="update cf_categories set extends_model='GO_Licenses_Model_License' where extends_model=11;";
 $updates["201109011450"][]="update cf_categories set extends_model='GO_Email_Model_Email' where extends_model=9;";
-$updates["201109011450"][]="update cf_categories set extends_model='GO_Base_Model_User' where extends_model=8;";
+$updates["201109011450"][]="update cf_categories set extends_model='\GO\Base\Model\User' where extends_model=8;";
 $updates["201109011450"][]="update cf_categories set extends_model='GO_Billing_Model_Order' where extends_model=7;";
 $updates["201109011450"][]="update cf_categories set extends_model='GO_Files_Model_File' where extends_model=6;";
 $updates["201109011450"][]="update cf_categories set extends_model='GO_Projects_Model_Project' where extends_model=5;";

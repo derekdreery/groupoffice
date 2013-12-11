@@ -7,7 +7,7 @@ class GO_Admin2userlogin_Controller_Switch extends \GO\Base\Controller\AbstractC
 		
 		$debug = !empty(\GO::session()->values['debug']);
 		
-		$user = \GO_Base_Model_User::model()->findByPk($params['user_id']);
+		$user = \GO\Base\Model\User::model()->findByPk($params['user_id']);
 		
 		\GO::session()->values=array(); //clear session
 		\GO::session()->setCurrentUser($user->id);

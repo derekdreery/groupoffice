@@ -17,7 +17,9 @@
  * @author Wesley Smits <wsmits@intermesh.nl>
  * @package GO.base.export
  */
-class GO_Base_Export_ExportPDF extends GO_Base_Export_AbstractExport {
+namespace GO\Base\Export;
+
+class ExportPDF extends \GO\Base\Export\AbstractExport {
 
 	public static $showInView = true;
 	public static $name = "PDF";
@@ -71,7 +73,7 @@ class GO_Base_Export_ExportPDF extends GO_Base_Export_AbstractExport {
 			$orientation = $this->orientation;
 		}
 		
-		$pdf = new \GO_Base_Util_Pdf($orientation, $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false);
+		$pdf = new \GO\Base\Util\Pdf($orientation, $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false);
 
 		$pdf->SetTitle($this->title);
 		$pdf->SetSubject($this->title);

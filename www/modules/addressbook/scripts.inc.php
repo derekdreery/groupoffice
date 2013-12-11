@@ -1,12 +1,12 @@
 <?php
 
-$GO_SCRIPTS_JS .= 'GO.addressbook.lang.defaultSalutationExpression="'.GO_Base_Util_String::escape_javascript(\GO::t('defaultSalutation','addressbook')).'";';
+$GO_SCRIPTS_JS .= 'GO.addressbook.lang.defaultSalutationExpression="'.\GO\Base\Util\String::escape_javascript(\GO::t('defaultSalutation','addressbook')).'";';
 
 
 $export_acl_id = \GO::config()->get_setting('go_addressbook_export', 0);
 if(!$export_acl_id)
 {
-	$acl = new \GO_Base_Model_Acl();
+	$acl = new \GO\Base\Model\Acl();
 	$acl->description='addressbook_export';
 	$acl->save();
 	
@@ -15,7 +15,7 @@ if(!$export_acl_id)
 }
 $GO_SCRIPTS_JS .= 'GO.addressbook.export_acl_id="'.$export_acl_id.'";';
 
-$acl_level = \GO_Base_Model_Acl::getUserPermissionLevel($export_acl_id, \GO::user()->id);
+$acl_level = \GO\Base\Model\Acl::getUserPermissionLevel($export_acl_id, \GO::user()->id);
 $GO_SCRIPTS_JS .= 'GO.addressbook.exportPermission="'.(($acl_level) ? 1 : 0).'";';
 
 

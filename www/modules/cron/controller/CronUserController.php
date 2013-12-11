@@ -1,13 +1,13 @@
 <?php
 
-class GO_Cron_Controller_CronUser extends GO_Base_Controller_AbstractMultiSelectModelController {
+class GO_Cron_Controller_CronUser extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called
 	 * @return String 
 	 */
 	public function modelName() {
-		return 'GO_Base_Model_User';
+		return '\GO\Base\Model\User';
 	}
 	
 	/**
@@ -15,7 +15,7 @@ class GO_Cron_Controller_CronUser extends GO_Base_Controller_AbstractMultiSelect
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return 'GO_Base_Cron_CronUser';
+		return '\GO\Base\Cron\CronUser';
 	}
 	
 	/**

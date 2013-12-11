@@ -1,5 +1,5 @@
 <?php
-class GO_Ldapauth_LdapauthModule extends GO_Base_Module{
+class GO_Ldapauth_LdapauthModule extends \GO\Base\Module{
 	
 	public static function initListeners() {		
 		\GO::session()->addListener('beforelogin', 'GO_Ldapauth_LdapauthModule', 'beforeLogin');

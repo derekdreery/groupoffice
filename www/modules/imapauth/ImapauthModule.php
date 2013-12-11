@@ -1,6 +1,6 @@
 <?php
 
-class GO_Imapauth_ImapauthModule extends GO_Base_Module {
+class GO_Imapauth_ImapauthModule extends \GO\Base\Module {
 
 	public static function initListeners() {
 		//\GO::session()->addListener('beforelogin', 'GO_Imapauth_ImapauthModule', 'beforeLogin');
@@ -12,14 +12,14 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 //	public static function beforeControllerLogin($params, &$response) {
 //		if (!isset($params['first_name'])) {
 //			try {
-//				$imap = new \GO_Base_Mail_Imap();
+//				$imap = new \GO\Base\Mail\Imap();
 //				$imap->connect(
 //								$config['host'], $config['port'], $mail_username, $password, $config['ssl']);
 //
 //				\GO::debug('IMAPAUTH: IMAP login succesful');
 //				$imap->disconnect();
 //
-//				$user = \GO_Base_Model_User::model()->findSingleByAttribute('username', $go_username);
+//				$user = \GO\Base\Model\User::model()->findSingleByAttribute('username', $go_username);
 //				if (!$user) {
 //					$response['needCompleteProfile'] = true;
 //				}
@@ -53,7 +53,7 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 						return false;
 					} else {
 						//user doesn't exist. create it now
-						$user = new \GO_Base_Model_User();
+						$user = new \GO\Base\Model\User();
 						$user->email = $ia->email;
 						$user->username = $ia->goUsername;
 						$user->password = $ia->imapPassword;

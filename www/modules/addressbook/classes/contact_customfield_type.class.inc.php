@@ -1,5 +1,5 @@
 <?php
-class contact_customfield_type extends default_customfield_type {
+class contact_customfield_type extends \default_customfield_type {
 	function format_for_display($field, &$record, $fields) {
 		//global $GO_MODULES;
 

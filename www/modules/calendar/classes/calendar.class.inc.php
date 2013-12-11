@@ -19,7 +19,7 @@ define('DB_TIME_FORMAT', 'H:i:00');
 
 
 
-class calendar extends db {
+class calendar extends \db {
 	var $events = array();
 	var $events_sort = array(); //used to sort the events at start_time
 	var $all_day_events = array();

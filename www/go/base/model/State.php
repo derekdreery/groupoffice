@@ -20,13 +20,15 @@
  * @property int $user_id
  */
 
-class GO_Base_Model_State extends GO_Base_Db_ActiveRecord {
+namespace GO\Base\Model;
+
+class State extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Base_Model_State 
+	 * @return State 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -49,7 +51,7 @@ class GO_Base_Model_State extends GO_Base_Db_ActiveRecord {
 	 */
 	public function getFullClientState($user_id){
 		$state = array();
-		$stmt = $this->findByAttribute('user_id', $user_id, \GO_Base_Db_FindParams::newInstance()->select('t.*'));
+		$stmt = $this->findByAttribute('user_id', $user_id, \GO\Base\Db\FindParams::newInstance()->select('t.*'));
 		while($model= $stmt->fetch()){
 			$state[$model->name]=$model->value;
 		}

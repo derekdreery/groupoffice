@@ -18,7 +18,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.util.date
  */
-class GO_Base_Util_Date_DateTime extends DateTime {
+namespace GO\Base\Util;
+
+class Date_DateTime extends \DateTime {
 
   /**
    * Overwrite constructor to used groupoffice default timezone and not systems default timezone
@@ -37,7 +39,7 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	 * Create a date time object with timezone information with a unixtime stamp
 	 * @depricated DateTime('@'.$unixtime) works as well
 	 * @param int $unixtime
-	 * @return GO_Base_Util_Date_DateTime 
+	 * @return Date_DateTime 
 	 */
 	public static function fromUnixtime($unixtime) {
 		return new self(date('Y-m-d H:i:s', $unixtime), new \DateTimeZone(date_default_timezone_get()));
@@ -46,10 +48,10 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	/**
 	 * Get the easter date time object with the correct timezone
 	 * @param int $year
-	 * @return GO_Base_Util_Date_DateTime
+	 * @return Date_DateTime
 	 */
 	public static function getEasterDatetime($year) {
-			$base = new \GO_Base_Util_Date_DateTime("$year-03-21");
+			$base = new Date_DateTime("$year-03-21");
 			$days = easter_days($year);
 
 			return $base->add(new \DateInterval("P{$days}D"));
@@ -66,7 +68,7 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	{
 	  if($format===null) {
 		//$format = \GO::user() ? \GO::user()->date_format . " " . \GO::user()->time_format : \GO::config()->default_date_format . " " . \GO::config()->default_time_format;
-		return \GO_Base_Util_Date::get_timestamp($this->getTimestamp());
+		return Date::get_timestamp($this->getTimestamp());
 	  }
 	  return parent::format($format);
 	}
@@ -95,7 +97,7 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	 * Get the number of days elapsed. We could not use DateTime::diff() because it's only
 	 * compatible with PHP 5.3
 	 * @deprecated since version 4.1
-	 * @param GO_Base_Util_Date_DateTime $dateTime
+	 * @param Date_DateTime $dateTime
 	 * @return int 
 	 */
 	public function getDaysElapsed($dateTime) {
@@ -109,7 +111,7 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 //	 * Get an array with elapsed days, hours and minutes that can be used for
 //	 * addDiffCompat. These functions are for php 5.2 compatibility.
 //	 * 
-//	 * @param GO_Base_Util_Date_DateTime $dateTime
+//	 * @param Date_DateTime $dateTime
 //	 * @return array 
 //	 */
 //	public function getDiffCompat($dateTime){

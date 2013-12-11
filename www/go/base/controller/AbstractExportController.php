@@ -1,5 +1,7 @@
 <?php
-abstract class GO_Base_Controller_AbstractExportController extends \GO\Base\Controller\AbstractController{
+namespace GO\Base\Controller;
+
+abstract class AbstractExportController extends \GO\Base\Controller\AbstractController{
 
 	/**
 	 * Attributes that should be exported from the statement result.
@@ -19,7 +21,7 @@ abstract class GO_Base_Controller_AbstractExportController extends \GO\Base\Cont
 	
 	public function actionAttributes($params){
 		
-		$store = new \GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 		
 		$attr = $this->exportableAttributes();
 		
@@ -43,7 +45,7 @@ abstract class GO_Base_Controller_AbstractExportController extends \GO\Base\Cont
 	}
 	
 //	public function actionParameters($params){
-//		$store = new \GO_Base_Data_ArrayStore();
+//		$store = new \GO\Base\Data\ArrayStore();
 //		
 //		$attr = $this->exportParameters();
 //		

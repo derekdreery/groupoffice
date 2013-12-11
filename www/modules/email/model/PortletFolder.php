@@ -29,7 +29,7 @@
  * @property string $name
  */
 
-class GO_email_Model_PortletFolder extends GO_Base_Db_ActiveRecord{	
+class GO_email_Model_PortletFolder extends \GO\Base\Db\ActiveRecord{	
 	
 	public $name = 'UNDEFINED';
 	

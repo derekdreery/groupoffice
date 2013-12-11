@@ -1,6 +1,8 @@
 <?php
 
-class GO_Base_Html_Radio extends GO_Base_Html_Input {
+namespace GO\Base\Html;
+
+class Radio extends \GO\Base\Html\Input {
 	
 	public static function render($attributes,$echo=true) {
 		$i = new self($attributes);

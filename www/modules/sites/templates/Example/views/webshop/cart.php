@@ -66,7 +66,7 @@
 						<?php echo GO::t('updateamounts', 'webshop'); ?></a>
 				</div>
 			</div>
-			<?php echo GO_Base_Html_Form::getHtmlEnd(); ?>
+			<?php echo \GO\Base\Html\Form::getHtmlEnd(); ?>
 
 <?php endif; ?>
 

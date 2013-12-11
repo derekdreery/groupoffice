@@ -6,7 +6,9 @@
  * @author Michal Charvát <michal.charvat@zdeno.net>
  */
 
-class GO_Base_Util_SpellChecker {
+namespace GO\Base\Util;
+
+class SpellChecker {
 
     private static $_pLink;
 

@@ -18,7 +18,7 @@
  */
 
 
-abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_Db_ActiveRecord{
+abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends \GO\Base\Db\ActiveRecord{
 	
 	/**
 	 * Some fields need different formatting when exporting like contact fields that are prefixed with the ID.
@@ -47,7 +47,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	/**
 	 * Return the static model this custom fields model extends with fields.
 	 * 
-	 * @return GO_Base_Db_ActiveRecord 
+	 * @return \GO\Base\Db\ActiveRecord 
 	 */
 	public function getExtendedModel(){
 		return GO::getModel($this->extendsModel());
@@ -56,7 +56,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	/**
 	 * Override this to return the model this custom fields model extends with fields.
 	 * 
-	 * @return GO_Base_Db_ActiveRecord 
+	 * @return \GO\Base\Db\ActiveRecord 
 	 */
 	protected function extendsModel(){
 		return false;
@@ -91,7 +91,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 						'bindParams'=>array('extends_model'=>$this->extendsModel())
 				));
 				
-				self::$cacheColumns[$this->extendsModel()]=\GO_Base_Db_Columns::getColumns ($this);
+				self::$cacheColumns[$this->extendsModel()]=\GO\Base\Db\Columns::getColumns ($this);
 				self::$attributeLabels[$this->extendsModel()]=array();
 				
 				while($field = $stmt->fetch()){			
@@ -370,7 +370,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	}
 	
 	public function getColIdByName($fieldNameString,$categoryNameString='') {
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 				->single()
 				->select('`t`.`id`')
 				->joinModel(array(
@@ -381,7 +381,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 					'tableAlias' => 'cat'
 				));
 
-		$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('name', $fieldNameString, '=', 't')
 						->addCondition('extends_model', $this->getExtendedModel()->className(), '=', 'cat');
 		if (!empty($categoryNameString))

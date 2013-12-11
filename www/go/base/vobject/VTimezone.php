@@ -3,7 +3,7 @@
 //require_once(\GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
 		
 
-class GO_Base_VObject_VTimezone extends Sabre\VObject\Document {
+class GO_Base_VObject_VTimezone extends \Sabre\VObject\Document {
 
 	 static public $defaultName = 'VTIMEZONE';
 	 
@@ -27,7 +27,7 @@ class GO_Base_VObject_VTimezone extends Sabre\VObject\Document {
 
 		$start_of_year = mktime(0, 0, 0, 1, 1);
 
-		$to = \GO_Base_Util_Date::get_timezone_offset(time());
+		$to = \GO\Base\Util\Date::get_timezone_offset(time());
 		if ($to < 0) {
 			if (strlen($to) == 2)
 				$to = '-0' . ($to * -1);

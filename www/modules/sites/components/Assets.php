@@ -200,8 +200,8 @@ class GO_Sites_Components_Assets
 				}
 				else if(!is_dir($dstDir))
 				{
-					$dstF = new GO_Base_Fs_Folder($dstDir);
-					$folder = new GO_Base_Fs_Folder($src);
+					$dstF = new \GO\Base\Fs\Folder($dstDir);
+					$folder = new \GO\Base\Fs\Folder($src);
 					$folder->copy($dstF);
 				}
 

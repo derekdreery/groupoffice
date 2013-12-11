@@ -33,7 +33,7 @@
  * @property GO_Sites_Model_Site $site
  * @property int $sort_order
  */
-class GO_Sites_Model_Content extends GO_Base_Db_ActiveRecord {
+class GO_Sites_Model_Content extends \GO\Base\Db\ActiveRecord {
 	
 	const STATUS_PUBLISHED = 1;
 	const STATUS_OFFLINE = 3;
@@ -59,7 +59,7 @@ class GO_Sites_Model_Content extends GO_Base_Db_ActiveRecord {
 	
 	public function relations() {
 		return array(
-//				'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Content', 'field' => 'parent_id', 'delete' => true, GO_Base_Db_FindParams::newInstance()->order('sort_order')),
+//				'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Content', 'field' => 'parent_id', 'delete' => true, \GO\Base\Db\FindParams::newInstance()->order('sort_order')),
 				'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Sites_Model_Site", 'field'=>'site_id'),
 //				'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Sites_Model_Content", 'field'=>'parent_id')
 				);

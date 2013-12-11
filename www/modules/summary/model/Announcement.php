@@ -17,7 +17,7 @@
  * @property int $acl_id
  */
 
-class GO_Summary_Model_Announcement extends GO_Base_Db_ActiveRecord {
+class GO_Summary_Model_Announcement extends \GO\Base\Db\ActiveRecord {
 	
 	public static function model($className=__CLASS__)
 	{	

@@ -20,7 +20,7 @@
  * @property int $view_id
  */
 
-class GO_Calendar_Model_ViewGroup extends GO_Base_Db_ActiveRecord{
+class GO_Calendar_Model_ViewGroup extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
@@ -60,7 +60,7 @@ class GO_Calendar_Model_ViewGroup extends GO_Base_Db_ActiveRecord{
 	 public function relations() {
 		 return array(
              'view' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_View', 'field' => 'view_id'),
-             'group' => array('type' => self::BELONGS_TO, 'model' => 'GO_Base_Model_Group', 'field' => 'group_id'),
+             'group' => array('type' => self::BELONGS_TO, 'model' => '\GO\Base\Model\Group', 'field' => 'group_id'),
          );
 	 }
 }

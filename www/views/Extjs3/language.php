@@ -2,7 +2,7 @@
 require("../../GO.php");
 
 
-$language = new GO_Base_Language();
+$language = new \GO\Base\Language();
 $lang = $language->getAllLanguage();
 
 

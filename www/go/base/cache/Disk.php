@@ -18,7 +18,9 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @package GO.base.cache
  */
-class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
+namespace GO\Base\Cache;
+
+class Disk implements CacheInterface{
 	
 	private $_ttls;
 	private $_ttlFile;
@@ -28,7 +30,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	private $_time;
 	
 	public function __construct(){
-//		\GO::debug("Using GO_Base_Cache_Disk cache");
+//		\GO::debug("Using Disk cache");
 		
 		$this->_dir = \GO::config()->tmpdir.'diskcache/';
 		
@@ -126,7 +128,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	public function flush(){
 		$this->_ttls=array();
 		$this->_ttlsDirty=true;
-		$folder = new \GO_Base_Fs_Folder($this->_dir);
+		$folder = new \GO\Base\Fs\Folder($this->_dir);
 		$folder->delete();
 		$folder->create(0777);
 	}

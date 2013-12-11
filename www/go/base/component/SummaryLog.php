@@ -3,7 +3,9 @@
  * Component to keep track of the state of an import.
  * It keeps track on hou many items are imported and which items went wrong. 
  */
-class GO_Base_Component_SummaryLog {
+namespace GO\Base\Component;
+
+class SummaryLog {
 	
 	/**
 	 * The total items count

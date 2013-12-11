@@ -31,7 +31,7 @@ class GO_Core_Controller_Export extends \GO\Base\Controller\AbstractController {
 		$response = array();		
 		$response['data'] = array();
 		
-		$settings =  \GO_Base_Export_Settings::load();
+		$settings =  \GO\Base\Export\Settings::load();
 		$data = $settings->getArray();
 		
 		// retreive checkbox settings
@@ -78,7 +78,7 @@ class GO_Core_Controller_Export extends \GO\Base\Controller\AbstractController {
 		
 		$defaultTypes = array();
 		
-		$folder = new GO_Base_Fs_Folder($path);
+		$folder = new \GO\Base\Fs\Folder($path);
 		$contents = $folder->ls();
 		
 		$classParts = explode('/',$folder->stripRootPath());
@@ -92,7 +92,7 @@ class GO_Core_Controller_Export extends \GO\Base\Controller\AbstractController {
 		foreach($contents as $exporter) {
 			if(is_file($exporter->path())) {
 				$classname = $classPath.$exporter->nameWithoutExtension();
-				if($classname != 'GO_Base_Export_ExportInterface' && $classname != 'GO_Base_Export_Settings')
+				if($classname != 'GO_Base_Export_ExportInterface' && $classname != '\GO\Base\Export\Settings')
 				{
 					//$export = new $classname('temp');
 					

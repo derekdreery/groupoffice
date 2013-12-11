@@ -1,7 +1,7 @@
 <?php
 
 require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap.class.inc');
-class cached_imap extends imap{
+class cached_imap extends \imap{
 
 	/**
 	 * E-mail module object to connect to the database

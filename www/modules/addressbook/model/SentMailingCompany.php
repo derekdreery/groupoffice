@@ -14,7 +14,7 @@
  * @property int $sent_mailing_id
  */
 
-class GO_Addressbook_Model_SentMailingCompany extends GO_Base_Db_ActiveRecord {
+class GO_Addressbook_Model_SentMailingCompany extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * Returns a static model of itself

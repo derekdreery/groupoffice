@@ -105,7 +105,9 @@
  *  @since PHP 4.0.2
  *  @package GO.base.util
  */
-class GO_Base_Util_Html2Text
+namespace GO\Base\Util;
+
+class Html2Text
 {
 
 	/**

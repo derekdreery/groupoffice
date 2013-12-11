@@ -21,7 +21,7 @@
  * @property int $number_decimals
  * @property int $max_length
  */
-class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
+class GO_Customfields_Model_Field extends \GO\Base\Db\ActiveRecord{
 	
 	private $_datatype;
 	
@@ -138,7 +138,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	 */
 	private function _clearColumnCache(){
 	  //deleted cached column schema. See GO_Customfields_Model_AbstractCustomFieldsRecord			
-		\GO_Base_Db_Columns::clearCache(\GO::getModel(\GO::getModel($this->category->extends_model)->customfieldsModel()));
+		\GO\Base\Db\Columns::clearCache(\GO::getModel(\GO::getModel($this->category->extends_model)->customfieldsModel()));
 		\GO::cache()->delete('customfields_'.$this->category->extends_model);	
 	}
 	
@@ -278,8 +278,8 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	 * @param int $permissionLevel Set to false to ignore permissions
 	 * @return GO_Customfields_Model_Field
 	 */
-	public function findByModel($modelName, $permissionLevel=  \GO_Base_Model_Acl::READ_PERMISSION){
-		$findParams = \GO_Base_Db_FindParams::newInstance()->joinRelation('category')->order('sort_index');
+	public function findByModel($modelName, $permissionLevel=  \GO\Base\Model\Acl::READ_PERMISSION){
+		$findParams = \GO\Base\Db\FindParams::newInstance()->joinRelation('category')->order('sort_index');
 		
 		if($permissionLevel){
 			$findParams->permissionLevel($permissionLevel);

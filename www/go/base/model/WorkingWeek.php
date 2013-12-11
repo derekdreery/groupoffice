@@ -19,7 +19,9 @@
  * @property double $su_work_hours
  */
 
-class GO_Base_Model_WorkingWeek extends GO_Base_Db_ActiveRecord {
+namespace GO\Base\Model;
+
+class WorkingWeek extends \GO\Base\Db\ActiveRecord {
 	
 	public static function model($className=__CLASS__)
 	{	
@@ -88,7 +90,7 @@ class GO_Base_Model_WorkingWeek extends GO_Base_Db_ActiveRecord {
 		if($workingHours>=0){
 
 			for($i=0;$i<7;$i++){
-				$startDate=\GO_Base_Util_Date::date_add($startDate,1);
+				$startDate=\GO\Base\Util\Date::date_add($startDate,1);
 				$hoursForDay = $this->getHoursForDay($startDate);
 				
 				$workingHours-=$hoursForDay;

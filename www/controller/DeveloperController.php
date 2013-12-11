@@ -1,5 +1,4 @@
 <?php
-
 class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractController {
 
 	protected function allowGuests() {
@@ -38,7 +37,7 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 	
 	public function actionTestNamespace(){
 		
-		$this->_replaceNamespace('GO_Base_Db_ActiveRecord');
+		$this->_replaceNamespace('\GO\Base\Db\ActiveRecord', true);
 		
 	}
 	
@@ -74,13 +73,16 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 			$content = $oldContent = file_get_contents($path);
 			
 			$count = 0;
-			$content = preg_replace("/(abstract\s+)?class\s+".preg_quote($className,'/')."([^A-Za-z0-9]+)/", "namespace ".preg_quote($namespace,'/').";\n\n$1class $newClassDefinition$2", $content, -1, $count);
+			$content = preg_replace("/(abstract\s+)?class\s+".preg_quote($className,'/')."([^A-Za-z0-9]+)/", 
+							"namespace ".preg_quote($namespace,'/').";\n\n$1class $newClassDefinition$2", $content, -1, $count);
 			
 			$content = preg_replace('/class(\s+\w+\s)extends\s([A-Za-z_]+)/',"class$1extends \\\\$2", $content);
 
-			$content = preg_replace('/\\\\'.preg_quote($className, '/').'([^A-Za-z0-9]+)/', '\\'.$newClass.'$1', $content);
+			$content = preg_replace('/\\\\'.preg_quote($className, '/').'([^A-Za-z0-9]+)/', '\\'.$newClass.'$1',
+							$content);
 			
-			$content = preg_replace('/'.preg_quote($className, '/').'([^A-Za-z0-9]+)/', '\\'.$newClass.'$1', $content);
+			$content = preg_replace('/'.preg_quote($className, '/').'([^A-Za-z0-9]+)/', '\\'.$newClass.'$1', 
+							$content);
 			
 			
 			if($count>0){				
@@ -116,9 +118,9 @@ class GO_Core_Controller_Developer extends \GO\Base\Controller\AbstractControlle
 
 			echo "Creating $prefix$i\n";
 			
-			$user = \GO_Base_Model_User::model()->findSingleByAttribute('username', $prefix . $i);
+			$user = \GO\Base\Model\User::model()->findSingleByAttribute('username', $prefix . $i);
 			if(!$user){
-				$user = new GO_Base_Model_User();
+				$user = new \GO\Base\Model\User();
 				$user->username = $prefix . $i;
 				$user->email = $prefix . $i . '@' . $domain;
 				$user->password = $prefix . $i;
@@ -214,11 +216,11 @@ END:VCALENDAR';
 	
 	protected function actionGrouped($params){
 		
-		$stmt = \GO_Base_Model_Grouped::model()->load(
+		$stmt = \GO\Base\Model\Grouped::model()->load(
 						'GO_Calendar_Model_Event',
 						'c.name', 
 						'c.name, count(*) AS count',
-						\GO_Base_Db_FindParams::newInstance()
+						\GO\Base\Db\FindParams::newInstance()
 						->joinModel(array(
 								'model'=>'GO_Calendar_Model_Calendar',
 								'localField'=>'calendar_id',
@@ -235,8 +237,8 @@ END:VCALENDAR';
 	}
 	
 	protected function actionAddRelation($params){
-		\GO_Base_Model_User::model()->addRelation('events', array(
-				'type'=>  \GO_Base_Db_ActiveRecord::HAS_MANY, 
+		\GO\Base\Model\User::model()->addRelation('events', array(
+				'type'=>  \GO\Base\Db\ActiveRecord::HAS_MANY, 
 				'model'=>'GO_Calendar_Model_Event', 
 				'field'=>'user_id'				
 		));
@@ -253,16 +255,16 @@ END:VCALENDAR';
 	
 	
 	protected function actionGroupRelation($params){
-		\GO_Base_Model_User::model()->addRelation('events', array(
-				'type'=>  \GO_Base_Db_ActiveRecord::HAS_MANY, 
+		\GO\Base\Model\User::model()->addRelation('events', array(
+				'type'=>  \GO\Base\Db\ActiveRecord::HAS_MANY, 
 				'model'=>'GO_Calendar_Model_Event', 
 				'field'=>'user_id'				
 		));
 		
-		$fp = \GO_Base_Db_FindParams::newInstance()->groupRelation('events', 'count(events.id) as eventCount');
+		$fp = \GO\Base\Db\FindParams::newInstance()->groupRelation('events', 'count(events.id) as eventCount');
 
 				
-		$stmt = \GO_Base_Model_User::model()->find($fp);
+		$stmt = \GO\Base\Model\User::model()->find($fp);
 		
 		foreach($stmt as $user){
 			echo $user->name.': '.$user->eventCount."<br />";
@@ -274,10 +276,10 @@ END:VCALENDAR';
 	
 	protected function actionCreateEvents($params){
 		
-		$now = \GO_Base_Util_Date::clear_time(time());
+		$now = \GO\Base\Util\Date::clear_time(time());
 		
 		for($i=0;$i<30;$i++){
-			$time = \GO_Base_Util_Date::date_add($now, -$i);
+			$time = \GO\Base\Util\Date::date_add($now, -$i);
 			
 			for($n=0;$n<10;$n++){
 				
@@ -286,8 +288,8 @@ END:VCALENDAR';
 				
 				$event->description = str_repeat('All work and no play, makes Jack a dull boy. ',100);
 				
-				$event->start_time = \GO_Base_Util_Date::date_add($time, 0,0,0,$n+7);
-				$event->end_time = \GO_Base_Util_Date::date_add($time, 0,0,0,$n+8);
+				$event->start_time = \GO\Base\Util\Date::date_add($time, 0,0,0,$n+7);
+				$event->end_time = \GO\Base\Util\Date::date_add($time, 0,0,0,$n+8);
 				
 				$event->save();
 					
@@ -314,7 +316,7 @@ END:VCALENDAR';
 ';
 		
 		
-		$tags = \GO_Base_Util_TagParser::getTags('site:img', $content);
+		$tags = \GO\Base\Util\TagParser::getTags('site:img', $content);
 		
 		var_dump($tags);
 		
@@ -325,7 +327,7 @@ END:VCALENDAR';
 	protected function actionJoinRelation($params){
 		$product = \GO_Billing_Model_Product::model()->findByPk(426	);
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->order(array('book.name', 'order.btime'),array('ASC','DESC'))
 						->joinRelation('order.book');
 		
@@ -358,7 +360,7 @@ END:VCALENDAR';
 		
 //		\GO::unsetDbConnection();
 		
-		$stmt = \GO_Base_Model_User::model()->find();
+		$stmt = \GO\Base\Model\User::model()->find();
 		sleep(10);
 		
 		echo "Done";

@@ -19,7 +19,9 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_MissingParameter extends Exception
+namespace GO\Base\Exception;
+
+class MissingParameter extends \Exception
 {
 
 }

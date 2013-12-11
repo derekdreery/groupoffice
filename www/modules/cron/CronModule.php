@@ -1,6 +1,6 @@
 <?php
 
-class GO_Cron_CronModule extends GO_Base_Module{
+class GO_Cron_CronModule extends \GO\Base\Module{
 	
 	public function author() {
 		return 'Wesley Smits';

@@ -18,7 +18,9 @@
  * @package GO.base.util
  */
 
-class GO_Base_Util_Image {
+namespace GO\Base\Util;
+
+class Image {
 
 	private $original_image;
 	private $resized_image;

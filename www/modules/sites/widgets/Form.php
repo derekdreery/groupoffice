@@ -1,5 +1,5 @@
 <?php
-class GO_Sites_Widgets_Form extends GO_Sites_Widgets_Component {
+class GO_Sites_Widgets_Form extends \GO_Sites_Widgets_Component {
 	
 	const ID_PREFIX='go';
 	
@@ -318,7 +318,7 @@ class GO_Sites_Widgets_Form extends GO_Sites_Widgets_Component {
 	/**
 	 * Resolve the name and the ID from 
 	 * 
-	 * @param GO_Base_Model $model
+	 * @param \GO\Base\Model $model
 	 * @param string $attribute
 	 * @param array $htmlAttributes
 	 * 
@@ -375,7 +375,7 @@ class GO_Sites_Widgets_Form extends GO_Sites_Widgets_Component {
 	 * Generates input name for a model attribute.
 	 * Note, the attribute name may be modified after calling this method if the name
 	 * contains square brackets (mainly used in tabular input) before the real attribute name.
-	 * @param GO_Base_Model $model the data model
+	 * @param \GO\Base\Model $model the data model
 	 * @param string $attribute the attribute
 	 * @return string the input name
 	 */
@@ -415,7 +415,7 @@ class GO_Sites_Widgets_Form extends GO_Sites_Widgets_Component {
 	 * Evaluates the attribute value of the model.
 	 * This method can recognize the attribute name written in array format.
 	 * For example, if the attribute name is 'name[a][b]', the value "$model->name['a']['b']" will be returned.
-	 * @param GO_Base_Model $model the data model
+	 * @param \GO\Base\Model $model the data model
 	 * @param string $attribute the attribute name
 	 * @return mixed the attribute value
 	 */

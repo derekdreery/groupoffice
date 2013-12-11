@@ -1,6 +1,6 @@
 <?php
 
-class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelController {
+class GO_Customfields_Controller_Field extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Customfields_Model_Field';
 
@@ -81,12 +81,12 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 	
 	protected function actionSelectOptions($params) {
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()->order('sort_order');
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order('sort_order');
 		$findParams->getCriteria()->addCondition('field_id', $params["field_id"]);
 		
 		$stmt = \GO_Customfields_Model_FieldSelectOption::model()->find($findParams);
 
-		$store = \GO_Base_Data_Store::newInstance(\GO_Customfields_Model_FieldSelectOption::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Customfields_Model_FieldSelectOption::model());
 		$store->setStatement($stmt);
 		$store->getColumnModel()->formatColumn('text', 'html_entity_decode($model->text)');
 		return $store->getData();
@@ -113,13 +113,13 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 //
 //		);
 		
-		return \GO_Base_Db_FindParams::newInstance()
+		return \GO\Base\Db\FindParams::newInstance()
 						->limit(0)
 						->order(array('category.sort_index', 't.sort_index'), array('ASC', 'ASC'))
-						->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('extends_model', $params['extends_model'],'=','category'));
+						->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('extends_model', $params['extends_model'],'=','category'));
 	}
 
-	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('category_name', '$model->category->name');
 		$columnModel->formatColumn('column_name', '$model->columnName()');
 		$columnModel->formatColumn('type', '$model->customfieldtype->name()');
@@ -150,7 +150,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 		if (!file_exists($importFile)) {
 			throw new \Exception('File was not uploaded!');
 		}
-		$csv = new \GO_Base_Fs_CsvFile($importFile);
+		$csv = new \GO\Base\Fs\CsvFile($importFile);
 		$sortOrder = 0;
 		while ($record = $csv->getRecord()) {
 			$o = new \GO_Customfields_Model_FieldSelectOption();
@@ -178,7 +178,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 		$field = \GO_Customfields_Model_Field::model()->findByPk($params['field_id']);
 		
 		$sort=1;
-		$csv = new \GO_Base_Fs_CsvFile($importFile);
+		$csv = new \GO\Base\Fs\CsvFile($importFile);
 		while ($record = $csv->getRecord()) {
 
 			for ($i = 0; $i < count($record); $i++) {

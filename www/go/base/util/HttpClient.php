@@ -19,7 +19,9 @@
 /**
  * Http client using curl.
  */
-class GO_Base_Util_HttpClient{
+namespace GO\Base\Util;
+
+class HttpClient{
 	
 	private $_curl;
 	private $_cookieFile;

@@ -5,7 +5,7 @@ class GO_Core_Controller_Reminder extends \GO\Base\Controller\AbstractController
 		$reminderIds = json_decode($params['reminders'], true);
 		
 		foreach($reminderIds as $id){
-			$r=\GO_Base_Model_Reminder::model()->findByPk($id);
+			$r=\GO\Base\Model\Reminder::model()->findByPk($id);
 			$r->setForUser(\GO::user()->id, time()+$params['snooze_time']);
 		}
 		$response['success']=true;
@@ -17,7 +17,7 @@ class GO_Core_Controller_Reminder extends \GO\Base\Controller\AbstractController
 		$reminderIds = json_decode($params['reminders'], true);
 		
 		foreach($reminderIds as $id){
-			$r=\GO_Base_Model_Reminder::model()->findByPk($id);
+			$r=\GO\Base\Model\Reminder::model()->findByPk($id);
 			if($r)
 				$r->removeUser(\GO::user()->id);
 		}
@@ -27,23 +27,23 @@ class GO_Core_Controller_Reminder extends \GO\Base\Controller\AbstractController
 	}
 	
 	protected function actionStore($params){
-		$params = \GO_Base_Db_FindParams::newInstance()
+		$params = \GO\Base\Db\FindParams::newInstance()
 						->select('t.*')
-						->join(\GO_Base_Model_ReminderUser::model()->tableName(),
-									\GO_Base_Db_FindCriteria::newInstance()
-											->addModel(\GO_Base_Model_Reminder::model())
+						->join(\GO\Base\Model\ReminderUser::model()->tableName(),
+									\GO\Base\Db\FindCriteria::newInstance()
+											->addModel(\GO\Base\Model\Reminder::model())
 											->addCondition('id', 'ru.reminder_id','=','t',true, true),
 										'ru')						
-						->criteria(\GO_Base_Db_FindCriteria::newInstance()
-										->addModel(\GO_Base_Model_ReminderUser::model(),'ru')
+						->criteria(\GO\Base\Db\FindCriteria::newInstance()
+										->addModel(\GO\Base\Model\ReminderUser::model(),'ru')
 										->addCondition('user_id', \GO::user()->id,'=','ru')
 										->addCondition('time', time(),'<','ru')
 										);
 		
-		$store = \GO_Base_Data_Store::newInstance(\GO_Base_Model_Reminder::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO\Base\Model\Reminder::model());
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatReminderRecord'));
 		
-		$stmt = \GO_Base_Model_Reminder::model()->find($params);
+		$stmt = \GO\Base\Model\Reminder::model()->find($params);
 		
 		$store->setStatement($stmt);		
 		
@@ -57,7 +57,7 @@ class GO_Core_Controller_Reminder extends \GO\Base\Controller\AbstractController
 		$record['model_name']='';
 
 		if(!empty($record['model_type_id'])){
-			$modelType = \GO_Base_Model_ModelType::model()->findByPk($record['model_type_id']);
+			$modelType = \GO\Base\Model\ModelType::model()->findByPk($record['model_type_id']);
 			if($modelType && \GO::getModel($modelType->model_name)){
 				$record['iconCls']='go-model-icon-'.$modelType->model_name;
 				$record['type']=\GO::getModel($modelType->model_name)->localizedName;
@@ -65,10 +65,10 @@ class GO_Core_Controller_Reminder extends \GO\Base\Controller\AbstractController
 			}
 		}  
 		
-		$now = \GO_Base_Util_Date::clear_time(time());
+		$now = \GO\Base\Util\Date::clear_time(time());
 		
 		$time = $model->vtime ? $model->vtime: $model->time;
-		if(\GO_Base_Util_Date::clear_time($time) != $now) {
+		if(\GO\Base\Util\Date::clear_time($time) != $now) {
 			$record['local_time']=date(\GO::user()->completeDateFormat,$time);
 		}else {
 			$record['local_time']=date(\GO::user()->time_format,$time);
@@ -82,20 +82,20 @@ class GO_Core_Controller_Reminder extends \GO\Base\Controller\AbstractController
 	
 	protected function actionDisplay($params){
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('count(*) AS count')
-						->join(\GO_Base_Model_ReminderUser::model()->tableName(),
-									\GO_Base_Db_FindCriteria::newInstance()
-											->addModel(\GO_Base_Model_Reminder::model())
+						->join(\GO\Base\Model\ReminderUser::model()->tableName(),
+									\GO\Base\Db\FindCriteria::newInstance()
+											->addModel(\GO\Base\Model\Reminder::model())
 											->addCondition('id', 'ru.reminder_id','=','t',true, true),
 										'ru')						
-						->criteria(\GO_Base_Db_FindCriteria::newInstance()
-										->addModel(\GO_Base_Model_ReminderUser::model(),'ru')
+						->criteria(\GO\Base\Db\FindCriteria::newInstance()
+										->addModel(\GO\Base\Model\ReminderUser::model(),'ru')
 										->addCondition('user_id', \GO::user()->id,'=','ru')
 										->addCondition('time', time(),'<','ru')
 										);
 		
-		$model=\GO_Base_Model_Reminder::model()->findSingle($findParams);		
+		$model=\GO\Base\Model\Reminder::model()->findSingle($findParams);		
 		
 		$html="";
 		

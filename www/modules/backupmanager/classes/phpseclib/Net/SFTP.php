@@ -104,7 +104,7 @@ define('NET_SFTP_STRING',  2);
  * @access  public
  * @package Net_SFTP
  */
-class Net_SFTP extends Net_SSH2 {
+class Net_SFTP extends \Net_SSH2 {
     /**
      * Packet Types
      *

@@ -23,19 +23,21 @@
  * @copyright Copyright Intermesh BV.
  */
 
-class GO_Base_Fs_Zip {
+namespace GO\Base\Fs;
+
+class Zip {
 
 	/**
 	 * Create a ZIP archive encoded in CP850 so that Windows will understand
 	 * foreign characters
 	 * 
 	 * @param GO\Base\Fs\File $archiveFile
-	 * @param GO_Base_Fs_Folder $workingFolder
-	 * @param GO_Base_Fs_Base[] $sources
+	 * @param \GO\Base\Fs\Folder $workingFolder
+	 * @param \GO\Base\Fs\Base[] $sources
 	 * @param boolean $utf8 Set to true to use UTF8 encoding. This is not supported by Windows explorer.
 	 * @throws Exception
 	 */
-	public static function create(GO\Base\Fs\File $archiveFile, GO_Base_Fs_Folder $workingFolder, $sources, $utf8=false) {
+	public static function create(GO\Base\Fs\File $archiveFile, \GO\Base\Fs\Folder $workingFolder, $sources, $utf8=false) {
 	
 		if (class_exists("ZipArchive") && !$utf8) {
 		
@@ -65,7 +67,7 @@ class GO_Base_Fs_Zip {
 			
 			\GO::debug("Using zip exec");
 		
-			if (!\GO_Base_Util_Common::isWindows())
+			if (!\GO\Base\Util\Common::isWindows())
 				putenv('LANG=en_US.UTF-8');
 
 			chdir($workingFolder->path());
@@ -87,7 +89,7 @@ class GO_Base_Fs_Zip {
 		}
 	}
 
-	private static function _zipDir(\GO_Base_Fs_Folder $dir, ZipArchive $zip, $relative_path) {
+	private static function _zipDir(\GO\Base\Fs\Folder $dir, ZipArchive $zip, $relative_path) {
 		
 		$items = $dir->ls();
 		if(count($items)){

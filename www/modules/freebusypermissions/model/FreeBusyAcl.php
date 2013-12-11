@@ -25,7 +25,7 @@
  * @property int $acl_id
  */
 
-class GO_Freebusypermissions_Model_FreeBusyAcl extends GO_Base_Db_ActiveRecord{
+class GO_Freebusypermissions_Model_FreeBusyAcl extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself

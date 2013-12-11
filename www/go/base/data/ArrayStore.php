@@ -19,7 +19,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.data
  */
-class GO_Base_Data_ArrayStore extends GO_Base_Data_AbstractStore {
+namespace GO\Base\Data;
+
+class ArrayStore extends \GO\Base\Data\AbstractStore {
 
 	public function __construct($columnModel = false, $data = array()) {
 		parent::__construct($columnModel);
@@ -36,7 +38,7 @@ class GO_Base_Data_ArrayStore extends GO_Base_Data_AbstractStore {
 	public function getRecords() {
 		$records = array();
 		foreach ($this->response['results'] as $record) {
-			if ($record && is_a($record, 'GO_Base_Model'))
+			if ($record && is_a($record, '\GO\Base\Model'))
 				$records[] = $this->_columnModel->formatModel($record);
 			elseif (is_array($record))
 				$records[] = $record;
@@ -47,7 +49,7 @@ class GO_Base_Data_ArrayStore extends GO_Base_Data_AbstractStore {
 	/**
 	 * Inserts an array of models to be used by the store.
 	 * This will overwrite all added models by addRecord
-	 * @param array $model an array of GO_Base_Model dirived objects
+	 * @param array $model an array of \GO\Base\Model dirived objects
 	 */
 	public function setRecords($models) {
 		$this->response['results'] = $models;
@@ -55,7 +57,7 @@ class GO_Base_Data_ArrayStore extends GO_Base_Data_AbstractStore {
 
 	/**
 	 * Add models to the result response.
-	 * @param GO_Base_Model[] $models array of model objects
+	 * @param \GO\Base\Model[] $models array of model objects
 	 */
 	public function addRecords($models) {
 		if (!isset($this->response['results']))
@@ -70,7 +72,7 @@ class GO_Base_Data_ArrayStore extends GO_Base_Data_AbstractStore {
 	public function nextRecord() {
 		$record = next($this->response['results']);
 
-		if ($record && is_a($record, 'GO_Base_Model'))
+		if ($record && is_a($record, '\GO\Base\Model'))
 			$record = $this->_columnModel->formatModel($record);
 		return $record;
 	}

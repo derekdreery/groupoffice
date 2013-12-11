@@ -17,7 +17,9 @@
  * @version $Id Connection.php 2012-06-14 14:35:41 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Base_Db_Connection
+namespace GO\Base\Db;
+
+class Connection
 {
 
 	public $charset = 'utf8';
@@ -81,14 +83,14 @@ class GO_Base_Db_Connection
 
 	/**
 	 * Opens DB connection if it is currently not
-	 * @throws GO_Base_Exception_Database if connection fails
+	 * @throws \GO\Base\Exception\Database if connection fails
 	 */
 	protected function open()
 	{
 		if ($this->_pdo === null)
 		{
 //			if (empty($this->connectionString))
-//				throw new \GO_Base_Exception_Database('Connection.connectionString cannot be empty.');
+//				throw new \GO\Base\Exception\Database('Connection.connectionString cannot be empty.');
 			try
 			{
 				$this->_pdo = $this->createPdoInstance();
@@ -97,7 +99,7 @@ class GO_Base_Db_Connection
 			}
 			catch (PDOException $e)
 			{
-				throw new \GO_Base_Exception_Database('Connection failed to open the DB connection.' . $e->getMessage(), (int) $e->getCode(), $e->errorInfo);
+				throw new \GO\Base\Exception\Database('Connection failed to open the DB connection.' . $e->getMessage(), (int) $e->getCode(), $e->errorInfo);
 			}
 		}
 	}
@@ -124,7 +126,7 @@ class GO_Base_Db_Connection
 		if(empty($this->connectionString))
 			return \GO::getDbConnection ();
 		else	
-			return new \GO_Base_Db_PDO($this->connectionString, $this->username, $this->password);
+			return new \GO\Base\Db\PDO($this->connectionString, $this->username, $this->password);
 	}
 
 //	/**
@@ -136,7 +138,7 @@ class GO_Base_Db_Connection
 //	protected function initConnection($pdo)
 //	{
 //		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//		//$pdo->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('GO_Base_Db_ActiveStatement', array()));
+//		//$pdo->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('\GO\Base\Db\ActiveStatement', array()));
 //		$driver = strtolower($pdo->getAttribute(PDO::ATTR_DRIVER_NAME));
 //
 //		if ($this->emulatePrepare !== null && constant('PDO::ATTR_EMULATE_PREPARES'))
@@ -167,7 +169,7 @@ class GO_Base_Db_Connection
 	public function createStatement()
 	{
 		$this->setActive(true);
-		return new \GO_Base_Db_Statement($this);
+		return new \GO\Base\Db\Statement($this);
 	}
 	
 	/**
@@ -190,13 +192,13 @@ class GO_Base_Db_Connection
 
 	/**
 	 * Starts a transaction.
-	 * @return GO_Base_Db_Transaction the transaction initiated
+	 * @return \GO\Base\Db\Transaction the transaction initiated
 	 */
 	public function beginTransaction()
 	{
 		$this->setActive(true);
 		$this->_pdo->beginTransaction();
-		return $this->_transaction = new \GO_Base_Db_Transaction($this);
+		return $this->_transaction = new \GO\Base\Db\Transaction($this);
 	}
 
 	/**

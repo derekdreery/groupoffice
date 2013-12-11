@@ -27,7 +27,7 @@ class GO_Core_Controller_Auth extends \GO\Base\Controller\AbstractController {
 
 	private function loadInit() {
 		
-		\GO_Base_Observable::cacheListeners();
+		\GO\Base\Observable::cacheListeners();
 
 		//when GO initializes modules need to perform their first run actions.
 		unset(\GO::session()->values['firstRunDone']);
@@ -79,13 +79,13 @@ class GO_Core_Controller_Auth extends \GO\Base\Controller\AbstractController {
 		
 		$response = array();
 	
-		if(!\GO_Base_Util_Http::isPostRequest() || empty($params['email']) || empty($params['usertoken'])){
+		if(!\GO\Base\Util\Http::isPostRequest() || empty($params['email']) || empty($params['usertoken'])){
 			$response['success']=false;
 			$response['feedback']="Invalid request!";
 			return $response;
 		}
 
-		$user = \GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
+		$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $params['email']);
 		if($user){
 			if($params['usertoken'] == $user->getSecurityToken()){
 				
@@ -111,7 +111,7 @@ class GO_Core_Controller_Auth extends \GO\Base\Controller\AbstractController {
 	}
 	
 	protected function actionSendResetPasswordMail($params){
-		$user = \GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
+		$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $params['email']);
 
 		if(!$user){
 			$response['success']=false;
@@ -163,16 +163,16 @@ class GO_Core_Controller_Auth extends \GO\Base\Controller\AbstractController {
 		} else {			
 			if (!empty($params['remind'])) {
 
-				$encUsername = \GO_Base_Util_Crypt::encrypt($params['username']);
+				$encUsername = \GO\Base\Util\Crypt::encrypt($params['username']);
 				if (!$encUsername)
 					$encUsername = $params['username'];
 
-				$encPassword = \GO_Base_Util_Crypt::encrypt($params['password']);
+				$encPassword = \GO\Base\Util\Crypt::encrypt($params['password']);
 				if (!$encPassword)
 					$encPassword = $params['password'];
 
-				\GO_Base_Util_Http::setCookie('GO_UN', $encUsername);
-				\GO_Base_Util_Http::setCookie('GO_PW', $encPassword);
+				\GO\Base\Util\Http::setCookie('GO_UN', $encUsername);
+				\GO\Base\Util\Http::setCookie('GO_PW', $encPassword);
 			}
 			
 			$response['groupoffice_version']=\GO::config()->version;
@@ -205,7 +205,7 @@ class GO_Core_Controller_Auth extends \GO\Base\Controller\AbstractController {
 		
 		//return $response;
 
-		if (\GO_Base_Util_Http::isAjaxRequest())
+		if (\GO\Base\Util\Http::isAjaxRequest())
 			return $response;
 		else
 			$this->redirect();

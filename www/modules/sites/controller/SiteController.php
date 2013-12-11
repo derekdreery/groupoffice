@@ -17,7 +17,7 @@
  * @version $Id DefaultController.php 2012-06-08 10:51:35 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontController
+class GO_Sites_Controller_Site extends \GO_Sites_Components_AbstractFrontController
 {
 	public function allowGuests()
 	{
@@ -32,18 +32,18 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 	}
 	
 	public function actionPlupload(){
-		GO_Base_Component_Plupload::handleUpload();
+		\GO\Base\Component\Plupload::handleUpload();
 	}
 	
 	/**
 	 * Renders content item selected them from database using slug and render them using the content view
-	 * @throws GO_Base_Exception_NotFound if the content item with given slug was not found
+	 * @throws \GO\Base\Exception\NotFound if the content item with given slug was not found
 	 */
 	public function actionContent() {
 		$content = GO_Sites_Model_Content::model()->findSingleByAttribute('slug', $_GET['slug']);
 		
 		if(!$content)
-			throw new GO_Base_Exception_NotFound('404 Page not found');
+			throw new \GO\Base\Exception\NotFound('404 Page not found');
 		
 		$this->setPageTitle($content->title);
 		$this->description=$content->meta_description;
@@ -56,7 +56,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 	 * Only if attributes are provided by the POST request shall the model be saved
 	 */
 	public function actionRegister() {
-		$user = new GO_Base_Model_User();		
+		$user = new \GO\Base\Model\User();		
 		$contact = new GO_Addressbook_Model_Contact();
 		
 				
@@ -69,7 +69,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		$company->setValidationRule('city', 'required', true);
 		$company->setValidationRule('country', 'required', true);
 		
-		if(\GO_Base_Util_Http::isPostRequest())
+		if(\GO\Base\Util\Http::isPostRequest())
 		{
 			//if username is deleted from form then use the e-mail adres as username
 			if(!isset($_POST['User']['username']))
@@ -137,9 +137,9 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 	 */
 	public function actionRecoverPassword() {
 		
-		if (\GO_Base_Util_Http::isPostRequest())
+		if (\GO\Base\Util\Http::isPostRequest())
 		{
-			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $_POST['email']);
+			$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $_POST['email']);
 			
 			if($user == null){
 				GOS::site()->notifier->setMessage('error', GO::t("invaliduser","sites"));
@@ -165,7 +165,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		if(empty($_GET['email']))
 			throw new Exception(GO::t("noemail","sites"));
 
-		$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $_GET['email']);
+		$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $_GET['email']);
 
 		if(!$user)
 			throw new Exception(GO::t("invaliduser","sites"));
@@ -174,7 +174,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 
 		if(isset($_GET['usertoken']) && $_GET['usertoken'] == $user->getSecurityToken())
 		{
-			if (\GO_Base_Util_Http::isPostRequest())
+			if (\GO\Base\Util\Http::isPostRequest())
 			{
 				$user->password = $_POST['User']['password'];
 				$user->passwordConfirm = $_POST['User']['passwordConfirm'];
@@ -197,9 +197,9 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 	 */
 	public function actionLogin(){
 		
-		$model = new GO_Base_Model_User();
+		$model = new \GO\Base\Model\User();
 		
-		if (\GO_Base_Util_Http::isPostRequest()) {
+		if (\GO\Base\Util\Http::isPostRequest()) {
 			
 			
 			
@@ -215,16 +215,16 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 			} else {
 				if (!empty($_POST['rememberMe'])) {
 
-					$encUsername = GO_Base_Util_Crypt::encrypt($model->username);
+					$encUsername = \GO\Base\Util\Crypt::encrypt($model->username);
 					if ($encUsername)
 						$encUsername = $model->username;
 
-					$encPassword = GO_Base_Util_Crypt::encrypt($password);
+					$encPassword = \GO\Base\Util\Crypt::encrypt($password);
 					if ($encPassword)
 						$encPassword = $password;
 
-					GO_Base_Util_Http::setCookie('GO_UN', $encUsername);
-					GO_Base_Util_Http::setCookie('GO_PW', $encPassword);
+					\GO\Base\Util\Http::setCookie('GO_UN', $encUsername);
+					\GO\Base\Util\Http::setCookie('GO_PW', $encPassword);
 				}
 				$this->redirect($this->getReturnUrl());
 			}
@@ -263,7 +263,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 			$company->addressbook_id=$contact->addressbook_id;
 		}
 		
-		if (\GO_Base_Util_Http::isPostRequest()) {
+		if (\GO\Base\Util\Http::isPostRequest()) {
 			
 			if(!empty($_POST['currentPassword']) && !empty($_POST['User']['password']))
 			{

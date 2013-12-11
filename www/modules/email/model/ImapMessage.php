@@ -5,11 +5,11 @@
  * 
  * @package GO.modules.email
  * 
- * @property GO_Base_Mail_EmailRecipients $to
- * @property GO_Base_Mail_EmailRecipients $cc
- * @property GO_Base_Mail_EmailRecipients $bcc
- * @property GO_Base_Mail_EmailRecipients $from
- * @property GO_Base_Mail_EmailRecipients $reply_to
+ * @property \GO\Base\Mail\EmailRecipients $to
+ * @property \GO\Base\Mail\EmailRecipients $cc
+ * @property \GO\Base\Mail\EmailRecipients $bcc
+ * @property \GO\Base\Mail\EmailRecipients $from
+ * @property \GO\Base\Mail\EmailRecipients $reply_to
  * @property string $subject
  * @property int $uid
  * @property int $size
@@ -31,7 +31,7 @@
  * @property GO_Email_Model_Account $account
  * @property String $mailbox
  */
-class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
+class GO_Email_Model_ImapMessage extends \GO_Email_Model_ComposerMessage {
 	
 	/**
 	 * By default the message will be marked as read when fetched.
@@ -92,13 +92,13 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	 * @param string $mailbox
 	 * @param int $start
 	 * @param int $limit
-	 * @param sring $sortField See constants in \GO_Base_Mail_Imap::SORT_*
+	 * @param sring $sortField See constants in \GO\Base\Mail\Imap::SORT_*
 	 * @param boolean $descending Sort descending
 	 * @param string $query
 	 * @param string $searchIn In what folder(s) are we searching ('current', 'all', 'recursive')
 	 * @return array
 	 */
-	public function find(\GO_Email_Model_Account $account, $mailbox="INBOX", $start=0, $limit=50, $sortField=GO_Base_Mail_Imap::SORT_DATE , $descending=true, $query='ALL', $searchIn='current'){
+	public function find(\GO_Email_Model_Account $account, $mailbox="INBOX", $start=0, $limit=50, $sortField=\GO\Base\Mail\Imap::SORT_DATE , $descending=true, $query='ALL', $searchIn='current'){
 		
 		$results=array();
 		if($searchIn=="all") {
@@ -113,7 +113,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			return $results;
 		}
 		
-		/** @var $imap GO_Base_Mail_Imap */
+		/** @var $imap \GO\Base\Mail\Imap */
 		$imap = $account->openImapConnection($mailbox);
 		$headersSet = $imap->get_message_headers_set($start, $limit, $sortField , $descending, $query);
 		foreach($headersSet as $uid=>$headers){
@@ -228,14 +228,14 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		//$dayEnd = mktime(0,0,0,date('m'),date('d')+1);
 		
 //		if($this->udate<$dayStart)
-			$attributes["date"]=\GO_Base_Util_Date::get_timestamp($this->udate, false);
+			$attributes["date"]=\GO\Base\Util\Date::get_timestamp($this->udate, false);
 //		else
 			$attributes["date_time"]=date(\GO::user()->time_format, $this->udate);
 		
 		
 		
 //		if($this->internal_udate<$dayStart)
-			$attributes["arrival"]=\GO_Base_Util_Date::get_timestamp($this->internal_udate, false);
+			$attributes["arrival"]=\GO\Base\Util\Date::get_timestamp($this->internal_udate, false);
 //		else
 			$attributes["arrival_time"]=date(\GO::user()->time_format, $this->internal_udate);		
 		
@@ -256,7 +256,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	
 	/**
 	 *
-	 * @return GO_Base_Mail_Imap 
+	 * @return \GO\Base\Mail\Imap 
 	 */
 	public function getImapConnection(){
 		return $this->account->openImapConnection($this->mailbox);
@@ -410,8 +410,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 						$maxBodySize = $noMaxBodySize ? false : $this->maxBodySize;
 						
 						$htmlPartStr = $imap->get_message_part_decoded($this->uid, $htmlPart['number'],$htmlPart['encoding'], $htmlPart['charset'],$this->peek,false);
-						$htmlPartStr = \GO_Base_Util_String::convertLinks($htmlPartStr);
-						$htmlPartStr = \GO_Base_Util_String::sanitizeHtml($htmlPartStr);
+						$htmlPartStr = \GO\Base\Util\String::convertLinks($htmlPartStr);
+						$htmlPartStr = \GO\Base\Util\String::sanitizeHtml($htmlPartStr);
 						
 						$this->_bodyTruncated = $imap->max_read;
 						
@@ -429,7 +429,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 //						\GO::debug("Missing from attachments: ".$htmlPart['number']);	
 //					}
 				}
-				//$this->_htmlBody = \GO_Base_Util_String::sanitizeHtml($this->_htmlBody);			
+				//$this->_htmlBody = \GO\Base\Util\String::sanitizeHtml($this->_htmlBody);			
 			}
 
 			if(empty($this->_htmlBody) && !$asText){
@@ -441,7 +441,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}
 		
 		if($asText){
-			$htmlToText = new \GO_Base_Util_Html2Text($this->_htmlBody);
+			$htmlToText = new \GO\Base\Util\Html2Text($this->_htmlBody);
 			return $htmlToText->get_text();
 		}
 		
@@ -499,13 +499,13 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			}
 		}
 		
-		$this->_plainBody = \GO_Base_Util_String::normalizeCrlf($this->_plainBody);
+		$this->_plainBody = \GO\Base\Util\String::normalizeCrlf($this->_plainBody);
 		
 		$this->extractUuencodedAttachments($this->_plainBody);
 				
 		if($asHtml){
 			$body = $this->_plainBody;			
-			$body = \GO_Base_Util_String::text_to_html($body);
+			$body = \GO\Base\Util\String::text_to_html($body);
 			
 			for($i=0,$max=count($inlineImages);$i<$max;$i++){
 				$body=str_replace('{inline_'.$i.'}', $inlineImages[$i], $body);
@@ -562,7 +562,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				
 				if (empty($part['name']) || $part['name'] == 'false') {
 					if (!empty($part['subject'])) {
-						$a->name = \GO\Base\Fs\File::stripInvalidChars(\GO_Base_Mail_Utils::mimeHeaderDecode($part['subject'])) . '.eml';
+						$a->name = \GO\Base\Fs\File::stripInvalidChars(\GO\Base\Mail\Utils::mimeHeaderDecode($part['subject'])) . '.eml';
 					} elseif ($part['type'] == 'message') {
 						$a->name = isset($part['description']) ? \GO\Base\Fs\File::stripInvalidChars($part['description']) . '.eml' : 'message.eml';
 					} elseif ($part['subtype'] == 'calendar') {
@@ -575,11 +575,11 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 						}
 					}
 				} else {
-					$a->name = \GO_Base_Mail_Utils::mimeHeaderDecode($part['name']);
+					$a->name = \GO\Base\Mail\Utils::mimeHeaderDecode($part['name']);
 					
 					$extension = \GO\Base\Fs\File::getExtension($a->name);
 					if(!empty($part['filename']) && empty($extension)){
-						$a->name = \GO_Base_Mail_Utils::mimeHeaderDecode($part['filename']);
+						$a->name = \GO\Base\Mail\Utils::mimeHeaderDecode($part['filename']);
 					}
 				}
 				

@@ -4,7 +4,7 @@ class GO_Calendar_Controller_Attendance extends \GO\Base\Controller\AbstractCont
 		
 		$event = \GO_Calendar_Model_Event::model()->findByPk($params['id']);
 		if(!$event)
-			throw new \GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		$participant=$event->getParticipantOfCalendar();
 		if(!$participant)
@@ -28,7 +28,7 @@ class GO_Calendar_Controller_Attendance extends \GO\Base\Controller\AbstractCont
 		
 		$event = \GO_Calendar_Model_Event::model()->findByPk($params['id']);
 		if(!$event)
-			throw new \GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		if(!empty($params['exception_date']))
 		{

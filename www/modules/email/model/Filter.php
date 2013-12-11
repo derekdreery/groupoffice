@@ -28,7 +28,7 @@
  * @property int $priority
  * @property boolean $mark_as_read
  */
-class GO_Email_Model_Filter extends GO_Base_Db_ActiveRecord {
+class GO_Email_Model_Filter extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself

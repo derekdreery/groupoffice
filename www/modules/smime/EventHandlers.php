@@ -54,7 +54,7 @@ class GO_Smime_EventHandlers {
 			$response['cert'] = true;
 	}
 
-	public static function aliasesStore(\GO_Email_Controller_Alias $controller, &$response, GO_Base_Data_Store $store, $params) {
+	public static function aliasesStore(\GO_Email_Controller_Alias $controller, &$response, \GO\Base\Data\Store $store, $params) {
 
 		foreach ($response['results'] as &$alias) {
 			$cert = GO_Smime_Model_Certificate::model()->findByPk($alias['account_id']);
@@ -210,7 +210,7 @@ class GO_Smime_EventHandlers {
 		}
 	}
 
-	public static function beforeSend(\GO_Email_Controller_Message $controller, array &$response, GO_Base_Mail_SmimeMessage $message, GO_Base_Mail_Mailer $mailer, GO_Email_Model_Account $account, GO_Email_Model_Alias $alias, $params) {
+	public static function beforeSend(\GO_Email_Controller_Message $controller, array &$response, \GO\Base\Mail\SmimeMessage $message, \GO\Base\Mail\Mailer $mailer, GO_Email_Model_Account $account, GO_Email_Model_Alias $alias, $params) {
 		if (!empty($params['sign_smime'])) {
 
 			//$password = trim(file_get_contents("/home/mschering/password.txt"));

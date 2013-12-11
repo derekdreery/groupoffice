@@ -25,7 +25,7 @@
  * @property mediumblob $content
  * @property String $extension
  */
-class GO_files_Model_Template extends GO_Base_Db_ActiveRecord {
+class GO_files_Model_Template extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself

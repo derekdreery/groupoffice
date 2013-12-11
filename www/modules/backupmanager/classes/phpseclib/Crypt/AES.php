@@ -114,7 +114,7 @@ define('CRYPT_AES_MODE_MCRYPT', 2);
  * @access  public
  * @package Crypt_AES
  */
-class Crypt_AES extends Crypt_Rijndael {
+class Crypt_AES extends \Crypt_Rijndael {
     /**
      * mcrypt resource for encryption
      *

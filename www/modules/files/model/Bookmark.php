@@ -14,7 +14,7 @@
  * @property int $folder_id
  */
 
-class GO_Files_Model_Bookmark extends GO_Base_Db_ActiveRecord {
+class GO_Files_Model_Bookmark extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * Returns a static model of itself

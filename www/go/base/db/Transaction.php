@@ -35,7 +35,9 @@
  * @version $Id Transaction.php 2012-06-14 10:22:16 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Base_Db_Transaction
+namespace GO\Base\Db;
+
+class Transaction
 {
 
 	private $_connection = null;
@@ -46,7 +48,7 @@ class GO_Base_Db_Transaction
 	 * @param CDbConnection $connection the connection associated with this transaction
 	 * @see CDbConnection::beginTransaction
 	 */
-	public function __construct(\GO_Base_Db_Connection $connection)
+	public function __construct(\GO\Base\Db\Connection $connection)
 	{
 		$this->_connection = $connection;
 		$this->_active = true;
@@ -64,7 +66,7 @@ class GO_Base_Db_Transaction
 			$this->_active = false;
 		}
 		else
-			throw new \GO_Base_Exception_Database('Transaction is inactive and cannot perform commit operation.');
+			throw new \GO\Base\Exception\Database('Transaction is inactive and cannot perform commit operation.');
 	}
 
 	/**
@@ -79,7 +81,7 @@ class GO_Base_Db_Transaction
 			$this->_active = false;
 		}
 		else
-			throw new \GO_Base_Exception_Database('Transaction is inactive and cannot perform roll back operation.');
+			throw new \GO\Base\Exception\Database('Transaction is inactive and cannot perform roll back operation.');
 	}
 
 }

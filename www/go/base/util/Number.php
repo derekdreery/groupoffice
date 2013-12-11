@@ -19,7 +19,9 @@
  * @since Group-Office 3.0
  */
 
-class GO_Base_Util_Number {
+namespace GO\Base\Util;
+
+class Number {
 
 	/**
 	 * Format a number by using the user preferences

@@ -27,7 +27,9 @@
  * @package GO.base
  */
  
-class GO_Base_Language{
+namespace GO\Base;
+
+class Language{
 	
 	private $_langIso='en';
 	private $_lang;
@@ -163,7 +165,7 @@ class GO_Base_Language{
 				if($file){
 					require($file);
 					if(isset($l)){
-						$defaultLang = \GO_Base_Util_Array::mergeRecurive($defaultLang, $l);
+						$defaultLang = \GO\Base\Util\ArrayExtra::mergeRecurive($defaultLang, $l);
 						unset($l);
 					}
 				}
@@ -173,7 +175,7 @@ class GO_Base_Language{
 			if($file){
 				require($file);
 				if(isset($l)){
-					$defaultLang = \GO_Base_Util_Array::mergeRecurive($defaultLang, $l);
+					$defaultLang = \GO\Base\Util\ArrayExtra::mergeRecurive($defaultLang, $l);
 					unset($l);
 				}
 			}
@@ -227,10 +229,10 @@ class GO_Base_Language{
 	
 	
 	public function getAllLanguage(){
-		$folder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'language');
+		$folder = new \GO\Base\Fs\Folder(\GO::config()->root_path.'language');
 		$items = $folder->ls();
 		foreach($items as $folder){
-			if($folder instanceof \GO_Base_Fs_Folder){
+			if($folder instanceof \GO\Base\Fs\Folder){
 				$this->_loadSection('base', $folder->name());
 			}
 		}

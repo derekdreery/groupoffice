@@ -1,6 +1,8 @@
 <?php
 
-class GO_Base_Html_Input {
+namespace GO\Base\Html;
+
+class Input {
 	
 	public static $errors;
 	

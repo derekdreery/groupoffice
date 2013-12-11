@@ -28,7 +28,7 @@
  * @property int $id
  */
 
-class GO_Customfields_Model_FieldTreeSelectOption extends GO_Base_Db_ActiveRecord{
+class GO_Customfields_Model_FieldTreeSelectOption extends \GO\Base\Db\ActiveRecord{
 		
 	
 	public $checkSlaves=true;

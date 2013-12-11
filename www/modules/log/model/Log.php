@@ -32,7 +32,7 @@
  * @property string $message
  */
 
-class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
+class GO_Log_Model_Log extends \GO\Base\Db\ActiveRecord {
 	
 	
 	const ACTION_ADD='add';

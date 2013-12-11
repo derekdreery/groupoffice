@@ -16,7 +16,7 @@
  * @property string $value
  */
 
-class GO_Addressbook_Model_ContactVcardProperty extends GO_Base_Db_ActiveRecord {
+class GO_Addressbook_Model_ContactVcardProperty extends \GO\Base\Db\ActiveRecord {
 
 	public static function model($className=__CLASS__)
 	{	

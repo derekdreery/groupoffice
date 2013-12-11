@@ -30,7 +30,7 @@
  * @property int $category_id
  */
 
-class GO_Comments_Model_Comment extends GO_Base_Db_ActiveRecord{
+class GO_Comments_Model_Comment extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
@@ -63,7 +63,7 @@ class GO_Comments_Model_Comment extends GO_Base_Db_ActiveRecord{
 	
 	public function getAttachedObject(){
 		
-		$modelType = \GO_Base_Model_ModelType::model()->findByPk($this->model_type_id);
+		$modelType = \GO\Base\Model\ModelType::model()->findByPk($this->model_type_id);
 		
 		if($modelType){
 			$obj = \GO::getModel($modelType->model_name)->findByPk($this->model_id);

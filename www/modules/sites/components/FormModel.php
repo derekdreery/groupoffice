@@ -18,7 +18,7 @@
  * @version $Id FormModel.php 2012-07-04 12:40:32 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-abstract class GO_Sites_Components_FormModel extends GO_Base_Model {
+abstract class GO_Sites_Components_FormModel extends \GO\Base\Model {
 
 	protected $requiredAttributes = array();
 

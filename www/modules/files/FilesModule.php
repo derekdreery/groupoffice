@@ -18,19 +18,19 @@
  * @copyright Copyright Intermesh BV.
  */
 
-class GO_Files_FilesModule extends GO_Base_Module{	
+class GO_Files_FilesModule extends \GO\Base\Module{	
 	
 	
 	public static function initListeners() {
-		\GO_Base_Model_User::model()->addListener('save', "GO_Files_FilesModule", "saveUser");
-		\GO_Base_Model_User::model()->addListener('delete', "GO_Files_FilesModule", "deleteUser");
+		\GO\Base\Model\User::model()->addListener('save', "GO_Files_FilesModule", "saveUser");
+		\GO\Base\Model\User::model()->addListener('delete', "GO_Files_FilesModule", "deleteUser");
 	}
 	
 
 	public function checkDatabase(&$response) {
 		
 		//create user home folders
-		$stmt = \GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));
+		$stmt = \GO\Base\Model\User::model()->find(array('ignoreAcl'=>true));
 		
 		while($user = $stmt->fetch()){
 			$folder = \GO_Files_Model_Folder::model()->findHomeFolder($user);
@@ -119,7 +119,7 @@ class GO_Files_FilesModule extends GO_Base_Module{
 		$template->content = file_get_contents(\GO::modules()->files->path.'install/templates/empty.docx');
 		$template->extension='docx';
 		$template->save();	
-		$template->acl->addGroup(\GO::config()->group_internal, \GO_Base_Model_Acl::READ_PERMISSION);
+		$template->acl->addGroup(\GO::config()->group_internal, \GO\Base\Model\Acl::READ_PERMISSION);
 		
 		
 		$template = new \GO_files_Model_Template();
@@ -127,7 +127,7 @@ class GO_Files_FilesModule extends GO_Base_Module{
 		$template->content = file_get_contents(\GO::modules()->files->path.'install/templates/empty.odt');
 		$template->extension='odt';
 		$template->save();	
-		$template->acl->addGroup(\GO::config()->group_internal, \GO_Base_Model_Acl::READ_PERMISSION);
+		$template->acl->addGroup(\GO::config()->group_internal, \GO\Base\Model\Acl::READ_PERMISSION);
 	}
 	
 }

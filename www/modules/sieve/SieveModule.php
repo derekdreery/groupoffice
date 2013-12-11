@@ -1,5 +1,5 @@
 <?php
-class GO_Sieve_SieveModule extends GO_Base_Module{
+class GO_Sieve_SieveModule extends \GO\Base\Module{
 	
 	public function autoInstall() {
 		return true;

@@ -1,5 +1,7 @@
 <?php
-class GO_Base_Util_Validate {
+namespace GO\Base\Util;
+
+class Validate {
 	
 /**
 	* Checks the given Ip is valid (ipv4 and ipv6).
@@ -25,7 +27,7 @@ class GO_Base_Util_Validate {
 	 * @return bool
 	 */
 	public static function email($email) {
-		return preg_match(\GO_Base_Util_String::get_email_validation_regex(), $email);
+		return preg_match(\GO\Base\Util\String::get_email_validation_regex(), $email);
 	}
 	
 /**
@@ -42,7 +44,7 @@ class GO_Base_Util_Validate {
 				$isInternal = true;
 		}
 
-		return $isInternal && \GO_Base_Util_Validate::ip($ip);
+		return $isInternal && Validate::ip($ip);
 	}
 	
 /**
@@ -135,7 +137,7 @@ class GO_Base_Util_Validate {
 	 */
 	public static function vatApplicable($customerCountry, $hasVatNo, $merchantCountry){
 		return strtolower($customerCountry)==strtolower($merchantCountry) || 
-						(\GO_Base_Util_Validate::isEUCountry($customerCountry) && !$hasVatNo);
+						(Validate::isEUCountry($customerCountry) && !$hasVatNo);
 	}
 	
 	/**
@@ -194,7 +196,7 @@ class GO_Base_Util_Validate {
 			}
 			
 			if($ret!="INVALID_INPUT")
-				throw new \GO_Base_Exception_ViesDown();
+				throw new \GO\Base\Exception\ViesDown();
 			
 			throw new \Exception("Could not check VAT number: ".$msg);
 		}

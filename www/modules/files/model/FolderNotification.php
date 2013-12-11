@@ -20,7 +20,7 @@
  * @property int $user_id
  * @property int $folder_id
  */
-class GO_Files_Model_FolderNotification extends GO_Base_Db_ActiveRecord {
+class GO_Files_Model_FolderNotification extends \GO\Base\Db\ActiveRecord {
 
 
 	/**
@@ -206,11 +206,11 @@ class GO_Files_Model_FolderNotification extends GO_Base_Db_ActiveRecord {
 			}
 		}
 
-		$message = new \GO_Base_Mail_Message();
+		$message = new \GO\Base\Mail\Message();
 		$message->setSubject(\GO::t('notificationEmailSubject', 'files'))
 				->setTo(array(\GO::user()->email=>\GO::user()->name))
 				->setFrom(array(\GO::config()->webmaster_email=>\GO::config()->title))
 				->setBody($emailBody);
-		\GO_Base_Mail_Mailer::newGoInstance()->send($message);
+		\GO\Base\Mail\Mailer::newGoInstance()->send($message);
 	}
 }

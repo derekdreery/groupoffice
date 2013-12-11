@@ -20,7 +20,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  *
  */
-class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\AbstractController {
+namespace GO\Base\Controller;
+
+class AbstractModelController extends \GO\Base\Controller\AbstractController {
 
 	/**
 	 *
@@ -162,7 +164,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 			$model = \GO::getModel($modelName)->findByPk($pk);
 			
 			if(!$model)
-				throw new \GO_Base_Exception_NotFound();
+				throw new \GO\Base\Exception\NotFound();
 			
 		}else{
 			$model = new $modelName;
@@ -186,8 +188,8 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 		
 		$response = array();
 		
-		if(!$model->checkPermissionLevel($model->isNew?\GO_Base_Model_Acl::CREATE_PERMISSION:\GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new \GO_Base_Exception_AccessDenied();
+		if(!$model->checkPermissionLevel($model->isNew?\GO\Base\Model\Acl::CREATE_PERMISSION:\GO\Base\Model\Acl::WRITE_PERMISSION))
+			throw new \GO\Base\Exception\AccessDenied();
 		
 		$response = $this->beforeLoad($response, $model, $params);
 
@@ -273,11 +275,11 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 
 	/**
 	 * Override this function to supply additional parameters to the 
-	 * GO_Base_Db_ActiveRecord->find() function
+	 * \GO\Base\Db\ActiveRecord->find() function
 	 * 
 	 * @var array() $params The request parameters of actionStore
 	 * 
-	 * @return GO_Base_Db_FindParams parameters for the GO_Base_Db_ActiveRecord->find() function 
+	 * @return \GO\Base\Db\FindParams parameters for the \GO\Base\Db\ActiveRecord->find() function 
 	 */
 	protected function getStoreParams($params) {
 		return array();
@@ -298,12 +300,12 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	/**
 	 * Override this function to format the grid record data.
 	 * @TODO: THIS DESCRIPTION IS NOT OK
-	 * @param array $record The grid record returned from the GO_Base_Db_ActiveRecord->getAttributes
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param array $record The grid record returned from the \GO\Base\Db\ActiveRecord->getAttributes
+	 * @param \GO\Base\Db\ActiveRecord $model
 	 * @return array The grid record data
 	 */
 	protected function getStoreColumnModel($withCustomfields=true) {
-		$cm =  new \GO_Base_Data_ColumnModel();
+		$cm =  new \GO\Base\Data\ColumnModel();
 		$cm->setColumnsFromModel(\GO::getModel($this->model), $this->getStoreExcludeColumns(),array(),$withCustomfields);	
 		return $cm;
 	}
@@ -311,11 +313,11 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	/**
 	 * Override this function to format the grid record data.
 	 * @TODO: THIS DESCRIPTION IS NOT OK
-	 * @param array $record The grid record returned from the GO_Base_Db_ActiveRecord->getAttributes
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param array $record The grid record returned from the \GO\Base\Db\ActiveRecord->getAttributes
+	 * @param \GO\Base\Db\ActiveRecord $model
 	 * @return array The grid record data
 	 */
-	protected function prepareStore(\GO_Base_Data_Store $store) {
+	protected function prepareStore(\GO\Base\Data\Store $store) {
 		
 		return $store;
 	}
@@ -324,10 +326,10 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
    * Override this function to format columns if necessary.
    * You can also use formatColumn to add extra columns
    * 
-   * @param GO_Base_Data_ColumnModel $columnModel
-   * @return GO_Base_Data_ColumnModel 
+   * @param \GO\Base\Data\ColumnModel $columnModel
+   * @return \GO\Base\Data\ColumnModel 
    */
-  protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel){
+  protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel){
     return $columnModel;
   }
 	
@@ -346,7 +348,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
   protected function actionStore($params){	
     $modelName = $this->model;  
 
-    $store = new \GO_Base_Data_Store($this->getStoreColumnModel());	
+    $store = new \GO\Base\Data\Store($this->getStoreColumnModel());	
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatStoreRecord'));		
 		
 		if(!empty($params["forEditing"]))
@@ -408,11 +410,11 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	 * 
 	 * @param array $response
 	 * @param array $params
-	 * @param GO_Base_Data_AbstractStore $store
-	 * @param GO_Base_Db_FindParams $storeParams
+	 * @param \GO\Base\Data\AbstractStore $store
+	 * @param \GO\Base\Db\FindParams $storeParams
 	 * @return array 
 	 */
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams){
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams){
 		return $response;
 	}
 
@@ -427,7 +429,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 		$model = \GO::getModel($modelName)->findByPk($this->getPrimaryKeyFromParams($params));
 		
 		if(!$model)
-			throw new \GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		$response = $this->beforeDisplay($response, $model, $params);
 		
@@ -437,11 +439,11 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 		$response['data'] = array_merge($response['data'], $model->getAttributes('html'));
 		$response['data']['model']=$model->className();
 		$response['data']['permission_level']=$model->getPermissionLevel();
-		$response['data']['write_permission']=\GO_Base_Model_Acl::hasPermission($response['data']['permission_level'],\GO_Base_Model_Acl::WRITE_PERMISSION);
+		$response['data']['write_permission']=\GO\Base\Model\Acl::hasPermission($response['data']['permission_level'],\GO\Base\Model\Acl::WRITE_PERMISSION);
 		if (!empty($model->ctime))
-			$response['data']['ctime'] = \GO_Base_Util_Date::get_timestamp ($model->ctime);
+			$response['data']['ctime'] = \GO\Base\Util\Date::get_timestamp ($model->ctime);
 		if (!empty($model->mtime))
-			$response['data']['mtime'] = \GO_Base_Util_Date::get_timestamp ($model->mtime);
+			$response['data']['mtime'] = \GO\Base\Util\Date::get_timestamp ($model->mtime);
 		if (!empty($model->user))
 			$response['data']['username'] = $model->user->name;
 		if (!empty($model->mUser))
@@ -549,9 +551,9 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 				}
 
 				$workflowResponse['history'] = array();
-				$historiesStmnt = \GO_Workflow_Model_StepHistory::model()->findByAttribute('process_model_id',$workflowModel->id, \GO_Base_Db_FindParams::newInstance()->select('t.*')->order('ctime','DESC'));
+				$historiesStmnt = \GO_Workflow_Model_StepHistory::model()->findByAttribute('process_model_id',$workflowModel->id, \GO\Base\Db\FindParams::newInstance()->select('t.*')->order('ctime','DESC'));
 				while($history = $historiesStmnt->fetch()){
-					\GO_Base_Db_ActiveRecord::$attributeOutputMode = 'html';
+					\GO\Base\Db\ActiveRecord::$attributeOutputMode = 'html';
 
 
 					if($history->step_id == '-1'){
@@ -573,7 +575,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 							'status_name'=>$history->status?\GO::t('approved','workflow'):\GO::t('declined','workflow')
 					);
 
-					\GO_Base_Db_ActiveRecord::$attributeOutputMode = 'raw';
+					\GO\Base\Db\ActiveRecord::$attributeOutputMode = 'raw';
 
 				}
 
@@ -591,7 +593,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 		//Get all field models and build an array of categories with their
 		//fields for display.
 
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->order(array('category.sort_index','t.sort_index'),array('ASC','ASC'));
 		$findParams->getCriteria()
 						->addCondition('extends_model', $model->customfieldsRecord->extendsModel(),'=','category');
@@ -645,7 +647,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	}
 	
 	private function _processLinksDisplay($model,$response, $limit=15){
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 							->limit($limit);
 			
 		$ignoreModelTypes = array();
@@ -656,9 +658,9 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 
 		$findParams->getCriteria()->addInCondition('model_type_id', $ignoreModelTypes, 't', true, true);
 
-		$stmt = \GO_Base_Model_SearchCacheRecord::model()->findLinks($model, $findParams);
+		$stmt = \GO\Base\Model\SearchCacheRecord::model()->findLinks($model, $findParams);
 
-		$store = \GO_Base_Data_Store::newInstance(\GO_Base_Model_SearchCacheRecord::model());		
+		$store = \GO\Base\Data\Store::newInstance(\GO\Base\Model\SearchCacheRecord::model());		
 		$store->setStatement($stmt);
 
 		$columnModel = $store->getColumnModel();		
@@ -675,15 +677,15 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	
 	
 	private function _processEventsDisplay($model,$response){
-		$startOfDay = \GO_Base_Util_Date::clear_time(time());
+		$startOfDay = \GO\Base\Util\Date::clear_time(time());
 			
 		// Process future events
-		$findParams = \GO_Base_Db_FindParams::newInstance()->order('start_time','DESC');
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order('start_time','DESC');
 		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=');						
 
 		$stmt = \GO_Calendar_Model_Event::model()->findLinks($model, $findParams);		
 
-		$store = \GO_Base_Data_Store::newInstance(\GO_Calendar_Model_Event::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Calendar_Model_Event::model());
 		$store->setStatement($stmt);
 
 		$columnModel = $store->getColumnModel();			
@@ -697,12 +699,12 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 		$response['data']['events']=$data['results'];
 		
 		// Process past events
-		$findParams = \GO_Base_Db_FindParams::newInstance()->order('start_time','DESC');
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order('start_time','DESC');
 		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<');						
 
 		$stmt = \GO_Calendar_Model_Event::model()->findLinks($model, $findParams);		
 
-		$store = \GO_Base_Data_Store::newInstance(\GO_Calendar_Model_Event::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Calendar_Model_Event::model());
 		$store->setStatement($stmt);
 
 		$columnModel = $store->getColumnModel();			
@@ -719,7 +721,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	
 	private function _processCommentsDisplay($model,$response){
 		if($model->hasLinks()){
-			$stmt = \GO_Comments_Model_Comment::model()->find(\GO_Base_Db_FindParams::newInstance()
+			$stmt = \GO_Comments_Model_Comment::model()->find(\GO\Base\Db\FindParams::newInstance()
 								->limit(5)
 								->select('t.*,cat.name AS categoryName')
 								->order('id','DESC')
@@ -731,13 +733,13 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 									'tableAlias' => 'cat',
 									'type' => 'LEFT'
 								))
-								->criteria(\GO_Base_Db_FindCriteria::newInstance()
+								->criteria(\GO\Base\Db\FindCriteria::newInstance()
 												->addModel(\GO_Comments_Model_Comment::model())
 												->addCondition('model_id', $model->id)
 												->addCondition('model_type_id',$model->modelTypeId())
 								));
 
-			$store = \GO_Base_Data_Store::newInstance(\GO_Comments_Model_Comment::model());			
+			$store = \GO\Base\Data\Store::newInstance(\GO_Comments_Model_Comment::model());			
 			$store->setStatement($stmt);
 
 			$columnModel = $store->getColumnModel();			
@@ -755,16 +757,16 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	}
 	
 	private function _processTasksDisplay($model,$response){
-		//$startOfDay = \GO_Base_Util_Date::clear_time(time());
+		//$startOfDay = \GO\Base\Util\Date::clear_time(time());
 
 		// Process linked tasks that are not completed.
-		$findParams = \GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order('due_time','DESC');
 		//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', \GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
 		$findParams->getCriteria()->addCondition('status', \GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
 
 		$stmt = \GO_Tasks_Model_Task::model()->findLinks($model, $findParams);		
 
-		$store = \GO_Base_Data_Store::newInstance(\GO_Tasks_Model_Task::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Tasks_Model_Task::model());
 		$store->setStatement($stmt);
 
 		$store->getColumnModel()
@@ -779,13 +781,13 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 		$response['data']['tasks']=$data['results'];
 		
 		// Process linked tasks that are completed.
-		$findParams = \GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order('due_time','DESC');
 		//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', \GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
 		$findParams->getCriteria()->addCondition('status', \GO_Tasks_Model_Task::STATUS_COMPLETED, '=');						
 
 		$stmt = \GO_Tasks_Model_Task::model()->findLinks($model, $findParams);		
 
-		$store = \GO_Base_Data_Store::newInstance(\GO_Tasks_Model_Task::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Tasks_Model_Task::model());
 		$store->setStatement($stmt);
 
 		$store->getColumnModel()
@@ -884,7 +886,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	 * The $params array has a couple of keys wich you maybe want to set:
 	 * 
 	 * * title	: The title of the file that will be created. (Without extention)
-	 * * type		: Which class needs to be used to export. (Eg. GO_Base_Export_ExportCSV)
+	 * * type		: Which class needs to be used to export. (Eg. \GO\Base\Export\ExportCSV)
 	 * * showHeader : Do you want to show the column headers in the file? (True or False)
 	 * 
 	 * @param Array $params 
@@ -914,7 +916,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 			'export_include_hidden'=>$includeHidden
 		);
 		
-		$settings =  \GO_Base_Export_Settings::load();
+		$settings =  \GO\Base\Export\Settings::load();
 		$settings->saveFromArray($checkboxSettings);
 		
 		//define('EXPORTING', true);
@@ -937,7 +939,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 		$findParams->getCriteria()->recreateTemporaryTables();
 		$model = \GO::getModel(\GO::session()->values[$params['name']]['model']);
 
-		$store = new \GO_Base_Data_Store($this->getStoreColumnModel());	
+		$store = new \GO\Base\Data\Store($this->getStoreColumnModel());	
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatStoreRecord'));		
 		//$store->getColumnModel()->setModelFormatType('formatted'); //no html
 		
@@ -960,7 +962,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 			
 			foreach($includeColumns as $incColumn){
 				if(!$columnModel->getColumn($incColumn))
-					$columnModel->addColumn (new \GO_Base_Data_Column($incColumn,$incColumn));
+					$columnModel->addColumn (new \GO\Base\Data\Column($incColumn,$incColumn));
 			}
 			
 			$columnModel->sort($includeColumns);
@@ -1006,7 +1008,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 		if(!empty($params['type']))
 			$export = new $params['type']($store, $columnModel,$model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams);
 		else
-			$export = new \GO_Base_Export_ExportCSV($store, $columnModel, $model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams); // The default Export is the CSV outputter.
+			$export = new \GO\Base\Export\ExportCSV($store, $columnModel, $model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams); // The default Export is the CSV outputter.
 
 		$export->output();
 	}
@@ -1031,7 +1033,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	 */
 	protected function actionImport($params) {
 				
-		$summarylog = new \GO_Base_Component_SummaryLog();
+		$summarylog = new \GO\Base\Component\SummaryLog();
 		
 		\GO::$disableModelCache=true; //for less memory usage		
 		\GO::setMaxExecutionTime(0);
@@ -1288,9 +1290,9 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	 * select box.
 	 * @param Array $response The response to be passed to the client.
 	 * @param type $params The request parameters from the client.
-	 * @param GO_Base_Db_ActiveRecord $model 
+	 * @param \GO\Base\Db\ActiveRecord $model 
 	 */
-	protected function afterAttributes(&$attributes, &$response, &$params, GO_Base_Db_ActiveRecord $model)
+	protected function afterAttributes(&$attributes, &$response, &$params, \GO\Base\Db\ActiveRecord $model)
 	{
 	//unset($attributes['t.company_id']);
 	//$attributes['companies.name']=\GO::t('company','addressbook');
@@ -1302,13 +1304,13 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	 * The advanced query panel view can be found in GO.query.QueryPanel
 	 * 
 	 * @param String-or-array $advancedQueryData 
-	 * @param GO_Base_Db_FindParams $storeParams
+	 * @param \GO\Base\Db\FindParams $storeParams
 	 */
 	private function _handleAdvancedQuery($advancedQueryData, &$storeParams){
 		$advancedQueryData = is_string($advancedQueryData) ? json_decode($advancedQueryData, true) : $advancedQueryData;
 		$findCriteria = $storeParams->getCriteria();
 		
-		$criteriaGroup = \GO_Base_Db_FindCriteria::newInstance();
+		$criteriaGroup = \GO\Base\Db\FindCriteria::newInstance();
 		$criteriaGroupAnd=true;
 		for($i=0,$count=count($advancedQueryData);$i<$count;$i++){
 			
@@ -1320,7 +1322,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 			if($i==0 || $advQueryRecord['start_group']){
 				$findCriteria->mergeWith($criteriaGroup,$criteriaGroupAnd);
 				$criteriaGroupAnd=$advQueryRecord['andor']=='AND';
-				$criteriaGroup = \GO_Base_Db_FindCriteria::newInstance();
+				$criteriaGroup = \GO\Base\Db\FindCriteria::newInstance();
 			}
 			
 			if(!empty($advQueryRecord['field'])){	
@@ -1376,12 +1378,12 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	 * Group-Office, \GO_Addressbook_Controller_Contact::afterAttributes and
 	 * \GO_Addressbook_Controller_Contact::beforeIntegrateRegularSql().
 	 * @param Array $advQueryRecord
-	 * @param GO_Base_Db_FindCriteria $findCriteria
-	 * @param GO_Base_Db_FindParams $storeParams
+	 * @param \GO\Base\Db\FindCriteria $findCriteria
+	 * @param \GO\Base\Db\FindParams $storeParams
 	 * @return boolean Return true if the current $advQueryRecord must be handled
 	 * in the regular way, return false after it has been handled differently.
 	 */
-	protected function beforeHandleAdvancedQuery($advQueryRecord, GO_Base_Db_FindCriteria &$findCriteria, GO_Base_Db_FindParams &$storeParams){
+	protected function beforeHandleAdvancedQuery($advQueryRecord, \GO\Base\Db\FindCriteria &$findCriteria, \GO\Base\Db\FindParams &$storeParams){
 		return true;
 	}
 	
@@ -1419,7 +1421,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 	/**
 	 * Checks for dates in the import model and performs an strtotime on it.
 	 * 
-	 * @param GO_Base_Db_ActiveRecord $model 
+	 * @param \GO\Base\Db\ActiveRecord $model 
 	 */
 	private function _parseImportDates(&$model){
 		
@@ -1484,7 +1486,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 		$response['results'] = array();
 		$response['total'] = 0;
 
-		$importFile = new \GO_Base_Fs_CsvFile($_FILES['files']['tmp_name'][0]);
+		$importFile = new \GO\Base\Fs\CsvFile($_FILES['files']['tmp_name'][0]);
 		$importFile->delimiter = $params['delimiter'];
 		$importFile->enclosure = $params['enclosure'];
 
@@ -1499,7 +1501,7 @@ class GO_Base_Controller_AbstractModelController extends \GO\Base\Controller\Abs
 		$response['results'] = array();
 		$response['total'] = 0;
 
-		$importFile = new \GO_Base_Fs_XlsFile($_FILES['files']['tmp_name'][0],false,1);
+		$importFile = new \GO\Base\Fs\XlsFile($_FILES['files']['tmp_name'][0],false,1);
 
 		$response['results'] = $importFile->getRecord();
 		$response['total'] = count($response['results']);

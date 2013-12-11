@@ -129,7 +129,7 @@ abstract class GO_Site_Components_Controller extends \GO\Base\Controller\Abstrac
 				echo $output;
 		}
 		else
-			throw new GO_Base_Exception_NotFound('cannot find the requested view ' . $view);
+			throw new \GO\Base\Exception\NotFound('cannot find the requested view ' . $view);
 	}
 
 	/**
@@ -288,7 +288,7 @@ abstract class GO_Site_Components_Controller extends \GO\Base\Controller\Abstrac
 			}
 			
 			if (!$this->_checkPermission($action))
-				throw new GO_Base_Exception_AccessDenied();
+				throw new \GO\Base\Exception\AccessDenied();
 
 			$this->beforeAction();
 			
@@ -300,10 +300,10 @@ abstract class GO_Site_Components_Controller extends \GO\Base\Controller\Abstrac
 			if(isset($oldIgnore))
 				GO::setIgnoreAclPermissions($oldIgnore);
 		}
-		catch (\GO_Base_Exception_MissingParameter $e){
+		catch (\GO\Base\Exception\MissingParameter $e){
 			$this->render('/site/404', array('error' => $e));
 		}
-		catch (\GO_Base_Exception_AccessDenied $e){
+		catch (\GO\Base\Exception\AccessDenied $e){
 			GO::debug($e->getMessage());
 			GO::debug($e->getTraceAsString());
 			
@@ -318,7 +318,7 @@ abstract class GO_Site_Components_Controller extends \GO\Base\Controller\Abstrac
 			}
 			//$this->render('error', array('error'=>$e));
 		}
-		catch (\GO_Base_Exception_NotFound $e){
+		catch (\GO\Base\Exception\NotFound $e){
 			header("HTTP/1.0 404 Not Found");
       header("Status: 404 Not Found");
 			

@@ -29,7 +29,9 @@
  * @package GO.base
  * @abstract
  */
-abstract class GO_Base_Object extends GO_Base_Observable{
+namespace GO\Base;
+
+abstract class Object extends \GO\Base\Observable{
 
 	/**
 	 * Returns the name of this object

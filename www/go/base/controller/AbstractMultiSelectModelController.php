@@ -42,7 +42,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @abstract
  */
-abstract class GO_Base_Controller_AbstractMultiSelectModelController extends \GO\Base\Controller\AbstractController{
+namespace GO\Base\Controller;
+
+abstract class AbstractMultiSelectModelController extends \GO\Base\Controller\AbstractController{
 	
 	
 	protected $uniqueSelection=true;
@@ -85,9 +87,9 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends \GO
 		$model = \GO::getModel($this->modelName());
 		$linkModel = \GO::getModel($this->linkModelName());
 		
-		$store = \GO_Base_Data_Store::newInstance($model);
+		$store = \GO\Base\Data\Store::newInstance($model);
 		
-		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 			->addCondition($this->getRemoteKey(), $params['model_id'],'=','lt')
 			->addCondition($model->primaryKey(), 'lt.'.$this->linkModelField(), '=', 't', true, true);			
 		
@@ -98,7 +100,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends \GO
 		if($this->uniqueSelection){
 			$findParams->join($linkModel->tableName(), $joinCriteria, 'lt', 'LEFT');
 
-			$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
+			$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addCondition($this->linkModelField(), null,'IS','lt');
 			$findParams->criteria($findCriteria);
 		}
@@ -114,9 +116,9 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends \GO
 	/**
 	 * Override this to make changes in the columnModel of this controller's
 	 * selectNewStore and selectedStore.
-	 * @param GO_Base_Data_ColumnModel $cm 
+	 * @param \GO\Base\Data\ColumnModel $cm 
 	 */
-	protected function formatColumns(\GO_Base_Data_ColumnModel $cm){
+	protected function formatColumns(\GO\Base\Data\ColumnModel $cm){
 		
 	}
 	
@@ -172,7 +174,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends \GO
 		$model = \GO::getModel($this->modelName());
 		$linkModel = \GO::getModel($this->linkModelName());
 		
-		$store = \GO_Base_Data_Store::newInstance($model);
+		$store = \GO\Base\Data\Store::newInstance($model);
 		$this->formatColumns($store->getColumnModel());
 		
 		if($model->aclField())
@@ -193,7 +195,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends \GO
 			$response['deleteFeedback'] = $e->getMessage();
 		}
 		
-		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 			->addCondition(
 							$model->primaryKey(),
 							'lt.'.$this->linkModelField(),

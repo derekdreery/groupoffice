@@ -20,7 +20,7 @@
  * @property int $user_id
  * @property int $folder_id
  */
-class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
+class GO_Files_Model_SharedRootFolder extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns the table name
@@ -42,13 +42,13 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Find all shared folders for the current user
 	 * 
-	 * @param GO_Base_Db_FindParams $findParams
-	 * @return GO_Base_Db_ActiveStatement
+	 * @param \GO\Base\Db\FindParams $findParams
+	 * @return \GO\Base\Db\ActiveStatement
 	 */
 	private function _findShares($user_id) {
 
 
-		$findParams = new \GO_Base_Db_FindParams();
+		$findParams = new \GO\Base\Db\FindParams();
 
 		$findParams->getCriteria()
 						->addModel(\GO_Files_Model_Folder::model())
@@ -62,15 +62,15 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 		
 		\GO_Files_Model_Folder::model()->addRelation('aclItem',array(
 			"type"=>self::BELONGS_TO,
-			"model"=>"GO_Base_Model_Acl",
+			"model"=>"\GO\Base\Model\Acl",
 			"field"=>'acl_id'
 		));
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()->debugSql()
+		$findParams = \GO\Base\Db\FindParams::newInstance()->debugSql()
 						->select("max(a.mtime) AS mtime")
 						->single()
 						->joinModel(array(
-								'model'=>"GO_Base_Model_Acl",
+								'model'=>"\GO\Base\Model\Acl",
 								'localField'=>'acl_id',
 								'tableAlias'=>'a'
 						));

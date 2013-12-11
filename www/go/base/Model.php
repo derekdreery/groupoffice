@@ -29,7 +29,9 @@
  * @package GO.base
  * @abstract
  */
-abstract class GO_Base_Model extends GO_Base_Object{
+namespace GO\Base;
+
+abstract class Model extends \GO\Base\Object{
 	
 	protected $_validationErrors = array();
 	
@@ -109,7 +111,7 @@ abstract class GO_Base_Model extends GO_Base_Object{
 	
 	/**
 	 * Get the name of the model in short
-	 * eg. GO_Base_Model_User will return 'User'
+	 * eg. Model\User will return 'User'
 	 * @return string Model name
 	 */
 	public function getModelName()

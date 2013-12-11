@@ -1,5 +1,7 @@
 <?php
-class GO_Base_Ldap_Connection{
+namespace GO\Base\Ldap;
+
+class Connection{
 	
 	private $_host;
 	private $_port;
@@ -16,7 +18,7 @@ class GO_Base_Ldap_Connection{
 	/**
 	 * Connect to the LDAP server defined in config.php
 	 * 
-	 * @return \GO_Base_Ldap_Connection
+	 * @return Connection
 	 * @throws Exception
 	 */
 	public static function getDefault(){
@@ -27,7 +29,7 @@ class GO_Base_Ldap_Connection{
 		if(empty(\GO::config()->ldap_port))
 			\GO::config()->ldap_port=389;
 		
-		$ldapConn = new \GO_Base_Ldap_Connection(\GO::config()->ldap_host, \GO::config()->ldap_port, !empty(\GO::config()->ldap_tls));
+		$ldapConn = new Connection(\GO::config()->ldap_host, \GO::config()->ldap_port, !empty(\GO::config()->ldap_tls));
 
 		//support old deprecated config.
 		if(!empty(\GO::config()->ldap_user))
@@ -96,7 +98,7 @@ class GO_Base_Ldap_Connection{
 	 * @param string $baseDN
 	 * @param string $query
 	 * @param array $attributes
-	 * @return GO_Base_Ldap_Result 
+	 * @return \GO\Base\Ldap\Result 
 	 */
 	public function search($baseDN, $query, $attributes=null){
 		
@@ -113,7 +115,7 @@ class GO_Base_Ldap_Connection{
 		if(!$searchId)
 			throw new \Exception("Invalid LDAP search BaseDN: $baseDN, Query: $query");
 		
-		return new \GO_Base_Ldap_Result($this, $searchId);
+		return new \GO\Base\Ldap\Result($this, $searchId);
 	}
 	
 	/**

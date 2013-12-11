@@ -25,7 +25,7 @@
  * @property string $cert
  */
 
-class GO_Smime_Model_PublicCertificate extends GO_Base_Db_ActiveRecord {
+class GO_Smime_Model_PublicCertificate extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
