@@ -75,9 +75,9 @@ class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
 							}
 						}
 					}
-					$this->render('contactform_done');
+					echo $this->render('contactform_done');
 				} else {
-					$this->render('contactform', array('contact'=>$contactModel,'company'=>$companyModel,'addressbook'=>$addressbookModel));
+					echo $this->render('contactform', array('contact'=>$contactModel,'company'=>$companyModel,'addressbook'=>$addressbookModel));
 				}
 			
 				
@@ -86,14 +86,14 @@ class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
 				$validationErrors = $contactModel->getValidationErrors();
 				foreach ($validationErrors as $valError)
 					echo $valError;
-				$this->render('contactform', array('contact'=>$contactModel,'company'=>$companyModel,'addressbook'=>$addressbookModel));
+				echo $this->render('contactform', array('contact'=>$contactModel,'company'=>$companyModel,'addressbook'=>$addressbookModel));
 			}
 						
 		}	else {
 			$addressbookModel = new GO_Addressbook_Model_Addressbook();
 			$contactModel = new GO_Addressbook_Model_Contact();
 			$companyModel = new GO_Addressbook_Model_Company();
-			$this->render('contactform', array('contact'=>$contactModel,'company'=>$companyModel,'addressbook'=>$addressbookModel));
+			echo $this->render('contactform', array('contact'=>$contactModel,'company'=>$companyModel,'addressbook'=>$addressbookModel));
 		}
 	}
 
