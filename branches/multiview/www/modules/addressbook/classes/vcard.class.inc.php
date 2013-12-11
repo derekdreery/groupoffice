@@ -70,7 +70,7 @@ define("CHAR_HTAB", chr(9));
 * @since    Group-Office 2.06
 */
 
-class vcard extends addressbook {
+class vcard extends \addressbook {
 	var $index;
 	var $instance;
 	var $version;

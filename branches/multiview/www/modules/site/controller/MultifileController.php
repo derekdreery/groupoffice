@@ -5,10 +5,10 @@ class GO_Site_Controller_Multifile extends \GO\Base\Controller\AbstractJsonContr
 	public function actionStore($params){
 		
 		if(!isset($params['model_id']))
-			Throw new GO_Base_Exception_NotFound('NO MODEL ID GIVEN');
+			Throw new \GO\Base\Exception\NotFound('NO MODEL ID GIVEN');
 		
 		if(!isset($params['field_id']))
-			Throw new GO_Base_Exception_NotFound('NO FIELD ID GIVEN');
+			Throw new \GO\Base\Exception\NotFound('NO FIELD ID GIVEN');
 		
 		// When a file is added to the multifileview
 		if(isset($params['addFileStorageFilesById'])){
@@ -29,7 +29,7 @@ class GO_Site_Controller_Multifile extends \GO\Base\Controller\AbstractJsonContr
 			}
 		}
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()->select('t.*,mf.order,mf.model_id,mf.field_id');
+		$findParams = \GO\Base\Db\FindParams::newInstance()->select('t.*,mf.order,mf.model_id,mf.field_id');
 		$findParams->ignoreAcl();
 		$findParams->order('mf.order');
 		$findParams->joinModel(array(
@@ -38,17 +38,17 @@ class GO_Site_Controller_Multifile extends \GO\Base\Controller\AbstractJsonContr
 			'localField' => 'id',
 			'foreignField' => 'file_id',
 			'tableAlias' => 'mf',
-			'criteria' => GO_Base_Db_FindCriteria::newInstance()
+			'criteria' => \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('model_id', $params['model_id'],'=','mf')
 						->addCondition('field_id', $params['field_id'],'=','mf')
 		));
 		
 		$model = new GO_Files_Model_File();
 		
-		$columnModel = new GO_Base_Data_ColumnModel($model);
+		$columnModel = new \GO\Base\Data\ColumnModel($model);
 		$columnModel->formatColumn('thumb_url', '$model->getThumbUrl(array("lw"=>100, "ph"=>100, "zc"=>1))');
 		
-		$store = new GO_Base_Data_DbStore('GO_Files_Model_File',$columnModel,$params,$findParams);
+		$store = new \GO\Base\Data\DbStore('GO_Files_Model_File',$columnModel,$params,$findParams);
 
 		$response = $this->renderStore($store);
 		

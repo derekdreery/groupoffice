@@ -11,7 +11,7 @@
 
 /**
  * 
- * The GO_Base_Model_LinkFolder model
+ * The LinkFolder model
  * 
  * 
  * @version $Id$
@@ -23,13 +23,15 @@
  * @property int $model_type_id
  * @property string $name
  */
-class GO_Base_Model_LinkFolder extends GO_Base_Db_ActiveRecord {
+namespace GO\Base\Model;
+
+class LinkFolder extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Base_Model_LinkFolder 
+	 * @return LinkFolder 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -42,12 +44,12 @@ class GO_Base_Model_LinkFolder extends GO_Base_Db_ActiveRecord {
 	
 	public function relations() {
 		return array(
-				'children' => array('type'=>self::HAS_MANY, 'model'=>'GO_Base_Model_LinkFolder', 'field'=>'parent_id', 'delete'=>true)
+				'children' => array('type'=>self::HAS_MANY, 'model'=>'LinkFolder', 'field'=>'parent_id', 'delete'=>true)
 				);
 	}
 	
 	public function hasChildren(){
-		$first = $this->children(\GO_Base_Db_FindParams::newInstance()->single());
+		$first = $this->children(\GO\Base\Db\FindParams::newInstance()->single());
 		
 		return $first!=false;
 	}

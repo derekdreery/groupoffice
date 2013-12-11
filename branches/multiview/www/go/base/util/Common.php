@@ -21,7 +21,9 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base.util 
  */
-class GO_Base_Util_Common {
+namespace GO\Base\Util;
+
+class Common {
 	/**
 	 * Check if this is a windows server
 	 * 

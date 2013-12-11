@@ -33,7 +33,7 @@
  * @property string $reset_password_path
  * @property string $lost_password_path
  */
-class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
+class GO_Sites_Model_Site extends \GO\Base\Db\ActiveRecord {
 	
 	public static function model($className=__CLASS__) {	
 		return parent::model($className);
@@ -84,7 +84,7 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'content' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Content', 'field' => 'site_id', 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('sort_order'),  'delete' => true)
+				'content' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Content', 'field' => 'site_id', 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order('sort_order'),  'delete' => true)
 			);
 	}	
 	
@@ -101,11 +101,11 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	private function _createDefaultGroups() {
 		foreach($this->getDefaultGroupNames() as $groupName)
 		{		
-			$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupName);
+			$group = \GO\Base\Model\Group::model()->findSingleByAttribute('name', $groupName);
 
 			if(!$group)
 			{
-				$group = new GO_Base_Model_Group();
+				$group = new \GO\Base\Model\Group();
 				$group->name = $groupName;
 				$group->admin_only = true;
 				$group->save();

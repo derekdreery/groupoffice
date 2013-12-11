@@ -1,6 +1,8 @@
 <?php
 
-class GO_Base_Util_Array {
+namespace GO\Base\Util;
+
+class ArrayExtra {
 
 	/**
 	 * Merge array recurively. 

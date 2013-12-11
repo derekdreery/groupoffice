@@ -33,7 +33,9 @@
  * @property int $completedat // timestamp of the latest run
  * 
  */
-class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
+namespace GO\Base\Cron;
+
+class CronJob extends \GO\Base\Db\ActiveRecord {
 		
 	public $paramsToSet = array();
 	
@@ -76,14 +78,14 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	
 	public function relations() {
 		return array(
-				'users' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'cronjob_id', 'linkModel' => 'GO_Base_Cron_CronUser'),
-				'groups' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_Group', 'field'=>'cronjob_id', 'linkModel' => 'GO_Base_Cron_CronGroup'),
+				'users' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\User', 'field'=>'cronjob_id', 'linkModel' => '\GO\Base\Cron\CronUser'),
+				'groups' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\Group', 'field'=>'cronjob_id', 'linkModel' => '\GO\Base\Cron\CronGroup'),
 		);
 	}
 	
 	/**
 	 * TODO: IMPLEMENT AND RETURN THE STATEMENT
-	 * @return GO_Base_Db_ActiveStatement $stmnt
+	 * @return \GO\Base\Db\ActiveStatement $stmnt
 	 */
 	public function getAllUsers(){
 		
@@ -103,7 +105,7 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 		$stmnt->bindParam("cronjob_id", $id, PDO::PARAM_INT);
 		$stmnt->execute();
 
-		$stmnt->setFetchMode(PDO::FETCH_CLASS, "GO_Base_Model_User",array(false));
+		$stmnt->setFetchMode(PDO::FETCH_CLASS, "\GO\Base\Model\User",array(false));
 		
 		return $stmnt;
 	}
@@ -245,7 +247,7 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	 * @return int The next run time (timestamp)
 	 */
 	private function _calculateNextRun(){
-		$completeExpression = new \GO_Base_Util_Cron($this->_buildExpression());
+		$completeExpression = new \GO\Base\Util\Cron($this->_buildExpression());
 		return $completeExpression->getNextRunDate()->getTimestamp();
 	}
 	
@@ -332,8 +334,8 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 		$jobReflection = new \ReflectionClass($this->job);
 		$parentReflection = $jobReflection->getParentClass();
 
-		$jobProperties = $jobReflection->getProperties(ReflectionProperty::IS_PUBLIC);
-		$parentProperties = $parentReflection->getProperties(ReflectionProperty::IS_PUBLIC);
+		$jobProperties = $jobReflection->getProperties(\ReflectionProperty::IS_PUBLIC);
+		$parentProperties = $parentReflection->getProperties(\ReflectionProperty::IS_PUBLIC);
 		
 		$publicProperties = array_diff($jobProperties, $parentProperties);
 		

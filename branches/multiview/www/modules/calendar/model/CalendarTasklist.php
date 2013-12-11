@@ -20,7 +20,7 @@
  * @property int $tasklist_id
  */
 
-class GO_Calendar_Model_CalendarTasklist extends GO_Base_Db_ActiveRecord{
+class GO_Calendar_Model_CalendarTasklist extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself

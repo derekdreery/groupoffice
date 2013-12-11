@@ -37,7 +37,7 @@
 
 namespace GO\Base\Controller;
 
-abstract class AbstractController extends \GO_Base_Observable {
+abstract class AbstractController extends \GO\Base\Observable {
 	
 	
 	
@@ -189,7 +189,7 @@ abstract class AbstractController extends \GO_Base_Observable {
 						(!isset($_REQUEST['security_token']) || $_REQUEST['security_token']!=\GO::session()->values['security_token'])
 			){
 			//\GO::session()->logout();			
-			throw new \GO_Base_Exception_SecurityTokenMismatch();
+			throw new \GO\Base\Exception\SecurityTokenMismatch();
 
 		}
 	}	
@@ -198,7 +198,7 @@ abstract class AbstractController extends \GO_Base_Observable {
 	 * Get the module object to which this controller belongs.
 	 * Returns false if it's a core controller.
 	 * 
-	 * @return GO_Base_Model_Module 
+	 * @return \GO\Base\Model\Module 
 	 */
 	public function getModule(){
 		if(!isset($this->_module)){
@@ -212,7 +212,7 @@ abstract class AbstractController extends \GO_Base_Observable {
 			
 			$moduleId = strtolower($classParts[1]);
 			
-			$this->_module = $moduleId=='core' ? false : \GO_Base_Model_Module::model()->findByPk($moduleId, false, true);			
+			$this->_module = $moduleId=='core' ? false : \GO\Base\Model\Module::model()->findByPk($moduleId, false, true);			
 		}
 		
 		return $this->_module;
@@ -338,7 +338,7 @@ abstract class AbstractController extends \GO_Base_Observable {
 		if(!in_array($action, $allowGuests) && !in_array('*', $allowGuests)){			
 			//check for logged in user
 			if(!\GO::user()){
-				\GO_Base_Util_Http::basicAuth();
+				\GO\Base\Util\Http::basicAuth();
 				
 				return false;	
 			}
@@ -368,8 +368,8 @@ abstract class AbstractController extends \GO_Base_Observable {
 	private function _checkRequiredPermissionLevels($action){
 		//check action permission
 		if(isset($this->requiredPermissionLevels[$action])){
-			$permLevel = \GO_Base_Model_Acl::getUserPermissionLevel($this->requiredPermissionLevels[$action]['aclId']);
-			return \GO_Base_Model_Acl::getUserPermissionLevel($permLevel,$this->requiredPermissionLevels[$action]['requiredPermissionLevel']);
+			$permLevel = \GO\Base\Model\Acl::getUserPermissionLevel($this->requiredPermissionLevels[$action]['aclId']);
+			return \GO\Base\Model\Acl::getUserPermissionLevel($permLevel,$this->requiredPermissionLevels[$action]['requiredPermissionLevel']);
 		}elseif($action!='*'){
 			return $this->_checkRequiredPermissionLevels('*');
 		}else
@@ -407,11 +407,11 @@ abstract class AbstractController extends \GO_Base_Observable {
 		$methodName='action'.$action;
 
 		if(!method_exists($this, $methodName))
-			throw new \GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		try {	
 			if($checkPermissions && !$this->_checkPermission($action)){
-				throw new \GO_Base_Exception_AccessDenied();
+				throw new \GO\Base\Exception\AccessDenied();
 			}
 			
 			$ignoreAcl = in_array($action, $this->ignoreAclPermissions()) || in_array('*', $this->ignoreAclPermissions());
@@ -471,7 +471,7 @@ abstract class AbstractController extends \GO_Base_Observable {
 			
 			$response['exceptionClass'] = get_class($e);
 			
-			if($e instanceof \GO_Base_Exception_AccessDenied){
+			if($e instanceof \GO\Base\Exception\AccessDenied){
 				
 				//doesn't work well with extjs
 //				header("HTTP/1.1 403 Forbidden");
@@ -487,7 +487,7 @@ abstract class AbstractController extends \GO_Base_Observable {
 				$response['redirectToLogin']=empty(\GO::session()->values['user_id']);
 			}
 			
-			if($e instanceof \GO_Base_Exception_SecurityTokenMismatch)
+			if($e instanceof \GO\Base\Exception\SecurityTokenMismatch)
 				$response['redirectToLogin']=true;
 
 			if(\GO::config()->debug){
@@ -539,7 +539,7 @@ abstract class AbstractController extends \GO_Base_Observable {
 			$methodArgs = array();
 			foreach($rParams as $param){
 				if(!isset($params[$param->getName()]) && !$param->isOptional())
-					throw new \GO_Base_Exception_MissingParameter("Missing argument '".$param->getName()."' for action method '".get_class ($this)."->".$methodName."'");
+					throw new \GO\Base\Exception\MissingParameter("Missing argument '".$param->getName()."' for action method '".get_class ($this)."->".$methodName."'");
 				
 				$methodArgs[]=isset($params[$param->getName()]) ? $params[$param->getName()] : $param->getDefaultValue();
 				
@@ -601,11 +601,11 @@ abstract class AbstractController extends \GO_Base_Observable {
 	/**
 	 * Check if action is ran on the Command Line Interface
 	 * 
-	 * @throws GO_Base_Exception_CliOnly
+	 * @throws \GO\Base\Exception\CliOnly
 	 */
 	public function requireCli(){
 		if(!$this->isCli())
-			throw new \GO_Base_Exception_CliOnly();
+			throw new \GO\Base\Exception\CliOnly();
 	}
 	
 	/**
@@ -631,8 +631,8 @@ abstract class AbstractController extends \GO_Base_Observable {
 
 	protected function checkMaxPostSizeExceeded() {
 		if (empty($_POST) && empty($_FILES)) {
-			$postMaxSize = \GO_Base_Util_Number::configSizeToMB(ini_get('post_max_size'));
-			$uploadMaxFileSize = \GO_Base_Util_Number::configSizeToMB(ini_get('upload_max_filesize'));
+			$postMaxSize = \GO\Base\Util\Number::configSizeToMB(ini_get('post_max_size'));
+			$uploadMaxFileSize = \GO\Base\Util\Number::configSizeToMB(ini_get('upload_max_filesize'));
 
 			
 			

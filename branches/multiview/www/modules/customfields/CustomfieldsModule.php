@@ -1,6 +1,6 @@
 <?php
 
-class GO_Customfields_CustomfieldsModule extends GO_Base_Module {
+class GO_Customfields_CustomfieldsModule extends \GO\Base\Module {
 
 	public function autoInstall() {
 		return true;
@@ -42,7 +42,7 @@ class GO_Customfields_CustomfieldsModule extends GO_Base_Module {
 
 	/**
 	 * 
-	 * @return GO_Base_Util_ReflectionClass[]
+	 * @return \GO\Base\Util\ReflectionClass[]
 	 */
 	public static function getCustomfieldModels() {
 		

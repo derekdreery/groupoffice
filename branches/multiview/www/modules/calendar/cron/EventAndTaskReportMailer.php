@@ -1,6 +1,6 @@
 <?php
 
-class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCron {
+class GO_Calendar_Cron_EventAndTaskReportMailer extends \GO\Base\Cron\AbstractCron {
 	
 	/**
 	 * Return true or false to enable the selection fo users and groups for 
@@ -41,10 +41,10 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	 * If $this->enableUserAndGroupSupport() returns FALSE then the 
 	 * $user parameter is null and the run function will be called only once.
 	 * 
-	 * @param GO_Base_Cron_CronJob $cronJob
-	 * @param GO_Base_Model_User $user [OPTIONAL]
+	 * @param \GO\Base\Cron\CronJob $cronJob
+	 * @param \GO\Base\Model\User $user [OPTIONAL]
 	 */
-	public function run(\GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
+	public function run(\GO\Base\Cron\CronJob $cronJob,\GO\Base\Model\User $user = null){
 		
 		\GO::session()->runAsRoot();
 		$pdf = $this->_getUserPdf($user);
@@ -57,10 +57,10 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	/**
 	 * Get the pdf of the given user
 	 * 
-	 * @param GO_Base_Model_User $user
+	 * @param \GO\Base\Model\User $user
 	 * @return String
 	 */
-	private function _getUserPdf(\GO_Base_Model_User $user){		
+	private function _getUserPdf(\GO\Base\Model\User $user){		
 		$pdf = new eventAndTaskPdf();
 		$pdf->setTitle($user->name); // Set the title in the header of the PDF
 		$pdf->setSubTitle(\GO::t('cronEventAndTaskReportMailerPdfSubtitle','calendar')); // Set the subtitle in the header of the PDF
@@ -72,11 +72,11 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	/**
 	 * Send the email to the users
 	 * 
-	 * @param GO_Base_Model_User $user
+	 * @param \GO\Base\Model\User $user
 	 * @param eventAndTaskPdf $pdf
 	 * @return Boolean
 	 */
-	private function _sendEmail(\GO_Base_Model_User $user,$pdf){
+	private function _sendEmail(\GO\Base\Model\User $user,$pdf){
 		
 		$filename = \GO\Base\Fs\File::stripInvalidChars($user->name).'.pdf'; //Set the PDF filename
 		$filename = str_replace(',', '', $filename);
@@ -84,7 +84,7 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 		$mailSubject = \GO::t('cronEventAndTaskReportMailerSubject','calendar');
 		$body = \GO::t('cronEventAndTaskReportMailerContent','calendar');
 		
-		$message = \GO_Base_Mail_Message::newInstance(
+		$message = \GO\Base\Mail\Message::newInstance(
 										$mailSubject
 										)->setFrom(\GO::config()->webmaster_email, \GO::config()->title)
 										->addTo($user->email);
@@ -92,14 +92,14 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 		$message->setHtmlAlternateBody(nl2br($body));
 		$message->attach(Swift_Attachment::newInstance($pdf,$filename,'application/pdf'));
 		\GO::debug('CRON SEND MAIL TO: '.$user->email);
-		return \GO_Base_Mail_Mailer::newGoInstance()->send($message);
+		return \GO\Base\Mail\Mailer::newGoInstance()->send($message);
 	}
 }
 
 /**
  * Class to render the PDF
  */
-class eventAndTaskPdf extends GO_Base_Util_Pdf {
+class eventAndTaskPdf extends \GO\Base\Util\Pdf {
 			
 	private	$_headerFontSize = '14';
 	private	$_headerFontColor = '#3194D0';
@@ -133,7 +133,7 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 	 * This will render the events and the tasks of the user that is given with 
 	 * the $user param.
 	 * 
-	 * @param GO_Base_Model_User $user
+	 * @param \GO\Base\Model\User $user
 	 */
 	public function render($user){
 		$this->AddPage();
@@ -177,10 +177,10 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 		$todayEnd = strtotime('tomorrow');
 		
 		if($defaultCalendar){
-			$findParams = \GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO\Base\Db\FindParams::newInstance()
 			->select()
 			//->order(array('start_time','name'),array('ASC','ASC'))
-			->criteria(\GO_Base_Db_FindCriteria::newInstance()
+			->criteria(\GO\Base\Db\FindCriteria::newInstance()
 					->addCondition('calendar_id', $defaultCalendar->id)
 			);
 			$events = \GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams,$todayStart,$todayEnd);
@@ -204,10 +204,10 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 		$todayEnd = strtotime('tomorrow');
 		
 		if($defaultTasklist){
-			$findParams = \GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO\Base\Db\FindParams::newInstance()
 			->select()
 			->order(array('start_time','name'),array('ASC','ASC'))
-			->criteria(\GO_Base_Db_FindCriteria::newInstance()
+			->criteria(\GO\Base\Db\FindCriteria::newInstance()
 					->addCondition('tasklist_id', $defaultTasklist->id)
 					->addCondition('start_time', $todayStart,'>=')
 					->addCondition('start_time', $todayEnd,'<')
@@ -229,7 +229,7 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 
 		$html = '';
 		$html .= '<tcpdf method="renderLine" />';
-		$html .= '<b><font style="font-size:'.$this->_timeFontSize.'px">'.\GO_Base_Util_Date_DateTime::fromUnixtime($event->getAlternateStartTime())->format('H:i').' - '.\GO_Base_Util_Date_DateTime::fromUnixtime($event->getAlternateEndTime())->format('H:i').'</font> <font style="font-size:'.$this->_nameFontSize.'px">'.\GO_Base_Util_String::text_to_html($event->getName(), true).'</font></b>';
+		$html .= '<b><font style="font-size:'.$this->_timeFontSize.'px">'.\GO\Base\Util\Date_DateTime::fromUnixtime($event->getAlternateStartTime())->format('H:i').' - '.\GO\Base\Util\Date_DateTime::fromUnixtime($event->getAlternateEndTime())->format('H:i').'</font> <font style="font-size:'.$this->_nameFontSize.'px">'.\GO\Base\Util\String::text_to_html($event->getName(), true).'</font></b>';
 		$realEvent = $event->getEvent();
 		if(!empty($realEvent->description))
 			$html .= 	'<br /><font style="font-size:'.$this->_descriptionFontSize.'px">'.$realEvent->getAttribute('description', 'html').'</font>';
@@ -246,7 +246,7 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 		
 		$html = '';
 		$html .= '<tcpdf method="renderLine" />';
-		$html .= '<b><font style="font-size:'.$this->_nameFontSize.'px">'.\GO_Base_Util_String::text_to_html($task->getAttribute('name', 'html'),true).'</font></b>';
+		$html .= '<b><font style="font-size:'.$this->_nameFontSize.'px">'.\GO\Base\Util\String::text_to_html($task->getAttribute('name', 'html'),true).'</font></b>';
 		if(!empty($task->description))
 			$html .= 	'<br /><font style="font-size:'.$this->_descriptionFontSize.'px">'.$task->getAttribute('description', 'html').'</font>';
 

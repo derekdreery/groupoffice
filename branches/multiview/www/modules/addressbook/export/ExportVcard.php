@@ -15,7 +15,7 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base.export
  */
-class GO_Addressbook_Export_ExportVCard extends GO_Base_Export_AbstractExport {
+class GO_Addressbook_Export_ExportVCard extends \GO\Base\Export\AbstractExport {
 	
 	public static $showInView = true;
 	public static $name = "VCard";
@@ -23,7 +23,7 @@ class GO_Addressbook_Export_ExportVCard extends GO_Base_Export_AbstractExport {
 	
 	private function _sendHeaders(){		
 		$file = new \GO\Base\Fs\File($this->title.'.vcf');
-		\GO_Base_Util_Http::outputDownloadHeaders($file);
+		\GO\Base\Util\Http::outputDownloadHeaders($file);
 	}
 
 	private function _write($data){

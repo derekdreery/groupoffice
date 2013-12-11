@@ -15,7 +15,7 @@
  * @property string $cls
  */
 
-class GO_Files_Model_FileHandler extends GO_Base_Db_ActiveRecord {
+class GO_Files_Model_FileHandler extends \GO\Base\Db\ActiveRecord {
 	
 
 	public function tableName(){

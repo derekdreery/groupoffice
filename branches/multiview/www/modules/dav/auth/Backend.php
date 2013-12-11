@@ -12,7 +12,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Auth_Backend extends Sabre\DAV\Auth\Backend\AbstractDigest {
+class GO_Dav_Auth_Backend extends \Sabre\DAV\Auth\Backend\AbstractDigest {
 	
 	private $_user;
 	
@@ -24,11 +24,11 @@ class GO_Dav_Auth_Backend extends Sabre\DAV\Auth\Backend\AbstractDigest {
 	public $checkModuleAccess='dav';
 	
 	public function getDigestHash($realm, $username) {
-		$user = \GO_Base_Model_User::model()->findSingleByAttribute("username", $username);
+		$user = \GO\Base\Model\User::model()->findSingleByAttribute("username", $username);
 		
 		//check dav module access		
-		$davModule = \GO_Base_Model_Module::model()->findByPk($this->checkModuleAccess, false, true);		
-		if(!\GO_Base_Model_Acl::getUserPermissionLevel($davModule->acl_id, $user->id))
+		$davModule = \GO\Base\Model\Module::model()->findByPk($this->checkModuleAccess, false, true);		
+		if(!\GO\Base\Model\Acl::getUserPermissionLevel($davModule->acl_id, $user->id))
 		{
 			$errorMsg = "No '".$this->checkModuleAccess."' module access for user '".$user->username."'";
 			\GO::debug($errorMsg);			

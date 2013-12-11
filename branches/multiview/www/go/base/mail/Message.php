@@ -10,7 +10,7 @@
  */
 
 //make sure temp dir exists
-$cacheFolder = new \GO_Base_Fs_Folder(\GO::config()->tmpdir);
+$cacheFolder = new \GO\Base\Fs\Folder(\GO::config()->tmpdir);
 $cacheFolder->create();
 
 /**
@@ -21,7 +21,9 @@ $cacheFolder->create();
  * @author Merijn Schering <mschering@intermesh.nl>
  * @copyright Copyright Intermesh BV.
  */
-class GO_Base_Mail_Message extends Swift_Message{
+namespace GO\Base\Mail;
+
+class Message extends \Swift_Message{
 	
 	private $_loadedBody;
 	
@@ -42,7 +44,7 @@ class GO_Base_Mail_Message extends Swift_Message{
    * @param string $body
    * @param string $contentType
    * @param string $charset
-   * @return GO_Base_Mail_Message
+   * @return Message
    */
   public static function newInstance($subject = null, $body = null,
     $contentType = null, $charset = null)
@@ -58,7 +60,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 	 */
 	public function loadMimeMessage($mimeData, $replaceCallback=false, $replaceCallbackArgs=array()){
 		
-		$decoder = new \GO_Base_Mail_MimeDecode($mimeData);
+		$decoder = new \GO\Base\Mail\MimeDecode($mimeData);
 		$structure = $decoder->decode(array(
 				'include_bodies'=>true,
 				'decode_headers'=>true,
@@ -86,24 +88,24 @@ class GO_Base_Mail_Message extends Swift_Message{
 		$cc = str_replace('mailto:','', $cc);
 		$bcc = str_replace('mailto:','', $bcc);
 	
-		$toList = new \GO_Base_Mail_EmailRecipients($to);
+		$toList = new \GO\Base\Mail\EmailRecipients($to);
 		$to =$toList->getAddresses();
 		foreach($to as $email=>$personal)
 			$this->addTo($email, $personal);
 		
-		$ccList = new \GO_Base_Mail_EmailRecipients($cc);
+		$ccList = new \GO\Base\Mail\EmailRecipients($cc);
 		$cc =$ccList->getAddresses();
 		foreach($cc as $email=>$personal)
 			$this->addCc($email, $personal);
 		
-		$bccList = new \GO_Base_Mail_EmailRecipients($bcc);
+		$bccList = new \GO\Base\Mail\EmailRecipients($bcc);
 		$bcc =$bccList->getAddresses();
 		foreach($bcc as $email=>$personal)
 			$this->addBcc($email, $personal);
 
 		if(isset($structure->headers['from'])){
 			
-			$fromList = new \GO_Base_Mail_EmailRecipients(str_replace('mailto:','',$structure->headers['from']));
+			$fromList = new \GO\Base\Mail\EmailRecipients(str_replace('mailto:','',$structure->headers['from']));
 			$from =$fromList->getAddress();
 		
 			if($from)
@@ -141,7 +143,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 	 * Set the HTML body and automatically create an alternate text body
 	 * 
 	 * @param String $htmlBody 
-	 * @return GO_Base_Mail_Message
+	 * @return Message
 	 */
 	public function setHtmlAlternateBody($htmlBody){
 	
@@ -149,7 +151,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 		$this->setBody($htmlBody, 'text/html','UTF-8');
 			
 		//add text version of the HTML body
-		$htmlToText = new \GO_Base_Util_Html2Text($htmlBody);
+		$htmlToText = new \GO\Base\Util\Html2Text($htmlBody);
 		$this->addPart($htmlToText->get_text(), 'text/plain','UTF-8');
 		
 		return $this;
@@ -185,7 +187,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 		}
 
 		if($charset!='UTF-8'){
-			$part->body = \GO_Base_Util_String::to_utf8($part->body, $charset);
+			$part->body = \GO\Base\Util\String::to_utf8($part->body, $charset);
 			
 			$part->body = str_ireplace($charset, 'UTF-8', $part->body);
 			
@@ -373,17 +375,17 @@ class GO_Base_Mail_Message extends Swift_Message{
 			$this->setSubject($params['subject']);		
 		
 		if(!empty($params['to'])){		
-			$to = new \GO_Base_Mail_EmailRecipients($params['to']);
+			$to = new \GO\Base\Mail\EmailRecipients($params['to']);
 			foreach($to->getAddresses() as $email=>$personal)
 				$this->addTo($email,$personal);
 		}
 		if(!empty($params['cc'])){		
-			$cc = new \GO_Base_Mail_EmailRecipients($params['cc']);
+			$cc = new \GO\Base\Mail\EmailRecipients($params['cc']);
 			foreach($cc->getAddresses() as $email=>$personal)
 				$this->addCc($email,$personal);
 		}
 		if(!empty($params['bcc'])){		
-			$bcc = new \GO_Base_Mail_EmailRecipients($params['bcc']);
+			$bcc = new \GO\Base\Mail\EmailRecipients($params['bcc']);
 			foreach($bcc->getAddresses() as $email=>$personal)
 				$this->addBcc($email,$personal);
 		}
@@ -439,7 +441,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 								$contentId = $this->embed($img);
 
 								//$tmpFile->delete();								
-								$params['htmlbody'] = \GO_Base_Util_String::replaceOnce($matches[1], $contentId, $params['htmlbody']);
+								$params['htmlbody'] = \GO\Base\Util\String::replaceOnce($matches[1], $contentId, $params['htmlbody']);
 							}else
 							{
 								//this may happen when an inline image was attached but deleted in the editor afterwards.

@@ -30,7 +30,7 @@
  * @property int $acl_write
  */
 
-class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
+class GO_Addressbook_Model_Template extends \GO\Base\Db\ActiveRecord{
 	
 	const TYPE_EMAIL=0;
 	
@@ -62,7 +62,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		
 //		$this->addDefaultTag('contact:salutation', \GO::t('default_salutation_unknown'));
 		$this->addDefaultTag('salutation', \GO::t('default_salutation_unknown'));
-		$this->addDefaultTag('date', \GO_Base_Util_Date::get_timestamp(time(), false));
+		$this->addDefaultTag('date', \GO\Base\Util\Date::get_timestamp(time(), false));
 		
 		return parent::init();
 	}
@@ -187,7 +187,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * {$tagPrefix:modelAttributeName}
 	 * 
 	 * @param string $content Containing the tags
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param \GO\Base\Db\ActiveRecord $model
 	 * @param string $tagPrefix
 	 * @param boolean $leaveEmptyTags Set to true if you don't want unreplaced tags to be cleaned up.
 	 * @return string 
@@ -254,7 +254,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 				$attributes[$key]=str_replace("\n", $this->_lineBreak, $attributes[$key]);
 		}
 		
-		$templateParser = new \GO_Base_Util_TemplateParser();
+		$templateParser = new \GO\Base\Util\TemplateParser();
 		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
 	}
 	

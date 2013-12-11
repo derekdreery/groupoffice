@@ -1,15 +1,17 @@
 <?php
-abstract class GO_Base_Export_AbstractExport {
+namespace GO\Base\Export;
+
+abstract class AbstractExport {
 	
 	/**
 	 *
-	 * @var GO_Base_Data_Store
+	 * @var \GO\Base\Data\Store
 	 */
 	protected $store;
 	
 	/**
 	 *
-	 * @var GO_Base_Data_ColumnModel 
+	 * @var \GO\Base\Data\ColumnModel 
 	 */
 	protected $columnModel;
 	
@@ -39,12 +41,12 @@ abstract class GO_Base_Export_AbstractExport {
 	
 	/**
 	 * 
-	 * @var GO_Base_Db_ActiveRecord 
+	 * @var \GO\Base\Db\ActiveRecord 
 	 */
 	protected $model;
 	/**
 	 * 
-	 * @var GO_Base_Db_FindParams 
+	 * @var \GO\Base\Db\FindParams 
 	 */
 	protected $findParams;
 	
@@ -76,14 +78,14 @@ abstract class GO_Base_Export_AbstractExport {
 	/**
 	 * The constructor for the exporter
 	 * 
-	 * @param GO_Base_Data_Store $store
-	 * @param GO_Base_Data_ColumnModel $columnModel
+	 * @param \GO\Base\Data\Store $store
+	 * @param \GO\Base\Data\ColumnModel $columnModel
 	 * @param Boolean $header
 	 * @param Boolean $humanHeaders
 	 * @param String $title
 	 * @param Mixed $orientation ('P' for Portrait,'L' for Landscape of false for none) 
 	 */
-	public function __construct(\GO_Base_Data_Store $store, GO_Base_Data_ColumnModel $columnModel, GO_Base_Db_ActiveRecord $model, GO_Base_Db_FindParams $findParams, $header=true,$humanHeaders=true, $title=false, $orientation=false, $params=array()) {
+	public function __construct(\GO\Base\Data\Store $store, \GO\Base\Data\ColumnModel $columnModel, \GO\Base\Db\ActiveRecord $model, \GO\Base\Db\FindParams $findParams, $header=true,$humanHeaders=true, $title=false, $orientation=false, $params=array()) {
 		$this->store = $store;
 		$this->columnModel = $columnModel;
 		$this->header = $header;

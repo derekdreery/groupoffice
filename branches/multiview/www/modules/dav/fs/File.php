@@ -12,7 +12,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
+class GO_Dav_Fs_File extends \Sabre\DAV\FS\File {
 
 	protected $folder;
 	protected $write_permission;
@@ -31,7 +31,7 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 		$fsFile = new \GO\Base\Fs\File($this->path);
 
 		$this->folder = \GO_Files_Model_Folder::model()->findByPath($fsFile->parent()->stripFileStoragePath());
-		if (!\GO_Base_Model_Acl::hasPermission($this->folder->getPermissionLevel(), \GO_Base_Model_Acl::WRITE_PERMISSION)){
+		if (!\GO\Base\Model\Acl::hasPermission($this->folder->getPermissionLevel(), \GO\Base\Model\Acl::WRITE_PERMISSION)){
 			throw new \Sabre\DAV\Exception\Forbidden("DAV: User ".\GO::user()->username." doesn't have write permission for file '".$this->relpath.'"');
 		}
 
@@ -105,7 +105,7 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 
 		\GO::debug('DAVFile::move(' . $this->path . ' -> ' . $newPath . ')');
 		
-		$destFsFolder = new \GO_Base_Fs_Folder(dirname($newPath));		
+		$destFsFolder = new \GO\Base\Fs\Folder(dirname($newPath));		
 		$destFolder = \GO_Files_Model_Folder::model()->findByPath($destFsFolder->stripFileStoragePath());
 		
 		$file = \GO_Files_Model_File::model()->findByPath($this->relpath);

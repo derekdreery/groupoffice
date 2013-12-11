@@ -1,4 +1,6 @@
 <?php
-class GO_Base_Mail_ImapAuthenticationFailedException extends Exception{
+namespace GO\Base\Mail;
+
+class ImapAuthenticationFailedException extends \Exception{
 	
 }

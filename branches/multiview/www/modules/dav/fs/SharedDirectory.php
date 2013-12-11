@@ -11,7 +11,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
+class GO_Dav_Fs_SharedDirectory extends \Sabre\DAV\FS\Directory {
 
 	public function __construct($path='') {
 		parent::__construct("Shared");
@@ -40,7 +40,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
 	public function getChildren() {
 		\GO::debug('Shared::getChildren()');
 
-		$shares =\GO_Files_Model_Folder::model()->getTopLevelShares(\GO_Base_Db_FindParams::newInstance()->limit(100));
+		$shares =\GO_Files_Model_Folder::model()->getTopLevelShares(\GO\Base\Db\FindParams::newInstance()->limit(100));
 
 		$nodes = array();
 		foreach($shares as $folder){

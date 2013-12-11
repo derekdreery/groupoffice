@@ -17,7 +17,7 @@
  *
  */
 
-class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelController {
+class GO_Calendar_Controller_Calendar extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Calendar_Model_Calendar';
 	
@@ -31,7 +31,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 
 	protected function getStoreParams($params) {
 		
-		$findParams =\GO_Base_Db_FindParams::newInstance();
+		$findParams =\GO\Base\Db\FindParams::newInstance();
 		
 		$c = $findParams->getCriteria();
 		
@@ -74,10 +74,10 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	
 	protected function actionCalendarsWithGroup($params){
 		
-		$store = \GO_Base_Data_Store::newInstance(\GO_Calendar_Model_Calendar::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Calendar_Model_Calendar::model());
 		
 		if(!isset($params['permissionLevel']))
-			$params['permissionLevel']=\GO_Base_Model_Acl::READ_PERMISSION;
+			$params['permissionLevel']=\GO\Base\Model\Acl::READ_PERMISSION;
 		
 		$store->getColumnModel()->formatColumn('permissionLevel', '$model->permissionLevel');
 		
@@ -86,7 +86,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		$store->setDefaultSortOrder(array('g.name','t.name'), array('ASC','ASC'));
 		
 		$findParams = $store->getDefaultParams($params)
-						->join(\GO_Calendar_Model_Group::model()->tableName(), \GO_Base_Db_FindCriteria::newInstance()->addCondition('group_id', 'g.id', '=', 't', true, true),'g')				
+						->join(\GO_Calendar_Model_Group::model()->tableName(), \GO\Base\Db\FindCriteria::newInstance()->addCondition('group_id', 'g.id', '=', 't', true, true),'g')				
 						->select('t.*,g.name AS group_name')
 						->permissionLevel($params['permissionLevel']);
 		
@@ -104,7 +104,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		return $store->getData();
 	}
 		
-	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		
 		$columnModel->formatColumn('user_name','$model->user->name');
 		
@@ -155,7 +155,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 			throw new \Exception(\GO::t('noFileUploaded'));
 		}else {
 			$file = new \GO\Base\Fs\File($_FILES['ical_file']['tmp_name'][0]);
-			$i = new \GO_Base_Vobject_Iterator($file, "VEVENT");
+			$i = new \GO\Base\Vobject\Iterator($file, "VEVENT");
 			foreach($i as $vevent){					
 			
 				$event = new \GO_Calendar_Model_Event();
@@ -183,10 +183,10 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	* @return array 
 	*/	
 	public function actionLoadColors($params){
-		$store = \GO_Base_Data_Store::newInstance(\GO_Calendar_Model_Calendar::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Calendar_Model_Calendar::model());
 		
 		$findParams = $store->getDefaultParams($params)
-						->join(\GO_Calendar_Model_CalendarUserColor::model()->tableName(), \GO_Base_Db_FindCriteria::newInstance()
+						->join(\GO_Calendar_Model_CalendarUserColor::model()->tableName(), \GO\Base\Db\FindCriteria::newInstance()
 										->addCondition('id', 'col.calendar_id', '=', 't', true, true)->addCondition('user_id', \GO::user()->id, '=','col'),'col','LEFT')
 						->order(array('t.name'))	
 						->select('col.*,name,id');
@@ -259,23 +259,23 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		
 		$calendar = \GO_Calendar_Model_Calendar::model()->findByPk($params["calendar_id"],false, true);
 		
-		if(!$calendar->public && !$calendar->checkPermissionLevel(\GO_Base_Model_Acl::READ_PERMISSION))
-			throw new \GO_Base_Exception_AccessDenied();
+		if(!$calendar->public && !$calendar->checkPermissionLevel(\GO\Base\Model\Acl::READ_PERMISSION))
+			throw new \GO\Base\Exception\AccessDenied();
 		
 		$c = new \GO_Base_VObject_VCalendar();				
 		$c->add(new \GO_Base_VObject_VTimezone());
 		
 		$months_in_past = isset($params['months_in_past']) ? intval($params['months_in_past']) : 0;
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()->select("t.*");
+		$findParams = \GO\Base\Db\FindParams::newInstance()->select("t.*");
 		$findParams->getCriteria()->addCondition("calendar_id", $params["calendar_id"]);
 		
 		if(!empty($params['months_in_past']))		
-			$stmt = \GO_Calendar_Model_Event::model()->findForPeriod($findParams, \GO_Base_Util_Date::date_add(time(), 0, -$months_in_past));
+			$stmt = \GO_Calendar_Model_Event::model()->findForPeriod($findParams, \GO\Base\Util\Date::date_add(time(), 0, -$months_in_past));
 		else
 			$stmt = \GO_Calendar_Model_Event::model()->find($findParams);		
 		
-		\GO_Base_Util_Http::outputDownloadHeaders(new \GO_Base_FS_File($calendar->name.'.ics'));
+		\GO\Base\Util\Http::outputDownloadHeaders(new \GO_Base_FS_File($calendar->name.'.ics'));
 
 		echo "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Intermesh//NONSGML ".\GO::config()->product_name." ".\GO::config()->version."//EN\r\n";
 
@@ -294,7 +294,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		$calendar = \GO_Calendar_Model_Calendar::model()->findByPk($params['calendar_id']);
 		
 		if(!$calendar)
-			throw new \GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		$calendar->truncate();
 		
@@ -313,7 +313,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		$calendar = \GO_Calendar_Model_Calendar::model()->findByPk($params['calendar_id']);
 		
 		if(!$calendar)
-			throw new \GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		\GO\Base\Fs\File::setAllowDeletes(false);
 		//VERY IMPORTANT:
@@ -333,7 +333,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 				echo '<h1>'.\GO::t('removeDuplicates').'</h1>';
 
 				$checkFieldsStr = 't.'.implode(', t.',$checkFields);
-				$findParams = \GO_Base_Db_FindParams::newInstance()
+				$findParams = \GO\Base\Db\FindParams::newInstance()
 								->ignoreAcl()
 								->select('t.id, count(*) AS n, '.$checkFieldsStr)
 								->group($checkFields)
@@ -356,7 +356,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 						$select .= ', t.files_folder_id';
 					}
 
-					$findParams = \GO_Base_Db_FindParams::newInstance()
+					$findParams = \GO\Base\Db\FindParams::newInstance()
 								->ignoreAcl()
 								->select($select.', '.$checkFieldsStr)
 								->order('id','ASC');

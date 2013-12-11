@@ -22,7 +22,7 @@ namespace GO\Notes\Model;
  * @property int $acl_id
  * @property int $user_id
  */
-class Category extends \GO_Base_Model_AbstractUserDefaultModel {
+class Category extends \GO\Base\Model\AbstractUserDefaultModel {
 
 	/**
 	 * Returns a static model of itself

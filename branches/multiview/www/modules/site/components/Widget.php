@@ -1,5 +1,5 @@
 <?php
-abstract class GO_Site_Components_Widget extends GO_Base_Object {
+abstract class GO_Site_Components_Widget extends \GO\Base\Object {
 	
 	/**
 	 * @var integer the counter for generating implicit IDs.

@@ -17,11 +17,11 @@
  * @author Michael de Hart mdhart@intermesh.nl
  */
 
-class GO_Calendar_Controller_ViewGroup extends GO_Base_Controller_AbstractMultiSelectModelController {
+class GO_Calendar_Controller_ViewGroup extends \GO\Base\Controller\AbstractMultiSelectModelController {
 
 	//protected $model = 'GO_Calendar_Model_ViewGroup';
 	
-	//protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
+	//protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 	//	$columnModel->formatColumn('group_name','$model->group->name',array(),'group_id');
 	//	return parent::formatColumns($columnModel);
 	//}
@@ -35,7 +35,7 @@ class GO_Calendar_Controller_ViewGroup extends GO_Base_Controller_AbstractMultiS
   }
 
   public function modelName() {
-    return 'GO_Base_Model_Group';
+    return '\GO\Base\Model\Group';
   }
 	
 }

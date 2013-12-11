@@ -1,5 +1,7 @@
 <?php
-abstract class GO_Base_Mail_ImapBase {
+namespace GO\Base\Mail;
+
+abstract class ImapBase {
 
 	var $touched_folders =array();
 
@@ -329,7 +331,7 @@ abstract class GO_Base_Mail_ImapBase {
 		if(!empty(\GO::session()->values['debugSql']))
 			\GO::debug("S: ".$command);
 		
-		$this->commands[trim($command)] = \GO_Base_Util_Date::getmicrotime();
+		$this->commands[trim($command)] = \GO\Base\Util\Date::getmicrotime();
 	}
 	/* determine if an imap response returned an "OK", returns
        true or false */
@@ -578,6 +580,6 @@ abstract class GO_Base_Mail_ImapBase {
 
 
 	function mime_header_decode($string) {
-		return \GO_Base_Mail_Utils::mimeHeaderDecode($string, $this->default_charset);
+		return \GO\Base\Mail\Utils::mimeHeaderDecode($string, $this->default_charset);
 	}
 }

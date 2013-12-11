@@ -1,6 +1,6 @@
 <?php
 
-class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelController {
+class GO_Files_Controller_File extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Files_Model_File';
 	
@@ -15,11 +15,11 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	 */
 	protected function actionRecalculateDiskUsage($id=false) {
 		if(!empty($id)) {
-			$user = \GO_Base_Model_User::model()->findByPk($id);
+			$user = \GO\Base\Model\User::model()->findByPk($id);
 			if(!empty($user) && $user->calculatedDiskUsage()->save())
 				echo $user->getName() . ' uses ' . $user->disk_usage. "<br>\n";
 		} else {
-			$users = \GO_Base_Model_User::model()->find();
+			$users = \GO\Base\Model\User::model()->find();
 			foreach($users as $user) {
 				if($user->calculatedDiskUsage()->save())
 					echo $user->getName() . ' uses ' . $user->disk_usage. "<br>\n";
@@ -42,7 +42,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	protected function afterDisplay(&$response, &$model, &$params) {
 
 		$response['data']['path'] = $model->path;
-		$response['data']['size'] = \GO_Base_Util_Number::formatSize($model->fsFile->size());
+		$response['data']['size'] = \GO\Base\Util\Number::formatSize($model->fsFile->size());
 		$response['data']['extension'] = strtolower($model->fsFile->extension());
 		$response['data']['type'] = \GO::t($response['data']['extension'], 'base', 'filetypes');
 		
@@ -52,7 +52,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		
 
 		if (!empty($model->random_code) && time() < $model->expire_time) {
-			$response['data']['expire_time'] = \GO_Base_Util_Date::get_timestamp(\GO_Base_Util_Date::date_add($model->expire_time, -1),false);
+			$response['data']['expire_time'] = \GO\Base\Util\Date::get_timestamp(\GO\Base\Util\Date::date_add($model->expire_time, -1),false);
 			$response['data']['download_link'] = $model->emailDownloadURL;
 		} else {
 			$response['data']['expire_time'] = "";
@@ -105,7 +105,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	protected function afterLoad(&$response, &$model, &$params) {
 
 		$response['data']['path'] = $model->path;
-		$response['data']['size'] = \GO_Base_Util_Number::formatSize($model->fsFile->size());
+		$response['data']['size'] = \GO\Base\Util\Number::formatSize($model->fsFile->size());
 		$response['data']['extension'] = strtolower($model->fsFile->extension());
 		$response['data']['type'] = \GO::t($response['data']['extension'], 'base', 'filetypes');
 		
@@ -179,7 +179,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		}
 //	var_dump($fileHandlers);
 		
-		$store = new \GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 		
 		foreach($fileHandlers as $fileHandler){	
 			$store->addRecord(array(
@@ -221,21 +221,21 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		}
 		
 		if(!$file)
-			throw new \GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		if(!empty($params['random_code'])){
 			if($file->random_code!=$params['random_code'])
-				throw new \GO_Base_Exception_NotFound();
+				throw new \GO\Base\Exception\NotFound();
 			
 			if(time()>$file->expire_time)
 				throw new \Exception(\GO::t('downloadLinkExpired', 'files'));				
 		}else
 		{
 			if(!\GO::user())
-				\GO_Base_Util_Http::basicAuth();
+				\GO\Base\Util\Http::basicAuth();
 				
-			if(!$file->checkPermissionLevel(\GO_Base_Model_Acl::READ_PERMISSION))
-				throw new \GO_Base_Exception_AccessDenied();
+			if(!$file->checkPermissionLevel(\GO\Base\Model\Acl::READ_PERMISSION))
+				throw new \GO\Base\Exception\AccessDenied();
 		}
 
 		
@@ -244,7 +244,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		if(isset($params['inline']) && $params['inline'] == "false")
 			$inline = false;
 
-		\GO_Base_Util_Http::outputDownloadHeaders($file->fsFile, $inline, !empty($params['cache']));
+		\GO\Base\Util\Http::outputDownloadHeaders($file->fsFile, $inline, !empty($params['cache']));
 		$file->fsFile->output();
 	}
 
@@ -259,7 +259,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		
 		$file = \GO_Files_Model_File::model()->findByPk($params['id']);
 	
-		$url = $file->getEmailDownloadURL(true,\GO_Base_Util_Date::date_add($params['expire_time'],1));
+		$url = $file->getEmailDownloadURL(true,\GO\Base\Util\Date::date_add($params['expire_time'],1));
 		
 		$response['url']=$url;
 		$response['success']=true;
@@ -291,11 +291,11 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		$linktext = $html ? "<ul>" : $lb;
 		
 		foreach($files as $file) {
-			$url = $file->getEmailDownloadURL($html,\GO_Base_Util_Date::date_add($params['expire_time'],1));
+			$url = $file->getEmailDownloadURL($html,\GO\Base\Util\Date::date_add($params['expire_time'],1));
 			$linktext .= $html ?  '<li><a href="'.$url.'">'.$file->name.'</a></li>'.$lb : $url.$lb;
 		}
 		$linktext .= $html ? "</ul>" : "\n";
-		$text .= ' ('.\GO::t('possibleUntil','files').' '.\GO_Base_Util_Date::get_timestamp(\GO_Base_Util_Date::date_add($file->expire_time,-1), false).')'.$lb;
+		$text .= ' ('.\GO::t('possibleUntil','files').' '.\GO\Base\Util\Date::get_timestamp(\GO\Base\Util\Date::date_add($file->expire_time,-1), false).')'.$lb;
 		$text .= $linktext;
 		
 		if($params['template_id'] && ($template = \GO_Addressbook_Model_Template::model()->findByPk($params['template_id']))){
@@ -331,10 +331,10 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		$start = !empty($params['start']) ? $params['start'] : 0;
 		$limit = !empty($params['limit']) ? $params['limit'] : 20;
 		
-		$store = \GO_Base_Data_Store::newInstance(\GO_Files_Model_File::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO_Files_Model_File::model());
 
 		$store->getColumnModel()->formatColumn('path', '$model->path', array(), array('first_name', 'last_name'));
-		$store->getColumnModel()->formatColumn('weekday', '$fullDays[date("w", $model->mtime)]." ".\GO_Base_Util_Date::get_timestamp($model->mtime, false);', array('fullDays'=>\GO::t('full_days')),array('first_name', 'last_name'));
+		$store->getColumnModel()->formatColumn('weekday', '$fullDays[date("w", $model->mtime)]." ".\GO\Base\Util\Date::get_timestamp($model->mtime, false);', array('fullDays'=>\GO::t('full_days')),array('first_name', 'last_name'));
 		
 		$store->setStatement(\GO_Files_Model_File::model()->findRecent($start,$limit));
 

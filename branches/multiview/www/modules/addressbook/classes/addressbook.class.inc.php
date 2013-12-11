@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-class addressbook extends db {
+class addressbook extends \db {
 
 
 

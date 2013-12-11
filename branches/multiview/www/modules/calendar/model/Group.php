@@ -23,7 +23,7 @@
  * @property String $fields
  * @property int $show_not_as_busy
  */
-class GO_Calendar_Model_Group extends GO_Base_Db_ActiveRecord {
+class GO_Calendar_Model_Group extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
@@ -54,7 +54,7 @@ class GO_Calendar_Model_Group extends GO_Base_Db_ActiveRecord {
 	public function relations() {
 
 		return array(
-				'admins' => array('type' => self::MANY_MANY, 'model' => 'GO_Base_Model_User', 'field' => 'group_id', 'linkModel' => 'GO_Calendar_Model_GroupAdmin'),
+				'admins' => array('type' => self::MANY_MANY, 'model' => '\GO\Base\Model\User', 'field' => 'group_id', 'linkModel' => 'GO_Calendar_Model_GroupAdmin'),
 				'calendars' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Calendar', 'field' => 'group_id'),
 		);
 	}

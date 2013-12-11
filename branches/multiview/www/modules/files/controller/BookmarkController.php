@@ -1,5 +1,5 @@
 <?php
-class GO_Files_Controller_Bookmark extends GO_Base_Controller_AbstractModelController {
+class GO_Files_Controller_Bookmark extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Files_Model_Bookmark';
 	
@@ -44,7 +44,7 @@ class GO_Files_Controller_Bookmark extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		$storeParams
             ->select('`t`.`folder_id`,`t`.`user_id`,`f`.`name`')
             ->joinModel(array(

@@ -1,6 +1,6 @@
 <?php
 
-class backupmanager extends db {
+class backupmanager extends \db {
 
 	public function __on_load_listeners($events) {
 	}

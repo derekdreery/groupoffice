@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  */
 
-class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
+class GO_Addressbook_Controller_Site extends \GO_Site_Components_Controller{
 	
 	/**
 	 * Sets the access permissions for guests
@@ -28,7 +28,7 @@ class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
 	protected function actionContact(){	
 		//GOS::site()->config->contact_addressbook_id;	
 		
-		if (\GO_Base_Util_Http::isPostRequest()) {
+		if (\GO\Base\Util\Http::isPostRequest()) {
 			$addressbookModel = \GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name', $_POST['Addressbook']['name']);
 			if (!$addressbookModel)
 				throw new \Exception(sprintf(\GO::t('addressbookNotFound','defaultsite'),$_POST['Addressbook']['name']));

@@ -1,9 +1,9 @@
 <?php
-class GO_Serverclient_ServerclientModule extends GO_Base_Module{
+class GO_Serverclient_ServerclientModule extends \GO\Base\Module{
 	
 	public static function initListeners() {
 		
-		GO_Base_Model_User::model()->addListener("save", "GO_Serverclient_ServerclientModule", "saveUser");
+		\GO\Base\Model\User::model()->addListener("save", "GO_Serverclient_ServerclientModule", "saveUser");
 		
 		return parent::initListeners();
 	}

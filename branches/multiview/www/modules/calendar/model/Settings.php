@@ -26,7 +26,7 @@
  * @property int $user_id
  */
 
-class GO_Calendar_Model_Settings extends GO_Base_Model_AbstractUserDefaultModel{
+class GO_Calendar_Model_Settings extends \GO\Base\Model\AbstractUserDefaultModel{
 	
 	/**
 	 * Returns a static model of itself

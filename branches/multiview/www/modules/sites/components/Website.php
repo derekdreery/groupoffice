@@ -78,7 +78,7 @@ class GO_Sites_Components_Website {
 		}
 		
 		if (!$site)
-			throw new GO_Base_Exception_NotFound('Website not found in database');
+			throw new \GO\Base\Exception\NotFound('Website not found in database');
 		
 		$this->_site = $site;
 
@@ -151,7 +151,7 @@ class GO_Sites_Components_Website {
 	/**
 	 * Creates the controller and performs the specified action.
 	 * @param string $route the route of the current request. See {@link createController} for more details.
-	 * @throws GO_Base_Exception_NotFound if the controller could not be created.
+	 * @throws \GO\Base\Exception\NotFound if the controller could not be created.
 	 */
 	public function runController($route) {
 		$this->_route = $route;
@@ -163,7 +163,7 @@ class GO_Sites_Components_Website {
 			$controller->run($actionID, $_REQUEST);
 		}
 		else
-			throw new GO_Base_Exception_NotFound('Unable to resolve the request "' . $route . '".');
+			throw new \GO\Base\Exception\NotFound('Unable to resolve the request "' . $route . '".');
 //		} catch (Exception $e)
 //		{
 //			$controller = new GO_Sites_Controller_Site($this);
@@ -192,10 +192,10 @@ class GO_Sites_Components_Website {
 		$aroute = explode('/', $route);
 		$module_id = $aroute[0];
 		if (!isset($aroute[1]))
-			throw new GO_Base_Exception_NotFound('No controller specified in url');
+			throw new \GO\Base\Exception\NotFound('No controller specified in url');
 		$controller_id = $aroute[1];
 		if (!isset($aroute[2]))
-			throw new GO_Base_Exception_NotFound('No controller action specified in url');
+			throw new \GO\Base\Exception\NotFound('No controller action specified in url');
 		$action_id = $aroute[2];
 
 		$className = 'GO_' . ucfirst($module_id) . '_Controller_' . ucfirst($controller_id); //TODO: set $module

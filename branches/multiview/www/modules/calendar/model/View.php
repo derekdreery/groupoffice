@@ -30,7 +30,7 @@
  * @property int $owncolor
  */
 
-class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
+class GO_Calendar_Model_View extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
@@ -58,7 +58,7 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
 	 }
 	 
 	 protected function getPermissionLevelForNewModel() {
-		 return \GO_Base_Model_Acl::MANAGE_PERMISSION;
+		 return \GO\Base\Model\Acl::MANAGE_PERMISSION;
 	 }
 	 
 
@@ -71,20 +71,20 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
      
      public function getGroupCalendars()
      {
-        $findParams = \GO_Base_Db_FindParams::newInstance()
+        $findParams = \GO\Base\Db\FindParams::newInstance()
                 ->select('t.*')
-                ->criteria(\GO_Base_Db_FindCriteria::newInstance()
+                ->criteria(\GO\Base\Db\FindCriteria::newInstance()
 				->addCondition('view_id', $this->id,'=', 'vgr'));	
         
         $findParams->joinModel(array(
-            'model'=>'GO_Base_Model_User',  
+            'model'=>'\GO\Base\Model\User',  
             'localField'=>'user_id',
             'tableAlias'=>'usr', 
             
         ));
         
         $findParams->joinModel(array(
-            'model'=>'GO_Base_Model_UserGroup',  
+            'model'=>'\GO\Base\Model\UserGroup',  
             'localField'=>'user_id',
             'foreignField'=>'user_id',
             'tableAlias'=>'usg', 
@@ -92,7 +92,7 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
         ));
         
 		$findParams->joinModel(array(
-            'model'=>'GO_Base_Model_Group',  
+            'model'=>'\GO\Base\Model\Group',  
             'localField'=>'group_id',
             'localTableAlias'=>'usg',
             'tableAlias'=>'grp', 
@@ -104,7 +104,7 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
             'localTableAlias'=>'grp',
             'foreignField'=>'group_id',
             'tableAlias'=>'vgr', 
-            'criteria'=> \GO_Base_Db_FindCriteria::newInstance()
+            'criteria'=> \GO\Base\Db\FindCriteria::newInstance()
 				->addCondition('view_id', $this->id,'=', 'vgr')
 		));
         

@@ -11,7 +11,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class comments extends db {
+class comments extends \db {
 		/**
 	 * Add a Comment
 	 *

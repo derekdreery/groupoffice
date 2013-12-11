@@ -25,7 +25,7 @@
  * @property int $model_id
  */
 
-class GO_Customfields_Model_EnabledCategory extends GO_Base_Db_ActiveRecord{
+class GO_Customfields_Model_EnabledCategory extends \GO\Base\Db\ActiveRecord{
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -55,9 +55,9 @@ class GO_Customfields_Model_EnabledCategory extends GO_Base_Db_ActiveRecord{
 	 */
 	public function getEnabledIds($modelName, $modelId){
 		 $stmt = $this->find(
-			\GO_Base_Db_FindParams::newInstance()
+			\GO\Base\Db\FindParams::newInstance()
 						->criteria(
-								\GO_Base_Db_FindCriteria::newInstance()							
+								\GO\Base\Db\FindCriteria::newInstance()							
 									->addCondition('model_name', $modelName)
 										->addCondition('model_id', $modelId)
 										)

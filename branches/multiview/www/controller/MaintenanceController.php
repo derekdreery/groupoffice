@@ -39,13 +39,13 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 			$packageUrl = $shopUrl.'?r=licenses/package/downloadPackageFile&package_name='.$package_name;
 			
 
-			$c = new GO_Base_Util_HttpClient();
+			$c = new \GO\Base\Util\HttpClient();
 			if(!$c->groupofficeLogin($shopUrl, $params['shopuser'],$params['shoppass']))
 				exit("Bad user name or password for shop");
 			else
 				echo "Shop login successful\n";
 
-			$tmpDir = new GO_Base_Fs_Folder(getcwd());
+			$tmpDir = new \GO\Base\Fs\Folder(getcwd());
 			if(!$tmpDir->isWritable())
 				exit("Error: ".$tmpDir->path ()." is not writable!\n");
 
@@ -92,7 +92,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 			
 			$downloadFolder = str_replace('.tar.gz','', $proDownload->name());
 			
-			$newFolder = new GO_Base_Fs_Folder(getcwd().'/'.$downloadFolder);
+			$newFolder = new \GO\Base\Fs\Folder(getcwd().'/'.$downloadFolder);
 			if(!$newFolder->exists())
 				exit("Download folder ".$newFolder->path()." does not exist.\n");
 			
@@ -114,7 +114,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 
 				echo "Replacing: ".$params['replacefolder']."\n";
 
-				$replaceFolder = new GO_Base_Fs_Folder($params['replacefolder']);
+				$replaceFolder = new \GO\Base\Fs\Folder($params['replacefolder']);
 
 				$origFolderName = $replaceFolder->name();
 
@@ -129,7 +129,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 				if(!$replaceFolder->rename($backupName))
 					die("Failed to rename ".$replaceFolder->path()."\n");
 
-//				$newFolder = new GO_Base_Fs_Folder(getcwd().'/'.$downloadFolder);
+//				$newFolder = new \GO\Base\Fs\Folder(getcwd().'/'.$downloadFolder);
 				if(!$newFolder->rename($origFolderName))
 					die("Failed to rename ".$newFolder->path()."\n");
 
@@ -148,7 +148,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 	}
 	
 	protected function actionGetNewAcl($params){
-		$acl = new GO_Base_Model_Acl();
+		$acl = new \GO\Base\Model\Acl();
 		$acl->user_id=isset($params['user_id']) ? $params['user_id'] : \GO::user()->id;
 		$acl->description=$params['description'];
 		$acl->save();
@@ -159,7 +159,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 	protected function actionRemoveDuplicates($params){
 				
 		if(!\GO::modules()->tools)
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO\Base\Exception\AccessDenied();
 		
 		\GO::session()->runAsRoot();
 		
@@ -189,7 +189,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 				echo '<h1>'.$modelName.'</h1>';
 
 				$checkFieldsStr = 't.'.implode(', t.',$checkFields);
-				$findParams = \GO_Base_Db_FindParams::newInstance()
+				$findParams = \GO\Base\Db\FindParams::newInstance()
 								->ignoreAcl()
 								->select('t.id, count(*) AS n, '.$checkFieldsStr)
 								->group($checkFields)
@@ -210,7 +210,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 						$select .= ', t.files_folder_id';
 					}
 
-					$findParams = \GO_Base_Db_FindParams::newInstance()
+					$findParams = \GO\Base\Db\FindParams::newInstance()
 								->ignoreAcl()
 								->select($select.', '.$checkFieldsStr)
 								->order('id','ASC');
@@ -282,7 +282,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 	protected function actionBuildSearchCache($params) {
 		
 		if(!$this->isCli() && !\GO::modules()->tools && \GO::router()->getControllerAction()!='upgrade')
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO\Base\Exception\AccessDenied();
 		
 		$this->lockAction();
 		
@@ -307,7 +307,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 				
 		$models=\GO::findClasses('model');
 		foreach($models as $model){
-			if($model->isSubclassOf("GO_Base_Db_ActiveRecord") && !$model->isAbstract()){
+			if($model->isSubclassOf("\GO\Base\Db\ActiveRecord") && !$model->isAbstract()){
 				echo "Processing ".$model->getName()."\n";
 				flush();
 				$stmt = \GO::getModel($model->getName())->rebuildSearchCache();			
@@ -334,7 +334,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 		
 
 		if(!$this->isCli() && !\GO::modules()->tools)
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO\Base\Exception\AccessDenied();
 		
 		$this->run("upgrade",$params);		
 		
@@ -392,7 +392,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 		
 		$classes=\GO::findClasses('model');
 		foreach($classes as $model){
-			if($model->isSubclassOf('GO_Base_Db_ActiveRecord') && !$model->isAbstract()){
+			if($model->isSubclassOf('\GO\Base\Db\ActiveRecord') && !$model->isAbstract()){
 		
 				echo "Processing ".$model->getName()."\n";
 				flush();
@@ -411,7 +411,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 	
 	private function _checkV3(){
 		
-		if(!\GO_Base_Db_Utils::tableExists('go_model_types')){
+		if(!\GO\Base\Db\Utils::tableExists('go_model_types')){
 			
 			$upgrade_mtime = \GO::config()->get_setting('upgrade_mtime');
 			
@@ -463,7 +463,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 		
 		
 		
-		\GO_Base_Db_Columns::$forceLoad=true;
+		\GO\Base\Db\Columns::$forceLoad=true;
 				
 		//don't be strict in upgrade process
 		\GO::getDbConnection()->query("SET sql_mode=''");
@@ -472,7 +472,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 		
 		$v3 = $this->_checkV3();
 		
-		$logDir = new \GO_Base_Fs_Folder(\GO::config()->file_storage_path.'log/upgrade/');
+		$logDir = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'log/upgrade/');
 		$logDir->create();
 		global $logFile;
 		
@@ -626,7 +626,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 		\GO\Base\Fs\File::setAllowDeletes(true);
 		\GO::clearCache();
 		//rebuild listeners
-		\GO_Base_Observable::cacheListeners();		
+		\GO\Base\Observable::cacheListeners();		
 		if($v3){
 			
 //			if(\GO::modules()->isInstalled('projects') && \GO::modules()->isInstalled('files')){
@@ -645,7 +645,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 //			echo "Done\n\n";
 //			ob_flush();
 			
-			$versioningFolder = new \GO_Base_Fs_Folder(\GO::config()->file_storage_path.'versioning');
+			$versioningFolder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'versioning');
 			if($versioningFolder->exists())
 				$versioningFolder->rename("versioning_backup_3_7");
 			
@@ -696,7 +696,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 		$lang1code = empty($params['lang1']) ? 'en' : $params['lang1'];
 		$lang2code = empty($params['lang2']) ? 'nl' : $params['lang2'];
 		
-		$commonLangFolder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'language/');
+		$commonLangFolder = new \GO\Base\Fs\Folder(\GO::config()->root_path.'language/');
 		$commonLangFolderContentArr = $commonLangFolder->ls();
 		$moduleModelArr = \GO::modules()->getAllModules();
 		
@@ -705,7 +705,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 		echo '<p><a href="'.\GO::url("maintenance/zipLanguage",array("lang"=>$lang2code)).'">Download zip file for '.$lang2code.'</a></p>';
 		
 		foreach ($commonLangFolderContentArr as $commonContentEl) {
-			if (get_class($commonContentEl)=='GO_Base_Fs_Folder') {				
+			if (get_class($commonContentEl)=='\GO\Base\Fs\Folder') {				
 				echo '<h3>'.$commonContentEl->path().'</h3>';
 				echo $this->_compareLangFiles($commonContentEl->path().'/'.$lang1code.'.php', $commonContentEl->path().'/'.$lang2code.'.php');
 				echo '<hr>';
@@ -841,12 +841,12 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 		
 		$languages = array_keys(\GO::language()->getLanguages());
 		
-		$commonLangFolder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'language/');
+		$commonLangFolder = new \GO\Base\Fs\Folder(\GO::config()->root_path.'language/');
 		$folders = $commonLangFolder->ls();
 		
 		$modules = \GO::modules()->getAllModules();
 		foreach($modules as $module){
-			$folder = new GO_Base_Fs_Folder($module->path.'language');
+			$folder = new \GO\Base\Fs\Folder($module->path.'language');
 			if($folder->exists())
 				$folders[]=$folder;
 		}
@@ -930,13 +930,13 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 		$fileNames = array();
 		
 		//gather file list in array
-		$commonLangFolder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'language/');
+		$commonLangFolder = new \GO\Base\Fs\Folder(\GO::config()->root_path.'language/');
 		if($commonLangFolder->exists()){
 			$commonLangFolderContentArr = $commonLangFolder->ls();
 			$moduleModelArr = \GO::modules()->getAllModules();
 
 			foreach ($commonLangFolderContentArr as $commonLangFolder) {
-				if (get_class($commonLangFolder)=='GO_Base_Fs_Folder') {
+				if (get_class($commonLangFolder)=='\GO\Base\Fs\Folder') {
 					$commonLangFileArr = $commonLangFolder->ls();
 					foreach ($commonLangFileArr as $commonLangFile)
 						if (get_class($commonLangFile)=='GO\Base\Fs\File' && $commonLangFile->name()==$langCode.'.php') {
@@ -947,7 +947,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 		}
 		
 		foreach ($moduleModelArr as $moduleModel) {
-			$modLangFolder = new GO_Base_Fs_Folder($moduleModel->path.'language/');
+			$modLangFolder = new \GO\Base\Fs\Folder($moduleModel->path.'language/');
 			if($modLangFolder->exists()){
 				$modLangFiles = $modLangFolder->ls();
 				foreach ($modLangFiles as $modLangFile) {
@@ -966,7 +966,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 		if($retVal>0)
 			trigger_error("Creating ZIP file failed! ".implode("<br />", $outputArr), E_USER_ERROR);
 		
-		\GO_Base_Util_Http::outputDownloadHeaders($tmpFile);
+		\GO\Base\Util\Http::outputDownloadHeaders($tmpFile);
 		$tmpFile->output();
 		$tmpFile->delete();
 	}
@@ -978,7 +978,7 @@ class GO_Core_Controller_Maintenance extends \GO\Base\Controller\AbstractControl
 		if(!$this->isCli())			
 			echo '<pre>';
 		
-		$stmt = \GO_Base_Model_User::model()->find();
+		$stmt = \GO\Base\Model\User::model()->find();
 		
 		foreach($stmt as $user){
 			echo "Checking ".$user->username."\n";

@@ -1,6 +1,6 @@
 <?php
 
-class GO_Site_Controller_Front extends GO_Site_Components_Controller {
+class GO_Site_Controller_Front extends \GO_Site_Components_Controller {
 	protected function allowGuests() {
 		return array('content','thumb','search','ajaxwidget', 'sitemap');
 	}
@@ -49,9 +49,9 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 		$searchString = $params['searchString'];
 		
 		
-		$searchParams = GO_Base_Db_FindParams::newInstance()
+		$searchParams = \GO\Base\Db\FindParams::newInstance()
 						->select('*')
-						->criteria(\GO_Base_Db_FindCriteria::newInstance()
+						->criteria(\GO\Base\Db\FindCriteria::newInstance()
 										->addSearchCondition('title', $searchString, false)
 										->addSearchCondition('meta_title', $searchString, false)
 										->addSearchCondition('meta_description', $searchString, false)
@@ -59,8 +59,8 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 										->addSearchCondition('content', $searchString, false)
 							);
 		
-		$columnModel = new GO_Base_Data_ColumnModel();
-		$store = new GO_Base_Data_DbStore('GO_Site_Model_Content',$columnModel,$params,$searchParams);
+		$columnModel = new \GO\Base\Data\ColumnModel();
+		$store = new \GO\Base\Data\DbStore('GO_Site_Model_Content',$columnModel,$params,$searchParams);
 	
 		$this->render('search', array('searchResults'=>$store));
 	}
@@ -81,18 +81,18 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	 * @param array $params
 	 * - stromg src: path the the file relative the the sites public storage folder.
 	 * @return the rsult of the thumb action on the core controller
-	 * @throws GO_Base_Exception_AccessDenied when unable to create the folder?
+	 * @throws \GO\Base\Exception\AccessDenied when unable to create the folder?
 	 */
 	protected function actionThumb($params){
 			
-		$rootFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'site/'.Site::model()->id);
+		$rootFolder = new \GO\Base\Fs\Folder(GO::config()->file_storage_path.'site/'.Site::model()->id);
 		$file = new GO\Base\Fs\File(GO::config()->file_storage_path.'site/'.Site::model()->id.'/'.$params['src']);
 		$folder = $file->parent();
 		
 		$ok = $folder->isSubFolderOf($rootFolder);
 		
 		if(!$ok)
-			Throw new GO_Base_Exception_AccessDenied();
+			Throw new \GO\Base\Exception\AccessDenied();
 		
 		
 		$c = new GO_Core_Controller_Core();

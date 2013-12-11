@@ -39,7 +39,9 @@
  * @package GO.base
  */
 
-class GO_Base_Config {
+namespace GO\Base;
+
+class Config {
 #FRAMEWORK VARIABLES
 
 /**
@@ -1216,7 +1218,7 @@ class GO_Base_Config {
 
 			$this->db_host='localhost';
 
-			if(\GO_Base_Util_Common::isWindows()) {
+			if(\GO\Base\Util\Common::isWindows()) {
 				$this->file_storage_path = substr($this->root_path,0,3).'groupoffice/';
 				$this->tmpdir=substr($this->root_path,0,3).'temp';
 
@@ -1298,7 +1300,7 @@ class GO_Base_Config {
 	/**
 	 * Get the temporary files folder.
 	 *
-	 * @return GO_Base_Fs_Folder
+	 * @return \GO\Base\Fs\Folder
 	 */
 	public function getTempFolder($autoCreate=true){
 		$user_id = \GO::user() ? \GO::user()->id : 0;
@@ -1310,7 +1312,7 @@ class GO_Base_Config {
 		$path .= $user_id;		
 		
 		
-		$folder = new \GO_Base_Fs_Folder($this->orig_tmpdir.$user_id);
+		$folder = new \GO\Base\Fs\Folder($this->orig_tmpdir.$user_id);
 		if($autoCreate)
 			$folder->create(0777);
 		return $folder;
@@ -1319,7 +1321,7 @@ class GO_Base_Config {
 	/**
 	 * Get the cache folder for cached scripts.
 	 * 
-	 * @return \GO_Base_Fs_Folder
+	 * @return \GO\Base\Fs\Folder
 	 */
 	public function getCacheFolder($autoCreate=true){
 		
@@ -1327,7 +1329,7 @@ class GO_Base_Config {
 			$this->cachefolder=$this->orig_tmpdir.'cache/';
 		}
 		
-		$folder = new \GO_Base_Fs_Folder($this->cachefolder);
+		$folder = new \GO\Base\Fs\Folder($this->cachefolder);
 		if($autoCreate)
 			$folder->create(0777);
 		return $folder;
@@ -1348,7 +1350,7 @@ class GO_Base_Config {
 //		if($this->debug_log) {
 //			//\GO::debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
 //
-//			\GO::debug('Page load took: '.(\GO_Base_Util_Date::getmicrotime()-$this->loadstart).'ms', $this);
+//			\GO::debug('Page load took: '.(\GO\Base\Util\Date::getmicrotime()-$this->loadstart).'ms', $this);
 //			\GO::debug('Peak memory usage:'.round(memory_get_peak_usage()/1048576,2).'MB', $this);
 //			
 //		}		
@@ -1357,7 +1359,7 @@ class GO_Base_Config {
 	
 //	private function _logSlowRequest(){
 //		if($this->log_slow_requests){
-//			$time = \GO_Base_Util_Date::getmicrotime()-$this->loadstart;
+//			$time = \GO\Base\Util\Date::getmicrotime()-$this->loadstart;
 //			if($time>$this->log_slow_requests_trigger){
 //
 //				$logStr = "URI: ";
@@ -1547,7 +1549,7 @@ class GO_Base_Config {
 		$attributes['name']=$name;
     $attributes['user_id']=$user_id;
 
-		$setting = \GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
+		$setting = \GO\Base\Model\Setting::model()->findSingleByAttributes($attributes);
 		if ($setting) {
 			return $setting->value;
 		}
@@ -1562,13 +1564,13 @@ class GO_Base_Config {
 	 * @return array Key value array('setting name'=>'value');
 	 */
 	public function getSettings($keys, $user_id=0){
-		$findParams = \GO_Base_Db_FindParams::newInstance()->select();
+		$findParams = \GO\Base\Db\FindParams::newInstance()->select();
 		
 		$findParams->getCriteria()
 						->addCondition('user_id', $user_id)
 						->addInCondition('name', $keys);
 		
-		$stmt = \GO_Base_Model_Setting::model()->find($findParams);
+		$stmt = \GO\Base\Model\Setting::model()->find($findParams);
 		
 		$return = array();
 		foreach($keys as $key){
@@ -1588,9 +1590,9 @@ class GO_Base_Config {
      * @return array all settings in user_id value pairs
      *
     public function get_settings($name) {
-      $params = \GO_Base_Db_FindParams::newInstance()->select('*');
+      $params = \GO\Base\Db\FindParams::newInstance()->select('*');
       $params->getCriteria()->addCondition('name',$name);
-      return \GO_Base_Model_Setting::model()->find($params)->fetchAll();
+      return \GO\Base\Model\Setting::model()->find($params)->fetchAll();
     }
      * 
      */
@@ -1609,9 +1611,9 @@ class GO_Base_Config {
 		$attributes['name']=$name;
 		$attributes['user_id']=$user_id;
 
-		$setting = \GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
+		$setting = \GO\Base\Model\Setting::model()->findSingleByAttributes($attributes);
 		if(!$setting){
-			$setting = new \GO_Base_Model_Setting();
+			$setting = new \GO\Base\Model\Setting();
 			$setting->setAttributes($attributes);
 		}
 
@@ -1634,7 +1636,7 @@ class GO_Base_Config {
         if($user_id!==false)
           $attributes['user_id']=$user_id;
 
-		$setting = \GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
+		$setting = \GO\Base\Model\Setting::model()->findSingleByAttributes($attributes);
 		return $setting ? $setting->delete() : true;
 	}
 
@@ -1664,6 +1666,6 @@ class GO_Base_Config {
 		}
 		$config = array_merge($config, $extraConfig);
 
-		return \GO_Base_Util_ConfigEditor::save(new \GO\Base\Fs\File(\GO::config()->get_config_file()), $config);
+		return \GO\Base\Util\ConfigEditor::save(new \GO\Base\Fs\File(\GO::config()->get_config_file()), $config);
 	}
 }

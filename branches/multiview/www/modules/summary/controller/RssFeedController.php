@@ -8,7 +8,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  */
-class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelController {
+class GO_Summary_Controller_RssFeed extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Summary_Model_RssFeed';
 
@@ -37,9 +37,9 @@ class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelCont
 		// delete other feeds
 		$feedStmt = GO_Summary_Model_RssFeed::model()
 						->find(
-						GO_Base_Db_FindParams::newInstance()
+						\GO\Base\Db\FindParams::newInstance()
 						->criteria(
-										GO_Base_Db_FindCriteria::newInstance()
+										\GO\Base\Db\FindCriteria::newInstance()
 										->addCondition('user_id', GO::user()->id)
 										->addInCondition('id', $ids, 't', true, true)
 						)
@@ -53,15 +53,15 @@ class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelCont
 		return $response;
 	}
 
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		$storeParams->getCriteria()->addCondition('user_id', GO::user()->id);
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
 	
 	protected function getStoreParams($params) {
-		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('user_id', GO::user()->id);
-		return GO_Base_Db_FindParams::newInstance()
+		return \GO\Base\Db\FindParams::newInstance()
 						->criteria($findCriteria);
 	}
 
@@ -72,7 +72,7 @@ class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelCont
 			header('Content-Type: text/xml');
 
 			if (function_exists('curl_init')) {				
-				$httpclient = new GO_Base_Util_HttpClient();
+				$httpclient = new \GO\Base\Util\HttpClient();
 				$xml = $httpclient->request($feed);
 			} else {
 				if (!GO\Base\Fs\File::checkPathInput($feed))

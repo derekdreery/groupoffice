@@ -50,7 +50,7 @@
  * @property String $photoURL URL to photo
  */
 
-class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
+class GO_Addressbook_Model_Company extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * Check the VAT number with the VIES service.
@@ -114,12 +114,12 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function validate() {
-		if(!empty($this->vat_no) && \GO_Base_Util_Validate::isEuCountry($this->post_country)){
+		if(!empty($this->vat_no) && \GO\Base\Util\Validate::isEuCountry($this->post_country)){
 			
 			if(substr($this->vat_no,0,2)!=$this->post_country)			
 				$this->vat_no = $this->post_country.' '.$this->vat_no;
 			
-			if($this->checkVatNumber && ($this->isModified('vat_no') || $this->isModified('post_country')) && !\GO_Base_Util_Validate::checkVat($this->post_country, $this->vat_no))
+			if($this->checkVatNumber && ($this->isModified('vat_no') || $this->isModified('post_country')) && !\GO\Base\Util\Validate::checkVat($this->post_country, $this->vat_no))
 				$this->setValidationError('vat_no', 'European VAT (Country:'.$this->post_country.', No.:'.$this->vat_no.') number is invalid according to VIES. Please click <a target="_blank" href="http://ec.europa.eu/taxation_customs/vies/" target="_blank">here</a> to check it on their website.');
 		}
 		
@@ -128,8 +128,8 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 	
 	protected function init() {
 		$this->columns['addressbook_id']['required']=true;
-		$this->columns['email']['regex']=\GO_Base_Util_String::get_email_validation_regex();
-		$this->columns['invoice_email']['regex']=\GO_Base_Util_String::get_email_validation_regex();
+		$this->columns['email']['regex']=\GO\Base\Util\String::get_email_validation_regex();
+		$this->columns['invoice_email']['regex']=\GO\Base\Util\String::get_email_validation_regex();
 		
 //		
 //		$this->columns['phone']['gotype']='phone';
@@ -163,7 +163,7 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 	 */
 	public function buildFilesPath() {
 		
-		$new_folder_name = \GO_Base_Fs_Base::stripInvalidChars($this->name).' ('.$this->id.')';
+		$new_folder_name = \GO\Base\Fs\Base::stripInvalidChars($this->name).' ('.$this->id.')';
 		$new_path = $this->addressbook->buildFilesPath().'/companies';
 		
 
@@ -178,11 +178,11 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		if(!$wasNew && $this->isModified('addressbook_id')){
 			
 			//make sure contacts and companies are in the same addressbook.
-			$whereCriteria = \GO_Base_Db_FindCriteria::newInstance()
+			$whereCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('company_id', $this->id)
 							->addCondition('addressbook_id', $this->addressbook_id,'!=');
 			
-			$findParams = \GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO\Base\Db\FindParams::newInstance()
 							->ignoreAcl()
 							->criteria($whereCriteria);			
 			
@@ -195,7 +195,7 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		return parent::afterSave($wasNew);
 	}
 	
-	protected function afterMergeWith(\GO_Base_Db_ActiveRecord $model) {
+	protected function afterMergeWith(\GO\Base\Db\ActiveRecord $model) {
 		
 		//move company employees to this model too.
 		if($model->className()==$this->className()){
@@ -212,7 +212,7 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeSave() {
 		if(!empty($this->homepage))
-			$this->homepage = \GO_Base_Util_Http::checkUrlForHttp($this->homepage);
+			$this->homepage = \GO\Base\Util\Http::checkUrlForHttp($this->homepage);
 		
 		return parent::beforeSave();
 	}
@@ -254,7 +254,7 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 	 */
 	public function getFormattedAddress()
 	{
-		return \GO_Base_Util_Common::formatAddress(
+		return \GO\Base\Util\Common::formatAddress(
 						$this->country, 
 						$this->address, 
 						$this->address_no,
@@ -271,7 +271,7 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 	 */
 	public function getFormattedPostAddress()
 	{
-		return \GO_Base_Util_Common::formatAddress(
+		return \GO\Base\Util\Common::formatAddress(
 						$this->post_country, 
 						$this->post_address, 
 						$this->post_address_no,
@@ -300,13 +300,13 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		
 		$this->getPhotoFile()->delete();
 				
-		$photoPath = new \GO_Base_Fs_Folder(\GO::config()->file_storage_path.'company_photos/'.$this->addressbook_id.'/');
+		$photoPath = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'company_photos/'.$this->addressbook_id.'/');
 		$photoPath->create();		
 		
 		
 //		if(strtolower($file->extension())!='jpg'){
 //		$filename = $photoPath->path().'/'.$this->id.'.jpg';
-//		$img = new \GO_Base_Util_Image();
+//		$img = new \GO\Base\Util\Image();
 //		if(!$img->load($file->path())){
 //			throw new \Exception(\GO::t('imageNotSupported','addressbook'));
 //		}
@@ -334,13 +334,13 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		
 		$this->getPhotoFile()->delete();
 				
-		$photoPath = new \GO_Base_Fs_Folder(\GO::config()->file_storage_path.'addressbook/photos/'.$this->addressbook_id.'/');
+		$photoPath = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'addressbook/photos/'.$this->addressbook_id.'/');
 		$photoPath->create();		
 		
 		
 //		if(strtolower($file->extension())!='jpg'){
 		$filename = $photoPath->path().'/'.$this->id.'.jpg';
-		$img = new \GO_Base_Util_Image();
+		$img = new \GO\Base\Util\Image();
 		if(!$img->load($file->path())){
 			throw new \Exception(\GO::t('imageNotSupported','addressbook'));
 		}

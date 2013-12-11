@@ -26,7 +26,7 @@ class GO_Site_Components_Template{
 	
 	private function _checkLink() {
 		
-		$folder = new GO_Base_Fs_Folder(Site::assetManager()->getBasePath());
+		$folder = new \GO\Base\Fs\Folder(Site::assetManager()->getBasePath());
 		if(!is_link($folder->path().'/template')){
 			
 			if(!symlink($this->getPath().'assets',$folder->path().'/template')){

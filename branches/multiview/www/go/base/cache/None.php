@@ -18,11 +18,13 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @package GO.base.cache
  */
-class GO_Base_Cache_None implements GO_Base_Cache_Interface{
+namespace GO\Base\Cache;
+
+class None implements CacheInterface{
 	
 	
 //	public function __construct() {
-//		\GO::debug("Using GO_Base_Cache_None cache");
+//		\GO::debug("Using None cache");
 //		
 //	}
 

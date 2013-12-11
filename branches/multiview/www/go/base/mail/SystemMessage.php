@@ -1,6 +1,8 @@
 <?php
 
-class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
+namespace GO\Base\Mail;
+
+class SystemMessage extends \GO\Base\Mail\SmimeMessage {
 
 	private $_account;
 	private $_alias;
@@ -23,15 +25,15 @@ class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
 	 * This function will be called when the $config['smtp_account_id'] is set in the Group-Office config file.
 	 * If the account cannot be found then this function will return an exception
 	 * 
-	 * @throws GO_Base_Exception_NotFound
+	 * @throws \GO\Base\Exception\NotFound
 	 */
 	private function _setAccount(){
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()->ignoreAcl();
+		$findParams = \GO\Base\Db\FindParams::newInstance()->ignoreAcl();
 		$this->_account = \GO_Email_Model_Account::model()->findByPk(\GO::config()->smtp_account_id,$findParams,true);
 			
 		if(!$this->_account)
-			throw new \GO_Base_Exception_NotFound('The mailaccount given in the Group-Office config file cannot be found');
+			throw new \GO\Base\Exception\NotFound('The mailaccount given in the Group-Office config file cannot be found');
 
 		$this->_alias = $this->_account->defaultAlias;
 
@@ -90,11 +92,11 @@ class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
 	/**
 	 * Get the Transport object for this message (Based on the account)
 	 * 
-	 * @return mixed GO_Base_Mail_Transport/GO_Email_Transport
+	 * @return mixed \GO\Base\Mail\Transport/GO_Email_Transport
 	 */
 	public function getTransport(){
 		if(!$this->hasAccount()){
-			return \GO_Base_Mail_Transport::newGoInstance ();
+			return \GO\Base\Mail\Transport::newGoInstance ();
 		}else {
 			return \GO_Email_Transport::newGoInstance($this->_account);
 		}
@@ -107,7 +109,7 @@ class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
 	 * @return boolean
 	 */
 	public function send(){
-		return \GO_Base_Mail_Mailer::newGoInstance($this->getTransport())->send($this);
+		return \GO\Base\Mail\Mailer::newGoInstance($this->getTransport())->send($this);
 	}
 	
 	

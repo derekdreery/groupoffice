@@ -17,7 +17,9 @@
  * @author Wesley Smits <wsmits@intermesh.nl>
  * @package GO.base.export
  */
-class GO_Base_Storeexport_ExportCSV extends GO_Base_Storeexport_AbstractExport {
+namespace GO\Base\Storeexport;
+
+class ExportCSV extends \GO\Base\Storeexport\AbstractExport {
 	
 	public static $showInView = true;
 	public static $name = "CSV";
@@ -32,7 +34,7 @@ class GO_Base_Storeexport_ExportCSV extends GO_Base_Storeexport_AbstractExport {
 	
 	private function _sendHeaders(){		
 		$file = new \GO\Base\Fs\File($this->title.'.csv');
-		\GO_Base_Util_Http::outputDownloadHeaders($file);
+		\GO\Base\Util\Http::outputDownloadHeaders($file);
 	}
 
 	private function _write($data){

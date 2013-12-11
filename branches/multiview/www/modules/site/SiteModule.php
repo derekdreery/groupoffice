@@ -1,6 +1,6 @@
 <?php
 
-class GO_Site_SiteModule extends GO_Base_Module{
+class GO_Site_SiteModule extends \GO\Base\Module{
 	
 	public function autoInstall() {
 		return false;

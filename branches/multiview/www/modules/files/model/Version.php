@@ -25,7 +25,7 @@
  * @property string $path
  * @property int $version
  */
-class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
+class GO_Files_Model_Version extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
@@ -82,7 +82,7 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 	}
 	
 	private function _findLastVersion(){
-		$params = \GO_Base_Db_FindParams::newInstance()
+		$params = \GO\Base\Db\FindParams::newInstance()
 						->ignoreAcl()
 						->single()
 						->order('mtime','DESC');
@@ -120,7 +120,7 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 	private function _deleteOld(){	
 
 		if(!empty(\GO::config()->max_file_versions)){
-			$params = \GO_Base_Db_FindParams::newInstance()
+			$params = \GO\Base\Db\FindParams::newInstance()
 							->ignoreAcl()
 							->start(\GO::config()->max_file_versions)
 							->limit(10)

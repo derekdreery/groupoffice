@@ -17,7 +17,7 @@
  */
 class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\BackendInterface {
 
-	private function _modelToDAVUser(\GO_Base_Model_User $user){
+	private function _modelToDAVUser(\GO\Base\Model\User $user){
 
 		$data= array(
 			'id'=>$user->id,
@@ -80,7 +80,7 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
 			
 			\GO::debug("getPrincipalByPath($path)");
 
-			$user = \GO_Base_Model_User::model()->findSingleByAttribute('username', $username);
+			$user = \GO\Base\Model\User::model()->findSingleByAttribute('username', $username);
 			if (!$user) {
 				return false;
 			} elseif (isset($pathParts[2])) {
@@ -190,7 +190,7 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
 			
 			\GO::debug("searchPrincipals");
 
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('t.username');
 		$findCriteria = $findParams->getCriteria();
 
@@ -213,7 +213,7 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
 			}
 		}
 		
-		$stmt = \GO_Base_Model_User::model()->find($findParams);
+		$stmt = \GO\Base\Model\User::model()->find($findParams);
 
 		$principals = array();
 		while ($record = $stmt->fetch()) {

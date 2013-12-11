@@ -23,7 +23,7 @@
  * @property date $leftoffice
  * @property float $income
  */
-class GO_Presidents_Model_President extends GO_Base_Db_ActiveRecord {
+class GO_Presidents_Model_President extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * Returns a static model of itself

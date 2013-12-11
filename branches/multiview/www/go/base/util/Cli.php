@@ -1,5 +1,7 @@
 <?php
-class GO_Base_Util_Cli {
+namespace GO\Base\Util;
+
+class Cli {
 
 	/**
 	 * Parse command line arguments in named variables.

@@ -1,5 +1,5 @@
 <?php
-class GO_Site_Customfieldtype_Sitefile extends GO_Customfields_Customfieldtype_Abstract{
+class GO_Site_Customfieldtype_Sitefile extends \GO_Customfields_Customfieldtype_Abstract{
 	
 	public function name(){
 		return 'Sitefile';

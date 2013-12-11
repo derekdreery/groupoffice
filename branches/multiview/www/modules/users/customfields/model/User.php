@@ -1,5 +1,5 @@
 <?php
-class GO_Users_Customfields_Model_User extends GO_Customfields_Model_AbstractCustomFieldsRecord{
+class GO_Users_Customfields_Model_User extends \GO_Customfields_Model_AbstractCustomFieldsRecord{
 	
 	/**
 	 * Returns a static model of itself
@@ -12,6 +12,6 @@ class GO_Users_Customfields_Model_User extends GO_Customfields_Model_AbstractCus
 		return parent::model($className);
 	}
 	public function extendsModel() {
-		return "GO_Base_Model_User";
+		return "\GO\Base\Model\User";
 	}
 }

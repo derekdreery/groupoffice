@@ -19,7 +19,9 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_RelationDeleteRestrict extends Exception
+namespace GO\Base\Exception;
+
+class RelationDeleteRestrict extends \Exception
 {
 
 	public function __construct($model, $relation) {

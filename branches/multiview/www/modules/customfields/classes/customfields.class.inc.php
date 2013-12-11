@@ -81,7 +81,7 @@ global $customfield_types;
 	));
 
 
-	class select_customfield_type extends default_customfield_type{
+	class select_customfield_type extends \default_customfield_type{
 		function format_for_form($field, &$record, $fields){
 			if(!empty($field['multiselect']))
 				$record[$field['dataname'].'[]'] = $record[$field['dataname']];
@@ -102,7 +102,7 @@ global $customfield_types;
 	));
 
 
-	class yesno_customfield_type extends default_customfield_type{
+	class yesno_customfield_type extends \default_customfield_type{
 		function format_for_display($field, &$record, $fields){
 			global $GO_LANGUAGE, $lang;
 			require_once($GLOBALS['GO_LANGUAGE']->get_language_file('customfields'));
@@ -132,7 +132,7 @@ global $customfield_types;
 	 * The slave is loaded with data depending on the selection of it's parent.
 	 * The last slave can be a multiselect combo (superboxselect).
 	 */
-	class treeselect_customfield_type extends default_customfield_type {
+	class treeselect_customfield_type extends \default_customfield_type {
 		function format_for_form($field, &$record, $fields){
 			if(!empty($field['multiselect']))
 				$record[$field['dataname'].'[]'] = $record[$field['dataname']];
@@ -169,7 +169,7 @@ global $customfield_types;
 	$customfield_types['treeselect_slave']=new treeselect_customfield_type();
 	
 
-	class html_customfield_type extends default_customfield_type{
+	class html_customfield_type extends \default_customfield_type{
 		function format_for_display($field, &$record, $fields){
 			$this->format_for_form($field, $record, $fields);
 		}
@@ -180,7 +180,7 @@ global $customfield_types;
 	));
 
 
-	class checkbox_customfield_type extends default_customfield_type{
+	class checkbox_customfield_type extends \default_customfield_type{
 		function format_for_display($field, &$record, $fields){
 			
 			if ($record[$field['dataname']]=='1') {
@@ -198,7 +198,7 @@ global $customfield_types;
 		'fieldsql'=>'BOOL'
 	));
 
-	class number_customfield_type extends default_customfield_type{
+	class number_customfield_type extends \default_customfield_type{
 		function format_for_form($field, &$record, $fields){
 			$record[$field['dataname']] = Number::format($record[$field['dataname']]);
 		}
@@ -213,7 +213,7 @@ global $customfield_types;
 	));
 
 
-	class date_customfield_type extends default_customfield_type{
+	class date_customfield_type extends \default_customfield_type{
 		function format_for_database($field, &$record, &$post_values){
 			$value =isset($post_values[$field['dataname']])?$post_values[$field['dataname']]:'';
 			$value = Date::to_db_date(trim($value));
@@ -233,7 +233,7 @@ global $customfield_types;
 
 
 
-	class datetime_customfield_type extends date_customfield_type{
+	class datetime_customfield_type extends \date_customfield_type{
 		function format_for_form($field, &$record, $fields){
 
 			if(!empty($record[$field['dataname']]) &&  $record[$field['dataname']] != '0000-00-00 00:00:00'){
@@ -262,7 +262,7 @@ global $customfield_types;
 
 
 
-	class function_customfield_type extends default_customfield_type{
+	class function_customfield_type extends \default_customfield_type{
 		function format_for_form($field, &$record, $fields){
 			$result_string='';
 
@@ -286,7 +286,7 @@ global $customfield_types;
 	$customfield_types["function"]=new function_customfield_type(array());
 
 	
-class user_customfield_type extends default_customfield_type {
+class user_customfield_type extends \default_customfield_type {
 	function format_for_display($field, &$record, $fields) {
 		global $GO_MODULES;
 		if(!empty($record[$field['dataname']])) {
@@ -315,7 +315,7 @@ class user_customfield_type extends default_customfield_type {
 	$customfield_types["user"]=new user_customfield_type(array());
 
 
-class customfields extends db {
+class customfields extends \db {
 
 	var $CF_MODEL_TYPES = array(
 		'1' => 'GO_Calendar_Model_Event',
@@ -325,7 +325,7 @@ class customfields extends db {
 		'5' => 'GO_Projects_Model_Project',
 		'6' => 'GO_Files_Model_File',
 		'7' => 'GO_Billing_Model_Order',
-		'8' => 'GO_Base_Model_User'
+		'8' => '\GO\Base\Model\User'
 	);
 	
 	var $CF_TABLES = array(

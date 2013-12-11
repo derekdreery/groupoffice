@@ -1,6 +1,6 @@
 <?php
 
-class GO_Site_Widget_Contactform_ContactForm extends GO_Base_Model {
+class GO_Site_Widget_Contactform_ContactForm extends \GO\Base\Model {
 	/**
 	 * @var string email from input
 	 */
@@ -33,7 +33,7 @@ class GO_Site_Widget_Contactform_ContactForm extends GO_Base_Model {
 			$this->setValidationError('email', sprintf(GO::t('attributeRequired'),'email'));
 		if(empty($this->message))
 			$this->setValidationError('message', sprintf(GO::t('attributeRequired'),'message'));
-		if(!GO_Base_Util_Validate::email($this->email))
+		if(!\GO\Base\Util\Validate::email($this->email))
 			$this->setValidationError('email', GO::t('invalidEmailError'));
 			
 		return parent::validate();
@@ -47,11 +47,11 @@ class GO_Site_Widget_Contactform_ContactForm extends GO_Base_Model {
 		
 		if(!$this->validate())
 			return false;
-		$message = GO_Base_Mail_Message::newInstance();
+		$message = \GO\Base\Mail\Message::newInstance();
 		$message->setSubject("Groupoffice contact form");
 		$message->setBody($this->message);
 		$message->addFrom($this->email, $this->name);
 		$message->addTo($this->receipt);
-		return GO_Base_Mail_Mailer::newGoInstance()->send($message);
+		return \GO\Base\Mail\Mailer::newGoInstance()->send($message);
 	}
 }

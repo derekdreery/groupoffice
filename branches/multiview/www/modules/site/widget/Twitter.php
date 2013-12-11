@@ -1,6 +1,6 @@
 <?php
 
-class GO_Site_Widget_Twitter extends GO_Site_Components_Widget {
+class GO_Site_Widget_Twitter extends \GO_Site_Components_Widget {
 	
 	/**
 	 * include retweets true, false
@@ -310,7 +310,7 @@ http://t.co/zy3JDoVTEC"
 				foreach($tweet as $key=>$value){
 					if(!is_object($value)){
 						if($key=='text')
-							$value = GO_Base_Util_String::text_to_html($value);
+							$value = \GO\Base\Util\String::text_to_html($value);
 						
 						$str = str_replace('{'.$key.'}', $value, $str); 
 					}else

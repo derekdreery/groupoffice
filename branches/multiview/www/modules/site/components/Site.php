@@ -135,7 +135,7 @@ class Site {
 	/**
 	 * Find's the site model by server name or GET param site_id and runs the site.
 	 * 
-	 * @throws GO_Base_Exception_NotFound
+	 * @throws \GO\Base\Exception\NotFound
 	 */
 	public static function launch() {
 		
@@ -146,7 +146,7 @@ class Site {
 			self::$_site=GO_Site_Model_Site::model()->findSingleByAttribute('domain', '*'); // Find the website model from its domainname
 
 		if(!self::$_site)
-			throw new GO_Base_Exception_NotFound('Website for domain '.$_SERVER["SERVER_NAME"].' not found in database');
+			throw new \GO\Base\Exception\NotFound('Website for domain '.$_SERVER["SERVER_NAME"].' not found in database');
 		
 		GO::session()->loginWithCookies();
 	
@@ -220,7 +220,7 @@ class Site {
 	public static function file($relativePath, $template=true){
 
 		if(!$template){			
-			$folder = new GO_Base_Fs_Folder(Site::model()->getPublicPath());
+			$folder = new \GO\Base\Fs\Folder(Site::model()->getPublicPath());
 			
 			$relativePath=str_replace($folder->stripFileStoragePath().'/files/', '', $relativePath);
 			return Site::model()->getPublicUrl().'files/'.$relativePath;	

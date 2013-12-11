@@ -18,21 +18,23 @@
  * @copyright Copyright Intermesh BV.
  */
 
-class GO_Base_Mail_Mailer extends Swift_Mailer{
+namespace GO\Base\Mail;
+
+class Mailer extends \Swift_Mailer{
 	
 	/**
    * Create a new \Mailer instance.
    * 
 	 * @var Swift_SmtpTransport $transport. 
-	 * Optionally supply a transport class. If omitted a GO_Base_Mail_Transport 
+	 * Optionally supply a transport class. If omitted a \GO\Base\Mail\Transport 
 	 * object will be created that uses the smtp settings from config.php
 	 * 
-   * @return GO_Base_Mail_Mailer
+   * @return Mailer
    */
   public static function newGoInstance($transport=false)
   {
 		if(!$transport)
-			$transport=\GO_Base_Mail_Transport::newGoInstance();
+			$transport=\GO\Base\Mail\Transport::newGoInstance();
 		
     $mailer = new self($transport);		
 		return $mailer;

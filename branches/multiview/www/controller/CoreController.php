@@ -27,7 +27,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 		
 		if(empty(\GO::session()->values['debug'])){
 //			if(!\GO::user()->isAdmin())
-//				throw new GO_Base_Exception_AccessDenied("Debugging can only be enabled by an admin. Tip: You can enable it as admin and switch to any user with the 'Switch user' module.");
+//				throw new \GO\Base\Exception\AccessDenied("Debugging can only be enabled by an admin. Tip: You can enable it as admin and switch to any user with the 'Switch user' module.");
 		
 			\GO::session()->values['debug']=true;
 		}
@@ -56,7 +56,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 	protected function actionInfo($params){
 		
 		if(empty(\GO::session()->values['debug'])){
-			throw new GO_Base_Exception_AccessDenied("Debugging can only be enabled by an admin");
+			throw new \GO\Base\Exception\AccessDenied("Debugging can only be enabled by an admin");
 		}
 			
 		$response = array('success'=>true, 'info'=>'');
@@ -88,7 +88,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 		$phpinfo = ob_get_contents();
 		ob_get_clean();
 		
-		$response['info'].= \GO_Base_Util_String::sanitizeHtml($phpinfo);
+		$response['info'].= \GO\Base\Util\String::sanitizeHtml($phpinfo);
 		return $response;
 		
 	}
@@ -134,7 +134,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 	/**
 	 * Get users
 	 * 
-	 * @param array $params @see \GO_Base_Data_Store::getDefaultParams()
+	 * @param array $params @see \GO\Base\Data\Store::getDefaultParams()
 	 * @return  
 	 */
 	protected function actionUsers($params) {
@@ -167,17 +167,17 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 				$params['start']=0;
 		}
 		
-		$store = \GO_Base_Data_Store::newInstance(\GO_Base_Model_User::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO\Base\Model\User::model());
 		$store->setDefaultSortOrder('name', 'ASC');
 
 		$store->getColumnModel()->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
 		$store->getColumnModel()->formatColumn('cf', '$model->id.":".$model->name'); //special field used by custom fields. They need an id an value in one.
 		
 		//only get users that are enabled
-		$enabledParam = \GO_Base_Db_FindParams::newInstance();
-						//->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('enabled', true));
+		$enabledParam = \GO\Base\Db\FindParams::newInstance();
+						//->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('enabled', true));
 		
-		$store->setStatement (\GO_Base_Model_User::model()->find($store->getDefaultParams($params, $enabledParam)));
+		$store->setStatement (\GO\Base\Model\User::model()->find($store->getDefaultParams($params, $enabledParam)));
 		$response = $store->getData();
 		
 		if(!empty(\GO::config()->limit_usersearch) && $response['total']>\GO::config()->limit_usersearch)
@@ -191,7 +191,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 	 * 
 	 */
 	protected function actionGroups($params) {
-		$store = \GO_Base_Data_Store::newInstance(\GO_Base_Model_Group::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO\Base\Model\Group::model());
 		$store->setDefaultSortOrder('name', 'ASC');
 		
 		$findParams = $store->getDefaultParams($params);
@@ -207,7 +207,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 //								->addCondition('user_id', \GO::user()->id,'=','ug');
 //				
 //				$findParams->joinModel(array(
-//						'model'=>"GO_Base_Model_UserGroup",
+//						'model'=>"\GO\Base\Model\UserGroup",
 //						'localTableAlias'=>'t', //defaults to "t"	  
 //						'foreignField'=>'group_id', //defaults to primary key of the remote model
 //						'tableAlias'=>'ug', //Optional table alias
@@ -217,7 +217,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 //		}
 		
 		
-		$store->setStatement (\GO_Base_Model_Group::model()->find($findParams));
+		$store->setStatement (\GO\Base\Model\Group::model()->find($findParams));
 		return $store->getData();
 	}
 	
@@ -225,9 +225,9 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 	 * Get the holidayfiles that are available groups
 	 */
 	protected function actionHolidays($params) {
-		$available = \GO_Base_Model_Holiday::getAvailableHolidayFiles();
+		$available = \GO\Base\Model\Holiday::getAvailableHolidayFiles();
 		
-		$store = new GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 		$store->setRecords($available);
 		return $store->getData();
 	}
@@ -382,7 +382,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 
 
 
-		$cacheDir = new \GO_Base_Fs_Folder(\GO::config()->orig_tmpdir . 'thumbcache');
+		$cacheDir = new \GO\Base\Fs\Folder(\GO::config()->orig_tmpdir . 'thumbcache');
 		$cacheDir->create();
 
 
@@ -402,7 +402,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 		if (!empty($params['nocache']) || !$thumbExists || $thumbMtime < $file->mtime() || $thumbMtime < $file->ctime()) {
 			
 			\GO::debug("Resizing image");
-			$image = new GO_Base_Util_Image($file->path());
+			$image = new \GO\Base\Util\Image($file->path());
 			if (!$image->load_success) {
 				\GO::debug("Failed to load image for thumbnailing");
 				//failed. Stream original image
@@ -513,7 +513,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 		$inline = !isset($params['inline']) || !empty($params['inline']);
 		
 		$file = new \GO\Base\Fs\File(\GO::config()->tmpdir.$params['path']);
-		\GO_Base_Util_Http::outputDownloadHeaders($file, $inline, !empty($params['cache']));
+		\GO\Base\Util\Http::outputDownloadHeaders($file, $inline, !empty($params['cache']));
 		$file->output();		
 	}
 	
@@ -526,7 +526,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 	 */
 	protected function actionDownloadPublicFile($params){
 		$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.'public/'.$params['path']);
-		\GO_Base_Util_Http::outputDownloadHeaders($file,false,!empty($params['cache']));
+		\GO\Base\Util\Http::outputDownloadHeaders($file,false,!empty($params['cache']));
 		$file->output();		
 	}
 	
@@ -534,7 +534,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 	protected function actionMultiRequest($params){	  
 			echo "{\n";
 			
-			//$router = new GO_Base_Router();
+			//$router = new \GO\Base\Router();
 			
 			$this->checkRequiredParameters(array('requests'), $params);
 
@@ -582,7 +582,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 	
 	protected function actionUpload($params) {
 
-		$tmpFolder = new \GO_Base_Fs_Folder(\GO::config()->tmpdir . 'uploadqueue');
+		$tmpFolder = new \GO\Base\Fs\Folder(\GO::config()->tmpdir . 'uploadqueue');
 //		$tmpFolder->delete();
 		$tmpFolder->create();
 
@@ -600,7 +600,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 	protected function actionPlupload($params) {
 		
 		
-		\GO_Base_Component_Plupload::handleUpload();
+		\GO\Base\Component\Plupload::handleUpload();
 
 		//return array('success' => true);
 	}
@@ -667,10 +667,10 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 			$response['text'] = '';
 		} else {
 
-			$mispeltwords = \GO_Base_Util_SpellChecker::check($params['tocheck'], $pspellLang);
+			$mispeltwords = \GO\Base\Util\SpellChecker::check($params['tocheck'], $pspellLang);
 			if (!empty($mispeltwords)) {
 				$response['errorcount'] = count($mispeltwords);
-				$response['text'] = \GO_Base_Util_SpellChecker::replaceMisspeltWords($mispeltwords, $params['tocheck']);
+				$response['text'] = \GO\Base\Util\SpellChecker::replaceMisspeltWords($mispeltwords, $params['tocheck']);
 			} else {
 				$response['errorcount'] = 0;
 				$response['text'] = $params['tocheck'];
@@ -695,10 +695,10 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 			{
 				foreach($values as $name=>$value){
 
-					$state = \GO_Base_Model_State::model()->findByPk(array('name'=>$name,'user_id'=>\GO::user()->id));
+					$state = \GO\Base\Model\State::model()->findByPk(array('name'=>$name,'user_id'=>\GO::user()->id));
 
 					if(!$state){
-						$state = new GO_Base_Model_State();
+						$state = new \GO\Base\Model\State();
 						$state->name=$name;
 					}
 
@@ -732,7 +732,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 		$response['data']['has_usage']=$response['data']['total_usage']>0;
 		foreach($response['data'] as $key=>$value){
 			if($key!='has_usage' && $key!='about')
-				$response['data'][$key]=  \GO_Base_Util_Number::formatSize($value);
+				$response['data'][$key]=  \GO\Base\Util\Number::formatSize($value);
 		}
 		
 		$response['success']=true;
@@ -768,20 +768,20 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 // 	 *  @DEPRECATED
 // 	 */
 //	private function _emailReminders(){
-//		$usersStmt = \GO_Base_Model_User::model()->find();
+//		$usersStmt = \GO\Base\Model\User::model()->find();
 //		while ($userModel = $usersStmt->fetch()) {
 //			if ($userModel->mail_reminders==1) {
-//				$remindersStmt = \GO_Base_Model_Reminder::model()->find(
-//					\GO_Base_Db_FindParams::newInstance()
+//				$remindersStmt = \GO\Base\Model\Reminder::model()->find(
+//					\GO\Base\Db\FindParams::newInstance()
 //						->joinModel(array(
-//							'model' => 'GO_Base_Model_ReminderUser',
+//							'model' => '\GO\Base\Model\ReminderUser',
 //							'localTableAlias' => 't',
 //							'localField' => 'id',
 //							'foreignField' => 'reminder_id',
 //							'tableAlias' => 'ru'								
 //						))
 //						->criteria(
-//							\GO_Base_Db_FindCriteria::newInstance()
+//							\GO\Base\Db\FindCriteria::newInstance()
 //								->addCondition('user_id', $userModel->id, '=', 'ru')
 //								->addCondition('time', time(), '<', 'ru')
 //								->addCondition('mail_sent', '0', '=', 'ru')
@@ -805,12 +805,12 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 //			
 ////					date_default_timezone_set(\GO::user()->timezone);
 //					
-//					$message = \GO_Base_Mail_Message::newInstance($subject, $body);
+//					$message = \GO\Base\Mail\Message::newInstance($subject, $body);
 //					$message->addFrom(\GO::config()->webmaster_email,\GO::config()->title);
 //					$message->addTo($userModel->email,$userModel->name);
-//					\GO_Base_Mail_Mailer::newGoInstance()->send($message);
+//					\GO\Base\Mail\Mailer::newGoInstance()->send($message);
 //					
-//					$reminderUserModelSend = \GO_Base_Model_ReminderUser::model()
+//					$reminderUserModelSend = \GO\Base\Model\ReminderUser::model()
 //						->findSingleByAttributes(array(
 //							'user_id' => $userModel->id,
 //							'reminder_id' => $reminderModel->id
@@ -825,9 +825,9 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 //	}
 	
 	protected function actionThemes($params){
-		$store = new GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 		
-		$view = new GO_Base_View_Extjs3();
+		$view = new \GO\Base\View\Extjs3();
 		$themes = $view->getThemeNames();
 		
 		foreach($themes as $theme){
@@ -838,7 +838,7 @@ class GO_Core_Controller_Core extends \GO\Base\Controller\AbstractController {
 	}
 	
 	protected function actionModules($params){
-		$store = new GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 		
 		$modules = \GO::modules()->getAllModules(true);
 		

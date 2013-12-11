@@ -1,7 +1,9 @@
 <?php
 require_once \GO::config()->root_path."go/vendor/tcpdf/tcpdf.php";
 
-class GO_Base_Util_Pdf extends TCPDF {
+namespace GO\Base\Util;
+
+class Pdf extends \TCPDF {
 
 	public function __construct($orientation = 'P') {
 		
@@ -128,7 +130,7 @@ color:#000;
 		$this->SetFont($this->font,'',$this->font_size);
 		$this->setDefaultTextColor();
 
-		$this->Cell($this->getPageWidth()-$this->getX()-$this->rMargin,12,  \GO_Base_Util_Date::get_timestamp(time()),0,0,'R');
+		$this->Cell($this->getPageWidth()-$this->getX()-$this->rMargin,12,  \GO\Base\Util\Date::get_timestamp(time()),0,0,'R');
 
 		if(!empty($_REQUEST['text']))
 		{

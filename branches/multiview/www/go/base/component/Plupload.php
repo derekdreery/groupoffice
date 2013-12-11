@@ -1,9 +1,11 @@
 <?php
 
-class GO_Base_Component_Plupload {
+namespace GO\Base\Component;
+
+class Plupload {
 
 	public static function handleUpload() {
-		$tmpFolder = new \GO_Base_Fs_Folder(\GO::config()->tmpdir . 'uploadqueue');
+		$tmpFolder = new \GO\Base\Fs\Folder(\GO::config()->tmpdir . 'uploadqueue');
 		//$tmpFolder->delete();
 		$tmpFolder->create();
 

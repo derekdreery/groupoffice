@@ -1,6 +1,6 @@
 <?php
 
-class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelController {
+class GO_Email_Controller_Account extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = "GO_Email_Model_Account";
 	
@@ -26,7 +26,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 //	}
 	protected function getStoreParams($params) {
 
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select("t.id,t.host,t.user_id,t.username,t.smtp_host,a.email, a.name")
 						->searchFields(array('a.email','a.name','t.host'))
 						->joinModel(array(
@@ -34,13 +34,13 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 				'model' => 'GO_Email_Model_Alias',
 				'foreignField' => 'account_id', //defaults to primary key of the remote model
 				'type' => 'INNER',
-				'criteria' => \GO_Base_Db_FindCriteria::newInstance()->addCondition('default', 1, '=', 'a')
+				'criteria' => \GO\Base\Db\FindCriteria::newInstance()->addCondition('default', 1, '=', 'a')
 						));
 
 		return $findParams;
 	}
 	
-	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name', '$model->user->name');
 		return parent::formatColumns($columnModel);
 	}
@@ -145,7 +145,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		
 		\GO::session()->closeWriting();
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->ignoreAdminGroup()
 						->select('t.*');
 
@@ -228,14 +228,14 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		if(isset($quota['usage'])) {
 			if(!empty($quota['limit'])) {
 				$percentage = ceil($quota['usage']*100/$quota['limit']);
-				$usage = sprintf(\GO::t('usage_limit','email'), $percentage.'%', \GO_Base_Util_Number::formatSize($quota['limit']*1024));
+				$usage = sprintf(\GO::t('usage_limit','email'), $percentage.'%', \GO\Base\Util\Number::formatSize($quota['limit']*1024));
 				
 				$round5 = floor($usage/5)*5;
 
 				$usage='<span class="em-usage-'.$round5.'">'.$usage.'</span>';
 				
 			}	else {
-				$usage = sprintf(\GO::t('usage','email'), \GO_Base_Util_Number::formatSize($quota['usage']*1024));
+				$usage = sprintf(\GO::t('usage','email'), \GO\Base\Util\Number::formatSize($quota['usage']*1024));
 			}
 		}
 		//var_dump($usage);
@@ -252,7 +252,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			return $response;
 		}elseif ($params['node'] == 'root') {
 			
-			$findParams = \GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('t.*')
 						->joinModel(array(
 								'model' => 'GO_Email_Model_AccountSort',
@@ -260,7 +260,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 								'localField' => 'id', //defaults to primary key of the model
 								'type' => 'LEFT',
 								'tableAlias'=>'s',
-								'criteria'=>  \GO_Base_Db_FindCriteria::newInstance()->addCondition('user_id', \GO::user()->id,'=','s')
+								'criteria'=>  \GO\Base\Db\FindCriteria::newInstance()->addCondition('user_id', \GO::user()->id,'=','s')
 						))
 						->ignoreAdminGroup()
 						->order('order', 'DESC');
@@ -290,7 +290,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							//'usage' => "",
 							//"acl_supported"=>false
 					);
-					if($node['permission_level']<= \GO_Base_Model_Acl::READ_PERMISSION)
+					if($node['permission_level']<= \GO\Base\Model\Acl::READ_PERMISSION)
 					  $node['cls'] = 'em-readonly';
 		
 //					try{						
@@ -300,7 +300,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 //							$node['children']=$this->_getMailboxTreeNodes($rootMailboxes);
 //						}
 //						
-//					}catch(\GO_Base_Mail_ImapAuthenticationFailedException $e){
+//					}catch(\GO\Base\Mail\ImapAuthenticationFailedException $e){
 //						//$this->_checkImapConnectException($e,$node);
 //						$node['isAccount'] = false;
 //						$node['hasError'] = true;
@@ -389,7 +389,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					'account_id' => $mailbox->getAccount()->id,
 					'iconCls' => 'folder-default',
 					'id' => $nodeId,
-					'draggable'=>$mailbox->getAccount()->getPermissionLevel() > \GO_Base_Model_Acl::READ_PERMISSION,
+					'draggable'=>$mailbox->getAccount()->getPermissionLevel() > \GO\Base\Model\Acl::READ_PERMISSION,
 					'permission_level'=>$mailbox->getAccount()->getPermissionLevel(),
 					'noselect' => $mailbox->noselect,
 					'disabled' =>$fetchAllWithSubscribedFlag && $mailbox->noselect,
@@ -453,7 +453,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			
 			$nodes[$sortIndex .'-'. $mailbox->name] = $node;
 		}
-		\GO_Base_Util_Array::caseInsensitiveSort($nodes);
+		\GO\Base\Util\ArrayExtra::caseInsensitiveSort($nodes);
 
 		return array_values($nodes);
 	}
@@ -515,12 +515,12 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	
 	protected function actionUsernames($params){
 		
-//		$store = \GO_Base_Data_Store::newInstance(\GO_Email_Model_Account::model());
+//		$store = \GO\Base\Data\Store::newInstance(\GO_Email_Model_Account::model());
 //		$findParams= $store->getDefaultParams($params)->group('username');
 		
 		
 		
-		$store = \GO_Base_Data_Store::newInstance(\GO_Base_Model_User::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO\Base\Model\User::model());
 		$findParams= $store->getDefaultParams($params);
 		$findParams->joinModel(array( 
 					'model'=>'GO_Email_Model_Account',
@@ -529,14 +529,14 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					'foreignField'=>'user_id', //defaults to primary key of the remote model 
 					'tableAlias'=>'acc', //Optional table alias  
 					'type'=>'INNER', //defaults to INNER, 
-				//	'criteria'=>'' //GO_Base_Db_FindCriteria Optional extra join parameters
+				//	'criteria'=>'' //\GO\Base\Db\FindCriteria Optional extra join parameters
 			));
 		
 		$findParams->select('acc.username');
 		$findParams->joinCustomFields(false);
 		$findParams->group(array('acc.username'));
 		
-		$stmt = \GO_Base_Model_User::model()->find($findParams);
+		$stmt = \GO\Base\Model\User::model()->find($findParams);
 		
 		//$stmt = \GO_Email_Model_Account::model()->find($findParams);
 		$store->setStatement($stmt);
@@ -564,8 +564,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			
 			$targetAccountModel = \GO_Email_Model_Account::model()->findByPk($params['targetAccountId']);
 			
-			if($targetAccountModel->getPermissionLevel() <= \GO_Base_Model_Acl::READ_PERMISSION)
-			  throw new \GO_Base_Exception_AccessDenied();
+			if($targetAccountModel->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
+			  throw new \GO\Base\Exception\AccessDenied();
 			
 			$targetImapConnection = $targetAccountModel->openImapConnection($params["targetMailboxPath"]);
 

@@ -11,7 +11,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class postfixadmin extends db {
+class postfixadmin extends \db {
 	
 	function get_installation_mailboxes($go_installation_id)
 	{

@@ -77,7 +77,7 @@ class GO_Site_Controller_Content extends \GO\Base\Controller\AbstractJsonControl
 		$model->setAttributes($params);
 		
 		
-		if(\GO_Base_Util_Http::isPostRequest()){	
+		if(\GO\Base\Util\Http::isPostRequest()){	
 			
 			
 			$model->save();
@@ -95,7 +95,7 @@ class GO_Site_Controller_Content extends \GO\Base\Controller\AbstractJsonControl
 				
 		$model->setDefaultTemplate();
 
-		if(\GO_Base_Util_Http::isPostRequest()){
+		if(\GO\Base\Util\Http::isPostRequest()){
 			$model->save();
 			echo $this->renderSubmit($model);
 		}  else {

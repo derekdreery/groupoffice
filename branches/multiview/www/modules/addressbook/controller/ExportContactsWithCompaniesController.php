@@ -8,7 +8,7 @@
 /**
  * Class to export Contacts with companies together to a .csv file. 
  */
-class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Controller_AbstractExportController{
+class GO_Addressbook_Controller_ExportContactsWithCompanies extends \GO\Base\Controller\AbstractExportController{
 	
 	/**
 	 * Export the contact model to a .csv, including the company.
@@ -32,12 +32,12 @@ class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Cont
 		$stmt = $model->find($findParams);
 		
 		// Create the csv file
-		$csvFile = new \GO_Base_Fs_CsvFile(GO\Base\Fs\File::stripInvalidChars('export.csv'));
+		$csvFile = new \GO\Base\Fs\CsvFile(GO\Base\Fs\File::stripInvalidChars('export.csv'));
 		
 		// Output the download headers
-		\GO_Base_Util_Http::outputDownloadHeaders($csvFile, false);
+		\GO\Base\Util\Http::outputDownloadHeaders($csvFile, false);
 				
-		$csvWriter = new \GO_Base_Csv_Writer('php://output');
+		$csvWriter = new \GO\Base\Csv\Writer('php://output');
 		
 		$headerPrinted = false; 
 		

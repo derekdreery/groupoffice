@@ -13,7 +13,7 @@
  */
 
 
-class email extends db {
+class email extends \db {
 	var $last_error;
 	var $mail;
 

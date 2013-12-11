@@ -1,6 +1,6 @@
 <?php
 
-class GO_Freebusypermissions_FreebusypermissionsModule extends GO_Base_Module{
+class GO_Freebusypermissions_FreebusypermissionsModule extends \GO\Base\Module{
 	
 	/**
 	 * Initialize the listeners for the ActiveRecords
@@ -18,7 +18,7 @@ class GO_Freebusypermissions_FreebusypermissionsModule extends GO_Base_Module{
 		$fbAcl = \GO_Freebusypermissions_FreebusypermissionsModule::getFreeBusyAcl($target_user_id);
 		
 
-		return \GO_Base_Model_Acl::getUserPermissionLevel($fbAcl->acl_id, $request_user_id) > 0;
+		return \GO\Base\Model\Acl::getUserPermissionLevel($fbAcl->acl_id, $request_user_id) > 0;
 	}
 
 	public static function loadSettings(&$settingsController, &$params, &$response, $user) {
@@ -37,7 +37,7 @@ class GO_Freebusypermissions_FreebusypermissionsModule extends GO_Base_Module{
 		
 		if(!$fbAcl){
 			
-			$acl = new \GO_Base_Model_Acl();
+			$acl = new \GO\Base\Model\Acl();
 			$acl->user_id = $userId;
 			$acl->description = \GO_Freebusypermissions_Model_FreeBusyAcl::model()->tableName();
 			$acl->save();

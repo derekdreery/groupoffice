@@ -16,10 +16,10 @@ class GO_Defaultsite_Controller_Installation extends \GO\Base\Controller\Abstrac
 			throw new \Exception("defaultsite module is not available!");
 		}
 
-		$siteModule = new \GO_Base_Model_Module();
+		$siteModule = new \GO\Base\Model\Module();
 		$siteModule->id='site';
 		if(\GO::modules()->isInstalled('site') || $siteModule->save()){
-			$defaultSiteModule = new \GO_Base_Model_Module();
+			$defaultSiteModule = new \GO\Base\Model\Module();
 			$defaultSiteModule->id='defaultsite';
 			if(!$defaultSiteModule->save()){
 				$response['success'] = false;

@@ -1,5 +1,5 @@
 <?php
-class GO_Calendar_Customfields_Model_Event extends GO_Customfields_Model_AbstractCustomFieldsRecord{
+class GO_Calendar_Customfields_Model_Event extends \GO_Customfields_Model_AbstractCustomFieldsRecord{
 	public function extendsModel() {		
 		return "GO_Calendar_Model_Event";
 	}

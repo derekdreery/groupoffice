@@ -3,9 +3,9 @@
 //\GO::session()->runAsRoot();
 
 if(\GO::modules()->isInstalled('projects')){
-	$fp = \GO_Base_Db_FindParams::newInstance()->ignoreAcl();
+	$fp = \GO\Base\Db\FindParams::newInstance()->ignoreAcl();
 
-	$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()->addRawCondition('t.acl_id', 'p.acl_id');
+	$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()->addRawCondition('t.acl_id', 'p.acl_id');
 
 	$fp->join('pm_types', $joinCriteria,'p');
 

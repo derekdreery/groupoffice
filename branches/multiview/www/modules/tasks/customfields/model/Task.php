@@ -20,7 +20,7 @@
  *
  */	
  
-class GO_Tasks_Customfields_Model_Task extends GO_Customfields_Model_AbstractCustomFieldsRecord{
+class GO_Tasks_Customfields_Model_Task extends \GO_Customfields_Model_AbstractCustomFieldsRecord{
 	/**
 	 * Returns a static model of itself
 	 * 

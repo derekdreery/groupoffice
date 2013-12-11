@@ -24,9 +24,11 @@
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl> 
  * 
- * @method GO_Base_Model_Grouped model()
+ * @method Grouped model()
  */
-class GO_Base_Model_Grouped extends GO_Base_Model {
+namespace GO\Base\Model;
+
+class Grouped extends \GO\Base\Model {
 
 	
 	private $_attributes=array();
@@ -46,13 +48,13 @@ class GO_Base_Model_Grouped extends GO_Base_Model {
 	 * @param string $modelName
 	 * @param array $groupBy eg array('t.name')
 	 * @param string $selectFields
-	 * @param GO_Base_Db_FindParams $findParams
-	 * @return GO_Base_Db_ActiveStatement
+	 * @param \GO\Base\Db\FindParams $findParams
+	 * @return \GO\Base\Db\ActiveStatement
 	 */
-	public function load($modelName, $groupBy, $selectFields, GO_Base_Db_FindParams $findParams=null){
+	public function load($modelName, $groupBy, $selectFields, \GO\Base\Db\FindParams $findParams=null){
 		
 		if(!isset($findParams))
-			$findParams = \GO_Base_Db_FindParams::newInstance ();
+			$findParams = \GO\Base\Db\FindParams::newInstance ();
 		
 		$findParams->ignoreAcl()
 				->select($selectFields)
@@ -69,7 +71,7 @@ class GO_Base_Model_Grouped extends GO_Base_Model {
 		$a = $this->_attributes;
 		
 		$r = new \ReflectionObject($this);
-		$publicProperties = $r->getProperties(ReflectionProperty::IS_PUBLIC);
+		$publicProperties = $r->getProperties(\ReflectionProperty::IS_PUBLIC);
 		foreach($publicProperties as $prop){
 			//$att[$prop->getName()]=$prop->getValue($this);
 			//$prop = new \ReflectionProperty();

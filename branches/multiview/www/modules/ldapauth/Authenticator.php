@@ -66,7 +66,7 @@ class GO_Ldapauth_Authenticator {
 		
 		
 
-//		$ldapConn = new \GO_Base_Ldap_Connection(\GO::config()->ldap_host, \GO::config()->ldap_port, !empty(\GO::config()->ldap_tls));
+//		$ldapConn = new \GO\Base\Ldap\Connection(\GO::config()->ldap_host, \GO::config()->ldap_port, !empty(\GO::config()->ldap_tls));
 //
 //		//support old deprecated config.
 //		if(!empty(\GO::config()->ldap_user))
@@ -77,7 +77,7 @@ class GO_Ldapauth_Authenticator {
 //			if (!$bound)
 //				throw new \Exception("Failed to bind to LDAP server with RDN: " . \GO::config()->ldap_bind_rdn);
 //		}
-		$ldapConn = \GO_Base_Ldap_Connection::getDefault();
+		$ldapConn = \GO\Base\Ldap\Connection::getDefault();
 
 		if (!empty(\GO::config()->ldap_search_template))
 			$query = str_replace('{username}', $username, \GO::config()->ldap_search_template);
@@ -146,11 +146,11 @@ class GO_Ldapauth_Authenticator {
 
 	/**
 	 * 
-	 * @param GO_Base_Ldap_Record $user
+	 * @param \GO\Base\Ldap\Record $user
 	 * @param type $password
-	 * @return \GO_Base_Model_User
+	 * @return \GO\Base\Model\User
 	 */
-	public function syncUserWithLdapRecord(\GO_Base_Ldap_Record $record, $password = null) {
+	public function syncUserWithLdapRecord(\GO\Base\Ldap\Record $record, $password = null) {
 		
 		//disable password validation because we can't control the external passwords
 		\GO::config()->password_validate=false;
@@ -167,7 +167,7 @@ class GO_Ldapauth_Authenticator {
 		unset($attr['exclude']);
 		
 		try {
-			$user = \GO_Base_Model_User::model()->findSingleByAttribute('username', $attr['username']);
+			$user = \GO\Base\Model\User::model()->findSingleByAttribute('username', $attr['username']);
 			if ($user) {
 				\GO::debug("LDAPAUTH: Group-Office user already exists.");
 				if (isset($password) && !$user->checkPassword($password)) {
@@ -203,7 +203,7 @@ class GO_Ldapauth_Authenticator {
 				\GO::debug("LDAPAUTH: Group-Office user does not exist. Attempting to create it.");
 				\GO::debug($attr);
 
-				$user = new \GO_Base_Model_User();
+				$user = new \GO\Base\Model\User();
 				$user->setAttributes($attr);
 				$user->cutAttributeLengths();
 				$user->password = $password;
@@ -261,7 +261,7 @@ class GO_Ldapauth_Authenticator {
 		}
 	}
 
-	private function _checkEmailAccounts(\GO_Base_Model_User $user, $password) {
+	private function _checkEmailAccounts(\GO\Base\Model\User $user, $password) {
 		if (\GO::modules()->isInstalled('email')) {
 
 			$arr = explode('@', $user->email);
@@ -291,7 +291,7 @@ class GO_Ldapauth_Authenticator {
 		}
 	}
 
-	public function getUserAttributes(\GO_Base_Ldap_Record $record) {
+	public function getUserAttributes(\GO\Base\Ldap\Record $record) {
 
 		$userAttributes = array();
 
@@ -332,12 +332,12 @@ class GO_Ldapauth_Authenticator {
 	/**
 	 * Checks if an e-mail address is present in the LDAP directory
 	 * 	 
-	 * @param GO_Base_Ldap_Record $record
+	 * @param \GO\Base\Ldap\Record $record
 	 * @param string $email
 	 * @param array $validAddresses
 	 * @return type 
 	 */
-	public function validateUserEmail(\GO_Base_Ldap_Record $record, $email, &$validAddresses = array()) {
+	public function validateUserEmail(\GO\Base\Ldap\Record $record, $email, &$validAddresses = array()) {
 
 		$mapping = $this->_getMapping();
 

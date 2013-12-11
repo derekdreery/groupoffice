@@ -1,6 +1,6 @@
 <?php
 
-class GO_Email_Controller_Alias extends GO_Base_Controller_AbstractModelController {
+class GO_Email_Controller_Alias extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Email_Model_Alias';
 
@@ -14,7 +14,7 @@ class GO_Email_Controller_Alias extends GO_Base_Controller_AbstractModelControll
 	protected function getStoreParams($params) {
 		
 		if(empty($params['account_id'])){
-			$findParams = \GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO\Base\Db\FindParams::newInstance()
 							->select('t.*')
 							->joinModel(array(
 									'model' => 'GO_Email_Model_AccountSort',
@@ -22,14 +22,14 @@ class GO_Email_Controller_Alias extends GO_Base_Controller_AbstractModelControll
 									'localField' => 'account_id', //defaults to primary key of the model
 									'type' => 'LEFT',
 									'tableAlias'=>'sor',
-									"criteria"=>  \GO_Base_Db_FindCriteria::newInstance()->addCondition('user_id', \GO::user()->id,"=",'sor')
+									"criteria"=>  \GO\Base\Db\FindCriteria::newInstance()->addCondition('user_id', \GO::user()->id,"=",'sor')
 							))
 							->ignoreAdminGroup()
-							->permissionLevel(\GO_Base_Model_Acl::CREATE_PERMISSION)
+							->permissionLevel(\GO\Base\Model\Acl::CREATE_PERMISSION)
 							->order(array('order','default'), array('DESC','DESC'));
 		}else
 		{
-			$findParams = \GO_Base_Db_FindParams::newInstance();
+			$findParams = \GO\Base\Db\FindParams::newInstance();
 			$findParams->getCriteria()->addCondition("account_id", $params['account_id'])->addCondition("default", 1,'!=');
 		}
 
@@ -38,10 +38,10 @@ class GO_Email_Controller_Alias extends GO_Base_Controller_AbstractModelControll
 
 	public function formatStoreRecord($record, $model, $store) {
 
-		$r = new \GO_Base_Mail_EmailRecipients();
+		$r = new \GO\Base\Mail\EmailRecipients();
 		$r->addRecipient($model->email, $model->name);
 		$record['from'] = (string) $r;
-		$record['html_signature'] = \GO_Base_Util_String::text_to_html($model->signature);
+		$record['html_signature'] = \GO\Base\Util\String::text_to_html($model->signature);
 		$record['plain_signature'] = $model->signature;
 		$record['template_id']=0;
 		

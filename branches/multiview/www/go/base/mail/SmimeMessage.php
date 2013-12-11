@@ -21,7 +21,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 * @subpackage Signatures
 * @author Xavier De Cock <xdecock@gmail.com>
 */
-class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
+namespace GO\Base\Mail;
+
+class SmimeMessage extends \GO\Base\Mail\Message
 { 
 	protected $tempout;
 	protected $tempin;
@@ -196,7 +198,7 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 			$this->_doEncrypt();
 		}
 
-		return \GO_Base_Util_String::normalizeCrlf(file_get_contents($this->tempout));
+		return \GO\Base\Util\String::normalizeCrlf(file_get_contents($this->tempout));
 	}
 	
   /**
@@ -227,7 +229,7 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 			trigger_error('Could not read tempout file', E_USER_ERROR);
 			
 		while($line = fgets($fp)){			
-			$line = \GO_Base_Util_String::normalizeCrlf($line);
+			$line = \GO\Base\Util\String::normalizeCrlf($line);
 			
 			$is->write($line);
 		}

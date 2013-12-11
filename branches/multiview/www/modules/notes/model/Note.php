@@ -31,7 +31,7 @@ namespace GO\Notes\Model;
  * @property boolean $encrypted
  * @property string $password
  */
-class Note extends \GO_Base_Db_ActiveRecord {
+class Note extends \GO\Base\Db\ActiveRecord {
 	
 	private $_decrypted=false;
 	
@@ -94,7 +94,7 @@ class Note extends \GO_Base_Db_ActiveRecord {
 	 */
 	public function buildFilesPath() {
 
-		return 'notes/' . \GO_Base_Fs_Base::stripInvalidChars($this->category->name) . '/' . date('Y', $this->ctime) . '/' . \GO_Base_Fs_Base::stripInvalidChars($this->name).' ('.$this->id.')';
+		return 'notes/' . \GO\Base\Fs\Base::stripInvalidChars($this->category->name) . '/' . date('Y', $this->ctime) . '/' . \GO\Base\Fs\Base::stripInvalidChars($this->name).' ('.$this->id.')';
 	}
 	
 	public function defaultAttributes() {
@@ -124,7 +124,7 @@ class Note extends \GO_Base_Db_ActiveRecord {
 		
 		if(!empty($this->userInputPassword1)){
 			$this->password = crypt($this->userInputPassword1);
-			$this->content = \GO_Base_Util_Crypt::encrypt($this->content, $this->userInputPassword1);
+			$this->content = \GO\Base\Util\Crypt::encrypt($this->content, $this->userInputPassword1);
 		}else
 		{
 			$this->password="";
@@ -146,7 +146,7 @@ class Note extends \GO_Base_Db_ActiveRecord {
 			return false;		
 		}else{
 			$this->_decrypted=true;
-			$this->content = \GO_Base_Util_Crypt::decrypt($this->content, $password);
+			$this->content = \GO\Base\Util\Crypt::decrypt($this->content, $password);
 			return true;
 		}
 	}		

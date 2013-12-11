@@ -18,12 +18,14 @@
  * @authorWesley Smits <wsmits@intermesh.nl> 
  * @abstract
  */
-abstract class GO_Base_Data_AbstractStore {
+namespace GO\Base\Data;
+
+abstract class AbstractStore {
 
 	/**
 	 * The columnmodel for this store
 	 * 
-	 * @var GO_Base_Data_ColumnModel 
+	 * @var \GO\Base\Data\ColumnModel 
 	 */
 	protected $_columnModel=false;
 	
@@ -46,18 +48,18 @@ abstract class GO_Base_Data_AbstractStore {
   /**
 	 * The constructor of the Store
 	 * 
-	 * A Store always needs an GO_Base_Data_ColumnModel so you can add a 
+	 * A Store always needs an \GO\Base\Data\ColumnModel so you can add a 
 	 * columnModel on the creation of a new object of the Store class.
-	 * If no GO_Base_Data_ColumnModel is given then this Store object makes his own 
+	 * If no \GO\Base\Data\ColumnModel is given then this Store object makes his own 
 	 * empty columnModel
 	 * 
-	 * @param GO_Base_Data_ColumnModel $columnModel 
+	 * @param \GO\Base\Data\ColumnModel $columnModel 
 	 */
   public function __construct($columnModel=false) {        
 		if($columnModel)
 			$this->_columnModel = $columnModel;
 		else
-			$this->_columnModel = new \GO_Base_Data_ColumnModel();
+			$this->_columnModel = new \GO\Base\Data\ColumnModel();
 		
 		$this->response['results'] = array();
   }
@@ -72,7 +74,7 @@ abstract class GO_Base_Data_AbstractStore {
 	/**
 	 * Returns the column model
 	 * 
-	 * @return GO_Base_Data_ColumnModel 
+	 * @return \GO\Base\Data\ColumnModel 
 	 */
 	public function getColumnModel(){
 		return $this->_columnModel;

@@ -1,5 +1,5 @@
 <?php
-class GO_Customfields_Controller_Category extends GO_Base_Controller_AbstractModelController{
+class GO_Customfields_Controller_Category extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO_Customfields_Model_Category';	
 
@@ -19,7 +19,7 @@ class GO_Customfields_Controller_Category extends GO_Base_Controller_AbstractMod
 
 	protected function getStoreParams($params) {
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->order('sort_index');
 		
 		$findParams->getCriteria()->addCondition('extends_model', $params['extends_model']);						
@@ -36,7 +36,7 @@ class GO_Customfields_Controller_Category extends GO_Base_Controller_AbstractMod
 
 		$response['enabled_customfield_categories']=$disableCategories!=false;
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->order('sort_index');
 		
 		$findParams->getCriteria()->addCondition('extends_model', $params['model_name']);						
@@ -118,9 +118,9 @@ class GO_Customfields_Controller_Category extends GO_Base_Controller_AbstractMod
 		}
 		
 		$stmt = \GO_Customfields_Model_EnabledCategory::model()->find(
-			\GO_Base_Db_FindParams::newInstance()
+			\GO\Base\Db\FindParams::newInstance()
 						->criteria(
-								\GO_Base_Db_FindCriteria::newInstance()
+								\GO\Base\Db\FindCriteria::newInstance()
 									->addInCondition('category_id', $categories, 't', true, true)
 									->addCondition('model_name', $params['model_name'])
 										->addCondition('model_id', $params['model_id'])

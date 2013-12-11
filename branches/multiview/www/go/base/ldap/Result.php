@@ -1,10 +1,12 @@
 <?php
-class GO_Base_Ldap_Result{
+namespace GO\Base\Ldap;
+
+class Result{
 	
 	/**
 	 * The LDAP connection
 	 * 
-	 * @var GO_Base_Ldap_Connection 
+	 * @var \GO\Base\Ldap\Connection 
 	 */
 	private $_ldapConn;
 	private $_searchId;
@@ -13,7 +15,7 @@ class GO_Base_Ldap_Result{
 	
 	private $_entryId;
 	
-	public function __construct(\GO_Base_Ldap_Connection $ldapConn, $searchId) {
+	public function __construct(\GO\Base\Ldap\Connection $ldapConn, $searchId) {
 		$this->_searchId=$searchId;
 		$this->_ldapConn=$ldapConn;
 	}
@@ -21,7 +23,7 @@ class GO_Base_Ldap_Result{
 	/**
 	 * Fetch the next record or return false if there's none.
 	 * 
-	 * @return GO_Base_Ldap_Record 
+	 * @return \GO\Base\Ldap\Record 
 	 */
 	public function fetch(){
 		if(!isset($this->_numEntry)){
@@ -36,7 +38,7 @@ class GO_Base_Ldap_Result{
 		if(!$this->_entryId)
 			return false;
 		
-		return new \GO_Base_Ldap_Record($this->_ldapConn, $this->_entryId);
+		return new \GO\Base\Ldap\Record($this->_ldapConn, $this->_entryId);
 	}
 	
 	/**

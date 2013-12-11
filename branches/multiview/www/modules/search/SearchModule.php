@@ -1,5 +1,5 @@
 <?php
-class GO_Search_SearchModule extends GO_Base_Module{
+class GO_Search_SearchModule extends \GO\Base\Module{
 	
 	public function autoInstall() {
 		return true;

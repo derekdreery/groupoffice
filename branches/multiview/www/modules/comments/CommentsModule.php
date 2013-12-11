@@ -1,5 +1,5 @@
 <?php
-class GO_Comments_CommentsModule extends GO_Base_Module{
+class GO_Comments_CommentsModule extends \GO\Base\Module{
 	public function autoInstall() {
 		return true;
 	}

@@ -14,7 +14,9 @@
  * XLS Output stream.
  * 
  */
-class GO_Base_Export_ExportXLS extends GO_Base_Export_AbstractExport {
+namespace GO\Base\Export;
+
+class ExportXLS extends \GO\Base\Export\AbstractExport {
 
 	public static $showInView = true;
 	public static $name = "XLS (Excel)";

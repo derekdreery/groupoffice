@@ -17,7 +17,7 @@
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
-class GO_files_Controller_FolderPreference extends GO_Base_Controller_AbstractModelController {
+class GO_files_Controller_FolderPreference extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Files_Model_FolderPreference';
 	

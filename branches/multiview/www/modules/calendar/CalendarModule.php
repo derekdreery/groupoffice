@@ -1,6 +1,6 @@
 <?php
 
-class GO_Calendar_CalendarModule extends GO_Base_Module{
+class GO_Calendar_CalendarModule extends \GO\Base\Module{
 	
 	
 	public function author() {
@@ -28,7 +28,7 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 	}
 	
 	public static function getDefaultCalendar($userId){
-		$user = \GO_Base_Model_User::model()->findByPk($userId);
+		$user = \GO\Base\Model\User::model()->findByPk($userId);
 		$calendar = \GO_Calendar_Model_Calendar::model()->getDefault($user);		
 		return $calendar;
 	}
@@ -38,7 +38,7 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 	} 
 	
 	public static function initListeners() {		
-		\GO_Base_Model_Reminder::model()->addListener('dismiss', "GO_Calendar_Model_Event", "reminderDismissed");
+		\GO\Base\Model\Reminder::model()->addListener('dismiss', "GO_Calendar_Model_Event", "reminderDismissed");
 	}
 	
 	
@@ -88,7 +88,7 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 		$group->save();
 		
 		
-		$cron = new \GO_Base_Cron_CronJob();
+		$cron = new \GO\Base\Cron\CronJob();
 		
 		$cron->name = 'Calendar publisher';
 		$cron->active = true;

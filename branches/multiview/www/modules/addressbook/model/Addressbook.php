@@ -25,7 +25,7 @@
  * @property int $user_id
  */
 
- class GO_Addressbook_Model_Addressbook extends GO_Base_Model_AbstractUserDefaultModel{
+ class GO_Addressbook_Model_Addressbook extends \GO\Base\Model\AbstractUserDefaultModel{
 		 
 	 /**
 	 * Returns a static model of itself

@@ -1,6 +1,8 @@
 <?php
 
-class GO_Base_View_Theme{
+namespace GO\Base\View;
+
+class Theme{
 	/**
 	 * Get the name of the theme that is selected by the user.
 	 * 

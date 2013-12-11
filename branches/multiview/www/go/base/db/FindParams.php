@@ -15,7 +15,7 @@
  */
 
 /**
- * The parameters for \GO_Base_Db_ActiveRecord::find() can be constructed with this class
+ * The parameters for \GO\Base\Db\ActiveRecord::find() can be constructed with this class
  *
  * @package GO.base.db
  * @version $Id$
@@ -23,7 +23,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>  * 
  */
 
-class GO_Base_Db_FindParams{
+namespace GO\Base\Db;
+
+class FindParams{
 	
 	private $_params=array();
 	
@@ -44,7 +46,7 @@ class GO_Base_Db_FindParams{
 	 * Set the Distinct select option
 	 * 
 	 * @param boolean $useDistinct
-	 * @return \GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function distinct($useDistinct = true){
 		$this->_params['distinct'] = $useDistinct;
@@ -53,9 +55,9 @@ class GO_Base_Db_FindParams{
 	
 	
 	/**
-	 * Create a new instance of GO_Base_Db_FindParams
+	 * Create a new instance of FindParams
 	 * 
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public static function newInstance(){
 		return new self;
@@ -64,18 +66,18 @@ class GO_Base_Db_FindParams{
 	/**
 	 * Merge this with another findParams object.
 	 * 
-	 * @param GO_Base_Db_FindParams $findParams 
-	 * @return GO_Base_Db_FindParams 
+	 * @param FindParams $findParams 
+	 * @return FindParams 
 	 */
 	public function mergeWith($findParams){
 		if(!$findParams)
 			$findParams=array();
 		elseif(!is_array($findParams)){
 			
-			if($findParams instanceof \GO_Base_Db_FindParams)
+			if($findParams instanceof FindParams)
 				$findParams = $findParams->getParams();
 			else
-				throw new \Exception('$findParams must be an instance of GO_Base_Db_FindParams');
+				throw new \Exception('$findParams must be an instance of FindParams');
 		}
 		
 		
@@ -100,7 +102,7 @@ class GO_Base_Db_FindParams{
 	 * Set to true if you want to ignore ACL permissions.
 	 * 
 	 * @param boolean $value
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function ignoreAcl($value=true){
 		$this->_params['ignoreAcl']=$value;
@@ -111,7 +113,7 @@ class GO_Base_Db_FindParams{
 	 * Join the table that contains the ACL field. For example ab_addressbook AS addressbook for the contact model.
 	 * 
 	 * @param boolean $value
-	 * @return \GO_Base_Db_FindParams
+	 * @return FindParams
 	 */
 	public function joinAclFieldTable($value=true){
 		$this->_params['joinAclFieldTable']=$value;
@@ -126,7 +128,7 @@ class GO_Base_Db_FindParams{
 	 * too much info on screen.
 	 * 
 	 * @param boolean $value
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function ignoreAdminGroup($value=true){
 		$this->_params['ignoreAdminGroup']=$value;
@@ -140,7 +142,7 @@ class GO_Base_Db_FindParams{
 	 * Remember the model table is aliased with 't'. Using this may result in incomplete models.
 	 * 
 	 * @param string $fields
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */					
 	public function select($fields='t.*'){
 		$this->_params['fields']=$fields;
@@ -165,11 +167,11 @@ class GO_Base_Db_FindParams{
 	 * Insert a plain join SQL string
 	 * 
 	 * @param string $tableName
-	 * @param GO_Base_Db_FindCriteria $criteria
+	 * @param \GO\Base\Db\FindCriteria $criteria
 	 * @param String $tableAlias
 	 * @param String $type INNER or LEFT etc.
 	 * 
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function join($tableName, $criteria, $tableAlias = false, $type='INNER'){
 				
@@ -219,16 +221,16 @@ class GO_Base_Db_FindParams{
 	 * 
 	 * For example select all users with their event counts:
 	 * 
-	 *  \GO_Base_Model_User::model()->addRelation('events', array(
-	 *		'type'=>  \GO_Base_Db_ActiveRecord::HAS_MANY, 
+	 *  \GO\Base\Model\User::model()->addRelation('events', array(
+	 *		'type'=>  \GO\Base\Db\ActiveRecord::HAS_MANY, 
 	 *		'model'=>'GO_Calendar_Model_Event', 
 	 *		'field'=>'user_id'				
 	 *	));
 	 *		
-	 *		$fp = \GO_Base_Db_FindParams::newInstance()->groupRelation('events', 'count(events.id) as eventCount');
+	 *		$fp = FindParams::newInstance()->groupRelation('events', 'count(events.id) as eventCount');
 	 *
 	 *				
-	 *		$stmt = \GO_Base_Model_User::model()->find($fp);
+	 *		$stmt = \GO\Base\Model\User::model()->find($fp);
 	 *		
 	 *		foreach($stmt as $user){
 	 *			echo $user->name.': '.$user->eventCount."<br />";
@@ -266,10 +268,10 @@ class GO_Base_Db_FindParams{
 	/**
 	 * Add a find criteria object to add where conditions
 	 * 
-	 * @param GO_Base_Db_FindCriteria $criteria
-	 * @return GO_Base_Db_FindParams 
+	 * @param \GO\Base\Db\FindCriteria $criteria
+	 * @return FindParams 
 	 */
-	public function criteria(\GO_Base_Db_FindCriteria $criteria){
+	public function criteria(\GO\Base\Db\FindCriteria $criteria){
 		if(!isset($this->_params['criteriaObject']))
 			$this->_params['criteriaObject']=$criteria;
 		else
@@ -281,11 +283,11 @@ class GO_Base_Db_FindParams{
 	/**
 	 * Get the find criteria object so you can add more conditions.
 	 * 
-	 * @return GO_Base_Db_FindCriteria 
+	 * @return \GO\Base\Db\FindCriteria 
 	 */
 	public function getCriteria(){
 		if(!isset($this->_params['criteriaObject']))
-			$this->_params['criteriaObject']= new \GO_Base_Db_FindCriteria();
+			$this->_params['criteriaObject']= new \GO\Base\Db\FindCriteria();
 		
 		return $this->_params['criteriaObject'];
 	}
@@ -293,10 +295,10 @@ class GO_Base_Db_FindParams{
 	/**
 	 * Make this query available for exports to CSV, PDF etc.
 	 * It will be stored in the session so that 
-	 * GO_Base_Controller_AbstractModelController can reuise the params.
+	 * \GO\Base\Controller\AbstractModelController can reuise the params.
 	 * 
 	 * @param string $name
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function export($name){
 		$this->_params['export']=$name;
@@ -308,7 +310,7 @@ class GO_Base_Db_FindParams{
 	 * 
 	 * @param string $query
 	 * @param array $fields When you ommit this it will search all text fields
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function searchQuery($query, $fields=array()){
 		$this->_params['searchQuery']=$query;
@@ -322,7 +324,7 @@ class GO_Base_Db_FindParams{
 	 * This needs to be RAW value of the field with the "table" prefix. Example: array('`pr`.`name`','`t`.`name`')
 	 * 
 	 * @param array $fields 
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function searchFields($fields=array()){
 		$this->_params['searchQueryFields']=$fields;
@@ -334,7 +336,7 @@ class GO_Base_Db_FindParams{
 	 * Join the custom fields table if it's available for the model.
 	 * 
 	 * @param boolean $value
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function joinCustomFields($value=true){
 		$this->_params['joinCustomFields']=$value;
@@ -348,10 +350,12 @@ class GO_Base_Db_FindParams{
 	 * SELECT FOUND_ROWS(). It's very useful for paging grids but for other 
 	 * purposes you probably just want to use rowCount() on the ActiveStatement.
 	 * 
-	 * (See class GO_Base_Db_ActiveStatement 
+	 * (See namespace GO\Base\Db;
+
+class ActiveStatement 
 	 * 
 	 * @param boolean $value
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function calcFoundRows($value=true){
 		$this->_params['calcFoundRows']=$value;
@@ -363,7 +367,7 @@ class GO_Base_Db_FindParams{
 	 * 
 	 * @param string/array $field or array('field1','field2') for multiple values
 	 * @param string/array $direction 'ASC' or array('ASC','DESC') for multiple values
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function order($field, $direction='ASC'){
 		$this->_params['order']=$field;
@@ -376,7 +380,7 @@ class GO_Base_Db_FindParams{
 	 * Adds a group by clause.
 	 * 
 	 * @param array $fields eg. array('t.id');
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function group($fields){
 		$this->_params['group']=$fields;
@@ -388,7 +392,7 @@ class GO_Base_Db_FindParams{
 	 * with user input.
 	 * 
 	 * @param string $rawSQL
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function having($rawSQL){
 		$this->_params['having']=$rawSQL;
@@ -400,7 +404,7 @@ class GO_Base_Db_FindParams{
 	 * Permissions will not be checked when using this option!
 	 * 
 	 * @param boolean $value
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function single($value=true, $disableModelCache=false){
 		$this->_params['single']=$value;
@@ -426,10 +430,10 @@ class GO_Base_Db_FindParams{
 	 *			'tableAlias'=>'l', //Optional table alias
 	 * 
 	 *			'type'=>'INNER' //defaults to INNER,
-	 *			'criteria'=>GO_Base_Db_FindCriteria // Optional extra join parameters
+	 *			'criteria'=>\GO\Base\Db\FindCriteria // Optional extra join parameters
 	 *			)
 	 * 
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function joinModel($params){	
 			
@@ -451,7 +455,7 @@ class GO_Base_Db_FindParams{
 			$params['tableAlias']=false;
 
 		if(!isset($params['criteria'])){
-			$params['criteria'] = new \GO_Base_Db_FindCriteria();
+			$params['criteria'] = new \GO\Base\Db\FindCriteria();
 		}				
 		
 		$table = $params['tableAlias'] ? $params['tableAlias'] : $joinModel->tableName();
@@ -478,7 +482,7 @@ class GO_Base_Db_FindParams{
 	 * Skip this number of items
 	 * 
 	 * @param int $start
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function start($start=0){
 		$this->_params['start']=$start;
@@ -489,7 +493,7 @@ class GO_Base_Db_FindParams{
 	 * Limit the number of models returned
 	 * 
 	 * @param int $limit
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function limit($limit=0){
 		$this->_params['limit']=$limit;
@@ -501,9 +505,9 @@ class GO_Base_Db_FindParams{
 	 * 
 	 * Note: this is ignored when you use ignoreAcl()
 	 * 
-	 * @param int $level See \GO_Base_Model_Acl constants for available levels. It defaults to GO_Base_Model_Acl::READ_PERMISSION
+	 * @param int $level See \GO\Base\Model\Acl constants for available levels. It defaults to \GO\Base\Model\Acl::READ_PERMISSION
 	 * @param int $user_id Defaults to the currently logged in user
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function permissionLevel($level, $user_id=false){
 		$this->_params['permissionLevel']=$level;
@@ -516,7 +520,7 @@ class GO_Base_Db_FindParams{
 	 * Set to true to debug the SQL code in the debug log
 	 * 
 	 * @param boolean $value
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function debugSql($value=true){
 		$this->_params['debugSql']=$value;
@@ -525,11 +529,11 @@ class GO_Base_Db_FindParams{
 	}
 	
 	/**
-	 * For internal use by GO_Base_Db_ActiveRecord only. This will be set to the 
+	 * For internal use by \GO\Base\Db\ActiveRecord only. This will be set to the 
 	 * relation name when a relational query is made.
 	 * 
 	 * @param string $name
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function relation($name){
 		$this->_params['relation']=$name;
@@ -538,13 +542,13 @@ class GO_Base_Db_FindParams{
 	}
 	
 	/**
-	 * For internal use by GO_Base_Db_ActiveRecord only. This is set with 
+	 * For internal use by \GO\Base\Db\ActiveRecord only. This is set with 
 	 * MANY_MANY relations that use a link table with a model.
 	 * 
 	 * @param string $modelName The model name
 	 * @param string $localPkField Attribute field that holds the pk of the other model.
 	 * @param int $localPk Primary key of the model
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function linkModel($modelName, $localPkField, $localPk){
 		
@@ -560,7 +564,7 @@ class GO_Base_Db_FindParams{
 	 * Limit the number of models returned
 	 * 
 	 * @param int $limit
-	 * @return GO_Base_Db_FindParams 
+	 * @return FindParams 
 	 */
 	public function fetchClass($className=null){
 		$this->_params['fetchClass']=$className;

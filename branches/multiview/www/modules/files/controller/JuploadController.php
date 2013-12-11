@@ -74,8 +74,8 @@ class GO_Files_Controller_Jupload extends \GO\Base\Controller\AbstractController
 			\GO::session()->values['files']['uploadqueue'] = array();
 
 		try {
-			$chunkTmpFolder = new \GO_Base_Fs_Folder(\GO::config()->tmpdir . 'juploadqueue/chunks');
-			$tmpFolder = new \GO_Base_Fs_Folder(\GO::config()->tmpdir . 'juploadqueue');
+			$chunkTmpFolder = new \GO\Base\Fs\Folder(\GO::config()->tmpdir . 'juploadqueue/chunks');
+			$tmpFolder = new \GO\Base\Fs\Folder(\GO::config()->tmpdir . 'juploadqueue');
 
 			$tmpFolder->create();
 			$chunkTmpFolder->create();
@@ -116,7 +116,7 @@ class GO_Files_Controller_Jupload extends \GO\Base\Controller\AbstractController
 								(!empty($params['relpathinfo' . $count]) && isset($params['jupart']) && !empty($params['jufinal']))) {
 					$fullpath = \GO::config()->tmpdir . 'juploadqueue' . '/' . str_replace('\\','/',$params['relpathinfo'.$count]);
 
-					$dir = new \GO_Base_Fs_Folder($fullpath);
+					$dir = new \GO\Base\Fs\Folder($fullpath);
 					$dir->create();
 					$subdir = true;
 					$file->move($dir);
@@ -140,7 +140,7 @@ class GO_Files_Controller_Jupload extends \GO\Base\Controller\AbstractController
 		echo "SUCCESS\n";
 	}
 	
-	private function _findHighestParent(\GO_Base_Fs_Folder $dir){
+	private function _findHighestParent(\GO\Base\Fs\Folder $dir){
 		$parent = $dir;
 
 		while($parent->parent()->name()!="juploadqueue"){

@@ -31,7 +31,7 @@ class GO_Core_Controller_Cron extends \GO\Base\Controller\AbstractJsonController
 	 * @param int $id
 	 */
   protected function actionUpdate($id) {
-		$model = \GO_Base_Cron_CronJob::model()->findByPk($id);
+		$model = \GO\Base\Cron\CronJob::model()->findByPk($id);
 		
 		$remoteComboFields = array();
 		
@@ -44,7 +44,7 @@ class GO_Core_Controller_Cron extends \GO\Base\Controller\AbstractJsonController
 			$select = false;
 		}
 		
-		if(\GO_Base_Util_Http::isPostRequest()) {
+		if(\GO\Base\Util\Http::isPostRequest()) {
 			$model->setAttributes($_POST);
 			$model->save();
 			echo $this->renderSubmit($model);
@@ -59,9 +59,9 @@ class GO_Core_Controller_Cron extends \GO\Base\Controller\AbstractJsonController
 	 */
 	protected function actionCreate() {
 		
-		$model = new GO_Base_Cron_CronJob();
+		$model = new \GO\Base\Cron\CronJob();
 		
-		if(\GO_Base_Util_Http::isPostRequest()) {
+		if(\GO\Base\Util\Http::isPostRequest()) {
 			$model->setAttributes($_POST);
 			$model->save();
 			echo $this->renderSubmit($model);
@@ -77,11 +77,11 @@ class GO_Core_Controller_Cron extends \GO\Base\Controller\AbstractJsonController
 	 */
 	public function actionStore($params){
 		
-		$colModel = new \GO_Base_Data_ColumnModel(\GO_Base_Cron_CronJob::model());
+		$colModel = new \GO\Base\Data\ColumnModel(\GO\Base\Cron\CronJob::model());
 					
 		$colModel->formatColumn('active', '$model->isRunning()?\GO::t("running","cron"):$model->active');
 		
-		$store = new GO_Base_Data_DbStore('GO_Base_Cron_CronJob',$colModel , $params);
+		$store = new \GO\Base\Data\DbStore('\GO\Base\Cron\CronJob',$colModel , $params);
 		$store->defaultSort = 'name';
 		
 		echo $this->renderStore($store);	
@@ -104,29 +104,29 @@ class GO_Core_Controller_Cron extends \GO\Base\Controller\AbstractJsonController
 		$till = false;
 		
 		if(isset($params['from']))
-			$from = new GO_Base_Util_Date_DateTime($params['from']);
+			$from = new \GO\Base\Util\Date_DateTime($params['from']);
 		
 		if(isset($params['till']))
-			$till = new GO_Base_Util_Date_DateTime($params['till']);
+			$till = new \GO\Base\Util\Date_DateTime($params['till']);
 		
 		if(!$from)
-			$from = new GO_Base_Util_Date_DateTime();
+			$from = new \GO\Base\Util\Date_DateTime();
 		
 		if(!$till){
-			$till = new GO_Base_Util_Date_DateTime();
+			$till = new \GO\Base\Util\Date_DateTime();
 			$till->add(new DateInterval('P1D'));
 		}
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()
-			->criteria(\GO_Base_Db_FindCriteria::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
+			->criteria(\GO\Base\Db\FindCriteria::newInstance()
 				->addCondition('nextrun', $till->getTimestamp(),'<')
 				->addCondition('nextrun', $from->getTimestamp(),'>')
 				->addCondition('active', 1,'=')
 			);
 		
-		$colModel = new \GO_Base_Data_ColumnModel(\GO_Base_Cron_CronJob::model());
+		$colModel = new \GO\Base\Data\ColumnModel(\GO\Base\Cron\CronJob::model());
 		
-		$store = new GO_Base_Data_DbStore('GO_Base_Cron_CronJob',$colModel , $params, $findParams);
+		$store = new \GO\Base\Data\DbStore('\GO\Base\Cron\CronJob',$colModel , $params, $findParams);
 		$store->defaultSort = 'nextrun';
 		
 		$result = $this->renderStore($store);
@@ -138,16 +138,16 @@ class GO_Core_Controller_Cron extends \GO\Base\Controller\AbstractJsonController
 	}
 	
 	private function _findNextCron(){
-		$currentTime = new GO_Base_Util_Date_DateTime();
+		$currentTime = new \GO\Base\Util\Date_DateTime();
 
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 			->single()
-			->criteria(\GO_Base_Db_FindCriteria::newInstance()
+			->criteria(\GO\Base\Db\FindCriteria::newInstance()
 				->addCondition('nextrun', $currentTime->getTimestamp(),'<')
 				->addCondition('active',true)
 			);
 		
-		return \GO_Base_Cron_CronJob::model()->find($findParams);
+		return \GO\Base\Cron\CronJob::model()->find($findParams);
 	}
 	/**
 	 * This is the function that is called from the server's cron deamon.
@@ -181,7 +181,7 @@ class GO_Core_Controller_Cron extends \GO\Base\Controller\AbstractJsonController
 		$response = array();
 		$response['results'] = array();
 		
-		$cronJobCollection = new GO_Base_Cron_CronCollection();
+		$cronJobCollection = new \GO\Base\Cron\CronCollection();
 		
 		$cronfiles = $cronJobCollection->getAllCronJobClasses();
 		$response['total'] = count($cronfiles);
@@ -206,7 +206,7 @@ class GO_Core_Controller_Cron extends \GO\Base\Controller\AbstractJsonController
 	 */
 	protected function actionLoadSettings($params) {
 		
-		$settings =  \GO_Base_Cron_CronSettings::load();
+		$settings =  \GO\Base\Cron\CronSettings::load();
 		
 		return array(
 				'success'=>true,
@@ -222,7 +222,7 @@ class GO_Core_Controller_Cron extends \GO\Base\Controller\AbstractJsonController
 	 */
 	protected function actionSubmitSettings($params) {
 		
-		$settings =  \GO_Base_Cron_CronSettings::load();
+		$settings =  \GO\Base\Cron\CronSettings::load();
 
 		return array(
 				'success'=>$settings->saveFromArray($params),

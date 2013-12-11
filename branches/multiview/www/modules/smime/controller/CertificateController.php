@@ -9,12 +9,12 @@ class GO_Smime_Controller_Certificate extends \GO\Base\Controller\AbstractContro
 
 		$cert = GO_Smime_Model_Certificate::model()->findByPk($account->id);
 		if (!$cert)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 
 		$filename = str_replace(array('@', '.'), '-', $account->getDefaultAlias()->email) . '.p12';
 
 		$file = new GO\Base\Fs\File($filename);
-		GO_Base_Util_Http::outputDownloadHeaders($file);
+		\GO\Base\Util\Http::outputDownloadHeaders($file);
 
 		echo $cert->cert;
 	}
@@ -79,7 +79,7 @@ class GO_Smime_Controller_Certificate extends \GO\Base\Controller\AbstractContro
 					$certData = $pubCertFile->getContents();
 
 					$arr = openssl_x509_parse($certData);
-					$email = GO_Base_Util_String::get_email_from_string($arr['extensions']['subjectAltName']);
+					$email = \GO\Base\Util\String::get_email_from_string($arr['extensions']['subjectAltName']);
 
 					$pubCertFile->delete();
 
@@ -96,7 +96,7 @@ class GO_Smime_Controller_Certificate extends \GO\Base\Controller\AbstractContro
 		
 		if(!isset($arr) && isset($certData)){
 			$arr = openssl_x509_parse($certData);
-			$email = GO_Base_Util_String::get_email_from_string($arr['extensions']['subjectAltName']);
+			$email = \GO\Base\Util\String::get_email_from_string($arr['extensions']['subjectAltName']);
 		}else if(empty($email)){
 			$email = 'unknown';
 		}
@@ -144,8 +144,8 @@ class GO_Smime_Controller_Certificate extends \GO\Base\Controller\AbstractContro
 			}
 
 			$response['html'] .= '</td></tr>';
-			$response['html'] .= '<tr><td>'.GO::t('valid_from','smime').':</td><td>' . GO_Base_Util_Date::get_timestamp($arr['validFrom_time_t']) . '</td></tr>';
-			$response['html'] .= '<tr><td>'.GO::t('valid_to','smime').':</td><td>' . GO_Base_Util_Date::get_timestamp($arr['validTo_time_t']) . '</td></tr>';
+			$response['html'] .= '<tr><td>'.GO::t('valid_from','smime').':</td><td>' . \GO\Base\Util\Date::get_timestamp($arr['validFrom_time_t']) . '</td></tr>';
+			$response['html'] .= '<tr><td>'.GO::t('valid_to','smime').':</td><td>' . \GO\Base\Util\Date::get_timestamp($arr['validTo_time_t']) . '</td></tr>';
 			$response['html'] .= '</table>';
 		}
 

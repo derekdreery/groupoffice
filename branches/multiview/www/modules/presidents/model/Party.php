@@ -17,7 +17,7 @@
  * @property int $id
  * @property string $name
  */
-class GO_Presidents_Model_Party extends GO_Base_Db_ActiveRecord {
+class GO_Presidents_Model_Party extends \GO\Base\Db\ActiveRecord {
 	/**
 	 * Returns a static model of itself
 	 * 

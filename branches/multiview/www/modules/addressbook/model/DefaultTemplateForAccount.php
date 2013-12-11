@@ -1,5 +1,5 @@
 <?php
-class GO_Addressbook_Model_DefaultTemplateForAccount extends GO_Base_Db_ActiveRecord {
+class GO_Addressbook_Model_DefaultTemplateForAccount extends \GO\Base\Db\ActiveRecord {
 	
 	public static function model($className=__CLASS__)
 	{	
@@ -25,7 +25,7 @@ class GO_Addressbook_Model_DefaultTemplateForAccount extends GO_Base_Db_ActiveRe
 	protected function defaultAttributes() {
 		$attr = parent::defaultAttributes();
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()->limit(1);
+		$findParams = \GO\Base\Db\FindParams::newInstance()->limit(1);
 		$stmt = \GO_Addressbook_Model_Template::model()->find($findParams);
 		
 		if($template=$stmt->fetch())

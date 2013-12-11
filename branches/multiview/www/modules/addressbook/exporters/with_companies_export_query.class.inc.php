@@ -1,6 +1,6 @@
 <?php
 require($GLOBALS['GO_CONFIG']->class_path.'export/csv_export_query.class.inc.php');
-class with_companies_export_query extends csv_export_query{
+class with_companies_export_query extends \csv_export_query{
 
 	function init_company_columns()
 	{

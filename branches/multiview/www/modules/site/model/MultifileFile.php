@@ -27,7 +27,7 @@
  * @property int $order
  */
 
-class GO_Site_Model_MultifileFile extends GO_Base_Db_ActiveRecord{
+class GO_Site_Model_MultifileFile extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns the table name

@@ -1,6 +1,6 @@
 <?php
 
-class GO_Calendar_Controller_GroupAdmin extends GO_Base_Controller_AbstractMultiSelectModelController {
+class GO_Calendar_Controller_GroupAdmin extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model we are showing and adding to the other model.
@@ -8,7 +8,7 @@ class GO_Calendar_Controller_GroupAdmin extends GO_Base_Controller_AbstractMulti
 	 * eg. When selecting calendars for a user in the sync settings this is set to GO_Calendar_Model_Calendar
 	 */
 	public function modelName() {
-		return 'GO_Base_Model_User';
+		return '\GO\Base\Model\User';
 	}
 	
 	/**

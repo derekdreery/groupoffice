@@ -19,7 +19,9 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_ViesDown extends Exception
+namespace GO\Base\Exception;
+
+class ViesDown extends \Exception
 {
 
 	public function __construct($message='') {

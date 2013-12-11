@@ -27,7 +27,7 @@
  * @property int $id
  */
 
-class GO_Customfields_Model_FieldSelectOption extends GO_Base_Db_ActiveRecord{
+class GO_Customfields_Model_FieldSelectOption extends \GO\Base\Db\ActiveRecord{
 		
 	/**
 	 * Returns a static model of itself

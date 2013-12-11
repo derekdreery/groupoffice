@@ -25,7 +25,7 @@
  * @property boolean $always_sign
  */
 
-class GO_Smime_Model_Certificate extends GO_Base_Db_ActiveRecord {
+class GO_Smime_Model_Certificate extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself

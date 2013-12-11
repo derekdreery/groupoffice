@@ -24,7 +24,9 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_Save extends Exception
+namespace GO\Base\Exception;
+
+class Save extends \Exception
 {
 
 	public function __construct($message='') {

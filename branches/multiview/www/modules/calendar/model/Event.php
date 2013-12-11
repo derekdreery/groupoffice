@@ -45,7 +45,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
-class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
+class GO_Calendar_Model_Event extends \GO\Base\Db\ActiveRecord {
 
 	const STATUS_TENTATIVE = 'TENTATIVE';
 //	const STATUS_DECLINED = 'DECLINED';
@@ -137,9 +137,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	public function countReminders() {
 		
-		$modelTypeModel = \GO_Base_Model_ModelType::model()->findSingleByAttribute('model_name',$this->className());
+		$modelTypeModel = \GO\Base\Model\ModelType::model()->findSingleByAttribute('model_name',$this->className());
 		
-		$stmt = \GO_Base_Model_Reminder::model()->findByAttributes(array(
+		$stmt = \GO\Base\Model\Reminder::model()->findByAttributes(array(
 			'model_id' => $this->id,
 			'model_type_id'=> $modelTypeModel->id
 		));
@@ -153,8 +153,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$defaults = array(
 				'status' => self::STATUS_CONFIRMED,
-				'start_time'=> \GO_Base_Util_Date::roundQuarters(time()), 
-				'end_time'=>\GO_Base_Util_Date::roundQuarters(time()+3600)				
+				'start_time'=> \GO\Base\Util\Date::roundQuarters(time()), 
+				'end_time'=>\GO\Base\Util\Date::roundQuarters(time()+3600)				
 		);
 		
 		
@@ -191,7 +191,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	protected function getCacheAttributes() {
 		
 		return array(
-				'name' => $this->private ?  \GO::t('privateEvent','calendar') : $this->name,' '.\GO_Base_Util_Date::get_timestamp($this->start_time, false).')',
+				'name' => $this->private ?  \GO::t('privateEvent','calendar') : $this->name,' '.\GO\Base\Util\Date::get_timestamp($this->start_time, false).')',
 				'description' => $this->private ?  "" : $this->description,
 				'mtime'=>$this->start_time
 		);
@@ -206,7 +206,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	public function buildFilesPath() {
 
-		return 'calendar/' . \GO_Base_Fs_Base::stripInvalidChars($this->calendar->name) . '/' . date('Y', $this->start_time) . '/' . \GO_Base_Fs_Base::stripInvalidChars($this->name).' ('.$this->id.')';
+		return 'calendar/' . \GO\Base\Fs\Base::stripInvalidChars($this->calendar->name) . '/' . date('Y', $this->start_time) . '/' . \GO\Base\Fs\Base::stripInvalidChars($this->name).' ('.$this->id.')';
 	}
 
 	/**
@@ -248,8 +248,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return array 
 	 */
 	public function getDiff() {
-		$startDateTime = new \GO_Base_Util_Date_DateTime(date('c', $this->start_time));
-		$endDateTime = new \GO_Base_Util_Date_DateTime(date('c', $this->end_time));
+		$startDateTime = new \GO\Base\Util\Date_DateTime(date('c', $this->start_time));
+		$endDateTime = new \GO\Base\Util\Date_DateTime(date('c', $this->end_time));
 
 		return $startDateTime->diff($endDateTime);
 	}
@@ -295,7 +295,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		$att['start_time'] = strtotime($d . ' ' . $t);
 
-		$endTime = new \GO_Base_Util_Date_DateTime(date('c', $att['start_time']));
+		$endTime = new \GO\Base\Util\Date_DateTime(date('c', $att['start_time']));
 		$endTime->add($diff);
 		$att['end_time'] = $endTime->format('U');
 		
@@ -384,7 +384,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	public function validate() {
 		if($this->rrule != ""){			
-			$rrule = new \GO_Base_Util_Icalendar_Rrule();
+			$rrule = new \GO\Base\Util\Icalendar\Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
 			$this->repeat_end_time = $rrule->until;
 		}		
@@ -398,7 +398,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	protected function beforeSave() {
 		
 		if($this->rrule != ""){			
-			$rrule = new \GO_Base_Util_Icalendar_Rrule();
+			$rrule = new \GO\Base\Util\Icalendar\Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
 			$this->repeat_end_time = intval($rrule->until);
 		}
@@ -406,10 +406,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		//if this is not the organizer event it may only be modified by the organizer
 		if(!$this->is_organizer && !$this->updatingRelatedEvent && !$this->_isImport && !$this->isNew && $this->isModified($this->getRelevantMeetingAttributes())){		
 //			$organizerEvent = $this->getOrganizerEvent();
-//			if($organizerEvent && !$organizerEvent->checkPermissionLevel(\GO_Base_Model_Acl::WRITE_PERMISSION) || !$organizerEvent && !$this->is_organizer){
+//			if($organizerEvent && !$organizerEvent->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION) || !$organizerEvent && !$this->is_organizer){
 //				\GO::debug($this->getModifiedAttributes());
 //				\GO::debug($this->_attributes);
-				throw new \GO_Base_Exception_AccessDenied();
+				throw new \GO\Base\Exception\AccessDenied();
 //			}			
 		}
 		
@@ -432,7 +432,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 	protected function afterDbInsert() {
 		if(empty($this->uuid)){
-			$this->uuid = \GO_Base_Util_UUID::create('event', $this->id);
+			$this->uuid = \GO\Base\Util\UUID::create('event', $this->id);
 			return true;
 		}else
 		{
@@ -626,7 +626,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Calendar_Model_Event
 	 */
 	public function getRelatedParticipantEvents($includeThisEvent=false){
-		$findParams = \GO_Base_Db_FindParams::newInstance()->ignoreAcl();
+		$findParams = \GO\Base\Db\FindParams::newInstance()->ignoreAcl();
 		
 		$start_time = $this->isModified('start_time') ? $this->getOldAttributeValue('start_time') : $this->start_time;
 		
@@ -665,9 +665,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * Is this a private event for the current user. If the event or the calendar
 	 * is owned by the current user it will not be displayed as private.
 	 * 
-	 * @param GO_Base_Model_User $user
+	 * @param \GO\Base\Model\User $user
 	 */
-	public function isPrivate(\GO_Base_Model_User $user=null){
+	public function isPrivate(\GO\Base\Model\User $user=null){
 		if(!isset($user))
 			$user=\GO::user();
 		
@@ -708,24 +708,24 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 										. $this->toHtml()
 										. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
 
-						$subject = sprintf(\GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, \GO_Base_Util_Date::get_timestamp($this->start_time,false));
+						$subject = sprintf(\GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
 					}else
 					{
 						$body = sprintf(\GO::t('resource_modified_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
 										. $this->toHtml()
 										. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
 
-						$subject = sprintf(\GO::t('resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, \GO_Base_Util_Date::get_timestamp($this->start_time,false));
+						$subject = sprintf(\GO::t('resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
 					}
 
-					$message = \GO_Base_Mail_Message::newInstance(
+					$message = \GO\Base\Mail\Message::newInstance(
 										$subject
 										)->setFrom(\GO::user()->email, \GO::user()->name)
 										->addTo($user->email, $user->name);
 
 					$message->setHtmlAlternateBody($body);					
 
-					\GO_Base_Mail_Mailer::newGoInstance()->send($message);
+					\GO\Base\Mail\Mailer::newGoInstance()->send($message);
 				}
 			}
 			
@@ -738,21 +738,21 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 								. $this->toHtml();
 								//. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
 
-						$subject = sprintf(\GO::t('your_resource_accepted_mail_subject','calendar'),$this->calendar->name, $this->name, \GO_Base_Util_Date::get_timestamp($this->start_time,false));
+						$subject = sprintf(\GO::t('your_resource_accepted_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
 					}else
 					{
 						$body = sprintf(\GO::t('your_resource_declined_mail_body','calendar'),\GO::user()->name,$this->calendar->name).'<br /><br />'
 								. $this->toHtml();
 								//. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
 
-						$subject = sprintf(\GO::t('your_resource_declined_mail_subject','calendar'),$this->calendar->name, $this->name, \GO_Base_Util_Date::get_timestamp($this->start_time,false));
+						$subject = sprintf(\GO::t('your_resource_declined_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
 					}
 				}else
 				{
 					$body = sprintf(\GO::t('your_resource_modified_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
 								. $this->toHtml();
 //								. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
-					$subject = sprintf(\GO::t('your_resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, \GO_Base_Util_Date::get_timestamp($this->start_time,false));
+					$subject = sprintf(\GO::t('your_resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
 				}
 				
 				$url = \GO::createExternalUrl('calendar', 'openCalendar', array(
@@ -761,14 +761,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 				$body .= '<br /><a href="'.$url.'">'.\GO::t('openCalendar','calendar').'</a>';
 
-				$message = \GO_Base_Mail_Message::newInstance(
+				$message = \GO\Base\Mail\Message::newInstance(
 									$subject
 									)->setFrom(\GO::user()->email, \GO::user()->name)
 									->addTo($this->user->email, $this->user->name);
 
 				$message->setHtmlAlternateBody($body);					
 
-				\GO_Base_Mail_Mailer::newGoInstance()->send($message);
+				\GO\Base\Mail\Mailer::newGoInstance()->send($message);
 			}
 
 		}
@@ -793,22 +793,22 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if ($this->exception_for_event_id != 0)
 			throw new \Exception("This is not a master event");
 
-		$startOfDay = \GO_Base_Util_Date::clear_time($exceptionDate);
-		$endOfDay = \GO_Base_Util_Date::date_add($startOfDay, 1);
+		$startOfDay = \GO\Base\Util\Date::clear_time($exceptionDate);
+		$endOfDay = \GO\Base\Util\Date::date_add($startOfDay, 1);
 
-		$findParams = \GO_Base_Db_FindParams::newInstance();
+		$findParams = \GO\Base\Db\FindParams::newInstance();
 
 
 
 		//must be an exception and start on the must start on the exceptionTime
-		$exceptionJoinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$exceptionJoinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('id', 'e.exception_event_id', '=', 't', true, true);
 
 		$findParams->join(\GO_Calendar_Model_Exception::model()->tableName(), $exceptionJoinCriteria, 'e');
 
-//			$dayStart = \GO_Base_Util_Date::clear_time($exceptionDate);
-//			$dayEnd = \GO_Base_Util_Date::date_add($dayStart,1);	
-		$whereCriteria = \GO_Base_Db_FindCriteria::newInstance()
+//			$dayStart = \GO\Base\Util\Date::clear_time($exceptionDate);
+//			$dayEnd = \GO\Base\Util\Date::date_add($dayStart,1);	
+		$whereCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('exception_for_event_id', $this->id)
 						->addCondition('time', $startOfDay, '>=', 'e')
 						->addCondition('time', $endOfDay, '<', 'e');
@@ -834,7 +834,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$conflictEvents=array();
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance();
+		$findParams = \GO\Base\Db\FindParams::newInstance();
 		$findParams->getCriteria()->addCondition("calendar_id", $this->calendar_id);
 		if(!$this->isNew)
 			$findParams->getCriteria()->addCondition("resource_event_id", $this->id, '<>');
@@ -846,7 +846,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						true);
 		
 		while($conflictEvent = array_shift($conflictingEvents)) {			
-			//\GO::debug("Conflict: ".$conflictEvent->getEvent()->id." ".$conflictEvent->getName()." ".\GO_Base_Util_Date::get_timestamp($conflictEvent->getAlternateStartTime())." - ".\GO_Base_Util_Date::get_timestamp($conflictEvent->getAlternateEndTime()));
+			//\GO::debug("Conflict: ".$conflictEvent->getEvent()->id." ".$conflictEvent->getName()." ".\GO\Base\Util\Date::get_timestamp($conflictEvent->getAlternateStartTime())." - ".\GO\Base\Util\Date::get_timestamp($conflictEvent->getAlternateEndTime()));
 			if($conflictEvent->getEvent()->id!=$this->id && (empty($exception_for_event_id) || $exception_for_event_id!=$conflictEvent->getEvent()->id)){
 				$conflictEvents[]=$conflictEvent;
 			}
@@ -859,7 +859,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * Find events that occur in a given time period. They will be sorted on 
 	 * start_time and name. Recurring events are calculated and added to the array.
 	 * 
-	 * @param GO_Base_Db_FindParams $findParams
+	 * @param \GO\Base\Db\FindParams $findParams
 	 * @param int $periodStartTime
 	 * @param int $periodEndTime
 	 * @param boolean $onlyBusyEvents
@@ -889,15 +889,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * Recurring events are not calculated. If you need recurring events use
 	 * findCalculatedForPeriod.
 	 * 
-	 * @param GO_Base_Db_FindParams $findParams
+	 * @param \GO\Base\Db\FindParams $findParams
 	 * @param int $periodStartTime
 	 * @param int $periodEndTime
 	 * @param boolean $onlyBusyEvents
-	 * @return GO_Base_Db_ActiveStatement
+	 * @return \GO\Base\Db\ActiveStatement
 	 */
 	public function findForPeriod($findParams, $periodStartTime, $periodEndTime=0, $onlyBusyEvents=false){
 		if (!$findParams)
-			$findParams = \GO_Base_Db_FindParams::newInstance();
+			$findParams = \GO\Base\Db\FindParams::newInstance();
 
 		$findParams->order('start_time', 'ASC')->select("t.*");
 		
@@ -909,18 +909,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if ($onlyBusyEvents)
 			$findParams->getCriteria()->addCondition('busy', 1);
 		
-		$normalEventsCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$normalEventsCriteria = \GO\Base\Db\FindCriteria::newInstance()
 					->addModel(\GO_Calendar_Model_Event::model())					
 					->addCondition('end_time', $periodStartTime, '>');
 		
 		if($periodEndTime)
 			$normalEventsCriteria->addCondition('start_time', $periodEndTime, '<');
 		
-		$recurringEventsCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$recurringEventsCriteria = \GO\Base\Db\FindCriteria::newInstance()
 					->addModel(\GO_Calendar_Model_Event::model())
 					->addCondition('rrule', "", '!=')
 					->mergeWith(
-									\GO_Base_Db_FindCriteria::newInstance()
+									\GO\Base\Db\FindCriteria::newInstance()
 										->addModel(\GO_Calendar_Model_Event::model())					
 //										->addCondition('repeat_end_time', $periodStartTime, '>=')
 										->addRawCondition('`t`.`repeat_end_time`', '('.intval($periodStartTime).'-(`t`.`end_time`-`t`.`start_time`))', '>=', true)
@@ -943,8 +943,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		//recurrences can only be calculated correctly if we use the start of the day and the end of the day.
 		//we'll use the original times later to check if they really overlap.
-		$periodStartTime= \GO_Base_Util_Date::clear_time($periodStartTime)-1;
-		$periodEndTime= \GO_Base_Util_Date::clear_time(\GO_Base_Util_Date::date_add($periodEndTime,1));
+		$periodStartTime= \GO\Base\Util\Date::clear_time($periodStartTime)-1;
+		$periodEndTime= \GO\Base\Util\Date::clear_time(\GO\Base\Util\Date::date_add($periodEndTime,1));
 
 		$localEvent = new \GO_Calendar_Model_LocalEvent($event, $origPeriodStartTime, $origPeriodEndTime);
 		
@@ -953,21 +953,21 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		} else {
 			
 			\GO::debug("Calculating recurrences for event: ".$event->id);
-			$rrule = new \GO_Base_Util_Icalendar_Rrule();
+			$rrule = new \GO\Base\Util\Icalendar\Rrule();
 			$rrule->readIcalendarRruleString($localEvent->getEvent()->start_time, $localEvent->getEvent()->rrule, true);
 			
 			//we need to start searching for the next occurrence at the period start
 			//time minus the duration of the event in days rounded up. Because an 
 			//occurrence may start before the period but end in it.
-			$rrule->setRecurpositionStartTime(\GO_Base_Util_Date::date_add($periodStartTime,-ceil(( ($event->end_time-$event->start_time) /86400))));
+			$rrule->setRecurpositionStartTime(\GO\Base\Util\Date::date_add($periodStartTime,-ceil(( ($event->end_time-$event->start_time) /86400))));
 
 //			var_dump('=====');
-//			var_dump(\GO_Base_Util_Date::get_timestamp(\GO_Base_Util_Date::date_add($periodStartTime,-ceil(( ($event->end_time-$event->start_time) /86400)))));
+//			var_dump(\GO\Base\Util\Date::get_timestamp(\GO\Base\Util\Date::date_add($periodStartTime,-ceil(( ($event->end_time-$event->start_time) /86400)))));
 			
 			$origEventAttr = $localEvent->getEvent()->getAttributes('formatted');
 			while ($occurenceStartTime = $rrule->getNextRecurrence(false,$periodEndTime)) {	
 				
-//				var_dump(\GO_Base_Util_Date::get_timestamp($occurenceStartTime));
+//				var_dump(\GO\Base\Util\Date::get_timestamp($occurenceStartTime));
 				
 				if ($occurenceStartTime > $localEvent->getPeriodEndTime())
 					break;
@@ -976,7 +976,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 				$diff = $event->getDiff();
 
-				$endTime = new \GO_Base_Util_Date_DateTime(date('c', $occurenceStartTime));
+				$endTime = new \GO\Base\Util\Date_DateTime(date('c', $occurenceStartTime));
 				$endTime->add($diff);
 				
 				$localEvent->setAlternateEndTime($endTime->format('U'));
@@ -998,7 +998,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //			//not a recurring event
 //			$this->_calculatedEvents[] = $event->getAttributes('formatted');
 //		} else {
-//			$rrule = new \GO_Base_Util_Icalendar_Rrule();
+//			$rrule = new \GO\Base\Util\Icalendar\Rrule();
 //			$rrule->readIcalendarRruleString($event->start_time, $event->rrule);
 //
 //			$rrule->setRecurpositionStartTime($periodStartTime);
@@ -1010,13 +1010,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //				if ($occurenceStartTime > $periodEndTime)
 //					break;
 //
-//				$origEventAttr['start_time'] = \GO_Base_Util_Date::get_timestamp($occurenceStartTime);
+//				$origEventAttr['start_time'] = \GO\Base\Util\Date::get_timestamp($occurenceStartTime);
 //
 //				$diff = $this->getDiff();
 //
-//				$endTime = new \GO_Base_Util_Date_DateTime(date('c', $occurenceStartTime));
+//				$endTime = new \GO\Base\Util\Date_DateTime(date('c', $occurenceStartTime));
 //				$endTime->addDiffCompat($diff);
-//				$origEventAttr['end_time'] = \GO_Base_Util_Date::get_timestamp($endTime->format('U'));
+//				$origEventAttr['end_time'] = \GO\Base\Util\Date::get_timestamp($endTime->format('U'));
 //
 //				$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $origEventAttr;
 //			}
@@ -1032,10 +1032,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Calendar_Model_Exception
 	 */
 	public function hasException($time){
-		$startDay = \GO_Base_Util_Date::clear_time($time);
-		$endDay = \GO_Base_Util_Date::date_add($startDay, 1);
+		$startDay = \GO\Base\Util\Date::clear_time($time);
+		$endDay = \GO\Base\Util\Date::date_add($startDay, 1);
 
-		$findParams = \GO_Base_Db_FindParams::newInstance();
+		$findParams = \GO\Base\Db\FindParams::newInstance();
 		$findParams->getCriteria()
 						->addCondition('event_id', $this->id)
 						->addCondition('time', $startDay,'>=')
@@ -1073,17 +1073,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	public function findByUuid($uuid, $user_id, $calendar_id=0, $exceptionDate=false){
 		
-		$whereCriteria = \GO_Base_Db_FindCriteria::newInstance()												
+		$whereCriteria = \GO\Base\Db\FindCriteria::newInstance()												
 										->addCondition('uuid', $uuid);
 
 		//todo exception date
 
-		$params = \GO_Base_Db_FindParams::newInstance()
+		$params = \GO\Base\Db\FindParams::newInstance()
 						->ignoreAcl()
 						->single();							
 		
 		if(!$calendar_id){
-			$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+			$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('calendar_id', 'c.id','=','t',true, true)
 							->addCondition('user_id', $user_id,'=','c');
 			
@@ -1095,13 +1095,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if($exceptionDate){
 			//must be an exception and start on the must start on the exceptionTime
-			$exceptionJoinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+			$exceptionJoinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('id', 'e.exception_event_id','=','t',true,true);
 			
 			$params->join(\GO_Calendar_Model_Exception::model()->tableName(),$exceptionJoinCriteria,'e');
 			
-			$dayStart = \GO_Base_Util_Date::clear_time($exceptionDate);
-			$dayEnd = \GO_Base_Util_Date::date_add($dayStart,1);	
+			$dayStart = \GO\Base\Util\Date::clear_time($exceptionDate);
+			$dayEnd = \GO\Base\Util\Date::date_add($dayStart,1);	
 			$whereCriteria 
 							->addCondition('time', $dayStart, '>=','e')
 							->addCondition('time', $dayEnd, '<','e',false);
@@ -1109,10 +1109,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //			//the code below only find exceptions on the same day which is wrong
 //			$whereCriteria->addCondition('exception_for_event_id', 0,'>');
 //			
-//			$dayStart = \GO_Base_Util_Date::clear_time($exceptionDate);
-//			$dayEnd = \GO_Base_Util_Date::date_add($dayStart,1);
+//			$dayStart = \GO\Base\Util\Date::clear_time($exceptionDate);
+//			$dayEnd = \GO\Base\Util\Date::date_add($dayStart,1);
 //			
-//			$dateCriteria = \GO_Base_Db_FindCriteria::newInstance()
+//			$dateCriteria = \GO\Base\Db\FindCriteria::newInstance()
 //							->addCondition('start_time', $dayStart, '>=')
 //							->addCondition('start_time', $dayEnd, '<','t',false);
 //			
@@ -1178,9 +1178,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		$html .= '<tr><td>' . \GO::t('startsAt', 'calendar') . ':</td>' .
-						'<td>' . \GO_Base_Util_Date::get_timestamp($this->start_time, empty($this->all_day_event)) . '</td></tr>' .
+						'<td>' . \GO\Base\Util\Date::get_timestamp($this->start_time, empty($this->all_day_event)) . '</td></tr>' .
 						'<tr><td>' . \GO::t('endsAt', 'calendar') . ':</td>' .
-						'<td>' . \GO_Base_Util_Date::get_timestamp($this->end_time, empty($this->all_day_event)) . '</td></tr>';
+						'<td>' . \GO\Base\Util\Date::get_timestamp($this->end_time, empty($this->all_day_event)) . '</td></tr>';
 
 		$html .= '<tr><td>' . \GO::t('status', 'calendar') . ':</td>' .
 						'<td>' . $this->getLocalizedStatus() . '</td></tr>';
@@ -1188,12 +1188,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		if (!empty($this->location)) {
 			$html .= '<tr><td style="vertical-align:top">' . \GO::t('location', 'calendar') . ':</td>' .
-							'<td>' . \GO_Base_Util_String::text_to_html($this->location) . '</td></tr>';
+							'<td>' . \GO\Base\Util\String::text_to_html($this->location) . '</td></tr>';
 		}
 		
 		if(!empty($this->description)){
 			$html .= '<tr><td style="vertical-align:top">' . \GO::t('strDescription') . ':</td>' .
-							'<td>' . \GO_Base_Util_String::text_to_html($this->description) . '</td></tr>';
+							'<td>' . \GO\Base\Util\String::text_to_html($this->description) . '</td></tr>';
 		}
 		
 		if($this->isRecurring()){
@@ -1201,7 +1201,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 
 		//don't calculate timezone offset for all day events
-//		$timezone_offset_string = \GO_Base_Util_Date::get_timezone_offset($this->start_time);
+//		$timezone_offset_string = \GO\Base\Util\Date::get_timezone_offset($this->start_time);
 //
 //		if ($timezone_offset_string > 0) {
 //			$gmt_string = '(\G\M\T +' . $timezone_offset_string . ')';
@@ -1238,14 +1238,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Get the recurrence pattern object
 	 * 
-	 * @return GO_Base_Util_Icalendar_Rrule
+	 * @return \GO\Base\Util\Icalendar\Rrule
 	 */
 	public function getRecurrencePattern(){
 		
 		if(!$this->isRecurring())
 			return false;
 		
-		$rRule = new \GO_Base_Util_Icalendar_Rrule();
+		$rRule = new \GO\Base\Util\Icalendar\Rrule();
 		$rRule->readIcalendarRruleString($this->start_time, $this->rrule);
 		
 		return $rRule;
@@ -1272,7 +1272,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$e=$calendar->createComponent('VEVENT');
 		
 		if(empty($this->uuid)){
-			$this->uuid = \GO_Base_Util_UUID::create('event', $this->id);
+			$this->uuid = \GO\Base\Util\UUID::create('event', $this->id);
 			$this->save(true);
 		}
 			
@@ -1322,22 +1322,22 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		if($recurrenceTime){
-			$dt = \GO_Base_Util_Date_DateTime::fromUnixtime($recurrenceTime);			
+			$dt = \GO\Base\Util\Date_DateTime::fromUnixtime($recurrenceTime);			
 			$e->add('recurrence-id', $dt, array('type'=>$dateType));
 		}
 	
 		
-		$e->add('dtstart', \GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time), array('type'=>$dateType));
+		$e->add('dtstart', \GO\Base\Util\Date_DateTime::fromUnixtime($this->start_time), array('type'=>$dateType));
 		
 		
 		if($this->all_day_event){
-			$end_time = \GO_Base_Util_Date::clear_time($this->end_time);			
-			$end_time = \GO_Base_Util_Date::date_add($end_time,1);			
+			$end_time = \GO\Base\Util\Date::clear_time($this->end_time);			
+			$end_time = \GO\Base\Util\Date::date_add($end_time,1);			
 		}else{
 			$end_time = $this->end_time;
 		}
 		
-		$e->add('dtend', \GO_Base_Util_Date_DateTime::fromUnixtime($end_time), array('type'=>$dateType));
+		$e->add('dtend', \GO\Base\Util\Date_DateTime::fromUnixtime($end_time), array('type'=>$dateType));
 
 		if(!empty($this->description))
 			$e->description=$this->description;
@@ -1351,7 +1351,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$rRule->shiftDays(false);
 			$e->rrule=str_replace('RRULE:','',$rRule->createRrule());			
 			
-			$findParams = \GO_Base_Db_FindParams::newInstance();
+			$findParams = \GO\Base\Db\FindParams::newInstance();
 			
 			if(!$includeExdatesForMovedEvents)
 				$findParams->getCriteria()->addCondition('exception_event_id', 0);
@@ -1359,7 +1359,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$stmt = $this->exceptions($findParams);
 			while($exception = $stmt->fetch()){
 //				$exdate = new \Sabre\VObject\Property\DateTime('exdate',Sabre\VObject\Property\DateTime::DATE);
-				$dt = \GO_Base_Util_Date_DateTime::fromUnixtime($exception->getStartTime());				
+				$dt = \GO\Base\Util\Date_DateTime::fromUnixtime($exception->getStartTime());				
 //				$exdate->setDateTime($dt);		
 				$e->add('exdate',$dt, array('type'=>'DATE'));
 			}
@@ -1537,7 +1537,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->end_time-=60;
 		
 		if((string) $vobject->rrule != ""){			
-			$rrule = new \GO_Base_Util_Icalendar_Rrule();
+			$rrule = new \GO\Base\Util\Icalendar\Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);	
 			$rrule->shiftDays(true);
 			$this->rrule = $rrule->createRrule();
@@ -1594,16 +1594,16 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$firstMatch = array_shift($recurrenceIds);
 			$recurrenceTime=$firstMatch->getDateTime()->format('U');
 			
-			$whereCriteria = \GO_Base_Db_FindCriteria::newInstance()
+			$whereCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('calendar_id', $this->calendar_id,'=','ev')
 							->addCondition('uuid', $this->uuid,'=','ev')
 							->addCondition('time', $recurrenceTime,'=','t');
 			
-			$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+			$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('event_id', 'ev.id','=','t',true, true);
 			
 			
-			$findParams = \GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO\Base\Db\FindParams::newInstance()
 							->single()
 							->criteria($whereCriteria)
 							->join(\GO_Calendar_Model_Event::model()->tableName(),$joinCriteria,'ev');
@@ -1679,14 +1679,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //					
 //					if (!empty($this->rrule)) {
 //					
-//						\GO::debug('=== ['.\GO_Base_Util_Date::get_timestamp($this->start_time).'] '.$this->name.' (with rrule)');
+//						\GO::debug('=== ['.\GO\Base\Util\Date::get_timestamp($this->start_time).'] '.$this->name.' (with rrule)');
 //						
 //						// Handle imported recurring event.
 //						
 //						$existingEventModel = \GO_Calendar_Model_Event::model()->find(
-//							\GO_Base_Db_FindParams::newInstance()
+//							\GO\Base\Db\FindParams::newInstance()
 //								->single()
-//								->criteria(\GO_Base_Db_FindCriteria::newInstance()
+//								->criteria(\GO\Base\Db\FindCriteria::newInstance()
 //									->addCondition('calendar_id',$this->calendar_id)
 //									->addCondition('uuid',$this->uuid)
 //									->addCondition('rrule','','!=')
@@ -1701,13 +1701,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //						
 //					} else {
 //						
-//						\GO::debug('=== ['.\GO_Base_Util_Date::get_timestamp($this->start_time).'] '.$this->name);
+//						\GO::debug('=== ['.\GO\Base\Util\Date::get_timestamp($this->start_time).'] '.$this->name);
 //						
 //						// Handle imported non-recurring event or exception event.
 //						
 //						$existingEventsStmt = \GO_Calendar_Model_Event::model()->find(
-//							\GO_Base_Db_FindParams::newInstance()
-//								->criteria(\GO_Base_Db_FindCriteria::newInstance()
+//							\GO\Base\Db\FindParams::newInstance()
+//								->criteria(\GO\Base\Db\FindCriteria::newInstance()
 //									->addCondition('calendar_id',$this->calendar_id)
 //									->addCondition('uuid',$this->uuid)
 //									->addCondition('rrule','','=')
@@ -1739,31 +1739,31 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 											array(
 												$installationName,
 												$this->name,
-												\GO_Base_Util_Date::get_timestamp($this->start_time),
+												\GO\Base\Util\Date::get_timestamp($this->start_time),
 												$this->calendar->name,
 												$validationErrStr
 											),
 											$body
 										);
-						$message = \GO_Base_Mail_Message::newInstance(
+						$message = \GO\Base\Mail\Message::newInstance(
 														$mailSubject
 														)->setFrom(\GO::config()->webmaster_email, \GO::config()->title)
 														->addTo($this->calendar->user->email);
 
 						$message->setHtmlAlternateBody(nl2br($body));
 
-						if (\GO_Base_Mail_Mailer::newGoInstance()->send($message))
-							throw new \GO_Base_Exception_Validation('DUE TO ERROR, CRON SENT MAIL TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
+						if (\GO\Base\Mail\Mailer::newGoInstance()->send($message))
+							throw new \GO\Base\Exception\Validation('DUE TO ERROR, CRON SENT MAIL TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
 						else
-							throw new \GO_Base_Exception_Validation('CRON COULD NOT SEND EMAIL WITH ERROR MESSAGE TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
+							throw new \GO\Base\Exception\Validation('CRON COULD NOT SEND EMAIL WITH ERROR MESSAGE TO: '.$this->calendar->user->email.'. THIS IS THE EMAIL MESSAGE:'."\r\n".$body);
 					} else {
-						throw new \GO_Base_Exception_Validation(implode("\n", $this->getValidationErrors())."\n");
+						throw new \GO\Base\Exception\Validation(implode("\n", $this->getValidationErrors())."\n");
 					}
 					
 				}
 				$this->_isImport=false;
 //			} catch (Exception $e) {
-//				throw new \Exception($this->name.' ['.\GO_Base_Util_Date::get_timestamp($this->start_time).' - '.\GO_Base_Util_Date::get_timestamp($this->end_time).'] '.$e->getMessage());
+//				throw new \Exception($this->name.' ['.\GO\Base\Util\Date::get_timestamp($this->start_time).' - '.\GO\Base\Util\Date::get_timestamp($this->end_time).'] '.$e->getMessage());
 //			}
 			
 			if(!empty($exception)){			
@@ -1831,8 +1831,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			if($importExternal && $this->isRecurring()){
 				$exceptionEventsStmt = \GO_Calendar_Model_Event::model()->find(
-					\GO_Base_Db_FindParams::newInstance()->criteria(
-						\GO_Base_Db_FindCriteria::newInstance()
+					\GO\Base\Db\FindParams::newInstance()->criteria(
+						\GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('calendar_id',$this->calendar_id)
 							->addCondition('uuid',$this->uuid)
 							->addCondition('rrule','','=')
@@ -1847,7 +1847,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					$this->addException($exceptionEventModel->start_time, $exceptionEventModel->id);
 					
 					
-//					\GO::debug('=== EXCEPTION EVENT === ['.\GO_Base_Util_Date::get_timestamp($exceptionEventModel->start_time).'] '.$exceptionEventModel->name.' (exception for event: '.$exceptionEventModel->exception_for_event_id.')');
+//					\GO::debug('=== EXCEPTION EVENT === ['.\GO\Base\Util\Date::get_timestamp($exceptionEventModel->start_time).'] '.$exceptionEventModel->name.' (exception for event: '.$exceptionEventModel->exception_for_event_id.')');
 				}
 			}
 		}
@@ -1901,7 +1901,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 			
 			if(!$p->user_id){
-				$user = \GO_Base_Model_User::model()->findSingleByAttribute('email', $attributes['email']);
+				$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $attributes['email']);
 				if($user)
 					$p->user_id=$user->id;
 			}		
@@ -2077,7 +2077,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(empty($this->id))
 			return false;
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->single();
 		
 		$findParams->getCriteria()
@@ -2096,11 +2096,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function checkDatabase() {
 
 	  if(empty($this->uuid))
-		$this->uuid = \GO_Base_Util_UUID::create('event', $this->id);
+		$this->uuid = \GO\Base\Util\UUID::create('event', $this->id);
 	  
 		//in some cases on old databases the repeat_end_time is set but the UNTIL property in the rrule is not. We correct that here.
 		if($this->repeat_end_time>0 && strpos($this->rrule,'UNTIL=')===false){
-			$rrule = new \GO_Base_Util_Icalendar_Rrule();
+			$rrule = new \GO\Base\Util\Icalendar\Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
 			$rrule->until=$this->repeat_end_time;
 			$this->rrule= $rrule->createRrule();	
@@ -2142,7 +2142,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	public function getParticipantsForUser(){
 		//update all participants with this user and event uuid in the system		
-		$findParams = \GO_Base_Db_FindParams::newInstance();
+		$findParams = \GO\Base\Db\FindParams::newInstance();
 		
 		$findParams->joinModel(array(
 				'model'=>'GO_Calendar_Model_Event',						  
@@ -2201,7 +2201,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 
 		//create e-mail message
-		$message = \GO_Base_Mail_Message::newInstance($subject)
+		$message = \GO\Base\Mail\Message::newInstance($subject)
 							->setFrom($sendingParticipant->email, $sendingParticipant->name)
 							->addTo($organizer->email, $organizer->name);
 
@@ -2231,7 +2231,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		$message->setHtmlAlternateBody($body);
 
-		\GO_Base_Mail_Mailer::newGoInstance()->send($message);
+		\GO\Base\Mail\Mailer::newGoInstance()->send($message);
 
 	}
 	
@@ -2251,7 +2251,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			// Set the language of the email to the language of the participant.
 			$language = false;
 			if(!empty($participant->user_id)){
-				$user = \GO_Base_Model_User::model()->findByPk($participant->user_id);
+				$user = \GO\Base\Model\User::model()->findByPk($participant->user_id);
 				
 				if($user)
 					\GO::language()->setLanguage($user->language);
@@ -2260,7 +2260,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$subject =  \GO::t('cancellation','calendar').': '.$this->name;
 
 			//create e-mail message
-			$message = \GO_Base_Mail_Message::newInstance($subject)
+			$message = \GO\Base\Mail\Message::newInstance($subject)
 								->setFrom($this->user->email, $this->user->name)
 								->addTo($participant->email, $participant->name);
 
@@ -2299,7 +2299,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			if($language !== false)
 				\GO::language()->setLanguage($language);
 			
-			\GO_Base_Mail_Mailer::newGoInstance()->send($message);
+			\GO\Base\Mail\Mailer::newGoInstance()->send($message);
 		}
 
 		return true;
@@ -2335,7 +2335,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				// Set the language of the email to the language of the participant.
 				$language = false;
 				if(!empty($participant->user_id)){
-					$user = \GO_Base_Model_User::model()->findByPk($participant->user_id);
+					$user = \GO\Base\Model\User::model()->findByPk($participant->user_id);
 
 					if($user)
 						\GO::language()->setLanguage($user->language);
@@ -2352,7 +2352,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				}				
 				
 				//create e-mail message
-				$message = \GO_Base_Mail_Message::newInstance($subject)
+				$message = \GO\Base\Mail\Message::newInstance($subject)
 									->setFrom($this->user->email, $this->user->name)
 									->addTo($participant->email, $participant->name);
 				
@@ -2411,7 +2411,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				if($language !== false)
 					\GO::language()->setLanguage($language);
 			
-				\GO_Base_Mail_Mailer::newGoInstance()->send($message);
+				\GO\Base\Mail\Mailer::newGoInstance()->send($message);
 			}
 			
 			return true;

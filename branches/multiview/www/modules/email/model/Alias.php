@@ -23,7 +23,7 @@
  * @property int $account_id
  * @property int $id
  */
-class GO_Email_Model_Alias extends GO_Base_Db_ActiveRecord {
+class GO_Email_Model_Alias extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself

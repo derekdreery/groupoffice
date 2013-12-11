@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-class users extends db
+class users extends \db
 {
 
 	public function get_register_email(){

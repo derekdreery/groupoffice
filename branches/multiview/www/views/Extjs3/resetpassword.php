@@ -16,7 +16,7 @@
 if (empty($_REQUEST['email'])) {
 	die(GO::t("noEmailGiven"));
 } else {
-	$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $_REQUEST['email']);
+	$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $_REQUEST['email']);
 	if ($user) {
 		if (empty($_REQUEST['usertoken']) || $_REQUEST['usertoken'] != $user->getSecurityToken()) 
 			die(GO::t("usertokenInvalid"));

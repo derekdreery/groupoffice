@@ -85,7 +85,7 @@ foreach($moduleObjects as $moduleObject)
                                                                             
                                         
 					// Makes global, client-side, editable form panels for every customfield category
-					if($category->checkPermissionLevel(\GO_Base_Model_Acl::WRITE_PERMISSION))
+					if($category->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION))
 						$GO_SCRIPTS_JS .= "\n\n".'GO.customfields.types["'.$model->extendsModel().'"].panels.push({xtype : "customformpanel", itemId:"cf-panel-'.$category->id.'", category_id: '.$category->id.', title : "'.htmlspecialchars($category->name,ENT_QUOTES, 'UTF-8').'", customfields : '.json_encode($fields).'});'."\n";
 					
 					/**
@@ -98,7 +98,7 @@ foreach($moduleObjects as $moduleObject)
             $exclude_from_grid = $field['exclude_from_grid'] || $field['datatype']=='GO_Customfields_Customfieldtype_Heading' ? 'true' : 'false';
 						
 						$GO_SCRIPTS_JS .= 'GO.customfields.columns["'.$model->extendsModel().'"].push({'.
-								'header: "'.\GO_Base_Util_String::escape_javascript($field['name']).'",'.
+								'header: "'.\GO\Base\Util\String::escape_javascript($field['name']).'",'.
 								'dataIndex: "'.$field['dataname'].'" ,'.
 								'datatype:"'.$field['datatype'].'", '.								
 								'align:"'.$align.'", '.

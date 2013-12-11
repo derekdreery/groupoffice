@@ -4,7 +4,7 @@
  * @property string $name
  * @property int $field_id
  */
-class GO_Customfields_Model_Block extends GO_Base_Db_ActiveRecord{
+class GO_Customfields_Model_Block extends \GO\Base\Db\ActiveRecord{
 		
 	/**
 	 * Returns a static model of itself
@@ -43,16 +43,16 @@ class GO_Customfields_Model_Block extends GO_Base_Db_ActiveRecord{
 		$cfTableName = 'cf_'.$modelUnderBlock->tableName();
 		
 		$stmt = $modelUnderBlock->find(
-			\GO_Base_Db_FindParams::newInstance()
+			\GO\Base\Db\FindParams::newInstance()
 				->ignoreAcl()
 				->join(
 					$cfTableName,
-					\GO_Base_Db_FindCriteria::newInstance()->addRawCondition('cf.model_id', 't.id'),
+					\GO\Base\Db\FindCriteria::newInstance()->addRawCondition('cf.model_id', 't.id'),
 					'cf',
 					'INNER'
 				)
 				->criteria(
-					\GO_Base_Db_FindCriteria::newInstance()
+					\GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('col_'.$this->field_id, $forModelId.':%', 'LIKE', 'cf')
 				)
 		);

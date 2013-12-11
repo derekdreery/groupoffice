@@ -23,15 +23,17 @@ namespace GO\Notes\Controller;
 
 use GO\Base\Controller;
 use GO\Notes\Model\Category;
+use GO\Base\Data\ColumnModel;
+use GO\Base\Data\DbStore;
 
 class CategoryController extends Controller\AbstractJsonController {
 
 	protected function actionStore($params) {
 
-		$columnModel = new \GO_Base_Data_ColumnModel("\GO\Notes\Model\Note");
+		$columnModel = new ColumnModel("\GO\Notes\Model\Note");
 		$columnModel->formatColumn('user_name', '$model->user ? $model->user->name : 0');
 		
-		$store = new \GO_Base_Data_DbStore('\GO\Notes\Model\Category', $columnModel, $params);
+		$store = new DbStore('\GO\Notes\Model\Category', $columnModel, $params);
 		$store->defaultSort = 'name';
 		$store->multiSelectable('no-multiselect');
 

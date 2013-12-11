@@ -1,6 +1,6 @@
 <?php
 
-class GO_Email_Controller_Filter extends GO_Base_Controller_AbstractModelController {
+class GO_Email_Controller_Filter extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Email_Model_Filter';
 
@@ -14,7 +14,7 @@ class GO_Email_Controller_Filter extends GO_Base_Controller_AbstractModelControl
 	protected function getStoreParams($params) {
 		
 	
-		$findParams = \GO_Base_Db_FindParams::newInstance();
+		$findParams = \GO\Base\Db\FindParams::newInstance();
 		$findParams->getCriteria()
 						->addCondition("account_id", $params['account_id']);
 	

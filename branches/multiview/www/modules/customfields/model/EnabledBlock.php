@@ -4,7 +4,7 @@
  * @property string $model_type_name
  * @property int $model_id
  */
-class GO_Customfields_Model_EnabledBlock extends GO_Base_Db_ActiveRecord{
+class GO_Customfields_Model_EnabledBlock extends \GO\Base\Db\ActiveRecord{
 		
 	/**
 	 * Returns a static model of itself
@@ -47,7 +47,7 @@ class GO_Customfields_Model_EnabledBlock extends GO_Base_Db_ActiveRecord{
 			$dataType = 'GO_Addressbook_Customfieldtype_Company';
 		
 		return self::model()->find(
-				\GO_Base_Db_FindParams::newInstance()
+				\GO\Base\Db\FindParams::newInstance()
 					->joinModel(array(
 						'model'=>'GO_Customfields_Model_Block',
 						'localTableAlias'=>'t',
@@ -65,7 +65,7 @@ class GO_Customfields_Model_EnabledBlock extends GO_Base_Db_ActiveRecord{
 						'type'=>'INNER'
 					))
 					->criteria(
-						\GO_Base_Db_FindCriteria::newInstance()
+						\GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('model_id', $modelId, '=', 't')
 							->addCondition('model_type_name', $listedModelTypeName, '=', 't')
 							->addCondition('datatype', $dataType, '=', 'cf')

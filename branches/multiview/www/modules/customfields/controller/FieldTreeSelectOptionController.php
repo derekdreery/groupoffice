@@ -1,10 +1,10 @@
 <?php
-class GO_Customfields_Controller_FieldTreeSelectOption extends GO_Base_Controller_AbstractModelController{
+class GO_Customfields_Controller_FieldTreeSelectOption extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO_Customfields_Model_FieldTreeSelectOption';
 	
 
-	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		
 		$columnModel->formatColumn('name_with_id', '$model->id.":".$model->name');
 
@@ -22,13 +22,13 @@ class GO_Customfields_Controller_FieldTreeSelectOption extends GO_Base_Controlle
 		$fieldModel = \GO_Customfields_Model_Field::model()->findByPk($field_id);
 		
 		if ($params['parent_id']==0 && $fieldModel->datatype=='GO_Customfields_Customfieldtype_TreeselectSlave') {
-			return \GO_Base_Db_FindParams::newInstance()
+			return \GO\Base\Db\FindParams::newInstance()
 						->order(array("parent_id","sort"))
-						->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('field_id', $fieldModel->treemaster_field_id));
+						->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('field_id', $fieldModel->treemaster_field_id));
 		} else {
-			return \GO_Base_Db_FindParams::newInstance()
+			return \GO\Base\Db\FindParams::newInstance()
 						->order("sort")
-						->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('field_id', $field_id)->addCondition('parent_id', $parent_id));
+						->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('field_id', $field_id)->addCondition('parent_id', $parent_id));
 		}
 		
 //		return array(

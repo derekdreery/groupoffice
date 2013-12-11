@@ -18,7 +18,9 @@
  * @copyright Copyright Intermesh BV.
  */
 
-class GO_Base_Fs_XlsFile extends GO\Base\Fs\File{
+namespace GO\Base\Fs;
+
+class XlsFile extends \GO\Base\Fs\File{
 		
 	/**
 	 * Full path to file.

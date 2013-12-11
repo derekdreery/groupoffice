@@ -24,11 +24,13 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base 
  */
-class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
+namespace GO\Base;
+
+class ModuleCollection extends \GO\Base\Model\ModelCollection{
 	
 	private $_allowedModules;
 	
-	public function __construct($model='GO_Base_Model_Module'){
+	public function __construct($model='\GO\Base\Model\Module'){
 
 		parent::__construct($model);
 	}
@@ -47,7 +49,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	 * @return array Module class names eg. GO_Calendar_Module
 	 */
 	public function getAvailableModules($returnInstalled=false){
-		$folder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'modules');
+		$folder = new \GO\Base\Fs\Folder(\GO::config()->root_path.'modules');
 		
 		$folders = $folder->ls();
 		$modules = array();
@@ -55,7 +57,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 			if($folder->isFolder()){
 				$ucfirst = ucfirst($folder->name());
 				$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
-				if(file_exists($moduleClass) && $this->_isAllowed($folder->name()) && ($returnInstalled || !\GO_Base_Model_Module::model()->findByPk($folder->name(), false, true))){
+				if(file_exists($moduleClass) && $this->_isAllowed($folder->name()) && ($returnInstalled || !\GO\Base\Model\Module::model()->findByPk($folder->name(), false, true))){
 					$modules[]='GO_'.$ucfirst.'_'.$ucfirst.'Module';
 				}
 			}
@@ -75,7 +77,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		if(!$this->_isAllowed($moduleId))
 			return false;
 		
-		$folder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'modules/'.$moduleId);
+		$folder = new \GO\Base\Fs\Folder(\GO::config()->root_path.'modules/'.$moduleId);
 		if($folder->exists()){
 			$ucfirst = ucfirst($folder->name());
 			$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
@@ -134,7 +136,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	 * Check if a module is installed.
 	 * 
 	 * @param string $moduleId
-	 * @return GO_Base_Model_Module 
+	 * @return \GO\Base\Model\Module 
 	 */
 	public function isInstalled($moduleId){
 		$model = $this->model->findByPk($moduleId, false, true);
@@ -152,7 +154,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		try{
 			$module = $this->$name;
 			return isset($module);
-		}catch(\GO_Base_Exception_AccessDenied $e){
+		}catch(\GO\Base\Exception\AccessDenied $e){
 			return false;
 		}
 	}
@@ -160,11 +162,11 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	/**
 	 * Query all modules.
 	 * 
-	 * @return GO_Base_Model_Module[]
+	 * @return \GO\Base\Model\Module[]
 	 */
 	public function getAllModules($ignoreAcl=false){
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()->order("sort_order");
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order("sort_order");
 		
 		if($ignoreAcl)
 			$findParams->ignoreAcl ();

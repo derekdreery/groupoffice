@@ -1,5 +1,5 @@
 <?php
-class GO_Addressbook_Customfields_Model_Company extends GO_Customfields_Model_AbstractCustomFieldsRecord{
+class GO_Addressbook_Customfields_Model_Company extends \GO_Customfields_Model_AbstractCustomFieldsRecord{
 	public function extendsModel() {		
 		return "GO_Addressbook_Model_Company";
 	}

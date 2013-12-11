@@ -1,5 +1,7 @@
 <?php
-class GO_Base_Cron_CalculateDiskUsage extends GO_Base_Cron_AbstractCron {
+namespace GO\Base\Cron;
+
+class CalculateDiskUsage extends \GO\Base\Cron\AbstractCron {
 	
 	/**
 	 * Return true or false to enable the selection for users and groups for 
@@ -40,10 +42,10 @@ class GO_Base_Cron_CalculateDiskUsage extends GO_Base_Cron_AbstractCron {
 	 * If $this->enableUserAndGroupSupport() returns FALSE then the 
 	 * $user parameter is null and the run function will be called only once.
 	 * 
-	 * @param GO_Base_Cron_CronJob $cronJob
-	 * @param GO_Base_Model_User $user [OPTIONAL]
+	 * @param \GO\Base\Cron\CronJob $cronJob
+	 * @param \GO\Base\Model\User $user [OPTIONAL]
 	 */
-	public function run(\GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
+	public function run(\GO\Base\Cron\CronJob $cronJob,\GO\Base\Model\User $user = null){
 		$stmt =\GO::getDbConnection()->query("SHOW TABLE STATUS FROM `".\GO::config()->db_name."`;");
 
 		$database_usage=0;
@@ -54,12 +56,12 @@ class GO_Base_Cron_CalculateDiskUsage extends GO_Base_Cron_AbstractCron {
 		
 		\GO::config()->save_setting('database_usage', $database_usage);
 		
-		$folder = new \GO_Base_Fs_Folder(\GO::config()->file_storage_path);
+		$folder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path);
 		\GO::config()->save_setting('file_storage_usage', $folder->calculateSize());
 		
 		if(\GO::modules()->postfixadmin){
 			
-			$findParams = \GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO\Base\Db\FindParams::newInstance()
 							->select('sum(`usage`) AS `usage`')
 							->ignoreAcl()
 							->single();

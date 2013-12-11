@@ -18,7 +18,7 @@
  * @copyright Copyright Intermesh BV.
  */
 
-class GO_Email_EmailModule extends GO_Base_Module{	
+class GO_Email_EmailModule extends \GO\Base\Module{	
 
 	public static function initListeners() {
 		
@@ -28,7 +28,7 @@ class GO_Email_EmailModule extends GO_Base_Module{
 		$c = new \GO_Core_Controller_Auth();
 		$c->addListener('head', 'GO_Email_EmailModule', 'head');
 		
-		\GO_Base_Model_User::model()->addListener('delete', "GO_Email_EmailModule", "deleteUser");
+		\GO\Base\Model\User::model()->addListener('delete', "GO_Email_EmailModule", "deleteUser");
 		
 		return parent::initListeners();
 	}

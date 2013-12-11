@@ -20,7 +20,9 @@
  * 
  * @package GO.base.cron
  */
-abstract class GO_Base_Cron_AbstractCron extends GO_Base_Model{
+namespace GO\Base\Cron;
+
+abstract class AbstractCron extends \GO\Base\Model{
 	
 	/**
 	 * Return true or false to enable the selection fo users and groups for 
@@ -55,9 +57,9 @@ abstract class GO_Base_Cron_AbstractCron extends GO_Base_Model{
 	 * If $this->enableUserAndGroupSupport() returns FALSE then the 
 	 * $user parameter is null and the run function will be called only once.
 	 * 
-	 * @param GO_Base_Cron_CronJob $cronJob
-	 * @param GO_Base_Model_User $user [OPTIONAL]
+	 * @param \GO\Base\Cron\CronJob $cronJob
+	 * @param \GO\Base\Model\User $user [OPTIONAL]
 	 */
-	public abstract function run(\GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null);
+	public abstract function run(\GO\Base\Cron\CronJob $cronJob,\GO\Base\Model\User $user = null);
 		
 }

@@ -22,13 +22,15 @@
  * @property int $user_id
  * @property int $reminder_id
  */
-class GO_Base_Model_ReminderUser extends GO_Base_Db_ActiveRecord {
+namespace GO\Base\Model;
+
+class ReminderUser extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Base_Model_ReminderUser 
+	 * @return ReminderUser 
 	 */
 	public static function model($className=__CLASS__)
 	{	

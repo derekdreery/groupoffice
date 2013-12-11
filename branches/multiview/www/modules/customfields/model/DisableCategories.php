@@ -24,7 +24,7 @@
  * @property int $model_id
  */
 
-class GO_Customfields_Model_DisableCategories extends GO_Base_Db_ActiveRecord{
+class GO_Customfields_Model_DisableCategories extends \GO\Base\Db\ActiveRecord{
 	/**
 	 * Returns a static model of itself
 	 * 

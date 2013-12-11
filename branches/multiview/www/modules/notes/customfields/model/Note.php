@@ -18,7 +18,7 @@
  * The note model custom fields model.
  * 
  */
-class GO_Notes_Customfields_Model_Note extends GO_Customfields_Model_AbstractCustomFieldsRecord{
+class GO_Notes_Customfields_Model_Note extends \GO_Customfields_Model_AbstractCustomFieldsRecord{
 	/**
 	 * Returns a static model of itself
 	 * 

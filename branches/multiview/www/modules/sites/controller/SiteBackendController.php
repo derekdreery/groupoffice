@@ -1,6 +1,6 @@
 <?php
 
-class GO_Sites_Controller_SiteBackend extends GO_Base_Controller_AbstractModelController {
+class GO_Sites_Controller_SiteBackend extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Sites_Model_Site';
 	
@@ -17,7 +17,7 @@ class GO_Sites_Controller_SiteBackend extends GO_Base_Controller_AbstractModelCo
 
 		$response=array();
 		
-		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams = \GO\Base\Db\FindParams::newInstance();
 		//->getCriteria()->addCondition('user_id',GO::user()->id);
 
 

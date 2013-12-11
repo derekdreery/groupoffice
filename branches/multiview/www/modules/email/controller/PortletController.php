@@ -1,6 +1,6 @@
 <?php
 
-class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelController {
+class GO_Email_Controller_Portlet extends \GO\Base\Controller\AbstractModelController {
 	
 	/**
 	 * The full name of the used model in this controller
@@ -24,16 +24,16 @@ class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelContro
 	 */
 	protected function actionPortletFoldersByUser($params){
 		
-		$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('user_id', \GO::user()->id);
 						
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->debugSql()
 						->criteria($findCriteria);
 		
 		$portletFoldersStatement = \GO_email_Model_PortletFolder::model()->find($findParams);
 		
-		$portletFoldersStore = \GO_Base_Data_Store::newInstance(\GO::getModel($this->model));
+		$portletFoldersStore = \GO\Base\Data\Store::newInstance(\GO::getModel($this->model));
 		$portletFoldersStore->setStatement($portletFoldersStatement);
 		
 		return $portletFoldersStore->getData();
@@ -121,7 +121,7 @@ class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelContro
 
 		if ($params['node'] == 'root') {
 			
-			$findParams = \GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('t.*')
 						->joinModel(array(
 								'model' => 'GO_Email_Model_AccountSort',
@@ -129,7 +129,7 @@ class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelContro
 								'localField' => 'id', //defaults to primary key of the model
 								'type' => 'LEFT',
 								'tableAlias'=>'s',
-								'criteria'=>  \GO_Base_Db_FindCriteria::newInstance()->addCondition('user_id', \GO::user()->id,'=','s')
+								'criteria'=>  \GO\Base\Db\FindCriteria::newInstance()->addCondition('user_id', \GO::user()->id,'=','s')
 						))
 						->ignoreAdminGroup()
 						->order('order', 'DESC');

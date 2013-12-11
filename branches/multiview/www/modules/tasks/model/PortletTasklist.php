@@ -20,7 +20,7 @@
  * @property int $tasklist_id
  */
 
-class GO_Tasks_Model_PortletTasklist extends GO_Base_Db_ActiveRecord {
+class GO_Tasks_Model_PortletTasklist extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 *

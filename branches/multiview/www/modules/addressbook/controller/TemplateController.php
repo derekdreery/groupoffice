@@ -10,7 +10,7 @@
  * @copyright Copyright Intermesh
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
  */
-class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractModelController{
+class GO_Addressbook_Controller_Template extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO_Addressbook_Model_Template';	
 	
@@ -22,7 +22,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 	
 	protected function getStoreParams($params) {
 		if(isset($params['type'])){
-			$findParams = \GO_Base_Db_FindParams::newInstance();
+			$findParams = \GO\Base\Db\FindParams::newInstance();
 			
 			$findParams->getCriteria()->addCondition('type', $params['type']);
 			return $findParams;
@@ -38,7 +38,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
-		$message = new \GO_Base_Mail_Message();
+		$message = new \GO\Base\Mail\Message();
 		$message->handleEmailFormInput($params);
 		
 		$model->content = $message->toString();
@@ -51,7 +51,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		$response['htmlbody'] = $message->getHtmlBody();
 		
 		// reset the temp folder created by the core controller
-//		$tmpFolder = new \GO_Base_Fs_Folder(\GO::config()->tmpdir . 'uploadqueue');
+//		$tmpFolder = new \GO\Base\Fs\Folder(\GO::config()->tmpdir . 'uploadqueue');
 //		$tmpFolder->delete();
 		
 		parent::afterSubmit($response, $model, $params, $modifiedAttributes);
@@ -70,7 +70,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		return parent::afterLoad($response, $model, $params);
 	}
 	
-	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name', '$model->user->name');
 		return parent::formatColumns($columnModel);
 	}
@@ -106,12 +106,12 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 			$this->_defaultTemplate->save();
 		}
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()->order('name');			
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order('name');			
 		$findParams->getCriteria()->addCondition('type', \GO_Addressbook_Model_Template::TYPE_EMAIL);
 				
 		$stmt = \GO_Addressbook_Model_Template::model()->find($findParams);
 		
-		$store = \GO_Base_Data_Store::newInstance(\GO_Addressbook_Model_Template::model());		
+		$store = \GO\Base\Data\Store::newInstance(\GO_Addressbook_Model_Template::model());		
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatEmailSelectionRecord'));
 		
 		$store->setStatement($stmt);
@@ -159,7 +159,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		
 	}
 	
-	public function formatEmailSelectionRecord(array $formattedRecord, GO_Base_Db_ActiveRecord $model, GO_Base_Data_ColumnModel $cm){
+	public function formatEmailSelectionRecord(array $formattedRecord, \GO\Base\Db\ActiveRecord $model, \GO\Base\Data\ColumnModel $cm){
 		if(!isset($this->_defaultTemplate->template_id)){
 			$this->_defaultTemplate->template_id=$model->id;
 			$this->_defaultTemplate->save();
@@ -174,12 +174,12 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 
 	public function actionAccountTemplatesStore($params){	
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()->order('name');			
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order('name');			
 		$findParams->getCriteria()->addCondition('type', \GO_Addressbook_Model_Template::TYPE_EMAIL);
 				
 		$stmt = \GO_Addressbook_Model_Template::model()->find($findParams);
 		
-		$store = \GO_Base_Data_Store::newInstance(\GO_Addressbook_Model_Template::model());		
+		$store = \GO\Base\Data\Store::newInstance(\GO_Addressbook_Model_Template::model());		
 //		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatEmailSelectionRecord'));
 		
 		$store->setStatement($stmt);

@@ -1,5 +1,7 @@
 <?php
-class GO_Base_Fs_MemoryFile extends GO\Base\Fs\File{
+namespace GO\Base\Fs;
+
+class MemoryFile extends \GO\Base\Fs\File{
 	
 	private $_data;
 	
@@ -47,7 +49,7 @@ class GO_Base_Fs_MemoryFile extends GO\Base\Fs\File{
 		throw Exception("move not implemented for memory file");
 	}
 	
-	public function copy(\GO_Base_Fs_Folder $destinationFolder, $newFileName = false) {
+	public function copy(\GO\Base\Fs\Folder $destinationFolder, $newFileName = false) {
 		throw Exception("copy not implemented for memory file");
 	}
 	public function parent() {

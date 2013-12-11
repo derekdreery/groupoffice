@@ -23,7 +23,7 @@
  * @property int $acl_id
  */
 
-class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
+class GO_Calendar_Model_Category extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
@@ -75,11 +75,11 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 	  */
 	 public function findByName($calendar_id, $name){
 		 
-		 $findParams = \GO_Base_Db_FindParams::newInstance()->single();
+		 $findParams = \GO\Base\Db\FindParams::newInstance()->single();
 		 
 		 $findParams->getCriteria()
 						 ->addCondition('name', $name)
-						 ->mergeWith(\GO_Base_Db_FindCriteria::newInstance()
+						 ->mergeWith(\GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('calendar_id', $calendar_id)
 							->addCondition('calendar_id', 0,'=','t',false)
 										 );
@@ -89,7 +89,7 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 	 
 	 protected function afterSave($wasNew) {
 		 
-		 $c = new \GO_Base_Db_Connection();		 
+		 $c = new \GO\Base\Db\Connection();		 
 		 $c->createStatement()->update(
 						 \GO_Calendar_Model_Event::model()->tableName(), 
 						 array('background'=>$this->color),
@@ -103,9 +103,9 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 		 if (empty($this->calendar))
 			 return true;		 
 		 
-		 if ($this->calendar->getPermissionLevel() >= \GO_Base_Model_Acl::DELETE_PERMISSION)
+		 if ($this->calendar->getPermissionLevel() >= \GO\Base\Model\Acl::DELETE_PERMISSION)
 			 return true;
 		 else
-			 throw new \GO_Base_Exception_AccessDenied();
+			 throw new \GO\Base\Exception\AccessDenied();
 	 }
 }

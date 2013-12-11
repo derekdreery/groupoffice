@@ -24,7 +24,7 @@ $settings['state']=array();
 if(GO::user()) {
 	//state for Ext components
 	$settings['html_editor_font']=GO::config()->html_editor_font;
-	$settings['state'] = GO_Base_Model_State::model()->getFullClientState($user_id);
+	$settings['state'] = \GO\Base\Model\State::model()->getFullClientState($user_id);
 	$settings['user_id']=$user_id;	
 	$settings['has_admin_permission']=GO::user()->isAdmin();	
 	$settings['username'] = GO::user()->username;
@@ -197,7 +197,7 @@ if(GO::config()->debug || !file_exists($path)) {
 	}	
 	
 	//Put all lang vars in js
-	$language = new GO_Base_Language();
+	$language = new \GO\Base\Language();
 	$l = $language->getAllLanguage();
 
 	fwrite($fp,'GO.lang='.json_encode($l['base']['common']).';');
@@ -231,7 +231,7 @@ if(GO::config()->debug || !file_exists($path)) {
 		}
 		
 		if(GO::config()->minify){
-			$js = GO_Base_Util_Minify_JSMin::minify($js);
+			$js = \GO\Base\Util\Minify\JSMin::minify($js);
 		}
 		
 		file_put_contents($path, $js,FILE_APPEND);
@@ -268,7 +268,7 @@ $scripts=array();
 $modulesCacheStr=array();
 foreach($load_modules as $module)
 	if($module->permissionLevel) 
-		$modulesCacheStr[]=$module->id.($module->permissionLevel>GO_Base_Model_Acl::READ_PERMISSION ? '1' : '0');
+		$modulesCacheStr[]=$module->id.($module->permissionLevel>\GO\Base\Model\Acl::READ_PERMISSION ? '1' : '0');
 	
 $modulesCacheStr=md5(implode('-',$modulesCacheStr));
 
@@ -289,7 +289,7 @@ if(count($load_modules)) {
 		}
 
 		//Put all lang vars in js
-		$language = new GO_Base_Language();
+		$language = new \GO\Base\Language();
 		$l = $language->getAllLanguage();
 		unset($l['base']);
 		
@@ -369,7 +369,7 @@ if(count($load_modules)) {
 			}
 			
 			if(GO::config()->minify){
-				$js = GO_Base_Util_Minify_JSMin::minify($js);
+				$js = \GO\Base\Util\Minify\JSMin::minify($js);
 			}
 			
 			file_put_contents($path, $js,FILE_APPEND);
@@ -403,7 +403,7 @@ if(count($load_modules)) {
 	$GO_SCRIPTS_JS='';
 	
 	//START FOR BACKWARDS COMPAT. REMOVE WHEN BILLING MODULE IS REFACTORED.	
-	$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'customexports');
+	$folder = new \GO\Base\Fs\Folder(GO::config()->file_storage_path.'customexports');
 	$ce=array();
 	if($folder->exists()){
 
@@ -477,7 +477,7 @@ if(file_exists(GO::view()->getTheme()->getPath().'MainLayout.js')) {
 if(isset($_REQUEST['f']))
 {
 	if(substr($_REQUEST['f'],0,9)=='{GOCRYPT}')
-		$fp = GO_Base_Util_Crypt::decrypt($_REQUEST['f']);
+		$fp = \GO\Base\Util\Crypt::decrypt($_REQUEST['f']);
 	else
 		$fp = json_decode(base64_decode($_REQUEST['f']),true);
 	

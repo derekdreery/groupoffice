@@ -87,7 +87,7 @@ class GO_Email_Controller_Folder extends \GO\Base\Controller\AbstractController 
 	protected function actionMarkAsRead($params){
 		$account = \GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
-		/* @var $imap GO_Base_Mail_Imap */	
+		/* @var $imap \GO\Base\Mail\Imap */	
 		
 		$imap = $account->openImapConnection($params["mailbox"]);
 		$uids = $imap->search("unseen");

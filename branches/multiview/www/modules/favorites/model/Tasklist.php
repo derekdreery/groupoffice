@@ -26,7 +26,7 @@
  * @property int $sort
  */
 
-class GO_Favorites_Model_Tasklist extends GO_Base_Db_ActiveRecord{
+class GO_Favorites_Model_Tasklist extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns the table name

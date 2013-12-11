@@ -4,7 +4,7 @@ require_once($GLOBALS['GO_CONFIG']->class_path . 'tcpdf/tcpdf.php');
 
 //ini_set('display_errors', 'off');
 
-class PDF extends TCPDF {
+class PDF extends \TCPDF {
 
 	var $font = 'helvetica';
 	var $pageWidth;

@@ -21,7 +21,7 @@
  * @property int $calendar_id
  */
 
-class GO_Calendar_Model_PortletCalendar extends GO_Base_Db_ActiveRecord {
+class GO_Calendar_Model_PortletCalendar extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 *

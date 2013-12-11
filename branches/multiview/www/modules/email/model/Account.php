@@ -45,7 +45,7 @@
  * @property boolean $sieve_tls
  * @property boolean $sieve_usetls
  */
-class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
+class GO_Email_Model_Account extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * Set to false if you don't want the IMAP connection on save.
@@ -129,7 +129,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	public function relations() {
 		return array(
 				'aliases' => array('type'=>self::HAS_MANY, 'model'=>'GO_Email_Model_Alias', 'field'=>'account_id','delete'=>true),
-				'filters' => array('type'=>self::HAS_MANY, 'model'=>'\GO_Email_Model_Filter', 'field'=>'account_id','delete'=>true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order("priority")),
+				'filters' => array('type'=>self::HAS_MANY, 'model'=>'\GO_Email_Model_Filter', 'field'=>'account_id','delete'=>true, 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order("priority")),
 				'portletFolders' => array('type'=>self::HAS_MANY, 'model'=>'GO_Email_Model_PortletFolder', 'field'=>'account_id','delete'=>true)
 		);
 	}
@@ -137,13 +137,13 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeSave() {
 		if($this->isModified('password')){	
-			$decrypted = \GO_Base_Util_Crypt::decrypt($this->getOldAttributeValue('password'));
+			$decrypted = \GO\Base\Util\Crypt::decrypt($this->getOldAttributeValue('password'));
 			
 			if($decrypted==$this->password){
 				$this->resetAttribute('password');
 			}else
 			{
-				$encrypted = \GO_Base_Util_Crypt::encrypt($this->password);		
+				$encrypted = \GO\Base\Util\Crypt::encrypt($this->password);		
 				if($encrypted){
 					$this->password = $encrypted;
 					$this->password_encrypted=2;//deprecated. remove when email is mvc style.
@@ -155,7 +155,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			unset(\GO::session()->values['emailModule']['accountPasswords'][$this->id]);
 		
 		if($this->isModified('smtp_password')){
-			$encrypted = \GO_Base_Util_Crypt::encrypt($this->smtp_password);		
+			$encrypted = \GO\Base\Util\Crypt::encrypt($this->smtp_password);		
 			if($encrypted)
 				$this->smtp_password = $encrypted;
 		}
@@ -267,7 +267,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
 	public function decryptPassword(){
 		if (!empty(\GO::session()->values['emailModule']['accountPasswords'][$this->id])) {
-			$decrypted = \GO_Base_Util_Crypt::decrypt(\GO::session()->values['emailModule']['accountPasswords'][$this->id]);
+			$decrypted = \GO\Base\Util\Crypt::decrypt(\GO::session()->values['emailModule']['accountPasswords'][$this->id]);
 		} else {
 			
 			//support for z-push without storing passwords
@@ -276,7 +276,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 				$decrypted = Request::GetAuthPassword();
 			}else
 			{			
-				$decrypted = \GO_Base_Util_Crypt::decrypt($this->password);
+				$decrypted = \GO\Base\Util\Crypt::decrypt($this->password);
 			}
 		}
 		
@@ -285,7 +285,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
 	public function decryptSmtpPassword(){
 		if (!empty(\GO::session()->values['emailModule']['smtpPasswords'][$this->id])) {
-			$decrypted = \GO_Base_Util_Crypt::decrypt(\GO::session()->values['emailModule']['smtpPasswords'][$this->id]);
+			$decrypted = \GO\Base\Util\Crypt::decrypt(\GO::session()->values['emailModule']['smtpPasswords'][$this->id]);
 		} else {
 			
 			//support for z-push without storing passwords
@@ -294,7 +294,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 				$decrypted = Request::GetAuthPassword();
 			}else
 			{			
-				$decrypted = \GO_Base_Util_Crypt::decrypt($this->smtp_password);
+				$decrypted = \GO\Base\Util\Crypt::decrypt($this->smtp_password);
 			}
 		}
 		
@@ -305,7 +305,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 * Open a connection to the imap server.
 	 *
 	 * @param string $mailbox
-	 * @return GO_Base_Mail_Imap
+	 * @return \GO\Base\Mail\Imap
 	 */
 	public function openImapConnection($mailbox='INBOX'){
 	
@@ -323,11 +323,11 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Connect to the IMAP server without selecting a mailbox
 	 * 
-	 * @return GO_Base_Mail_Imap
+	 * @return \GO\Base\Mail\Imap
 	 */
 	public function justConnect(){
 		if(empty($this->_imap)){
-			$this->_imap = new \GO_Base_Mail_Imap();
+			$this->_imap = new \GO\Base\Mail\Imap();
 			$this->_imap->connect($this->host, $this->port, $this->username, $this->decryptPassword(), $this->use_ssl);
 		}else
 		{
@@ -355,7 +355,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Get the imap connection if it's open.
 	 * 
-	 * @return GO_Base_Mail_Imap 
+	 * @return \GO\Base\Mail\Imap 
 	 */
 	public function getImapConnection(){
 		if(isset($this->_imap)){
@@ -398,13 +398,13 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 */
 	public function findByEmail($email){
 
-		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addRawCondition('t.id', 'a.account_id');
 
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->single()
 						->join(\GO_Email_Model_Alias::model()->tableName(), $joinCriteria,'a')
-						->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('email', $email,'=','a'));
+						->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('email', $email,'=','a'));
 
 		return $this->find($findParams);
 	}

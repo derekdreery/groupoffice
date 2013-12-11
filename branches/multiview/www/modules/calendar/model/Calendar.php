@@ -32,7 +32,7 @@
  * @property string $ics_import_url
  */
 
-class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel {
+class GO_Calendar_Model_Calendar extends \GO\Base\Model\AbstractUserDefaultModel {
 	
 	/**
 	 * The default color to display this calendar in the view
@@ -79,9 +79,9 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	}
 	
 	public function findDefault($userId){
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->single()
-						->join("cal_settings", \GO_Base_Db_FindCriteria::newInstance()
+						->join("cal_settings", \GO\Base\Db\FindCriteria::newInstance()
 										->addCondition('id', 's.calendar_id','=','t',true,true)
 										->addCondition('user_id', $userId,'=','s'),
 										's');
@@ -130,7 +130,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 * @return boolean
 	 */
 	public function userHasCreatePermission(){
-//		if(\GO_Base_Model_Acl::hasPermission($this->getPermissionLevel(),\GO_Base_Model_Acl::CREATE_PERMISSION)){
+//		if(\GO\Base\Model\Acl::hasPermission($this->getPermissionLevel(),\GO\Base\Model\Acl::CREATE_PERMISSION)){
 //			return true;
 //		}else 
 		if(\GO::modules()->isInstalled('freebusypermissions')){
@@ -147,7 +147,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		 
 		 foreach($stmt as $user){
 			 if($user->user_id!=$this->user_id)//the owner has already been added automatically with manage permission
-				$this->acl->addUser($user->user_id, \GO_Base_Model_Acl::DELETE_PERMISSION);
+				$this->acl->addUser($user->user_id, \GO\Base\Model\Acl::DELETE_PERMISSION);
 		 }
 		}
 		
@@ -180,10 +180,10 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	
 	/**
 	 * 
-	 * @param \GO_Base_Model_User $user
+	 * @param \GO\Base\Model\User $user
 	 * @return GO_Tasks_Model_Tasklist
 	 */
-	public function getDefault(\GO_Base_Model_User $user, &$createdNew=false) {
+	public function getDefault(\GO\Base\Model\User $user, &$createdNew=false) {
 		$default = parent::getDefault($user, $createdNew);
 	
 		if($createdNew){
@@ -207,10 +207,10 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		foreach ($free_busy as $min=>$busy) {
 			
 			$model = \GO_Calendar_Model_Event::model()->find(
-				\GO_Base_Db_FindParams::newInstance()
+				\GO\Base\Db\FindParams::newInstance()
 					->single()
 					->ignoreAcl()
-					->criteria(\GO_Base_Db_FindCriteria::newInstance()
+					->criteria(\GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('calendar_id', $this->id, '=')
 						->addCondition('start_time',$startTimeUnix+$min*60+15*60,'<')
 						->addCondition('end_time',$startTimeUnix+$min*60,'>')
@@ -233,11 +233,11 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 */
 	public function toVObject(){
 
-		//$stmt = $this->events(\GO_Base_Db_FindParams::newInstance()->select("t.*"));
-		$findParams = \GO_Base_Db_FindParams::newInstance()->select("t.*");
+		//$stmt = $this->events(\GO\Base\Db\FindParams::newInstance()->select("t.*"));
+		$findParams = \GO\Base\Db\FindParams::newInstance()->select("t.*");
 		$findParams->getCriteria()->addCondition("calendar_id", $this->id);
 	
-		$stmt = \GO_Calendar_Model_Event::model()->findForPeriod($findParams, \GO_Base_Util_Date::date_add(time(), 0, -1));
+		$stmt = \GO_Calendar_Model_Event::model()->findForPeriod($findParams, \GO\Base\Util\Date::date_add(time(), 0, -1));
 		
 		$string = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Intermesh//NONSGML ".\GO::config()->product_name." ".\GO::config()->version."//EN\r\n";
 

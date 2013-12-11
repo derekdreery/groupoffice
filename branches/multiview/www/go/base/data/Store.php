@@ -21,11 +21,13 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.data
  */
-class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
+namespace GO\Base\Data;
+
+class Store extends \GO\Base\Data\AbstractStore {
 	
   /**
    *
-   * @var GO_Base_Db_ActiveStatement 
+   * @var \GO\Base\Db\ActiveStatement 
    */
   private $_stmt;
 	
@@ -37,15 +39,15 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	/**
 	 * Create a new grid with column model and query result
 	 * 
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param \GO\Base\Db\ActiveRecord $model
 	 * @param array $excludeColumns Exlude columns if you autoload all columns
 	 * @param array $excludeColumns Set the columns to load from the model. If ommitted it will load all columns.
 	 * @param array $findParams
-	 * @return GO_Base_Data_Store 
+	 * @return Store 
 	 */
 	public static function newInstance($model, $excludeColumns=array(), $includeColumns=array())
 	{
-		$cm = new \GO_Base_Data_ColumnModel($model, $excludeColumns, $includeColumns=array());		
+		$cm = new \GO\Base\Data\ColumnModel($model, $excludeColumns, $includeColumns=array());		
 		$store = new self($cm);
 		return $store;
 		
@@ -65,9 +67,9 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	 * Run the statement after you construct this grid. Otherwise the delete
 	 * actions will be ran later and they will still be in the result set.
 	 * 
-	 * @param GO_Base_Db_ActiveStatement $stmt 
+	 * @param \GO\Base\Db\ActiveStatement $stmt 
 	 */
-	public function setStatement(\GO_Base_Db_ActiveStatement $stmt){
+	public function setStatement(\GO\Base\Db\ActiveStatement $stmt){
 		$this->_stmt = $stmt;
 		
 		
@@ -221,8 +223,8 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
    * Returns a set of default parameters for use with a grid.
 	 * 
    * @var array $requestParams The request parameters passed to the controller. (Similar to $_REQUEST)
-   * @var GO_Base_Db_FindParams $extraFindParams Supply parameters to add to or override the default ones
-   * @return GO_Base_Db_FindParams defaultParams 
+   * @var \GO\Base\Db\FindParams $extraFindParams Supply parameters to add to or override the default ones
+   * @return \GO\Base\Db\FindParams defaultParams 
    */
   public function getDefaultParams($requestParams, $extraFindParams=false) {
 		
@@ -256,7 +258,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 //			$sort[$i] = $this->getColumnModel()->getSortColumn($sort[$i]);
 //		}
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()						
+		$findParams = \GO\Base\Db\FindParams::newInstance()						
 						->joinCustomFields()
 						->order($sort, $dir);
 		

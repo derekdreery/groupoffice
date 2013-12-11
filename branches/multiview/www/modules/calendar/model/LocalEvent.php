@@ -20,7 +20,7 @@
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
-class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
+class GO_Calendar_Model_LocalEvent extends \GO\Base\Model {
 	
 	
 	private $_initials = array();
@@ -90,7 +90,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		
 		// If there is no user attached to this event (user_id = 0) then create a temporary user object
 //		if(!$event->user){
-//			$event->user = new \GO_Base_Model_User();
+//			$event->user = new \GO\Base\Model\User();
 //			$event->user->first_name = \GO::t('unknown').' '.\GO::t('user');
 //		}
 		
@@ -147,7 +147,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response['ctime'] = date('Y-m-d H:i',  $this->_event->ctime);
 		$response['mtime'] = date('Y-m-d H:i',  $this->_event->mtime);
 		$response['event_id'] = $this->_event->id;
-		$response['description'] = nl2br(htmlspecialchars(\GO_Base_Util_String::cut_string($this->_event->description, 800), ENT_COMPAT, 'UTF-8'));
+		$response['description'] = nl2br(htmlspecialchars(\GO\Base\Util\String::cut_string($this->_event->description, 800), ENT_COMPAT, 'UTF-8'));
 		$response['private'] = $this->isPrivate();
 		
 		$response['private_enabled']=$this->_event->private;
@@ -180,7 +180,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		
 		$response['permission_level']=$this->_event->permissionLevel;
 		$response['all_day_event'] = $this->isAllDay();
-		$response['day'] = $dayString[date('w', $this->getAlternateStartTime())].' '.\GO_Base_Util_Date::get_timestamp($this->getAlternateStartTime(),false);  // date(implode(\GO::user()->date_separator,str_split(\GO::user()->date_format,1)), ($eventModel->start_time));
+		$response['day'] = $dayString[date('w', $this->getAlternateStartTime())].' '.\GO\Base\Util\Date::get_timestamp($this->getAlternateStartTime(),false);  // date(implode(\GO::user()->date_separator,str_split(\GO::user()->date_format,1)), ($eventModel->start_time));
 		$response['read_only'] = $this->isReadOnly();
 		$response['model_name'] = $this->_event->className();
 		
@@ -456,7 +456,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 						$this->_event->read_only || 
 						!$this->_event->is_organizer || 
 						$this->isPrivate() && \GO::user()->id != $this->_event->user_id || 
-						$this->_event->permissionLevel < \GO_Base_Model_Acl::WRITE_PERMISSION;
+						$this->_event->permissionLevel < \GO\Base\Model\Acl::WRITE_PERMISSION;
 	}
 	
 	/**

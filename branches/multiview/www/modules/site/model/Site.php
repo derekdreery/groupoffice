@@ -37,7 +37,7 @@
  * @property string $language
  * @property type $files_folder_id
  */
-class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
+class GO_Site_Model_Site extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 *
@@ -122,8 +122,8 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-			'content' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'site_id', 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('sort_order'),  'delete' => true),
-			'contentNodes' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'site_id', 'findParams'=> GO_Base_Db_FindParams::newInstance()->order('sort_order')->criteria(\GO_Base_Db_FindCriteria::newInstance()->addCondition('parent_id', null)),  'delete' => true)
+			'content' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'site_id', 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order('sort_order'),  'delete' => true),
+			'contentNodes' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'site_id', 'findParams'=> \GO\Base\Db\FindParams::newInstance()->order('sort_order')->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('parent_id', null)),  'delete' => true)
 		);
 	}
 
@@ -131,11 +131,11 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 //	 * Get the path to the site's file storage. It is web accessible through an 
 //	 * alias /public. This folder contains template files and component assets.
 //	 * 
-//	 * @return GO_Base_Fs_Folder
+//	 * @return \GO\Base\Fs\Folder
 //	 */
 //	public function getFileStorageFolder(){
 //		
-//		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'site/'.$this->id.'/');
+//		$folder = new \GO\Base\Fs\Folder(GO::config()->file_storage_path.'site/'.$this->id.'/');
 //		$folder->create();
 //		
 //		return $folder;
@@ -158,7 +158,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Return the module that handles the view of the site.
 	 * 
-	 * @return GO_Base_Model_Module
+	 * @return \GO\Base\Model\Module
 	 * @throws Exception
 	 */
 	public function getSiteModule(){
@@ -174,7 +174,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	public static function getTreeNodes(){
 		
 		$tree = array();
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->ignoreAcl();
 		
 		$sites = self::model()->find($findParams);

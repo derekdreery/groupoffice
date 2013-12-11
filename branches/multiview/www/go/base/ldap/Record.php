@@ -1,9 +1,11 @@
 <?php
-class GO_Base_Ldap_Record{
+namespace GO\Base\Ldap;
+
+class Record{
 	/**
 	 * The LDAP connection
 	 * 
-	 * @var GO_Base_Ldap_Connection 
+	 * @var \GO\Base\Ldap\Connection 
 	 */
 	private $_ldapConn;
 	
@@ -11,7 +13,7 @@ class GO_Base_Ldap_Record{
 	
 	private $_attributes;
 	
-	public function __construct(\GO_Base_Ldap_Connection $ldapConn, $entryId) {
+	public function __construct(\GO\Base\Ldap\Connection $ldapConn, $entryId) {
 		$this->_entryId=$entryId;
 		$this->_ldapConn=$ldapConn;
 	}

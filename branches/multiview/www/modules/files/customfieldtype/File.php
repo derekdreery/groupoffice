@@ -1,5 +1,5 @@
 <?php
-class GO_Files_Customfieldtype_File extends GO_Customfields_Customfieldtype_Abstract{
+class GO_Files_Customfieldtype_File extends \GO_Customfields_Customfieldtype_Abstract{
 	
 	public function name(){
 		return 'File';

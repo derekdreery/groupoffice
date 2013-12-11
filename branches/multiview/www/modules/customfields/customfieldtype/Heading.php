@@ -1,5 +1,5 @@
 <?php
-class GO_Customfields_Customfieldtype_Heading extends GO_Customfields_Customfieldtype_Abstract{
+class GO_Customfields_Customfieldtype_Heading extends \GO_Customfields_Customfieldtype_Abstract{
 	
 	public function name(){
 		return 'Heading';

@@ -21,7 +21,7 @@
  * @property string $background
  */
 
-class GO_Calendar_Model_ViewCalendar extends GO_Base_Db_ActiveRecord{
+class GO_Calendar_Model_ViewCalendar extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself

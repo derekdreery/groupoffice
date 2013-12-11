@@ -1,5 +1,5 @@
 <?php
-class GO_Customfields_Customfieldtype_Treeselect extends GO_Customfields_Customfieldtype_Select{
+class GO_Customfields_Customfieldtype_Treeselect extends \GO_Customfields_Customfieldtype_Select{
 	
 	public function name(){
 		return 'Treeselect';

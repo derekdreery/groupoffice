@@ -24,19 +24,21 @@
  * @copyright Copyright Intermesh BV.
  */
 
-class GO_Base_Fs_CsvFile extends GO\Base\Fs\File{
+namespace GO\Base\Fs;
+
+class CsvFile extends \GO\Base\Fs\File{
 	public $delimiter=',';
 	
 	public $enclosure='"';
 	
 	/**
-	 * @var GO_Base_Csv_Writer or GO_Base_Csv_Reader, see _setCSV
+	 * @var \GO\Base\Csv\Writer or \GO\Base\Csv\Reader, see _setCSV
 	 */
 	private $_csv;
 	
 	private function _setCSV($mode){
 		if(!isset($this->_csv)){
-			$this->_csv = new \GO_Base_Csv_Writer($this->path());			
+			$this->_csv = new \GO\Base\Csv\Writer($this->path());			
 			$this->_csv->delimiter=$this->delimiter;
 			$this->_csv->enclosure=$this->enclosure;
 		}

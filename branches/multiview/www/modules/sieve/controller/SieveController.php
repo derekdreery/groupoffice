@@ -1,5 +1,5 @@
 <?php
-class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelController{
+class GO_Sieve_Controller_Sieve extends \GO\Base\Controller\AbstractModelController{
 	
 	private $_sieve;
 	
@@ -173,7 +173,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 				}
 				
 				if($rule['actions'][$i]['type'] == 'stop' && $i < $c-1){
-					Throw new GO_Base_Exception_Save(GO::t('stopEndError','sieve'));
+					Throw new \GO\Base\Exception\Save(GO::t('stopEndError','sieve'));
 				}
 			}
 

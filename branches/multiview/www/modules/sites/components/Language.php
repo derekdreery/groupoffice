@@ -45,7 +45,7 @@ class GO_Sites_Components_Language{
 		if($file)
 			require($file);
 		else
-			throw new GO_Base_Exception_NotFound('Language file not found');
+			throw new \GO\Base\Exception\NotFound('Language file not found');
 		
 		if(isset($l)){
 			if(!empty($l[$name]))

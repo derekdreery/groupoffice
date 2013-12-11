@@ -1,8 +1,8 @@
 <?php
-class GO_Tasks_TasksModule extends GO_Base_Module{
+class GO_Tasks_TasksModule extends \GO\Base\Module{
 	public static function initListeners() {
 		
-		GO_Base_Model_User::model()->addListener('delete', "GO_Tasks_TasksModule", "deleteUser");
+		\GO\Base\Model\User::model()->addListener('delete', "GO_Tasks_TasksModule", "deleteUser");
 	}
 
 	public function autoInstall() {

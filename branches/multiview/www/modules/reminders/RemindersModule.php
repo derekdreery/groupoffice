@@ -1,4 +1,4 @@
 <?php
-class GO_Reminders_RemindersModule extends GO_Base_Module{
+class GO_Reminders_RemindersModule extends \GO\Base\Module{
 
 }

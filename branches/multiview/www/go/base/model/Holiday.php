@@ -22,7 +22,9 @@
  * @property String $name
  * @property String $region
  */
-class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
+namespace GO\Base\Model;
+
+class Holiday extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * The mapping for the holiday files
@@ -42,7 +44,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Base_Model_Module 
+	 * @return \GO\Base\Model\Module 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -71,12 +73,12 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 	 * @param string $locale
 	 * @param boolean $check
 	 * @param boolean $force
-	 * @return GO_Base_Db_ActiveStatement 
+	 * @return \GO\Base\Db\ActiveStatement 
 	 */
 	public function getHolidaysInPeriod($startDate,$endDate,$locale=false,$check=true,$force=false){
 		
 		if(empty($locale)){		
-			$locale = \GO_Base_Model_Holiday::localeFromCountry(\GO::user()->createContact()->country);
+			$locale = Holiday::localeFromCountry(\GO::user()->createContact()->country);
 			if(!$locale)
 				return false;
 		}
@@ -92,16 +94,16 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 				$this->generateHolidays($year,$locale);
 		}
 		
-		$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('date', date('Y-m-d',$startDate),'>=')
 						->addCondition('date', date('Y-m-d',$endDate), '<=');	
 					
 		$findCriteria->addCondition('region', $locale);
 			
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->criteria($findCriteria);
 		
-		return \GO_Base_Model_Holiday::model()->find($findParams);
+		return Holiday::model()->find($findParams);
 	}
 	
 	/**
@@ -120,15 +122,15 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 //		$startYear = mktime(0, 0, 0, 1, 1, $year);
 //		$endYear   = mktime(23, 59, 59, 12, 31, $year);
 		
-		$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 					->addCondition('date', $year.'-01-01','>=')
 					->addCondition('date', ($year+1).'-01-01', '<')
 					->addCondition('region', $locale);
 
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 					->criteria($findCriteria);
 
-		$result = \GO_Base_Model_Holiday::model()->find($findParams);
+		$result = Holiday::model()->find($findParams);
 
 		return ($result->rowCount() >= 1);
 	}
@@ -148,15 +150,15 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 		$startYear = mktime(0, 0, 0, 1, 1, $year);
 		$endYear   = mktime(23, 59, 59, 12, 31, $year);
 		
-		$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 					->addCondition('date', date('Y-m-d', $startYear),'>=')
 					->addCondition('date',  date('Y-m-d', $endYear), '<=')
 					->addCondition('region', $locale);
 
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 					->criteria($findCriteria);
 
-		$holidays = \GO_Base_Model_Holiday::model()->find($findParams);
+		$holidays = Holiday::model()->find($findParams);
 		
 		while($holiday = $holidays->fetch()){
 			$holiday->delete();
@@ -171,7 +173,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 	public static function getAvailableHolidayFiles(){
 		$holidays = array();
 		$folderPath = \GO::config()->root_path.'language/holidays/';
-		$folder = new \GO_Base_Fs_Folder($folderPath);
+		$folder = new \GO\Base\Fs\Folder($folderPath);
 		
 		$children = $folder->ls();
 		foreach($children as $child){
@@ -214,7 +216,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 				$month_day = explode("-", $key);
 				$date = mktime(0,0,0,$month_day[0],$month_day[1],$year);
 				
-				$holiday = new \GO_Base_Model_Holiday();
+				$holiday = new Holiday();
 				$holiday->name = $name;
 				$holiday->date = date('Y-m-d',$date);
 				$holiday->region = $locale;
@@ -226,14 +228,14 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 		if(isset($holidays['var']) && function_exists('easter_date') && $year > 1969 && $year < 2037) {
 //			$easter_day = easter_date($year);
 			
-			$easterDT = \GO_Base_Util_Date_DateTime::getEasterDatetime($year);
+			$easterDT = \GO\Base\Util\Date_DateTime::getEasterDatetime($year);
 			$easter_day = $easterDT->format('U');
 			
 			foreach($holidays['var'] as $key => $name) {
 				$date = strtotime($key." days", $easter_day);
 		
 				
-				$holiday = new \GO_Base_Model_Holiday();
+				$holiday = new Holiday();
 				$holiday->name = $name;
 				$holiday->date = date('Y-m-d',$date);
 				$holiday->region = $locale;
@@ -247,7 +249,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 				$count = $key - $weekday;
 				$date = strtotime($count." days", mktime(0,0,0,"12","24",$year));
 				
-				$holiday = new \GO_Base_Model_Holiday();
+				$holiday = new Holiday();
 				$holiday->name = $name;
 				$holiday->date = date('Y-m-d',$date);
 				$holiday->region = $locale;
@@ -259,7 +261,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 	
 			foreach($holidays['fn'] as $def) {
 			
-				$holiday = new \GO_Base_Model_Holiday();
+				$holiday = new Holiday();
 				$holiday->name = $def[0];
 				$holiday->date = call_user_func($def[1], $year);
 				$holiday->region = $locale;
@@ -286,7 +288,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 			//'background'=>$calendar->displayColor,
 			'background'=>'f1f1f1',
 			'model_name'=>'',
-			'day'=>$dayString[date('w', strtotime($this->date))].' '.\GO_Base_Util_Date::get_timestamp(strtotime($this->date),false),
+			'day'=>$dayString[date('w', strtotime($this->date))].' '.\GO\Base\Util\Date::get_timestamp(strtotime($this->date),false),
 			'read_only'=>true
 			);
 	}

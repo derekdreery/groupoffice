@@ -1,5 +1,7 @@
 <?php
-class GO_Base_Cron_CronGroup extends GO_Base_Db_ActiveRecord {
+namespace GO\Base\Cron;
+
+class CronGroup extends \GO\Base\Db\ActiveRecord {
 
 	public static function model($className=__CLASS__)
 	{	
@@ -16,7 +18,7 @@ class GO_Base_Cron_CronGroup extends GO_Base_Db_ActiveRecord {
 	
 	public function relations(){
 		return array(	
-			'cronjob' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Cron_CronJob', 'field'=>'group_id', 'linkModel' => 'GO_Base_Model_Group'),
+			'cronjob' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Cron\CronJob', 'field'=>'group_id', 'linkModel' => '\GO\Base\Model\Group'),
     );
 	}
 }

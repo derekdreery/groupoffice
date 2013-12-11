@@ -24,7 +24,7 @@
  * @version $Id ContentController.php 2012-07-12 15:13:19 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Sites_Controller_Content extends GO_Base_Controller_AbstractModelController {
+class GO_Sites_Controller_Content extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Sites_Model_Content';
 	
@@ -42,7 +42,7 @@ class GO_Sites_Controller_Content extends GO_Base_Controller_AbstractModelContro
 	}
 	
 	protected function getStoreParams($params) {
-		$fp = GO_Base_Db_FindParams::newInstance()->order('sort_order');
+		$fp = \GO\Base\Db\FindParams::newInstance()->order('sort_order');
 		
 		$fp->getCriteria()->addCondition('site_id', $params['site_id']);
 		

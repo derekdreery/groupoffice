@@ -1,10 +1,10 @@
 <?php
-class GO_Calendar_Controller_Group extends GO_Base_Controller_AbstractModelController {
+class GO_Calendar_Controller_Group extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Calendar_Model_Group';
 	
 	protected function getStoreParams($params) {
-		$findParams = \GO_Base_Db_FindParams::newInstance();
+		$findParams = \GO\Base\Db\FindParams::newInstance();
 		
 		//don't show calendars group. First group is a special one for calendars.
 		$findParams->getCriteria()->addCondition('id', 1,'>');
@@ -15,9 +15,9 @@ class GO_Calendar_Controller_Group extends GO_Base_Controller_AbstractModelContr
 	
 	protected function actionGroupsWithResources($params){
 		
-		$stmt = \GO_Calendar_Model_Group::model()->find(\GO_Base_Db_FindParams::newInstance()
+		$stmt = \GO_Calendar_Model_Group::model()->find(\GO\Base\Db\FindParams::newInstance()
 						->order('t.name')
-						->criteria(\GO_Base_Db_FindCriteria::newInstance()
+						->criteria(\GO\Base\Db\FindCriteria::newInstance()
 										->addCondition('id',1,'>')));
 		
 		$response['results']=array();
@@ -32,11 +32,11 @@ class GO_Calendar_Controller_Group extends GO_Base_Controller_AbstractModelContr
 			
 			$record['resources']=array();
 			
-			$calStmt = \GO_Calendar_Model_Calendar::model()->find(\GO_Base_Db_FindParams::newInstance()
-							->permissionLevel(\GO_Base_Model_Acl::READ_PERMISSION)
+			$calStmt = \GO_Calendar_Model_Calendar::model()->find(\GO\Base\Db\FindParams::newInstance()
+							->permissionLevel(\GO\Base\Model\Acl::READ_PERMISSION)
 							->joinCustomFields()
 							->order('t.name')
-							->criteria(\GO_Base_Db_FindCriteria::newInstance()
+							->criteria(\GO\Base\Db\FindCriteria::newInstance()
 										->addCondition('group_id',$group->id)
 										));
 			

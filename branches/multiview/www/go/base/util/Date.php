@@ -19,7 +19,9 @@
  * @since Group-Office 3.0
  */
 
-class GO_Base_Util_Date {
+namespace GO\Base\Util;
+
+class Date {
 
 
 	public static function roundQuarters($time) {
@@ -74,7 +76,7 @@ class GO_Base_Util_Date {
 
 			$region = $region ? $region : \GO::config()->language;
 
-			$hstmt = \GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startDate, $endDate, $region);
+			$hstmt = \GO\Base\Model\Holiday::model()->getHolidaysInPeriod($startDate, $endDate, $region);
 			if ($hstmt && $hstmt->rowCount()) {
 				return true;
 			}
@@ -171,9 +173,9 @@ class GO_Base_Util_Date {
 			return 0;
 		}
 
-		//$time = strtotime(\GO_Base_Util_Date::to_input_format($date_string));
+		//$time = strtotime(Date::to_input_format($date_string));
 		//return $time;
-		$date = new \DateTime(\GO_Base_Util_Date::to_input_format($date_string));
+		$date = new \DateTime(Date::to_input_format($date_string));
 		return intval($date->format("U"));
 	}
 
@@ -192,7 +194,7 @@ class GO_Base_Util_Date {
 		{
 			return null;
 		}
-		$time = \GO_Base_Util_Date::to_unixtime($date_string);
+		$time = Date::to_unixtime($date_string);
 		if(!$time)
 		{
 			return null;
@@ -289,7 +291,7 @@ class GO_Base_Util_Date {
 		if($utime<1)
 			return '';
 
-		return \GO_Base_Util_Date::format('@'.$utime, $with_time);
+		return Date::format('@'.$utime, $with_time);
 	}
 
 	public static function format($time, $with_time=true)//, $timezone='GMT')

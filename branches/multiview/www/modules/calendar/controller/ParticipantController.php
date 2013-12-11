@@ -17,20 +17,20 @@
  *
  */
 
-class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractModelController {
+class GO_Calendar_Controller_Participant extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO_Calendar_Model_Participant';
 	
 	protected function getStoreParams($params) {
-		$c = \GO_Base_Db_FindParams::newInstance()
-						->criteria(\GO_Base_Db_FindCriteria::newInstance()
+		$c = \GO\Base\Db\FindParams::newInstance()
+						->criteria(\GO\Base\Db\FindCriteria::newInstance()
 										->addModel(\GO_Calendar_Model_Participant::model())
 										->addCondition('event_id', $params['event_id'])
 										);
 		return $c;
 	}
 	
-	protected function prepareStore(\GO_Base_Data_Store $store) {
+	protected function prepareStore(\GO\Base\Data\Store $store) {
 		
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatParticipantRecord'));
 		
@@ -64,7 +64,7 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 
 		$participantAttrs=json_decode($params['participants']);
 
-		$store = new \GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 		
 		foreach($participantAttrs as $participantAttr) {
 			$participant = new \GO_Calendar_Model_Participant();
@@ -81,7 +81,7 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 	public function actionGetContacts($params){
 		$ids = json_decode($params['contacts']);
 
-		$store = new \GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 
 		foreach($ids as $contact_id){
 
@@ -108,7 +108,7 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 	public function actionGetCompanies($params){
 		$ids = json_decode($params['companies']);
 
-		$store = new \GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 
 		foreach($ids as $company_id){
 
@@ -128,11 +128,11 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 	public function actionGetUsers($params){
 		$ids = json_decode($params['users']);
 
-		$store = new \GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 
 		foreach($ids as $user_id){
 
-			$user=\GO_Base_Model_User::model()->findByPk($user_id, false,  true);
+			$user=\GO\Base\Model\User::model()->findByPk($user_id, false,  true);
 
 			$participant = new \GO_Calendar_Model_Participant();
 			$participant->user_id=$user->id;
@@ -154,7 +154,7 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 	public function actionGetAddresslists($params){
 		$ids = json_decode($params['addresslists']);
 
-		$store = new \GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 		
 		$addedContacts=array();
 		
@@ -207,13 +207,13 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 	public function actionGetUserGroups($params){
 		$ids = json_decode($params['groups']);
 
-		$store = new \GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 		
 		$addedUsers=array();
 
 		foreach($ids as $group_id){
 
-			$group=\GO_Base_Model_Group::model()->findByPk($group_id, false, true);
+			$group=\GO\Base\Model\Group::model()->findByPk($group_id, false, true);
 			
 			$stmt = $group->users();
 			
@@ -241,7 +241,7 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 	public function actionFreeBusyInfo($params) {
 
 		$event_id = empty($params['event_id']) ? 0 : $params['event_id'];
-		$date=getdate(\GO_Base_Util_Date::to_unixtime($params['date']));
+		$date=getdate(\GO\Base\Util\Date::to_unixtime($params['date']));
 		$daystart = mktime(0,0,0,$date['mon'], $date['mday'], $date['year']);
 		$dayend = mktime(0,0,0,$date['mon'], $date['mday']+1, $date['year']);
 		
@@ -281,7 +281,7 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 				
 				if(!empty($row['user_id'])){
 					
-					$user = \GO_Base_Model_User::model()->findByPk($row['user_id']);
+					$user = \GO\Base\Model\User::model()->findByPk($row['user_id']);
 					if ($user){
 						$participant = new \GO_Calendar_Model_Participant();
 						$participant->user_id=$user->id;
@@ -342,8 +342,8 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 		if (empty($resourceIds)) $resourceIds = array('-1');
 		
 		$calendarsStmt = \GO_Calendar_Model_Calendar::model()->find(
-			\GO_Base_Db_FindParams::newInstance()
-				->criteria(\GO_Base_Db_FindCriteria::newInstance()
+			\GO\Base\Db\FindParams::newInstance()
+				->criteria(\GO\Base\Db\FindCriteria::newInstance()
 					->addInCondition('id',$resourceIds)
 				)
 				->order('name','ASC')

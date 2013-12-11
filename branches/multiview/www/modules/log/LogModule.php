@@ -1,5 +1,5 @@
 <?php
-class GO_Log_LogModule extends GO_Base_Module{
+class GO_Log_LogModule extends \GO\Base\Module{
 	/**
 	 * Initialize the listeners for the ActiveRecords
 	 */

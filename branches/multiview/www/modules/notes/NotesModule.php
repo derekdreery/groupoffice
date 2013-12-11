@@ -21,7 +21,7 @@ use GO\Notes\Model\Category;
  * The Notes module maintenance class
  * 
  */
-class NotesModule extends \GO_Base_Module{
+class NotesModule extends \GO\Base\Module{
 	
 	public function autoInstall() {
 		return true;
@@ -60,7 +60,7 @@ class NotesModule extends \GO_Base_Module{
 
 	
 	public static function getDefaultNoteCategory($userId){
-		$user = \GO_Base_Model_User::model()->findByPk($userId);
+		$user = \GO\Base\Model\User::model()->findByPk($userId);
 		if(!$user)
 			return false;
 		$category = Category::model()->getDefault($user);
@@ -74,6 +74,6 @@ class NotesModule extends \GO_Base_Module{
 		$category = new Category();
 		$category->name=\GO::t('general','notes');
 		$category->save();
-		$category->acl->addGroup(\GO::config()->group_everyone, \GO_Base_Model_Acl::READ_PERMISSION);
+		$category->acl->addGroup(\GO::config()->group_everyone, \GO\Base\Model\Acl::READ_PERMISSION);
 	}
 }

@@ -19,7 +19,9 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_CliOnly extends Exception
+namespace GO\Base\Exception;
+
+class CliOnly extends \Exception
 {
 
 	public function __construct($message='') {

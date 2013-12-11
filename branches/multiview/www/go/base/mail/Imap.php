@@ -1,5 +1,7 @@
 <?php
-class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
+namespace GO\Base\Mail;
+
+class Imap extends \GO\Base\Mail\ImapBodyStruct {
 	
 	const SORT_NAME='NAME';
 	const SORT_FROM='FROM';
@@ -76,7 +78,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //		}
 		
 		if(empty($password)){
-			throw new \GO_Base_Mail_ImapAuthenticationFailedException('Authententication failed for user '.$username.' on IMAP server '.$this->server);
+			throw new \GO\Base\Mail\ImapAuthenticationFailedException('Authententication failed for user '.$username.' on IMAP server '.$this->server);
 		}
 		
 		$this->ssl = $ssl;
@@ -166,7 +168,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				$this->banner = fgets($this->handle, 1024);
 				$cram1 = 'A'.$this->command_number().' AUTHENTICATE CRAM-MD5'."\r\n";
 				fputs ($this->handle, $cram1);
-				$this->commands[trim($cram1)] = \GO_Base_Util_Date::getmicrotime();
+				$this->commands[trim($cram1)] = \GO\Base\Util\Date::getmicrotime();
 				$response = fgets($this->handle, 1024);
 				$this->responses[] = $response;
 				$challenge = base64_decode(substr(trim($response), 1));
@@ -175,12 +177,12 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				$opad = str_repeat(chr(0x5c), 64);
 				$digest = bin2hex(pack("H*", md5(($pass ^ $opad).pack("H*", md5(($pass ^ $ipad).$challenge)))));
 				$challenge_response = base64_encode($username.' '.$digest);
-				$this->commands[trim($challenge_response)] = \GO_Base_Util_Date::getmicrotime();
+				$this->commands[trim($challenge_response)] = \GO\Base\Util\Date::getmicrotime();
 				fputs($this->handle, $challenge_response."\r\n");
 				break;
 			default:
 				$login = 'A'.$this->command_number().' LOGIN "'.$this->_escape( $username).'" "'.$this->_escape( $pass). "\"\r\n";
-				$this->commands[trim(str_replace($pass, 'xxxx', $login))] = \GO_Base_Util_Date::getmicrotime();
+				$this->commands[trim(str_replace($pass, 'xxxx', $login))] = \GO\Base\Util\Date::getmicrotime();
 				fputs($this->handle, $login);
 				break;
 		}
@@ -194,7 +196,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			if(!$response && count($res)==2)
 				$response = array_pop($res);
 
-			$this->short_responses[$response] = \GO_Base_Util_Date::getmicrotime();
+			$this->short_responses[$response] = \GO\Base\Util\Date::getmicrotime();
 			if (!$this->auth) {
 				if (isset($res[1])) {
 					$this->banner = $res[1];
@@ -224,7 +226,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //				if(!\GO::config()->debug)
 //					$this->errors[]=$response;
 				
-				throw new \GO_Base_Mail_ImapAuthenticationFailedException('Authententication failed for user '.$username.' on IMAP server '.$this->server."\n\n".$response);
+				throw new \GO\Base\Mail\ImapAuthenticationFailedException('Authententication failed for user '.$username.' on IMAP server '.$this->server."\n\n".$response);
 
 			}
 		}
@@ -590,7 +592,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 
-		\GO_Base_Util_Array::caseInsensitiveSort($folders);
+		\GO\Base\Util\ArrayExtra::caseInsensitiveSort($folders);
 		
 //		\GO::debug($folders);
 
@@ -985,7 +987,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->clean($sort, 'keyword');
 		//$this->clean($filter, 'keyword');
 		
-		$charset = $forceAscii || !\GO_Base_Util_String::isUtf8($filter) ? 'US-ASCII' : 'UTF-8';
+		$charset = $forceAscii || !\GO\Base\Util\String::isUtf8($filter) ? 'US-ASCII' : 'UTF-8';
 		
 		$command = 'UID SORT ('.$sort.') '.$charset.' '.$filter."\r\n";
 		$this->send_command($command);
@@ -1982,7 +1984,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			if($charset=='us-ascii')
 				$charset = 'windows-1252';
 			
-			$str = \GO_Base_Util_String::clean_utf8($str, $charset);
+			$str = \GO\Base\Util\String::clean_utf8($str, $charset);
 			if($charset != 'utf-8') {
 				$str = str_replace($charset, 'utf-8', $str);
 			}
@@ -2082,7 +2084,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				if($charset=='us-ascii')
 					$charset = 'windows-1252';
 
-				$str = \GO_Base_Util_String::clean_utf8($str, $charset);
+				$str = \GO\Base\Util\String::clean_utf8($str, $charset);
 				if($charset != 'utf-8') {
 					$str = str_replace($charset, 'utf-8', $str);
 				}

@@ -17,7 +17,7 @@
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
 
-class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelController{
+class GO_Tasks_Controller_Task extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO_Tasks_Model_Task';
 	
@@ -44,7 +44,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	protected function afterLoad(&$response, &$model, &$params) {
 		
 		if(!empty($model->rrule)) {
-			$rRule = new GO_Base_Util_Icalendar_Rrule();
+			$rRule = new \GO\Base\Util\Icalendar\Rrule();
 			$rRule->readIcalendarRruleString($model->due_time, $model->rrule);
 			$createdRule = $rRule->createJSONOutput();
 
@@ -64,7 +64,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		}
 		
 		if(!empty($params['project_id']) && empty($params['id'])){
-			$findParams = GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO\Base\Db\FindParams::newInstance()
 							->select('count(*) AS count')
 							->single();
 			
@@ -83,7 +83,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 					
 		if(isset($params['freq'])){
 			if(!empty($params['freq'])){
-				$rRule = new GO_Base_Util_Icalendar_Rrule();
+				$rRule = new \GO\Base\Util\Icalendar\Rrule();
 				$rRule->readJsonArray($params);		
 				$model->rrule = $rRule->createRrule();
 			} else {
@@ -92,10 +92,10 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		}
 		
 		if(isset($params['remind'])) // Check for a setted reminder
-			$model->reminder= GO_Base_Util_Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
+			$model->reminder= \GO\Base\Util\Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
 		
 		if($model->isNew && !isset($params['remind']) && !isset($params['priority'])) //This checks if it is called from the quickadd bar
-		  $model->reminder = $model->getDefaultReminder(\GO_Base_Util_Date::to_unixtime ($params['start_time']));
+		  $model->reminder = $model->getDefaultReminder(\GO\Base\Util\Date::to_unixtime ($params['start_time']));
 	  
 		return parent::beforeSubmit($response, $model, $params);
 	}
@@ -136,16 +136,16 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 
 
 	
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		
-		$multiSel = new GO_Base_Component_MultiSelectGrid(
+		$multiSel = new \GO\Base\Component\MultiSelectGrid(
 						'ta-taskslists', 
 						"GO_Tasks_Model_Tasklist",$store, $params, true);		
 		$multiSel->addSelectedToFindCriteria($storeParams, 'tasklist_id');
 		$multiSel->setButtonParams($response);
 		$multiSel->setStoreTitle();
 		
-		$catMultiSel = new GO_Base_Component_MultiSelectGrid(
+		$catMultiSel = new \GO\Base\Component\MultiSelectGrid(
             'categories', 
             "GO_Tasks_Model_Category",
             $store, 
@@ -170,7 +170,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		return parent::beforeStore($response, $params, $store);
 	}
 	
-	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		
 		$columnModel->formatColumn('completion_time','$model->getAttribute("completion_time","formatted")',array(),array('incomplete','completion_time'));
 		$columnModel->formatColumn('completed','$model->status=="COMPLETED" ? 1 : 0');
@@ -188,7 +188,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		
 		if(isset($params['ta-taskslists'])){
 			
-			$findParams = GO_Base_Db_FindParams::newInstance()->select('t.id,t.name')->limit(GO::config()->nav_page_size);
+			$findParams = \GO\Base\Db\FindParams::newInstance()->select('t.id,t.name')->limit(GO::config()->nav_page_size);
 			$findParams->getCriteria()->addInCondition('id', json_decode($params['ta-taskslists']));
 			$tasklists = GO_Tasks_Model_Tasklist::model()->find($findParams);
 			
@@ -214,10 +214,10 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		
 		$fields = GO_Tasks_Model_Task::model()->getDefaultFindSelectFields();
 		
-		$storeParams = GO_Base_Db_FindParams::newInstance()
+		$storeParams = \GO\Base\Db\FindParams::newInstance()
 			->export("tasks")
 			->joinCustomFields()
-			->criteria(\GO_Base_Db_FindCriteria::newInstance()
+			->criteria(\GO\Base\Db\FindCriteria::newInstance()
 				->addModel(\GO_Tasks_Model_Task::model(),'t')
 					)										
 			//->select('t.*, tl.name AS tasklist_name')
@@ -247,7 +247,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		return $storeParams;
 	}
 	
-	private function checkFilterParams($show, GO_Base_Db_FindParams $params) {
+	private function checkFilterParams($show, \GO\Base\Db\FindParams $params) {
 
 		// Check for a given filter on the statusses
 		if(!empty($show)) {
@@ -256,12 +256,12 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 			switch($show) {
 				case 'today':
 					$start_time = mktime(0,0,0);
-					$end_time = GO_Base_Util_Date::date_add($start_time, 1);
+					$end_time = \GO\Base\Util\Date::date_add($start_time, 1);
 					break;
 
 				case 'sevendays':
 					$start_time = mktime(0,0,0);
-					$end_time = GO_Base_Util_Date::date_add($start_time, 7);
+					$end_time = \GO\Base\Util\Date::date_add($start_time, 7);
 					$show_completed=false;	
 					break;
 
@@ -319,7 +319,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 				$statusCriteria->addCondition('due_time', $end_time, '<');
 
 			if(isset($show_future)) {
-				$now = GO_Base_Util_Date::date_add(mktime(0,0,0),1);
+				$now = \GO\Base\Util\Date::date_add(mktime(0,0,0),1);
 				if($show_future) 
 					$statusCriteria->addCondition('start_time', $now, '>=');
 				else
@@ -332,7 +332,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		
 //		// Check for a given filter on the categories
 //		if(isset($params['categoryFilter'])) {
-//			$categoryCriteria = GO_Base_Db_FindCriteria::newInstance()
+//			$categoryCriteria = \GO\Base\Db\FindCriteria::newInstance()
 //				->addModel(\GO_Tasks_Model_Task::model(),'t');
 //			
 //			$categories = json_decode($params['categoryFilter'], true);

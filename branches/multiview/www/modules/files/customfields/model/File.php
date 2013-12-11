@@ -17,7 +17,7 @@
  *
  */
 
-class GO_Files_Customfields_Model_File extends GO_Customfields_Model_AbstractCustomFieldsRecord{
+class GO_Files_Customfields_Model_File extends \GO_Customfields_Model_AbstractCustomFieldsRecord{
 
 	/**
 	 * Returns a static model of itself

@@ -19,7 +19,9 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_BadPassword extends Exception
+namespace GO\Base\Exception;
+
+class BadPassword extends \Exception
 {
 	public function __construct($message = '')
 	{

@@ -1,3 +1,5 @@
 <?php
-abstract class GO_Base_Rpc_AbstractController{
+namespace GO\Base\Rpc;
+
+abstract class AbstractController{
 }

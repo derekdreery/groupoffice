@@ -1,8 +1,8 @@
 <?php
 
-class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelController {
+class GO_Users_Controller_User extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = 'GO_Base_Model_User';
+	protected $model = '\GO\Base\Model\User';
 
 	protected function ignoreAclPermissions() {
 		//ignore acl on submit so normal users can use the users module. 
@@ -29,7 +29,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		}
 	}
 
-	protected function formatColumns(\GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('name', '$model->name', array(), 'first_name');
 		$columnModel->formatColumn('enabled', "!empty(\$model->enabled) ? GO::t('yes') : GO::t('no')");
 		return parent::formatColumns($columnModel);
@@ -138,7 +138,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			 * Process selected module permissions
 			 */
 			foreach ($modules as $modPermissions) {
-				$modModel = GO_Base_Model_Module::model()->findByPk(
+				$modModel = \GO\Base\Model\Module::model()->findByPk(
 					$modPermissions->id
 				);	
 				$modModel->acl->addUser(
@@ -153,9 +153,9 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			foreach ($groupsMember as $group) {
 				if ($group['id'] != GO::config()->group_everyone) {
 					if ($group['group_permission']) {
-						GO_Base_Model_Group::model()->findByPk($group['id'])->addUser($model->id);
+						\GO\Base\Model\Group::model()->findByPk($group['id'])->addUser($model->id);
 					} else {
-						GO_Base_Model_Group::model()->findByPk($group['id'])->removeUser($model->id);
+						\GO\Base\Model\Group::model()->findByPk($group['id'])->removeUser($model->id);
 					}
 				}
 			}
@@ -167,7 +167,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			foreach ($groupsVisible as $group) {
 				if ($group['visible_permission']) {
 					
-					$model->acl->addGroup($group['id'], GO_Base_Model_Acl::MANAGE_PERMISSION);
+					$model->acl->addGroup($group['id'], \GO\Base\Model\Acl::MANAGE_PERMISSION);
 				} else {
 					$model->acl->removeGroup($group['id']);
 				}
@@ -192,13 +192,13 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 				$email['register_email_body'] = str_replace('{url}', GO::config()->full_url, $email['register_email_body']);
 				$email['register_email_body'] = str_replace('{title}', GO::config()->title, $email['register_email_body']);
 				
-				$message = new GO_Base_Mail_Message();
+				$message = new \GO\Base\Mail\Message();
 				$message->setSubject($email['register_email_subject'])
 								->setTo(array($model->email=>$model->name))
 								->setFrom(array(GO::config()->webmaster_email=>GO::config()->title))
 								->setBody($email['register_email_body']);								
 
-				GO_Base_Mail_Mailer::newGoInstance()->send($message);
+				\GO\Base\Mail\Mailer::newGoInstance()->send($message);
 				
 			}
 		}
@@ -217,7 +217,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			$ab->users = true;
 			$ab->save();
 		}
-		$stmt = GO_Base_Model_User::model()->find();
+		$stmt = \GO\Base\Model\User::model()->find();
 		while ($user = $stmt->fetch()) {
 
 			$contact = $user->contact();
@@ -246,7 +246,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	
 	protected function getStoreParams($params) {
 		
-		$findParams =  GO_Base_Db_FindParams::newInstance();
+		$findParams =  \GO\Base\Db\FindParams::newInstance();
 		
 		if(!empty($params['show_licensed'])){		
 		
@@ -258,18 +258,18 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 				foreach($proModules as $module)
 					$proModuleAcls[]=$module->acl_id;
 				
-				$aclJoinCriteria= GO_Base_Db_FindCriteria::newInstance()
+				$aclJoinCriteria= \GO\Base\Db\FindCriteria::newInstance()
 								->addRawCondition('a.user_id', 't.id')
 								->addRawCondition('a.group_id', 'ug.group_id','=',false);
 
 				$findParams
 					->ignoreAcl()
 					->joinModel(array(
-						'model'=>'GO_Base_Model_UserGroup',
+						'model'=>'\GO\Base\Model\UserGroup',
 						'foreignField'=>'user_id',
 						'tableAlias'=>'ug'				
 					))
-					->join(\GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria,'a')
+					->join(\GO\Base\Model\AclUsersGroups::model()->tableName(), $aclJoinCriteria,'a')
 					->group('t.id');
 
 				$findParams->getCriteria()->addInCondition('acl_id', $proModuleAcls,'a');
@@ -294,11 +294,11 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		return parent::afterStore($response, $params, $store, $storeParams);
 	}
 	
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		
 		$storeParams->joinModel(
 			array(
-				'model'=>'GO_Base_Model_UserGroup',
+				'model'=>'\GO\Base\Model\UserGroup',
 				'localTableAlias'=>'t',
 				'localField'=>'id',
 				'foreignField'=>'user_id',
@@ -307,9 +307,9 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		
 		$storeParams->group('t.id');
 		
-		$groupsMultiSel = new GO_Base_Component_MultiSelectGrid(
+		$groupsMultiSel = new \GO\Base\Component\MultiSelectGrid(
 			'users-groups-panel', 
-			"GO_Base_Model_Group",$store, $params, true);		
+			"\GO\Base\Model\Group",$store, $params, true);		
 			$groupsMultiSel->addSelectedToFindCriteria($storeParams, 'group_id','ug');
 			
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
@@ -356,9 +356,9 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			);
 		}
 		
-		GO_Base_Util_Http::outputDownloadHeaders(new GO\Base\Fs\File("users.csv"));
+		\GO\Base\Util\Http::outputDownloadHeaders(new GO\Base\Fs\File("users.csv"));
 		
-		$csvFile  = new GO_Base_Csv_Writer('php://output');
+		$csvFile  = new \GO\Base\Csv\Writer('php://output');
 	
 		$header = true;
 		
@@ -421,7 +421,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	/**
 	 * The afterimport for every imported user.
 	 * 
-	 * @param GO_Base_Model_User $model
+	 * @param \GO\Base\Model\User $model
 	 * @param array $attributes
 	 * @param array $record
 	 * @return boolean success

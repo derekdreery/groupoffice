@@ -33,7 +33,7 @@
  * 
  * 
  */
-class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
+class GO_Calendar_Model_Participant extends \GO\Base\Db\ActiveRecord {
 
 	const STATUS_TENTATIVE = "TENTATIVE";
 	const STATUS_DECLINED = "DECLINED";
@@ -143,10 +143,10 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 */
 	public static function userIsAvailable($periodStartTime, $periodEndTime, $userId, $ignoreEvent = false) {
 
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->ignoreAcl();
 
-		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addRawCondition('t.calendar_id', 'c.id');
 
 		$findParams->join(\GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
@@ -192,10 +192,10 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		if(empty($this->user_id))
 			return $freebusy;
 
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->ignoreAcl();
 
-		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addRawCondition('t.calendar_id', 'c.id');
 
 		$findParams->join(\GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
@@ -289,7 +289,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 			return false;
 		
 		
-		$params = \GO_Base_Db_FindParams::newInstance()
+		$params = \GO\Base\Db\FindParams::newInstance()
 						->ignoreAcl()
 						->single();		
 		
@@ -299,7 +299,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 						->addCondition("exception_for_event_id", 0, $this->event->exception_for_event_id==0 ? '=' : '!='); //the master event or a single occurrence can start at the same time. Therefore we must check if exception event has a value or is 0.
 
 
-		$joinCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('calendar_id', 'c.id','=','t',true, true)
 						->addCondition('user_id', $this->user_id,'=','c');
 
@@ -435,7 +435,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 //
 //
 //		//create e-mail message
-//		$message = \GO_Base_Mail_Message::newInstance($subject)
+//		$message = \GO\Base\Mail\Message::newInstance($subject)
 //							->setFrom($this->user->email, $this->user->name)
 //							->addTo($organizer->email, $organizer->name);
 //
@@ -452,7 +452,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 //
 //		$message->setHtmlAlternateBody($body);
 //
-//		\GO_Base_Mail_Mailer::newGoInstance()->send($message);
+//		\GO\Base\Mail\Mailer::newGoInstance()->send($message);
 //		
 //	}
 	
@@ -464,7 +464,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 */
 	public function getRelatedParticipants(){
 		//update all participants with this user and event uuid in the system		
-		$findParams = \GO_Base_Db_FindParams::newInstance();
+		$findParams = \GO\Base\Db\FindParams::newInstance();
 		
 		$findParams->joinModel(array(
 				'model'=>'GO_Calendar_Model_Event',						  
@@ -489,7 +489,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		
 		// Check for a user with this email address
 		if($this->isNew && $this->user_id === null){
-			$user = \GO_Base_Model_User::model()->findSingleByAttribute('email', $this->email);
+			$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $this->email);
 			if($user)
 				$this->user_id = $user->id;
 		}

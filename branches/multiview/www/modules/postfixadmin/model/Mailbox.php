@@ -14,7 +14,7 @@
  * @property boolean $active
  * @property int $usage Usage in kilobytes
  */
-class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
+class GO_Postfixadmin_Model_Mailbox extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
@@ -102,10 +102,10 @@ class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Get the filesystem folder with mail data.
 	 * 
-	 * @return \GO_Base_Fs_Folder
+	 * @return \GO\Base\Fs\Folder
 	 */
 	public function getMaildirFolder(){
-		return new GO_Base_Fs_Folder('/home/vmail/'.$this->maildir);
+		return new \GO\Base\Fs\Folder('/home/vmail/'.$this->maildir);
 	}
 	
 	public function cacheUsage(){
@@ -126,7 +126,7 @@ class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
 				$sumUsedQuotaOtherwise = $this->domain->getSumUsedQuota() - $existingQuota; // Domain's used quota w/o the current mailbox's quota.
 				if ($sumUsedQuotaOtherwise + $this->quota > $total_quota) {
 					$quotaLeft = $total_quota - $sumUsedQuotaOtherwise;
-					throw new Exception('The maximum quota has been reached. You have ' . GO_Base_Util_Number::localize($quotaLeft / 1024) . 'MB left');
+					throw new Exception('The maximum quota has been reached. You have ' . \GO\Base\Util\Number::localize($quotaLeft / 1024) . 'MB left');
 				}
 			}
 		}

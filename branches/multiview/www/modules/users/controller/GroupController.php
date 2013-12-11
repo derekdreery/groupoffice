@@ -3,9 +3,9 @@ class GO_Users_Controller_Group extends \GO\Base\Controller\AbstractJsonControll
 	
 	protected function actionStore($params) {
 		
-		$columnModel = new GO_Base_Data_ColumnModel('GO_Base_Model_Group');
+		$columnModel = new \GO\Base\Data\ColumnModel('\GO\Base\Model\Group');
 		
-		$store = new GO_Base_Data_DbStore('GO_Base_Model_Group', $columnModel, $params);
+		$store = new \GO\Base\Data\DbStore('\GO\Base\Model\Group', $columnModel, $params);
 		$store->defaultSort = array('name');
 		$store->multiSelectable('users-groups-panel');
 		

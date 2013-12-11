@@ -18,7 +18,7 @@
  * @property string $name
  */
 
-class GO_Comments_Model_Category extends GO_Base_Db_ActiveRecord{
+class GO_Comments_Model_Category extends \GO\Base\Db\ActiveRecord{
 
 	public static function model($className=__CLASS__)
 	{	

@@ -12,7 +12,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
+class GO_Dav_Fs_Directory extends \Sabre\DAV\FS\Directory{
 
 	protected $_folder;
 	protected $relpath;
@@ -24,7 +24,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 		$this->relpath = $path;
 		$path = \GO::config()->file_storage_path . $path;
 		
-		//		if(!$this->_getFolder()->checkPermissionLevel(\GO_Base_Model_Acl::READ_PERMISSION)){
+		//		if(!$this->_getFolder()->checkPermissionLevel(\GO\Base\Model\Acl::READ_PERMISSION)){
 //			\GO::debug("DAV: User ".\GO::user()->username." doesn't have write permission for ".$this->relpath);
 //			throw new \Sabre\DAV\Exception\Forbidden ("DAV: User ".\GO::user()->username." doesn't have write permission for folder '".$this->relpath.'"');
 //		}
@@ -62,7 +62,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 
 		$folder = $this->_getFolder();
 
-		if (!$folder->checkPermissionLevel(\GO_Base_Model_Acl::WRITE_PERMISSION))
+		if (!$folder->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION))
 			throw new \Sabre\DAV\Exception\Forbidden();
 
 		$newFile = new \GO\Base\Fs\File($this->path . '/' . $name);
@@ -88,7 +88,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 
 		$folder = $this->_getFolder();
 
-		if (!$folder->checkPermissionLevel(\GO_Base_Model_Acl::WRITE_PERMISSION))
+		if (!$folder->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION))
 			throw new \Sabre\DAV\Exception\Forbidden();
 		
 		$folder->name = $name;
@@ -117,10 +117,10 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 
 		$folder = $this->_getFolder();
 
-		if (!$folder->checkPermissionLevel(\GO_Base_Model_Acl::WRITE_PERMISSION))
+		if (!$folder->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION))
 			throw new \Sabre\DAV\Exception\Forbidden();
 	
-		$destFsFolder = new \GO_Base_Fs_Folder($newPath);		
+		$destFsFolder = new \GO\Base\Fs\Folder($newPath);		
 		
 		//\GO::debug("Dest folder: ".$destFsFolder->stripFileStoragePath());
 		
@@ -147,7 +147,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 		
 		$folder = $this->_getFolder();
 
-		if (!$folder->checkPermissionLevel(\GO_Base_Model_Acl::WRITE_PERMISSION))
+		if (!$folder->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION))
 			throw new \Sabre\DAV\Exception\Forbidden();
 
 		$folder->addFolder($name);
@@ -244,7 +244,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 
 		$folder = $this->_getFolder();
 		
-		if (!$folder->checkPermissionLevel(\GO_Base_Model_Acl::DELETE_PERMISSION))
+		if (!$folder->checkPermissionLevel(\GO\Base\Model\Acl::DELETE_PERMISSION))
 			throw new \Sabre\DAV\Exception\Forbidden();
 
 

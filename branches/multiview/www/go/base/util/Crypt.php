@@ -39,7 +39,9 @@
  */
 
 
-class GO_Base_Util_Crypt {
+namespace GO\Base\Util;
+
+class Crypt {
 
 	/** Encryption Procedure
 	 *
@@ -186,7 +188,7 @@ class GO_Base_Util_Crypt {
 			$key = file_get_contents($key_file);
 		} else {
 
-			$key = \GO_Base_Util_String::randomPassword(20);
+			$key = \GO\Base\Util\String::randomPassword(20);
 			if (file_put_contents($key_file, $key)) {
 				chmod($key_file, 0400);
 			} else {

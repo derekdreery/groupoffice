@@ -1,6 +1,6 @@
 <?php
 
-class GO_Defaultsite_DefaultsiteModule extends GO_Base_Module {
+class GO_Defaultsite_DefaultsiteModule extends \GO\Base\Module {
 
 	public function author() {
 		return 'Wesley Smits';

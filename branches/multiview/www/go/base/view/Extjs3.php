@@ -1,11 +1,13 @@
 <?php
-class GO_Base_View_Extjs3{
+namespace GO\Base\View;
+
+class Extjs3{
 	public function getTheme(){
-		return new \GO_Base_View_Theme();
+		return new \GO\Base\View\Theme();
 	}
 	
 	public function getThemeNames(){
-		$folder = new \GO_Base_Fs_Folder(\GO::config()->root_path.'views/Extjs3/themes');
+		$folder = new \GO\Base\Fs\Folder(\GO::config()->root_path.'views/Extjs3/themes');
 		$items = $folder->ls();
 		$themes=array();
 		foreach($items as $folder){
@@ -34,9 +36,9 @@ class GO_Base_View_Extjs3{
 	private function _replaceUrl($css, $baseurl){
 		return preg_replace_callback('/url[\s]*\(([^\)]*)\)/iU', 
 			function($matches) use($baseurl) { 
-				return \GO_Base_View_Extjs3::_replaceUrlCallback($matches[1], $baseurl);
+				return Extjs3::_replaceUrlCallback($matches[1], $baseurl);
 			}, $css);
-		 //return preg_replace('/url[\s]*\(([^\)]*)\)/ieU', "\GO_Base_View_Extjs3::_replaceUrlCallback('$1', \$baseurl)", $css);
+		 //return preg_replace('/url[\s]*\(([^\)]*)\)/ieU', "Extjs3::_replaceUrlCallback('$1', \$baseurl)", $css);
 	}
 
 	public static function _replaceUrlCallback($url, $baseurl){
@@ -119,7 +121,7 @@ class GO_Base_View_Extjs3{
 			//fclose($fp);
 			
 			if(\GO::config()->minify){
-				$cssMin = new \GO_Base_Util_Minify_CSSMin();
+				$cssMin = new \GO\Base\Util\Minify\CSSMin();
 				$css = $cssMin->run($css);
 			}
 			
@@ -151,8 +153,8 @@ class GO_Base_View_Extjs3{
 			$arr[$module->id]['full_url']=\GO::config()->full_url.'modules/'.$module->id.'/';
 			
 			$arr[$module->id]['permission_level']=$module->permissionLevel;
-			$arr[$module->id]['read_permission']=$module->permissionLevel>=\GO_Base_Model_Acl::READ_PERMISSION;
-			$arr[$module->id]['write_permission']=$module->permissionLevel>=\GO_Base_Model_Acl::WRITE_PERMISSION;
+			$arr[$module->id]['read_permission']=$module->permissionLevel>=\GO\Base\Model\Acl::READ_PERMISSION;
+			$arr[$module->id]['write_permission']=$module->permissionLevel>=\GO\Base\Model\Acl::WRITE_PERMISSION;
 			
 		}
 		

@@ -1,7 +1,9 @@
 <?php
 //chdir(\GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/');
 //require_once(\GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/Decoder.php');
-class GO_Base_Wbxml_Convertor{
+namespace GO\Base\Wbxml;
+
+class Convertor{
 	
 	private $_wbxmlFile;
 	private $_xmlFile;
@@ -24,7 +26,7 @@ class GO_Base_Wbxml_Convertor{
 		fclose($fp);
 		//convert temp file
 
-		if(\GO_Base_Util_Common::isWindows())
+		if(\GO\Base\Util\Common::isWindows())
 		{
 			$cmd = \GO::config()->cmd_wbxml2xml.' -o '.$this->_xmlFile.' '.$this->_wbxmlFile;
 		}else
@@ -49,7 +51,7 @@ class GO_Base_Wbxml_Convertor{
 
 		file_put_contents($this->_xmlFile, $xml);
 
-		if(\GO_Base_Util_Common::isWindows())
+		if(\GO\Base\Util\Common::isWindows())
 		{
 			$cmd = \GO::config()->cmd_xml2wbxml.' -o '.$this->_wbxmlFile.' '.$this->_xmlFile;
 		}else

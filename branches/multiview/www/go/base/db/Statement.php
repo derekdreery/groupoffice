@@ -23,7 +23,9 @@
  * @version $Id Command.php 2012-06-14 10:22:40 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Base_Db_Statement implements IteratorAggregate
+namespace GO\Base\Db;
+
+class Statement implements \IteratorAggregate
 {
 	private $_connection; //The database connection the belongs to this statement
 	private $_statement; //The PDOStatement for this DBCommand
@@ -36,9 +38,9 @@ class GO_Base_Db_Statement implements IteratorAggregate
 	
 	/**
 	 * Can only be constructed with a connection
-	 * @param GO_Base_Db_PDO $connection 
+	 * @param \GO\Base\Db\PDO $connection 
 	 */
-	public function __construct(\GO_Base_Db_Connection $connection)
+	public function __construct(\GO\Base\Db\Connection $connection)
 	{
 		$this->_connection=$connection;
 	}
@@ -62,7 +64,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 	 * Specifies the SQL statement to be executed.
 	 * The previous statement will be set to null
 	 * @param string $value the SQL statement
-	 * @return GO_Base_Db_Statement Myself for chaining 
+	 * @return Statement Myself for chaining 
 	 */
 	protected function setText($value)
 	{
@@ -94,7 +96,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 				$this->_paramLog = array();
 			} catch (Exception $e) {
 				$errorInfo = $e instanceof PDOException ? $e->errorInfo : null;
-				throw new \GO_Base_Exception_Database('DbCommand failed to prepare the SQL statement: '. $e->getMessage(), $e->getCode(), $errorInfo);
+				throw new \GO\Base\Exception\Database('DbCommand failed to prepare the SQL statement: '. $e->getMessage(), $e->getCode(), $errorInfo);
 			}
 		}
 	}
@@ -105,7 +107,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 	 * No result set will be returned.
 	 * @param array $params input parameters (name=>value) for the SQL execution. This is an alternative
 	 * @return integer number of rows affected by the execution.
-	 * @throws GO_Base_Exception_Database execution failed
+	 * @throws \GO\Base\Exception\Database execution failed
 	 */
 	public function execute($params = array())
 	{
@@ -130,7 +132,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 			$errorInfo = $e instanceof PDOException ? $e->errorInfo : null;
 			$message = $e->getMessage();
 			\GO::debug('DbCommand::execute() failed: '.$message.' The SQL statement executed was: '.$this->getText() . $par);
-			throw new \GO_Base_Exception_Database('DbStatement failed to execute the SQL statement: '.$message, (int) $e->getCode(), $errorInfo);
+			throw new \GO\Base\Exception\Database('DbStatement failed to execute the SQL statement: '.$message, (int) $e->getCode(), $errorInfo);
 		}
 	}
 	
@@ -138,7 +140,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 	 * Executes SQL statement en returns all rows
 	 * @param array $params input params (name=>value)
 	 * @return array all rows of the query result
-	 * @throws GO_Base_Exception_Database execution failed 
+	 * @throws \GO\Base\Exception\Database execution failed 
 	 */
 	public function queryAll($params=array())
 	{
@@ -156,14 +158,14 @@ class GO_Base_Db_Statement implements IteratorAggregate
 			return $record['found'];
 		}
 		else
-			throw new \GO_Base_Exception_Database('Cannot know total rows before queryAll is executed');
+			throw new \GO\Base\Exception\Database('Cannot know total rows before queryAll is executed');
 	}
 	
 	/**
 	 * Executes SQL statement and returns the first row
 	 * @param array $params input params (name=>value)
 	 * @return first row of the query result
-	 * @throws GO_Base_Exception_Database execution failed 
+	 * @throws \GO\Base\Exception\Database execution failed 
 	 */
 	public function queryRow()
 	{
@@ -207,7 +209,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 			$message = $e->getMessage();
 			if (\GO::config()->debug)
 				$message .= '. The SQL statement executed was: ' . $this->getText() . $par;
-			throw new \GO_Base_Exception_Database('DbCommand failed to execute the SQL statement: '.$message, (int) $e->getCode(), $errorInfo);
+			throw new \GO\Base\Exception\Database('DbCommand failed to execute the SQL statement: '.$message, (int) $e->getCode(), $errorInfo);
 		}
 	}
 
@@ -227,7 +229,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 		if (isset($query['from']))
 			$sql.="\nFROM " . $query['from'];
 		else
-			throw new \GO_Base_Exception_Database('The DB query must contain the "from" portion.');
+			throw new \GO\Base\Exception\Database('The DB query must contain the "from" portion.');
 
 		if(isset($query['join']))
       $sql.="\n".(is_array($query['join']) ? implode("\n",$query['join']) : $query['join']);
@@ -286,7 +288,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 	 * Sets the SELECT part of the query with the DISTINCT flag turned on.
    * This is the same as select() except that the DISTINCT flag is turned on.
 	 * @param mixed $columns column name in array or string form
-	 * @return GO_Base_Db_Statement myself for chaining
+	 * @return Statement myself for chaining
 	 */
 	public function selectDistinct($columns='*')
 	{
@@ -331,7 +333,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 	 * 
 	 * @param string $conditions the conditions that should be put in the WHERE part. (eg.: 'id=:id')
 	 * @param array $params the paremeters (name=>value) to be bound to the query
-	 * @return GO_Base_Db_Statement mysql for chaining
+	 * @return Statement mysql for chaining
 	 */
 	public function where($conditions, $params = array())
 	{
@@ -394,7 +396,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 		* @param mixed $columns the columns (and the directions) to be ordered by.
 		* Columns can be specified in either a string (e.g. "id ASC, name DESC") or an array (e.g. array('id ASC', 'name DESC')).
 		* The method will automatically quote the column names
-		* @return GO_Base_Db_Statement myself for chaining
+		* @return Statement myself for chaining
 		*/
   public function order($columns)
 	{
@@ -425,7 +427,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 	 * Sets the LIMIT part of the query.
 	 * @param integer $limit the limit
 	 * @param integer $offset the offset
-	 * @return GO_Base_Db_Statement myself for chaining
+	 * @return Statement myself for chaining
 	 */
 	public function limit($limit, $offset=null)
 	{
@@ -438,7 +440,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 	/**
 	 * Sets the OFFSET part of the query.
 	 * @param integer $offset the offset
-	 * @return GO_Base_Db_Statement myself for chaining
+	 * @return Statement myself for chaining
 	 */
 	public function offset($offset)
 	{
@@ -553,7 +555,7 @@ class GO_Base_Db_Statement implements IteratorAggregate
 		if (!is_array($conditions))
 			return $conditions;
 		else
-		  throw new \GO_Base_Exception_Database('condition should be a string');
+		  throw new \GO\Base\Exception\Database('condition should be a string');
 	}
 
 	/**

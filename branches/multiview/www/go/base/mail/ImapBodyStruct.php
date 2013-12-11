@@ -2,7 +2,9 @@
 
 
 /* parsing routines for the imap bodstructure response */
-class GO_Base_Mail_ImapBodyStruct extends GO_Base_Mail_ImapBase {
+namespace GO\Base\Mail;
+
+class ImapBodyStruct extends \GO\Base\Mail\ImapBase {
 	function update_part_num($part) {
 		if (!strstr($part, '.')) {
 			$part++;

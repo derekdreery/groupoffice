@@ -26,8 +26,8 @@ class GO_Addressbook_Controller_Portlet extends \GO\Base\Controller\AbstractJson
 	 *
 	protected function actionBirthdays() {
 
-		$yesterday = \GO_Base_Util_Date::date_add(mktime(0,0,0),-1);
-		$next_month = \GO_Base_Util_Date::date_add(mktime(0,0,0),30);
+		$yesterday = \GO\Base\Util\Date::date_add(mktime(0,0,0),-1);
+		$next_month = \GO\Base\Util\Date::date_add(mktime(0,0,0),30);
 		
 		$start = date('Y-m-d',strtotime($yesterday));
 		$end = date('Y-m-d',strtotime($next_month));
@@ -38,7 +38,7 @@ class GO_Addressbook_Controller_Portlet extends \GO\Base\Controller\AbstractJson
 			."STR_TO_DATE(CONCAT(YEAR('$start')+1,'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e')) "
 			."as upcoming ";
 		
-		$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('birthday', '0000-00-00', '!=')
 						->addRawCondition('birthday', 'NULL', 'IS NOT');
 		
@@ -53,16 +53,16 @@ class GO_Addressbook_Controller_Portlet extends \GO\Base\Controller\AbstractJson
 		
 		$having = "upcoming BETWEEN '$start' AND '$end'";
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 			->distinct()
 			->select($select)
 			->criteria($findCriteria)
 			->having($having)
 			->order('upcoming');
 		
-		$columnModel = new \GO_Base_Data_ColumnModel('GO_Addressbook_Model_Contact');
+		$columnModel = new \GO\Base\Data\ColumnModel('GO_Addressbook_Model_Contact');
 		
-		$store = new \GO_Base_Data_DbStore('GO_Addressbook_Model_Contact', $columnModel, $_POST, $findParams);
+		$store = new \GO\Base\Data\DbStore('GO_Addressbook_Model_Contact', $columnModel, $_POST, $findParams);
 		
 		echo $this->renderStore($store);
 		
@@ -74,7 +74,7 @@ class GO_Addressbook_Controller_Portlet extends \GO\Base\Controller\AbstractJson
 	 *
 	protected function actionBirthdaysSettings() {
 		
-		if(\GO_Base_Util_Http::isPostRequest() && isset($_POST['addressbook_ids'])) {
+		if(\GO\Base\Util\Http::isPostRequest() && isset($_POST['addressbook_ids'])) {
 			
 			\GO_Addressbook_Model_BirthdayPortletSetting::model()->deleteByAttribute('user_id', \GO::user()->id);
 			
@@ -115,7 +115,7 @@ class GO_Addressbook_Controller_Portlet extends \GO\Base\Controller\AbstractJson
  * @copyright Copyright Intermesh BV.
  * @author Michael de Hart <mdhart@intermesh.nl>
  */
-class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelectModelController {
+class GO_Addressbook_Controller_Portlet extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called
@@ -150,7 +150,7 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractMulti
 	protected function actionBirthdays($params) {
 		
 		$today = mktime(0,0,0);
-		$next_month = \GO_Base_Util_Date::date_add(mktime(0,0,0),30);
+		$next_month = \GO\Base\Util\Date::date_add(mktime(0,0,0),30);
 		//\GO::debug($yesterday);
 		
 		$start = date('Y-m-d',$today);
@@ -163,7 +163,7 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractMulti
 			."STR_TO_DATE(CONCAT(YEAR('$start')+1,'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e')) "
 			."as upcoming ";
 		
-		$findCriteria = \GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('birthday', '0000-00-00', '!=')
 						->addRawCondition('birthday', 'NULL', 'IS NOT');
 		
@@ -178,7 +178,7 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractMulti
 		
 		$having = "upcoming BETWEEN '$start' AND '$end'";
 		
-		$findParams = \GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 			->distinct()
 			->select($select)
 			->criteria($findCriteria)
@@ -187,12 +187,12 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractMulti
 		
 		
 		//$response['data']['original_photo_url']=$model->photoURL;
-		$columnModel = new \GO_Base_Data_ColumnModel('GO_Addressbook_Model_Contact');
+		$columnModel = new \GO\Base\Data\ColumnModel('GO_Addressbook_Model_Contact');
 		$columnModel->formatColumn('addressbook_id', '$model->addressbook->name');
 		$columnModel->formatColumn('photo_url', '$model->getPhotoThumbURL()');
 		$columnModel->formatColumn('age', '($model->upcoming != date("Y-m-d")) ? $model->age+1 : $model->age');
 		
-		$store = new \GO_Base_Data_DbStore('GO_Addressbook_Model_Contact', $columnModel, $_POST, $findParams);
+		$store = new \GO\Base\Data\DbStore('GO_Addressbook_Model_Contact', $columnModel, $_POST, $findParams);
 		
 		return $store->getData();
 		

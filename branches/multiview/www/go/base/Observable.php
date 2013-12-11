@@ -27,7 +27,9 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base 
  */
-class GO_Base_Observable{
+namespace GO\Base;
+
+class Observable{
 	
 	public static $listeners;
 	
@@ -40,7 +42,7 @@ class GO_Base_Observable{
 	 */
 	public static function cacheListeners(){
 		
-		\GO::debug("\GO_Base_Observable::cacheListeners");
+		\GO::debug("Observable::cacheListeners");
 		
 		$cacheFolder = \GO::config()->getCacheFolder();
 		$folder = $cacheFolder->createChild('listeners',false);
@@ -86,7 +88,7 @@ class GO_Base_Observable{
 //	 IN THE MODULE ADD THIS TO ATTACH A LISTENER:
 //	 
 //  public static function initListeners() {
-//		\GO_Base_Controller_AbstractModelController::attachListener("display", "GO_Lists_ListsModule", "displayResponse");
+//		\GO\Base\Controller\AbstractModelController::attachListener("display", "GO_Lists_ListsModule", "displayResponse");
 //	}
 //	 
 //	 * 

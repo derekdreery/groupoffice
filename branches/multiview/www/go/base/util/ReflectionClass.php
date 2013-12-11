@@ -1,6 +1,8 @@
 <?php
 
-class GO_Base_Util_ReflectionClass extends ReflectionClass {
+namespace GO\Base\Util;
+
+class ReflectionClass extends \ReflectionClass {
 
 	
 	private $_overriddenMethods;
@@ -9,7 +11,7 @@ class GO_Base_Util_ReflectionClass extends ReflectionClass {
 	 * Return them as an array.
 	 * 
 	 * @param int $filter The optional filter, for filtering desired property 
-	 * types. It's configured using the ReflectionProperty constants, and defaults
+	 * types. It's configured using the \ReflectionProperty constants, and defaults
 	 * to all property types.
 	 * 
 	 * @return array
