@@ -106,10 +106,12 @@ GO.addressbook.CompanyProfilePanel = function(config)
 	 * 
 	 */
 	 
-	this.formPostAddress = new Ext.form.TextField(
+	this.formPostAddress = new Ext.form.TextArea(
 	{
 		fieldLabel: GO.lang['strAddress'], 
-		name: 'post_address'
+		name: 'post_address',
+		height: 50,
+		maxLength: 255
 	});
 					
 	this.formPostAddressNo = new Ext.form.TextField(
