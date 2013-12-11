@@ -1,3 +1,4 @@
+
 - Calendar printing: removed start time for the 2nd printed instance of events that take longer than 1 day
 - Calendar module: Added print option for event count per category per calendar.
 - Fixed exception dates import from CalDAV
@@ -45,11 +46,12 @@
 - Tickets: Closed ticket will be reopened on receiving ticket email of customer.
 - Link items: prohibited to link a read-only item.
 
-27-11-2013 4.2.28
+
+29-11-2013 4.2.28
+- Disallow deleting system folders through files module
 - Raised post address 2 field to 100 chars
 - When someone other the the ticket agent add a new message to the ticket it will be marked as unseen
 - Zpushadmin can now also work with zpush2.1
-- Prevent deletion of required system folders by non-admins
 - Projects templates fix: Also use 'days offset' in task action.
 - Fixed refreshing Favorites calendar display after permission change
 - Added permissions option to multiselect dialog

@@ -131,6 +131,7 @@ $l['alwaysAsk']="Altijd vragen";
 
 $l['openWith']='Open met';
 
+$l['dontDeleteSystemFolder']="U kunt deze systeemmap niet verwijderen";
 $l['open']='Openen';
 
 $l['rightClickToCopy']='Klik met de rechtermuis knop om te kopiëren';
