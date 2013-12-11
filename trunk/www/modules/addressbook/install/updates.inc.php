@@ -407,3 +407,6 @@ $updates['201310221010'][]="ALTER TABLE `ab_contacts` ADD `skype_name` VARCHAR( 
 
 $updates["201310221010"][]="ALTER TABLE `ab_companies` CHANGE `post_address_no` `post_address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201310251010"][]="ALTER TABLE `ab_companies` CHANGE `post_address_no` `post_address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";//Double because first query had an error before
+
+$updates["201312061535"][]="ALTER TABLE `ab_contacts` CHANGE `address` `address` VARCHAR(255) NOT NULL DEFAULT '' ;";
+$updates["201312061535"][]="ALTER TABLE `ab_companies` CHANGE `address` `address` VARCHAR(255) NOT NULL DEFAULT '' ;";

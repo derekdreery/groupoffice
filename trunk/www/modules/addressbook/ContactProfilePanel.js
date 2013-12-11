@@ -154,10 +154,12 @@ GO.addressbook.ContactProfilePanel = function(config)
 	
 														
 	
-		this.formAddress = new Ext.form.TextField(
+		this.formAddress = new Ext.form.TextArea(
 		{
 			fieldLabel: GO.lang['strAddress'],
-			name: 'address'
+			name: 'address',
+			height: 50,
+			maxLength: 255
 		});
 	
 		this.formAddressNo = new Ext.form.TextField(
