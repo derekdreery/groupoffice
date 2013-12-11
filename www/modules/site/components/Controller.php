@@ -96,7 +96,7 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 	 * @param boolean $return return rendering result if true
 	 * @return string the redering result if $return is true 
 	 */
-	public function render($view, $data = null, $return = false)
+	public function render($view, $data = null)
 	{
 		$output = $this->renderPartial($view, $data, true);
 		if (($layoutFile = $this->getLayoutFile($this->layout)) !== false)
@@ -104,10 +104,7 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 
 		Site::scripts()->render($output);
 		
-		if ($return)
-			return $output;
-		else
-			echo $output;
+		return $output;
 	}
 
 	/**
