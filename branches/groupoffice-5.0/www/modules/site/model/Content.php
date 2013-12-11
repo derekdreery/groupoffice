@@ -149,8 +149,11 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 public static function findBySlug($slug, $siteId=false){
 		 
 		 if(!$siteId)
-			$model = self::model()->findSingleByAttribute('slug', $slug);
-		 else
+			$siteId = Site::model()->id;
+		 
+//		 if(!$siteId)
+//			$model = self::model()->findSingleByAttribute('slug', $slug);
+//		 else
 			$model = self::model()->findSingleByAttributes(array('slug'=>$slug,'site_id'=>$siteId));
 		 
 		 if(!$model)
