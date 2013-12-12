@@ -646,3 +646,25 @@ $l['folderUpload']='Mappars (kräver Java)';
 
 $l['pasteFromWord']='Tvättar text som klistrats in ifrån Word eller andra program med avancerad textformatering';
 $l['th']= 'Thai';
+
+$l['short_months'][1]='Jan';
+$l['short_months'][2]='Feb';
+$l['short_months'][3]='Mar';
+$l['short_months'][4]='Apr';
+$l['short_months'][5]='Maj';
+$l['short_months'][6]='Jun';
+$l['short_months'][7]='Jul';
+$l['short_months'][8]='Aug';
+$l['short_months'][9]='Sep';
+$l['short_months'][10]='Okt';
+$l['short_months'][11]='Nov';
+$l['short_months'][12]='Dec';
+
+$l['areYouSureDeleteItem']= 'Är du säker på att du vill radera \'{item}\'?';
+$l['report']='Rapportera';
+$l['namelessItem']= 'Namnlöst objekt';
+$l['importFileType']= 'Filtyp för import';
+$l['maybeMaxUploadExceeded']= 'Servern fick inte rätt parametrar ifrån webläsaren. Förmodligen har den maximala filstorleken för uppladdning (%sMB) överskridits.';
+$l['relationDeleteRestrict']="Du kan inte radera detta %s eftersom det innehåller '%s' objekt. Vänligen radera dem först.";
+$l['pspell_lang']='sv';
+$l['dependenciesCannotDelete']="Du kan inte radera den nuvarande modulen eftersom följande (installerade) moduler är beroende av den: %s.";

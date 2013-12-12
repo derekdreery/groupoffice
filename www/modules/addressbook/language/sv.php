@@ -303,3 +303,21 @@ $l['currentImage']='Nuvarande bild';
 $l['downloadFullImage']='Hämta hela bilden';
 
 $l['bankBicNo']= 'Bank-BIC-nummer';
+
+$l['upcomingBirthdays']= "Kommande födelsedagar";
+$l['age']= "Ålder";
+$l['linkedinUrl']= 'LinkedIn-adress';
+$l['facebookUrl']= 'Facebook-adress';
+$l['twitterUrl']= 'Twitter-adress';
+$l['cmdPanelSocialMedia']= 'Sociala media';
+$l['actionDate']='Aktiveringsdatum';
+$l['selectCurrentActions']='Visa aktivade';
+$l['showActieveToolTip']='Visa endast kontakter som har ett passerat aktiveringsdatum.';
+
+$l['skypeName']= 'Skypenamm';
+$l['setCurrentTemplateAsDefaultEAccount']='Sätt nuvarande mall som standard för detta e-post-konto';
+$l['callOnSkype']= 'Ring med Skype';
+
+$l['contactCellular2']= "Andra mobil";
+$l['userDefaultTemplate']= 'Användarens standardmall';
+$l['exportContactsWithCompanies']= 'Kontakter med företag';
