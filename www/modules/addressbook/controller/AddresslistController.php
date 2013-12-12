@@ -304,16 +304,20 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		$companyIds = json_decode($params['companies'],true);
 		$removeOther = isset($params['move']) && $params['move']=='true';
 		
+		$targetAddresslistModel = GO_Addressbook_Model_Addresslist::model()->findByPk($listId);
+		if (!$targetAddresslistModel->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION))
+			throw new GO_Base_Exception_AccessDenied();
+				
 		if (!empty($removeOther)) {
 			foreach ($contactIds as $contactId) {
 				$contactModel = GO_Addressbook_Model_Contact::model()->findByPk($contactId);
 				$contactModel->removeAllManyMany('addresslists');
-			}
+					}
 			foreach ($companyIds as $companyId) {
 				$companyModel = GO_Addressbook_Model_Company::model()->findByPk($companyId);
 				$companyModel->removeAllManyMany('addresslists');
-			}
-		}
+					}
+				}
 
 		$addresslistModel = GO_Addressbook_Model_Addresslist::model()->findByPk($listId);
 		foreach ($contactIds as $contactId)
