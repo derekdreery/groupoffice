@@ -83,3 +83,8 @@ $l["taskProject_name"]='Projekt';
 $l['taskPercentage_complete']='Procent färdigt';
 
 $l['completedTasks']='Avslutade uppgifter';
+$l['phoneNr']='Telefonnr';
+$l['savePhoneNr']='Spara nummer till';
+$l['scheduleCallTaskName']='Ring {name} på {number}';
+$l['overwritePhoneNumber']='Skriv över {field} ({number})';
+$l['addToPhoneNumber']='Lägg till {field}';

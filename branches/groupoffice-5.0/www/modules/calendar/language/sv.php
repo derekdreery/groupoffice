@@ -226,3 +226,21 @@ $l['show_completed_tasks']= "Visa avslutade händelser";
 
 $l['showStatuses']='Visa status för händelser i vyer';
 $l['cantMoveRecurringByDay']="Du kan inte flytta händelser som repeteras på veckodagar på detta sätt. Vänligen öppna händelsen och justera inställningarna för upprepning.";
+
+$l['usedResources']= 'Använda resurser';
+
+$l['updateReponses']['NEEDS-ACTION']='%s har markerat sin närvaro vid händelsen %s som obestämd';
+$l['eventNotSavedSubject']= 'Händelsen sparades inte i %event i kalendern "%cal"';
+$l['eventNotSavedBody']= 'Detta är ett meddelande ifrån din kalender i %goname. %goname försökte importera händelsen "%event" med starttid %starttime från en extern kalender till kalendern "%cal", men det misslyckades eftersom händelsen innehöll fel. Händelsen kanske finns kvar i den externa kalendern.';
+$l['shareCalendarsCron']= 'Uppdatera delade kalenderfiler';
+$l['shareCalendarsCronDescription']= 'Uppdaterar delade kalenderfiler för publicerade kalendrar';
+
+$l['cmdPrintView']= 'Skriv ut nuvarande vy';
+$l['startDate']= 'Startdatum';
+$l['endDate']= 'Slutdatum';
+$l['nextMonth']= 'Nästa månad';
+$l['previousMonth']= 'Föregående månad';
+$l['till']= 'till';
+$l['total']= 'Total';
+$l['cmdPrintCategoryCount'] = 'Skriv ut antal per kategori';
+$l['eventsPerCategoryCount'] = 'Antal händelser per kategori';

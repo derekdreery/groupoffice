@@ -259,3 +259,12 @@ $l['noname']= 'Inget namn';
 $l['doNotMarkAsRead']= 'Markera inte mail som lästa automatiskt';
 
 $l['showAll']='Visa alla';
+
+$l['searchIn']= 'Sök i';
+$l['searchRecursive']= 'Sök i undermappar';
+$l['currentFolder']= 'Nuvarande mapp';
+$l['allFolders']= 'Alla mappar';
+
+$l['defaultEmailTemplate']='Standardmailmall';
+$l['useAuth']="Använd autentisering";
+$l['linkMustHavePermissionToWrite']= 'Du har inte skrivbehörighet till det objektet så du tillåts inte att länka ett meddelande till det.';
