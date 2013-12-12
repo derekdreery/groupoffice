@@ -78,7 +78,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 		}
 		
 		
-		$this->render('register', array('user'=>$user,'contact'=>$contact,'company'=>$company));
+		echo $this->render('register', array('user'=>$user,'contact'=>$contact,'company'=>$company));
 	}
 	
 	/**
@@ -105,7 +105,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 			}
 		}
 		
-		$this->render('recoverPassword');
+		echo $this->render('recoverPassword');
 	}
 	
 	public function actionResetPassword()
@@ -135,7 +135,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 			Site::notifier()->setMessage('error',GO::t("invalidusertoken","sites"));
 				
 		$user->password = null;
-		$this->render('resetPassword', array('user'=>$user));
+		echo $this->render('resetPassword', array('user'=>$user));
 	}
 	
 	/**
@@ -177,7 +177,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 			}
 		}
 
-		$this->render('login',array('model'=>$model));
+		echo $this->render('login',array('model'=>$model));
 	}
 	
 	/**
@@ -263,6 +263,6 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 		$user->password="";
 		$user->passwordConfirm="";
 		
-		$this->render('profile', array('user'=>$user,'contact'=>$contact, 'company'=>$company));
+		echo $this->render('profile', array('user'=>$user,'contact'=>$contact, 'company'=>$company));
 	}
 }
