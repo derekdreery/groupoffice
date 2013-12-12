@@ -280,7 +280,7 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 				GO::setIgnoreAclPermissions($oldIgnore);
 		}
 		catch (GO_Base_Exception_MissingParameter $e){
-			$this->render('/site/404', array('error' => $e));
+			echo $this->render('/site/404', array('error' => $e));
 		}
 		catch (GO_Base_Exception_AccessDenied $e){
 			GO::debug($e->getMessage());
@@ -293,18 +293,18 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 				$this->redirect($loginpath);
 			}  else {
 //				$controller = new GO_Site_Controller_Site();
-				$this->render('/site/error', array('error' => $e));
+				echo $this->render('/site/error', array('error' => $e));
 			}
-			//$this->render('error', array('error'=>$e));
+			//echo $this->render('error', array('error'=>$e));
 		}
 		catch (GO_Base_Exception_NotFound $e){
 			header("HTTP/1.0 404 Not Found");
       header("Status: 404 Not Found");
 			
-			$this->render('/site/404', array('error' => $e));
+			echo $this->render('/site/404', array('error' => $e));
 		}
 		catch (Exception $e){
-			$this->render('/site/error', array('error' => $e));
+			echo $this->render('/site/error', array('error' => $e));
 		}
 	}
 	
