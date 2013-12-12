@@ -61,6 +61,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 				$mailing['alias_id'] = $params['alias_id'];
 				$mailing['subject'] = $params['subject'];
 				$mailing['addresslist_id'] = $params['addresslist_id'];
+				$mailing['campaign_id'] = $params['campaign_id'];
 				$mailing['message_path'] =  'mailings/' . GO::user()->id . '_' . date('Ymd_Gis') . '.eml';
 
 				$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'mailings');
@@ -342,6 +343,11 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		
 		echo '['.GO_Base_Util_Date::get_timestamp(time())."] Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
 
+		if ($typestring=='contact')
+			$sentMailModel = GO_Addressbook_Model_SentMailingContact::model()->findSingleByAttributes(array('sent_mailing_id'=>$mailing->id,'contact_id'=>$model->id));
+		else
+			$sentMailModel = GO_Addressbook_Model_SentMailingCompany::model()->findSingleByAttributes(array('sent_mailing_id'=>$mailing->id,'company_id'=>$model->id));
+		
 		$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($mailing->id, array(), true, true);
 		if($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_PAUSED)
 		{
@@ -355,6 +361,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			}elseif($this->dry){
 				echo "Not sending because dry is true\n";
 			}else{
+				$this->fireEvent('beforeMessageSend',array(&$message,$model,$mailing));
 				$this->_sentEmails[]=$email;
 				$mailer->send($message);
 			}
@@ -362,12 +369,16 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			$status = $e->getMessage();
 		}
 		if (!empty($status)) {
-			echo "---------\n";
-			echo "Failed at ".GO_Base_Util_Date::get_timestamp(time())."\n";
-			echo $status . "\n";
-			echo "---------\n";
+			$errorMsg = "---------\n".
+				"Failed at ".GO_Base_Util_Date::get_timestamp(time())."\n".
+				$status . "\n".
+				"---------\n";
 			
-			$mailing->errors++;		
+			echo $errorMsg;
+			
+//			$mailing->errors++;		
+			$sentMailModel->has_error = true;
+			$sentMailModel->error_description = $errorMsg;
 			
 			$this->smtpFailCount++;
 			
@@ -380,17 +391,19 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			
 			unset($status);
 		} else {
-			$mailing->sent++;
+			$sentMailModel->sent = true;
+//			$mailing->sent++;
 			$this->smtpFailCount=0;
 		}
 		
-		$mailing->save();
+		$sentMailModel->save();
+//		$mailing->save();
 
-		if ($typestring == 'contact') {
-			$mailing->removeManyMany('contacts', $model->id);
-		} else {
-			$mailing->removeManyMany('companies', $model->id);			
-		}
+//		if ($typestring == 'contact') {
+//			$mailing->removeManyMany('contacts', $model->id);
+//		} else {
+//			$mailing->removeManyMany('companies', $model->id);			
+//		}
 		
 		
 	}
@@ -401,6 +414,8 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		
 		if(!GO::user()->isAdmin())
 			$criteria->addCondition('user_id', GO::user()->id);
+		
+		$criteria->addCondition('campaign_id',$params['campaign_id']);
 		
 		return GO_Base_Db_FindParams::newInstance()->criteria($criteria);
 						
