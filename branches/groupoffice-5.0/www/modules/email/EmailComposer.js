@@ -813,6 +813,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				this.showBCC(false);
 
 				this.sendParams.addresslist_id = config.addresslist_id;
+				this.sendParams.campaign_id = config.campaign_id;
 
 				this.saveButton.setDisabled(true);
 			}else
