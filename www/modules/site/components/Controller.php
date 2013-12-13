@@ -318,5 +318,3 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 	
 	
 }
-
-?>
