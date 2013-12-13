@@ -1,3 +1,9 @@
+13-12-2013 5.0.28
+- Auto loader improved
+- Changed projects2 layout and improved navigation
+- Employees can submit new holiday entries and their manager can approve them
+- Added "Add holiday" button to timeregistration2 tab too.
+
 11-12-2013 5.0.27
 - Prevent new task list on ios from crashing activesync. All tasks will be 
   synced to all lists. Not elegant but it seems to be the only way to prevent 
@@ -191,6 +197,11 @@
 - Updated Sabredav to 1.8.6
 - Address Book module: photos functionality for companies.
 - Projects module: 'show in tree' check box for project statuses.
+
+13-12-2013 4.2.29
+- Disallow deleting system folders through files module
+- Auto loader improved
+
 
 29-11-2013 4.2.28
 - Disallow deleting system folders through files module
