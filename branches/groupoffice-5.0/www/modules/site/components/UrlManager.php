@@ -217,12 +217,10 @@ class GO_Site_Components_UrlManager
 	}
 	
 	public function getHomeUrl() {
-		if(Site::model()->mod_rewrite){
-			$url = Site::model()->ssl ? 'https://' : 'http://';
-			$url .= Site::model()->domain.rtrim($this->getBaseUrl(),'/');
-		}  else {
-			$url = GO::config()->full_url.'modules/site/index.php?site_id='.Site::model()->id;
-		}
+
+		$url = Site::model()->ssl ? 'https://' : 'http://';
+		$url .= Site::model()->domain.rtrim($this->getBaseUrl(),'/');
+
 		return $url;
 	}
 
