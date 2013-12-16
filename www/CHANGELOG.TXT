@@ -1,5 +1,7 @@
+16-12-2013 5.0.29
 - Made mailserver interact with Group-Office with unique token. Which is easier 
   to manage and more secure because the password is not stored on disk.
+- Removed old unneeded file with small security problem.
 
 13-12-2013 5.0.28
 - Auto loader improved
