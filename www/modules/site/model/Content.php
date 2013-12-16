@@ -449,8 +449,14 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 			
 			$html .= ' />';
 			
-			if(key_exists('href', $imageAttr))
-			 $html = sprintf('<a href="%s" target="_blank">%s</a>',$imageAttr['href'],$html);
+			if(key_exists('href', $imageAttr)){
+				$target='';
+				if(isset($imageAttr['target'])){
+					$target = ' target="'.$imageAttr['target'].'"';
+				}
+				
+			 $html = sprintf('<a href="%s"'.$target.'>%s</a>',$imageAttr['href'],$html);
+			}
 		}
 		 return $html;
 	 }
