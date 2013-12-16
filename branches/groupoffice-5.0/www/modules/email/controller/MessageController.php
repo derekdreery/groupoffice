@@ -962,7 +962,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				
 				$from = $message->from->getAddress();
 				
-				$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($from['email']);
+				$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($from['email'], GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION));
 				if($contact){
 					
 					
