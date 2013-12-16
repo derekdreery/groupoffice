@@ -1089,7 +1089,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @param string $email
 	 * @return GO_Base_Db_ActiveStatement 
 	 */
-	public function findSingleByEmail($email){
+	public function findSingleByEmail($email, GO_Base_Db_FindParams $findParams = null){
 		
 		$criteria = GO_Base_Db_FindCriteria::newInstance()
 			->addCondition('email',$email)
@@ -1097,6 +1097,11 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			->addCondition('email3', $email,'=','t',false);
 			
 		$fp = GO_Base_Db_FindParams::newInstance()->criteria($criteria)->limit(1);
+		
+		if(isset($findParams)){
+			$fp->mergeWith($findParams);
+		}
+		
 		$stmt = GO_Addressbook_Model_Contact::model()->find($fp);
 		return $stmt->fetch();
 	}
