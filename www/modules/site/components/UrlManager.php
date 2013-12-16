@@ -219,7 +219,10 @@ class GO_Site_Components_UrlManager
 	public function getHomeUrl() {
 
 		$url = Site::model()->ssl ? 'https://' : 'http://';
-		$url .= Site::model()->domain.rtrim($this->getBaseUrl(),'/');
+		
+		$domain = Site::model()->domain == '*' ? $_SERVER['SERVER_NAME'] : Site::model()->domain;
+		
+		$url .= $domain.rtrim($this->getBaseUrl(),'/');
 
 		return $url;
 	}
