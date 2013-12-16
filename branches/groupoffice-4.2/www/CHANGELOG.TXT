@@ -1,3 +1,5 @@
+- Removed old unneeded file with small security problem.
+
 13-12-2013 4.2.29
 - Disallow deleting system folders through files module
 - Auto loader improved
