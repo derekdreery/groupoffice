@@ -1,8 +1,12 @@
+- Made mailserver interact with Group-Office with unique token. Which is easier 
+  to manage and more secure because the password is not stored on disk.
+
 13-12-2013 5.0.28
 - Auto loader improved
 - Changed projects2 layout and improved navigation
 - Employees can submit new holiday entries and their manager can approve them
 - Added "Add holiday" button to timeregistration2 tab too.
+- Removed sum from billing for performance reasons
 
 11-12-2013 5.0.27
 - Prevent new task list on ios from crashing activesync. All tasks will be 

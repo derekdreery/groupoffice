@@ -9,6 +9,8 @@ $replacements['db_user']=$dbuser;
 $replacements['db_pass']=$dbpass;
 $replacements['domain']=$domain;
 
+$replacements['serverclient_token']=uniqid(time());
+
 function create_file($file, $tpl, $replacements) {
 	$data = file_get_contents($tpl);
 
@@ -129,6 +131,20 @@ function file_contains($filename, $str){
 	return strpos(file_get_contents($filename),$str)!==false;
 }
 
+
+function remove_line($filename, $str){
+	$data = file_get_contents($filename);
+	$newData="";
+	$lines = explode("\n", $data);
+	
+	foreach($lines as $line){
+		if(strpos($line,$str)==false){
+			$newData .= $line."\n";
+		}						
+	}
+	$data = file_put_contents($filename,$newData);
+}
+
 echo "Configuring Dovecot\n";
 
 exec('dovecot --version', $output);
@@ -197,6 +213,14 @@ if(!file_exists('/etc/groupoffice/globalconfig.inc.php'))
 
 if(!file_contains('/etc/groupoffice/config.php', 'serverclient_domains'))
 	set_value('/etc/groupoffice/config.php', '$config[\'serverclient_domains\']="'.$domain.'";');
+
+
+if(!file_contains('/etc/groupoffice/globalconfig.inc.php', 'serverclient_token')){
+	set_value('/etc/groupoffice/globalconfig.inc.php', '$config[\'serverclient_token\']="'.$replacements['serverclient_token'].'";');
+	
+	remove_line('/etc/groupoffice/globalconfig.inc.php','serverclient_username');
+	remove_line('/etc/groupoffice/globalconfig.inc.php','serverclient_password');
+}
 
 require('/etc/groupoffice/config.php');
 

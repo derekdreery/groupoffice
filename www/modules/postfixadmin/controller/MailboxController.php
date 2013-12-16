@@ -6,7 +6,7 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	
 	
 	protected function allowGuests() {
-		return array("cacheusage");
+		return array("cacheusage","setpassword","submit");
 	}
 		
 	protected function getStoreParams($params) {
@@ -27,6 +27,16 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	
 	
 	protected function actionSetPassword($params){
+		
+		if(!GO::user()){
+			if(!empty($params['tokem']) && $params['token']!=GO::config()->postfixadmin_token){
+				throw new GO_Base_Exception_AccessDenied();
+			}else
+			{
+				GO::session()->runAsRoot();
+			}
+		}
+		
 		$mailbox = GO_Postfixadmin_Model_Mailbox::model()->findSingleByAttributes(array(
 				"username"=>$params["username"]				
 		));
@@ -46,6 +56,17 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	}
 	
 	protected function beforeSubmit(&$response, &$model, &$params) {
+		
+		if(!GO::user()){
+			if(!empty($params['tokem']) && $params['token']!=GO::config()->postfixadmin_token){
+				throw new GO_Base_Exception_AccessDenied();
+			}else
+			{
+				GO::session()->runAsRoot();
+			}
+		}
+
+		
 		if(isset($params['domain_id']))
 			$domainModel = GO_Postfixadmin_Model_Domain::model()->findByPk($params['domain_id']);
 		else {
