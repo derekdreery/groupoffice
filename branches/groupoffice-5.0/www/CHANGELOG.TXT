@@ -1,3 +1,5 @@
+- Email: When sending email with a link, the linked email time will be set.
+
 16-12-2013 5.0.29
 - Made mailserver interact with Group-Office with unique token. Which is easier 
   to manage and more secure because the password is not stored on disk.
