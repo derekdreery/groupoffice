@@ -467,6 +467,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 				$attributes['path'] = $path;
 
+				$attributes['time'] = $message->getDate();
 				
 				if($model){
 					
