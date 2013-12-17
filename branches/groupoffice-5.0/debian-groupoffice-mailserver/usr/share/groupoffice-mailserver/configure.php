@@ -95,11 +95,11 @@ additional_conditions = and backupmx = '1' and active = '1'";
 	file_put_contents('/etc/postfix/mysql_relay_domains_maps.cf', $content);
 }
 
-$transport = file_exists('/etc/postfix/transport') ? file_get_contents('/etc/postfix/transport') : '';
-if(strpos($transport, "autoreply.$domain vacation:")===false) {
-	file_put_contents('/etc/postfix/transport', "autoreply.$domain vacation:", FILE_APPEND);
-	system('postmap /etc/postfix/transport');
-}
+//$transport = file_exists('/etc/postfix/transport') ? file_get_contents('/etc/postfix/transport') : '';
+//if(strpos($transport, "autoreply.$domain vacation:")===false) {
+//	file_put_contents('/etc/postfix/transport', "autoreply.$domain vacation:", FILE_APPEND);
+//	system('postmap /etc/postfix/transport');
+//}
 
 
 /*$version=0;
