@@ -1,3 +1,4 @@
+- Email: Namespaces on the mailserver will be added to the folders response too.
 - Email: When sending email with a link, the linked email time will be set.
 
 16-12-2013 5.0.29
