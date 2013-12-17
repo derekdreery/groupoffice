@@ -9,7 +9,7 @@ GO.addressbook.ContactsGrid = function(config){
 	config.border=false;
 	
 	var fields ={
-		fields : ['id','uuid','name','company_name','first_name','middle_name','last_name','title','initials','sex','birthday','age','email','email2','email3','home_phone','work_phone','work_fax','cellular','cellular2','fax','address','address_no','zip','city','state','country','function','department','salutation','ab_name','ctime','mtime','action_date'],
+		fields : ['id','uuid','name','company_name','first_name','middle_name','last_name','title','initials','sex','birthday','age','email','email2','email3','home_phone','work_phone','work_fax','cellular','cellular2','fax','address','address_no','zip','city','state','country','function','department','salutation','ab_name','ctime','mtime','action_date','suffix'],
 		columns : [
 		{
 			header: GO.addressbook.lang.id,
@@ -54,6 +54,11 @@ GO.addressbook.ContactsGrid = function(config){
 		{
 			header: GO.lang['strInitials'],
 			dataIndex: 'initials',
+			hidden:true
+		},{
+			header: GO.lang['strSuffix'],
+			dataIndex: 'suffix',
+			width:50,
 			hidden:true
 		},
 		{
