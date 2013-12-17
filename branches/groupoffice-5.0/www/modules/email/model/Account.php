@@ -454,12 +454,21 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		$imap = $this->openImapConnection();
 		
 		$rootMailboxes = array();
-				
-		$folders = $imap->list_folders($subscribed,$withStatus,"","{$this->mbroot}%", true);		
-//		GO::debug($folders);
-		foreach($folders as $folder){
-			$mailbox = new GO_Email_Model_ImapMailbox($this,$folder);
-			$rootMailboxes[]=$mailbox;
+	
+			$folders = $imap->list_folders($subscribed,$withStatus,"","{$this->mbroot}%", true);		
+	//		GO::debug($folders);
+			foreach($folders as $folder){
+				$mailbox = new GO_Email_Model_ImapMailbox($this,$folder);
+				$rootMailboxes[]=$mailbox;
+			}
+		
+		$namespaces = $imap ->get_namespaces();
+		
+		foreach($namespaces as $namespace){
+			if($namespace['name']!=''){
+				$namespace['noselect']=true;
+				$rootMailboxes[]=new GO_Email_Model_ImapMailbox($this, $namespace);
+			}
 		}
 		
 		return $rootMailboxes;
