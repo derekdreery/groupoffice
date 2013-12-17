@@ -596,6 +596,70 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		return $folders;
 	}
+	
+	/**
+	 * Get the namespaces that are available on the mailserver.
+	 * 
+	 * @return array
+	 */
+	public function get_namespaces(){
+		// Array with the namespaces that are found.
+		$nss = array();
+		
+		if($this->has_capability('NAMESPACE')){
+			//IMAP ccommand
+			
+			$command = "NAMESPACE\r\n";
+			$this->send_command($command);
+			$result = $this->get_response(false, true);
+
+			$namespaceCmdFound=false;
+			
+			$insideNamespace=false;
+			
+			$namespace = array('name'=>null, 'delimiter'=>null);
+			
+			foreach ($result as $vals) {
+				foreach ($vals as $val) {
+					if (!$namespaceCmdFound && strtoupper($val) == 'NAMESPACE') {
+						$namespaceCmdFound = true;
+					} else {
+						switch (strtoupper($val)) {
+
+							case '(':
+								$insideNamespace = true;
+								break;
+
+							case ')':
+								$insideNamespace = false;
+								
+								if(isset($namespace['name'])){
+									$namespace['name']=$this->utf7_decode(trim($namespace['name'], $namespace['delimiter']));
+									$nss[] = $namespace;
+									$namespace = array('name' => null, 'delimiter' => null);
+								}
+								break;
+
+							default:
+								if ($insideNamespace) {
+									if (!isset($namespace['name'])) {
+										$namespace['name'] = $val;
+									} else {
+										$namespace['delimiter'] = $val;
+									}
+								}
+								break;
+						}
+					}
+				}
+			}
+
+			return $nss;
+		}else
+		{
+			return array(array('name'=>'','delimiter'=>$this->get_mailbox_delimiter()));
+		}
+	}
 
 
 	/**
