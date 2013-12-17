@@ -248,7 +248,7 @@ if(GO::config()->debug || !file_exists($path)) {
 			$js = GO_Base_Util_Minify_JSMin::minify($js);
 		}
 
-		file_put_contents($path, $js,FILE_APPEND);
+		file_put_contents($path, $js);
 	}
 }
 
