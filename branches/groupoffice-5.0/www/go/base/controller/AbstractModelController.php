@@ -1043,6 +1043,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		if(is_file($params['file'])){
 						
+			if (!isset($params['importType']))
+				$params['importType'] = 'Csv';
+			
 			$fileClassName = 'GO_Base_Fs_'.$params['importType'].'File';
 			if ($params['importType']=='Xls' && !empty($params['maxColumnNr']))
 				$importFile = new $fileClassName($params['file'],$params['maxColumnNr']);
