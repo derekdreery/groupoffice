@@ -2,6 +2,7 @@
 - Email: When sending email with a link, the linked email time will be set.
 - Address book: Contact suffix as column in contacts grid.
 - Users: fixed import user CSV.
+- Holidays: Show leave days / holidays in the owner's calendar.
 
 16-12-2013 5.0.29
 - Made mailserver interact with Group-Office with unique token. Which is easier 
