@@ -829,6 +829,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 						$holidaysAdded=true;
 						$response = $this->_getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime);
 					}
+					
+					if (GO::modules()->leavedays) {
+						$response = $this->_getLeavedaysResponseForPeriod($response,$calendar,$startTime,$endTime);
+					}
 
 				}
 				
@@ -1017,6 +1021,45 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		// Set the count of the holidays
 		$response['count_holidays_only'] = $resultCount;
+
+		
+		return $response;
+	}
+	
+	/**
+	 * Fill the response array with the leave days between the start and end time
+	 * (must have Holidays (Leave days) module enabled.
+	 * 
+	 * @param array $response
+	 * @param GO_Calendar_Model_Calendar $calendar
+	 * @param string $startTime
+	 * @param string $endTime
+	 * @return array 
+	 */
+	private function _getLeavedaysResponseForPeriod($response,$calendar,$startTime,$endTime){
+		$resultCount = 0;
+
+		
+		if(!$calendar->user)
+			return $response;
+		
+//		$leavedays = GO_Leavedays_Model_Leaveday::model()
+		//$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
+		$leavedaysStmt = GO_Leavedays_Model_Leaveday::model()->getLeavedaysInPeriod($calendar->user->id,$startTime, $endTime);
+		
+		if($leavedaysStmt){
+			while($leavedayModel = $leavedaysStmt->fetch()){ 
+				$resultCount++;
+				$record = $leavedayModel->getJson($calendar);
+				$record['calendar_id']=$calendar->id;
+				$record['id']=$response['count']++;
+				$index = $this->_getIndex($response['results'],$leavedayModel->first_date);
+				$response['results'][$index] = $record;
+			}
+		}
+
+		// Set the count of the holidays
+		$response['count_leavedays_only'] = $resultCount;
 
 		
 		return $response;
