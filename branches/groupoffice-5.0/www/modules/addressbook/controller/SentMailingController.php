@@ -63,7 +63,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 						|| empty(GO::config()->campaigns_imap_server) || empty(GO::config()->campaigns_imap_port)
 						|| !isset(GO::config()->campaigns_smtp_user) || !isset(GO::config()->campaigns_smtp_pass)
 						|| empty(GO::config()->campaigns_smtp_server) || empty(GO::config()->campaigns_smtp_port)
-						|| empty(GO::config()->campaigns_from) || empty(GO::config()->campaigns_mails_per_month)
+						|| empty(GO::config()->campaigns_from) || empty(GO::config()->campaigns_max_mails_per_period)
 					)
 				) {
 					throw new Exception(GO::t('mustSetCampaignsConfig','campaigns'));
@@ -256,10 +256,10 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 						// Check mail limit
 						$nSentMails = GO::config()->get_setting('campaigns_number_sent_mails',0);
-						if ($mailing->campaign_id>0 && $nSentMails>=GO::config()->campaigns_mails_per_month) {
+						if ($mailing->campaign_id>0 && $nSentMails>=GO::config()->campaigns_max_mails_per_period) {
 							$this->_pauseMailing($mailing->id);
 							echo "Error for ".$contact->firstEmail.": \n";
-							echo str_replace('%maxMails',GO::config()->campaigns_mails_per_month,GO::t('sentMailLimitReached','campaigns'));
+							echo str_replace('%maxMails',GO::config()->campaigns_max_mails_per_period,GO::t('sentMailLimitReached','campaigns'));
 							exit();
 						}
 
@@ -323,10 +323,10 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 						// Check mail limit
 						$nSentMails = GO::config()->get_setting('campaigns_number_sent_mails',0);
-						if ($mailing->campaign_id>0 && $nSentMails>=GO::config()->campaigns_mails_per_month) {
+						if ($mailing->campaign_id>0 && $nSentMails>=GO::config()->campaigns_max_mails_per_period) {
 							$this->_pauseMailing($mailing->id);
 							echo "Error for ".$contact->firstEmail.": \n";
-							echo str_replace('%maxMails',GO::config()->campaigns_mails_per_month,GO::t('sentMailLimitReached','campaigns'));
+							echo str_replace('%maxMails',GO::config()->campaigns_max_mails_per_period,GO::t('sentMailLimitReached','campaigns'));
 							exit();
 						}
 
