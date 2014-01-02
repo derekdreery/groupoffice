@@ -79,7 +79,7 @@ class GO_Files_FilesModule extends GO_Base_Module{
 	public static function deleteUser($user) {
 		$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);
 		if($folder)
-			$folder->delete();
+			$folder->delete(true);
 	}
 	
 	public function autoInstall() {
