@@ -1,3 +1,5 @@
+- Billing: Order attribute for amount that has been (partially) paid.
+
 02-01-2014 5.0.30
 - Timeregistration show future weeks.
 - Billing module could not find order error message because of change to the new year.
