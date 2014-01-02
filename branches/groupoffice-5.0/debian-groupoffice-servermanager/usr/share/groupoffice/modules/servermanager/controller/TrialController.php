@@ -37,12 +37,12 @@ class GO_Servermanager_Controller_Trial extends GO_Site_Components_Controller {
 			}
 		}		
 		
-		$this->render('newtrial', array('model' => $newTrial));
+		echo $this->render('newtrial', array('model' => $newTrial));
 	}
 	
 	public function actionEmailSent(){
 		$newTrial = GO_ServerManager_Model_NewTrial::model()->findSingleByAttribute('key', $_REQUEST['key']);
-		$this->render('emailsent', array('model' => $newTrial));
+		echo $this->render('emailsent', array('model' => $newTrial));
 	}
 
 	public function actionCreate($params) {
@@ -86,14 +86,14 @@ class GO_Servermanager_Controller_Trial extends GO_Site_Components_Controller {
 				}
 				
 				
-				$this->render('trialcreated', array('installation'=>$installation));
+				echo $this->render('trialcreated', array('installation'=>$installation));
 				
 				$this->newTrial->delete();
 				exit();
 			}
 		}
 
-		$this->render('createtrial');
+		echo $this->render('createtrial');
 	}
 	
 	
