@@ -1,4 +1,5 @@
 - Billing: Order attribute for amount that has been (partially) paid.
+- Address book: When sent mailings grid reloads (every 5 seconds), it stays on the current page.
 
 02-01-2014 5.0.30
 - Timeregistration show future weeks.
