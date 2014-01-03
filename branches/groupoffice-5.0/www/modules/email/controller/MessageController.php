@@ -647,6 +647,38 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 
 		if ($success) {
+			
+			$toAddresses = $message->getTo();
+			if (empty($toAddresses))
+				$toAddresses = array();
+			$ccAddresses = $message->getCc();
+			if (empty($ccAddresses))
+				$ccAddresses = array();
+			$bccAddresses = $message->getBcc();
+			if (empty($bccAddresses))
+				$bccAddresses = array();
+			$emailAddresses = array_merge($toAddresses,$ccAddresses);
+			$emailAddresses = array_merge($emailAddresses,$bccAddresses);
+						
+			foreach ($emailAddresses as $emailAddress => $fullName) {
+				$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('email',$emailAddress,'=','t',false)
+						->addCondition('email2',$emailAddress,'=','t',false)
+						->addCondition('email3',$emailAddress,'=','t',false);
+				
+				$findParams = GO_Base_Db_FindParams::newInstance()
+					->criteria($findCriteria);
+				$contactsStmt = GO_Addressbook_Model_Contact::model()->find($findParams);
+				if ($contactsStmt) {
+					foreach ($contactsStmt as $contactModel) {
+						if ($contactModel->name == $fullName) {
+							$contactModel->last_email_time = time();
+							$contactModel->save();
+						}
+					}
+				}
+			}
+			
 			if (!empty($params['reply_uid'])) {
 				//set \Answered flag on IMAP message
 				GO::debug("Reply");
