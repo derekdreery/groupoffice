@@ -63,6 +63,7 @@
  * @property string $email
  * @property GO_Addressbook_Model_Contact $contact
  * @property string $digest
+ * @property Boolean $sort_email_addresses_by_time
  */
 
 class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
