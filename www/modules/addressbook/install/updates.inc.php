@@ -429,3 +429,5 @@ $updates['201312121200'][]="ALTER TABLE `ab_sent_mailing_contacts` CHANGE `will_
 $updates['201312121200'][]="ALTER TABLE `ab_sent_mailing_companies` CHANGE `sent_mailing_id` `will_be_company_id` INT( 11 ) NOT NULL DEFAULT '0';";
 $updates['201312121200'][]="ALTER TABLE `ab_sent_mailing_companies` CHANGE `company_id` `sent_mailing_id` INT( 11 ) NOT NULL DEFAULT '0';";
 $updates['201312121200'][]="ALTER TABLE `ab_sent_mailing_companies` CHANGE `will_be_company_id` `company_id` INT( 11 ) NOT NULL DEFAULT '0';";
+
+$updates['201401031040'][]="ALTER TABLE `ab_contacts` ADD `last_email_time` int(11) NOT NULL DEFAULT '0';";
