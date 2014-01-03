@@ -66,6 +66,7 @@
  * @property string $url_facebook
  * @property string $url_twitter
  * @property string $skype_name
+ * @property int $last_email_time
  */
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
