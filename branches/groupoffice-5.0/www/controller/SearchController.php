@@ -252,6 +252,9 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 				$findParams->getCriteria()->mergeWith($criteria);
 //			}
 
+			if (GO::user()->sort_email_addresses_by_time==1)
+				$findParams->order('last_email_time','DESC');
+				
 			$stmt = GO_Addressbook_Model_Contact::model()->findUsers(GO::user()->id, $findParams);
 
 			$userContactIds = array();
