@@ -161,6 +161,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
 	`url_facebook` VARCHAR( 100 ) NULL DEFAULT NULL,
 	`url_twitter` VARCHAR( 100 ) NULL DEFAULT NULL,
 	`skype_name` VARCHAR( 100 ) NULL DEFAULT NULL,
+	`last_email_time` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `addressbook_id` (`addressbook_id`),
   KEY `email` (`email`),
