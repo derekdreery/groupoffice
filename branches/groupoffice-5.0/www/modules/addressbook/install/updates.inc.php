@@ -431,3 +431,4 @@ $updates['201312121200'][]="ALTER TABLE `ab_sent_mailing_companies` CHANGE `comp
 $updates['201312121200'][]="ALTER TABLE `ab_sent_mailing_companies` CHANGE `will_be_company_id` `company_id` INT( 11 ) NOT NULL DEFAULT '0';";
 
 $updates['201401031040'][]="ALTER TABLE `ab_contacts` ADD `last_email_time` int(11) NOT NULL DEFAULT '0';";
+$updates['201401061330'][]="ALTER TABLE `ab_contacts` DROP `last_email_time`;";
