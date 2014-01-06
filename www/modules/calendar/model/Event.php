@@ -2302,7 +2302,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return boolean
 	 * @throws Exception
 	 */
-	public function sendMeetingRequest(){		
+	public function sendMeetingRequest($newParticipantsOnly=false){		
 		
 		if(!$this->is_organizer)
 			throw new Exception("Meeting request can only be send from the organizer's event");
@@ -2315,92 +2315,99 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->save(true);
 		}
 
-			while ($participant = $stmt->fetch()) {		
-				//don't invite organizer
-				if($participant->is_organizer)
-					continue;
-				
-				// Set the language of the email to the language of the participant.
-				$language = false;
-				if(!empty($participant->user_id)){
-					$user = GO_Base_Model_User::model()->findByPk($participant->user_id);
-
-					if($user)
-						GO::language()->setLanguage($user->language);
-				}
-
-				//if participant status is pending then send a new inviation subject. Otherwise send it as update
-				if($participant->status == GO_Calendar_Model_Participant::STATUS_PENDING){
-					$subject = GO::t('invitation', 'calendar').': '.$this->name;
-					$bodyLine = GO::t('invited', 'calendar');
-				}else
-				{
-					$subject = GO::t('invitation_update', 'calendar').': '.$this->name;
-					$bodyLine = GO::t('eventUpdated', 'calendar');
-				}				
-				
-				//create e-mail message
-				$message = GO_Base_Mail_Message::newInstance($subject)
-									->setFrom($this->user->email, $this->user->name)
-									->addTo($participant->email, $participant->name);
-				
-
-				//check if we have a Group-Office event. If so, we can handle accepting 
-				//and declining in Group-Office. Otherwise we'll use ICS calendar objects by mail
-				$participantEvent = $participant->getParticipantEvent();
-				
-				$body = '<p>'.$bodyLine.': </p>'.$this->toHtml();			
-				
-				
-//				if(!$participantEvent){					
-
-				//build message for external program
-				$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
-				$declineUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
-
-//				if($participantEvent){	
-					//hide confusing buttons if user has a GO event.
-					$body .= '<div class="go-hidden">';
-//				}
-				$body .= 
+			while ($participant = $stmt->fetch()) {
+				if (!$newParticipantsOnly || (isset(GO::session()->values['new_participant_ids']) && in_array($participant->user_id,GO::session()->values['new_participant_ids']))) {
 					
-						'<p><br /><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
-						'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-						'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
-						'&nbsp;|&nbsp;' .
-						'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+					//don't invite organizer
+					if($participant->is_organizer)
+						continue;
+
+					// Set the language of the email to the language of the participant.
+					$language = false;
+					if(!empty($participant->user_id)){
+						$user = GO_Base_Model_User::model()->findByPk($participant->user_id);
+
+						if($user)
+							GO::language()->setLanguage($user->language);
+					}
+
+					//if participant status is pending then send a new inviation subject. Otherwise send it as update
+					if($participant->status == GO_Calendar_Model_Participant::STATUS_PENDING){
+						$subject = GO::t('invitation', 'calendar').': '.$this->name;
+						$bodyLine = GO::t('invited', 'calendar');
+					}else
+					{
+						$subject = GO::t('invitation_update', 'calendar').': '.$this->name;
+						$bodyLine = GO::t('eventUpdated', 'calendar');
+					}				
+
+					//create e-mail message
+					$message = GO_Base_Mail_Message::newInstance($subject)
+										->setFrom($this->user->email, $this->user->name)
+										->addTo($participant->email, $participant->name);
+
+
+					//check if we have a Group-Office event. If so, we can handle accepting 
+					//and declining in Group-Office. Otherwise we'll use ICS calendar objects by mail
+					$participantEvent = $participant->getParticipantEvent();
+
+					$body = '<p>'.$bodyLine.': </p>'.$this->toHtml();			
+
+
+	//				if(!$participantEvent){					
+
+					//build message for external program
+					$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+					$declineUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+
+	//				if($participantEvent){	
+						//hide confusing buttons if user has a GO event.
+						$body .= '<div class="go-hidden">';
+	//				}
+					$body .= 
+
+							'<p><br /><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+							'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+							'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+							'&nbsp;|&nbsp;' .
+							'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+
+	//				if($participantEvent){	
+						$body .= '</div>';
+	//				}
+
+					$ics=$this->toICS("REQUEST");				
+					$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REQUEST"');
+					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+					$a->setDisposition("inline");
+					$message->attach($a);
+
+					//for outlook 2003 compatibility
+					$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
+					$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+					$message->attach($a2);
+
+					if($participantEvent){
+						$url = GO::createExternalUrl('calendar', 'openCalendar', array(
+						'unixtime'=>$this->start_time
+						));
+
+						$body .= '<br /><a href="'.$url.'">'.GO::t('openCalendar','calendar').'</a>';
+					}
+
+					$message->setHtmlAlternateBody($body);
+
+					// Set back the original language
+					if($language !== false)
+						GO::language()->setLanguage($language);
+
+					GO_Base_Mail_Mailer::newGoInstance()->send($message);
 				
-//				if($participantEvent){	
-					$body .= '</div>';
-//				}
-
-				$ics=$this->toICS("REQUEST");				
-				$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REQUEST"');
-				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
-				$a->setDisposition("inline");
-				$message->attach($a);
-				
-				//for outlook 2003 compatibility
-				$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
-				$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
-				$message->attach($a2);
-
-				if($participantEvent){
-					$url = GO::createExternalUrl('calendar', 'openCalendar', array(
-					'unixtime'=>$this->start_time
-					));
-
-					$body .= '<br /><a href="'.$url.'">'.GO::t('openCalendar','calendar').'</a>';
 				}
 				
-				$message->setHtmlAlternateBody($body);
-
-				// Set back the original language
-				if($language !== false)
-					GO::language()->setLanguage($language);
-			
-				GO_Base_Mail_Mailer::newGoInstance()->send($message);
 			}
+			
+			unset(GO::session()->values['new_participant_ids']);
 			
 			return true;
 	}

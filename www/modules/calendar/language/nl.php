@@ -244,3 +244,8 @@ $l['nextMonth'] = 'Volgende maand';
 $l['previousMonth'] = 'Vorige maand';
 $l['till'] = 'tot';
 $l['total'] = 'Totaal';
+
+$l['sendNotificationToNewParticipants']='Wilt u alleen de zojuist toegevoegde deelnemers per e-mail op de hoogte brengen van deze afspraak?';
+$l['newParticipants']='Nieuwe deelnemers';
+$l['allParticipants']='Alle deelnemers';
+$l['noParticipants']='Geen deelnemers';
