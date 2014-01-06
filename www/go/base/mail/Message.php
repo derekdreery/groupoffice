@@ -259,14 +259,15 @@ class GO_Base_Mail_Message extends Swift_Message{
 
 					if(isset($part->headers['content-id']))
 					{
-						$content_id=trim($part->headers['content-id']);
-						if (strpos($content_id,'>'))
-						{
-							$content_id = substr($part->headers['content-id'], 1,strlen($part->headers['content-id'])-2);
-						}
+						$content_id=trim($part->headers['content-id'],' <>');
 						$img = Swift_EmbeddedFile::fromPath($tmp_file);
 						$img->setContentType($mime_type);
-						$img->setId($content_id);
+						
+						//Only set valid ID's. Iphone sends invalid content ID's sometimes.
+						if (preg_match('/^.+@.+$/D',$content_id))
+						{
+							$img->setId($content_id);
+						}
 						$this->embed($img);
 					}else
 					{
