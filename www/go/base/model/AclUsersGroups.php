@@ -68,6 +68,11 @@ class GO_Base_Model_AclUsersGroups extends GO_Base_Db_ActiveRecord {
 	
 	protected function afterSave($wasNew) {
 		
+		//Add log message for activitylog here
+		if(GO::modules()->isInstalled("log")){
+			GO_Log_Model_Log::create("acl", $this->aclItem->description,$this->aclItem->className(),$this->aclItem->id);
+		}
+
 		$this->aclItem->touch();
 		
 		return parent::afterSave($wasNew);
