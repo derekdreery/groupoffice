@@ -216,18 +216,18 @@ function user_row_groupoffice($username, $password, $user_id=false)
 		return false;
 	}
 
-	$adpos = strpos($gorow['username'],'@');
-	if($adpos){
-		$gorow['username']=substr($gorow['username'],0,$adpos);
-
-		//check for a duplicate user in GO.
-		$sql = "SELECT id FROM go_users WHERE username='".$db->sql_escape(utf8_clean_string($gorow['username']))."'";
-		$result = $godb->sql_query($sql);
-		if($godb->sql_fetchrow($result)){
-			//duplicate found append the id
-			$gorow['username'].=$gorow['id'];
-		}
-	}
+//	$adpos = strpos($gorow['username'],'@');
+//	if($adpos){
+//		$gorow['username']=substr($gorow['username'],0,$adpos);
+//
+//		//check for a duplicate user in GO.
+//		$sql = "SELECT id FROM go_users WHERE username='".$db->sql_escape(utf8_clean_string($gorow['username']))."'";
+//		$result = $godb->sql_query($sql);
+//		if($godb->sql_fetchrow($result)){
+//			//duplicate found append the id
+//			$gorow['username'].=$gorow['id'];
+//		}
+//	}
 
 	// generate user account data
 	return array(
