@@ -230,7 +230,7 @@ class GO_Base_Util_Http {
 	
 	
 	public static function basicAuth(){
-		if (!isset($_SERVER['PHP_AUTH_USER']) && !GO_Base_Util_Http::isAjaxRequest()) {
+		if (!isset($_SERVER['PHP_AUTH_USER']) && !GO_Base_Util_Http::isAjaxRequest() && PHP_SAPI != 'cli') {
 			header('WWW-Authenticate: Basic realm="'.GO::config()->product_name.'"');
 			header('HTTP/1.0 401 Unauthorized');
 			
