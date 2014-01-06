@@ -43,3 +43,4 @@ $lang['cms']['none'] = 'NONE';
 $lang['cms']['template_not_found'] = 'Site template not found. Check if the site is plugged to a template and that the template\'s directory exists in modules/cms/template/...';
 
 $lang['cms']['newCategory'] = 'New category';
+$lang['cms']['filenameAlreadyExists'] = 'The filename "%s" already exists in that folder. Choose a different name.';

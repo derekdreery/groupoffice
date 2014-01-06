@@ -42,3 +42,4 @@ $lang['cms']['none'] = 'GEEN';
 $lang['cms']['template_not_found'] = 'Er is geen template gevonden voor deze site. Controleer of de site is gekoppeld aan een template en dat de gekozen template een directory heeft in modules/cms/template/...';
 
 $lang['cms']['newCategory'] = 'Nieuwe categorie';
+$lang['cms']['filenameAlreadyExists'] = 'Het bestandsnaam "%s" bestaat al in die map. Kiest u een andere naam.';
