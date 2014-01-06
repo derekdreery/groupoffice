@@ -303,6 +303,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `popup_reminders` tinyint(1) NOT NULL DEFAULT '0',
   `password_type` varchar(20) NOT NULL DEFAULT 'crypt',
 	`holidayset` VARCHAR( 10 ) NULL,
+	`sort_email_addresses_by_time` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- --------------------------------------------------------
