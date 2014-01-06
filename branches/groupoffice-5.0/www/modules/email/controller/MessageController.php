@@ -646,7 +646,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$success=false;
 		}
 
-		if ($success) {
+		// Update "last mailed" time of the emailed contacts.
+		if ($success && GO::modules()->addressbook) {
 			
 			$toAddresses = $message->getTo();
 			if (empty($toAddresses))
@@ -672,8 +673,19 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				if ($contactsStmt) {
 					foreach ($contactsStmt as $contactModel) {
 						if ($contactModel->name == $fullName) {
-							$contactModel->last_email_time = time();
-							$contactModel->save();
+							
+							$contactLastMailTimeModel = GO_Email_Model_ContactMailTime::model()->findSingleByAttributes(array(
+								'contact_id' => $contactModel->id,
+								'user_id' => GO::user()->id
+							));
+							if (!$contactLastMailTimeModel) {
+								$contactLastMailTimeModel = new GO_Email_Model_ContactMailTime();
+								$contactLastMailTimeModel->contact_id = $contactModel->id;
+								$contactLastMailTimeModel->user_id = GO::user()->id;
+							}
+							
+							$contactLastMailTimeModel->last_mail_time = time();
+							$contactLastMailTimeModel->save();
 						}
 					}
 				}
