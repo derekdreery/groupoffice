@@ -19,12 +19,12 @@ GO.email.SettingsPanel = function(config) {
 		autoHeight:true,		
 		html:GO.email.lang.defaultProgramInstructions.replace('{url}', GO.url("email/register/download")).replace('{product_name}', GO.settings.config.product_name)
 	},
-//	this.sortBySendMailTime = new Ext.form.Checkbox({
-//		boxLabel:GO.email.lang.sortAddressesByMailTime,
-//		hideLabel:true,
-//		checked:GO.email.sortBySendMailTime,
-//		name:'sort_email_addresses_by_time'
-//	}),
+	this.sortBySendMailTime = new Ext.form.Checkbox({
+		boxLabel:GO.email.lang.sortAddressesByMailTime,
+		hideLabel:true,
+		checked:GO.email.sortBySendMailTime,
+		name:'sort_email_addresses_by_time'
+	}),
 	this.useHtml = new Ext.form.Checkbox({
 		boxLabel:GO.email.lang.htmlMarkup,
 		hideLabel:true,

@@ -82,3 +82,10 @@ $updates['201304231330'][]="ALTER TABLE `em_links` ADD `muser_id` int(11) NOT NU
 $updates['201306251122'][]="ALTER TABLE  `em_accounts` ADD  `do_not_mark_as_read` BOOLEAN NOT NULL DEFAULT FALSE";
 
 $updates['201306251600'][]="ALTER TABLE `em_links` CHANGE `time` `time` INT( 11 ) NOT NULL DEFAULT '0';";
+
+$updates['201401061330'][]="CREATE TABLE IF NOT EXISTS `em_contacts_last_mail_times` (
+  `contact_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `last_mail_time` int(11) NOT NULL,
+  PRIMARY KEY (`contact_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";

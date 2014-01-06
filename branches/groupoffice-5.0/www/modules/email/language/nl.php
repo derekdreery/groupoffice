@@ -284,4 +284,4 @@ $l['useAuth']="Gebruik authenticatie";
 
 $l['linkMustHavePermissionToWrite'] = 'U heeft niet de vereiste schrijfrechten over dat object, dus kunt u deze mail niet eraan koppelen.';
 
-$l['sortAddressesByMailTime'] = 'Sorteer ontvanger emailadressen op tijd van laatst verzonden email';
+$l['sortAddressesByMailTime'] = 'Sorteer ontvanger emailadressen op tijd van laatst verzonden email (module Adresboek benodigd)';

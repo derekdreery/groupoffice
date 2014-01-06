@@ -233,3 +233,13 @@ CREATE TABLE IF NOT EXISTS `em_portlet_folders` (
   `mtime` int(11) NOT NULL,
   PRIMARY KEY (`account_id`,`folder_name`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+DROP TABLE IF EXISTS `em_contacts_last_mail_times`;
+CREATE TABLE IF NOT EXISTS `em_contacts_last_mail_times` (
+  `contact_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `last_mail_time` int(11) NOT NULL,
+  PRIMARY KEY (`contact_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
