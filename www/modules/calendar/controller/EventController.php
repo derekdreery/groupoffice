@@ -1297,23 +1297,35 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$settings = GO_Calendar_Model_Settings::model()->getDefault($account->user);
 		
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, 0, $settings->calendar_id);		
+
+		if (!$masterEvent->calendar->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
+			throw new Exception(sprintf(GO::t('cannotHandleInvitation','calendar'),$masterEvent->calendar->name));
 		
 		//delete existing data		
 		if(!$recurrenceDate){
 			//if no recurring instance was given delete the master event
-			if($masterEvent)
+			if($masterEvent) {
+				if (!$masterEvent->calendar->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
+					throw new Exception(sprintf(GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
 				$masterEvent->delete();
+			}
 		}  else if($masterEvent)
 		{
 			
 			$exceptionEvent = $masterEvent->findException($recurrenceDate);			
 				
-			if($exceptionEvent)
+			if($exceptionEvent) {
+				if (!$masterEvent->calendar->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
+					throw new Exception(sprintf(GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
 				$exceptionEvent->delete();
+			}
 			
 			$exception = $masterEvent->hasException($recurrenceDate);
-			if($exception)
+			if($exception) {
+				if (!$masterEvent->calendar->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
+					throw new Exception(sprintf(GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
 				$exception->delete();
+			}
 		}
 		
 		$eventUpdated=!$recurrenceDate && $masterEvent || $recurrenceDate && !empty($exceptionEvent);
