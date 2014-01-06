@@ -1573,4 +1573,15 @@ class cms extends db {
 //		$record = $this->next_record();
 //		return $record['id'];
 //	}
+	
+	public function check_filename_exists($filename, $folder_id) {
+		
+		$sql = "SELECT f.* FROM cms_files f ".
+			"WHERE f.name='".$this->escape($filename)."' AND f.folder_id='".intval($folder_id)."';";
+		$this->query($sql);
+		$next_record = $this->next_record();
+		return !empty($next_record);
+		
+	}
+	
 }
