@@ -1574,10 +1574,10 @@ class cms extends db {
 //		return $record['id'];
 //	}
 	
-	public function check_filename_exists($filename, $folder_id) {
+	public function check_filename_exists($filename, $folder_id, $file_id) {
 		
 		$sql = "SELECT f.* FROM cms_files f ".
-			"WHERE f.name='".$this->escape($filename)."' AND f.folder_id='".intval($folder_id)."';";
+			"WHERE f.name='".$this->escape($filename)."' AND f.folder_id='".intval($folder_id)."' AND f.id!='".intval($file_id)."';";
 		$this->query($sql);
 		$next_record = $this->next_record();
 		return !empty($next_record);
