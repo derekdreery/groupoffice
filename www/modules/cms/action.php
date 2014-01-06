@@ -254,6 +254,12 @@ try {
 
 		case 'save_file':
 
+			if ($cms->check_filename_exists($_POST['name'],$_POST['folder_id'])) {
+				global $GO_LANGUAGE;
+				require_once($GO_LANGUAGE->get_language_file('cms'));
+				throw new Exception(sprintf($lang['cms']['filenameAlreadyExists'],$_POST['name']));
+			}
+			
 			$file_id=$file['id']=isset($_POST['file_id']) ? ($_POST['file_id']) : 0;
 
 
