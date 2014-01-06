@@ -2269,7 +2269,41 @@ GO.calendar.openCalendar = function(displayConfig){
 
 
 GO.calendar.handleMeetingRequest=function(responseResult){
-	if(responseResult.askForMeetingRequest){
+	if (responseResult.askForMeetingRequestForNewParticipants) {
+		Ext.Msg.show({
+			title:GO.calendar.lang.notifyParticipants,
+			msg: GO.calendar.lang.sendNotificationToNewParticipants,
+			buttons: {
+				yes:GO.calendar.lang.newParticipants,
+				no:GO.calendar.lang.allParticipants,
+				cancel:GO.calendar.lang.noParticipants
+			},
+			fn: function(buttonId, text, config){
+				if(buttonId=='yes'){
+					GO.request({
+						url:"calendar/event/sendMeetingRequest",
+						params:{
+							event_id:responseResult.id,
+							new_participants_only: true
+						}
+					})
+				} else if (buttonId=='no') {
+					GO.request({
+						url:"calendar/event/sendMeetingRequest",
+						params:{
+							event_id:responseResult.id
+						}
+					})
+				} else {
+					GO.request({
+						url:"calendar/participant/clearNewParticipantsSession"
+					});
+				}
+			},
+			scope: this,
+			icon: Ext.MessageBox.QUESTION
+	 });
+	} else if (responseResult.askForMeetingRequest){
 		Ext.Msg.show({
 			title:GO.calendar.lang.notifyParticipants,
 			msg: GO.calendar.lang.sendNotification,
@@ -2282,10 +2316,18 @@ GO.calendar.handleMeetingRequest=function(responseResult){
 							event_id:responseResult.id
 						}
 					})
+				} else {
+					GO.request({
+						url:"calendar/participant/clearNewParticipantsSession"
+					});
 				}
 			},
 			icon: Ext.MessageBox.QUESTION
 	 });
+	} else {
+		GO.request({
+			url:"calendar/participant/clearNewParticipantsSession"
+		});
 	}
 }
 

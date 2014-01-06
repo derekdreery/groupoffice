@@ -254,3 +254,8 @@ $l['nextMonth'] = 'Next month';
 $l['previousMonth'] = 'Previous month';
 $l['till'] = 'till';
 $l['total'] = 'Total';
+
+$l['sendNotificationToNewParticipants']='Do you want to notify by e-mail only the participants that you just added?';
+$l['newParticipants']='New participants';
+$l['allParticipants']='All participants';
+$l['noParticipants']='No participants';

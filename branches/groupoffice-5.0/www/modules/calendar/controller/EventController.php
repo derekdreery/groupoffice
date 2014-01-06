@@ -246,12 +246,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			}
 		}
 		
+		$newParticipantIds = !empty(GO::session()->values['new_participant_ids']) ? GO::session()->values['new_participant_ids'] : array();
+		if (!empty($newParticipantIds))
+			$response['askForMeetingRequestForNewParticipants'] = true;
+		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
 	
 	protected function actionSendMeetingRequest($params){
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
-		$response['success']=$event->sendMeetingRequest();
+		$response['success']=$event->sendMeetingRequest(!empty($params['new_participants_only']));
 		
 		return $response;
 	}
@@ -487,6 +491,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 	protected function beforeDisplay(&$response, &$model, &$params) {
 		
+		unset(GO::session()->values['new_participant_ids']);
+		
 		if($model->isPrivate(GO::user()) && $model->user_id != GO::user()->id && $model->calendar->user_id!=GO::user()->id)
 			throw new GO_Base_Exception_AccessDenied();
 		
@@ -494,6 +500,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	protected function actionLoad($params) {
+		
+		unset(GO::session()->values['new_participant_ids']);
 		
 		$this->_changeTimeParams($params);
 		
