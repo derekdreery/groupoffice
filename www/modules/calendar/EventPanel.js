@@ -60,7 +60,9 @@ GO.calendar.EventPanel = Ext.extend(GO.DisplayPanel,{
 			this.template += GO.calendar.EventTemplate;
 
 		this.template +=GO.linksTemplate;		
-
+		
+		if(GO.lists)
+			this.template += GO.lists.ListTemplate;
 
 		if(GO.files)
 		{
