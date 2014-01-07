@@ -185,7 +185,7 @@ GO.email.AddressbookDialog = function(config) {
 		this.mailingsGrid = new GO.grid.GridPanel({
 			title : GO.addressbook.lang.cmdPanelMailings,
 			id: 'em-addresslists-grid-tab',
-			paging : false,
+			paging : true,
 			border : false,
 			store : GO.addressbook.readableAddresslistsStore,
 			view : new Ext.grid.GridView({
