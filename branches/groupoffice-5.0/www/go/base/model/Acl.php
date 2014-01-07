@@ -544,7 +544,4 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		return $acl;
 	}
 	
-	public function checkPermissionLevel($level) {
-		throw new Exception("Don't call this directly on the ACL");
-	}
 }
