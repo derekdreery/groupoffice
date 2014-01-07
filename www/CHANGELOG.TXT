@@ -1,3 +1,7 @@
+- Email: Fixed problem with "read only" Inbox folder and Imap namespaces.
+- Added pagination to "Emailcomposer->Adrressbook->addresslists" grid.
+- Added lists display to the displayPanel of orders, folders, files and events (When installed)
+- Activity Log: Added Log messages when ACL's are added to items
 - Billing: Order attribute for amount that has been (partially) paid.
 - Address book: When sent mailings grid reloads (every 5 seconds), it stays on the current page.
 
