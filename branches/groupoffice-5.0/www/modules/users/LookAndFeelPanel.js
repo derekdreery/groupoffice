@@ -188,6 +188,11 @@ GO.users.LookAndFeelPanel = function(config)
 			boxLabel: GO.users.lang.showSmilies,
 			name: 'show_smilies'
 		},{
+			xtype:'xcheckbox',
+			hideLabel: true,
+			boxLabel: GO.users.lang.autoPunctuation,
+			name: 'auto_punctuation'
+		},{
 			xtype:'button',
 			style:'margin-top:20px',
 			handler:this.resetState,
