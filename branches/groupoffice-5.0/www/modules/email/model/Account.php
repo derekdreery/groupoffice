@@ -466,7 +466,8 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		
 		foreach($namespaces as $namespace){
 			if($namespace['name']!=''){
-				$namespace['noselect']=true;
+				$namespace['noselect']=  strtoupper($namespace['name'])!='INBOX';
+				$namespace['subscribed']=true;
 				$rootMailboxes[]=new GO_Email_Model_ImapMailbox($this, $namespace);
 			}
 		}
