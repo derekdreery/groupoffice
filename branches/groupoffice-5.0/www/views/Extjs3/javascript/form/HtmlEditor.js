@@ -124,34 +124,30 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 		var me = this;
         var doc = me.getDoc();
         
-        if (Ext.isIE || Ext.isWebKit || Ext.isOpera) {
-            Ext.EventManager.on(doc, 'keydown', me.correctPunctuation, me);
-        } else if (Ext.isGecko) {
-            Ext.EventManager.on(doc, 'keypress', me.correctPunctuation, me);
-        }
+		var keyevent = (Ext.isIE || Ext.isWebKit || Ext.isOpera) ? 'keydown' : 'keypress';
+        Ext.EventManager.on(doc, keyevent, me.correctPunctuation, me);
 	},
 	
 	lastKeyStrokes: [],
 	
 	correctPunctuation : function(event) {
-		var		spacechar=31, 
-				dotchar=189, 
-				achar=64, 
-				zchar=86;
+		var		spacechar=32, 
+				dotchar=190, 
+				achar=65, 
+				zchar=87;
 		
-		if(event.button==dotchar){
+		var key = event.button+1 || event.keyCode;
+		
+		if(key==dotchar){
 			this.lastKeyStrokes=[];
-			this.lastKeyStrokes.push(event.button);
-		} else if(event.button==spacechar) {
-			this.lastKeyStrokes.push(event.button);
-		} else if(this.lastKeyStrokes[0]==dotchar && this.lastKeyStrokes[1]==spacechar && event.button>=achar && event.button<=zchar+1) {
+			this.lastKeyStrokes.push(key);
+		} else if(key==spacechar) {
+			this.lastKeyStrokes.push(key);
+		} else if(this.lastKeyStrokes[0]==dotchar && this.lastKeyStrokes[1]==spacechar && key>=achar && key<=zchar+1) {
 			this.lastKeyStrokes=[];
-			// get caret position/selection
-			var char = String.fromCharCode(event.button+1);
+			var char = String.fromCharCode(key);
 			event.preventDefault();
-			// set textarea value to: text before caret + uppercase char + text after caret
 			this.insertAtCursor(char.toUpperCase());
-			//this.setValue( val.substring(0, start) + char.toUpperCase() + val.substring(end) );
 		}
 	},
 
@@ -264,7 +260,7 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 				 * so it's certain the right content is submitted.
 				 */
 
-		GO.mainLayout.initLogoutTimer(false); // stop logout timer
+		GO.mainLayout.timeout(0); // stop logout timer
 
 		if(this.readOnly){
 			return;
