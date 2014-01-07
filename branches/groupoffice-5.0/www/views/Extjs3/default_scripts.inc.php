@@ -47,6 +47,7 @@ if(GO::user()) {
 	$settings['mute_new_mail_sound'] = GO::user()->mute_new_mail_sound;
 	$settings['popup_reminders'] = GO::user()->popup_reminders;
 	$settings['show_smilies'] = GO::user()->show_smilies;
+	$settings['auto_punctuation'] = GO::user()->auto_punctuation;
 	$settings['first_weekday'] = GO::user()->first_weekday;
 	$settings['sort_name'] = GO::user()->sort_name;
 	$settings['list_separator'] = GO::user()->list_separator;
