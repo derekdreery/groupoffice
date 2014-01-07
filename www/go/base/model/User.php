@@ -49,6 +49,7 @@
  * @property Boolean $mute_reminder_sound
  * @property Boolean $mute_new_mail_sound
  * @property Boolean $show_smilies
+ * @property Boolean $auto_punctuation
  * @property String $list_separator
  * @property String $text_separator
  * @property int $files_folder_id
