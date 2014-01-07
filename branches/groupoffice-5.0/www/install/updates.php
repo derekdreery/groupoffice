@@ -379,3 +379,5 @@ CHANGE `su_work_hours` `su_work_hours` DOUBLE NOT NULL DEFAULT '0';";
 $updates['201312061137'][]="ALTER TABLE go_search_cache DROP INDEX ft_keywords;";
 
 $updates['201401031210'][]="ALTER TABLE `go_users` ADD `sort_email_addresses_by_time` TINYINT(1) NOT NULL DEFAULT '0';";
+
+$updates['201401071347'][]="ALTER TABLE `go_users` ADD COLUMN `auto_punctuation` TINYINT(1) NOT NULL DEFAULT 0 AFTER `show_smilies`;";
