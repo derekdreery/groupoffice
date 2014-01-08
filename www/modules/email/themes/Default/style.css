@@ -1,3 +1,6 @@
+@media print { 
+ .em-autolink-message,.em-contact-link-container{ display: none !important; } 
+}
 
 .em-autolink-message{
 	padding:5px;
