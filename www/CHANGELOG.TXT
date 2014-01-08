@@ -1,3 +1,5 @@
+- Changed email-address for Email Reminders, it is now using the CONFIG->noreply_email.
+- Added CONFIG->noreply_email to configuration file.
 - Removed install queries from timeregistration module (no longer needed)
 - Future weeks/months will show in the timeregistration panel and current week/month will be selected.
 - Close button added at the bottom of the ticket display panel.
