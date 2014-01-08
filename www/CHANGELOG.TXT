@@ -1,3 +1,4 @@
+- Email: Created mailboxNotFound exception that is translatable through the global language files
 - Email: Merged multiple linked item blocks to each other so it will only display one block.
 - Email: Hide link information in email prints
 - Changed email-address for Email Reminders, it is now using the CONFIG->noreply_email.
