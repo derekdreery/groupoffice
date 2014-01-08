@@ -1,3 +1,8 @@
+- Removed install queries from timeregistration module (no longer needed)
+- Future weeks/months will show in the timeregistration panel and current week/month will be selected.
+- Close button added at the bottom of the ticket display panel.
+- An amount of seconds can be supplied to auto-logout after inactivity. (works in IE)
+- Rich Text editor will automatically insert a capital after a dot (.) when it's enabled.
 - Email: Fixed problem with "read only" Inbox folder and Imap namespaces.
 - Added pagination to "Emailcomposer->Adrressbook->addresslists" grid.
 - Added lists display to the displayPanel of orders, folders, files and events (When installed)
