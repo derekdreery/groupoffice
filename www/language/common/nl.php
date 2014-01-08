@@ -643,3 +643,5 @@ $l['maybeMaxUploadExceeded'] = 'De server ontving niet de vereiste parameters va
 $l['relationDeleteRestrict']="U kunt dit %s niet verwijderen omdat het '%s' items bevat. Verwijder deze eerst aub.";
 
 $l['dependenciesCannotDelete']="Deze module kan niet verwijderd worden, omdat de volgende (geïnstalleerde) modules het nodig hebben: %s.";
+
+$l['MailboxNotFoundException'] = "De map \"%s\" kan niet worden geopend. Controller de email account instellingen.";
