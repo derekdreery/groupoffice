@@ -477,7 +477,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		$folderPath = str_replace(GO::config()->file_storage_path,"",$fsFile->parent()->path());
 		
 		$folder = GO_Files_Model_Folder::model()->findByPath($folderPath, true);
-		return $folder->addFile($fsFile->name());	
+		return $folder->hasFile($fsFile->name()) || $folder->addFile($fsFile->name());	
 	}
 	
 	/**
