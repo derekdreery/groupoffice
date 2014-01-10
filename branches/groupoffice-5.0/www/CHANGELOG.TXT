@@ -1,3 +1,6 @@
+
+- Support ThinkFree office integration
+- Added date in event search result and activity log
 - Email: Created mailboxNotFound exception that is translatable through the global language files
 - Email: Merged multiple linked item blocks to each other so it will only display one block.
 - Email: Hide link information in email prints
