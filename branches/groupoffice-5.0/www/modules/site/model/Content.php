@@ -233,7 +233,9 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 			 $childNode = array(
 				'id' => $child->site_id.'_content_'.$child->id,
 				'content_id'=>$child->id,
-				'site_id'=>$child->site->id, 
+				'site_id'=>$child->site->id,
+				'slug'=>$child->slug,
+				'cls' => 'site-node-content',
 				'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
 				'text' => $child->title,
 				'hasChildren' => $hasChildren,
@@ -471,5 +473,29 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 			 return $this->meta_title;
 		else
 			return $this->title;
-	 }	 
+	 }
+	 
+	  public static function setTreeSort($extractedParent,$sortOrder,$allowedTypes){
+		 
+		 $sort = 0;
+		 
+		 foreach($sortOrder as $sortItem){
+			 
+			 $extrChild = GO_Site_SiteModule::extractTreeNode($sortItem);
+			 
+			 if(in_array($extrChild['type'],$allowedTypes)){
+				 
+				 $modelName = GO_Site_SiteModule::getModelNameFromTreeNodeType($extrChild['type']);
+				 
+				 $model = $modelName::model()->findByPk($extrChild['modelId']);
+				 $model->parent_id = !empty($extractedParent['modelId'])?$extractedParent['modelId']:NULL;
+				 $model->sort_order = $sort;
+				 if($model->save())				 
+					$sort++;
+			 }
+		 }
+		 
+		 return array("success"=>true);
+	 }
+	 
 }
