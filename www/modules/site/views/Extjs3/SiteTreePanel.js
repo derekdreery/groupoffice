@@ -18,11 +18,7 @@ GO.site.SiteTreePanel = function (config){
 		if(el)
 			el.unmask();
 	}, this);
-	
-	this.siteContextMenu = new GO.site.SiteContextMenu({treePanel:this});
-	this.contentContextMenu = new GO.site.ContentContextMenu({treePanel:this});
-	this.contentRootContextMenu = new GO.site.ContentRootContextMenu({treePanel:this});
-	
+
 	Ext.applyIf(config, {
 		enableDD:true,
 		layout:'fit',
@@ -71,125 +67,102 @@ GO.site.SiteTreePanel = function (config){
 
 	this.on('contextmenu',this.onContextMenu, this);
 	this.on('click',this.onTreeNodeClick, this);
+	this.on('dblclick',this.onTreeNodeDblClick, this);
 	this.on('nodedrop',this.onNodeDrop, this);
+	this.on('movenode',this.onMoveNode, this);
+	this.on('beforenodedrop',this.onBeforeNodeDrop, this);
 }
-	
 	
 Ext.extend(GO.site.SiteTreePanel, Ext.tree.TreePanel,{
 
 	saveTreeState : false,
 	loadingDone : false,
+	
+	getNodeObject : function (treeNode){
+		
+		var extractedNode = GO.site.extractTreeNode(treeNode);
+		// Result = [siteId:siteId,	type:type, type_up:type.charAt(0).toUpperCase()+type.slice(1), modelId:modelId]
+		switch(extractedNode['type']){
+			case 'content':
+				return new GO.site.treeNodes.ContentNode({
+					treeNode:treeNode,
+					extractedNode:extractedNode,
+					treePanel:this
+				});
+				break;
+			case 'menu':
+				return new GO.site.treeNodes.MenuNode({
+					treeNode:treeNode,
+					extractedNode:extractedNode,
+					treePanel:this
+				});
+				break;
+			case 'menuitem':
+				return new GO.site.treeNodes.MenuItemNode({
+					treeNode:treeNode,
+					extractedNode:extractedNode,
+					treePanel:this
+				});
+				break;
+			case 'site':
+				return new GO.site.treeNodes.SiteNode({
+					treeNode:treeNode,
+					extractedNode:extractedNode,
+					treePanel:this
+				});
+				break;
+		}
+		
+	},
 
 	// When clicked on a treenode
-	onTreeNodeClick: function(node){
-		
+	onTreeNodeClick: function(node,e){
 		node.select();
-		
-		GO.site.currentSiteId = node.attributes.site_id;
-		
-		if(this.isSiteNode(node)){
-			// DO NOTHING
-		}else if(this.isRootContentNode(node)){
-			// DO NOTHING
-		}else if(this.isContentNode(node)){
-			this.contentPanel.load(node.attributes.content_id);
-		}
+		return this.getNodeObject(node).click(node,e);
 	},
 	
-	// When right clicked on a treenode
-	onContextMenu: function(node,event){
+	// When dblclicked on a treenode
+	onTreeNodeDblClick: function(node,e){
 		node.select();
-		
-		if(this.isSiteNode(node)){
-			this.siteContextMenu.setSelected(this,node,'GO_Site_Model_Site');
-			this.siteContextMenu.showAt(event.xy);
-		}else if(this.isRootContentNode(node)){
-			this.contentRootContextMenu.setSelected(this,node,'GO_Site_Model_Content');
-			this.contentRootContextMenu.showAt(event.xy);
-		}else if(this.isContentNode(node)){
-			this.contentPanel.load(node.attributes.content_id); // Load the panel
-			this.contentContextMenu.setSelected(this,node,'GO_Site_Model_Content');
-			this.contentContextMenu.showAt(event.xy);
-		}
+		return this.getNodeObject(node).dblclick(node,e);
 	},
 	
-	isSiteNode: function(node){
-		var id = node.id;
-		var parts = id.split("_"); // site_{id}
-		var type = parts[0];
-		
-		if(type == 'site')
-			return true;
-		else
-			return false;
+	// When calling contextmenu on a treenode
+	onContextMenu: function(node,e){
+		node.select();
+		return this.getNodeObject(node).contextmenu(node,e);
 	},
 	
-	isRootContentNode: function(node){
-		var id = node.id;
-		var parts = id.split("_");// {siteID}_content_{id}
-		var type = parts[1];
-		var content_id = parts[2];
-		
-		if(type == 'content' && GO.util.empty(content_id))
-			return true;
-		else
-			return false;
+	// Before the node is dropped
+	onBeforeNodeDrop: function(e){
+		if(e.dropNode)	
+			return this.getNodeObject(e.dropNode).beforeNodeDrop(e.dropNode,e);
 	},
 	
-	isContentNode: function(node){
-		var id = node.id;
-		var parts = id.split("_");// {siteID}_content_{id}
-		var type = parts[1];
-		var content_id = parts[2];
-		
-		if(type == 'content' && !GO.util.empty(content_id))
-			return true;
-		else
-			return false;
+	// When the node is dropped
+	onNodeDrop: function(e){
+		if(e.dropNode)	
+			return this.getNodeObject(e.dropNode).nodeDrop(e.dropNode,e);
+	},
+	
+	// When the node is dropped
+	onMoveNode: function(tree, node, oldParent, newParent, index){
+		if(newParent)	
+			return this.getNodeObject(newParent).moveNode(tree, node, oldParent, newParent, index);
 	},
 
+	isRootNode : function(extractedNode){
+		if(extractedNode.modelId){
+			return false;
+		} else {
+			return true;
+		}
+	},
+	
 	getRootNode: function(){
 		return this.rootNode;
 	},
 	
-	// e.dropNode:	The node that is moved
-	// e.target:		The node where it is dropped to.
-	onNodeDrop : function(e){
-			
-		if(e.dropNode){			
-			var sortorder = [];
-			var parent = false;
-			var parentId = 0;
-			
-			if(e.point === "append"){ // The node is dropped on an item
-				parent = e.target;
-			}else{ // The node is dropped between two items
-				parent = e.target.parentNode;
-			}
-			
-			if(parent.attributes.content_id)
-					parentId = parent.attributes.content_id;
-
-			var children = parent.childNodes;
-			
-			for(var i=0;i<children.length;i++){
-				if(children[i].attributes.content_id)
-					sortorder.push(children[i].attributes.content_id);
-			}
-			
-			var isDropNodeInArray = sortorder.indexOf(e.dropNode.attributes.content_id);
-			if(isDropNodeInArray === -1)
-				sortorder.push(e.dropNode.attributes.content_id);
-
-			GO.request({
-				url: "site/site/treeSort",
-				params: {
-					parent_id: parentId,
-					sort_order: Ext.encode(sortorder)
-				}
-			});
-		}
-	},
 	getExpandedNodes : function(){
 		var expanded = new Array();
 		this.getRootNode().cascade(function(n){
@@ -230,5 +203,3 @@ Ext.extend(GO.site.SiteTreePanel, Ext.tree.TreePanel,{
 		});
 	}					
 });
-	
-	

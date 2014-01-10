@@ -184,21 +184,35 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 			// Site node
 			$siteNode = array(
 				'id' => 'site_' . $site->id,
+				'cls' => 'site-node-site',
 				'site_id'=>$site->id, 
 				'iconCls' => 'go-model-icon-GO_Site_Model_Site', 
 				'text' => $site->name, 
 				'expanded' => true,
 				'children' => array(
+						// Content treeitems
 						array(
 							'id' => $site->id.'_content',
 							'draggable' => false,
+							'cls' => 'site-readonly',
 							'site_id'=>$site->id, 
 							'iconCls' => 'go-icon-layout', 
 							'text' => GO::t('content','site'),
 							'expanded' => self::isExpandedNode('site_' . $site->id),
 							'children' => $site->loadContentNodes()
-						)
+						),
+						// Menu treeitems
+						array(
+							'id' => $site->id.'_menu',
+							'draggable' => false,
+							'cls' => 'site-readonly',
+							'site_id'=>$site->id, 
+							'iconCls' => 'go-model-icon-GO_Site_Model_Menuroot', 
+							'text' => GO::t('menus','site'),
+							'expanded' => self::isExpandedNode('site_' . $site->id),
+							'children' => GO_Site_Model_Menu::getTreeMenuNodes($site)
 					)
+				)
 			);
 
 			$tree[] = $siteNode;
@@ -220,6 +234,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 					'id' => $this->id.'_content_'.$content->id,
 					'site_id'=>$this->id,
 					'content_id'=>$content->id,
+					'slug'=>$content->slug,
 					'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
 					//'expanded' => !$hasChildren,
 					'expanded' => !$hasChildren || self::isExpandedNode($this->id.'_content_'.$content->id),

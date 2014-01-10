@@ -41,38 +41,37 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController 
 		if(!isset($params['node']))
 			return $response;
 		
-		$args = explode('_', $params['node']);
+		$extractedNode = GO_Site_SiteModule::extractTreeNode($params['node']);
 		
-		$siteId = $args[0];
-		
-		if(!isset($args[1]))
-			$type = 'root';
-		else
-			$type = $args[1];
-		
-		if(isset($args[2]))
-			$parentId = $args[2];
-		else
-			$parentId = null;
-		
-		switch($type){
+		// 1_menuitem_6 = array('siteId' => '1','type' =>'menuitem','modelId' => '6');
+		// 1_root = array('siteId' => '1','type' =>'root','modelId' => false);
+		// 1_content = array('siteId' => '1','type' =>'content','modelId' => false);
+		// 1_menu = array('siteId' => '1','type' =>'menu','modelId' => false);
+		// 1_menu_1 = array('siteId' => '1','type' =>'menu','modelId' => '1');
+				
+		switch($extractedNode['type']){
 			case 'root':
 				$response = GO_Site_Model_Site::getTreeNodes();
 				break;
 			case 'content':
-				
-				if($parentId === null){
+				if(empty($extractedNode['modelId'])){
 					$response = GO_Site_Model_Site::getTreeNodes();
-					//$response = GO_Site_Model_Content::getTreeNodes($siteId);
 				} else {
-					$parentNode = GO_Site_Model_Content::model()->findByPk($parentId);
-					if($parentNode)
-						$response = $parentNode->getChildrenTree();
+					$content = GO_Site_Model_Content::model()->findByPk($extractedNode['modelId']);
+					if($content)
+						$response = $content->getChildrenTree();
 				}
 				break;
-//			case 'news':
-//				$response = GO_Site_Model_News::getTreeNodes($site);
-//				break;
+			case 'menu':
+				$menu = GO_Site_Model_Menu::model()->findByPk($extractedNode['modelId']);
+					if($menu)
+						$response = $menu->getChildrenTree();
+				break;
+			case 'menuitem':
+				$menuitem = GO_Site_Model_MenuItem::model()->findByPk($extractedNode['modelId']);
+					if($menuitem)
+						$response = $menuitem->getChildrenTree();
+				break;
 		}
 		
 		echo $this->renderJson($response);
@@ -85,24 +84,31 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController 
 	 * @param array $params
 	 * @return array
 	 */
-	protected function actionTreeSort($params){
-		$sortOrder = json_decode($params['sort_order'], true);
-		$parentId = $params['parent_id'];
+	protected function actionTreeSort($sortOrder, $parent){
+//		EXAMPLE INPUT
+//		parent:1_menu_11
+//		sortOrder:["1_menuitem_30","1_menuitem_31","1_menuitem_33","1_menuitem_8"]
+			$sortOrder = json_decode($sortOrder, true);
+			$extractedParentNode = GO_Site_SiteModule::extractTreeNode($parent);
 			
-		$order = 0;
-		foreach($sortOrder as $contentId){
-			$content = GO_Site_Model_Content::model()->findByPk($contentId);
-
-			if($content){
-				$content->parent_id = empty($parentId)?null:$parentId;
-				$content->sort_order = $order;
-				if($content->save()){
-					$order++;
-				}
+			switch($extractedParentNode['type']){
+				case 'content':
+					$allowedTypes = array('content');
+					return GO_Site_Model_Content::setTreeSort($extractedParentNode, $sortOrder, $allowedTypes);
+					break;
+//				case 'site':
+//					$allowedTypes = array('content');
+//					return GO_Site_Model_Site::setTreeSort($extractedParentNode, $sortOrder, $allowedTypes);
+//					break;
+				case 'menu':
+					$allowedTypes = array('menuitem');
+					return GO_Site_Model_Menu::setTreeSort($extractedParentNode, $sortOrder, $allowedTypes);
+					break;
+				case 'menuitem':
+					$allowedTypes = array('menuitem');
+					return GO_Site_Model_MenuItem::setTreeSort($extractedParentNode, $sortOrder, $allowedTypes);
+					break;
 			}
-		}
-
-		return array("success"=>true);
 	}
 	
 	/**

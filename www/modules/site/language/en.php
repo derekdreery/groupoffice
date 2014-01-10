@@ -133,3 +133,34 @@ $l["url"] = "Url";
 $l["file"] = "File";
 $l["openInNewWindow"] = "Open in new window";
 $l["selectFile"] = "Select file";
+
+$l["menus"] = "Menu's";
+$l["addMenuItem"] = "New item";
+$l["addMenu"] = "Add menu";
+$l["delete"] = "Delete";
+$l["properties"] = "Properties";
+$l["menuItem"] = "Menu item";
+
+$l["deleteMenuHasChildren"] = "The selected menu-item has children and cannot be deleted.";
+$l["deleteMenu"] = "Delete menu item";
+$l["deleteMenuConfirm"] = "Do you really want to delete this menu item?";
+
+$l["menu"] = "Menu";
+
+$l["menuId"] = "ID";
+$l["menuSite_id"] = "Site";
+$l["menuLabel"] = "Label";
+$l["menuMenu_slug"] = "Slug";
+
+$l["menuitemLabel"] = "Label";
+$l["menuitemMenu_id"] = "Menu";
+$l["menuitemId"] = "ID";
+$l["menuitemParent_id"] = "Parent";
+$l["menuitemContent_id"] = "Content";
+$l["menuitemUrl"] = "Url";
+$l["menuitemDisplay_children"] = "Display children";
+$l["menuitemSort_order"] = "Order";
+$l["menuitemTarget"] = "Target";
+
+$l["sureCreateContentMenuItemTitle"] = "Create menu item from content";
+$l["sureCreateContentMenuItem"] = "Are you sure that you want to create a menu item from this content item?";
