@@ -1211,7 +1211,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$response = $this->_handleAutoContactLinkFromSender($imapMessage, $params, $response);				
 				
 				// Process found autolink tags
-				if(count($response['autolink_items']) > 0){
+				if(isset($response['autolink_items']) && count($response['autolink_items']) > 0){
 					
 					$linkedItems = '';
 
