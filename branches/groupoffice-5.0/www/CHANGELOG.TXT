@@ -1,3 +1,7 @@
+- Accepting calendar invitations was broken.
+- Password with colon (:) failed with SyncML
+- Removed requirement for CLI on cronjob controller so it can be called as URL as well.
+
 10-01-2014 5.0.31
 - Support ThinkFree office integration
 - Added date in event search result and activity log
