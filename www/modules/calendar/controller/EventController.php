@@ -1298,7 +1298,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, 0, $settings->calendar_id);		
 
-		if (!$masterEvent->calendar->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
+		if (!$settings->calendar->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new Exception(sprintf(GO::t('cannotHandleInvitation','calendar'),$masterEvent->calendar->name));
 		
 		//delete existing data		
