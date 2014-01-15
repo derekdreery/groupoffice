@@ -468,6 +468,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$attributes['path'] = $path;
 
 				$attributes['time'] = $message->getDate();
+				$attributes['uid']= $alias->email.'-'.$message->getDate();
 				
 				if($model){
 					
@@ -573,15 +574,20 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 
-	private function _createAutoLinkTag($params, $account){
+	private function _createAutoLinkTagFromParams($params, $account){
 		$tag = '';
 		if (!empty($params['link'])) {
 			$linkProps = explode(':', $params['link']);
 			//$model = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
 
-			$tag = "[link:".base64_encode($_SERVER['SERVER_NAME'].','.$account->id.','.$linkProps[0].','.$linkProps[1])."]";
+			$tag = $this->_createAutoLinkTag($account,$linkProps[0],$linkProps[1]);
 		}
 		return $tag;
+	}
+	
+	
+	private function _createAutoLinkTag($account, $model_name, $model_id){
+		return "[link:".base64_encode($_SERVER['SERVER_NAME'].','.$account->id.','.$model_name.','.$model_id)."]";
 	}
 
 	/**
@@ -602,7 +608,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$message = new GO_Base_Mail_SmimeMessage();
 
-		$tag = $this->_createAutoLinkTag($params, $account);
+		$tag = $this->_createAutoLinkTagFromParams($params, $account);
 
 		if(!empty($tag)){
 			if($params['content_type']=='html')
@@ -1002,7 +1008,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$response['sendParams']['reply_mailbox'] = $params['mailbox'];
 			$response['sendParams']['reply_account_id'] = $params['account_id'];
 			
-			
+			//We need to link the contact if a manual link was made of the message to the sender.
+			//Otherwise the new sent message may not be linked if an autolink tag is not present.
 			if(GO::modules()->savemailas){
 				
 				$from = $message->from->getAddress();
@@ -1015,9 +1022,23 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					
 					
 					if($linkedMessage){
-						$response['data']['link_text']=$contact->name;
-						$response['data']['link_value']=$contact->className().':'.$contact->id;
+						
+						$tag = $this->_createAutoLinkTag($account, "GO_Addressbook_Model_Contact", $contact->id);
+
+
+						if($html){
+							if(strpos($response['data']['htmlbody'], $tag)===false){
+								$response['data']['htmlbody'].= '<div style="display:none">'.$tag.'</div>';
+							}
+						}else{
+							if(strpos($response['data']['plainbody'], $tag)===false){
+								$response['data']['plainbody'].= "\n\n".$tag."\n\n";
+							}
+						}
 					}
+//						$response['data']['link_text']=$contact->name;
+//						$response['data']['link_value']=$contact->className().':'.$contact->id;
+					
 				}
 			}
 		}
