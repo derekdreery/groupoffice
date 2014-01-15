@@ -1,8 +1,10 @@
+15-01-2014 5.0.32
+- Notice in e-mail viewing
 - Accepting calendar invitations was broken.
 - Password with colon (:) failed with SyncML
 - Removed requirement for CLI on cronjob controller so it can be called as URL as well.
 - Address Book: for new salutations, the first letter of the middle name and
-the first letter of the last name will be capitalized.
+  the first letter of the last name will be capitalized.
 
 10-01-2014 5.0.31
 - Support ThinkFree office integration
