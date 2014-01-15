@@ -1,3 +1,5 @@
+- Address Book: Batch edit custom fields are now sorted alphabetically.
+
 15-01-2014 5.0.32
 - Notice in e-mail viewing
 - Accepting calendar invitations was broken.
