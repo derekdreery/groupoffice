@@ -144,6 +144,22 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	}
 	
 	/**
+	 * Get an unique messageID
+	 * 
+	 * @return string
+	 */
+	public function getUniqueID(){
+		if(empty($this->message_id)){
+			
+			$from = $this->from->getAddress();	
+			return $from["email"].'-'.$this->udate;
+
+		}else{
+			return $this->message_id;
+		}
+	}
+	
+	/**
 	 *
 	 * @param GO_Email_Model_Account $account
 	 * @param int $uid 
