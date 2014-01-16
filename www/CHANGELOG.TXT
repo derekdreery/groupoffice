@@ -1,5 +1,6 @@
 - Address Book: Batch edit custom fields are now sorted alphabetically.
 - Address Book: No longer possible to add employees from different address book.
+- Address Book: Regular users can now create their own e-mail templates and document templates.
 
 15-01-2014 5.0.32
 - Notice in e-mail viewing
