@@ -51,7 +51,7 @@ GO.addressbook.TemplatesGrid = function(config)
 		iconCls: 'btn-add',
 		text: GO.addressbook.lang['cmdAddEmailTemplate'],
 		cls: 'x-btn-text-icon',
-		disabled:!GO.settings.modules.addressbook.write_permission,
+//		disabled:!GO.settings.modules.addressbook.write_permission,
 		handler: function(){
 
 			this.showEmailTemplateDialog();
@@ -63,7 +63,7 @@ GO.addressbook.TemplatesGrid = function(config)
 		tbarItems.push({
 			iconCls: 'btn-add',
 			text: GO.addressbook.lang.addDocumentTemplate,
-			disabled:!GO.settings.modules.addressbook.write_permission,
+//			disabled:!GO.settings.modules.addressbook.write_permission,
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				this.showOOTemplateDialog();
