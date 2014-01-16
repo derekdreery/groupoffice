@@ -352,7 +352,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		$mailing->status = GO_Addressbook_Model_SentMailing::STATUS_FINISHED;
 		$mailing->save();
 
-		echo "Mailing finished\n";
+		echo "Mailing finished at ".GO_Base_Util_Date::get_timestamp(time())."\n";
 	}
 	
 	public function actionUnsubscribe($params){
