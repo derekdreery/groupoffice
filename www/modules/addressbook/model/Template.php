@@ -67,6 +67,10 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		return parent::init();
 	}
 	
+	protected function getPermissionLevelForNewModel() {
+		return GO_Base_Model_Acl::MANAGE_PERMISSION;
+	}
+	
 	/**
 	 * Add a default tag value.
 	 * 
