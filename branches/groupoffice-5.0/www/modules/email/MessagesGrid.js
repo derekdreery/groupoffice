@@ -21,6 +21,8 @@ GO.email.MessagesGrid = function(config){
 	config.layout='fit';
 	config.autoScroll=true;
 	config.paging=true;
+	
+	config.hideMode='offsets';
 
 	if(config.region=='north')
 	{
