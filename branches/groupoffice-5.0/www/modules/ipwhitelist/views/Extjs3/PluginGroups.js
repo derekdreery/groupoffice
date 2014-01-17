@@ -51,7 +51,7 @@ GO.moduleManager.onModuleReady('groups',function(){
 		}),
 							
 		setRemoteModelId : GO.groups.GroupDialog.prototype.setRemoteModelId.createSequence(function(remoteModelId){
-			this.whitelistPanel.setDisabled(!(remoteModelId>0));
+			this.whitelistPanel.setDisabled(!(remoteModelId>0) || !GO.settings.modules.groups.write_permission || !GO.settings.modules.ipwhitelist.write_permission);
 			GO.ipwhitelist.ipGrid.setGroupId(remoteModelId);
 		})
 					
