@@ -30,33 +30,28 @@ class GO_Ipwhitelist_IpwhitelistModule extends GO_Base_Module{
 			return true;
 				
 		$allowedIpAddresses = array();//"127.0.0.1");
-		$whitelistIpAddressesStmt = GO_Base_Model_User::model()->find(
+		$whitelistIpAddressesStmt = GO_Ipwhitelist_Model_IpAddress::model()->find(
 			GO_Base_Db_FindParams::newInstance()
-				->select('ip.ip_address')
-				->joinModel(array(
-					'model'=>'GO_Base_Model_UserGroup',
-					'localTableAlias'=>'t',
-					'localField'=>'id',
-					'foreignField'=>'user_id',
-					'tableAlias'=>'usergroup',
-					'type'=>'INNER'
-				))
+				->select('t.ip_address')
 				->joinModel(array(
 					'model'=>'GO_Ipwhitelist_Model_EnableWhitelist',
-					'localTableAlias'=>'usergroup',
+					'localTableAlias'=>'t',
 					'localField'=>'group_id',
 					'foreignField'=>'group_id',
 					'tableAlias'=>'ew',
 					'type'=>'INNER'
 				))
 				->joinModel(array(
-					'model'=>'GO_Ipwhitelist_Model_IpAddress',
+					'model'=>'GO_Base_Model_UserGroup',
 					'localTableAlias'=>'ew',
 					'localField'=>'group_id',
 					'foreignField'=>'group_id',
-					'tableAlias'=>'ip',
+					'tableAlias'=>'usergroup',
 					'type'=>'INNER'
 				))
+				->criteria(GO_Base_Db_FindCriteria::newInstance()
+					->addCondition('user_id',$userModel->id,'=','usergroup')
+				)
 		);
 		if (!empty($whitelistIpAddressesStmt) && $whitelistIpAddressesStmt->rowCount() > 0) {
 			
