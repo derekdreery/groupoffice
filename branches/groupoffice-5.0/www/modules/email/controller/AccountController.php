@@ -451,7 +451,11 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					break;
 			}
 			
-			$nodes[$sortIndex .'-'. $mailbox->name] = $node;
+			//don't return empty namespaces
+			if(!$node['noselect'] || empty($node['expanded']) || !empty($node['children'])){
+				$nodes[$sortIndex .'-'. $mailbox->name] = $node;
+			}
+			
 		}
 		GO_Base_Util_Array::caseInsensitiveSort($nodes);
 
