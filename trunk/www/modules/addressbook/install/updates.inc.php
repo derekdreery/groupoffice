@@ -408,5 +408,27 @@ $updates['201310221010'][]="ALTER TABLE `ab_contacts` ADD `skype_name` VARCHAR( 
 $updates["201310221010"][]="ALTER TABLE `ab_companies` CHANGE `post_address_no` `post_address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201310251010"][]="ALTER TABLE `ab_companies` CHANGE `post_address_no` `post_address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";//Double because first query had an error before
 
-$updates["201312061535"][]="ALTER TABLE `ab_contacts` CHANGE `address` `address` VARCHAR(255) NOT NULL DEFAULT '' ;";
-$updates["201312061535"][]="ALTER TABLE `ab_companies` CHANGE `address` `address` VARCHAR(255) NOT NULL DEFAULT '' ;";
+$updates['201312111215'][]="ALTER TABLE `ab_sent_mailings` ADD `opened` int(11) DEFAULT '0';";
+$updates['201312111215'][]="ALTER TABLE `ab_sent_mailings` ADD `campaign_id` int(11) NOT NULL DEFAULT '0';";
+$updates['201312111215'][]="ALTER TABLE `ab_sent_mailings` ADD `campaigns_status_id` int(11) NOT NULL DEFAULT '0';";
+
+$updates['201312111215'][]="ALTER TABLE `ab_sent_mailing_companies` ADD `sent` tinyint(1) NOT NULL DEFAULT '0';";
+$updates['201312111215'][]="ALTER TABLE `ab_sent_mailing_companies` ADD `campaigns_opened` tinyint(1) NOT NULL DEFAULT '0';";
+$updates['201312111215'][]="ALTER TABLE `ab_sent_mailing_companies` ADD `has_error` tinyint(1) NOT NULL DEFAULT '0';";
+$updates['201312111215'][]="ALTER TABLE `ab_sent_mailing_companies` ADD `error_description` varchar(255) NOT NULL DEFAULT '';";
+
+$updates['201312111215'][]="ALTER TABLE `ab_sent_mailing_contacts` ADD `sent` tinyint(1) NOT NULL DEFAULT '0';";
+$updates['201312111215'][]="ALTER TABLE `ab_sent_mailing_contacts` ADD `campaigns_opened` tinyint(1) NOT NULL DEFAULT '0';";
+$updates['201312111215'][]="ALTER TABLE `ab_sent_mailing_contacts` ADD `has_error` tinyint(1) NOT NULL DEFAULT '0';";
+$updates['201312111215'][]="ALTER TABLE `ab_sent_mailing_contacts` ADD `error_description` varchar(255) NOT NULL DEFAULT '';";
+
+$updates['201312121200'][]="ALTER TABLE `ab_sent_mailing_contacts` CHANGE `sent_mailing_id` `will_be_contact_id` INT( 11 ) NOT NULL DEFAULT '0';";
+$updates['201312121200'][]="ALTER TABLE `ab_sent_mailing_contacts` CHANGE `contact_id` `sent_mailing_id` INT( 11 ) NOT NULL DEFAULT '0';";
+$updates['201312121200'][]="ALTER TABLE `ab_sent_mailing_contacts` CHANGE `will_be_contact_id` `contact_id` INT( 11 ) NOT NULL DEFAULT '0';";
+
+$updates['201312121200'][]="ALTER TABLE `ab_sent_mailing_companies` CHANGE `sent_mailing_id` `will_be_company_id` INT( 11 ) NOT NULL DEFAULT '0';";
+$updates['201312121200'][]="ALTER TABLE `ab_sent_mailing_companies` CHANGE `company_id` `sent_mailing_id` INT( 11 ) NOT NULL DEFAULT '0';";
+$updates['201312121200'][]="ALTER TABLE `ab_sent_mailing_companies` CHANGE `will_be_company_id` `company_id` INT( 11 ) NOT NULL DEFAULT '0';";
+
+$updates['201401031040'][]="ALTER TABLE `ab_contacts` ADD `last_email_time` int(11) NOT NULL DEFAULT '0';";
+$updates['201401061330'][]="ALTER TABLE `ab_contacts` DROP `last_email_time`;";

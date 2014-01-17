@@ -128,6 +128,12 @@ class GO_Base_Router{
 		
 		$controllerClass.='Controller_'.$controller;
 		
+		if(preg_match('/[^A-Za-z0-9_]+/', $controllerClass, $matches)){
+			$err = "Only these charactes are allowed in controller names: A-Za-z0-9_";
+			echo $err;
+			trigger_error($err, E_USER_ERROR);
+		}
+		
 		$this->_action=$action;		
 		
 		if(!class_exists($controllerClass)){

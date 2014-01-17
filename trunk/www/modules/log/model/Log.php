@@ -90,13 +90,13 @@ class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
 	 * @param string $action eg update, save
 	 * @param string $message 
 	 */
-	public static function create($action, $message){
+	public static function create($action, $message, $model_name="", $model_id=0){
 		$log = new GO_Log_Model_Log();
 		
-		$log->model_id=0;
+		$log->model_id=$model_id;
 
 		$log->action=$action;
-		$log->model="";			
+		$log->model=$model_name;			
 		$log->message = $message;
 		$log->save();
 	}

@@ -1,7 +1,10 @@
 <?php
-$config['serverclient_server_url']="http://localhost/groupoffice/";
-$config['serverclient_username']="admin";
-$config['serverclient_password']="admin";
+
+$config['serverclient_token']='{serverclient_token}';
+
+//set if mailserver is on different location
+//$config['serverclient_server_url']="http://localhost/groupoffice/";
+
 $config['serverclient_mbroot']="";
 $config['serverclient_use_ssl']="0";
 $config['serverclient_novalidate_cert']="0";

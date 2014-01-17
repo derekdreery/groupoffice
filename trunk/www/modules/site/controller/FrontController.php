@@ -15,9 +15,9 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 		if(!$content){
 			
 			header("HTTP/1.0 404 Not Found");
-      header("Status: 404 Not Found");
+			header("Status: 404 Not Found");
 			
-			$this->render('/site/404');
+			echo $this->render('/site/404');
 		}else{
 			
 			$this->setPageTitle($content->metaTitle);
@@ -31,7 +31,7 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 					$content->template = $defaultTemplate;
 			}
 			
-			$this->render($content->template,array('content'=>$content));
+			echo $this->render($content->template,array('content'=>$content));
 		}
 	}
 	
@@ -44,7 +44,7 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	protected function actionSearch($params){
 		
 		if(!isset($params['searchString']))
-			Throw new Exception('No searchstring provided');
+			throw new Exception('No searchstring provided');
 		
 		$searchString = $params['searchString'];
 		
@@ -62,7 +62,7 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 		$columnModel = new GO_Base_Data_ColumnModel();
 		$store = new GO_Base_Data_DbStore('GO_Site_Model_Content',$columnModel,$params,$searchParams);
 	
-		$this->render('search', array('searchResults'=>$store));
+		echo $this->render('search', array('searchResults'=>$store));
 	}
 	
 	/**
@@ -72,7 +72,7 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	protected function actionSitemap($params) {
 		$sitemap = GO_Site_Model_Content::getTreeNodes(2);
 		
-		$this->render('sitemap', array('sitemap'=>$sitemap));
+		echo $this->render('sitemap', array('sitemap'=>$sitemap));
 	}
 	
 	/**
@@ -92,7 +92,7 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 		$ok = $folder->isSubFolderOf($rootFolder);
 		
 		if(!$ok)
-			Throw new GO_Base_Exception_AccessDenied();
+			throw new GO_Base_Exception_AccessDenied();
 		
 		
 		$c = new GO_Core_Controller_Core();
@@ -110,10 +110,10 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	 */
 	protected function actionAjaxWidget($params){
 		if(!isset($params['widget_class']))
-			Throw new Exception ('Widget class not given.');
+			throw new Exception ('Widget class not given.');
 		
 		if(!isset($params['widget_method']))
-			Throw new Exception('Widget method not given.');
+			throw new Exception('Widget method not given.');
 			
 		$widgetClassName = $params['widget_class'];
 		$widgetMethod = $params['widget_method'];

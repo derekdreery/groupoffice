@@ -111,8 +111,10 @@ GO.addressbook.EmployeesPanel = function(config)
 						scope: this
 					});
 				}
-				this.selectContactDialog.grid.store.baseParams.addressbook_id=this.ownerCt.ownerCt.ownerCt.companyForm.form.findField('addressbook_id').getValue();
-				this.selectContactDialog.show();
+				
+				var addressbookId = this.ownerCt.ownerCt.ownerCt.companyForm.form.findField('addressbook_id').getValue();
+				this.selectContactDialog.grid.store.baseParams.addressbook_id=addressbookId;
+				this.selectContactDialog.show(addressbookId);
 			
 			},
 			scope: this

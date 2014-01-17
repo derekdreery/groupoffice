@@ -86,7 +86,7 @@ class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
 //					date_default_timezone_set(GO::user()->timezone);
 
 				$message = GO_Base_Mail_Message::newInstance($subject, $body);
-				$message->addFrom(GO::config()->webmaster_email,GO::config()->title);
+				$message->addFrom(GO::config()->noreply_email,GO::config()->title);
 				$message->addTo($userModel->email,$userModel->name);
 				GO_Base_Mail_Mailer::newGoInstance()->send($message, $failedRecipients);
 				

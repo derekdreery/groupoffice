@@ -94,3 +94,38 @@ GO.moduleManager.addModule('site', GO.site.MainPanel, {
 	title : GO.site.lang.name,
 	iconCls : 'go-tab-icon-site'
 });
+
+
+GO.site.extractTreeNode = function(node){
+
+	var siteId = false;
+	var type = false;
+	var type_up = false;
+	var modelId = false;
+	
+	var parts = node.attributes.id.split('_');
+		
+	if(parts.length > 0){
+		
+		if(parts[0] === 'site'){ // It's the root site node
+			siteId = parts[1];
+			type = parts[0];
+			
+		} else {
+			siteId = parts[0];
+			type = parts[1];
+
+			if(parts.length > 2)
+				modelId = parts[2];
+		}
+		
+		return {
+			siteId	:	siteId,
+			type		:	type,
+			type_up	:	type.charAt(0).toUpperCase()+type.slice(1),
+			modelId	:	modelId
+		}
+	}
+		
+	return false;
+}

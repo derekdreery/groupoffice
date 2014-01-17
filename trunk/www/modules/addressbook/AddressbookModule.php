@@ -91,9 +91,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		$addressbook = new GO_Addressbook_Model_Addressbook();
 		$addressbook->setAttributes(array(
 				'user_id' => 1,
-				'name' => GO::t('prospects','addressbook'),
-//				'default_iso_address_format' => $default_language,
-				'default_salutation' => GO::t('defaultSalutation','addressbook')
+				'name' => GO::t('prospects','addressbook')
 		));
 		$addressbook->save();
 		$addressbook->acl->addGroup(GO::config()->group_internal,GO_Base_Model_Acl::WRITE_PERMISSION);
@@ -101,9 +99,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		$addressbook = new GO_Addressbook_Model_Addressbook();
 		$addressbook->setAttributes(array(
 				'user_id' => 1,
-				'name' => GO::t('suppliers','addressbook'),
-//				'default_iso_address_format' => $default_language,
-				'default_salutation' => GO::t('defaultSalutation','addressbook')
+				'name' => GO::t('suppliers','addressbook')
 		));
 		$addressbook->save();
 		$addressbook->acl->addGroup(GO::config()->group_internal,GO_Base_Model_Acl::WRITE_PERMISSION);
@@ -114,8 +110,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		$addressbook = new GO_Addressbook_Model_Addressbook();
 		$addressbook->setAttributes(array(
 			'user_id' => 1,
-			'name' => GO::t('customers','addressbook'),
-			'default_salutation' => GO::t('defaultSalutation','addressbook')
+			'name' => GO::t('customers','addressbook')
 		));
 		$addressbook->save();
 		$addressbook->acl->addGroup(GO::config()->group_internal,GO_Base_Model_Acl::WRITE_PERMISSION);

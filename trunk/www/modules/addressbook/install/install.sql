@@ -236,6 +236,9 @@ CREATE TABLE IF NOT EXISTS `ab_sent_mailings` (
   `total` int(11) DEFAULT '0',
   `sent` int(11) DEFAULT '0',
 	`errors` int(11) DEFAULT '0',
+	`opened` int(11) DEFAULT '0',
+	`campaign_id` int(11) NOT NULL DEFAULT '0',
+	`campaigns_status_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -350,6 +353,10 @@ DROP TABLE IF EXISTS `ab_sent_mailing_companies`;
 CREATE TABLE IF NOT EXISTS `ab_sent_mailing_companies` (
   `sent_mailing_id` int(11) NOT NULL DEFAULT '0',
   `company_id` int(11) NOT NULL DEFAULT '0',
+	`sent` tinyint(1) NOT NULL DEFAULT '0',
+	`campaigns_opened` tinyint(1) NOT NULL DEFAULT '0',
+	`has_error` tinyint(1) NOT NULL DEFAULT '0',
+	`error_description` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`sent_mailing_id`,`company_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -363,6 +370,10 @@ DROP TABLE IF EXISTS `ab_sent_mailing_contacts`;
 CREATE TABLE IF NOT EXISTS `ab_sent_mailing_contacts` (
   `sent_mailing_id` int(11) NOT NULL DEFAULT '0',
   `contact_id` int(11) NOT NULL DEFAULT '0',
+	`sent` tinyint(1) NOT NULL DEFAULT '0',
+	`campaigns_opened` tinyint(1) NOT NULL DEFAULT '0',
+	`has_error` tinyint(1) NOT NULL DEFAULT '0',
+	`error_description` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`sent_mailing_id`,`contact_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

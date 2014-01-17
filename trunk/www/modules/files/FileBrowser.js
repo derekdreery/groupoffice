@@ -61,7 +61,7 @@ GO.files.FileBrowser = function(config){
 	if(!config.id)
 		config.id=Ext.id();
 
-	this.westPanel = {
+	this.westPanel = new Ext.Panel({
 		region: 'west',
 		layout: 'border',
 		width: 200,
@@ -84,7 +84,7 @@ GO.files.FileBrowser = function(config){
 				region: 'south'
 			})
 		]
-	};
+	});
 	
 	//select the first inbox to be displayed in the messages grid
 	

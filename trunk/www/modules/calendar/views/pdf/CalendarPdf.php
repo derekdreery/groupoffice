@@ -107,7 +107,6 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 			$time = $this->_start_time;
 
 			// print headers
-			
 			if ($headers) {
 				if (!empty($calendar_name)) {
 					$this->Cell($nameColWidth, 20, '', 1, 0, 'L', 1);
@@ -115,6 +114,13 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 				for ($i = 0; $i < $maxCells; $i++) {
  					$label = $this->_days > $maxCells ? $fullDays[date('w', $time)] : $fullDays[date('w', $time)] . ', ' . date(GO::user()->completeDateFormat, $time);
 					$this->Cell($cellWidth, 20, $label, 1, 0, 'L', 1);
+		
+					// Add the day we are printing to the events array
+					foreach ($cellEvents[$i] as $key=>$event) {
+						$event['day_for_printing'] = $time;
+						$cellEvents[$i][$key] = $event;
+					}
+					
 					$time = GO_Base_Util_Date::date_add($time, 1);
 				}
 				$this->Ln();
@@ -150,8 +156,17 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 				$this->setPage($pageStart);
 				$this->setXY($tableLeftMargin + ($pos * $cellWidth), $cellStartY);
 
+				// If we are using the month view
 				if ($this->_days > 7) {
+					
 					$time = GO_Base_Util_Date::date_add($this->_start_time, $i);
+					
+					// Add the day we are printing to the events array
+					foreach ($cellEvents[$i] as $key=>$event) {
+						$event['day_for_printing'] = $time;
+						$cellEvents[$i][$key] = $event;
+					}
+					
 					$this->Cell($cellWidth, $this->cell_height, date('d', $time), 0, 1, 'R');
 					$this->setX($tableLeftMargin + ($pos * $cellWidth));
 				}
@@ -160,11 +175,13 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 				
 				//while($event = array_shift($cellEvents[$i]))
 				foreach ($cellEvents[$i] as $event) {
-					//$time = $event['all_day_event'] == '1' ? '-' : date($time_format, $event['start_time']);
 
-					if(empty($event['all_day_event']))
+					if(isset($event['day_for_printing']) && empty($event['all_day_event']) && $event['day_for_printing'] > strtotime($event['start_time'])){
+						// Don't change the name
+					} else if(empty($event['all_day_event'])){
+						// If it's not a full day event and the start_time is the same time as the day we print
 						$event['name']=date($time_format, strtotime($event['start_time'])).': '.$event['name'];
-					
+					}
 					
 					$event['name']=  html_entity_decode($event['name']);
 					$event['description']= !empty($event['description']) ? html_entity_decode($event['description']) : '';

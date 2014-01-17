@@ -87,6 +87,7 @@ $l["popupNotification"]='Show a popup window when a reminder becomes active or a
 $l["muteNewMailSound"]='Mute new mail sounds';
 $l["muteReminderSound"]='Mute reminder sounds';
 $l["showSmilies"]='Show smilies';
+$l["autoPunctuation"]='Capital after punctuation';
 $l['name'] = 'Users';
 $l['description'] = 'Admin module. Managing system users.';
 $l['deletePrimaryAdmin'] = 'You can\'t delete the primary administrator';

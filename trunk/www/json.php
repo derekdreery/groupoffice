@@ -27,33 +27,33 @@ $limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 try {
 	switch($_REQUEST['task']) {
 
-		case 'saved_advanced_queries':
-
-		require_once($GLOBALS['GO_CONFIG']->class_path.'advanced_query.class.inc.php');
-		$aq = new advanced_query();
-
-		if (isset($_POST['delete_keys'])) {
-			try {
-				$delete_sqls = json_decode($_POST['delete_keys']);
-
-				foreach ($delete_sqls as $id) {
-					$aq->delete_search_query($id);
-				}
-				$response['deleteSuccess'] = true;
-			} catch (Exception $e) {
-				$response['deleteFeedback'] = $e->getMessage();
-				$response['deleteSuccess'] = false;
-			}
-		}
-
-		$response['total'] = $aq->get_search_queries($GLOBALS['GO_SECURITY']->user_id);
-		$response['results'] = array();
-
-		while ($r = $aq->next_record())
-			$response['results'][] = $r;
-
-		$response['success'] = true;
-		break;
+//		case 'saved_advanced_queries':
+//
+//		require_once($GLOBALS['GO_CONFIG']->class_path.'advanced_query.class.inc.php');
+//		$aq = new advanced_query();
+//
+//		if (isset($_POST['delete_keys'])) {
+//			try {
+//				$delete_sqls = json_decode($_POST['delete_keys']);
+//
+//				foreach ($delete_sqls as $id) {
+//					$aq->delete_search_query($id);
+//				}
+//				$response['deleteSuccess'] = true;
+//			} catch (Exception $e) {
+//				$response['deleteFeedback'] = $e->getMessage();
+//				$response['deleteSuccess'] = false;
+//			}
+//		}
+//
+//		$response['total'] = $aq->get_search_queries($GLOBALS['GO_SECURITY']->user_id);
+//		$response['results'] = array();
+//
+//		while ($r = $aq->next_record())
+//			$response['results'][] = $r;
+//
+//		$response['success'] = true;
+//		break;
 
 		case 'get_weeks':
 

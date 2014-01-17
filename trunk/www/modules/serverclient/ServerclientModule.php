@@ -26,22 +26,22 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 
 			foreach ($domains as $domain) {				
 				if($wasNew){					
-					try{
-						$httpClient->postfixLogin();
-					}catch(Exception $e){
-						throw new Exception("Could not login to postfixadmin module. Check the username and password in /etc/groupoffice/globalconfig.inc.php\n\nMessage from Postfixadmin:\n\n".$e->getMessage());
-					}
+//					try{
+//						$httpClient->postfixLogin();
+//					}catch(Exception $e){
+//						throw new Exception("Could not login to postfixadmin module. Check the username and password in /etc/groupoffice/globalconfig.inc.php\n\nMessage from Postfixadmin:\n\n".$e->getMessage());
+//					}
 					
 					self::_addMailbox($httpClient,$user,$domain);
 					self::_addAccount($user,$domain);
 				}else
 				{					
 					if($user->unencryptedPassword){						
-						try{
-							$httpClient->postfixLogin();
-						}catch(Exception $e){
-							throw new Exception("Could not login to postfixadmin module. Check the username and password in /etc/groupoffice/globalconfig.inc.php\n\nMessage from Postfixadmin:\n\n".$e->getMessage());
-						}
+//						try{
+//							$httpClient->postfixLogin();
+//						}catch(Exception $e){
+//							throw new Exception("Could not login to postfixadmin module. Check the username and password in /etc/groupoffice/globalconfig.inc.php\n\nMessage from Postfixadmin:\n\n".$e->getMessage());
+//						}
 
 						self::_setMailboxPassword($httpClient, $user,$domain);
 					}
@@ -59,7 +59,7 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 		$alias = strpos($user->email,'@'.$domain) ? $user->email : '';
 
 		//domain is, for example "intermesh .dev ".
-		$url = GO::config()->serverclient_server_url . "?r=postfixadmin/mailbox/submit";
+		$url = "postfixadmin/mailbox/submit";
 		$response = $httpClient->request($url, array(
 				"r" => "postfixadmin/mailbox/submit",
 				"name" => $user->name,
@@ -88,8 +88,8 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 		if(empty(GO::config()->serverclient_dont_add_domain_to_imap_username))
 			$username.='@'.$domain;
 		
-		
-		$url = GO::config()->serverclient_server_url."?r=postfixadmin/mailbox/submit";
+	
+		$url = "postfixadmin/mailbox/submit";
 		$response = $httpClient->request($url, array(
 			"r"=>"postfixadmin/mailbox/setPassword",
 			"username"=>$username,

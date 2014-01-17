@@ -29,7 +29,10 @@ GO.site.HtmlEditorImageInsert = function(config) {
 };
 
 Ext.extend(GO.site.HtmlEditorImageInsert, Ext.util.Observable, {
-
+	toolbarPosition : 18,
+	toolbarSeparatorBefore : false,
+	toolbarSeparatorAfter : false,
+	
 	root_folder_id : 0,
 	model_name: "GO_Site_Model_Site",
 	folder_id : 0,
@@ -57,7 +60,14 @@ Ext.extend(GO.site.HtmlEditorImageInsert, Ext.util.Observable, {
 				this.showFileBrowser();
 			};
 		}
-		this.editor.tb.add(element);
+		
+		if(this.toolbarSeparatorBefore)
+			this.editor.tb.insert(this.toolbarPosition,'-');
+		
+		this.editor.tb.insert(this.toolbarPosition,element);
+		
+		if(this.toolbarSeparatorAfter)
+			this.editor.tb.insert((this.toolbarPosition+1),'-');
 	},
 	
 	showFileBrowser : function (){

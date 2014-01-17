@@ -429,7 +429,9 @@ Ext.extend(GO.addressbook.ContactProfilePanel, Ext.Panel,{
 		if(overwrite || this.formSalutation.getValue()==''){
 			var firstName = this.formFirstName.getValue();
 			var middleName = this.formMiddleName.getValue();
+				middleName = !GO.util.empty(middleName) ? middleName[0].toUpperCase()+middleName.substring(1) : '';
 			var lastName = this.formLastName.getValue();
+				lastName = !GO.util.empty(lastName) ? lastName[0].toUpperCase()+lastName.substring(1) : '';
 			var initials = this.formInitials.getValue();
 			var title = this.formTitle.getValue();
 			var record = this.formAddressBooks.store.getById(this.formAddressBooks.getValue());

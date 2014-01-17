@@ -252,6 +252,9 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 		if(GO.workflow)
 			this.template +=GO.workflow.WorkflowTemplate;
 
+		if(GO.lists)
+			this.template += GO.lists.ListTemplate;
+
 		this.template += GO.linksTemplate;
 		
 		Ext.apply(this.templateConfig, GO.linksTemplateConfig);

@@ -16,7 +16,7 @@ abstract class GO_Site_Components_Widget extends GO_Base_Object {
 		foreach($config as $key => $value)
 			if($ref->getProperty ($key)->isPublic())
 				$this->{$key}=$value;
-				
+			
 		$this->init();
 	}
 	
@@ -48,6 +48,20 @@ abstract class GO_Site_Components_Widget extends GO_Base_Object {
 	public function setId($value)
 	{
 		$this->_id=$value;
+	}
+	
+	/**
+	 * PHP magic method that returns the string representation of this object.
+	 * __toString cannot throw exception use trigger_error to bypass this limitation
+	 * @return string the string representation of this object.
+	 */
+	public function __toString() {
+		try {
+			return $this->render();
+		} catch (\Exception $e) {
+			trigger_error($e->getMessage());
+			return '';
+		}
 	}
 	
 	/**

@@ -200,6 +200,10 @@ line-height:20px;
 	background:transparent url('images/16x16/filetypes/images.png') no-repeat !important;
 }
 
+.x-html-editor-tb .go-edit-insertlink .x-btn-text{
+	background:transparent url('images/16x16/link.png') no-repeat !important;
+}
+
 .x-html-editor-tb .go-edit-selectVariable .x-btn-text {
 	background:transparent url('images/16x16/filetypes/images.png') no-repeat !important;
 }

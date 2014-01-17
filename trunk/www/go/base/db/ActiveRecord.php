@@ -1023,7 +1023,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return $tableAlias.'.*';
 		
 		foreach($this->columns as $name=>$attr){
-			if($attr['gotype']!='blob' && $attr['gotype']!='textarea')
+			if(isset($attr['gotype']) && $attr['gotype']!='blob' && $attr['gotype']!='textarea')
 				$fields[]=$name;
 		}
 		

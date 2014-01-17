@@ -393,4 +393,65 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	  return parent::beforeImport($params, $model, $attributes, $record);
 	}
 	
+	protected function actionSelectCompany($params){
+		
+				$response = array('total'=>0, 'results'=>array());
+			
+		$query = '%'.preg_replace ('/[\s*]+/','%', $params['query']).'%'; 
+				
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+			->ignoreAcl()
+			->select('t.*, a.name AS ab_name')
+			->searchQuery($query,
+							array(
+									"CONCAT(t.name,' ',t.name2,' ',' ',a.name)",
+									't.email'
+									))					
+			->joinModel(array(
+				'model'=>'GO_Addressbook_Model_Addressbook',					
+				'foreignField'=>'id', //defaults to primary key of the remote model
+				'localField'=>'addressbook_id', //defaults to "id"
+				'tableAlias'=>'a', //Optional table alias
+				'type'=>'INNER' //defaults to INNER,
+
+			))			
+			->limit(10);
+
+//		}
+
+
+		if(!empty($params['addressbook_id'])){		
+			$abs= array($params['addressbook_id']);
+		}else
+		{
+			$abs = GO_Addressbook_Model_Addressbook::model()->getAllReadableAddressbookIds();			
+		}
+
+		if(!empty($abs)){
+
+			$findParams->getCriteria ()->addInTemporaryTableCondition('addressbooks','addressbook_id', $abs);
+
+			$stmt = GO_Addressbook_Model_Company::model()->find($findParams);
+
+//				$user_ids=array();
+			foreach($stmt as $company){
+				$record =$company->getAttributes();
+				$record['name_and_name2'] = !empty($company->name2) ? $company->name.' '.$company->name2.' ('.$company->addressbook->name.')' : $company->name.' ('.$company->addressbook->name.')';
+				//$record['name']=$contact->name;
+				$record['cf']=$company->id.":".$company->name;
+
+				$response['results'][]=$record;
+				$response['total']++;			
+
+//					if($contact->go_user_id)
+//						$user_ids[]=$contact->go_user_id;
+			}
+		}
+		
+		
+		return $response;
+		
+	}
+	
 }

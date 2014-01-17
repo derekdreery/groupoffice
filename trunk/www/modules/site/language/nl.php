@@ -119,3 +119,48 @@ $l["imageExample"] = "Voorbeeld afbeelding";
 
 $l["notImplementedYet"] = "Nog niet geimplementeerd";
 $l["otherOptions"] = "Overige opties";
+
+$l["linkEditor"] = "Link invoegen";
+
+$l["linkTitle"] = "Link titel";
+$l["linkToContent"] = "Link naar content";
+$l["linkToContentText"] = "Maak een link naar een content item binnen deze site. Dubbelklik op een item om hem te selecteren.";
+$l["linkToFile"] = "Link naar bestand";
+$l["linkToFileText"] = "Maak een link naar een bestand dat is geupload binnen de site.";
+$l["linkToUrl"] = "Link naar url";
+$l["linkToUrlText"] = "U kunt u ook aangepaste links maken. Begin de url met http(s):// ";
+$l["url"] = "Url";
+$l["file"] = "Bestand";
+$l["openInNewWindow"] = "Openen in nieuw venster";
+$l["selectFile"] = "Bestand selecteren";
+
+$l["menus"] = "Menu's";
+$l["addMenuItem"] = "Nieuw item";
+$l["addMenu"] = "Menu toevoegen";
+$l["delete"] = "Verwijderen";
+$l["properties"] = "Opties";
+$l["menuItem"] = "Menuitem";
+
+$l["deleteMenuHasChildren"] = "Kan het geselecteerde menuitem niet verwijderen, verwijder eerst alle kinderen.";
+$l["deleteMenu"] = "Verwijder menuitem";
+$l["deleteMenuConfirm"] = "Weet u zeker dat u dit menuitem wilt verwijderen?";
+
+$l["menu"] = "Menu";
+
+$l["menuId"] = "ID";
+$l["menuSite_id"] = "Site";
+$l["menuLabel"] = "Label";
+$l["menuMenu_slug"] = "Slug";
+
+$l["menuitemLabel"] = "Label";
+$l["menuitemMenu_id"] = "Menu";
+$l["menuitemId"] = "ID";
+$l["menuitemParent_id"] = "Ouder";
+$l["menuitemContent_id"] = "Content";
+$l["menuitemUrl"] = "Url";
+$l["menuitemDisplay_children"] = "Toon kinderen";
+$l["menuitemSort_order"] = "Volgorde";
+$l["menuitemTarget"] = "Doel";
+
+$l["sureCreateContentMenuItemTitle"] = "Maak menuitem van content";
+$l["sureCreateContentMenuItem"] = "Weet u zeker dat u een menuitem wilt maken van deze content?";

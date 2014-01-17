@@ -47,6 +47,7 @@ if(GO::user()) {
 	$settings['mute_new_mail_sound'] = GO::user()->mute_new_mail_sound;
 	$settings['popup_reminders'] = GO::user()->popup_reminders;
 	$settings['show_smilies'] = GO::user()->show_smilies;
+	$settings['auto_punctuation'] = GO::user()->auto_punctuation;
 	$settings['first_weekday'] = GO::user()->first_weekday;
 	$settings['sort_name'] = GO::user()->sort_name;
 	$settings['list_separator'] = GO::user()->list_separator;
@@ -132,7 +133,24 @@ if(GO::config()->debug) {
 
 $scripts[]=$view_root_uri.'javascript/namespaces.js';
 ?>
+<script type="text/javascript">	
+	//hide mask after 10s to display errors is necessary.
+	setTimeout(function(){
+		var loadMask = document.getElementById('loading-mask');
+		var loading = document.getElementById('loading');
+		if(loadMask)
+			loadMask.style.display='none';
+		
+		if(loading)
+			loading.style.display='none';
+		
+	},10000);
+	
+</script>
+
 <script type="text/javascript">
+	
+	
 	var BaseHref = '<?php echo GO::config()->host; ?>';
 
 	GO = {};
@@ -174,7 +192,6 @@ if($extjsLang=='extjs_lang')
 	$extjsLang = GO::language()->getLanguage();
 $file = 'base-'.md5($extjsLang.GO::config()->mtime).'.js';
 $path = $cacheFolder->path().'/'.$file;
-
 
 if(GO::config()->debug || !file_exists($path)) {
 	echo "\n<!-- regenerated script -->\n";
@@ -231,8 +248,8 @@ if(GO::config()->debug || !file_exists($path)) {
 		if(GO::config()->minify){
 			$js = GO_Base_Util_Minify_JSMin::minify($js);
 		}
-		
-		file_put_contents($path, $js,FILE_APPEND);
+
+		file_put_contents($path, $js);
 	}
 }
 

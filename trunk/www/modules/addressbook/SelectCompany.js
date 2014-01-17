@@ -23,7 +23,7 @@ GO.addressbook.SelectCompany = function(config){
 		config.tpl = '<tpl for="."><div class="x-combo-list-item">{' + config.displayField + '} ({addressbook_name})</div></tpl>';
 
 
-	Ext.apply(this, config);
+//	Ext.apply(this, config);
 	
 
 	if (typeof(config.fields)=='undefined') {
@@ -44,7 +44,7 @@ GO.addressbook.SelectCompany = function(config){
 
 	if (typeof(config.store)=='undefined') {
 		this.store = new GO.data.JsonStore({
-			url: GO.url("addressbook/company/store"),
+			url: GO.url("addressbook/company/selectCompany"),
 			baseParams: {				
 				addressbook_id : this.addressbook_id,		
 				noMultiSelectFilter:true
@@ -57,15 +57,18 @@ GO.addressbook.SelectCompany = function(config){
 		});
 	}
 	
-	
-
 	this.store.setDefaultSort('name', 'asc');
+	
+	config.triggerAction='all';
+	config.selectOnFocus=true;
 
-	GO.addressbook.SelectCompany.superclass.constructor.call(this,{		
-		triggerAction: 'all',
-		selectOnFocus:true,
-		pageSize: parseInt(GO.settings['max_rows_list'])
-	});
+	GO.addressbook.SelectCompany.superclass.constructor.call(this,config
+//	{		
+//		triggerAction: 'all',
+//		selectOnFocus:true,
+//		pageSize: parseInt(GO.settings['max_rows_list'])
+//	}
+	);
 	
 }
 Ext.extend(GO.addressbook.SelectCompany, GO.form.ComboBoxReset);

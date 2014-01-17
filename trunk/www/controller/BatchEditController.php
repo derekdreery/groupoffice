@@ -139,11 +139,21 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 					$row['value']='';
 					$row['edit']='';
 					$row['gotype']=$value['gotype'];
+					$row['category_name']=$value['customfield']->category->name;
 
 					$cfrows[] = $row;
 				}
 			}
 		
+			function sortCustomFields($a,$b) {
+				if ($a['category_name']==$b['category_name'])
+					return strcmp($a['label'],$b['label']);
+				else
+					return strcmp($a['category_name'],$b['category_name']);
+			}
+			
+			usort($cfrows,'sortCustomFields');
+			
 			$rows = array_merge($rows,$cfrows);
 		}
 		$response['results'] = $rows;

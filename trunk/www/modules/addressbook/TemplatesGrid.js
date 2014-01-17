@@ -36,34 +36,43 @@ GO.addressbook.TemplatesGrid = function(config)
 		remoteSort: true
 	});
 	config.store.setDefaultSort('name', 'ASC');
-	config.store.on('load', function(){
-		if(GO.documenttemplates)
-			GO.documenttemplates.ooTemplatesStore.load();
-	}, this);
+	if (GO.util.empty(config.noDocumentTemplates)) {
+		config.store.on('load', function(){
+			if(GO.documenttemplates)
+				GO.documenttemplates.ooTemplatesStore.load();
+		}, this);
+	} else {
+		config.store.on('beforeload',function(store,options){
+			store.baseParams['type']=0;
+		}, this);
+	}
 	
-	config.tbar= [
-	{
+	var tbarItems = [{
 		iconCls: 'btn-add',
 		text: GO.addressbook.lang['cmdAddEmailTemplate'],
 		cls: 'x-btn-text-icon',
-		disabled:!GO.settings.modules.addressbook.write_permission,
+//		disabled:!GO.settings.modules.addressbook.write_permission,
 		handler: function(){
 
 			this.showEmailTemplateDialog();
 		},
 		scope: this
-	},
-	{
-		iconCls: 'btn-add',
-		text: GO.addressbook.lang.addDocumentTemplate,
-		disabled:!GO.settings.modules.addressbook.write_permission,
-		cls: 'x-btn-text-icon',
-		handler: function(){
-			this.showOOTemplateDialog();
-		},
-		scope: this
-	},
-	{
+	}];
+	
+	if (GO.util.empty(config.noDocumentTemplates)) {
+		tbarItems.push({
+			iconCls: 'btn-add',
+			text: GO.addressbook.lang.addDocumentTemplate,
+//			disabled:!GO.settings.modules.addressbook.write_permission,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.showOOTemplateDialog();
+			},
+			scope: this
+		});
+	}
+	
+	tbarItems.push({
 		iconCls: 'btn-delete',
 		text: GO.lang['cmdDelete'],
 		cls: 'x-btn-text-icon',
@@ -80,7 +89,9 @@ GO.addressbook.TemplatesGrid = function(config)
 			width:150,
 			emptyText: GO.lang.strSearch
 		})
-	];
+	);
+	
+	config.tbar= tbarItems;
 	
 	var columnModel =  new Ext.grid.ColumnModel({
 		defaults:{
@@ -117,12 +128,14 @@ GO.addressbook.TemplatesGrid = function(config)
 	config.paging= true;
 	config.layout= 'fit';
 
-	config.deleteConfig= {
-		callback: function(){
-			GO.documenttemplates.ooTemplatesStore.reload();
-		},
-		scope: this
-	};
+	if (GO.util.empty(config.noDocumentTemplates)) {
+		config.deleteConfig= {
+			callback: function(){
+				GO.documenttemplates.ooTemplatesStore.reload();
+			},
+			scope: this
+		};
+	}
 	
 	
 	GO.addressbook.TemplatesGrid.superclass.constructor.call(this, config);

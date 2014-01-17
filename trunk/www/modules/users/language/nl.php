@@ -106,7 +106,7 @@ $l["popupNotification"]='Toon een popup scherm wanneer een herinnering actief wo
 $l["muteNewMailSound"]='Demp geluid bij inkomende mail';
 $l["muteReminderSound"]='Demp geluid bij herinneringen';
 $l["showSmilies"]='Toon smilies';
-
+$l["autoPunctuation"]='Hoofdletters na interpunctie';
 $l['openContact']='Open contactpersoon';
 
 $l['showProUsers']='Toon pro grebruikers';

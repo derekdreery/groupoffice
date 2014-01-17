@@ -136,7 +136,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		 return array(
 			'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'parent_id', 'delete' => true, 'findParams' =>GO_Base_Db_FindParams::newInstance()->select('*')->order(array('sort_order','ptime'))),
 			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Site", 'field'=>'site_id'),
-			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Content", 'field'=>'parent_id')
+			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Content", 'field'=>'parent_id','findParams' =>GO_Base_Db_FindParams::newInstance()->select('*'))
 		 );
 	 }
 	 
@@ -151,8 +151,11 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 public static function findBySlug($slug, $siteId=false){
 		 
 		 if(!$siteId)
-			$model = self::model()->findSingleByAttribute('slug', $slug);
-		 else
+			$siteId = Site::model()->id;
+		 
+//		 if(!$siteId)
+//			$model = self::model()->findSingleByAttribute('slug', $slug);
+//		 else
 			$model = self::model()->findSingleByAttributes(array('slug'=>$slug,'site_id'=>$siteId));
 		 
 		 if(!$model)
@@ -232,7 +235,9 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 			 $childNode = array(
 				'id' => $child->site_id.'_content_'.$child->id,
 				'content_id'=>$child->id,
-				'site_id'=>$child->site->id, 
+				'site_id'=>$child->site->id,
+				'slug'=>$child->slug,
+				'cls' => 'site-node-content',
 				'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
 				'text' => $child->title,
 				'hasChildren' => $hasChildren,
@@ -335,6 +340,13 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 
 	 public static function replaceContentTags($content=''){
 
+		 $links = GO_Base_Util_TagParser::getTags('site:link', $content);
+		 
+		 foreach($links as $link){
+			 $template = self::processLink($link['params'],$link['xml']);
+			 $content = str_replace($link['xml'], $template, $content);
+		 }
+		 
 		 $images = GO_Base_Util_TagParser::getTags('site:img', $content);
 		 
 		 foreach($images as $image){
@@ -344,6 +356,64 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 
 		 return $content;
 	 }
+	 
+	 public static function processLink($linkAttr, $completeXml) {
+
+		$html = '<a';
+
+		switch ($linkAttr['linktype']) {
+			case 'content':
+				// $linkAttr['contentid'] = '1';
+
+				if (empty($linkAttr['contentid']))
+					$linkAttr['contentid'] = '0';
+
+				$content = GO_Site_Model_Content::model()->findByPk((int) $linkAttr['contentid']);
+
+				if ($content)
+					$url = $content->url;
+				else
+					$url = '#';
+
+				$html .= ' href="' . $url . '"';
+				break;
+			case 'file':
+				// $linkAttr['path'] = 'public/site/1/files/1/contract.png';
+
+				if (empty($linkAttr['path']))
+					$linkAttr['path'] = '#';
+
+				$html .= ' href="' . Site::file($linkAttr['path'], false) . '"';
+				break;
+			case 'manual':
+				// $linkAttr['url'] = 'www.google.nl';
+
+				if (empty($linkAttr['url']))
+					$linkAttr['url'] = '#';
+
+				$html .= ' href="' . $linkAttr['url'] . '"';
+				break;
+		}
+
+		if (isset($linkAttr['target']))
+			$html .= ' target="_blank"';
+
+		if (!empty($linkAttr['title']))
+			$html .= ' title="' . $linkAttr['title'] . '"';
+
+		$html .= '>';
+
+		preg_match('/(<a[^>]*>)(.*?)(<\/a>)/i', $completeXml, $matches);
+
+		if (isset($matches[2]))
+			$html .= $matches[2];
+		else
+			$html .= 'LINK';
+
+		$html .= '</a>';
+
+		return $html;
+	}
 	 
 	 public static function processImage($imageAttr){
 		 
@@ -364,8 +434,8 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 					$thumb = Site::thumb($imageAttr['path'],array("lw"=>$imageAttr['width'], "ph"=>$imageAttr['height'], "zc"=>1));
 				else
 					$thumb = Site::thumb($imageAttr['path'],array("lw"=>$imageAttr['width'], "ph"=>$imageAttr['height'], "zc"=>0));
-				
-				$imageAttr['a'] = Site::file($imageAttr['path']); // Create an url to the original image
+				if(isset($imageAttr['link_to_original']))
+					$imageAttr['href'] = Site::file($imageAttr['path']); // Create an url to the original image
 				
 			} else {
 				$thumb = Site::file($imageAttr['path']);
@@ -383,8 +453,14 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 			
 			$html .= ' />';
 			
-			if(key_exists('a', $imageAttr))
-			 $html = sprintf('<a href="%s" target="_blank">%s</a>',$imageAttr['a'],$html);
+			if(key_exists('href', $imageAttr)){
+				$target='';
+				if(isset($imageAttr['target'])){
+					$target = ' target="'.$imageAttr['target'].'"';
+				}
+				
+			 $html = sprintf('<a href="%s"'.$target.'>%s</a>',$imageAttr['href'],$html);
+			}
 		}
 		 return $html;
 	 }
@@ -399,5 +475,29 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 			 return $this->meta_title;
 		else
 			return $this->title;
-	 }	 
+	 }
+	 
+	  public static function setTreeSort($extractedParent,$sortOrder,$allowedTypes){
+		 
+		 $sort = 0;
+		 
+		 foreach($sortOrder as $sortItem){
+			 
+			 $extrChild = GO_Site_SiteModule::extractTreeNode($sortItem);
+			 
+			 if(in_array($extrChild['type'],$allowedTypes)){
+				 
+				 $modelName = GO_Site_SiteModule::getModelNameFromTreeNodeType($extrChild['type']);
+				 
+				 $model = $modelName::model()->findByPk($extrChild['modelId']);
+				 $model->parent_id = !empty($extractedParent['modelId'])?$extractedParent['modelId']:NULL;
+				 $model->sort_order = $sort;
+				 if($model->save())				 
+					$sort++;
+			 }
+		 }
+		 
+		 return array("success"=>true);
+	 }
+	 
 }

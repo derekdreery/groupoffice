@@ -22,7 +22,11 @@ GO.addressbook.MailingStatusWindow = function(config){
 	
 	this.refreshTask = {
 			run: function(){
-				this.sentMailingsGrid.store.load()
+				this.sentMailingsGrid.store.load({
+					params: {
+						start : this.sentMailingsGrid.bottomToolbar.cursor
+					}
+				})
 			},
 			scope:this,
 			interval:5000

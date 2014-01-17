@@ -267,7 +267,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-	`digest` VARCHAR( 255 ) NOT NULL DEFAULT '',
+  `digest` VARCHAR( 255 ) NOT NULL DEFAULT '',
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   `first_name` varchar(50) NOT NULL,
   `middle_name` varchar(50) NOT NULL DEFAULT '',
@@ -291,11 +291,12 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `first_weekday` tinyint(4) NOT NULL DEFAULT '0',
   `sort_name` varchar(20) NOT NULL DEFAULT 'first_name',
   `mtime` int(11) NOT NULL DEFAULT '0',
-	`muser_id` int(11) NOT NULL DEFAULT '0',
+  `muser_id` int(11) NOT NULL DEFAULT '0',
   `mute_sound` tinyint(1) NOT NULL DEFAULT '0',
   `mute_reminder_sound` tinyint(1) NOT NULL DEFAULT '0',
   `mute_new_mail_sound` tinyint(1) NOT NULL DEFAULT '0',
   `show_smilies` tinyint(1) NOT NULL DEFAULT '1',
+  `auto_punctuation` tinyint(1) NOT NULL DEFAULT '0',
   `list_separator` char(3) NOT NULL DEFAULT ';',
   `text_separator` char(3) NOT NULL DEFAULT '"',
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
@@ -305,6 +306,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `popup_reminders` tinyint(1) NOT NULL DEFAULT '0',
   `password_type` varchar(20) NOT NULL DEFAULT 'crypt',
 	`holidayset` VARCHAR( 10 ) NULL,
+	`sort_email_addresses_by_time` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- --------------------------------------------------------

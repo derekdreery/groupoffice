@@ -8,7 +8,7 @@ class GO_Site_Components_Router{
 	
 	/**
 	 *
-	 * @var GO_Site_Controller_Abstract
+	 * @var GO_Site_Components_Controller
 	 */
 	private $_controller;
 	

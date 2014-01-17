@@ -10,12 +10,35 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	protected $method = 'POST'; //form method [POST or GET] defaults to post
 	protected $htmlAttributes = array(); //extra html attributes for form tag
 	
+	//Extra html attributes for the field tags
+	public $inputOptions = array();
+	public $labelOptions = array();
+	public $errorOptions = array();
+	
 	/**
 	 * Should not be used for rendering a form
 	 * Use beginForm() to render the starting tag instead
+	 * @deprecated use beginForm() instead
 	 * @return string with detailed error if used anyway
 	 */
-	public function render(){ return "use beginForm() instead of render()"; }
+	public function render() { return "use beginForm() instead of render()"; }
+	
+	public function field($model, $attribute, $options = array()){
+		$template=null;
+		if (isset($options['template'])) {
+			$template = $options['template'];
+			unset($options['tag']);
+		}
+		
+		$field = new GO_Site_Widget_FormField($options);
+		
+		if(!empty($template))
+			$field->template = $template;
+		$field->form = $this;
+		$field->model = $model;
+		$field->attribute = $attribute;
+		return $field;
+	}
 	
 	/**
 	 * Generates a label tag for a model attribute.
@@ -53,6 +76,8 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 			$htmlAttributes = $this->_addErrorCss($htmlAttributes);
 		
 		$htmlAttributes = $this->_resolveRequired($model, $attribute, $htmlAttributes);
+		
+		$htmlAttributes = array_merge($this->labelOptions, $htmlAttributes);
 		
 		return $this->staticLabel($label,$for,$htmlAttributes);
 	}
@@ -304,8 +329,7 @@ $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFor
 		$error=$model->getValidationError($attribute);
 		if($error!='')
 		{
-			if(!isset($htmlAttributes['class']))
-				$htmlAttributes['class']=$this->errorCss;
+			$htmlAttributes = array_merge($this->errorOptions, $htmlAttributes);
 			return $this->_tag('div',$htmlAttributes,$error);
 		}
 		else
@@ -489,7 +513,9 @@ $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFor
 	
 	private function _resolveRequired($model,$attribute,$htmlAttributes){
 
-		if(isset($model->columns) && isset($model->columns[$attribute])){
+		if(isset($htmlAttributes['required']) && $htmlAttributes['required']==false) {
+			unset($htmlAttributes['required']);
+		} else if(isset($model->columns) && isset($model->columns[$attribute])){
 			if($model->columns[$attribute]['required'] && !isset($htmlAttributes['required']))
 				$htmlAttributes['required'] = true;
 			else if(isset($htmlAttributes['required']) && !$htmlAttributes['required'])
@@ -504,7 +530,6 @@ $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFor
 		$htmlAttributes = $this->_resolveNameID($model, $attribute, $htmlAttributes);
 		$htmlAttributes = $this->_resolveRequired($model, $attribute, $htmlAttributes);
 		
-		
 		$htmlAttributes['type']=$type;
 		
 		// TODO: Check maxlength
@@ -516,7 +541,7 @@ $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFor
 		
 		if($model->hasValidationErrors($attribute))
 			$htmlAttributes = $this->_addErrorCss($htmlAttributes);
-		
+		$htmlAttributes = array_merge($this->inputOptions, $htmlAttributes);
 		return $this->_tag('input',$htmlAttributes);
 	}
 	
@@ -649,6 +674,10 @@ $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFor
 			return $closeTag ? $html.' />' : $html.'>';
 		else
 			return $closeTag ? $html.'>'.$content.'</'.$tag.'>' : $html.'>'.$content;
+	}
+	
+	public function tag($tag,$htmlAttributes=array(),$content=false,$closeTag=true) {
+		return $this->_tag($tag, $htmlAttributes,$content,$closeTag);
 	}
 	
 	/**

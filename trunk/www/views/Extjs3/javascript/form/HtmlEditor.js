@@ -31,11 +31,12 @@ GO.form.HtmlEditor = function(config){
 		rmFormatPlugin,
 		ssScriptPlugin
 		);
+
 	GO.form.HtmlEditor.superclass.constructor.call(this, config);
-}
+};
 
 Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
-	
+
 	setValue: function(value){
 		
 		if(this.win && Ext.isChrome){
@@ -60,6 +61,10 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 			GO.form.HtmlEditor.superclass.syncValue.call(this);
 		}
 	},	
+	correctify: function(full, prefix, letter){
+		var regex = /([:\?]\s+)(.)/g;
+		return prefix + letter.toUpperCase();
+	},
 
 //	urlify : function () {
 //		
@@ -87,6 +92,9 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 //		
 //	},
 	onFirstFocus : function(){
+		
+		this.initPunctuationCorrection();
+		
 		this.activated = true;
 		this.disableItems(this.readOnly);
 		if(Ext.isGecko){ // prevent silly gecko errors
@@ -108,6 +116,40 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 	createToolbar : Ext.form.HtmlEditor.prototype.createToolbar.createSequence(function(editor){
 		this.tb.enableOverflow=true;
 	}),
+	
+	initPunctuationCorrection: function() {
+		if(GO.settings.auto_punctuation!=1)
+			return;
+		
+		var me = this;
+        var doc = me.getDoc();
+        
+		var keyevent = (Ext.isIE || Ext.isWebKit || Ext.isOpera) ? 'keydown' : 'keypress';
+        Ext.EventManager.on(doc, keyevent, me.correctPunctuation, me);
+	},
+	
+	lastKeyStrokes: [],
+	
+	correctPunctuation : function(event) {
+		var		spacechar=32, 
+				dotchar=190, 
+				achar=65, 
+				zchar=87;
+		
+		var key = event.button+1 || event.keyCode;
+		
+		if(key==dotchar){
+			this.lastKeyStrokes=[];
+			this.lastKeyStrokes.push(key);
+		} else if(key==spacechar) {
+			this.lastKeyStrokes.push(key);
+		} else if(this.lastKeyStrokes[0]==dotchar && this.lastKeyStrokes[1]==spacechar && key>=achar && key<=zchar+1) {
+			this.lastKeyStrokes=[];
+			var char = String.fromCharCode(key);
+			event.preventDefault();
+			this.insertAtCursor(char.toUpperCase());
+		}
+	},
 
 	getDocMarkup : function(){
 		var h = Ext.fly(this.iframe).getHeight() - this.iframePad * 2;
@@ -150,7 +192,7 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 					this.deferFocus();
 				}
 			};
-		}else if(Ext.isWebKit){ 
+		}else if(Ext.isWebKit){
 			return function(e){
 				var k = e.getKey();
 				if(k == e.TAB){
@@ -217,6 +259,8 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 				 * html documents. I manually call syncvalue when the message is sent
 				 * so it's certain the right content is submitted.
 				 */
+
+		GO.mainLayout.timeout(0); // stop logout timer
 
 		if(this.readOnly){
 			return;
