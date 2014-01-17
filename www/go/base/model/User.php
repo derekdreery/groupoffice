@@ -49,6 +49,7 @@
  * @property Boolean $mute_reminder_sound
  * @property Boolean $mute_new_mail_sound
  * @property Boolean $show_smilies
+ * @property Boolean $auto_punctuation
  * @property String $list_separator
  * @property String $text_separator
  * @property int $files_folder_id
@@ -64,9 +65,11 @@
  * @property string $date_format
  * @property string $email
  * @property GO_Addressbook_Model_Contact $contact
- * @property string $digest
+ * @property string $diges
  * 
  * @method GO_Base_Model_User findByPk();
+ * 
+ * @property Boolean $sort_email_addresses_by_time
  */
 
 class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {

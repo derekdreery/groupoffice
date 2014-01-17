@@ -246,12 +246,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			}
 		}
 		
+		$newParticipantIds = !empty(GO::session()->values['new_participant_ids']) ? GO::session()->values['new_participant_ids'] : array();
+		if (!empty($newParticipantIds))
+			$response['askForMeetingRequestForNewParticipants'] = true;
+		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
 	
 	protected function actionSendMeetingRequest($params){
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
-		$response['success']=$event->sendMeetingRequest();
+		$response['success']=$event->sendMeetingRequest(!empty($params['new_participants_only']));
 		
 		return $response;
 	}
@@ -487,6 +491,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 	protected function beforeDisplay(&$response, &$model, &$params) {
 		
+		unset(GO::session()->values['new_participant_ids']);
+		
 		if($model->isPrivate(GO::user()) && $model->user_id != GO::user()->id && $model->calendar->user_id!=GO::user()->id)
 			throw new GO_Base_Exception_AccessDenied();
 		
@@ -494,6 +500,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	protected function actionLoad($params) {
+		
+		unset(GO::session()->values['new_participant_ids']);
 		
 		$this->_changeTimeParams($params);
 		
@@ -829,6 +837,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 						$holidaysAdded=true;
 						$response = $this->_getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime);
 					}
+					
+					if (GO::modules()->leavedays) {
+						$response = $this->_getLeavedaysResponseForPeriod($response,$calendar,$startTime,$endTime);
+					}
 
 				}
 				
@@ -1017,6 +1029,45 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		// Set the count of the holidays
 		$response['count_holidays_only'] = $resultCount;
+
+		
+		return $response;
+	}
+	
+	/**
+	 * Fill the response array with the leave days between the start and end time
+	 * (must have Holidays (Leave days) module enabled.
+	 * 
+	 * @param array $response
+	 * @param GO_Calendar_Model_Calendar $calendar
+	 * @param string $startTime
+	 * @param string $endTime
+	 * @return array 
+	 */
+	private function _getLeavedaysResponseForPeriod($response,$calendar,$startTime,$endTime){
+		$resultCount = 0;
+
+		
+		if(!$calendar->user)
+			return $response;
+		
+//		$leavedays = GO_Leavedays_Model_Leaveday::model()
+		//$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
+		$leavedaysStmt = GO_Leavedays_Model_Leaveday::model()->getLeavedaysInPeriod($calendar->user->id,$startTime, $endTime);
+		
+		if($leavedaysStmt){
+			while($leavedayModel = $leavedaysStmt->fetch()){ 
+				$resultCount++;
+				$record = $leavedayModel->getJson($calendar);
+				$record['calendar_id']=$calendar->id;
+				$record['id']=$response['count']++;
+				$index = $this->_getIndex($response['results'],$leavedayModel->first_date);
+				$response['results'][$index] = $record;
+			}
+		}
+
+		// Set the count of the holidays
+		$response['count_leavedays_only'] = $resultCount;
 
 		
 		return $response;
@@ -1246,23 +1297,35 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$settings = GO_Calendar_Model_Settings::model()->getDefault($account->user);
 		
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, 0, $settings->calendar_id);		
+
+		if (!$settings->calendar->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
+			throw new Exception(sprintf(GO::t('cannotHandleInvitation','calendar'),$masterEvent->calendar->name));
 		
 		//delete existing data		
 		if(!$recurrenceDate){
 			//if no recurring instance was given delete the master event
-			if($masterEvent)
+			if($masterEvent) {
+				if (!$masterEvent->calendar->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
+					throw new Exception(sprintf(GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
 				$masterEvent->delete();
+			}
 		}  else if($masterEvent)
 		{
 			
 			$exceptionEvent = $masterEvent->findException($recurrenceDate);			
 				
-			if($exceptionEvent)
+			if($exceptionEvent) {
+				if (!$masterEvent->calendar->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
+					throw new Exception(sprintf(GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
 				$exceptionEvent->delete();
+			}
 			
 			$exception = $masterEvent->hasException($recurrenceDate);
-			if($exception)
+			if($exception) {
+				if (!$masterEvent->calendar->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
+					throw new Exception(sprintf(GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
 				$exception->delete();
+			}
 		}
 		
 		$eventUpdated=!$recurrenceDate && $masterEvent || $recurrenceDate && !empty($exceptionEvent);

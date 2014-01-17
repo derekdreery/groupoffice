@@ -235,4 +235,22 @@ $l['eventNotSavedBody'] = 'Deze boodschap komt van uw %goname agenda. %goname he
 
 $l['allTogetherForParticipants'] = 'Alle deelnemers samen';
 $l['allTogetherForResources'] = 'Alle hulpmiddelen samen';
+
 $l['usedResources'] = 'Gebruikte hulpmiddelen';
+
+$l['cmdPrintView'] = 'Print huidige weergave';
+$l['cmdPrintCategoryCount'] = 'Print aantal per categorie';
+$l['startDate'] = 'Start datum';
+$l['endDate'] = 'Eind datum';
+$l['eventsPerCategoryCount'] = 'Aantal afspraken per categorie';
+$l['nextMonth'] = 'Volgende maand';
+$l['previousMonth'] = 'Vorige maand';
+$l['till'] = 'tot';
+$l['total'] = 'Totaal';
+
+$l['sendNotificationToNewParticipants']='Wilt u alleen de zojuist toegevoegde deelnemers per e-mail op de hoogte brengen van deze afspraak?';
+$l['newParticipants']='Nieuwe deelnemers';
+$l['allParticipants']='Alle deelnemers';
+$l['noParticipants']='Geen deelnemers';
+$l['cannotHandleInvitation']='De agenda die hoort bij het email account heet "%s" en u heeft daar geen schrijfrechten toe. Omdat de afspraak in die agenda zit, is haar status nu niet gewijzigd.';
+$l['cannotHandleInvitation2']='Kon de afspraak niet aanpassen, omdat u te weinig toegangsrechten heeft tot de agenda die hoort bij het email account (agenda: "%s"). Omdat de afspraak in die agenda zit, is haar status nu niet gewijzigd.';

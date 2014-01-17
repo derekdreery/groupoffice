@@ -21,6 +21,9 @@
  * @property string $subject
  * @property int $user_id
  * @property int $id
+ * @property int $opened
+ * @property int $campaign_id
+ * @property int $campaign_status_id
  * 
  * @property GO_Base_Fs_File $logFile
  * @property GO_Base_Fs_File $messageFile
@@ -47,11 +50,32 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 	public function relations() {
 		return array(
 				'addresslist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Addressbook_Model_Addresslist', 'field' => 'addresslist_id'),
-				'contacts' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'contact_id', 'linkModel' => 'GO_Addressbook_Model_SentMailingContact'),
-				'companies' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'company_id', 'linkModel' => 'GO_Addressbook_Model_SentMailingCompany')
+				'campaign' => array('type' => self::BELONGS_TO, 'model' => 'GO_Campaigns_Model_Campaign', 'field' => 'campaign_id'),
+				'contacts' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'sent_mailing_id', 'linkModel' => 'GO_Addressbook_Model_SentMailingContact'),
+				'companies' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'sent_mailing_id', 'linkModel' => 'GO_Addressbook_Model_SentMailingCompany')
 		);
 	}
 
+	protected function afterSave($wasNew) {
+		
+		$campaignModel = $this->campaign;
+		if (!empty($campaignModel)) {
+			$sentAdd = $this->isModified('sent') ? $this->sent - $this->getOldAttributeValue('sent') : 0;
+			$errorAdd = $this->isModified('errors') ? $this->errors - $this->getOldAttributeValue('errors') : 0;
+			$totalAdd = $this->isModified('total') ? $this->total - $this->getOldAttributeValue('total') : 0;
+			$openedAdd = $this->isModified('opened') ? $this->opened - $this->getOldAttributeValue('opened') : 0;
+			if ($sentAdd!=0 || $errorAdd!=0 || $totalAdd!=0 || $openedAdd!=0) {
+				$campaignModel->n_sent += $sentAdd;
+				$campaignModel->n_send_errors += $errorAdd;
+				$campaignModel->n_total += $totalAdd;
+				$campaignModel->n_opened += $openedAdd;
+				$campaignModel->save();
+			}
+		}
+		
+		return parent::afterSave($wasNew);
+	}
+	
 	/**
 	 * Clears or initializes the sending status of the mailing.
 	 */
@@ -99,7 +123,7 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeDelete() {
 		if($this->status==self::STATUS_RUNNING)
-			throw new Exception("Can't delete a running mailing. Pause it first.");
+			throw new Exception("Can't delete a running mailing. Pause it first.");		
 		return parent::beforeDelete();
 	}
 	
@@ -107,6 +131,18 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 		
 		$this->logFile->delete();
 		$this->messageFile->delete();
+		
+		$this->removeAllManyMany('contacts');
+		$this->removeAllManyMany('companies');
+		
+		$campaignModel = $this->campaign;
+		if (!empty($campaignModel)) {
+			$campaignModel->n_sent -= $this->sent;
+			$campaignModel->n_send_errors -= $this->errors;
+			$campaignModel->n_total -= $this->total;
+			$campaignModel->n_opened -= $this->opened;
+			$campaignModel->save();
+		}
 		
 		return parent::afterDelete();
 	}

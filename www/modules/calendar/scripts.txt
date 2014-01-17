@@ -1,3 +1,5 @@
+modules/calendar/views/Extjs3/PrintCategoryCountDialog.js
+
 modules/calendar/Settings.js
 modules/calendar/Calendar.js
 modules/calendar/EventTemplate.js

@@ -2,6 +2,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 	
 	
 	// Plugins for the editor
+	editorLinkInsertPlugin:false,
 	editorImageInsertPlugin : false,
 	editorTablePlugin : false,
 	parentPanel : false,
@@ -21,6 +22,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 				if(this.fileBrowseButton){
 					this.fileBrowseButton.setId(action.result.data.site_id);
 					this.editorImageInsertPlugin.setSiteId(action.result.data.site_id);
+					this.editorLinkInsertPlugin.setSiteId(action.result.data.site_id);
 				}
 			},
 			scope:this
@@ -195,19 +197,18 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 			name: 'content',
 			anchor: '100% -80',
 			allowBlank:true,
+			enableLinks:false,
 			fieldLabel: GO.site.lang.contentContent,
 			plugins:this.initHtmlEditorPlugins()
 		});
-				
+		
 		config.items = [
 			this.titleField,
 			this.completeSlug,
 			this.editor
 		];
 		
-		GO.site.ContentPanel.superclass.constructor.call(this, config);
-		
-		
+		GO.site.ContentPanel.superclass.constructor.call(this, config);		
 	},
 	showContentDialog : function(id){
 		if(!this.contentDialog){
@@ -227,11 +228,14 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		return slug;
 	},
 	initHtmlEditorPlugins : function(htmlEditorConfig) {		
+		// insertLink plugin
+		this.editorLinkInsertPlugin = new GO.site.HtmlEditorLinkInsert({toolbarPosition : 17,toolbarSeparatorAfter:true});
+		
 		// optional image attachment
-		this.editorImageInsertPlugin = new GO.site.HtmlEditorImageInsert();
+		this.editorImageInsertPlugin = new GO.site.HtmlEditorImageInsert({toolbarPosition : 19,toolbarSeparatorAfter:true});
 		this.editorTablePlugin = new Ext.ux.form.HtmlEditor.Table();
 			
-		return [this.editorImageInsertPlugin,this.editorTablePlugin, new Ext.ux.form.HtmlEditor.HeadingMenu()];
+		return [this.editorLinkInsertPlugin,this.editorImageInsertPlugin,this.editorTablePlugin, new Ext.ux.form.HtmlEditor.HeadingMenu()];
 	}
 });
 

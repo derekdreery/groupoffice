@@ -173,7 +173,11 @@ GO.addressbook.SelectContactDialog = function(config){
 
 Ext.extend(GO.addressbook.SelectContactDialog, Ext.Window, {
 
-	show : function(){		
+	show : function(addressbookId){		
+		
+		this.addressbookId = addressbookId || 0;
+		this.addressbooksGrid.setDisabled(this.addressbookId>0);
+		
 		GO.addressbook.SelectContactDialog.superclass.show.call(this);
 		
 		//if(!this.grid.store.loaded)

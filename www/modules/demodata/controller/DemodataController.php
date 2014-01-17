@@ -890,17 +890,20 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 			$employee = new GO_Projects2_Model_Employee();
 			$employee->user_id=$elmer->id;
-			$employee->fee=120;
+			$employee->external_fee=120;
+			$employee->internal_fee=60;
 			$employee->save();
 			
 			$employee = new GO_Projects2_Model_Employee();
 			$employee->user_id=$demo->id;
-			$employee->fee=80;
+			$employee->external_fee=80;
+			$employee->internal_fee=40;
 			$employee->save();
 			
 			$employee = new GO_Projects2_Model_Employee();
 			$employee->user_id=$linda->id;
-			$employee->fee=90;
+			$employee->external_fee=90;
+			$employee->internal_fee=45;
 			$employee->save();
 			
 			
@@ -961,21 +964,24 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$resource->project_id=$rocketProject->id;
 				$resource->user_id=$demo->id;
 				$resource->budgeted_units=100;
-				$resource->fee=80;
+				$resource->external_fee=80;
+				$resource->internal_fee=40;
 				$resource->save();
 				
 				$resource = new GO_Projects2_Model_Resource();
 				$resource->project_id=$rocketProject->id;
 				$resource->user_id=$elmer->id;
 				$resource->budgeted_units=16;
-				$resource->fee=120;
+				$resource->external_fee=120;
+				$resource->internal_fee=60;
 				$resource->save();
 				
 				$resource = new GO_Projects2_Model_Resource();
 				$resource->project_id=$rocketProject->id;
 				$resource->user_id=$linda->id;
 				$resource->budgeted_units=16;
-				$resource->fee=90;
+				$resource->external_fee=90;
+				$resource->internal_fee=45;
 				$resource->save();
 				
 				
@@ -1103,7 +1109,8 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$resource = new GO_Projects2_Model_Resource();
 				$resource->project_id=$launcherProject->id;
 				$resource->user_id=$demo->id;
-				$resource->fee=80;
+				$resource->external_fee=80;
+				$resource->internal_fee=40;
 				$resource->budgeted_units=16;
 				$resource->save();
 			}

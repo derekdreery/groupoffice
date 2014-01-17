@@ -412,6 +412,8 @@ class GO{
 		}else
 		{
 //			echo "Autoloading: ".$className."\n";
+			
+			$filePath = false;
 
 			if(substr($className,0,7)=='GO_Base'){
 				$arr = explode('_', $className);
@@ -419,9 +421,7 @@ class GO{
 
 				$path = strtolower(implode('/', $arr));
 				$location =$path.'/'.$file;
-				$baseClassFile = dirname(dirname(__FILE__)) . '/'.$location;
-				require($baseClassFile);
-
+				$filePath = dirname(dirname(__FILE__)) . '/'.$location;
 			} else if(substr($className,0,4)=='GOFS'){
 						
 				$arr = explode('_', $className);
@@ -431,8 +431,8 @@ class GO{
 				$file = array_pop($arr).'.php';
 				$path = strtolower(implode('/', $arr));
 				$location =$path.'/'.$file;
-				$baseClassFile = GO::config()->file_storage_path.'php/'.$location;			
-				require($baseClassFile);
+				$filePath = GO::config()->file_storage_path.'php/'.$location;	
+				
 			} else {
 				//$orgClassName = $className;
 				$forGO = substr($className,0,3)=='GO_';
@@ -466,33 +466,37 @@ class GO{
 
 					}
 					
-					$fullPath = self::config()->root_path.$file;
+					$filePath = self::config()->root_path.$file;
 					
-//					echo $fullPath."\n";
-
-					if(!file_exists($fullPath) || is_dir($fullPath)){
-						//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
-						return false;
-					}
-					
-					require($fullPath);
-				}elseif(strpos($className,'Sabre_VObject')===0) {
-					$classFile = self::config()->root_path . 'go/vendor/VObject/lib/'.str_replace('_','/',$className).'.php';
-					require $classFile;
-					return true;
+				}elseif(strpos($className,'Sabre\VObject')===0) {
+					$filePath = self::config()->root_path . 'go/vendor/VObject/lib/'.str_replace('\\','/',$className).'.php';
 				}elseif(strpos($className,'Sabre')===0) {
 					require self::config()->root_path . 'go/vendor/SabreDAV/lib/'.str_replace('_','/',$className). '.php';
 					return true;					
+					$filePath = self::config()->root_path . 'go/vendor/SabreDAV/lib/'.str_replace('\\','/',$className). '.php';
 				}else	if (0 === strpos($className, 'Swift'))
 				{
 					require_once self::config()->root_path.'go/vendor/swift/lib/classes/Swift.php';
 					//Load the init script to set up dependency injection
 					require_once self::config()->root_path.'go/vendor/swift/lib/swift_init.php';
 
-					$path = self::config()->root_path.'go/vendor/swift/lib/classes/'.str_replace('_', '/', $className).'.php';
-					require_once $path;
-					return true;
-				}
+					$filePath = self::config()->root_path.'go/vendor/swift/lib/classes/'.str_replace('_', '/', $className).'.php';
+				}				
+			}
+
+			
+			if(strpos($filePath, '..')!==false){
+				echo "Invalid PHP file autoloaded!";
+				throw new Exception("Invalid PHP file autoloaded!");
+			}
+
+			if(!file_exists($filePath) || is_dir($filePath)){
+				//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
+				return false;
+			}else
+			{
+				require($filePath);
+				return true;
 			}
 		}
 	}

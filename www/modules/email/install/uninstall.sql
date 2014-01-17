@@ -10,3 +10,5 @@ DROP TABLE IF EXISTS `em_messages_cache`;
 DROP TABLE IF EXISTS `go_links_9`;
 
 DROP TABLE IF EXISTS `em_accounts_sort`;
+
+DROP TABLE IF EXISTS `em_contacts_last_mail_times`;

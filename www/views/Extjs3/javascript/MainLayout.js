@@ -119,28 +119,36 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	fireReady : function(){
 		this.fireEvent('ready', this);
 	 	this.ready=true;
-		this.initLogoutTimer(GO.settings.config['session_inactivity_timeout']);
+		this.initLogoutTimer();
 	},
 	
 	/**
-	 * Set a timer that will automatically logout when no mouseclicks of keypresses
+	 * Set a timer that will automatically logout when no mouseclicks or keypresses
+	 * @param start set the false to stop the logout timer
 	 * @see fireReady
 	 */
-	initLogoutTimer: function(seconds) { 
-		//Doesn't work in IE
-//		if(seconds==0) 
-//			return;
-//		var ms = seconds*1000;
-//		var delay = (function(){
-//			var timer = 0;
-//			return function(ms){
-//			  clearTimeout (timer);
-//			  timer = setTimeout(function() { window.location = GO.url('core/auth/logout'); }, ms);
-//			};
-//		  })();
-//		Ext.EventManager.addListener(window,'keyup', function() {delay(ms)});
-//		Ext.EventManager.addListener(window,'click', function() {delay(ms)});
-//		delay(ms);
+	initLogoutTimer: function(start) { 
+		//Does work in IE since 3-jan-2014
+		var ms = GO.settings.config['session_inactivity_timeout'] * 1000;
+		var delay = (function() {
+			var timer = 0;
+			return function(ms) {
+				clearTimeout(timer);
+				if (ms > 0)
+					timer = setTimeout(function() {
+						window.location = GO.url('core/auth/logout');
+					}, ms);
+			};
+		})();
+		var keyevent = (Ext.isIE || Ext.isWebKit || Ext.isOpera) ? 'keydown' : 'keypress';
+		Ext.EventManager.on(document, keyevent, function() {
+			delay(ms);
+		});
+		Ext.EventManager.on(document, 'click', function() {
+			delay(ms);
+		});
+		this.timeout = delay;
+		this.timeout(ms);
 	},
 
 	getOpenModules : function(){
@@ -168,6 +176,14 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
         items: items/*,
         layoutOnTabChange:true*/
     	});
+			
+		
+		//blur active form fields on tab change. Otherwise auto complete combo boxes
+		//will remain focussed but the autocomplete functionality fails.
+		this.tabPanel.on('tabchange', function(tabpanel, newTab){
+			if(document.activeElement && typeof document.activeElement.blur === 'function')
+				document.activeElement.blur();
+		}, this);
 
 		this.tabPanel.on('contextmenu',function(tp, panel, e){
 

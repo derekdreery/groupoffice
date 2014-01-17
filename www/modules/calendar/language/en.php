@@ -248,3 +248,20 @@ $l['usedResources'] = 'Used resources';
 
 $l['shareCalendarsCron'] = 'Update the shared calendar files';
 $l['shareCalendarsCronDescription'] = 'Update the shared calendar files of the calendars that are published';
+
+$l['cmdPrintView'] = 'Print current view';
+$l['cmdPrintCategoryCount'] = 'Print count per category';
+$l['startDate'] = 'Start date';
+$l['endDate'] = 'End date';
+$l['eventsPerCategoryCount'] = 'Number of events for each category';
+$l['nextMonth'] = 'Next month';
+$l['previousMonth'] = 'Previous month';
+$l['till'] = 'till';
+$l['total'] = 'Total';
+
+$l['sendNotificationToNewParticipants']='Do you want to notify by e-mail only the participants that you just added?';
+$l['newParticipants']='New participants';
+$l['allParticipants']='All participants';
+$l['noParticipants']='No participants';
+$l['cannotHandleInvitation']='The calendar associated with the email account is "%s" and you have no write permission to it. Because the appointment is in that calendar, its status has not been changed now.';
+$l['cannotHandleInvitation2']='Could not update the event because you have too little access permission to the calendar associated with the email account (calendar: "%s"). Because the appointment is in that calendar, its status has not been changed now.';

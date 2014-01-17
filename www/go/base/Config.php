@@ -429,6 +429,13 @@ class GO_Base_Config {
 	 */
 	var $webmaster_email = 'webmaster@example.com';
 
+	/**
+	 * The no-reply e-mail which will be used to send system messages
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $noreply_email = '';
 
 	/**
 	 * The path to the root of Group-Office with trailing slash.
@@ -945,7 +952,8 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '5.0.26';
+	var $version = '5.0.32';
+
 	
 	/**
 	 * Modification date
@@ -954,7 +962,7 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20131129';
+	var $mtime = '20140115';
 
 	#group configuration
 	/**
@@ -1292,6 +1300,24 @@ class GO_Base_Config {
 		
 		if(!$this->support_link && $this->isProVersion()){
 			$this->support_link = "https://shop.group-office.com/support";
+		}
+		
+		/* 
+		 * Check if the noreply_email variable is set in the config.php file.
+		 * If it is not set, then use noreply@ {webmaster_email domain name}
+		 * When the webmaster email is not set, then this will be noreply@example.com
+		 */
+		if(empty($this->noreply_email)){
+			
+			$wmdomain = 'example.com';
+			
+			if(!empty($this->webmaster_email)){
+				$extractedEmail = explode('@',$this->webmaster_email);
+				if(isset($extractedEmail[1]))
+					$wmdomain = $extractedEmail[1];
+			}
+			
+			$this->noreply_email = 'noreply@'.$wmdomain;
 		}
 	}
 

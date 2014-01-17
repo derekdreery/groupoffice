@@ -467,6 +467,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 				$attributes['path'] = $path;
 
+				$attributes['time'] = $message->getDate();
+				$attributes['uid']= $alias->email.'-'.$message->getDate();
 				
 				if($model){
 					
@@ -572,15 +574,20 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 
-	private function _createAutoLinkTag($params, $account){
+	private function _createAutoLinkTagFromParams($params, $account){
 		$tag = '';
 		if (!empty($params['link'])) {
 			$linkProps = explode(':', $params['link']);
 			//$model = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
 
-			$tag = "[link:".base64_encode($_SERVER['SERVER_NAME'].','.$account->id.','.$linkProps[0].','.$linkProps[1])."]";
+			$tag = $this->_createAutoLinkTag($account,$linkProps[0],$linkProps[1]);
 		}
 		return $tag;
+	}
+	
+	
+	private function _createAutoLinkTag($account, $model_name, $model_id){
+		return "[link:".base64_encode($_SERVER['SERVER_NAME'].','.$account->id.','.$model_name.','.$model_id)."]";
 	}
 
 	/**
@@ -601,7 +608,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$message = new GO_Base_Mail_SmimeMessage();
 
-		$tag = $this->_createAutoLinkTag($params, $account);
+		$tag = $this->_createAutoLinkTagFromParams($params, $account);
 
 		if(!empty($tag)){
 			if($params['content_type']=='html')
@@ -645,7 +652,51 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$success=false;
 		}
 
-		if ($success) {
+		// Update "last mailed" time of the emailed contacts.
+		if ($success && GO::modules()->addressbook) {
+			
+			$toAddresses = $message->getTo();
+			if (empty($toAddresses))
+				$toAddresses = array();
+			$ccAddresses = $message->getCc();
+			if (empty($ccAddresses))
+				$ccAddresses = array();
+			$bccAddresses = $message->getBcc();
+			if (empty($bccAddresses))
+				$bccAddresses = array();
+			$emailAddresses = array_merge($toAddresses,$ccAddresses);
+			$emailAddresses = array_merge($emailAddresses,$bccAddresses);
+						
+			foreach ($emailAddresses as $emailAddress => $fullName) {
+				$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('email',$emailAddress,'=','t',false)
+						->addCondition('email2',$emailAddress,'=','t',false)
+						->addCondition('email3',$emailAddress,'=','t',false);
+				
+				$findParams = GO_Base_Db_FindParams::newInstance()
+					->criteria($findCriteria);
+				$contactsStmt = GO_Addressbook_Model_Contact::model()->find($findParams);
+				if ($contactsStmt) {
+					foreach ($contactsStmt as $contactModel) {
+						if ($contactModel->name == $fullName) {
+							
+							$contactLastMailTimeModel = GO_Email_Model_ContactMailTime::model()->findSingleByAttributes(array(
+								'contact_id' => $contactModel->id,
+								'user_id' => GO::user()->id
+							));
+							if (!$contactLastMailTimeModel) {
+								$contactLastMailTimeModel = new GO_Email_Model_ContactMailTime();
+								$contactLastMailTimeModel->contact_id = $contactModel->id;
+								$contactLastMailTimeModel->user_id = GO::user()->id;
+							}
+							
+							$contactLastMailTimeModel->last_mail_time = time();
+							$contactLastMailTimeModel->save();
+						}
+					}
+				}
+			}
+			
 			if (!empty($params['reply_uid'])) {
 				//set \Answered flag on IMAP message
 				GO::debug("Reply");
@@ -957,12 +1008,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$response['sendParams']['reply_mailbox'] = $params['mailbox'];
 			$response['sendParams']['reply_account_id'] = $params['account_id'];
 			
-			
+			//We need to link the contact if a manual link was made of the message to the sender.
+			//Otherwise the new sent message may not be linked if an autolink tag is not present.
 			if(GO::modules()->savemailas){
 				
 				$from = $message->from->getAddress();
 				
-				$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($from['email']);
+				$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($from['email'], GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION));
 				if($contact){
 					
 					
@@ -970,9 +1022,23 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					
 					
 					if($linkedMessage){
-						$response['data']['link_text']=$contact->name;
-						$response['data']['link_value']=$contact->className().':'.$contact->id;
+						
+						$tag = $this->_createAutoLinkTag($account, "GO_Addressbook_Model_Contact", $contact->id);
+
+
+						if($html){
+							if(strpos($response['data']['htmlbody'], $tag)===false){
+								$response['data']['htmlbody'].= '<div style="display:none">'.$tag.'</div>';
+							}
+						}else{
+							if(strpos($response['data']['plainbody'], $tag)===false){
+								$response['data']['plainbody'].= "\n\n".$tag."\n\n";
+							}
+						}
 					}
+//						$response['data']['link_text']=$contact->name;
+//						$response['data']['link_value']=$contact->className().':'.$contact->id;
+					
 				}
 			}
 		}
@@ -1163,7 +1229,22 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$response = $this->_handleInvitations($imapMessage, $params, $response);
 				
 				//Commented out because it would autolink to email every time you read it @see _link() where it's already handeled
-				$response = $this->_handleAutoContactLinkFromSender($imapMessage, $params, $response);
+				$response = $this->_handleAutoContactLinkFromSender($imapMessage, $params, $response);				
+				
+				// Process found autolink tags
+				if(isset($response['autolink_items']) && count($response['autolink_items']) > 0){
+					
+					$linkedItems = '';
+
+					foreach($response['autolink_items'] as $autolinkItem){
+						$linkedItems .= ', '.$autolinkItem;
+					}
+					
+					$linkedItems = trim($linkedItems,' ,');
+					$response['htmlbody']='<div class="em-autolink-message">'.
+										sprintf(GO::t('autolinked','email'),$linkedItems).'</div>'.
+										$response['htmlbody'];
+				}
 			}
 		}
 		
@@ -1363,6 +1444,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if(GO::modules()->savemailas){
 			$tags = $this->_findAutoLinkTags($response['htmlbody']);
 
+			if(!isset($response['autolink_items']))
+				$response['autolink_items'] = array();
+			
 			while($tag = array_shift($tags)){
 				if($imapMessage->account->id == $tag['account_id']){
 					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id'],false, true);
@@ -1372,10 +1456,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						//we need this just to display a unified name
 						$searchCacheModel = $linkModel->getCachedSearchRecord();
 
-						$response['htmlbody']='<div class="em-autolink-message">'.
-										sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
-														$tag['model_id'].');">'.$searchCacheModel->name.'</span>').'</div>'.
-										$response['htmlbody'];
+						$response['autolink_items'][] = '<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
+												$tag['model_id'].');">'.$searchCacheModel->name.'</span>';
+						
+//						$response['htmlbody']='<div class="em-autolink-message">'.
+//										sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
+//														$tag['model_id'].');">'.$searchCacheModel->name.'</span>').'</div>'.
+//										$response['htmlbody'];
 					}
 				}
 			}
@@ -1397,6 +1484,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	private function _handleAutoContactLinkFromSender(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
 		
 		if(GO::modules()->addressbook && GO::modules()->savemailas && !empty(GO::config()->email_autolink_contacts)){
+			
+			if(!isset($response['autolink_items']))
+				$response['autolink_items'] = array();
+			
 			$from = $imapMessage->from->getAddress();
 
 			$stmt = GO_Addressbook_Model_Contact::model()->findByEmail($from['email'], GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->limit(1));
@@ -1405,10 +1496,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			if($contact){
 				GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $contact);
 
-				$response['htmlbody']='<div class="em-autolink-message">'.
-								sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, '.
-												$contact->id.');">'.$contact->name.'</div>').
-								$response['htmlbody'];
+//				$response['htmlbody']='<div class="em-autolink-message">'.
+//								sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, '.
+//												$contact->id.');">'.$contact->name.'</div>').
+//								$response['htmlbody'];
+				
+				$response['autolink_items'][] = '<span class="em-autolink-link" onclick="GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, '.
+												$contact->id.');">'.$contact->name.'</span>';
 			}
 		}
 			

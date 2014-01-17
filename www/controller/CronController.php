@@ -157,7 +157,7 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 	 */
 	protected function actionRun($params){
 		
-		$this->requireCli();
+//		$this->requireCli();
 		$jobAvailable = false;
 		GO::debug('CRONJOB START (PID:'.getmypid().')');
 		while($cronToHandle = $this->_findNextCron()){

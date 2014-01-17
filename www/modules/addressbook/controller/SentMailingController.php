@@ -55,12 +55,27 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			try {
 				//$params = $this->_convertOldParams($params);
 
+				if (
+					GO::modules()->isAvailable('campaigns') && isset($params['campaign_id']) && $params['campaign_id']>0
+					&&
+					(
+						empty(GO::config()->campaigns_imap_user) || empty(GO::config()->campaigns_imap_pass)
+						|| empty(GO::config()->campaigns_imap_server) || empty(GO::config()->campaigns_imap_port)
+						|| !isset(GO::config()->campaigns_smtp_user) || !isset(GO::config()->campaigns_smtp_pass)
+						|| empty(GO::config()->campaigns_smtp_server) || empty(GO::config()->campaigns_smtp_port)
+						|| empty(GO::config()->campaigns_from) || empty(GO::config()->campaigns_max_mails_per_period)
+					)
+				) {
+					throw new Exception(GO::t('mustSetCampaignsConfig','campaigns'));
+				}
+					
 				$message = GO_Base_Mail_Message::newInstance();
 				$message->handleEmailFormInput($params); // insert the inline and regular attachments in the MIME message
 
 				$mailing['alias_id'] = $params['alias_id'];
 				$mailing['subject'] = $params['subject'];
 				$mailing['addresslist_id'] = $params['addresslist_id'];
+				$mailing['campaign_id'] = $params['campaign_id'];
 				$mailing['message_path'] =  'mailings/' . GO::user()->id . '_' . date('Ymd_Gis') . '.eml';
 
 				$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'mailings');
@@ -160,8 +175,24 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 						->join(GO_Email_Model_Alias::model()->tableName(), $joinCriteria, 'a')
 						->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('id', $mailing->alias_id, '=', 'a')
 		);
-		$account = GO_Email_Model_Account::model()->find($findParams);
 
+		if ($mailing->campaign_id>0 && GO::modules()->isAvailable('campaigns')) {
+			$account = new GO_Email_Model_Account();
+			
+			$account->username = GO::config()->campaigns_imap_user;
+			$account->password = GO::config()->campaigns_imap_pass;
+			$account->host = GO::config()->campaigns_imap_server;
+			$account->port = GO::config()->campaigns_imap_port;
+			$account->smtp_username = GO::config()->campaigns_smtp_user;
+			$account->smtp_password = GO::config()->campaigns_smtp_pass;
+			$account->smtp_host = GO::config()->campaigns_smtp_server;
+			$account->smtp_port = GO::config()->campaigns_smtp_port;			
+			$message->setFrom(GO::config()->campaigns_from);
+			
+		} else {
+			$account = GO_Email_Model_Account::model()->find($findParams);
+		}
+		
 		$mailer = GO_Base_Mail_Mailer::newGoInstance(GO_Email_Transport::newGoInstance($account));
 
 		echo "Will send emails from " . $account->username . ".\n";
@@ -183,107 +214,145 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 		foreach ($mailing->contacts as $contact) {			
 			
-			$errors=1;
+			$sentMailingContactModel = GO_Addressbook_Model_SentMailingContact::model()
+				->findSingleByAttributes(array('sent_mailing_id'=>$mailing->id,'contact_id'=>$contact->id));
 			
-			$unsubscribeHref=GO::url('addressbook/sentMailing/unsubscribe', 
-							array(
-									'addresslist_id'=>$mailing->addresslist_id, 
-									'contact_id'=>$contact->id, 
-									'token'=>md5($contact->ctime.$contact->addressbook_id.$contact->firstEmail) //token to check so that users can't unsubscribe other members by guessing id's
-									), false, true);
+			if (!$sentMailingContactModel->sent) {
 			
-			$body = str_replace('%unsubscribe_href%', $unsubscribeHref, $bodyWithTags); //curly brackets don't work inside links in browser wysiwyg editors.
-			
-			$templateModel = GO_Addressbook_Model_Template::model();
-			$templateModel->htmlSpecialChars = false;
-			$body = $templateModel->replaceCustomTags($body,array(				
-				'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'" target="_blank">'.GO::t("unsubscription","addressbook").'</a>'
-			), true);
-			$templateModel->htmlSpecialChars = true;
-			
-			try{
-				if(!$contact->email_allowed){
-					echo "Skipping contact ".$contact->firstEmail." because newsletter sending is disabled in the addresslists tab.\n\n";
-				}elseif(empty($contact->firstEmail)){
-					echo "Skipping contact ".$contact->name." no e-mail address was set.\n\n";					
-				}else
-				{		
-					$body = GO_Addressbook_Model_Template::model()->replaceContactTags($body, $contact);
-					$message->setTo($contact->firstEmail, $contact->name);
-					$message->setBody($body);
-					
-					$plainTextPart = $message->findPlainTextBody();
-					if($plainTextPart){
-						$htmlToText->set_html($body);
-						$plainTextPart->setBody($htmlToText->get_text());
+				$errors=1;
+
+				$unsubscribeHref=GO::url('addressbook/sentMailing/unsubscribe', 
+								array(
+										'addresslist_id'=>$mailing->addresslist_id, 
+										'contact_id'=>$contact->id, 
+										'token'=>md5($contact->ctime.$contact->addressbook_id.$contact->firstEmail) //token to check so that users can't unsubscribe other members by guessing id's
+										), false, true);
+
+				$body = str_replace('%unsubscribe_href%', $unsubscribeHref, $bodyWithTags); //curly brackets don't work inside links in browser wysiwyg editors.
+
+				$templateModel = GO_Addressbook_Model_Template::model();
+				$templateModel->htmlSpecialChars = false;
+				$body = $templateModel->replaceCustomTags($body,array(				
+					'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'" target="_blank">'.GO::t("unsubscription","addressbook").'</a>'
+				), true);
+				$templateModel->htmlSpecialChars = true;
+
+				try{
+					if(!$contact->email_allowed){
+						echo "Skipping contact ".$contact->firstEmail." because newsletter sending is disabled in the addresslists tab.\n\n";
+					}elseif(empty($contact->firstEmail)){
+						echo "Skipping contact ".$contact->name." no e-mail address was set.\n\n";					
+					}else
+					{		
+						$body = GO_Addressbook_Model_Template::model()->replaceContactTags($body, $contact);
+						$message->setTo($contact->firstEmail, $contact->name);
+						$message->setBody($body);
+
+						$plainTextPart = $message->findPlainTextBody();
+						if($plainTextPart){
+							$htmlToText->set_html($body);
+							$plainTextPart->setBody($htmlToText->get_text());
+						}
+
+						// Check mail limit
+						$nSentMails = GO::config()->get_setting('campaigns_number_sent_mails',0);
+						if ($mailing->campaign_id>0 && $nSentMails>=GO::config()->campaigns_max_mails_per_period) {
+							$this->_pauseMailing($mailing->id);
+							echo "Error for ".$contact->firstEmail.": \n";
+							echo str_replace('%maxMails',GO::config()->campaigns_max_mails_per_period,GO::t('sentMailLimitReached','campaigns'));
+							exit();
+						}
+
+						$this->_sendmail($message, $contact, $mailer, $mailing);
+
+						GO::config()->save_setting('campaigns_number_sent_mails', $nSentMails+1, 0);
+						$errors=0;
+
 					}
-					
-					$this->_sendmail($message, $contact, $mailer, $mailing);
-					$errors=0;
-					
+				}catch(Exception $e){
+					echo "Error for ".$contact->firstEmail.": ".$e->getMessage()."\n";
 				}
-			}catch(Exception $e){
-				echo "Error for ".$contact->firstEmail.": ".$e->getMessage()."\n";
+
+				if($errors){
+					$mailing->errors++;
+					$mailing->save();
+				}
+			
 			}
 			
-			if($errors){
-				$mailing->errors++;
-				$mailing->save();
-			}
 		}
 
 		foreach ($mailing->companies as $company) {
 			
-			$errors=1;
+			$sentMailingCompanyModel = GO_Addressbook_Model_SentMailingCompany::model()
+				->findSingleByAttributes(array('sent_mailing_id'=>$mailing->id,'company_id'=>$company->id));
 			
-			$unsubscribeHref=GO::url('addressbook/sentMailing/unsubscribe', 
-							array(
-									'addresslist_id'=>$mailing->addresslist_id, 
-									'company_id'=>$company->id, 
-									'token'=>md5($company->ctime.$company->addressbook_id.$company->email) //token to check so that users can't unsubscribe other members by guessing id's
-									), true, true);
+			if (!$sentMailingCompanyModel->sent) {
 			
-			$body = str_replace('%unsubscribe_href%', $unsubscribeHref, $bodyWithTags); //curly brackets don't work inside links in browser wysiwyg editors.
-			
-			$body = GO_Addressbook_Model_Template::model()->replaceCustomTags($body,array(				
-				'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'">'.GO::t("unsubscription","addressbook").'</a>'
-			), true);
-			
-			try{
-				if(!$company->email_allowed){
-					echo "Skipping company ".$company->email." because newsletter sending is disabled in the addresslists tab.\n\n";
-				}elseif(empty($company->email)){
-					echo "Skipping company ".$company->name." no e-mail address was set.\n\n";
-				}else
-				{		
-					$body = GO_Addressbook_Model_Template::model()->replaceModelTags($body, $company);
-					$message->setTo($company->email, $company->name);
-					$message->setBody($body);
-					
-					$plainTextPart = $message->findPlainTextBody();
-					if($plainTextPart){
-						$htmlToText->set_html($body);
-						$plainTextPart->setBody($htmlToText->get_text());
+				$errors=1;
+
+				$unsubscribeHref=GO::url('addressbook/sentMailing/unsubscribe', 
+								array(
+										'addresslist_id'=>$mailing->addresslist_id, 
+										'company_id'=>$company->id, 
+										'token'=>md5($company->ctime.$company->addressbook_id.$company->email) //token to check so that users can't unsubscribe other members by guessing id's
+										), true, true);
+
+				$body = str_replace('%unsubscribe_href%', $unsubscribeHref, $bodyWithTags); //curly brackets don't work inside links in browser wysiwyg editors.
+
+				$body = GO_Addressbook_Model_Template::model()->replaceCustomTags($body,array(				
+					'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'">'.GO::t("unsubscription","addressbook").'</a>'
+				), true);
+
+				try{
+					if(!$company->email_allowed){
+						echo "Skipping company ".$company->email." because newsletter sending is disabled in the addresslists tab.\n\n";
+					}elseif(empty($company->email)){
+						echo "Skipping company ".$company->name." no e-mail address was set.\n\n";
+					}else
+					{		
+						$body = GO_Addressbook_Model_Template::model()->replaceModelTags($body, $company);
+						$message->setTo($company->email, $company->name);
+						$message->setBody($body);
+
+						$plainTextPart = $message->findPlainTextBody();
+						if($plainTextPart){
+							$htmlToText->set_html($body);
+							$plainTextPart->setBody($htmlToText->get_text());
+						}
+
+						// Check mail limit
+						$nSentMails = GO::config()->get_setting('campaigns_number_sent_mails',0);
+						if ($mailing->campaign_id>0 && $nSentMails>=GO::config()->campaigns_max_mails_per_period) {
+							$this->_pauseMailing($mailing->id);
+							echo "Error for ".$contact->firstEmail.": \n";
+							echo str_replace('%maxMails',GO::config()->campaigns_max_mails_per_period,GO::t('sentMailLimitReached','campaigns'));
+							exit();
+						}
+
+						$this->_sendmail($message, $company, $mailer, $mailing);	
+
+						GO::config()->save_setting('campaigns_number_sent_mails', $nSentMails+1, 0);
+						$errors=0;
 					}
-					
-					$this->_sendmail($message, $company, $mailer, $mailing);	
-					$errors=0;
+
+				}catch(Exception $e){
+					echo "Error for ".$company->email.": ".$e->getMessage()."\n";
 				}
-					
-			}catch(Exception $e){
-				echo "Error for ".$company->email.": ".$e->getMessage()."\n";
+
+				if($errors){
+					$mailing->errors++;
+					$mailing->save();
+				}
+			
 			}
 			
-			if($errors){
-				$mailing->errors++;
-				$mailing->save();
-			}
 		}
 
 		$mailing->status = GO_Addressbook_Model_SentMailing::STATUS_FINISHED;
 		$mailing->save();
 
-		echo "Mailing finished\n";
+		echo "Mailing finished at ".GO_Base_Util_Date::get_timestamp(time())."\n";
 	}
 	
 	public function actionUnsubscribe($params){
@@ -342,6 +411,11 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		
 		echo '['.GO_Base_Util_Date::get_timestamp(time())."] Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
 
+		if ($typestring=='contact')
+			$sentMailModel = GO_Addressbook_Model_SentMailingContact::model()->findSingleByAttributes(array('sent_mailing_id'=>$mailing->id,'contact_id'=>$model->id));
+		else
+			$sentMailModel = GO_Addressbook_Model_SentMailingCompany::model()->findSingleByAttributes(array('sent_mailing_id'=>$mailing->id,'company_id'=>$model->id));
+		
 		$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($mailing->id, array(), true, true);
 		if($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_PAUSED)
 		{
@@ -355,6 +429,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			}elseif($this->dry){
 				echo "Not sending because dry is true\n";
 			}else{
+				$this->fireEvent('beforeMessageSend',array(&$message,$model,$mailing));
 				$this->_sentEmails[]=$email;
 				$mailer->send($message);
 			}
@@ -362,12 +437,16 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			$status = $e->getMessage();
 		}
 		if (!empty($status)) {
-			echo "---------\n";
-			echo "Failed at ".GO_Base_Util_Date::get_timestamp(time())."\n";
-			echo $status . "\n";
-			echo "---------\n";
+			$errorMsg = "---------\n".
+				"Failed at ".GO_Base_Util_Date::get_timestamp(time())."\n".
+				$status . "\n".
+				"---------\n";
 			
-			$mailing->errors++;		
+			echo $errorMsg;
+			
+//			$mailing->errors++;		
+			$sentMailModel->has_error = true;
+			$sentMailModel->error_description = $errorMsg;
 			
 			$this->smtpFailCount++;
 			
@@ -380,17 +459,19 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			
 			unset($status);
 		} else {
-			$mailing->sent++;
+			$sentMailModel->sent = true;
+//			$mailing->sent++;
 			$this->smtpFailCount=0;
 		}
 		
-		$mailing->save();
+		$sentMailModel->save();
+//		$mailing->save();
 
-		if ($typestring == 'contact') {
-			$mailing->removeManyMany('contacts', $model->id);
-		} else {
-			$mailing->removeManyMany('companies', $model->id);			
-		}
+//		if ($typestring == 'contact') {
+//			$mailing->removeManyMany('contacts', $model->id);
+//		} else {
+//			$mailing->removeManyMany('companies', $model->id);			
+//		}
 		
 		
 	}
@@ -402,18 +483,24 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		if(!GO::user()->isAdmin())
 			$criteria->addCondition('user_id', GO::user()->id);
 		
+		$criteria->addCondition('campaign_id',$params['campaign_id']);
+		
 		return GO_Base_Db_FindParams::newInstance()->criteria($criteria);
 						
 	}
 
+	private function _pauseMailing($mailingId) {
+		$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($mailingId);
+		if($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_RUNNING){
+			$mailing->status = GO_Addressbook_Model_SentMailing::STATUS_PAUSED;
+			$mailing->save();
+		}
+	}
+	
 	protected function beforeStore(&$response, &$params, &$store) {
 
 		if (!empty($params['pause_mailing_id'])) {
-			$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($params['pause_mailing_id']);
-			if($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_RUNNING){
-				$mailing->status = GO_Addressbook_Model_SentMailing::STATUS_PAUSED;
-				$mailing->save();
-			}
+			$this->_pauseMailing($params['pause_mailing_id']);
 		}
 
 		if (!empty($params['start_mailing_id'])) {

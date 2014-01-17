@@ -85,7 +85,7 @@ class Site {
 	}
 	
 	public static function controller() {
-		return self::$_router->getController();
+		return self::router()->getController();
 	}
 	
 	/**
@@ -130,6 +130,13 @@ class Site {
 			self::$_urlManager->init();
 		}
 		return self::$_urlManager;
+	}
+	
+	/**
+	 * Short method for writing urls in your view
+	 */
+	public static function url($route, $params = array(), $ampersand = '&') {
+		return self::urlManager()->createUrl($route, $params, $ampersand);
 	}
 
 	/**

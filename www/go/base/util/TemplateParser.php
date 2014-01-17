@@ -222,7 +222,9 @@ class GO_Base_Util_TemplateParser
 				{
 					$tagcontent = '';
 				}
-								
+				$content = str_replace('<br>'.$tag, $tagcontent, $content);
+				$content = str_replace('<br/>'.$tag, $tagcontent, $content);
+				$content = str_replace('<br />'.$tag, $tagcontent, $content);
 				$content = str_replace($tag, $tagcontent, $content);
 			}
 		}

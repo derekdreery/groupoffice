@@ -597,6 +597,9 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					this.stopLoading.defer(300, this);
 					
 					this.afterLoad(result.data);
+					
+					
+					this.fireEvent('load',this, this.model_id);
 				},
 				scope: this			
 			});

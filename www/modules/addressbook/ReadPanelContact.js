@@ -340,7 +340,8 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 					!GO.util.empty(values['cellular']) ||
 					!GO.util.empty(values['cellular2']) ||
 					!GO.util.empty(values['work_phone']) ||
-					!GO.util.empty(values['work_fax'])	)
+					!GO.util.empty(values['work_fax']) ||
+					!GO.util.empty(values['homepage'])	)
 				{
 					return true;
 				} else {

@@ -130,3 +130,6 @@ $l['rememberFileHandler']="Kom ihåg mitt val för denna filtyp";
 $l['alwaysAsk']="Fråga alltid";
 $l['openWith']='Öppna med';
 $l['open']='Öppna';
+
+$l['rightClickToCopy']='Högerklicka för att kopiera';
+$l['dontDeleteSystemFolder']="Du kan inte radera denna system-mapp";

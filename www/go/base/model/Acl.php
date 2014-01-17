@@ -543,4 +543,5 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		
 		return $acl;
 	}
+	
 }

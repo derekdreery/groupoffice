@@ -128,6 +128,9 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 	public function actionGetUsers($params){
 		$ids = json_decode($params['users']);
 
+		$newParticipantIds = !empty(GO::session()->values['new_participant_ids']) ? GO::session()->values['new_participant_ids'] : array();
+		GO::session()->values['new_participant_ids'] = array_merge($newParticipantIds,$ids);
+		
 		$store = new GO_Base_Data_ArrayStore();
 
 		foreach($ids as $user_id){
@@ -150,6 +153,10 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 		return $store->getData();
 	}
 	
+	protected function actionClearNewParticipantsSession($params) {
+		unset(GO::session()->values['new_participant_ids']);
+		return array('success'=>true);
+	}
 	
 	public function actionGetAddresslists($params){
 		$ids = json_decode($params['addresslists']);

@@ -96,37 +96,27 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 	 * @param boolean $return return rendering result if true
 	 * @return string the redering result if $return is true 
 	 */
-	public function render($view, $data = null, $return = false)
-	{
-		$output = $this->renderPartial($view, $data, true);
+	public function render($view, $data = null) {
+		$output = $this->renderPartial($view, $data);
 		if (($layoutFile = $this->getLayoutFile($this->layout)) !== false)
 			$output = $this->renderFile($layoutFile, array('content' => $output), true);
 
 		Site::scripts()->render($output);
 		
-		if ($return)
-			return $output;
-		else
-			echo $output;
+		return $output;
 	}
 
 	/**
 	 * Renders a view file.
 	 * @param string $view name of the view to be rendered
 	 * @param array $data data to be extracted info PHP variables and made available to the view
-	 * @param boolean $return return the rendered result instead of echoing
 	 * @return type
 	 * @throws CException 
 	 */
-	public function renderPartial($view, $data = null, $return = false)
-	{
-		if (($viewFile = $this->getViewFile($view)) !== false)
-		{
+	public function renderPartial($view, $data = null) {
+		if (($viewFile = $this->getViewFile($view)) !== false){
 			$output = $this->renderFile($viewFile, $data, true);
-			if ($return)
-				return $output;
-			else
-				echo $output;
+			return $output;
 		}
 		else
 			throw new GO_Base_Exception_NotFound('cannot find the requested view ' . $view);
@@ -301,7 +291,7 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 				GO::setIgnoreAclPermissions($oldIgnore);
 		}
 		catch (GO_Base_Exception_MissingParameter $e){
-			$this->render('/site/404', array('error' => $e));
+			echo $this->render('/site/404', array('error' => $e));
 		}
 		catch (GO_Base_Exception_AccessDenied $e){
 			GO::debug($e->getMessage());
@@ -314,18 +304,18 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 				$this->redirect($loginpath);
 			}  else {
 //				$controller = new GO_Site_Controller_Site();
-				$this->render('/site/error', array('error' => $e));
+				echo $this->render('/site/error', array('error' => $e));
 			}
-			//$this->render('error', array('error'=>$e));
+			//echo $this->render('error', array('error'=>$e));
 		}
 		catch (GO_Base_Exception_NotFound $e){
 			header("HTTP/1.0 404 Not Found");
       header("Status: 404 Not Found");
 			
-			$this->render('/site/404', array('error' => $e));
+			echo $this->render('/site/404', array('error' => $e));
 		}
 		catch (Exception $e){
-			$this->render('/site/error', array('error' => $e));
+			echo $this->render('/site/error', array('error' => $e));
 		}
 	}
 	
@@ -339,5 +329,3 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 	
 	
 }
-
-?>

@@ -59,9 +59,9 @@ else
 	#address mapping is done after spamassassin
 	postconf -e 'receive_override_options = no_address_mappings'
 
-	#transport map for autoreply or vacation
-	postconf -e 'transport_maps = hash:/etc/postfix/transport';
-	postconf -e 'vacation_destination_recipient_limit = 1';
+	#transport map for autoreply or vacation (old)
+	#postconf -e 'transport_maps = hash:/etc/postfix/transport';
+	#postconf -e 'vacation_destination_recipient_limit = 1';
 
 	# dovecot handles delivery
 	postconf -e virtual_transport=dovecot

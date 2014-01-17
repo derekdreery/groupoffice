@@ -155,6 +155,15 @@ abstract class GO_Base_Fs_Base{
 	}
 	
 	/**
+	 * Filesize in bytes
+	 * 
+	 * @return int Filesize in bytes
+	 */
+	public function size(){
+		return filesize($this->path);
+	}
+	
+	/**
 	 * Get the name of this file or folder
 	 * 
 	 * @return String  

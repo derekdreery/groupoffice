@@ -15,3 +15,4 @@ $l['newCommentText']='Ange ny kommentar här ...';
 $l['readMore']="Läs mer";
 
 $l['enableReadMore']="Aktivera länkar för att läsa mer";
+$l['actionDate']='Aktiveringsdatum';

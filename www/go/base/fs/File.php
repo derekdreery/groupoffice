@@ -62,16 +62,6 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		return new GO_Base_Fs_File($p);
 	}
 	
-	
-	/**
-	 * Filesize in bytes
-	 * 
-	 * @return int Filesize in bytes
-	 */
-	public function size(){
-		return filesize($this->path);
-	}
-	
 	/**
 	 * Get the size formatted nicely like 1.5 MB
 	 * 
