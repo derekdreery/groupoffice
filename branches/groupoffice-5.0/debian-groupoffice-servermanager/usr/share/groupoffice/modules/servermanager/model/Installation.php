@@ -684,7 +684,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		if(!empty(GO::config()->serverclient_server_url) && !empty($this->config['serverclient_domains'])) {
 			$c = new GO_Serverclient_HttpClient();
-			$c->postfixLogin();
+//			$c->postfixLogin();
 
 			$response = $c->request(
 					GO::config()->serverclient_server_url."?r=postfixadmin/domain/getUsage", 
