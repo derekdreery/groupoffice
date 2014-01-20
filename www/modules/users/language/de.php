@@ -86,6 +86,7 @@ $l["popupNotification"]='Popupfenster anzeigen wenn eine Erinnerung ansteht oder
 $l["muteNewMailSound"]='Keine Sounds für E-Mails nutzen';
 $l["muteReminderSound"]='Keine Sounds für Erinnerungen nutzen';
 $l["showSmilies"]='Zeige Smileys';
+$l["autoPunctuation"]='Großschreibung nach Punkt';
 $l['name']='Benutzer';
 $l['description']='Modul zur Benutzerverwaltung';
 $l['deletePrimaryAdmin']='Sie können den primären Administrator nicht löschen';

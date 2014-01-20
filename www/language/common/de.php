@@ -53,7 +53,7 @@ $l['summarylogErrorText']="Während des Imports sind Fehler aufgetreten";
 $l['summarylogSuccessText']="Import erfolgreich";
 $l['exportIncludeHidden']= 'Auch versteckte Spalten exportieren';
 $l['exportHumanHeaders']= 'Nutze die Namen der Datenbankspalten als Header';
-$l['exportIncludeHeaders']= 'Auch Headers exportieren';
+$l['exportIncludeHeaders']= 'Auch Header exportieren';
 $l['exportOrientation']= 'Ausrichtung';
 $l['remove']="Löschen";
 $l['removeSelected']="Lösche ausgewählte";
@@ -224,6 +224,7 @@ $l["strRequestError"]='Es konnte keine Verbindung zum Server aufgebaut werden. B
 $l["strSelected"]='Ausgewählt';
 $l["noItemSelected"]='Sie haben keinen Eintrag ausgewählt.';
 $l["strDeleteSelectedItems"]='Sind Sie sicher, dass Sie {count} Einträge löschen möchten?';
+$l["areYouSureDeleteItem"]= 'Sind Sie sicher, dass Sie \'{item}\' löschen möchten?';
 $l["strDeleteSelectedItem"]='Sind Sie sicher, dass Sie den gewählten Eintrag löschen möchten?';
 $l["strNoWritePermissions"]='Sie haben keine Befugnis, diesen Eintrag zu bearbeiten.';
 $l["strUnauthorized"]='Nicht autorisiert';
@@ -449,6 +450,18 @@ $l['months'][9]='September';
 $l['months'][10]='Oktober';
 $l['months'][11]='November';
 $l['months'][12]='Dezember';
+$l['short_months'][1]='Jan';
+$l['short_months'][2]='Feb';
+$l['short_months'][3]='Mrz';
+$l['short_months'][4]='Apr';
+$l['short_months'][5]='Mai';
+$l['short_months'][6]='Jun';
+$l['short_months'][7]='Jul';
+$l['short_months'][8]='Aug';
+$l['short_months'][9]='Sep';
+$l['short_months'][10]='Okt';
+$l['short_months'][11]='Nov';
+$l['short_months'][12]='Dez';
 $l['short_days'][0]='So';
 $l['short_days'][1]='Mo';
 $l['short_days'][2]='Di';
@@ -630,5 +643,17 @@ $l['pt'] = 'Portugal';
 $l['sv'] = 'Schweden';
 $l['th'] = 'Thailand';
 
+$l["report"]='Report';
+
+$l['namelessItem'] = 'Objekt ohne Namen';
+$l['importFileType'] = 'Dateityp importieren';
+
+$l['maybeMaxUploadExceeded'] = 'Der Server konnte die benötigten Parameter nicht von Ihrem Browser empfangen. Wahrscheinlich wurde die maximale Dateigröße von %sMb überschritten.';
+
+$l['relationDeleteRestrict']="%s kann nicht gelöscht werden, da es '%s' Objekte beinhaltet. Bitte entfernen Sie diese zuerst.";
 
 //$l['pspell_lang']='DE_de';
+
+$l['dependenciesCannotDelete']="Das ausgewählte Modul kann nicht gelöscht werden, da die folgenden (installierten) Module davon abhängen: %s.";
+
+$l['MailboxNotFoundException'] = "Der Ordner \"%s\" kann nicht geöffnet werden. Bitte überprüfen Sie die Einstellungen Ihres E-Mail-Accounts.";

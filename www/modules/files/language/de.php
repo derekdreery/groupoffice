@@ -118,4 +118,9 @@ $l['selectApplication']="Anwendung zum Öffnen dieser Datei wählen...";
 $l['rememberFileHandler']="Meine Entscheidung für diesen Dateityp merken";
 $l['alwaysAsk']="Immer fragen";
 $l['openWith']='Öffnen mit';
+
+$l['dontDeleteSystemFolder']="Sie können diesen Systemordner nicht löschen";
 $l['open']='Öffnen';
+
+$l['rightClickToCopy']='Rechtsklick zum Kopieren';
+
