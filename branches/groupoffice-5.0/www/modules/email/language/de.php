@@ -114,6 +114,7 @@ $l["email"]='E-Mail';
 $l["manageAliases"]='Aliase...';
 $l["addSendersTo"]='Absender als Empfänger';
 $l["defaultTemplate"]='Gewählte Vorlage als Standard verwenden';
+$l["defaultEmailTemplate"]='Standard E-Mail-Vorlage';
 $l["moving"]='Verschiebe...';
 $l["orderFilters"]='Sie können die Reihenfolge der Filter durch ziehen und ablegen verändern.';
 $l["orderAccounts"]='Sie können die Reihenfolge der Konten durch ziehen und ablegen verändern.';
@@ -250,3 +251,13 @@ $l['appointementAlreadyProcessed']='Diese Nachricht beinhaltet eine Termineinlad
 $l['noname'] = 'namenlos';
 $l['doNotMarkAsRead'] = 'E-Mails nicht automatisch als gelesen markieren';
 $l["showAll"]='Alle anzeigen';
+
+$l['searchIn'] = 'Suchen in';
+$l['searchRecursive'] = 'Rekursive Suche';
+$l['currentFolder'] = 'Aktueller Ordner';
+$l['allFolders'] = 'Alle Ordner';
+
+$l['useAuth']="Authentifizierung benutzen";
+$l['linkMustHavePermissionToWrite'] = 'Sie haben nicht die benötigten Schreibberechtigungen auf das Objekt, um die E-Mail darauf zu verlinken.';
+
+$l['sortAddressesByMailTime'] = 'Adressen der Empfänger nach der Zeit der letzten gesendeten E-Mail sortieren (benötigt das Adressbuch-Modul)';
