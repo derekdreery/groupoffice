@@ -1,3 +1,6 @@
+20-01-2014 5.0.34
+- Parse rrules in caldav failed in some cases with mutliple weekdays
+- Build error in 5.0.33
 - Billing: New Export Catalog Products function.
 
 20-01-2014 5.0.33
