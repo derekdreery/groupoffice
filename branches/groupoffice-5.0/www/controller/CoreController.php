@@ -831,7 +831,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$themes = $view->getThemeNames();
 		
 		foreach($themes as $theme){
-			$store->addRecord(array('theme'=>$theme));
+			$store->addRecord(array('theme'=>$theme, 'label'=>str_replace('Group-Office', GO::config()->product_name, $theme)));
 		}
 		
 		return $store->getData();
