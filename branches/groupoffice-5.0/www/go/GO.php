@@ -588,7 +588,6 @@ class GO{
 			self::config()->tmpdir = self::config()->getTempFolder()->path().'/';
 		}
 		
-		require(GO::config()->root_path.'modules/recruity/init.php');
 	}
 	
 	/**
