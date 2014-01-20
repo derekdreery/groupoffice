@@ -127,9 +127,9 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 	
 	public function actionGetUsers($params){
 		$ids = json_decode($params['users']);
-
-		$newParticipantIds = !empty(GO::session()->values['new_participant_ids']) ? GO::session()->values['new_participant_ids'] : array();
-		GO::session()->values['new_participant_ids'] = array_merge($newParticipantIds,$ids);
+		
+		$oldParticipantIds = !empty(GO::session()->values['new_participant_ids']) ? GO::session()->values['new_participant_ids'] : array();
+		GO::session()->values['new_participant_ids'] = array_merge($oldParticipantIds,$ids);
 		
 		$store = new GO_Base_Data_ArrayStore();
 
