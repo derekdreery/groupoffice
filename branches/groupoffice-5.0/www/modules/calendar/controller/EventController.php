@@ -246,8 +246,17 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			}
 		}
 		
+		$allParticipantsStmt = GO_Calendar_Model_Participant::model()->findByAttributes(array(
+				'event_id'=>$model->id,
+				'is_organizer'=>0
+			));
+		$allParticipantIds = array();
+		foreach ($allParticipantsStmt as $participantModel)
+			$allParticipantIds[] = $participantModel->user_id;
+		
 		$newParticipantIds = !empty(GO::session()->values['new_participant_ids']) ? GO::session()->values['new_participant_ids'] : array();
-		if (!empty($newParticipantIds))
+		$oldParticipantsIds = array_diff($allParticipantIds,$newParticipantIds);
+		if (!empty($newParticipantIds) && !empty($oldParticipantsIds))
 			$response['askForMeetingRequestForNewParticipants'] = true;
 		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
