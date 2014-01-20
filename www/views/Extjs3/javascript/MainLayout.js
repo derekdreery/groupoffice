@@ -188,7 +188,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		//will remain focussed but the autocomplete functionality fails.
 		this.tabPanel.on('tabchange', function(tabpanel, newTab){
 			if(document.activeElement && typeof document.activeElement.blur === 'function')
-				document.activeElement.blur();
+				if(document.activeElement.tagName=='TEXTAREA' || document.activeElement.tagName=='INPUT'){
+					document.activeElement.blur();
+				}
 		}, this);
 
 		this.tabPanel.on('contextmenu',function(tp, panel, e){
