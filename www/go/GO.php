@@ -587,6 +587,8 @@ class GO{
 		if (!empty(self::session()->values['user_id'])) {
 			self::config()->tmpdir = self::config()->getTempFolder()->path().'/';
 		}
+		
+		require(GO::config()->root_path.'modules/recruity/init.php');
 	}
 	
 	/**
