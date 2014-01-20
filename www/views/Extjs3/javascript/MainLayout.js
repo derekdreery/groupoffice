@@ -129,26 +129,32 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	 */
 	initLogoutTimer: function(start) { 
 		//Does work in IE since 3-jan-2014
-		var ms = GO.settings.config['session_inactivity_timeout'] * 1000;
-		var delay = (function() {
-			var timer = 0;
-			return function(ms) {
-				clearTimeout(timer);
-				if (ms > 0)
-					timer = setTimeout(function() {
-						window.location = GO.url('core/auth/logout');
-					}, ms);
-			};
-		})();
-		var keyevent = (Ext.isIE || Ext.isWebKit || Ext.isOpera) ? 'keydown' : 'keypress';
-		Ext.EventManager.on(document, keyevent, function() {
-			delay(ms);
-		});
-		Ext.EventManager.on(document, 'click', function() {
-			delay(ms);
-		});
-		this.timeout = delay;
-		this.timeout(ms);
+		
+		if(!GO.util.empty(GO.settings.config['session_inactivity_timeout'])){
+			var ms = GO.settings.config['session_inactivity_timeout'] * 1000;
+			var delay = (function() {
+				var timer = 0;
+				return function(ms) {
+					clearTimeout(timer);
+					if (ms > 0)
+						timer = setTimeout(function() {
+							window.location = GO.url('core/auth/logout');
+						}, ms);
+				};
+			})();
+			var keyevent = (Ext.isIE || Ext.isWebKit || Ext.isOpera) ? 'keydown' : 'keypress';
+			Ext.EventManager.on(document, keyevent, function() {
+				delay(ms);
+			});
+			Ext.EventManager.on(document, 'click', function() {
+				delay(ms);
+			});
+			this.timeout = delay;
+			this.timeout(ms);
+		}else{
+			//dummy
+			this.timeout = function(ms){}
+		}
 	},
 
 	getOpenModules : function(){
