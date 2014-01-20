@@ -1,3 +1,5 @@
+- Billing: New Export Catalog Products function.
+
 20-01-2014 5.0.33
 - Check language input on login form so auto submission tools can't input incorrect language settings.
 - Updated German language.
