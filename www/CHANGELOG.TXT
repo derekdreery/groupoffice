@@ -1,3 +1,5 @@
+- Email: Fixed quotation of text in saved email subjects
+
 20-01-2014 5.0.34
 - Parse rrules in caldav failed in some cases with mutliple weekdays
 - Build error in 5.0.33
@@ -11,6 +13,8 @@
 - Address Book: Regular users can now create their own e-mail templates and document templates.
 - Address Book: Mailing log now shows time of mailing finish.
 - IP Whitelist: Group-Office IP whitelisting now possible on a user group basis.
+- Email: Hide namespaced imap folders when they are empty.
+- Z-Push 2.1: Fixed duplicate include of replied/forwarded email on the iphone. (Smartforward)
 
 15-01-2014 5.0.32
 - Notice in e-mail viewing
