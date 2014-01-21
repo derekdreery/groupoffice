@@ -35,7 +35,7 @@ GO.form.ListField = Ext.extend(GO.grid.EditorGridPanel, {
 	/**
 	 * @cfg {Number} height default height of component
 	 */
-	height : 100,
+	height : 160,
 
 	/**
 	 * @cfg {Number} anchor test
@@ -48,6 +48,7 @@ GO.form.ListField = Ext.extend(GO.grid.EditorGridPanel, {
 			this.hiddenField = new Ext.form.Hidden({
 				name: this.name
 			});
+			var items = [this.hiddenField];
 		}
 
 		Ext.apply(this, {
@@ -78,7 +79,7 @@ GO.form.ListField = Ext.extend(GO.grid.EditorGridPanel, {
 				autoFill: true,
 				forceFit:true
 			},
-			height: 160,
+			height: this.height,
 			cm: new Ext.grid.ColumnModel({
 				columns: [{
 					sortable:false,
@@ -88,9 +89,10 @@ GO.form.ListField = Ext.extend(GO.grid.EditorGridPanel, {
 					editor: new Ext.grid.GridEditor(new Ext.form.TextField())
 				}]
 			}),
+			items: items || [],
 			sm: new Ext.grid.RowSelectionModel()
 		});
-		
+
 		this.setValue(this.value);
 		
 		GO.form.ListField.superclass.initComponent.call(this);
@@ -105,13 +107,13 @@ GO.form.ListField = Ext.extend(GO.grid.EditorGridPanel, {
 		this.update();
 	},
 	update : function() {
-		if(this.name && this.hiddenField && false) {
+		if(this.name && this.hiddenField) {
 			var value = [];
 			for(var i = 0 ; i < this.store.data.items.length; i++) {
 				var item = this.store.data.items[i];
 				value.push(item.data.value);
 			}
-			var val = Ext.util.Format.htmlDecode(value);
+			var val = Ext.encode(value);
 			this.hiddenField.setValue(val);
 		}
 	},
