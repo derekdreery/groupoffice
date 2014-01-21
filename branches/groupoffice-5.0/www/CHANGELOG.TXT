@@ -1,4 +1,5 @@
 - Email: Fixed quotation of text in saved email subjects
+- Tickets: Disable "mark as read" button in the display panel when not enough permissions.
 
 20-01-2014 5.0.34
 - Parse rrules in caldav failed in some cases with mutliple weekdays
