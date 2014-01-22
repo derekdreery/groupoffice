@@ -163,3 +163,4 @@ $updates["201305161114"][]="ALTER TABLE  `fs_folders` CHANGE  `thumbs`  `thumbs`
 $updates['201305161114'][]="ALTER TABLE `fs_files` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
 $updates['201305161114'][]="ALTER TABLE `fs_folders` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
 
+$updates["201401221715"][]='script:3_install_cron.php';

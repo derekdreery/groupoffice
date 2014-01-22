@@ -359,7 +359,7 @@ GO.files.FileBrowser = function(config){
 		menu: this.newMenu
 	});
 
-        var quotaPercentage = (GO.settings.disk_quota) ? GO.settings.disk_usage/GO.settings.disk_quota : 0;
+        var quotaPercentage = (GO.settings.disk_quota && GO.settings.disk_quota>0) ? GO.settings.disk_usage/GO.settings.disk_quota : 0;
 
 	this.locationPanel = new Ext.Panel({
 		region:'north',
@@ -901,8 +901,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		{
 			state = Ext.state.Manager.get(this.gridPanel.id);
 		}
-		
-		if (store.reader.jsonData.disk_usage && store.reader.jsonData.disk_quota) {
+		if (store.reader.jsonData.disk_usage!=='undifined' && store.reader.jsonData.disk_quota!=='undifined') {
 			GO.settings.disk_usage = store.reader.jsonData.disk_usage;
 			GO.settings.disk_quota = store.reader.jsonData.disk_quota;
 			
@@ -910,7 +909,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			var remainingDiskSpace = Math.floor(GO.settings.disk_quota-GO.settings.disk_usage);
 			this.uploadItem.lowerMaxFileSize(remainingDiskSpace);
 			
-			var quotaPercentage = (GO.settings.disk_quota) ? GO.settings.disk_usage/GO.settings.disk_quota : 0;
+			var quotaPercentage = (GO.settings.disk_quota && GO.settings.disk_quota>0) ? GO.settings.disk_usage/GO.settings.disk_quota : 0;
+			if(quotaPercentage==0 && GO.settings.disk_quota==0)
+				quotaPercentage=1;
 			var text = Math.round(quotaPercentage*100)+'% ('+ GO.settings.disk_usage+' of '+GO.settings.disk_quota+'MB)';
 			this.quotaBar.updateProgress(quotaPercentage, text);
 			this.quotaBar.removeClass('warning');
