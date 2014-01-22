@@ -1,4 +1,3 @@
-<<<<<<< .working
 - Calendar: Overview of participant and resource availability per day.
 - Tasks & Reminders: get reminder when another user puts a task in your task list
 - Added user quota support
