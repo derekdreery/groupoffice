@@ -1,0 +1,72 @@
+Search in subfolders with mail
+
+
+op ics klikken opent event dialog
+
+link rules email
+
+Totaal rates in ticket export
+
+Bij alle omgebouwde modules .php zoeken in *.js files zodat oude php code uiteindelijk weg kan.
+
+
+Automatisch ticket maken van support@intermesh.nl
+
+
+http://www.group-office.com/forum/viewtopic.php?f=3&t=8353
+
+VCF import via mail
+
+Note sync bij syncml. Funambol outlook ondersteund dit.
+
+reminder als licentie verloopt
+
+
+
+Geafactureerd type ook als gesloten beschouwen
+
+GOTA moet weten of file gelocked of niet is.
+
+resize vcard photo's
+
+Add max_file_storage setting to servermanager
+
+
+Document conversion
+
+Product opties bij billing
+
+Group-Office 100 users 600 euro, 150 users 700 euro etc.
+
+
+*** Lage prio:
+
+
+overige modules mvc
+sticky user group that is shared with all items members create
+
+Feature requests voting system
+
+Bij bedrijf -> displaypanel -> New -> Contact
+
+
+Billing MVC
+
+UCF for deb pkgs
+http://www.group-office.com/forum/viewtopic.php?f=6&t=8083
+
+Drag & drop contacts:
+http://www.group-office.com/forum/viewtopic.php?f=5&t=8351
+
+
+Docs:
+
+- Sieve
+- Workflow
+- Smime
+- Bookmarks
+- Notes (Encryption)
+
+PHPdocs netjes en online op api.group-office.com
+
+- Alles even nalopen
