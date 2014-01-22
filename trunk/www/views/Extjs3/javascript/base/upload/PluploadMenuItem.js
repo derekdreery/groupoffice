@@ -43,5 +43,22 @@ GO.base.upload.PluploadMenuItem = Ext.extend(Ext.menu.Item, {
 		};
         
 		GO.base.upload.PluploadMenuItem.superclass.constructor.apply(this, arguments);
+	},
+	lowerMaxFileSize: function(new_max_filesize) {
+		if(new_max_filesize < 0)
+				new_max_filesize=0;
+		var go_max_filesize = Math.floor(GO.settings.config.max_file_size/1024/1024);
+		if(new_max_filesize < go_max_filesize) {
+			this.uploadpanel.max_file_size = new_max_filesize+'mb';
+		} else {
+			this.uploadpanel.max_file_size = go_max_filesize+'mb';
+		}
+		this.window.setTitle(" ("+GO.lang.strMax+": "+this.uploadpanel.max_file_size+")");
+		if(this.uploadpanel.uploader){
+			console.log(this.uploadpanel.max_file_size);
+			this.uploadpanel.uploader.settings.max_file_size = this.uploadpanel.max_file_size;
+		}
+		//this.render();
+		//this.uploader.max_file_size = this.max_file_size;
 	}
 });
