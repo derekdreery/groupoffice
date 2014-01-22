@@ -55,7 +55,6 @@ GO.base.upload.PluploadMenuItem = Ext.extend(Ext.menu.Item, {
 		}
 		this.window.setTitle(" ("+GO.lang.strMax+": "+this.uploadpanel.max_file_size+")");
 		if(this.uploadpanel.uploader){
-			console.log(this.uploadpanel.max_file_size);
 			this.uploadpanel.uploader.settings.max_file_size = this.uploadpanel.max_file_size;
 		}
 		//this.render();
