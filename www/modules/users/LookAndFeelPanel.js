@@ -33,8 +33,9 @@ GO.users.LookAndFeelPanel = function(config)
 	
 	var themesStore = new GO.data.JsonStore({
 		url: GO.url('core/themes'),
-		fields:['theme'],
-		remoteSort: true		
+		fields:['theme','label'],
+		remoteSort: true,
+		autoLoad:true
 	});
 
 	this.modulesStore = new GO.data.JsonStore({
@@ -53,9 +54,9 @@ GO.users.LookAndFeelPanel = function(config)
 			fieldLabel: GO.users.lang['cmdFormLabelTheme'],
 			name: 'theme',
 			store: themesStore,
-			displayField:'theme',
+			displayField:'label',
 			valueField: 'theme',		
-			mode:'remote',
+			mode:'local',
 			triggerAction:'all',
 			editable: false,
 			selectOnFocus:true,

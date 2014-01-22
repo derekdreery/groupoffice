@@ -115,7 +115,7 @@ class GO_Site_Widget_FormField extends GO_Site_Components_Widget {
 	 *
 	 * @return static the field object itself
 	 */
-	public function hint($content, $options = []) {
+	public function hint($content, $options = array()) {
 		$options = array_merge($this->hintOptions, $options);
 		if (isset($options['tag'])) {
 			$tag = $options['tag'];
@@ -177,7 +177,7 @@ class GO_Site_Widget_FormField extends GO_Site_Components_Widget {
 		return $this;
 	}
 
-	public function textArea($options = []) {
+	public function textArea($options = array()) {
 		$this->parts['{input}'] = $this->form->textArea($this->model, $this->attribute, $options);
 		return $this;
 	}

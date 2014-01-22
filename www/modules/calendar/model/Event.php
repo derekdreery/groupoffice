@@ -301,7 +301,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		
 		
-		return $this->duplicate($att, false);
+		$duplicate =  $this->duplicate($att, false);
+		
+//		$this->copyLinks($duplicate);
+		
+		return $duplicate;
 	}
 	
 
@@ -348,6 +352,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$exceptionEvent->setAttributes($attributes);
 			if(!$exceptionEvent->save())
 				throw new Exception("Could not create exception: ".var_export($exceptionEvent->getValidationErrors(), true));
+			
+
+			$event->copyLinks($exceptionEvent);
+			
 			$event->addException($exceptionDate, $exceptionEvent->id);
 
 			$event->duplicateRelation('participants', $exceptionEvent);

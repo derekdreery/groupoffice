@@ -602,6 +602,7 @@ class GO{
 		if (!empty(self::session()->values['user_id'])) {
 			self::config()->tmpdir = self::config()->getTempFolder()->path().'/';
 		}
+		
 	}
 	
 	/**

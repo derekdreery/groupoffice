@@ -1,3 +1,4 @@
+<<<<<<< .working
 - Calendar: Overview of participant and resource availability per day.
 - Tasks & Reminders: get reminder when another user puts a task in your task list
 - Added user quota support
@@ -8,11 +9,27 @@
 
 
 - Autolink a contact will check if the same contact is not already selected in the link field
+- Copy links when creating exception
+- Projects name template not working anymore after saving settings
+- Don't move project to a project in tree drag and drop
+- Email: Fixed quotation of text in saved email subjects
+- Tickets: Disable "mark as read" button in the display panel when not enough permissions.
+
+20-01-2014 5.0.34
+- Parse rrules in caldav failed in some cases with mutliple weekdays
+- Build error in 5.0.33
+- Billing: New Export Catalog Products function.
+
+20-01-2014 5.0.33
+- Check language input on login form so auto submission tools can't input incorrect language settings.
+- Updated German language.
 - Address Book: Batch edit custom fields are now sorted alphabetically.
 - Address Book: No longer possible to add employees from different address book.
 - Address Book: Regular users can now create their own e-mail templates and document templates.
 - Address Book: Mailing log now shows time of mailing finish.
 - IP Whitelist: Group-Office IP whitelisting now possible on a user group basis.
+- Email: Hide namespaced imap folders when they are empty.
+- Z-Push 2.1: Fixed duplicate include of replied/forwarded email on the iphone. (Smartforward)
 
 15-01-2014 5.0.32
 - Notice in e-mail viewing

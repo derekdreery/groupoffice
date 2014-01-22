@@ -179,7 +179,8 @@ $l['eventDeclined']="Sie haben den Termin abgelehnt.";
 $l['eventUpdatedIn']='Der Termin im Kalender %s wurde mit dem Status %s aktualisiert';
 $l['updateReponses']["ACCEPTED"]='%s hat den Termin %s akzeptiert';
 $l['updateReponses']["DECLINED"]='%s hat den Termin %s abgewiesen';
-$l['updateReponses']["TENTATIVE"]='%s hat den Termin %s als vorläufig markiert';
+$l['updateReponses']["TENTATIVE"]='%s hat den Termin %s als \"vorläufig\" markiert';
+$l['updateReponses']["NEEDS-ACTION"]='%s hat den Termin %s als \"noch nicht entschieden\" markiert';
 $l['cancelMessage']='Der folgende Termin, zu dem Sie eingeladen waren, wurde abgesagt.';
 $l['directUrl']='Direktlink';
 $l['cantRemoveOrganizer']="Sie können den Organisator nicht löschen.";
@@ -226,3 +227,30 @@ $l['eventPrivateChecked'] = 'Bitte beachten Sie, dass die Nutzer, für die Sie d
 $l['show_completed_tasks'] = "Zeige abgeschlossene Aufgaben";
 $l['showStatuses']='Termin-Status in der Kalenderansicht mit anzeigen';
 $l['cantMoveRecurringByDay']="Es ist leider nicht möglich, Termine, die sich an Wochentagen wiederholen, auf einen anderen Tag zu verschieben. Bitte direkt die Wiederholung im Termin bearbeiten.";
+
+$l['eventNotSavedSubject'] = 'Termin nicht gespeichert im %event Kalender "%cal"';
+$l['eventNotSavedBody'] = 'Diese Nachricht ist von Ihrem Kalender %goname. %goname versuchte den Termin "%event" mit dem Beginn %starttime aus einem externen Kalender in den Kalender "%cal" zu importieren. Dieser Vorgang konnte nicht durchgeführt werden, da der Termin Fehler beinhaltet. Der Termin ist vermutlich noch in dem externen Kalender gespeichert.'.
+                                                                "\r\n\r\n".'Fehlermeldung:'."\r\n".'%errormessage';
+
+$l['usedResources'] = 'Benutzte Ressourcen';
+
+$l['shareCalendarsCron'] = 'Freigegebene Kalenderdateien aktualisieren';
+$l['shareCalendarsCronDescription'] = 'Freigegebene Kalenderdateien von veröffentlichten Kalendern aktualisieren';
+
+$l['cmdPrintView'] = 'Aktuelle Ansicht drucken';
+$l['cmdPrintCategoryCount'] = 'Nach Kategorie drucken';
+$l['startDate'] = 'Startdatum';
+$l['endDate'] = 'Enddatum';
+$l['eventsPerCategoryCount'] = 'Anzahl der Termine pro Kategorie';
+$l['nextMonth'] = 'Nächster Monat';
+$l['previousMonth'] = 'Vorheriger Monat';
+$l['till'] = 'bis';
+$l['total'] = 'Gesamt';
+
+$l['sendNotificationToNewParticipants']='Möchten Sie nur die eben neu hinzugefügten Teilnehmer per E-Mail benachrichtigen?';
+$l['newParticipants']='Neue Teilnehmer';
+$l['allParticipants']='Alle Teilnehmer';
+$l['noParticipants']='Keine Teilnehmer';
+$l['cannotHandleInvitation']='Der Kalender, der mit dem E-Mail-Account verbunden ist, ist "%s" und Sie haben keine Schreibberechtigung darauf. Da der Termin in diesem Kalender liegt, konnte der Status nicht geändert werden.';
+$l['cannotHandleInvitation2']='Der Termin konnte nicht aktualisiert werden, da Sie nicht die notwendigen Berechtigungen auf den Kalender haben (Kalender: "%s"), der mit dem E-Mail-Account verbunden ist. Da der Termin sich in diesem Kalender befindet, konnte der Status nicht geändert werden.';
+
