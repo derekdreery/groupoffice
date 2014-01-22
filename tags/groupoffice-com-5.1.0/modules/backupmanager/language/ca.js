@@ -1,0 +1,19 @@
+
+GO.backupmanager.lang.backupmanager='Gestor de còpies de seguretat';
+GO.backupmanager.lang.rmachine='Ordinador remot';
+GO.backupmanager.lang.rport='Port';
+GO.backupmanager.lang.rtarget='Carpeta destí';
+GO.backupmanager.lang.sources='Carpetes orígen';
+GO.backupmanager.lang.rotations='Rotacions';
+GO.backupmanager.lang.quiet='Silenciós';
+GO.backupmanager.lang.emailaddresses='Adreces d\'e-mail';
+GO.backupmanager.lang.emailsubject='Assumpte d\'e-mail';
+GO.backupmanager.lang.rhomedir='Homedir remot';
+GO.backupmanager.lang.rpassword='Contrasenya remota';
+GO.backupmanager.lang.publish='Publicar';
+GO.backupmanager.lang.enablebackup='Iniciar còpia de seguretat';
+GO.backupmanager.lang.disablebackup='Aturar còpia de seguretat';
+GO.backupmanager.lang.successdisabledbackup='La còpia de seguretat s\'ha desactivat correctament!';
+GO.backupmanager.lang.publishkey='Activar còpia de seguretat';
+GO.backupmanager.lang.publishSuccess='La còpia de seguretat s\'ha activat correctament.';
+GO.backupmanager.lang.helpText='Aquest mòdul farà còpies de seguretat dels arxius i totes les bases de dades (assegureu-vos d\'incloure /home/mysqlbackup en les carpetes orígen) a un servidor remot mitjançant rsync i SSH. Quan activeu la còpia de seguretat es publicarà la clau pública SSH al servidor i comprovarà si la carpeta destí existeix. Llavors, primer assegureu-vos que la carpeta destí de la còpia de seguretat existeix. Per defecte, la còpia de seguretat es programa a mitjanit a /etc/cron.d/groupoffice-backup. Podeu ajustar-ne la programació en aquest arxiu o crear-la si no existeix. També podeu iniciar manualment la còpia de seguretat executant "php /usr/share/groupoffice/modules/backupmanager/cron.php" en el terminal.';
