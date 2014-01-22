@@ -308,7 +308,7 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 		
 		
 		//parsing of rrule is done by GO. SabreDAV fails on vcalendar 1.0 rrules
-		Sabre\VObject\Component\VCalendar::$propertyMap['RRULE']='Sabre\\VObject\\Property\\Text';
+//		Sabre\VObject\Component\VCalendar::$propertyMap['RRULE']='Sabre\\VObject\\Property\\Text';
 		
 		//remove quoted printable line breaks
 		$data = GO_Base_Util_String::normalizeCrlf($data,"\n");

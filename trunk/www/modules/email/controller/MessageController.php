@@ -891,7 +891,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		{
 			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path']);
 		}
-		$response['data'] = $message->toOutputArray($params['content_type'] == 'html', true);
+		$response['data'] = $message->toOutputArray($params['content_type'] == 'html', true,false,false);
 		
 		if(!empty($params['uid'])){
 			$alias = $this->_findAliasFromRecipients($account, $message->from);	

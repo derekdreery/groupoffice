@@ -199,7 +199,9 @@ $l["companyEmail"]= "E-Mail";
 $l["companyHomepage"]= "Homepage";
 $l["companyComment"]= "Kommentare";
 $l["companyBank_no"] = "BLZ";
+$l['bankBicNo'] = 'BIC Nummer';
 $l["companyVat_no"] = "VAT-Nummer";
+$l["cmdFormLabelInvoiceEmail"]= 'E-Mail für Rechnungen';
 $l["companyIban"] = "IBAN";
 $l["companyCrn"] = "CRN";
 $l["companyCtime"]= "Erstellt am";
@@ -271,3 +273,17 @@ $l['currentImage']='Aktuelles Bild';
 $l['downloadFullImage']='Bild herunterladen';
 
 $l['upcomingBirthdays'] = "Anstehende Geburtstage";
+
+$l['age'] = "Alter";
+$l['linkedinUrl'] = 'LinkedIn';
+$l['facebookUrl'] = 'Facebook';
+$l['twitterUrl'] = 'Twitter';
+$l['skypeName'] = 'Skype-Name';
+$l['cmdPanelSocialMedia'] = 'Soziale Netzwerke';
+
+$l['setCurrentTemplateAsDefaultEAccount']='Die aktuelle Vorlage für diesen E-Mail-Account als Standard setzen';
+
+$l['callOnSkype'] = 'Anrufen über Skype';
+
+$l['userDefaultTemplate'] = 'Standard-Vorlage';
+$l['exportContactsWithCompanies'] = 'Kontakte mit Firmen';

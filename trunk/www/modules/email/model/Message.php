@@ -287,7 +287,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 * 
 	 * @return Array
 	 */
-	public function toOutputArray($html=true, $recipientsAsString=false, $noMaxBodySize=false) {
+	public function toOutputArray($html=true, $recipientsAsString=false, $noMaxBodySize=false,$useHtmlSpecialChars=true) {
 
 		$from = $this->from->getAddresses();		
 
@@ -325,11 +325,16 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 		if($html) {
 			$response['htmlbody'] = $this->getHtmlBody(false,$noMaxBodySize);
-			$response['subject'] = htmlspecialchars($this->subject,ENT_COMPAT,'UTF-8');
 		} else {
 			$response['plainbody'] =$this->getPlainBody(false,$noMaxBodySize);
+		}
+		
+		if($useHtmlSpecialChars){
+			$response['subject'] = htmlspecialchars($this->subject,ENT_COMPAT,'UTF-8');
+		} else {
 			$response['subject'] = $this->subject;
 		}
+		
 
 		$response['body_truncated'] = $this->bodyIsTruncated();
 		
