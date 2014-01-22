@@ -1,3 +1,6 @@
+- Copy links when creating exception
+- Projects name template not working anymore after saving settings
+- Don't move project to a project in tree drag and drop
 - Email: Fixed quotation of text in saved email subjects
 - Tickets: Disable "mark as read" button in the display panel when not enough permissions.
 
