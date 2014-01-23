@@ -104,7 +104,7 @@ chown vmail:mail /var/lib/dovecot/shared-mailboxes.db
 if  ! id spamd 1>/dev/null 2>&1 ; then
 	groupadd -g 5001 spamd
 	useradd -u 5001 -g spamd -s /sbin/nologin -d /var/lib/spamassassin spamd
-	mkdir /var/lib/spamassassin	
+	mkdir -p /var/lib/spamassassin	
 fi
 
 chown spamd:spamd /var/lib/spamassassin
