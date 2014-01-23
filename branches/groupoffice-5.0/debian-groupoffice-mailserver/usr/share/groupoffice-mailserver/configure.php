@@ -189,6 +189,10 @@ if(version_compare(2, $version)>0){
 	if(!file_contains($filename, 'Group-Office'))
 		create_file($filename,'tpl/etc/dovecot/conf.d/15-lda.conf', $replacements);
 	
+	$filename = '/etc/dovecot/conf.d/15-mailboxes.conf';
+	if(!file_contains($filename, 'Group-Office'))
+		create_file($filename,'tpl/etc/dovecot/conf.d/15-mailboxes.conf', $replacements);
+	
 	$filename = '/etc/dovecot/conf.d/20-imap.conf';
 	if(!file_contains($filename, 'Group-Office'))
 		create_file($filename,'tpl/etc/dovecot/conf.d/20-imap.conf', $replacements);
