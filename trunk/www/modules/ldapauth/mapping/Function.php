@@ -1,5 +1,5 @@
 <?php
-class GO_Ldapauth_Mapping_Function {
+class GO_Ldapauth_Mapping_FunctionMapping {
 
 	private $_function;
 
