@@ -1,5 +1,5 @@
 <?php
-class GO_Admin2userlogin_Controller_Switch extends GO_Base_Controller_AbstractController {
+class GO_Admin2userlogin_Controller_Login extends GO_Base_Controller_AbstractController {
 	protected function actionSwitch($params){
 //		
 //		if(!GO::user()->isAdmin())
