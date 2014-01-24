@@ -7,7 +7,15 @@
 		
 		<?php echo GO::t('contactformText','defaultsite'); ?>
 		
-		<?php echo $form->hiddenField($addressbook,'name',array('value'=>'Persoon, Test (test)')); ?>
+		<?php 
+		
+		$addressbook = GO_Addressbook_Model_Addressbook::model()->findSingle();
+		
+		//$addressbook = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name','Example');
+		
+		echo $form->hiddenField($addressbook,'id',array('value'=>$addressbook->id)); 
+		
+		?>
 		
 		<h3><?php echo GO::t('contactDetails','defaultsite'); ?></h3>
 		<table class="table-registration-contact">
@@ -93,14 +101,14 @@
 					<td><?php //echo $form->label($company, 'postAddressIsEqual'); ?></td>
 					<td><?php //echo $form->checkBox($company, 'postAddressIsEqual'); ?></td>
 			</tr>-->
-				<tr>
+<!--				<tr>
 					<td><label for="Newsletter_1">Newsletter 1</label></td>
 					<td><input type="checkbox" name="Addresslist[Test Adreslijst]" value="checked" /></td>
 				</tr>
 				<tr>
 					<td><label for="Newsletter_2">Newsletter 2</label></td>
 					<td><input type="checkbox" name="Addresslist[Test adreslijst 2]" value="checked" /></td>
-				</tr>
+				</tr>-->
 		</table>
 
 		
