@@ -8,80 +8,80 @@
 								
 								<?php 								
 								
-									GO_Base_Html_Form::renderBegin('webshop/cart/checkout','confirm',true); 
+									\GO\Base\Html\Form::renderBegin('webshop/cart/checkout','confirm',true); 
 									
-									GO_Base_Html_Hidden::render(array(
+									\GO\Base\Html\Hidden::render(array(
 										"name" => "reference",
 										"value" => $_REQUEST['reference']
 									));
 
-									GO_Base_Html_Input::render(array(
+									\GO\Base\Html\Input::render(array(
 										"required" => true,
 										"label" => "Name",
 										"name" => "name",
 										"value" => $this->customer->name
 									));
 
-									GO_Base_Html_Input::render(array(
+									\GO\Base\Html\Input::render(array(
 											"required" => true,
 											"label" => "Email",
 											"name" => "email",
 											"value" => $this->customer->email
 										));
 
-									GO_Base_Html_Input::render(array(
+									\GO\Base\Html\Input::render(array(
 										"required" => true,
 										"label" => "Address",
 										"name" => "address",
 										"value" => $this->customer->address
 									));
 
-									GO_Base_Html_Input::render(array(
+									\GO\Base\Html\Input::render(array(
 										"required" => true,
 										"label" => "Number of house",
 										"name" => "address_no",
 										"value" => $this->customer->address_no
 									));
 
-									GO_Base_Html_Input::render(array(
+									\GO\Base\Html\Input::render(array(
 										"required" => true,
 										"label" => "ZIP/Postal code",
 										"name" => "zip",
 										"value" => $this->customer->zip
 									));
 
-									GO_Base_Html_Input::render(array(
+									\GO\Base\Html\Input::render(array(
 										"required" => true,
 										"label" => "City",
 										"name" => "city",
 										"value" => $this->customer->city
 									));
 
-									GO_Base_Html_Input::render(array(
+									\GO\Base\Html\Input::render(array(
 										"required" => false,
 										"label" => "State/Province",
 										"name" => "state",
 										"value" => $this->customer->state
 									));
 
-									GO_Base_Html_Select::render(array(
+									\GO\Base\Html\Select::render(array(
 										"required" => true,
 										'label' => 'Country',
 										'value' => $this->customer->country,
 										'name' => "country",
-										'options' => GO::language()->getCountries()
+										'options' => \GO::language()->getCountries()
 									));
 								?>
 								<p>Only enter the following field if you don't live in the Netherlands and you have a valid European Union VAT number.</p>
 								<?php								
-									GO_Base_Html_Input::render(array(
+									\GO\Base\Html\Input::render(array(
 										"required" => false,
 										"label" => "EU VAT No.:",
 										"name" => "vat_no",
 										"value" => $this->customer->vat_no
 									));
 									
-									GO_Base_Html_Select::render(array(
+									\GO\Base\Html\Select::render(array(
 										"required" => true,
 										'label' => 'Payment period',
 										'value' => "Year",
@@ -93,7 +93,7 @@
 										)
 									));
 									
-									GO_Base_Html_Select::render(array(
+									\GO\Base\Html\Select::render(array(
 										"required" => true,
 										'label' => 'Number of users (exluding the admin user)',
 										'value' => "1",
@@ -123,28 +123,28 @@
 									?>
 									<p>512MB per user for a mailbox is included. You'll need some additional space to store files in Group-Office. Diskspace costs € 2,- per GB per month.</p>
 								<?php								
-									GO_Base_Html_Input::render(array(
+									\GO\Base\Html\Input::render(array(
 										"required" => true,
 										"label" => "Amount of diskspace (GB)",
 										"name" => "diskspace",
 										"value" => '1'
 									));
 	
-									GO_Base_Html_Submit::render(array(
+									\GO\Base\Html\Submit::render(array(
 										"label" => "",
 										"name" => "submitorderfromtrial",
 										"value" => 'Confirm',
 										"renderContainer" => false
 									));
 									
-									GO_Base_Html_Reset::render(array(
+									\GO\Base\Html\Reset::render(array(
 										"label" => "",
 										"name" => "reset",
 										"value" => 'Cancel',
 										"renderContainer" => false
 									));
 									
-									GO_Base_Html_Form::renderEnd();
+									\GO\Base\Html\Form::renderEnd();
 									
 								?>
 							</div>

@@ -1,33 +1,37 @@
 <?php
 
-class GO_Imapauth_ImapauthModule extends GO_Base_Module {
+
+namespace GO\Imapauth;
+
+
+class ImapauthModule extends \GO\Base\Module {
 
 	public static function initListeners() {
-		//GO::session()->addListener('beforelogin', 'GO_Imapauth_ImapauthModule', 'beforeLogin');
+		//\GO::session()->addListener('beforelogin', '\GO\Imapauth\ImapauthModule', 'beforeLogin');
 
-		$controller = new GO_Core_Controller_Auth();
-		$controller->addListener('beforelogin', 'GO_Imapauth_ImapauthModule', 'beforeLogin');
+		$controller = new \GO\Core\Controller\Auth();
+		$controller->addListener('beforelogin', '\GO\Imapauth\ImapauthModule', 'beforeLogin');
 	}
 
 //	public static function beforeControllerLogin($params, &$response) {
 //		if (!isset($params['first_name'])) {
 //			try {
-//				$imap = new GO_Base_Mail_Imap();
+//				$imap = new \GO\Base\Mail\Imap();
 //				$imap->connect(
 //								$config['host'], $config['port'], $mail_username, $password, $config['ssl']);
 //
-//				GO::debug('IMAPAUTH: IMAP login succesful');
+//				\GO::debug('IMAPAUTH: IMAP login succesful');
 //				$imap->disconnect();
 //
-//				$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $go_username);
+//				$user = \GO\Base\Model\User::model()->findSingleByAttribute('username', $go_username);
 //				if (!$user) {
 //					$response['needCompleteProfile'] = true;
 //				}
 //			} catch (Exception $e) {
-//				GO::debug('IMAPAUTH: Authentication to IMAP server failed with Exception: ' . $e->getMessage() . ' IMAP error:' . $imap->last_error());
+//				\GO::debug('IMAPAUTH: Authentication to IMAP server failed with Exception: ' . $e->getMessage() . ' IMAP error:' . $imap->last_error());
 //				$imap->clear_errors();
 //
-//				GO::session()->logout(); //for clearing remembered password cookies
+//				\GO::session()->logout(); //for clearing remembered password cookies
 //
 //				return false;
 //			}
@@ -37,14 +41,14 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 	
 	public static function beforeLogin($params, &$response) {
 
-		$oldIgnoreAcl = GO::setIgnoreAclPermissions(true);
+		$oldIgnoreAcl = \GO::setIgnoreAclPermissions(true);
 
-		$ia = new GO_Imapauth_Authenticator();
+		$ia = new Authenticator();
 
 		if ($ia->setCredentials($params['username'], $params['password'])) {
 			if ($ia->imapAuthenticate()) {
 				if (!$ia->user) {
-					GO::debug("IMAPAUTH: Group-Office user doesn't exist.");
+					\GO::debug("IMAPAUTH: Group-Office user doesn't exist.");
 					if (!isset($params['first_name'])) {
 						$response['needCompleteProfile'] = true;
 						$response['success'] = false;
@@ -53,7 +57,7 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 						return false;
 					} else {
 						//user doesn't exist. create it now
-						$user = new GO_Base_Model_User();
+						$user = new \GO\Base\Model\User();
 						$user->email = $ia->email;
 						$user->username = $ia->goUsername;
 						$user->password = $ia->imapPassword;
@@ -76,7 +80,7 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 							//todo testen of deze regel nodig is om e-mail account aan te maken voor nieuwe gebruiker
 							$ia->createEmailAccount($user, $ia->config, $ia->imapUsername, $ia->imapPassword);
 						} catch (Exception $e) {
-							GO::debug('IMAPAUTH: Failed creating user ' .
+							\GO::debug('IMAPAUTH: Failed creating user ' .
 											$ia->goUsername . ' and e-mail ' . $ia->email .
 											'Exception: ' .
 											$e->getMessage(), E_USER_WARNING);
@@ -89,6 +93,6 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 			}
 		}
 
-		GO::setIgnoreAclPermissions($oldIgnoreAcl);
+		\GO::setIgnoreAclPermissions($oldIgnoreAcl);
 	}
 }

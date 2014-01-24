@@ -10,7 +10,7 @@
  */
 
 //make sure temp dir exists
-$cacheFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir);
+$cacheFolder = new \GO\Base\Fs\Folder(\GO::config()->tmpdir);
 $cacheFolder->create();
 
 /**
@@ -21,7 +21,11 @@ $cacheFolder->create();
  * @author Merijn Schering <mschering@intermesh.nl>
  * @copyright Copyright Intermesh BV.
  */
-class GO_Base_Mail_Message extends Swift_Message{
+
+namespace GO\Base\Mail;
+
+
+class Message extends Swift_Message{
 	
 	private $_loadedBody;
 	
@@ -30,8 +34,8 @@ class GO_Base_Mail_Message extends Swift_Message{
 		
 		$headers = $this->getHeaders();
 
-		$headers->addTextHeader("X-Mailer", GO::config()->product_name);
-		$headers->addTextHeader("X-MimeOLE", "Produced by ".GO::config()->product_name);
+		$headers->addTextHeader("X-Mailer", \GO::config()->product_name);
+		$headers->addTextHeader("X-MimeOLE", "Produced by ".\GO::config()->product_name);
 		$remoteAddr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'cli';
 		$headers->addTextHeader("X-Remote-Addr", "[".$remoteAddr."]");
 	}
@@ -42,7 +46,7 @@ class GO_Base_Mail_Message extends Swift_Message{
    * @param string $body
    * @param string $contentType
    * @param string $charset
-   * @return GO_Base_Mail_Message
+   * @return Message
    */
   public static function newInstance($subject = null, $body = null,
     $contentType = null, $charset = null)
@@ -58,7 +62,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 	 */
 	public function loadMimeMessage($mimeData, $replaceCallback=false, $replaceCallbackArgs=array()){
 		
-		$decoder = new GO_Base_Mail_MimeDecode($mimeData);
+		$decoder = new MimeDecode($mimeData);
 		$structure = $decoder->decode(array(
 				'include_bodies'=>true,
 				'decode_headers'=>true,
@@ -86,24 +90,24 @@ class GO_Base_Mail_Message extends Swift_Message{
 		$cc = str_replace('mailto:','', $cc);
 		$bcc = str_replace('mailto:','', $bcc);
 	
-		$toList = new GO_Base_Mail_EmailRecipients($to);
+		$toList = new EmailRecipients($to);
 		$to =$toList->getAddresses();
 		foreach($to as $email=>$personal)
 			$this->addTo($email, $personal);
 		
-		$ccList = new GO_Base_Mail_EmailRecipients($cc);
+		$ccList = new EmailRecipients($cc);
 		$cc =$ccList->getAddresses();
 		foreach($cc as $email=>$personal)
 			$this->addCc($email, $personal);
 		
-		$bccList = new GO_Base_Mail_EmailRecipients($bcc);
+		$bccList = new EmailRecipients($bcc);
 		$bcc =$bccList->getAddresses();
 		foreach($bcc as $email=>$personal)
 			$this->addBcc($email, $personal);
 
 		if(isset($structure->headers['from'])){
 			
-			$fromList = new GO_Base_Mail_EmailRecipients(str_replace('mailto:','',$structure->headers['from']));
+			$fromList = new EmailRecipients(str_replace('mailto:','',$structure->headers['from']));
 			$from =$fromList->getAddress();
 		
 			if($from)
@@ -141,7 +145,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 	 * Set the HTML body and automatically create an alternate text body
 	 * 
 	 * @param String $htmlBody 
-	 * @return GO_Base_Mail_Message
+	 * @return Message
 	 */
 	public function setHtmlAlternateBody($htmlBody){
 	
@@ -149,7 +153,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 		$this->setBody($htmlBody, 'text/html','UTF-8');
 			
 		//add text version of the HTML body
-		$htmlToText = new GO_Base_Util_Html2Text($htmlBody);
+		$htmlToText = new \GO\Base\Util\Html2Text($htmlBody);
 		$this->addPart($htmlToText->get_text(), 'text/plain','UTF-8');
 		
 		return $this;
@@ -185,7 +189,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 		}
 
 		if($charset!='UTF-8'){
-			$part->body = GO_Base_Util_String::to_utf8($part->body, $charset);
+			$part->body = \GO\Base\Util\String::to_utf8($part->body, $charset);
 			
 			$part->body = str_ireplace($charset, 'UTF-8', $part->body);
 			
@@ -229,7 +233,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 				{
 					//attachment
 
-					$dir=GO::config()->tmpdir.'attachments/';
+					$dir=\GO::config()->tmpdir.'attachments/';
 
 					if(!is_dir($dir))
 						mkdir($dir, 0755, true);
@@ -323,7 +327,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 	 * @return type 
 	 */
 	private function _fixRelativeUrls($body){		
-		return str_replace('href="?r=','href="'.GO::config()->full_url, $body);
+		return str_replace('href="?r=','href="'.\GO::config()->full_url, $body);
 	}
 	
 	private function _embedPastedImages($body){
@@ -333,7 +337,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 		foreach($allMatches as $matches){
 			if($matches[2]=='base64'){
 				$extension = $matches[1];
-				$tmpFile = GO_Base_Fs_File::tempFile('', $extension);
+				$tmpFile = \GO\Base\Fs\File::tempFile('', $extension);
 				$tmpFile->putContents(base64_decode($matches[3]));
 
 				$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
@@ -374,23 +378,23 @@ class GO_Base_Mail_Message extends Swift_Message{
 			$this->setSubject($params['subject']);		
 		
 		if(!empty($params['to'])){		
-			$to = new GO_Base_Mail_EmailRecipients($params['to']);
+			$to = new EmailRecipients($params['to']);
 			foreach($to->getAddresses() as $email=>$personal)
 				$this->addTo($email,$personal);
 		}
 		if(!empty($params['cc'])){		
-			$cc = new GO_Base_Mail_EmailRecipients($params['cc']);
+			$cc = new EmailRecipients($params['cc']);
 			foreach($cc->getAddresses() as $email=>$personal)
 				$this->addCc($email,$personal);
 		}
 		if(!empty($params['bcc'])){		
-			$bcc = new GO_Base_Mail_EmailRecipients($params['bcc']);
+			$bcc = new EmailRecipients($params['bcc']);
 			foreach($bcc->getAddresses() as $email=>$personal)
 				$this->addBcc($email,$personal);
 		}
 		
 		if(isset($params['alias_id'])){
-			$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);	
+			$alias = \GO\Email\Model\Alias::model()->findByPk($params['alias_id']);	
 			$this->setFrom($alias->email, $alias->name);
 			
 			if(!empty($params['notification']))
@@ -422,13 +426,13 @@ class GO_Base_Mail_Message extends Swift_Message{
 				 if(count($inlineAttachments)){
 					foreach ($inlineAttachments as $ia) {
 
-						//$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$ia['tmp_file']);
+						//$tmpFile = new \GO\Base\Fs\File(\GO::config()->tmpdir.$ia['tmp_file']);
 						if(empty($ia->tmp_file)){
 							throw new Exception("No temp file for inline attachment ".$ia->name);
 						}
 
-						$path = empty($ia->from_file_storage) ? GO::config()->tmpdir.$ia->tmp_file : GO::config()->file_storage_path.$ia->tmp_file;
-						$tmpFile = new GO_Base_Fs_File($path);
+						$path = empty($ia->from_file_storage) ? \GO::config()->tmpdir.$ia->tmp_file : \GO::config()->file_storage_path.$ia->tmp_file;
+						$tmpFile = new \GO\Base\Fs\File($path);
 
 						if ($tmpFile->exists()) {				
 							//Different browsers reformat URL's to absolute or relative. So a pattern match on the filename.
@@ -440,7 +444,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 								$contentId = $this->embed($img);
 
 								//$tmpFile->delete();								
-								$params['htmlbody'] = GO_Base_Util_String::replaceOnce($matches[1], $contentId, $params['htmlbody']);
+								$params['htmlbody'] = \GO\Base\Util\String::replaceOnce($matches[1], $contentId, $params['htmlbody']);
 							}else
 							{
 								//this may happen when an inline image was attached but deleted in the editor afterwards.
@@ -460,7 +464,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 <head>
 <style type="text/css">
 body,p,td,div,span{
-	'.GO::config()->html_editor_font.'
+	'.\GO::config()->html_editor_font.'
 };
 body p{
 	margin:0px;
@@ -480,8 +484,8 @@ body p{
 		if (!empty($params['attachments'])) {
 			$attachments = json_decode($params['attachments']);
 			foreach ($attachments as $att) {
-				$path = empty($att->from_file_storage) ? GO::config()->tmpdir.$att->tmp_file : GO::config()->file_storage_path.$att->tmp_file;
-				$tmpFile = new GO_Base_Fs_File($path);
+				$path = empty($att->from_file_storage) ? \GO::config()->tmpdir.$att->tmp_file : \GO::config()->file_storage_path.$att->tmp_file;
+				$tmpFile = new \GO\Base\Fs\File($path);
 				if ($tmpFile->exists()) {
 					$file = Swift_Attachment::fromPath($tmpFile->path());
 					$file->setContentType($tmpFile->mimeType());

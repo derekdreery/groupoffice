@@ -1,5 +1,9 @@
 <?php
-class GO_Customfields_Customfieldtype_Text extends GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
+
+namespace GO\Customfields\Customfieldtype;
+
+
+class Text extends AbstractCustomfieldtype{
 	
 	public function name(){
 		return 'Text';

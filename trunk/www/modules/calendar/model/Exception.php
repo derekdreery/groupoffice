@@ -8,26 +8,30 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: GO_Calendar_Model_Exception.php 7607 2011-09-16 11:24:50Z <<USERNAME>> $
+ * @version $Id: Exception.php 7607 2011-09-16 11:24:50Z <<USERNAME>> $
  * @copyright Copyright Intermesh
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
 
 /**
- * The GO_Calendar_Model_Exception model
+ * The Exception model
  * 
  * @property int $id
  * @property int $event_id
  * @property int $time The time of the day of the exception. Use getStartTime() for the acurate time.
  * @property int $exception_event_id
  */
-class GO_Calendar_Model_Exception extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Calendar\Model;
+
+
+class Exception extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Calendar_Model_Exception
+	 * @return Exception
 	 */
 	public static function model($className = __CLASS__) {
 		return parent::model($className);
@@ -59,8 +63,8 @@ class GO_Calendar_Model_Exception extends GO_Base_Db_ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'event' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Event', 'field' => 'exception_event_id'),
-				'mainevent' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Event', 'field' => 'event_id')
+				'event' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Event', 'field' => 'exception_event_id'),
+				'mainevent' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Event', 'field' => 'event_id')
 		);
 	}
 
@@ -81,7 +85,7 @@ class GO_Calendar_Model_Exception extends GO_Base_Db_ActiveRecord {
 	 * @return int 
 	 */
 	public function getStartTime(){
-		return GO_Base_Util_Date::clear_time($this->time, date('H',$this->mainevent->start_time), date('i',$this->mainevent->start_time));
+		return \GO\Base\Util\Date::clear_time($this->time, date('H',$this->mainevent->start_time), date('i',$this->mainevent->start_time));
 	}
 
 }

@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-$product_name = class_exists('GO') ? GO::config()->product_name : 'Group-Office';
+$product_name = class_exists('GO') ? \GO::config()->product_name : 'Group-Office';
 
 /**
 * Format a size to a human readable format.
@@ -207,8 +207,8 @@ function test_system(){
 	$test['name']='libwbxml';
 	if(class_exists('GO'))
 	{
-		$wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : GO::config()->cmd_wbxml2xml;
-		$xml2wbxml = whereis('xml2wbxml') ? whereis('xml2wbxml') : GO::config()->cmd_xml2wbxml;
+		$wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : \GO::config()->cmd_wbxml2xml;
+		$xml2wbxml = whereis('xml2wbxml') ? whereis('xml2wbxml') : \GO::config()->cmd_xml2wbxml;
 	}else
 	{
 		$wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : '/usr/bin/wbxml2xml';
@@ -234,7 +234,7 @@ function test_system(){
 	$test['name']='TAR Compression';
 	if(class_exists('GO'))
 	{
-		$tar = whereis('tar') ? whereis('tar') : GO::config()->cmd_tar;
+		$tar = whereis('tar') ? whereis('tar') : \GO::config()->cmd_tar;
 	}else
 	{
 		$tar = whereis('tar') ? whereis('tar') : '/bin/tar';
@@ -248,7 +248,7 @@ function test_system(){
 	$test['name']='ZIP Compression';
 	if(class_exists('GO'))
 	{
-		$zip = whereis('zip') ? whereis('zip') : GO::config()->cmd_zip;
+		$zip = whereis('zip') ? whereis('zip') : \GO::config()->cmd_zip;
 	}else
 	{
 		$zip = whereis('zip') ? whereis('zip') : '/usr/bin/zip';
@@ -261,7 +261,7 @@ function test_system(){
 	$test['name']='TNEF';
 	if(class_exists('GO'))
 	{
-		$tnef = whereis('tnef') ? whereis('tnef') : GO::config()->cmd_tnef;
+		$tnef = whereis('tnef') ? whereis('tnef') : \GO::config()->cmd_tnef;
 	}else
 	{
 		$tnef = whereis('tnef') ? whereis('tnef') : '/usr/bin/tnef';
@@ -281,7 +281,7 @@ function test_system(){
 	if(is_dir('../modules/professional') && class_exists('GO'))
 	{
 		$test['name']='Professional license';
-		$check_url = GO::config()->full_url.'modules/professional/checklicense.php';
+		$check_url = \GO::config()->full_url.'modules/professional/checklicense.php';
 		$content = @file_get_contents($check_url);
 		if(empty($content)){
 			$test['feedback']='Warning: Could not determine if your license file works properly. Probably becuase URL file-access is disabled in your server configuration. This is not really a problem but you should check it manually now. <a target="_blank" href="'.$check_url.'">Click here to check it</a>. The output from the server was: '.$content;
@@ -320,10 +320,10 @@ function test_system(){
 
 	$tests[]=$test;	
 	
-	if(class_exists("GO") && !empty(GO::config()->title))
+	if(class_exists("GO") && !empty(\GO::config()->title))
 	{		
 		$test['name']='Protected files path';
-		$test['pass']=is_writable(GO::config()->file_storage_path);
+		$test['pass']=is_writable(\GO::config()->file_storage_path);
 		$test['feedback']='Fatal error: the file_storage_path setting in config.php is not writable. You must correct this or '.$product_name.' will not run.';
 		$test['fatal']=false;
 		$tests[]=$test;

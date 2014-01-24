@@ -21,7 +21,11 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base.util 
  */
-class GO_Base_Util_Common {
+
+namespace GO\Base\Util;
+
+
+class Common {
 	/**
 	 * Check if this is a windows server
 	 * 
@@ -73,7 +77,7 @@ class GO_Base_Util_Common {
 	 * @return String 
 	 */
 	public static function formatAddress($isoCountry, $address, $address_no,$zip,$city, $state) {
-		require(GO::config()->root_path . 'language/addressformats.php');
+		require(\GO::config()->root_path . 'language/addressformats.php');
 		$format = isset($af[$isoCountry]) ? $af[$isoCountry] : $af['default'];
 
 		$format= str_replace('{address}', $address, $format);
@@ -81,7 +85,7 @@ class GO_Base_Util_Common {
 		$format= str_replace('{city}', $city, $format);
 		$format= str_replace('{zip}', $zip, $format);
 		$format= str_replace('{state}', $state, $format);
-		$format= str_replace('{country}', GO::t($isoCountry,'base','countries'), $format);
+		$format= str_replace('{country}', \GO::t($isoCountry,'base','countries'), $format);
 
 		return preg_replace("/(\r\n)+|(\n|\r)+/", "\n", $format);
 	}

@@ -113,14 +113,14 @@ ICS;
 
         }
 
-        $tz = new DateTimeZone('Europe/Brussels');
+        $tz = new \DateTimeZone('Europe/Brussels');
 
         $this->assertEquals(array(
-            new DateTime('2013-07-15 09:00:00', $tz),
-            new DateTime('2013-07-16 07:00:00', $tz),
-            new DateTime('2013-07-17 07:00:00', $tz),
-            new DateTime('2013-07-18 09:00:00', $tz),
-            new DateTime('2013-07-19 07:00:00', $tz),
+            new \DateTime('2013-07-15 09:00:00', $tz),
+            new \DateTime('2013-07-16 07:00:00', $tz),
+            new \DateTime('2013-07-17 07:00:00', $tz),
+            new \DateTime('2013-07-18 09:00:00', $tz),
+            new \DateTime('2013-07-19 07:00:00', $tz),
         ), $result);
 
     }

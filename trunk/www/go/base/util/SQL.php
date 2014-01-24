@@ -16,7 +16,11 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.util
  */
-class GO_Base_Util_SQL {
+
+namespace GO\Base\Util;
+
+
+class SQL {
 
 	/**
 	 * Get's all queries from an SQL dump file in an array
@@ -67,7 +71,7 @@ class GO_Base_Util_SQL {
 		$queries = self::getSqlQueries($file);
 		try{
 			foreach($queries as $query)
-				GO::getDbConnection ()->query($query);
+				\GO::getDbConnection ()->query($query);
 		}catch(Exception $e){
 			throw new Exception("Could not execute query: ".$query."\n\n".(string) $e);
 		}

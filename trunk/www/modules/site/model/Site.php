@@ -9,16 +9,16 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.Site
- * @version $Id: GO_Site_Model_Site.php 7607 2013-03-27 15:35:31Z wsmits $
+ * @version $Id: Site.php 7607 2013-03-27 15:35:31Z wsmits $
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  */
 
 /**
- * The GO_Site_Model_Site model
+ * The Site model
  *
  * @package GO.modules.Site
- * @version $Id: GO_Site_Model_Site.php 7607 2013-03-27 15:35:31Z wsmits $
+ * @version $Id: Site.php 7607 2013-03-27 15:35:31Z wsmits $
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  *
@@ -37,11 +37,15 @@
  * @property string $language
  * @property type $files_folder_id
  */
-class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Site\Model;
+
+
+class Site extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 *
-	 * @var GO_Site_Components_Config 
+	 * @var \GO\Site\Components\Config 
 	 */
 	private $_config;
 
@@ -61,8 +65,8 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	
 	private function _loadFields(){
 		//load cf
-		if(!isset(self::$fields) && GO::modules()->isInstalled('customfields')){
-			$fields = GO_Customfields_Model_Field::model()->findByModel('GO_Site_Model_Site', false);
+		if(!isset(self::$fields) && \GO::modules()->isInstalled('customfields')){
+			$fields = \GO\Customfields\Model\Field::model()->findByModel('\GO\Site\Model\Site', false);
 
 			foreach($fields as $field){
 				self::$fields[$field->name]= $field;
@@ -93,7 +97,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	 * Attach the customfield model to this model.
 	 */
 	public function customfieldsModel() {
-		return 'GO_Site_Customfields_Model_Site';
+		return '\GO\Site\Customfields\Model\Site';
 	}
 	
 	/**
@@ -122,8 +126,8 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-			'content' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'site_id', 'findParams'=>  GO_Base_Db_FindParams::newInstance()->select('*')->order('sort_order'),  'delete' => true),
-			'contentNodes' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'site_id', 'findParams'=> GO_Base_Db_FindParams::newInstance()->select('*')->order('sort_order')->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('parent_id', null)),  'delete' => true)
+			'content' => array('type' => self::HAS_MANY, 'model' => '\GO\Site\Model\Content', 'field' => 'site_id', 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->select('*')->order('sort_order'),  'delete' => true),
+			'contentNodes' => array('type' => self::HAS_MANY, 'model' => '\GO\Site\Model\Content', 'field' => 'site_id', 'findParams'=> \GO\Base\Db\FindParams::newInstance()->select('*')->order('sort_order')->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('parent_id', null)),  'delete' => true)
 		);
 	}
 
@@ -131,11 +135,11 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 //	 * Get the path to the site's file storage. It is web accessible through an 
 //	 * alias /public. This folder contains template files and component assets.
 //	 * 
-//	 * @return GO_Base_Fs_Folder
+//	 * @return \GO\Base\Fs\Folder
 //	 */
 //	public function getFileStorageFolder(){
 //		
-//		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'site/'.$this->id.'/');
+//		$folder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'site/'.$this->id.'/');
 //		$folder->create();
 //		
 //		return $folder;
@@ -144,12 +148,12 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Get the config parameters of the site.
 	 * 
-	 * @return GO_Site_Components_Config
+	 * @return \GO\Site\Components\Config
 	 */
 	public function getConfig(){
 		if(!isset($this->_config))
 		{
-			$this->_config = new GO_Site_Components_Config($this);
+			$this->_config = new \GO\Site\Components\Config($this);
 		}
 		
 		return $this->_config;
@@ -158,12 +162,12 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Return the module that handles the view of the site.
 	 * 
-	 * @return GO_Base_Model_Module
+	 * @return \GO\Base\Model\Module
 	 * @throws Exception
 	 */
 	public function getSiteModule(){
 		
-		$module = GO::modules()->isInstalled($this->module);		
+		$module = \GO::modules()->isInstalled($this->module);		
 		
 		if(!$module)
 			throw new Exception("Module ".$this->module." not found!");
@@ -174,7 +178,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	public static function getTreeNodes(){
 		
 		$tree = array();
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->ignoreAcl();
 		
 		$sites = self::model()->find($findParams);
@@ -186,7 +190,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 				'id' => 'site_' . $site->id,
 				'cls' => 'site-node-site',
 				'site_id'=>$site->id, 
-				'iconCls' => 'go-model-icon-GO_Site_Model_Site', 
+				'iconCls' => 'go-model-icon-Site', 
 				'text' => $site->name, 
 				'expanded' => true,
 				'children' => array(
@@ -197,7 +201,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 							'cls' => 'site-readonly',
 							'site_id'=>$site->id, 
 							'iconCls' => 'go-icon-layout', 
-							'text' => GO::t('content','site'),
+							'text' => \GO::t('content','site'),
 							'expanded' => self::isExpandedNode('site_' . $site->id),
 							'children' => $site->loadContentNodes()
 						),
@@ -207,10 +211,10 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 							'draggable' => false,
 							'cls' => 'site-readonly',
 							'site_id'=>$site->id, 
-							'iconCls' => 'go-model-icon-GO_Site_Model_Menuroot', 
-							'text' => GO::t('menus','site'),
+							'iconCls' => 'go-model-icon-Menuroot', 
+							'text' => \GO::t('menus','site'),
 							'expanded' => self::isExpandedNode('site_' . $site->id),
-							'children' => GO_Site_Model_Menu::getTreeMenuNodes($site)
+							'children' => Menu::getTreeMenuNodes($site)
 					)
 				)
 			);
@@ -235,7 +239,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 					'site_id'=>$this->id,
 					'content_id'=>$content->id,
 					'slug'=>$content->slug,
-					'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
+					'iconCls' => 'go-model-icon-Content', 
 					//'expanded' => !$hasChildren,
 					'expanded' => !$hasChildren || self::isExpandedNode($this->id.'_content_'.$content->id),
 					'hasChildren' => $hasChildren,
@@ -288,7 +292,7 @@ ServerName www.giralisgroep.nl
 	}
 
 	public static function isExpandedNode($nodeId) {
-		$state = GO::config()->get_setting("site_tree_state", GO::user()->id);
+		$state = \GO::config()->get_setting("site_tree_state", \GO::user()->id);
 
 		if (empty($state)) {
 			$decoded = base64_decode($nodeId);
@@ -314,7 +318,7 @@ ServerName www.giralisgroep.nl
 	}
 	
 	public function getPublicPath(){
-		return GO::config()->file_storage_path.'public/site/'.$this->id.'/';
+		return \GO::config()->file_storage_path.'public/site/'.$this->id.'/';
 	}
 
 }

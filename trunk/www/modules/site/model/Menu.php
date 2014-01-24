@@ -14,7 +14,7 @@
  */
  
 /**
- * The GO_Site_Model_Menu model
+ * The Menu model
  *
  * @package GO.modules.Site
  * @version $Id$
@@ -27,7 +27,11 @@
  * @property String $menu_slug The slug of the menu item
  */
 
-class GO_Site_Model_Menu extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Site\Model;
+
+
+class Menu extends \GO\Base\Db\ActiveRecord{
 	
 	/**
 	 * Returns the table name
@@ -45,21 +49,21 @@ class GO_Site_Model_Menu extends GO_Base_Db_ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Site", 'field'=>'site_id'),
-			'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_MenuItem', 'field' => 'menu_id', 'delete' => false, 'findParams' =>GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('parent_id', null))->select('*')->order(array('sort_order')))
+			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Site\Model\Site", 'field'=>'site_id'),
+			'children' => array('type' => self::HAS_MANY, 'model' => '\GO\Site\Model\MenuItem', 'field' => 'menu_id', 'delete' => false, 'findParams' =>\GO\Base\Db\FindParams::newInstance()->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('parent_id', null))->select('*')->order(array('sort_order')))
 		 );
 	 }
 	 
 	 /**
 	  * Get the root menu tree nodes
 	  * 
-	  * @param GO_Site_Model_Site $site
+	  * @param Site $site
 	  * @return array
 	  */
-	 public static function getTreeMenuNodes(GO_Site_Model_Site $site){
+	 public static function getTreeMenuNodes(Site $site){
 			 
 		 $tree = array();
-		 $menus = GO_Site_Model_Menu::model()->findByAttribute('site_id',$site->id,  GO_Base_Db_FindParams::newInstance());
+		 $menus = Menu::model()->findByAttribute('site_id',$site->id,  \GO\Base\Db\FindParams::newInstance());
 		 
 		 foreach($menus as $menu){
 
@@ -70,10 +74,10 @@ class GO_Site_Model_Menu extends GO_Base_Db_ActiveRecord{
 				'menu_id' => $menu->id,
 				'cls' => 'site-node-menu',
 				'site_id'=>$menu->site->id, 
-				'iconCls' => 'go-model-icon-GO_Site_Model_Menu',
+				'iconCls' => 'go-model-icon-Menu',
 				'text' => $menu->label,
 				'hasChildren' => $hasChildren,
-				'expanded' => !$hasChildren || GO_Site_Model_Site::isExpandedNode($menu->site_id.'_menu_'.$menu->id),	 
+				'expanded' => !$hasChildren || Site::isExpandedNode($menu->site_id.'_menu_'.$menu->id),	 
 				'children'=> $hasChildren ? $menu->getMenuChildrenTree():null,
 			 );
 			 $tree[] = $node;
@@ -103,10 +107,10 @@ class GO_Site_Model_Menu extends GO_Base_Db_ActiveRecord{
 				'menu_item_id'=>$child->id,
 				'cls' => 'site-node-menuitem',
 				'site_id'=>$this->site_id,
-				'iconCls' => 'go-model-icon-GO_Site_Model_Menuitem', 
+				'iconCls' => 'go-model-icon-Menuitem', 
 				'text' => $child->label,
 				'hasChildren' => $hasChildren,
-				'expanded' => !$hasChildren || GO_Site_Model_Site::isExpandedNode($this->site_id.'_menu_'.$child->id),	 
+				'expanded' => !$hasChildren || Site::isExpandedNode($this->site_id.'_menu_'.$child->id),	 
 				'children'=> $hasChildren ? null : $child->getChildrenTree(),
 			);
 			 
@@ -122,7 +126,7 @@ class GO_Site_Model_Menu extends GO_Base_Db_ActiveRecord{
 	  * @return boolean
 	  */
 	 public function hasChildren(){
-		 $child = $this->children(GO_Base_Db_FindParams::newInstance()->single());
+		 $child = $this->children(\GO\Base\Db\FindParams::newInstance()->single());
 		 return !empty($child); 
 	 }
 	 
@@ -131,16 +135,16 @@ class GO_Site_Model_Menu extends GO_Base_Db_ActiveRecord{
 		 $sort = 0;
 		 
 		 
-		 GO::debug(implode(',',$extractedParent));
-		 GO::debug(implode(',',$allowedTypes));
+		 \GO::debug(implode(',',$extractedParent));
+		 \GO::debug(implode(',',$allowedTypes));
 		 
 		 foreach($sortOrder as $sortItem){
-			 GO::debug($sortItem);
-			 $extrChild = GO_Site_SiteModule::extractTreeNode($sortItem);
+			 \GO::debug($sortItem);
+			 $extrChild = \GO\Site\SiteModule::extractTreeNode($sortItem);
 			 
 			 if(in_array($extrChild['type'],$allowedTypes)){
 				 
-				 $modelName = GO_Site_SiteModule::getModelNameFromTreeNodeType($extrChild['type']);
+				 $modelName = \GO\Site\SiteModule::getModelNameFromTreeNodeType($extrChild['type']);
 				 
 				 $model = $modelName::model()->findByPk($extrChild['modelId']);
 				 $model->parent_id = NULL;

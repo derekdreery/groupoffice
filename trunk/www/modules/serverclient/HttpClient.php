@@ -1,24 +1,28 @@
 <?php
-class GO_Serverclient_HttpClient extends GO_Base_Util_HttpClient{
+
+namespace GO\Serverclient;
+
+
+class HttpClient extends \GO\Base\Util\HttpClient{
 	
 //	public function postfixLogin(){		
-//		return $this->groupofficeLogin(GO::config()->serverclient_server_url, GO::config()->serverclient_username, GO::config()->serverclient_password);		
+//		return $this->groupofficeLogin(\GO::config()->serverclient_server_url, \GO::config()->serverclient_username, \GO::config()->serverclient_password);		
 //	}
 	
 	public function request($url, $params = array()) {
 		
 		
-		if(empty(GO::config()->serverclient_server_url)){
-			GO::config()->serverclient_server_url=GO::config()->full_url;
+		if(empty(\GO::config()->serverclient_server_url)){
+			\GO::config()->serverclient_server_url=\GO::config()->full_url;
 		}
 		
-		$url = GO::config()->serverclient_server_url.'?r='.$url;
+		$url = \GO::config()->serverclient_server_url.'?r='.$url;
 		
-		if(empty(GO::config()->serverclient_token)){
+		if(empty(\GO::config()->serverclient_token)){
 			throw new Exception("Could not connect to mailserver. Please set a strong password in /etc/groupoffice/globalconfig.inc.php.\n\nPlease remove serverclient_username and serverclient_password.\n\nPlease add:\n\n \$config['postfixadmin_token']='strongpassword';");
 		}
 		
-		$params['postfixadmin_token']=GO::config()->serverclient_token;
+		$params['postfixadmin_token']=\GO::config()->serverclient_token;
 	
 		
 		return parent::request($url, $params);
@@ -27,7 +31,7 @@ class GO_Serverclient_HttpClient extends GO_Base_Util_HttpClient{
 //	public function postfixRequest($params){
 //		$this->postfixLogin();		
 //		
-//		$url = GO::config()->serverclient_server_url.'modules/postfixadmin/json.php';
+//		$url = \GO::config()->serverclient_server_url.'modules/postfixadmin/json.php';
 //		
 //		return $this->request($url, $params);
 //	}	

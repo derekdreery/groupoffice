@@ -1,5 +1,5 @@
 <?php
-$cron = new GO_Base_Cron_CronJob();
+$cron = new \GO\Base\Cron\CronJob();
 		
 $cron->name = 'Calculate disk usage';
 $cron->active = true;
@@ -9,6 +9,6 @@ $cron->hours = '0';
 $cron->monthdays = '*';
 $cron->months = '*';
 $cron->weekdays = '*';
-$cron->job = 'GO_Base_Cron_CalculateDiskUsage';		
+$cron->job = '\GO\Base\Cron\CalculateDiskUsage';		
 
 $cron->save();

@@ -1,6 +1,10 @@
 <?php
 
-class GO_Base_Html_Textarea extends GO_Base_Html_Input {
+
+namespace GO\Base\Html;
+
+
+class Textarea extends Input {
 
 	public static function render($attributes,$echo=true) {
 		$i = new self($attributes);

@@ -18,7 +18,7 @@
  */
  
 /**
- * The GO_ServerManager_Model_Installation model
+ * The Installation model
  *
  * @property string name
  * @property string $title
@@ -30,13 +30,17 @@
  * @property int $ctime
  */
 
-class GO_ServerManager_Model_NewTrial extends GO_Base_Db_ActiveRecord {
+
+namespace GO\ServerManager\Model;
+
+
+class NewTrial extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_ServerManager_Model_NewTrial
+	 * @return NewTrial
 	 */
 	public static function model($className = __CLASS__) {
 		return parent::model($className);
@@ -72,32 +76,32 @@ class GO_ServerManager_Model_NewTrial extends GO_Base_Db_ActiveRecord {
 		
 		$attr = parent::defaultAttributes();
 		
-		$attr['title']=GO::config()->product_name;
+		$attr['title']=\GO::config()->product_name;
 		
 		return $attr;
 	}
 	
 	public function attributeLabels() {
 		return array_merge(parent::attributeLabels(), array(
-				'name'=>GO::t("domainName", "servermanager"),
-				'first_name'=>GO::t("strFirstName"),
-				'middle_name'=>GO::t("strMiddleName"),
-				'last_name'=>GO::t("strLastName"),
-				'email'=>GO::t("strEmail"),
+				'name'=>\GO::t("domainName", "servermanager"),
+				'first_name'=>\GO::t("strFirstName"),
+				'middle_name'=>\GO::t("strMiddleName"),
+				'last_name'=>\GO::t("strLastName"),
+				'email'=>\GO::t("strEmail"),
 		));
 	}
 	
 	protected function beforeSave() {
 		
-		$this->password = GO_Base_Util_String::randomPassword(6);
+		$this->password = \GO\Base\Util\String::randomPassword(6);
 		$this->key = md5($this->password.$this->name);
 		
 		return parent::beforeSave();
 	}
 	
 	public function validate() {
-		$installation = new GO_ServerManager_Model_Installation();
-		$installation->name = $this->name.'.'.GO::config()->servermanager_wildcard_domain;
+		$installation = new Installation();
+		$installation->name = $this->name.'.'.\GO::config()->servermanager_wildcard_domain;
 		
 		if(!$installation->validate()){
 			$this->setValidationError('name', implode("\n", $installation->getValidationErrors()));
@@ -109,15 +113,15 @@ class GO_ServerManager_Model_NewTrial extends GO_Base_Db_ActiveRecord {
 	public function sendMail($tplStr){
 	
 		
-		$protocol = empty(GO::config()->servermanager_ssl) ? 'http' : 'https';
-		$url = $protocol.'://'.$this->name.'.'.GO::config()->servermanager_wildcard_domain;
+		$protocol = empty(\GO::config()->servermanager_ssl) ? 'http' : 'https';
+		$url = $protocol.'://'.$this->name.'.'.\GO::config()->servermanager_wildcard_domain;
 
-		$link = GO::config()->full_url.'modules/site/index.php?r=servermanager/trial/create&security_token='.GO::session()->values['security_token'].'&key='.$this->key;
+		$link = \GO::config()->full_url.'modules/site/index.php?r=servermanager/trial/create&security_token='.\GO::session()->values['security_token'].'&key='.$this->key;
 		
-		$tplStr = str_replace('{product_name}', GO::config()->product_name, $tplStr);
+		$tplStr = str_replace('{product_name}', \GO::config()->product_name, $tplStr);
 		$tplStr = str_replace('{url}', $url, $tplStr);
 		$tplStr = str_replace('{name}', $this->first_name.' '.$this->last_name, $tplStr);
-//		$tplStr = str_replace('{link}',GO::url("servermanager/trial/create", array('key'=>$this->key), false, false), $tplStr);
+//		$tplStr = str_replace('{link}',\GO::url("servermanager/trial/create", array('key'=>$this->key), false, false), $tplStr);
 		$tplStr = str_replace('{link}',$link, $tplStr);
 		$tplStr = str_replace('{password}', $this->password, $tplStr);
 			
@@ -127,12 +131,12 @@ class GO_ServerManager_Model_NewTrial extends GO_Base_Db_ActiveRecord {
 		$body = trim(substr($tplStr, $pos));
 		
 					
-		$message = GO_Base_Mail_Message::newInstance($subject,$body)
-						->setFrom(GO::config()->webmaster_email, GO::config()->title)
+		$message = \GO\Base\Mail\Message::newInstance($subject,$body)
+						->setFrom(\GO::config()->webmaster_email, \GO::config()->title)
 						->addTo($this->email, $this->first_name.' '.$this->last_name)
-						->addBcc(GO::config()->webmaster_email);
+						->addBcc(\GO::config()->webmaster_email);
 		
-		return GO_Base_Mail_Mailer::newGoInstance()->send($message);
+		return \GO\Base\Mail\Mailer::newGoInstance()->send($message);
 	}
 
 

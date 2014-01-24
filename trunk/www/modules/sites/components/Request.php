@@ -17,7 +17,11 @@
  * @version $Id Request.php 2012-06-07 14:59:00 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Sites_Components_Request
+
+namespace GO\Sites\Components;
+
+
+class Request
 {
 
 	private $_requestUri;

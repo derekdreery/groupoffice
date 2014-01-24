@@ -15,15 +15,19 @@
  * (the latter is assumed to be user input $params['model_id']).
  */
 
-class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelectModelController {
+
+namespace GO\Core\Controller;
+
+
+class AclGroup extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model we are showing and adding to the other model.
 	 * 
-	 * eg. When selecting calendars for a user in the sync settings this is set to GO_Calendar_Model_Calendar
+	 * eg. When selecting calendars for a user in the sync settings this is set to \GO\Calendar\Model\Calendar
 	 */
 	public function modelName() {
-		return 'GO_Base_Model_Group';
+		return '\GO\Base\Model\Group';
 	}
 	
 	/**
@@ -31,7 +35,7 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return 'GO_Base_Model_AclUsersGroups';
+		return '\GO\Base\Model\AclUsersGroups';
 	}
 	
 	/**
@@ -50,7 +54,7 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 		return array($this->getRemoteKey()=>$params['model_id'], 'user_id'=>0);
 	}
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $cm) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $cm) {
 		$cm->formatColumn('manage_permission', 'isset($model->level) ? $model->level : ""');
 		return parent::formatColumns($cm);
 	}
@@ -63,8 +67,8 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 	 * @return $response for the client. 
 	 */
 	protected function actionSelectedStore($params) {
-		$currentPermissionLevel = GO_Base_Model_Acl::getUserPermissionLevel($params['model_id'],GO::user()->id);
-		$response['manage_permission'] = $params['currentUserHasManagePermission'] = GO_Base_Model_Acl::hasPermission($currentPermissionLevel,GO_Base_Model_Acl::MANAGE_PERMISSION);
+		$currentPermissionLevel = \GO\Base\Model\Acl::getUserPermissionLevel($params['model_id'],\GO::user()->id);
+		$response['manage_permission'] = $params['currentUserHasManagePermission'] = \GO\Base\Model\Acl::hasPermission($currentPermissionLevel,\GO\Base\Model\Acl::MANAGE_PERMISSION);
 		$response = array_merge($response,parent::actionSelectedStore($params));
 		return $response;
 	}
@@ -74,7 +78,7 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 		if (!empty($addKeys)) {
 			// Only admins may edit the set of linked groups.
 			if(!$params['currentUserHasManagePermission'])
-				throw new GO_Base_Exception_AccessDenied();
+				throw new \GO\Base\Exception\AccessDenied();
 		} else {
 			return false;
 		}
@@ -86,10 +90,10 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 		if (!empty($delKeys)) {
 			// Only admins may edit the set of linked groups.
 			if(!$params['currentUserHasManagePermission'])
-					throw new GO_Base_Exception_AccessDenied();
+					throw new \GO\Base\Exception\AccessDenied();
 			foreach ($delKeys as $delKey) {
-				if ($delKey==GO::config()->group_root) {
-					throw new Exception(GO::t('dontChangeAdminsPermissions'));
+				if ($delKey==\GO::config()->group_root) {
+					throw new Exception(\GO::t('dontChangeAdminsPermissions'));
 				}
 			}
 		} else {
@@ -99,8 +103,8 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 	}
 	
 	protected function beforeUpdateRecord($params, &$record, $model) {
-		if ($record['id']==GO::config()->group_root)
-			throw new GO_Base_Exception_AccessDenied();
+		if ($record['id']==\GO::config()->group_root)
+			throw new \GO\Base\Exception\AccessDenied();
 		return true;
 	}
 }

@@ -19,7 +19,11 @@
  * @since Group-Office 3.0
  */
 
-class GO_Base_Util_Date {
+
+namespace GO\Base\Util;
+
+
+class Date {
 
 
 	public static function roundQuarters($time) {
@@ -72,9 +76,9 @@ class GO_Base_Util_Date {
 			$startDate = date('d.m.Y', $time);
 			$endDate = date('d.m.Y', $time);
 
-			$region = $region ? $region : GO::config()->language;
+			$region = $region ? $region : \GO::config()->language;
 
-			$hstmt = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startDate, $endDate, $region);
+			$hstmt = \GO\Base\Model\Holiday::model()->getHolidaysInPeriod($startDate, $endDate, $region);
 			if ($hstmt && $hstmt->rowCount()) {
 				return true;
 			}
@@ -116,11 +120,11 @@ class GO_Base_Util_Date {
 
 	public static function format_long_date($time,$add_time=true,$full_day_names=false,$full_month_names=false){
 
-		$days = $full_day_names ? GO::t('full_days') : GO::t('short_days');
-		$months = $full_month_names ? GO::t('months') : GO::t('short_months');
+		$days = $full_day_names ? \GO::t('full_days') : \GO::t('short_days');
+		$months = $full_month_names ? \GO::t('months') : \GO::t('short_months');
 		$str  = $days[date('w', $time)].' '.date('d', $time).' '.$months[date('n', $time)].' ';
 		if ($add_time)
-			return $str.date('Y - '.GO::user()->time_format, $time);
+			return $str.date('Y - '.\GO::user()->time_format, $time);
 		else
 			return $str.date('Y', $time);
 	}
@@ -143,14 +147,14 @@ class GO_Base_Util_Date {
 		$date_string = trim($date_string);
 
 //		if(!isset($date_format)){
-//			$date_format=GO::user() ? GO::user()->completeDateFormat : GO::config()->default_date_format;
+//			$date_format=\GO::user() ? \GO::user()->completeDateFormat : \GO::config()->default_date_format;
 //		}
 //
 //		if(!isset($date_separator)){
-//			$date_separator=GO::user() ? GO::user()->date_separator : GO::config()->default_date_separator;
+//			$date_separator=\GO::user() ? \GO::user()->date_separator : \GO::config()->default_date_separator;
 //		}
 
-		if(GO::user() && GO::user()->date_format=='mdY')
+		if(\GO::user() && \GO::user()->date_format=='mdY')
 			$date_string = str_replace(array('-','.'),array('/','/'),$date_string);
 		else
 			$date_string = str_replace(array('/','.'),array('-','-'),$date_string);
@@ -171,9 +175,9 @@ class GO_Base_Util_Date {
 			return 0;
 		}
 
-		//$time = strtotime(GO_Base_Util_Date::to_input_format($date_string));
+		//$time = strtotime(Date::to_input_format($date_string));
 		//return $time;
-		$date = new DateTime(GO_Base_Util_Date::to_input_format($date_string));
+		$date = new \DateTime(Date::to_input_format($date_string));
 		return intval($date->format("U"));
 	}
 
@@ -192,7 +196,7 @@ class GO_Base_Util_Date {
 		{
 			return null;
 		}
-		$time = GO_Base_Util_Date::to_unixtime($date_string);
+		$time = Date::to_unixtime($date_string);
 		if(!$time)
 		{
 			return null;
@@ -289,7 +293,7 @@ class GO_Base_Util_Date {
 		if($utime<1)
 			return '';
 
-		return GO_Base_Util_Date::format('@'.$utime, $with_time);
+		return Date::format('@'.$utime, $with_time);
 	}
 
 	public static function format($time, $with_time=true)//, $timezone='GMT')
@@ -298,20 +302,20 @@ class GO_Base_Util_Date {
 		{
 			return '';
 		}
-		/*$d = new DateTime($time, new DateTimeZone($timezone));
+		/*$d = new \DateTime($time, new \DateTimeZone($timezone));
 
 
 		if($timezone!=$_SESSION['GO_SESSION']['timezone'])
 		{
-			$tz = new DateTimeZone(date_default_timezone_get());
+			$tz = new \DateTimeZone(date_default_timezone_get());
 			if($tz)
 			{
 				$d->setTimezone($tz);
 			}
 		}*/
 
-		$completeDateFormat = GO::user() ? GO::user()->completeDateFormat : GO::config()->getCompleteDateFormat();
-		$timeFormat = GO::user() ? GO::user()->time_format : GO::config()->default_time_format;
+		$completeDateFormat = \GO::user() ? \GO::user()->completeDateFormat : \GO::config()->getCompleteDateFormat();
+		$timeFormat = \GO::user() ? \GO::user()->time_format : \GO::config()->default_time_format;
 
 		$date_format = $with_time ?  $completeDateFormat.' '.$timeFormat : $completeDateFormat;
 
@@ -320,8 +324,8 @@ class GO_Base_Util_Date {
 
 	public static function get_timezone_offset($utime)
 	{
-		$d = new DateTime('@'.$utime, new DateTimeZone('GMT'));
-		$tz = new DateTimeZone(date_default_timezone_get());
+		$d = new \DateTime('@'.$utime, new \DateTimeZone('GMT'));
+		$tz = new \DateTimeZone(date_default_timezone_get());
 		if($tz)
 		{
 				$d->setTimezone($tz);
@@ -353,7 +357,7 @@ class GO_Base_Util_Date {
 	 * Convert a date formatted according to icalendar 2.0 specs to a unix timestamp.
 	 *
 	 * @param String $date
-	 * @param GO_Base_Util_Icalendar_Timezone $icalendarTimezone
+	 * @param Icalendar\Timezone $icalendarTimezone
 	 * @return int Unix timestamp
 	 */
 	public static function parseIcalDate($date, $icalendarTimezone=false) {

@@ -16,14 +16,14 @@
 			?>
 
 			<div class="form">
-				<?php echo GO_Sites_Components_Html::beginForm(); ?>
+				<?php echo \GO\Sites\Components\Html::beginForm(); ?>
 				
-				<?php echo GO_Sites_Components_Html::hiddenField('reference', $reference); ?>
+				<?php echo \GO\Sites\Components\Html::hiddenField('reference', $reference); ?>
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::label("Payment period", 'payment_period'); ?>
+					<?php echo \GO\Sites\Components\Html::label("Payment period", 'payment_period'); ?>
 					<?php
-					echo GO_Sites_Components_Html::dropDownList("payment_period", "Year", array(
+					echo \GO\Sites\Components\Html::dropDownList("payment_period", "Year", array(
 							"year" => "Year",
 							"halfyear" => "Half year",
 							"quarter" => "Quarter"
@@ -32,9 +32,9 @@
 				</div>
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::label("Number of users (exluding the admin user)", 'number_of_users'); ?>
+					<?php echo \GO\Sites\Components\Html::label("Number of users (exluding the admin user)", 'number_of_users'); ?>
 					<?php
-					echo GO_Sites_Components_Html::dropDownList("number_of_users", "1", array(
+					echo \GO\Sites\Components\Html::dropDownList("number_of_users", "1", array(
 							"1" => "1 user (€ 10 p.m.)",
 							"2" => "2 users (€ 19 p.m.)",
 							"3" => "3 users (€ 28 p.m.)",
@@ -60,25 +60,25 @@
 				<p> You'll need diskspace for files and or e-mail. It costs € 1,- per GB per month.</p>
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::label("Amount of diskspace (GB)", 'diskspace'); ?>
-					<?php echo GO_Sites_Components_Html::textField("diskspace", "1"); ?>					
+					<?php echo \GO\Sites\Components\Html::label("Amount of diskspace (GB)", 'diskspace'); ?>
+					<?php echo \GO\Sites\Components\Html::textField("diskspace", "1"); ?>					
 				</div>
 
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::label("Billing module (+€20,- pm.)", 'billing'); ?>
-					<?php echo GO_Sites_Components_Html::checkBox("billing"); ?>					
+					<?php echo \GO\Sites\Components\Html::label("Billing module (+€20,- pm.)", 'billing'); ?>
+					<?php echo \GO\Sites\Components\Html::checkBox("billing"); ?>					
 				</div>
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::label("Documents module (+€15 pm.)", 'documents'); ?>
-					<?php echo GO_Sites_Components_Html::checkBox("documents"); ?>					
+					<?php echo \GO\Sites\Components\Html::label("Documents module (+€15 pm.)", 'documents'); ?>
+					<?php echo \GO\Sites\Components\Html::checkBox("documents"); ?>					
 				</div>
 				<div class="row buttons">
-					<?php echo GO_Sites_Components_Html::submitButton('Save'); ?>
+					<?php echo \GO\Sites\Components\Html::submitButton('Save'); ?>
 				</div>
 				<div style="clear:both;"></div>
-					<?php echo GO_Sites_Components_Html::endForm(); ?>
+					<?php echo \GO\Sites\Components\Html::endForm(); ?>
 			</div>
 		</div>
 	</div>

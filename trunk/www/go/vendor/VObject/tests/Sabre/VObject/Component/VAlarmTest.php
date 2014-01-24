@@ -29,8 +29,8 @@ class VAlarmTest extends \PHPUnit_Framework_TestCase {
             $calendar->createProperty('TRIGGER', '20120312T130000Z', array('VALUE' => 'DATE-TIME'))
         );
 
-        $tests[] = array($valarm1, new DateTime('2012-03-01 01:00:00'), new DateTime('2012-04-01 01:00:00'), true);
-        $tests[] = array($valarm1, new DateTime('2012-03-01 01:00:00'), new DateTime('2012-03-10 01:00:00'), false);
+        $tests[] = array($valarm1, new \DateTime('2012-03-01 01:00:00'), new \DateTime('2012-04-01 01:00:00'), true);
+        $tests[] = array($valarm1, new \DateTime('2012-03-01 01:00:00'), new \DateTime('2012-03-10 01:00:00'), false);
 
         // Relation to start time of event
         $valarm2 = $calendar->createComponent('VALARM');
@@ -42,8 +42,8 @@ class VAlarmTest extends \PHPUnit_Framework_TestCase {
         $vevent2->DTSTART = '20120313T130000Z';
         $vevent2->add($valarm2);
 
-        $tests[] = array($valarm2, new DateTime('2012-03-01 01:00:00'), new DateTime('2012-04-01 01:00:00'), true);
-        $tests[] = array($valarm2, new DateTime('2012-03-01 01:00:00'), new DateTime('2012-03-10 01:00:00'), false);
+        $tests[] = array($valarm2, new \DateTime('2012-03-01 01:00:00'), new \DateTime('2012-04-01 01:00:00'), true);
+        $tests[] = array($valarm2, new \DateTime('2012-03-01 01:00:00'), new \DateTime('2012-03-10 01:00:00'), false);
 
         // Relation to end time of event
         $valarm3 = $calendar->createComponent('VALARM');
@@ -54,8 +54,8 @@ class VAlarmTest extends \PHPUnit_Framework_TestCase {
         $vevent3->DTEND = '20120401T130000Z';
         $vevent3->add($valarm3);
 
-        $tests[] = array($valarm3, new DateTime('2012-02-25 01:00:00'), new DateTime('2012-03-05 01:00:00'), false);
-        $tests[] = array($valarm3, new DateTime('2012-03-25 01:00:00'), new DateTime('2012-04-05 01:00:00'), true);
+        $tests[] = array($valarm3, new \DateTime('2012-02-25 01:00:00'), new \DateTime('2012-03-05 01:00:00'), false);
+        $tests[] = array($valarm3, new \DateTime('2012-03-25 01:00:00'), new \DateTime('2012-04-05 01:00:00'), true);
 
         // Relation to end time of todo 
         $valarm4 = $calendar->createComponent('VALARM');
@@ -68,8 +68,8 @@ class VAlarmTest extends \PHPUnit_Framework_TestCase {
         $vtodo4->DUE = '20120401T130000Z';
         $vtodo4->add($valarm4);
 
-        $tests[] = array($valarm4, new DateTime('2012-02-25 01:00:00'), new DateTime('2012-03-05 01:00:00'), false);
-        $tests[] = array($valarm4, new DateTime('2012-03-25 01:00:00'), new DateTime('2012-04-05 01:00:00'), true);
+        $tests[] = array($valarm4, new \DateTime('2012-02-25 01:00:00'), new \DateTime('2012-03-05 01:00:00'), false);
+        $tests[] = array($valarm4, new \DateTime('2012-03-25 01:00:00'), new \DateTime('2012-04-05 01:00:00'), true);
 
         // Relation to start time of event + repeat
         $valarm5 = $calendar->createComponent('VALARM');
@@ -82,7 +82,7 @@ class VAlarmTest extends \PHPUnit_Framework_TestCase {
         $vevent5->DTSTART = '20120301T130000Z';
         $vevent5->add($valarm5);
 
-        $tests[] = array($valarm5, new DateTime('2012-03-09 01:00:00'), new DateTime('2012-03-10 01:00:00'), true);
+        $tests[] = array($valarm5, new \DateTime('2012-03-09 01:00:00'), new \DateTime('2012-03-10 01:00:00'), true);
 
         // Relation to start time of event + duration, but no repeat
         $valarm6 = $calendar->createComponent('VALARM');
@@ -94,8 +94,8 @@ class VAlarmTest extends \PHPUnit_Framework_TestCase {
         $vevent6->DTSTART = '20120313T130000Z';
         $vevent6->add($valarm6);
 
-        $tests[] = array($valarm6, new DateTime('2012-03-01 01:00:00'), new DateTime('2012-04-01 01:00:00'), true);
-        $tests[] = array($valarm6, new DateTime('2012-03-01 01:00:00'), new DateTime('2012-03-10 01:00:00'), false);
+        $tests[] = array($valarm6, new \DateTime('2012-03-01 01:00:00'), new \DateTime('2012-04-01 01:00:00'), true);
+        $tests[] = array($valarm6, new \DateTime('2012-03-01 01:00:00'), new \DateTime('2012-03-10 01:00:00'), false);
 
 
         // Relation to end time of event (DURATION instead of DTEND)
@@ -109,8 +109,8 @@ class VAlarmTest extends \PHPUnit_Framework_TestCase {
         $vevent7->DURATION = 'P30D';
         $vevent7->add($valarm7);
 
-        $tests[] = array($valarm7, new DateTime('2012-02-25 01:00:00'), new DateTime('2012-03-05 01:00:00'), false);
-        $tests[] = array($valarm7, new DateTime('2012-03-25 01:00:00'), new DateTime('2012-04-05 01:00:00'), true);
+        $tests[] = array($valarm7, new \DateTime('2012-02-25 01:00:00'), new \DateTime('2012-03-05 01:00:00'), false);
+        $tests[] = array($valarm7, new \DateTime('2012-03-25 01:00:00'), new \DateTime('2012-04-05 01:00:00'), true);
 
         // Relation to end time of event (No DTEND or DURATION)
         $valarm7 = $calendar->createComponent('VALARM');
@@ -122,8 +122,8 @@ class VAlarmTest extends \PHPUnit_Framework_TestCase {
         $vevent7->DTSTART = '20120301T130000Z';
         $vevent7->add($valarm7);
 
-        $tests[] = array($valarm7, new DateTime('2012-02-25 01:00:00'), new DateTime('2012-03-05 01:00:00'), true);
-        $tests[] = array($valarm7, new DateTime('2012-03-25 01:00:00'), new DateTime('2012-04-05 01:00:00'), false);
+        $tests[] = array($valarm7, new \DateTime('2012-02-25 01:00:00'), new \DateTime('2012-03-05 01:00:00'), true);
+        $tests[] = array($valarm7, new \DateTime('2012-03-25 01:00:00'), new \DateTime('2012-04-05 01:00:00'), false);
 
 
         return $tests;
@@ -142,7 +142,7 @@ class VAlarmTest extends \PHPUnit_Framework_TestCase {
         $vjournal = $calendar->createComponent('VJOURNAL');
         $vjournal->add($valarm);
 
-        $valarm->isInTimeRange(new DateTime('2012-02-25 01:00:00'), new DateTime('2012-03-05 01:00:00'));
+        $valarm->isInTimeRange(new \DateTime('2012-02-25 01:00:00'), new \DateTime('2012-03-05 01:00:00'));
 
     }
 

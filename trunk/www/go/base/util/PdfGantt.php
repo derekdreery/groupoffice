@@ -11,7 +11,11 @@
 * @license http://www.opensource.org/licenses/bsd-license.php    BSD
 *
 **/
-class GO_Base_Util_PdfGantt {
+
+namespace GO\Base\Util;
+
+
+class PdfGantt {
     const DEFAULT_MARGIN = 5;
     const DEFAULT_DATEFORMAT = 'd.m.Y';
     static $_show_taskid = FALSE;

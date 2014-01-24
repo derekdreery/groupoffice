@@ -1,5 +1,9 @@
 <?php 
-class GO_Sites_Components_Language{
+
+namespace GO\Sites\Components;
+
+
+class Language{
 	private $_langIso='en';
 	private $_lang;
 	
@@ -22,7 +26,7 @@ class GO_Sites_Components_Language{
 		
 		if(!$isoCode){
 			
-			$goIso = GO::user() ? GO::user()->language : GO::config()->language;
+			$goIso = \GO::user() ? \GO::user()->language : \GO::config()->language;
 			
 			$this->_langIso=$this->hasLanguage($goIso) ? $goIso : 'en';
 		}else
@@ -45,7 +49,7 @@ class GO_Sites_Components_Language{
 		if($file)
 			require($file);
 		else
-			throw new GO_Base_Exception_NotFound('Language file not found');
+			throw new \GO\Base\Exception\NotFound('Language file not found');
 		
 		if(isset($l)){
 			if(!empty($l[$name]))

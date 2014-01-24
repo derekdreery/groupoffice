@@ -1,9 +1,13 @@
 <?php
-class GO_Bookmarks_Controller_Category extends GO_Base_Controller_AbstractModelController{
 
-	protected $model ='GO_Bookmarks_Model_Category';
+namespace GO\Bookmarks\Controller;
+
+
+class Category extends \GO\Base\Controller\AbstractModelController{
+
+	protected $model ='\GO\Bookmarks\Model\Category';
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name', '$model->user->name');
 		return parent::formatColumns($columnModel);
 	}

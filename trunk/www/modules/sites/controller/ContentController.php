@@ -24,17 +24,21 @@
  * @version $Id ContentController.php 2012-07-12 15:13:19 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Sites_Controller_Content extends GO_Base_Controller_AbstractModelController {
 
-	protected $model = 'GO_Sites_Model_Content';
+namespace GO\Sites\Controller;
+
+
+class Content extends \GO\Base\Controller\AbstractModelController {
+
+	protected $model = '\GO\Sites\Model\Content';
 	
 	/**
 	 * TODO: fix the action
 	 * @param array $params the $_REQUEST 
 	 */
 	protected function actionRedirectToFront($params){
-		$content = GO_Sites_Model_Content::model()->findByPk($params['id']);
-		$site = GO_Sites_Model_Site::model()->findByPk($content->site_id);
+		$content = \GO\Sites\Model\Content::model()->findByPk($params['id']);
+		$site = \GO\Sites\Model\Site::model()->findByPk($content->site_id);
 		
 		$url = "http://www.".$site->domain."/".$content->getUrl(); 
 		header('Location: '.$url);
@@ -42,7 +46,7 @@ class GO_Sites_Controller_Content extends GO_Base_Controller_AbstractModelContro
 	}
 	
 	protected function getStoreParams($params) {
-		$fp = GO_Base_Db_FindParams::newInstance()->order('sort_order');
+		$fp = \GO\Base\Db\FindParams::newInstance()->order('sort_order');
 		
 		$fp->getCriteria()->addCondition('site_id', $params['site_id']);
 		
@@ -54,7 +58,7 @@ class GO_Sites_Controller_Content extends GO_Base_Controller_AbstractModelContro
 		$items = json_decode($params['content'], true);
 		$sort = 0;
 		foreach ($items as $item) {
-			$model = GO_Sites_Model_Content::model()->findByPk($item['id']);
+			$model = \GO\Sites\Model\Content::model()->findByPk($item['id']);
 			$model->sort_order=$sort;
 			$model->save();
 			$sort++;

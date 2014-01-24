@@ -1,12 +1,12 @@
 <?php
 /**
- * GO_Base_Util_Minify_JSMin.php - modified PHP implementation of Douglas Crockford's GO_Base_Util_Minify_JSMin.
+ * JSMin.php - modified PHP implementation of Douglas Crockford's JSMin.
  *
  * <code>
- * $minifiedJs = GO_Base_Util_Minify_JSMin::minify($js);
+ * $minifiedJs = JSMin::minify($js);
  * </code>
  *
- * This is a modified port of GO_Base_Util_Minify_JSMin.c. Improvements:
+ * This is a modified port of JSMin.c. Improvements:
  *
  * Does not choke on some regexp literals containing quote characters. E.g. /'/
  *
@@ -18,7 +18,7 @@
  * PHP 5 or higher is required.
  *
  * Permission is hereby granted to use this version of the library under the
- * same terms as GO_Base_Util_Minify_JSMin.c, which has the following license:
+ * same terms as JSMin.c, which has the following license:
  *
  * --
  * Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
@@ -44,17 +44,21 @@
  * SOFTWARE.
  * --
  *
- * @package GO_Base_Util_Minify_JSMin
+ * @package JSMin
  * @author Ryan Grove <ryan@wonko.com> (PHP port)
  * @author Steve Clay <steve@mrclay.org> (modifications + cleanup)
  * @author Andrea Giammarchi <http://www.3site.eu> (spaceBeforeRegExp)
- * @copyright 2002 Douglas Crockford <douglas@crockford.com> (GO_Base_Util_Minify_JSMin.c)
+ * @copyright 2002 Douglas Crockford <douglas@crockford.com> (JSMin.c)
  * @copyright 2008 Ryan Grove <ryan@wonko.com> (PHP port)
  * @license http://opensource.org/licenses/mit-license.php MIT License
- * @link http://code.google.com/p/GO_Base_Util_Minify_JSMin-php/
+ * @link http://code.google.com/p/JSMin-php/
  */
 
-class GO_Base_Util_Minify_JSMin {
+
+namespace GO\Base\Util\Minify;
+
+
+class JSMin {
     const ORD_LF            = 10;
     const ORD_SPACE         = 32;
     const ACTION_KEEP_A     = 1;
@@ -80,8 +84,8 @@ class GO_Base_Util_Minify_JSMin {
      */
     public static function minify($js)
     {
-        $GO_Base_Util_Minify_JSMin = new GO_Base_Util_Minify_JSMin($js);
-        return $GO_Base_Util_Minify_JSMin->min();
+        $JSMin = new JSMin($js);
+        return $JSMin->min();
     }
 
     /**
@@ -158,7 +162,7 @@ class GO_Base_Util_Minify_JSMin {
      * ACTION_DELETE_A_B = Get the next B.
      *
      * @param int $command
-     * @throws GO_Base_Util_Minify_JSMin_UnterminatedRegExpException|GO_Base_Util_Minify_JSMin_UnterminatedStringException
+     * @throws JSMin_UnterminatedRegExpException|JSMin_UnterminatedStringException
      */
     protected function action($command)
     {
@@ -200,8 +204,8 @@ class GO_Base_Util_Minify_JSMin {
                             break;
                         }
                         if ($this->isEOF($this->a)) {
-                            throw new GO_Base_Util_Minify_JSMin_UnterminatedStringException(
-                                "GO_Base_Util_Minify_JSMin: Unterminated String at byte {$this->inputIndex}: {$str}");
+                            throw new JSMin_UnterminatedStringException(
+                                "\GO\Base\Util\Minify\JSMin: Unterminated String at byte {$this->inputIndex}: {$str}");
                         }
                         $str .= $this->a;
                         if ($this->a === '\\') {
@@ -237,8 +241,8 @@ class GO_Base_Util_Minify_JSMin {
                                     $pattern .= $this->a;
                                 }
                                 if ($this->isEOF($this->a)) {
-                                    throw new GO_Base_Util_Minify_JSMin_UnterminatedRegExpException(
-                                        "GO_Base_Util_Minify_JSMin: Unterminated set in RegExp at byte "
+                                    throw new JSMin_UnterminatedRegExpException(
+                                        "\GO\Base\Util\Minify\JSMin: Unterminated set in RegExp at byte "
                                             . $this->inputIndex .": {$pattern}");
                                 }
                             }
@@ -251,8 +255,8 @@ class GO_Base_Util_Minify_JSMin {
                             $this->a = $this->get();
                             $pattern .= $this->a;
                         } elseif ($this->isEOF($this->a)) {
-                            throw new GO_Base_Util_Minify_JSMin_UnterminatedRegExpException(
-                                "GO_Base_Util_Minify_JSMin: Unterminated RegExp at byte {$this->inputIndex}: {$pattern}");
+                            throw new JSMin_UnterminatedRegExpException(
+                                "\GO\Base\Util\Minify\JSMin: Unterminated RegExp at byte {$this->inputIndex}: {$pattern}");
                         }
                         $this->output .= $this->a;
                         $this->lastByteOut = $this->a;
@@ -376,7 +380,7 @@ class GO_Base_Util_Minify_JSMin {
     /**
      * Consume a multiple line comment from input (possibly retaining it)
      *
-     * @throws GO_Base_Util_Minify_JSMin_UnterminatedCommentException
+     * @throws JSMin_UnterminatedCommentException
      */
     protected function consumeMultipleLineComment()
     {
@@ -401,8 +405,8 @@ class GO_Base_Util_Minify_JSMin {
                     return;
                 }
             } elseif ($get === null) {
-                throw new GO_Base_Util_Minify_JSMin_UnterminatedCommentException(
-                    "GO_Base_Util_Minify_JSMin: Unterminated comment at byte {$this->inputIndex}: /*{$comment}");
+                throw new JSMin_UnterminatedCommentException(
+                    "\GO\Base\Util\Minify\JSMin: Unterminated comment at byte {$this->inputIndex}: /*{$comment}");
             }
             $comment .= $get;
         }
@@ -432,6 +436,6 @@ class GO_Base_Util_Minify_JSMin {
     }
 }
 
-class GO_Base_Util_Minify_JSMin_UnterminatedStringException extends Exception {}
-class GO_Base_Util_Minify_JSMin_UnterminatedCommentException extends Exception {}
-class GO_Base_Util_Minify_JSMin_UnterminatedRegExpException extends Exception {}
+class JSMin_UnterminatedStringException extends \Exception {}
+class JSMin_UnterminatedCommentException extends \Exception {}
+class JSMin_UnterminatedRegExpException extends \Exception {}

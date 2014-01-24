@@ -10,8 +10,8 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * 
- * @property GO_Calendar_Model_Event $_event
- * @property GO_Calendar_Model_Calendar $_calendar
+ * @property Event $_event
+ * @property Calendar $_calendar
  * @property string $_startTime
  * @property string $_endTime
  * @property string $_alternateEndTime
@@ -20,7 +20,11 @@
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
-class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
+
+namespace GO\Calendar\Model;
+
+
+class LocalEvent extends \GO\Base\Model {
 	
 	
 	private $_initials = array();
@@ -36,13 +40,13 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	
 	/**
 	 *
-	 * @var GO_Calendar_Model_Event 
+	 * @var Event 
 	 */
 	private $_event;
 	
 	/**
 	 *
-	 * @var GO_Calendar_Model_Calendar 
+	 * @var Calendar 
 	 */
 	private $_calendar;
 	
@@ -75,11 +79,11 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	/**
 	 * Constructor
 	 * 
-	 * @param GO_Calendar_Model_Event $event
+	 * @param Event $event
 	 * @param string $periodStartTime
 	 * @param string $periodEndTime 
 	 */
-	public function GO_Calendar_Model_LocalEvent(GO_Calendar_Model_Event $event, $periodStartTime, $periodEndTime){
+	public function LocalEvent(Event $event, $periodStartTime, $periodEndTime){
 		$this->_event = $event;
 		$this->_startTime = $periodStartTime;
 		$this->_endTime = $periodEndTime;
@@ -90,8 +94,8 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		
 		// If there is no user attached to this event (user_id = 0) then create a temporary user object
 //		if(!$event->user){
-//			$event->user = new GO_Base_Model_User();
-//			$event->user->first_name = GO::t('unknown').' '.GO::t('user');
+//			$event->user = new \GO\Base\Model_User();
+//			$event->user->first_name = \GO::t('unknown').' '.\GO::t('user');
 //		}
 		
 		$this->_initials[] = $event->user ? $event->user->getShortName() : '??';
@@ -108,14 +112,14 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	
 	public function getResponseData(){
 		
-		$dayString = GO::t('full_days');
+		$dayString = \GO::t('full_days');
 		
 		$response = $this->_event->getAttributes('html');
 
 		if($this->isAllDay()){
 			$response['time'] =  $this->getFormattedTime();
 		} else {
-			if (date(GO::user()->date_format, $this->getAlternateStartTime()) != date(GO::user()->date_format, $this->getAlternateEndTime()))
+			if (date(\GO::user()->date_format, $this->getAlternateStartTime()) != date(\GO::user()->date_format, $this->getAlternateEndTime()))
 				$response['time'] =  $this->getFormattedTime();
 			else
 				$response['time'] =  $this->getFormattedTime();
@@ -123,10 +127,10 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 //		$response['time_of_day'] = $this->getTimeOfDay();
         
 		$response['status'] = $this->_event->status;
-		$response['username'] = $this->_event->user ? $this->_event->user->getName() : GO::t('unknown').' '.GO::t('user');
+		$response['username'] = $this->_event->user ? $this->_event->user->getName() : \GO::t('unknown').' '.\GO::t('user');
 		$response['musername'] = !empty($this->_event->mUser) ? $this->_event->mUser->getName() : '';
 		
-//		if($this->_event->status==GO_Calendar_Model_Event::STATUS_CANCELLED){			
+//		if($this->_event->status==Event::STATUS_CANCELLED){			
 //			$response['name'] .= ' ('.$this->_event->localizedStatus.')';
 //		}
 //		
@@ -147,7 +151,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response['ctime'] = date('Y-m-d H:i',  $this->_event->ctime);
 		$response['mtime'] = date('Y-m-d H:i',  $this->_event->mtime);
 		$response['event_id'] = $this->_event->id;
-		$response['description'] = nl2br(htmlspecialchars(GO_Base_Util_String::cut_string($this->_event->description, 800), ENT_COMPAT, 'UTF-8'));
+		$response['description'] = nl2br(htmlspecialchars(\GO\Base\Util\String::cut_string($this->_event->description, 800), ENT_COMPAT, 'UTF-8'));
 		$response['private'] = $this->isPrivate();
 		
 		$response['private_enabled']=$this->_event->private;
@@ -155,7 +159,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response['resources'] = array();
 		
 		if($response['private']){
-			$response['name']=GO::t('private','calendar');
+			$response['name']=\GO::t('private','calendar');
 			$response['description']="";
 			$response['location']="";
 			$response['repeats'] = false;
@@ -180,14 +184,14 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		
 		$response['permission_level']=$this->_event->permissionLevel;
 		$response['all_day_event'] = $this->isAllDay();
-		$response['day'] = $dayString[date('w', $this->getAlternateStartTime())].' '.GO_Base_Util_Date::get_timestamp($this->getAlternateStartTime(),false);  // date(implode(GO::user()->date_separator,str_split(GO::user()->date_format,1)), ($eventModel->start_time));
+		$response['day'] = $dayString[date('w', $this->getAlternateStartTime())].' '.\GO\Base\Util\Date::get_timestamp($this->getAlternateStartTime(),false);  // date(implode(\GO::user()->date_separator,str_split(\GO::user()->date_format,1)), ($eventModel->start_time));
 		$response['read_only'] = $this->isReadOnly();
 		$response['model_name'] = $this->_event->className();
 		
 		$response['partstatus']="none";
-		if(isset($response['status']) && $response['status']==GO_Calendar_Model_Event::STATUS_CANCELLED){
+		if(isset($response['status']) && $response['status']==Event::STATUS_CANCELLED){
 			//hack to make it transparent on cancelled status too in the view.
-			$response['partstatus']=  GO_Calendar_Model_Participant::STATUS_DECLINED;
+			$response['partstatus']=  Participant::STATUS_DECLINED;
 		}else{
 			if($participant = $this->_event->getParticipantOfCalendar()){
 				$response['partstatus']=$participant->status;
@@ -199,7 +203,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		if($duration >= 60){
 			$durationHours = floor($duration / 60);
 			$durationRestMinutes = $duration % 60;
-			$response['duration'] = $durationHours.' '.GO::t('hours').', '.$durationRestMinutes.' '.GO::t('mins');
+			$response['duration'] = $durationHours.' '.\GO::t('hours').', '.$durationRestMinutes.' '.\GO::t('mins');
 		} else {
 			$response['duration'] = $duration.'m';
 		}
@@ -343,7 +347,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	
 	/**
 	 *
-	 * @return GO_Calendar_Model_Event 
+	 * @return Event 
 	 */
 	public function getEvent(){
 		return $this->_event;
@@ -351,7 +355,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	
 	/**
 	 *
-	 * @return GO_Calendar_Model_Calendar 
+	 * @return Calendar 
 	 */
 	public function getCalendar(){
 		return $this->_calendar;
@@ -372,7 +376,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	 * @return string 
 	 */
 	public function getFormattedDate(){
-		return date(GO::user()->date_format,$this->_event->start_time);
+		return date(\GO::user()->date_format,$this->_event->start_time);
 	}
 	
 	/**
@@ -381,7 +385,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	 * @return string 
 	 */
 	public function getFormattedDateAndTime(){
-		return date(GO::user()->date_format.' '.GO::user()->time_format,$this->_event->start_time);
+		return date(\GO::user()->date_format.' '.\GO::user()->time_format,$this->_event->start_time);
 	}
 	
 	/**
@@ -390,7 +394,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	 * @return string 
 	 */
 	public function getFormattedTime(){
-		return date(GO::user()->time_format,$this->_event->start_time);
+		return date(\GO::user()->time_format,$this->_event->start_time);
 	}
 	
 	/**
@@ -399,7 +403,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	 * @return string 
 	 */
 	public function getDay(){
-		$dayString = GO::t('full_days','common');
+		$dayString = \GO::t('full_days','common');
 		return $dayString[date('w',$this->_event->start_time)];
 	}
 	
@@ -441,8 +445,8 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	 */
 	public function isPrivate(){
 		return $this->_event->private && 
-				(GO::user()->id != $this->_event->user_id) && 
-				GO::user()->id!=$this->_event->calendar->user_id;	
+				(\GO::user()->id != $this->_event->user_id) && 
+				\GO::user()->id!=$this->_event->calendar->user_id;	
 	}
 	
 	/**
@@ -455,8 +459,8 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 						$this->_isMerged ||
 						$this->_event->read_only || 
 						!$this->_event->is_organizer || 
-						$this->isPrivate() && GO::user()->id != $this->_event->user_id || 
-						$this->_event->permissionLevel < GO_Base_Model_Acl::WRITE_PERMISSION;
+						$this->isPrivate() && \GO::user()->id != $this->_event->user_id || 
+						$this->_event->permissionLevel < \GO\Base\Model_Acl::WRITE_PERMISSION;
 	}
 	
 	/**

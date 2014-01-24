@@ -9,21 +9,25 @@
  */
  
 /**
- * The CustomField Model for the GO_Site_Customfields_Model_Content
+ * The CustomField Model for the Content
  *
  * @package GO.modules.Site
- * @version $Id: GO_Site_Customfields_Model_Content.php 7607 2013-03-27 15:41:11Z wsmits $
+ * @version $Id: Content.php 7607 2013-03-27 15:41:11Z wsmits $
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  */	
  
-class GO_Site_Customfields_Model_Content extends GO_Customfields_Model_AbstractCustomFieldsRecord {
+
+namespace GO\Site\Customfields\Model;
+
+
+class Content extends \GO\Customfields\Model\AbstractCustomFieldsRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Site_Model_CustomFieldsRecord 
+	 * @return \GO\Site\Model\CustomFieldsRecord 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -31,6 +35,6 @@ class GO_Site_Customfields_Model_Content extends GO_Customfields_Model_AbstractC
 	}
 
 	public function extendsModel(){
-		return "GO_Site_Model_Content";
+		return "\GO\Site\Model\Content";
 	}
 }

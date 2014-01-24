@@ -1,7 +1,7 @@
 <?php
 /**
- * @property GO_Customfields_Model_Category $category 
- * @property GO_Customfields_Customfieldtype_Text $customfieldtype
+ * @property Category $category 
+ * @property \GO\Customfields\Customfieldtype\Text $customfieldtype
  * @property int $height
  * @property boolean $exclude_from_grid
  * @property int $treemaster_field_id
@@ -21,7 +21,11 @@
  * @property int $number_decimals
  * @property int $max_length
  */
-class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Customfields\Model;
+
+
+class Field extends \GO\Base\Db\ActiveRecord{
 	
 	private $_datatype;
 	
@@ -29,7 +33,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Customfields_Model_Field 
+	 * @return Field 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -46,9 +50,9 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	
 	public function relations() {
 		return array(
-				'category' => array('type' => self::BELONGS_TO, 'model' => 'GO_Customfields_Model_Category', 'field' => 'category_id'),		
-				'treeOptions'=>array('type' => self::HAS_MANY, 'model' => 'GO_Customfields_Model_FieldTreeSelectOption', 'field' => 'field_id','delete'=>true),
-				'selectOptions'=>array('type' => self::HAS_MANY, 'model' => 'GO_Customfields_Model_FieldSelectOption', 'field' => 'field_id','delete'=>true)		
+				'category' => array('type' => self::BELONGS_TO, 'model' => '\GO\Customfields\Model\Category', 'field' => 'category_id'),		
+				'treeOptions'=>array('type' => self::HAS_MANY, 'model' => '\GO\Customfields\Model\FieldTreeSelectOption', 'field' => 'field_id','delete'=>true),
+				'selectOptions'=>array('type' => self::HAS_MANY, 'model' => '\GO\Customfields\Model\FieldSelectOption', 'field' => 'field_id','delete'=>true)		
 			);
 	}
 	
@@ -87,7 +91,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 			set_error_handler(array($this,"exception_error_handler"));
 			preg_match($this->validation_regex, "");
 			if($this->_regex_has_errors)
-				$this->setValidationError ("validation_regex", GO::t("invalidRegex","customfields"));
+				$this->setValidationError ("validation_regex", \GO::t("invalidRegex","customfields"));
 			
 			restore_error_handler();
 		}
@@ -114,7 +118,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 			
 		}		
 		//don't be strict in upgrade process
-		GO::getDbConnection()->query("SET sql_mode=''");
+		\GO::getDbConnection()->query("SET sql_mode=''");
 		
 		if(!$this->getDbConnection()->query($sql))
 			throw new Exception("Could not create custom field");
@@ -137,9 +141,9 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	 * GO caches the table schema for performance. We need to clear it 
 	 */
 	private function _clearColumnCache(){
-	  //deleted cached column schema. See GO_Customfields_Model_AbstractCustomFieldsRecord			
-		GO_Base_Db_Columns::clearCache(GO::getModel(GO::getModel($this->category->extends_model)->customfieldsModel()));
-		GO::cache()->delete('customfields_'.$this->category->extends_model);	
+	  //deleted cached column schema. See AbstractCustomFieldsRecord			
+		\GO\Base\Db\Columns::clearCache(\GO::getModel(\GO::getModel($this->category->extends_model)->customfieldsModel()));
+		\GO::cache()->delete('customfields_'.$this->category->extends_model);	
 	}
 	
 	public function hasLength() {
@@ -149,7 +153,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	protected function getCustomfieldtype(){
 		
 		if(!isset($this->_datatype)){
-			$className = class_exists($this->datatype) ? $this->datatype : "GO_Customfields_Customfieldtype_Text";
+			$className = class_exists($this->datatype) ? $this->datatype : "\GO\Customfields\Customfieldtype\Text";
 
 			$this->_datatype = new $className($this);
 		}
@@ -160,7 +164,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	protected function afterDelete() {
 		
 		//don't be strict in upgrade process
-		GO::getDbConnection()->query("SET sql_mode=''");	
+		\GO::getDbConnection()->query("SET sql_mode=''");	
 		
 		$sql = "ALTER TABLE `".$this->category->customfieldsTableName()."` DROP `".$this->columnName()."`";
 		
@@ -177,7 +181,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	
 	
 	public function getTreeSelectNestingLevel($parentOptionId=0, $nestingLevel=0){
-		$stmt= GO_Customfields_Model_FieldTreeSelectOption::model()->find(array(
+		$stmt= FieldTreeSelectOption::model()->find(array(
 			'where'=>'parent_id=:parent_id AND field_id=:field_id',
 			'bindParams'=>array('parent_id'=>$parentOptionId, 'field_id'=>$this->id),
 			'order'=>'sort'
@@ -196,16 +200,16 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	}
 	
 	public function checkTreeSelectSlaves(){
-		//We need to create a GO_Customfields_Customfieldtype_TreeselectSlave field for all tree levels
+		//We need to create a \GO\Customfields\Customfieldtype\TreeselectSlave field for all tree levels
 		$nestingLevel = $this->getTreeSelectNestingLevel();
 
 		for($i=1;$i<$nestingLevel;$i++){
-			$field =GO_Customfields_Model_Field::model()->findSingleByAttributes(array('treemaster_field_id'=>$this->id,'nesting_level'=>$i));
+			$field =Field::model()->findSingleByAttributes(array('treemaster_field_id'=>$this->id,'nesting_level'=>$i));
 
 			if(!$field){
-				$field = new GO_Customfields_Model_Field();
+				$field = new Field();
 				$field->name=$this->name.' '.$i;
-				$field->datatype='GO_Customfields_Customfieldtype_TreeselectSlave';
+				$field->datatype='\GO\Customfields\Customfieldtype\TreeselectSlave';
 				$field->treemaster_field_id=$this->id;
 				$field->nesting_level=$i;
 				$field->category_id=$this->category_id;
@@ -226,12 +230,12 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	 * 
 	 * @param int $category_id
 	 * @param string $fieldName
-	 * @return \GO_Customfields_Model_Field 
+	 * @return \Field 
 	 */
 	public function createIfNotExists($category_id, $fieldName, $createAttributes=array()){
-		$field = GO_Customfields_Model_Field::model()->findSingleByAttributes(array('category_id'=>$category_id,'name'=>$fieldName));
+		$field = Field::model()->findSingleByAttributes(array('category_id'=>$category_id,'name'=>$fieldName));
 		if(!$field){
-			$field = new GO_Customfields_Model_Field();
+			$field = new Field();
 			$field->setAttributes($createAttributes, false);
 			$field->category_id=$category_id;
 			$field->name=$fieldName;
@@ -276,10 +280,10 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	 * 
 	 * @param string $modelName
 	 * @param int $permissionLevel Set to false to ignore permissions
-	 * @return GO_Customfields_Model_Field
+	 * @return Field
 	 */
-	public function findByModel($modelName, $permissionLevel=  GO_Base_Model_Acl::READ_PERMISSION){
-		$findParams = GO_Base_Db_FindParams::newInstance()->joinRelation('category')->order('sort_index');
+	public function findByModel($modelName, $permissionLevel=  \GO\Base\Model\Acl::READ_PERMISSION){
+		$findParams = \GO\Base\Db\FindParams::newInstance()->joinRelation('category')->order('sort_index');
 		
 		if($permissionLevel){
 			$findParams->permissionLevel($permissionLevel);

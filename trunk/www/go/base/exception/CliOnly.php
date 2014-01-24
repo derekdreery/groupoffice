@@ -19,12 +19,16 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_CliOnly extends Exception
+
+namespace GO\Base\Exception;
+
+
+class CliOnly extends \Exception
 {
 
 	public function __construct($message='') {
 		
-		$message = empty($message) ? GO::t('cliOnly') : GO::t('cliOnly')."\n\n".$message;
+		$message = empty($message) ? \GO::t('cliOnly') : \GO::t('cliOnly')."\n\n".$message;
 		
 		parent::__construct($message);
 	}

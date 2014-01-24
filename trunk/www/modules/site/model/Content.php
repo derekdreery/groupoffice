@@ -8,16 +8,16 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.Site
- * @version $Id: GO_Site_Model_Content.php 7607 2013-03-27 15:36:16Z wsmits $
+ * @version $Id: Content.php 7607 2013-03-27 15:36:16Z wsmits $
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  */
  
 /**
- * The GO_Site_Model_Content model
+ * The Content model
  *
  * @package GO.modules.Site
- * @version $Id: GO_Site_Model_Content.php 7607 2013-03-27 15:36:16Z wsmits $
+ * @version $Id: Content.php 7607 2013-03-27 15:36:16Z wsmits $
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  *
@@ -38,10 +38,14 @@
  * @property int $ptime
  * @property string $default_child_template
  * 
- * @method GO_Site_Model_Content model()
+ * @method Content model()
  */
 
-class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Site\Model;
+
+
+class Content extends \GO\Base\Db\ActiveRecord{
 
 	private $_cf=array();	
 	
@@ -54,7 +58,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		
 		//load cf
 		if(!isset(self::$fields)){
-			$fields = GO_Customfields_Model_Field::model()->findByModel('GO_Site_Model_Content', false);
+			$fields = \GO\Customfields\Model\Field::model()->findByModel('\GO\Site\Model\Content', false);
 
 			foreach($fields as $field){
 				self::$fields[$field->name]= $field;
@@ -113,7 +117,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 * Attach the customfield model to this model.
 	 */
 	public function customfieldsModel() {
-		return 'GO_Site_Customfields_Model_Content';
+		return '\GO\Site\Customfields\Model\Content';
 	}
 	
 //	protected function init() {
@@ -134,9 +138,9 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-			'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'parent_id', 'delete' => true, 'findParams' =>GO_Base_Db_FindParams::newInstance()->select('*')->order(array('sort_order','ptime'))),
-			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Site", 'field'=>'site_id'),
-			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Content", 'field'=>'parent_id','findParams' =>GO_Base_Db_FindParams::newInstance()->select('*'))
+			'children' => array('type' => self::HAS_MANY, 'model' => '\GO\Site\Model\Content', 'field' => 'parent_id', 'delete' => true, 'findParams' =>\GO\Base\Db\FindParams::newInstance()->select('*')->order(array('sort_order','ptime'))),
+			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Site\Model\Site", 'field'=>'site_id'),
+			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Site\Model\Content", 'field'=>'parent_id','findParams' =>\GO\Base\Db\FindParams::newInstance()->select('*'))
 		 );
 	 }
 	 
@@ -145,8 +149,8 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	  * 
 	  * @param string $slug
 	  * @param int $siteId
-	  * @return GO_Site_Model_Content
-	  * @throws GO_Base_Exception_NotFound
+	  * @return Content
+	  * @throws \GO\Base\Exception\NotFound
 	  */
 	 public static function findBySlug($slug, $siteId=false){
 		 
@@ -160,7 +164,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		 
 		 if(!$model)
 			 return false;
-			 //Throw new GO_Base_Exception_NotFound('There is no page found with the slug: '.$slug);
+			 //Throw new \GO\Base\Exception\NotFound('There is no page found with the slug: '.$slug);
 		 
 		 return $model;
 	 }
@@ -185,17 +189,17 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	  * @return boolean
 	  */
 	 public function hasChildren(){
-		 $child = $this->children(GO_Base_Db_FindParams::newInstance()->single());
+		 $child = $this->children(\GO\Base\Db\FindParams::newInstance()->single());
 		 return !empty($child); 
 	 }
 	 
 	 /**
 	  * Check if the given content model is an ancestor of this content model
 	  * 
-	  * @param GO_Site_Model_Content $parent
+	  * @param Content $parent
 	  * @return boolean
 	  */
-	 public function isChildOf(GO_Site_Model_Content $parent){
+	 public function isChildOf(Content $parent){
 		 return strpos($this->slug, $parent->slug)===0;
 	 }
 	 
@@ -212,7 +216,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		 if(empty($this->template) && !empty($this->parent->default_child_template)){
 			$this->template = $this->parent->default_child_template;
 		 }else{
-			$config = new GO_Site_Components_Config($this->site);
+			$config = new \GO\Site\Components\Config($this->site);
 			$this->template = $config->getDefaultTemplate();
 		 }
 	 }
@@ -238,11 +242,11 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 				'site_id'=>$child->site->id,
 				'slug'=>$child->slug,
 				'cls' => 'site-node-content',
-				'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
+				'iconCls' => 'go-model-icon-Content', 
 				'text' => $child->title,
 				'hasChildren' => $hasChildren,
 				//'expanded' => !$hasChildren,
-				'expanded' => !$hasChildren || GO_Site_Model_Site::isExpandedNode($child->site_id.'_content_'.$child->id),	 
+				'expanded' => !$hasChildren || Site::isExpandedNode($child->site_id.'_content_'.$child->id),	 
 				'children'=> $hasChildren ? null : array(),
 			);
 			 
@@ -288,8 +292,8 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	  */
 	 public function getShortText($length=100,$cutwords=false,$append='...'){
 		 
-		 $text = GO_Base_Util_String::html_to_text($this->content);
-		 $text = GO_Base_Util_String::cut_string($text,$length,!$cutwords,$append);
+		 $text = \GO\Base\Util\String::html_to_text($this->content);
+		 $text = \GO\Base\Util\String::cut_string($text,$length,!$cutwords,$append);
 		 
 		 return $text;
 	 }
@@ -340,14 +344,14 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 
 	 public static function replaceContentTags($content=''){
 
-		 $links = GO_Base_Util_TagParser::getTags('site:link', $content);
+		 $links = \GO\Base\Util\TagParser::getTags('site:link', $content);
 		 
 		 foreach($links as $link){
 			 $template = self::processLink($link['params'],$link['xml']);
 			 $content = str_replace($link['xml'], $template, $content);
 		 }
 		 
-		 $images = GO_Base_Util_TagParser::getTags('site:img', $content);
+		 $images = \GO\Base\Util\TagParser::getTags('site:img', $content);
 		 
 		 foreach($images as $image){
 			 $template = self::processImage($image['params']);
@@ -368,7 +372,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 				if (empty($linkAttr['contentid']))
 					$linkAttr['contentid'] = '0';
 
-				$content = GO_Site_Model_Content::model()->findByPk((int) $linkAttr['contentid']);
+				$content = Content::model()->findByPk((int) $linkAttr['contentid']);
 
 				if ($content)
 					$url = $content->url;
@@ -483,11 +487,11 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		 
 		 foreach($sortOrder as $sortItem){
 			 
-			 $extrChild = GO_Site_SiteModule::extractTreeNode($sortItem);
+			 $extrChild = \GO\Site\SiteModule::extractTreeNode($sortItem);
 			 
 			 if(in_array($extrChild['type'],$allowedTypes)){
 				 
-				 $modelName = GO_Site_SiteModule::getModelNameFromTreeNodeType($extrChild['type']);
+				 $modelName = \GO\Site\SiteModule::getModelNameFromTreeNodeType($extrChild['type']);
 				 
 				 $model = $modelName::model()->findByPk($extrChild['modelId']);
 				 $model->parent_id = !empty($extractedParent['modelId'])?$extractedParent['modelId']:NULL;

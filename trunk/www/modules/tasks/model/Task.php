@@ -9,10 +9,10 @@
  */
  
 /**
- * The GO_Tasks_Model_Task model
+ * The Task model
  *
  * @package GO.modules.Tasks
- * @version $Id: GO_Tasks_Model_Task.php 7607 2011-09-20 10:05:23Z <<USERNAME>> $
+ * @version $Id: Task.php 7607 2011-09-20 10:05:23Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *
@@ -39,7 +39,11 @@
  * @property int $percentage_complete
  */
 
-class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Tasks\Model;
+
+
+class Task extends \GO\Base\Db\ActiveRecord {
 	
 	const STATUS_NEEDS_ACTION = "NEEDS-ACTION";
 	const STATUS_COMPLETED = "COMPLETED";
@@ -57,7 +61,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Tasks_Model_Task
+	 * @return Task
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -80,7 +84,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getLocalizedName() {
-		return GO::t('task', 'tasks');
+		return \GO::t('task', 'tasks');
 	}
 
 	public function tableName() {
@@ -100,14 +104,14 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function customfieldsModel(){
-		return "GO_Tasks_Customfields_Model_Task";
+		return "\GO\Tasks\Customfields\Model\Task";
 	}
 	
 	public function relations() {
 		return array(
-				'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'tasklist_id', 'delete' => false),
-				'category' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Category', 'field' => 'category_id', 'delete' => false),
-				'project' => array('type' => self::BELONGS_TO, 'model' => 'GO_Projects_Model_Project', 'field' => 'project_id', 'delete' => false)
+				'tasklist' => array('type' => self::BELONGS_TO, 'model' => '\GO\Tasks\Model\Tasklist', 'field' => 'tasklist_id', 'delete' => false),
+				'category' => array('type' => self::BELONGS_TO, 'model' => '\GO\Tasks\Model\Category', 'field' => 'category_id', 'delete' => false),
+				'project' => array('type' => self::BELONGS_TO, 'model' => '\GO\Projects\Model\Project', 'field' => 'project_id', 'delete' => false)
 				);
 	}
 	
@@ -117,7 +121,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		
 	public function beforeSave() {		
 		if($this->isModified('status'))
-			$this->setCompleted($this->status==GO_Tasks_Model_Task::STATUS_COMPLETED, false);
+			$this->setCompleted($this->status==Task::STATUS_COMPLETED, false);
 		
 		return parent::beforeSave();
 	}
@@ -136,12 +140,12 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		return parent::afterSave($wasNew);
 	}
 	
-//	public function afterLink(GO_Base_Db_ActiveRecord $model, $isSearchCacheModel, $description = '', $this_folder_id = 0, $model_folder_id = 0, $linkBack = true) {
+//	public function afterLink(\GO\Base\Db\ActiveRecord $model, $isSearchCacheModel, $description = '', $this_folder_id = 0, $model_folder_id = 0, $linkBack = true) {
 //		throw new Exception();
 //		$modelName = $isSearchCacheModel ? $model->model_name : $model->className;
 //		$modelId = $isSearchCacheModel ? $model->model_id : $model->id;
 //		echo $modelName;
-//		if($modelName=="GO_Projects_Model_Project")
+//		if($modelName=="\GO\Projects\Model\Project")
 //		{
 //			$this->project_id=$modelId;
 //			$this->save();
@@ -159,7 +163,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	
 	protected function afterDbInsert() {
 		if(empty($this->uuid)){
-			$this->uuid = GO_Base_Util_UUID::create('task', $this->id);
+			$this->uuid = \GO\Base\Util\UUID::create('task', $this->id);
 			return true;
 		}else
 		{
@@ -177,7 +181,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	public function setCompleted($complete=true, $save=true) {
 		if($complete) {
 			$this->completion_time = time();
-			$this->status=GO_Tasks_Model_Task::STATUS_COMPLETED;
+			$this->status=Task::STATUS_COMPLETED;
 			$this->percentage_complete=100;
 			$this->_recur();
 			$this->rrule='';			
@@ -188,8 +192,8 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 			
 			$this->completion_time = 0;
 			
-			if($this->status==GO_Tasks_Model_Task::STATUS_COMPLETED)
-				$this->status=GO_Tasks_Model_Task::STATUS_NEEDS_ACTION;
+			if($this->status==Task::STATUS_COMPLETED)
+				$this->status=Task::STATUS_NEEDS_ACTION;
 		}
 		
 		if($save)
@@ -202,14 +206,14 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	private function _recur(){
 		if(!empty($this->rrule)) {
 
-			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule = new \GO\Base\Util\Icalendar\Rrule();
 			$rrule->readIcalendarRruleString($this->due_time, $this->rrule, true);
 		
 			$this->duplicate(array(
 				'completion_time'=>0,
 				'start_time'=>time(),
 				'due_time'=>$rrule->getNextRecurrence(time()),
-				'status'=>GO_Tasks_Model_Task::STATUS_NEEDS_ACTION,
+				'status'=>Task::STATUS_NEEDS_ACTION,
 				'percentage_complete'=>0
 			));
 		}
@@ -220,14 +224,14 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	 */
 	public function buildFilesPath() {
 
-		return 'tasks/' . GO_Base_Fs_Base::stripInvalidChars($this->tasklist->name) . '/' . date('Y', $this->due_time) . '/' . GO_Base_Fs_Base::stripInvalidChars($this->name).' ('.$this->id.')';
+		return 'tasks/' . \GO\Base\Fs\Base::stripInvalidChars($this->tasklist->name) . '/' . date('Y', $this->due_time) . '/' . \GO\Base\Fs\Base::stripInvalidChars($this->name).' ('.$this->id.')';
 	}
 	
 	public function defaultAttributes() {
-		$settings = GO_Tasks_Model_Settings::model()->getDefault(GO::user());
+		$settings = Settings::model()->getDefault(\GO::user());
 		
 		$defaults = array(
-				'status' => GO_Tasks_Model_Task::STATUS_NEEDS_ACTION,
+				'status' => Task::STATUS_NEEDS_ACTION,
 				//'remind' => $settings->remind,
 				'start_time'=> time(),
 				'due_time'=> time(),
@@ -241,9 +245,9 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function getDefaultReminder($startTime){
-		$settings = GO_Tasks_Model_Settings::model()->getDefault(GO::user());
+		$settings = Settings::model()->getDefault(\GO::user());
 		
-		$tmp = GO_Base_Util_Date::date_add($startTime, -$settings->reminder_days);
+		$tmp = \GO\Base\Util\Date::date_add($startTime, -$settings->reminder_days);
 		
 		// Set default to 8:00 when reminder_time is not set.
 		$rtime = empty($settings->reminder_time) ? "08:00" : $settings->reminder_time;
@@ -261,18 +265,18 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	 */
 	public function toICS() {		
 		
-		$c = new GO_Base_VObject_VCalendar();		
-		$c->add(new GO_Base_VObject_VTimezone());
+		$c = new \GO\Base\VObject\VCalendar();		
+		$c->add(new \GO\Base\VObject\VTimezone());
 		$c->add($this->toVObject());		
 		return $c->serialize();		
 	}
 	
 	public function toVCS(){
-		$c = new GO_Base_VObject_VCalendar();		
+		$c = new \GO\Base\VObject\VCalendar();		
 		$vobject = $this->toVObject('');
 		$c->add($vobject);		
 		
-		GO_Base_VObject_Reader::convertICalendarToVCalendar($c);
+		\GO\Base\VObject\Reader::convertICalendarToVCalendar($c);
 		
 		return $c->serialize();		
 	}
@@ -290,14 +294,14 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		
 		$e->uid=$this->uuid;	
 		
-		$e->add('dtstamp', new DateTime("now", new DateTimeZone('UTC')));
+		$e->add('dtstamp', new \DateTime("now", new \DateTimeZone('UTC')));
 		
-		$mtimeDateTime = new DateTime('@'.$this->mtime);
-		$mtimeDateTime->setTimezone(new DateTimeZone('UTC'));		
+		$mtimeDateTime = new \DateTime('@'.$this->mtime);
+		$mtimeDateTime->setTimezone(new \DateTimeZone('UTC'));		
 		$e->add('LAST-MODIFIED', $mtimeDateTime);
 				
-		$ctimeDateTime = new DateTime('@'.$this->mtime);
-		$ctimeDateTime->setTimezone(new DateTimeZone('UTC'));
+		$ctimeDateTime = new \DateTime('@'.$this->mtime);
+		$ctimeDateTime->setTimezone(new \DateTimeZone('UTC'));
 		$e->add('created', $ctimeDateTime);
 		
     $e->summary = $this->name;
@@ -307,27 +311,27 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		$dateType = "DATE";
 		
 //		$dtstart = new Sabre\VObject\Property\DateTime('dtstart',$dateType);
-//		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time));		
+//		$dtstart->setDateTime(\GO\Base\Util\Date_DateTime::fromUnixtime($this->start_time));		
 //		$e->add($dtstart);
 //		
-		$e->add('dtstart', GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time), array('type'=>$dateType));
+		$e->add('dtstart', \GO\Base\Util\Date_DateTime::fromUnixtime($this->start_time), array('type'=>$dateType));
 		
 		
 		
 //		$due = new Sabre\VObject\Property\DateTime('due',$dateType);
-//		$due->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->due_time));		
+//		$due->setDateTime(\GO\Base\Util\Date_DateTime::fromUnixtime($this->due_time));		
 //		$e->add($due);
 		
-		$e->add('due', GO_Base_Util_Date_DateTime::fromUnixtime($this->due_time), array('type'=>$dateType));
+		$e->add('due', \GO\Base\Util\Date_DateTime::fromUnixtime($this->due_time), array('type'=>$dateType));
 		
 		
 		
 		if($this->completion_time>0){
 //			$completed = new Sabre\VObject\Property\DateTime('completed',Sabre\VObject\Property\DateTime::LOCALTZ);
-//			$completed->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->completion_time));		
+//			$completed->setDateTime(\GO\Base\Util\Date_DateTime::fromUnixtime($this->completion_time));		
 //			$e->add($completed);
 			
-			$e->add('completed', GO_Base_Util_Date_DateTime::fromUnixtime($this->completion_time), array('type'=>$dateType));
+			$e->add('completed', \GO\Base\Util\Date_DateTime::fromUnixtime($this->completion_time), array('type'=>$dateType));
 		
 		}
 		
@@ -362,10 +366,10 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param Sabre\VObject\Component $vobject
 	 * @param array $attributes Extra attributes to apply to the task. Raw values should be past. No input formatting is applied.
-	 * @return GO_Tasks_Model_Task 
+	 * @return Task 
 	 */
 	public function importVObject(Sabre\VObject\Component $vobject, $attributes=array()){
-		//$event = new GO_Calendar_Model_Event();
+		//$event = new \GO\Calendar\Model\Event();
 		
 		$this->uuid = (string) $vobject->uid;
 		$this->name = (string) $vobject->summary;
@@ -398,7 +402,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 			$this->start_time=$this->due_time;
 		
 		if($vobject->rrule){			
-			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule = new \GO\Base\Util\Icalendar\Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);	
 			$rrule->shiftDays(false);
 			$this->rrule = $rrule->createRrule();
@@ -412,7 +416,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 			$this->status=(string) $vobject->status;
 		
 		if($vobject->duration){
-			$duration = GO_Base_VObject_Reader::parseDuration($vobject->duration);
+			$duration = \GO\Base\VObject\Reader::parseDuration($vobject->duration);
 			$this->end_time = $this->start_time+$duration;
 		}
 		

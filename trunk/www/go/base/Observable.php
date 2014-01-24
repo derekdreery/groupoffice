@@ -27,7 +27,11 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base 
  */
-class GO_Base_Observable{
+
+namespace GO\Base;
+
+
+class Observable{
 	
 	public static $listeners;
 	
@@ -40,19 +44,19 @@ class GO_Base_Observable{
 	 */
 	public static function cacheListeners(){
 		
-		GO::debug("GO_Base_Observable::cacheListeners");
+		\GO::debug("\GO\Base\Observable::cacheListeners");
 		
-		$cacheFolder = GO::config()->getCacheFolder();
+		$cacheFolder = \GO::config()->getCacheFolder();
 		$folder = $cacheFolder->createChild('listeners',false);
 		
-		if(GO::config()->debug){
+		if(\GO::config()->debug){
 			$folder->delete();			
 		}
 		
 		if(!$folder->exists()){
 			$folder->create();
 			
-			GO::modules()->callModuleMethod('initListeners');
+			\GO::modules()->callModuleMethod('initListeners');
 		}
 	}
 	/**
@@ -64,11 +68,11 @@ class GO_Base_Observable{
 	 */
 	public function addListener($eventName,$listenerClass, $staticListenerFunction){
 		
-		GO::debug("addListener($eventName,$listenerClass, $staticListenerFunction)");
+		\GO::debug("addListener($eventName,$listenerClass, $staticListenerFunction)");
 		
 		$line = '$listeners["'.$eventName.'"][]=array("'.$listenerClass.'", "'.$staticListenerFunction.'");'."\n";
 		
-		$dir = GO::config()->orig_tmpdir.'cache/listeners/';
+		$dir = \GO::config()->orig_tmpdir.'cache/listeners/';
 		$file = $dir.get_class($this).'.php';
 		
 		if(!file_exists($file))
@@ -86,7 +90,7 @@ class GO_Base_Observable{
 //	 IN THE MODULE ADD THIS TO ATTACH A LISTENER:
 //	 
 //  public static function initListeners() {
-//		GO_Base_Controller_AbstractModelController::attachListener("display", "GO_Lists_ListsModule", "displayResponse");
+//		Controller\AbstractModelController::attachListener("display", "\GO\Lists\ListsModule", "displayResponse");
 //	}
 //	 
 //	 * 
@@ -95,11 +99,11 @@ class GO_Base_Observable{
 //	 * @param type $staticListenerFunction
 //	 */	
 //	public static function attachListener($eventName,$listenerClass, $staticListenerFunction){
-//		GO::debug("addListener($eventName,$listenerClass, $staticListenerFunction)");
+//		\GO::debug("addListener($eventName,$listenerClass, $staticListenerFunction)");
 //		
 //		$line = '$listeners["'.$eventName.'"][]=array("'.$listenerClass.'", "'.$staticListenerFunction.'");'."\n";
 //		
-//		$dir = GO::config()->orig_tmpdir.'cache/listeners/';
+//		$dir = \GO::config()->orig_tmpdir.'cache/listeners/';
 //		$file = $dir.get_called_class().'.php';
 //		
 //		if(!file_exists($file))
@@ -138,8 +142,8 @@ class GO_Base_Observable{
 			//listeners array will be loaded from a file. Because addListener is only called once when there is no cache.
 			$listeners=array();
 			
-			$cacheFile = GO::config()->orig_tmpdir.'cache/listeners/'.get_class($this).'.php';
-//			$cacheFile = GO::config()->orig_tmpdir.'cache/listeners/'.$className.'.php';
+			$cacheFile = \GO::config()->orig_tmpdir.'cache/listeners/'.get_class($this).'.php';
+//			$cacheFile = \GO::config()->orig_tmpdir.'cache/listeners/'.$className.'.php';
 			if(file_exists($cacheFile))
 				require($cacheFile);
 			
@@ -149,12 +153,12 @@ class GO_Base_Observable{
 		if(isset(self::$listeners[$className][$eventName])){
 			foreach(self::$listeners[$className][$eventName] as $listener)
 			{
-				GO::debug('Firing listener for class '.$className.' event '.$eventName.': '.$listener[0].'::'.$listener[1]);
+				\GO::debug('Firing listener for class '.$className.' event '.$eventName.': '.$listener[0].'::'.$listener[1]);
 
 				$method = !empty($listener[0]) ? array($listener[0], $listener[1]) : $listener[1];
 				$return = call_user_func_array($method, $params);
 				if($return===false){
-					GO::debug("Event '$eventName' cancelled by ".$listener[0].'::'.$listener[1]);
+					\GO::debug("Event '$eventName' cancelled by ".$listener[0].'::'.$listener[1]);
 					return false;
 				}
 			}

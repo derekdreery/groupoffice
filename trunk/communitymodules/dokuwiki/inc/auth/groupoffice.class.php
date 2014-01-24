@@ -72,9 +72,9 @@ class auth_groupoffice extends auth_basic {
 		//$this->_includeGroupOffice();
 
 		$data = array(
-			'name'=>GO::user()->name,
-			'mail'=>GO::user()->email,
-			'grps'=>$this->getGroups(GO::user()->id)
+			'name'=>\GO::user()->name,
+			'mail'=>\GO::user()->email,
+			'grps'=>$this->getGroups(\GO::user()->id)
 		);
 		
 		return $data;
@@ -99,15 +99,15 @@ class auth_groupoffice extends auth_basic {
 		$this->_includeGroupOffice();
 		$this->_copyGroupOfficeSession();
 		   
-   if(!empty(GO::session()->values['user_id']))
+   if(!empty(\GO::session()->values['user_id']))
     {           
-      $USERINFO['name'] = GO::session()->values['name'];
-      $USERINFO['mail'] = GO::session()->values['email'];
+      $USERINFO['name'] = \GO::session()->values['name'];
+      $USERINFO['mail'] = \GO::session()->values['email'];
       
-      $USERINFO['grps'] = $this->getGroups(GO::session()->values['user_id']);
+      $USERINFO['grps'] = $this->getGroups(\GO::session()->values['user_id']);
             
-      $_SERVER['REMOTE_USER'] = GO::session()->values['username'];
-      $_SESSION[DOKU_COOKIE]['auth']['user'] = GO::session()->values['username'];
+      $_SERVER['REMOTE_USER'] = \GO::session()->values['username'];
+      $_SESSION[DOKU_COOKIE]['auth']['user'] = \GO::session()->values['username'];
       $_SESSION[DOKU_COOKIE]['auth']['pass'] = $pass;
       $_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
       return true;
@@ -133,7 +133,7 @@ class auth_groupoffice extends auth_basic {
    * @return  array
    */
   function retrieveGroups($start=0,$limit=0) {
-    return $this->getGroups(GO::user()->id);
+    return $this->getGroups(\GO::user()->id);
   }
 
   /**
@@ -164,22 +164,22 @@ class auth_groupoffice extends auth_basic {
 		
 		$this->_includeGroupOffice();
 		
-		$user = GO::session()->login($user, $pass);
+		$user = \GO::session()->login($user, $pass);
 		if(!$user)
 			return false;
 		
-		if(!GO::modules()->dokuwiki)
+		if(!\GO::modules()->dokuwiki)
 			return false;
 		
 		$this->checkRights();
 		
-		$USERINFO['name'] = GO::user()->name;
-		$USERINFO['mail'] = GO::user()->email;
-		$USERINFO['grps'] = $this->getGroups(GO::user()->id);
+		$USERINFO['name'] = \GO::user()->name;
+		$USERINFO['mail'] = \GO::user()->email;
+		$USERINFO['grps'] = $this->getGroups(\GO::user()->id);
 		
-		$_SERVER['REMOTE_USER'] = GO::user()->username;
+		$_SERVER['REMOTE_USER'] = \GO::user()->username;
 		
-    $_SESSION[DOKU_COOKIE]['auth']['user'] = GO::user()->username;
+    $_SESSION[DOKU_COOKIE]['auth']['user'] = \GO::user()->username;
     $_SESSION[DOKU_COOKIE]['auth']['pass'] = $pass;
     $_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
     return true;
@@ -191,7 +191,7 @@ class auth_groupoffice extends auth_basic {
    */
   function checkRights()
   {    
-    if(GO::modules()->dokuwiki->checkPermissionLevel(GO_Base_Model_Acl::MANAGE_PERMISSION))
+    if(\GO::modules()->dokuwiki->checkPermissionLevel(\GO\Base\Model\Acl::MANAGE_PERMISSION))
       $this->canDo('UserMod');
     else
       $this->canDo('Profile');
@@ -205,12 +205,12 @@ class auth_groupoffice extends auth_basic {
    */
   function getGroups($userId)
   {
-		$groups = GO::user()->getGroupIds($userId);
+		$groups = \GO::user()->getGroupIds($userId);
 		
 		$list = array();
 		
 		foreach($groups as $groupId){
-			$group = GO_Base_Model_Group::model()->findByPk($groupId, array(), true);
+			$group = \GO\Base\Model\Group::model()->findByPk($groupId, array(), true);
 			$list[] = $group->name;
 		}
 		
@@ -220,8 +220,8 @@ class auth_groupoffice extends auth_basic {
 	private function _includeGroupOffice(){
 		global $conf;
 		//define("GO_NO_SESSION");
-		if(!empty($conf['GO_php'])){
-			require_once($conf['GO_php']);
+		if(!empty($conf['\GO\php'])){
+			require_once($conf['\GO\php']);
 			error_reporting(E_ALL ^ E_NOTICE);
 		} else {	
 			throw new Exception('NO VALID GO URL GIVEN IN THE DOKUWIKI CONFIGURATION');
@@ -238,13 +238,13 @@ class auth_groupoffice extends auth_basic {
       $GO_SID=false;
     }
 		
-		if(!isset(GO::session()->values['GO_SID']) || GO::session()->values['GO_SID']!=$GO_SID){
+		if(!isset(\GO::session()->values['GO_SID']) || \GO::session()->values['GO_SID']!=$GO_SID){
       //Group-Office session id changed. Someone else logged in.      
       if(!$this->logOff())
         throw new Exception('The GO session is not closed properly.');
     }
 		
-		if($GO_SID && empty(GO::user()->id)) 
+		if($GO_SID && empty(\GO::user()->id)) 
     {
       $fname = session_save_path() . "/sess_" . $GO_SID;
       if (file_exists($fname)) 
@@ -253,8 +253,8 @@ class auth_groupoffice extends auth_basic {
         $data = $this->_unserializesession($data);
         
         $_SESSION['GO_SESSION'] = $data['GO_SESSION'];
-				GO::session()->values = $data['GO_SESSION'];
-        GO::session()->values['GO_SID']=$GO_SID;
+				\GO::session()->values = $data['GO_SESSION'];
+        \GO::session()->values['GO_SID']=$GO_SID;
       }
     }
 	}

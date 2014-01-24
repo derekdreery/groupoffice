@@ -8,9 +8,13 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  */
-class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelController {
 
-	protected $model = 'GO_Summary_Model_RssFeed';
+namespace GO\Summary\Controller;
+
+
+class RssFeed extends \GO\Base\Controller\AbstractModelController {
+
+	protected $model = '\GO\Summary\Model\RssFeed';
 
 	protected function actionSaveFeeds($params) {
 
@@ -19,12 +23,12 @@ class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelCont
 
 		$response['data'] = array();
 		foreach ($feeds as $feed) {
-			//$feed['user_id'] = GO::user()->id;
+			//$feed['user_id'] = \GO::user()->id;
 			
 			if(!empty($feed['id']))
-				$feedModel = GO_Summary_Model_RssFeed::model()->findByPk($feed['id']);
+				$feedModel = \GO\Summary\Model\RssFeed::model()->findByPk($feed['id']);
 			else
-				$feedModel = new GO_Summary_Model_RssFeed();
+				$feedModel = new \GO\Summary\Model\RssFeed();
 			
 			$feedModel->setAttributes($feed);
 			$feedModel->save();
@@ -35,12 +39,12 @@ class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelCont
 		}
 
 		// delete other feeds
-		$feedStmt = GO_Summary_Model_RssFeed::model()
+		$feedStmt = \GO\Summary\Model\RssFeed::model()
 						->find(
-						GO_Base_Db_FindParams::newInstance()
+						\GO\Base\Db\FindParams::newInstance()
 						->criteria(
-										GO_Base_Db_FindCriteria::newInstance()
-										->addCondition('user_id', GO::user()->id)
+										\GO\Base\Db\FindCriteria::newInstance()
+										->addCondition('user_id', \GO::user()->id)
 										->addInCondition('id', $ids, 't', true, true)
 						)
 		);
@@ -53,15 +57,15 @@ class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelCont
 		return $response;
 	}
 
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
-		$storeParams->getCriteria()->addCondition('user_id', GO::user()->id);
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
+		$storeParams->getCriteria()->addCondition('user_id', \GO::user()->id);
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
 	
 	protected function getStoreParams($params) {
-		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
-						->addCondition('user_id', GO::user()->id);
-		return GO_Base_Db_FindParams::newInstance()
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
+						->addCondition('user_id', \GO::user()->id);
+		return \GO\Base\Db\FindParams::newInstance()
 						->criteria($findCriteria);
 	}
 
@@ -72,10 +76,10 @@ class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelCont
 			header('Content-Type: text/xml');
 
 			if (function_exists('curl_init')) {				
-				$httpclient = new GO_Base_Util_HttpClient();
+				$httpclient = new \GO\Base\Util\HttpClient();
 				$xml = $httpclient->request($feed);
 			} else {
-				if (!GO_Base_Fs_File::checkPathInput($feed))
+				if (!\GO\Base\Fs\File::checkPathInput($feed))
 					throw new Exception("Invalid request");
 
 				$xml = @file_get_contents($feed);

@@ -14,7 +14,7 @@
 
 require_once("../../GO.php");
 
-require_once(GO::config()->root_path.'modules/formprocessor/classes/formprocessor.class.inc.php');
+require_once(\GO::config()->root_path.'modules/formprocessor/classes/formprocessor.class.inc.php');
 
 $ajax = !isset($_POST['return_to']);
 

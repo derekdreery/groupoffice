@@ -1,8 +1,12 @@
 <?php
 //require vendor lib SabreDav vobject
-//require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
+//require_once(\GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
 		
-class GO_Base_VObject_VCalendar extends Sabre\VObject\Component\VCalendar {
+
+namespace GO\Base\VObject;
+
+
+class VCalendar extends Sabre\VObject\Component\VCalendar {
 
 	/**
 	 * Creates a new component.
@@ -18,6 +22,6 @@ class GO_Base_VObject_VCalendar extends Sabre\VObject\Component\VCalendar {
 		parent::__construct();
 		
 		$this->version='2.0';
-		$this->prodid='-//Intermesh//NONSGML Group-Office '.GO::config()->version.'//EN';		
+		$this->prodid='-//Intermesh//NONSGML Group-Office '.\GO::config()->version.'//EN';		
 	}
 }

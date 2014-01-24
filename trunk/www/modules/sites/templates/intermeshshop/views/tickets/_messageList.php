@@ -36,7 +36,7 @@
 						<?php endif; ?>
 							<?php if($message->has_status): ?>
 								<tr class="ticketmodel-row <?php echo $style; ?>">
-									<td colspan="2"><?php echo GO::t('status_change', 'tickets') . ': ' . GO_Tickets_Model_Status::getName($message->status_id); ?></td>
+									<td colspan="2"><?php echo \GO::t('status_change', 'tickets') . ': ' . \GO\Tickets\Model\Status::getName($message->status_id); ?></td>
 								</tr>
 							<?php endif; ?>
 					<?php } ?>

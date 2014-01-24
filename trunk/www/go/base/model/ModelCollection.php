@@ -18,12 +18,16 @@
  * @package GO.base.model 
  */
 
-class GO_Base_Model_ModelCollection{
+
+namespace GO\Base\Model;
+
+
+class ModelCollection{
 	
 	protected $_models;
 	/**
 	 *
-	 * @var GO_Base_Db_ActiveRecord 
+	 * @var \GO\Base\Db\ActiveRecord 
 	 */
 	protected $model;
 	
@@ -34,7 +38,7 @@ class GO_Base_Model_ModelCollection{
 	public function __get($name){
 		try{
 			$model =  $this->model->findByPk($name);
-		}catch(GO_Base_Exception_AccessDenied $e){
+		}catch(\GO\Base\Exception\AccessDenied $e){
 			return false;
 		}
 		
@@ -44,14 +48,14 @@ class GO_Base_Model_ModelCollection{
 	public function __isset($name){
 		try{
 			return $this->model->findByPk($name)!==false;
-		}catch(GO_Base_Exception_AccessDenied $e){
+		}catch(\GO\Base\Exception\AccessDenied $e){
 			return false;
 		}
 	}
 	/**
 	 * Query all modules.
 	 * 
-	 * @return GO_Base_Db_ActiveStatement 
+	 * @return \GO\Base\Db\ActiveStatement 
 	 */
 	public function getAll(){
 		return $this->model->find();

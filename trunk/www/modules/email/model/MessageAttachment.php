@@ -7,7 +7,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: GO_Email_Model_LinkedEmail.php 7607 2011-09-01 15:38:01Z <<USERNAME>> $
+ * @version $Id: LinkedEmail.php 7607 2011-09-01 15:38:01Z <<USERNAME>> $
  * @copyright Copyright Intermesh
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
@@ -24,7 +24,11 @@
  * @var string $encoding Content encoding
  * @var string $disposition Can be attachment or inline.
  */
-class GO_Email_Model_MessageAttachment extends GO_Base_Model{
+
+namespace GO\Email\Model;
+
+
+class MessageAttachment extends \GO\Base\Model{
 	public $name="";
 	public $number=0;
 	public $content_id="";
@@ -40,7 +44,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 * Returns the static model of the specified AR class.
 	 * Every child of this class must override it.
 	 * 
-	 * @return GO_Email_Model_MessageAttachment the static model class
+	 * @return MessageAttachment the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{		
@@ -48,14 +52,14 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	}
 	
 	/**
-	 * Create a new instance for an GO_Email_Model_ComposerMessage for example.
+	 * Create a new instance for an ComposerMessage for example.
 	 * 
-	 * @param GO_Base_Fs_File $file The temporary file
-	 * @return \GO_Email_Model_MessageAttachment 
+	 * @param \GO\Base\Fs\File $file The temporary file
+	 * @return \MessageAttachment 
 	 */
-	public function createFromTempFile(GO_Base_Fs_File $file){
+	public function createFromTempFile(\GO\Base\Fs\File $file){
 		//		$a['name'] = $file->name();
-		$a = new GO_Email_Model_MessageAttachment();
+		$a = new MessageAttachment();
 		$a->name=$file->name();
 		$a->mime= $file->mimeType();
 		
@@ -67,7 +71,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	/**
 	 * Get the temporary file for this attachment
 	 * 
-	 * @return string Relative to GO::config()->tmp_dir 
+	 * @return string Relative to \GO::config()->tmp_dir 
 	 */
 	public function getTempFile(){
 		return isset($this->_tmp_file) ? $this->_tmp_file : false;
@@ -76,10 +80,10 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	/**
 	 * Set the temporary file 
 	 * 
-	 * @param GO_Base_Fs_File $file
+	 * @param \GO\Base\Fs\File $file
 	 * @throws Exception 
 	 */
-	public function setTempFile(GO_Base_Fs_File $file){
+	public function setTempFile(\GO\Base\Fs\File $file){
 		if(!$file->isTempFile())
 			throw new Exception("File $file->name is not a temporary file");
 		
@@ -95,7 +99,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 		if(empty($this->_tmp_file))
 			return false;
 		else {
-			return file_exists(GO::config()->tmpdir.$this->_tmp_file);
+			return file_exists(\GO::config()->tmpdir.$this->_tmp_file);
 		}
 	}
 	
@@ -106,10 +110,10 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 */
 	public function getUrl(){
 		if($this->getExtension()=='dat'){			
-			return GO::url('email/message/tnefAttachmentFromTempFile', array('tmp_file'=>$this->getTempFile()));
+			return \GO::url('email/message/tnefAttachmentFromTempFile', array('tmp_file'=>$this->getTempFile()));
 		}else
 		{		
-			return GO::url('core/downloadTempFile', array('path'=>$this->getTempFile()));		
+			return \GO::url('core/downloadTempFile', array('path'=>$this->getTempFile()));		
 		}		
 	}
 	
@@ -170,7 +174,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 * @return string 
 	 */
 	public function getHumanSize(){
-		return GO_Base_Util_Number::formatSize($this->getEstimatedSize());
+		return \GO\Base\Util\Number::formatSize($this->getEstimatedSize());
 	}
 	
 	/**
@@ -179,7 +183,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 * @return string
 	 */
 	public function getExtension(){
-		$file = new GO_Base_Fs_File($this->name);
+		$file = new \GO\Base\Fs\File($this->name);
 		return strtolower($file->extension());
 	}
 	

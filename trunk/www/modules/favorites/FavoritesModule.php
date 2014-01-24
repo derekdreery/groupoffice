@@ -1,6 +1,10 @@
 <?php
 
-class GO_Favorites_FavoritesModule extends GO_Base_Module{
+
+namespace GO\Favorites;
+
+
+class FavoritesModule extends \GO\Base\Module{
 	
 	public function autoInstall() {
 		return false;

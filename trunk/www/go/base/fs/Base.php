@@ -17,7 +17,11 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @copyright Copyright Intermesh BV.
  */
-abstract class GO_Base_Fs_Base{
+
+namespace GO\Base\Fs;
+
+
+abstract class Base{
 	
 	protected $path;
 	
@@ -31,13 +35,13 @@ abstract class GO_Base_Fs_Base{
 	 */
 	public function __construct($path) {
 		
-//		GO::debug("FS construct $path");
+//		\GO::debug("FS construct $path");
 		
 		if(empty($path))
-			throw new Exception("Path may not be empty in GO_Base_Fs_Base");
+			throw new Exception("Path may not be empty in Base");
 		
 		//normalize path slashes
-		if(GO_Base_Util_Common::isWindows())
+		if(\GO\Base\Util\Common::isWindows())
 			$path=str_replace('\\','/', $path);
 		
 		if(!self::checkPathInput($path))
@@ -56,20 +60,20 @@ abstract class GO_Base_Fs_Base{
 	 * Create a folder or file from a path string
 	 * 
 	 * @param string $path
-	 * @return GO_Base_Fs_File|GO_Base_Fs_Folder
+	 * @return File|Folder
 	 */
 	public static function createFromPath($path){
 		if(is_file($path))
-			return new GO_Base_Fs_File($path);
+			return new File($path);
 		else
-			return new GO_Base_Fs_Folder ($path);
+			return new Folder ($path);
 	}
 	
 	
 	/**
 	 * Get the parent folder object
 	 * 
-	 * @return GO_Base_Fs_Folder Parent folder object
+	 * @return Folder Parent folder object
 	 */
 	public function parent(){
 		
@@ -77,13 +81,13 @@ abstract class GO_Base_Fs_Base{
 		if($parentPath==$this->path)
 			return false;
 		
-		return new GO_Base_Fs_Folder($parentPath);
+		return new Folder($parentPath);
 	}
 	
 	/**
 	 * Find the first existing parent folder.
 	 * 
-	 * @return GO_Base_Fs_Folder
+	 * @return Folder
 	 */
 	public function firstExistingParent(){
 		$parent=$this;
@@ -98,14 +102,14 @@ abstract class GO_Base_Fs_Base{
 	 * Get a child file or folder.
 	 * 
 	 * @param string $filename
-	 * @return \GO_Base_Fs_File|\GO_Base_Fs_Folder|boolean 
+	 * @return \File|\Folder|boolean 
 	 */
 	public function child($filename){
 		$childPath = $this->path.'/'.$filename;
 		if(is_file($childPath)){
-			return new GO_Base_Fs_File($childPath);
+			return new File($childPath);
 		} elseif(is_dir($childPath)){
-			return new GO_Base_Fs_Folder($childPath);
+			return new Folder($childPath);
 		}else
 		{
 			return false;
@@ -117,14 +121,14 @@ abstract class GO_Base_Fs_Base{
 	 * 
 	 * @param string $filename
 	 * @param boolean $isFile
-	 * @return \GO_Base_Fs_File|\GO_Base_Fs_Folder 
+	 * @return \File|\Folder 
 	 */
 	public function createChild($filename, $isFile=true){
 		$childPath = $this->path.'/'.$filename;
 		if($isFile){
-			return new GO_Base_Fs_File($childPath);
+			return new File($childPath);
 		} else{
-			return new GO_Base_Fs_Folder($childPath);
+			return new Folder($childPath);
 		}
 	}
 	
@@ -316,8 +320,8 @@ abstract class GO_Base_Fs_Base{
 			$filename = 'unnamed';
 		}
 		
-		if(GO::config()->convert_utf8_filenames_to_ascii)
-			$filename = GO_Base_Util_String::utf8ToASCII($filename);
+		if(\GO::config()->convert_utf8_filenames_to_ascii)
+			$filename = \GO\Base\Util\String::utf8ToASCII($filename);
 		
 		if(strlen($filename)>255)
 			$filename = substr($filename, 0,255);
@@ -364,30 +368,30 @@ abstract class GO_Base_Fs_Base{
 	}
 	
 	/**
-	 * Get the path without GO::config()->file_storage_path.
+	 * Get the path without \GO::config()->file_storage_path.
 	 * 
 	 * @return string 
 	 */
 	public function stripFileStoragePath(){
-		return str_replace(GO::config()->file_storage_path,'', $this->path());
+		return str_replace(\GO::config()->file_storage_path,'', $this->path());
 	}
 	
 	/**
-	 * Get the path without GO::config()->root_path.
+	 * Get the path without \GO::config()->root_path.
 	 * 
 	 * @return string 
 	 */
 	public function stripRootPath(){
-		return str_replace(GO::config()->root_path,'', $this->path());
+		return str_replace(\GO::config()->root_path,'', $this->path());
 	}
 	
 	/**
-	 * Get the path without GO::config()->tmpdir.
+	 * Get the path without \GO::config()->tmpdir.
 	 * 
 	 * @return string 
 	 */
 	public function stripTempPath(){
-		return str_replace(GO::config()->tmpdir,'', $this->path());
+		return str_replace(\GO::config()->tmpdir,'', $this->path());
 	}
 	
 	/**
@@ -396,7 +400,7 @@ abstract class GO_Base_Fs_Base{
 	 * @return boolean 
 	 */
 	public function isTempFile(){
-		return strpos($this->path(), GO::config()->tmpdir)===0;
+		return strpos($this->path(), \GO::config()->tmpdir)===0;
 	}
 
 }

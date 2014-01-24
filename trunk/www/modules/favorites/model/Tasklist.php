@@ -14,7 +14,7 @@
  */
  
 /**
- * The GO_Favorites_Model_Tasklist model
+ * The Tasklist model
  *
  * @package GO.modules.Favorites
  * @version $Id$
@@ -26,7 +26,11 @@
  * @property int $sort
  */
 
-class GO_Favorites_Model_Tasklist extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Favorites\Model;
+
+
+class Tasklist extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns the table name
@@ -45,7 +49,7 @@ class GO_Favorites_Model_Tasklist extends GO_Base_Db_ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-				 'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'tasklist_id', 'delete' => false),
+				 'tasklist' => array('type' => self::BELONGS_TO, 'model' => '\GO\Tasks\Model\Tasklist', 'field' => 'tasklist_id', 'delete' => false),
 		 );
 	 }	
 }

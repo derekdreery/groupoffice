@@ -24,7 +24,7 @@
  * @uses Exception
  */
 
-class AccessDeniedException extends Exception
+class AccessDeniedException extends \Exception
 {
 
 	public function __construct() {
@@ -45,7 +45,7 @@ class AccessDeniedException extends Exception
 
 
 
-class DatabaseInsertException extends Exception
+class DatabaseInsertException extends \Exception
 {
 	public function __construct() {
 		parent::__construct($GLOBALS['lang']['common']['saveError']);
@@ -64,7 +64,7 @@ class DatabaseInsertException extends Exception
  */
 
 
-class DatabaseUpdateException extends Exception
+class DatabaseUpdateException extends \Exception
 {
 	public function __construct() {
 		parent::__construct($GLOBALS['lang']['common']['saveError']);
@@ -83,7 +83,7 @@ class DatabaseUpdateException extends Exception
  */
 
 
-class DatabaseDeleteException extends Exception
+class DatabaseDeleteException extends \Exception
 {
 	public function __construct() {
 		parent::__construct($GLOBALS['lang']['common']['deleteError']);
@@ -102,7 +102,7 @@ class DatabaseDeleteException extends Exception
  */
 
 
-class DatabaseSelectException extends Exception
+class DatabaseSelectException extends \Exception
 {
 	public function __construct() {
 		parent::__construct($GLOBALS['lang']['common']['selectError']);
@@ -121,7 +121,7 @@ class DatabaseSelectException extends Exception
  */
 
 
-class DatabaseReplaceException extends Exception
+class DatabaseReplaceException extends \Exception
 {
 	public function __construct() {
 		parent::__construct($GLOBALS['lang']['common']['saveError']);
@@ -140,14 +140,14 @@ class DatabaseReplaceException extends Exception
  */
 
 
-class MissingFieldException extends Exception
+class MissingFieldException extends \Exception
 {
 	public function __construct() {
 		parent::__construct($GLOBALS['lang']['common']['missingField']);
 	}
 }
 
-class FileNotFoundException extends Exception
+class FileNotFoundException extends \Exception
 {
 	public function __construct($path = '') {
 		$m = 'File not found';

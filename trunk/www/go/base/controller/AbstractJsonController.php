@@ -19,21 +19,25 @@
  * @author Michael de Hart <mdhart@intermesh.nl>
  *
  */
-abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Controller_AbstractController {
+
+namespace GO\Base\Controller;
+
+
+abstract class AbstractJsonController extends AbstractController {
 
 	/**
 	 * @deprecated
 	 * Get a Json object from the response data
 	 * @param array $data
-	 * @return GO_Base_Data_JsonResponse response object
+	 * @return \GO\Base\Data\JsonResponse response object
 	 */
 	public function renderJson($data) {
-		return new GO_Base_Data_JsonResponse($data);
+		return new \GO\Base\Data\JsonResponse($data);
 	}
 	
 	/**
 	 * Render JSON response for forms
-	 * @param GO_Base_Db_ActiveRecord $model the AWR to renerated the JSON form data for
+	 * @param \GO\Base\Db\ActiveRecord $model the AWR to renerated the JSON form data for
 	 * @param array $remoteComboField List all fields that require a remote text to load for a remote combobox.
 	 * eg. with a model you want to provide the category name so that that the
 	 * category combo store does not need to be loaded to show it.
@@ -44,18 +48,18 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	 * 
 	 * The category name would be looked up in the model model ->category->name.
 	 * A relation for this must be defined. See ActiveRecord->relations.
-	 * @see GO_Base_Controller_AbstractModelController::remoteComboFields()
+	 * @see AbstractModelController::remoteComboFields()
 	 * @param array $extraFields the extra fields that should be attached to the data array as key => value
-	 * @return GO_Base_Data_JsonResponse Response object
-	 * @throws GO_Base_Exception_AccessDenied
+	 * @return \GO\Base\Data\JsonResponse Response object
+	 * @throws \GO\Base\Exception\AccessDenied
 	 */
 	public function renderForm($model, $remoteComboFields = array(), $extraFields = array()) {
 
 		$response = array('data' => array(), 'success' => true);
 
 		//TODO: check if this can be moved. This methode renders JSON and should not check permissions.
-		if (!$model->checkPermissionLevel($model->isNew ? GO_Base_Model_Acl::CREATE_PERMISSION : GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied();
+		if (!$model->checkPermissionLevel($model->isNew ? \GO\Base\Model\Acl::CREATE_PERMISSION : \GO\Base\Model\Acl::WRITE_PERMISSION))
+			throw new \GO\Base\Exception\AccessDenied();
 
 		//Init data array
 		$response['data'] = array_merge($model->getAttributes(), $extraFields);
@@ -63,7 +67,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		$response['data']['write_permission'] = true;
 
 		//Add the customerfields to the data array
-		if (GO::user()->getModulePermissionLevel('customfields') && $model->customfieldsRecord)
+		if (\GO::user()->getModulePermissionLevel('customfields') && $model->customfieldsRecord)
 			$response['data'] = array_merge($response['data'], $model->customfieldsRecord->getAttributes());
 
 		if (!empty($remoteComboFields))
@@ -76,14 +80,14 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				&$remoteComboFields
 		));
 
-		return new GO_Base_Data_JsonResponse($response);
+		return new \GO\Base\Data\JsonResponse($response);
 	}
 
 	/**
 	 * Can be used in actionDisplay like actions
-	 * @param GO_Base_Db_ActiveRecord $model the model to render display data for
+	 * @param \GO\Base\Db\ActiveRecord $model the model to render display data for
 	 * @param array $extraFields the extra fields that should be attached to the data array as key => value
-	 * @return GO_Base_Data_JsonResponse Response object
+	 * @return \GO\Base\Data\JsonResponse Response object
 	 */
 	public function renderDisplay($model, $extraFields = array()) {
 		$response = array('data' => array(), 'success' => true);
@@ -97,12 +101,12 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		//$response['data'] = $model->getAttributes('html');
 		//$response['data']['model'] = $model->className();
 		$response['data']['permission_level'] = $model->getPermissionLevel();
-		$response['data']['write_permission'] = GO_Base_Model_Acl::hasPermission($response['data']['permission_level'], GO_Base_Model_Acl::WRITE_PERMISSION);
+		$response['data']['write_permission'] = \GO\Base\Model\Acl::hasPermission($response['data']['permission_level'], \GO\Base\Model\Acl::WRITE_PERMISSION);
 
 
 		$response['data']['customfields'] = array();
 
-		if (!isset($response['data']['workflow']) && GO::modules()->workflow)
+		if (!isset($response['data']['workflow']) && \GO::modules()->workflow)
 			$response = $this->_processWorkflowDisplay($model, $response);
 
 		if ($model->customfieldsRecord)
@@ -111,21 +115,21 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		if ($model->hasLinks()) {
 			$response = $this->_processLinksDisplay($model, $response);
 
-			if (!isset($response['data']['events']) && GO::modules()->calendar)
+			if (!isset($response['data']['events']) && \GO::modules()->calendar)
 				$response = $this->_processEventsDisplay($model, $response);
 
-			if (!isset($response['data']['tasks']) && GO::modules()->tasks)
+			if (!isset($response['data']['tasks']) && \GO::modules()->tasks)
 				$response = $this->_processTasksDisplay($model, $response);
 		}
 
-		if (GO::modules()->files && !isset($response['data']['files']))
+		if (\GO::modules()->files && !isset($response['data']['files']))
 			$response = $this->_processFilesDisplay($model, $response);
 
-		if (GO::modules()->comments)
+		if (\GO::modules()->comments)
 			$response = $this->_processCommentsDisplay($model, $response);
 		
-		if (GO::modules()->lists)
-			$response = GO_Lists_ListsModule::displayResponse($model, $response);
+		if (\GO::modules()->lists)
+			$response = \GO\Lists\ListsModule::displayResponse($model, $response);
 
 		$this->fireEvent('display', array(
 				&$this,
@@ -133,13 +137,13 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				&$model
 		));
 
-		return new GO_Base_Data_JsonResponse($response);
+		return new \GO\Base\Data\JsonResponse($response);
 	}
 
 	/**
 	 * Render the JSON outbut for a submit action to be used by ExtJS Form submit
-	 * @param GO_Base_Db_ActiveRecord $model
-	 * @return GO_Base_Data_JsonResponse Response object
+	 * @param \GO\Base\Db\ActiveRecord $model
+	 * @return \GO\Base\Data\JsonResponse Response object
 	 */
 	public function renderSubmit($model) {
 
@@ -156,18 +160,18 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 
 			//TODO: move the link saving to the model someday
 			if (!empty($_POST['link']) && $model->hasLinks()) {
-				//a link is sent like  GO_Notes_Model_Note:1
+				//a link is sent like  \GO\Notes\Model\Note:1
 				//where 1 is the id of the model
 				$linkProps = explode(':', $_POST['link']);
-				$linkModel = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
+				$linkModel = \GO::getModel($linkProps[0])->findByPk($linkProps[1]);
 				$model->link($linkModel);
 			}
 			
 		} else { // model was not saved
 			$response['success'] = false;
 			//can't use <br /> tags in response because this goes wrong with the extjs fileupload hack with an iframe.
-			$response['feedback'] = sprintf(GO::t('validationErrorsFound'), strtolower($model->localizedName)) . "\n\n" . implode("\n", $model->getValidationErrors()) . "\n";
-			if (GO_Base_Util_Http::isAjaxRequest(false)) {
+			$response['feedback'] = sprintf(\GO::t('validationErrorsFound'), strtolower($model->localizedName)) . "\n\n" . implode("\n", $model->getValidationErrors()) . "\n";
+			if (\GO\Base\Util\Http::isAjaxRequest(false)) {
 				$response['feedback'] = nl2br($response['feedback']);
 			}
 			$response['validationErrors'] = $model->getValidationErrors();
@@ -179,17 +183,17 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 					&$model
 			));
 
-		return new GO_Base_Data_JsonResponse($response);
+		return new \GO\Base\Data\JsonResponse($response);
 	}
 
 	/**
 	 * Renders DbStore object to a valid JSON response
-	 * @param GO_Base_Date_JsonStore $store I JsonStore object to get JSON from
+	 * @param \GO\Base\Date\JsonStore $store I JsonStore object to get JSON from
 	 * @deprecated boolean $return still here for buttonParams (should button params be set in DbStore
 	 * @param mixed $buttonParams ???
-	 * @return GO_Base_Data_JsonResponse Response object
+	 * @return \GO\Base\Data\JsonResponse Response object
 	 */
-	public function renderStore(GO_Base_Data_AbstractStore $store, $return = false, $buttonParams=false) {
+	public function renderStore(\GO\Base\Data\AbstractStore $store, $return = false, $buttonParams=false) {
 
 //		$response = array(
 //				"success" => true,
@@ -207,7 +211,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		if (!empty($title))
 			$response['title'] = $title;
 
-//		if ($store instanceof GO_Base_Data_DbStore) {
+//		if ($store instanceof \GO\Base\Data\DbStore) {
 //			if ($store->getDeleteSuccess() !== null) {
 //				$response['deleteSuccess'] = $store->getDeleteSuccess();
 //				if(!$response['deleteSuccess'])
@@ -220,19 +224,19 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 //			}
 //		}
 
-		return new GO_Base_Data_JsonResponse($response);
+		return new \GO\Base\Data\JsonResponse($response);
 	}
 	
 	/**
 	 * 
-	 * @param GO_Base_Data_AbstractStore $store
+	 * @param \GO\Base\Data\AbstractStore $store
 	 * @param type $params
 	 */
-	protected function renderExport(GO_Base_Data_AbstractStore $store, $params) {
+	protected function renderExport(\GO\Base\Data\AbstractStore $store, $params) {
 		//define('EXPORTING', true);
 		//used by custom fields to format diffently
-		if(GO::modules()->customfields)
-			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
+		if(\GO::modules()->customfields)
+			\GO\Customfields\Model\AbstractCustomFieldsRecord::$formatForExport=true;
 		
 		$checkboxSettings = array(
 			'export_include_headers'=>!empty($params['includeHeaders']),
@@ -240,7 +244,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 			'export_include_hidden'=>!empty($params['includeHidden'])
 		);
 		
-		$settings =  GO_Base_Export_Settings::load();
+		$settings =  \GO\Base\Export\Settings::load();
 		$settings->saveFromArray($checkboxSettings);
 		
 		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="H"))
@@ -254,7 +258,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 			$includeColumns = explode(',',$params['columns']);
 			foreach($includeColumns as $incColumn){
 				if(!$columnModel->getColumn($incColumn))
-					$columnModel->addColumn (new GO_Base_Data_Column($incColumn,$incColumn));
+					$columnModel->addColumn (new \GO\Base\Data\Column($incColumn,$incColumn));
 			}
 				
 			$columnModel->sort($includeColumns);
@@ -267,10 +271,10 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		
 		if(!empty($params['type'])){
 			//temporary fix for compatibility with AbsractModelController
-			$params['type']=str_replace('GO_Base_Export', 'GO_Base_Storeexport', $params['type']);
+			$params['type']=str_replace('\GO\Base\Export', '\GO\Base\Storeexport', $params['type']);
 			$export = new $params['type']($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation);
 		}else
-			$export = new GO_Base_Storeexport_ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
+			$export = new \GO\Base\Storeexport_ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
 
 		if(isset($params['extraLines']))
 			$export->addLines($params['extraLines']);
@@ -338,7 +342,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 
 		$response['data']['workflow'] = array();
 
-		$workflowModelstmnt = GO_Workflow_Model_Model::model()->findByAttributes(array("model_id" => $model->id, "model_type_id" => $model->modelTypeId()));
+		$workflowModelstmnt = \GO\Workflow\Model\Model::model()->findByAttributes(array("model_id" => $model->id, "model_type_id" => $model->modelTypeId()));
 
 		while ($workflowModel = $workflowModelstmnt->fetch()) {
 
@@ -359,7 +363,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 
 			if ($workflowModel->step_id == '-1') {
 				$workflowResponse['step_progress'] = '';
-				$workflowResponse['step_name'] = GO::t('complete', 'workflow');
+				$workflowResponse['step_name'] = \GO::t('complete', 'workflow');
 				$workflowResponse['is_approver'] = false;
 				$workflowResponse['step_all_must_approve'] = false;
 			} else {
@@ -367,7 +371,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				$workflowResponse['step_name'] = $currentStep->name;
 				$workflowResponse['step_all_must_approve'] = $currentStep->all_must_approve;
 
-				$is_approver = GO_Workflow_Model_RequiredApprover::model()->findByPk(array("user_id" => GO::user()->id, "process_model_id" => $workflowModel->id, "approved" => false));
+				$is_approver = \GO\Workflow\Model\RequiredApprover::model()->findByPk(array("user_id" => \GO::user()->id, "process_model_id" => $workflowModel->id, "approved" => false));
 
 				if ($is_approver)
 					$workflowResponse['is_approver'] = true;
@@ -395,13 +399,13 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 			}
 
 			$workflowResponse['history'] = array();
-			$historiesStmnt = GO_Workflow_Model_StepHistory::model()->findByAttribute('process_model_id', $workflowModel->id, GO_Base_Db_FindParams::newInstance()->select('t.*')->order('ctime', 'DESC'));
+			$historiesStmnt = \GO\Workflow\Model\StepHistory::model()->findByAttribute('process_model_id', $workflowModel->id, \GO\Base\Db\FindParams::newInstance()->select('t.*')->order('ctime', 'DESC'));
 			while ($history = $historiesStmnt->fetch()) {
-				GO_Base_Db_ActiveRecord::$attributeOutputMode = 'html';
+				\GO\Base\Db\ActiveRecord::$attributeOutputMode = 'html';
 
 
 				if ($history->step_id == '-1')
-					$step_name = GO::t('complete', 'workflow');
+					$step_name = \GO::t('complete', 'workflow');
 				else
 					$step_name = $history->step->name;
 
@@ -412,10 +416,10 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 						'ctime' => $history->ctime,
 						'comment' => $history->comment,
 						'status' => $history->status ? "1" : "0",
-						'status_name' => $history->status ? GO::t('approved', 'workflow') : GO::t('declined', 'workflow')
+						'status_name' => $history->status ? \GO::t('approved', 'workflow') : \GO::t('declined', 'workflow')
 				);
 
-				GO_Base_Db_ActiveRecord::$attributeOutputMode = 'raw';
+				\GO\Base\Db\ActiveRecord::$attributeOutputMode = 'raw';
 			}
 
 			$response['data']['workflow'][] = $workflowResponse;
@@ -430,12 +434,12 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		//Get all field models and build an array of categories with their
 		//fields for display.
 
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->order(array('category.sort_index', 't.sort_index'), array('ASC', 'ASC'));
 		$findParams->getCriteria()
 						->addCondition('extends_model', $model->customfieldsRecord->extendsModel(), '=', 'category');
 
-		$stmt = GO_Customfields_Model_Field::model()->find($findParams);
+		$stmt = \GO\Customfields\Model\Field::model()->find($findParams);
 
 		$categories = array();
 
@@ -446,7 +450,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				$categories[$field->category->id]['fields'] = array();
 			}
 			if (!empty($customAttributes[$field->columnName()])) {
-				if ($field->datatype == "GO_Customfields_Customfieldtype_Heading") {
+				if ($field->datatype == "\GO\Customfields\Customfieldtype\Heading") {
 					$header = array('name' => $field->name, 'value' => $customAttributes[$field->columnName()]);
 				}
 				if (!empty($header)) {
@@ -466,8 +470,8 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				$response['data']['customfields'][] = $category;
 		}
 
-		if(isset($response['data']['customfields']) && method_exists($model, 'getDisabledCustomFieldsCategoriesField') && GO_Customfields_Model_DisableCategories::isEnabled($model->className(), $model->disabledCustomFieldsCategoriesField)){
-			$ids = GO_Customfields_Model_EnabledCategory::model()->getEnabledIds($model->className(), $model->getDisabledCustomFieldsCategoriesField());
+		if(isset($response['data']['customfields']) && method_exists($model, 'getDisabledCustomFieldsCategoriesField') && \GO\Customfields\Model\DisableCategories::isEnabled($model->className(), $model->disabledCustomFieldsCategoriesField)){
+			$ids = \GO\Customfields\Model\EnabledCategory::model()->getEnabledIds($model->className(), $model->getDisabledCustomFieldsCategoriesField());
 			
 			$enabled = array();
 			foreach($response['data']['customfields'] as $cat){
@@ -483,9 +487,9 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	}
 
 	private function _processFilesDisplay($model, $response) {
-		if (isset(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id'] > 0) {
+		if (isset(\GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id'] > 0) {
 
-			$fc = new GO_Files_Controller_Folder();
+			$fc = new \GO\Files\Controller\Folder();
 			$listResponse = $fc->run("list", array('skip_fs_sync'=>true, 'folder_id' => $response['data']['files_folder_id'], "limit" => 20, "sort" => 'mtime', "dir" => 'DESC'), false);
 			$response['data']['files'] = $listResponse['results'];
 		} else {
@@ -495,24 +499,24 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	}
 
 	private function _processLinksDisplay($model, $response) {
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->limit(15);
 
 		$ignoreModelTypes = array();
-		if (GO::modules()->calendar)
-			$ignoreModelTypes[] = GO_Calendar_Model_Event::model()->modelTypeId();
-		if (GO::modules()->tasks)
-			$ignoreModelTypes[] = GO_Tasks_Model_Task::model()->modelTypeId();
+		if (\GO::modules()->calendar)
+			$ignoreModelTypes[] = \GO\Calendar\Model\Event::model()->modelTypeId();
+		if (\GO::modules()->tasks)
+			$ignoreModelTypes[] = \GO\Tasks\Model\Task::model()->modelTypeId();
 
 		$findParams->getCriteria()->addInCondition('model_type_id', $ignoreModelTypes, 't', true, true);
 
-		$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, $findParams);
+		$stmt = \GO\Base\Model\SearchCacheRecord::model()->findLinks($model, $findParams);
 
-		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_SearchCacheRecord::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO\Base\Model\SearchCacheRecord::model());
 		$store->setStatement($stmt);
 
 		$columnModel = $store->getColumnModel();
-		$columnModel->formatColumn('link_count', 'GO::getModel($model->model_name)->countLinks($model->model_id)');
+		$columnModel->formatColumn('link_count', '\GO::getModel($model->model_name)->countLinks($model->model_id)');
 		$columnModel->formatColumn('link_description', '$model->link_description');
 
 		$data = $store->getData();
@@ -522,14 +526,14 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	}
 
 	private function _processEventsDisplay($model, $response) {
-		$startOfDay = GO_Base_Util_Date::clear_time(time());
+		$startOfDay = \GO\Base\Util\Date::clear_time(time());
 
-		$findParams = GO_Base_Db_FindParams::newInstance()->order('start_time', 'DESC');
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order('start_time', 'DESC');
 		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=');
 
-		$stmt = GO_Calendar_Model_Event::model()->findLinks($model, $findParams);
+		$stmt = \GO\Calendar\Model\Event::model()->findLinks($model, $findParams);
 
-		$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Event::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO\Calendar\Model\Event::model());
 		$store->setStatement($stmt);
 
 		$columnModel = $store->getColumnModel();
@@ -544,25 +548,25 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	}
 
 	private function _processCommentsDisplay($model, $response) {
-		$stmt = GO_Comments_Model_Comment::model()->find(GO_Base_Db_FindParams::newInstance()
+		$stmt = \GO\Comments\Model\Comment::model()->find(\GO\Base\Db\FindParams::newInstance()
 										->limit(5)
 										->select('t.*,cat.name AS categoryName')
 										->order('id', 'DESC')
 										->joinModel(array(
-												'model' => 'GO_Comments_Model_Category',
+												'model' => '\GO\Comments\Model\Category',
 												'localTableAlias' => 't',
 												'localField' => 'category_id',
 												'foreignField' => 'id',
 												'tableAlias' => 'cat',
 												'type' => 'LEFT'
 										))
-										->criteria(GO_Base_Db_FindCriteria::newInstance()
-														->addModel(GO_Comments_Model_Comment::model())
+										->criteria(\GO\Base\Db\FindCriteria::newInstance()
+														->addModel(\GO\Comments\Model\Comment::model())
 														->addCondition('model_id', $model->id)
 														->addCondition('model_type_id', $model->modelTypeId())
 										));
 
-		$store = GO_Base_Data_Store::newInstance(GO_Comments_Model_Comment::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO\Comments\Model\Comment::model());
 		$store->setStatement($stmt);
 
 		$columnModel = $store->getColumnModel();
@@ -570,7 +574,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 
 		$data = $store->getData();
 		foreach ($data['results'] as $k => $v) {
-			$data['results'][$k]['categoryName'] = !empty($v['categoryName']) ? $v['categoryName'] : GO::t('noCategory', 'comments');
+			$data['results'][$k]['categoryName'] = !empty($v['categoryName']) ? $v['categoryName'] : \GO::t('noCategory', 'comments');
 		}
 		$response['data']['comments'] = $data['results'];
 
@@ -578,14 +582,14 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	}
 
 	private function _processTasksDisplay($model, $response) {
-		//$startOfDay = GO_Base_Util_Date::clear_time(time());
+		//$startOfDay = \GO\Base\Util\Date::clear_time(time());
 
-		$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time', 'DESC');
-		//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order('due_time', 'DESC');
+		//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', \GO\Tasks\Model\Task::STATUS_COMPLETED, '!=');						
 
-		$stmt = GO_Tasks_Model_Task::model()->findLinks($model, $findParams);
+		$stmt = \GO\Tasks\Model\Task::model()->findLinks($model, $findParams);
 
-		$store = GO_Base_Data_Store::newInstance(GO_Tasks_Model_Task::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO\Tasks\Model\Task::model());
 		$store->setStatement($stmt);
 
 		$store->getColumnModel()
@@ -603,7 +607,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 
 	public function formatTaskLinkRecord($record, $model, $cm) {
 
-		$statuses = GO::t('statuses', 'tasks');
+		$statuses = \GO::t('statuses', 'tasks');
 
 		$record['status'] = $statuses[$model->status];
 

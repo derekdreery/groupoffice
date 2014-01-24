@@ -1,5 +1,5 @@
 <?php
-$cron = new GO_Base_Cron_CronJob();
+$cron = new \GO\Base\Cron\CronJob();
 		
 $cron->name = 'Calendar publisher';
 $cron->active = true;
@@ -9,6 +9,6 @@ $cron->hours = '*';
 $cron->monthdays = '*';
 $cron->months = '*';
 $cron->weekdays = '*';
-$cron->job = 'GO_Calendar_Cron_CalendarPublisher';		
+$cron->job = '\GO\Calendar\Cron\CalendarPublisher';		
 
 $cron->save();

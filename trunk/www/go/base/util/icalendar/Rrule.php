@@ -17,7 +17,11 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.util.icalendar
  */
-class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
+
+namespace GO\Base\Util\Icalendar;
+
+
+class Rrule extends \GO\Base\Util\Date\RecurrencePattern
 {
 	/**
 	 * Create a Rrule object from a Rrule string. This function automatically finds 
@@ -39,8 +43,8 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 			}
 			
 			if($this->_until){
-				$this->_until = GO_Base_Util_Date::date_add(
-							GO_Base_Util_Date::clear_time($this->_until),
+				$this->_until = \GO\Base\Util\Date::date_add(
+							\GO\Base\Util\Date::clear_time($this->_until),
 							0,
 							0,
 							0,
@@ -60,12 +64,12 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	{
 		$parameters = array();
 		
-		$parameters['interval'] = GO_Base_Util_Number::unlocalize($json['interval']);
+		$parameters['interval'] = \GO\Base\Util\Number::unlocalize($json['interval']);
 		$parameters['freq'] = strtoupper($json['freq']);
 		if($parameters['freq']=='MONTHLY_DATE')
 			$parameters['freq']='MONTHLY';
 		$parameters['eventstarttime'] = isset($json['eventstarttime'])?strtotime($json['eventstarttime']):strtotime($json['start_time']);
-		$parameters['until'] = empty($json['repeat_forever']) && isset($json['until']) ? GO_Base_Util_Date::to_unixtime($json['until'].' 23:59') : 0; //date('G', $parameters['eventstarttime']).':'.date('i', $parameters['eventstarttime'])) : 0;
+		$parameters['until'] = empty($json['repeat_forever']) && isset($json['until']) ? \GO\Base\Util\Date::to_unixtime($json['until'].' 23:59') : 0; //date('G', $parameters['eventstarttime']).':'.date('i', $parameters['eventstarttime'])) : 0;
 		$parameters['bymonth'] = isset($json['bymonth'])?$json['bymonth']:'';
 		$parameters['bymonthday'] = isset($json['bymonthday'])?$json['bymonthday']:'';
 		
@@ -91,9 +95,9 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		// Monthly by day recurrence _must_ have valid BYSETPOS and BYDAY.
 		else if (strtolower($parameters['freq'])=='monthly' && isset($json['bysetpos'])) {
 			if (count($parameters['byday'])<1)
-				throw new Exception(GO::t('selectMonthlyDay'));
+				throw new Exception(\GO::t('selectMonthlyDay'));
 			else if (empty($json['bysetpos']))
-				throw new Exception(GO::t('selectWeekOfMonth'));
+				throw new Exception(\GO::t('selectWeekOfMonth'));
 		}
 		
 		$this->setParams($parameters);
@@ -224,10 +228,10 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 
 				if (strlen($expl_rrule[count($expl_rrule) - 1]) > 2) {
 					//this must be the end date
-					$this->_until = intval(GO_Base_Util_Date::parseIcalDate(array_pop($expl_rrule)));
+					$this->_until = intval(\GO\Base\Util\Date::parseIcalDate(array_pop($expl_rrule)));
 				}
 			} else {
-				$this->_until = intval(GO_Base_Util_Date::parseIcalDate($until));
+				$this->_until = intval(\GO\Base\Util\Date::parseIcalDate($until));
 			}
 		}
 
@@ -335,7 +339,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		$this->_bymonth = !empty($rrule_arr['BYMONTH']) ? intval($rrule_arr['BYMONTH']) : 0;
 		$this->_bymonthday = !empty($rrule_arr['BYMONTHDAY']) ? intval($rrule_arr['BYMONTHDAY']) : 0;
 		$this->_freq = !empty($rrule_arr['FREQ']) ? $rrule_arr['FREQ'] : '';
-		$this->_until = isset($rrule_arr['UNTIL']) ? intval(GO_Base_Util_Date::parseIcalDate($rrule_arr['UNTIL'])) : 0;
+		$this->_until = isset($rrule_arr['UNTIL']) ? intval(\GO\Base\Util\Date::parseIcalDate($rrule_arr['UNTIL'])) : 0;
 		$this->_count = !empty($rrule_arr['COUNT']) ? intval($rrule_arr['COUNT']) : 0;
 		$this->_interval = !empty($rrule_arr['INTERVAL']) ? intval($rrule_arr['INTERVAL']) : 1;
 		$this->_bysetpos = !empty($rrule_arr['BYSETPOS']) ? intval($rrule_arr['BYSETPOS']) : 0;
@@ -376,7 +380,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		$response = array();
 		if (isset($this->_freq)) {
 			if (!empty($this->_until)){
-				$response['until'] = GO_Base_Util_Date::get_timestamp($this->_until, false);
+				$response['until'] = \GO\Base\Util\Date::get_timestamp($this->_until, false);
 				$response['repeat_forever'] = 0;
 			}else
 			{

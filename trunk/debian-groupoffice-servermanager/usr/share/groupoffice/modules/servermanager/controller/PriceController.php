@@ -23,7 +23,11 @@
  * @version $Id PricesController.php 2012-08-29 15:17:36 mdhart $
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Servermanager_Controller_Price extends GO_Base_Controller_AbstractController
+
+namespace GO\Servermanager\Controller;
+
+
+class Price extends \GO\Base\Controller\AbstractController
 {
 
 	/**
@@ -32,12 +36,12 @@ class GO_Servermanager_Controller_Price extends GO_Base_Controller_AbstractContr
 	 */
 	protected function actionLoad($params)
 	{
-		//GO::config()->save_setting('sm_price_extra_gb', 2.5);
+		//\GO::config()->save_setting('sm_price_extra_gb', 2.5);
 		return array(
 			'success'=>true,
 			'data' => array(
-				'mbs_included'=>GO::config()->get_setting('sm_mbs_included'), 
-				'price_extra_gb'=>GO::config()->get_setting('sm_price_extra_gb'),
+				'mbs_included'=>\GO::config()->get_setting('sm_mbs_included'), 
+				'price_extra_gb'=>\GO::config()->get_setting('sm_price_extra_gb'),
 			),
 		);
 	}
@@ -50,8 +54,8 @@ class GO_Servermanager_Controller_Price extends GO_Base_Controller_AbstractContr
 	{
 		if(isset($params['mbs_included']) && isset($params['price_extra_gb']))
 		{
-			GO::config()->save_setting('sm_mbs_included', $params['mbs_included']);
-			GO::config()->save_setting('sm_price_extra_gb', $params['price_extra_gb']);
+			\GO::config()->save_setting('sm_mbs_included', $params['mbs_included']);
+			\GO::config()->save_setting('sm_price_extra_gb', $params['price_extra_gb']);
 			
 			return array('success'=>true);
 		}

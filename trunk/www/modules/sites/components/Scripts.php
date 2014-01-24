@@ -17,7 +17,11 @@
  * @version $Id ClientScript.php 2012-06-06 16:41:34 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Sites_Components_Scripts
+
+namespace GO\Sites\Components;
+
+
+class Scripts
 {
 
 	const POS_HEAD = 1; //Render script in head section before title tag
@@ -73,23 +77,23 @@ class GO_Sites_Components_Scripts
 	{
 		$html = '';
 		foreach ($this->metaTags as $meta)
-			$html.=GO_Sites_Components_Html::metaTag($meta['content'], null, null, $meta) . "\n";
+			$html.=Html::metaTag($meta['content'], null, null, $meta) . "\n";
 		foreach ($this->cssFiles as $url => $media)
-			$html.=GO_Sites_Components_Html::cssFile($url, $media) . "\n";
+			$html.=Html::cssFile($url, $media) . "\n";
 
 		if(isset($this->gapiScripts[self::POS_HEAD]))
 		{
 			foreach ($this->gapiScripts[self::POS_HEAD] as $gapiScript)
-				$html.=GO_Sites_Components_HTML::scriptFile($gapiScript) . "\n";
+				$html.=HTML::scriptFile($gapiScript) . "\n";
 		}
 		if (isset($this->scriptFiles[self::POS_HEAD]))
 		{
 			foreach ($this->scriptFiles[self::POS_HEAD] as $scriptFile)
-				$html.=GO_Sites_Components_Html::scriptFile($scriptFile) . "\n";
+				$html.=Html::scriptFile($scriptFile) . "\n";
 		}
 
 		if (isset($this->scripts[self::POS_HEAD]))
-			$html.=GO_Sites_Components_Html::script(implode("\n", $this->scripts[self::POS_HEAD])) . "\n";
+			$html.=Html::script(implode("\n", $this->scripts[self::POS_HEAD])) . "\n";
 
 
 		if ($html !== '')
@@ -113,10 +117,10 @@ class GO_Sites_Components_Scripts
 		if (isset($this->scriptFiles[self::POS_BEGIN]))
 		{
 			foreach ($this->scriptFiles[self::POS_BEGIN] as $scriptFile)
-				$html.=GO_Sites_Components_Html::scriptFile($scriptFile) . "\n";
+				$html.=Html::scriptFile($scriptFile) . "\n";
 		}
 		if (isset($this->scripts[self::POS_BEGIN]))
-			$html.=GO_Sites_Components_Html::script(implode("\n", $this->scripts[self::POS_BEGIN])) . "\n";
+			$html.=Html::script(implode("\n", $this->scripts[self::POS_BEGIN])) . "\n";
 
 		if ($html !== '')
 		{
@@ -145,7 +149,7 @@ class GO_Sites_Components_Scripts
 		if (isset($this->scriptFiles[self::POS_END]))
 		{
 			foreach ($this->scriptFiles[self::POS_END] as $scriptFile)
-				$html.=GO_Sites_Components_Html::scriptFile($scriptFile) . "\n";
+				$html.=Html::scriptFile($scriptFile) . "\n";
 		}
 		$scripts = isset($this->scripts[self::POS_END]) ? $this->scripts[self::POS_END] : array();
 		if (isset($this->scripts[self::POS_READY]))
@@ -156,7 +160,7 @@ class GO_Sites_Components_Scripts
 				$scripts[] = implode("\n", $this->scripts[self::POS_READY]);
 		}
 		if (!empty($scripts))
-			$html.=GO_Sites_Components_Html::script(implode("\n", $scripts)) . "\n";
+			$html.=Html::script(implode("\n", $scripts)) . "\n";
 
 		if ($fullPage)
 			$output = str_replace('<###end###>', $html, $output);
@@ -168,7 +172,7 @@ class GO_Sites_Components_Scripts
 	 * Registers a CSS file
 	 * @param string $url URL of the CSS file
 	 * @param string $media media that the CSS file should be applied to. If empty, it means all media types.
-	 * @return GO_Sites_Components_Scripts myself for chaining.
+	 * @return Scripts myself for chaining.
 	 */
 	public function registerCssFile($url, $media = '')
 	{
@@ -181,7 +185,7 @@ class GO_Sites_Components_Scripts
 	 * Register a javascript file
 	 * @param string $url url of the javascript file
 	 * @param integer $position (HEAD, BEGIN, END)
-	 * @return GO_Sites_Components_Scripts myself for chaining
+	 * @return Scripts myself for chaining
 	 */
 	public function registerScriptFile($url, $position = self::POS_HEAD)
 	{
@@ -194,7 +198,7 @@ class GO_Sites_Components_Scripts
 	 * Register a google api script
 	 * @param string $package can be jquery or jquery-ui
 	 * @param integer $position where to add the scriptfile
-	 * @return GO_Sites_Components_Scripts myself for chaining
+	 * @return Scripts myself for chaining
 	 */
 	public function registerGapiScript($package, $position = self::POS_HEAD)
 	{
@@ -219,7 +223,7 @@ class GO_Sites_Components_Scripts
 	 * @param string $id unique identifier for the piece of code
 	 * @param string $script the javascript code
 	 * @param int $position position code shoudl be inserted (HEAD, BEGIN, END, READY)
-	 * @return GO_Sites_Components_Scripts myself for chaining
+	 * @return Scripts myself for chaining
 	 */
 	public function registerScript($id, $script, $position = self::POS_READY)
 	{
@@ -239,7 +243,7 @@ class GO_Sites_Components_Scripts
 	 * @param string $name name attribute of metatag
 	 * @param string $httpEquiv httpequiv attribute of metatage
 	 * @param array $options other option in name-value pair for metatag
-	 * @return GO_Sites_Components_Scripts mysql for chaining
+	 * @return Scripts mysql for chaining
 	 */
 	public function registerMetaTag($content, $name = null, $httpEquiv = null, $options = array())
 	{

@@ -21,15 +21,19 @@
  * @property int $acl_id
  * @property int $user_id
  * @property int $group_id
- * @property int $level {@see GO_Base_Model_Acl::READ_PERMISSION etc}
+ * @property int $level {@see Acl::READ_PERMISSION etc}
  */
-class GO_Base_Model_AclUsersGroups extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Base\Model;
+
+
+class AclUsersGroups extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Base_Model_AclUsersGroups 
+	 * @return AclUsersGroups 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -61,7 +65,7 @@ class GO_Base_Model_AclUsersGroups extends GO_Base_Db_ActiveRecord {
 	public function relations() {
 		return array('aclItem'=>array(
 			"type"=>self::BELONGS_TO,
-			"model"=>"GO_Base_Model_Acl",
+			"model"=>"\GO\Base\Model\Acl",
 			"field"=>'acl_id'
 		));
 	}
@@ -69,8 +73,8 @@ class GO_Base_Model_AclUsersGroups extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 		
 		//Add log message for activitylog here
-		if(GO::modules()->isInstalled("log")){
-			GO_Log_Model_Log::create("acl", $this->aclItem->description,$this->aclItem->className(),$this->aclItem->id);
+		if(\GO::modules()->isInstalled("log")){
+			\GO\Log\Model\Log::create("acl", $this->aclItem->description,$this->aclItem->className(),$this->aclItem->id);
 		}
 
 		$this->aclItem->touch();

@@ -1,13 +1,17 @@
 <?php
 
-class GO_Cron_Controller_CronGroup extends GO_Base_Controller_AbstractMultiSelectModelController {
+
+namespace GO\Cron\Controller;
+
+
+class CronGroup extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called
 	 * @return String 
 	 */
 	public function modelName() {
-		return 'GO_Base_Model_Group';
+		return '\GO\Base\Model\Group';
 	}
 	
 	/**
@@ -15,7 +19,7 @@ class GO_Cron_Controller_CronGroup extends GO_Base_Controller_AbstractMultiSelec
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return 'GO_Base_Cron_CronGroup';
+		return '\GO\Base\Cron\CronGroup';
 	}
 	
 	/**

@@ -1,5 +1,9 @@
 <?php
-class GO_Cms_CmsModule extends GO_Base_Module{
+
+namespace GO\Cms;
+
+
+class CmsModule extends \GO\Base\Module{
 	
 	public function autoInstall() {
 		return true;

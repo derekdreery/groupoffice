@@ -1,13 +1,17 @@
 <?php
-class GO_Addressbook_Customfields_Model_Contact extends GO_Customfields_Model_AbstractCustomFieldsRecord{
+
+namespace GO\Addressbook\Customfields\Model;
+
+
+class Contact extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
 	public function extendsModel() {		
-		return "GO_Addressbook_Model_Contact";
+		return "\GO\Addressbook\Model\Contact";
 	}
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Addressbook_Model_ContactCustomFieldsRecord 
+	 * @return \GO\Addressbook\Model\ContactCustomFieldsRecord 
 	 */
 	public static function model($className=__CLASS__)
 	{	

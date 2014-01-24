@@ -1,7 +1,7 @@
 <?php
 require_once 'pclzip/pclzip.lib.php';
 require_once 'ZipInterface.php';
-class PclZipProxyException extends Exception
+class PclZipProxyException extends \Exception
 { }
 /**
  * Proxy class for the PclZip library

@@ -1,6 +1,10 @@
 <?php
 
-class GO_Base_Util_ReflectionClass extends \ReflectionClass {
+
+namespace GO\Base\Util;
+
+
+class ReflectionClass extends \ReflectionClass {
 
 	
 	private $_overriddenMethods;

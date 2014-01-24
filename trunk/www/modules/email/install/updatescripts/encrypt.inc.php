@@ -1,5 +1,5 @@
 <?php
-$accountsStmt = GO_Email_Model_Account::model()->find();
+$accountsStmt = \GO\Email\Model\Account::model()->find();
 while ($accountModel = $accountsStmt->fetch()) {
 	if (!empty($accountModel->smtp_password)) {
 		try{

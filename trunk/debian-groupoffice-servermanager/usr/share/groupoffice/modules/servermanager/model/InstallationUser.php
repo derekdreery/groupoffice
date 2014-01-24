@@ -31,10 +31,14 @@
  * @property int $lastlogin
  * @property boolean $enabled
  * 
- * @property GO_ServerManager_Model_Installation $installation the installation this module was installed for
+ * @property Installation $installation the installation this module was installed for
  */
 
-class GO_ServerManager_Model_InstallationUser extends GO_Base_Db_ActiveRecord {
+
+namespace GO\ServerManager\Model;
+
+
+class InstallationUser extends \GO\Base\Db\ActiveRecord {
 
 	public $modules;
 	
@@ -80,7 +84,7 @@ class GO_ServerManager_Model_InstallationUser extends GO_Base_Db_ActiveRecord {
 	public function relations()
 	{
 		return array(
-				'installation'=>array('type'=>self::BELONGS_TO, 'model'=>'GO_ServerManager_Model_Installation', 'field'=>'installation_id'),
+				'installation'=>array('type'=>self::BELONGS_TO, 'model'=>'\GO\ServerManager\Model\Installation', 'field'=>'installation_id'),
 		);
 	}
 
@@ -107,7 +111,7 @@ class GO_ServerManager_Model_InstallationUser extends GO_Base_Db_ActiveRecord {
 	{
 		if(empty($this->ctime)) 
 			return $this->installation->trial_days;
-		$trial_end_stamp = GO_Base_Util_Date::date_add($this->ctime, $this->installation->trial_days);
+		$trial_end_stamp = \GO\Base\Util\Date::date_add($this->ctime, $this->installation->trial_days);
 		
 		$seconds_to_go = $trial_end_stamp - time();
 		$days_to_go = $seconds_to_go / 60 / 60 / 24;
@@ -125,25 +129,25 @@ class GO_ServerManager_Model_InstallationUser extends GO_Base_Db_ActiveRecord {
 		if(!$this->isTrial())
 			return true;
 		
-		$message = GO_Base_Mail_Message::newInstance();
-		$subject = vsprintf(GO::t('user_trial_email_title','servermanager'),array($this->username));
+		$message = \GO\Base\Mail\Message::newInstance();
+		$subject = vsprintf(\GO::t('user_trial_email_title','servermanager'),array($this->username));
 		$message->setSubject($subject);
 		
-		$fromName = GO::config()->title;
+		$fromName = \GO::config()->title;
 	
-		$parts = explode('@', GO::config()->webmaster_email);
+		$parts = explode('@', \GO::config()->webmaster_email);
 		$fromEmail = 'noreply@'.$parts[1];
 		
 		$toEmail = $this->installation->config['webmaster_email'];
 
-		$emailBody = GO::t('user_trial_email_body','servermanager'); //TODO: add to translation
+		$emailBody = \GO::t('user_trial_email_body','servermanager'); //TODO: add to translation
 		$emailBody = vsprintf($emailBody,array($this->username, $this->trialDaysLeft));
 		
 		$message->setBody($emailBody);
 		$message->addFrom($fromEmail,$fromName);
 		$message->addTo($toEmail);
 		
-		return GO_Base_Mail_Mailer::newGoInstance()->send($message);
+		return \GO\Base\Mail\Mailer::newGoInstance()->send($message);
 	}
 	
 

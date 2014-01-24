@@ -42,7 +42,7 @@ $this->setPageTitle("License");
 								?>
 								<br />
 								<div class="row bottons">
-									<?php echo GO_Sites_Components_Html::button('Back', array("onclick"=>"document.location='".$this->createUrl("/licenses/site/licenselist")."';")); ?>
+									<?php echo \GO\Sites\Components\Html::button('Back', array("onclick"=>"document.location='".$this->createUrl("/licenses/site/licenselist")."';")); ?>
 								</div>
 								
 							</div>

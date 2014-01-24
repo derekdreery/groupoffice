@@ -8,16 +8,16 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.Calendar
- * @version $Id: GO_Calendar_Model_View.php 7607 2012-04-12 11:48:52Z <<USERNAME>> $
+ * @version $Id: View.php 7607 2012-04-12 11:48:52Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
  
 /**
- * The GO_Calendar_Model_View model
+ * The View model
  *
  * @package GO.modules.Calendar
- * @version $Id: GO_Calendar_Model_View.php 7607 2012-04-12 11:48:52Z <<USERNAME>> $
+ * @version $Id: View.php 7607 2012-04-12 11:48:52Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *
@@ -30,13 +30,17 @@
  * @property int $owncolor
  */
 
-class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Calendar\Model;
+
+
+class View extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Calendar_Model_View
+	 * @return View
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -58,7 +62,7 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
 	 }
 	 
 	 protected function getPermissionLevelForNewModel() {
-		 return GO_Base_Model_Acl::MANAGE_PERMISSION;
+		 return \GO\Base\Model\Acl::MANAGE_PERMISSION;
 	 }
 	 
 
@@ -71,20 +75,20 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
      
      public function getGroupCalendars()
      {
-        $findParams = GO_Base_Db_FindParams::newInstance()
+        $findParams = \GO\Base\Db\FindParams::newInstance()
                 ->select('t.*')
-                ->criteria(GO_Base_Db_FindCriteria::newInstance()
+                ->criteria(\GO\Base\Db\FindCriteria::newInstance()
 				->addCondition('view_id', $this->id,'=', 'vgr'));	
         
         $findParams->joinModel(array(
-            'model'=>'GO_Base_Model_User',  
+            'model'=>'\GO\Base\Model\User',  
             'localField'=>'user_id',
             'tableAlias'=>'usr', 
             
         ));
         
         $findParams->joinModel(array(
-            'model'=>'GO_Base_Model_UserGroup',  
+            'model'=>'\GO\Base\Model\UserGroup',  
             'localField'=>'user_id',
             'foreignField'=>'user_id',
             'tableAlias'=>'usg', 
@@ -92,24 +96,24 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
         ));
         
 		$findParams->joinModel(array(
-            'model'=>'GO_Base_Model_Group',  
+            'model'=>'\GO\Base\Model\Group',  
             'localField'=>'group_id',
             'localTableAlias'=>'usg',
             'tableAlias'=>'grp', 
 		));
         
         $findParams->joinModel(array(
-            'model'=>'GO_Calendar_Model_ViewGroup',  
+            'model'=>'\GO\Calendar\Model\ViewGroup',  
             'localField'=>'id',
             'localTableAlias'=>'grp',
             'foreignField'=>'group_id',
             'tableAlias'=>'vgr', 
-            'criteria'=> GO_Base_Db_FindCriteria::newInstance()
+            'criteria'=> \GO\Base\Db\FindCriteria::newInstance()
 				->addCondition('view_id', $this->id,'=', 'vgr')
 		));
         
 		
-        return GO_Calendar_Model_Calendar::model()->find($findParams);
+        return Calendar::model()->find($findParams);
      }
 
 	/**
@@ -120,16 +124,16 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
 		 return array(
             'calendars' => array(
                 'type' => self::MANY_MANY, 
-                'model' => 'GO_Calendar_Model_Calendar', 
-                'linkModel'=>'GO_Calendar_Model_ViewCalendar', 
+                'model' => '\GO\Calendar\Model\Calendar', 
+                'linkModel'=>'\GO\Calendar\Model\ViewCalendar', 
                 'field'=>'view_id', 
                 'linksTable' => 'cal_views_calendars', 
                 'remoteField'=>'calendar_id'
             ),
            'groups' => array(
                'type' => self::MANY_MANY, 
-               'model' => 'GO_Calendar_Model_Calendar', 
-               'linkModel'=>'GO_Calendar_Model_ViewGroup', 
+               'model' => '\GO\Calendar\Model\Calendar', 
+               'linkModel'=>'\GO\Calendar\Model\ViewGroup', 
                'field'=>'view_id', 
                'linksTable' => 'cal_views_groups', 
                'remoteField'=>'group_id'

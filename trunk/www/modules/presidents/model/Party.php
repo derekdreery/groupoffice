@@ -17,12 +17,16 @@
  * @property int $id
  * @property string $name
  */
-class GO_Presidents_Model_Party extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Presidents\Model;
+
+
+class Party extends \GO\Base\Db\ActiveRecord {
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Presidents_Model_Party 
+	 * @return Party 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -36,7 +40,7 @@ class GO_Presidents_Model_Party extends GO_Base_Db_ActiveRecord {
 
 	public function relations() {
 		return array(
-			'presidents' => array('type' => self::HAS_MANY, 'model' => 'GO_Presidents_Model_President', 'field' => 'party_id', 'delete' => true)		
+			'presidents' => array('type' => self::HAS_MANY, 'model' => '\GO\Presidents\Model\President', 'field' => 'party_id', 'delete' => true)		
 		);
 	}
 

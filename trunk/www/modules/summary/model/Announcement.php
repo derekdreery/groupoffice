@@ -17,7 +17,11 @@
  * @property int $acl_id
  */
 
-class GO_Summary_Model_Announcement extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Summary\Model;
+
+
+class Announcement extends \GO\Base\Db\ActiveRecord {
 	
 	public static function model($className=__CLASS__)
 	{	
@@ -25,7 +29,7 @@ class GO_Summary_Model_Announcement extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function getLocalizedName(){
-		return GO::t('announcement','summary');
+		return \GO::t('announcement','summary');
 	}
 	
 	public function tableName(){

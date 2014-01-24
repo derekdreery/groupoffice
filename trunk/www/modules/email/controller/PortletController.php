@@ -1,13 +1,17 @@
 <?php
 
-class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelController {
+
+namespace GO\Email\Controller;
+
+
+class Portlet extends \GO\Base\Controller\AbstractModelController {
 	
 	/**
 	 * The full name of the used model in this controller
 	 * 
 	 * @var string 
 	 */
-	protected $model = 'GO_email_Model_PortletFolder';
+	protected $model = '\GO\email\Model\PortletFolder';
 	
 	/**
 	 * The state of the portlet folders tree (This is the same state as the tree in the email tab)
@@ -24,16 +28,16 @@ class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelContro
 	 */
 	protected function actionPortletFoldersByUser($params){
 		
-		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
-						->addCondition('user_id', GO::user()->id);
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
+						->addCondition('user_id', \GO::user()->id);
 						
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->debugSql()
 						->criteria($findCriteria);
 		
-		$portletFoldersStatement = GO_email_Model_PortletFolder::model()->find($findParams);
+		$portletFoldersStatement = \GO\email\Model\PortletFolder::model()->find($findParams);
 		
-		$portletFoldersStore = GO_Base_Data_Store::newInstance(GO::getModel($this->model));
+		$portletFoldersStore = \GO\Base\Data\Store::newInstance(\GO::getModel($this->model));
 		$portletFoldersStore->setStatement($portletFoldersStatement);
 		
 		return $portletFoldersStore->getData();
@@ -57,8 +61,8 @@ class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelContro
 			$portletFolder =  $this->_loadPortletFolder($accountId,$mailboxName);
 			
 			if(!$portletFolder){
-				$portletFolder = new GO_email_Model_PortletFolder();
-				$portletFolder->user_id = GO::user()->id;
+				$portletFolder = new \GO\email\Model\PortletFolder();
+				$portletFolder->user_id = \GO::user()->id;
 				$portletFolder->account_id = $accountId;
 				$portletFolder->folder_name = $mailboxName;
 				$portletFolder->save();
@@ -72,7 +76,7 @@ class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelContro
 	
 	
 	private function _loadPortletFolder($accountId,$mailboxName){
-		$portletFolder =  GO_email_Model_PortletFolder::model()->findByPk(array('account_id'=>$accountId,'folder_name'=>$mailboxName,'user_id'=>GO::user()->id));
+		$portletFolder =  \GO\email\Model\PortletFolder::model()->findByPk(array('account_id'=>$accountId,'folder_name'=>$mailboxName,'user_id'=>\GO::user()->id));
 		
 		if(!$portletFolder)
 			return false;
@@ -115,26 +119,26 @@ class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelContro
 	 * @return array $response
 	 */
 	public function actionPortletTree($params) {
-		GO::session()->closeWriting();
+		\GO::session()->closeWriting();
 		
 		$response = array();
 
 		if ($params['node'] == 'root') {
 			
-			$findParams = GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('t.*')
 						->joinModel(array(
-								'model' => 'GO_Email_Model_AccountSort',
+								'model' => '\GO\Email\Model\AccountSort',
 								'foreignField' => 'account_id', //defaults to primary key of the remote model
 								'localField' => 'id', //defaults to primary key of the model
 								'type' => 'LEFT',
 								'tableAlias'=>'s',
-								'criteria'=>  GO_Base_Db_FindCriteria::newInstance()->addCondition('user_id', GO::user()->id,'=','s')
+								'criteria'=>  \GO\Base\Db\FindCriteria::newInstance()->addCondition('user_id', \GO::user()->id,'=','s')
 						))
 						->ignoreAdminGroup()
 						->order('order', 'DESC');
 			
-			$stmt = GO_Email_Model_Account::model()->find($findParams);
+			$stmt = \GO\Email\Model\Account::model()->find($findParams);
 
 			
 			// Loop throught the found accounts and build the accounts root node.
@@ -177,12 +181,12 @@ class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelContro
 			$accountId = array_shift($parts);
 			$mailboxName = implode('_', $parts);
 			
-			$account = GO_Email_Model_Account::model()->findByPk($accountId);
+			$account = \GO\Email\Model\Account::model()->findByPk($accountId);
 			
 			if($type=="account"){
 				$response=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
 			}else{
-				$mailbox = new GO_Email_Model_ImapMailbox($account, array('name' => $mailboxName));
+				$mailbox = new \GO\Email\Model\ImapMailbox($account, array('name' => $mailboxName));
 				$response = $this->_getMailboxTreeNodes($mailbox->getChildren());
 			}
 		}
@@ -265,7 +269,7 @@ class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelContro
 	 */
 	private function _isExpanded($nodeId) {
 		if (!isset($this->_treeState)) {
-			$state = GO::config()->get_setting("email_accounts_tree", GO::user()->id);
+			$state = \GO::config()->get_setting("email_accounts_tree", \GO::user()->id);
 			
 			if(empty($state)){
 				//account and inbox nodes are expanded by default

@@ -14,13 +14,17 @@
  * @property int $sent_mailing_id
  */
 
-class GO_Addressbook_Model_SentMailingCompany extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Addressbook\Model;
+
+
+class SentMailingCompany extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Addressbook_Model_Company 
+	 * @return Company 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -37,7 +41,7 @@ class GO_Addressbook_Model_SentMailingCompany extends GO_Base_Db_ActiveRecord {
 	
 	public function relations() {
 		return array(
-				'sentMailing' => array('type' => self::BELONGS_TO, 'model' => 'GO_Addressbook_Model_SentMailing', 'field' => 'sent_mailing_id')
+				'sentMailing' => array('type' => self::BELONGS_TO, 'model' => '\GO\Addressbook\Model\SentMailing', 'field' => 'sent_mailing_id')
 		);
 	}
 	

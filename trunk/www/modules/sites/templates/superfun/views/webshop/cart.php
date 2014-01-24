@@ -2,7 +2,7 @@
 <p>Leeg</p>
 <?php else: ?>
 
-<?php echo GO_Sites_Components_Html::beginForm('webshop/cart/updatePrices', 'cart', true); ?>
+<?php echo \GO\Sites\Components\Html::beginForm('webshop/cart/updatePrices', 'cart', true); ?>
 
 <table class="cart">
 	<tr>
@@ -13,7 +13,7 @@
 
 	<?php foreach($cart->getItems() as $product): ?>
 	<tr>
-		<td><?php echo GO_Sites_Components_Html::activeTextField($product, "[$product->id]amount"); ?></td>
+		<td><?php echo \GO\Sites\Components\Html::activeTextField($product, "[$product->id]amount"); ?></td>
 		<td><?php echo $product->geItem()->getLanguage(1)->name; ?></td>
 		<td align="right"><?php echo $product->activity->priceText; ?> </td>
 	</tr>

@@ -16,13 +16,17 @@
  * @property int $id
  */
 
- class GO_Addressbook_Model_SearchQuery extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Addressbook\Model;
+
+
+ class SearchQuery extends \GO\Base\Db\ActiveRecord{
 		 
 	 /**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Addressbook_Model_Addressbook 
+	 * @return Addressbook 
 	 */
 	public static function model($className=__CLASS__)
 	{	

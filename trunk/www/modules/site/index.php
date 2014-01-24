@@ -75,6 +75,6 @@ elseif(file_exists('/usr/share/groupoffice/GO.php'))
 else
 	die("Please change the \$go variable to the correct location of GO.php");
 
-require(GO::config()->root_path.'modules/site/components/Site.php');
+require(\GO::config()->root_path.'modules/site/components/Site.php');
 Site::launch();
 ?>

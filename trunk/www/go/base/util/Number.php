@@ -19,7 +19,11 @@
  * @since Group-Office 3.0
  */
 
-class GO_Base_Util_Number {
+
+namespace GO\Base\Util;
+
+
+class Number {
 
 	/**
 	 * Format a number by using the user preferences
@@ -35,8 +39,8 @@ class GO_Base_Util_Number {
 		if($number===null)
 			return "";
 		
-		$ts = GO::user() ? GO::user()->thousands_separator : GO::config()->default_thousands_separator;
-		$ds = GO::user() ? GO::user()->decimal_separator : GO::config()->default_decimal_separator;
+		$ts = \GO::user() ? \GO::user()->thousands_separator : \GO::config()->default_thousands_separator;
+		$ds = \GO::user() ? \GO::user()->decimal_separator : \GO::config()->default_decimal_separator;
 		return number_format(floatval($number), $decimals, $ds, $ts);
 	}
 
@@ -54,8 +58,8 @@ class GO_Base_Util_Number {
 		if($number=="")
 			return null;
 		
-		$ts = GO::user() ? GO::user()->thousands_separator : GO::config()->default_thousands_separator;
-		$ds = GO::user() ? GO::user()->decimal_separator : GO::config()->default_decimal_separator;
+		$ts = \GO::user() ? \GO::user()->thousands_separator : \GO::config()->default_thousands_separator;
+		$ds = \GO::user() ? \GO::user()->decimal_separator : \GO::config()->default_decimal_separator;
 		$number = str_replace($ts,'', $number);
 		$number = str_replace($ds,'.',$number);
 		

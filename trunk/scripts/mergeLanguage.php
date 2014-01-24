@@ -2,12 +2,12 @@
 
 require('../www/GO.php');
 
-$folder = new GO_Base_Fs_Folder(GO::config()->root_path . 'language');
+$folder = new \GO\Base\Fs\Folder(\GO::config()->root_path . 'language');
 
 $children = $folder->ls();
 
 foreach ($children as $child) {
-	if ($child instanceof GO_Base_Fs_Folder) {
+	if ($child instanceof \GO\Base\Fs\Folder) {
 
 		$section = $child->name();
 
@@ -24,19 +24,19 @@ foreach ($children as $child) {
 	}
 }
 
-$folder = new GO_Base_Fs_Folder(GO::config()->root_path . 'modules');
+$folder = new \GO\Base\Fs\Folder(\GO::config()->root_path . 'modules');
 
 $children = $folder->ls();
 
 foreach ($children as $moduleFolder) {
-	if ($moduleFolder instanceof GO_Base_Fs_Folder) {
+	if ($moduleFolder instanceof \GO\Base\Fs\Folder) {
 		
 		$section = $moduleFolder->name();
 		
 //		if($section!='addressbook')
 //			continue;
 		
-		$child = new GO_Base_Fs_Folder($moduleFolder->path().'/language');
+		$child = new \GO\Base\Fs\Folder($moduleFolder->path().'/language');
 	
 		if($child->exists()){
 			

@@ -21,7 +21,7 @@ require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
 $cal = new calendar();
 
 function get_posted_event() {
-	$gmt_tz = new DateTimeZone('GMT');
+	$gmt_tz = new \DateTimeZone('GMT');
 
 	$event['id']=$_POST['event_id'];
 	$event['calendar_id']=$_POST['calendar_id'];
@@ -49,11 +49,11 @@ function get_posted_event() {
 		$end_time = $_POST['end_time'];
 	}
 
-	$start_date = new DateTime(Date::to_input_format($_POST['start_date'].' '.$start_time));
+	$start_date = new \DateTime(Date::to_input_format($_POST['start_date'].' '.$start_time));
 	$start_date->setTimezone($gmt_tz);
 	$event['start_time'] = $start_date->format('U');
 
-	$end_date = new DateTime(Date::to_input_format($_POST['end_date'].' '.$end_time));
+	$end_date = new \DateTime(Date::to_input_format($_POST['end_date'].' '.$end_time));
 	$start_date->setTimezone($gmt_tz);
 	$event['end_time'] = $end_date->format('U');
 

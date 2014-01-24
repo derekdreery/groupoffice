@@ -11,7 +11,11 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_ObjectTree extends Sabre\DAV\ObjectTree{
+
+namespace GO\Dav;
+
+
+class ObjectTree extends Sabre\DAV\ObjectTree{
 	/**
      * Moves a file from one location to another
      *
@@ -21,12 +25,12 @@ class GO_Dav_ObjectTree extends Sabre\DAV\ObjectTree{
      */
     public function move($sourcePath, $destinationPath) {
 
-			GO::debug("ObjectTree::move($sourcePath, $destinationPath)");
+			\GO::debug("ObjectTree::move($sourcePath, $destinationPath)");
 
 			$moveable = $this->getNodeForPath($sourcePath);
 
 			$destination = $this->getNodeForPath(dirname($destinationPath));
-			$targetServerPath = $destination->getServerPath().'/'.GO_Base_Fs_File::utf8Basename($destinationPath);
+			$targetServerPath = $destination->getServerPath().'/'.\GO\Base\Fs\File::utf8Basename($destinationPath);
 
       $moveable->move($targetServerPath);
     }

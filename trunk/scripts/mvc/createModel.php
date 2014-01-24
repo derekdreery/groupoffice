@@ -31,7 +31,7 @@ else
 
 function generateModel($className, $table, $moduleName){
 	require('../../www/GO.php');
-	$conn = GO::getDbConnection();
+	$conn = \GO::getDbConnection();
 	
 	$sql = "SHOW FIELDS FROM `".$table."`;";
 
@@ -105,7 +105,7 @@ function generateModel($className, $table, $moduleName){
  *
 '.$props.'
 
-class '.$className.' extends GO_Base_Db_ActiveRecord{
+class '.$className.' extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself

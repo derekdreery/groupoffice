@@ -1,18 +1,22 @@
 <?php
-class GO_Base_Util_ScriptLoader{
+
+namespace GO\Base\Util;
+
+
+class ScriptLoader{
 	
 	private $_cacheFile;
 	
 	
 	public function __construct(){
 		
-		$f = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'cache');
+		$f = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'cache');
 		$f->create();
 		
-		$this->_cacheFile = GO::config()->file_storage_path.'cache/script-';
+		$this->_cacheFile = \GO::config()->file_storage_path.'cache/script-';
 		
-		if(GO::user()){
-			$this->_cacheFile .= GO::user()->username;
+		if(\GO::user()){
+			$this->_cacheFile .= \GO::user()->username;
 		}else
 		{
 			$this->_cacheFile .= "loggedoff";

@@ -10,10 +10,10 @@
  */
 
 /**
- * The GO_files_Model_Template model
+ * The Template model
  *
  * @package GO.modules.files
- * @version $Id: GO_files_Model_Template.php 7607 2011-09-29 08:41:31Z <<USERNAME>> $
+ * @version $Id: Template.php 7607 2011-09-29 08:41:31Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
  *
@@ -25,13 +25,17 @@
  * @property mediumblob $content
  * @property String $extension
  */
-class GO_files_Model_Template extends GO_Base_Db_ActiveRecord {
+
+namespace GO\files\Model;
+
+
+class Template extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_files_Model_Template
+	 * @return Template
 	 */
 	public static function model($className=__CLASS__) {
 		return parent::model($className);

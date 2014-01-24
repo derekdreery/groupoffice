@@ -12,9 +12,13 @@
  * @author WilmarVB <wilmar@intermesh.nl>
  */
 
-class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractModelController {
 
-	protected $model = 'GO_Addressbook_Model_Addresslist';
+namespace GO\Addressbook\Controller;
+
+
+class Addresslist extends \GO\Base\Controller\AbstractModelController {
+
+	protected $model = '\GO\Addressbook\Model\Addresslist';
 	
 	protected function beforeStore(&$response, &$params, &$store) {
 		
@@ -23,12 +27,12 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		return parent::beforeStore($response, $params, $store);
 	}
 	
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		
 		if (empty($params['forContextMenu'])) {
-			$multiSel = new GO_Base_Component_MultiSelectGrid(
+			$multiSel = new \GO\Base\Component\MultiSelectGrid(
 							'addresslist_filter', 
-							"GO_Addressbook_Model_Addresslist",$store, $params, false);		
+							"\GO\Addressbook\Model\Addresslist",$store, $params, false);		
 			$multiSel->formatCheckedColumn();
 		}
 		
@@ -44,7 +48,7 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		return $record;
 	}
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 
 		$columnModel->formatColumn('user_name', '$model->user->name');
 
@@ -58,40 +62,40 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 
 	protected function actionContacts($params) {
 
-		$store = GO_Base_Data_Store::newInstance(GO_Addressbook_Model_Contact::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO\Addressbook\Model\Contact::model());
 
 		$store->getColumnModel()->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
 		$store->getColumnModel()->formatColumn('company_name', '$model->company->name', array(), 'company_id');
 		$store->getColumnModel()->formatColumn('addressbook_name', '$model->addressbook->name', array(), 'addressbook_id');
 
-		$store->processDeleteActions($params, "GO_Addressbook_Model_AddresslistContact", array('addresslist_id' => $params['addresslist_id']));
+		$store->processDeleteActions($params, "\GO\Addressbook\Model\AddresslistContact", array('addresslist_id' => $params['addresslist_id']));
 
 		$response = array();
 
 		if (!empty($params['add_addressbook_id'])) {
-			$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($params['add_addressbook_id']);
-			$model = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']);
+			$addressbook = \GO\Addressbook\Model\Addressbook::model()->findByPk($params['add_addressbook_id']);
+			$model = \GO\Addressbook\Model\Addresslist::model()->findByPk($params['addresslist_id']);
 			$stmt = $addressbook->contacts();
 			while ($contact = $stmt->fetch()) {
 				$model->addManyMany('contacts', $contact->id);
 			}
 		} elseif (!empty($params['add_keys'])) {
 			$add_keys = json_decode($params['add_keys'], true);
-			$model = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']);
+			$model = \GO\Addressbook\Model\Addresslist::model()->findByPk($params['addresslist_id']);
 			foreach ($add_keys as $add_key)
 				$model->addManyMany('contacts', $add_key);
 		}elseif(!empty($params['add_search_result'])){
-			$findParams = GO::session()->values["contact"]['findParams'];
+			$findParams = \GO::session()->values["contact"]['findParams'];
 			$findParams->limit(0)->select('t.id');
 			
-			$model = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']);
-			$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
+			$model = \GO\Addressbook\Model\Addresslist::model()->findByPk($params['addresslist_id']);
+			$stmt = \GO\Addressbook\Model\Contact::model()->find($findParams);
 			foreach ($stmt as $contact)
 				$model->addManyMany('contacts', $contact->id);
 			
 		}
 
-		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id'])->contacts($store->getDefaultParams($params));
+		$stmt = \GO\Addressbook\Model\Addresslist::model()->findByPk($params['addresslist_id'])->contacts($store->getDefaultParams($params));
 
 		$store->setDefaultSortOrder('name', 'ASC');
 		$store->setStatement($stmt);
@@ -101,40 +105,40 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 
 	protected function actionCompanies($params) {
 
-		$store = GO_Base_Data_Store::newInstance(GO_Addressbook_Model_Company::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO\Addressbook\Model\Company::model());
 
 		$store->getColumnModel()->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
 		$store->getColumnModel()->formatColumn('addressbook_name', '$model->addressbook->name', array(), 'addressbook_id');
 		
-		$store->processDeleteActions($params, "GO_Addressbook_Model_AddresslistCompany", array('addresslist_id' => $params['addresslist_id']));
+		$store->processDeleteActions($params, "\GO\Addressbook\Model\AddresslistCompany", array('addresslist_id' => $params['addresslist_id']));
 
 		$response = array();
 
 		if (!empty($params['add_addressbook_id'])) {
-			$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($params['add_addressbook_id']);
-			$model = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']);
+			$addressbook = \GO\Addressbook\Model\Addressbook::model()->findByPk($params['add_addressbook_id']);
+			$model = \GO\Addressbook\Model\Addresslist::model()->findByPk($params['addresslist_id']);
 			$stmt = $addressbook->companies();
 			while ($company = $stmt->fetch()) {
 				$model->addManyMany('companies', $company->id);
 			}
 		} elseif (!empty($params['add_keys'])) {
 			$add_keys = json_decode($params['add_keys'], true);
-			$model = !isset($model) ? GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']) : $model;
+			$model = !isset($model) ? \GO\Addressbook\Model\Addresslist::model()->findByPk($params['addresslist_id']) : $model;
 			foreach ($add_keys as $add_key)
 				$model->addManyMany('companies', $add_key);
 		}elseif(!empty($params['add_search_result'])){
-			$findParams = GO::session()->values["company"]['findParams'];
+			$findParams = \GO::session()->values["company"]['findParams'];
 			$findParams->limit(0)->select('t.id');
 			
-			$model = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']);
+			$model = \GO\Addressbook\Model\Addresslist::model()->findByPk($params['addresslist_id']);
 			
-			$stmt = GO_Addressbook_Model_Company::model()->find($findParams);
+			$stmt = \GO\Addressbook\Model\Company::model()->find($findParams);
 			foreach ($stmt as $contact)
 				$model->addManyMany('companies', $contact->id);
 			
 		}
 
-		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id'])->companies($store->getDefaultParams($params));
+		$stmt = \GO\Addressbook\Model\Addresslist::model()->findByPk($params['addresslist_id'])->companies($store->getDefaultParams($params));
 
 		$store->setDefaultSortOrder('name', 'ASC');
 		$store->setStatement($stmt);
@@ -147,20 +151,20 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		if(empty($params['addresslists']))
 			throw new Exception();
 			
-		$recipients = new GO_Base_Mail_EmailRecipients();
+		$recipients = new \GO\Base\Mail\EmailRecipients();
 		
 		$addresslistIds = json_decode($params['addresslists']);
 				
 		foreach($addresslistIds as $addresslistId){
 		
-			$addresslist = GO_Addressbook_Model_Addresslist::model()->findByPk($addresslistId);
+			$addresslist = \GO\Addressbook\Model\Addresslist::model()->findByPk($addresslistId);
 			
 			if($addresslist){
-				$contacts = $addresslist->contacts(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('email', '','!=')));
+				$contacts = $addresslist->contacts(\GO\Base\Db\FindParams::newInstance()->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('email', '','!=')));
 				while($contact = $contacts->fetch())				
 						$recipients->addRecipient($contact->email, $contact->name);
 
-				$companies = $addresslist->companies(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('email', '','!=')));
+				$companies = $addresslist->companies(\GO\Base\Db\FindParams::newInstance()->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('email', '','!=')));
 				while($company = $companies->fetch())
 						$recipients->addRecipient($company->email, $company->name);
 			}
@@ -182,7 +186,7 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 	 * that the user can decide what to do with the unknown senders.
 	 */
 	public function actionAddContactsToAddresslist($params) {
-		$addresslistModel = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslistId']);
+		$addresslistModel = \GO\Addressbook\Model\Addresslist::model()->findByPk($params['addresslistId']);
 		$response = array(
 			'success'=>true,
 		);
@@ -209,12 +213,12 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 			}
 
 			foreach($senders as $senderEmail => $senderNameArr){
-				$contactNameArr = GO_Base_Util_String::split_name($senderNameArr);
-				$contactStmt = GO_Addressbook_Model_Contact::model()
+				$contactNameArr = \GO\Base\Util\String::split_name($senderNameArr);
+				$contactStmt = \GO\Addressbook\Model\Contact::model()
 					->find(
-						GO_Base_Db_FindParams::newInstance()
+						\GO\Base\Db\FindParams::newInstance()
 							->criteria(
-								GO_Base_Db_FindCriteria::newInstance()
+								\GO\Base\Db\FindCriteria::newInstance()
 									->addCondition('email', $senderEmail, '=', 't', false)
 									->addCondition('email2', $senderEmail, '=', 't', false)
 									->addCondition('email3', $senderEmail, '=', 't', false)
@@ -264,7 +268,7 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 	}
 
 	public function actionDeleteContactsFromAddresslist($params) {
-		$addresslistModel = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslistId']);
+		$addresslistModel = \GO\Addressbook\Model\Addresslist::model()->findByPk($params['addresslistId']);
 		$response = array(
 			'success'=>true,
 			'nRemoved'=>0
@@ -274,11 +278,11 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		$senderEmails = json_decode($params['senderEmails']);
 
 		foreach($senderEmails as $senderEmail){
-			$contactStmt = GO_Addressbook_Model_Contact::model()
+			$contactStmt = \GO\Addressbook\Model\Contact::model()
 				->find(
-						GO_Base_Db_FindParams::newInstance()
+						\GO\Base\Db\FindParams::newInstance()
 							->criteria(
-								GO_Base_Db_FindCriteria::newInstance()
+								\GO\Base\Db\FindCriteria::newInstance()
 									->addCondition('email', $senderEmail, '=', 't', false)
 									->addCondition('email2', $senderEmail, '=', 't', false)
 									->addCondition('email3', $senderEmail, '=', 't', false)
@@ -304,22 +308,22 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		$companyIds = json_decode($params['companies'],true);
 		$removeOther = isset($params['move']) && $params['move']=='true';
 		
-		$targetAddresslistModel = GO_Addressbook_Model_Addresslist::model()->findByPk($listId);
-		if (!$targetAddresslistModel->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied();
+		$targetAddresslistModel = \GO\Addressbook\Model\Addresslist::model()->findByPk($listId);
+		if (!$targetAddresslistModel->checkPermissionLevel(\GO\Base\Model\Acl::CREATE_PERMISSION))
+			throw new \GO\Base\Exception\AccessDenied();
 				
 		if (!empty($removeOther)) {
 			foreach ($contactIds as $contactId) {
-				$contactModel = GO_Addressbook_Model_Contact::model()->findByPk($contactId);
+				$contactModel = \GO\Addressbook\Model\Contact::model()->findByPk($contactId);
 				$contactModel->removeAllManyMany('addresslists');
 					}
 			foreach ($companyIds as $companyId) {
-				$companyModel = GO_Addressbook_Model_Company::model()->findByPk($companyId);
+				$companyModel = \GO\Addressbook\Model\Company::model()->findByPk($companyId);
 				$companyModel->removeAllManyMany('addresslists');
 					}
 				}
 
-		$addresslistModel = GO_Addressbook_Model_Addresslist::model()->findByPk($listId);
+		$addresslistModel = \GO\Addressbook\Model\Addresslist::model()->findByPk($listId);
 		foreach ($contactIds as $contactId)
 			$addresslistModel->addManyMany ('contacts', $contactId);
 		foreach ($companyIds as $companyId)

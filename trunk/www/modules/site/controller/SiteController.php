@@ -1,6 +1,10 @@
 <?php
 
-class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController {
+
+namespace GO\Site\Controller;
+
+
+class Site extends \GO\Base\Controller\AbstractJsonController {
 	
 	/**
 	 * Redirect to the homepage
@@ -9,20 +13,20 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController 
 	 */
 	protected function actionRedirectToFront($params){
 		
-		$site = GO_Site_Model_Site::model()->findByPk($params['id']);
+		$site = \GO\Site\Model\Site::model()->findByPk($params['id']);
 		
 		header("Location: ".$site->getBaseUrl());
 		exit();
 	}
 	
 	protected function actionLoad($params) {
-		$model = GO_Site_Model_Site::model()->createOrFindByParams($params);
+		$model = \GO\Site\Model\Site::model()->createOrFindByParams($params);
 		
 		echo $this->renderForm($model);
 	}
 	
 	protected function actionSubmit($params) {
-		$model = GO_Site_Model_Site::model()->createOrFindByParams($params);
+		$model = \GO\Site\Model\Site::model()->createOrFindByParams($params);
 		$model->setAttributes($params);
 		$model->save();
 		echo $this->renderSubmit($model);
@@ -41,7 +45,7 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController 
 		if(!isset($params['node']))
 			return $response;
 		
-		$extractedNode = GO_Site_SiteModule::extractTreeNode($params['node']);
+		$extractedNode = \GO\Site\SiteModule::extractTreeNode($params['node']);
 		
 		// 1_menuitem_6 = array('siteId' => '1','type' =>'menuitem','modelId' => '6');
 		// 1_root = array('siteId' => '1','type' =>'root','modelId' => false);
@@ -51,24 +55,24 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController 
 				
 		switch($extractedNode['type']){
 			case 'root':
-				$response = GO_Site_Model_Site::getTreeNodes();
+				$response = \GO\Site\Model\Site::getTreeNodes();
 				break;
 			case 'content':
 				if(empty($extractedNode['modelId'])){
-					$response = GO_Site_Model_Site::getTreeNodes();
+					$response = \GO\Site\Model\Site::getTreeNodes();
 				} else {
-					$content = GO_Site_Model_Content::model()->findByPk($extractedNode['modelId']);
+					$content = \GO\Site\Model\Content::model()->findByPk($extractedNode['modelId']);
 					if($content)
 						$response = $content->getChildrenTree();
 				}
 				break;
 			case 'menu':
-				$menu = GO_Site_Model_Menu::model()->findByPk($extractedNode['modelId']);
+				$menu = \GO\Site\Model\Menu::model()->findByPk($extractedNode['modelId']);
 					if($menu)
 						$response = $menu->getChildrenTree();
 				break;
 			case 'menuitem':
-				$menuitem = GO_Site_Model_MenuItem::model()->findByPk($extractedNode['modelId']);
+				$menuitem = \GO\Site\Model\MenuItem::model()->findByPk($extractedNode['modelId']);
 					if($menuitem)
 						$response = $menuitem->getChildrenTree();
 				break;
@@ -89,24 +93,24 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController 
 //		parent:1_menu_11
 //		sortOrder:["1_menuitem_30","1_menuitem_31","1_menuitem_33","1_menuitem_8"]
 			$sortOrder = json_decode($sortOrder, true);
-			$extractedParentNode = GO_Site_SiteModule::extractTreeNode($parent);
+			$extractedParentNode = \GO\Site\SiteModule::extractTreeNode($parent);
 			
 			switch($extractedParentNode['type']){
 				case 'content':
 					$allowedTypes = array('content');
-					return GO_Site_Model_Content::setTreeSort($extractedParentNode, $sortOrder, $allowedTypes);
+					return \GO\Site\Model\Content::setTreeSort($extractedParentNode, $sortOrder, $allowedTypes);
 					break;
 //				case 'site':
 //					$allowedTypes = array('content');
-//					return GO_Site_Model_Site::setTreeSort($extractedParentNode, $sortOrder, $allowedTypes);
+//					return \GO\Site\Model\Site::setTreeSort($extractedParentNode, $sortOrder, $allowedTypes);
 //					break;
 				case 'menu':
 					$allowedTypes = array('menuitem');
-					return GO_Site_Model_Menu::setTreeSort($extractedParentNode, $sortOrder, $allowedTypes);
+					return \GO\Site\Model\Menu::setTreeSort($extractedParentNode, $sortOrder, $allowedTypes);
 					break;
 				case 'menuitem':
 					$allowedTypes = array('menuitem');
-					return GO_Site_Model_MenuItem::setTreeSort($extractedParentNode, $sortOrder, $allowedTypes);
+					return \GO\Site\Model\MenuItem::setTreeSort($extractedParentNode, $sortOrder, $allowedTypes);
 					break;
 			}
 	}
@@ -118,7 +122,7 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController 
 	 * @return array
 	 */
 	protected function actionSaveTreeState($params) {
-		$response['success'] = GO::config()->save_setting("site_tree_state", $params['expandedNodes'], GO::user()->id);
+		$response['success'] = \GO::config()->save_setting("site_tree_state", $params['expandedNodes'], \GO::user()->id);
 		return $response;
 	}	
 }

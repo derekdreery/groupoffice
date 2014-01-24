@@ -9,7 +9,7 @@
  */
  
 /**
- * The GO_Calendar_Model_CalendarView model
+ * The CalendarView model
  *
  * @package GO.modules.Calendar
  * @version $Id: CalendarView.php 7607 2011-11-23 15:14:37Z <<USERNAME>> $
@@ -21,13 +21,17 @@
  * @property string $background
  */
 
-class GO_Calendar_Model_ViewCalendar extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Calendar\Model;
+
+
+class ViewCalendar extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Calendar_Model_CalendarTasklist
+	 * @return CalendarTasklist
 	 */
 	public static function model($className=__CLASS__)
 	{	

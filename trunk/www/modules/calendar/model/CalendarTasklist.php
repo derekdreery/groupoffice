@@ -9,10 +9,10 @@
  */
  
 /**
- * The GO_Calendar_Model_CalendarTasklist model
+ * The CalendarTasklist model
  *
  * @package GO.modules.Calendar
- * @version $Id: GO_Calendar_Model_CalendarTasklist.php 7607 2011-11-23 15:14:37Z <<USERNAME>> $
+ * @version $Id: CalendarTasklist.php 7607 2011-11-23 15:14:37Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *
@@ -20,13 +20,17 @@
  * @property int $tasklist_id
  */
 
-class GO_Calendar_Model_CalendarTasklist extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Calendar\Model;
+
+
+class CalendarTasklist extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Calendar_Model_CalendarTasklist
+	 * @return CalendarTasklist
 	 */
 	public static function model($className=__CLASS__)
 	{	

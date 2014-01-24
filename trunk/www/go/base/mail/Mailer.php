@@ -18,21 +18,25 @@
  * @copyright Copyright Intermesh BV.
  */
 
-class GO_Base_Mail_Mailer extends Swift_Mailer{
+
+namespace GO\Base\Mail;
+
+
+class Mailer extends Swift_Mailer{
 	
 	/**
    * Create a new Mailer instance.
    * 
 	 * @var Swift_SmtpTransport $transport. 
-	 * Optionally supply a transport class. If omitted a GO_Base_Mail_Transport 
+	 * Optionally supply a transport class. If omitted a Transport 
 	 * object will be created that uses the smtp settings from config.php
 	 * 
-   * @return GO_Base_Mail_Mailer
+   * @return Mailer
    */
   public static function newGoInstance($transport=false)
   {
 		if(!$transport)
-			$transport=GO_Base_Mail_Transport::newGoInstance();
+			$transport=Transport::newGoInstance();
 		
     $mailer = new self($transport);		
 		return $mailer;
@@ -40,10 +44,10 @@ class GO_Base_Mail_Mailer extends Swift_Mailer{
 	
 	public function send(Swift_Mime_Message $message, &$failedRecipients = null) {
 		
-		if(GO::config()->debug)
-			GO::debug("Sending e-mail to ".implode(",",array_keys($message->getTo())));
+		if(\GO::config()->debug)
+			\GO::debug("Sending e-mail to ".implode(",",array_keys($message->getTo())));
 		
-		if(GO::modules()->isInstalled("log")){
+		if(\GO::modules()->isInstalled("log")){
 			
 			$str = "";
 			
@@ -67,7 +71,7 @@ class GO_Base_Mail_Mailer extends Swift_Mailer{
 			if(!empty($to))
 				$str .= implode(",",array_keys($to));
 			
-			GO_Log_Model_Log::create ("email", $str);
+			\GO\Log\Model\Log::create ("email", $str);
 		}
 		
 //		debug_print_backtrace();

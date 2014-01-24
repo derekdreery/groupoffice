@@ -27,7 +27,11 @@
  * @version $Id AssetManager.php 2012-07-25 16:51:19 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Site_Components_AssetManager
+
+namespace GO\Site\Components;
+
+
+class AssetManager
 {
 	/**
 	 * @var boolean whether to use symbolic link to publish asset files. Defaults to false, meaning
@@ -82,7 +86,7 @@ class GO_Site_Components_AssetManager
 	public function getBasePath()
 	{
 		if($this->_basePath===null){
-			$basePath= new GO_Base_Fs_Folder(Site::model()->getPublicPath().'assets');					
+			$basePath= new \GO\Base\Fs\Folder(Site::model()->getPublicPath().'assets');					
 			$basePath->create();
 			
 			$this->_basePath=$basePath->path();
@@ -176,9 +180,9 @@ class GO_Site_Components_AssetManager
 				}
 				else if(!is_dir($dstDir))
 				{
-					$dstF = new GO_Base_Fs_Folder($dstDir);
+					$dstF = new \GO\Base\Fs\Folder($dstDir);
 
-					$folder = new GO_Base_Fs_Folder($src);
+					$folder = new \GO\Base\Fs\Folder($src);
 					$folder->copy($dstF);
 				}
 
@@ -247,7 +251,7 @@ class GO_Site_Components_AssetManager
 	 */
 	protected function hash($path)
 	{
-		return sprintf('%x',crc32($path.GO::config()->version));
+		return sprintf('%x',crc32($path.\GO::config()->version));
 	}
 }
 ?>

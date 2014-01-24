@@ -19,7 +19,11 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_Validation extends Exception
+
+namespace GO\Base\Exception;
+
+
+class Validation extends \Exception
 {
 	
 }

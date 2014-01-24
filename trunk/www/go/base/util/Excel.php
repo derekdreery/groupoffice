@@ -1,11 +1,15 @@
 <?php
-require_once(GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel.php');
-class GO_Base_Util_Excel extends PHPExcel {
+require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel.php');
+
+namespace GO\Base\Util;
+
+
+class Excel extends PHPExcel {
 	
 	private $_writer;
 	
 	private function _getWriter() {
-		require_once(GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Writer/Excel2007.php');
+		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Writer/Excel2007.php');
 		if (empty($this->_writer))
 			$this->_writer = new PHPExcel_Writer_Excel2007($this);
 		
@@ -19,9 +23,9 @@ class GO_Base_Util_Excel extends PHPExcel {
 	}
 	
 	public function setDefaultStyle($fontFamily='Arial',$fontSize=10,$colorRGB='00000000',$bold=false,$italic=false,$underline=false) {
-		require_once(GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style.php');
-		require_once(GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Font.php');
-		require_once(GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Color.php');
+		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style.php');
+		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Font.php');
+		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Color.php');
 		$colorObj = new PHPExcel_Style_Color();
 		$colorObj->setRGB($colorRGB);
 		$fontObj = new PHPExcel_Style_Font();
@@ -38,9 +42,9 @@ class GO_Base_Util_Excel extends PHPExcel {
 	}
 	
 	public function setStyle($cellRange,$fontFamily='Arial',$fontSize=10,$colorRGB='00000000',$bold=false,$italic=false,$underline=false) {
-		require_once(GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style.php');
-		require_once(GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Font.php');
-		require_once(GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Color.php');
+		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style.php');
+		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Font.php');
+		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Color.php');
 		$colorObj = new PHPExcel_Style_Color();
 		$colorObj->setRGB($colorRGB);
 		$fontObj = new PHPExcel_Style_Font();

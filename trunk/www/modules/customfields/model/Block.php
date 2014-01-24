@@ -4,13 +4,17 @@
  * @property string $name
  * @property int $field_id
  */
-class GO_Customfields_Model_Block extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Customfields\Model;
+
+
+class Block extends \GO\Base\Db\ActiveRecord{
 		
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Customfields_Model_Field 
+	 * @return Field 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -23,8 +27,8 @@ class GO_Customfields_Model_Block extends GO_Base_Db_ActiveRecord{
 	
 	public function relations() {
 		return array(
-				'customField' => array('type' => self::BELONGS_TO, 'model' => 'GO_Customfields_Model_Field', 'field' => 'field_id'),
-				'enabledModels'=>array('type' => self::HAS_MANY, 'model' => 'GO_Customfields_Model_EnabledBlock', 'field' => 'block_id','delete'=>true)
+				'customField' => array('type' => self::BELONGS_TO, 'model' => '\GO\Customfields\Model\Field', 'field' => 'field_id'),
+				'enabledModels'=>array('type' => self::HAS_MANY, 'model' => '\GO\Customfields\Model\EnabledBlock', 'field' => 'block_id','delete'=>true)
 			);
 	}
 		
@@ -38,21 +42,21 @@ class GO_Customfields_Model_Block extends GO_Base_Db_ActiveRecord{
 
 	public function getItemNames($forModelId,$forModelName) {
 		
-		$modelUnderBlock = GO::getModel($this->customField->category->extends_model);
+		$modelUnderBlock = \GO::getModel($this->customField->category->extends_model);
 		
 		$cfTableName = 'cf_'.$modelUnderBlock->tableName();
 		
 		$stmt = $modelUnderBlock->find(
-			GO_Base_Db_FindParams::newInstance()
+			\GO\Base\Db\FindParams::newInstance()
 				->ignoreAcl()
 				->join(
 					$cfTableName,
-					GO_Base_Db_FindCriteria::newInstance()->addRawCondition('cf.model_id', 't.id'),
+					\GO\Base\Db\FindCriteria::newInstance()->addRawCondition('cf.model_id', 't.id'),
 					'cf',
 					'INNER'
 				)
 				->criteria(
-					GO_Base_Db_FindCriteria::newInstance()
+					\GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('col_'.$this->field_id, $forModelId.':%', 'LIKE', 'cf')
 				)
 		);
@@ -60,7 +64,7 @@ class GO_Customfields_Model_Block extends GO_Base_Db_ActiveRecord{
 		$itemNamesArr = array();
 		
 		foreach ($stmt as $item) {
-			$name = $item->className()=='GO_Addressbook_Model_Company' || $item->className()=='GO_Addressbook_Model_Contact'
+			$name = $item->className()=='\GO\Addressbook\Model\Company' || $item->className()=='\GO\Addressbook\Model\Contact'
 				? $item->name.' ('.$item->addressbook->name.')'
 				: $item->name;
 			$itemNamesArr[] = array('model_id'=>$item->id,'model_name'=>$item->className(),'item_name'=>$name);

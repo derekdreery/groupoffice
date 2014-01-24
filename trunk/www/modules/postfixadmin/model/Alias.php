@@ -17,7 +17,7 @@
  */
  
 /**
- * The GO_Postfixadmin_Model_Alias model
+ * The Alias model
  *
  * @package GO.modules.postfixadmin.model
  * @property int $domain_id
@@ -28,13 +28,17 @@
  * @property boolean $active
  */
 
-class GO_Postfixadmin_Model_Alias extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Postfixadmin\Model;
+
+
+class Alias extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Postfixadmin_Model_Alias 
+	 * @return Alias 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -47,7 +51,7 @@ class GO_Postfixadmin_Model_Alias extends GO_Base_Db_ActiveRecord {
 	
 	public function relations() {
 		return array(
-			'domain' => array('type' => self::BELONGS_TO, 'model' => 'GO_Postfixadmin_Model_Domain', 'field' => 'domain_id')
+			'domain' => array('type' => self::BELONGS_TO, 'model' => '\GO\Postfixadmin\Model\Domain', 'field' => 'domain_id')
 		);
 	}
 	

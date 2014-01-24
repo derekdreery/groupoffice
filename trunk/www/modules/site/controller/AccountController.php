@@ -1,6 +1,10 @@
 <?php
 
-class GO_Site_Controller_Account extends GO_Site_Components_Controller {
+
+namespace GO\Site\Controller;
+
+
+class Account extends \GO\Site\Components\Controller {
 	
 	protected function allowGuests() {
 		return array('register','login','lostpassword','recoverpassword','resetpassword');
@@ -12,13 +16,13 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 	 */
 	public function actionRegister() {
 		
-		GO::config()->password_validate=false;
+		\GO::config()->password_validate=false;
 		
-		$user = new GO_Base_Model_User();		
-		$contact = new GO_Addressbook_Model_Contact();
+		$user = new \GO\Base\Model\User();		
+		$contact = new \GO\Addressbook\Model\Contact();
 				
 //		$user->setValidationRule('passwordConfirm', 'required', true);
-		$company = new GO_Addressbook_Model_Company();		
+		$company = new \GO\Addressbook\Model\Company();		
 		
 		//set additional required fields
 		$company->setValidationRule('address', 'required', true);
@@ -26,7 +30,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 		$company->setValidationRule('city', 'required', true);
 		$company->setValidationRule('country', 'required', true);
 		
-		if(GO_Base_Util_Http::isPostRequest())
+		if(\GO\Base\Util\Http::isPostRequest())
 		{
 			//if username is deleted from form then use the e-mail adres as username
 			if(!isset($_POST['User']['username']))
@@ -47,7 +51,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 			if($user->validate() && $contact->validate() && $company->validate())
 			{				
 				
-				GO::setIgnoreAclPermissions(); //allow guest to create user
+				\GO::setIgnoreAclPermissions(); //allow guest to create user
 
 				if($user->save())
 				{
@@ -60,7 +64,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 					$contact->save();
 
 					// Automatically log the newly created user in.
-					if(GO::session()->login($user->username, $_POST['User']['password']))
+					if(\GO::session()->login($user->username, $_POST['User']['password']))
 						$this->redirect($this->getReturnUrl());
 					else
 						throw new Exception('Login after registreation failed.');
@@ -87,12 +91,12 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 	 */
 	public function actionRecoverPassword() {
 		
-		if (GO_Base_Util_Http::isPostRequest())
+		if (\GO\Base\Util\Http::isPostRequest())
 		{
-			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $_POST['email']);
+			$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $_POST['email']);
 			
 			if($user == null){
-				Site::notifier()->setMessage('error', GO::t("invaliduser","sites"));
+				Site::notifier()->setMessage('error', \GO::t("invaliduser","sites"));
 			}else{
 				$siteTitle = Site::model()->name;
 				$url = Site::request()->getHostInfo(). Site::urlManager()->createUrl('/site/account/resetpassword', array(), false);
@@ -101,7 +105,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 				$fromEmail = 'noreply@intermesh.nl';
 
 				$user->sendResetPasswordMail($siteTitle,$url,$fromName,$fromEmail);
-				Site::notifier()->setMessage('success', GO::t('recoverEmailSent', 'site')." ".$user->email);
+				Site::notifier()->setMessage('success', \GO::t('recoverEmailSent', 'site')." ".$user->email);
 			}
 		}
 		
@@ -111,28 +115,28 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 	public function actionResetPassword()
 	{
 		if(empty($_GET['email']))
-			throw new Exception(GO::t("noemail","sites"));
+			throw new Exception(\GO::t("noemail","sites"));
 
-		$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $_GET['email']);
+		$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $_GET['email']);
 
 		if(!$user)
-			throw new Exception(GO::t("invaliduser","sites"));
+			throw new Exception(\GO::t("invaliduser","sites"));
 
 		if(isset($_GET['usertoken']) && $_GET['usertoken'] == $user->getSecurityToken())
 		{
-			if (GO_Base_Util_Http::isPostRequest())
+			if (\GO\Base\Util\Http::isPostRequest())
 			{
 				$user->password = $_POST['User']['password'];
 				$user->passwordConfirm = $_POST['User']['passwordConfirm'];
 
-				GO::$ignoreAclPermissions = true; 
+				\GO::$ignoreAclPermissions = true; 
 				
 				if($user->validate() && $user->save())
-					Site::notifier()->setMessage('success',GO::t('resetPasswordSuccess', 'sites'));
+					Site::notifier()->setMessage('success',\GO::t('resetPasswordSuccess', 'sites'));
 			}
 		}
 		else
-			Site::notifier()->setMessage('error',GO::t("invalidusertoken","sites"));
+			Site::notifier()->setMessage('error',\GO::t("invalidusertoken","sites"));
 				
 		$user->password = null;
 		echo $this->render('resetPassword', array('user'=>$user));
@@ -143,35 +147,35 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 	 */
 	public function actionLogin(){
 		
-		$model = new GO_Base_Model_User();
+		$model = new \GO\Base\Model\User();
 		
-		if (GO_Base_Util_Http::isPostRequest() && isset($_POST['User'])) {
+		if (\GO\Base\Util\Http::isPostRequest() && isset($_POST['User'])) {
 
 			$model->username = $_POST['User']['username'];
 			
 			$password = $_POST['User']['password'];
 
-			$user = GO::session()->login($model->username, $password);
+			$user = \GO::session()->login($model->username, $password);
 			
 			//reset language after login
 			if(!empty(Site::model()->language))
-				GO::language()->setLanguage(Site::model()->language);
+				\GO::language()->setLanguage(Site::model()->language);
 			
 			if (!$user) {
-				Site::notifier()->setMessage('error', GO::t('badLogin')); // set the correct login failure message
+				Site::notifier()->setMessage('error', \GO::t('badLogin')); // set the correct login failure message
 			} else {
 				if (!empty($_POST['rememberMe'])) {
 
-					$encUsername = GO_Base_Util_Crypt::encrypt($model->username);
+					$encUsername = \GO\Base\Util\Crypt::encrypt($model->username);
 					if ($encUsername)
 						$encUsername = $model->username;
 
-					$encPassword = GO_Base_Util_Crypt::encrypt($password);
+					$encPassword = \GO\Base\Util\Crypt::encrypt($password);
 					if ($encPassword)
 						$encPassword = $password;
 
-					GO_Base_Util_Http::setCookie('GO_UN', $encUsername);
-					GO_Base_Util_Http::setCookie('GO_PW', $encPassword);
+					\GO\Base\Util\Http::setCookie('GO_UN', $encUsername);
+					\GO\Base\Util\Http::setCookie('GO_PW', $encPassword);
 				}
 				$this->redirect($this->getReturnUrl());
 			}
@@ -184,14 +188,14 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 	 * Logout the current user and redirect to loginpage 
 	 */
 	public function actionLogout(){
-		GO::session()->logout();
-		GO::session()->start();
+		\GO::session()->logout();
+		\GO::session()->start();
 		$this->redirect(Site::urlManager()->getHomeUrl());
 	}
 	
 	protected function actionProfile(){
 		
-		$user = GO::user();
+		$user = \GO::user();
 		
 		$contact = $user->contact;
 		
@@ -203,16 +207,16 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 //		$user->setValidationRule('passwordConfirm', 'required', false);
 		$user->setValidationRule('password', 'required', false);
 		
-		GO::config()->password_validate=false;
+		\GO::config()->password_validate=false;
 		
 		if($contact->company)
 			$company = $contact->company;
 		else{
-			$company = new GO_Addressbook_Model_Company();
+			$company = new \GO\Addressbook\Model\Company();
 			$company->addressbook_id=$contact->addressbook_id;
 		}
 		
-		if (GO_Base_Util_Http::isPostRequest()) {
+		if (\GO\Base\Util\Http::isPostRequest()) {
 			
 			if(!empty($_POST['currentPassword']) && !empty($_POST['User']['password']))
 			{
@@ -236,7 +240,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 			
 			if(!GOS::site()->notifier->hasMessage('error') && $user->validate() && $contact->validate() && $company->validate())
 			{	
-				GO::setIgnoreAclPermissions(); //allow guest to create user
+				\GO::setIgnoreAclPermissions(); //allow guest to create user
 				
 				$user->save();
 				$company->save();

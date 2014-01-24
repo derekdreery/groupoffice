@@ -1,4 +1,7 @@
 <?php
+
+namespace GO\Holidays;
+
 // holidays with fixed date
 $input_holidays['fix']['01-01'] = 'Nyårsdagen';
 $input_holidays['fix']['01-06'] = 'Trettondedag jul';
@@ -15,16 +18,19 @@ $input_holidays['var']['39'] = 'Kristi himmelsfärdsdag';
 $input_holidays['var']['49'] = 'Pingstdagen';
 
 // // Midsummers Day: the saturday between June 20 and 26
-$input_holidays['fn'][0] = array('Midsommardagen',array('GO_Holidays_Sv', 'midsummer'));
+$input_holidays['fn'][0] = array('Midsommardagen',array('\GO\Holidays\Sv', 'midsummer'));
 // // All hallows day: the saturday between October 31 and November 6
-$input_holidays['fn'][1] = array('Alla helgons dag',array('GO_Holidays_Sv', 'allHallowsDay'));
+$input_holidays['fn'][1] = array('Alla helgons dag',array('\GO\Holidays\Sv', 'allHallowsDay'));
 
-if(!class_exists('GO_Holidays_Sv')){
-	class GO_Holidays_Sv{
+if(!class_exists('\GO\Holidays\Sv')){
+
+
+
+	class Sv{
 		public static function midsummer($year){
 			$time = mktime(0,0,0,6,26,$year);
 
-			$saturday = GO_Base_Util_Date::get_last_weekday($time, -1);
+			$saturday = \GO\Base\Util\Date::get_last_weekday($time, -1);
 
 			return date('Y-m-d', $saturday);	
 
@@ -33,7 +39,7 @@ if(!class_exists('GO_Holidays_Sv')){
 		public static function allHallowsDay($year){
 			$time = mktime(0,0,0,11,6,$year);
 
-			$saturday = GO_Base_Util_Date::get_last_weekday($time, -1);
+			$saturday = \GO\Base\Util\Date::get_last_weekday($time, -1);
 
 			return date('Y-m-d', $saturday);	
 

@@ -1,8 +1,12 @@
 <?php
 
-class GO_Log_Controller_Log extends GO_Base_Controller_AbstractModelController {
 
-	protected $model = 'GO_Log_Model_Log';
+namespace GO\Log\Controller;
+
+
+class Log extends \GO\Base\Controller\AbstractModelController {
+
+	protected $model = '\GO\Log\Model\Log';
 	
 	protected function allowGuests() {
 		return array('rotate');
@@ -10,25 +14,25 @@ class GO_Log_Controller_Log extends GO_Base_Controller_AbstractModelController {
 	
 	protected function getStoreParams($params) {
 		
-		return GO_Base_Db_FindParams::newInstance()->export("log");
+		return \GO\Base\Db\FindParams::newInstance()->export("log");
 	}
 
 	protected function actionRotate($params){
 		
 		$this->requireCli();
 		
-		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams = \GO\Base\Db\FindParams::newInstance();
 		
-		$findParams->getCriteria()->addCondition('ctime', GO_Base_Util_Date::date_add(time(),-GO::config()->log_max_days), '<');
+		$findParams->getCriteria()->addCondition('ctime', \GO\Base\Util\Date::date_add(time(),-\GO::config()->log_max_days), '<');
 		
-		$stmt = GO_Log_Model_Log::model()->find($findParams);
+		$stmt = \GO\Log\Model\Log::model()->find($findParams);
 		
 		$count = $stmt->rowCount();
 		echo "Dumping ".$count." records to CSV file\n";
 		if($count){
-			$logPath = '/var/log/groupoffice/'.GO::config()->id.'.csv';
+			$logPath = '/var/log/groupoffice/'.\GO::config()->id.'.csv';
 
-			$csvLogFile = new GO_Base_Fs_CsvFile($logPath);
+			$csvLogFile = new \GO\Base\Fs\CsvFile($logPath);
 			$csvLogFile->parent()->create();
 
 			while($log = $stmt->fetch()){

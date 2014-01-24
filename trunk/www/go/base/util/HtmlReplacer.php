@@ -21,7 +21,11 @@
  * @since Group-Office 3.0
  */
 
-class GO_Base_Util_HtmlReplacer {
+
+namespace GO\Base\Util;
+
+
+class HtmlReplacer {
 	
 	private static function _replaceInTags($matches) {
 		return stripslashes(str_replace($matches[1], '{TEMP}', $matches[0]));
@@ -51,7 +55,7 @@ class GO_Base_Util_HtmlReplacer {
 			$end_boundary = '\\b';
 		}
 
-		$text = preg_replace_callback('/<[^>]*(' . $keyword . ')[^>]*>/uis', array('GO_Base_Util_HtmlReplacer', '_replaceInTags'), $text);
+		$text = preg_replace_callback('/<[^>]*(' . $keyword . ')[^>]*>/uis', array('\GO\Base\Util\HtmlReplacer', '_replaceInTags'), $text);
 		
 		$regex = "/" . $begin_boundary . "(" . $keyword . ")" . $end_boundary . "/sui";
 

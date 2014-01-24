@@ -18,7 +18,7 @@
  */
  
 /**
- * The GO_Customfields_Model_FieldSelectOption model
+ * The FieldSelectOption model
  *
  * @package GO.modules.customfields.model
  * @property int $sort_order
@@ -27,13 +27,17 @@
  * @property int $id
  */
 
-class GO_Customfields_Model_FieldSelectOption extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Customfields\Model;
+
+
+class FieldSelectOption extends \GO\Base\Db\ActiveRecord{
 		
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Customfields_Model_FieldSelectOption 
+	 * @return FieldSelectOption 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -46,7 +50,7 @@ class GO_Customfields_Model_FieldSelectOption extends GO_Base_Db_ActiveRecord{
 	
 	public function relations() {
 		return array(
-				'fields' => array('type' => self::BELONGS_TO, 'model' => 'GO_Customfields_Model_Field', 'field' => 'field_id')		);
+				'fields' => array('type' => self::BELONGS_TO, 'model' => '\GO\Customfields\Model\Field', 'field' => 'field_id')		);
 	}	
 
 }

@@ -17,7 +17,7 @@
  */
  
 /**
- * The GO_Calendar_Model_Settings model
+ * The Settings model
  *
  * @package GO.modules.calendar.model
  * @property int $calendar_id
@@ -26,13 +26,17 @@
  * @property int $user_id
  */
 
-class GO_Calendar_Model_Settings extends GO_Base_Model_AbstractUserDefaultModel{
+
+namespace GO\Calendar\Model;
+
+
+class Settings extends \GO\Base\Model\AbstractUserDefaultModel{
 	
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Calendar_Model_Settings 
+	 * @return Settings 
 	 */
 	public static function model($className=__CLASS__) {
 		return parent::model($className);
@@ -51,7 +55,7 @@ class GO_Calendar_Model_Settings extends GO_Base_Model_AbstractUserDefaultModel{
 	
 	public function relations() {
 		return array(
-				'calendar' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Calendar_Model_Calendar', 'field'=>'calendar_id')
+				'calendar' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Calendar\Model\Calendar', 'field'=>'calendar_id')
 		);
 	}
 	

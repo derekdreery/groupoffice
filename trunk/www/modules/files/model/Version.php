@@ -10,10 +10,10 @@
  */
 
 /**
- * The GO_files_Model_Template model
+ * The \GO\files\Model\Template model
  *
  * @package GO.modules.files
- * @version $Id: GO_files_Model_Template.php 7607 2011-09-29 08:41:31Z <<USERNAME>> $
+ * @version $Id: \GO\files\Model\Template.php 7607 2011-09-29 08:41:31Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
  *
@@ -21,17 +21,21 @@
  * @property int $file_id
  * @property int $user_id 
  * @property int $mtime 
- * @property GO_Files_Model_File $file
+ * @property File $file
  * @property string $path
  * @property int $version
  */
-class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Files\Model;
+
+
+class Version extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_files_Model_Template
+	 * @return \GO\files\Model\Template
 	 */
 	public static function model($className=__CLASS__) {
 		return parent::model($className);
@@ -57,16 +61,16 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'file' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Files_Model_File', 'field'=>'file_id')
+				'file' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Files\Model\File', 'field'=>'file_id')
 		);
 	}
 	
 	/**
 	 * 
-	 * @return \GO_Base_Fs_File
+	 * @return \GO\Base\Fs\File
 	 */
 	public function getFilesystemFile(){
-		return new GO_Base_Fs_File(GO::config()->file_storage_path.$this->path);
+		return new \GO\Base\Fs\File(\GO::config()->file_storage_path.$this->path);
 	}
 	
 	protected function beforeSave() {
@@ -82,7 +86,7 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 	}
 	
 	private function _findLastVersion(){
-		$params = GO_Base_Db_FindParams::newInstance()
+		$params = \GO\Base\Db\FindParams::newInstance()
 						->ignoreAcl()
 						->single()
 						->order('mtime','DESC');
@@ -99,7 +103,7 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 		
 		$this->file->fsFile->move($folder, $file->name());
 		
-		GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')+$file->size());
+		\GO::config()->save_setting("file_storage_usage", \GO::config()->get_setting('file_storage_usage')+$file->size());
 		
 		$this->_deleteOld(); 
 		
@@ -110,7 +114,7 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 		
 		$file = $this->getFilesystemFile();
 		
-		GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')-$file->size());
+		\GO::config()->save_setting("file_storage_usage", \GO::config()->get_setting('file_storage_usage')-$file->size());
 		
 		$file->delete();
 		
@@ -119,10 +123,10 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 	
 	private function _deleteOld(){	
 
-		if(!empty(GO::config()->max_file_versions)){
-			$params = GO_Base_Db_FindParams::newInstance()
+		if(!empty(\GO::config()->max_file_versions)){
+			$params = \GO\Base\Db\FindParams::newInstance()
 							->ignoreAcl()
-							->start(GO::config()->max_file_versions)
+							->start(\GO::config()->max_file_versions)
 							->limit(10)
 							->order('mtime','DESC');
 

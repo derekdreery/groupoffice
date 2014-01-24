@@ -9,10 +9,10 @@
  */
  
 /**
- * The GO_Tasks_Model_Category model
+ * The Category model
  *
  * @package GO.modules.Tasks
- * @version $Id: GO_Tasks_Model_Category.php 7607 2011-09-20 10:09:35Z <<USERNAME>> $
+ * @version $Id: Category.php 7607 2011-09-20 10:09:35Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *
@@ -21,13 +21,17 @@
  * @property int $user_id
  */
 
-class GO_Tasks_Model_Category extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Tasks\Model;
+
+
+class Category extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Tasks_Model_Category 
+	 * @return Category 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -45,7 +49,7 @@ class GO_Tasks_Model_Category extends GO_Base_Db_ActiveRecord {
 
 	public function relations() {
 		return array(
-				'tasks' => array('type' => self::HAS_MANY, 'model' => 'GO_Tasks_Model_Task', 'field' => 'category_id', 'delete' => true),
+				'tasks' => array('type' => self::HAS_MANY, 'model' => '\GO\Tasks\Model\Task', 'field' => 'category_id', 'delete' => true),
 				);
 	}
 }

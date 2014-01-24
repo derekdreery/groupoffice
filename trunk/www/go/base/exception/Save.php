@@ -24,12 +24,16 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_Save extends Exception
+
+namespace GO\Base\Exception;
+
+
+class Save extends \Exception
 {
 
 	public function __construct($message='') {
 		
-		$message = empty($message) ? GO::t('saveError') : GO::t('saveError').":\n\n".$message;
+		$message = empty($message) ? \GO::t('saveError') : \GO::t('saveError').":\n\n".$message;
 		
 		parent::__construct($message);
 	}

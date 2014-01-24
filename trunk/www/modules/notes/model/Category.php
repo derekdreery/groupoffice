@@ -22,13 +22,17 @@
  * @property int $acl_id
  * @property int $user_id
  */
-class GO_Notes_Model_Category extends GO_Base_Model_AbstractUserDefaultModel {
+
+namespace GO\Notes\Model;
+
+
+class Category extends \GO\Base\Model\AbstractUserDefaultModel {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Notes_Model_Category 
+	 * @return Category 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -49,7 +53,7 @@ class GO_Notes_Model_Category extends GO_Base_Model_AbstractUserDefaultModel {
 
 	public function relations() {
 		return array(
-				'notes' => array('type' => self::HAS_MANY, 'model' => 'GO_Notes_Model_Note', 'field' => 'category_id', 'delete' => true)		);
+				'notes' => array('type' => self::HAS_MANY, 'model' => '\GO\Notes\Model\Note', 'field' => 'category_id', 'delete' => true)		);
 	}
 	
 	protected function init() {

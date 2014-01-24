@@ -13,23 +13,23 @@
 				}
 				?>
 
-				<?php echo GO_Sites_Components_Html::beginForm(); ?>	
+				<?php echo \GO\Sites\Components\Html::beginForm(); ?>	
 
 				<div class="row formrow">					
-					<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'username'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($model, 'username'); ?>
-					<?php echo GO_Sites_Components_Html::error($model, 'username'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($model, 'username'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($model, 'username'); ?>
+					<?php echo \GO\Sites\Components\Html::error($model, 'username'); ?>
 				</div>
 				<div class="row formrow">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'password'); ?>
-					<?php echo GO_Sites_Components_Html::activePasswordField($model, 'password'); ?>
-					<?php echo GO_Sites_Components_Html::error($model, 'password'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($model, 'password'); ?>
+					<?php echo \GO\Sites\Components\Html::activePasswordField($model, 'password'); ?>
+					<?php echo \GO\Sites\Components\Html::error($model, 'password'); ?>
 				</div>					
 				<div class="row buttons">
-					<?php echo GO_Sites_Components_Html::submitButton('OK'); ?>
-					<?php echo GO_Sites_Components_Html::resetButton('Reset'); ?>
+					<?php echo \GO\Sites\Components\Html::submitButton('OK'); ?>
+					<?php echo \GO\Sites\Components\Html::resetButton('Reset'); ?>
 				</div>
-				<?php echo GO_Sites_Components_Html::endForm(); ?>
+				<?php echo \GO\Sites\Components\Html::endForm(); ?>
 				<div style="clear:both;"></div>
 					<a href="<?php echo $this->createUrl('/sites/site/recoverpassword'); ?>"><?php echo GOS::t('lostPassword'); ?>?</a>
 			</div>

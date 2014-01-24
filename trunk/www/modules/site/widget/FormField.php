@@ -20,15 +20,19 @@
  * @version $Id$
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Site_Widget_FormField extends GO_Site_Components_Widget {
+
+namespace GO\Site\Widget;
+
+
+class FormField extends \GO\Site\Components\Widget {
 
 	/**
-	 * @var GO_Site_Widget_Form this fields form
+	 * @var Form this fields form
 	 */
 	public $form;
 
 	/**
-	 * @var GO_Base_Model the datamodel this field represents
+	 * @var \GO\Base\Model the datamodel this field represents
 	 */
 	public $model;
 

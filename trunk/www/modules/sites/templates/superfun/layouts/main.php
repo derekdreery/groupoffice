@@ -19,11 +19,11 @@
 		<div class="wrapper">
 
 			<div id="login">
-				<?php if(!GO::user()) : ?>
+				<?php if(!\GO::user()) : ?>
 					<a class="btn btn-inverse" href="<?php echo $this->createUrl("/sites/site/login"); ?>">Inloggen</a> 
 					| <a class="btn btn-inverse" href="<?php echo $this->createUrl("/reservation/front/register"); ?>">Registreren</a>
 				<?php else: ?>
-					<span class="hello">Welkom <?php echo GO::user()->name; ?> </span>
+					<span class="hello">Welkom <?php echo \GO::user()->name; ?> </span>
 					| <a class="btn btn-inverse" href="<?php echo $this->createUrl('/sites/site/logout'); ?>">Uitloggen</a>
 					| <a class="btn btn-inverse" href="<?php echo $this->createUrl('/reservation/front/account'); ?>">Mijn account</a>
 				<?php endif; ?>
@@ -51,7 +51,7 @@
 							<?php endforeach; ?>
 						</li>
 				<?php endif; ?>
-				<?php $cart = new GO_Webshop_Components_ShoppingCart();
+				<?php $cart = new \GO\Webshop\Components\ShoppingCart();
 				foreach($cart->getItems() as $item): ?>
 					<li <?php echo ($item->getItem()->hasValidationErrors()) ? 'class="errorMessage"' : ''; ?>><h3><?php echo $item->getItem()->activity->planboard->name; ?></h3>
 						<div class="price">

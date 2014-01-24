@@ -1,15 +1,19 @@
 <?php
-class GO_Files_Filehandler_Download implements GO_Files_Filehandler_FilehandlerInterface{
 
-	public function isDefault(\GO_Files_Model_File $file) {
+namespace GO\Files\Filehandler;
+
+
+class Download implements FilehandlerInterface{
+
+	public function isDefault(\GO\Files\Model\File $file) {
 		return false;
 	}
 	
 	public function getName(){
-		return GO::t('download');
+		return \GO::t('download');
 	}
 	
-	public function fileIsSupported(GO_Files_Model_File $file){
+	public function fileIsSupported(\GO\Files\Model\File $file){
 		return true;
 	}
 	
@@ -17,7 +21,7 @@ class GO_Files_Filehandler_Download implements GO_Files_Filehandler_FilehandlerI
 		return 'btn-download';
 	}
 	
-	public function getHandler(GO_Files_Model_File $file){
+	public function getHandler(\GO\Files\Model\File $file){
 		return 'window.location.href="'.$file->getDownloadUrl(true, true).'";';
 	}
 }

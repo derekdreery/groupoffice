@@ -8,26 +8,30 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: GO_Files_Model_Folder.php 7607 2011-09-01 15:44:36Z <<USERNAME>> $
+ * @version $Id: Folder.php 7607 2011-09-01 15:44:36Z <<USERNAME>> $
  * @copyright Copyright Intermesh
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
 
 /**
- * The GO_Files_Model_Folder model
+ * The Folder model
  *
 
  * @property int $user_id
  * @property int $folder_id
  */
-class GO_Files_Model_FolderNotification extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Files\Model;
+
+
+class FolderNotification extends \GO\Base\Db\ActiveRecord {
 
 
 	/**
 	 * Returns a static model of itself
 	 *
 	 * @param String $className
-	 * @return GO_Files_Model_FolderNotification
+	 * @return FolderNotification
 	 */
 	public static function model($className=__CLASS__) {
 		return parent::model($className);
@@ -57,7 +61,7 @@ class GO_Files_Model_FolderNotification extends GO_Base_Db_ActiveRecord {
 		$users = array();
 		while ($fnRow = $stmt->fetch()) {
 			//ignore user who changed file(s)
-			if ($fnRow->user_id == GO::user()->id)
+			if ($fnRow->user_id == \GO::user()->id)
 				continue;
 			$users[] = $fnRow->user_id;
 		}
@@ -89,7 +93,7 @@ class GO_Files_Model_FolderNotification extends GO_Base_Db_ActiveRecord {
 
 		if (count($users)) {
 			foreach($users as $user_id) {
-				$notification = new GO_Files_Model_FolderNotificationMessage();
+				$notification = new FolderNotificationMessage();
 				$notification->type = $type;
 				$notification->arg1 = $arg1;
 				$notification->arg2 = $arg2;
@@ -100,7 +104,7 @@ class GO_Files_Model_FolderNotification extends GO_Base_Db_ActiveRecord {
 	}
 
 	public function notifyUser() {
-		$notifications = GO_Files_Model_FolderNotificationMessage::getNotifications(GO::user()->id);
+		$notifications = FolderNotificationMessage::getNotifications(\GO::user()->id);
 		if (!count($notifications))
 			return false;
 
@@ -113,11 +117,11 @@ class GO_Files_Model_FolderNotification extends GO_Base_Db_ActiveRecord {
 				$messages[$notification->type] = array();
 
 			if (!isset($users[$notification->modified_user_id])) {
-				$user = GO::user()->findByPk($notification->modified_user_id);
+				$user = \GO::user()->findByPk($notification->modified_user_id);
 				if ($user)
 					$users[$notification->modified_user_id] = $user->getName();
 				else
-					$users[$notification->modified_user_id] = GO::t('deletedUser', 'files');
+					$users[$notification->modified_user_id] = \GO::t('deletedUser', 'files');
 			}
 
 			//switch status of notification to sent
@@ -125,71 +129,71 @@ class GO_Files_Model_FolderNotification extends GO_Base_Db_ActiveRecord {
 			$notification->save();
 
 			switch ($notification->type) {
-				case GO_Files_Model_FolderNotificationMessage::ADD_FOLDER:
+				case FolderNotificationMessage::ADD_FOLDER:
 					$messages[$notification->type][] = sprintf(
-						GO::t('notifyFolderAdd', 'files'),
+						\GO::t('notifyFolderAdd', 'files'),
 						$notification->arg1,
 						$notification->arg2,
 						$users[$notification->modified_user_id]
 					);
 					break;
-				case GO_Files_Model_FolderNotificationMessage::RENAME_FOLDER:
+				case FolderNotificationMessage::RENAME_FOLDER:
 					$messages[$notification->type][] = sprintf(
-						GO::t('notifyFolderRename', 'files'),
+						\GO::t('notifyFolderRename', 'files'),
 						$notification->arg1,
 						$notification->arg2,
 						$users[$notification->modified_user_id]
 					);
 					break;
-				case GO_Files_Model_FolderNotificationMessage::MOVE_FOLDER:
+				case FolderNotificationMessage::MOVE_FOLDER:
 					$messages[$notification->type][] = sprintf(
-						GO::t('notifyFolderMove', 'files'),
+						\GO::t('notifyFolderMove', 'files'),
 						$notification->arg1,
 						$notification->arg2,
 						$users[$notification->modified_user_id]
 					);
 					break;
-				case GO_Files_Model_FolderNotificationMessage::DELETE_FOLDER:
+				case FolderNotificationMessage::DELETE_FOLDER:
 					$messages[$notification->type][] = sprintf(
-						GO::t('notifyFolderDelete', 'files'),
+						\GO::t('notifyFolderDelete', 'files'),
 						$notification->arg1,
 						$users[$notification->modified_user_id]
 					);
 					break;
-				case GO_Files_Model_FolderNotificationMessage::ADD_FILE:
+				case FolderNotificationMessage::ADD_FILE:
 					$messages[$notification->type][] = sprintf(
-						GO::t('notifyFileAdd', 'files'),
-						$notification->arg1,
-						$notification->arg2,
-						$users[$notification->modified_user_id]
-					);
-					break;
-				case GO_Files_Model_FolderNotificationMessage::RENAME_FILE:
-					$messages[$notification->type][] = sprintf(
-						GO::t('notifyFileRename', 'files'),
+						\GO::t('notifyFileAdd', 'files'),
 						$notification->arg1,
 						$notification->arg2,
 						$users[$notification->modified_user_id]
 					);
 					break;
-				case GO_Files_Model_FolderNotificationMessage::MOVE_FILE:
+				case FolderNotificationMessage::RENAME_FILE:
 					$messages[$notification->type][] = sprintf(
-						GO::t('notifyFileMove', 'files'),
+						\GO::t('notifyFileRename', 'files'),
 						$notification->arg1,
 						$notification->arg2,
 						$users[$notification->modified_user_id]
 					);
 					break;
-				case GO_Files_Model_FolderNotificationMessage::DELETE_FILE:
+				case FolderNotificationMessage::MOVE_FILE:
 					$messages[$notification->type][] = sprintf(
-						GO::t('notifyFileDelete', 'files'),
+						\GO::t('notifyFileMove', 'files'),
+						$notification->arg1,
+						$notification->arg2,
+						$users[$notification->modified_user_id]
+					);
+					break;
+				case FolderNotificationMessage::DELETE_FILE:
+					$messages[$notification->type][] = sprintf(
+						\GO::t('notifyFileDelete', 'files'),
 						$notification->arg1,
 						$users[$notification->modified_user_id]
 					);
 					break;
-				case GO_Files_Model_FolderNotificationMessage::UPDATE_FILE:
+				case FolderNotificationMessage::UPDATE_FILE:
 					$messages[$notification->type][] = sprintf(
-						GO::t('notifyFileUpdate', 'files'),
+						\GO::t('notifyFileUpdate', 'files'),
 						$notification->arg1,
 						$users[$notification->modified_user_id]
 					);
@@ -206,11 +210,11 @@ class GO_Files_Model_FolderNotification extends GO_Base_Db_ActiveRecord {
 			}
 		}
 
-		$message = new GO_Base_Mail_Message();
-		$message->setSubject(GO::t('notificationEmailSubject', 'files'))
-				->setTo(array(GO::user()->email=>GO::user()->name))
-				->setFrom(array(GO::config()->webmaster_email=>GO::config()->title))
+		$message = new \GO\Base\Mail\Message();
+		$message->setSubject(\GO::t('notificationEmailSubject', 'files'))
+				->setTo(array(\GO::user()->email=>\GO::user()->name))
+				->setFrom(array(\GO::config()->webmaster_email=>\GO::config()->title))
 				->setBody($emailBody);
-		GO_Base_Mail_Mailer::newGoInstance()->send($message);
+		\GO\Base\Mail\Mailer::newGoInstance()->send($message);
 	}
 }

@@ -9,7 +9,7 @@
  */
  
 /**
- * The GO_Users_Model_CfSettingTab model
+ * The CfSettingTab model
  *
  * @package GO.modules.Users
  * @version $Id: CfSettingTab.php 7607 2011-11-03 10:28:32Z wsmits $
@@ -19,13 +19,17 @@
  * @property int $cf_category_id
  */
 
-class GO_Users_Model_CfSettingTab extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Users\Model;
+
+
+class CfSettingTab extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Ads_Model_Format
+	 * @return \GO\Ads\Model\Format
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -63,24 +67,24 @@ class GO_Users_Model_CfSettingTab extends GO_Base_Db_ActiveRecord{
 	  * Get an activestatement witch includes all the customfieldCategories that 
 	  * will be showed in the settings tab.
 	  * 
-	  * @return GO_Base_Db_ActiveStatement
+	  * @return \GO\Base\Db\ActiveStatement
 	  */
 	 public function getSettingTabs(){
 		 		 
-		 $findParams = GO_Base_Db_FindParams::newInstance()
+		 $findParams = \GO\Base\Db\FindParams::newInstance()
 						 ->ignoreAcl()
 						 ->joinModel(array(
-								'model'=>'GO_Users_Model_CfSettingTab',									
+								'model'=>'\GO\Users\Model\CfSettingTab',									
 								'localTableAlias'=>'t', //defaults to "t"
 								'localField'=>'id', //defaults to "id"			
 								'foreignField'=>'cf_category_id', //defaults to primary key of the remote model
 								'tableAlias'=>'cfs', //Optional table alias					
 								'type'=>'INNER' //defaults to INNER,
 						 ))
-						 ->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('extends_model', "GO_Addressbook_Model_Contact"))
+						 ->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('extends_model', "\GO\Addressbook\Model\Contact"))
 						 ->order('sort_index');
 		 
-		 $stmt = GO_Customfields_Model_Category::model()->find($findParams);
+		 $stmt = \GO\Customfields\Model\Category::model()->find($findParams);
 		 return $stmt;
 	 }
 	 

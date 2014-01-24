@@ -328,8 +328,8 @@ class PHPExcel_Reader_OOCalc extends PHPExcel_Reader_Abstract implements PHPExce
 			throw new PHPExcel_Reader_Exception("Could not open " . $pFilename . " for reading! File does not exist.");
 		}
 
-		$timezoneObj = new DateTimeZone('Europe/London');
-		$GMT = new DateTimeZone('UTC');
+		$timezoneObj = new \DateTimeZone('Europe/London');
+		$GMT = new \DateTimeZone('UTC');
 
 		$zip = new ZipArchive;
 		if (!$zip->open($pFilename)) {
@@ -580,7 +580,7 @@ class PHPExcel_Reader_OOCalc extends PHPExcel_Reader_Abstract implements PHPExce
 												break;
 										case 'date' :
 												$type = PHPExcel_Cell_DataType::TYPE_NUMERIC;
-											    $dateObj = new DateTime($cellDataOfficeAttributes['date-value'], $GMT);
+											    $dateObj = new \DateTime($cellDataOfficeAttributes['date-value'], $GMT);
 												$dateObj->setTimeZone($timezoneObj);
 												list($year,$month,$day,$hour,$minute,$second) = explode(' ',$dateObj->format('Y m d H i s'));
 												$dataValue = PHPExcel_Shared_Date::FormattedPHPToExcel($year,$month,$day,$hour,$minute,$second);

@@ -17,13 +17,17 @@
  * @property int $id
  */
 
-class GO_Addressbook_Model_Addresslist extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Addressbook\Model;
+
+
+class Addresslist extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Addressbook_Model_Company 
+	 * @return Company 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -32,14 +36,14 @@ class GO_Addressbook_Model_Addresslist extends GO_Base_Db_ActiveRecord {
 	
 	// TODO : move language from mailings module to addressbook module
 	protected function getLocalizedName() {
-		return GO::t('addresslist', 'addressbook');
+		return \GO::t('addresslist', 'addressbook');
 	}
 	
 	public function relations(){
 		return array(
-				'contacts' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'addresslist_id', 'linkModel' => 'GO_Addressbook_Model_AddresslistContact'),
-				'companies' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'addresslist_id', 'linkModel' => 'GO_Addressbook_Model_AddresslistCompany'),
-				'sentMailings' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_SentMailing','field'=>'addresslist_id')
+				'contacts' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Addressbook\Model\Contact', 'field'=>'addresslist_id', 'linkModel' => '\GO\Addressbook\Model\AddresslistContact'),
+				'companies' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Addressbook\Model\Company', 'field'=>'addresslist_id', 'linkModel' => '\GO\Addressbook\Model\AddresslistCompany'),
+				'sentMailings' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Addressbook\Model\SentMailing','field'=>'addresslist_id')
 		);
 	}
 	
@@ -54,7 +58,7 @@ class GO_Addressbook_Model_Addresslist extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Add a contact to this addresslist
 	 * 
-	 * @param GO_Addressbook_Model_Contact $contact
+	 * @param Contact $contact
 	 */
 	public function addContact($contact){
 		$this->addManyMany('contacts', $contact->id);
@@ -63,7 +67,7 @@ class GO_Addressbook_Model_Addresslist extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Add a company to this addresslist
 	 * 
-	 * @param GO_Addressbook_Model_Company $company
+	 * @param Company $company
 	 */
 	public function addCompany($company){
 		$this->addManyMany('companies', $company->id);

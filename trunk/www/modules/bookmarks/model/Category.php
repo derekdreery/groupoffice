@@ -18,7 +18,7 @@
  */
  
 /**
- * The GO_Bookmarks_Model_Category model
+ * The Category model
  *
  * @package GO.modules.bookmarks.model
  * @property string $name
@@ -27,13 +27,17 @@
  * @property int $id
  */
 
-class GO_Bookmarks_Model_Category extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Bookmarks\Model;
+
+
+class Category extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Presidents_Model_President 
+	 * @return \GO\Presidents\Model\President 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -57,6 +61,6 @@ class GO_Bookmarks_Model_Category extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getPermissionLevelForNewModel(){
-		return GO_Base_Model_Acl::DELETE_PERMISSION;
+		return \GO\Base\Model\Acl::DELETE_PERMISSION;
 	}
 }

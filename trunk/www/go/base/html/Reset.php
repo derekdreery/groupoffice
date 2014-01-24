@@ -1,5 +1,9 @@
 <?php
-class GO_Base_Html_Reset extends GO_Base_Html_Input {
+
+namespace GO\Base\Html;
+
+
+class Reset extends Input {
 	
 	public static function render($attributes,$echo=true) {
 		$i = new self($attributes);

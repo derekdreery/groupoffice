@@ -1,5 +1,9 @@
 <?php
-abstract class GO_Base_Controller_AbstractExportController extends GO_Base_Controller_AbstractController{
+
+namespace GO\Base\Controller;
+
+
+abstract class AbstractExportController extends AbstractController{
 
 	/**
 	 * Attributes that should be exported from the statement result.
@@ -19,12 +23,12 @@ abstract class GO_Base_Controller_AbstractExportController extends GO_Base_Contr
 	
 	public function actionAttributes($params){
 		
-		$store = new GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 		
 		$attr = $this->exportableAttributes();
 		
 		$className = get_class($this);
-		$selected = GO::config()->get_setting($className.'_attributes');
+		$selected = \GO::config()->get_setting($className.'_attributes');
 		if($selected){
 			$selected=  unserialize($selected);
 		}else
@@ -43,7 +47,7 @@ abstract class GO_Base_Controller_AbstractExportController extends GO_Base_Contr
 	}
 	
 //	public function actionParameters($params){
-//		$store = new GO_Base_Data_ArrayStore();
+//		$store = new \GO\Base\Data\ArrayStore();
 //		
 //		$attr = $this->exportParameters();
 //		
@@ -65,7 +69,7 @@ abstract class GO_Base_Controller_AbstractExportController extends GO_Base_Contr
 	
 		$className = get_class($this);
 		
-		GO::config()->save_setting($className.'_attributes', serialize($params['attributes']));
+		\GO::config()->save_setting($className.'_attributes', serialize($params['attributes']));
 		
 		$this->export($params);
 	}

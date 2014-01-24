@@ -1,5 +1,9 @@
 <?php
-class GO_Site_Components_Router{
+
+namespace GO\Site\Components;
+
+
+class Router{
 
 	/**
 	 * @return string the route of the default controller, action or module. Defaults to 'sites/site'.
@@ -8,7 +12,7 @@ class GO_Site_Components_Router{
 	
 	/**
 	 *
-	 * @var GO_Site_Components_Controller
+	 * @var Controller
 	 */
 	private $_controller;
 	
@@ -34,11 +38,11 @@ class GO_Site_Components_Router{
 			$action_id = $aroute[2];
 		}
 
-		$className = 'GO_' . ucfirst($module_id) . '_Controller_' . ucfirst($controller_id); //TODO: set $module
-		//$classFile = GO::config()->root_path . 'modules/' . $module_id . '/controller' . DIRECTORY_SEPARATOR . ucfirst($controller_id) . 'Controller.php';
+		$className = 'GO\\' . ucfirst($module_id) . '\\Controller\\' . ucfirst($controller_id); //TODO: set $module
+		//$classFile = \GO::config()->root_path . 'modules/' . $module_id . '/controller' . DIRECTORY_SEPARATOR . ucfirst($controller_id) . 'Controller.php';
 
 		if (class_exists($className)) {
-			//if (is_subclass_of($className, 'GO_Site_Components_AbstractFrontController')) {
+			//if (is_subclass_of($className, '\GO\Site\Components\AbstractFrontController')) {
 						
 			$action = $this->getControllerAction($action_id);
 			$controller = new $className;

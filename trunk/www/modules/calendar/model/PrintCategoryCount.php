@@ -3,7 +3,11 @@
 /**
  * Model that keeps the records of the categorycount print
  */
-class GO_Calendar_Model_PrintCategoryCount extends GO_Base_Model {
+
+namespace GO\Calendar\Model;
+
+
+class PrintCategoryCount extends \GO\Base\Model {
 
 	public $startDate;
 	public $endDate;
@@ -26,8 +30,8 @@ class GO_Calendar_Model_PrintCategoryCount extends GO_Base_Model {
 		$this->startDate = $startDate;
 		$this->endDate = $endDate;
 		
-		$this->categories = GO_Calendar_Model_Category::model()->find()->fetchAll(); //GLOBAL
-		$this->calendars = GO_Calendar_Model_Calendar::model()->find()->fetchAll();
+		$this->categories = Category::model()->find()->fetchAll(); //GLOBAL
+		$this->calendars = Calendar::model()->find()->fetchAll();
 	}
 	
 	/**
@@ -38,7 +42,7 @@ class GO_Calendar_Model_PrintCategoryCount extends GO_Base_Model {
 	public function getHeaders(){
 		
 		if(empty($this->_headers)){
-			$this->_headers[] = GO::t('calendars','calendar');
+			$this->_headers[] = \GO::t('calendars','calendar');
 
 			foreach($this->categories as $cat){
 				$this->_headers[] = $cat->name;
@@ -62,12 +66,12 @@ class GO_Calendar_Model_PrintCategoryCount extends GO_Base_Model {
 
 				foreach($this->categories as $category){
 
-					$findParams = GO_Base_Db_FindParams::newInstance();
+					$findParams = \GO\Base\Db\FindParams::newInstance();
 					$findParams->select('COUNT(*) as count');
 					$findParams->ignoreAcl();
 	//				$findParams->group('calendar_id');
 
-					$findCriteria = GO_Base_Db_FindCriteria::newInstance();
+					$findCriteria = \GO\Base\Db\FindCriteria::newInstance();
 
 					$findCriteria->addCondition('category_id', $category->id);
 					$findCriteria->addCondition('calendar_id', $calendar->id);
@@ -76,7 +80,7 @@ class GO_Calendar_Model_PrintCategoryCount extends GO_Base_Model {
 
 					$findParams->criteria($findCriteria);
 
-					$result = GO_Calendar_Model_Event::model()->find($findParams)->fetch();
+					$result = Event::model()->find($findParams)->fetch();
 
 					if(empty($result->count))
 						$row[] = 0;
@@ -101,7 +105,7 @@ class GO_Calendar_Model_PrintCategoryCount extends GO_Base_Model {
 		if(empty($this->_totals)){
 			$rows = $this->getRows();
 			
-			$this->_totals[] =GO::t('total','calendar');
+			$this->_totals[] =\GO::t('total','calendar');
 			
 			foreach($rows as $row){
 				$i = 1;

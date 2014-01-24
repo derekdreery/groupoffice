@@ -1,5 +1,9 @@
 <?php
-abstract class GO_Base_Mail_ImapBase {
+
+namespace GO\Base\Mail;
+
+
+abstract class ImapBase {
 
 	var $touched_folders =array();
 
@@ -34,7 +38,7 @@ abstract class GO_Base_Mail_ImapBase {
 	
 	public function last_error($clear=true){
 		$count=count($this->errors);
-		//GO::debug($this->errors);
+		//\GO::debug($this->errors);
 		if($count){
 			
 			return $clear ? array_pop($this->errors) : $this->errors[$count-1];
@@ -280,20 +284,20 @@ abstract class GO_Base_Mail_ImapBase {
 		
 		$this->responses[] = $result;
 		if ($chunked) {
-			if(!empty(GO::session()->values['debugSql'])){
+			if(!empty(\GO::session()->values['debugSql'])){
 				foreach($chunked_result as $chunks)
-					GO::debug("R: ".implode(" ", $chunks));
+					\GO::debug("R: ".implode(" ", $chunks));
 			}
 			$result = $chunked_result;
 		}else
 		{
-			if(!empty(GO::session()->values['debugSql'])){
+			if(!empty(\GO::session()->values['debugSql'])){
 				foreach($result as $line)
-					GO::debug("R: ".$line);
+					\GO::debug("R: ".$line);
 			}
 		}
 
-		//GO::debug($result);
+		//\GO::debug($result);
 		return $result;
 	}
 	/* increment the imap command prefix such that it counts
@@ -326,10 +330,10 @@ abstract class GO_Base_Mail_ImapBase {
 		}
 		
 
-		if(!empty(GO::session()->values['debugSql']))
-			GO::debug("S: ".$command);
+		if(!empty(\GO::session()->values['debugSql']))
+			\GO::debug("S: ".$command);
 		
-		$this->commands[trim($command)] = GO_Base_Util_Date::getmicrotime();
+		$this->commands[trim($command)] = \GO\Base\Util\Date::getmicrotime();
 	}
 	/* determine if an imap response returned an "OK", returns
        true or false */
@@ -578,6 +582,6 @@ abstract class GO_Base_Mail_ImapBase {
 
 
 	function mime_header_decode($string) {
-		return GO_Base_Mail_Utils::mimeHeaderDecode($string, $this->default_charset);
+		return Utils::mimeHeaderDecode($string, $this->default_charset);
 	}
 }

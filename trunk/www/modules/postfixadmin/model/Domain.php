@@ -18,7 +18,7 @@
  */
  
 /**
- * The GO_Postfixadmin_Model_Domain model
+ * The Domain model
  *
  * @package GO.modules.postfixadmin.model
  * @property int $user_id
@@ -36,13 +36,17 @@
  * @property int $acl_id
  */
 
-class GO_Postfixadmin_Model_Domain extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Postfixadmin\Model;
+
+
+class Domain extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Postfixadmin_Model_Domain 
+	 * @return Domain 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -60,8 +64,8 @@ class GO_Postfixadmin_Model_Domain extends GO_Base_Db_ActiveRecord {
 
 	public function relations() {
 		return array(
-			'mailboxes' => array('type' => self::HAS_MANY, 'model' => 'GO_Postfixadmin_Model_Mailbox', 'field' => 'domain_id', 'delete' => true),
-			'aliases' => array('type' => self::HAS_MANY, 'model' => 'GO_Postfixadmin_Model_Alias', 'field' => 'domain_id', 'delete' => true)
+			'mailboxes' => array('type' => self::HAS_MANY, 'model' => '\GO\Postfixadmin\Model\Mailbox', 'field' => 'domain_id', 'delete' => true),
+			'aliases' => array('type' => self::HAS_MANY, 'model' => '\GO\Postfixadmin\Model\Alias', 'field' => 'domain_id', 'delete' => true)
 		);
 	}
 	
@@ -89,12 +93,12 @@ class GO_Postfixadmin_Model_Domain extends GO_Base_Db_ActiveRecord {
 	 * @return Int The sum of the current domain's mailbox quotas.
 	 */
 	public function getSumUsedQuota() {
-		$activeRecord = GO_Postfixadmin_Model_Mailbox::model()->find(
-			GO_Base_Db_FindParams::newInstance()
+		$activeRecord = Mailbox::model()->find(
+			\GO\Base\Db\FindParams::newInstance()
 				->single()
 				->select('SUM(`quota`) AS sum_used_quota')
 				->criteria(
-					GO_Base_Db_FindCriteria::newInstance()
+					\GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('domain_id',$this->id)
 				)
 		);
@@ -103,12 +107,12 @@ class GO_Postfixadmin_Model_Domain extends GO_Base_Db_ActiveRecord {
 	
 	public function getSumMailboxes() {
 		
-		$record = GO_Postfixadmin_Model_Mailbox::model()->find(
-			GO_Base_Db_FindParams::newInstance()
+		$record = Mailbox::model()->find(
+			\GO\Base\Db\FindParams::newInstance()
 				->single()
 				->select('COUNT(*) AS count')
 				->criteria(
-					GO_Base_Db_FindCriteria::newInstance()
+					\GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('domain_id',$this->id)
 				)
 		);
@@ -116,12 +120,12 @@ class GO_Postfixadmin_Model_Domain extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function getSumAliases() {
-		$record = GO_Postfixadmin_Model_Alias::model()->find(
-			GO_Base_Db_FindParams::newInstance()
+		$record = Alias::model()->find(
+			\GO\Base\Db\FindParams::newInstance()
 				->single()
 				->select('COUNT(*) AS count')
 				->criteria(
-					GO_Base_Db_FindCriteria::newInstance()
+					\GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('domain_id',$this->id)
 				)
 		);

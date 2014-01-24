@@ -18,9 +18,13 @@
  * @copyright Copyright Intermesh BV.
  */
 
-class GO_Email_Transport extends Swift_SmtpTransport{
+
+namespace GO\Email;
+
+
+class Transport extends Swift_SmtpTransport{
 	
-	public static function newGoInstance(GO_Email_Model_Account $account){
+	public static function newGoInstance(Model\Account $account){
 		$encryption = empty($account->smtp_encryption) ? null : $account->smtp_encryption;
 		$o = self::newInstance($account->smtp_host, $account->smtp_port, $encryption);
 		

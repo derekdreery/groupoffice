@@ -1,5 +1,9 @@
 <?php
-//class GO_Ipwhitelist_Controller_EnableWhitelist extends GO_Base_Controller_AbstractJsonController {
+
+namespace GO\Ipwhitelist\Controller;
+
+
+//class EnableWhitelist extends \GO\Base\Controller\AbstractJsonController {
 //	
 //	protected function actionSetWhitelist($params) {
 //		
@@ -8,15 +12,15 @@
 //		
 //		if ($enable) {
 //			
-//			$enableWhitelistModel = GO_Ipwhitelist_Model_EnableWhitelist::model()->findByPk($groupId);
+//			$enableWhitelistModel = \GO\Ipwhitelist\Model\EnableWhitelist::model()->findByPk($groupId);
 //			if (!$enableWhitelistModel) {
-//				$enableWhitelistModel = new GO_Ipwhitelist_Model_EnableWhitelist();
+//				$enableWhitelistModel = new \GO\Ipwhitelist\Model\EnableWhitelist();
 //				$enableWhitelistModel->group_id = $groupId;
 //				$enableWhitelistModel->save();
 //			}
 //			
 //		} else {
-//			$enableWhitelistModel = GO_Ipwhitelist_Model_EnableWhitelist::model()->findByPk($groupId);
+//			$enableWhitelistModel = \GO\Ipwhitelist\Model\EnableWhitelist::model()->findByPk($groupId);
 //			if ($enableWhitelistModel)
 //				$enableWhitelistModel->delete();
 //		}

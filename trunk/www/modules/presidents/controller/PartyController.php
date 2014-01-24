@@ -15,9 +15,13 @@
 /**
  * The Party controller
  */
-class GO_Presidents_Controller_Party extends GO_Base_Controller_AbstractModelController{
+
+namespace GO\Presidents\Controller;
+
+
+class Party extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = 'GO_Presidents_Model_Party';
+	protected $model = '\GO\Presidents\Model\Party';
 
 }
 

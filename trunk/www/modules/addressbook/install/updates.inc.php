@@ -432,3 +432,6 @@ $updates['201312121200'][]="ALTER TABLE `ab_sent_mailing_companies` CHANGE `will
 
 $updates['201401031040'][]="ALTER TABLE `ab_contacts` ADD `last_email_time` int(11) NOT NULL DEFAULT '0';";
 $updates['201401061330'][]="ALTER TABLE `ab_contacts` DROP `last_email_time`;";
+
+
+$updates['201401241646'][]="update `go_model_types` set model_name=replace(model_name, '_','\\');";

@@ -13,7 +13,11 @@
  * @property int $muser_id
  */
 
-class GO_Ipwhitelist_Model_IpAddress extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Ipwhitelist\Model;
+
+
+class IpAddress extends \GO\Base\Db\ActiveRecord{
 		 
 	public static function model($className=__CLASS__)
 	{	
@@ -30,8 +34,8 @@ class GO_Ipwhitelist_Model_IpAddress extends GO_Base_Db_ActiveRecord{
 		
 //	public function relations(){
 //		return array(
-//				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'addressbook_id', 'delete'=>true),
-//				'companies' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'addressbook_id', 'delete'=>true)
+//				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Addressbook\Model\Contact', 'field'=>'addressbook_id', 'delete'=>true),
+//				'companies' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Addressbook\Model\Company', 'field'=>'addressbook_id', 'delete'=>true)
 //		);
 //	}
 	

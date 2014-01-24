@@ -8,7 +8,11 @@
 /**
  * Class to export Contacts with companies together to a .csv file. 
  */
-class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Controller_AbstractExportController{
+
+namespace GO\Addressbook\Controller;
+
+
+class ExportContactsWithCompanies extends \GO\Base\Controller\AbstractExportController{
 	
 	/**
 	 * Export the contact model to a .csv, including the company.
@@ -18,9 +22,9 @@ class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Cont
 	public function export($params) {
 
 		// Load the data from the session.
-		$findParams = GO::session()->values['contact']['findParams'];
+		$findParams = \GO::session()->values['contact']['findParams'];
 		$findParams->getCriteria()->recreateTemporaryTables();
-		$model = GO::getModel(GO::session()->values['contact']['model']);
+		$model = \GO::getModel(\GO::session()->values['contact']['model']);
 		
 		// Include the companies
 		$findParams->joinRelation('company','LEFT');
@@ -32,12 +36,12 @@ class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Cont
 		$stmt = $model->find($findParams);
 		
 		// Create the csv file
-		$csvFile = new GO_Base_Fs_CsvFile(GO_Base_Fs_File::stripInvalidChars('export.csv'));
+		$csvFile = new \GO\Base\Fs\CsvFile(\GO\Base\Fs\File::stripInvalidChars('export.csv'));
 		
 		// Output the download headers
-		GO_Base_Util_Http::outputDownloadHeaders($csvFile, false);
+		\GO\Base\Util\Http::outputDownloadHeaders($csvFile, false);
 				
-		$csvWriter = new GO_Base_Csv_Writer('php://output');
+		$csvWriter = new \GO\Base\Csv\Writer('php://output');
 		
 		$headerPrinted = false; 
 		
@@ -54,8 +58,8 @@ class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Cont
 			}
 			
 			foreach($compAttrs as $cattr=>$cval){
-				$header[GO::t('company','addressbook').$cattr] = GO::t('company','addressbook').':'.$m->company->getAttributeLabel($cattr);
-				$record[GO::t('company','addressbook').$cattr] = $m->company->{$cattr};
+				$header[\GO::t('company','addressbook').$cattr] = \GO::t('company','addressbook').':'.$m->company->getAttributeLabel($cattr);
+				$record[\GO::t('company','addressbook').$cattr] = $m->company->{$cattr};
 			}
 			
 			if(!$headerPrinted){

@@ -1,16 +1,20 @@
 <?php
-class GO_Site_Customfieldtype_Sitemultifile extends GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
+
+namespace GO\Site\Customfieldtype;
+
+
+class Sitemultifile extends \GO\Customfields\Customfieldtype\AbstractCustomfieldtype{
 	
 	public function name(){
 		return 'Sitemultifile';
 	}
 	
-	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
+	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
 		
-		return 'No display created (in GO_Site_Customfieldtype_Sitemultifile)';
+		return 'No display created (in Sitemultifile)';
 	}
 	
-	public function formatFormOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
+	public function formatFormOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
 
 		$column = $model->getColumn($key);
 		if(!$column)
@@ -18,22 +22,22 @@ class GO_Site_Customfieldtype_Sitemultifile extends GO_Customfields_Customfieldt
 				
 		$fieldId = $column['customfield']->id;
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 				->select('COUNT(*) AS count')
 				->single()
-			->criteria(GO_Base_Db_FindCriteria::newInstance()
+			->criteria(\GO\Base\Db\FindCriteria::newInstance()
 				->addCondition('model_id', $model->model_id)
 				->addCondition('field_id', $fieldId));
 
-		$model = GO_Site_Model_MultifileFile::model()->find($findParams);
+		$model = \GO\Site\Model\MultifileFile::model()->find($findParams);
 		
 		$string = '';
-		$string = sprintf(GO::t('multifileSelectValue','site'), $model->count);
+		$string = sprintf(\GO::t('multifileSelectValue','site'), $model->count);
 		
 		return $string;
 	}	
 	
-	public function formatRawOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
+	public function formatRawOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
 
 		$column = $model->getColumn($key);
 		if(!$column)
@@ -41,21 +45,21 @@ class GO_Site_Customfieldtype_Sitemultifile extends GO_Customfields_Customfieldt
 		
 		$fieldId = $column['customfield']->id;
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 				->ignoreAcl()
 				->order('mf.order')
 				->joinModel(array(
-					'model' => 'GO_Site_Model_MultifileFile',
+					'model' => '\GO\Site\Model\MultifileFile',
 					'localTableAlias' => 't',
 					'localField' => 'id',
 					'foreignField' => 'file_id',
 					'tableAlias' => 'mf'))
 		
-			->criteria(GO_Base_Db_FindCriteria::newInstance()
+			->criteria(\GO\Base\Db\FindCriteria::newInstance()
 				->addCondition('model_id', $model->model_id,'=','mf')
 				->addCondition('field_id', $fieldId,'=','mf'));
 
-		return GO_Files_Model_File::model()->find($findParams,'false',true);
+		return \GO\Files\Model\File::model()->find($findParams,'false',true);
 	}	
 	
 	public function selectForGrid(){
@@ -68,11 +72,11 @@ class GO_Site_Customfieldtype_Sitemultifile extends GO_Customfields_Customfieldt
 	 * Otherwise it will only be available for the given modeltypes.
 	 * 
 	 * Example:
-	 *	return array('GO_Site_Model_Content','GO_Site_Model_Site');
+	 *	return array('\GO\Site\Model\Content','\GO\Site\Model\Site');
 	 *  
 	 * @return array
 	 */
 	public function supportedModels(){
-		return array('GO_Site_Model_Content','GO_Site_Model_Site');
+		return array('\GO\Site\Model\Content','\GO\Site\Model\Site');
 	}
 }

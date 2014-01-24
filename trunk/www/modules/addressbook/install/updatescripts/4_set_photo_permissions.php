@@ -1,3 +1,3 @@
 <?php
-$abModule = new GO_Addressbook_AddressbookModule();
+$abModule = new \GO\Addressbook\AddressbookModule();
 $abModule->setFolderPermissions();

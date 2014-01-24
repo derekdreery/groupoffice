@@ -15,15 +15,19 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base.export
  */
-class GO_Addressbook_Export_ExportVCard extends GO_Base_Export_AbstractExport {
+
+namespace GO\Addressbook\Export;
+
+
+class ExportVCard extends \GO\Base\Export\AbstractExport {
 	
 	public static $showInView = true;
 	public static $name = "VCard";
 	public static $useOrientation=false;
 	
 	private function _sendHeaders(){		
-		$file = new GO_Base_Fs_File($this->title.'.vcf');
-		GO_Base_Util_Http::outputDownloadHeaders($file);
+		$file = new \GO\Base\Fs\File($this->title.'.vcf');
+		\GO\Base\Util\Http::outputDownloadHeaders($file);
 	}
 
 	private function _write($data){
@@ -58,7 +62,7 @@ class GO_Addressbook_Export_ExportVCard extends GO_Base_Export_AbstractExport {
 //		}
 		
 		while($record = $this->store->nextRecord()){
-			$model = GO_Addressbook_Model_Contact::model()->findByPk($record['id']);
+			$model = \GO\Addressbook\Model\Contact::model()->findByPk($record['id']);
 			$this->_write($model->toVObject()->serialize());
 		}
 	}

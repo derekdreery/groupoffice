@@ -21,9 +21,9 @@
 							
 			<table class="cart">
 				<tr>
-					<th><?php echo GO::t('amount', 'webshop'); ?></th>
-					<th><?php echo GO::t('productname', 'webshop'); ?></th>
-					<th style="text-align:right"><?php echo GO::t('price','webshop'); ?></th>
+					<th><?php echo \GO::t('amount', 'webshop'); ?></th>
+					<th><?php echo \GO::t('productname', 'webshop'); ?></th>
+					<th style="text-align:right"><?php echo \GO::t('price','webshop'); ?></th>
 				</tr>
 
 				<?php foreach($cart->getItems() as $product): ?>
@@ -48,7 +48,7 @@
 				<?php if($cart->vatApplicable()): ?>
 
 				<tr>
-					<td colspan="2" align="right" class="minicart_total"><b><?php echo GO::t('subtotal','webshop');?>:</b></td>
+					<td colspan="2" align="right" class="minicart_total"><b><?php echo \GO::t('subtotal','webshop');?>:</b></td>
 					<td align="right" class="minicart_total"><b><?php echo $cart->getSubTotalTexT(); ?></b></td>
 				</tr>
 
@@ -59,7 +59,7 @@
 				<?php endif; ?>
 
 				<tr>
-					<td colspan="2" align="right" class="minicart_total"><b><?php echo GO::t('total', 'webshop'); ?>:</b></td>
+					<td colspan="2" align="right" class="minicart_total"><b><?php echo \GO::t('total', 'webshop'); ?>:</b></td>
 					<td align="right" class="minicart_total"><b><?php echo $cart->getTotalTexT(); ?></b></td>
 				</tr>
 
@@ -70,23 +70,23 @@
 			</table>
 								
 								<?php
-									GO_Base_Html_Form::renderBegin('webshop/site/summary','confirmSummary',true); 
+									\GO\Base\Html\Form::renderBegin('webshop/site/summary','confirmSummary',true); 
 									
-									GO_Base_Html_Hidden::render(array(
+									\GO\Base\Html\Hidden::render(array(
 										"label" => "",
 										"name" => "submitsummary",
 										"value" => 'Confirm',
 										"renderContainer" => false
 									));
 								
-//									GO_Base_Html_Submit::render(array(
+//									\GO\Base\Html\Submit::render(array(
 //										"label" => "",
 //										"name" => "submitsummary",
 //										"value" => 'Confirm',
 //										"renderContainer" => false
 //									));
 									
-//									GO_Base_Html_Reset::render(array(
+//									\GO\Base\Html\Reset::render(array(
 //										"label" => "",
 //										"name" => "reset",
 //										"value" => 'Cancel',
@@ -113,7 +113,7 @@
 				<?php
 
 
-					GO_Base_Html_Form::renderEnd();
+					\GO\Base\Html\Form::renderEnd();
 
 				?>
 

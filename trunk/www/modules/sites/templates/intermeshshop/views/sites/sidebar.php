@@ -1,9 +1,9 @@
 <h1>Shopping cart</h1>
 
-<?php $cart = new GO_Webshop_Components_ShoppingCart(); ?>
+<?php $cart = new \GO\Webshop\Components\ShoppingCart(); ?>
 
 <?php if($cart->isEmpty()): ?>
-			<p><?php echo GO::t('noproductsincart','webshop'); ?></p>
+			<p><?php echo \GO::t('noproductsincart','webshop'); ?></p>
 <?php else: ?>
 		<table class="cart">
 			
@@ -25,7 +25,7 @@
 
 
 		<tr>
-			<td colspan="2" align="right" class="minicart_total"><b><?php echo GO::t('total','webshop'); ?>:</b></td>
+			<td colspan="2" align="right" class="minicart_total"><b><?php echo \GO::t('total','webshop'); ?>:</b></td>
 			<td align="right" class="minicart_total"><b><?php echo $cart->getTotalText(); ?></b></td>
 		</tr>
 

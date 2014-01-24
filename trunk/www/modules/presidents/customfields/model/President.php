@@ -18,12 +18,16 @@
  * The president model custom fields model.
  * 
  */
-class GO_Presidents_Customfields_Model_President extends GO_Customfields_Model_AbstractCustomFieldsRecord{
+
+namespace GO\Presidents\Customfields\Model;
+
+
+class President extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Presidents_Model_CustomFieldsRecord 
+	 * @return \GO\Presidents\Model\CustomFieldsRecord 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -31,6 +35,6 @@ class GO_Presidents_Customfields_Model_President extends GO_Customfields_Model_A
 	}
 
 	public function extendsModel(){
-		return "GO_Presidents_Model_President";
+		return "\GO\Presidents\Model\President";
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-$cron = new GO_Base_Cron_CronJob();
+$cron = new \GO\Base\Cron\CronJob();
 
 $cron->name = 'Email Reminders';
 $cron->active = true;
@@ -10,6 +10,6 @@ $cron->hours = '*';
 $cron->monthdays = '*';
 $cron->months = '*';
 $cron->weekdays = '*';
-$cron->job = 'GO_Base_Cron_EmailReminders';
+$cron->job = '\GO\Base\Cron\EmailReminders';
 
 $cron->save();

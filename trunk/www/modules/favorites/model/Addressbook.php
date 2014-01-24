@@ -14,7 +14,7 @@
  */
  
 /**
- * The GO_Favorites_Model_Addressbook model
+ * The Addressbook model
  *
  * @package GO.modules.Favorites
  * @version $Id$
@@ -26,7 +26,11 @@
  * @property int $sort
  */
 
-class GO_Favorites_Model_Addressbook extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Favorites\Model;
+
+
+class Addressbook extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns the table name
@@ -45,7 +49,7 @@ class GO_Favorites_Model_Addressbook extends GO_Base_Db_ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-				 'addressbook' => array('type' => self::BELONGS_TO, 'model' => 'GO_Addressbook_Model_Addressbook', 'field' => 'addressbook_id', 'delete' => false),
+				 'addressbook' => array('type' => self::BELONGS_TO, 'model' => '\GO\Addressbook\Model\Addressbook', 'field' => 'addressbook_id', 'delete' => false),
 		 );
 	 }	
 }

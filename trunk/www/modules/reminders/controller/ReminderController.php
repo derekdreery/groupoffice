@@ -18,20 +18,24 @@
  * The Note controller
  * 
  */
-class GO_Reminders_Controller_Reminder extends GO_Base_Controller_AbstractModelController{
+
+namespace GO\Reminders\Controller;
+
+
+class Reminder extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = 'GO_Base_Model_Reminder';
+	protected $model = '\GO\Base\Model\Reminder';
 	
 	public function formatStoreRecord($record, $model, $store) {
-		$record['time'] = GO_Base_Util_Date::format_long_date($model->time);
+		$record['time'] = \GO\Base\Util\Date::format_long_date($model->time);
 		return parent::formatStoreRecord($record, $model, $store);
 	}
 		
 	protected function getStoreParams($params) {
 		
-		return GO_Base_Db_FindParams::newInstance()
+		return \GO\Base\Db\FindParams::newInstance()
 						->select('t.*')
-						->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('manual','1'));
+						->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('manual','1'));
 	}
 		
 	protected function beforeSubmit(&$response, &$model, &$params) {
@@ -39,7 +43,7 @@ class GO_Reminders_Controller_Reminder extends GO_Base_Controller_AbstractModelC
 		{
 			$link = explode(':', $params['link']);
 			$params['model_id']=$link[1];
-			$params['model_type_id']= GO::getModel($link[0])->modelTypeId();
+			$params['model_type_id']= \GO::getModel($link[0])->modelTypeId();
 		}else
 		{
 			$params['model_id']=0;
@@ -54,9 +58,9 @@ class GO_Reminders_Controller_Reminder extends GO_Base_Controller_AbstractModelC
 	
 	protected function actionReminderUsers($params) {
 		
-		GO::setIgnoreAclPermissions();
+		\GO::setIgnoreAclPermissions();
 		
-		$reminderModel = GO_Base_Model_Reminder::model()->findByPk($params['reminder_id']);
+		$reminderModel = \GO\Base\Model\Reminder::model()->findByPk($params['reminder_id']);
 		$response['success'] = true;
 		$response['total'] = 0;
 		$response['results'] = array();
@@ -76,7 +80,7 @@ class GO_Reminders_Controller_Reminder extends GO_Base_Controller_AbstractModelC
 		}
 
 		foreach ($addGroupIds as $addGroupId) {
-			$groupModel = GO_Base_Model_Group::model()->findByPk($addGroupId);
+			$groupModel = \GO\Base\Model\Group::model()->findByPk($addGroupId);
 			$stmt = $groupModel->users;
 			while ($userModel = $stmt->fetch()) {
 				if (!in_array($userModel->id,$addUserIds)) {
@@ -86,13 +90,13 @@ class GO_Reminders_Controller_Reminder extends GO_Base_Controller_AbstractModelC
 		}
 		
 		foreach ($addUserIds as $addUserId) {
-			$remUserModel = GO_Base_Model_ReminderUser::model()
+			$remUserModel = \GO\Base\Model\ReminderUser::model()
 				->findSingleByAttributes(array(
 					'user_id' => $addUserId,
 					'reminder_id' => $reminderModel->id
 				));
 			if (empty($remUserModel))
-				$remUserModel = new GO_Base_Model_ReminderUser();
+				$remUserModel = new \GO\Base\Model\ReminderUser();
 			
 			$remUserModel->setAttributes(array(
 					'reminder_id'	=> $reminderModel->id,
@@ -119,10 +123,10 @@ class GO_Reminders_Controller_Reminder extends GO_Base_Controller_AbstractModelC
 
 	protected function beforeLoad(&$response, &$model, &$params) {
 		if($model->model_id>0){
-			$modelType = GO_Base_Model_ModelType::model()->findByPk($model->model_type_id);
+			$modelType = \GO\Base\Model\ModelType::model()->findByPk($model->model_type_id);
 			
 			$response['data']['link']=$modelType->model_name.':'.$model->model_id;
-			$searchCacheRecord = GO_Base_Model_SearchCacheRecord::model()
+			$searchCacheRecord = \GO\Base\Model\SearchCacheRecord::model()
 				->findSingleByAttributes( array('model_id' => $model->model_id,'model_type_id' => $model->model_type_id) );
 			
 			if ($searchCacheRecord)
@@ -135,8 +139,8 @@ class GO_Reminders_Controller_Reminder extends GO_Base_Controller_AbstractModelC
 	}
 	
 	protected function afterLoad(&$response, &$model, &$params) {
-		$response['data']['date'] = date(GO::user()->completeDateFormat, $model->time);
-		$response['data']['time'] = date(GO::user()->time_format, $model->time);
+		$response['data']['date'] = date(\GO::user()->completeDateFormat, $model->time);
+		$response['data']['time'] = date(\GO::user()->time_format, $model->time);
 		return parent::afterLoad($response, $model, $params);
 	}
 	

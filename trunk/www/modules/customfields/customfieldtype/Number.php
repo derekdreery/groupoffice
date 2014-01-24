@@ -1,27 +1,31 @@
 <?php
-class GO_Customfields_Customfieldtype_Number extends GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
+
+namespace GO\Customfields\Customfieldtype;
+
+
+class Number extends AbstractCustomfieldtype{
 	
 	public function name(){
 		return 'Number';
 	}
 	
-	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
-		return GO_Base_Util_Number::localize($attributes[$key],$this->field->number_decimals);
+	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
+		return \GO\Base\Util\Number::localize($attributes[$key],$this->field->number_decimals);
 	}
 	
-	public function formatFormOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {		
+	public function formatFormOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {		
 		if (empty($attributes[$key]) && $attributes[$key]!=0)
 			return null;
 		else {
-			return GO_Base_Util_Number::localize($attributes[$key],$this->field->number_decimals);
+			return \GO\Base\Util\Number::localize($attributes[$key],$this->field->number_decimals);
 		}
 	}
 	
-	public function formatFormInput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
+	public function formatFormInput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
 		if (empty($attributes[$key]) && $attributes[$key]!=0)
 			return null;
 		else
-			return GO_Base_Util_Number::unlocalize($attributes[$key]);
+			return \GO\Base\Util\Number::unlocalize($attributes[$key]);
 	}
 	
 	public function fieldSql() {
@@ -36,6 +40,6 @@ class GO_Customfields_Customfieldtype_Number extends GO_Customfields_Customfield
 	}
 	
 	public function getValidationError(){
-		return GO::t('numberValidationError','customfields');
+		return \GO::t('numberValidationError','customfields');
 	}
 }

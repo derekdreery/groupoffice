@@ -18,7 +18,11 @@
  * @version $Id AbstractFrontController.php 2012-06-05 10:01:09 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Controller_AbstractController
+
+namespace GO\Sites\Components;
+
+
+abstract class AbstractFrontController extends \GO\Base\Controller\AbstractController
 {
 //	/**
 //	 * Frontend action can be accessed without moduel access
@@ -135,7 +139,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 				echo $output;
 		}
 		else
-			throw new GO_Base_Exception_NotFound('cannot find the requested view ' . $view);
+			throw new \GO\Base\Exception\NotFound('cannot find the requested view ' . $view);
 	}
 
 	/**
@@ -166,7 +170,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 
 	public function getTemplatePath()
 	{
-		return GO::config()->root_path . 'modules/sites/templates/' . $this->template . '/';
+		return \GO::config()->root_path . 'modules/sites/templates/' . $this->template . '/';
 	}
 
 	private function getViewPath($viewName = false)
@@ -182,7 +186,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 	 * Will search in root/{templatename}
 	 * Can be used by Views for inserting css or js files from template folder
 	 * @return string  url to template assets
-	 * @throws GO_Base_Exception_NotFound when the template directory doesn't excists
+	 * @throws \GO\Base\Exception\NotFound when the template directory doesn't excists
 	 */
 	public function getTemplateUrl()
 	{
@@ -193,13 +197,13 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 		if(file_exists($template_url)) //look in root/[templatename]
 			return GOS::site()->urlManager->getBaseUrl()."/". $template_url;
 		else
-			return GO::config()->host . 'modules/sites/templates/' . $this->template . '/assets/';
+			return \GO::config()->host . 'modules/sites/templates/' . $this->template . '/assets/';
 				
-//		$template_url = GO::config()->host . 'modules/sites/templates/' . $this->template . '/assets/';
+//		$template_url = \GO::config()->host . 'modules/sites/templates/' . $this->template . '/assets/';
 //		if(file_exists($template_url)) //look in sites module
 //			return $template_url;
 
-		throw new GO_Base_Exception_NotFound('Could not find the template directory '. $template_url);
+		throw new \GO\Base\Exception\NotFound('Could not find the template directory '. $template_url);
 	}
 
 	/**
@@ -214,7 +218,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 		$theme_view_file = $this->getViewPath($viewName) . $viewName . '.php';
 		if(file_exists($theme_view_file))
 			return $theme_view_file;
-		return GO::config()->root_path . 'modules/'. $this->getModule()->id . '/views/site/' . $viewName . '.php';
+		return \GO::config()->root_path . 'modules/'. $this->getModule()->id . '/views/site/' . $viewName . '.php';
 	}
 
 	/**
@@ -264,10 +268,10 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 	 */
 	public function getReturnUrl()
 	{
-		if (isset(GO::session()->values['sites']['returnUrl']))
+		if (isset(\GO::session()->values['sites']['returnUrl']))
 		{
-			$returnUrl = GO::session()->values['sites']['returnUrl'];
-			//unset(GO::session ()->values['sites']['returnUrl']);
+			$returnUrl = \GO::session()->values['sites']['returnUrl'];
+			//unset(\GO::session ()->values['sites']['returnUrl']);
 			return $returnUrl;
 		}
 		else
@@ -286,12 +290,12 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 		
 		if(!in_array($action, $allowGuests) && !in_array('*', $allowGuests)){			
 			//check for logged in user
-			if(!GO::user())
+			if(!\GO::user())
 				return false;			
 		}
 		
 		$module = $this->getModule();
-		return !$module || GO::modules()->isInstalled($module->id);
+		return !$module || \GO::modules()->isInstalled($module->id);
 	}
 
 	public function run($action = '', $params = array(), $render = true, $checkPermissions = true)
@@ -305,11 +309,11 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 
 			$ignoreAcl = in_array($action, $this->ignoreAclPermissions()) || in_array('*', $this->ignoreAclPermissions());
 			if($ignoreAcl){		
-				$oldIgnore = GO::setIgnoreAclPermissions(true);				
+				$oldIgnore = \GO::setIgnoreAclPermissions(true);				
 			}
 			
 			if (!$this->_checkPermission($action))
-				throw new GO_Base_Exception_AccessDenied();
+				throw new \GO\Base\Exception\AccessDenied();
 
 			$this->beforeAction();
 			
@@ -318,34 +322,34 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			
 			//restore old value for acl permissions if this method was allowed for guests.
 			if(isset($oldIgnore))
-				GO::setIgnoreAclPermissions($oldIgnore);
+				\GO::setIgnoreAclPermissions($oldIgnore);
 		}
-		catch (GO_Base_Exception_AccessDenied $e)
+		catch (\GO\Base\Exception\AccessDenied $e)
 		{
-			if(!GO::user()){
+			if(!\GO::user()){
 				//Path the page you tried to visit into lastPath session for redirecting after login
-				GO::session()->values['sites']['returnUrl'] = GOS::site()->getRequest()->getRequestUri();
+				\GO::session()->values['sites']['returnUrl'] = GOS::site()->getRequest()->getRequestUri();
 				$loginpath = !empty(GOS::site()->getSite()->login_url) ? GOS::site()->getSite()->login_url : '/sites/site/login';
 				$this->redirect(array($loginpath));
 			}  else {
-				$controller = new GO_Sites_Controller_Site();
+				$controller = new \GO\Sites\Controller\Site();
 				$controller->template = $this->template;
 				$controller->render('error', array('error' => $e));
 			}
 			//$this->render('error', array('error'=>$e));
 		}
-		catch (GO_Base_Exception_NotFound $e){
+		catch (\GO\Base\Exception\NotFound $e){
 			header("HTTP/1.0 404 Not Found");
       header("Status: 404 Not Found");
 			
-			$controller = new GO_Sites_Controller_Site();
+			$controller = new \GO\Sites\Controller\Site();
 			$controller->template = $this->template;
 			$controller->setPageTitle("404 Not found");
 			$controller->render('404');
 		}
 		catch (Exception $e)
 		{
-			$controller = new GO_Sites_Controller_Site();
+			$controller = new \GO\Sites\Controller\Site();
 			$controller->template = $this->template;
 			$controller->render('error', array('error' => $e));
 		}

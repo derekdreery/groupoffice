@@ -18,7 +18,11 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @package GO.base.cache
  */
-class GO_Base_Cache_Disk implements GO_Base_Cache_CacheInterface{
+
+namespace GO\Base\Cache;
+
+
+class Disk implements CacheInterface{
 	
 	private $_ttls;
 	private $_ttlFile;
@@ -28,15 +32,15 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_CacheInterface{
 	private $_time;
 	
 	public function __construct(){
-//		GO::debug("Using GO_Base_Cache_Disk cache");
+//		\GO::debug("Using Disk cache");
 		
-		$this->_dir = GO::config()->tmpdir.'diskcache/';
+		$this->_dir = \GO::config()->tmpdir.'diskcache/';
 		
 		if(!is_dir($this->_dir))
 			mkdir($this->_dir, 0777, true);
 		
 		$this->_ttlFile = $this->_dir.'ttls.txt';
-		//if(!GO::config()->debug)
+		//if(!\GO::config()->debug)
 		$this->_load();
 		
 		$this->_time=time();
@@ -66,7 +70,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_CacheInterface{
 		if($key===false)
 			return true;
 		
-		$key = GO_Base_Fs_File::stripInvalidChars($key,'-');
+		$key = \GO\Base\Fs\File::stripInvalidChars($key,'-');
 						
 		if($ttl){
 			$this->_ttls[$key]=$this->_time+$ttl;
@@ -85,7 +89,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_CacheInterface{
 	 */
 	public function get($key){
 		
-		$key = GO_Base_Fs_File::stripInvalidChars($key, '-');
+		$key = \GO\Base\Fs\File::stripInvalidChars($key, '-');
 		
 		if(!empty($this->_ttls[$key]) && $this->_ttls[$key]<$this->_time){
 			unlink($this->_dir.$key);
@@ -114,7 +118,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_CacheInterface{
 	 * @param string $key 
 	 */
 	public function delete($key){
-		$key = GO_Base_Fs_File::stripInvalidChars($key, '-');
+		$key = \GO\Base\Fs\File::stripInvalidChars($key, '-');
 		
 		unset($this->_ttls[$key]);
 		$this->_ttlsDirty=true;
@@ -126,7 +130,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_CacheInterface{
 	public function flush(){
 		$this->_ttls=array();
 		$this->_ttlsDirty=true;
-		$folder = new GO_Base_Fs_Folder($this->_dir);
+		$folder = new \GO\Base\Fs\Folder($this->_dir);
 		$folder->delete();
 		$folder->create(0777);
 	}

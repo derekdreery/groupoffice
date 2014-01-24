@@ -8,19 +8,23 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: GO_Files_Model_Folder.php 7607 2011-09-01 15:44:36Z <<USERNAME>> $
+ * @version $Id: Folder.php 7607 2011-09-01 15:44:36Z <<USERNAME>> $
  * @copyright Copyright Intermesh
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
 
 /**
- * The GO_Files_Model_Folder model
+ * The Folder model
  * 
 
  * @property int $user_id
  * @property int $folder_id
  */
-class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Files\Model;
+
+
+class SharedRootFolder extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns the table name
@@ -35,63 +39,63 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 
 	public function relations() {
 		return array(
-				'folder' => array('type' => self::BELONGS_TO, 'model' => 'GO_Files_Model_Folder', 'field' => 'folder_id')
+				'folder' => array('type' => self::BELONGS_TO, 'model' => '\GO\Files\Model\Folder', 'field' => 'folder_id')
 		);
 	}
 
 	/**
 	 * Find all shared folders for the current user
 	 * 
-	 * @param GO_Base_Db_FindParams $findParams
-	 * @return GO_Base_Db_ActiveStatement
+	 * @param \GO\Base\Db\FindParams $findParams
+	 * @return \GO\Base\Db\ActiveStatement
 	 */
 	private function _findShares($user_id) {
 
 
-		$findParams = new GO_Base_Db_FindParams();
+		$findParams = new \GO\Base\Db\FindParams();
 
 		$findParams->getCriteria()
-						->addModel(GO_Files_Model_Folder::model())
+						->addModel(Folder::model())
 						->addCondition('visible', 1)
 						->addCondition('user_id', $user_id, '!=');
 
-		return GO_Files_Model_Folder::model()->find($findParams);
+		return Folder::model()->find($findParams);
 	}
 
 	private function _getLastMtime($user_id) {
 		
-		GO_Files_Model_Folder::model()->addRelation('aclItem',array(
+		Folder::model()->addRelation('aclItem',array(
 			"type"=>self::BELONGS_TO,
-			"model"=>"GO_Base_Model_Acl",
+			"model"=>"\GO\Base\Model\Acl",
 			"field"=>'acl_id'
 		));
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()->debugSql()
+		$findParams = \GO\Base\Db\FindParams::newInstance()->debugSql()
 						->select("max(a.mtime) AS mtime")
 						->single()
 						->joinModel(array(
-								'model'=>"GO_Base_Model_Acl",
+								'model'=>"\GO\Base\Model\Acl",
 								'localField'=>'acl_id',
 								'tableAlias'=>'a'
 						));
 		
 		$findParams->getCriteria()
-						->addModel(GO_Files_Model_Folder::model())
+						->addModel(Folder::model())
 						->addCondition('visible', 1)
 						->addCondition('user_id', $user_id, '!=');
 		
 		
-		$result = GO_Files_Model_Folder::model()->find($findParams);
+		$result = Folder::model()->find($findParams);
 		
 		return $result->mtime;		
 	}
 
 	public function rebuildCache($user_id, $force=false) {
 		
-		$lastBuildTime = $force ? 0 : GO::config()->get_setting('files_shared_cache_ctime', $user_id);
+		$lastBuildTime = $force ? 0 : \GO::config()->get_setting('files_shared_cache_ctime', $user_id);
 		if(!$lastBuildTime || $this->_getLastMtime($user_id)>$lastBuildTime){	
 
-			GO::debug("Rebuilding shared cache");
+			\GO::debug("Rebuilding shared cache");
 			$this->deleteByAttribute('user_id', $user_id);
 
 			$stmt = $this->_findShares($user_id);
@@ -110,7 +114,7 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 				if (!$isSubDir) {
 
 
-					$sharedRoot = new GO_Files_Model_SharedRootFolder();
+					$sharedRoot = new SharedRootFolder();
 					$sharedRoot->user_id = $user_id;
 					$sharedRoot->folder_id = $folder->id;
 					$sharedRoot->save();
@@ -119,7 +123,7 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 				}
 			}
 			
-			GO::config()->save_setting('files_shared_cache_ctime',time(), $user_id);
+			\GO::config()->save_setting('files_shared_cache_ctime',time(), $user_id);
 			
 			return time();
 		}else

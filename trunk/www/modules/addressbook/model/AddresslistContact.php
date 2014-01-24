@@ -14,13 +14,17 @@
  * @property int $addresslist_id
  */
 
-class GO_Addressbook_Model_AddresslistContact extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Addressbook\Model;
+
+
+class AddresslistContact extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Addressbook_Model_Company 
+	 * @return Company 
 	 */
 	public static function model($className=__CLASS__)
 	{	

@@ -1,7 +1,11 @@
 <?php
-require_once GO::config()->root_path."go/vendor/tcpdf/tcpdf.php";
+require_once \GO::config()->root_path."go/vendor/tcpdf/tcpdf.php";
 
-class GO_Base_Util_Pdf extends TCPDF {
+
+namespace GO\Base\Util;
+
+
+class Pdf extends TCPDF {
 
 	public function __construct($orientation = 'P') {
 		
@@ -68,17 +72,17 @@ color:#000;
 		$this->setJPEGQuality(100);
 		$this->SetMargins(30,60,30);
 				
-		if (!empty(GO::config()->tcpdf_font)) {
-			$this->font = GO::config()->tcpdf_font;
+		if (!empty(\GO::config()->tcpdf_font)) {
+			$this->font = \GO::config()->tcpdf_font;
 		}
 		
-		if(!empty(GO::config()->tcpdf_ttf_font)){
-			$this->font=  TCPDF_FONTS::addTTFfont(GO::config()->tcpdf_ttf_font);
-			//$this->font=  TCPDF_FONTS::addTTFfont(GO::config()->tcpdf_ttf_font,'TrueType'); // 2nd parameter is normally autodetected but sometimes this goes wrong. 
+		if(!empty(\GO::config()->tcpdf_ttf_font)){
+			$this->font=  TCPDF_FONTS::addTTFfont(\GO::config()->tcpdf_ttf_font);
+			//$this->font=  TCPDF_FONTS::addTTFfont(\GO::config()->tcpdf_ttf_font,'TrueType'); // 2nd parameter is normally autodetected but sometimes this goes wrong. 
 		}		
 		
-		if (!empty(GO::config()->tcpdf_font_size)) {
-			$this->font_size = GO::config()->tcpdf_font_size;
+		if (!empty(\GO::config()->tcpdf_font_size)) {
+			$this->font_size = \GO::config()->tcpdf_font_size;
 		}
 
 		$this->SetFont($this->font,'',$this->font_size);
@@ -98,8 +102,8 @@ color:#000;
 		$this->SetFont($this->font,'',$this->font_size);
 		$this->SetY(-20);
 		$pW=$this->getPageWidth();
-		$this->Cell($pW/2, 10, GO::config()->product_name.' '.GO::config()->version, 0, 0, 'L');
-		$this->Cell(($pW/2), 10, sprintf(GO::t('printPage'), $this->getAliasNumPage(), $this->getAliasNbPages()), 0, 0, 'R');
+		$this->Cell($pW/2, 10, \GO::config()->product_name.' '.\GO::config()->version, 0, 0, 'L');
+		$this->Cell(($pW/2), 10, sprintf(\GO::t('printPage'), $this->getAliasNumPage(), $this->getAliasNbPages()), 0, 0, 'R');
 	}
 
 	public function Header() {
@@ -128,7 +132,7 @@ color:#000;
 		$this->SetFont($this->font,'',$this->font_size);
 		$this->setDefaultTextColor();
 
-		$this->Cell($this->getPageWidth()-$this->getX()-$this->rMargin,12,  GO_Base_Util_Date::get_timestamp(time()),0,0,'R');
+		$this->Cell($this->getPageWidth()-$this->getX()-$this->rMargin,12,  Date::get_timestamp(time()),0,0,'R');
 
 		if(!empty($_REQUEST['text']))
 		{
@@ -269,7 +273,7 @@ color:#000;
 }
 
 
-class GO_Base_Util_PdfTableColumn{
+class PdfTableColumn{
 	
 	public $width;
 	public $text="";

@@ -1,6 +1,6 @@
 <?php
 require 'SegmentIterator.php';
-class SegmentException extends Exception
+class SegmentException extends \Exception
 {}
 /**
  * Class for handling templating segments with odt files

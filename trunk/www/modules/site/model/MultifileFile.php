@@ -8,16 +8,16 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.Site
- * @version $Id: GO_Site_Model_MultifileFile.php 7607 2013-04-16 09:44:35Z wsmits $
+ * @version $Id: MultifileFile.php 7607 2013-04-16 09:44:35Z wsmits $
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  */
  
 /**
- * The GO_Site_Model_MultifileFile model
+ * The MultifileFile model
  *
  * @package GO.modules.Site
- * @version $Id: GO_Site_Model_MultifileFile.php 7607 2013-04-16 09:44:35Z wsmits $
+ * @version $Id: MultifileFile.php 7607 2013-04-16 09:44:35Z wsmits $
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  *
@@ -27,7 +27,11 @@
  * @property int $order
  */
 
-class GO_Site_Model_MultifileFile extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Site\Model;
+
+
+class MultifileFile extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns the table name
@@ -46,7 +50,7 @@ class GO_Site_Model_MultifileFile extends GO_Base_Db_ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-				'file'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Files_Model_File", 'field'=>'file_id')
+				'file'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Files\Model\File", 'field'=>'file_id')
 		 );
 	 }
 	 
@@ -63,14 +67,14 @@ class GO_Site_Model_MultifileFile extends GO_Base_Db_ActiveRecord{
 		if (empty($fileId) || empty($modelId) || empty($fieldId))
 			return false;
 
-		$file = GO_Site_Model_MultifileFile::model()->findByPk(array(
+		$file = MultifileFile::model()->findByPk(array(
 			'model_id' => $modelId,
 			'field_id' => $fieldId,
 			'file_id' => $fileId
 		));
 
 		if (!$file)
-			$file = new GO_Site_Model_MultifileFile();
+			$file = new MultifileFile();
 
 		$file->file_id = $fileId;
 		$file->model_id = $modelId;
@@ -92,7 +96,7 @@ class GO_Site_Model_MultifileFile extends GO_Base_Db_ActiveRecord{
 		 if(empty($fileId) || empty($modelId) || empty($fieldId))
 			 return false;
 		 
-		 $file = GO_Site_Model_MultifileFile::model()->findByPk(array(
+		 $file = MultifileFile::model()->findByPk(array(
 				'model_id'=>$modelId,
 				'field_id'=>$fieldId,
 				'file_id'=>$fileId

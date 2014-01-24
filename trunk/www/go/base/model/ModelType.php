@@ -21,13 +21,17 @@
  * @property int $id
  */
 
-class GO_Base_Model_ModelType extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Base\Model;
+
+
+class ModelType extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Base_Model_LinkType 
+	 * @return LinkType 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -47,7 +51,7 @@ class GO_Base_Model_ModelType extends GO_Base_Db_ActiveRecord {
 		if($model)
 			return $model->id;
 		
-		$model = new GO_Base_Model_ModelType();
+		$model = new ModelType();
 		$model->model_name=$modelName;
 		$model->save();
 		
@@ -60,7 +64,7 @@ class GO_Base_Model_ModelType extends GO_Base_Db_ActiveRecord {
 		//after module uninstall but in some cases this went wrong.
 		$parts = explode('_',$this->model_name);
 		$module = strtolower($parts[1]);
-		if($module!='base' && !GO::modules()->isInstalled($module)){
+		if($module!='base' && !\GO::modules()->isInstalled($module)){
 			$this->delete();
 		}else
 		{		

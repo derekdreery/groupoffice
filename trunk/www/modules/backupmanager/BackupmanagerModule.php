@@ -1,3 +1,7 @@
 <?php
-class GO_Backupmanager_BackupmanagerModule extends GO_Base_Module{
+
+namespace GO\Backupmanager;
+
+
+class BackupmanagerModule extends \GO\Base\Module{
 }

@@ -1,15 +1,19 @@
 <?php
-class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelController{
+
+namespace GO\Sieve\Controller;
+
+
+class Sieve extends \GO\Base\Controller\AbstractModelController{
 	
 	private $_sieve;
 	
 	function __construct() {
-		$this->_sieve = new GO_Sieve_Util_Sieve();
+		$this->_sieve = new \GO\Sieve\Util\Sieve();
 		parent::__construct();
 	}
 	
 	private function _sieveConnect($accountId) {		
-		$accountModel = GO_Email_Model_Account::model()->findByPk($accountId);
+		$accountModel = \GO\Email\Model\Account::model()->findByPk($accountId);
 		
 		if (!empty($accountModel))
 		$connectResponse = $this->_sieve->connect(
@@ -58,7 +62,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 
 			if($script == $response['active'])
 			{
-				$name .= ' ('.GO::t('active','sieve').')';
+				$name .= ' ('.\GO::t('active','sieve').')';
 			}
 
 			$response['results'][]=array('value'=>$script,'name'=>$name, 'active'=>$script == $response['active']);
@@ -141,7 +145,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 			
 			for($i=0,$c=count($rule['tests']);$i<$c;$i++)
 			{
-				//GO::debug("TEST: ".$rule['tests'][$i]['arg1']);
+				//\GO::debug("TEST: ".$rule['tests'][$i]['arg1']);
 				if(preg_match('/[^a-z_\-_0-9]/i',$rule['tests'][$i]['arg1'])){
 					throw new Exception("Invalid value ".$rule['tests'][$i]['arg1']);
 				}
@@ -161,8 +165,8 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 								
 				if(!empty($rule['actions'][$i]['addresses'])) { // && !is_array($rule['actions'][$i]['addresses'])){
 					if($rule['actions'][$i]['type']=='vacation') {
-						if (!empty(GO::config()->sieve_vacation_subject))
-							$rule['actions'][$i]['subject']=GO::config()->sieve_vacation_subject;
+						if (!empty(\GO::config()->sieve_vacation_subject))
+							$rule['actions'][$i]['subject']=\GO::config()->sieve_vacation_subject;
 					}
 
 					$rule['actions'][$i]['addresses']= is_array($rule['actions'][$i]['addresses']) ? $rule['actions'][$i]['addresses'] : explode(',',$rule['actions'][$i]['addresses']);
@@ -173,7 +177,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 				}
 				
 				if($rule['actions'][$i]['type'] == 'stop' && $i < $c-1){
-					Throw new GO_Base_Exception_Save(GO::t('stopEndError','sieve'));
+					Throw new \GO\Base\Exception\Save(\GO::t('stopEndError','sieve'));
 				}
 			}
 
@@ -234,7 +238,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 	
 	protected function actionAccountAliases($params) {
 		$response = array();
-		$aliasesStmt = GO_Email_Model_Alias::model()->findByAttribute('account_id',$params['account_id']);
+		$aliasesStmt = \GO\Email\Model\Alias::model()->findByAttribute('account_id',$params['account_id']);
 		$aliases = array();
 		while ($aliasModel = $aliasesStmt->fetch()) {
 			$aliases[] = $aliasModel->email;
@@ -281,13 +285,13 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 				switch($action['type'])
 				{
 					case 'set_read':
-						$action['text'] = GO::t('setRead','sieve');
+						$action['text'] = \GO::t('setRead','sieve');
 						break;
 					case 'fileinto':
 						if(!$action['copy']){
-							$action['text'] = GO::t('fileinto','sieve').' "'.$action['target'].'"';
+							$action['text'] = \GO::t('fileinto','sieve').' "'.$action['target'].'"';
 						}else{
-							$action['text']=GO::t('copyto','sieve').' "'.$action['target'].'"';
+							$action['text']=\GO::t('copyto','sieve').' "'.$action['target'].'"';
 							$action['type'] = 'fileinto_copy';
 						}
 						break;
@@ -295,32 +299,32 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 					case 'redirect':
 						if (!empty($action['copy'])) {
 							$action['type'] = 'redirect_copy';
-							$action['text'] = GO::t('sendcopyto','sieve').' "'.$action['target'].'"';
+							$action['text'] = \GO::t('sendcopyto','sieve').' "'.$action['target'].'"';
 						} else {
-							$action['text'] = GO::t('forwardto','sieve').' "'.$action['target'].'"';
+							$action['text'] = \GO::t('forwardto','sieve').' "'.$action['target'].'"';
 						}
 						break;
 					case 'reject':
-						$action['text']=GO::t('refusewithmesssage','sieve').' "'.$action['target'].'"';
+						$action['text']=\GO::t('refusewithmesssage','sieve').' "'.$action['target'].'"';
 						break;
 					case 'vacation':
 						$addressesText = !empty($action['addresses']) && is_array($action['addresses'])
-							? GO::t('vacAlsoMailTo','sieve').': '.implode(',',$action['addresses']).'. '
+							? \GO::t('vacAlsoMailTo','sieve').': '.implode(',',$action['addresses']).'. '
 							: '';
 						
 						if(empty($action['days']))
 							$action['days']=7;
 						
-						$action['text']=GO::t('vacsendevery','sieve').' '.$action['days'].' '.GO::t('vacsendevery2','sieve').'. '.$addressesText.GO::t('vacationmessage','sieve').' "'.$action['reason'].'"';
+						$action['text']=\GO::t('vacsendevery','sieve').' '.$action['days'].' '.\GO::t('vacsendevery2','sieve').'. '.$addressesText.\GO::t('vacationmessage','sieve').' "'.$action['reason'].'"';
 						break;
 					case 'discard':
-						$action['text']=GO::t('discard','sieve');
+						$action['text']=\GO::t('discard','sieve');
 						break;
 					case 'stop':
-						$action['text']=GO::t('stop','sieve');
+						$action['text']=\GO::t('stop','sieve');
 						break;
 					default:
-						$action['text']=GO::t('errorshowtext','sieve');
+						$action['text']=\GO::t('errorshowtext','sieve');
 						break;
 				}
 				$response['actions'][] = $action;

@@ -1,5 +1,9 @@
 <?php
-class GO_Site_Widget_Contactform_Widget extends GO_Site_Components_Widget {
+
+namespace GO\Site\Widget\Contactform;
+
+
+class Widget extends \GO\Site\Components\Widget {
 
 	public $receipt;						//send to email
 	public $emailFieldOptions=array();		//html attributes for email field
@@ -15,11 +19,11 @@ class GO_Site_Widget_Contactform_Widget extends GO_Site_Components_Widget {
 	public $sentSuccess=false;
 	
 	public function init() {
-		$this->formModel = new GO_Site_Widget_ContactForm_ContactForm();
-		$this->formModel->receipt = isset($this->receipt) ? $this->receipt : GO::config()->webmaster_email;
-		$this->formModel->name = GO::user() ? GO::user()->name : 'Website Guest';
+		$this->formModel = new \GO\Site\Widget\ContactForm\ContactForm();
+		$this->formModel->receipt = isset($this->receipt) ? $this->receipt : \GO::config()->webmaster_email;
+		$this->formModel->name = \GO::user() ? \GO::user()->name : 'Website Guest';
 
-		$this->form = new GO_Site_Widget_Form();
+		$this->form = new \GO\Site\Widget\Form();
 	}
 	
 	public function render()

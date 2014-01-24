@@ -9,17 +9,21 @@
  */
 
 /**
- * The GO_Tasks_Controller_Settings controller
+ * The Settings controller
  *
  * @package GO.modules.Tasks
- * @version $Id: GO_Tasks_Controller_Settings.php 7607 2011-09-20 10:08:21Z <<USERNAME>> $
+ * @version $Id: Settings.php 7607 2011-09-20 10:08:21Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
 
-class GO_Tasks_Controller_Settings extends GO_Base_Model_AbstractModelController {
+
+namespace GO\Tasks\Controller;
+
+
+class Settings extends \GO\Base\Model\AbstractModelController {
 	
-	protected $model = 'GO_Tasks_Model_Settings';
+	protected $model = '\GO\Tasks\Model\Settings';
 
 	
 }

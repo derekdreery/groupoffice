@@ -23,13 +23,17 @@
  * @property date $leftoffice
  * @property float $income
  */
-class GO_Presidents_Model_President extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Presidents\Model;
+
+
+class President extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Presidents_Model_President 
+	 * @return President 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -46,7 +50,7 @@ class GO_Presidents_Model_President extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function customfieldsModel(){
-		return "GO_Presidents_Customfields_Model_President";
+		return "\GO\Presidents\Customfields\Model\President";
 	}
 	
 	public function hasLinks() {
@@ -64,7 +68,7 @@ class GO_Presidents_Model_President extends GO_Base_Db_ActiveRecord {
 
 	public function relations(){
 		return array(	
-				'party' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Presidents_Model_Party', 'field'=>'party_id'),		);
+				'party' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Presidents\Model\Party', 'field'=>'party_id'),		);
 	}
 
 }

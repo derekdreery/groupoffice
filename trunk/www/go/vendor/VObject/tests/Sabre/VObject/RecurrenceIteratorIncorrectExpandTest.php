@@ -34,7 +34,7 @@ ICS;
         $vcal = Reader::read($input);
         $this->assertInstanceOf('Sabre\\VObject\\Component\\VCalendar', $vcal);
 
-        $vcal->expand(new DateTime('2011-01-01'), new DateTime('2014-01-01'));
+        $vcal->expand(new \DateTime('2011-01-01'), new \DateTime('2014-01-01'));
 
         $result = $vcal->serialize();
 

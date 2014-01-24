@@ -1,6 +1,10 @@
 <?php
 
-class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
+
+namespace GO\Base\Mail;
+
+
+class SystemMessage extends SmimeMessage {
 
 	private $_account;
 	private $_alias;
@@ -9,12 +13,12 @@ class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
 		parent::__construct($subject, $body, $contentType, $charset);
 		
 		// Check if the account needs to be set
-		if(!empty(GO::config()->smtp_account_id)){
+		if(!empty(\GO::config()->smtp_account_id)){
 			
 			$this->_setAccount(); 
 		
 			// Check if the message needs to be signed with smime
-			if(!empty(GO::config()->smtp_account_smime_sign))
+			if(!empty(\GO::config()->smtp_account_smime_sign))
 				$this->_setSmime();
 		}
 	}
@@ -23,15 +27,15 @@ class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
 	 * This function will be called when the $config['smtp_account_id'] is set in the Group-Office config file.
 	 * If the account cannot be found then this function will return an exception
 	 * 
-	 * @throws GO_Base_Exception_NotFound
+	 * @throws \GO\Base\Exception\NotFound
 	 */
 	private function _setAccount(){
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
-		$this->_account = GO_Email_Model_Account::model()->findByPk(GO::config()->smtp_account_id,$findParams,true);
+		$findParams = \GO\Base\Db\FindParams::newInstance()->ignoreAcl();
+		$this->_account = \GO\Email\Model\Account::model()->findByPk(\GO::config()->smtp_account_id,$findParams,true);
 			
 		if(!$this->_account)
-			throw new GO_Base_Exception_NotFound('The mailaccount given in the Group-Office config file cannot be found');
+			throw new \GO\Base\Exception\NotFound('The mailaccount given in the Group-Office config file cannot be found');
 
 		$this->_alias = $this->_account->defaultAlias;
 
@@ -48,27 +52,27 @@ class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
 	private function _setSmime(){
 		
 		// Check if the smime module is installed
-		if(!GO::modules()->isInstalled("smime"))
+		if(!\GO::modules()->isInstalled("smime"))
 			Throw new Exception('Smime module not installed');
 
-		if(empty(GO::config()->smtp_account_smime_password))
+		if(empty(\GO::config()->smtp_account_smime_password))
 			Throw new Exception('No password for smime set in the Group-Office config file');
 		
 		// Check for a certificate for the give email account
-		$cert = GO_Smime_Model_Certificate::model()->findByPk($this->_account->id);
+		$cert = \GO\Smime\Model\Certificate::model()->findByPk($this->_account->id);
 		
 		if(!$cert || empty($cert->cert))
 			Throw new Exception('No certificate enabled for the given account');
 
 		// If the certificate is found, then get the password and attach the certificate to the message
-		$this->setSignParams($cert->cert, GO::config()->smtp_account_smime_password);
+		$this->setSignParams($cert->cert, \GO::config()->smtp_account_smime_password);
 	}
 	
 	/**
 	 * Get the alias of the account
 	 * If no account is set then this function will return false
 	 * 
-	 * @return mixed boolean/GO_email_Model_Alias
+	 * @return mixed boolean/\GO\email\Model\Alias
 	 */
 	public function getAccountAlias(){
 		
@@ -90,13 +94,13 @@ class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
 	/**
 	 * Get the Transport object for this message (Based on the account)
 	 * 
-	 * @return mixed GO_Base_Mail_Transport/GO_Email_Transport
+	 * @return mixed Transport/\GO\Email\Transport
 	 */
 	public function getTransport(){
 		if(!$this->hasAccount()){
-			return GO_Base_Mail_Transport::newGoInstance ();
+			return Transport::newGoInstance ();
 		}else {
-			return GO_Email_Transport::newGoInstance($this->_account);
+			return \GO\Email\Transport::newGoInstance($this->_account);
 		}
 	}
 	
@@ -107,7 +111,7 @@ class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
 	 * @return boolean
 	 */
 	public function send(){
-		return GO_Base_Mail_Mailer::newGoInstance($this->getTransport())->send($this);
+		return Mailer::newGoInstance($this->getTransport())->send($this);
 	}
 	
 	

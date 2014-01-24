@@ -9,10 +9,10 @@
  */
  
 /**
- * The GO_Calendar_Model_Category model
+ * The Category model
  *
  * @package GO.modules.Calendar
- * @version $Id: GO_Calendar_Model_Category.php 7607 2011-09-28 10:29:10Z <<USERNAME>> $
+ * @version $Id: Category.php 7607 2011-09-28 10:29:10Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *
@@ -23,13 +23,17 @@
  * @property int $acl_id
  */
 
-class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Calendar\Model;
+
+
+class Category extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Calendar_Model_Category
+	 * @return Category
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -62,7 +66,7 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 	 */
 	public function relations() {
 		return array(
-			'calendar' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Calendar', 'field' => 'calendar_id')
+			'calendar' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Calendar', 'field' => 'calendar_id')
 		);
 	}
 	 	 
@@ -71,27 +75,27 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 	  * 
 	  * @param int $calendar_id
 	  * @param string $name
-	  * @return GO_Calendar_Model_Category
+	  * @return Category
 	  */
 	 public function findByName($calendar_id, $name){
 		 
-		 $findParams = GO_Base_Db_FindParams::newInstance()->single();
+		 $findParams = \GO\Base\Db\FindParams::newInstance()->single();
 		 
 		 $findParams->getCriteria()
 						 ->addCondition('name', $name)
-						 ->mergeWith(GO_Base_Db_FindCriteria::newInstance()
+						 ->mergeWith(\GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('calendar_id', $calendar_id)
 							->addCondition('calendar_id', 0,'=','t',false)
 										 );
 		 
-		 return GO_Calendar_Model_Category::model()->find($findParams);
+		 return Category::model()->find($findParams);
 	 }
 	 
 	 protected function afterSave($wasNew) {
 		 
-		 $c = new GO_Base_Db_Connection();		 
+		 $c = new \GO\Base\Db\Connection();		 
 		 $c->createStatement()->update(
-						 GO_Calendar_Model_Event::model()->tableName(), 
+						 Event::model()->tableName(), 
 						 array('background'=>$this->color),
 						 'category_id=:category_id',
 						 array('category_id'=>$this->id));
@@ -103,9 +107,9 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 		 if (empty($this->calendar))
 			 return true;		 
 		 
-		 if ($this->calendar->getPermissionLevel() >= GO_Base_Model_Acl::DELETE_PERMISSION)
+		 if ($this->calendar->getPermissionLevel() >= \GO\Base\Model\Acl::DELETE_PERMISSION)
 			 return true;
 		 else
-			 throw new GO_Base_Exception_AccessDenied();
+			 throw new \GO\Base\Exception\AccessDenied();
 	 }
 }

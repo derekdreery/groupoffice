@@ -19,7 +19,7 @@
  * 
  * @property string $id The id of the module which is identical to the folder name inside the "modules" folder.
  * @property String $path The absolute filesystem path to module.
- * @property GO_Base_Module $moduleManager The module class to install, initialize etc the module.
+ * @property \GO\Base\Module $moduleManager The module class to install, initialize etc the module.
  * @property int $acl_id
  * @property boolean $admin_menu
  * @property int $sort_order
@@ -27,14 +27,18 @@
  * @property int $acl_write
  * @property boolean $enabled
  */
-class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Base\Model;
+
+
+class Module extends \GO\Base\Db\ActiveRecord {
 
 	private $_moduleManager;
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Base_Model_Module 
+	 * @return Module 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -50,12 +54,12 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getPath(){
-		return GO::config()->root_path . 'modules/' . $this->id . '/';
+		return \GO::config()->root_path . 'modules/' . $this->id . '/';
 	}
 	
 	protected function getModuleManager(){
 		if(!isset($this->_moduleManager))	
-			$this->_moduleManager = GO_Base_Module::findByModuleId ($this->id);
+			$this->_moduleManager = \GO\Base\Module::findByModuleId ($this->id);
 		
 		return $this->_moduleManager;
 	}
@@ -72,7 +76,7 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 		
 		if(!$this->admin_menu)
-			$this->acl->addGroup(GO::config()->group_internal);
+			$this->acl->addGroup(\GO::config()->group_internal);
 		
 		if($wasNew){			
 			if($this->moduleManager)
@@ -91,7 +95,7 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	private function _checkDependencies() {
 		
 		$dependentModuleNames = array();
-		$modules = GO::modules()->getAllModules(true);
+		$modules = \GO::modules()->getAllModules(true);
 		foreach ($modules as $module) {
 			$depends = $module->moduleManager->depends();
 			if (in_array($this->id,$depends))
@@ -99,7 +103,7 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 		}
 		
 		if (count($dependentModuleNames)>0)
-			throw new Exception(sprintf(GO::t('dependenciesCannotDelete'),implode(', ',$dependentModuleNames)));
+			throw new Exception(sprintf(\GO::t('dependenciesCannotDelete'),implode(', ',$dependentModuleNames)));
 		
 	}
 	
@@ -120,10 +124,10 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	}
 
 //	protected function getName() {
-//		return GO::t('name', $this->id);// isset($lang[$this->id]['name']) ? $lang[$this->id]['name'] : $this->id;
+//		return \GO::t('name', $this->id);// isset($lang[$this->id]['name']) ? $lang[$this->id]['name'] : $this->id;
 //	}
 //
 //	protected function getDescription() {
-//		return GO::t('description', $this->id);
+//		return \GO::t('description', $this->id);
 //	}
 	}

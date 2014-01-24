@@ -20,7 +20,11 @@
  * 
  * @package GO.base.cron
  */
-class GO_Base_Cron_CronCollection extends GO_Base_Model {
+
+namespace GO\Base\Cron;
+
+
+class CronCollection extends \GO\Base\Model {
 	
 	/**
 	 * The foldername where the cronjob scripts are located in.
@@ -43,7 +47,7 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 	 * @return array
 	 */
 	public function getAllCronJobClasses(){
-		$modules = GO::modules()->getAllModules();
+		$modules = \GO::modules()->getAllModules();
 
 		$foundCronJobClasses=array();
 		foreach($modules as $module){
@@ -62,10 +66,10 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 	
 	public function getCoreCronJobClasses(){
 		$foundCronJobClasses=array();
-		$folderPath = GO::config()->root_path.'go/base/cron';
+		$folderPath = \GO::config()->root_path.'go/base/cron';
 		
-		$folder = new GO_Base_Fs_Folder($folderPath);
-		GO::debug("CRONFILE SEARCH IN FOLDER: ".$folder->path());
+		$folder = new \GO\Base\Fs\Folder($folderPath);
+		\GO::debug("CRONFILE SEARCH IN FOLDER: ".$folder->path());
 		if($folder->exists()){
 			$items = $folder->ls();
 			$reflectionClasses = array();
@@ -78,7 +82,7 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 			
 			foreach($reflectionClasses as $reflectionClass){
 				if($this->_checkIsCronJobClassFile($reflectionClass)){
-					GO::debug("CRONFILE FOUND: ".$reflectionClass->name);
+					\GO::debug("CRONFILE FOUND: ".$reflectionClass->name);
 					$cronJob = new $reflectionClass->name();
 					$foundCronJobClasses[$reflectionClass->name] = $cronJob->getLabel();
 				}
@@ -90,10 +94,10 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 	
 	public function getFileStorageCronJobClasses($folderName='cron'){
 		$foundCronJobClasses=array();
-		$folderPath = GO::config()->file_storage_path.'php/'.$folderName;
+		$folderPath = \GO::config()->file_storage_path.'php/'.$folderName;
 		
-		$folder = new GO_Base_Fs_Folder($folderPath);
-		GO::debug("CRONFILE SEARCH IN FOLDER: ".$folder->path());
+		$folder = new \GO\Base\Fs\Folder($folderPath);
+		\GO::debug("CRONFILE SEARCH IN FOLDER: ".$folder->path());
 		if($folder->exists()){
 			$items = $folder->ls();
 			$reflectionClasses = array();
@@ -106,7 +110,7 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 			
 			foreach($reflectionClasses as $reflectionClass){
 				if($this->_checkIsCronJobClassFile($reflectionClass)){
-					GO::debug("CRONFILE FOUND: ".$reflectionClass->name);
+					\GO::debug("CRONFILE FOUND: ".$reflectionClass->name);
 					$cronJob = new $reflectionClass->name();
 					$foundCronJobClasses[$reflectionClass->name] = $cronJob->getLabel();
 				}
@@ -122,11 +126,11 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 	 * Get an array of all cronjobs that are available for the given module.
 	 * Example output:
 	 * array(
-	 *	'uniqueCronName'=>'GO_Addressbook_Cron_Check',
-	 *	'uniqueCronName2'=>'GO_Addressbook_Cron_AutoMail'
+	 *	'uniqueCronName'=>'\GO\Addressbook\Cron\Check',
+	 *	'uniqueCronName2'=>'\GO\Addressbook\Cron\AutoMail'
 	 * );
 	 * 
-	 * @param GO_Base_Module $module
+	 * @param \GO\Base\Module $module
 	 * @return array
 	 */
 	public function getModuleCronJobClasses($module){
@@ -150,13 +154,13 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 	}
 	
 	/**
-	 * Check if the class is a subclass of the "GO_Base_Cron_AbstractCron" classfile.
+	 * Check if the class is a subclass of the "\GO\Base\Cron\AbstractCron" classfile.
 	 * 
 	 * @param ReflectionClass $reflectionClass
 	 * @return boolean
 	 */
 	private function _checkIsCronJobClassFile(ReflectionClass $reflectionClass){
-		return $reflectionClass->isSubclassOf("GO_Base_Cron_AbstractCron")?true:false;
+		return $reflectionClass->isSubclassOf("\GO\Base\Cron\AbstractCron")?true:false;
 	}
 	
 }

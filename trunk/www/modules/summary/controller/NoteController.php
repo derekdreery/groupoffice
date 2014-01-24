@@ -9,15 +9,19 @@
  * If you have questions write an e-mail to info@intermesh.nl
  */
 
-class GO_Summary_Controller_Note extends GO_Base_Controller_AbstractModelController{
+
+namespace GO\Summary\Controller;
+
+
+class Note extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = 'GO_Summary_Model_Note';
+	protected $model = '\GO\Summary\Model\Note';
 	
 
 	protected function getModelFromParams($params) {
-		$model = GO_Summary_Model_Note::model()->findByPk(GO::user()->id);
+		$model = \GO\Summary\Model\Note::model()->findByPk(\GO::user()->id);
 		if(!$model){
-			$model = new GO_Summary_Model_Note();
+			$model = new \GO\Summary\Model\Note();
 			$model->save();
 		}
 		

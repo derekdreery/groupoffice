@@ -1,12 +1,12 @@
 <?php
 
 /*!
- * GO_Base_Util_Minify_CSSMin.php rev ebaf67b 12/06/2013
+ * CSSMin.php rev ebaf67b 12/06/2013
  * Author: Tubal Martin - http://tubalmartin.me/
  * Repo: https://github.com/tubalmartin/YUI-CSS-compressor-PHP-port
  *
  * This is a PHP port of the CSS minification tool distributed with YUICompressor, 
- * itself a port of the GO_Base_Util_Minify_CSSMin utility by Isaac Schlueter - http://foohack.com/
+ * itself a port of the CSSMin utility by Isaac Schlueter - http://foohack.com/
  * Permission is hereby granted to use the PHP version under the same
  * conditions as the YUICompressor.
  */
@@ -20,13 +20,17 @@
  * by Yahoo! Inc. under the BSD (revised) open source license.
  */
 
-class GO_Base_Util_Minify_CSSMin
+
+namespace GO\Base\Util\Minify;
+
+
+class CSSMin
 {
-    const NL = '___YUIGO_Base_Util_Minify_CSSMin_PRESERVED_NL___';
-    const TOKEN = '___YUIGO_Base_Util_Minify_CSSMin_PRESERVED_TOKEN_';
-    const COMMENT = '___YUIGO_Base_Util_Minify_CSSMin_PRESERVE_CANDIDATE_COMMENT_';
-    const CLASSCOLON = '___YUIGO_Base_Util_Minify_CSSMin_PSEUDOCLASSCOLON___';
-    const QUERY_FRACTION = '___YUIGO_Base_Util_Minify_CSSMin_QUERY_FRACTION___';
+    const NL = '___YUICSSMin_PRESERVED_NL___';
+    const TOKEN = '___YUICSSMin_PRESERVED_TOKEN_';
+    const COMMENT = '___YUICSSMin_PRESERVE_CANDIDATE_COMMENT_';
+    const CLASSCOLON = '___YUICSSMin_PSEUDOCLASSCOLON___';
+    const QUERY_FRACTION = '___YUICSSMin_QUERY_FRACTION___';
 
     private $comments;
     private $preserved_tokens;

@@ -16,7 +16,11 @@
  * @version $Id Html.php 2012-06-05 15:51:47 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Sites_Components_Html
+
+namespace GO\Sites\Components;
+
+
+class Html
 {
 	const ID_PREFIX='go';
 	/**
@@ -1534,7 +1538,7 @@ class GO_Sites_Components_Html
 	 * Generates input name for a model attribute.
 	 * Note, the attribute name may be modified after calling this method if the name
 	 * contains square brackets (mainly used in tabular input) before the real attribute name.
-	 * @param GO_Base_Model $model the data model
+	 * @param \GO\Base\Model $model the data model
 	 * @param string $attribute the attribute
 	 * @return string the input name
 	 */
@@ -1564,7 +1568,7 @@ class GO_Sites_Components_Html
 	 * Evaluates the attribute value of the model.
 	 * This method can recognize the attribute name written in array format.
 	 * For example, if the attribute name is 'name[a][b]', the value "$model->name['a']['b']" will be returned.
-	 * @param GO_Base_Model $model the data model
+	 * @param \GO\Base\Model $model the data model
 	 * @param string $attribute the attribute name
 	 * @return mixed the attribute value
 	 */

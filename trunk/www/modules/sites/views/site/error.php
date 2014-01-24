@@ -1,7 +1,7 @@
 <h1>Error</h1>
 <p style="color:red;"><?php echo $error->getMessage(); ?></p>
 
-<?php if(GO::config()->debug): ?>
+<?php if(\GO::config()->debug): ?>
 
 <?php echo "<h1>".get_class($error)."</h1>";
 //A lot of crap for pretty stack traces

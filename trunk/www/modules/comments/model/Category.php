@@ -18,7 +18,11 @@
  * @property string $name
  */
 
-class GO_Comments_Model_Category extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Comments\Model;
+
+
+class Category extends \GO\Base\Db\ActiveRecord{
 
 	public static function model($className=__CLASS__)
 	{	
@@ -32,6 +36,6 @@ class GO_Comments_Model_Category extends GO_Base_Db_ActiveRecord{
 	
 	public function relations() {
 		return array(
-				'comments' => array('type' => self::HAS_MANY, 'model' => 'GO_Comments_Model_Comment', 'field' => 'category_id', 'delete' => true)		);
+				'comments' => array('type' => self::HAS_MANY, 'model' => '\GO\Comments\Model\Comment', 'field' => 'category_id', 'delete' => true)		);
 	}
 }

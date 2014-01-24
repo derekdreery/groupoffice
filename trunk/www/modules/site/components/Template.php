@@ -1,5 +1,9 @@
 <?php
-class GO_Site_Components_Template{
+
+namespace GO\Site\Components;
+
+
+class Template{
 	
 	/**
 	 * Get the path to the template folder
@@ -10,7 +14,7 @@ class GO_Site_Components_Template{
 		if(empty(Site::model()->module))
 			return false;
 		
-		return GO::config()->root_path . 'modules/' . Site::model()->module . '/views/site/';	
+		return \GO::config()->root_path . 'modules/' . Site::model()->module . '/views/site/';	
 	}
 	
 	/**
@@ -26,7 +30,7 @@ class GO_Site_Components_Template{
 	
 	private function _checkLink() {
 		
-		$folder = new GO_Base_Fs_Folder(Site::assetManager()->getBasePath());
+		$folder = new \GO\Base\Fs\Folder(Site::assetManager()->getBasePath());
 		if(!is_link($folder->path().'/template')){
 			
 			if(!symlink($this->getPath().'assets',$folder->path().'/template')){

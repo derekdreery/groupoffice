@@ -4,13 +4,17 @@
  * @property string $model_type_name
  * @property int $model_id
  */
-class GO_Customfields_Model_EnabledBlock extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Customfields\Model;
+
+
+class EnabledBlock extends \GO\Base\Db\ActiveRecord{
 		
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Customfields_Model_Field 
+	 * @return Field 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -27,7 +31,7 @@ class GO_Customfields_Model_EnabledBlock extends GO_Base_Db_ActiveRecord{
 	
 	public function relations() {
 		return array(
-				'block' => array('type' => self::BELONGS_TO, 'model' => 'GO_Customfields_Model_Block', 'field' => 'block_id')
+				'block' => array('type' => self::BELONGS_TO, 'model' => '\GO\Customfields\Model\Block', 'field' => 'block_id')
 			);
 	}
 		
@@ -41,15 +45,15 @@ class GO_Customfields_Model_EnabledBlock extends GO_Base_Db_ActiveRecord{
 
 	public static function getEnabledBlocks($modelId,$listedModelTypeName,$listingModelName) {
 		
-		if ($listingModelName=='GO_Addressbook_Model_Contact')
-			$dataType = 'GO_Addressbook_Customfieldtype_Contact';
-		if ($listingModelName=='GO_Addressbook_Model_Company')
-			$dataType = 'GO_Addressbook_Customfieldtype_Company';
+		if ($listingModelName=='\GO\Addressbook\Model\Contact')
+			$dataType = '\GO\Addressbook\Customfieldtype\Contact';
+		else
+			$dataType = '\GO\Addressbook\Customfieldtype\Company';
 		
 		return self::model()->find(
-				GO_Base_Db_FindParams::newInstance()
+				\GO\Base\Db\FindParams::newInstance()
 					->joinModel(array(
-						'model'=>'GO_Customfields_Model_Block',
+						'model'=>'\GO\Customfields\Model\Block',
 						'localTableAlias'=>'t',
 						'localField'=>'block_id',
 						'foreignField'=>'id',
@@ -57,7 +61,7 @@ class GO_Customfields_Model_EnabledBlock extends GO_Base_Db_ActiveRecord{
 						'type'=>'INNER'
 					))
 					->joinModel(array(
-						'model'=>'GO_Customfields_Model_Field',
+						'model'=>'\GO\Customfields\Model\Field',
 						'localTableAlias'=>'b',
 						'localField'=>'field_id',
 						'foreignField'=>'id',
@@ -65,7 +69,7 @@ class GO_Customfields_Model_EnabledBlock extends GO_Base_Db_ActiveRecord{
 						'type'=>'INNER'
 					))
 					->criteria(
-						GO_Base_Db_FindCriteria::newInstance()
+						\GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('model_id', $modelId, '=', 't')
 							->addCondition('model_type_name', $listedModelTypeName, '=', 't')
 							->addCondition('datatype', $dataType, '=', 'cf')

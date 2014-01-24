@@ -16,7 +16,11 @@
  * @property string $value
  */
 
-class GO_Addressbook_Model_ContactVcardProperty extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Addressbook\Model;
+
+
+class ContactVcardProperty extends \GO\Base\Db\ActiveRecord {
 
 	public static function model($className=__CLASS__)
 	{	
@@ -29,7 +33,7 @@ class GO_Addressbook_Model_ContactVcardProperty extends GO_Base_Db_ActiveRecord 
 	
 	public function relations(){
 		return array(
-			'contact' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'contact_id')
+			'contact' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Addressbook\Model\Contact', 'field'=>'contact_id')
 		);
 	}
 	

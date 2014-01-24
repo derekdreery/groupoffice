@@ -69,9 +69,9 @@ $this->setPageTitle("Download");
 								</td>
 								<td>
 									<?php if(!$license->new): ?>
-										<a target="_blank" href="<?php echo GO::url('licenses/license/downloadLicenseFile',array('package_id'=>$package->id,'license_id'=>$license->id),true,true); ?>">Download license</a> |
+										<a target="_blank" href="<?php echo \GO::url('licenses/license/downloadLicenseFile',array('package_id'=>$package->id,'license_id'=>$license->id),true,true); ?>">Download license</a> |
 									<?php endif; ?>
-										<a target="_blank" href="<?php echo GO::url("licenses/package/downloadPackageFile",array('package_id'=>$package->id),true,true); ?>">Download package</a>
+										<a target="_blank" href="<?php echo \GO::url("licenses/package/downloadPackageFile",array('package_id'=>$package->id),true,true); ?>">Download package</a>
 										
 									
 								</td>

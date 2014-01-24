@@ -24,15 +24,19 @@
  * @version $Id ModulePriceController.php 2012-10-15 10:09:46 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_ServerManager_Controller_ModulePrice extends GO_Base_Controller_AbstractModelController{
+
+namespace GO\ServerManager\Controller;
+
+
+class ModulePrice extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = 'GO_ServerManager_Model_ModulePrice';
+	protected $model = '\GO\ServerManager\Model\ModulePrice';
 
 	protected function beforeSubmit(&$response, &$model, &$params)
 	{
-		$model = GO_ServerManager_Model_ModulePrice::model()->findByPk($params['module_name']);
+		$model = \GO\ServerManager\Model\ModulePrice::model()->findByPk($params['module_name']);
 		if($model == null)
-			$model = new GO_ServerManager_Model_ModulePrice();
+			$model = new \GO\ServerManager\Model\ModulePrice();
 	}
 }
 ?>

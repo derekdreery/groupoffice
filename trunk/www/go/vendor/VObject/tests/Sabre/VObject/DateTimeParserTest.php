@@ -44,7 +44,7 @@ class DateTimeParserTest extends \PHPUnit_Framework_TestCase {
 
         $dateTime = DateTimeParser::parseDateTime('20100316T141405');
 
-        $compare = new DateTime('2010-03-16 14:14:05',new DateTimeZone('UTC'));
+        $compare = new \DateTime('2010-03-16 14:14:05',new \DateTimeZone('UTC'));
 
         $this->assertEquals($compare, $dateTime);
 
@@ -67,7 +67,7 @@ class DateTimeParserTest extends \PHPUnit_Framework_TestCase {
 
         $dateTime = DateTimeParser::parseDateTime('20100316T141405Z');
 
-        $compare = new DateTime('2010-03-16 14:14:05',new DateTimeZone('UTC'));
+        $compare = new \DateTime('2010-03-16 14:14:05',new \DateTimeZone('UTC'));
         $this->assertEquals($compare, $dateTime);
 
     }
@@ -79,7 +79,7 @@ class DateTimeParserTest extends \PHPUnit_Framework_TestCase {
 
         $dateTime = DateTimeParser::parseDateTime('20101211T160000Z');
 
-        $compare = new DateTime('2010-12-11 16:00:00',new DateTimeZone('UTC'));
+        $compare = new \DateTime('2010-12-11 16:00:00',new \DateTimeZone('UTC'));
         $this->assertEquals($compare, $dateTime);
 
     }
@@ -89,9 +89,9 @@ class DateTimeParserTest extends \PHPUnit_Framework_TestCase {
      */
     function testParseICalendarDateTimeCustomTimeZone() {
 
-        $dateTime = DateTimeParser::parseDateTime('20100316T141405', new DateTimeZone('Europe/Amsterdam'));
+        $dateTime = DateTimeParser::parseDateTime('20100316T141405', new \DateTimeZone('Europe/Amsterdam'));
 
-        $compare = new DateTime('2010-03-16 14:14:05',new DateTimeZone('Europe/Amsterdam'));
+        $compare = new \DateTime('2010-03-16 14:14:05',new \DateTimeZone('Europe/Amsterdam'));
         $this->assertEquals($compare, $dateTime);
 
     }
@@ -100,7 +100,7 @@ class DateTimeParserTest extends \PHPUnit_Framework_TestCase {
 
         $dateTime = DateTimeParser::parseDate('20100316');
 
-        $expected = new DateTime('2010-03-16 00:00:00',new DateTimeZone('UTC'));
+        $expected = new \DateTime('2010-03-16 00:00:00',new \DateTimeZone('UTC'));
 
         $this->assertEquals($expected, $dateTime);
 
@@ -116,7 +116,7 @@ class DateTimeParserTest extends \PHPUnit_Framework_TestCase {
 
         $dateTime = DateTimeParser::parseDate('45001231');
 
-        $expected = new DateTime('4500-12-31 00:00:00',new DateTimeZone('UTC'));
+        $expected = new \DateTime('4500-12-31 00:00:00',new \DateTimeZone('UTC'));
 
         $this->assertEquals($expected, $dateTime);
 
@@ -132,7 +132,7 @@ class DateTimeParserTest extends \PHPUnit_Framework_TestCase {
 
         $dateTime = DateTimeParser::parseDateTime('45001231T235959');
 
-        $expected = new DateTime('4500-12-31 23:59:59',new DateTimeZone('UTC'));
+        $expected = new \DateTime('4500-12-31 23:59:59',new \DateTimeZone('UTC'));
 
         $this->assertEquals($expected, $dateTime);
 

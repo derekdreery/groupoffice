@@ -4,7 +4,7 @@ require 'zip/PclZipProxy.php';
 require 'zip/PhpZipProxy.php';
 require 'Segment.php';
 
-class OdfException extends Exception {
+class OdfException extends \Exception {
 
 }
 
@@ -101,7 +101,7 @@ class Odf {
 	public function setVars($key, $value, $encode = true) {
 			$value = $encode ? htmlspecialchars($value, ENT_COMPAT, 'UTF-8') : $value;
 			
-			//GO::debug('ODF var: '.$key.'=>'.$value);
+			//\GO::debug('ODF var: '.$key.'=>'.$value);
 			
 			$this->vars[$key] = str_replace("\n", "<text:line-break/>", $value);
 			return $this;
@@ -235,9 +235,9 @@ IMG;
 				$v = str_replace($key, $value, $v);
 			}
 
-			GO::config()->debug_display_errors = false;
+			\GO::config()->debug_display_errors = false;
 			@eval("\$result_string=" . $v . ";");
-			GO::config()->debug_display_errors = true;
+			\GO::config()->debug_display_errors = true;
 
 			$v = isset($result_string) ? $result_string : 'invalid math expression!';
 		}
@@ -422,15 +422,15 @@ IMG;
 //class odf_renderers {
 //
 //	function number($v, $decimals=2) {
-//		return GO_Base_Util_Number::localize($v, $decimals);
+//		return \GO\Base\Util\Number::localize($v, $decimals);
 //	}
 //
 //	function from_unixtime($v, $with_time=true) {
-//		return GO_Base_Util_Date::get_timestamp($v, $with_time);
+//		return \GO\Base\Util\Date::get_timestamp($v, $with_time);
 //	}
 //
 //	function from_unixdate($v) {
-//		return GO_Base_Util_Date::get_timestamp($v, false);
+//		return \GO\Base\Util\Date::get_timestamp($v, false);
 //	}
 //
 //}

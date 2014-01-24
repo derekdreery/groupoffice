@@ -43,7 +43,11 @@
  * @property string $customer_city The customers city
  * @property integer $installation_id foreingkey of installation
  */
-class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
+
+namespace GO\ServerManager\Model;
+
+
+class AutomaticInvoice extends \GO\Base\Db\ActiveRecord {
 	
 	public function tableName()
 	{
@@ -64,7 +68,7 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 	{
 		if($this->isNew) //set next_invoice time of an new object to end of trial period
 		{
-			$this->next_invoice_time = GO_Base_Util_Date::dateTime_add(strtotime('today'), 0, 0, 0, $this->installation->trial_days);
+			$this->next_invoice_time = \GO\Base\Util\Date::dateTime_add(strtotime('today'), 0, 0, 0, $this->installation->trial_days);
 		}
 		return true;
 	}
@@ -72,7 +76,7 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 	public function relations()
 	{
 		return array(
-				'installation'=>array('type'=>self::BELONGS_TO, 'model'=>'GO_Servermanager_Model_Installation', 'field'=>'installation_id'),
+				'installation'=>array('type'=>self::BELONGS_TO, 'model'=>'\GO\Servermanager\Model\Installation', 'field'=>'installation_id'),
 		);
 	}
 	
@@ -83,15 +87,15 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 	 */
 	public static function canConnect()
 	{
-		//echo GO::config()->servermanager_billing_bookid;
-		$host = GO::config()->servermanager_billing_host;
-		$username = GO::config()->servermanager_billing_user;
-		$password = GO::config()->servermanager_billing_pass;
+		//echo \GO::config()->servermanager_billing_bookid;
+		$host = \GO::config()->servermanager_billing_host;
+		$username = \GO::config()->servermanager_billing_user;
+		$password = \GO::config()->servermanager_billing_pass;
 		if(!isset($host) || !isset($username) || !isset($password))
 			return false;
 		
 		//connection with login
-		$c = new GO_Base_Util_HttpClient();
+		$c = new \GO\Base\Util\HttpClient();
 		$c->groupofficeLogin($host, $username, $password);
 		$response = $c->request($host.'?r=billing/order/remoteAutoInvoice', array(
 				'data'=>json_encode(array('test'=>true))
@@ -107,8 +111,8 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 	 */
 	protected function _getUserPrice()
 	{
-		$params = GO_Base_Db_FindParams::newInstance()->order('max_users','ASC');
-		$staffelprices = GO_ServerManager_Model_UserPrice::model()->find($params);
+		$params = \GO\Base\Db\FindParams::newInstance()->order('max_users','ASC');
+		$staffelprices = UserPrice::model()->find($params);
 		$uprice = 0;
 		foreach($staffelprices as $price)
 		{
@@ -129,7 +133,7 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 	protected function _getModulePrice($module_name)
 	{
 		if(!isset($this->_module_prices))
-			$this->_module_prices = GO_ServerManager_Model_ModulePrice::model()->find()->fetchAll();
+			$this->_module_prices = ModulePrice::model()->find()->fetchAll();
 
 		foreach($this->_module_prices as $modulePrice)
 		{
@@ -150,7 +154,7 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 		if(isset($this->installation) && isset($this->installation->currentusage))
 		{
 			$mbs_used = $this->installation->currentusage->getTotalUsage()/1024/1024;
-			$extra_mbs = $mbs_used - (GO::config()->get_setting('sm_mbs_included') * $this->installation->currentusage->count_users);
+			$extra_mbs = $mbs_used - (\GO::config()->get_setting('sm_mbs_included') * $this->installation->currentusage->count_users);
 		}
 		return $extra_mbs;
 	}
@@ -171,7 +175,7 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 	 */
 	protected function _getExtraGbsUsedPrice()
 	{
-		return $this->_getExtraGbsUsed() * GO::config()->get_setting('sm_price_extra_gb');
+		return $this->_getExtraGbsUsed() * \GO::config()->get_setting('sm_price_extra_gb');
 	}
 	
 	/**
@@ -185,7 +189,7 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 
 			//create jsondata to send
 			$order = array();
-			$order['book_id'] = isset(GO::config()->servermanger_billing_bookid) ? GO::config()->servermanger_billing_bookid : 2;
+			$order['book_id'] = isset(\GO::config()->servermanger_billing_bookid) ? \GO::config()->servermanger_billing_bookid : 2;
 			$order['customer_address'] = $this->customer_address;
 			$order['customer_address_no'] = $this->customer_address_no;
 			$order['customer_city'] = $this->customer_city;
@@ -213,7 +217,7 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 				if($price > 0 && !$module->isTrial())
 				{
 					$order['items'][] = array(
-							'description'=>GO::t('name', $module->name). " Module",
+							'description'=>\GO::t('name', $module->name). " Module",
 							'unit_price'=>$price, 
 							'amount'=>$this->invoice_timespan,
 							'discount'=>$this->discount_percentage,
@@ -255,11 +259,11 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 		if(self::canConnect())
 		{
 			$orderData = $this->createOrderData();
-			$host = GO::config()->servermanager_billing_host;
-			$username = GO::config()->servermanager_billing_user;
-			$password = GO::config()->servermanager_billing_pass;
+			$host = \GO::config()->servermanager_billing_host;
+			$username = \GO::config()->servermanager_billing_user;
+			$password = \GO::config()->servermanager_billing_pass;
 		  //send the data to billing module using curl
-			$c = new GO_Base_Util_HttpClient();
+			$c = new \GO\Base\Util\HttpClient();
 			$c->groupofficeLogin($host, $username, $password);
 			$response = $c->request($host.'?r=billing/order/remoteAutoInvoice', array(
 					'data'=>json_encode($orderData)
@@ -294,7 +298,7 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 	 */
 	protected function calcNextInvoiceTime()
 	{
-		return GO_Base_Util_Date::date_add($this->next_invoice_time, 0, $this->invoice_timespan);
+		return \GO\Base\Util\Date::date_add($this->next_invoice_time, 0, $this->invoice_timespan);
 		//$timestring = "+".$this->invoice_timespan." month";
 		//return strtotime($timestring,$this->next_invoice_time);
 	}

@@ -12,27 +12,27 @@ $this->setPageTitle("New license");
 <p>Download the gotest.php file <a href="">here</a></p><br>
 								
 <?php if (!empty($license)): ?>
-<?php echo GO_Sites_Components_Html::form(); ?>
+<?php echo \GO\Sites\Components\Html::form(); ?>
 <div class="row">
-	<?php echo GO_Sites_Components_Html::activeLabelEx($license, 'host'); ?>
-	<?php echo GO_Sites_Components_Html::activeTextField($license, 'host'); ?>
-	<?php echo GO_Sites_Components_Html::error($license, 'host'); ?>
+	<?php echo \GO\Sites\Components\Html::activeLabelEx($license, 'host'); ?>
+	<?php echo \GO\Sites\Components\Html::activeTextField($license, 'host'); ?>
+	<?php echo \GO\Sites\Components\Html::error($license, 'host'); ?>
 </div>
 <div class="row">
-	<?php echo GO_Sites_Components_Html::activeLabelEx($license, 'ip'); ?>
-	<?php echo GO_Sites_Components_Html::activeTextField($license, 'ip'); ?>
-	<?php echo GO_Sites_Components_Html::error($license, 'ip'); ?>
+	<?php echo \GO\Sites\Components\Html::activeLabelEx($license, 'ip'); ?>
+	<?php echo \GO\Sites\Components\Html::activeTextField($license, 'ip'); ?>
+	<?php echo \GO\Sites\Components\Html::error($license, 'ip'); ?>
 </div>
 <div class="row">
-	<?php echo GO_Sites_Components_Html::label('Internal Ip-address', 'internal_ip'); ?>
-	<?php echo GO_Sites_Components_Html::activeTextField($license,'internal_ip'); ?>
-	<?php echo GO_Sites_Components_Html::error($license, 'internal_ip'); ?>
+	<?php echo \GO\Sites\Components\Html::label('Internal Ip-address', 'internal_ip'); ?>
+	<?php echo \GO\Sites\Components\Html::activeTextField($license,'internal_ip'); ?>
+	<?php echo \GO\Sites\Components\Html::error($license, 'internal_ip'); ?>
 </div>
 <div class="row bottons">
-	<?php echo GO_Sites_Components_Html::submitButton('Save license'); ?>
-	<?php echo GO_Sites_Components_Html::button('Cancel', array("onclick"=>"document.location='".$this->createUrl("/licenses/site/licenselist")."';")); ?>
+	<?php echo \GO\Sites\Components\Html::submitButton('Save license'); ?>
+	<?php echo \GO\Sites\Components\Html::button('Cancel', array("onclick"=>"document.location='".$this->createUrl("/licenses/site/licenselist")."';")); ?>
 </div>
-<?php echo GO_Sites_Components_Html::endForm(); ?>
+<?php echo \GO\Sites\Components\Html::endForm(); ?>
 
 <?php else: ?>
 		<p>An error occurred!</p>			

@@ -18,7 +18,7 @@
  */
  
 /**
- * The GO_Files_Model_FolderNotificationMessage model
+ * The FolderNotificationMessage model
  *
  * @package GO.modules.files.model
  * @property int $modified_user_id
@@ -29,7 +29,11 @@
  * @property boolean $status
  */
 
-class GO_Files_Model_FolderNotificationMessage extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Files\Model;
+
+
+class FolderNotificationMessage extends \GO\Base\Db\ActiveRecord {
         
     const ADD_FOLDER = 1;
     const RENAME_FOLDER = 2;
@@ -70,11 +74,11 @@ class GO_Files_Model_FolderNotificationMessage extends GO_Base_Db_ActiveRecord {
 
         $user_id = (int)$user_id;
         if (!$user_id)
-            $user_id = GO::user()->id;
+            $user_id = \GO::user()->id;
 
         $stmt = self::model()->findByAttributes(
                 array(
-                    'user_id' => GO::user()->id,
+                    'user_id' => \GO::user()->id,
                     'status'  => 0
                 )
         );
@@ -89,7 +93,7 @@ class GO_Files_Model_FolderNotificationMessage extends GO_Base_Db_ActiveRecord {
     public function defaultAttributes() {
         $attr = parent::defaultAttributes();
         
-        $attr['modified_user_id'] = GO::user()->id;
+        $attr['modified_user_id'] = \GO::user()->id;
         $attr['mtime'] = time();
         $attr['status'] = 0;
         

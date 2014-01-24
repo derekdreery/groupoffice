@@ -19,7 +19,11 @@
  * @author Wesley Smits <wsmits@intermesh.nl> 
  * 
  */
-class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController {
+
+namespace GO\Core\Controller;
+
+
+class BatchEdit extends \GO\Base\Controller\AbstractController {
 	
 	/**
 	 * Update the given id's with the given data
@@ -42,7 +46,7 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 		
 		if(is_array($keys)) {
 			foreach($keys as $key) {
-				$model = GO::getModel($params['model_name'])->findByPk($key);
+				$model = \GO::getModel($params['model_name'])->findByPk($key);
 				if(!empty($model))
 					$this->_updateModel($model, $data);
 			}
@@ -55,7 +59,7 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 	/**
 	 * Update the model with the given attributes
 	 *  
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param \GO\Base\Db\ActiveRecord $model
 	 * @param array $data
 	 * @return Boolean 
 	 */

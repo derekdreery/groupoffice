@@ -317,8 +317,8 @@ class PHPExcel_Reader_Excel2003XML extends PHPExcel_Reader_Abstract implements P
 				PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY
 			);
 
-		$timezoneObj = new DateTimeZone('Europe/London');
-		$GMT = new DateTimeZone('UTC');
+		$timezoneObj = new \DateTimeZone('Europe/London');
+		$GMT = new \DateTimeZone('UTC');
 
 
 		// Check if file exists

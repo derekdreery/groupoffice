@@ -9,10 +9,10 @@
  */
  
 /**
- * The GO_Tasks_Model_Settings model
+ * The Settings model
  *
  * @package GO.modules.Tasks
- * @version $Id: GO_Tasks_Model_Settings.php 7607 2011-09-20 10:06:28Z <<USERNAME>> $
+ * @version $Id: Settings.php 7607 2011-09-20 10:06:28Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *
@@ -23,13 +23,17 @@
  * @property int $default_tasklist_id
  */
 
-class GO_Tasks_Model_Settings extends GO_Base_Model_AbstractUserDefaultModel {
+
+namespace GO\Tasks\Model;
+
+
+class Settings extends \GO\Base\Model\AbstractUserDefaultModel {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Tasks_Model_Settings
+	 * @return Settings
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -42,7 +46,7 @@ class GO_Tasks_Model_Settings extends GO_Base_Model_AbstractUserDefaultModel {
 
 	public function relations() {
 		return array(
-			'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'default_tasklist_id', 'delete' => false)
+			'tasklist' => array('type' => self::BELONGS_TO, 'model' => '\GO\Tasks\Model\Tasklist', 'field' => 'default_tasklist_id', 'delete' => false)
 			);
 	}
 		

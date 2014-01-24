@@ -8,13 +8,13 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: GO_Email_Model_LinkedEmail.php 7607 2011-09-01 15:38:01Z <<USERNAME>> $
+ * @version $Id: LinkedEmail.php 7607 2011-09-01 15:38:01Z <<USERNAME>> $
  * @copyright Copyright Intermesh
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
 
 /**
- * The GO_Email_Model_Filter model
+ * The Filter model
  * 
  * @property string $name
  * @property string $email
@@ -28,13 +28,17 @@
  * @property int $priority
  * @property boolean $mark_as_read
  */
-class GO_Email_Model_Filter extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Email\Model;
+
+
+class Filter extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Email_Model_Filter
+	 * @return Filter
 	 */
 	public static function model($className=__CLASS__) {
 		return parent::model($className);
@@ -54,7 +58,7 @@ class GO_Email_Model_Filter extends GO_Base_Db_ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'account' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Email_Model_Account', 'field'=>'account_id')
+				'account' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Email\Model\Account', 'field'=>'account_id')
 		);
 	}
 }

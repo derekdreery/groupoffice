@@ -1,8 +1,12 @@
 <?php
 
-class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelController {
 
-	protected $model = 'GO_Bookmarks_Model_Bookmark';
+namespace GO\Bookmarks\Controller;
+
+
+class Bookmark extends \GO\Base\Controller\AbstractModelController {
+
+	protected $model = '\GO\Bookmarks\Model\Bookmark';
 
 	protected function actionDescription($params) {
 
@@ -13,7 +17,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		if (function_exists('curl_init')) {
 			try{
 
-				$c = new GO_Base_Util_HttpClient();
+				$c = new \GO\Base\Util\HttpClient();
 				$c->setCurlOption(CURLOPT_CONNECTTIMEOUT, 2);
 				$c->setCurlOption(CURLOPT_TIMEOUT, 5);
 				$c->setCurlOption(CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);			
@@ -37,7 +41,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 
 						$charset = strtolower(trim($match[1]));
 						if ($charset != 'utf-8')
-							$html = GO_Base_Util_String::to_utf8($html, $charset);
+							$html = \GO\Base\Util\String::to_utf8($html, $charset);
 					}
 
 					preg_match_all('/<meta[^>]*>/i', $html, $matches);
@@ -70,7 +74,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 
 				if (!empty($contents) && $c->getHttpCode()!=404) {
 					$relpath = 'public/bookmarks/';
-					$path = GO::config()->file_storage_path . $relpath;
+					$path = \GO::config()->file_storage_path . $relpath;
 					if (!is_dir($path))
 						mkdir($path, 0755, true);
 
@@ -89,8 +93,8 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 			}
 		}
 		
-		$response['title']=GO_Base_Util_String::cut_string($response['title'], 64, true, "");
-		$response['description']=GO_Base_Util_String::cut_string($response['description'], 255, true, "");
+		$response['title']=\GO\Base\Util\String::cut_string($response['title'], 64, true, "");
+		$response['description']=\GO\Base\Util\String::cut_string($response['description'], 255, true, "");
 		return $response;
 	}
 
@@ -110,7 +114,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		return $storeParams;
 	}
 
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {		
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {		
 		
 		$columnModel->formatColumn('category_name', '$model->category_name');
 		$columnModel->formatColumn('thumb', '$model->thumbURL');
@@ -125,7 +129,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 	protected function actionThumbs() {		
 		$response['results'] = array();
 		
-		$folder = new GO_Base_Fs_Folder(GO::modules()->bookmarks->path."icons");
+		$folder = new \GO\Base\Fs\Folder(\GO::modules()->bookmarks->path."icons");
 		
 		$filesystemObjects = $folder->ls();
 		foreach($filesystemObjects as $imgObject) {			
@@ -141,11 +145,11 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 	
 		$relpath = 'public/bookmarks/';
 		
-		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.$relpath);
+		$folder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.$relpath);
 		$folder->create();
 		
 		
-		$files= GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $folder);
+		$files= \GO\Base\Fs\File::moveUploadedFiles($_FILES['attachments'], $folder);
 		$file= $files[0];
 		$file->rename($params['thumb_id'].'.'.$file->extension());
 		

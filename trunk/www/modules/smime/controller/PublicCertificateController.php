@@ -17,15 +17,19 @@
  * The Category controller
  * 
  */
-class GO_Smime_Controller_PublicCertificate extends GO_Base_Controller_AbstractModelController{
+
+namespace GO\Smime\Controller;
+
+
+class PublicCertificate extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = 'GO_Smime_Model_PublicCertificate';
+	protected $model = '\GO\Smime\Model\PublicCertificate';
 	
 	protected function getStoreParams($params) {
 		
-		$fp = GO_Base_Db_FindParams::newInstance();
+		$fp = \GO\Base\Db\FindParams::newInstance();
 		
-		$fp->getCriteria()->addCondition('user_id', GO::user()->id);
+		$fp->getCriteria()->addCondition('user_id', \GO::user()->id);
 		
 		return $fp;
 		

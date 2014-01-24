@@ -9,7 +9,7 @@
  */
 
 /**
- * The GO_Favorites_Controller_TasklistFavorites controller
+ * The TasklistFavorites controller
  *
  * @package GO.modules.Favorites
  * @version $Id$
@@ -17,14 +17,18 @@
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
 
-class GO_Favorites_Controller_TasklistFavorites extends GO_Base_Controller_AbstractMultiSelectModelController {
+
+namespace GO\Favorites\Controller;
+
+
+class TasklistFavorites extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called
 	 * @return String 
 	 */
 	public function modelName() {
-		return 'GO_Tasks_Model_Tasklist';
+		return '\GO\Tasks\Model\Tasklist';
 	}
 	
 	/**
@@ -32,7 +36,7 @@ class GO_Favorites_Controller_TasklistFavorites extends GO_Base_Controller_Abstr
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return 'GO_Favorites_Model_Tasklist';
+		return '\GO\Favorites\Model\Tasklist';
 	}
 	
 	/**
@@ -59,12 +63,12 @@ class GO_Favorites_Controller_TasklistFavorites extends GO_Base_Controller_Abstr
 	 */
 	protected function actionSelectNewStore($params){
 		
-		$model = GO::getModel($this->modelName());
-		$linkModel = GO::getModel($this->linkModelName());
+		$model = \GO::getModel($this->modelName());
+		$linkModel = \GO::getModel($this->linkModelName());
 		
-		$store = GO_Base_Data_Store::newInstance($model);
+		$store = \GO\Base\Data\Store::newInstance($model);
 		
-		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 			->addCondition($this->getRemoteKey(), $params['model_id'],'=','lt')
 			->addCondition($model->primaryKey(), 'lt.'.$this->linkModelField(), '=', 't', true, true);			
 		
@@ -75,7 +79,7 @@ class GO_Favorites_Controller_TasklistFavorites extends GO_Base_Controller_Abstr
 		if($this->uniqueSelection){
 			$findParams->join($linkModel->tableName(), $joinCriteria, 'lt', 'LEFT');
 
-			$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+			$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addCondition($this->linkModelField(), null,'IS','lt');
 			$findParams->criteria($findCriteria);
 		}

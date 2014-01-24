@@ -1,17 +1,21 @@
 <?php
-class GO_Files_Filehandler_Inline implements GO_Files_Filehandler_FilehandlerInterface{
+
+namespace GO\Files\Filehandler;
+
+
+class Inline implements FilehandlerInterface{
 
 	private $defaultExtensions = array('pdf','html','htm','txt','xml','log');
 	
-	public function isDefault(\GO_Files_Model_File $file) {
+	public function isDefault(\GO\Files\Model\File $file) {
 		return in_array(strtolower($file->extension), $this->defaultExtensions);
 	}
 	
 	public function getName(){
-		return GO::t('openInBrowser','files');
+		return \GO::t('openInBrowser','files');
 	}
 	
-	public function fileIsSupported(GO_Files_Model_File $file){
+	public function fileIsSupported(\GO\Files\Model\File $file){
 		return $file->isImage() || in_array(strtolower($file->extension),$this->defaultExtensions);
 	}
 	
@@ -19,7 +23,7 @@ class GO_Files_Filehandler_Inline implements GO_Files_Filehandler_FilehandlerInt
 		return 'fs-browser';
 	}
 	
-	public function getHandler(GO_Files_Model_File $file){
+	public function getHandler(\GO\Files\Model\File $file){
 		return 'window.open("'.$file->getDownloadUrl(false, true).'");';
 	}
 }

@@ -7,16 +7,16 @@
 <h2>Inloggen</h2>
 <p>Indien u al eerder gebruik heeft gemaakt van ons syteem kunt u zich hieronder inloggen</p>
 <div class="form">
-<?php echo GO_Sites_Components_Html::beginForm(); ?>	
+<?php echo \GO\Sites\Components\Html::beginForm(); ?>	
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'username'); ?>
-		<?php echo GO_Sites_Components_Html::activeTextField($model, 'username'); ?>
-		<?php echo GO_Sites_Components_Html::error($model, 'username'); ?>
+		<?php echo \GO\Sites\Components\Html::activeLabelEx($model, 'username'); ?>
+		<?php echo \GO\Sites\Components\Html::activeTextField($model, 'username'); ?>
+		<?php echo \GO\Sites\Components\Html::error($model, 'username'); ?>
 	</div>
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'password'); ?>
-		<?php echo GO_Sites_Components_Html::activePasswordField($model, 'password'); ?>
-		<?php echo GO_Sites_Components_Html::error($model, 'password'); ?>
+		<?php echo \GO\Sites\Components\Html::activeLabelEx($model, 'password'); ?>
+		<?php echo \GO\Sites\Components\Html::activePasswordField($model, 'password'); ?>
+		<?php echo \GO\Sites\Components\Html::error($model, 'password'); ?>
 	</div>
 	<?php if(GOS::site()->notifier->hasMessage('error')): ?>
 		<div class="errorMessage">
@@ -24,10 +24,10 @@
 		</div>
 	<?php endif; ?>
 	<div class="row buttons">
-		<?php echo GO_Sites_Components_Html::submitButton('Inloggen', array('class'=>'btn btn-primary')); ?>
+		<?php echo \GO\Sites\Components\Html::submitButton('Inloggen', array('class'=>'btn btn-primary')); ?>
 		<a class="btn" href="<?php echo $this->createUrl('/sites/site/recoverpassword'); ?>">Wachtwoord vergeten?</a>
 	</div>
-<?php echo GO_Sites_Components_Html::endForm(); ?>
+<?php echo \GO\Sites\Components\Html::endForm(); ?>
 	
 
 </div>

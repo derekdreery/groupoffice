@@ -10,9 +10,13 @@
  * @copyright Copyright Intermesh
  * @author WilmarVB <wilmar@intermesh.nl>
  */
-class GO_Servermanager_Controller_AutomaticEmail extends GO_Base_Controller_AbstractModelController{
+
+namespace GO\Servermanager\Controller;
+
+
+class AutomaticEmail extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = 'GO_Servermanager_Model_AutomaticEmail';	
+	protected $model = '\GO\Servermanager\Model\AutomaticEmail';	
 		
 	protected function beforeStore(&$response, &$params, &$store) {
 		$store->setDefaultSortOrder('name');
@@ -20,18 +24,18 @@ class GO_Servermanager_Controller_AutomaticEmail extends GO_Base_Controller_Abst
 	}
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
-		$message = new GO_Base_Mail_Message();
+		$message = new \GO\Base\Mail\Message();
 		$message->handleEmailFormInput($params);
 		$model->mime = $message->toString();
 		return parent::beforeSubmit($response, $model, $params);
 	}
 	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
-		$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($model->mime);
+		$message = \GO\Email\Model\SavedMessage::model()->createFromMimeData($model->mime);
 		$response['htmlbody'] = $message->getHtmlBody();
 		
 		// reset the temp folder created by the core controller
-//		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
+//		$tmpFolder = new \GO\Base\Fs\Folder(\GO::config()->tmpdir . 'uploadqueue');
 //		$tmpFolder->delete();
 		
 		parent::afterSubmit($response, $model, $params, $modifiedAttributes);
@@ -45,7 +49,7 @@ class GO_Servermanager_Controller_AutomaticEmail extends GO_Base_Controller_Abst
 	protected function afterLoad(&$response, &$model, &$params) {
 		
 		// create message model from client's content field, turned into HTML format
-		$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($model->mime);
+		$message = \GO\Email\Model\SavedMessage::model()->createFromMimeData($model->mime);
 	
 		$html = empty($params['content_type']) || $params['content_type']=='html';
 		
@@ -55,7 +59,7 @@ class GO_Servermanager_Controller_AutomaticEmail extends GO_Base_Controller_Abst
 		return parent::afterLoad($response, $model, $params);
 	}
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name', '$model->user->name');
 		return parent::formatColumns($columnModel);
 	}
@@ -64,10 +68,10 @@ class GO_Servermanager_Controller_AutomaticEmail extends GO_Base_Controller_Abst
 	
 	public function actionEmailSelection($params){	
 		
-		$this->_defaultTemplate = GO_Addressbook_Model_DefaultTemplate::model()->findByPk(GO::user()->id);
+		$this->_defaultTemplate = \GO\Addressbook\Model\DefaultTemplate::model()->findByPk(\GO::user()->id);
 		if(!$this->_defaultTemplate){
-			$this->_defaultTemplate= new GO_Addressbook_Model_DefaultTemplate();
-			$this->_defaultTemplate->user_id=GO::user()->id;
+			$this->_defaultTemplate= new \GO\Addressbook\Model\DefaultTemplate();
+			$this->_defaultTemplate->user_id=\GO::user()->id;
 		}
 		
 		if(isset($params['default_template_id']))
@@ -76,19 +80,19 @@ class GO_Servermanager_Controller_AutomaticEmail extends GO_Base_Controller_Abst
 			$this->_defaultTemplate->save();
 		}
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()->order('name');			
-		$findParams->getCriteria()->addCondition('type', GO_Addressbook_Model_Template::TYPE_EMAIL);
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order('name');			
+		$findParams->getCriteria()->addCondition('type', \GO\Addressbook\Model\Template::TYPE_EMAIL);
 				
-		$stmt = GO_Addressbook_Model_Template::model()->find($findParams);
+		$stmt = \GO\Addressbook\Model\Template::model()->find($findParams);
 		
-		$store = GO_Base_Data_Store::newInstance(GO_Addressbook_Model_Template::model());		
+		$store = \GO\Base\Data\Store::newInstance(\GO\Addressbook\Model\Template::model());		
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatEmailSelectionRecord'));
 		
 		$store->setStatement($stmt);
 		$store->addRecord(array(
 			'group' => 'templates',
 			'checked'=>isset($this->_defaultTemplate->template_id) && $this->_defaultTemplate->template_id==0,
-			'text' => GO::t('none'),
+			'text' => \GO::t('none'),
 			'template_id'=>0
 		));
 		
@@ -99,7 +103,7 @@ class GO_Servermanager_Controller_AutomaticEmail extends GO_Base_Controller_Abst
 			$response['results'][] = '-';
 
 			$record = array(
-				'text' => GO::t('setCurrentTemplateAsDefault','addressbook'),
+				'text' => \GO::t('setCurrentTemplateAsDefault','addressbook'),
 				'template_id'=>'default'
 			);
 
@@ -109,7 +113,7 @@ class GO_Servermanager_Controller_AutomaticEmail extends GO_Base_Controller_Abst
 		return $response;
 	}
 	
-	public function formatEmailSelectionRecord(array $formattedRecord, GO_Base_Db_ActiveRecord $model, GO_Base_Data_ColumnModel $cm){
+	public function formatEmailSelectionRecord(array $formattedRecord, \GO\Base\Db\ActiveRecord $model, \GO\Base\Data\ColumnModel $cm){
 		if(!isset($this->_defaultTemplate->template_id)){
 			$this->_defaultTemplate->template_id=$model->id;
 			$this->_defaultTemplate->save();

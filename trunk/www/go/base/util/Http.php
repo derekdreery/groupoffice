@@ -16,7 +16,11 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base.util 
  */
-class GO_Base_Util_Http {
+
+namespace GO\Base\Util;
+
+
+class Http {
 
 	public static function checkUrlForHttp($url,$https=false){
 		
@@ -89,12 +93,12 @@ class GO_Base_Util_Http {
 	/**
 	 * Output the right headers for outputting file data to a browser.
 	 * 
-	 * @param GO_Base_Fs_File $file Use GO_Base_Fs_MemoryFile for outputting variables
+	 * @param \GO\Base\Fs\File $file Use \GO\Base\Fs\MemoryFile for outputting variables
 	 * @param boolean $inline
 	 * @param boolean $cache Cache the file for one day in the browser.
 	 * @param array $extraHeaders  Key value array for extra headers
 	 */
-	public static function outputDownloadHeaders(GO_Base_Fs_File $file, $inline=true, $cache=false, $extraHeaders=array()) {
+	public static function outputDownloadHeaders(\GO\Base\Fs\File $file, $inline=true, $cache=false, $extraHeaders=array()) {
 		
 		header('Content-Transfer-Encoding: binary');		
 		
@@ -105,7 +109,7 @@ class GO_Base_Util_Http {
 			header('Cache-Control: cache');
 			header('Pragma: cache');
 		}
-		if (GO_Base_Util_Http::isInternetExplorer()) {
+		if (Http::isInternetExplorer()) {
 			header('Content-Type: application/download');
 			header('Content-Disposition: '.$disposition.'; filename="' .rawurlencode($file->name()). '"');
 
@@ -138,12 +142,12 @@ class GO_Base_Util_Http {
 	/**
 	 * Download a file to the client
 	 * 
-	 * @param GO_Base_Fs_File $file Use GO_Base_Fs_MemoryFile for outputting variables
+	 * @param \GO\Base\Fs\File $file Use \GO\Base\Fs\MemoryFile for outputting variables
 	 * @param boolean $inline
 	 * @param boolean $cache Cache the file for one day in the browser.
 	 * @param array $extraHeaders  Key value array for extra headers
 	 */
-	public static function downloadFile(GO_Base_Fs_File $file, $inline=true, $cache=false, $extraHeaders=array()){
+	public static function downloadFile(\GO\Base\Fs\File $file, $inline=true, $cache=false, $extraHeaders=array()){
 		self::outputDownloadHeaders($file, $inline, $cache, $extraHeaders);
 		$file->output();
 	}
@@ -184,7 +188,7 @@ class GO_Base_Util_Http {
 	 * @param string $name 
 	 */
 	public static function unsetCookie($name){
-		SetCookie($name,"",time()-3600,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
+		SetCookie($name,"",time()-3600,\GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
 		unset($_COOKIE[$name]);
 	}
 	
@@ -196,7 +200,7 @@ class GO_Base_Util_Http {
 	 * @param string $expireTime Defaults to one month
 	 */
 	public static function setCookie($name, $value, $expireTime=2592000){
-		SetCookie($name,$value,time()+$expireTime,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
+		SetCookie($name,$value,time()+$expireTime,\GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
 	}
 	
 	
@@ -230,12 +234,12 @@ class GO_Base_Util_Http {
 	
 	
 	public static function basicAuth(){
-		if (!isset($_SERVER['PHP_AUTH_USER']) && !GO_Base_Util_Http::isAjaxRequest() && PHP_SAPI != 'cli') {
-			header('WWW-Authenticate: Basic realm="'.GO::config()->product_name.'"');
+		if (!isset($_SERVER['PHP_AUTH_USER']) && !Http::isAjaxRequest() && PHP_SAPI != 'cli') {
+			header('WWW-Authenticate: Basic realm="'.\GO::config()->product_name.'"');
 			header('HTTP/1.0 401 Unauthorized');
 			
 			
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO\Base\Exception\AccessDenied();
 			exit;
 		}
 	}

@@ -1,5 +1,9 @@
 <?php
-class GO_Sites_Components_UrlRule
+
+namespace GO\Sites\Components;
+
+
+class UrlRule
 {
 
 	/**

@@ -27,7 +27,11 @@
  * @property int $max_users the user limit for
  * @property double $price_per_month
  */
-class GO_ServerManager_Model_UserPrice extends GO_Base_Db_ActiveRecord
+
+namespace GO\ServerManager\Model;
+
+
+class UserPrice extends \GO\Base\Db\ActiveRecord
 {
 	public static function model($className = __CLASS__) {
 		return parent::model($className);

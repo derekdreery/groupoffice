@@ -1,16 +1,20 @@
 <?php
-class GO_Serverclient_ServerclientModule extends GO_Base_Module{
+
+namespace GO\Serverclient;
+
+
+class ServerclientModule extends \GO\Base\Module{
 	
 	public static function initListeners() {
 		
-		GO_Base_Model_User::model()->addListener("save", "GO_Serverclient_ServerclientModule", "saveUser");
+		\GO\Base\Model\User::model()->addListener("save", "\GO\Serverclient\ServerclientModule", "saveUser");
 		
 		return parent::initListeners();
 	}
 	
 	
 	public static function getDomains(){
-		return empty(GO::config()->serverclient_domains) ? array() : array_map('trim',explode(",", GO::config()->serverclient_domains));
+		return empty(\GO::config()->serverclient_domains) ? array() : array_map('trim',explode(",", \GO::config()->serverclient_domains));
 	}
 	
 	public static function saveUser($user, $wasNew){
@@ -22,7 +26,7 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 		
 		if(!empty($domains)){
 
-			$httpClient = new GO_Serverclient_HttpClient();			
+			$httpClient = new HttpClient();			
 
 			foreach ($domains as $domain) {				
 				if($wasNew){					
@@ -54,7 +58,7 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 		//strip domain from username if it's present.
 		$username = str_replace('@'.$domain, '', $user->username);
 
-		GO::debug("SERVERCLIENT: Adding mailbox for " . $username . '@' . $domain);
+		\GO::debug("SERVERCLIENT: Adding mailbox for " . $username . '@' . $domain);
 		
 		$alias = strpos($user->email,'@'.$domain) ? $user->email : '';
 
@@ -70,7 +74,7 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 				"domain" => $domain
 						));
 
-		GO::debug($response);
+		\GO::debug($response);
 
 		$result = json_decode($response);
 
@@ -82,10 +86,10 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 	private static function _setMailboxPassword($httpClient, $user, $domain){
 		//domain is, for example "intermesh.dev".
 		
-		GO::debug("SERVERCLIENT: Updating password for mailbox ".$user->username.'@'.$domain);
+		\GO::debug("SERVERCLIENT: Updating password for mailbox ".$user->username.'@'.$domain);
 		
 		$username = $user->username;
-		if(empty(GO::config()->serverclient_dont_add_domain_to_imap_username))
+		if(empty(\GO::config()->serverclient_dont_add_domain_to_imap_username))
 			$username.='@'.$domain;
 		
 	
@@ -96,15 +100,15 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 			"password"=>$user->getUnencryptedPassword(),
 		));
 		
-		GO::debug($response);
+		\GO::debug($response);
 
 		$result=json_decode($response);
 
 		if(!$result->success)
 			throw new Exception("Could not set mailbox password on postfixadmin module. ".$result->feedback);
 		
-		if(GO::modules()->isInstalled('email')){
-			$stmt = GO_Email_Model_Account::model()->findByAttributes(array(
+		if(\GO::modules()->isInstalled('email')){
+			$stmt = \GO\Email\Model\Account::model()->findByAttributes(array(
 					'username'=>$username
 			));
 			
@@ -117,31 +121,31 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 	
 	private static function _addAccount($user,$domainName) {
 		
-		if(GO::modules()->isInstalled('email')){
+		if(\GO::modules()->isInstalled('email')){
 			
-			GO::debug("SERVERCLIENT: Adding e-mail account for ".$user->username.'@'.$domainName);
+			\GO::debug("SERVERCLIENT: Adding e-mail account for ".$user->username.'@'.$domainName);
 			
-			$accountModel = new GO_Email_Model_Account();
+			$accountModel = new \GO\Email\Model\Account();
 			$accountModel->user_id=$user->id;
-			$accountModel->mbroot = GO::config()->serverclient_mbroot;
-			$accountModel->use_ssl = GO::config()->serverclient_use_ssl;
-			$accountModel->novalidate_cert = GO::config()->serverclient_novalidate_cert;
-			$accountModel->type=GO::config()->serverclient_type;
-			$accountModel->host=GO::config()->serverclient_host;
-			$accountModel->port=GO::config()->serverclient_port;
+			$accountModel->mbroot = \GO::config()->serverclient_mbroot;
+			$accountModel->use_ssl = \GO::config()->serverclient_use_ssl;
+			$accountModel->novalidate_cert = \GO::config()->serverclient_novalidate_cert;
+			$accountModel->type=\GO::config()->serverclient_type;
+			$accountModel->host=\GO::config()->serverclient_host;
+			$accountModel->port=\GO::config()->serverclient_port;
 
 //			$accountModel->name=$user->name;
 			$accountModel->username=$user->username;
-			if(empty(GO::config()->serverclient_dont_add_domain_to_imap_username)){
+			if(empty(\GO::config()->serverclient_dont_add_domain_to_imap_username)){
 				$accountModel->username.='@'.$domainName;
 			}
 			$accountModel->password=$user->getUnencryptedPassword();
 
-			$accountModel->smtp_host=GO::config()->serverclient_smtp_host;
-			$accountModel->smtp_port=GO::config()->serverclient_smtp_port;
-			$accountModel->smtp_encryption=GO::config()->serverclient_smtp_encryption;
-			$accountModel->smtp_username=GO::config()->serverclient_smtp_username;
-			$accountModel->smtp_password=GO::config()->serverclient_smtp_password;
+			$accountModel->smtp_host=\GO::config()->serverclient_smtp_host;
+			$accountModel->smtp_port=\GO::config()->serverclient_smtp_port;
+			$accountModel->smtp_encryption=\GO::config()->serverclient_smtp_encryption;
+			$accountModel->smtp_username=\GO::config()->serverclient_smtp_username;
+			$accountModel->smtp_password=\GO::config()->serverclient_smtp_password;
 			$accountModel->save();
 			
 			$alias = strpos($user->email, '@'.$domainName) ? $user->email : $accountModel->username;

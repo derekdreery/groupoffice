@@ -16,7 +16,11 @@
  * IMAP search query builder
  */
 
-class GO_Email_Model_ImapSearchQuery {
+
+namespace GO\Email\Model;
+
+
+class ImapSearchQuery {
 						
 	const TO = "TO";								// - match messages with "string" in the To:
 	const BCC  = "BCC";							// - match messages with "string" in the Bcc: field
@@ -149,15 +153,15 @@ class GO_Email_Model_ImapSearchQuery {
 	 * Add a word to search for in the specific section
 	 * 
 	 * Possible $section:
-	 *	TO				: GO_Email_Model_ImapSearchQuery::TO
-	 *	BCC				: GO_Email_Model_ImapSearchQuery::BCC
-	 *	CC				: GO_Email_Model_ImapSearchQuery::CC
-	 *	FROM			: GO_Email_Model_ImapSearchQuery::FROM
-	 *	BODY			: GO_Email_Model_ImapSearchQuery::BODY
-	 *	TEXT			: GO_Email_Model_ImapSearchQuery::TEXT
-	 *	KEYWORD		: GO_Email_Model_ImapSearchQuery::KEYWORD
-	 *	UNKEYWORD : GO_Email_Model_ImapSearchQuery::UNKEYWORD
-	 *	SUBJECT		: GO_Email_Model_ImapSearchQuery::SUBJECT		*default value
+	 *	TO				: ImapSearchQuery::TO
+	 *	BCC				: ImapSearchQuery::BCC
+	 *	CC				: ImapSearchQuery::CC
+	 *	FROM			: ImapSearchQuery::FROM
+	 *	BODY			: ImapSearchQuery::BODY
+	 *	TEXT			: ImapSearchQuery::TEXT
+	 *	KEYWORD		: ImapSearchQuery::KEYWORD
+	 *	UNKEYWORD : ImapSearchQuery::UNKEYWORD
+	 *	SUBJECT		: ImapSearchQuery::SUBJECT		*default value
 	 *  
 	 * @param string $word
 	 * @param string $section

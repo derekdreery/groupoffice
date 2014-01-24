@@ -1,6 +1,10 @@
 <?php
 
-class GO_Base_Util_ArrayUtil {
+
+namespace GO\Base\Util;
+
+
+class ArrayUtil {
 
 	/**
 	 * Merge array recurively. 

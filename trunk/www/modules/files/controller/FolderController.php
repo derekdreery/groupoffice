@@ -1,8 +1,12 @@
 <?php
 
-class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelController {
 
-	protected $model = 'GO_Files_Model_Folder';
+namespace GO\Files\Controller;
+
+
+class Folder extends \GO\Base\Controller\AbstractModelController {
+
+	protected $model = '\GO\Files\Model\Folder';
 	
 	
 
@@ -20,26 +24,26 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if (substr($path,-1,1)=='/')
 			$path = substr($path,0,-1);
 		
-		$folderModel = GO_Files_Model_Folder::model()->findByPath($path,true);
+		$folderModel = \GO\Files\Model\Folder::model()->findByPath($path,true);
 		
-		return array('success'=>true,'url'=>  GO_Base_Util_Http::addParamsToUrl($folderModel->getExternalURL(),array('GOSID'=>session_id(), 'security_token'=>GO::session()->values['security_token'])));
+		return array('success'=>true,'url'=>  \GO\Base\Util\Http::addParamsToUrl($folderModel->getExternalURL(),array('GOSID'=>session_id(), 'security_token'=>\GO::session()->values['security_token'])));
 	}
 	
 	protected function actionCache($params){
-		GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id);
+		\GO\Files\Model\SharedRootFolder::model()->rebuildCache(\GO::user()->id);
 	}
 
 	protected function actionSyncFilesystem($params){	
 		
-		if(!$this->isCli() && !GO::modules()->tools)
-			throw new GO_Base_Exception_AccessDenied();
+		if(!$this->isCli() && !\GO::modules()->tools)
+			throw new \GO\Base\Exception\AccessDenied();
 		
-		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
+		$oldAllowDeletes = \GO\Base\Fs\File::setAllowDeletes(false);
 
-		GO::$disableModelCache=true; //for less memory usage
+		\GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '0');
 
-		GO::session()->runAsRoot();
+		\GO::session()->runAsRoot();
 
 		if(isset($params['path'])){
 			$folders = array($params['path']);
@@ -48,7 +52,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$folders = array('users','projects','addressbook','notes','tickets');
 
 
-			$billingFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'billing');
+			$billingFolder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'billing');
 			if($billingFolder->exists()){
 				$bFolders = $billingFolder->ls();
 
@@ -64,7 +68,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		foreach($folders as $name){
 			echo "Syncing ".$name."\n";
 			try{
-				$folder = GO_Files_Model_Folder::model()->findByPath($name, true);
+				$folder = \GO\Files\Model\Folder::model()->findByPath($name, true);
 				
 				if(!$folder)
 					throw new Exception("Could not find or create folder");
@@ -85,16 +89,16 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 
 		if(!isset($params['path'])){
-			GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
+			\GO\Base\Fs\File::setAllowDeletes($oldAllowDeletes);
 			$folders = array('email', 'billing/notifications');
 
 			foreach($folders as $name){
 
 				echo "Deleting ".$name."\n";
-				GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
-				GO_Files_Model_File::$deleteInDatabaseOnly=true;
+				\GO\Files\Model\Folder::$deleteInDatabaseOnly=true;
+				\GO\Files\Model\File::$deleteInDatabaseOnly=true;
 				try{
-					$folder = GO_Files_Model_Folder::model()->findByPath($name);
+					$folder = \GO\Files\Model\Folder::model()->findByPath($name);
 					if($folder)
 							$folder->delete();
 				}
@@ -120,10 +124,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		foreach($folders as $name){
 
 			echo "Deleting ".$name."\n";
-			GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
-			GO_Files_Model_File::$deleteInDatabaseOnly=true;
+			\GO\Files\Model\Folder::$deleteInDatabaseOnly=true;
+			\GO\Files\Model\File::$deleteInDatabaseOnly=true;
 			try{
-				$folder = GO_Files_Model_Folder::model()->findByPath($name);
+				$folder = \GO\Files\Model\Folder::model()->findByPath($name);
 				if($folder)
 						$folder->delete();
 			}
@@ -136,11 +140,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		}
 			
 			
-		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams = \GO\Base\Db\FindParams::newInstance();
 
 		$findParams->getCriteria()->addCondition('parent_id', null,'IS');
 
-		$stmt = GO_Files_Model_Folder::model()->find($findParams);
+		$stmt = \GO\Files\Model\Folder::model()->find($findParams);
 
 		foreach($stmt as $folder){
 
@@ -156,7 +160,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	private function _getExpandFolderIds($params){
 		$expandFolderIds=array();
 		if(!empty($params['expand_folder_id']) && $params['expand_folder_id']!='shared') {
-			$expandFolderIds=  GO_Files_Model_Folder::model()->getFolderIdsInPath($params['expand_folder_id']);
+			$expandFolderIds=  \GO\Files\Model\Folder::model()->getFolderIdsInPath($params['expand_folder_id']);
 		}
 		return $expandFolderIds;
 	}
@@ -164,23 +168,23 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	private function _buildSharedTree($expandFolderIds){
 		
 		
-		GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id);
+		\GO\Files\Model\SharedRootFolder::model()->rebuildCache(\GO::user()->id);
 		
 		$response=array();
 		
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->joinRelation('sharedRootFolders')
 						->ignoreAcl()
 						->order('name','ASC')
 						->limit(200);
 		
 		$findParams->getCriteria()
-					->addCondition('user_id', GO::user()->id,'=','sharedRootFolders');
+					->addCondition('user_id', \GO::user()->id,'=','sharedRootFolders');
 		
 		
 		
-		$shares = GO_Files_Model_Folder::model()->find($findParams);
+		$shares = \GO\Files\Model\Folder::model()->find($findParams);
 		foreach($shares as $folder){
 			$response[]=$this->_folderToNode($folder, $expandFolderIds, false);
 		}
@@ -195,12 +199,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		//refresh forces sync with db
 		if(!empty($params['sync_folder_id'])){
 			if($params['sync_folder_id']=="shared"){
-				GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id, true);
+				\GO\Files\Model\SharedRootFolder::model()->rebuildCache(\GO::user()->id, true);
 			}else
 			{
 				
 			
-				$syncFolder = GO_Files_Model_Folder::model()->findByPk($params['sync_folder_id']);
+				$syncFolder = \GO\Files\Model\Folder::model()->findByPk($params['sync_folder_id']);
 				if($syncFolder)
 					$syncFolder->syncFilesystem();
 			}
@@ -218,24 +222,24 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				break;
 			case 'root':
 				if (!empty($params['root_folder_id'])) {
-					$folder = GO_Files_Model_Folder::model()->findByPk($params['root_folder_id']);
+					$folder = \GO\Files\Model\Folder::model()->findByPk($params['root_folder_id']);
 //					$folder->checkFsSync();
 					$node = $this->_folderToNode($folder, $expandFolderIds, true, $showFiles);
 					$response[] = $node;
 				} else {
-					$folder = GO_Files_Model_Folder::model()->findHomeFolder(GO::user());
+					$folder = \GO\Files\Model\Folder::model()->findHomeFolder(\GO::user());
 
 //					$folder->checkFsSync();
 
 					$node = $this->_folderToNode($folder, $expandFolderIds, true, $showFiles);
-					$node['text'] = GO::t('personal', 'files');
+					$node['text'] = \GO::t('personal', 'files');
 					$node['iconCls'] = 'folder-home';
 					$node['path'] = $folder->path;
 					$response[] = $node;
 
 
 					$node = array(
-							'text' => GO::t('shared', 'files'),
+							'text' => \GO::t('shared', 'files'),
 							'id' => 'shared',
 							'readonly' => true,
 							'draggable' => false,
@@ -246,49 +250,49 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					);
 					
 					//expand shares for non admins only. Admin may see too many folders.
-					if(!GO::user()->isAdmin()){
+					if(!\GO::user()->isAdmin()){
 						$node['expanded']=true;
 						$node['children']=$this->_buildSharedTree($expandFolderIds);
 					}
 					
 					$response[] = $node;
 
-					if (GO::modules()->addressbook) {
-						$contactsFolder = GO_Files_Model_Folder::model()->findByPath('addressbook');
+					if (\GO::modules()->addressbook) {
+						$contactsFolder = \GO\Files\Model\Folder::model()->findByPath('addressbook');
 
 						if ($contactsFolder) {
 							$node = $this->_folderToNode($contactsFolder, $expandFolderIds, false, $showFiles);
-							$node['text'] = GO::t('addressbook', 'addressbook');
+							$node['text'] = \GO::t('addressbook', 'addressbook');
 							$response[] = $node;
 						}
 					}
 
-					if (GO::modules()->projects) {
-						$projectsFolder = GO_Files_Model_Folder::model()->findByPath('projects');
+					if (\GO::modules()->projects) {
+						$projectsFolder = \GO\Files\Model\Folder::model()->findByPath('projects');
 
 						if ($projectsFolder) {
 							$node = $this->_folderToNode($projectsFolder, $expandFolderIds, false, $showFiles);
-							$node['text'] = GO::t('projects', 'projects');
+							$node['text'] = \GO::t('projects', 'projects');
 							$response[] = $node;
 						}
 					}
 					
-					if (GO::modules()->projects2) {
-						$projectsFolder = GO_Files_Model_Folder::model()->findByPath('projects2');
+					if (\GO::modules()->projects2) {
+						$projectsFolder = \GO\Files\Model\Folder::model()->findByPath('projects2');
 
 						if ($projectsFolder) {
 							$node = $this->_folderToNode($projectsFolder, $expandFolderIds, false, $showFiles);
-							$node['text'] = GO::t('projects', 'projects2');
+							$node['text'] = \GO::t('projects', 'projects2');
 							$response[] = $node;
 						}
 					}
 					
-					if(GO::user()->isAdmin()){
-						$logFolder = GO_Files_Model_Folder::model()->findByPath('log', true);
+					if(\GO::user()->isAdmin()){
+						$logFolder = \GO\Files\Model\Folder::model()->findByPath('log', true);
 //						$logFolder->syncFilesystem();
 						
 						$node = $this->_folderToNode($logFolder, $expandFolderIds, false, $showFiles);
-						$node['text']=GO::t('logFiles');
+						$node['text']=\GO::t('logFiles');
 						
 						$response[]=$node;
 					}
@@ -299,13 +303,13 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				break;
 
 			default:
-				$folder = GO_Files_Model_Folder::model()->findByPk($params['node']);
+				$folder = \GO\Files\Model\Folder::model()->findByPk($params['node']);
 				if(!$folder)
 					return false;
 				
 //				$folder->checkFsSync();
 
-				$stmt = $folder->getSubFolders(GO_Base_Db_FindParams::newInstance()
+				$stmt = $folder->getSubFolders(\GO\Base\Db\FindParams::newInstance()
 							->limit(200)//not so nice hardcoded limit
 							->order('name','ASC'));
 
@@ -336,7 +340,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		if ($expanded) {
 			$node['children'] = array();
-			$stmt = $folder->getSubFolders(GO_Base_Db_FindParams::newInstance()
+			$stmt = $folder->getSubFolders(\GO\Base\Db\FindParams::newInstance()
 							->limit(100)//not so nice hardcoded limit
 							->order('name','ASC'));
 			while ($subfolder = $stmt->fetch()) {
@@ -378,20 +382,20 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			);
 
 			$files[] = $fileNode;
-			GO::debug($file);
+			\GO::debug($file);
 		}
 		return $files;
 	}
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
 
-		if(isset($params['share']) && !$model->readonly && !$model->isSomeonesHomeFolder() && $model->checkPermissionLevel(GO_Base_Model_Acl::MANAGE_PERMISSION)){
+		if(isset($params['share']) && !$model->readonly && !$model->isSomeonesHomeFolder() && $model->checkPermissionLevel(\GO\Base\Model\Acl::MANAGE_PERMISSION)){
 			if ($params['share']==1 && $model->acl_id == 0) {
 				$model->visible = 1;
 
-//				$acl = new GO_Base_Model_Acl();
+//				$acl = new \GO\Base\Model\Acl();
 //				$acl->description = $model->tableName() . '.' . $model->aclField();
-//				$acl->user_id = GO::user() ? GO::user()->id : 1;
+//				$acl->user_id = \GO::user() ? \GO::user()->id : 1;
 //				$acl->save();
 				$model->setNewAcl();
 				
@@ -405,8 +409,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			}
 		}
 
-		if(!empty($params['name']) && GO::config()->convert_utf8_filenames_to_ascii)
-			$params['name']=GO_Base_Util_String::utf8ToASCII ($params['name']);
+		if(!empty($params['name']) && \GO::config()->convert_utf8_filenames_to_ascii)
+			$params['name']=\GO\Base\Util\String::utf8ToASCII ($params['name']);
 
 		return parent::beforeSubmit($response, $model, $params);
 	}
@@ -421,10 +425,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		if(isset($params['notify'])){
 			if ($params['notify']==1)
-				$model->addNotifyUser(GO::user()->id,$notifyRecursive);
+				$model->addNotifyUser(\GO::user()->id,$notifyRecursive);
 
 			if ($params['notify']==0)
-				$model->removeNotifyUser(GO::user()->id,$notifyRecursive);
+				$model->removeNotifyUser(\GO::user()->id,$notifyRecursive);
 		}
 
 		parent::afterSubmit($response, $model, $params, $modifiedAttributes);
@@ -433,7 +437,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	protected function afterLoad(&$response, &$model, &$params) {
 
 		$response['data']['path'] = $model->path;
-		$response['data']['notify'] = $model->hasNotifyUser(GO::user()->id);
+		$response['data']['notify'] = $model->hasNotifyUser(\GO::user()->id);
 		$response['data']['is_someones_home_dir'] = $model->isSomeonesHomeFolder();
 		$response['data']['username'] = !empty($model->user) ? $model->user->name : '';
 		$response['data']['musername'] = !empty($model->mUser) ? $model->mUser->name : '';
@@ -445,7 +449,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	protected function afterDisplay(&$response, &$model, &$params) {
 		$response['data']['path'] = $model->path;
-		$response['data']['type'] = GO::t('folder', 'files');
+		$response['data']['type'] = \GO::t('folder', 'files');
 		
 		$response['data']['url']=$model->externalUrl;
 
@@ -461,15 +465,15 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 
 		if (isset($params['ids']) && $params['overwrite'] == 'ask')
-			GO::session()->values['files']['pasteIds'] = $this->_splitFolderAndFileIds(json_decode($params['ids'], true));
+			\GO::session()->values['files']['pasteIds'] = $this->_splitFolderAndFileIds(json_decode($params['ids'], true));
 
-		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
+		$destinationFolder = \GO\Files\Model\Folder::model()->findByPk($params['destination_folder_id']);
 
-		if (!$destinationFolder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied();
+		if (!$destinationFolder->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION))
+			throw new \GO\Base\Exception\AccessDenied();
 
-		while ($file_id = array_shift(GO::session()->values['files']['pasteIds']['files'])) {
-			$file = GO_Files_Model_File::model()->findByPk($file_id);
+		while ($file_id = array_shift(\GO::session()->values['files']['pasteIds']['files'])) {
+			$file = \GO\Files\Model\File::model()->findByPk($file_id);
 
 			$newFileName=$file->name;
 
@@ -491,7 +495,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			if ($existingFile) {
 				switch ($params['overwrite']) {
 					case 'ask':
-						array_unshift(GO::session()->values['files']['pasteIds']['files'], $file_id);
+						array_unshift(\GO::session()->values['files']['pasteIds']['files'], $file_id);
 						$response['fileExists'] = $file->name;
 						return $response;
 						break;
@@ -524,8 +528,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			}
 		}
 
-		while ($folder_id = array_shift(GO::session()->values['files']['pasteIds']['folders'])) {
-			$folder = GO_Files_Model_Folder::model()->findByPk($folder_id);
+		while ($folder_id = array_shift(\GO::session()->values['files']['pasteIds']['folders'])) {
+			$folder = \GO\Files\Model\Folder::model()->findByPk($folder_id);
 			
 			if($params['paste_mode']=='copy' && $folder->parent_id==$destinationFolder->id){
 				//pasting in the same folder. Append (1).
@@ -540,7 +544,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			if ($existingFolder) {
 				switch ($params['overwrite']) {
 					case 'ask':
-						array_unshift(GO::session()->values['files']['pasteIds']['folders'], $folder_id);
+						array_unshift(\GO::session()->values['files']['pasteIds']['folders'], $folder_id);
 						$response['fileExists'] = $folderName;
 						return $response;
 						break;
@@ -594,7 +598,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	private function _listShares($params) {
 
-		//$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
+		//$store = \GO\Base\Data\Store::newInstance(\GO\Files\Model\Folder::model());
 //
 //      //set sort aliases
 //      $store->getColumnModel()->formatColumn('type', '$model->type',array(),'name');
@@ -602,34 +606,34 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //
 //      $store->getColumnModel()->setFormatRecordFunction(array($this, 'formatListRecord'));
 //      $findParams = $store->getDefaultParams($params);
-//      $stmt = GO_Files_Model_Folder::model()->findShares($findParams);
+//      $stmt = \GO\Files\Model\Folder::model()->findShares($findParams);
 //      $store->setStatement($stmt);
 //
 //      $response = $store->getData();
 		
 		
-//		$fp = GO_Base_Db_FindParams::newInstance()->limit(100);
+//		$fp = \GO\Base\Db\FindParams::newInstance()->limit(100);
 		
-		//$fp = GO_Base_Db_FindParams::newInstance()->calcFoundRows();
+		//$fp = \GO\Base\Db\FindParams::newInstance()->calcFoundRows();
 		
-		$cm = new GO_Base_Data_ColumnModel('GO_Files_Model_Folder');
+		$cm = new \GO\Base\Data\ColumnModel('\GO\Files\Model\Folder');
 		$cm->setFormatRecordFunction(array($this, 'formatListRecord'));
 		
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->joinRelation('sharedRootFolders')
 						->ignoreAcl()
 						->order('name','ASC');
 		
 		$findParams->getCriteria()
-					->addCondition('user_id', GO::user()->id,'=','sharedRootFolders');
+					->addCondition('user_id', \GO::user()->id,'=','sharedRootFolders');
 		
 		
-		$store = new GO_Base_Data_DbStore('GO_Files_Model_Folder',$cm, $params, $findParams);
+		$store = new \GO\Base\Data\DbStore('\GO\Files\Model\Folder',$cm, $params, $findParams);
 		$response = $store->getData();
-		$response['permission_level']=GO_Base_Model_Acl::READ_PERMISSION;
+		$response['permission_level']=\GO\Base\Model\Acl::READ_PERMISSION;
 //		$response['results']=array();
-//		$shares =GO_Files_Model_Folder::model()->getTopLevelShares($fp);
+//		$shares =\GO\Files\Model\Folder::model()->getTopLevelShares($fp);
 //		foreach($shares as $folder){
 //			$record=$folder->getAttributes("html");
 //			$record = $this->formatListRecord($record, $folder, false);
@@ -651,13 +655,13 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		//get the folder that contains the files and folders to list.
 		//This will check permissions too.
-		$folder = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
+		$folder = \GO\Files\Model\Folder::model()->findByPk($params['folder_id']);
 		if(!$folder)
 			return false;
 
 		$this->_listFolderPermissionLevel=$folder->permissionLevel;
 
-		$response['permission_level']=$folder->permissionLevel;//$folder->readonly ? GO_Base_Model_Acl::READ_PERMISSION : $folder->permissionLevel;
+		$response['permission_level']=$folder->permissionLevel;//$folder->readonly ? \GO\Base\Model\Acl::READ_PERMISSION : $folder->permissionLevel;
 
 		if(empty($params['skip_fs_sync']))
 			$folder->checkFsSync();
@@ -666,20 +670,20 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$response['path'] = $folder->path;
 
 		//Show this page in thumbnails or list
-		$folderPreference = GO_Files_Model_FolderPreference::model()->findByPk(array('user_id'=>GO::user()->id,'folder_id'=>$folder->id));
+		$folderPreference = \GO\Files\Model\FolderPreference::model()->findByPk(array('user_id'=>\GO::user()->id,'folder_id'=>$folder->id));
 		if($folderPreference)
 			$response['thumbs']=$folderPreference->thumbs;
 		else
 			$response['thumbs']=0;
 
 		$response['parent_id'] = $folder->parent_id;
-		$response['disk_usage']=round(GO::user()->disk_usage/1024/1024,2);
-		$response['disk_quota']=GO::user()->disk_quota;
+		$response['disk_usage']=round(\GO::user()->disk_usage/1024/1024,2);
+		$response['disk_quota']=\GO::user()->disk_quota;
 
 		//locked state
 		$response['lock_state']=!empty($folder->apply_state);
 		$response['cm_state']=isset($folder->cm_state) && !empty($folder->apply_state) ? $folder->cm_state : "";
-		$response['may_apply_state']=GO_Base_Model_Acl::hasPermission($folder->getPermissionLevel(), GO_Base_Model_Acl::MANAGE_PERMISSION);
+		$response['may_apply_state']=\GO\Base\Model\Acl::hasPermission($folder->getPermissionLevel(), \GO\Base\Model\Acl::MANAGE_PERMISSION);
 
 //      if($response["lock_state"]){
 //          $state = json_decode($response["cm_state"]);
@@ -691,7 +695,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //      }
 
 
-		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
+		$store = \GO\Base\Data\Store::newInstance(\GO\Files\Model\Folder::model());
 
 		//set sort aliases
 		$store->getColumnModel()->formatColumn('type', '',array(),'name');
@@ -705,10 +709,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$ids = $this->_splitFolderAndFileIds(json_decode($params['delete_keys'], true));
 
 			$params['delete_keys'] = json_encode($ids['folders']);
-			$store->processDeleteActions($params, "GO_Files_Model_Folder");
+			$store->processDeleteActions($params, "\GO\Files\Model\Folder");
 
 			$params['delete_keys'] = json_encode($ids['files']);
-			$store->processDeleteActions($params, "GO_Files_Model_File");
+			$store->processDeleteActions($params, "\GO\Files\Model\File");
 		}
 
 
@@ -776,7 +780,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$response['total']+=$filesResponse['total'];
 			$response['results'] = array_merge($response['results'], $filesResponse['results']);
 		} else {
-			$record = $folder->files(GO_Base_Db_FindParams::newInstance()->single()->select('count(*) as total'));
+			$record = $folder->files(\GO\Base\Db\FindParams::newInstance()->single()->select('count(*) as total'));
 			$response['total']+=$record->total;
 		}
 
@@ -790,40 +794,40 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$limit = !empty($params['limit']) ? $params['limit'] : 30;
 			$start = !empty($params['start']) ? $params['start'] : 0;
 
-			$aclJoinCriteria = GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.acl_id', 'sc.acl_id', '=', false);
+			$aclJoinCriteria = \GO\Base\Db\FindCriteria::newInstance()->addRawCondition('a.acl_id', 'sc.acl_id', '=', false);
 
-			$aclWhereCriteria = GO_Base_Db_FindCriteria::newInstance()
-					->addCondition('user_id', GO::user()->id, '=', 'a', false)
-					->addInCondition("group_id", GO_Base_Model_User::getGroupIds(GO::user()->id), "a", false);
+			$aclWhereCriteria = \GO\Base\Db\FindCriteria::newInstance()
+					->addCondition('user_id', \GO::user()->id, '=', 'a', false)
+					->addInCondition("group_id", \GO\Base\Model\User::getGroupIds(\GO::user()->id), "a", false);
 
-			$findParams = GO_Base_Db_FindParams::newInstance()
+			$findParams = \GO\Base\Db\FindParams::newInstance()
 					->select('*')
 					->ignoreAcl()
 					->joinCustomFields()
 					->joinModel(array(
-						'model'=>'GO_Base_Model_SearchCacheRecord',
+						'model'=>'\GO\Base\Model\SearchCacheRecord',
 						'localTableAlias'=>'t',
 						'localField'=>'id',
 						'foreignField'=>'model_id',
 						'tableAlias'=>'sc'
 					))
-					->join(GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'INNER')->debugSql()
+					->join(\GO\Base\Model\AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'INNER')->debugSql()
 					->criteria(
-						GO_Base_Db_FindCriteria::newInstance()
-							->addCondition('model_type_id', GO::getModel('GO_Files_Model_File')->modelTypeId(),  '=', 'sc', true)
+						\GO\Base\Db\FindCriteria::newInstance()
+							->addCondition('model_type_id', \GO::getModel('\GO\Files\Model\File')->modelTypeId(),  '=', 'sc', true)
 							->mergeWith(
-								GO_Base_Db_FindCriteria::newInstance()
+								\GO\Base\Db\FindCriteria::newInstance()
 									->addCondition('name', $queryStr, 'LIKE', 'sc', false)
 									->addCondition('keywords', $queryStr, 'LIKE', 'sc', false)
 							)
 							->mergeWith($aclWhereCriteria)
 					);
 
-			$filesStmt = GO_Files_Model_File::model()->find($findParams);
+			$filesStmt = \GO\Files\Model\File::model()->find($findParams);
 
 			$response['total'] = $filesStmt->rowCount();
 
-			$filesStmt = GO_Files_Model_File::model()->find(
+			$filesStmt = \GO\Files\Model\File::model()->find(
 				$findParams
 					->start($start)
 					->limit($limit)
@@ -846,15 +850,15 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$record['path'] = $model->path;
 
-		if ($model instanceof GO_Files_Model_Folder) {
+		if ($model instanceof \GO\Files\Model\Folder) {
 			$record['type_id'] = 'd:' . $model->id;
-			$record['type'] = GO::t('folder', 'files');
+			$record['type'] = \GO::t('folder', 'files');
 			$record['size'] = '-';
 			$record['extension'] = 'folder';
 			$record['readonly']=$model->readonly;
 		} else {
 			$record['type_id'] = 'f:' . $model->id;
-			$record['type'] = GO_Base_Fs_File::getFileTypeDescription($model->extension);
+			$record['type'] = \GO\Base\Fs\File::getFileTypeDescription($model->extension);
 			$record['extension'] = strtolower($model->extension);
 			$record['size']=$model->size;
 			$record['permission_level']=$this->_listFolderPermissionLevel;
@@ -868,12 +872,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	private function _checkExistingModelFolder($model, $folder, $mustExist=false) {
 
-		GO::debug("Check existing model folder ".$model->className()."(ID:".$model->id." Folder ID: ".$folder->id." ACL ID: ".$model->findAclId().")");
+		\GO::debug("Check existing model folder ".$model->className()."(ID:".$model->id." Folder ID: ".$folder->id." ACL ID: ".$model->findAclId().")");
 
 		if(!$folder->fsFolder->exists())
 		{
 			//throw new Exception("Fs folder doesn't exist! ".$folder->fsFolder->path());
-			GO::debug("Deleting it because filesystem folder doesn't exist");
+			\GO::debug("Deleting it because filesystem folder doesn't exist");
 			$folder->readonly = 1; //makes sure acl is not deleted
 			$folder->delete(true);
 			if($mustExist)
@@ -904,18 +908,18 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if(!$newPath)
 			return false;
 
-		if(GO::router()->getControllerAction()=='checkdatabase'){
+		if(\GO::router()->getControllerAction()=='checkdatabase'){
 			//Always ensure folder exists on check database
-			$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
+			$destinationFolder = \GO\Files\Model\Folder::model()->findByPath(
 							dirname($newPath), true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
 		}
 
 		if ($currentPath != $newPath) {
 
-			GO::debug("Moving folder ".$currentPath." to ".$newPath);
+			\GO::debug("Moving folder ".$currentPath." to ".$newPath);
 
 			//model has a new path. We must move the current folder
-			$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
+			$destinationFolder = \GO\Files\Model\Folder::model()->findByPath(
 							dirname($newPath), true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
 
 
@@ -924,20 +928,20 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			//projects/Name must be moved into projects/Name/Name
 			//then we temporarily move it to a temp name
 			if($destinationFolder->id==$folder->id || $destinationFolder->fsFolder->isSubFolderOf($folder->fsFolder)){
-				GO::debug("Destination folder is the same!");
+				\GO::debug("Destination folder is the same!");
 				$folder->name=uniqid();
 				$folder->systemSave=true;
 				$folder->save(true);
 
-				GO::debug("Moved folder to temp:".$folder->fsFolder->path());
+				\GO::debug("Moved folder to temp:".$folder->fsFolder->path());
 
-				GO::modelCache()->remove("GO_Files_Model_Folder");
+				\GO::modelCache()->remove("\GO\Files\Model\Folder");
 
-				$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
+				$destinationFolder = \GO\Files\Model\Folder::model()->findByPath(
 							dirname($newPath), true);
 				
 
-				GO::debug("Now moving to:".$destinationFolder->fsFolder->path());
+				\GO::debug("Now moving to:".$destinationFolder->fsFolder->path());
 
 			}
 
@@ -945,11 +949,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				throw new Exception("Same ID's!");
 			}
 
-			$fsFolder = new GO_Base_Fs_Folder($newPath);
+			$fsFolder = new \GO\Base\Fs\Folder($newPath);
 //          $fsFolder->appendNumberToNameIfExists();
 
 			if(($existingFolder = $destinationFolder->hasFolder($fsFolder->name()))){
-				GO::debug("Merging into existing folder.".$folder->path.' ('.$folder->id.') -> '.$existingFolder->path.' ('.$existingFolder->id.')');
+				\GO::debug("Merging into existing folder.".$folder->path.' ('.$folder->id.') -> '.$existingFolder->path.' ('.$existingFolder->id.')');
 				//if (!empty($model->acl_id))
 				$existingFolder->acl_id = $model->findAclId();
 				$existingFolder->visible = 0;
@@ -986,7 +990,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			}
 		}else
 		{
-			GO::debug("No change needed");
+			\GO::debug("No change needed");
 //          if ($model->acl_id>0)
 //              $folder->acl_id = $model->acl_id;
 //          else
@@ -1002,11 +1006,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $folder->id;
 	}
 
-	private function _createNewModelFolder(GO_Base_Db_ActiveRecord $model) {
+	private function _createNewModelFolder(\GO\Base\Db\ActiveRecord $model) {
 
-		//GO::debug("Create new model folder ".$model->className()."(ID:".$model->id.")");
+		//\GO::debug("Create new model folder ".$model->className()."(ID:".$model->id.")");
 
-		$folder = GO_Files_Model_Folder::model()->findByPath($model->buildFilesPath(),true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
+		$folder = \GO\Files\Model\Folder::model()->findByPath($model->buildFilesPath(),true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
 		
 		if(!$folder){
 			throw new Exception("Failed to create folder ".$model->buildFilesPath());
@@ -1030,19 +1034,19 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	 * @return type
 	 */
 	protected function actionCheckModelFolder($params) {
-		$model = GO::getModel($params['model'])->findByPk($params['id'],false, true);
+		$model = \GO::getModel($params['model'])->findByPk($params['id'],false, true);
 
 		$response['success'] = true;
 		$response['files_folder_id'] = $this->checkModelFolder($model, true, !empty($params['mustExist']));
 		return $response;
 	}
 
-	public function checkModelFolder(GO_Base_Db_ActiveRecord $model, $saveModel=false, $mustExist=false) {
-		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
+	public function checkModelFolder(\GO\Base\Db\ActiveRecord $model, $saveModel=false, $mustExist=false) {
+		$oldAllowDeletes = \GO\Base\Fs\File::setAllowDeletes(false);
 
 		$folder = false;
 		if ($model->files_folder_id > 0){
-			$folder = GO_Files_Model_Folder::model()->findByPk($model->files_folder_id, false, true);
+			$folder = \GO\Files\Model\Folder::model()->findByPk($model->files_folder_id, false, true);
 			
 			//record has an ID but the folder is missing from the database. Attempt to create new one.
 			$mustExist = true;
@@ -1067,7 +1071,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if(empty($model->files_folder_id))
 			$model->files_folder_id=0;
 
-		 GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
+		 \GO\Base\Fs\File::setAllowDeletes($oldAllowDeletes);
 
 		return $model->files_folder_id;
 	}
@@ -1079,31 +1083,31 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if (!isset($params['overwrite']))
 			$params['overwrite'] = 'ask'; //can be ask, yes, no
 
-		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
+		$destinationFolder = \GO\Files\Model\Folder::model()->findByPk($params['destination_folder_id']);
 
-		if (!$destinationFolder->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied();
+		if (!$destinationFolder->checkPermissionLevel(\GO\Base\Model\Acl::CREATE_PERMISSION))
+			throw new \GO\Base\Exception\AccessDenied();
 
 
-		while ($tmpfile = array_shift(GO::session()->values['files']['uploadqueue'])) {
+		while ($tmpfile = array_shift(\GO::session()->values['files']['uploadqueue'])) {
 
 
 			if(is_dir($tmpfile)){
-				$folder = new GO_Base_Fs_Folder($tmpfile);
+				$folder = new \GO\Base\Fs\Folder($tmpfile);
 				if($folder->exists()){
 					$folder->move($destinationFolder->fsFolder,false, true);
 					$destinationFolder->addFileSystemFolder($folder);
 				}
 			} else {
 
-				$file = new GO_Base_Fs_File($tmpfile);
+				$file = new \GO\Base\Fs\File($tmpfile);
 				if($file->exists()){
 
 					$existingFile = $destinationFolder->hasFile($file->name());
 					if ($existingFile) {
 						switch ($params['overwrite']) {
 							case 'ask':
-								array_unshift(GO::session()->values['files']['uploadqueue'], $tmpfile);
+								array_unshift(\GO::session()->values['files']['uploadqueue'], $tmpfile);
 								$response['fileExists'] = $file->name();
 								return $response;
 								break;
@@ -1141,21 +1145,21 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$sources = json_decode($params['compress_sources'], true);
 
 
-		$workingFolder = GO_Files_Model_Folder::model()->findByPk($params['working_folder_id']);
-		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
-		$archiveFile = new GO_Base_Fs_File(GO::config()->file_storage_path.$destinationFolder->path . '/' . $params['archive_name'] . '.zip');
+		$workingFolder = \GO\Files\Model\Folder::model()->findByPk($params['working_folder_id']);
+		$destinationFolder = \GO\Files\Model\Folder::model()->findByPk($params['destination_folder_id']);
+		$archiveFile = new \GO\Base\Fs\File(\GO::config()->file_storage_path.$destinationFolder->path . '/' . $params['archive_name'] . '.zip');
 		
 		if($archiveFile->exists())
-			throw new Exception(sprintf(GO::t('filenameExists','files'), $archiveFile->stripFileStoragePath()));
+			throw new Exception(sprintf(\GO::t('filenameExists','files'), $archiveFile->stripFileStoragePath()));
 		
 		$sourceObjects = array();
 		for($i=0;$i<count($sources);$i++){			
-			$path = GO::config()->file_storage_path.$sources[$i];			
-			$sourceObjects[]=GO_Base_Fs_Base::createFromPath($path);
+			$path = \GO::config()->file_storage_path.$sources[$i];			
+			$sourceObjects[]=\GO\Base\Fs\Base::createFromPath($path);
 		}
 		
-		if(GO_Base_Fs_Zip::create($archiveFile, $workingFolder->fsFolder, $sourceObjects)){
-			GO_Files_Model_File::importFromFilesystem($archiveFile);
+		if(\GO\Base\Fs\Zip::create($archiveFile, $workingFolder->fsFolder, $sourceObjects)){
+			\GO\Files\Model\File::importFromFilesystem($archiveFile);
 			$response['success']=true;
 		}  else {
 			throw new Exception("ZIP creation failed");
@@ -1166,24 +1170,24 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 
 	protected function actionDecompress($params){
-		if (!GO_Base_Util_Common::isWindows())
+		if (!\GO\Base\Util\Common::isWindows())
 			putenv('LANG=en_US.UTF-8');
 
 		$sources = json_decode($params['decompress_sources'], true);
 
 
-		$workingFolder = GO_Files_Model_Folder::model()->findByPk($params['working_folder_id']);
+		$workingFolder = \GO\Files\Model\Folder::model()->findByPk($params['working_folder_id']);
 
-		$workingPath = GO::config()->file_storage_path.$workingFolder->path;
+		$workingPath = \GO::config()->file_storage_path.$workingFolder->path;
 		chdir($workingPath);
 
 
 		while ($filePath = array_shift($sources)) {
-			$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$filePath);
+			$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.$filePath);
 			switch(strtolower($file->extension())) {
 				case 'zip':					
 					
-					$folder = GO_Base_Fs_Folder::tempFolder(uniqid());
+					$folder = \GO\Base\Fs\Folder::tempFolder(uniqid());
 					
 					if(class_exists("ZipArchive")){
 						$zip = new ZipArchive;
@@ -1193,7 +1197,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					}else
 					{
 						chdir($folder->path());					
-						$cmd = GO::config()->cmd_unzip.' -n '.escapeshellarg($file->path());
+						$cmd = \GO::config()->cmd_unzip.' -n '.escapeshellarg($file->path());
 						exec($cmd, $output, $ret);
 						if($ret!=0)
 						{
@@ -1204,7 +1208,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					$items = $folder->ls();
 					
 					foreach($items as $item){
-						$item->move(new GO_Base_Fs_Folder($workingPath));
+						$item->move(new \GO\Base\Fs\Folder($workingPath));
 					}
 					
 					$folder->delete();
@@ -1212,7 +1216,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					break;
 				case 'gz':
 				case 'tgz':
-					$cmd = GO::config()->cmd_tar.' zxf '.escapeshellarg($file->path());
+					$cmd = \GO::config()->cmd_tar.' zxf '.escapeshellarg($file->path());
 					exec($cmd, $output, $ret);
 
 					if($ret!=0)
@@ -1222,7 +1226,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					break;
 
 				case 'tar':
-					$cmd = GO::config()->cmd_tar.' xf '.escapeshellarg($file->path());
+					$cmd = \GO::config()->cmd_tar.' xf '.escapeshellarg($file->path());
 					
 					exec($cmd, $output, $ret);
 
@@ -1240,13 +1244,13 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	}
 	
-	private function _convertZipEncoding(GO_Base_Fs_Folder $folder, $charset='CP850'){
+	private function _convertZipEncoding(\GO\Base\Fs\Folder $folder, $charset='CP850'){
 		$items = $folder->ls();
 		
 		foreach($items as $item){
 			
-			if(!GO_Base_Util_String::isUtf8($item->name()))
-				$item->rename(GO_Base_Util_String::clean_utf8($item->name(), $charset));
+			if(!\GO\Base\Util\String::isUtf8($item->name()))
+				$item->rename(\GO\Base\Util\String::clean_utf8($item->name(), $charset));
 
 			if($item->isFolder()){
 				$this->_convertZipEncoding($item, $charset);
@@ -1271,13 +1275,13 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			if(count($tmp_files)){
 				$folder_id = $this->checkModelFolder($model, true, true);
 
-				$folder = GO_Files_Model_Folder::model()->findByPk($folder_id);
+				$folder = \GO\Files\Model\Folder::model()->findByPk($folder_id);
 
 				while ($tmp_file = array_shift($tmp_files)) {
 					if (!empty($tmp_file['tmp_file'])) {
 
-						$file = new GO_Base_Fs_File(GO::config()->tmpdir.$tmp_file['tmp_file']);
-						$file->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . $folder->path));
+						$file = new \GO\Base\Fs\File(\GO::config()->tmpdir.$tmp_file['tmp_file']);
+						$file->move(new \GO\Base\Fs\Folder(\GO::config()->file_storage_path . $folder->path));
 
 						$folder->addFile($file->name());
 					}
@@ -1289,10 +1293,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	protected function actionImages($params){
 		if(isset($params["id"])){
-			$currentFile = GO_Files_Model_File::model()->findByPk($params["id"]);
+			$currentFile = \GO\Files\Model\File::model()->findByPk($params["id"]);
 		}else
 		{
-			$currentFile = GO_Files_Model_File::model()->findByPath($params["path"]);
+			$currentFile = \GO\Files\Model\File::model()->findByPath($params["path"]);
 		}
 
 		$folder = $currentFile->folder();
@@ -1309,7 +1313,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if(!isset($params["dir"]))
 			$params["dir"]="ASC";
 
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->order($params["sort"], $params["dir"]);
 
 		$stmt = $folder->files($findParams);

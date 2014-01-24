@@ -1,5 +1,9 @@
 <?php
-class GO_Sites_Widgets_Uploader extends GO_Sites_Widgets_Component {
+
+namespace GO\Sites\Widgets;
+
+
+class Uploader extends Component {
 	
 	public $max_file_size = '100mb';
 	public $chunk_size = '10mb';
@@ -18,14 +22,14 @@ class GO_Sites_Widgets_Uploader extends GO_Sites_Widgets_Component {
 		
 	public function __construct($id,$params,$formname="form",$uploadTarget=false) {
 		$this->formname = $formname;
-		$this->uploadTarget = !$uploadTarget?GO::url('sites/site/plupload'):$uploadTarget;
+		$this->uploadTarget = !$uploadTarget?\GO::url('sites/site/plupload'):$uploadTarget;
 
 		parent::__construct($id, $params);
 	}
 
 	protected function _init()
 	{
-		$assetUrl = GOS::site()->assets->publish(GO::config()->root_path.'modules/sites/widgets/Uploader');
+		$assetUrl = GOS::site()->assets->publish(\GO::config()->root_path.'modules/sites/widgets/Uploader');
 		
 		$this->_silverLightUrl = $assetUrl.'/Uploader/plupload/js/plupload.silverlight.xap';
 		$this->_swfUrl = $assetUrl.'/Uploader/plupload/js/plupload.flash.swf';
@@ -36,15 +40,15 @@ class GO_Sites_Widgets_Uploader extends GO_Sites_Widgets_Component {
 	public function render() {
 		GOS::site()->scripts->registerGapiScript('jquery');
 		
-		$assetUrl = GOS::site()->assets->publish(GO::config()->root_path.'modules/sites/widgets/Uploader');
+		$assetUrl = GOS::site()->assets->publish(\GO::config()->root_path.'modules/sites/widgets/Uploader');
 		
 		GOS::site()->scripts->registerScriptFile($assetUrl.'/Uploader/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js'); 
 		GOS::site()->scripts->registerScriptFile($assetUrl.'/Uploader/plupload/js/plupload.full.js'); 
 		GOS::site()->scripts->registerCssFile($assetUrl.'/Uploader/uploader_style.css'); 
-		GOS::site()->scripts->registerScript('UploadComponent', $this->createjs(), GO_Sites_Components_Scripts::POS_READY);
+		GOS::site()->scripts->registerScript('UploadComponent', $this->createjs(), \GO\Sites\Components\Scripts::POS_READY);
 		
-		$langFile = 'Uploader/plupload/js/i18n/'.GO::language()->getLanguage().'.js';
-		if(file_exists(GO::config()->root_path.'modules/sites/widgets/'.$langFile)){
+		$langFile = 'Uploader/plupload/js/i18n/'.\GO::language()->getLanguage().'.js';
+		if(file_exists(\GO::config()->root_path.'modules/sites/widgets/'.$langFile)){
 			GOS::site()->scripts->registerScriptFile($assetUrl.'/'.$langFile); 
 		}
 		

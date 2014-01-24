@@ -36,7 +36,7 @@ $l["deleteContentHasChildren"] = "je kunt dit content item niet verwijderen want
 $l["deleteSite"] = "Verwijder site";
 $l["deleteSiteConfirm"] = "Weet je zeker dat je deze site wilt verwijderen";
 
-// Language for model: GO_Site_Model_Content
+// Language for model: \GO\Site\Model\Content
 $l["contentId"] = "ID";
 $l["contentUser_id"] = "Gebruiker";
 $l["contentCtime"] = "Aangemaakt";
@@ -52,7 +52,7 @@ $l["contentParent_id"] = "Ouder";
 $l["contentSite_id"] = "Site";
 $l["contentSort_order"] = "Volgorde";
 
-// Language for model: GO_Site_Model_Site
+// Language for model: \GO\Site\Model\Site
 $l["siteId"] = "ID";
 $l["siteName"] = "Naam";
 $l["siteUser_id"] = "Gebruiker";

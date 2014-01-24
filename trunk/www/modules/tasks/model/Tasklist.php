@@ -9,10 +9,10 @@
  */
  
 /**
- * The GO_Tasks_Model_Tasklist model
+ * The Tasklist model
  *
  * @package GO.modules.Tasks
- * @version $Id: GO_Tasks_Model_Tasklist.php 7607 2011-09-20 10:07:07Z <<USERNAME>> $
+ * @version $Id: Tasklist.php 7607 2011-09-20 10:07:07Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *
@@ -23,13 +23,17 @@
  * @property int $files_folder_id
  */
 
-class GO_Tasks_Model_Tasklist extends GO_Base_Model_AbstractUserDefaultModel {
+
+namespace GO\Tasks\Model;
+
+
+class Tasklist extends \GO\Base\Model\AbstractUserDefaultModel {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Tasks_Model_Tasklist 
+	 * @return Tasklist 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -37,7 +41,7 @@ class GO_Tasks_Model_Tasklist extends GO_Base_Model_AbstractUserDefaultModel {
 	}
 	
 	public function settingsModelName() {
-		return "GO_Tasks_Model_Settings";
+		return "\GO\Tasks\Model\Settings";
 	}
 	
 	public function settingsPkAttribute() {
@@ -54,7 +58,7 @@ class GO_Tasks_Model_Tasklist extends GO_Base_Model_AbstractUserDefaultModel {
 	
 	public function relations() {
 		return array(
-				'tasks' => array('type' => self::HAS_MANY, 'model' => 'GO_Tasks_Model_Task', 'field' => 'tasklist_id', 'delete' => true),			
+				'tasks' => array('type' => self::HAS_MANY, 'model' => '\GO\Tasks\Model\Task', 'field' => 'tasklist_id', 'delete' => true),			
 				);
 	}
 	
@@ -76,14 +80,14 @@ class GO_Tasks_Model_Tasklist extends GO_Base_Model_AbstractUserDefaultModel {
 	
 	/**
 	 * 
-	 * @param \GO_Base_Model_User $user
-	 * @return GO_Tasks_Model_Tasklist
+	 * @param \GO\Base\Model\User $user
+	 * @return Tasklist
 	 */
-	public function getDefault(\GO_Base_Model_User $user, &$createdNew=false) {
+	public function getDefault(\GO\Base\Model\User $user, &$createdNew=false) {
 		$default = parent::getDefault($user, $createdNew);
 	
 		if($createdNew){
-			$pt = new GO_Tasks_Model_PortletTasklist();
+			$pt = new PortletTasklist();
 			$pt->user_id=$user->id;
 			$pt->tasklist_id=$default->id;
 			$pt->save();

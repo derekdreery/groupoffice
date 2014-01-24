@@ -1,6 +1,10 @@
 <?php
 
-class GO_Base_Vobject_Iterator implements \Iterator {
+
+namespace GO\Base\Vobject;
+
+
+class Iterator implements \Iterator {
 
 	private $file;
 	private $type;
@@ -13,7 +17,7 @@ class GO_Base_Vobject_Iterator implements \Iterator {
 	
 	private $header=false;
 	
-	public function __construct(GO_Base_Fs_File $file, $type = "VEVENT") {
+	public function __construct(\GO\Base\Fs\File $file, $type = "VEVENT") {
 		$this->file = $file;
 		$this->type = $type;		
 		
@@ -55,7 +59,7 @@ class GO_Base_Vobject_Iterator implements \Iterator {
 	}
 
 	public function rewind() {
-//		GO::debug("rewind");
+//		\GO::debug("rewind");
 		if(is_resource($this->fp))
 			fclose($this->fp);
 		
@@ -70,34 +74,34 @@ class GO_Base_Vobject_Iterator implements \Iterator {
 	}
 
 	public function current() {
-//		GO::debug("current");
+//		\GO::debug("current");
 		return $this->current;
 	}
 
 	public function key() {
-//		GO::debug("key");
+//		\GO::debug("key");
 		return $this->key;
 	}
 
 	public function next() {
-//		GO::debug("next");
+//		\GO::debug("next");
 		$data = $this->getNextData();
 		
-//		GO::debug($data);
+//		\GO::debug($data);
 		
 		$this->current=false;
 				
 		if(empty($data))			
 			return false;
 		
-		$vcal = GO_Base_VObject_Reader::read($data);
+		$vcal = \GO\Base\VObject\Reader::read($data);
 			
 		$vevents = $vcal->select($this->type);
 		
-//		GO::debug("Found: ".count($vevents));
+//		\GO::debug("Found: ".count($vevents));
 		$vevent = array_shift($vevents);
 		if($vevent){
-//			GO::debug("Found event");
+//			\GO::debug("Found event");
 			$this->current=$vevent;
 			$this->key++;
 			return $this->current;
@@ -108,9 +112,9 @@ class GO_Base_Vobject_Iterator implements \Iterator {
 	}
 
 	public function valid() {
-//		GO::debug("valid");
+//		\GO::debug("valid");
 		$ret = $this->current!=false;
-//		GO::debug($ret);
+//		\GO::debug($ret);
 		return $ret;
 	}
 

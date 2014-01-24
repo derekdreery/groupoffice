@@ -18,7 +18,7 @@
  */
  
 /**
- * The GO_Customfields_Model_FieldTreeSelectOption model
+ * The FieldTreeSelectOption model
  *
  * @package GO.modules.customfields.model
  * @property int $sort
@@ -28,7 +28,11 @@
  * @property int $id
  */
 
-class GO_Customfields_Model_FieldTreeSelectOption extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Customfields\Model;
+
+
+class FieldTreeSelectOption extends \GO\Base\Db\ActiveRecord{
 		
 	
 	public $checkSlaves=true;
@@ -36,7 +40,7 @@ class GO_Customfields_Model_FieldTreeSelectOption extends GO_Base_Db_ActiveRecor
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Customfields_Model_FieldSelectOption 
+	 * @return FieldSelectOption 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -49,7 +53,7 @@ class GO_Customfields_Model_FieldTreeSelectOption extends GO_Base_Db_ActiveRecor
 	
 	public function relations() {
 		return array(
-				'field' => array('type' => self::BELONGS_TO, 'model' => 'GO_Customfields_Model_Field', 'field' => 'field_id')		);
+				'field' => array('type' => self::BELONGS_TO, 'model' => '\GO\Customfields\Model\Field', 'field' => 'field_id')		);
 	}	
 	
 	protected function beforeSave() {

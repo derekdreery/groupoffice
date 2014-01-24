@@ -1,16 +1,20 @@
 <?php
 
-class GO_Tasks_Controller_ScheduleCall extends GO_Base_Controller_AbstractJsonController {
+
+namespace GO\Tasks\Controller;
+
+
+class ScheduleCall extends \GO\Base\Controller\AbstractJsonController {
 
 	protected function actionLoad($params){
-		$scheduleCall = new GO_Tasks_Model_Task();
+		$scheduleCall = new \GO\Tasks\Model\Task();
 
 		$remoteComboFields = array(
 				'category_id'=>'$model->category->name',
 				'tasklist_id'=>'$model->tasklist->name'				
 		);
 		
-		if(GO::modules()->projects)
+		if(\GO::modules()->projects)
 			$remoteComboFields['project_id']='$model->project->path';
 		
 		echo $this->renderForm($scheduleCall,$remoteComboFields);
@@ -21,13 +25,13 @@ class GO_Tasks_Controller_ScheduleCall extends GO_Base_Controller_AbstractJsonCo
 		if(empty($params['number']) || empty($params['remind_date']) || empty($params['remind_time']))
 			throw new Exception('Not all parameters are given');
 
-		$scheduleCall = new GO_Tasks_Model_Task();
+		$scheduleCall = new \GO\Tasks\Model\Task();
 				
 		$scheduleCall->setAttributes($params);
 				
 		// Check if the contact_id is really an ID or if it is a name. (The is_contact is true when it is an ID) 
 		if(!empty($params['contact_id'])){
-			$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['contact_id']);
+			$contact = \GO\Addressbook\Model\Contact::model()->findByPk($params['contact_id']);
 			
 			if(!empty($params['number']) && !empty($params['save_as'])){
 				$contact->{$params['save_as']} = $params['number'];
@@ -39,8 +43,8 @@ class GO_Tasks_Controller_ScheduleCall extends GO_Base_Controller_AbstractJsonCo
 			$name = $params['contact_name'];
 		}
 		
-		$scheduleCall->name = str_replace(array('{name}','{number}'),array($name, $params['number']),GO::t('scheduleCallTaskName','tasks'));
-		$scheduleCall->reminder= GO_Base_Util_Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
+		$scheduleCall->name = str_replace(array('{name}','{number}'),array($name, $params['number']),\GO::t('scheduleCallTaskName','tasks'));
+		$scheduleCall->reminder= \GO\Base\Util\Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
 		
 		$scheduleCall->save();
 		

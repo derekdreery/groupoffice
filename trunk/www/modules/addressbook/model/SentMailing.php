@@ -25,10 +25,14 @@
  * @property int $campaign_id
  * @property int $campaign_status_id
  * 
- * @property GO_Base_Fs_File $logFile
- * @property GO_Base_Fs_File $messageFile
+ * @property \GO\Base\Fs\File $logFile
+ * @property \GO\Base\Fs\File $messageFile
  */
-class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Addressbook\Model;
+
+
+class SentMailing extends \GO\Base\Db\ActiveRecord {
 	const STATUS_RUNNING=1;
 	const STATUS_FINISHED=2;
 	const STATUS_PAUSED=3;
@@ -37,7 +41,7 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Addressbook_Model_Addressbook 
+	 * @return Addressbook 
 	 */
 	public static function model($className=__CLASS__) {
 		return parent::model($className);
@@ -49,10 +53,10 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 	
 	public function relations() {
 		return array(
-				'addresslist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Addressbook_Model_Addresslist', 'field' => 'addresslist_id'),
-				'campaign' => array('type' => self::BELONGS_TO, 'model' => 'GO_Campaigns_Model_Campaign', 'field' => 'campaign_id'),
-				'contacts' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'sent_mailing_id', 'linkModel' => 'GO_Addressbook_Model_SentMailingContact'),
-				'companies' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'sent_mailing_id', 'linkModel' => 'GO_Addressbook_Model_SentMailingCompany')
+				'addresslist' => array('type' => self::BELONGS_TO, 'model' => '\GO\Addressbook\Model\Addresslist', 'field' => 'addresslist_id'),
+				'campaign' => array('type' => self::BELONGS_TO, 'model' => '\GO\Campaigns\Model\Campaign', 'field' => 'campaign_id'),
+				'contacts' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Addressbook\Model\Contact', 'field'=>'sent_mailing_id', 'linkModel' => '\GO\Addressbook\Model\SentMailingContact'),
+				'companies' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Addressbook\Model\Company', 'field'=>'sent_mailing_id', 'linkModel' => '\GO\Addressbook\Model\SentMailingCompany')
 		);
 	}
 
@@ -86,7 +90,7 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 		$this->removeAllManyMany('companies');
 
 		// Add company recipients to this list and count them
-		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($this->addresslist_id)->companies();
+		$stmt = Addresslist::model()->findByPk($this->addresslist_id)->companies();
 		while ($company = $stmt->fetch()) {
 			$this->addManyMany('companies', $company->id);			
 			$nMailsToSend++;			
@@ -96,7 +100,7 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 		$this->removeAllManyMany('contacts');
 
 		// Add contact recipients to this list and count them
-		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($this->addresslist_id)->contacts();
+		$stmt = Addresslist::model()->findByPk($this->addresslist_id)->contacts();
 		while ($contact = $stmt->fetch()) {
 			$this->addManyMany('contacts', $contact->id);			
 			$nMailsToSend++;			
@@ -112,12 +116,12 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getLogFile(){
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/mailings/'.$this->id.'.log');		
+		$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.'log/mailings/'.$this->id.'.log');		
 		return $file;
 	}
 	
 	protected function getMessageFile(){
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$this->message_path);		
+		$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.$this->message_path);		
 		return $file;
 	}
 	

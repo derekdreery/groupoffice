@@ -18,12 +18,16 @@
  * The content model custom fields model.
  * 
  */
-class GO_Sites_Customfields_Model_Content extends GO_Customfields_Model_AbstractCustomFieldsRecord{
+
+namespace GO\Sites\Customfields\Model;
+
+
+class Content extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Sites_Customfields_Model_Content
+	 * @return Content
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -31,6 +35,6 @@ class GO_Sites_Customfields_Model_Content extends GO_Customfields_Model_Abstract
 	}
 
 	public function extendsModel(){
-		return "GO_Sites_Model_Content";
+		return "\GO\Sites\Model\Content";
 	}
 }

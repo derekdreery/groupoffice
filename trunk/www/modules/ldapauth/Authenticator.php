@@ -1,6 +1,10 @@
 <?php
 
-class GO_Ldapauth_Authenticator {
+
+namespace GO\Ldapauth;
+
+
+class Authenticator {
 
 	private $_mapping = false;
 
@@ -9,15 +13,15 @@ class GO_Ldapauth_Authenticator {
 			return $this->_mapping;
 		}
 
-		$conf = str_replace('config.php', 'ldapauth.config.php', GO::config()->get_config_file());
+		$conf = str_replace('config.php', 'ldapauth.config.php', \GO::config()->get_config_file());
 
 		if (file_exists($conf)) {
 			require($conf);
 			$this->_mapping = $mapping;
 		} else {
 			$this->_mapping = array(
-					'exclude' => new GO_Ldapauth_Mapping_Constant(false),
-					'enabled' => new GO_Ldapauth_Mapping_Constant('1'),
+					'exclude' => new Mapping\Constant(false),
+					'enabled' => new Mapping\Constant('1'),
 					'username' => 'uid',
 					//'password' => 'userpassword',
 					'first_name' => 'givenname',
@@ -58,39 +62,39 @@ class GO_Ldapauth_Authenticator {
 
 		$mapping = $this->_getMapping();
 
-		if (empty(GO::config()->ldap_host) || empty(GO::config()->ldap_peopledn)) {
-			GO::debug("LDAPAUTH: Aborting because one or more of the following " .
+		if (empty(\GO::config()->ldap_host) || empty(\GO::config()->ldap_peopledn)) {
+			\GO::debug("LDAPAUTH: Aborting because one or more of the following " .
 							"required values is not set: \$config['ldap_host'] and \$config['ldap_peopledn'].");
 			return true;
 		}
 		
 		
 
-//		$ldapConn = new GO_Base_Ldap_Connection(GO::config()->ldap_host, GO::config()->ldap_port, !empty(GO::config()->ldap_tls));
+//		$ldapConn = new \GO\Base\Ldap\Connection(\GO::config()->ldap_host, \GO::config()->ldap_port, !empty(\GO::config()->ldap_tls));
 //
 //		//support old deprecated config.
-//		if(!empty(GO::config()->ldap_user))
-//			GO::config()->ldap_bind_rdn=GO::config()->ldap_user;
+//		if(!empty(\GO::config()->ldap_user))
+//			\GO::config()->ldap_bind_rdn=\GO::config()->ldap_user;
 //		
-//		if (!empty(GO::config()->ldap_bind_rdn)) {
-//			$bound = $ldapConn->bind(GO::config()->ldap_bind_rdn, GO::config()->ldap_pass);
+//		if (!empty(\GO::config()->ldap_bind_rdn)) {
+//			$bound = $ldapConn->bind(\GO::config()->ldap_bind_rdn, \GO::config()->ldap_pass);
 //			if (!$bound)
-//				throw new Exception("Failed to bind to LDAP server with RDN: " . GO::config()->ldap_bind_rdn);
+//				throw new Exception("Failed to bind to LDAP server with RDN: " . \GO::config()->ldap_bind_rdn);
 //		}
-		$ldapConn = GO_Base_Ldap_Connection::getDefault();
+		$ldapConn = \GO\Base\Ldap\Connection::getDefault();
 
-		if (!empty(GO::config()->ldap_search_template))
-			$query = str_replace('{username}', $username, GO::config()->ldap_search_template);
+		if (!empty(\GO::config()->ldap_search_template))
+			$query = str_replace('{username}', $username, \GO::config()->ldap_search_template);
 		else
 			$query = $mapping['username'] . '=' . $username;
 		
-		GO::debug("LDAPAUTH: Search People DN: ".GO::config()->ldap_peopledn." Query: ". $query);
+		\GO::debug("LDAPAUTH: Search People DN: ".\GO::config()->ldap_peopledn." Query: ". $query);
 
-		$result = $ldapConn->search(GO::config()->ldap_peopledn, $query);
+		$result = $ldapConn->search(\GO::config()->ldap_peopledn, $query);
 		$record = $result->fetch();
 
 		if (!$record) {
-			GO::debug("LDAPAUTH: No LDAP entry found for " . $username);
+			\GO::debug("LDAPAUTH: No LDAP entry found for " . $username);
 			//return true here because this should not block normal authentication
 			return true;
 		}
@@ -98,8 +102,8 @@ class GO_Ldapauth_Authenticator {
 		$authenticated = $ldapConn->bind($record->getDn(), $password);
 		if (!$authenticated) {
 		
-			GO::debug("LDAPAUTH: LDAP authentication FAILED for " . $username);
-			GO::session()->logout();
+			\GO::debug("LDAPAUTH: LDAP authentication FAILED for " . $username);
+			\GO::session()->logout();
 			
 			
 			$str = "LOGIN FAILED" ;		
@@ -108,58 +112,58 @@ class GO_Ldapauth_Authenticator {
 				$str .= $_SERVER['REMOTE_ADDR'];
 			else
 				$str .= 'unknown';
-			GO::infolog($str);
+			\GO::infolog($str);
 			
 			//Don't throw exception because this won't be catched by cookie login.
-//			throw new Exception(GO::t('badLogin').' (LDAP)');
+//			throw new Exception(\GO::t('badLogin').' (LDAP)');
 			
 			return false;
 		} else {
-			GO::debug("LDAPAUTH: LDAP authentication SUCCESS for " . $username);
+			\GO::debug("LDAPAUTH: LDAP authentication SUCCESS for " . $username);
 			
-			$oldIgnoreAcl = GO::setIgnoreAclPermissions(true);
+			$oldIgnoreAcl = \GO::setIgnoreAclPermissions(true);
 			
-			if(!empty(GO::config()->ldap_create_mailbox_domains)){
+			if(!empty(\GO::config()->ldap_create_mailbox_domains)){
 				
-				if(!GO::modules()->serverclient)
-					throw new Exception("The serverclient module must be installed and configured when using \$config['GO::config()->ldap_create_mailbox_domains']. See https://www.group-office.com/wiki/Mailserver#Optionally_install_the_serverclient");
+				if(!\GO::modules()->serverclient)
+					throw new Exception("The serverclient module must be installed and configured when using \$config['\GO::config()->ldap_create_mailbox_domains']. See https://www.group-office.com/wiki/Mailserver#Optionally_install_the_serverclient");
 				
-				$_POST['serverclient_domains']=GO::config()->ldap_create_mailbox_domains;
+				$_POST['serverclient_domains']=\GO::config()->ldap_create_mailbox_domains;
 			}
 
 			$user = $this->syncUserWithLdapRecord($record, $password);
 			if(!$user){
-				GO::setIgnoreAclPermissions($oldIgnoreAcl);
+				\GO::setIgnoreAclPermissions($oldIgnoreAcl);
 				return false;
 			}
 
 			try{
 				$this->_checkEmailAccounts($user, $password);
 			}catch(Exception $e){
-//				GO::debug("LDAPAUTH: Failed to create or update e-mail account!\n\n".(string) $e);
+//				\GO::debug("LDAPAUTH: Failed to create or update e-mail account!\n\n".(string) $e);
 				trigger_error("LDAPAUTH: Failed to create or update e-mail account for user ".$user->username."\n\n".$e->getMessage());
 			}
 
-			GO::setIgnoreAclPermissions($oldIgnoreAcl);
+			\GO::setIgnoreAclPermissions($oldIgnoreAcl);
 		}
 	}
 
 	/**
 	 * 
-	 * @param GO_Base_Ldap_Record $user
+	 * @param \GO\Base\Ldap\Record $user
 	 * @param type $password
-	 * @return \GO_Base_Model_User
+	 * @return \GO\Base\Model\User
 	 */
-	public function syncUserWithLdapRecord(GO_Base_Ldap_Record $record, $password = null) {
+	public function syncUserWithLdapRecord(\GO\Base\Ldap\Record $record, $password = null) {
 		
 		//disable password validation because we can't control the external passwords
-		GO::config()->password_validate=false;
+		\GO::config()->password_validate=false;
 		
 
 		$attr = $this->getUserAttributes($record);
 		
 		if(!empty($attr['exclude'])){
-			GO::debug("LDAPAUTH: User is excluded from LDAP by mapping!");
+			\GO::debug("LDAPAUTH: User is excluded from LDAP by mapping!");
 			
 			return false;
 		}
@@ -167,16 +171,16 @@ class GO_Ldapauth_Authenticator {
 		unset($attr['exclude']);
 		
 		try {
-			$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $attr['username']);
+			$user = \GO\Base\Model\User::model()->findSingleByAttribute('username', $attr['username']);
 			if ($user) {
-				GO::debug("LDAPAUTH: Group-Office user already exists.");
+				\GO::debug("LDAPAUTH: Group-Office user already exists.");
 				if (isset($password) && !$user->checkPassword($password)) {
-					GO::debug('LDAPAUTH: LDAP password has been changed. Updating Group-Office database');
+					\GO::debug('LDAPAUTH: LDAP password has been changed. Updating Group-Office database');
 
 					$user->password = $password;
 				}
 
-				if (empty(GO::config()->ldap_auth_dont_update_profiles)) {
+				if (empty(\GO::config()->ldap_auth_dont_update_profiles)) {
 					//never update the e-mail address because the user
 					//can't change it to something invalid.
 
@@ -188,22 +192,22 @@ class GO_Ldapauth_Authenticator {
 					$user->setAttributes($attr);
 					$user->cutAttributeLengths();
 
-					GO::debug('LDAPAUTH: updating user profile');
-					GO::debug($attr);
+					\GO::debug('LDAPAUTH: updating user profile');
+					\GO::debug($attr);
 
 					$this->_updateContact($user, $attr);
 				}else {
-					GO::debug('LDAPAUTH: Profile updating from LDAP is disabled');
+					\GO::debug('LDAPAUTH: Profile updating from LDAP is disabled');
 				}
 
 				if(!$user->save()){
 					throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
 				}
 			} else {
-				GO::debug("LDAPAUTH: Group-Office user does not exist. Attempting to create it.");
-				GO::debug($attr);
+				\GO::debug("LDAPAUTH: Group-Office user does not exist. Attempting to create it.");
+				\GO::debug($attr);
 
-				$user = new GO_Base_Model_User();
+				$user = new \GO\Base\Model\User();
 				$user->setAttributes($attr);
 				$user->cutAttributeLengths();
 				$user->password = $password;
@@ -211,8 +215,8 @@ class GO_Ldapauth_Authenticator {
 				if(!$user->save()){
 					throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
 				}
-				if (!empty(GO::config()->ldap_groups))
-					$user->addToGroups(explode(',', GO::config()->ldap_groups));
+				if (!empty(\GO::config()->ldap_groups))
+					$user->addToGroups(explode(',', \GO::config()->ldap_groups));
 
 				$this->_updateContact($user, $attr);
 
@@ -220,7 +224,7 @@ class GO_Ldapauth_Authenticator {
 			}
 		
 		} catch (Exception $e) {
-				GO::debug('LDAPAUTH: Failed creating user ' .
+				\GO::debug('LDAPAUTH: Failed creating user ' .
 								$attr['username'] .
 								' Exception: ' .
 								$e->getMessage(), E_USER_WARNING);
@@ -233,26 +237,26 @@ class GO_Ldapauth_Authenticator {
 	private function _updateContact($user, $attributes) {
 		$contact = $user->createContact();
 		if ($contact) {
-			GO::debug('LDAPAUTH: updating user contact');
+			\GO::debug('LDAPAUTH: updating user contact');
 			$contact->setAttributes($attributes);
 			$contact->cutAttributeLengths();
 			$contact->skip_user_update=true;
 
 			if (!empty($attributes['company'])) {
-				$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array(
+				$company = \GO\Addressbook\Model\Company::model()->findSingleByAttributes(array(
 						'addressbook_id' => $contact->addressbook_id,
 						'name' => $attributes['company']
 								));				
 
 				if (!$company) {
-					GO::debug('LDAPAUTH: creating company for contact');
-					$company = new GO_Addressbook_Model_Company();
+					\GO::debug('LDAPAUTH: creating company for contact');
+					$company = new \GO\Addressbook\Model\Company();
 					$company->name = $attributes['company'];
 					$company->addressbook_id = $contact->addressbook_id;
 					$company->cutAttributeLengths();
 					$company->save();
 				} else {
-					GO::debug('LDAPAUTH: found existing company for contact');
+					\GO::debug('LDAPAUTH: found existing company for contact');
 				}
 				$contact->company_id = $company->id;
 			}
@@ -261,28 +265,28 @@ class GO_Ldapauth_Authenticator {
 		}
 	}
 
-	private function _checkEmailAccounts(GO_Base_Model_User $user, $password) {
-		if (GO::modules()->isInstalled('email')) {
+	private function _checkEmailAccounts(\GO\Base\Model\User $user, $password) {
+		if (\GO::modules()->isInstalled('email')) {
 
 			$arr = explode('@', $user->email);
 			$mailbox = trim($arr[0]);
 			$domain = isset($arr[1]) ? trim($arr[1]) : '';
 
-			$imapauth = new GO_Imapauth_Authenticator();
+			$imapauth = new \GO\Imapauth\Authenticator();
 			$config = $imapauth->config = $imapauth->getDomainConfig($domain);
 
 			if (!$config) {
-				GO::debug('LDAPAUTH: No E-mail configuration found for domain: ' . $domain);
+				\GO::debug('LDAPAUTH: No E-mail configuration found for domain: ' . $domain);
 				return false;
 			}
 			
 			if(empty($config['create_email_account'])){
-				GO::debug('LDAPAUTH: E-mail account creation disabled for domain: ' . $domain);
+				\GO::debug('LDAPAUTH: E-mail account creation disabled for domain: ' . $domain);
 				return false;
 			}
 				
 
-			GO::debug('LDAPAUTH: E-mail configuration found. Creating e-mail account');
+			\GO::debug('LDAPAUTH: E-mail configuration found. Creating e-mail account');
 			$imapUsername = empty($config['ldap_use_email_as_imap_username']) ? $user->username : $user->email;
 
 			if (!$imapauth->checkEmailAccounts($user, $config['host'], $imapUsername, $password)) {
@@ -291,7 +295,7 @@ class GO_Ldapauth_Authenticator {
 		}
 	}
 
-	public function getUserAttributes(GO_Base_Ldap_Record $record) {
+	public function getUserAttributes(\GO\Base\Ldap\Record $record) {
 
 		$userAttributes = array();
 
@@ -316,8 +320,8 @@ class GO_Ldapauth_Authenticator {
 			}
 		}
 
-		if (!empty(GO::config()->ldap_use_uid_with_email_domain))
-			$userAttributes['email'] = $userAttributes['username'] . '@' . GO::config()->ldap_use_uid_with_email_domain;
+		if (!empty(\GO::config()->ldap_use_uid_with_email_domain))
+			$userAttributes['email'] = $userAttributes['username'] . '@' . \GO::config()->ldap_use_uid_with_email_domain;
 		
 		
 		//sometimes users mapped the password. Unset it here to make sure the hash is not used for password in the user.
@@ -332,12 +336,12 @@ class GO_Ldapauth_Authenticator {
 	/**
 	 * Checks if an e-mail address is present in the LDAP directory
 	 * 	 
-	 * @param GO_Base_Ldap_Record $record
+	 * @param \GO\Base\Ldap\Record $record
 	 * @param string $email
 	 * @param array $validAddresses
 	 * @return type 
 	 */
-	public function validateUserEmail(GO_Base_Ldap_Record $record, $email, &$validAddresses = array()) {
+	public function validateUserEmail(\GO\Base\Ldap\Record $record, $email, &$validAddresses = array()) {
 
 		$mapping = $this->_getMapping();
 
@@ -353,9 +357,9 @@ class GO_Ldapauth_Authenticator {
 			$validAddresses[] = strtolower($val[$i]);
 		}
 
-		if (!empty(GO::config()->ldap_use_uid_with_email_domain)) {
+		if (!empty(\GO::config()->ldap_use_uid_with_email_domain)) {
 
-			$default = strtolower($lowercase[$mapping['username']][0]) . '@' . GO::config()->ldap_use_uid_with_email_domain;
+			$default = strtolower($lowercase[$mapping['username']][0]) . '@' . \GO::config()->ldap_use_uid_with_email_domain;
 
 			if (!in_array($default, $validAddresses)) {
 				$validAddresses[] = $default;

@@ -1,5 +1,9 @@
 <?php
-class GO_Addressbook_Model_DefaultTemplateForAccount extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Addressbook\Model;
+
+
+class DefaultTemplateForAccount extends \GO\Base\Db\ActiveRecord {
 	
 	public static function model($className=__CLASS__)
 	{	
@@ -16,8 +20,8 @@ class GO_Addressbook_Model_DefaultTemplateForAccount extends GO_Base_Db_ActiveRe
 	
 	public function relations(){
 		return array(
-			'emailTemplate' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Template', 'field'=>'template_id'),
-			'emailAccount' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Email_Model_Account', 'field'=>'account_id')
+			'emailTemplate' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Addressbook\Model\Template', 'field'=>'template_id'),
+			'emailAccount' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Email\Model\Account', 'field'=>'account_id')
 		);
 	}
 
@@ -25,8 +29,8 @@ class GO_Addressbook_Model_DefaultTemplateForAccount extends GO_Base_Db_ActiveRe
 	protected function defaultAttributes() {
 		$attr = parent::defaultAttributes();
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()->limit(1);
-		$stmt = GO_Addressbook_Model_Template::model()->find($findParams);
+		$findParams = \GO\Base\Db\FindParams::newInstance()->limit(1);
+		$stmt = Template::model()->find($findParams);
 		
 		if($template=$stmt->fetch())
 		{

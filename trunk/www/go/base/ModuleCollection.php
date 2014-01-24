@@ -24,11 +24,15 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base 
  */
-class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
+
+namespace GO\Base;
+
+
+class ModuleCollection extends Model\ModelCollection{
 	
 	private $_allowedModules;
 	
-	public function __construct($model='GO_Base_Model_Module'){
+	public function __construct($model='\GO\Base\Model\Module'){
 
 		parent::__construct($model);
 	}
@@ -36,7 +40,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	private function _isAllowed($moduleid){
 		
 		if(!isset($this->_allowedModules))
-			$this->_allowedModules=empty(GO::config()->allowed_modules) ? array() : explode(',', GO::config()->allowed_modules);
+			$this->_allowedModules=empty(\GO::config()->allowed_modules) ? array() : explode(',', \GO::config()->allowed_modules);
 		
 		return empty($this->_allowedModules) || in_array($moduleid, $this->_allowedModules);			
 	}
@@ -44,10 +48,10 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	/**
 	 * Returns an array of all module classes as string found in the modules folder.
 	 * 
-	 * @return array Module class names eg. GO_Calendar_Module
+	 * @return array Module class names eg. \GO\Calendar\Module
 	 */
 	public function getAvailableModules($returnInstalled=false){
-		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'modules');
+		$folder = new Fs\Folder(\GO::config()->root_path.'modules');
 		
 		$folders = $folder->ls();
 		$modules = array();
@@ -55,8 +59,8 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 			if($folder->isFolder()){
 				$ucfirst = ucfirst($folder->name());
 				$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
-				if(file_exists($moduleClass) && $this->_isAllowed($folder->name()) && ($returnInstalled || !GO_Base_Model_Module::model()->findByPk($folder->name(), false, true))){
-					$modules[]='GO_'.$ucfirst.'_'.$ucfirst.'Module';
+				if(file_exists($moduleClass) && $this->_isAllowed($folder->name()) && ($returnInstalled || !Model\Module::model()->findByPk($folder->name(), false, true))){
+					$modules[]='GO\\'.$ucfirst.'\\'.$ucfirst.'Module';
 				}
 			}
 		}
@@ -75,7 +79,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		if(!$this->_isAllowed($moduleId))
 			return false;
 		
-		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'modules/'.$moduleId);
+		$folder = new Fs\Folder(\GO::config()->root_path.'modules/'.$moduleId);
 		if($folder->exists()){
 			$ucfirst = ucfirst($folder->name());
 			$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
@@ -86,7 +90,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	
 
 	/**
-	 * Call a method of a module class. eg. GO_Notes_NotesModule::firstRun
+	 * Call a method of a module class. eg. \GO\Notes\NotesModule::firstRun
 	 * 
 	 * @deprecated Preferrably use events with listeners because it has better performance
 	 * @param string $method
@@ -94,7 +98,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	 */
 	public function callModuleMethod($method, $params=array(), $ignoreAclPermissions=true){
 		
-		$oldIgnore = GO::setIgnoreAclPermissions($ignoreAclPermissions);
+		$oldIgnore = \GO::setIgnoreAclPermissions($ignoreAclPermissions);
 		$modules = $this->getAllModules();
 		
 		foreach($modules as $module)
@@ -104,11 +108,11 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 				//todo load listeners
 				if(file_exists($file)){
 					//require_once($file);
-					$class='GO_'.ucfirst($module->id).'_'.ucfirst($module->id).'Module';
+					$class='GO\\'.ucfirst($module->id).'\\'.ucfirst($module->id).'Module';
 
 					$object = new $class;
 					if(method_exists($object, $method)){					
-//						GO::debug('Calling '.$class.'::'.$method);
+//						\GO::debug('Calling '.$class.'::'.$method);
 						call_user_func_array(array($object, $method), $params);
 						//$object->$method($params);
 					}
@@ -116,7 +120,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 //			}
 		}
 		
-		GO::setIgnoreAclPermissions($oldIgnore);
+		\GO::setIgnoreAclPermissions($oldIgnore);
 	}
 	
 	private $_modules;
@@ -142,7 +146,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	 * Check if a module is installed.
 	 * 
 	 * @param string $moduleId
-	 * @return GO_Base_Model_Module 
+	 * @return Model\Module 
 	 */
 	public function isInstalled($moduleId){
 		$model = $this->model->findByPk($moduleId, false, true);
@@ -160,7 +164,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		try{
 			$module = $this->$name;
 			return isset($module);
-		}catch(GO_Base_Exception_AccessDenied $e){
+		}catch(Exception\AccessDenied $e){
 			return false;
 		}
 	}
@@ -168,11 +172,11 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	/**
 	 * Query all modules.
 	 * 
-	 * @return GO_Base_Model_Module[]
+	 * @return Model\Module[]
 	 */
 	public function getAllModules($ignoreAcl=false){
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()->order("sort_order");
+		$findParams = Db\FindParams::newInstance()->order("sort_order");
 		
 		if($ignoreAcl)
 			$findParams->ignoreAcl ();

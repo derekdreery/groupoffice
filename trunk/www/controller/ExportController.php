@@ -19,7 +19,11 @@
  * @author Wesley Smits <wsmits@intermesh.nl> 
  * @abstract
  */
-class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController { 
+
+namespace GO\Core\Controller;
+
+
+class Export extends \GO\Base\Controller\AbstractController { 
 
 	/**
 	 * Get the exporttypes that can be used and get the data for the checkboxes
@@ -31,7 +35,7 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 		$response = array();		
 		$response['data'] = array();
 		
-		$settings =  GO_Base_Export_Settings::load();
+		$settings =  \GO\Base\Export\Settings::load();
 		$data = $settings->getArray();
 		
 		// retreive checkbox settings
@@ -39,10 +43,10 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 		$response['data']['humanHeaders'] = $data['export_human_headers'];
 		$response['data']['includeHidden'] = $data['export_include_hidden'];
 		
-		$response['outputTypes'] = $this->_getExportTypes(GO::config()->root_path.'go/base/export/');
+		$response['outputTypes'] = $this->_getExportTypes(\GO::config()->root_path.'go/base/export/');
 		
 		if(!empty($params['exportClassPath']))
-			$response['outputTypes'] = array_merge($response['outputTypes'], $this->_getExportTypes(GO::config()->root_path.$params['exportClassPath']));
+			$response['outputTypes'] = array_merge($response['outputTypes'], $this->_getExportTypes(\GO::config()->root_path.$params['exportClassPath']));
 		
 		$response['success'] =true;
 		return $response;
@@ -57,10 +61,10 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 //	 */
 //	protected function actionTypes($params) {
 //		$response = array();		
-//		$response['outputTypes'] = $this->_getExportTypes(GO::config()->root_path.'go/base/export/');
+//		$response['outputTypes'] = $this->_getExportTypes(\GO::config()->root_path.'go/base/export/');
 //		
 //		if(!empty($params['exportClassPath']))
-//			$response['outputTypes'] = array_merge($response['outputTypes'], $this->_getExportTypes(GO::config()->root_path.$params['exportClassPath']));
+//			$response['outputTypes'] = array_merge($response['outputTypes'], $this->_getExportTypes(\GO::config()->root_path.$params['exportClassPath']));
 //		
 //		$response['success'] =true;
 //		return $response;
@@ -78,21 +82,21 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 		
 		$defaultTypes = array();
 		
-		$folder = new GO_Base_Fs_Folder($path);
+		$folder = new \GO\Base\Fs\Folder($path);
 		$contents = $folder->ls();
 		
 		$classParts = explode('/',$folder->stripRootPath());
 		
-		$classPath='GO_';
+		$classPath='GO\\';
 		foreach($classParts as $part){
 			if($part!='go' && $part != 'modules')
-				$classPath.=ucfirst($part).'_';
+				$classPath.=ucfirst($part).'\\';
 		}
 		
 		foreach($contents as $exporter) {
 			if(is_file($exporter->path())) {
 				$classname = $classPath.$exporter->nameWithoutExtension();
-				if($classname != 'GO_Base_Export_ExportInterface' && $classname != 'GO_Base_Export_Settings')
+				if($classname != '\GO\Base\Export\ExportInterface' && $classname != '\GO\Base\Export\Settings')
 				{
 					//$export = new $classname('temp');
 					

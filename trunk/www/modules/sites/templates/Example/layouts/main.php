@@ -18,10 +18,10 @@
 
 			<?php if($this->getAction()!='newtrial') : ?>
 				<div id="login">
-					<?php if(!GO::user()) : ?>
+					<?php if(!\GO::user()) : ?>
 						<a href="<?php echo $this->createUrl("/sites/site/login"); ?>"><?php echo GOS::t('login'); ?></a> | <a href="<?php echo $this->createUrl("sites/site/register"); ?>"><?php echo GOS::t('register'); ?></a>
 					<?php else: ?>
-						Welcome <?php echo GO::user()->name; ?> | <a href="<?php echo $this->createUrl('/sites/site/profile'); ?>"><?php echo GOS::t('youraccount'); ?></a> | <a href="<?php echo $this->createUrl('/sites/site/logout'); ?>"><?php echo GOS::t('logout'); ?></a>
+						Welcome <?php echo \GO::user()->name; ?> | <a href="<?php echo $this->createUrl('/sites/site/profile'); ?>"><?php echo GOS::t('youraccount'); ?></a> | <a href="<?php echo $this->createUrl('/sites/site/logout'); ?>"><?php echo GOS::t('logout'); ?></a>
 					<?php endif; ?>
 				</div>
 			<?php endif; ?>
@@ -31,7 +31,7 @@
 				<div class="topmenu-container">
 					<div id="topmenu-item-center_43" class="topmenu-item-center topmenu-item-center_0">						
 				
-						<?php if(GO::modules()->isInstalled("webshop")): ?>
+						<?php if(\GO::modules()->isInstalled("webshop")): ?>
 						<div class="topmenu-item-left <?php if(GOS::site()->route=='webshop/site/products')echo 'selected'; ?>">
 							<div class="topmenu-item-right">
 								<a class="topmenu-item-center" href="<?php echo $this->createUrl('/webshop/site/products'); ?>">Products</a>
@@ -50,15 +50,15 @@
 								</div>
 							</div>
 						<?php endif; ?>
-						<?php if(GO::modules()->isInstalled("tickets")): ?>
+						<?php if(\GO::modules()->isInstalled("tickets")): ?>
 							<div class="topmenu-item-left <?php if(GOS::site()->route=='tickets/site/ticketlist' || GOS::site()->route=='tickets/site/ticket') echo 'selected'; ?>">
 								<div class="topmenu-item-right">
-									<a class="topmenu-item-center" href="<?php echo GO::user() ? $this->createUrl('tickets/site/ticketlist'): $this->createUrl('tickets/site/ticketLogin'); ?>">Support</a>
+									<a class="topmenu-item-center" href="<?php echo \GO::user() ? $this->createUrl('tickets/site/ticketlist'): $this->createUrl('tickets/site/ticketLogin'); ?>">Support</a>
 								</div>
 							</div>
 						<?php endif; ?>
 						
-						<?php if(GO::modules()->isInstalled("addressbook")): ?>
+						<?php if(\GO::modules()->isInstalled("addressbook")): ?>
 							<div class="topmenu-item-left <?php if(GOS::site()->route=='addressbook/site/contact' || GOS::site()->route=='tickets/site/ticket') echo 'selected'; ?>">
 								<div class="topmenu-item-right">
 									<a class="topmenu-item-center" href="<?php echo $this->createUrl('addressbook/site/contact'); ?>">Contact</a>

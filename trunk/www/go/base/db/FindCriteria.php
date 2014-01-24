@@ -9,7 +9,7 @@
  */
 
 /**
- * Create "where" criteria for the SQL query GO_Base_Db_ActiveRecord::find() function
+ * Create "where" criteria for the SQL query ActiveRecord::find() function
  *
  * @package GO.base.db
  * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
@@ -17,7 +17,11 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @author Wesley Smits <wsmits@intermesh.nl> 
  */
-class GO_Base_Db_FindCriteria {
+
+namespace GO\Base\Db;
+
+
+class FindCriteria {
 	
 	private $_condition='';
 	
@@ -33,7 +37,7 @@ class GO_Base_Db_FindCriteria {
 	/**
 	 * Get a new instance object of this class file
 	 * 
-	 * @return GO_Base_Db_FindCriteria 
+	 * @return FindCriteria 
 	 */
 	public static function newInstance(){
 		return new self;
@@ -43,7 +47,7 @@ class GO_Base_Db_FindCriteria {
 	 * Add a model to the criteria object so it can determine of which PDO type a column is.
 	 * You can also give an alias with it. If not then the alias defaults to "t".
 	 * 
-	 * @param GO_Base_Db_ActiveRecord $model An ActiveRecord model.
+	 * @param ActiveRecord $model An ActiveRecord model.
 	 * @param String $tableAlias The alias that this model needs to use. Default: 't'.
 	 */
 	public function addModel($model, $tableAlias='t'){
@@ -66,7 +70,7 @@ class GO_Base_Db_FindCriteria {
 	/**
 	 * Prevent warnings on column types when the model is unknown
 	 * 
-	 * @return GO_Base_Db_FindCriteria 
+	 * @return FindCriteria 
 	 */
 	public function ignoreUnknownColumns(){
 		$this->_ignoreUnknownColumns=true;
@@ -87,10 +91,10 @@ class GO_Base_Db_FindCriteria {
 		else{
 			$type= PDO::PARAM_STR;
 			if(!$this->_ignoreUnknownColumns){
-				//GO::debug("WARNING: Could not find column type for $tableAlias. $field in GO_Base_Db_FindCriteria. Using PDO::PARAM_STR. Do you need to use addModel?");
+				//\GO::debug("WARNING: Could not find column type for $tableAlias. $field in FindCriteria. Using PDO::PARAM_STR. Do you need to use addModel?");
 //				$trace = debug_backtrace();
 //				for($i=0;$i<count($trace);$i++){
-//					GO::debug($trace[$i]['class'].'::'.$trace[$i]['function']);
+//					\GO::debug($trace[$i]['class'].'::'.$trace[$i]['function']);
 //				}
 			
 			}
@@ -141,7 +145,7 @@ class GO_Base_Db_FindCriteria {
 	 * @param String $tableAlias The alias of the table for the $field parameter
 	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true. 
 	 * @param Boolean $valueIsColumn Treat the value as a column name. In this case the value must contain the table alias too if necessary.
-	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
+	 * @return FindCriteria The complete FindCriteria object is given as a return value.
 	 */
 	public function addCondition($field, $value, $comparator='=',$tableAlias='t', $useAnd=true, $valueIsColumn=false) {
 		
@@ -167,7 +171,7 @@ class GO_Base_Db_FindCriteria {
 	 * @param String $value The value of the field for this condition.
 	 * @param String $comparator How needs this field be compared with the value. Can be ('<','>','<>','=<','>=','=').
 	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true. 
-	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
+	 * @return FindCriteria The complete FindCriteria object is given as a return value.
 	 */
 	public function addRawCondition($value1, $value2, $comparator='=', $useAnd=true) {
 		$this->_appendOperator($useAnd);
@@ -181,7 +185,7 @@ class GO_Base_Db_FindCriteria {
 	 * @param string $paramTag eg. ":paramName"
 	 * @param mixed $value
 	 * @param int $pdoType
- 	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
+ 	 * @return FindCriteria The complete FindCriteria object is given as a return value.
 	 */
 	public function addBindParameter($paramTag, $value, $pdoType=PDO::PARAM_STR){
 		$this->addParams(array($paramTag=>array($value, $pdoType)));
@@ -211,7 +215,7 @@ class GO_Base_Db_FindCriteria {
 	 * @param String $tableAlias The alias of the table in this SQL statement.
 	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true.
 	 * @param Boolean $useNot True for 'NOT IN', false for 'IN'. Default: false.
-	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
+	 * @return FindCriteria The complete FindCriteria object is given as a return value.
 	 */
 	public function addInCondition($field, $values, $tableAlias='t', $useAnd=true, $useNot=false) {	
 				
@@ -254,7 +258,7 @@ class GO_Base_Db_FindCriteria {
 	 * @param String $tableAlias The alias of the table in this SQL statement.
 	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true.
 	 * @param Boolean $useNot True for 'NOT IN', false for 'IN'. Default: false.
-	 * @return \GO_Base_Db_FindCriteria
+	 * @return \FindCriteria
 	 * @throws Exception
 	 */
 	public function addInTemporaryTableCondition($tableName, $field, $values, $tableAlias='t', $useAnd=true, $useNot=false){
@@ -277,19 +281,19 @@ class GO_Base_Db_FindCriteria {
 				`id` int(11) NOT NULL,
 				PRIMARY KEY (`id`)
 			);";
-			GO::getDbConnection()->query($sql);
+			\GO::getDbConnection()->query($sql);
 
 			self::$_temporaryTables[$tableName]=true;
 		}else
 		{
-			GO::getDbConnection()->query("TRUNCATE TABLE `$tableName`");
+			\GO::getDbConnection()->query("TRUNCATE TABLE `$tableName`");
 		}
 		
 		$this->sleepingTempTables[$tableName]=$values;
 
 
 		$sql = "INSERT INTO `$tableName` (id) VALUES (".implode('),(', $values).")";
-		GO::getDbConnection()->query($sql);
+		\GO::getDbConnection()->query($sql);
 	}
 	
 	private $sleepingTempTables=array();
@@ -312,7 +316,7 @@ class GO_Base_Db_FindCriteria {
 	 * @param string $tableAlias
 	 * @param boolean $useAnd
 	 * @param string $mode
-	 * @return GO_Base_Db_FindCriteria 
+	 * @return FindCriteria 
 	 */
 	public function addMatchCondition($field, $matchQuery, $tableAlias='t', $useAnd=true, $mode='BOOLEAN'){
 		$this->_appendOperator($useAnd);
@@ -345,7 +349,7 @@ class GO_Base_Db_FindCriteria {
 	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true.
 	 * @param Boolean $useNot True for 'NOT LIKE', false for 'LIKE'. Default: false.
 	 * @param Boolean $useExact True if you need an exact match for the given value, false if it needs to be a part of the given value. Default: false.
-	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
+	 * @return FindCriteria The complete FindCriteria object is given as a return value.
 	 */
 	public function addSearchCondition($field, $value, $useAnd=true, $useNot=false, $useExact=false) {
 		
@@ -371,7 +375,7 @@ class GO_Base_Db_FindCriteria {
 	}
 	
 	/**
-	 * Returns the current condition value of this GO_Base_Db_FindCriteria object as a string.
+	 * Returns the current condition value of this FindCriteria object as a string.
 	 * 
 	 * @return String Current condition value.
 	 */
@@ -380,7 +384,7 @@ class GO_Base_Db_FindCriteria {
 	}
 	
 	/**
-	 * Returns the current parameter values of this GO_Base_Db_FindCriteria object as an array.
+	 * Returns the current parameter values of this FindCriteria object as an array.
 	 * 
 	 * @return Array Current parameter values.
 	 */
@@ -389,14 +393,14 @@ class GO_Base_Db_FindCriteria {
 	}
 	
 	/**
-	 * Merge an other GO_Base_Db_FindCriteria object together with this GO_Base_Db_FindCriteria object.
-	 * Then returns the complete merged GO_Base_Db_FindCriteria object.
+	 * Merge an other FindCriteria object together with this FindCriteria object.
+	 * Then returns the complete merged FindCriteria object.
 	 * 
-	 * @param GO_Base_Db_FindCriteria $criteria The GO_Base_Db_FindCriteria object that needs to be merged with this GO_Base_Db_FindCriteria object.
+	 * @param FindCriteria $criteria The FindCriteria object that needs to be merged with this FindCriteria object.
 	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true.
-	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
+	 * @return FindCriteria The complete FindCriteria object is given as a return value.
 	 */
-	public function mergeWith(GO_Base_Db_FindCriteria $criteria, $useAnd=true) {
+	public function mergeWith(FindCriteria $criteria, $useAnd=true) {
 		
 		$condition = $criteria->getCondition();
 		
@@ -419,7 +423,7 @@ class GO_Base_Db_FindCriteria {
 	}
 	
 	/**
-	 * Add extra params to bind to the query. This is used by GO_Base_Db_FindParams::join()
+	 * Add extra params to bind to the query. This is used by FindParams::join()
 	 * 
 	 * @var array $params
 	 */

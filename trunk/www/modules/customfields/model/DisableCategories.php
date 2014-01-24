@@ -17,19 +17,23 @@
  */
   
 /**
- * The GO_Customfields_Model_DisableCategories model
+ * The DisableCategories model
  *
  * @package GO.modules.customfields.model
  * @property string $model_name
  * @property int $model_id
  */
 
-class GO_Customfields_Model_DisableCategories extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Customfields\Model;
+
+
+class DisableCategories extends \GO\Base\Db\ActiveRecord{
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Customfields_Model_Category 
+	 * @return Category 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -53,7 +57,7 @@ class GO_Customfields_Model_DisableCategories extends GO_Base_Db_ActiveRecord{
 	 * @return boolean 
 	 */
 	public static function isEnabled($model_name, $model_id){
-		$model = GO_Customfields_Model_DisableCategories::model()->findByPk(array('model_id'=>$model_id,'model_name'=>$model_name));
+		$model = DisableCategories::model()->findByPk(array('model_id'=>$model_id,'model_name'=>$model_name));
 		
 		return $model!=false;
 	}

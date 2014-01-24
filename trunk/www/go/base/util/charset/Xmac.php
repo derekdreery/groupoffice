@@ -27,7 +27,11 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  */
 
-class GO_Base_Util_Charset_Xmac {
+
+namespace GO\Base\Util\Charset;
+
+
+class Xmac {
 
 	public static $map = array(
 
@@ -176,7 +180,7 @@ class GO_Base_Util_Charset_Xmac {
 
 	public static function toUtf8($string, $charset) {
 
-		if(!GO_Base_Util_String::is8bit($string,$charset))
+		if(!\GO\Base\Util\String::is8bit($string,$charset))
 			return $string;
 		
 //		$searches = array();

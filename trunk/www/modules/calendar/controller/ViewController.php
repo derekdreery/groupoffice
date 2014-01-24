@@ -9,19 +9,23 @@
  */
 
 /**
- * The GO_Calendar_Controller_View controller
+ * The View controller
  *
  * @package GO.modules.Calendar
- * @version $Id: GO_Calendar_Controller_View.php 7607 2012-04-12 13:37:41Z <<USERNAME>> $
+ * @version $Id: View.php 7607 2012-04-12 13:37:41Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
 
-class GO_Calendar_Controller_View extends GO_Base_Controller_AbstractModelController {
 
-	protected $model = 'GO_Calendar_Model_View';
+namespace GO\Calendar\Controller;
+
+
+class View extends \GO\Base\Controller\AbstractModelController {
+
+	protected $model = '\GO\Calendar\Model\View';
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name','$model->user->name',array(),'user_id');
 		return parent::formatColumns($columnModel);
 	}
