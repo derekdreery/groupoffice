@@ -1055,7 +1055,7 @@ class GO{
 	 * Find classes in a folder
 	 *
 	 * @param string $path Relative from go/base
-	 * @return ReflectionClass[]
+	 * @return \ReflectionClass[]
 	 */
 	public static function findClasses($subfolder){
 
@@ -1068,7 +1068,7 @@ class GO{
 			foreach($items as $item){
 				if($item instanceof GO_Base_Fs_File){
 					$className = 'GO_Base_'.ucfirst($subfolder).'_'.$item->nameWithoutExtension();
-					$classes[] = new ReflectionClass($className);
+					$classes[] = new \ReflectionClass($className);
 				}
 			}
 		}
@@ -1081,7 +1081,7 @@ class GO{
 	 * Find classes in a folder
 	 *
 	 * @param string $path Relative from $config['file_storage_path'].'php/'
-	 * @return ReflectionClass[]
+	 * @return \ReflectionClass[]
 	 */
 	public static function findFsClasses($subfolder, $subClassOf=null){
 
@@ -1103,7 +1103,7 @@ class GO{
 					
 					$className .= $item->nameWithoutExtension();
 					
-					$rc = new ReflectionClass($className);
+					$rc = new \ReflectionClass($className);
 					
 					if($subClassOf==null || $rc->isSubclassOf($subClassOf))
 						$classes[] = $rc;
