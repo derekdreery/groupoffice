@@ -403,7 +403,7 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * Find all classes in a folder.
 	 * 
 	 * @param string $subfolder
-	 * @return ReflectionClass array
+	 * @return \ReflectionClass array
 	 */
 	public function findClasses($subfolder){
 		
@@ -421,7 +421,7 @@ class GO_Base_Module extends GO_Base_Observable {
 					
 					$className = 'GO_'.ucfirst($this->id()).'_'.implode('_',$subParts).'_'.$item->nameWithoutExtension();			
 					if(class_exists($className)){
-						$reflectionClass = new ReflectionClass($className);
+						$reflectionClass = new \ReflectionClass($className);
 						if(!$reflectionClass->isAbstract())
 							$classes[] = $reflectionClass;					
 					}

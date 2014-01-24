@@ -1,6 +1,6 @@
 <?php
 
-class GO_Base_Util_ReflectionClass extends ReflectionClass {
+class GO_Base_Util_ReflectionClass extends \ReflectionClass {
 
 	
 	private $_overriddenMethods;
@@ -44,7 +44,7 @@ class GO_Base_Util_ReflectionClass extends ReflectionClass {
 
 			//find all public and protected methods in ParentClass
 			$parentMethods = $parentClass->getMethods(
-							ReflectionMethod::IS_PUBLIC ^ ReflectionMethod::IS_PROTECTED
+							\ReflectionMethod::IS_PUBLIC ^ \ReflectionMethod::IS_PROTECTED
 			);
 
 			//find all parentmethods that were redeclared in ChildClass

@@ -20,7 +20,7 @@
  * @package GO.base.db
  */
 
-class GO_Base_Db_ActiveStatement implements IteratorAggregate {
+class GO_Base_Db_ActiveStatement implements \IteratorAggregate {
 	
   /**
    * The model type this statement result returns.
@@ -68,12 +68,12 @@ class GO_Base_Db_ActiveStatement implements IteratorAggregate {
 //	public static $idCount=0;
 //	public static $aliveStmts=array();
 
-  public function __construct(PDOStatement $stmt, GO_Base_Db_ActiveRecord $model) {
+  public function __construct(\PDOStatement $stmt, GO_Base_Db_ActiveRecord $model) {
     $this->stmt=$stmt;
 		
 		$this->model=$model;
 		
-		$stmt->setFetchMode(PDO::FETCH_CLASS, $model->className(),array(false));
+		$stmt->setFetchMode(\PDO::FETCH_CLASS, $model->className(),array(false));
 		
 //		$this->id=self::$idCount++;
 //		

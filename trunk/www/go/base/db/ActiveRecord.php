@@ -2403,11 +2403,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 		if(!isset(self::$_magicAttributeNames[$this->className()])){
 			self::$_magicAttributeNames[$this->className()]=array();
-			$r = new ReflectionObject($this);
-			$publicProperties = $r->getProperties(ReflectionProperty::IS_PUBLIC);
+			$r = new \ReflectionObject($this);
+			$publicProperties = $r->getProperties(\ReflectionProperty::IS_PUBLIC);
 			foreach($publicProperties as $prop){
 				//$att[$prop->getName()]=$prop->getValue($this);
-				//$prop = new ReflectionProperty();
+				//$prop = new \ReflectionProperty();
 				if(!$prop->isStatic()) {
 					//$this->_magicAttributeNames[]=$prop->getName();
 					self::$_magicAttributeNames[$this->className()][]=$prop->name;
