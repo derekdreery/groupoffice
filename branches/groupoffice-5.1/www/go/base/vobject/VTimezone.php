@@ -7,6 +7,11 @@ class GO_Base_VObject_VTimezone extends Sabre\VObject\Document {
 
 	 static public $defaultName = 'VTIMEZONE';
 	 
+	 
+	  static public $propertyMap = array(
+			 'RRULE'         => 'Sabre\\VObject\\Property\\ICalendar\\Recur',
+	 );
+	 
 	/**
 	 * Creates a new component.
 	 *
