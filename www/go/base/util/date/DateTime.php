@@ -18,7 +18,11 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.util.date
  */
-class GO_Base_Util_Date_DateTime extends DateTime {
+
+namespace GO\Base\Util\Date;
+
+
+class DateTime extends DateTime {
 
   /**
    * Overwrite constructor to used groupoffice default timezone and not systems default timezone
@@ -27,8 +31,8 @@ class GO_Base_Util_Date_DateTime extends DateTime {
    */
   public function __construct($time="now", $timezone=null) {
 	if($timezone===null) {
-	  $tz = GO::user() ? GO::user()->timezone : GO::config()->default_timezone;
-	  $timezone = new DateTimeZone($tz);
+	  $tz = \GO::user() ? \GO::user()->timezone : \GO::config()->default_timezone;
+	  $timezone = new \DateTimeZone($tz);
 	}
 	parent::__construct($time, $timezone);
   }
@@ -37,19 +41,19 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	 * Create a date time object with timezone information with a unixtime stamp
 	 * @depricated DateTime('@'.$unixtime) works as well
 	 * @param int $unixtime
-	 * @return GO_Base_Util_Date_DateTime 
+	 * @return DateTime 
 	 */
 	public static function fromUnixtime($unixtime) {
-		return new self(date('Y-m-d H:i:s', $unixtime), new DateTimeZone(date_default_timezone_get()));
+		return new self(date('Y-m-d H:i:s', $unixtime), new \DateTimeZone(date_default_timezone_get()));
 	}
 	
 	/**
 	 * Get the easter date time object with the correct timezone
 	 * @param int $year
-	 * @return GO_Base_Util_Date_DateTime
+	 * @return DateTime
 	 */
 	public static function getEasterDatetime($year) {
-			$base = new GO_Base_Util_Date_DateTime("$year-03-21");
+			$base = new \DateTime("$year-03-21");
 			$days = easter_days($year);
 
 			return $base->add(new DateInterval("P{$days}D"));
@@ -65,29 +69,29 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	public function format($format=null)
 	{
 	  if($format===null) {
-		//$format = GO::user() ? GO::user()->date_format . " " . GO::user()->time_format : GO::config()->default_date_format . " " . GO::config()->default_time_format;
-		return GO_Base_Util_Date::get_timestamp($this->getTimestamp());
+		//$format = \GO::user() ? \GO::user()->date_format . " " . \GO::user()->time_format : \GO::config()->default_date_format . " " . \GO::config()->default_time_format;
+		return \GO\Base\Util\Date::get_timestamp($this->getTimestamp());
 	  }
 	  return parent::format($format);
 	}
 	
 	/**
-	 * Format the DateTime object in a GO::user respected time format
+	 * Format the DateTime object in a \GO::user respected time format
 	 * @param DateTimeZone $timezone
 	 * @return string The formatted time
 	 */
 	public function formatTime() {
-	  $timeFormat = GO::user() ? GO::user()->time_format : GO::config()->default_time_format;
+	  $timeFormat = \GO::user() ? \GO::user()->time_format : \GO::config()->default_time_format;
 	  return parent::format($timeFormat);
 	}
 	
 	/**
-	 * Format the DateTime object in a GO::user respected date format
+	 * Format the DateTime object in a \GO::user respected date format
 	 * @param DateTimeZone $timezone
 	 * @return string The formatted time
 	 */
 	public function formatDate() {
-	  $dateFormat = GO::user() ? GO::user()->completeDateFormat : GO::config()->getCompleteDateFormat();
+	  $dateFormat = \GO::user() ? \GO::user()->completeDateFormat : \GO::config()->getCompleteDateFormat();
 	  return parent::format($dateFormat);
 	}
 
@@ -95,7 +99,7 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	 * Get the number of days elapsed. We could not use DateTime::diff() because it's only
 	 * compatible with PHP 5.3
 	 * @deprecated since version 4.1
-	 * @param GO_Base_Util_Date_DateTime $dateTime
+	 * @param DateTime $dateTime
 	 * @return int 
 	 */
 	public function getDaysElapsed($dateTime) {
@@ -109,7 +113,7 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 //	 * Get an array with elapsed days, hours and minutes that can be used for
 //	 * addDiffCompat. These functions are for php 5.2 compatibility.
 //	 * 
-//	 * @param GO_Base_Util_Date_DateTime $dateTime
+//	 * @param DateTime $dateTime
 //	 * @return array 
 //	 */
 //	public function getDiffCompat($dateTime){
@@ -245,22 +249,22 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 		$string = '';
 
 		if (!empty($diff->y))
-			$string .= $diff->y . ' ' . GO::t('strYears') . ', ';
+			$string .= $diff->y . ' ' . \GO::t('strYears') . ', ';
 
 		if (!empty($diff->m))
-			$string .= $diff->m . ' ' . GO::t('strMonths') . ', ';
+			$string .= $diff->m . ' ' . \GO::t('strMonths') . ', ';
 
 		if (!empty($diff->d))
-			$string .= $diff->d . ' ' . GO::t('strDays') . ', ';
+			$string .= $diff->d . ' ' . \GO::t('strDays') . ', ';
 
 		if (!empty($diff->h))
-			$string .= $diff->h . ' ' . GO::t('strHours') . ', ';
+			$string .= $diff->h . ' ' . \GO::t('strHours') . ', ';
 
 		if (!empty($diff->i))
-			$string .= $diff->i . ' ' . GO::t('strMinutes');
+			$string .= $diff->i . ' ' . \GO::t('strMinutes');
 
 //		if(!empty($diff['s']))
-//			$string .= $diff['s'].' '.GO::t('strSeconds');
+//			$string .= $diff['s'].' '.\GO::t('strSeconds');
 
 		return rtrim($string,', ');
 	}

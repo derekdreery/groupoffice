@@ -244,7 +244,7 @@ class CronExpression
             $currentDate = $currentTime->format('Y-m-d H:i');
             $currentTime = strtotime($currentDate);
         } else {
-            $currentTime = new DateTime($currentTime);
+            $currentTime = new \DateTime($currentTime);
             $currentTime->setTime($currentTime->format('H'), $currentTime->format('i'), 0);
             $currentDate = $currentTime->format('Y-m-d H:i');
             $currentTime = $currentTime->getTimeStamp();
@@ -269,10 +269,10 @@ class CronExpression
     {
         $currentDate = $currentTime instanceof DateTime
             ? $currentTime
-            : new DateTime($currentTime ?: 'now');
+            : new \DateTime($currentTime ?: 'now');
 
         // set the timezone
-        $currentDate->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        $currentDate->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
         $currentDate->setTime($currentDate->format('H'), $currentDate->format('i'), 0);
         $nextRun = clone $currentDate;

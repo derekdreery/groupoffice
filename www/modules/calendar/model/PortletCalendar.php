@@ -9,7 +9,7 @@
  */
  
 /**
- * The GO_Calendar_Model_PortletCalendar model
+ * The PortletCalendar model
  *
  * @package GO.modules.Calendar
  * @version $Id: PortletCalendar.php 7607 2011-09-20 10:07:07Z wsmits $
@@ -21,12 +21,16 @@
  * @property int $calendar_id
  */
 
-class GO_Calendar_Model_PortletCalendar extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Calendar\Model;
+
+
+class PortletCalendar extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 *
 	 * @param type $className
-	 * @return GO_Calendar_Model_PortletCalendar 
+	 * @return PortletCalendar 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -43,7 +47,7 @@ class GO_Calendar_Model_PortletCalendar extends GO_Base_Db_ActiveRecord {
 	
 	public function relations() {
 		return array(
-			'calendar' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Calendar', 'field' => 'calendar_id', 'delete' => false),
+			'calendar' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Calendar', 'field' => 'calendar_id', 'delete' => false),
 			);
 	}
 	

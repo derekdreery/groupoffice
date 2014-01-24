@@ -1,6 +1,10 @@
 <?php
 
-class GO_Site_Controller_Front extends GO_Site_Components_Controller {
+
+namespace GO\Site\Controller;
+
+
+class Front extends \GO\Site\Components\Controller {
 	protected function allowGuests() {
 		return array('content','thumb','search','ajaxwidget', 'sitemap');
 	}
@@ -10,7 +14,7 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 		if(!isset($params['slug']))
 			$params['slug']='';
 		
-		$content = GO_Site_Model_Content::model()->findBySlug($params['slug']);
+		$content = \GO\Site\Model\Content::model()->findBySlug($params['slug']);
 		
 		if(!$content){
 			
@@ -49,9 +53,9 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 		$searchString = $params['searchString'];
 		
 		
-		$searchParams = GO_Base_Db_FindParams::newInstance()
+		$searchParams = \GO\Base\Db\FindParams::newInstance()
 						->select('*')
-						->criteria(GO_Base_Db_FindCriteria::newInstance()
+						->criteria(\GO\Base\Db\FindCriteria::newInstance()
 										->addSearchCondition('title', $searchString, false)
 										->addSearchCondition('meta_title', $searchString, false)
 										->addSearchCondition('meta_description', $searchString, false)
@@ -59,8 +63,8 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 										->addSearchCondition('content', $searchString, false)
 							);
 		
-		$columnModel = new GO_Base_Data_ColumnModel();
-		$store = new GO_Base_Data_DbStore('GO_Site_Model_Content',$columnModel,$params,$searchParams);
+		$columnModel = new \GO\Base\Data\ColumnModel();
+		$store = new \GO\Base\Data\DbStore('\GO\Site\Model\Content',$columnModel,$params,$searchParams);
 	
 		echo $this->render('search', array('searchResults'=>$store));
 	}
@@ -70,7 +74,7 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	 * @param array $params [empty]
 	 */
 	protected function actionSitemap($params) {
-		$sitemap = GO_Site_Model_Content::getTreeNodes(2);
+		$sitemap = \GO\Site\Model\Content::getTreeNodes(2);
 		
 		echo $this->render('sitemap', array('sitemap'=>$sitemap));
 	}
@@ -81,21 +85,21 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	 * @param array $params
 	 * - stromg src: path the the file relative the the sites public storage folder.
 	 * @return the rsult of the thumb action on the core controller
-	 * @throws GO_Base_Exception_AccessDenied when unable to create the folder?
+	 * @throws \GO\Base\Exception\AccessDenied when unable to create the folder?
 	 */
 	protected function actionThumb($params){
 			
-		$rootFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'site/'.Site::model()->id);
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'site/'.Site::model()->id.'/'.$params['src']);
+		$rootFolder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'site/'.Site::model()->id);
+		$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.'site/'.Site::model()->id.'/'.$params['src']);
 		$folder = $file->parent();
 		
 		$ok = $folder->isSubFolderOf($rootFolder);
 		
 		if(!$ok)
-			throw new GO_Base_Exception_AccessDenied();
+			throw new \GO\Base\Exception\AccessDenied();
 		
 		
-		$c = new GO_Core_Controller_Core();
+		$c = new \GO\Core\Controller\Core();
 		return $c->run('thumb', $params, true, false);
 	}
 	
@@ -104,7 +108,7 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	 * Using an AJAX call this the controller action
 	 * 
 	 * @param array $params
-	 * - string widget_class eg. 'GO_Site_Widget_Plupload_Widget'
+	 * - string widget_class eg. '\GO\Site\Widget\Plupload\Widget'
 	 * - string widget_method name of the widgets static method eg. 'upload'
 	 * @throws Exception when not all required parameters are supplied
 	 */

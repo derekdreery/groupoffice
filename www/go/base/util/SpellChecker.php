@@ -6,7 +6,11 @@
  * @author Michal Charvát <michal.charvat@zdeno.net>
  */
 
-class GO_Base_Util_SpellChecker {
+
+namespace GO\Base\Util;
+
+
+class SpellChecker {
 
     private static $_pLink;
 
@@ -80,7 +84,7 @@ class GO_Base_Util_SpellChecker {
                 $out .= $before . $sugestion . $after;
             }
         }else{
-            $out .= $before. GO::t('No Sugestions') . $after;
+            $out .= $before. \GO::t('No Sugestions') . $after;
         }
         return $out;
     }

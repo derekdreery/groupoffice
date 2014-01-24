@@ -5,7 +5,7 @@ $this->setPageTitle("Error");
 
 <p style="color:red;"><?php echo $error->getMessage(); ?></p>
 
-<?php if(GO::config()->debug): ?>
+<?php if(\GO::config()->debug): ?>
 
 
 <pre><?php echo (string) $error; ?></pre>

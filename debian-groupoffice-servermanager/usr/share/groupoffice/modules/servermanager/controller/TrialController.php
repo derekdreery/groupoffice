@@ -1,6 +1,10 @@
 <?php
 
-class GO_Servermanager_Controller_Trial extends GO_Site_Components_Controller {
+
+namespace GO\Servermanager\Controller;
+
+
+class Trial extends \GO\Site\Components\Controller {
 
 	protected $newTrial;
 	
@@ -14,23 +18,23 @@ class GO_Servermanager_Controller_Trial extends GO_Site_Components_Controller {
 	 */
 	protected function actionNewTrial(){
 		
-		if(empty(GO::config()->servermanager_trials_enabled))
+		if(empty(\GO::config()->servermanager_trials_enabled))
 			throw new Exception("Trials are not enabled. Set \$config['servermanager_trials_enabled']=true;");
 		
-		if(!isset(GO::config()->servermanager_wildcard_domain))
+		if(!isset(\GO::config()->servermanager_wildcard_domain))
 			throw new Exception("\$config['servermanager_wildcard_domain']='example.com'; is not defined in /etc/groupoffice/config.php");
 		
 		
-		$newTrial =  new GO_ServerManager_Model_NewTrial();
+		$newTrial =  new \GO\ServerManager\Model\NewTrial();
 		
-		if (GO_Base_Util_Http::isPostRequest()) {
+		if (\GO\Base\Util\Http::isPostRequest()) {
 		
 			$newTrial->setAttributes($_POST['NewTrial']);
 			if($newTrial->validate())
 			{	
 				$newTrial->save();
 
-				$tplStr = file_get_contents(GO::config()->root_path.'modules/defaultsite/views/site/servermanager/emails/trial.txt');
+				$tplStr = file_get_contents(\GO::config()->root_path.'modules/defaultsite/views/site/servermanager/emails/trial.txt');
 				$newTrial->sendMail($tplStr);
 
 				$this->redirect(array('servermanager/trial/emailsent','key'=>$newTrial->key));
@@ -41,40 +45,40 @@ class GO_Servermanager_Controller_Trial extends GO_Site_Components_Controller {
 	}
 	
 	public function actionEmailSent(){
-		$newTrial = GO_ServerManager_Model_NewTrial::model()->findSingleByAttribute('key', $_REQUEST['key']);
+		$newTrial = \GO\ServerManager\Model\NewTrial::model()->findSingleByAttribute('key', $_REQUEST['key']);
 		echo $this->render('emailsent', array('model' => $newTrial));
 	}
 
 	public function actionCreate($params) {
 		
-		if(empty(GO::config()->servermanager_trials_enabled))
+		if(empty(\GO::config()->servermanager_trials_enabled))
 			throw new Exception("Trials are not enabled. Set \$config['servermanager_trials_enabled']=true;");
 
 	
-		$this->newTrial = GO_ServerManager_Model_NewTrial::model()->findSingleByAttribute('key', $params['key']);
+		$this->newTrial = \GO\ServerManager\Model\NewTrial::model()->findSingleByAttribute('key', $params['key']);
 		if(!$this->newTrial)
 			throw new Exception("Sorry, Could not find your trial subscription!");
 		
-		if (GO_Base_Util_Http::isPostRequest()) {
+		if (\GO\Base\Util\Http::isPostRequest()) {
 			
 			//clean up old trial requests that were never
-			$stmt = GO_ServerManager_Model_NewTrial::model()->find(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('ctime', GO_Base_Util_Date::date_add(time(),-1), '<')));
+			$stmt = \GO\ServerManager\Model\NewTrial::model()->find(\GO\Base\Db\FindParams::newInstance()->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('ctime', \GO\Base\Util\Date::date_add(time(),-1), '<')));
 			$stmt->callOnEach("delete");
 			
 			
-			$installation = new GO_ServerManager_Model_Installation();
-			$installation->status=GO_ServerManager_Model_Installation::STATUS_TRIAL;
-			$installation->name = $this->newTrial->name.'.'.GO::config()->servermanager_wildcard_domain;
+			$installation = new \GO\ServerManager\Model\Installation();
+			$installation->status=\GO\ServerManager\Model\Installation::STATUS_TRIAL;
+			$installation->name = $this->newTrial->name.'.'.\GO::config()->servermanager_wildcard_domain;
 			
-			if(GO_Base_Html_Error::validateModel($installation)){
+			if(\GO\Base\Html\Error::validateModel($installation)){
 
 				$installation->save();
 
 				$tmpConfigFile = $this->_createConfig($params, $installation, $this->newTrial);
 
-				$cmd = 'sudo TERM=dumb ' . GO::config()->root_path .
+				$cmd = 'sudo TERM=dumb ' . \GO::config()->root_path .
 								'groupofficecli.php -r=servermanager/installation/create' .
-								' -c=' . GO::config()->get_config_file() .
+								' -c=' . \GO::config()->get_config_file() .
 								' --tmp_config=' . $tmpConfigFile->path() .
 								' --name=' . $installation->name.
 								' --adminpassword=' . $this->newTrial->password . ' 2>&1';
@@ -97,19 +101,19 @@ class GO_Servermanager_Controller_Trial extends GO_Site_Components_Controller {
 	}
 	
 	
-	private function _createConfig($params, GO_ServerManager_Model_Installation $model, GO_ServerManager_Model_NewTrial $newTrial) {
+	private function _createConfig($params, \GO\ServerManager\Model\Installation $model, \GO\ServerManager\Model\NewTrial $newTrial) {
 		
 		if(!file_exists($model->configPath)){
 			//only create these values on new config files.
 			
 			//for testing		
-			$config['debug']=GO::config()->debug;
+			$config['debug']=\GO::config()->debug;
 
 			$config['id']=$model->dbName;
 			$config['db_name']=$model->dbName;
 			$config['db_user']=$model->dbUser;
-			$config['db_host']=GO::config()->db_host;
-			$config['db_pass']= GO_Base_Util_String::randomPassword(8,'a-z,A-Z,1-9');
+			$config['db_host']=\GO::config()->db_host;
+			$config['db_pass']= \GO\Base\Util\String::randomPassword(8,'a-z,A-Z,1-9');
 			$config['host']='/';
 			$config['root_path']=$model->installPath.'groupoffice/';
 			$config['tmpdir']='/tmp/'.$model->name.'/';
@@ -136,12 +140,12 @@ class GO_Servermanager_Controller_Trial extends GO_Site_Components_Controller {
 		if (intval($config['max_users']) < 1)
 			throw new Exception('You must set a maximum number of users');
 
-		if (!GO_Base_Util_String::validate_email($config['webmaster_email']))
-			throw new Exception(GO::t('invalidEmail','servermanager'));
+		if (!\GO\Base\Util\String::validate_email($config['webmaster_email']))
+			throw new Exception(\GO::t('invalidEmail','servermanager'));
 		
-		$tmpFile = GO_Base_Fs_File::tempFile('', 'php');
+		$tmpFile = \GO\Base\Fs\File::tempFile('', 'php');
 		
-		if(!GO_Base_Util_ConfigEditor::save($tmpFile, $config)){
+		if(!\GO\Base\Util\ConfigEditor::save($tmpFile, $config)){
 			throw new Exception("Failed to save config file!");
 		}
 		

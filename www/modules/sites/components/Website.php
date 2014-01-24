@@ -17,17 +17,21 @@
  * @version $Id Website.php 2012-06-07 14:11:08 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  * 
- * @property GO_Sites_Components_Notifier $notifier notification object for success/error messages
- * @property GO_Sites_Components_AbstractFrontController $controller The current accessed controller
- * @property GO_Sites_Components_Request $request The request component.
- * @property GO_Sites_Components_UrlManager $urlManager The URL manager component.
- * @property GO_Sites_Components_Scripts $scripts Component for adden clientside scripts to the template
+ * @property Notifier $notifier notification object for success/error messages
+ * @property AbstractFrontController $controller The current accessed controller
+ * @property Request $request The request component.
+ * @property UrlManager $urlManager The URL manager component.
+ * @property Scripts $scripts Component for adden clientside scripts to the template
  * @property string $baseUrl The relative URL for the application.
  * @property string $route The homepage URL.
  * @property string $name Name of the website.
- * @property GO_Sites_Model_Site $site website active record object.
+ * @property \GO\Sites\Model\Site $site website active record object.
  */
-class GO_Sites_Components_Website {
+
+namespace GO\Sites\Components;
+
+
+class Website {
 
 	/**
 	 * @return string the route of the default controller, action or module. Defaults to 'sites/site'.
@@ -42,7 +46,7 @@ class GO_Sites_Components_Website {
 
 	/**
 	 *
-	 * @var GO_Sites_Components_AbstractFrontController 
+	 * @var AbstractFrontController 
 	 */
 	private $_controller; //To current controllers that was called
 	private $_request;
@@ -50,7 +54,7 @@ class GO_Sites_Components_Website {
 	/**
 	 * The config object
 	 * 
-	 * @var GO_Sites_Components_Config 
+	 * @var Config 
 	 */
 	private $_siteconfig;
 	private $_urlManager;
@@ -67,23 +71,23 @@ class GO_Sites_Components_Website {
 		
 		
 		if(isset($_GET['site_id']))
-			GO::session()->values['sites']['site_id']=$_GET['site_id'];
+			\GO::session()->values['sites']['site_id']=$_GET['site_id'];
 		
-		if(!empty(GO::session()->values['sites']['site_id'])){
-			$site = GO_Sites_Model_Site::model()->findByPk(GO::session()->values['sites']['site_id']);
+		if(!empty(\GO::session()->values['sites']['site_id'])){
+			$site = \GO\Sites\Model\Site::model()->findByPk(\GO::session()->values['sites']['site_id']);
 		}else
 		{
 			// Find the website model from its domainname
-			$site = GO_Sites_Model_Site::model()->findSingleByAttribute('domain', $_SERVER["SERVER_NAME"]);
+			$site = \GO\Sites\Model\Site::model()->findSingleByAttribute('domain', $_SERVER["SERVER_NAME"]);
 		}
 		
 		if (!$site)
-			throw new GO_Base_Exception_NotFound('Website not found in database');
+			throw new \GO\Base\Exception\NotFound('Website not found in database');
 		
 		$this->_site = $site;
 
 		// Set the language of GO itself to the same language as the website.
-		GO::language()->setLanguage($this->_site->language);
+		\GO::language()->setLanguage($this->_site->language);
 	}
 
 	/**
@@ -109,7 +113,7 @@ class GO_Sites_Components_Website {
 
 	public function getScripts() {
 		if ($this->_scripts == null)
-			$this->_scripts = new GO_Sites_Components_Scripts();
+			$this->_scripts = new Scripts();
 		return $this->_scripts;
 	}
 
@@ -134,7 +138,7 @@ class GO_Sites_Components_Website {
 	}
 
 	public function run($siteconfig = array()) {
-		$this->_siteconfig = new GO_Sites_Components_Config($siteconfig);
+		$this->_siteconfig = new Config($siteconfig);
 		$this->processRequest();
 	}
 
@@ -151,7 +155,7 @@ class GO_Sites_Components_Website {
 	/**
 	 * Creates the controller and performs the specified action.
 	 * @param string $route the route of the current request. See {@link createController} for more details.
-	 * @throws GO_Base_Exception_NotFound if the controller could not be created.
+	 * @throws \GO\Base\Exception\NotFound if the controller could not be created.
 	 */
 	public function runController($route) {
 		$this->_route = $route;
@@ -163,10 +167,10 @@ class GO_Sites_Components_Website {
 			$controller->run($actionID, $_REQUEST);
 		}
 		else
-			throw new GO_Base_Exception_NotFound('Unable to resolve the request "' . $route . '".');
+			throw new \GO\Base\Exception\NotFound('Unable to resolve the request "' . $route . '".');
 //		} catch (Exception $e)
 //		{
-//			$controller = new GO_Sites_Controller_Site($this);
+//			$controller = new \GO\Sites\Controller\Site($this);
 //			$controller->template = $this->_site->template;
 //			$this->_controller = $controller;
 //			$controller->render('error', array('error'=>$e));
@@ -192,23 +196,23 @@ class GO_Sites_Components_Website {
 		$aroute = explode('/', $route);
 		$module_id = $aroute[0];
 		if (!isset($aroute[1]))
-			throw new GO_Base_Exception_NotFound('No controller specified in url');
+			throw new \GO\Base\Exception\NotFound('No controller specified in url');
 		$controller_id = $aroute[1];
 		if (!isset($aroute[2]))
-			throw new GO_Base_Exception_NotFound('No controller action specified in url');
+			throw new \GO\Base\Exception\NotFound('No controller action specified in url');
 		$action_id = $aroute[2];
 
-		$className = 'GO_' . ucfirst($module_id) . '_Controller_' . ucfirst($controller_id); //TODO: set $module
-		$classFile = GO::config()->root_path . 'modules/' . $module_id . '/controller' . DIRECTORY_SEPARATOR . ucfirst($controller_id) . 'Controller.php';
+		$className = 'GO\\' . ucfirst($module_id) . '\\Controller\\' . ucfirst($controller_id); //TODO: set $module
+		$classFile = \GO::config()->root_path . 'modules/' . $module_id . '/controller' . DIRECTORY_SEPARATOR . ucfirst($controller_id) . 'Controller.php';
 
 		if (is_file($classFile)) {
-			//if (is_subclass_of($className, 'GO_Sites_Components_AbstractFrontController')) {
+			//if (is_subclass_of($className, '\GO\Sites\Components\AbstractFrontController')) {
 			return array(
 					new $className($this),
 					$this->parseActionParams($action_id),
 			);
 			//}
-			//echo is_subclass_of($className, 'GO_Sites_Components_AbstractFrontController')  ? "is" : "not";
+			//echo is_subclass_of($className, '\GO\Sites\Components\AbstractFrontController')  ? "is" : "not";
 			return null;
 		}
 	}
@@ -231,19 +235,19 @@ class GO_Sites_Components_Website {
 
 	/**
 	 * 
-	 * @return GO_Sites_Components_AbstractFrontController
+	 * @return AbstractFrontController
 	 */
 	public function getController() {
 		return $this->_controller;
 	}
 
 	public function getBasePath() {
-		return GO::config()->root_path;
+		return \GO::config()->root_path;
 	}
 
 	public function getUrlManager() {
 		if ($this->_urlManager == null) {
-			$this->_urlManager = new GO_Sites_Components_UrlManager();
+			$this->_urlManager = new UrlManager();
 			$this->_urlManager->rules = require($this->getBasePath() . 'modules/sites/templates/' . $this->_site->template . '/config/urls.php');
 			$this->_urlManager->init();
 		}
@@ -252,25 +256,25 @@ class GO_Sites_Components_Website {
 
 	public function getAssets() {
 		if ($this->_assets == null)
-			$this->_assets = new GO_Sites_Components_Assets();
+			$this->_assets = new Assets();
 		return $this->_assets;
 	}
 
 	public function getNotifier() {
 		if ($this->_notifier == null)
-			$this->_notifier = new GO_Sites_Components_Notifier();
+			$this->_notifier = new Notifier();
 		return $this->_notifier;
 	}
 
 	public function getRequest() {
 		if ($this->_request == null)
-			$this->_request = new GO_Sites_Components_Request();
+			$this->_request = new Request();
 		return $this->_request;
 	}
 
 	public function getLanguage() {
 		if ($this->_language == null)
-			$this->_language = new GO_Sites_Components_Language($this->_site->language);
+			$this->_language = new Language($this->_site->language);
 		return $this->_language;
 	}
 

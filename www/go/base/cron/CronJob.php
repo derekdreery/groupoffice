@@ -33,7 +33,11 @@
  * @property int $completedat // timestamp of the latest run
  * 
  */
-class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Base\Cron;
+
+
+class CronJob extends \GO\Base\Db\ActiveRecord {
 		
 	public $paramsToSet = array();
 	
@@ -42,7 +46,7 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Notes_Model_Note 
+	 * @return \GO\Notes\Model\Note 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -76,14 +80,14 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	
 	public function relations() {
 		return array(
-				'users' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'cronjob_id', 'linkModel' => 'GO_Base_Cron_CronUser'),
-				'groups' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_Group', 'field'=>'cronjob_id', 'linkModel' => 'GO_Base_Cron_CronGroup'),
+				'users' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\User', 'field'=>'cronjob_id', 'linkModel' => '\GO\Base\Cron\CronUser'),
+				'groups' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\Group', 'field'=>'cronjob_id', 'linkModel' => '\GO\Base\Cron\CronGroup'),
 		);
 	}
 	
 	/**
 	 * TODO: IMPLEMENT AND RETURN THE STATEMENT
-	 * @return GO_Base_Db_ActiveStatement $stmnt
+	 * @return \GO\Base\Db\ActiveStatement $stmnt
 	 */
 	public function getAllUsers(){
 		
@@ -99,11 +103,11 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 								INNER JOIN `go_users_groups` ug ON `ug`.`group_id`=`cg`.`group_id`
 								WHERE `cg`.`cronjob_id`=:cronjob_id
 							);";
-		$stmnt = GO::getDbConnection()->prepare($query);
+		$stmnt = \GO::getDbConnection()->prepare($query);
 		$stmnt->bindParam("cronjob_id", $id, PDO::PARAM_INT);
 		$stmnt->execute();
 
-		$stmnt->setFetchMode(PDO::FETCH_CLASS, "GO_Base_Model_User",array(false));
+		$stmnt->setFetchMode(PDO::FETCH_CLASS, "\GO\Base\Model\User",array(false));
 		
 		return $stmnt;
 	}
@@ -117,22 +121,22 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	public function validate() {
 		
 		if(!$this->_validateExpression('minutes'))
-			$this->setValidationError('minutes', GO::t('minutesNotMatch','cron'));
+			$this->setValidationError('minutes', \GO::t('minutesNotMatch','cron'));
 		
 		if(!$this->_validateExpression('hours'))
-			$this->setValidationError('hours', GO::t('hoursNotMatch','cron'));
+			$this->setValidationError('hours', \GO::t('hoursNotMatch','cron'));
 		
 		if(!$this->_validateExpression('monthdays'))
-			$this->setValidationError('monthdays', GO::t('monthdaysNotMatch','cron'));
+			$this->setValidationError('monthdays', \GO::t('monthdaysNotMatch','cron'));
 		
 		if(!$this->_validateExpression('months'))
-			$this->setValidationError('months', GO::t('monthsNotMatch','cron'));
+			$this->setValidationError('months', \GO::t('monthsNotMatch','cron'));
 		
 		if(!$this->_validateExpression('weekdays'))
-			$this->setValidationError('weekdays', GO::t('weekdaysNotMatch','cron'));
+			$this->setValidationError('weekdays', \GO::t('weekdaysNotMatch','cron'));
 		
 		if(!$this->_validateExpression('years'))
-			$this->setValidationError('years', GO::t('yearsNotMatch','cron'));
+			$this->setValidationError('years', \GO::t('yearsNotMatch','cron'));
 		
 		if($this->hasValidationErrors())
 			$this->setValidationError('active', '<br /><br />'.$this->_getExampleFormats());
@@ -189,14 +193,14 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	}
 	
 	private function _getExampleFormats(){
-		return GO::t('exampleFormats','cron').
+		return \GO::t('exampleFormats','cron').
 			'<table>'.
-				'<tr><td>*</td><td>'.GO::t('exampleFormat1Explanation','cron').'</td></tr>'.
-				'<tr><td>1</td><td>'.GO::t('exampleFormat2Explanation','cron').'</td></tr>'.
-				'<tr><td>1-5</td><td>'.GO::t('exampleFormat3Explanation','cron').'</td></tr>'.
-				'<tr><td>0-23/2</td><td>'.GO::t('exampleFormat4Explanation','cron').'</td></tr>'.
-				'<tr><td>1,2,3,13,22</td><td>'.GO::t('exampleFormat5Explanation','cron').'</td></tr>'.
-				'<tr><td>0-4,8-12</td><td>'.GO::t('exampleFormat6Explanation','cron').'</td></tr>'.
+				'<tr><td>*</td><td>'.\GO::t('exampleFormat1Explanation','cron').'</td></tr>'.
+				'<tr><td>1</td><td>'.\GO::t('exampleFormat2Explanation','cron').'</td></tr>'.
+				'<tr><td>1-5</td><td>'.\GO::t('exampleFormat3Explanation','cron').'</td></tr>'.
+				'<tr><td>0-23/2</td><td>'.\GO::t('exampleFormat4Explanation','cron').'</td></tr>'.
+				'<tr><td>1,2,3,13,22</td><td>'.\GO::t('exampleFormat5Explanation','cron').'</td></tr>'.
+				'<tr><td>0-4,8-12</td><td>'.\GO::t('exampleFormat6Explanation','cron').'</td></tr>'.
 			'<table>';
 	}
 	
@@ -245,17 +249,17 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	 * @return int The next run time (timestamp)
 	 */
 	private function _calculateNextRun(){
-		$completeExpression = new GO_Base_Util_Cron($this->_buildExpression());
+		$completeExpression = new \GO\Base\Util\Cron($this->_buildExpression());
 		return $completeExpression->getNextRunDate()->getTimestamp();
 	}
 	
 	public function run(){
-		GO::session()->runAsRoot();
-		GO::debug('CRONJOB ('.$this->name.') START : '.date('d-m-Y H:i:s'));
+		\GO::session()->runAsRoot();
+		\GO::debug('CRONJOB ('.$this->name.') START : '.date('d-m-Y H:i:s'));
 		
 		if($this->_prepareRun()){
 			if(!class_exists($this->job)){
-				GO::debug('Abort because cron job class file is missing');
+				\GO::debug('Abort because cron job class file is missing');
 				return false;
 			}
 			// Run the specified cron file code
@@ -267,13 +271,13 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 				
 				$stmnt = $this->getAllUsers();
 				foreach($stmnt as $user){
-					GO::language()->setLanguage($user->language); // Set the users language
+					\GO::language()->setLanguage($user->language); // Set the users language
 					
-					GO::debug('CRONJOB ('.$this->name.') START FOR '.$user->username.' : '.date('d-m-Y H:i:s'));
+					\GO::debug('CRONJOB ('.$this->name.') START FOR '.$user->username.' : '.date('d-m-Y H:i:s'));
 					$cronFile->run($this,$user);
-					GO::debug('CRONJOB ('.$this->name.') FINSIHED FOR '.$user->username.' : '.date('d-m-Y H:i:s'));
+					\GO::debug('CRONJOB ('.$this->name.') FINSIHED FOR '.$user->username.' : '.date('d-m-Y H:i:s'));
 					
-					GO::language()->setLanguage(); // Set the admin language
+					\GO::language()->setLanguage(); // Set the admin language
 				}
 			} else {
 				$cronFile->run($this);
@@ -283,7 +287,7 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	
 			return true;
 		} else {
-			GO::debug('CRONJOB ('.$this->name.') FAILED TO RUN : '.date('d-m-Y H:i:s'));
+			\GO::debug('CRONJOB ('.$this->name.') FAILED TO RUN : '.date('d-m-Y H:i:s'));
 			return false;
 		}
 	}
@@ -294,7 +298,7 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 //		$this->params = $this->_paramsToJson();
 		
 		$this->nextrun = $this->_calculateNextRun();
-		GO::debug('CRONJOB ('.$this->name.') NEXTRUN : '.$this->getAttribute('nextrun','formatted'));
+		\GO::debug('CRONJOB ('.$this->name.') NEXTRUN : '.$this->getAttribute('nextrun','formatted'));
 		return parent::beforeSave();
 	}
 	
@@ -392,15 +396,15 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	private function _finishRun(){
 		if(!$this->runonce){
 			$this->active = true;
-			GO::debug('CRONJOB ('.$this->name.') IS REACTIVATED NOW');
+			\GO::debug('CRONJOB ('.$this->name.') IS REACTIVATED NOW');
 		} else {
-			GO::debug('CRONJOB ('.$this->name.') HAS RUNONCE OPTION, DISABLING NOW');
+			\GO::debug('CRONJOB ('.$this->name.') HAS RUNONCE OPTION, DISABLING NOW');
 		}
 		
 		$this->completedat = time();
 		$this->save();
 			
-		GO::debug('CRONJOB ('.$this->name.') FINISHED : '.date('d-m-Y H:i:s'));
+		\GO::debug('CRONJOB ('.$this->name.') FINISHED : '.date('d-m-Y H:i:s'));
 	}
 	
 }

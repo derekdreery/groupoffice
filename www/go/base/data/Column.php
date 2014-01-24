@@ -20,7 +20,11 @@
  * 
  */
 
-class GO_Base_Data_Column {
+
+namespace GO\Base\Data;
+
+
+class Column {
 	
 	/**
 	 * The dataindex name of this column
@@ -76,7 +80,7 @@ class GO_Base_Data_Column {
 	 * @param string $dataindex
 	 * @param string $label
 	 * @param int $sortIndex
-	 * @return GO_Base_Data_Column 
+	 * @return Column 
 	 */
 	public static function newInstance($dataindex, $label='', $sortIndex=0){
 		return new self($dataindex, $label, $sortIndex);
@@ -140,7 +144,7 @@ class GO_Base_Data_Column {
 	 * 
 	 * @param String $format
 	 * @param Array $extraVars
-	 * @return GO_Base_Data_Column 
+	 * @return Column 
 	 */
 	public function setFormat($format, $extraVars=array()){
 		$this->_format = $format;
@@ -153,7 +157,7 @@ class GO_Base_Data_Column {
 	 * Returns the whole column object
 	 * 
 	 * @param String $sortAlias
-	 * @return GO_Base_Data_Column 
+	 * @return Column 
 	 */
 	public function setSortAlias($sortAlias){
 		$this->_sortAlias = $sortAlias;
@@ -208,7 +212,7 @@ class GO_Base_Data_Column {
 				eval('$result=' . $this->_format . ';');
 			return $result;
 		} elseif (isset($model->{$this->_dataindex})) {
-		  if($model instanceof GO_Base_Db_ActiveRecord)
+		  if($model instanceof \GO\Base\Db\ActiveRecord)
 			return $model->getAttribute($this->_dataindex,$this->_modelFormatType);
 		  return $model->{$this->_dataindex};
 		} else {

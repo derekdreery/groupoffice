@@ -46,21 +46,21 @@ GO.customfields.columnMap={};
 ';
 
 
-$moduleObjects =  GO::modules()->getAllModules();
+$moduleObjects =  \GO::modules()->getAllModules();
 foreach($moduleObjects as $moduleObject)
 {	
 	$file = $moduleObject->path.ucfirst($moduleObject->id).'Module.php';
 	//todo load listeners
 	if(file_exists($file)){
 //		require_once($file);
-		$class='GO_'.ucfirst($moduleObject->id).'_'.ucfirst($moduleObject->id).'Module';
+		$class='GO\\'.ucfirst($moduleObject->id).'\\'.ucfirst($moduleObject->id).'Module';
 
 		$object = new $class;
 		$models = $object->findClasses("customfields/model");
 		
 		foreach($models as $customFieldModel){
 			
-			if($customFieldModel->isSubclassOf('GO_Customfields_Model_AbstractCustomFieldsRecord')){
+			if($customFieldModel->isSubclassOf('\GO\Customfields\Model\AbstractCustomFieldsRecord')){
 				$name =$customFieldModel->name;
 				$model = new $name;
 				
@@ -71,11 +71,11 @@ foreach($moduleObjects as $moduleObject)
 				
 
 				GO.customfields.types["'.$model->extendsModel().'"]={
-					name: "'.GO::getModel($model->extendsModel())->localizedName.'",
+					name: "'.\GO::getModel($model->extendsModel())->localizedName.'",
 					panels: []
 				};'."\n";
 				
-				$stmt = GO_Customfields_Model_Category::model()->findByModel($model->extendsModel());
+				$stmt = \GO\Customfields\Model\Category::model()->findByModel($model->extendsModel());
 				
 				while($category = $stmt->fetch()){
 					
@@ -87,7 +87,7 @@ foreach($moduleObjects as $moduleObject)
                                                                             
                                         
 					// Makes global, client-side, editable form panels for every customfield category
-					if($category->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
+					if($category->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION))
 						$GO_SCRIPTS_JS .= "\n\n".'GO.customfields.types["'.$model->extendsModel().'"].panels.push({xtype : "customformpanel", itemId:"cf-panel-'.$category->id.'", category_id: '.$category->id.', title : "'.htmlspecialchars($category->name,ENT_QUOTES, 'UTF-8').'", customfields : '.json_encode($fields).'});'."\n";
 					
 					/**
@@ -96,11 +96,11 @@ foreach($moduleObjects as $moduleObject)
 					 * described in a global, client-side object, ordered by customfield id.
 					 */
 					foreach($fields as $field) {
-						$align = $field['datatype']=='GO_Customfields_Customfieldtype_Number' || $field['datatype']=='GO_Customfields_Customfieldtype_Date' || $field['datatype']=='GO_Customfields_Customfieldtype_Datetime' ? 'right' : 'left';
-            $exclude_from_grid = $field['exclude_from_grid'] || $field['datatype']=='GO_Customfields_Customfieldtype_Heading' ? 'true' : 'false';
+						$align = $field['datatype']=='\GO\Customfields\Customfieldtype\Number' || $field['datatype']=='\GO\Customfields\Customfieldtype\Date' || $field['datatype']=='\GO\Customfields\Customfieldtype\Datetime' ? 'right' : 'left';
+            $exclude_from_grid = $field['exclude_from_grid'] || $field['datatype']=='\GO\Customfields\Customfieldtype\Heading' ? 'true' : 'false';
 						
 						$GO_SCRIPTS_JS .= 'GO.customfields.columns["'.$model->extendsModel().'"].push({'.
-								'header: "'.GO_Base_Util_String::escape_javascript($field['name']).'",'.
+								'header: "'.\GO\Base\Util\String::escape_javascript($field['name']).'",'.
 								'dataIndex: "'.$field['dataname'].'" ,'.
 								'datatype:"'.$field['datatype'].'", '.								
 								'align:"'.$align.'", '.

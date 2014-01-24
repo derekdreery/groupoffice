@@ -8,27 +8,31 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: GO_Files_Model_Folder.php 7607 2011-09-01 15:44:36Z <<USERNAME>> $
+ * @version $Id: Folder.php 7607 2011-09-01 15:44:36Z <<USERNAME>> $
  * @copyright Copyright Intermesh
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
 
 /**
- * The GO_Files_Model_Folder model
+ * The Folder model
  * 
 
  * @property int $user_id
  * @property int $folder_id
  * @property boolean $thumbs
  */
-class GO_Files_Model_FolderPreference extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Files\Model;
+
+
+class FolderPreference extends \GO\Base\Db\ActiveRecord {
 
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Files_Model_FolderNotification
+	 * @return FolderNotification
 	 */
 	public static function model($className=__CLASS__) {
 		return parent::model($className);

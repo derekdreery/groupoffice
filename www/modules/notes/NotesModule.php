@@ -17,7 +17,11 @@
  * The Notes module maintenance class
  * 
  */
-class GO_Notes_NotesModule extends GO_Base_Module{
+
+namespace GO\Notes;
+
+
+class NotesModule extends \GO\Base\Module{
 	
 	public function autoInstall() {
 		return true;
@@ -40,7 +44,7 @@ class GO_Notes_NotesModule extends GO_Base_Module{
 	 */
 	public static function firstRun(){
 		parent::firstRun();
-		$category = self::getDefaultNoteCategory(GO::user()->id);
+		$category = self::getDefaultNoteCategory(\GO::user()->id);
 		
 		return array('exportVariables'=>array(
 				'GO'=>array(
@@ -56,10 +60,10 @@ class GO_Notes_NotesModule extends GO_Base_Module{
 
 	
 	public static function getDefaultNoteCategory($userId){
-		$user = GO_Base_Model_User::model()->findByPk($userId);
+		$user = \GO\Base\Model\User::model()->findByPk($userId);
 		if(!$user)
 			return false;
-		$category = GO_Notes_Model_Category::model()->getDefault($user);
+		$category = Model\Category::model()->getDefault($user);
 		
 		return $category;
 	}
@@ -67,9 +71,9 @@ class GO_Notes_NotesModule extends GO_Base_Module{
 	public function install() {
 		parent::install();
 		
-		$category = new GO_Notes_Model_Category();
-		$category->name=GO::t('general','notes');
+		$category = new Model\Category();
+		$category->name=\GO::t('general','notes');
 		$category->save();
-		$category->acl->addGroup(GO::config()->group_everyone, GO_Base_Model_Acl::READ_PERMISSION);
+		$category->acl->addGroup(\GO::config()->group_everyone, \GO\Base\Model\Acl::READ_PERMISSION);
 	}
 }

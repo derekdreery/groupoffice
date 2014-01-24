@@ -14,7 +14,7 @@
  * @package Swift
  * @author  Chris Corbyn
  */
-class Swift_SwiftException extends Exception
+class Swift_SwiftException extends \Exception
 {
     /**
      * Create a new SwiftException with $message.

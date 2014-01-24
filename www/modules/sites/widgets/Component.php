@@ -1,5 +1,9 @@
 <?php
-class GO_Sites_Widgets_Component {
+
+namespace GO\Sites\Widgets;
+
+
+class Component {
 	/**
 	 * The component id
 	 * 
@@ -11,7 +15,7 @@ class GO_Sites_Widgets_Component {
 	/**
 	 * The controller that is used
 	 * 
-	 * @var GO_Sites_Controller_Site 
+	 * @var \GO\Sites\Controller\Site 
 	 */
 	protected $_controller;
 	

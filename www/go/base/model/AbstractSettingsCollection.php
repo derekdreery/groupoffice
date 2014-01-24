@@ -20,7 +20,11 @@
  * 
  * @package GO.base.model
  */
-abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
+
+namespace GO\Base\Model;
+
+
+abstract class AbstractSettingsCollection extends \GO\Base\Model {
 
 	/**
 	 * The id of the user you want the settings for.
@@ -43,7 +47,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	/**
 	 * Load function to load the setting values to the properties
 	 * 
-	 * @return GO_Base_Model_AbstractSettingsCollection Description
+	 * @return AbstractSettingsCollection Description
 	 */
 	public static function load($userId=0){
 
@@ -76,7 +80,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 			$propertyNames[] = $this->myPrefix().$property->name;
 		}
 		
-		$values = GO::config()->getSettings($propertyNames,$this->_userId);
+		$values = \GO::config()->getSettings($propertyNames,$this->_userId);
 
 		foreach($values as $property=>$value){
 			if(isset($value)){
@@ -116,7 +120,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 			if(is_array($value) || is_object($value))
 				$value = 'serialized:'.serialize ($value);
 
-			$success = $success && GO::config()->save_setting($this->myPrefix().$key, $value, $this->_userId);			
+			$success = $success && \GO::config()->save_setting($this->myPrefix().$key, $value, $this->_userId);			
 		}
 		return $success;
 	}
@@ -154,7 +158,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	 * @return \ReflectionClass
 	 */
 	private function _getReflectionClass(){
-		return new GO_Base_Util_ReflectionClass($this);
+		return new \GO\Base\Util\ReflectionClass($this);
 	}
 	
 	/**

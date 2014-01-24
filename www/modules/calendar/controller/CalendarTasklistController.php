@@ -1,13 +1,17 @@
 <?php
 
-class GO_Calendar_Controller_CalendarTasklist extends GO_Base_Controller_AbstractMultiSelectModelController {
+
+namespace GO\Calendar\Controller;
+
+
+class CalendarTasklist extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called
 	 * @return String 
 	 */
 	public function modelName() {
-		return 'GO_Tasks_Model_Tasklist';
+		return '\GO\Tasks\Model\Tasklist';
 	}
 	
 	/**
@@ -15,7 +19,7 @@ class GO_Calendar_Controller_CalendarTasklist extends GO_Base_Controller_Abstrac
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return 'GO_Calendar_Model_CalendarTasklist';
+		return '\GO\Calendar\Model\CalendarTasklist';
 	}
 	
 	/**

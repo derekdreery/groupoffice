@@ -1,9 +1,13 @@
 <?php
-abstract class GO_Base_Storeexport_AbstractExport {
+
+namespace GO\Base\Storeexport;
+
+
+abstract class AbstractExport {
 	
 	/**
 	 *
-	 * @var GO_Base_Data_AbstractStore
+	 * @var \GO\Base\Data\AbstractStore
 	 */
 	protected $store;
 	
@@ -54,14 +58,14 @@ abstract class GO_Base_Storeexport_AbstractExport {
 	/**
 	 * The constructor for the exporter
 	 * 
-	 * @param GO_Base_Data_Store $store
-	 * @param GO_Base_Data_ColumnModel $columnModel
+	 * @param \GO\Base\Data\Store $store
+	 * @param \GO\Base\Data\ColumnModel $columnModel
 	 * @param Boolean $header
 	 * @param Boolean $humanHeaders
 	 * @param String $title
 	 * @param Mixed $orientation ('P' for Portrait,'L' for Landscape of false for none) 
 	 */
-	public function __construct(GO_Base_Data_AbstractStore $store, $header=true,$humanHeaders=true, $title=false, $orientation=false) {
+	public function __construct(\GO\Base\Data\AbstractStore $store, $header=true,$humanHeaders=true, $title=false, $orientation=false) {
 		$this->store = $store;
 		$this->header = $header;
 		$this->title = $title;

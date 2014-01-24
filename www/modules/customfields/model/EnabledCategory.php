@@ -17,7 +17,7 @@
  */
  
 /**
- * The GO_Customfields_Model_EnabledCategory model
+ * The EnabledCategory model
  *
  * @package GO.modules.customfields.model
  * @property int $category_id
@@ -25,12 +25,16 @@
  * @property int $model_id
  */
 
-class GO_Customfields_Model_EnabledCategory extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Customfields\Model;
+
+
+class EnabledCategory extends \GO\Base\Db\ActiveRecord{
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Customfields_Model_EnabledCategory 
+	 * @return EnabledCategory 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -49,15 +53,15 @@ class GO_Customfields_Model_EnabledCategory extends GO_Base_Db_ActiveRecord{
 	/**
 	 * Get enabled categories for a model.
 	 * 
-	 * @param string $modelName The name of the model that controls the disabled categories. eg. GO_Addressbook_Model_Addressbook controls them for GO_Addressbook_Model_Contact
+	 * @param string $modelName The name of the model that controls the disabled categories. eg. \GO\Addressbook\Model\Addressbook controls them for \GO\Addressbook\Model\Contact
 	 * @param int $modelId
 	 * @return array 
 	 */
 	public function getEnabledIds($modelName, $modelId){
 		 $stmt = $this->find(
-			GO_Base_Db_FindParams::newInstance()
+			\GO\Base\Db\FindParams::newInstance()
 						->criteria(
-								GO_Base_Db_FindCriteria::newInstance()							
+								\GO\Base\Db\FindCriteria::newInstance()							
 									->addCondition('model_name', $modelName)
 										->addCondition('model_id', $modelId)
 										)

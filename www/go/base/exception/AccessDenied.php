@@ -19,12 +19,16 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_AccessDenied extends Exception
+
+namespace GO\Base\Exception;
+
+
+class AccessDenied extends \Exception
 {
 
 	public function __construct($message='') {
 		
-		$message = empty($message) ? GO::t('accessDenied') : GO::t('accessDenied')."\n\n".$message;
+		$message = empty($message) ? \GO::t('accessDenied') : \GO::t('accessDenied')."\n\n".$message;
 		
 		parent::__construct($message);
 	}

@@ -20,20 +20,24 @@
  */
  
 /**
- * The GO_Calendar_Model_GroupAdmin model
+ * The GroupAdmin model
  *
  * @package GO.modules.calendar.model
  * @property int $user_id
  * @property int $group_id
  */
 
-class GO_Calendar_Model_GroupAdmin extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Calendar\Model;
+
+
+class GroupAdmin extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Calendar_Model_GroupAdmin
+	 * @return GroupAdmin
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -57,7 +61,7 @@ class GO_Calendar_Model_GroupAdmin extends GO_Base_Db_ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-			 'group' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Calendar_Model_Group', 'field'=>'group_id')
+			 'group' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Calendar\Model\Group', 'field'=>'group_id')
 		 );
 	 }
 	 
@@ -66,7 +70,7 @@ class GO_Calendar_Model_GroupAdmin extends GO_Base_Db_ActiveRecord{
 		 $stmt = $this->group->calendars;
 		 
 		 foreach($stmt as $calendar){
-			 $calendar->acl->addUser($this->user_id, GO_Base_Model_Acl::DELETE_PERMISSION);
+			 $calendar->acl->addUser($this->user_id, \GO\Base\Model\Acl::DELETE_PERMISSION);
 		 }
 		 
 		 return parent::afterSave($wasNew);

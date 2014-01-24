@@ -1,3 +1,7 @@
 <?php
-class GO_Dav_DavModule extends GO_Base_Module{
+
+namespace GO\Dav;
+
+
+class DavModule extends \GO\Base\Module{
 }

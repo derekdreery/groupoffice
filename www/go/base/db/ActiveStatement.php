@@ -20,12 +20,16 @@
  * @package GO.base.db
  */
 
-class GO_Base_Db_ActiveStatement implements \IteratorAggregate {
+
+namespace GO\Base\Db;
+
+
+class ActiveStatement implements \IteratorAggregate {
 	
   /**
    * The model type this statement result returns.
    * 
-   * @var GO_Base_Db_ActiveRecord 
+   * @var ActiveRecord 
    */
   public $model;
 	
@@ -36,7 +40,7 @@ class GO_Base_Db_ActiveStatement implements \IteratorAggregate {
 	public $stmt;
   
   /**
-   * Parameters  that were passed to GO_BaseDb_activeRecord::find()
+   * Parameters  that were passed to \GO\BaseDb\activeRecord::find()
    * 
    * @var array 
    */
@@ -58,7 +62,7 @@ class GO_Base_Db_ActiveStatement implements \IteratorAggregate {
 	 * The total number of found rows. Even when specifying a limit it will return 
 	 * the number of rows as if you wouldn't have specified a limit.
 	 * 
-	 * It is only set when calcFoundRows was passed to the GO_Base_Db_ActiveRecord::find() function parameters.
+	 * It is only set when calcFoundRows was passed to the ActiveRecord::find() function parameters.
    * 
    * @var int 
    */
@@ -68,7 +72,7 @@ class GO_Base_Db_ActiveStatement implements \IteratorAggregate {
 //	public static $idCount=0;
 //	public static $aliveStmts=array();
 
-  public function __construct(\PDOStatement $stmt, GO_Base_Db_ActiveRecord $model) {
+  public function __construct(\PDOStatement $stmt, ActiveRecord $model) {
     $this->stmt=$stmt;
 		
 		$this->model=$model;
@@ -112,7 +116,7 @@ class GO_Base_Db_ActiveStatement implements \IteratorAggregate {
 	/**
 	 * Fetch a model from the statement
 	 * 
-	 * @return GO_Base_Db_ActiveRecord
+	 * @return ActiveRecord
 	 */
 	public function fetch($fetch_style=null){
 		return $this->stmt->fetch($fetch_style);
@@ -121,7 +125,7 @@ class GO_Base_Db_ActiveStatement implements \IteratorAggregate {
 	/**
 	 * Get all models from the find result
 	 * 
-	 * @return GO_Base_Db_ActiveRecord[]
+	 * @return ActiveRecord[]
 	 */
 	public function fetchAll($fetch_style=null){
 		return $this->stmt->fetchAll($fetch_style);
@@ -155,13 +159,13 @@ class GO_Base_Db_ActiveStatement implements \IteratorAggregate {
 //			$sql = preg_replace('/^LIMIT .*$/mi','', $sql);
 //			$sql = preg_replace('/^ORDER BY .*$/mi','', $sql);
 //			$sql = preg_replace('/^LEFT JOIN .*$/mi','', $sql);			
-//			GO::debug($sql);
+//			\GO::debug($sql);
 //		
-//			$r = GO::getDbConnection()->query($sql);
-//			$foundRows = GO::session()->values[$queryUid]=intval($r->fetchColumn(0));	
+//			$r = \GO::getDbConnection()->query($sql);
+//			$foundRows = \GO::session()->values[$queryUid]=intval($r->fetchColumn(0));	
 //		}else
 //		{
-//			$foundRows=GO::session()->values[$queryUid];
+//			$foundRows=\GO::session()->values[$queryUid];
 //		}
 //		
 //		return $foundRows;

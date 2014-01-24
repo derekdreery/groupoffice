@@ -17,7 +17,7 @@
  */
  
 /**
- * The GO_ServerManager_Model_AutomaticEmail model
+ * The AutomaticEmail model
  *
  * @package GO.modules.servermanager.model
  * @property int $id
@@ -27,13 +27,17 @@
  * @property boolean $active
  */
 
-class GO_ServerManager_Model_AutomaticEmail extends GO_Base_Db_ActiveRecord {
+
+namespace GO\ServerManager\Model;
+
+
+class AutomaticEmail extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_ServerManager_Model_AutomaticEmail
+	 * @return AutomaticEmail
 	 */
 	public static function model($className = __CLASS__) {
 		return parent::model($className);

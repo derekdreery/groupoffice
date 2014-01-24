@@ -15,18 +15,22 @@
 /**
  * The Dokuwiki controller
  */
-class GO_Dokuwiki_Controller_Dokuwiki extends GO_Base_Controller_AbstractController {
+
+namespace GO\Dokuwiki\Controller;
+
+
+class Dokuwiki extends \GO\Base\Controller\AbstractController {
 	
 	protected function actionLoadSettings($params){
 		
 		$response = array();
 		$response['data'] = array();
 		
-		$response['data']['title'] = GO::config()->get_setting('dokuwiki_title');
+		$response['data']['title'] = \GO::config()->get_setting('dokuwiki_title');
 		if (empty($response['data']['title'])) 
 			$response['data']['title'] = 'Dokuwiki';
 		
-		$response['data']['external_url'] = GO::config()->get_setting('dokuwiki_external_url');
+		$response['data']['external_url'] = \GO::config()->get_setting('dokuwiki_external_url');
 		if (empty($response['data']['external_url'])) 
 			$response['data']['external_url'] = '';
 		
@@ -39,8 +43,8 @@ class GO_Dokuwiki_Controller_Dokuwiki extends GO_Base_Controller_AbstractControl
 		
 		$response = array();
 		
-		GO::config()->save_setting('dokuwiki_external_url', $params['external_url']);
-		GO::config()->save_setting('dokuwiki_title', $params['title']);
+		\GO::config()->save_setting('dokuwiki_external_url', $params['external_url']);
+		\GO::config()->save_setting('dokuwiki_title', $params['title']);
 		
 		$response['data']['external_url'] = $params['external_url'];
 		$response['data']['title'] = $params['title'];

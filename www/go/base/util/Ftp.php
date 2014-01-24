@@ -31,7 +31,11 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base.util 
  */
-class GO_Base_Util_Ftp{
+
+namespace GO\Base\Util;
+
+
+class Ftp{
 	
     private $_conn;
 

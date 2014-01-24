@@ -10,20 +10,20 @@
 	<h1>Wachtwoord wijzigen</h1>								
 	<p>Gebruik het onderstaand formulier om uw wachtwoord te wijzigen.</p>
 	<div class="form">
-	<?php echo GO_Sites_Components_Html::beginForm(); ?>
+	<?php echo \GO\Sites\Components\Html::beginForm(); ?>
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::activeLabel($user, 'password'); ?>
-		<?php echo GO_Sites_Components_Html::activePasswordField($user, 'password'); ?>
+		<?php echo \GO\Sites\Components\Html::activeLabel($user, 'password'); ?>
+		<?php echo \GO\Sites\Components\Html::activePasswordField($user, 'password'); ?>
 	</div>
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::label(GO::t('passwordConfirm'), null); ?>
-		<?php echo GO_Sites_Components_Html::activePasswordField($user, 'passwordConfirm'); ?>
-		<?php echo GO_Sites_Components_Html::error($user, 'passwordConfirm'); ?>
+		<?php echo \GO\Sites\Components\Html::label(\GO::t('passwordConfirm'), null); ?>
+		<?php echo \GO\Sites\Components\Html::activePasswordField($user, 'passwordConfirm'); ?>
+		<?php echo \GO\Sites\Components\Html::error($user, 'passwordConfirm'); ?>
   </div>
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::submitButton('Wijzigen', array('class'=>'btn btn-primary')); ?>
-		<?php echo GO_Sites_Components_Html::resetButton('Reset', array('class'=>'btn')); ?>
+		<?php echo \GO\Sites\Components\Html::submitButton('Wijzigen', array('class'=>'btn btn-primary')); ?>
+		<?php echo \GO\Sites\Components\Html::resetButton('Reset', array('class'=>'btn')); ?>
   </div>
-	<?php echo GO_Sites_Components_Html::endForm(); ?>
+	<?php echo \GO\Sites\Components\Html::endForm(); ?>
 	</div>
 <?php endif; ?>

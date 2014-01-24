@@ -17,7 +17,11 @@
  * The Dokuwiki module maintenance class
  * 
  */
-class GO_Phpbb3_Phpbb3Module extends GO_Base_Module{
+
+namespace GO\Phpbb3;
+
+
+class Phpbb3Module extends \GO\Base\Module{
 	
 	public function autoInstall() {
 		return false;

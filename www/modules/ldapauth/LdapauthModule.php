@@ -1,16 +1,20 @@
 <?php
-class GO_Ldapauth_LdapauthModule extends GO_Base_Module{
+
+namespace GO\Ldapauth;
+
+
+class LdapauthModule extends \GO\Base\Module{
 	
 	public static function initListeners() {		
-		GO::session()->addListener('beforelogin', 'GO_Ldapauth_LdapauthModule', 'beforeLogin');
+		\GO::session()->addListener('beforelogin', '\GO\Ldapauth\LdapauthModule', 'beforeLogin');
 	}
 	
 	
 	public static function beforeLogin($username, $password){
 		
-		GO::debug("LDAPAUTH: Active");
+		\GO::debug("LDAPAUTH: Active");
 		
-		$lh = new GO_Ldapauth_Authenticator();
+		$lh = new Authenticator();
 		return $lh->authenticate($username, $password);
 	}
 	

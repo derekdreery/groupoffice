@@ -1,8 +1,12 @@
 <?php
 
-class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractModelController {
 
-	protected $model = 'GO_Postfixadmin_Model_Mailbox';
+namespace GO\Postfixadmin\Controller;
+
+
+class Mailbox extends \GO\Base\Controller\AbstractModelController {
+
+	protected $model = '\GO\Postfixadmin\Model\Mailbox';
 	
 	
 	protected function allowGuests() {
@@ -10,8 +14,8 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	}
 		
 	protected function getStoreParams($params) {
-		return GO_Base_Db_FindParams::newInstance()
-						->criteria(GO_Base_Db_FindCriteria::newInstance()
+		return \GO\Base\Db\FindParams::newInstance()
+						->criteria(\GO\Base\Db\FindCriteria::newInstance()
 				->addCondition('domain_id',$params['domain_id']));		
 	}
 	
@@ -19,7 +23,7 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 		if($model->isNew)
 			$model->quota=$model->domain->default_quota;
 		$response['data']['password'] = '';
-		$response['data']['quota'] = GO_Base_Util_Number::localize($model->quota/1024);
+		$response['data']['quota'] = \GO\Base\Util\Number::localize($model->quota/1024);
 		$response['data']['domain']='@'.$model->domain->domain;
 		$response['data']['username']=str_replace($response['data']['domain'],"", $response['data']['username']);
 		return $response;
@@ -28,16 +32,16 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	
 	protected function actionSetPassword($params){
 		
-		if(!GO::user()){
-			if(!empty($params['token']) && $params['token']!=GO::config()->postfixadmin_token){
-				throw new GO_Base_Exception_AccessDenied();
+		if(!\GO::user()){
+			if(!empty($params['token']) && $params['token']!=\GO::config()->postfixadmin_token){
+				throw new \GO\Base\Exception\AccessDenied();
 			}else
 			{
-				GO::session()->runAsRoot();
+				\GO::session()->runAsRoot();
 			}
 		}
 		
-		$mailbox = GO_Postfixadmin_Model_Mailbox::model()->findSingleByAttributes(array(
+		$mailbox = \GO\Postfixadmin\Model\Mailbox::model()->findSingleByAttributes(array(
 				"username"=>$params["username"]				
 		));
 
@@ -57,25 +61,25 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
-		if(!GO::user()){
-			if(!empty($params['tokem']) && $params['token']!=GO::config()->postfixadmin_token){
-				throw new GO_Base_Exception_AccessDenied();
+		if(!\GO::user()){
+			if(!empty($params['tokem']) && $params['token']!=\GO::config()->postfixadmin_token){
+				throw new \GO\Base\Exception\AccessDenied();
 			}else
 			{
-				GO::session()->runAsRoot();
+				\GO::session()->runAsRoot();
 			}
 		}
 
 		
 		if(isset($params['domain_id']))
-			$domainModel = GO_Postfixadmin_Model_Domain::model()->findByPk($params['domain_id']);
+			$domainModel = \GO\Postfixadmin\Model\Domain::model()->findByPk($params['domain_id']);
 		else {
-			$domainModel = GO_Postfixadmin_Model_Domain::model()->findSingleByAttribute("domain", $params['domain']); //serverclient module doesn't know the domain_id. It sends the domain name as string.
+			$domainModel = \GO\Postfixadmin\Model\Domain::model()->findSingleByAttribute("domain", $params['domain']); //serverclient module doesn't know the domain_id. It sends the domain name as string.
 			if(!$domainModel){
 				//todo create new domain
-				$domainModel = new	GO_Postfixadmin_Model_Domain();
+				$domainModel = new	\GO\Postfixadmin\Model\Domain();
 				$domainModel->domain = $params['domain'];
-				$domainModel->user_id = GO::user()->id;
+				$domainModel->user_id = \GO::user()->id;
 				$domainModel->save();
 			}
 			$params['domain_id']=$domainModel->id;
@@ -84,12 +88,12 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 		}
 		
 		if(isset($params['quota'])){
-			$model->quota=  GO_Base_Util_Number::unlocalize($params['quota'])*1024;
+			$model->quota=  \GO\Base\Util\Number::unlocalize($params['quota'])*1024;
 			unset($params['quota']);
 		}
 		
 		if ($params['password']!=$params['password2'])
-			throw new Exception(GO::t('passwordMatchError'));
+			throw new Exception(\GO::t('passwordMatchError'));
 		
 		if(empty($params['password']))
 			unset($params['password']);
@@ -98,9 +102,9 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 			$params['username'] .= '@'.$domainModel->domain;
 		
 		if ($model->isNew) {
-//			$aliasModel = GO_Postfixadmin_Model_Alias::model()->findSingleByAttribute('address', $params['username']);
+//			$aliasModel = \GO\Postfixadmin\Model\Alias::model()->findSingleByAttribute('address', $params['username']);
 //			if (empty($aliasModel)) {
-//				$aliasModel = new GO_Postfixadmin_Model_Alias();
+//				$aliasModel = new \GO\Postfixadmin\Model\Alias();
 //			}
 //			$aliasModel->domain_id = $params['domain_id'];
 //			$aliasModel->address = $params['username'];
@@ -109,9 +113,9 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 			
 			
 			if(!empty($params['alias']) && $params['alias']!=$params['username']){
-				$aliasModel = GO_Postfixadmin_Model_Alias::model()->findSingleByAttribute('address', $params['alias']);
+				$aliasModel = \GO\Postfixadmin\Model\Alias::model()->findSingleByAttribute('address', $params['alias']);
 				if (empty($aliasModel)) {
-					$aliasModel = new GO_Postfixadmin_Model_Alias();
+					$aliasModel = new \GO\Postfixadmin\Model\Alias();
 				}
 				$aliasModel->domain_id = $params['domain_id'];
 				$aliasModel->address = $params['alias'];
@@ -122,8 +126,8 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	}
 	
 	public function formatStoreRecord($record, $model, $store) {
-		$record['usage'] = GO_Base_Util_Number::formatSize($model->usage*1024);
-		$record['quota'] = GO_Base_Util_Number::formatSize($model->quota*1024);
+		$record['usage'] = \GO\Base\Util\Number::formatSize($model->usage*1024);
+		$record['quota'] = \GO\Base\Util\Number::formatSize($model->quota*1024);
 		return $record;
 	}
 	
@@ -131,15 +135,15 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	protected function actionCacheUsage($params){
 		$this->requireCli();
 
-		if(!GO::modules()->isInstalled('postfixadmin'))
+		if(!\GO::modules()->isInstalled('postfixadmin'))
 			trigger_error('Postfixadmin module must be installed',E_USER_ERROR);
 
-		$activeStmt = GO_Postfixadmin_Model_Mailbox::model()->find();
+		$activeStmt = \GO\Postfixadmin\Model\Mailbox::model()->find();
 		
 		while ($mailboxModel = $activeStmt->fetch()) {
 			echo 'Calculating size of '.$mailboxModel->getMaildirFolder()->path()."\n";
 			$mailboxModel->cacheUsage();
-			echo GO_Base_Util_Number::formatSize($mailboxModel->usage*1024)."\n";
+			echo \GO\Base\Util\Number::formatSize($mailboxModel->usage*1024)."\n";
 		}
 
 	}
@@ -157,7 +161,7 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 //		
 //		$localUsername="import@intermesh.dev";
 //		
-//		$imap = new GO_Base_Mail_Imap();
+//		$imap = new \GO\Base\Mail\Imap();
 //		if(!$imap->connect($source['host'], $source['port'], $source['username'], $source['password'], $source['ssl']))
 //				throw new Exception("Could not connect to source host");
 //		

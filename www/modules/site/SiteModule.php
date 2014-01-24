@@ -1,6 +1,10 @@
 <?php
 
-class GO_Site_SiteModule extends GO_Base_Module{
+
+namespace GO\Site;
+
+
+class SiteModule extends \GO\Base\Module{
 	
 	public function autoInstall() {
 		return false;
@@ -55,16 +59,16 @@ class GO_Site_SiteModule extends GO_Base_Module{
 		switch($nodeType){
 			
 			case 'content':
-				return 'GO_Site_Model_Content';
+				return '\GO\Site\Model\Content';
 				break;
 			case 'site':
-				return 'GO_Site_Model_Site';
+				return '\GO\Site\Model\Site';
 				break;
 			case 'menu':
-				return 'GO_Site_Model_Menu';
+				return '\GO\Site\Model\Menu';
 				break;
 			case 'menuitem':
-				return 'GO_Site_Model_MenuItem';
+				return '\GO\Site\Model\MenuItem';
 				break;
 		}
 		

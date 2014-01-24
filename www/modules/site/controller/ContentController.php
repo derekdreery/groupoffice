@@ -1,6 +1,10 @@
 <?php
 
-class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonController {
+
+namespace GO\Site\Controller;
+
+
+class Content extends \GO\Base\Controller\AbstractJsonController {
 	
 	/**
 	 * 
@@ -17,7 +21,7 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 		if(empty($params['parentId']))
 			Throw new Exception('No Parent ID given!');
 		
-		$parent = GO_Site_Model_Content::model()->findByPk($params['parentId']);
+		$parent = \GO\Site\Model\Content::model()->findByPk($params['parentId']);
 		
 		if(!$parent)
 			Throw new Exception('No content item found with the following id: '.$params['parentId']);
@@ -33,14 +37,14 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 		if(empty($params['siteId']))
 			Throw new Exception('No Site ID given!');
 		
-		$site = GO_Site_Model_Site::model()->findByPk($params['siteId']);
+		$site = \GO\Site\Model\Site::model()->findByPk($params['siteId']);
 		
 		if(!$site)
 			Throw new Exception('No site found with the following id: '.$id);
 		
 		$templateFiles = array();
 		
-		$config = new GO_Site_Components_Config($site);
+		$config = new \GO\Site\Components\Config($site);
 
 		if($config->templates){			
 			// Read config items and convert to json
@@ -59,7 +63,7 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 	
 //	protected function actionLoad($params){
 //
-//		$model= GO_Site_Model_Content::model()->createOrFindByParams($params);
+//		$model= \GO\Site\Model\Content::model()->createOrFindByParams($params);
 //		
 //		
 //		echo $this->renderForm($model, $remoteComboFields, $extraFields);
@@ -77,7 +81,7 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 		$model->setAttributes($params);
 		
 		
-		if(GO_Base_Util_Http::isPostRequest()){	
+		if(\GO\Base\Util\Http::isPostRequest()){	
 			
 			
 			$model->save();
@@ -90,12 +94,12 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 	}
 	
 	protected function actionCreate($params) {
-		$model = new GO_Site_Model_Content();
+		$model = new \GO\Site\Model\Content();
 		$model->setAttributes($params);
 				
 		$model->setDefaultTemplate();
 
-		if(GO_Base_Util_Http::isPostRequest()){
+		if(\GO\Base\Util\Http::isPostRequest()){
 			$model->save();
 			echo $this->renderSubmit($model);
 		}  else {
@@ -117,7 +121,7 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 	}
 	
 	private function _loadModel($id){
-		$model = GO_Site_Model_Content::model()->findByPk($id);
+		$model = \GO\Site\Model\Content::model()->findByPk($id);
 		
 		if(!$model)
 			Throw new Exception('No content item found with the following id: '.$id);
@@ -134,7 +138,7 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 		if(!isset($params['node']))
 			return $response;
 		
-		$site = GO_Site_Model_Site::model()->findByPk($params['site_id']);
+		$site = \GO\Site\Model\Site::model()->findByPk($params['site_id']);
 		
 		$args = explode('_', $params['node']);
 		
@@ -155,13 +159,13 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 				if($parentId === null){
 					$response = $site->loadContentNodes();
 				} else {
-					$parentNode = GO_Site_Model_Content::model()->findByPk($parentId);
+					$parentNode = \GO\Site\Model\Content::model()->findByPk($parentId);
 					if($parentNode)
 						$response = $parentNode->getChildrenTree();
 				}
 				break;
 //			case 'news':
-//				$response = GO_Site_Model_News::getTreeNodes($site);
+//				$response = \GO\Site\Model\News::getTreeNodes($site);
 //				break;
 		}
 		

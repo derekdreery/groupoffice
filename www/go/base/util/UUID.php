@@ -17,7 +17,11 @@
  * @package GO.base.util
  */
 
-class GO_Base_Util_UUID {
+
+namespace GO\Base\Util;
+
+
+class UUID {
   public static function v3($namespace, $name) {
     if(!self::is_valid($namespace)) return false;
 
@@ -121,13 +125,13 @@ class GO_Base_Util_UUID {
 
 	public static function create($type, $name){
 		//get or create namespace uuid for Group-Office
-		$namespace = GO::config()->get_setting('uuid_namespace');
+		$namespace = \GO::config()->get_setting('uuid_namespace');
 		if(!$namespace){
-			$namespace = GO_Base_Util_UUID::v4();
-			GO::config()->save_setting('uuid_namespace', $namespace);
+			$namespace = UUID::v4();
+			\GO::config()->save_setting('uuid_namespace', $namespace);
 		}
 
-		return GO_Base_Util_UUID::v5($namespace, $type.$name);
+		return UUID::v5($namespace, $type.$name);
 
 	}
 

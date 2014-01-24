@@ -19,7 +19,7 @@ if(PHP_SAPI=='cli'){
 	
 	require_once($root.'go/base/util/Cli.php');
 	
-	$args = GO_Base_Util_Cli::parseArgs();
+	$args = \GO\Base\Util\Cli::parseArgs();
 	
 	if(isset($args['c'])){
 		define("GO_CONFIG_FILE", $args['c']);
@@ -39,46 +39,46 @@ foreach($requiredArgs as $ra){
 chdir(dirname(__FILE__));
 require('../GO.php');
 
-GO::setIgnoreAclPermissions();
+\GO::setIgnoreAclPermissions();
 
-$stmt = GO::getDbConnection()->query("SHOW TABLES");
+$stmt = \GO::getDbConnection()->query("SHOW TABLES");
 if ($stmt->rowCount())
 	throw new Exception("Automatic installation of Group-Office aborted because database is not empty");
 else
 	echo "Database connection established. Database is empty\n";
 
-GO_Base_Util_SQL::executeSqlFile('install.sql');
+\GO\Base\Util\SQL::executeSqlFile('install.sql');
 
-$dbVersion = GO_Base_Util_Common::countUpgradeQueries("updates.php");
+$dbVersion = \GO\Base\Util\Common::countUpgradeQueries("updates.php");
 
-GO::config()->save_setting('version', $dbVersion);
-GO::config()->save_setting('upgrade_mtime', GO::config()->mtime);
+\GO::config()->save_setting('version', $dbVersion);
+\GO::config()->save_setting('upgrade_mtime', \GO::config()->mtime);
 
-$adminGroup = new GO_Base_Model_Group();
+$adminGroup = new \GO\Base\Model\Group();
 $adminGroup->id = 1;
-$adminGroup->name = GO::t('group_admins');
+$adminGroup->name = \GO::t('group_admins');
 $adminGroup->save();
 
-$everyoneGroup = new GO_Base_Model_Group();
+$everyoneGroup = new \GO\Base\Model\Group();
 $everyoneGroup->id = 2;
-$everyoneGroup->name = GO::t('group_everyone');
+$everyoneGroup->name = \GO::t('group_everyone');
 $everyoneGroup->save();
 
-$internalGroup = new GO_Base_Model_Group();
+$internalGroup = new \GO\Base\Model\Group();
 $internalGroup->id = 3;
-$internalGroup->name = GO::t('group_internal');
+$internalGroup->name = \GO::t('group_internal');
 $internalGroup->save();
 
-//GO::config()->register_user_groups = GO::t('group_internal');
-//GO::config()->register_visible_user_groups = GO::t('group_internal');
+//\GO::config()->register_user_groups = \GO::t('group_internal');
+//\GO::config()->register_visible_user_groups = \GO::t('group_internal');
 
-$modules = GO::modules()->getAvailableModules();
+$modules = \GO::modules()->getAvailableModules();
 
 if(isset($args['modules'])){
 	$installModules = explode(',', $args['modules']);
 	
-}elseif(!empty(GO::config()->allowed_modules)){
-	$installModules=explode(',',GO::config()->allowed_modules);
+}elseif(!empty(\GO::config()->allowed_modules)){
+	$installModules=explode(',',\GO::config()->allowed_modules);
 }
 
 if(isset($installModules)){
@@ -93,23 +93,23 @@ foreach ($modules as $moduleClass) {
 		
 		echo "Installing module ".$moduleController->id()."\n";
 		
-		$module = new GO_Base_Model_Module();
+		$module = new \GO\Base\Model\Module();
 		$module->id = $moduleController->id();
 		$module->save();
 	}
 }
 
-$admin = new GO_Base_Model_User();
-$admin->first_name = GO::t('system');
-$admin->last_name = GO::t('admin');
+$admin = new \GO\Base\Model\User();
+$admin->first_name = \GO::t('system');
+$admin->last_name = \GO::t('admin');
 $admin->username = $args['adminusername'];
 $admin->password = $args['adminpassword'];
-$admin->email = GO::config()->webmaster_email = $args['adminemail'];
+$admin->email = \GO::config()->webmaster_email = $args['adminemail'];
 
-GO::config()->save();
+\GO::config()->save();
 
 //disable password validation
-GO::config()->password_validate=false;		
+\GO::config()->password_validate=false;		
 
 $admin->save();
 
@@ -120,17 +120,17 @@ $admin->checkDefaultModels();
 
 
 //module code here because we need the user and the module for this
-if(GO::modules()->files){
-	$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$admin->username.'/Public', true);
+if(\GO::modules()->files){
+	$folder = \GO\Files\Model\Folder::model()->findByPath('users/'.$admin->username.'/Public', true);
 	$folder->visible=true;
 	$acl = $folder->setNewAcl();
-	$acl->addGroup(GO::config()->group_everyone, GO_Base_Model_Acl::DELETE_PERMISSION);
+	$acl->addGroup(\GO::config()->group_everyone, \GO\Base\Model\Acl::DELETE_PERMISSION);
 	$folder->save();
 }
 
 
 //Insert default cronjob record for email reminders
-$cron = new GO_Base_Cron_CronJob();
+$cron = new \GO\Base\Cron\CronJob();
 
 $cron->name = 'Email Reminders';
 $cron->active = true;
@@ -140,11 +140,11 @@ $cron->hours = '*';
 $cron->monthdays = '*';
 $cron->months = '*';
 $cron->weekdays = '*';
-$cron->job = 'GO_Base_Cron_EmailReminders';
+$cron->job = '\GO\Base\Cron\EmailReminders';
 
 $cron->save();
 
-$cron = new GO_Base_Cron_CronJob();
+$cron = new \GO\Base\Cron\CronJob();
 
 $cron->name = 'Calculate disk usage';
 $cron->active = true;
@@ -154,7 +154,7 @@ $cron->hours = '0';
 $cron->monthdays = '*';
 $cron->months = '*';
 $cron->weekdays = '*';
-$cron->job = 'GO_Base_Cron_CalculateDiskUsage';		
+$cron->job = '\GO\Base\Cron\CalculateDiskUsage';		
 
 $cron->save();
 

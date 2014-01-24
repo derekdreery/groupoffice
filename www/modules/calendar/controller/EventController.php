@@ -8,18 +8,22 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: GO_Calendar_Controller_Event.php 7607 2011-09-14 10:06:07Z <<USERNAME>> $
+ * @version $Id: Event.php 7607 2011-09-14 10:06:07Z <<USERNAME>> $
  * @copyright Copyright Intermesh
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
 
 /**
- * The GO_Calendar_Controller_Event controller
+ * The Event controller
  *
  */
-class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelController {
 
-	protected $model = 'GO_Calendar_Model_Event';
+namespace GO\Calendar\Controller;
+
+
+class Event extends \GO\Base\Controller\AbstractModelController {
+
+	protected $model = '\GO\Calendar\Model\Event';
 	
 	private $_uuidEvents = array();
 	
@@ -54,12 +58,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		//Grid sends move request
 		if (isset($params['offset'])) {
-			$model->start_time = GO_Base_Util_Date::roundQuarters($model->start_time + $params['offset']);
-			$model->end_time = GO_Base_Util_Date::roundQuarters($model->end_time + $params['offset']);
+			$model->start_time = \GO\Base\Util\Date::roundQuarters($model->start_time + $params['offset']);
+			$model->end_time = \GO\Base\Util\Date::roundQuarters($model->end_time + $params['offset']);
 		}
 		if (isset($params['offset_days'])) {
-			$model->start_time = GO_Base_Util_Date::date_add($model->start_time, $params['offset_days']);
-			$model->end_time = GO_Base_Util_Date::date_add($model->end_time, $params['offset_days']);
+			$model->start_time = \GO\Base\Util\Date::date_add($model->start_time, $params['offset_days']);
+			$model->end_time = \GO\Base\Util\Date::date_add($model->end_time, $params['offset_days']);
 		}
 
 		//when a user resizes an event
@@ -72,7 +76,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 
 		if (!empty($params['freq'])) {
-			$rRule = new GO_Base_Util_Icalendar_Rrule();
+			$rRule = new \GO\Base\Util\Icalendar\Rrule();
 			$rRule->readJsonArray($params);
 			$model->rrule = $rRule->createRrule();
 		} elseif (isset($params['freq'])) {
@@ -80,7 +84,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 
 		if (isset($params['reminder_value']) && isset($params['reminder_multiplier']))
-			$model->reminder = GO_Base_Util_Number::unlocalize ($params['reminder_value']) * $params['reminder_multiplier'];
+			$model->reminder = \GO\Base\Util\Number::unlocalize ($params['reminder_value']) * $params['reminder_multiplier'];
 //		else
 //			$model->reminder = 0;
 
@@ -106,7 +110,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				if(!empty($rrule->byday)){
 					if (!empty($params['duplicate']))
 						$model->delete();
-					throw new Exception(GO::t('cantMoveRecurringByDay', 'calendar'));
+					throw new Exception(\GO::t('cantMoveRecurringByDay', 'calendar'));
 				}
 			}
 		}
@@ -121,7 +125,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$model->resetAttributes();
 			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
 			//this parameter is sent by the view when it wants to edit a single occurence of a repeating event.
-			$recurringEvent = GO_Calendar_Model_Event::model()->findByPk($params['exception_for_event_id']);
+			$recurringEvent = \GO\Calendar\Model\Event::model()->findByPk($params['exception_for_event_id']);
 			$model = $recurringEvent->createExceptionEvent($params['exception_date'], array(), true);
 			unset($params['exception_date']);
 			unset($params['id']);
@@ -135,7 +139,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		return parent::beforeSubmit($response, $model, $params);
 	}
 
-	private function _checkConflicts(&$response, GO_Calendar_Model_Event &$event, &$params) {
+	private function _checkConflicts(&$response, \GO\Calendar\Model\Event &$event, &$params) {
 		
 
 		if(!empty($params["check_conflicts"]) && $event->busy){		
@@ -146,16 +150,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 //		
 //		/* Check for conflicts with other events in the calendar */		
-//		$findParams = GO_Base_Db_FindParams::newInstance();
+//		$findParams = \GO\Base\Db\FindParams::newInstance();
 //		$findParams->getCriteria()->addCondition("calendar_id", $event->calendar_id);
 //		if(!$event->isNew)
 //			$findParams->getCriteria()->addCondition("resource_event_id", $event->id, '<>');
 //		
-//		$conflictingEvents = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $event->start_time, $event->end_time, true);
+//		$conflictingEvents = \GO\Calendar\Model\Event::model()->findCalculatedForPeriod($findParams, $event->start_time, $event->end_time, true);
 //		
 //		while($conflictEvent = array_shift($conflictingEvents)) {
 //			
-//			GO::debug("Conflict: ".$event->id." ".$event->name);
+//			\GO::debug("Conflict: ".$event->id." ".$event->name);
 //
 //			if($conflictEvent["id"]!=$event->id && (empty($params['exception_for_event_id']) || $params['exception_for_event_id']!=$conflictEvent["id"])){
 //				throw new Exception('Ask permission');
@@ -173,12 +177,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			
 			if (count($resources) > 0) {
 				
-				$findParams = GO_Base_Db_FindParams::newInstance();
+				$findParams = \GO\Base\Db\FindParams::newInstance();
 				$findParams->getCriteria()->addInCondition("calendar_id", $resources);
 				if(!$event->isNew)
 					$findParams->getCriteria()->addCondition("resource_event_id", $event->id, '<>');
 				
-				$conflictingEvents = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $event->start_time, $event->end_time, true);
+				$conflictingEvents = \GO\Calendar\Model\Event::model()->findCalculatedForPeriod($findParams, $event->start_time, $event->end_time, true);
 				
 				$resourceConlictsFound=false;
 			
@@ -210,9 +214,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$this->_saveResources($params, $model, $isNewEvent, $modifiedAttributes);
 		}
 		
-		if(GO::modules()->files){
+		if(\GO::modules()->files){
 			//handle attachment when event is saved from an email.
-			$f = new GO_Files_Controller_Folder();
+			$f = new \GO\Files\Controller\Folder();
 			$f->processAttachments($response, $model, $params);
 		}
 		 
@@ -246,7 +250,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			}
 		}
 		
-		$allParticipantsStmt = GO_Calendar_Model_Participant::model()->findByAttributes(array(
+		$allParticipantsStmt = \GO\Calendar\Model\Participant::model()->findByAttributes(array(
 				'event_id'=>$model->id,
 				'is_organizer'=>0
 			));
@@ -254,7 +258,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		foreach ($allParticipantsStmt as $participantModel)
 			$allParticipantIds[] = $participantModel->user_id;
 		
-		$newParticipantIds = !empty(GO::session()->values['new_participant_ids']) ? GO::session()->values['new_participant_ids'] : array();
+		$newParticipantIds = !empty(\GO::session()->values['new_participant_ids']) ? \GO::session()->values['new_participant_ids'] : array();
 		$oldParticipantsIds = array_diff($allParticipantIds,$newParticipantIds);
 		if (!empty($newParticipantIds) && !empty($oldParticipantsIds))
 			$response['askForMeetingRequestForNewParticipants'] = true;
@@ -263,7 +267,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	protected function actionSendMeetingRequest($params){
-		$event = GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
+		$event = \GO\Calendar\Model\Event::model()->findByPk($params['event_id']);
 		$response['success']=$event->sendMeetingRequest(!empty($params['new_participants_only']));
 		
 		return $response;
@@ -286,12 +290,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				foreach ($params['resources'] as $resource_calendar_id => $enabled) {
 
 					if (!$isNewEvent)
-						$resourceEvent = GO_Calendar_Model_Event::model()->findResourceForEvent($model->id, $resource_calendar_id);
+						$resourceEvent = \GO\Calendar\Model\Event::model()->findResourceForEvent($model->id, $resource_calendar_id);
 					else
 						$resourceEvent = false;
 
 					if (empty($resourceEvent))
-						$resourceEvent = new GO_Calendar_Model_Event();
+						$resourceEvent = new \GO\Calendar\Model\Event();
 
 					$resourceEvent->resource_event_id = $model->id;
 					$resourceEvent->calendar_id = $resource_calendar_id;
@@ -306,7 +310,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					$resourceEvent->busy = !$resourceEvent->calendar->group->show_not_as_busy;
 
 
-					if (GO::modules()->customfields && isset($params['resource_options'][$resource_calendar_id]))
+					if (\GO::modules()->customfields && isset($params['resource_options'][$resource_calendar_id]))
 						$resourceEvent->customfieldsRecord->setAttributes($params['resource_options'][$resource_calendar_id]);
 
 					$resourceEvent->save(true);
@@ -315,10 +319,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				}
 			}
 			//delete all other resource events
-			$stmt = GO_Calendar_Model_Event::model()->find(
-							GO_Base_Db_FindParams::newInstance()
+			$stmt = \GO\Calendar\Model\Event::model()->find(
+							\GO\Base\Db\FindParams::newInstance()
 											->criteria(
-															GO_Base_Db_FindCriteria::newInstance()
+															\GO\Base\Db\FindCriteria::newInstance()
 															->addInCondition('id', $ids, 't', true, true)
 															->addCondition('resource_event_id', $model->id)
 											)
@@ -327,7 +331,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 	}
 
-	private function _saveParticipants($params, GO_Calendar_Model_Event $event, &$response) {
+	private function _saveParticipants($params, \GO\Calendar\Model\Event $event, &$response) {
 
 		$response['participants'] = array();
 		
@@ -341,12 +345,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			if(count($participants)>1){				
 				$hasOrganizer=false;
 				foreach ($participants as $p) {
-					$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
+					$participant = \GO\Calendar\Model\Participant::model()->findSingleByAttributes(array(
 							'email'=> $p['email'],
 							'event_id'=>$event->id
 					));
 					if (!$participant){
-						$participant = new GO_Calendar_Model_Participant();
+						$participant = new \GO\Calendar\Model\Participant();
 						
 						//ask for meeting request because there's a new participant
 						$response['askForMeetingRequest']=true;
@@ -369,10 +373,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				}
 			}
 
-			$stmt = GO_Calendar_Model_Participant::model()->find(
-							GO_Base_Db_FindParams::newInstance()
+			$stmt = \GO\Calendar\Model\Participant::model()->find(
+							\GO\Base\Db\FindParams::newInstance()
 											->criteria(
-															GO_Base_Db_FindCriteria::newInstance()
+															\GO\Base\Db\FindCriteria::newInstance()
 															->addInCondition('id', $ids, 't', true, true)
 															->addCondition('event_id', $event->id)
 											)
@@ -385,10 +389,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$organizer = $event->getDefaultOrganizerParticipant();
 				
 				$existing = $event->participants(
-								GO_Base_Db_FindParams::newInstance()
+								\GO\Base\Db\FindParams::newInstance()
 									->single()
 									->criteria(
-													GO_Base_Db_FindCriteria::newInstance()
+													\GO\Base\Db\FindCriteria::newInstance()
 													->addCondition('email',$organizer->email)
 													)
 								);
@@ -416,7 +420,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //	 * @param type $isNewEvent
 //	 * @param type $modifiedAttributes
 //	 * @param type $method
-//	 * @param GO_Calendar_Model_Participant $sendingParticipant 
+//	 * @param \GO\Calendar\Model\Participant $sendingParticipant 
 //	 */
 //	private function _sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes, $method='REQUEST', $sendingParticipant=false) {
 //
@@ -431,55 +435,55 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //									
 //				if($shouldSend){
 //					if($isNewEvent){
-//						$subject = GO::t('invitation', 'calendar').': '.$event->name;
+//						$subject = \GO::t('invitation', 'calendar').': '.$event->name;
 //					}elseif($sendingParticipant)
 //					{							
-//						$updateReponses = GO::t('updateReponses','calendar');
+//						$updateReponses = \GO::t('updateReponses','calendar');
 //						$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $event->name);
 //					}elseif($method == 'CANCEL')
 //					{
-//						$subject = GO::t('cancellation','calendar').': '.$event->name;
+//						$subject = \GO::t('cancellation','calendar').': '.$event->name;
 //					}else
 //					{
-//						$subject = GO::t('invitation_update', 'calendar').': '.$event->name;
+//						$subject = \GO::t('invitation_update', 'calendar').': '.$event->name;
 //					}
 //
 //
-//					$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
-//					$declineUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+//					$acceptUrl = \GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+//					$declineUrl = \GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
 //
 //					if($method=='REQUEST' && $isNewEvent){
-//						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
+//						$body = '<p>' . \GO::t('invited', 'calendar') . '</p>' .
 //										$event->toHtml() .
-//										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
-//										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-//										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+//										'<p><b>' . \GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+//										'<p>' . \GO::t('acccept_question', 'calendar') . '</p>' .
+//										'<a href="'.$acceptUrl.'">'.\GO::t('accept', 'calendar') . '</a>' .
 //										'&nbsp;|&nbsp;' .
-//										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+//										'<a href="'.$declineUrl.'">'.\GO::t('decline', 'calendar') . '</a>';
 //					}elseif($method=='CANCEL') {
-//						$body = '<p>' . GO::t('cancelMessage', 'calendar') . '</p>' .
+//						$body = '<p>' . \GO::t('cancelMessage', 'calendar') . '</p>' .
 //										$event->toHtml();
 //					}else // on update event
 //					{
-//						$body = '<p>' . GO::t('invitation_update', 'calendar') . '</p>' .
+//						$body = '<p>' . \GO::t('invitation_update', 'calendar') . '</p>' .
 //										$event->toHtml() .
-//										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
-//										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-//										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+//										'<p><b>' . \GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+//										'<p>' . \GO::t('acccept_question', 'calendar') . '</p>' .
+//										'<a href="'.$acceptUrl.'">'.\GO::t('accept', 'calendar') . '</a>' .
 //										'&nbsp;|&nbsp;' .
-//										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+//										'<a href="'.$declineUrl.'">'.\GO::t('decline', 'calendar') . '</a>';
 //					}
 //
-//					$fromEmail = GO::user() ? GO::user()->email : $sendingParticipant->email;
-//					$fromName = GO::user() ? GO::user()->name : $sendingParticipant->name;
+//					$fromEmail = \GO::user() ? \GO::user()->email : $sendingParticipant->email;
+//					$fromName = \GO::user() ? \GO::user()->name : $sendingParticipant->name;
 //
 //					
 //					$toEm = $participant->email;
 //          $toName = $participant->name;
 //
-//          GO::debug("SEND EVENT INVITATION FROM: ".$fromEmail."(".$fromName.") TO: ".$toEm."(".$toName.")");
+//          \GO::debug("SEND EVENT INVITATION FROM: ".$fromEmail."(".$fromName.") TO: ".$toEm."(".$toName.")");
 //
-//					$message = GO_Base_Mail_Message::newInstance($subject)
+//					$message = \GO\Base\Mail\Message::newInstance($subject)
 //									->setFrom($fromEmail, $fromName)
 //									->addTo($participant->email, $participant->name);
 //
@@ -487,11 +491,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //
 //					$message->setHtmlAlternateBody($body);
 //					//$message->setBody($body, 'text/html','UTF-8');
-//					$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
+//					$a = Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
 //					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 //					$a->setDisposition("inline");
 //					$message->attach($a);
-//					GO_Base_Mail_Mailer::newGoInstance()->send($message);
+//					\GO\Base\Mail\Mailer::newGoInstance()->send($message);
 //				}
 //				
 //			
@@ -500,17 +504,17 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 	protected function beforeDisplay(&$response, &$model, &$params) {
 		
-		unset(GO::session()->values['new_participant_ids']);
+		unset(\GO::session()->values['new_participant_ids']);
 		
-		if($model->isPrivate(GO::user()) && $model->user_id != GO::user()->id && $model->calendar->user_id!=GO::user()->id)
-			throw new GO_Base_Exception_AccessDenied();
+		if($model->isPrivate(\GO::user()) && $model->user_id != \GO::user()->id && $model->calendar->user_id!=\GO::user()->id)
+			throw new \GO\Base\Exception\AccessDenied();
 		
 		return parent::beforeDisplay($response, $model, $params);
 	}
 	
 	protected function actionLoad($params) {
 		
-		unset(GO::session()->values['new_participant_ids']);
+		unset(\GO::session()->values['new_participant_ids']);
 		
 		$this->_changeTimeParams($params);
 		
@@ -520,8 +524,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function beforeLoad(&$response, &$model, &$params) {
 		
 	
-		if($model->isPrivate(GO::user()) && $model->user_id != GO::user()->id && $model->calendar->user_id!=GO::user()->id)
-			throw new GO_Base_Exception_AccessDenied();
+		if($model->isPrivate(\GO::user()) && $model->user_id != \GO::user()->id && $model->calendar->user_id!=\GO::user()->id)
+			throw new \GO\Base\Exception\AccessDenied();
 	
 		if (!empty($params['exception_date'])) {
 			//$params['exception_date'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
@@ -538,22 +542,22 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		$response = self::reminderSecondsToForm($response);
 
-		$response['data']['start_time'] = date(GO::user()->time_format, $model->start_time);
-		$response['data']['end_time'] = date(GO::user()->time_format, $model->end_time);
+		$response['data']['start_time'] = date(\GO::user()->time_format, $model->start_time);
+		$response['data']['end_time'] = date(\GO::user()->time_format, $model->end_time);
 
 		if (isset($response['data']['rrule']) && !empty($response['data']['rrule'])) {
-			$rRule = new GO_Base_Util_Icalendar_Rrule();
+			$rRule = new \GO\Base\Util\Icalendar\Rrule();
 			$rRule->readIcalendarRruleString($model->start_time, $model->rrule);
 			$createdRule = $rRule->createJSONOutput();
 
 			$response['data'] = array_merge($response['data'], $createdRule);
 		}
 
-		$response['data']['start_date'] = GO_Base_Util_Date::get_timestamp($model->start_time, false);
-		$response['data']['end_date'] = GO_Base_Util_Date::get_timestamp($model->end_time, false);
+		$response['data']['start_date'] = \GO\Base\Util\Date::get_timestamp($model->start_time, false);
+		$response['data']['end_date'] = \GO\Base\Util\Date::get_timestamp($model->end_time, false);
 
-		if (GO::modules()->customfields)
-			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Calendar_Model_Event", $model->calendar->group_id);
+		if (\GO::modules()->customfields)
+			$response['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("\GO\Calendar\Model\Event", $model->calendar->group_id);
 
 		$response['group_id'] = $model->calendar->group_id;
 		
@@ -569,7 +573,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if(!$model->isResource() && $model->id>0)
 			$this->_loadResourceEvents($model, $response);
 		
-//		$response['data']['has_other_participants']=$model->hasOtherParticipants(GO::user()->id);
+//		$response['data']['has_other_participants']=$model->hasOtherParticipants(\GO::user()->id);
 		
 		$response['data']['user_name']=$model->user ? $model->user->name : "Unknown";
 		
@@ -581,11 +585,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			if(!empty($params['linkModelNameAndId'])){
 				$arr = explode(':', $params['linkModelNameAndId']);
 				
-				if($arr[0]=='GO_Addressbook_Model_Contact'){
-					$contact = GO_Addressbook_Model_Contact::model()->findByPk($arr[1]);
+				if($arr[0]=='\GO\Addressbook\Model\Contact'){
+					$contact = \GO\Addressbook\Model\Contact::model()->findByPk($arr[1]);
 					
 					if($contact){
-						$participantModel = new GO_Calendar_Model_Participant();
+						$participantModel = new \GO\Calendar\Model\Participant();
 						$participantModel->setContact($contact);
 						
 						$response['participants']['results'][]=$participantModel->toJsonArray($model->start_time, $model->end_time);
@@ -595,7 +599,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			}
 		}else
 		{
-			$particsStmt = GO_Calendar_Model_Participant::model()->findByAttribute('event_id',$params['id']);
+			$particsStmt = \GO\Calendar\Model\Participant::model()->findByAttribute('event_id',$params['id']);
 			$response['participants']=array('results'=>array(),'total'=>0,'success'=>true);
 
 			while ($participantModel = $particsStmt->fetch()) {
@@ -631,7 +635,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 	/**
 	 *
-	 * @param GO_Calendar_Model_Event $event
+	 * @param \GO\Calendar\Model\Event $event
 	 * @param array $response 
 	 */
 	private function _loadResourceEvents($event, &$response){
@@ -644,7 +648,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$response['data']['status_'.$resourceEvent->calendar->id] = $resourceEvent->localizedStatus;
 			$response['data']['resources_checked'][] = $resourceEvent->calendar->id;
 			
-			if(GO::modules()->customfields){
+			if(\GO::modules()->customfields){
 				
 				$attr = $resourceEvent->customfieldsRecord->getAttributes('formatted');
 				foreach($attr as $key=>$value){
@@ -687,9 +691,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	}	
 	
 	protected function actionViewStore($params) {
-		$view = GO_Calendar_Model_View::model()->findByPk($params['view_id']);
+		$view = \GO\Calendar\Model\View::model()->findByPk($params['view_id']);
 		if (!$view)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		$response['title']=$view->name;
 		
@@ -749,7 +753,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		//dirty hack to save multiselect grid state
 		if(isset($_REQUEST['calendars']))
-			GO::config()->save_setting('ms_calendars', implode(',', json_decode($_REQUEST['calendars'])), GO::session()->values['user_id']);
+			\GO::config()->save_setting('ms_calendars', implode(',', json_decode($_REQUEST['calendars'])), \GO::session()->values['user_id']);
 		
 		if(!empty($params['start_time']))
 			$startTime = $params['start_time'];
@@ -763,9 +767,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		// Check for the given calendars if they have events in the given period
 		if(!empty($params['view_id'])){
-				$view = GO_Calendar_Model_View::model()->findByPk($params['view_id']);
+				$view = \GO\Calendar\Model\View::model()->findByPk($params['view_id']);
 				if(!$view)
-					throw new GO_Base_Exception_NotFound();
+					throw new \GO\Base\Exception\NotFound();
 				
 				//$calendarModels = $view->calendars;
 				$calendarModels = array_merge($view->getGroupCalendars()->fetchAll(), $view->calendars->fetchAll());
@@ -797,9 +801,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		foreach($calendars as $calendarId){
 			// Get the calendar model that $calendarIdis used for these events
 			try{
-				$calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
+				$calendar = \GO\Calendar\Model\Calendar::model()->findByPk($calendarId);
 				if(!$calendar)
-					throw new GO_Base_Exception_NotFound();
+					throw new \GO\Base\Exception\NotFound();
 				
 				$calendarModels[]=$calendar;
 				
@@ -819,7 +823,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 
 				if($response['calendar_count'] > 1){
-					$background = $calendar->getColor(GO::user()->id);
+					$background = $calendar->getColor(\GO::user()->id);
 
 
 					if(empty($background)){
@@ -837,7 +841,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				}
 				
 				if(empty($params['events_only'])){
-					if(!$bdaysAdded && $calendar->show_bdays && GO::modules()->addressbook){
+					if(!$bdaysAdded && $calendar->show_bdays && \GO::modules()->addressbook){
 						$bdaysAdded=true;
 						$response = $this->_getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime);
 					}
@@ -847,19 +851,19 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 						$response = $this->_getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime);
 					}
 					
-					if (GO::modules()->leavedays) {
+					if (\GO::modules()->leavedays) {
 						$response = $this->_getLeavedaysResponseForPeriod($response,$calendar,$startTime,$endTime);
 					}
 
 				}
 				
 					
-				if(GO::modules()->tasks && empty($params['events_only'])){
+				if(\GO::modules()->tasks && empty($params['events_only'])){
 					$response = $this->_getTaskResponseForPeriod($response,$calendar,$startTime,$endTime);
 				}
 
 				$response = $this->_getEventResponseForPeriod($response,$calendar,$startTime,$endTime);
-			}	catch(GO_Base_Exception_AccessDenied $e){
+			}	catch(\GO\Base\Exception\AccessDenied $e){
 				//skip calendars without permission
 			}
 		}
@@ -868,7 +872,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$defaultWritableCalendar = $this->_getDefaultWritableCalendar($calendarModels);
 		if($defaultWritableCalendar){
 			$response['calendar_id']=$defaultWritableCalendar->id;
-			$response['write_permission']= $defaultWritableCalendar->permissionLevel >= GO_Base_Model_Acl::WRITE_PERMISSION?true:false;
+			$response['write_permission']= $defaultWritableCalendar->permissionLevel >= \GO\Base\Model\Acl::WRITE_PERMISSION?true:false;
 //			$response['calendar_name']=$defaultWritableCalendar->name;
 			$response['permission_level']=$defaultWritableCalendar->permissionLevel;
 		}else
@@ -911,14 +915,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 */
 	private function _getDefaultWritableCalendar(array $calendarModels){
 		
-		$defaultCalendar = GO_Calendar_Model_Calendar::model()->findDefault(GO::user()->id);
+		$defaultCalendar = \GO\Calendar\Model\Calendar::model()->findDefault(\GO::user()->id);
 		$calendar = false;
 		
 		foreach($calendarModels as $cal){
 			if($cal->id == $defaultCalendar->id)
 				return $cal;
 			
-			if(empty($calendar) && $cal->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION))
+			if(empty($calendar) && $cal->checkPermissionLevel(\GO\Base\Model\Acl::CREATE_PERMISSION))
 				$calendar = $cal;
 		}
 		
@@ -930,14 +934,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * for this calendar between the start and end time
 	 * 
 	 * @param array $response
-	 * @param GO_Calendar_Model_Calendar $calendar
+	 * @param \GO\Calendar\Model\Calendar $calendar
 	 * @param string $startTime
 	 * @param string $endTime
 	 * @return array 
 	 */
 	private function _getTaskResponseForPeriod($response,$calendar,$startTime,$endTime){
 		$resultCount = 0;
-		$dayString = GO::t('full_days');
+		$dayString = \GO::t('full_days');
 		
 		$tasklists = $calendar->visible_tasklists;
 
@@ -948,7 +952,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if(!empty($lists)){
 			
 		  
-			$taskFindCriteria = GO_Base_Db_FindCriteria::newInstance()
+			$taskFindCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('due_time', strtotime($startTime),'>=')
 							->addCondition('due_time', strtotime($endTime), '<=');
 			
@@ -959,10 +963,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$taskFindCriteria->addInCondition('tasklist_id', array_keys($lists));
 	
 
-			$taskFindParams = GO_Base_Db_FindParams::newInstance()
+			$taskFindParams = \GO\Base\Db\FindParams::newInstance()
 							->criteria($taskFindCriteria);
 
-			$tasks = GO_Tasks_Model_Task::model()->find($taskFindParams);
+			$tasks = \GO\Tasks\Model\Task::model()->find($taskFindParams);
 
 			while($task = $tasks->fetch()){
 
@@ -983,10 +987,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					'start_time'=>$startTime,
 					'end_time'=>$endTime,
 					'all_day_event'=>1,
-					'model_name'=>'GO_Tasks_Model_Task',
+					'model_name'=>'\GO\Tasks\Model\Task',
 					//'background'=>$calendar->displayColor,
 					'background'=>'EBF1E2',
-					'day'=>$dayString[date('w', ($task->due_time))].' '.GO_Base_Util_Date::get_timestamp($task->due_time,false),
+					'day'=>$dayString[date('w', ($task->due_time))].' '.\GO\Base\Util\Date::get_timestamp($task->due_time,false),
 					'read_only'=>true,
 					'task_id'=>$task->id
 				);
@@ -1010,7 +1014,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * Fill the response array with the holidays between the start and end time
 	 * 
 	 * @param array $response
-	 * @param GO_Calendar_Model_Calendar $calendar
+	 * @param \GO\Calendar\Model\Calendar $calendar
 	 * @param string $startTime
 	 * @param string $endTime
 	 * @return array 
@@ -1023,8 +1027,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			return $response;
 		
 		
-		//$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
-		$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->holidayset);
+		//$holidays = \GO\Base\Model\Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
+		$holidays = \GO\Base\Model\Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->holidayset);
 
 		if($holidays){
 			while($holiday = $holidays->fetch()){ 
@@ -1048,7 +1052,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * (must have Holidays (Leave days) module enabled.
 	 * 
 	 * @param array $response
-	 * @param GO_Calendar_Model_Calendar $calendar
+	 * @param \GO\Calendar\Model\Calendar $calendar
 	 * @param string $startTime
 	 * @param string $endTime
 	 * @return array 
@@ -1060,9 +1064,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if(!$calendar->user)
 			return $response;
 		
-//		$leavedays = GO_Leavedays_Model_Leaveday::model()
-		//$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
-		$leavedaysStmt = GO_Leavedays_Model_Leaveday::model()->getLeavedaysInPeriod($calendar->user->id,$startTime, $endTime);
+//		$leavedays = \GO\Leavedays\Model\Leaveday::model()
+		//$holidays = \GO\Base\Model\Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
+		$leavedaysStmt = \GO\Leavedays\Model\Leaveday::model()->getLeavedaysInPeriod($calendar->user->id,$startTime, $endTime);
 		
 		if($leavedaysStmt){
 			while($leavedayModel = $leavedaysStmt->fetch()){ 
@@ -1087,18 +1091,18 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * addressbooks between the start and end time
 	 * 
 	 * @param array $response
-	 * @param GO_Calendar_Model_Calendar $calendar
+	 * @param \GO\Calendar\Model\Calendar $calendar
 	 * @param string $startTime
 	 * @param string $endTime
 	 * @return array 
 	 */
 	private function _getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime){
-		$adressbooks = GO_Addressbook_Model_Addressbook::model()->find(
-						GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION, $calendar->user_id)
+		$adressbooks = \GO\Addressbook\Model\Addressbook::model()->find(
+						\GO\Base\Db\FindParams::newInstance()->permissionLevel(\GO\Base\Model\Acl::READ_PERMISSION, $calendar->user_id)
 						);
 		
 		$resultCount = 0;
-		$dayString = GO::t('full_days');
+		$dayString = \GO::t('full_days');
 		$addressbookKeys = array();
 
 		while($addressbook = $adressbooks->fetch()){
@@ -1113,7 +1117,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			if(!in_array($contact->id, $alreadyProcessed)){
 				$alreadyProcessed[] = $contact->id;
 
-				$name = GO_Base_Util_String::format_name($contact->last_name, $contact->first_name, $contact->middle_name);
+				$name = \GO\Base\Util\String::format_name($contact->last_name, $contact->first_name, $contact->middle_name);
 				$start_arr = explode('-',$contact->upcoming);
 
 				$start_unixtime = mktime(0,0,0,$start_arr[1],$start_arr[2],$start_arr[0]);
@@ -1122,17 +1126,17 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				
 				$response['results'][$this->_getIndex($response['results'],strtotime($contact->upcoming.' 00:00'))] = array(
 					'id'=>$response['count']++,
-					'name'=>htmlspecialchars(str_replace('{NAME}',$name,GO::t('birthday_name','calendar')), ENT_COMPAT, 'UTF-8'),
-					'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$contact->upcoming-$contact->birthday), GO::t('birthday_desc','calendar')), ENT_COMPAT, 'UTF-8'),
-					'time'=>date(GO::user()->time_format, $start_unixtime),												
+					'name'=>htmlspecialchars(str_replace('{NAME}',$name,\GO::t('birthday_name','calendar')), ENT_COMPAT, 'UTF-8'),
+					'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$contact->upcoming-$contact->birthday), \GO::t('birthday_desc','calendar')), ENT_COMPAT, 'UTF-8'),
+					'time'=>date(\GO::user()->time_format, $start_unixtime),												
 					'start_time'=>$contact->upcoming.' 00:00',
 					'end_time'=>$contact->upcoming.' 23:59',
-					'model_name'=>'GO_Adressbook_Model_Contact',
+					'model_name'=>'\GO\Adressbook\Model\Contact',
 //					'background'=>$calendar->displayColor,
 					'background'=>'EBF1E2',
 					'calendar_id'=>$calendar->id,
 					'all_day_event'=>1,
-					'day'=>$dayString[date('w', $start_unixtime)].' '.GO_Base_Util_Date::get_timestamp($start_unixtime,false),
+					'day'=>$dayString[date('w', $start_unixtime)].' '.\GO\Base\Util\Date::get_timestamp($start_unixtime,false),
 					'read_only'=>true,
 					'contact_id'=>$contact->id
 				);
@@ -1150,7 +1154,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * the start and end time
 	 * 
 	 * @param array $response
-	 * @param GO_Calendar_Model_Calendar $calendar
+	 * @param \GO\Calendar\Model\Calendar $calendar
 	 * @param string $startTime
 	 * @param string $endTime
 	 * @return array 
@@ -1159,9 +1163,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$resultCount = 0;
 	
 		// Get all the localEvent models between the given time period
-		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod(
-								GO_Base_Db_FindParams::newInstance()->criteria(
-									GO_Base_Db_FindCriteria::newInstance()->addCondition('calendar_id', $calendar->id)
+		$events = \GO\Calendar\Model\Event::model()->findCalculatedForPeriod(
+								\GO\Base\Db\FindParams::newInstance()->criteria(
+									\GO\Base\Db\FindCriteria::newInstance()->addCondition('calendar_id', $calendar->id)
 								)->select(),
 								strtotime($startTime), 
 								strtotime($endTime)
@@ -1195,7 +1199,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			// If you are showing more than one calendar, then change the display 
 			// color of the current event to the color of the calendar it belongs to.
 			if($response['calendar_count'] > 1){
-				$background = $calendar->getColor(GO::user()->id);
+				$background = $calendar->getColor(\GO::user()->id);
 				if(empty($background))
 					$background = $calendar->displayColor;				
 				$event->setBackgroundColor($background);
@@ -1217,17 +1221,17 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	}
 		
 	protected function actionIcs($params) {
-		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
+		$event = \GO\Calendar\Model\Event::model()->findByPk($params['id']);
 		header('Content-Type: text/plain');
-		//GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File('calendar.ics'));
+		//\GO\Base\Util\Http::outputDownloadHeaders(new \GO\Base\FS\File('calendar.ics'));
 		echo $event->toICS();
 	}
 	
 	protected function actionDelete($params){
 		
-		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
+		$event = \GO\Calendar\Model\Event::model()->findByPk($params['id']);
 		if(!$event)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		if(!isset($params['send_cancel_notice']) && $event->hasOtherParticipants()){
 			return array(
@@ -1245,7 +1249,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				}else{
 					
 					$participant = $event->getParticipantOfCalendar();
-					$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
+					$participant->status=\GO\Calendar\Model\Participant::STATUS_DECLINED;
 					$participant->save();
 					
 					$event->replyToOrganizer();
@@ -1266,13 +1270,13 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @param Sabre\VObject\Component $vevent
 	 * @param type $recurrenceDate
 	 * @return boolean
-	 * @throws GO_Base_Exception_NotFound
+	 * @throws \GO\Base\Exception\NotFound
 	 */
-	private function _handleIcalendarReply(Sabre\VObject\Component $vevent, $recurrenceDate, GO_Email_Model_Account $account){
+	private function _handleIcalendarReply(Sabre\VObject\Component $vevent, $recurrenceDate, \GO\Email\Model\Account $account){
 		//find existing event
-		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, $account->user_id);
+		$masterEvent = \GO\Calendar\Model\Event::model()->findByUuid((string)$vevent->uid, $account->user_id);
 		if(!$masterEvent)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		if($recurrenceDate){
 			$event = $masterEvent->findException($recurrenceDate);
@@ -1287,7 +1291,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$participant = $event->importVObjectAttendee($event, $vevent->attendee);
 
-		$response['feedback']=sprintf(GO::t('eventUpdatedIn','calendar'), $event->calendar->name, $participant->statusName);
+		$response['feedback']=sprintf(\GO::t('eventUpdatedIn','calendar'), $event->calendar->name, $participant->statusName);
 		$response['success']=true;
 		
 		return $response;
@@ -1299,23 +1303,23 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @param Sabre\VObject\Component $vevent
 	 * @param type $recurrenceDate
 	 * @return boolean
-	 * @throws GO_Base_Exception_NotFound
+	 * @throws \GO\Base\Exception\NotFound
 	 */
-	private function _handleIcalendarRequest(Sabre\VObject\Component $vevent, $recurrenceDate, GO_Email_Model_Account $account){
+	private function _handleIcalendarRequest(Sabre\VObject\Component $vevent, $recurrenceDate, \GO\Email\Model\Account $account){
 		
-		$settings = GO_Calendar_Model_Settings::model()->getDefault($account->user);
+		$settings = \GO\Calendar\Model\Settings::model()->getDefault($account->user);
 		
-		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, 0, $settings->calendar_id);		
+		$masterEvent = \GO\Calendar\Model\Event::model()->findByUuid((string)$vevent->uid, 0, $settings->calendar_id);		
 
-		if (!$settings->calendar->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new Exception(sprintf(GO::t('cannotHandleInvitation','calendar'),$masterEvent->calendar->name));
+		if (!$settings->calendar->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION))
+			throw new Exception(sprintf(\GO::t('cannotHandleInvitation','calendar'),$masterEvent->calendar->name));
 		
 		//delete existing data		
 		if(!$recurrenceDate){
 			//if no recurring instance was given delete the master event
 			if($masterEvent) {
-				if (!$masterEvent->calendar->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
-					throw new Exception(sprintf(GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
+				if (!$masterEvent->calendar->checkPermissionLevel(\GO\Base\Model\Acl::DELETE_PERMISSION))
+					throw new Exception(sprintf(\GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
 				$masterEvent->delete();
 			}
 		}  else if($masterEvent)
@@ -1324,15 +1328,15 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$exceptionEvent = $masterEvent->findException($recurrenceDate);			
 				
 			if($exceptionEvent) {
-				if (!$masterEvent->calendar->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
-					throw new Exception(sprintf(GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
+				if (!$masterEvent->calendar->checkPermissionLevel(\GO\Base\Model\Acl::DELETE_PERMISSION))
+					throw new Exception(sprintf(\GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
 				$exceptionEvent->delete();
 			}
 			
 			$exception = $masterEvent->hasException($recurrenceDate);
 			if($exception) {
-				if (!$masterEvent->calendar->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
-					throw new Exception(sprintf(GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
+				if (!$masterEvent->calendar->checkPermissionLevel(\GO\Base\Model\Acl::DELETE_PERMISSION))
+					throw new Exception(sprintf(\GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
 				$exception->delete();
 			}
 		}
@@ -1342,7 +1346,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$importAttributes=array('is_organizer'=>false,'calendar_id'=>$settings->calendar_id);
 		
 		//import it
-		$event = new GO_Calendar_Model_Event();
+		$event = new \GO\Calendar\Model\Event();
 		$event->importVObject($vevent, $importAttributes,false,true);
 			
 		//notify orgnizer
@@ -1351,8 +1355,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //		if(!$participant)
 //		{
 //			//this is a bad situation. The import thould have detected a user for one of the participants.
-//			//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
-//			$participant = new GO_Calendar_Model_Participant();
+//			//It uses the E-mail account aliases to determine a user. See \GO\Calendar\Model\Event::importVObject
+//			$participant = new \GO\Calendar\Model\Participant();
 //			$participant->event_id=$event->id;
 //			$participant->user_id=$event->calendar->user_id;
 //			$participant->email=$event->calendar->user->email;	
@@ -1369,14 +1373,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$langKey = $eventUpdated ? 'eventUpdatedIn' : 'eventScheduledIn';
 		
 		$response['attendance_event_id']=$event->id;
-		$response['feedback']=sprintf(GO::t($langKey,'calendar'), $event->calendar->name, $participant->statusName);
+		$response['feedback']=sprintf(\GO::t($langKey,'calendar'), $event->calendar->name, $participant->statusName);
 		$response['success']=true;
 		
 		return $response;
 	}
 	
-	private function _handleIcalendarCancel(Sabre\VObject\Component $vevent, $recurrenceDate,GO_Email_Model_Account $account){
-		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, $account->user_id);
+	private function _handleIcalendarCancel(Sabre\VObject\Component $vevent, $recurrenceDate,\GO\Email\Model\Account $account){
+		$masterEvent = \GO\Calendar\Model\Event::model()->findByUuid((string)$vevent->uid, $account->user_id);
 				
 		//delete existing data		
 		if(!$recurrenceDate){
@@ -1394,7 +1398,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 		
 		
-		$response['feedback']=sprintf(GO::t('eventDeleted','calendar'));
+		$response['feedback']=sprintf(\GO::t('eventDeleted','calendar'));
 		$response['success']=true;
 		
 		return $response;
@@ -1403,11 +1407,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function actionAcceptInvitation($params){
 		
 		//todo calendar should be associated with mail account!
-		//GO::user()->id must be replaced with $account->calendar->user_id
+		//\GO::user()->id must be replaced with $account->calendar->user_id
 
 //		$vevent = $this->_getVObjectFromMail($params);
-		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
-		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
+		$account = \GO\Email\Model\Account::model()->findByPk($params['account_id']);		
+		$message = \GO\Email\Model\ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
 		$vcalendar = $message->getInvitationVcalendar();
 		
 	
@@ -1449,39 +1453,39 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 //	protected function actionImportIcs($params){
 //		
-//		$file = new GO_Base_Fs_File($params['file']);
+//		$file = new \GO\Base\Fs\File($params['file']);
 //		$file->convertToUtf8();
 //		$data = $file->getContents();
 //		
 //		//var_dump($data);
 //
-//		$vcalendar = GO_Base_VObject_Reader::read($data);
+//		$vcalendar = \GO\Base\VObject\Reader::read($data);
 //		
 //		foreach($vcalendar->vevent as $vevent){
-//			$event = new GO_Calendar_Model_Event();
+//			$event = new \GO\Calendar\Model\Event();
 //			$event->importVObject($vevent);
 //		}
 //	}
 	
 //	protected function actionImportVcs($params){
 //		
-//		$file = new GO_Base_Fs_File($params['file']);
+//		$file = new \GO\Base\Fs\File($params['file']);
 //		
 //		$data = $file->getContents();
 //		
-//		$vcalendar = GO_Base_VObject_Reader::read($data);
+//		$vcalendar = \GO\Base\VObject\Reader::read($data);
 //		
-//		GO_Base_VObject_Reader::convertICalendarToVCalendar($vcalendar);
+//		\GO\Base\VObject\Reader::convertICalendarToVCalendar($vcalendar);
 //		
 //		foreach($vcalendar->vevent as $vevent){
-//			$event = new GO_Calendar_Model_Event();
+//			$event = new \GO\Calendar\Model\Event();
 //			$event->importVObject($vevent);		
 //		}
 //	}
 
 	public function actionInvitation($params){
 		
-		$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
+		$participant = \GO\Calendar\Model\Participant::model()->findSingleByAttributes(array(
 				'event_id'=>$params['id'],
 				'email'=>$params['email']
 		));
@@ -1495,9 +1499,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 		
 		if(empty($params['accept']))		
-			$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
+			$participant->status=\GO\Calendar\Model\Participant::STATUS_DECLINED;
 		else
-			$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
+			$participant->status=\GO\Calendar\Model\Participant::STATUS_ACCEPTED;
 		
 		//save will be handled by organizer when he get's an email
 		$participant->save();
@@ -1519,7 +1523,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @param string $start_time
 	 * @param string $end_time
 	 * @param array $abooks
-	 * @return GO_Base_Db_ActiveStatement 
+	 * @return \GO\Base\Db\ActiveStatement 
 	 */
 	private function _getBirthdays($start_time,$end_time,$abooks=array()) {
 
@@ -1532,7 +1536,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			."STR_TO_DATE(CONCAT(YEAR('$start')+1,'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e')) "
 			."as upcoming ";
 		
-		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('birthday', '0000-00-00', '!=')
 						->addRawCondition('birthday', 'NULL', 'IS NOT');
 		
@@ -1543,14 +1547,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$having = "upcoming BETWEEN '$start' AND '$end'";
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->distinct()
 						->select($select)
 						->criteria($findCriteria)
 						->having($having)
 						->order('upcoming');
 
-		$contacts = GO_Addressbook_Model_Contact::model()->find($findParams);
+		$contacts = \GO\Addressbook\Model\Contact::model()->find($findParams);
 		
 		return $contacts;
 	}
@@ -1561,18 +1565,18 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @param array $response 
 	 */
 	private function _createPdf($response, $view=false){
-		$pdf = new GO_Calendar_Views_Pdf_CalendarPdf('L', $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false);
+		$pdf = new \GO\Calendar\Views\Pdf\CalendarPdf('L', $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false);
 		$pdf->setParams($response, $view);
-		$pdf->Output(GO_Base_Fs_File::stripInvalidChars($response['title']).'.pdf');
+		$pdf->Output(\GO\Base\Fs\File::stripInvalidChars($response['title']).'.pdf');
 	}
 	
 	
 	
 	public function actionParticipantEmailRecipients($params){
-		$event = GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
+		$event = \GO\Calendar\Model\Event::model()->findByPk($params['event_id']);
 		$participants = $event->participants;
 		
-		$to = new GO_Base_Mail_EmailRecipients();
+		$to = new \GO\Base\Mail\EmailRecipients();
 		
 		while($participant = $participants->fetch()){
 			$to->addRecipient($participant->email, $participant->name);
@@ -1588,30 +1592,30 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	public function actionDeleteOld($params){
 		$this->requireCli();
 		
-		if(!GO::user()->isAdmin())
+		if(!\GO::user()->isAdmin())
 			throw new Exception("You must be admin");
 		
 		$this->checkRequiredParameters(array('date'), $params);
 
 		$params['date']=strtotime($params['date']);
 		
-		if($params['date']>GO_Base_Util_Date::date_add(time(), 0, 0, -1)){
+		if($params['date']>\GO\Base\Util\Date::date_add(time(), 0, 0, -1)){
 			throw new Exception("Please give a date at least one year in the past.");
 		}
 		
-		$sure = readline("If you continue all events older than '".GO_Base_Util_Date::get_timestamp($params['date'], false)."' will be deleted. Are you sure? (y/n)");
+		$sure = readline("If you continue all events older than '".\GO\Base\Util\Date::get_timestamp($params['date'], false)."' will be deleted. Are you sure? (y/n)");
 		echo "\n";
 		if($sure=='y'){
 			
 			echo "Deleting...\n";
 			
-			$findParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
+			$findParams = \GO\Base\Db\FindParams::newInstance()->ignoreAcl();
 
 			$findParams->getCriteria()
 							->addCondition('start_time',$params['date'], '<')
 							->addCondition('repeat_end_time',$params['date'], '<');
 
-			$stmt = GO_Calendar_Model_Event::model()->find($findParams);
+			$stmt = \GO\Calendar\Model\Event::model()->find($findParams);
 
 			foreach($stmt as $event){
 				$event->delete();

@@ -8,9 +8,13 @@
  */
 
 //require vendor lib SabreDav vobject
-//require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
+//require_once(\GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
 		
-class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
+
+namespace GO\Base\VObject;
+
+
+class Reader extends Sabre\VObject\Reader{
 	
 //  const REGEX_ELEMENT_STRING = "/^(?P<name>[A-Z0-9-\.]+)(?:;(?P<params>([^:^\"]|\"([^\"]*)\")*))?:(?P<value>.*)$/i";
 //	const REGEX_PARAM_STRING = '/(?<=^|;)(?P<paramName>[A-Z0-9-]+)(=(?P<paramValue>[^\"^;]*|"[^"]*")(?=$|;))?/i';
@@ -20,7 +24,7 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 //		
 //		
 //		//remove quoted printable line breaks
-//		$dataString = GO_Base_Util_String::normalizeCrlf($dataString,"\n");
+//		$dataString = \GO\Base\Util\String::normalizeCrlf($dataString,"\n");
 //		$dataString = str_replace("=0D=0A=\n", "=0D=0A=",$dataString);
 //		
 //		$lines = explode("\n",$dataString);
@@ -162,17 +166,17 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 //					for($i=0;$i<count($child->children);$i++){
 //						$property = $child->children[$i];
 //						if((string) $property->getValue()==""){
-//							GO_Syncml_Server::debug("Unsetting: ".$property->name);
+//							\GO\Syncml\Server::debug("Unsetting: ".$property->name);
 //							array_splice($child->children, $i, 1);
 //							$i--;
 //						}
 //						
 //						
-//						GO_Syncml_Server::debug("Prop: ".$property->name);
+//						\GO\Syncml\Server::debug("Prop: ".$property->name);
 //						
 //						if(isset($property['ENCODING']) && strtoupper($property['ENCODING'])=='QUOTED-PRINTABLE'){
 //							
-//							GO_Syncml_Server::debug("decode");
+//							\GO\Syncml\Server::debug("decode");
 //							
 //							$value = quoted_printable_decode($property->getValue());
 //							$value = str_replace("\r","",$value);
@@ -183,7 +187,7 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 //					}
 					
 					if(isset($child->rrule) && (string) $child->rrule!=''){
-						$rrule = new GO_Base_Util_Icalendar_Rrule();
+						$rrule = new \GO\Base\Util\Icalendar\Rrule();
 						$rrule->readIcalendarRruleString($child->dtstart->getDateTime()->format('U'), (string) $child->rrule);			
 						$child->rrule = str_replace('RRULE:','',$rrule->createRrule());
 					}					
@@ -211,7 +215,7 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 					}
 					
 					if(isset($child->rrule) && (string) $child->rrule!=''){
-						$rrule = new GO_Base_Util_Icalendar_Rrule();
+						$rrule = new \GO\Base\Util\Icalendar\Rrule();
 						$rrule->readIcalendarRruleString($child->dtstart->getDateTime()->format('U'), (string) $child->rrule);			
 						$child->rrule = str_replace('RRULE:','',$rrule->createVCalendarRrule());
 					}
@@ -239,8 +243,8 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 //				if(isset($property['ENCODING']) && strtoupper($property['ENCODING'])=='QUOTED-PRINTABLE'){
 //					$value = quoted_printable_decode($property->getValue());
 //					$value = str_replace("\r","",$value);
-////					GO::debug($value);
-////					$value = GO_Base_Util_String::to_utf8($value);
+////					\GO::debug($value);
+////					$value = \GO\Base\Util\String::to_utf8($value);
 //					$property->setValue($value);				
 //					unset($property['ENCODING']);
 //				}
@@ -251,12 +255,12 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 				
 				
 //				if($property->name=='EMAIL' || $property->name=='TEL' || $property->name=='ADR'){
-////					GO_Syncml_Server::debug($property->);
+////					\GO\Syncml\Server::debug($property->);
 //					
 //					$types = array();
 //					foreach ($property->parameters as $param){
 //						
-//						GO_Syncml_Server::debug($param->name);
+//						\GO\Syncml\Server::debug($param->name);
 //						if(empty($param->value)){
 //							$types[]=$param->name;
 //							unset($property[$param->name]);
@@ -311,7 +315,7 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 //		Sabre\VObject\Component\VCalendar::$propertyMap['RRULE']='Sabre\\VObject\\Property\\Text';
 		
 		//remove quoted printable line breaks
-		$data = GO_Base_Util_String::normalizeCrlf($data,"\n");
+		$data = \GO\Base\Util\String::normalizeCrlf($data,"\n");
 		if(strpos($data,'QUOTED-PRINTABLE')){		
 			$data = str_replace("=\n", "",$data);
 		}

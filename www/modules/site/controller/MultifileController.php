@@ -1,20 +1,24 @@
 <?php
 
-class GO_Site_Controller_Multifile extends GO_Base_Controller_AbstractJsonController {
+
+namespace GO\Site\Controller;
+
+
+class Multifile extends \GO\Base\Controller\AbstractJsonController {
 	
 	public function actionStore($params){
 		
 		if(!isset($params['model_id']))
-			Throw new GO_Base_Exception_NotFound('NO MODEL ID GIVEN');
+			Throw new \GO\Base\Exception\NotFound('NO MODEL ID GIVEN');
 		
 		if(!isset($params['field_id']))
-			Throw new GO_Base_Exception_NotFound('NO FIELD ID GIVEN');
+			Throw new \GO\Base\Exception\NotFound('NO FIELD ID GIVEN');
 		
 		// When a file is added to the multifileview
 		if(isset($params['addFileStorageFilesById'])){
 			$files = json_decode($params['addFileStorageFilesById'],true);
 			foreach($files as $fileId){
-				GO_Site_Model_MultifileFile::addFromFileSelector($fileId, $params['model_id'], $params['field_id']);
+				\GO\Site\Model\MultifileFile::addFromFileSelector($fileId, $params['model_id'], $params['field_id']);
 			}
 		}
 		
@@ -25,30 +29,30 @@ class GO_Site_Controller_Multifile extends GO_Base_Controller_AbstractJsonContro
 			unset($params['delete_keys']);
 			
 			foreach ($keys as $fileId){
-				GO_Site_Model_MultifileFile::deleteFromFileSelector($fileId, $params['model_id'], $params['field_id']);
+				\GO\Site\Model\MultifileFile::deleteFromFileSelector($fileId, $params['model_id'], $params['field_id']);
 			}
 		}
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()->select('t.*,mf.order,mf.model_id,mf.field_id');
+		$findParams = \GO\Base\Db\FindParams::newInstance()->select('t.*,mf.order,mf.model_id,mf.field_id');
 		$findParams->ignoreAcl();
 		$findParams->order('mf.order');
 		$findParams->joinModel(array(
-			'model' => 'GO_Site_Model_MultifileFile',
+			'model' => '\GO\Site\Model\MultifileFile',
 			'localTableAlias' => 't',
 			'localField' => 'id',
 			'foreignField' => 'file_id',
 			'tableAlias' => 'mf',
-			'criteria' => GO_Base_Db_FindCriteria::newInstance()
+			'criteria' => \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('model_id', $params['model_id'],'=','mf')
 						->addCondition('field_id', $params['field_id'],'=','mf')
 		));
 		
-		$model = new GO_Files_Model_File();
+		$model = new \GO\Files\Model\File();
 		
-		$columnModel = new GO_Base_Data_ColumnModel($model);
+		$columnModel = new \GO\Base\Data\ColumnModel($model);
 		$columnModel->formatColumn('thumb_url', '$model->getThumbUrl(array("lw"=>100, "ph"=>100, "zc"=>1))');
 		
-		$store = new GO_Base_Data_DbStore('GO_Files_Model_File',$columnModel,$params,$findParams);
+		$store = new \GO\Base\Data\DbStore('\GO\Files\Model\File',$columnModel,$params,$findParams);
 
 		$response = $this->renderStore($store);
 		
@@ -63,13 +67,13 @@ class GO_Site_Controller_Multifile extends GO_Base_Controller_AbstractJsonContro
 		
 		$urlParams['filemtime']=$this->mtime;
 		$urlParams['src']=$this->path;
-		return GO::url('core/thumb', $urlParams);
+		return \GO::url('core/thumb', $urlParams);
 	}
 	
 	
 	public function actionAdd($params){
 		
-		$model = new GO_Site_Model_MultifileFile();
+		$model = new \GO\Site\Model\MultifileFile();
 		$model->setAttributes($params);
 		$model->save();
 		
@@ -80,17 +84,17 @@ class GO_Site_Controller_Multifile extends GO_Base_Controller_AbstractJsonContro
 	 * Save the sort of the multifiles
 	 * 
 	 * @param array $params
-	 * @throws GO_Base_Exception
+	 * @throws \GO\Base\Exception
 	 */
 	public function actionSaveSort($params){
 
 		if(!isset($params['sort']))
-			Throw new GO_Base_Exception('Failed to save the sort.');
+			Throw new \GO\Base\Exception('Failed to save the sort.');
 		
 		$sortOrder = json_decode($params['sort']);
 		
 		foreach($sortOrder as $order){
-			$file = GO_Site_Model_MultifileFile::model()->findByPk(array(
+			$file = \GO\Site\Model\MultifileFile::model()->findByPk(array(
 				'model_id' => $order->model_id,
 				'field_id' => $order->field_id,
 				'file_id' => $order->file_id

@@ -11,10 +11,14 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory{
+
+namespace GO\Dav\Fs;
+
+
+class RootDirectory extends Sabre\DAV\FS\Directory{
 
 	public function __construct($path="") {
-		parent::__construct(GO::config()->file_storage_path);
+		parent::__construct(\GO::config()->file_storage_path);
 	}
 	public function getName() {
 		return "root";
@@ -28,14 +32,14 @@ class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory{
 	public function getChildren() {
 		
 		$children = array();
-		$children[] = new GO_Dav_Fs_Directory('users/' . GO::user()->username);
-		$children[] = new GO_Dav_Fs_SharedDirectory();
+		$children[] = new Directory('users/' . \GO::user()->username);
+		$children[] = new SharedDirectory();
 		
-		if(GO::modules()->projects)
-			$children[] = new GO_Dav_Fs_Directory('projects');
+		if(\GO::modules()->projects)
+			$children[] = new Directory('projects');
 		
-		if(GO::modules()->addressbook)
-			$children[] = new GO_Dav_Fs_Directory('addressbook');
+		if(\GO::modules()->addressbook)
+			$children[] = new Directory('addressbook');
 
 
 		return $children;
@@ -51,21 +55,21 @@ class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory{
     public function getChild($name) {
 			
 			switch($name){
-				case GO::user()->username:
-					return new GO_Dav_Fs_Directory('users/' . GO::user()->username);
+				case \GO::user()->username:
+					return new Directory('users/' . \GO::user()->username);
 					break;
 				
 				case 'Shared':
-						return new GO_Dav_Fs_SharedDirectory();
+						return new SharedDirectory();
 					break;
 				case 'projects':
-					if(GO::modules()->projects)
-						return new GO_Dav_Fs_Directory('projects');
+					if(\GO::modules()->projects)
+						return new Directory('projects');
 					break;
 					
 				case 'addressbook':
-					if(GO::modules()->addressbook)
-						return new GO_Dav_Fs_Directory('addressbook');
+					if(\GO::modules()->addressbook)
+						return new Directory('addressbook');
 					break;
 			}
 			
@@ -127,7 +131,7 @@ class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory{
 	 */
 	public function getLastModified() {
 
-		return filemtime(GO::config()->file_storage_path);
+		return filemtime(\GO::config()->file_storage_path);
 	}
 
 }

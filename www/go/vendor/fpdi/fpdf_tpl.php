@@ -17,7 +17,7 @@
 //  limitations under the License.
 //
 
-require_once(GO::config()->root_path.'go/vendor/fpdi/fpdi2tcpdf_bridge.php');
+require_once(\GO::config()->root_path.'go/vendor/fpdi/fpdi2tcpdf_bridge.php');
 
 class FPDF_TPL extends FPDF {
     /**

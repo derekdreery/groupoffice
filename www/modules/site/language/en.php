@@ -36,7 +36,7 @@ $l["deleteContentHasChildren"] = "You cannot delete this item because it has sub
 $l["deleteSite"] = "Delete site";
 $l["deleteSiteConfirm"] = "Are you sure that you want to delete this site";
 
-// Language for model: GO_Site_Model_Content
+// Language for model: \GO\Site\Model\Content
 $l["contentId"] = "ID";
 $l["contentUser_id"] = "User";
 $l["contentCtime"] = "Created";
@@ -52,7 +52,7 @@ $l["contentParent_id"] = "Parent";
 $l["contentSite_id"] = "Site";
 $l["contentSort_order"] = "Sort";
 
-// Language for model: GO_Site_Model_Site
+// Language for model: \GO\Site\Model\Site
 $l["siteId"] = "ID";
 $l["siteName"] = "Name";
 $l["siteUser_id"] = "User";

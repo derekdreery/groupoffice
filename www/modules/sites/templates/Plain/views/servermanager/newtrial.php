@@ -6,49 +6,49 @@ if (GOS::site()->notifier->hasMessage('error')) {
 }
 ?>
 
-<?php echo GO_Sites_Components_Html::beginForm(); ?>	
+<?php echo \GO\Sites\Components\Html::beginForm(); ?>	
 
 <div class="row formrow">					
-	<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'name'); ?>
-	<?php echo GO_Sites_Components_Html::activeTextField($model, 'name'); ?>
-	<span >.<?php echo GO::config()->servermanager_wildcard_domain; ?></span>
-	<?php echo GO_Sites_Components_Html::error($model, 'name'); ?>
+	<?php echo \GO\Sites\Components\Html::activeLabelEx($model, 'name'); ?>
+	<?php echo \GO\Sites\Components\Html::activeTextField($model, 'name'); ?>
+	<span >.<?php echo \GO::config()->servermanager_wildcard_domain; ?></span>
+	<?php echo \GO\Sites\Components\Html::error($model, 'name'); ?>
 </div>
 <div class="row formrow">
-	<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'title'); ?>
-	<?php echo GO_Sites_Components_Html::activeTextField($model, 'title'); ?>
-	<?php echo GO_Sites_Components_Html::error($model, 'title'); ?>
+	<?php echo \GO\Sites\Components\Html::activeLabelEx($model, 'title'); ?>
+	<?php echo \GO\Sites\Components\Html::activeTextField($model, 'title'); ?>
+	<?php echo \GO\Sites\Components\Html::error($model, 'title'); ?>
 </div>		
 
 <div class="row formrow">
-	<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'first_name'); ?>
-	<?php echo GO_Sites_Components_Html::activeTextField($model, 'first_name'); ?>
-	<?php echo GO_Sites_Components_Html::error($model, 'first_name'); ?>
+	<?php echo \GO\Sites\Components\Html::activeLabelEx($model, 'first_name'); ?>
+	<?php echo \GO\Sites\Components\Html::activeTextField($model, 'first_name'); ?>
+	<?php echo \GO\Sites\Components\Html::error($model, 'first_name'); ?>
 </div>	
 
 <div class="row formrow">
-	<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'middle_name'); ?>
-	<?php echo GO_Sites_Components_Html::activeTextField($model, 'middle_name'); ?>
-	<?php echo GO_Sites_Components_Html::error($model, 'middle_name'); ?>
+	<?php echo \GO\Sites\Components\Html::activeLabelEx($model, 'middle_name'); ?>
+	<?php echo \GO\Sites\Components\Html::activeTextField($model, 'middle_name'); ?>
+	<?php echo \GO\Sites\Components\Html::error($model, 'middle_name'); ?>
 </div>	
 
 <div class="row formrow">
-	<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'last_name'); ?>
-	<?php echo GO_Sites_Components_Html::activeTextField($model, 'last_name'); ?>
-	<?php echo GO_Sites_Components_Html::error($model, 'last_name'); ?>
+	<?php echo \GO\Sites\Components\Html::activeLabelEx($model, 'last_name'); ?>
+	<?php echo \GO\Sites\Components\Html::activeTextField($model, 'last_name'); ?>
+	<?php echo \GO\Sites\Components\Html::error($model, 'last_name'); ?>
 </div>	
 
 <div class="row formrow">
-	<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'email'); ?>
-	<?php echo GO_Sites_Components_Html::activeTextField($model, 'email'); ?>
-	<?php echo GO_Sites_Components_Html::error($model, 'email'); ?>
+	<?php echo \GO\Sites\Components\Html::activeLabelEx($model, 'email'); ?>
+	<?php echo \GO\Sites\Components\Html::activeTextField($model, 'email'); ?>
+	<?php echo \GO\Sites\Components\Html::error($model, 'email'); ?>
 </div>	
 
 <div class="row buttons">
-	<?php echo GO_Sites_Components_Html::submitButton('Create trial!'); ?>
-	<?php echo GO_Sites_Components_Html::resetButton('Reset'); ?>
+	<?php echo \GO\Sites\Components\Html::submitButton('Create trial!'); ?>
+	<?php echo \GO\Sites\Components\Html::resetButton('Reset'); ?>
 </div>
 
 <div style="clear:both"></div>
-<?php echo GO_Sites_Components_Html::endForm(); ?>
+<?php echo \GO\Sites\Components\Html::endForm(); ?>
 			

@@ -4,29 +4,33 @@
  * command. It is created in the current user's personal root folder the first
  * time the log() method is used to write data into it.
  */
-class GO_Files_Fs_UserLogFile extends GO_Base_Fs_File{
+
+namespace GO\Files\Fs;
+
+
+class UserLogFile extends \GO\Base\Fs\File{
 	
 	
 	
 	public function __construct($prefixString='') {
 		
-		if (!GO::modules()->isInstalled('files'))
+		if (!\GO::modules()->isInstalled('files'))
 			throw new Exception('The current action requires the files module to be activated for the current user.');
 		
 		// Make sure the current user's folder exists.
 
-		$userFolderModel = GO_Files_Model_Folder::model()->findHomeFolder(GO::user());
+		$userFolderModel = \GO\Files\Model\Folder::model()->findHomeFolder(\GO::user());
 
 		if (empty($userFolderModel)) {
-			$userFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'users/'.GO::user()->username);
+			$userFolder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'users/'.\GO::user()->username);
 			$userFolder->create();
-			$userFolderModel = new GO_Files_Model_Folder();
-			$userFolderModel->findByPath('users/'.GO::user()->username,true);
+			$userFolderModel = new \GO\Files\Model\Folder();
+			$userFolderModel->findByPath('users/'.\GO::user()->username,true);
 		}
 		
 		parent::__construct(
-				GO::config()->file_storage_path.$userFolderModel->path.
-				'/'.$prefixString.GO_Base_Util_Date::get_timestamp(time(), true).'.log'
+				\GO::config()->file_storage_path.$userFolderModel->path.
+				'/'.$prefixString.\GO\Base\Util\Date::get_timestamp(time(), true).'.log'
 			);
 	
 	}

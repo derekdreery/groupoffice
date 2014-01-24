@@ -14,10 +14,10 @@ $rruleString = 'FREQ=MONTHLY;INTERVAL=2';
 
 $start = '02-11-2011 19:00:00';
 
-$rrule = new GO_Base_Util_Icalendar_Rrule();
+$rrule = new \GO\Base\Util\Icalendar\Rrule();
 $rrule->readIcalendarRruleString(strtotime($start), $rruleString);
 
-//$fromTime=GO_Base_Util_Date::clear_time(time());
+//$fromTime=\GO\Base\Util\Date::clear_time(time());
 $next = $rrule->getNextRecurrence();
 for($i=0;$i<10;$i++){
 	
@@ -43,7 +43,7 @@ for($i=0;$i<10;$i++){
 //		'until' => '',
 //);
 //
-//$Recurrence_pattern = new GO_Base_Util_Date_RecurrencePattern($params);
+//$Recurrence_pattern = new \GO\Base\Util\Date_RecurrencePattern($params);
 
 //
 //$date1 = new DateTime("2011-11-01");

@@ -1,5 +1,9 @@
 <?php
-class GO_Admin2userlogin_Admin2userloginModule extends GO_Base_Module{
+
+namespace GO\Admin2userlogin;
+
+
+class Admin2userloginModule extends \GO\Base\Module{
 	public function adminModule() {
 		return true;
 	}

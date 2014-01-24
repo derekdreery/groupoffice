@@ -18,7 +18,11 @@
  * @since Group-Office 3.0
  */
 
-class GO_Base_Util_String {
+
+namespace GO\Base\Util;
+
+
+class String {
 	
 	
 	public static function normalizeCrlf($text, $crlf="\r\n"){
@@ -183,7 +187,7 @@ class GO_Base_Util_String {
 			}
 			
 			if(substr($from_charset,0,5)=='x-mac')
-				return GO_Base_Util_Charset_Xmac::toUtf8($str, $from_charset);
+				return Charset\Xmac::toUtf8($str, $from_charset);
 			
 			$from_charset = self::fixCharset($from_charset);
 
@@ -643,7 +647,7 @@ END;
 	 * @return bool
 	 */
 	public static function validate_email($email) {
-		return GO_Base_Util_Validate::email($email);
+		return Validate::email($email);
 	}
 
 	/**
@@ -721,8 +725,8 @@ END;
 			$middle = isset($last['middle_name']) ? $last['middle_name'] : '';
 			$last = isset($last['last_name']) ? $last['last_name'] : '';
 		}
-		if(GO::user())
-			$sort_name = $sort_name == '' ? GO::user()->sort_name : $sort_name;
+		if(\GO::user())
+			$sort_name = $sort_name == '' ? \GO::user()->sort_name : $sort_name;
 		else
 			$sort_name ='first_name';
 
@@ -915,7 +919,7 @@ END;
 
 	public static function html_to_text($text, $link_list=true){
 
-		$htmlToText = new GO_Base_Util_Html2Text ($text);
+		$htmlToText = new Html2Text ($text);
 		return $htmlToText->get_text($link_list);
 	}
 
@@ -1005,8 +1009,8 @@ END;
 		}
 		
 		// Check for smilies to be enabled by the user (settings->Look & Feel-> Show Smilies)
-		if(GO::user() && GO::user()->show_smilies)
-			$html = GO_Base_Util_String::replaceEmoticons($html,true);
+		if(\GO::user() && \GO::user()->show_smilies)
+			$html = String::replaceEmoticons($html,true);
 
 		return $html;
 	}
@@ -1061,14 +1065,14 @@ END;
 
 		foreach ($emoticons as $emoticon => $img) {
 			
-			$rel = 'views/Extjs3/themes/' . GO::user()->theme . '/images/emoticons/normal/' . $img;
-			if(!file_exists(GO::config()->root_path.$rel))
+			$rel = 'views/Extjs3/themes/' . \GO::user()->theme . '/images/emoticons/normal/' . $img;
+			if(!file_exists(\GO::config()->root_path.$rel))
 				$rel = 'views/Extjs3/themes/Default/images/emoticons/normal/' . $img;
 			
-			$imgpath = GO::config()->host . $rel;
+			$imgpath = \GO::config()->host . $rel;
 			$imgstring = '<img src="' . $imgpath . '" alt="' . $emoticon . '" />';
 			if ($html)
-				$string = GO_Base_Util_String::htmlReplace($emoticon, $imgstring, $string);
+				$string = String::htmlReplace($emoticon, $imgstring, $string);
 			else
 				$string = preg_replace('/([^a-z0-9])' . preg_quote($emoticon) . '([^a-z0-9])/i', "\\1" . $imgstring . "\\2", $string);
 		}
@@ -1084,7 +1088,7 @@ END;
 	 * @return string 
 	 */
 	public static function htmlReplace($search, $replacement, $html){
-    $html = preg_replace_callback('/<[^>]*('.preg_quote($search).')[^>]*>/uis',array('GO_Base_Util_String', '_replaceInTags'), $html);
+    $html = preg_replace_callback('/<[^>]*('.preg_quote($search).')[^>]*>/uis',array('\GO\Base\Util\String', '_replaceInTags'), $html);
     $html = preg_replace('/([^a-z0-9])'.preg_quote($search).'([^a-z0-9])/i',"\\1".$replacement."\\2", $html);
     
     //$html = str_ireplace($search, $replacement, $html);
@@ -1112,7 +1116,7 @@ END;
 	public static function detectXSS($string) {
 		
 		if (!is_string($string)) {
-			GO::debug($string);
+			\GO::debug($string);
 			throw new Exception('Passed parameter is not a string.');
 		}
 
@@ -1152,8 +1156,8 @@ END;
 		foreach ($patterns as $pattern) {
 // Test both the original string and clean string
 			if (preg_match($pattern, $string, $matches) || preg_match($pattern, $orig, $matches)){
-				GO::debug("XSS pattern matched: ".$pattern);
-				//GO::debug($matches);
+				\GO::debug("XSS pattern matched: ".$pattern);
+				//\GO::debug($matches);
 				return true;			
 			}
 		}
@@ -1235,11 +1239,11 @@ END;
 			$html = preg_replace($regexp, "<a target=$1_blank$1 class=$1blue$1 href=$1".$baseUrl, $html);
 		}
 
-		//$regexp="/<a.+?href=([\"']?)".str_replace('/','\\/', GO::config()->full_url)."(.+?)>/i";
-		//$html = preg_replace($regexp, "<a target=$1main$1 class=$1blue$1 href=$1".GO::config()->host."$2$3>", $html);
+		//$regexp="/<a.+?href=([\"']?)".str_replace('/','\\/', \GO::config()->full_url)."(.+?)>/i";
+		//$html = preg_replace($regexp, "<a target=$1main$1 class=$1blue$1 href=$1".\GO::config()->host."$2$3>", $html);
 
 		//Following line breaks links on mobile phones
-		//$html =str_replace(GO::config()->full_url, GO::config()->host, $html);
+		//$html =str_replace(\GO::config()->full_url, \GO::config()->host, $html);
 		
 		return $html;
 	}
@@ -1273,7 +1277,7 @@ END;
 
 		if($password_length==0)
 		{
-			$password_length=GO::config()->default_password_length;
+			$password_length=\GO::config()->default_password_length;
 		}
 
 		// Generate array of allowable characters.
@@ -1423,7 +1427,7 @@ END;
 	{
 		$keys = array_keys($name);
 
-		$editedKeys = array_map(array("GO_Base_Util_String", "_addAccolades"), $keys);
+		$editedKeys = array_map(array("\GO\Base\Util\String", "_addAccolades"), $keys);
 
 		$res = trim(preg_replace('/\s+/', ' ',str_replace($editedKeys, array_values($name),$template)));
 

@@ -1,15 +1,19 @@
 <?php
-class GO_Customfields_Customfieldtype_Datetime extends GO_Customfields_Customfieldtype_Date{
+
+namespace GO\Customfields\Customfieldtype;
+
+
+class Datetime extends Date{
 	
 	public function name(){
 		return 'Date time';
 	}
 	
-	public function formatFormOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model){
+	public function formatFormOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model){
 		$unixtime = strtotime($attributes[$key]);
-		return $attributes[$key]=GO_Base_Util_Date::get_timestamp($unixtime, true);
+		return $attributes[$key]=\GO\Base\Util\Date::get_timestamp($unixtime, true);
 	}
-	public function formatFormInput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
+	public function formatFormInput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
 
 //		if(empty($attributes[$key]))
 //			return null;
@@ -19,11 +23,11 @@ class GO_Customfields_Customfieldtype_Datetime extends GO_Customfields_Customfie
 //		if(isset($attributes[$key."_hour"]))
 //			$time .= ' '.$attributes[$key."_hour"].':'.$attributes[$key."_min"];
 		
-		return GO_Base_Util_Date::to_db_date($attributes[$key], true);
+		return \GO\Base\Util\Date::to_db_date($attributes[$key], true);
 	}
 	
-	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
-		return GO_Base_Util_Date::get_timestamp(strtotime($attributes[$key]), true);
+	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
+		return \GO\Base\Util\Date::get_timestamp(strtotime($attributes[$key]), true);
 	}
 	
 	public function fieldSql() {

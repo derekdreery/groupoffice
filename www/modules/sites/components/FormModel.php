@@ -18,7 +18,11 @@
  * @version $Id FormModel.php 2012-07-04 12:40:32 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-abstract class GO_Sites_Components_FormModel extends GO_Base_Model {
+
+namespace GO\Sites\Components;
+
+
+abstract class FormModel extends \GO\Base\Model {
 
 	protected $requiredAttributes = array();
 
@@ -81,7 +85,7 @@ abstract class GO_Sites_Components_FormModel extends GO_Base_Model {
 		foreach($this->requiredAttributes as $attributeName){
 
 			if(empty($this->$attributeName))
-				$this->setValidationError($attributeName, sprintf(GO::t('attributeRequired'),$this->getAttributeLabel($attributeName)));
+				$this->setValidationError($attributeName, sprintf(\GO::t('attributeRequired'),$this->getAttributeLabel($attributeName)));
 		}
 
 		return !$this->hasValidationErrors();

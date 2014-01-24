@@ -1,7 +1,7 @@
 <?php
 require('../../www/GO.php');
 
-GO::session()->setCurrentUser(1);
+\GO::session()->setCurrentUser(1);
 
 if(PHP_SAPI!='cli')
 	echo "<pre>";
@@ -33,8 +33,8 @@ function classNameToPackage($className){
 }
 
 
-$classes=GO::findClasses('model');
-$stmt = GO::modules()->getAll();
+$classes=\GO::findClasses('model');
+$stmt = \GO::modules()->getAll();
 while($module = $stmt->fetch()){
 	if($module->moduleManager){
 		$models = $module->moduleManager->getModels();
@@ -45,13 +45,13 @@ while($module = $stmt->fetch()){
 
 
 foreach($classes as $model){
-	if($model->isSubclassOf('GO_Base_Db_ActiveRecord') && !$model->isAbstract()){
+	if($model->isSubclassOf('\GO\Base\Db\ActiveRecord') && !$model->isAbstract()){
 		
 		$changed = false;
 
 		echo "Processing ".$model->getName()."\n";
 		
-		$instance = GO::getModel($model->getName());
+		$instance = \GO::getModel($model->getName());
 		$columns = $instance->getColumns();
 		
 		$contents = file_get_contents($model->getFileName());

@@ -1,13 +1,17 @@
 <?php
-class GO_Calendar_Customfields_Model_Calendar extends GO_Customfields_Model_AbstractCustomFieldsRecord{
+
+namespace GO\Calendar\Customfields\Model;
+
+
+class Calendar extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
 	public function extendsModel() {		
-		return "GO_Calendar_Model_Calendar";
+		return "\GO\Calendar\Model\Calendar";
 	}
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Calendar_Model_CalendarCustomFieldsRecord 
+	 * @return \GO\Calendar\Model\CalendarCustomFieldsRecord 
 	 */
 	public static function model($className=__CLASS__)
 	{	

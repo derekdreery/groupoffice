@@ -9,7 +9,7 @@
  */
 
 /**
- * The GO_Calendar_Controller_Portlet controller
+ * The Portlet controller
  *
  * @package GO.modules.Calendar
  * @version $Id: PortletController.php 7607 2011-09-20 10:08:21Z wsmits $
@@ -17,14 +17,18 @@
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
 
-class GO_Calendar_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelectModelController {
+
+namespace GO\Calendar\Controller;
+
+
+class Portlet extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called
 	 * @return String 
 	 */
 	public function modelName() {
-		return 'GO_Calendar_Model_Calendar';
+		return '\GO\Calendar\Model\Calendar';
 	}
 	
 	/**
@@ -32,7 +36,7 @@ class GO_Calendar_Controller_Portlet extends GO_Base_Controller_AbstractMultiSel
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return 'GO_Calendar_Model_PortletCalendar';
+		return '\GO\Calendar\Model\PortletCalendar';
 	}
 	
 	/**
@@ -62,27 +66,27 @@ class GO_Calendar_Controller_Portlet extends GO_Base_Controller_AbstractMultiSel
 		$today_end = mktime(0, 0, 0, $month, $day+1, $year);
 		
 		
-		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
-						->addCondition('user_id', GO::user()->id,'=','pt')
+		$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()
+						->addCondition('user_id', \GO::user()->id,'=','pt')
 						->addCondition('calendar_id', 'pt.calendar_id', '=', 't', true, true);
 		
-		$calendarJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$calendarJoinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('calendar_id', 'tl.id', '=', 't', true, true);
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('t.*, tl.name AS calendar_name')
 						->ignoreAcl()
-						->join(GO_Calendar_Model_PortletCalendar::model()->tableName(),$joinCriteria,'pt')
-						->join(GO_Calendar_Model_Calendar::model()->tableName(), $calendarJoinCriteria,'tl');
+						->join(\GO\Calendar\Model\PortletCalendar::model()->tableName(),$joinCriteria,'pt')
+						->join(\GO\Calendar\Model\Calendar::model()->tableName(), $calendarJoinCriteria,'tl');
 		
 			
-		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime);
+		$events = \GO\Calendar\Model\Event::model()->findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime);
 
-		$store = new GO_Base_Data_ArrayStore();
+		$store = new \GO\Base\Data\ArrayStore();
 		
 		foreach($events as $event){
 			$record = $event->getResponseData();
-			$record['day']=$event->getAlternateStartTime()<$today_end ? GO::t('today') : GO::t('tomorrow');
+			$record['day']=$event->getAlternateStartTime()<$today_end ? \GO::t('today') : \GO::t('tomorrow');
 			$record['time']=$event->getEvent()->all_day_event==1 ? '-' : $record['time'];
 			$store->addRecord($record);
 		}

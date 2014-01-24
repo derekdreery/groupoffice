@@ -3,7 +3,11 @@
 /**
  * Not ready to be used. Was just for testing
  */
-class GO_Base_Util_XMLRPCClient {
+
+namespace GO\Base\Util;
+
+
+class XMLRPCClient {
 
 	private $_user;
 	private $_pass;
@@ -113,7 +117,7 @@ class GO_Base_Util_XMLRPCClient {
 			throw new Exception("The php5-xmlrpc extension is not installed. Please install this to use this functionality");
 		}
 		$xml = xmlrpc_encode_request($method, $params);
-//GO::debug($xml);
+//\GO::debug($xml);
 		if ($this->curl_hdl === null) {
 			// Create cURL resource
 			$this->curl_hdl = curl_init();
@@ -144,7 +148,7 @@ class GO_Base_Util_XMLRPCClient {
 		if ($errorNo) {
 			throw new Exception($this->_curlErrorCodes[$errorNo]);
 		}
-//GO::debug($response);
+//\GO::debug($response);
 		$result = xmlrpc_decode_request($response, $method);
 		return $result;
 	}

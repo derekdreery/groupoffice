@@ -15,9 +15,13 @@
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\BackendInterface {
 
-	private function _modelToDAVUser(GO_Base_Model_User $user){
+namespace GO\Dav\DavAcl;
+
+
+class PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\BackendInterface {
+
+	private function _modelToDAVUser(\GO\Base\Model\User $user){
 
 		$data= array(
 			'id'=>$user->id,
@@ -49,10 +53,10 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
      */
     public function getPrincipalsByPrefix($prefixPath) {
 
-		GO::debug('GO_DAV_Auth_Backend::getUsers()');
+		\GO::debug('\GO\DAV\Auth\Backend::getUsers()');
 
 		if (!isset($this->users)) {
-			$this->users = array($this->_modelToDAVUser(GO::user()));
+			$this->users = array($this->_modelToDAVUser(\GO::user()));
 		}
 		return $this->users;
 	}
@@ -78,9 +82,9 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
 
 			$username = $pathParts[1];
 			
-			GO::debug("getPrincipalByPath($path)");
+			\GO::debug("getPrincipalByPath($path)");
 
-			$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $username);
+			$user = \GO\Base\Model\User::model()->findSingleByAttribute('username', $username);
 			if (!$user) {
 				return false;
 			} elseif (isset($pathParts[2])) {
@@ -101,7 +105,7 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
      */
     public function getGroupMemberSet($principal) {
 
-			GO::debug("getGroupMemberSet($principal)");
+			\GO::debug("getGroupMemberSet($principal)");
 //        $principal = $this->getPrincipalByPath($principal);
 //        if (!$principal) throw new Sabre\DAV\Exception('Principal not found');
 //
@@ -125,7 +129,7 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
      * @return array 
      */
     public function getGroupMembership($principal) {
-			GO::debug("getGroupMemberSet($principal)");
+			\GO::debug("getGroupMemberSet($principal)");
 			
 			return array();
 //        $principal = $this->getPrincipalByPath($principal);
@@ -152,7 +156,7 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
      * @return void
      */
     public function setGroupMemberSet($principal, array $members) {
-			GO::debug("setGroupMemberSet($principal)");
+			\GO::debug("setGroupMemberSet($principal)");
         // Grabbing the list of principal id's.
 //        $stmt = $this->pdo->prepare('SELECT id, uri FROM principals WHERE uri IN (? ' . str_repeat(', ? ', count($members)) . ');');
 //        $stmt->execute(array_merge(array($principal), $members));
@@ -188,9 +192,9 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
 		
 		function searchPrincipals($prefixPath, array $searchProperties) {
 			
-			GO::debug("searchPrincipals");
+			\GO::debug("searchPrincipals");
 
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('t.username');
 		$findCriteria = $findParams->getCriteria();
 
@@ -213,7 +217,7 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
 			}
 		}
 		
-		$stmt = GO_Base_Model_User::model()->find($findParams);
+		$stmt = \GO\Base\Model\User::model()->find($findParams);
 
 		$principals = array();
 		while ($record = $stmt->fetch()) {

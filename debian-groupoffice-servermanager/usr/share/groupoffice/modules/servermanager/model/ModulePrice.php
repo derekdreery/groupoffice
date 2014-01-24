@@ -27,7 +27,11 @@
  * @property string $module_name the directory name of the module
  * @property double $price_per_month the price the module costs per month
  */
-class GO_ServerManager_Model_ModulePrice extends GO_Base_Db_ActiveRecord
+
+namespace GO\ServerManager\Model;
+
+
+class ModulePrice extends \GO\Base\Db\ActiveRecord
 {
 	public static function model($className = __CLASS__) {
 		return parent::model($className);

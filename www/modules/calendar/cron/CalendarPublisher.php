@@ -1,6 +1,10 @@
 <?php
 
-class GO_Calendar_Cron_CalendarPublisher extends GO_Base_Cron_AbstractCron {
+
+namespace GO\Calendar\Cron;
+
+
+class CalendarPublisher extends \GO\Base\Cron\AbstractCron {
 	
 	/**
 	 * Return true or false to enable the selection fo users and groups for 
@@ -20,7 +24,7 @@ class GO_Calendar_Cron_CalendarPublisher extends GO_Base_Cron_AbstractCron {
 	 * @return String
 	 */
 	public function getLabel(){
-		return GO::t('shareCalendarsCron','calendar');
+		return \GO::t('shareCalendarsCron','calendar');
 	}
 	
 	/**
@@ -29,7 +33,7 @@ class GO_Calendar_Cron_CalendarPublisher extends GO_Base_Cron_AbstractCron {
 	 * @return String
 	 */
 	public function getDescription(){
-		return GO::t('shareCalendarsCronDescription','calendar');
+		return \GO::t('shareCalendarsCronDescription','calendar');
 	}
 	
 	/**
@@ -41,31 +45,31 @@ class GO_Calendar_Cron_CalendarPublisher extends GO_Base_Cron_AbstractCron {
 	 * If $this->enableUserAndGroupSupport() returns FALSE then the 
 	 * $user parameter is null and the run function will be called only once.
 	 * 
-	 * @param GO_Base_Cron_CronJob $cronJob
-	 * @param GO_Base_Model_User $user [OPTIONAL]
+	 * @param \GO\Base\Cron\CronJob $cronJob
+	 * @param \GO\Base\Model\User $user [OPTIONAL]
 	 */
-	public function run(GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
+	public function run(\GO\Base\Cron\CronJob $cronJob,\GO\Base\Model\User $user = null){
 		
-		GO::session()->runAsRoot();
+		\GO::session()->runAsRoot();
 		
-		GO::debug("Start updating public calendars.");
+		\GO::debug("Start updating public calendars.");
 	
-		$calendars = GO_Calendar_Model_Calendar::model()->findByAttribute('public', true);
+		$calendars = \GO\Calendar\Model\Calendar::model()->findByAttribute('public', true);
 		
 		foreach($calendars as $calendar){
 
-			$file = new GO_Base_Fs_File($calendar->getPublicIcsPath());
+			$file = new \GO\Base\Fs\File($calendar->getPublicIcsPath());
 	
 			if(!$file->exists()){
-				GO::debug("Creating ".$file->path().".");
+				\GO::debug("Creating ".$file->path().".");
 				$file->touch(true);
 			}
 
 			$file->putContents($calendar->toVObject());
 
-			GO::debug("Updating ".$calendar->name." to ".$file->path().".");
+			\GO::debug("Updating ".$calendar->name." to ".$file->path().".");
 		}
 		
-		GO::debug("Finished updating public calendars.");
+		\GO::debug("Finished updating public calendars.");
 	}
 }

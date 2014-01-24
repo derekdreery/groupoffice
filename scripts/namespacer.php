@@ -5,11 +5,17 @@
 //"_Array", "_List". Otherwise this script would create illegal class names as
 //class Interface is not allowed.
 
+//extends Exception -> extends \Exception
+
+//throw new Exception -> throw new \Exception
+
 //After this script I still had to prefix some manual usages of php classes.
 //for exmple PDO had to become \PDO
 
 
 //find all PHP files except updates.php and updates.inc.php because we shouldn't touch them
+
+chdir('/var/www/trunk');
 
 $cmd = 'find . -type f \( -iname "*.php" ! -iname "updates*" \);';
 exec($cmd, $scripts, $return_var);

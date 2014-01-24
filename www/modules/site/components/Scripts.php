@@ -17,7 +17,11 @@
  * @version $Id ClientScript.php 2012-06-06 16:41:34 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Site_Components_Scripts
+
+namespace GO\Site\Components;
+
+
+class Scripts
 {
 
 	const POS_HEAD = 1; //Render script in head section before title tag
@@ -172,7 +176,7 @@ class GO_Site_Components_Scripts
 	 * Registers a CSS file
 	 * @param string $url Url to the CSS file
 	 * @param string $media media that the CSS file should be applied to. If empty, it means all media types.
-	 * @return GO_Site_Components_Scripts myself for chaining.
+	 * @return Scripts myself for chaining.
 	 */
 	public function registerCssFile($url, $media = '')
 	{
@@ -187,7 +191,7 @@ class GO_Site_Components_Scripts
 	 * Register a javascript file
 	 * @param string $url url to the javascript file
 	 * @param integer $position (HEAD, BEGIN, END)
-	 * @return GO_Site_Components_Scripts myself for chaining
+	 * @return Scripts myself for chaining
 	 */
 	public function registerScriptFile($url, $position = self::POS_HEAD)
 	{
@@ -202,7 +206,7 @@ class GO_Site_Components_Scripts
 	 * Register a google api script
 	 * @param string $package can be jquery or jquery-ui
 	 * @param integer $position where to add the scriptfile
-	 * @return GO_Site_Components_Scripts myself for chaining
+	 * @return Scripts myself for chaining
 	 */
 	public function registerGapiScript($package, $position = self::POS_HEAD)
 	{
@@ -227,7 +231,7 @@ class GO_Site_Components_Scripts
 	 * @param string $id unique identifier for the piece of code
 	 * @param string $script the javascript code
 	 * @param int $position position code shoudl be inserted (HEAD, BEGIN, END, READY)
-	 * @return GO_Site_Components_Scripts myself for chaining
+	 * @return Scripts myself for chaining
 	 */
 	public function registerScript($id, $script, $position = self::POS_READY)
 	{
@@ -259,7 +263,7 @@ class GO_Site_Components_Scripts
 	 * @param string $name name attribute of metatag
 	 * @param string $httpEquiv httpequiv attribute of metatage
 	 * @param array $options other option in name-value pair for metatag
-	 * @return GO_Site_Components_Scripts mysql for chaining
+	 * @return Scripts mysql for chaining
 	 */
 	public function registerMetaTag($content, $name = null, $httpEquiv = null, $options = array())
 	{

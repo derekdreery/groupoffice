@@ -15,7 +15,11 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base.util 
  */
-class GO_Base_Csv_Writer extends GO_Base_Csv_Reader{
+
+namespace GO\Base\Csv;
+
+
+class Writer extends Reader{
 		
 	/**
 	 * Writes an array of strings as the next line of the CSV file, after making

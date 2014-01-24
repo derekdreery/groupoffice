@@ -30,10 +30,14 @@
  * @property int $status
  * @property int $parent_id
  * @property int $site_id
- * @property GO_Sites_Model_Site $site
+ * @property Site $site
  * @property int $sort_order
  */
-class GO_Sites_Model_Content extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Sites\Model;
+
+
+class Content extends \GO\Base\Db\ActiveRecord {
 	
 	const STATUS_PUBLISHED = 1;
 	const STATUS_OFFLINE = 3;
@@ -43,13 +47,13 @@ class GO_Sites_Model_Content extends GO_Base_Db_ActiveRecord {
 	 * Attach the customfield model to this model.
 	 */
 	public function customfieldsModel() {
-		return 'GO_Sites_Customfields_Model_Content';
+		return '\GO\Sites\Customfields\Model\Content';
 	}
 	
 	public function defaultAttributes()
 	{
 		return array(
-				'user_id'=>GO::user()->id
+				'user_id'=>\GO::user()->id
 		);
 	}
 	
@@ -59,9 +63,9 @@ class GO_Sites_Model_Content extends GO_Base_Db_ActiveRecord {
 	
 	public function relations() {
 		return array(
-//				'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Content', 'field' => 'parent_id', 'delete' => true, GO_Base_Db_FindParams::newInstance()->order('sort_order')),
-				'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Sites_Model_Site", 'field'=>'site_id'),
-//				'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Sites_Model_Content", 'field'=>'parent_id')
+//				'children' => array('type' => self::HAS_MANY, 'model' => '\GO\Sites\Model\Content', 'field' => 'parent_id', 'delete' => true, \GO\Base\Db\FindParams::newInstance()->order('sort_order')),
+				'site'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Sites\Model\Site", 'field'=>'site_id'),
+//				'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Sites\Model\Content", 'field'=>'parent_id')
 				);
 	}
 	

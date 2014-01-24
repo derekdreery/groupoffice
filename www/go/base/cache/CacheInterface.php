@@ -19,7 +19,11 @@
  * @package GO.base.cache
  */
 
-interface GO_Base_Cache_CacheInterface{
+
+namespace GO\Base\Cache;
+
+
+interface CacheInterface{
 	/**
 	 * Store any value in the cache
 	 * @param string $key

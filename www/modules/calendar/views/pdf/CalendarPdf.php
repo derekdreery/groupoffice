@@ -13,7 +13,11 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
+
+namespace GO\Calendar\Views\Pdf;
+
+
+class CalendarPdf extends \GO\Base\Util\Pdf {
 	
 	private $_start_time = '';
 	private $_end_time = '';
@@ -42,9 +46,9 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 			$this->_view=$view;
 			$this->_start_time = $r['start_time'];
 			$this->_end_time = $r['end_time'];
-			$this->_title = GO_Base_Fs_File::stripInvalidChars($r['title']);
+			$this->_title = \GO\Base\Fs\File::stripInvalidChars($r['title']);
 			$this->_days = ceil(($this->_end_time - $this->_start_time) / 86400);
-			$this->_date_range_text = $this->_days > 1 ? date(GO::user()->completeDateFormat,$this->_start_time) . ' - ' . date(GO::user()->completeDateFormat,$this->_end_time) : date(GO::user()->completeDateFormat,$this->_start_time);
+			$this->_date_range_text = $this->_days > 1 ? date(\GO::user()->completeDateFormat,$this->_start_time) . ' - ' . date(\GO::user()->completeDateFormat,$this->_end_time) : date(\GO::user()->completeDateFormat,$this->_start_time);
 
 			$this->_results = $r['results'];
 			$this->_loadCurrentCalendar($r['calendar_id']);
@@ -74,7 +78,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 	
 	private function _processEvents($list=true, $headers=true, $calendar_name=''){
 		
-		$fullDays = GO::t('full_days');
+		$fullDays = \GO::t('full_days');
 		$calendarPrinted=false;
 		
 		for ($i = 0; $i < $this->_days; $i++) {
@@ -98,9 +102,9 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 
 			$nameColWidth = 100;
 			$cellWidth = !empty($calendar_name) ? ($this->pageWidth - $nameColWidth) / $maxCells : $this->pageWidth / $maxCells;
-			$timeColWidth = $this->GetStringWidth(date(GO::user()->time_format, mktime(23, 59, 0)), $this->font, '', $this->font_size) + 5;
+			$timeColWidth = $this->GetStringWidth(date(\GO::user()->time_format, mktime(23, 59, 0)), $this->font, '', $this->font_size) + 5;
 
-			$time_format = str_replace('G', 'H', GO::user()->time_format);
+			$time_format = str_replace('G', 'H', \GO::user()->time_format);
 			$time_format = str_replace('g', 'h', $time_format);
 
 			$this->SetFillColor(248, 248, 248);
@@ -112,7 +116,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 					$this->Cell($nameColWidth, 20, '', 1, 0, 'L', 1);
 				}
 				for ($i = 0; $i < $maxCells; $i++) {
- 					$label = $this->_days > $maxCells ? $fullDays[date('w', $time)] : $fullDays[date('w', $time)] . ', ' . date(GO::user()->completeDateFormat, $time);
+ 					$label = $this->_days > $maxCells ? $fullDays[date('w', $time)] : $fullDays[date('w', $time)] . ', ' . date(\GO::user()->completeDateFormat, $time);
 					$this->Cell($cellWidth, 20, $label, 1, 0, 'L', 1);
 		
 					// Add the day we are printing to the events array
@@ -121,7 +125,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 						$cellEvents[$i][$key] = $event;
 					}
 					
-					$time = GO_Base_Util_Date::date_add($time, 1);
+					$time = \GO\Base\Util\Date::date_add($time, 1);
 				}
 				$this->Ln();
 			}
@@ -159,7 +163,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 				// If we are using the month view
 				if ($this->_days > 7) {
 					
-					$time = GO_Base_Util_Date::date_add($this->_start_time, $i);
+					$time = \GO\Base\Util\Date::date_add($this->_start_time, $i);
 					
 					// Add the day we are printing to the events array
 					foreach ($cellEvents[$i] as $key=>$event) {
@@ -333,7 +337,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 			//if($calendarPrinted)
 				$this->AddPage();
 
-			$this->H1(GO::t('printList','calendar'));
+			$this->H1(\GO::t('printList','calendar'));
 
 			$time = $this->_start_time;
 			for ($i = 0; $i < $this->_days; $i++) {
@@ -344,7 +348,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 					
 					$this->setCellPaddings(0,0,0,0);
 					
-					$this->H3($fullDays[date('w', $time)] . ', ' . date(GO::user()->completeDateFormat, $time));
+					$this->H3($fullDays[date('w', $time)] . ', ' . date(\GO::user()->completeDateFormat, $time));
 					
 					$this->setCellPaddings(13,0,0,0);
 					
@@ -381,20 +385,20 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 						$this->H4($event['name']);
 						
 						if (empty($event['all_day_event'])) {
-							$text = sprintf(GO::t('printTimeFormat','calendar'), $event['start_time'], $event['end_time']);
+							$text = sprintf(\GO::t('printTimeFormat','calendar'), $event['start_time'], $event['end_time']);
 						} else {
-							$start_date = date(GO::user()->date_format, strtotime($event['start_time']));
-							$end_date = date(GO::user()->date_format, strtotime($event['end_time']));
+							$start_date = date(\GO::user()->date_format, strtotime($event['start_time']));
+							$end_date = date(\GO::user()->date_format, strtotime($event['end_time']));
 
 							if ($start_date == $end_date) {
-								$text = sprintf(GO::t('printAllDaySingle','calendar'));
+								$text = sprintf(\GO::t('printAllDaySingle','calendar'));
 							} else {
-								$text = sprintf(GO::t('printAllDayMultiple','calendar'), $start_date, $end_date);
+								$text = sprintf(\GO::t('printAllDayMultiple','calendar'), $start_date, $end_date);
 							}
 						}
 
 						if (!empty($event['location']))
-							$text .= sprintf(GO::t('printLocationFormat','calendar'), $event['location']);
+							$text .= sprintf(\GO::t('printLocationFormat','calendar'), $event['location']);
 
 						$pW = $this->getPageWidth() - $this->lMargin - $this->rMargin;
 						
@@ -416,7 +420,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 						$this->ln(10);
 					}
 				}
-				$time = GO_Base_Util_Date::date_add($time, 1);
+				$time = \GO\Base\Util\Date::date_add($time, 1);
 			}
 		}
 	}
@@ -426,7 +430,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 		if(empty($calendarId))
 			throw new FileNotFoundException();
 		
-		$this->_calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
+		$this->_calendar = \GO\Calendar\Model\Calendar::model()->findByPk($calendarId);
 	}
 
 	private function _insertEvent($event,&$cellEvents) {
@@ -437,15 +441,15 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 		
 		$index_time = mktime(0, 0, 0, $startDate['mon'], $startDate['mday'], $startDate['year']);
 		while ($index_time <= $endTime && $index_time < $this->_end_time) {
-			if ($this->_calendar->user_id != GO::user()->id && !empty($event['private'])) {
-				$event['name'] = GO::t('private','calendar');
+			if ($this->_calendar->user_id != \GO::user()->id && !empty($event['private'])) {
+				$event['name'] = \GO::t('private','calendar');
 				$event['description'] = '';
 				$event['location'] = '';
 			}
 
 			//$cellIndex = floor(($index_time-$this->_start_time)/86400);
-			$cellIndex = GO_Base_Util_Date::date_diff_days($this->_start_time, $index_time);
-			$index_time = GO_Base_Util_Date::date_add($index_time, 1);
+			$cellIndex = \GO\Base\Util\Date::date_diff_days($this->_start_time, $index_time);
+			$index_time = \GO\Base\Util\Date::date_add($index_time, 1);
 			$cellEvents[$cellIndex][] = $event;
 		}
 	}

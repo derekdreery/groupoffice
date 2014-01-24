@@ -17,7 +17,7 @@
  */
  
 /**
- * The GO_Customfields_Model_Category model
+ * The Category model
  *
  * @package GO.modules.customfields.model
  * @property int $sort_index
@@ -27,12 +27,16 @@
  * @property int $id
  */
 
-class GO_Customfields_Model_Category extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Customfields\Model;
+
+
+class Category extends \GO\Base\Db\ActiveRecord{
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Customfields_Model_Category 
+	 * @return Category 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -49,8 +53,8 @@ class GO_Customfields_Model_Category extends GO_Base_Db_ActiveRecord{
 	
 	public function relations() {
 		return array(
-		'fields' => array('type' => self::HAS_MANY, 'model' => 'GO_Customfields_Model_Field', 'field' => 'category_id', 'delete' => true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('sort_index')),
-		'_fieldsUnsorted' => array('type' => self::HAS_MANY, 'model' => 'GO_Customfields_Model_Field', 'field' => 'category_id'	)
+		'fields' => array('type' => self::HAS_MANY, 'model' => '\GO\Customfields\Model\Field', 'field' => 'category_id', 'delete' => true, 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order('sort_index')),
+		'_fieldsUnsorted' => array('type' => self::HAS_MANY, 'model' => '\GO\Customfields\Model\Field', 'field' => 'category_id'	)
 				);
 	}
 	
@@ -58,17 +62,17 @@ class GO_Customfields_Model_Category extends GO_Base_Db_ActiveRecord{
 	public function customfieldsTableName(){
 		
 		
-		$model = GO::getModel($this->extends_model);
+		$model = \GO::getModel($this->extends_model);
 		
 		return 'cf_'.$model->tableName();
 	}
 	
 	
-	public function findByModel($modelName, $permissionLevel=  GO_Base_Model_Acl::READ_PERMISSION){
-		return GO_Customfields_Model_Category::model()->find(
-                    GO_Base_Db_FindParams::newInstance()												
+	public function findByModel($modelName, $permissionLevel=  \GO\Base\Model\Acl::READ_PERMISSION){
+		return Category::model()->find(
+                    \GO\Base\Db\FindParams::newInstance()												
 												->permissionLevel($permissionLevel)
-                        ->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('extends_model', $modelName))
+                        ->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('extends_model', $modelName))
                         ->order('sort_index')
 		);
 	}
@@ -78,13 +82,13 @@ class GO_Customfields_Model_Category extends GO_Base_Db_ActiveRecord{
 	 * 
 	 * @param string $extendsModel
 	 * @param string $categoryName
-	 * @return \GO_Customfields_Model_Category 
+	 * @return \Category 
 	 */
 	public function createIfNotExists($extendsModel, $categoryName){
-		$category = GO_Customfields_Model_Category::model()->findSingleByAttributes(array('extends_model'=>$extendsModel, 'name'=>$categoryName));
+		$category = Category::model()->findSingleByAttributes(array('extends_model'=>$extendsModel, 'name'=>$categoryName));
 		
 		if(!$category){
-			$category = new GO_Customfields_Model_Category();
+			$category = new Category();
 			$category->extends_model=$extendsModel;
 			$category->name=$categoryName;
 			$category->save();

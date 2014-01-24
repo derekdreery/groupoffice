@@ -11,20 +11,20 @@
  * @version $Id: invitation.php 7752 2011-07-26 13:48:43Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-//require_once(GO::config()->root_path."Group-Office.php");
+//require_once(\GO::config()->root_path."Group-Office.php");
 
 extract($data);
 
 
 $this->render('externalHeader');
 ?>
-<p><?php echo GO::t('r_u_sure','addressbook'); ?></p>
-<form action="<?php echo GO::url($this->getRoute('unsubscribe'),array(),false, true); ?>" method="POST">
+<p><?php echo \GO::t('r_u_sure','addressbook'); ?></p>
+<form action="<?php echo \GO::url($this->getRoute('unsubscribe'),array(),false, true); ?>" method="POST">
 	<input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />
 	<input type="hidden" name="token" value="<?php echo $token; ?>" />
 	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
 	<input type="hidden" name="sure" value="1" />
-	<input type="submit" value="<?php echo GO::t('cmdOk'); ?>" />
+	<input type="submit" value="<?php echo \GO::t('cmdOk'); ?>" />
 </form>
 <?php
 $this->render('externalFooter');

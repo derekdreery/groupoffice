@@ -2,7 +2,11 @@
 
 
 
-class GO_Sites_Components_Config{
+
+namespace GO\Sites\Components;
+
+
+class Config{
 
 	private $_configOptions = array();
 	

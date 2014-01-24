@@ -1,6 +1,10 @@
 <?php
 
-class GO_Site_Widget_Menu extends GO_Site_Components_Widget {
+
+namespace GO\Site\Widget;
+
+
+class Menu extends \GO\Site\Components\Widget {
 	
 	public $template = "<ul>\n{items}</ul>\n";
 	public $itemTemplate = "<li><a href='{url}'{target}>{item}</a>{items}</li>\n";
@@ -13,7 +17,7 @@ class GO_Site_Widget_Menu extends GO_Site_Components_Widget {
 	
 	public function __construct($config = array()) {
 		parent::__construct($config);
-		$this->_menuModel = GO_Site_Model_Menu::model()->findSingleByAttributes(array('site_id'=>Site::model()->id,'menu_slug'=>$this->id));	
+		$this->_menuModel = \GO\Site\Model\Menu::model()->findSingleByAttributes(array('site_id'=>Site::model()->id,'menu_slug'=>$this->id));	
 	}
 	
 	public function render(){
@@ -61,7 +65,7 @@ class GO_Site_Widget_Menu extends GO_Site_Components_Widget {
 		
 			$tpl = $this->template;
 			// If this is the root UL
-			if($parent instanceof GO_Site_Model_Menu){
+			if($parent instanceof \GO\Site\Model\Menu){
 
 				$options = $this->htmlOptions;
 				array_walk($options, create_function('&$i,$k','$i=" $k=\"$i\"";'));
@@ -82,7 +86,7 @@ class GO_Site_Widget_Menu extends GO_Site_Components_Widget {
 		
 		$itemHtml = '';
 		$target = !empty($parent->target)?' target="'.$parent->target.'"':'';
-		$parentContentItem = GO_Site_Model_Content::model()->findByPk($parent->content_id);
+		$parentContentItem = \GO\Site\Model\Content::model()->findByPk($parent->content_id);
 		
 		foreach($parentContentItem->children as $child){
 			$itemHtml .= strtr($this->itemTemplate, array(
@@ -98,7 +102,7 @@ class GO_Site_Widget_Menu extends GO_Site_Components_Widget {
 		
 			$tpl = $this->template;
 			// If this is the root UL
-			if($parent instanceof GO_Site_Model_Menu){
+			if($parent instanceof \GO\Site\Model\Menu){
 
 				$options = $this->htmlOptions;
 				array_walk($options, create_function('&$i,$k','$i=" $k=\"$i\"";'));

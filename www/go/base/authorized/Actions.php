@@ -9,7 +9,11 @@
  * For example: The action to process plupload uploads should be authorised for 
  * users that have created a ticket and are not logged in.
  */
-class GO_Base_Authorized_Actions{
+
+namespace GO\Base\Authorized;
+
+
+class Actions{
 	
 	/**
 	 * Check if the current session is authorized to process an controller action.
@@ -18,8 +22,8 @@ class GO_Base_Authorized_Actions{
 	 * @return boolean is authorisation granted or not.
 	 */
 	public static function isAuthorized($name){
-		if(!empty(GO::session()->values['Authorized'])){
-			if(in_array($name, GO::session()->values['Authorized'])){
+		if(!empty(\GO::session()->values['Authorized'])){
+			if(in_array($name, \GO::session()->values['Authorized'])){
 				return true;
 			}
 		}
@@ -33,9 +37,9 @@ class GO_Base_Authorized_Actions{
 	 * @param string $name 
 	 */
 	public static function setAuthorized($name){
-		if(empty(GO::session()->values['Authorized']))
-			GO::session()->values['Authorized'] = array();
+		if(empty(\GO::session()->values['Authorized']))
+			\GO::session()->values['Authorized'] = array();
 		
-		GO::session()->values['Authorized'][] = $name;
+		\GO::session()->values['Authorized'][] = $name;
 	}
 }

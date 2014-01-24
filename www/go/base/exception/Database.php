@@ -17,7 +17,11 @@
  * @version $Id Database.php 2012-06-14 10:36:28 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Base_Exception_Database extends Exception
+
+namespace GO\Base\Exception;
+
+
+class Database extends \Exception
 {
 
 	public function __construct($message,$code=0,$errorInfo=null) {

@@ -27,7 +27,11 @@
  * @version $Id Assets.php 2012-07-25 16:51:19 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Sites_Components_Assets
+
+namespace GO\Sites\Components;
+
+
+class Assets
 {
 	/**
 	 * Default web accessible base path for storing private files
@@ -200,8 +204,8 @@ class GO_Sites_Components_Assets
 				}
 				else if(!is_dir($dstDir))
 				{
-					$dstF = new GO_Base_Fs_Folder($dstDir);
-					$folder = new GO_Base_Fs_Folder($src);
+					$dstF = new \GO\Base\Fs\Folder($dstDir);
+					$folder = new \GO\Base\Fs\Folder($src);
 					$folder->copy($dstF);
 				}
 
@@ -270,7 +274,7 @@ class GO_Sites_Components_Assets
 	 */
 	protected function hash($path)
 	{
-		return sprintf('%x',crc32($path.GO::config()->version));
+		return sprintf('%x',crc32($path.\GO::config()->version));
 	}
 }
 ?>

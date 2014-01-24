@@ -19,13 +19,17 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_RelationDeleteRestrict extends Exception
+
+namespace GO\Base\Exception;
+
+
+class RelationDeleteRestrict extends \Exception
 {
 
 	public function __construct($model, $relation) {
 		
-		$relationModelName = GO::getModel($relation['model'])->localizedName;	
+		$relationModelName = \GO::getModel($relation['model'])->localizedName;	
 		
-		parent::__construct(sprintf(GO::t('relationDeleteRestrict'), strtolower($model->localizedName), $relationModelName));
+		parent::__construct(sprintf(\GO::t('relationDeleteRestrict'), strtolower($model->localizedName), $relationModelName));
 	}
 }

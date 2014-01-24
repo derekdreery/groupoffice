@@ -1,15 +1,19 @@
 <?php
 
-class GO_Postfixadmin_Controller_Alias extends GO_Base_Controller_AbstractModelController {
 
-	protected $model = 'GO_Postfixadmin_Model_Alias';
+namespace GO\Postfixadmin\Controller;
+
+
+class Alias extends \GO\Base\Controller\AbstractModelController {
+
+	protected $model = '\GO\Postfixadmin\Model\Alias';
 	
 	
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		$storeParams
 			->select('t.*')
 			->criteria(
-				GO_Base_Db_FindCriteria::newInstance()
+				\GO\Base\Db\FindCriteria::newInstance()
 					->addCondition('domain_id',$params['domain_id'])
 			);
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);

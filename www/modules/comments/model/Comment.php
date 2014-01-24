@@ -17,7 +17,7 @@
  */
  
 /**
- * The GO_Comments_Model_Comment model
+ * The Comment model
  *
  * @package GO.modules.comments.model
  * @property string $comments
@@ -30,13 +30,17 @@
  * @property int $category_id
  */
 
-class GO_Comments_Model_Comment extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Comments\Model;
+
+
+class Comment extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Comments_Model_Comment 
+	 * @return Comment 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -46,7 +50,7 @@ class GO_Comments_Model_Comment extends GO_Base_Db_ActiveRecord{
 	protected function init() {
 		$this->columns['model_id']['required']=true;
 		$this->columns['model_type_id']['required']=true;
-		$this->columns['category_id']['required']=GO_Comments_CommentsModule::commentsRequired();
+		$this->columns['category_id']['required']=\GO\Comments\CommentsModule::commentsRequired();
 		
 		return parent::init();
 	}
@@ -58,15 +62,15 @@ class GO_Comments_Model_Comment extends GO_Base_Db_ActiveRecord{
 	
 	public function relations(){
 		return array(	
-			'category' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Comments_Model_Category', 'field'=>'category_id'),		);
+			'category' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Comments\Model\Category', 'field'=>'category_id'),		);
 	}
 	
 	public function getAttachedObject(){
 		
-		$modelType = GO_Base_Model_ModelType::model()->findByPk($this->model_type_id);
+		$modelType = \GO\Base\Model\ModelType::model()->findByPk($this->model_type_id);
 		
 		if($modelType){
-			$obj = GO::getModel($modelType->model_name)->findByPk($this->model_id);
+			$obj = \GO::getModel($modelType->model_name)->findByPk($this->model_id);
 			
 			if($obj)
 				return $obj;

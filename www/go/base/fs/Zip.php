@@ -23,23 +23,27 @@
  * @copyright Copyright Intermesh BV.
  */
 
-class GO_Base_Fs_Zip {
+
+namespace GO\Base\Fs;
+
+
+class Zip {
 
 	/**
 	 * Create a ZIP archive encoded in CP850 so that Windows will understand
 	 * foreign characters
 	 * 
-	 * @param GO_Base_Fs_File $archiveFile
-	 * @param GO_Base_Fs_Folder $workingFolder
-	 * @param GO_Base_Fs_Base[] $sources
+	 * @param File $archiveFile
+	 * @param Folder $workingFolder
+	 * @param Base[] $sources
 	 * @param boolean $utf8 Set to true to use UTF8 encoding. This is not supported by Windows explorer.
 	 * @throws Exception
 	 */
-	public static function create(GO_Base_Fs_File $archiveFile, GO_Base_Fs_Folder $workingFolder, $sources, $utf8=false) {
+	public static function create(File $archiveFile, Folder $workingFolder, $sources, $utf8=false) {
 	
 		if (class_exists("ZipArchive") && !$utf8) {
 		
-			GO::debug("Using PHP ZipArchive");
+			\GO::debug("Using PHP ZipArchive");
 			$zip = new ZipArchive();
 			$zip->open($archiveFile->path(), ZIPARCHIVE::CREATE);
 			for ($i = 0; $i < count($sources); $i++) {
@@ -49,7 +53,7 @@ class GO_Base_Fs_Zip {
 					$name = str_replace($workingFolder->path() . '/', '', $sources[$i]->path());
 					$name = @iconv('UTF-8', 'CP850//TRANSLIT', $name);
 
-					GO::debug("Add file: ".$sources[$i]->path());
+					\GO::debug("Add file: ".$sources[$i]->path());
 					$zip->addFile($sources[$i]->path(), $name);
 				}
 			}
@@ -63,9 +67,9 @@ class GO_Base_Fs_Zip {
 			}
 		} else {
 			
-			GO::debug("Using zip exec");
+			\GO::debug("Using zip exec");
 		
-			if (!GO_Base_Util_Common::isWindows())
+			if (!\GO\Base\Util\Common::isWindows())
 				putenv('LANG=en_US.UTF-8');
 
 			chdir($workingFolder->path());
@@ -75,7 +79,7 @@ class GO_Base_Fs_Zip {
 				$cmdSources[$i] = escapeshellarg(str_replace($workingFolder->path() . '/', '', $sources[$i]->path()));
 			}
 
-			$cmd = GO::config()->cmd_zip . ' -r ' . escapeshellarg($archiveFile->path()) . ' ' . implode(' ', $cmdSources);
+			$cmd = \GO::config()->cmd_zip . ' -r ' . escapeshellarg($archiveFile->path()) . ' ' . implode(' ', $cmdSources);
 
 			exec($cmd, $output, $ret);
 
@@ -87,7 +91,7 @@ class GO_Base_Fs_Zip {
 		}
 	}
 
-	private static function _zipDir(GO_Base_Fs_Folder $dir, ZipArchive $zip, $relative_path) {
+	private static function _zipDir(Folder $dir, ZipArchive $zip, $relative_path) {
 		
 		$items = $dir->ls();
 		if(count($items)){
@@ -97,7 +101,7 @@ class GO_Base_Fs_Zip {
 					$name = @iconv('UTF-8', 'CP850//TRANSLIT', $name);
 					
 					
-					GO::debug("Add file: ".$name);
+					\GO::debug("Add file: ".$name);
 					
 					$zip->addFile($dir->path().'/'.$item->name(), $name);
 				} else{
@@ -105,7 +109,7 @@ class GO_Base_Fs_Zip {
 				}
 			}
 		}  else {
-			GO::debug("Add empty dir: ".$relative_path);
+			\GO::debug("Add empty dir: ".$relative_path);
 			if(!$zip->addEmptyDir(rtrim($relative_path,'/')))
 				throw new Exception("Could not add emty directory ".$relative_path);
 							

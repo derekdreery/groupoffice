@@ -3,10 +3,10 @@
 // 
 //require('GO.php');
 //
-//GO::session()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PASS']);
+//\GO::session()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PASS']);
 //
 //function rpcRouter($method, $param_arr, $data=null){
-//	GO::debug($method.'('.var_export($param_arr, true).')');
+//	\GO::debug($method.'('.var_export($param_arr, true).')');
 //	
 //	$parts = explode('_',$method);
 //	
@@ -22,7 +22,7 @@
 //
 //$xmlrpcServer = xmlrpc_server_create();
 //
-//$classes = GO::modules()->findClasses('rpc');
+//$classes = \GO::modules()->findClasses('rpc');
 //
 //foreach($classes as $class){
 //	

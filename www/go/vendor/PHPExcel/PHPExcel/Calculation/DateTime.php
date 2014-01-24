@@ -189,7 +189,7 @@ class PHPExcel_Calculation_DateTime {
 					$retValue = (integer) time();
 					break;
 			case PHPExcel_Calculation_Functions::RETURNDATE_PHP_OBJECT :
-					$retValue = new DateTime();
+					$retValue = new \DateTime();
 					break;
 		}
 		date_default_timezone_set($saveTimeZone);
@@ -443,7 +443,7 @@ class PHPExcel_Calculation_DateTime {
 						$dayAdjust = floor($hour / 24);
 						$hour = $hour % 24;
 					}
-					$phpDateObject = new DateTime('1900-01-01 '.$hour.':'.$minute.':'.$second);
+					$phpDateObject = new \DateTime('1900-01-01 '.$hour.':'.$minute.':'.$second);
 					if ($dayAdjust != 0) {
 						$phpDateObject->modify($dayAdjust.' days');
 					}
@@ -551,7 +551,7 @@ class PHPExcel_Calculation_DateTime {
 				case PHPExcel_Calculation_Functions::RETURNDATE_PHP_NUMERIC :
 						return (integer) PHPExcel_Shared_Date::ExcelToPHP($excelDateValue);
 				case PHPExcel_Calculation_Functions::RETURNDATE_PHP_OBJECT :
-						return new DateTime($PHPDateArray['year'].'-'.$PHPDateArray['month'].'-'.$PHPDateArray['day'].' 00:00:00');
+						return new \DateTime($PHPDateArray['year'].'-'.$PHPDateArray['month'].'-'.$PHPDateArray['day'].' 00:00:00');
 			}
 		}
 		return PHPExcel_Calculation_Functions::VALUE();
@@ -598,7 +598,7 @@ class PHPExcel_Calculation_DateTime {
 				case PHPExcel_Calculation_Functions::RETURNDATE_PHP_NUMERIC :
 						return (integer) $phpDateValue = PHPExcel_Shared_Date::ExcelToPHP($excelDateValue+25569) - 3600;;
 				case PHPExcel_Calculation_Functions::RETURNDATE_PHP_OBJECT :
-						return new DateTime('1900-01-01 '.$PHPDateArray['hour'].':'.$PHPDateArray['minute'].':'.$PHPDateArray['second']);
+						return new \DateTime('1900-01-01 '.$PHPDateArray['hour'].':'.$PHPDateArray['minute'].':'.$PHPDateArray['second']);
 			}
 		}
 		return PHPExcel_Calculation_Functions::VALUE();

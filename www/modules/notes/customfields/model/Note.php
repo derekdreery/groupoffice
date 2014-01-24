@@ -18,12 +18,16 @@
  * The note model custom fields model.
  * 
  */
-class GO_Notes_Customfields_Model_Note extends GO_Customfields_Model_AbstractCustomFieldsRecord{
+
+namespace GO\Notes\Customfields\Model;
+
+
+class Note extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Notes_Model_CustomFieldsRecord 
+	 * @return \GO\Notes\Model\CustomFieldsRecord 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -31,6 +35,6 @@ class GO_Notes_Customfields_Model_Note extends GO_Customfields_Model_AbstractCus
 	}
 
 	public function extendsModel(){
-		return "GO_Notes_Model_Note";
+		return "\GO\Notes\Model\Note";
 	}
 }

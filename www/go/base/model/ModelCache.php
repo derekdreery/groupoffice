@@ -11,7 +11,7 @@
 
 /**
  * Sometimes the same models are accessed lots of times in one script run. This
- * class helps GO_Base_Db_ActiveRecord->findByPk to return the object from 
+ * class helps \GO\Base\Db\ActiveRecord->findByPk to return the object from 
  * memory if it has already been fetched from the database.
  * 
  * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
@@ -20,14 +20,18 @@
  * @package GO.base.model 
  */
 
-class GO_Base_Model_ModelCache{
+
+namespace GO\Base\Model;
+
+
+class ModelCache{
 	
 	private $_models;
 	
 	/**
 	 * Add a model to the memory cache.
 	 * 
-	 * @param String $modelClassName The GO_Base_Db_ActiveRecord derived class
+	 * @param String $modelClassName The \GO\Base\Db\ActiveRecord derived class
 	 * @param mixed $model 
 	 */
 	public function add($modelClassName, $model, $cacheKey=false){
@@ -36,7 +40,7 @@ class GO_Base_Model_ModelCache{
 		 * This cache mechanism can consume a lot of memory when running large
 		 * batch scripts. That's why it can be disabled.
 		 */
-		if(GO::$disableModelCache)// && $modelClassName != 'GO_Base_Model_Acl')
+		if(\GO::$disableModelCache)// && $modelClassName != '\GO\Base\Model\Acl')
 			return;
 		
 		if(!$cacheKey)
@@ -74,21 +78,21 @@ class GO_Base_Model_ModelCache{
 	/**
 	 * Get a model from the memory cache
 	 * 
-	 * @param String $modelClassName The GO_Base_Db_ActiveRecord derived class
+	 * @param String $modelClassName The \GO\Base\Db\ActiveRecord derived class
 	 * @param mixed $primaryKey 
 	 */
 	public function get($modelClassName, $cacheKey){	
 		
-		if(GO::$disableModelCache)
+		if(\GO::$disableModelCache)
 			return;
 		
 		$formatted=$this->_formatCacheKey($cacheKey);
 		
-		//GO::debug("GO_Base_Model_ModelCache::get($modelClassName, $cacheKey) ".$formatted);
+		//\GO::debug("\GO\Base\Model\ModelCache::get($modelClassName, $cacheKey) ".$formatted);
 		
 		if(isset($this->_models[$modelClassName][$formatted]))
 		{
-			//GO::debug("Found in cache");
+			//\GO::debug("Found in cache");
 			return $this->_models[$modelClassName][$formatted];
 		}else
 			return false;

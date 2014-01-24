@@ -1,10 +1,14 @@
 <?php
-class GO_Servermanager_ServerManagerModule extends GO_Base_Module{
+
+namespace GO\Servermanager;
+
+
+class ServerManagerModule extends \GO\Base\Module{
 	public function install() {
 			
 		parent::install();
 		
-		$cron = new GO_Base_Cron_CronJob();
+		$cron = new \GO\Base\Cron\CronJob();
 		
 		$cron->name = 'Subcron';
 		$cron->active = true;
@@ -14,7 +18,7 @@ class GO_Servermanager_ServerManagerModule extends GO_Base_Module{
 		$cron->monthdays = '*';
 		$cron->months = '*';
 		$cron->weekdays = '*';
-		$cron->job = 'GO_Servermanager_Cron_SubCron';		
+		$cron->job = '\GO\Servermanager\Cron\SubCron';		
 		
 		$cron->save();
 	}

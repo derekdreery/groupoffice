@@ -3,7 +3,7 @@ GOS::site()->scripts->registerCssFile($this->getTemplateUrl().'css/ticket.css');
 
 $this->setPageTitle("Support");
 ?>
-<?php if(GO::modules()->tickets): ?>
+<?php if(\GO::modules()->tickets): ?>
 	<div class="subkader-small-top">
 		<div class="subkader-small-bottom">
 			<div class="subkader-small-center">		
@@ -41,7 +41,7 @@ $this->setPageTitle("Support");
 								$linktoticket = '<a href="'.$this->createUrl("tickets/site/showTicket",array("ticket_number"=>$ticket->ticket_number,"ticket_verifier"=>$ticket->ticket_verifier)).'">';
 						?>
 						<tr class="ticketmodel-row <?php echo $style; ?>">
-							<td width="20px"><?php echo $linktoticket; ?>	<?php echo ($ticket->status_id != GO_Tickets_Model_Ticket::STATUS_CLOSED && $ticket->unseen)?"<span class='image-new-message'></span>":'';?></a></td>
+							<td width="20px"><?php echo $linktoticket; ?>	<?php echo ($ticket->status_id != \GO\Tickets\Model\Ticket::STATUS_CLOSED && $ticket->unseen)?"<span class='image-new-message'></span>":'';?></a></td>
 							<td width="80px"><?php echo $linktoticket; ?>	<?php echo $ticket->ticket_number; ?>	</a></td>
 							<td><?php echo $linktoticket;?><?php echo $ticket->subject;?></a></td>
 							<td width="180px"><?php echo $linktoticket; ?><?php echo $ticket->getStatusName(); ?></a></td>

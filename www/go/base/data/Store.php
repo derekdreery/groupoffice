@@ -12,7 +12,7 @@
 /**
  * The Store provider is useful to generate response for a grid store in a 
  * controller.
- * @TODO: RENAME THIS STORE TO DBSTORE so it will be GO_Base_Data_DBStore. NEEDS TO BE FIXED IN THE WHOLE PROJECT THEN
+ * @TODO: RENAME THIS STORE TO DBSTORE so it will be DBStore. NEEDS TO BE FIXED IN THE WHOLE PROJECT THEN
  * 
 
  * 
@@ -21,11 +21,15 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.data
  */
-class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
+
+namespace GO\Base\Data;
+
+
+class Store extends AbstractStore {
 	
   /**
    *
-   * @var GO_Base_Db_ActiveStatement 
+   * @var \GO\Base\Db\ActiveStatement 
    */
   private $_stmt;
 	
@@ -37,15 +41,15 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	/**
 	 * Create a new grid with column model and query result
 	 * 
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param \GO\Base\Db\ActiveRecord $model
 	 * @param array $excludeColumns Exlude columns if you autoload all columns
 	 * @param array $excludeColumns Set the columns to load from the model. If ommitted it will load all columns.
 	 * @param array $findParams
-	 * @return GO_Base_Data_Store 
+	 * @return Store 
 	 */
 	public static function newInstance($model, $excludeColumns=array(), $includeColumns=array())
 	{
-		$cm = new GO_Base_Data_ColumnModel($model, $excludeColumns, $includeColumns=array());		
+		$cm = new ColumnModel($model, $excludeColumns, $includeColumns=array());		
 		$store = new self($cm);
 		return $store;
 		
@@ -65,9 +69,9 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	 * Run the statement after you construct this grid. Otherwise the delete
 	 * actions will be ran later and they will still be in the result set.
 	 * 
-	 * @param GO_Base_Db_ActiveStatement $stmt 
+	 * @param \GO\Base\Db\ActiveStatement $stmt 
 	 */
-	public function setStatement(GO_Base_Db_ActiveStatement $stmt){
+	public function setStatement(\GO\Base\Db\ActiveStatement $stmt){
 		$this->_stmt = $stmt;
 		
 		
@@ -108,7 +112,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 //          $deleteModelName = $this->_stmt->model->className();
 //
 //          //If this is a MANY_MANY relational query. For example when you're displaying the users in a 
-//          // group in a grid then you don't want to delete the GO_BAse_Model_User but the linking table record GO_Base_MOdel_UserGroup
+//          // group in a grid then you don't want to delete the \GO\BAse\Model\User but the linking table record \GO\Base\MOdel\UserGroup
 //          if (!empty($this->_stmt->relation)) {
 //            $relations = $this->stmt->model->relations();
 //            if (isset($relations[$this->stmt->relation]['linksModel']))
@@ -145,7 +149,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
       } catch (Exception $e) {
         $this->response['deleteSuccess'] = false;
         $this->response['deleteFeedback'] = $e->getMessage();
-				if(GO::config()->debug)
+				if(\GO::config()->debug)
 					$this->response['deleteTrace'] = $e->getTraceAsString ();
       }
     }
@@ -164,7 +168,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		
 		$model = $this->_stmt->fetch();
 		
-//		GO::debugPageLoadTime("fetch");
+//		\GO::debugPageLoadTime("fetch");
 		
 		return $model;
 	}
@@ -221,8 +225,8 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
    * Returns a set of default parameters for use with a grid.
 	 * 
    * @var array $requestParams The request parameters passed to the controller. (Similar to $_REQUEST)
-   * @var GO_Base_Db_FindParams $extraFindParams Supply parameters to add to or override the default ones
-   * @return GO_Base_Db_FindParams defaultParams 
+   * @var \GO\Base\Db\FindParams $extraFindParams Supply parameters to add to or override the default ones
+   * @return \GO\Base\Db\FindParams defaultParams 
    */
   public function getDefaultParams($requestParams, $extraFindParams=false) {
 		
@@ -256,7 +260,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 //			$sort[$i] = $this->getColumnModel()->getSortColumn($sort[$i]);
 //		}
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()						
+		$findParams = \GO\Base\Db\FindParams::newInstance()						
 						->joinCustomFields()
 						->order($sort, $dir);
 		
@@ -274,7 +278,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		if(isset($requestParams['limit']))
 			$findParams->limit ($requestParams['limit']);
 		else
-			$findParams->limit (GO::user()->max_rows_list);
+			$findParams->limit (\GO::user()->max_rows_list);
 		
 		if(!empty($requestParams['start']))
 			$findParams->start ($requestParams['start']);

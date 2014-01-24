@@ -15,7 +15,7 @@ $packages = array('groupoffice-com', 'groupoffice-pro','groupoffice-mailserver',
 foreach($packages as $package){
 	file_put_contents('debian-'.$package.'/debian/changelog', str_replace(
 					array('{package}', '{version}', '{date}'),
-					array($package, GO::config()->version, $date),
+					array($package, \GO::config()->version, $date),
 					$tpl
 					));
 }

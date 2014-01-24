@@ -1,11 +1,15 @@
 <?php
-class GO_Site_Components_Config{
+
+namespace GO\Site\Components;
+
+
+class Config{
 
 	private $_configOptions = array();
 	
-	public function __construct(GO_Site_Model_Site $siteModel) {
+	public function __construct(\GO\Site\Model\Site $siteModel) {
 
-		$file = new GO_Base_Fs_File($siteModel->getSiteModule()->moduleManager->path().'siteconfig.php');
+		$file = new \GO\Base\Fs\File($siteModel->getSiteModule()->moduleManager->path().'siteconfig.php');
 		if($file->exists()){
 			require ($file->path());
 		}	

@@ -1,6 +1,10 @@
 <?php
 
-class GO_Users_Model_Settings extends GO_Base_Model_AbstractSettingsCollection{
+
+namespace GO\Users\Model;
+
+
+class Settings extends \GO\Base\Model\AbstractSettingsCollection{
 
 	public $register_email_subject;
 	public $register_email_body;

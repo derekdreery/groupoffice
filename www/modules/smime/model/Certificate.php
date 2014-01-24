@@ -17,7 +17,7 @@
  */
  
 /**
- * The GO_Smime_Model_Certificate model
+ * The Certificate model
  *
  * @package GO.modules.smime.model
  * @property int $account_id
@@ -25,13 +25,17 @@
  * @property boolean $always_sign
  */
 
-class GO_Smime_Model_Certificate extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Smime\Model;
+
+
+class Certificate extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Smime_Model_Certificate
+	 * @return Certificate
 	 */
 	public static function model($className=__CLASS__) {
 		return parent::model($className);

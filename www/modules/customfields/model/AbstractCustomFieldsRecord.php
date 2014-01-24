@@ -18,7 +18,11 @@
  */
 
 
-abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Customfields\Model;
+
+
+abstract class AbstractCustomFieldsRecord extends \GO\Base\Db\ActiveRecord{
 	
 	/**
 	 * Some fields need different formatting when exporting like contact fields that are prefixed with the ID.
@@ -47,7 +51,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	/**
 	 * Return the static model this custom fields model extends with fields.
 	 * 
-	 * @return GO_Base_Db_ActiveRecord 
+	 * @return \GO\Base\Db\ActiveRecord 
 	 */
 	public function getExtendedModel(){
 		return call_user_func(array($this->extendsModel(),'model'));
@@ -56,7 +60,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	/**
 	 * Override this to return the model this custom fields model extends with fields.
 	 * 
-	 * @return GO_Base_Db_ActiveRecord 
+	 * @return \GO\Base\Db\ActiveRecord 
 	 */
 	protected function extendsModel(){
 		return false;
@@ -75,23 +79,23 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	 */
 	private function _getAllFields() {
 		
-		//cache is cleared when a field is saved or deleted in GO_Customfields_Model_Field::AfterSave and afterdelete
+		//cache is cleared when a field is saved or deleted in Field::AfterSave and afterdelete
 		if(!isset(self::$cacheColumns[$this->extendsModel()])){
 			$cacheKey = $this->getCacheKey();
 
-			if($cached = GO::cache()->get($cacheKey)){				
+			if($cached = \GO::cache()->get($cacheKey)){				
 				self::$attributeLabels[$this->extendsModel()]=$cached['attributeLabels'];
 				self::$cacheColumns[$this->extendsModel()]=$cached['columns'];
 			}else
 			{			
-				$stmt = GO_Customfields_Model_Field::model()->find(array(
+				$stmt = Field::model()->find(array(
 						'ignoreAcl'=>true,
 						'join'=>'INNER JOIN cf_categories c ON t.category_id=c.id',
 						'where'=>'c.extends_model=:extends_model',
 						'bindParams'=>array('extends_model'=>$this->extendsModel())
 				));
 				
-				self::$cacheColumns[$this->extendsModel()]=GO_Base_Db_Columns::getColumns ($this);
+				self::$cacheColumns[$this->extendsModel()]=\GO\Base\Db\Columns::getColumns ($this);
 				self::$attributeLabels[$this->extendsModel()]=array();
 				
 				while($field = $stmt->fetch()){			
@@ -108,7 +112,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 
 				}
 
-				GO::cache()->set($cacheKey, array('attributeLabels'=>self::$attributeLabels[$this->extendsModel()], 'columns'=>self::$cacheColumns[$this->extendsModel()]));
+				\GO::cache()->set($cacheKey, array('attributeLabels'=>self::$attributeLabels[$this->extendsModel()], 'columns'=>self::$cacheColumns[$this->extendsModel()]));
 			}
 		}
 		
@@ -177,9 +181,9 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	 * 
 	 * With this function we can easily copy that value.
 	 * 
-	 * @param GO_Customfields_Model_AbstractCustomFieldsRecord $source
+	 * @param AbstractCustomFieldsRecord $source
 	 */
-	public function copyAttributesWithMatchingAttributeLabels(GO_Customfields_Model_AbstractCustomFieldsRecord $copyFrom){
+	public function copyAttributesWithMatchingAttributeLabels(AbstractCustomFieldsRecord $copyFrom){
 		$sourceColumns = $copyFrom->attributeLabels();
 		unset($sourceColumns['model_id']);
 		//flip keys and values
@@ -291,7 +295,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	 */
 	public function convertLabelKeyAttributes($categoryName, $labelValueArray) {
 
-		$stmt = GO_Customfields_Model_Field::model()->find(array(
+		$stmt = Field::model()->find(array(
 				'ignoreAcl' => true,
 				'join' => 'INNER JOIN cf_categories c ON (t.category_id=c.id AND c.name=:categoryName)',
 				'where' => 'c.extends_model=:extends_model',
@@ -318,12 +322,12 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	 */
 	public function getAttributeByName($categoryName, $fieldName, $outputType='raw'){
 
-		$category = GO_Customfields_Model_Category::model()->findSingleByAttributes(array(
+		$category = Category::model()->findSingleByAttributes(array(
 				'extends_model'=>$this->extendsModel(),
 				'name'=>$categoryName
 		));
 		
-		$field = GO_Customfields_Model_Field::model()->findSingleByAttributes(array(
+		$field = Field::model()->findSingleByAttributes(array(
 				'category_id'=>$category->id,
 				'name'=>$fieldName
 		));
@@ -370,18 +374,18 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	}
 	
 	public function getColIdByName($fieldNameString,$categoryNameString='') {
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 				->single()
 				->select('`t`.`id`')
 				->joinModel(array(
-					'model' => 'GO_Customfields_Model_Category',
+					'model' => '\GO\Customfields\Model\Category',
 					'localTableAlias' => 't',
 					'localField' => 'category_id',
 					'foreignField' => 'id',
 					'tableAlias' => 'cat'
 				));
 
-		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('name', $fieldNameString, '=', 't')
 						->addCondition('extends_model', $this->getExtendedModel()->className(), '=', 'cat');
 		if (!empty($categoryNameString))
@@ -389,7 +393,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 		
 		$findParams->criteria($findCriteria);
 		
-		$fieldRecord = GO_Customfields_Model_Field::model()->find($findParams);
+		$fieldRecord = Field::model()->find($findParams);
 		if (!empty($fieldRecord))
 			return $fieldRecord->id;
 		else
@@ -408,9 +412,9 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 //				preg_match('/col_(\d+)_unique/', $msg, $cfMatches);
 //				
 //				if (count($cfMatches)>1) {
-//					$cField = GO_Customfields_Model_Field::model()->findByPk($cfMatches[1]);
+//					$cField = Field::model()->findByPk($cfMatches[1]);
 //					$cFieldPath = $cField->category->name.':'.$cField->name;
-//					$feedbackString = str_replace('%cf',$cFieldPath,GO::t('duplicateExistsFeedback','customfields'));
+//					$feedbackString = str_replace('%cf',$cFieldPath,\GO::t('duplicateExistsFeedback','customfields'));
 //					throw new Exception($feedbackString);
 //				} else {
 //					throw $e;

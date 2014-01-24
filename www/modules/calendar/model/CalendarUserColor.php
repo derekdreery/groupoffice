@@ -8,16 +8,16 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.Calendar
- * @version $Id: GO_Calendar_Model_CalendarUserColors.php 7607 2012-06-27 15:56:46Z wsmits $
+ * @version $Id: CalendarUserColors.php 7607 2012-06-27 15:56:46Z wsmits $
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  */
  
 /**
- * The GO_Calendar_Model_CalendarUserColors model
+ * The CalendarUserColors model
  *
  * @package GO.modules.Calendar
- * @version $Id: GO_Calendar_Model_CalendarUserColor.php 7607 2012-06-27 15:56:46Z wsmits $
+ * @version $Id: CalendarUserColor.php 7607 2012-06-27 15:56:46Z wsmits $
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  *
@@ -26,13 +26,17 @@
  * @property String $color
  */
 
-class GO_Calendar_Model_CalendarUserColor extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Calendar\Model;
+
+
+class CalendarUserColor extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Calendar_Model_CalendarUserColors
+	 * @return CalendarUserColors
 	 */
 	public static function model($className=__CLASS__)
 	{	

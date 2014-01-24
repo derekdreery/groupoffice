@@ -1,7 +1,7 @@
 <?php
 require('../www/Group-Office.php');
 
-$conn = GO::getDbConnection();
+$conn = \GO::getDbConnection();
 
 $table = $argv[1];
 
@@ -70,7 +70,7 @@ echo '<?php
  * 
 '.$props.'
 
-class '.$className.' extends GO_Base_Db_ActiveRecord{
+class '.$className.' extends \GO\Base\Db\ActiveRecord{
 
   /**
    * Enable this function if you want this model to check the acl\'s automatically.

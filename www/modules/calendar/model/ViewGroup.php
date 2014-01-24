@@ -9,7 +9,7 @@
  */
  
 /**
- * The GO_Calendar_Model_CalendarView model
+ * The CalendarView model
  *
  * @package GO.modules.Calendar
  * @version $Id: CalendarView.php 7607 2011-11-23 15:14:37Z mdhart $
@@ -20,13 +20,17 @@
  * @property int $view_id
  */
 
-class GO_Calendar_Model_ViewGroup extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Calendar\Model;
+
+
+class ViewGroup extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Calendar_Model_CalendarTasklist
+	 * @return CalendarTasklist
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -59,8 +63,8 @@ class GO_Calendar_Model_ViewGroup extends GO_Base_Db_ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-             'view' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_View', 'field' => 'view_id'),
-             'group' => array('type' => self::BELONGS_TO, 'model' => 'GO_Base_Model_Group', 'field' => 'group_id'),
+             'view' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\View', 'field' => 'view_id'),
+             'group' => array('type' => self::BELONGS_TO, 'model' => '\GO\Base\Model\Group', 'field' => 'group_id'),
          );
 	 }
 }

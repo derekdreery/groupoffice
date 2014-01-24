@@ -23,7 +23,11 @@
  * 
  * @package GO.base.model
  */
-abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Base\Model;
+
+
+abstract class AbstractUserDefaultModel extends \GO\Base\Db\ActiveRecord {
 
 	private static $_allUserDefaultModels;
 
@@ -31,37 +35,37 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	 * Get all models that should exist by default for a user.
 	 * 
 	 * @param int $user_id
-	 * @return GO_Base_Db_ActiveRecord 
+	 * @return \GO\Base\Db\ActiveRecord 
 	 */
 	public static function getAllUserDefaultModels($user_id=0) {
 		
-		$oldIgnoreAcl = GO::setIgnoreAclPermissions(true);
+		$oldIgnoreAcl = \GO::setIgnoreAclPermissions(true);
 
 		if (!isset(self::$_allUserDefaultModels)) {
 			self::$_allUserDefaultModels = array();
-			$modules = GO::modules()->getAllModules();
+			$modules = \GO::modules()->getAllModules();
 			
 			while ($module=array_shift($modules)) {
-			  $permissionLevel=$user_id ? GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $user_id) : 1;
+			  $permissionLevel=$user_id ? Acl::getUserPermissionLevel($module->acl_id, $user_id) : 1;
 				if($permissionLevel){
 				  if($module->moduleManager){
 					  $classes = $module->moduleManager->findClasses('model');
 					  foreach($classes as $class){
-						  if($class->isSubclassOf('GO_Base_Model_AbstractUserDefaultModel')){							
-							  self::$_allUserDefaultModels[] = GO::getModel($class->getName());
+						  if($class->isSubclassOf('\GO\Base\Model\AbstractUserDefaultModel')){							
+							  self::$_allUserDefaultModels[] = \GO::getModel($class->getName());
 						  }					
 					  }
 				  }
 				}
 			}
 		}
-		GO::setIgnoreAclPermissions($oldIgnoreAcl);
+		\GO::setIgnoreAclPermissions($oldIgnoreAcl);
 		return self::$_allUserDefaultModels;
 	}
 	
 	/**
 	 * Return a model to store the default in. Eg. The default tasklist created by
-	 * getDefault should be stored in GO_Tasks_Model_Settings->default_taskkist_id
+	 * getDefault should be stored in \GO\Tasks\Model\Settings->default_taskkist_id
 	 * 
 	 * @return string 
 	 */
@@ -71,7 +75,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 
 	/**
 	 * Return a settings attribute name. Eg. The default tasklist created by
-	 * getDefault should be stored in GO_Tasks_Model_Settings->default_taskkist_id
+	 * getDefault should be stored in \GO\Tasks\Model\Settings->default_taskkist_id
 	 * 
 	 * @return string 
 	 */
@@ -85,10 +89,10 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	 * This function is automaticall called in afterSave of the user model and
 	 * after a module is installed.
 	 * 
-	 * @param GO_Base_Model_User $user
-	 * @return GO_Base_Model_AbstractUserDefaultModel 
+	 * @param User $user
+	 * @return AbstractUserDefaultModel 
 	 */
-	public function getDefault(GO_Base_Model_User $user, &$createdNew=false) {	
+	public function getDefault(User $user, &$createdNew=false) {	
 		
 			
 		if(!$user)
@@ -97,7 +101,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 		$settingsModelName = $this->settingsModelName();
 		if ($settingsModelName) {
 			
-			$settingsModel = GO::getModel($settingsModelName)->findByPk($user->id);
+			$settingsModel = \GO::getModel($settingsModelName)->findByPk($user->id);
 			if(!$settingsModel){
 				$settingsModel = new $settingsModelName;
 				$settingsModel->user_id=$user->id;
@@ -105,7 +109,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			{
 				$pk = $settingsModel->{$this->settingsPkAttribute()};
 				$defaultModel = $this->findByPk($pk, false, true);
-				if($defaultModel && $defaultModel->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
+				if($defaultModel && $defaultModel->checkPermissionLevel(Acl::WRITE_PERMISSION))
 					return $defaultModel;
 			}
 		}
@@ -124,9 +128,9 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			}
 			
 			//any user may do this.
-			$oldIgnore = GO::setIgnoreAclPermissions(true);		
+			$oldIgnore = \GO::setIgnoreAclPermissions(true);		
 			$defaultModel->save();			
-			GO::setIgnoreAclPermissions($oldIgnore);
+			\GO::setIgnoreAclPermissions($oldIgnore);
 			
 			$createdNew=true;
 		}
@@ -140,7 +144,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	}
 	
 	public static function getNameTemplate($className){
-		$template = GO::config()->get_setting("name_template_".$className);
+		$template = \GO::config()->get_setting("name_template_".$className);
 		if(!$template)
 			$template = "{first_name} {middle_name} {last_name}";
 		
@@ -148,12 +152,12 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	}
 	
 	public static function setNameTemplate($className,$templateString){
-		return GO::config()->save_setting("name_template_".$className,$templateString);
+		return \GO::config()->save_setting("name_template_".$className,$templateString);
 	}
 	
 	/**
 	 *
-	 * @param GO_Base_Db_User $user User model, defaults to false.
+	 * @param \GO\Base\Db\User $user User model, defaults to false.
 	 * @param string &$feedback Feedback string for calling scope, contains
 	 * success / failure reports on every default model.
 	 */
@@ -163,7 +167,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			$user=$this->user;
 		
 		if(!$user)
-			throw new Exception(" - ".GO::t(get_class($this),'settings')." '".$this->name."' ".GO::t('notRenamedNoUser','settings').".<br />");
+			throw new Exception(" - ".\GO::t(get_class($this),'settings')." '".$this->name."' ".\GO::t('notRenamedNoUser','settings').".<br />");
 	
 		$template = self::getNameTemplate($this->className());
 

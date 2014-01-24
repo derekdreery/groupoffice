@@ -2,12 +2,16 @@
 /**
  * Example usage:
  * 
- * $pluploader = new GO_Site_Widgets_Plupload_Widget();
+ * $pluploader = new \GO\Site\Widgets\Plupload\Widget();
  * echo $pluploader->render();
  */
-class GO_Site_Widget_Plupload_Widget extends GO_Site_Components_Widget {
+
+namespace GO\Site\Widget\Plupload;
+
+
+class Widget extends \GO\Site\Components\Widget {
 	
-	public $max_file_size; //The maximun filesize of a single file [defaults to GO::config()->max_file_size]
+	public $max_file_size; //The maximun filesize of a single file [defaults to \GO::config()->max_file_size]
 	public $chunk_size = '2mb'; //Large files will be chunked to this size
 	public $runtimes = 'html5,gears,flash,browserplus,html4'; //Runtimes to be used on order of try and fail
 	public $uploadTarget; //Upload target to post $_FILES to defaults to sites/site/plupload
@@ -24,12 +28,12 @@ class GO_Site_Widget_Plupload_Widget extends GO_Site_Components_Widget {
 			$this->uploadTarget = Site::urlManager()->createUrl('site/front/ajaxWidget', array('widget_method'=>'upload', 'widget_class'=>$this->className()));
 
 			if(empty($this->max_file_size))
-				$this->max_file_size = GO::config()->max_file_size;
+				$this->max_file_size = \GO::config()->max_file_size;
 
 			Site::scripts()->registerGapiScript('jquery');
 			Site::scripts()->registerGapiScript('jquery-ui');
 
-			$assetUrl = Site::assetManager()->publish(GO::config()->root_path.'modules/site/widget/plupload/assets');
+			$assetUrl = Site::assetManager()->publish(\GO::config()->root_path.'modules/site/widget/plupload/assets');
 
 			$this->_swfUrl = $assetUrl.'/assets/js/plupload.flash.swf';
 
@@ -37,7 +41,7 @@ class GO_Site_Widget_Plupload_Widget extends GO_Site_Components_Widget {
 			Site::scripts()->registerScriptFile($assetUrl.'/assets/js/plupload.full.js');
 			Site::scripts()->registerScriptFile($assetUrl.'/assets/js/jquery.plupload.queue/jquery.plupload.queue.js'); 
 
-			$langFile = '/assets/js/i18n/'.GO::language()->getLanguage().'.js';
+			$langFile = '/assets/js/i18n/'.\GO::language()->getLanguage().'.js';
 //			if(file_exists(Site::assetManager()->getBasePath().$langFile)){
 				Site::scripts()->registerScriptFile($assetUrl.$langFile); 
 //			}
@@ -45,7 +49,7 @@ class GO_Site_Widget_Plupload_Widget extends GO_Site_Components_Widget {
 		catch(Exception $e){
 			echo '<h2 style="color:red;">AN ERROR HAS OCCURED</h2>';
 			//echo '<p style="color:red;">'.$e->getMessage().'</p>';
-			echo '<p style="color:red;">Please check if the folder( <b>'.GO::config()->assets_path.'</b> ) is writable for the webserver.<br />This path is also configurable in the Group-Office <b>config.php</b> file.<br />Please check the options: <b>assets_path</b> and <b>assets_url</b></p>';
+			echo '<p style="color:red;">Please check if the folder( <b>'.\GO::config()->assets_path.'</b> ) is writable for the webserver.<br />This path is also configurable in the Group-Office <b>config.php</b> file.<br />Please check the options: <b>assets_path</b> and <b>assets_url</b></p>';
 		}
 	}
 	
@@ -55,7 +59,7 @@ class GO_Site_Widget_Plupload_Widget extends GO_Site_Components_Widget {
 	 */
 	public function render() {
 
-		Site::scripts()->registerScript('plupload#'.$this->id, $this->createjs(), GO_Site_Components_Scripts::POS_END);
+		Site::scripts()->registerScript('plupload#'.$this->id, $this->createjs(), \GO\Site\Components\Scripts::POS_END);
 
 		return '<div id="'.$this->id.'">Loading upload widget...</div>';
 	}
@@ -83,6 +87,6 @@ EOD;
 	} 	
 	
 	public static function upload($params){
-		GO_Base_Component_Plupload::handleUpload();
+		\GO\Base\Component\Plupload::handleUpload();
 	}
 }

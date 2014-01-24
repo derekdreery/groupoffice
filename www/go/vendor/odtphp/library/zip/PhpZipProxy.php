@@ -1,6 +1,6 @@
 <?php
 require_once 'ZipInterface.php';
-class PhpZipProxyException extends Exception
+class PhpZipProxyException extends \Exception
 { }
 /**
  * Proxy class for the PHP Zip Extension

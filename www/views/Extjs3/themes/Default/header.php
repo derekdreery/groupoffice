@@ -5,22 +5,22 @@
 <meta name="robots" content="noindex" />
 <meta http-equiv="x-ua-compatible" content="IE=8">
 <?php
-$favicon = !empty(GO::config()->favicon) ? GO::config()->favicon : GO::view()->getTheme()->getUrl()."images/groupoffice.ico?";
+$favicon = !empty(\GO::config()->favicon) ? \GO::config()->favicon : \GO::view()->getTheme()->getUrl()."images/groupoffice.ico?";
 ?>
 <link href="<?php echo $favicon; ?>" rel="shortcut icon" type="image/x-icon">
-<title><?php echo GO::config()->title; ?></title>
+<title><?php echo \GO::config()->title; ?></title>
 <?php
-GO::view()->addStylesheet(GO::view()->getPath().'ext/resources/css/ext-all.css', GO::view()->getUrl().'ext/resources/css/');
-GO::view()->addStylesheet(GO::view()->getPath().'themes/Default/xtheme-groupoffice.css', GO::view()->getUrl().'themes/Default/');
-GO::view()->addStylesheet(GO::view()->getPath().'themes/Default/style.css', GO::view()->getUrl().'themes/Default/');
-GO::view()->loadModuleStylesheets();
+\GO::view()->addStylesheet(\GO::view()->getPath().'ext/resources/css/ext-all.css', \GO::view()->getUrl().'ext/resources/css/');
+\GO::view()->addStylesheet(\GO::view()->getPath().'themes/Default/xtheme-groupoffice.css', \GO::view()->getUrl().'themes/Default/');
+\GO::view()->addStylesheet(\GO::view()->getPath().'themes/Default/style.css', \GO::view()->getUrl().'themes/Default/');
+\GO::view()->loadModuleStylesheets();
 ?>
-<link href="<?php echo GO::view()->getCachedStylesheet(); ?>" type="text/css" rel="stylesheet" />
+<link href="<?php echo \GO::view()->getCachedStylesheet(); ?>" type="text/css" rel="stylesheet" />
 <?php
-if(!empty(GO::config()->custom_css_url))
-	echo '<link href="'.GO::config()->custom_css_url.'" type="text/css" rel="stylesheet" />';
+if(!empty(\GO::config()->custom_css_url))
+	echo '<link href="'.\GO::config()->custom_css_url.'" type="text/css" rel="stylesheet" />';
 
-//$this is GO_Core_Controller_Auth
+//$this is \GO\Core\Controller\Auth
 $this->fireEvent('head');
 
 ?>

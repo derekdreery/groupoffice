@@ -25,13 +25,17 @@
  * @property int $user_id
  */
 
- class GO_Addressbook_Model_Addressbook extends GO_Base_Model_AbstractUserDefaultModel{
+
+namespace GO\Addressbook\Model;
+
+
+ class Addressbook extends \GO\Base\Model\AbstractUserDefaultModel{
 		 
 	 /**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Addressbook_Model_Addressbook 
+	 * @return Addressbook 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -51,8 +55,8 @@
 	
 	public function relations(){
 		return array(
-				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'addressbook_id', 'delete'=>true),
-				'companies' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'addressbook_id', 'delete'=>true)
+				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Addressbook\Model\Contact', 'field'=>'addressbook_id', 'delete'=>true),
+				'companies' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Addressbook\Model\Company', 'field'=>'addressbook_id', 'delete'=>true)
 		);
 	}
 	
@@ -68,7 +72,7 @@
 	protected function beforeSave() {
 		
 		if(!isset($this->default_salutation))
-			$this->default_salutation=GO::t("defaultSalutationTpl","addressbook");
+			$this->default_salutation=\GO::t("defaultSalutationTpl","addressbook");
 			
 		return parent::beforeSave();
 	}
@@ -85,24 +89,24 @@
 	 * Get the addressbook for the user profiles. If it doesn't exist it will be
 	 * created.
 	 * 
-	 * @return GO_Addressbook_Model_Addressbook 
+	 * @return Addressbook 
 	 */
 	public function getUsersAddressbook(){
-		$ab = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('users', '1'); //GO::t('users','base'));
+		$ab = Addressbook::model()->findSingleByAttribute('users', '1'); //\GO::t('users','base'));
 		if (!$ab) {
-			$ab = new GO_Addressbook_Model_Addressbook();
-			$ab->name = GO::t('users');
+			$ab = new Addressbook();
+			$ab->name = \GO::t('users');
 			$ab->users = true;
 			$ab->save();
 			
-			$ab->acl->addGroup(GO::config()->group_internal);
+			$ab->acl->addGroup(\GO::config()->group_internal);
 		}
 		return $ab;
 	}
 	
 	public function defaultAttributes() {
 		$attr = parent::defaultAttributes();
-		$attr['default_salutation']=GO::t('defaultSalutationTpl','addressbook');
+		$attr['default_salutation']=\GO::t('defaultSalutationTpl','addressbook');
 		return $attr;
 	}
 
@@ -130,14 +134,14 @@
 	 * @return array
 	 */
 	public function getAllReadableAddressbookIds(){
-		if(!isset(GO::session()->values['addressbook']['readable_addressbook_ids'])){
-			GO::session()->values['addressbook']['readable_addressbook_ids']=array();
+		if(!isset(\GO::session()->values['addressbook']['readable_addressbook_ids'])){
+			\GO::session()->values['addressbook']['readable_addressbook_ids']=array();
 			$stmt = $this->find();
 			while($ab = $stmt->fetch()){
-				GO::session()->values['addressbook']['readable_addressbook_ids'][]=$ab->id;
+				\GO::session()->values['addressbook']['readable_addressbook_ids'][]=$ab->id;
 			}
 		}
 		
-		return GO::session()->values['addressbook']['readable_addressbook_ids'];
+		return \GO::session()->values['addressbook']['readable_addressbook_ids'];
 	}
 }

@@ -1,6 +1,10 @@
 <?php
 
-class GO_Customfields_Html_Field extends GO_Base_Html_Input {
+
+namespace GO\Customfields\Html;
+
+
+class Field extends \GO\Base\Html\Input {
 
 	public static function render($attributes,$echo=true) {
 		
@@ -23,12 +27,12 @@ class GO_Customfields_Html_Field extends GO_Base_Html_Input {
 				$column= $columns[$this->attributes['name']];
 				
 				switch($column['customfield']->datatype){
-					case 'GO_Customfields_Customfieldtype_Checkbox':
+					case '\GO\Customfields\Customfieldtype\Checkbox':
 						$this->attributes['type']='checkbox';
 						$this->attributes['class'].=' checkbox';
 					break;
 				
-					case 'GO_Customfields_Customfieldtype_Select':
+					case '\GO\Customfields\Customfieldtype\Select':
 						$this->attributes['type']='select';
 						$this->attributes['class'].=' select';
 						

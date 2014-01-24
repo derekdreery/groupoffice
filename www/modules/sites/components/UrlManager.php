@@ -17,7 +17,11 @@
  * @version $Id UrlManager.php 2012-06-06 15:23:04 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Sites_Components_UrlManager
+
+namespace GO\Sites\Components;
+
+
+class UrlManager
 {
 
 	const GET_FORMAT='get';
@@ -111,7 +115,7 @@ class GO_Sites_Components_UrlManager
 			return;
 
 		foreach ($this->rules as $pattern => $route)
-			$this->_rules[] = new GO_Sites_Components_UrlRule($route, $pattern);
+			$this->_rules[] = new UrlRule($route, $pattern);
 	}
 
 	/**
@@ -214,7 +218,7 @@ class GO_Sites_Components_UrlManager
 
 	/**
 	 * Parses the user request.
-	 * @param GO_Sites_Components_Request $request the request component
+	 * @param Request $request the request component
 	 * @return string the route (controllerID/actionID) and perhaps GET parameters in path format.
 	 */
 	public function parseUrl($request)

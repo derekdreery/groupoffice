@@ -14,7 +14,7 @@
  */
  
 /**
- * The GO_Favorites_Model_Calendar model
+ * The Calendar model
  *
  * @package GO.modules.Favorites
  * @version $Id$
@@ -26,7 +26,11 @@
  * @property int $sort
  */
 
-class GO_Favorites_Model_Calendar extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Favorites\Model;
+
+
+class Calendar extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns the table name
@@ -45,7 +49,7 @@ class GO_Favorites_Model_Calendar extends GO_Base_Db_ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-				 'calendar' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Calendar', 'field' => 'calendar_id', 'delete' => false),
+				 'calendar' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Calendar', 'field' => 'calendar_id', 'delete' => false),
 		 );
 	 }	
 }

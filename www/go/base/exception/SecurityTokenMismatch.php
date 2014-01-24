@@ -19,7 +19,11 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_SecurityTokenMismatch extends Exception
+
+namespace GO\Base\Exception;
+
+
+class SecurityTokenMismatch extends \Exception
 {
 
 	public function __construct() {

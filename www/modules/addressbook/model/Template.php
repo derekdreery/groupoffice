@@ -17,7 +17,7 @@
  */
  
 /**
- * The GO_Addressbook_Model_Template model
+ * The Template model
  *
  * @package GO.modules.addressbook.model
  * @property string $extension
@@ -30,7 +30,11 @@
  * @property int $acl_write
  */
 
-class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Addressbook\Model;
+
+
+class Template extends \GO\Base\Db\ActiveRecord{
 	
 	const TYPE_EMAIL=0;
 	
@@ -45,7 +49,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Addressbook_Model_Template 
+	 * @return Template 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -54,21 +58,21 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	
 	// TODO : move language from mailings module to addressbook module
 	protected function getLocalizedName() {
-		return GO::t('template', 'addressbook');
+		return \GO::t('template', 'addressbook');
 	}
 	
 	protected function init() {
 		$this->columns['content']['required']=true;
 		
-//		$this->addDefaultTag('contact:salutation', GO::t('default_salutation_unknown'));
-		$this->addDefaultTag('salutation', GO::t('default_salutation_unknown'));
-		$this->addDefaultTag('date', GO_Base_Util_Date::get_timestamp(time(), false));
+//		$this->addDefaultTag('contact:salutation', \GO::t('default_salutation_unknown'));
+		$this->addDefaultTag('salutation', \GO::t('default_salutation_unknown'));
+		$this->addDefaultTag('date', \GO\Base\Util\Date::get_timestamp(time(), false));
 		
 		return parent::init();
 	}
 	
 	protected function getPermissionLevelForNewModel() {
-		return GO_Base_Model_Acl::MANAGE_PERMISSION;
+		return \GO\Base\Model\Acl::MANAGE_PERMISSION;
 	}
 	
 	/**
@@ -128,14 +132,14 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	private function _getUserAttributes(){
 		$attributes=array();
 		
-		if(GO::user() && GO::user()->contact){
-			$attributes = array_merge($attributes, $this->_getModelAttributes(GO::user()->contact,'user:'));
-			$attributes['user:sirmadam']=GO::user()->contact->sex=="M" ? GO::t('cmdSir','addressbook') : GO::t('cmdMadam', 'addressbook');
-			if(GO::user()->contact->company){
-				$attributes = array_merge($attributes, $this->_getModelAttributes(GO::user()->contact->company,'usercompany:'));
+		if(\GO::user() && \GO::user()->contact){
+			$attributes = array_merge($attributes, $this->_getModelAttributes(\GO::user()->contact,'user:'));
+			$attributes['user:sirmadam']=\GO::user()->contact->sex=="M" ? \GO::t('cmdSir','addressbook') : \GO::t('cmdMadam', 'addressbook');
+			if(\GO::user()->contact->company){
+				$attributes = array_merge($attributes, $this->_getModelAttributes(\GO::user()->contact->company,'usercompany:'));
 			}
 			
-			$attributes = array_merge($attributes, $this->_getModelAttributes(GO::user(),'user:'));			
+			$attributes = array_merge($attributes, $this->_getModelAttributes(\GO::user(),'user:'));			
 		}
 		return $attributes;
 	}
@@ -152,21 +156,21 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * {user:modelAttributeName}
 	 * 
 	 * @param string $content Containing the tags
-	 * @param GO_Addressbook_Model_Contact $contact
+	 * @param Contact $contact
 	 * @param boolean $leaveEmptyTags Set to true if you don't want unreplaced tags to be cleaned up.
 	 * @return string 
 	 */
-	public function replaceContactTags($content, GO_Addressbook_Model_Contact $contact, $leaveEmptyTags=false){
+	public function replaceContactTags($content, Contact $contact, $leaveEmptyTags=false){
 		
-		if(GO::modules()->customfields)
-			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
+		if(\GO::modules()->customfields)
+			\GO\Customfields\Model\AbstractCustomFieldsRecord::$formatForExport=true;
 		
 		$attributes = $leaveEmptyTags ? array() : $this->_defaultTags;
 		
 		if(!empty($contact->salutation))
 			$attributes['salutation']=$contact->salutation;
 		
-		$attributes['contact:sirmadam']=$contact->sex=="M" ? GO::t('sir') : GO::t('madam');
+		$attributes['contact:sirmadam']=$contact->sex=="M" ? \GO::t('sir') : \GO::t('madam');
 		
 		$attributes = array_merge($attributes, $this->_getModelAttributes($contact, 'contact:'));
 		if($contact->company)
@@ -176,8 +180,8 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
 				
-		if(GO::modules()->customfields)
-			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=false;
+		if(\GO::modules()->customfields)
+			\GO\Customfields\Model\AbstractCustomFieldsRecord::$formatForExport=false;
 		
 		return $this->_parse($content, $attributes, $leaveEmptyTags);
 	}
@@ -191,15 +195,15 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * {$tagPrefix:modelAttributeName}
 	 * 
 	 * @param string $content Containing the tags
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param \GO\Base\Db\ActiveRecord $model
 	 * @param string $tagPrefix
 	 * @param boolean $leaveEmptyTags Set to true if you don't want unreplaced tags to be cleaned up.
 	 * @return string 
 	 */
 	public function replaceModelTags($content, $model, $tagPrefix='', $leaveEmptyTags=false){
 		
-		if(GO::modules()->customfields)
-			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
+		if(\GO::modules()->customfields)
+			\GO\Customfields\Model\AbstractCustomFieldsRecord::$formatForExport=true;
 		
 		$attributes = $leaveEmptyTags ? array() : $this->_defaultTags;
 		
@@ -209,8 +213,8 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		
 		$content = $this->_replaceRelations($content, $model, $tagPrefix, $leaveEmptyTags);
 		
-		if(GO::modules()->customfields)
-			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=false;
+		if(\GO::modules()->customfields)
+			\GO\Customfields\Model\AbstractCustomFieldsRecord::$formatForExport=false;
 	
 		return $this->_parse($content, $attributes, $leaveEmptyTags);		
 	}
@@ -258,7 +262,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 				$attributes[$key]=str_replace("\n", $this->_lineBreak, $attributes[$key]);
 		}
 		
-		$templateParser = new GO_Base_Util_TemplateParser();
+		$templateParser = new \GO\Base\Util\TemplateParser();
 		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
 	}
 	
@@ -274,17 +278,17 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * @return string 
 	 */
 	public function replaceUserTags($content, $leaveEmptyTags=false){
-		if(GO::modules()->customfields)
-			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
+		if(\GO::modules()->customfields)
+			\GO\Customfields\Model\AbstractCustomFieldsRecord::$formatForExport=true;
 		
 		$attributes = $leaveEmptyTags ? array() : $this->_defaultTags;
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
 		
-		//$attributes['contact:salutation']=GO::t('default_salutation_unknown');
+		//$attributes['contact:salutation']=\GO::t('default_salutation_unknown');
 		
-		if(GO::modules()->customfields)
-			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=false;
+		if(\GO::modules()->customfields)
+			\GO\Customfields\Model\AbstractCustomFieldsRecord::$formatForExport=false;
 		
 		return $this->_parse($content, $attributes, $leaveEmptyTags);
 	}
@@ -306,13 +310,13 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	}
 
 //	/**
-//	 * @return GO_Email_Model_SavedMessage
+//	 * @return \GO\Email\Model\SavedMessage
 //	 */
 //	private function _getMessage(){
 //		if(!isset($this->_message)){
 //			
 //			//todo getFromMimeData
-//			$this->_message = GO_Email_Model_SavedMessage::model()->createFromMimeData($this->content);
+//			$this->_message = \GO\Email\Model\SavedMessage::model()->createFromMimeData($this->content);
 //
 //		}
 //		return $this->_message;

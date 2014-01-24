@@ -9,7 +9,7 @@
  */
  
 /**
- * The GO_Tasks_Model_PortletTasklist model
+ * The PortletTasklist model
  *
  * @package GO.modules.Tasks
  * @version $Id: PortletTasklist.php 7607 2011-09-20 10:07:07Z wsmits $
@@ -20,12 +20,16 @@
  * @property int $tasklist_id
  */
 
-class GO_Tasks_Model_PortletTasklist extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Tasks\Model;
+
+
+class PortletTasklist extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 *
 	 * @param type $className
-	 * @return GO_Tasks_Model_PortletTasklist 
+	 * @return PortletTasklist 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -42,7 +46,7 @@ class GO_Tasks_Model_PortletTasklist extends GO_Base_Db_ActiveRecord {
 	
 	public function relations() {
 		return array(
-			'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'tasklist_id', 'delete' => false),
+			'tasklist' => array('type' => self::BELONGS_TO, 'model' => '\GO\Tasks\Model\Tasklist', 'field' => 'tasklist_id', 'delete' => false),
 			);
 	}
 	

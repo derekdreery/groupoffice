@@ -2,7 +2,7 @@
 
 GOS::site()->scripts->registerCssFile($this->getTemplateUrl().'css/ticket.css');
 
-$form = new GO_Sites_Widgets_Form();
+$form = new \GO\Sites\Widgets\Form();
 
 if($ticket->isNew){
 	$this->renderPartial('_ticketForm',array('ticket'=>$ticket,'ticketTypes'=>$ticketTypes,'form'=>$form));

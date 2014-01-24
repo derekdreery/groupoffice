@@ -1,6 +1,10 @@
 <?php
 
-class GO_Site_Widget_Twitter extends GO_Site_Components_Widget {
+
+namespace GO\Site\Widget;
+
+
+class Twitter extends \GO\Site\Components\Widget {
 	
 	/**
 	 * include retweets true, false
@@ -278,11 +282,11 @@ http://t.co/zy3JDoVTEC"
 	public function render() {
 
 
-		require_once(GO::modules()->site->path.'widget/twitter/codebird.php');
+		require_once(\GO::modules()->site->path.'widget/twitter/codebird.php');
 
 		$cacheKey = $this->consumerKey.':'.$this->accessToken.':'.$this->userTimeLine.':'.$this->retweets;
 		
-		if(!$this->cacheLifeTime || !($tweets = GO::cache()->get($cacheKey))){	
+		if(!$this->cacheLifeTime || !($tweets = \GO::cache()->get($cacheKey))){	
 			//Get authenticated
 			\Codebird\Codebird::setConsumerKey($this->consumerKey, $this->consumerSecret);
 
@@ -300,7 +304,7 @@ http://t.co/zy3JDoVTEC"
 			//tweets returned by Twitter	
 			$tweets = $this->userTimeLine ? (array) $cb->statuses_userTimeline($params) : (array) $cb->statuses_homeTimeline($params);
 			
-			GO::cache()->set($cacheKey, $tweets,$this->cacheLifeTime);
+			\GO::cache()->set($cacheKey, $tweets,$this->cacheLifeTime);
 		}
 //var_dump($tweets);
 		$html = '';
@@ -310,7 +314,7 @@ http://t.co/zy3JDoVTEC"
 				foreach($tweet as $key=>$value){
 					if(!is_object($value)){
 						if($key=='text')
-							$value = GO_Base_Util_String::text_to_html($value);
+							$value = \GO\Base\Util\String::text_to_html($value);
 						
 						$str = str_replace('{'.$key.'}', $value, $str); 
 					}else

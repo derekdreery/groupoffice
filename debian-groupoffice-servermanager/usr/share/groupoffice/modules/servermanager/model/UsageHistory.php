@@ -32,7 +32,11 @@
  * @property double $mailbox_usage mailbox folder size i nbytes
  * @property int $total_logins the amount of logins into the system
  */
-class GO_ServerManager_Model_UsageHistory extends GO_Base_Db_ActiveRecord
+
+namespace GO\ServerManager\Model;
+
+
+class UsageHistory extends \GO\Base\Db\ActiveRecord
 {
 	
 	/**
@@ -48,19 +52,19 @@ class GO_ServerManager_Model_UsageHistory extends GO_Base_Db_ActiveRecord
 	
 	public function getDatabaseUsageText()
 	{
-		return GO_Base_Util_Number::formatSize($this->database_usage);
+		return \GO\Base\Util\Number::formatSize($this->database_usage);
 	}
 	public function getFileStorageUsageText()
 	{
-		return GO_Base_Util_Number::formatSize($this->file_storage_usage);
+		return \GO\Base\Util\Number::formatSize($this->file_storage_usage);
 	}
 	public function getMailboxUsageText()
 	{
-		return GO_Base_Util_Number::formatSize($this->mailbox_usage);
+		return \GO\Base\Util\Number::formatSize($this->mailbox_usage);
 	}
 	public function getTotalUsageText()
 	{
-		return GO_Base_Util_Number::formatSize($this->getTotalUsage());
+		return \GO\Base\Util\Number::formatSize($this->getTotalUsage());
 	}
 	
 	/**

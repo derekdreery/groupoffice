@@ -1,5 +1,9 @@
 <?php
-class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
+
+namespace GO\Sites\Widgets;
+
+
+class Pager extends Component {
 	
 	/**
 	 * The limit of models per page
@@ -46,21 +50,21 @@ class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 	/**
 	 * The activestatement that this component uses.
 	 * 
-	 * @var GO_Base_Db_ActiveStatement 
+	 * @var \GO\Base\Db\ActiveStatement 
 	 */
 	private $_stmt;
 	
 	/**
 	 * The findparams for this component
 	 * 
-	 * @var GO_Base_Db_FindParams 
+	 * @var \GO\Base\Db\FindParams 
 	 */
 	private $_findParams;
 	
 	/**
 	 * The model for this component
 	 * 
-	 * @var GO_Base_Db_ActiveRecord 
+	 * @var \GO\Base\Db\ActiveRecord 
 	 */
 	private $_model;
 	
@@ -69,15 +73,15 @@ class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 	 * Constructor for the pagination
 	 * 
 	 * @param int $id The identifier for this pagination component. (This is a string e.g." paginationOne)
-	 * @param GO_Sites_Controller_Site $controller the page model on where this pagination component is used
+	 * @param \GO\Sites\Controller\Site $controller the page model on where this pagination component is used
 	 * @param mixed $model The model to create this pagination for.
-	 * @param GO_Base_Db_FindParams $findParams Findparams to find the correct models.
+	 * @param \GO\Base\Db\FindParams $findParams Findparams to find the correct models.
 	 * @param int $limit The limiter for how many models will be showed on each page
 	 * @param int $offset The number of pages that will be showed before and after the current showed page. e.g. 
 	 *	Number 2 will create [2][3][4=current][5][6]
 	 *  Number 3 will create [1][2][3][4=current][5][6][7]
 	 */
-	public function __construct($id, $params, $model, GO_Base_Db_FindParams $findParams, $limit=10, $offset=0){		
+	public function __construct($id, $params, $model, \GO\Base\Db\FindParams $findParams, $limit=10, $offset=0){		
 
 		$this->limit = $limit;
 		$this->offset = $offset;
@@ -115,7 +119,7 @@ class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 	/**
 	 * Get the statement that is used to create the pagination
 	 * 
-	 * @return GO_Base_Db_ActiveStatement 
+	 * @return \GO\Base\Db\ActiveStatement 
 	 */
 	public function getStatement(){
 		return $this->_stmt;

@@ -1,5 +1,9 @@
 <?php
-class GO_Base_Mail_EmailRecipients{
+
+namespace GO\Base\Mail;
+
+
+class EmailRecipients{
 	/**
 	 * Pass a e-mail string like:
 	 * 
@@ -23,14 +27,14 @@ class GO_Base_Mail_EmailRecipients{
 	 * 
 	 * Useful to format a single addres like this:
 	 * 
-	 * (string) GO_Base_Mail_EmailRecipients::createSingle("john@example.com", "John Smith");
+	 * (string) EmailRecipients::createSingle("john@example.com", "John Smith");
 	 * 
 	 * @param string $email
 	 * @param string $personal
-	 * @return GO_Base_Mail_EmailRecipients 
+	 * @return EmailRecipients 
 	 */
 	public static function createSingle($email, $personal){
-		$l = new GO_Base_Mail_EmailRecipients();
+		$l = new EmailRecipients();
 		$l->addRecipient($email, $personal);
 		return $l;
 	}
@@ -223,7 +227,7 @@ class GO_Base_Mail_EmailRecipients{
 				
 				case ',':
 				case ';':
-					if($this->_quote || (!$this->strict && !$this->_emailFound && !GO_Base_Util_String::validate_email(trim($this->_buffer))))
+					if($this->_quote || (!$this->strict && !$this->_emailFound && !\GO\Base\Util\String::validate_email(trim($this->_buffer))))
 					{
 						$this->_buffer .= $char;				
 					}else
@@ -259,7 +263,7 @@ class GO_Base_Mail_EmailRecipients{
 		
 		if(!empty($this->_buffer))
 		{
-			if($this->strict && !GO_Base_Util_String::validate_email($this->_buffer)){
+			if($this->strict && !\GO\Base\Util\String::validate_email($this->_buffer)){
 				throw new Exception("Address ".$this->_buffer." is not valid");
 			}else
 			{
@@ -295,10 +299,10 @@ class GO_Base_Mail_EmailRecipients{
 	/**
 	 * Merge two address strings
 	 * 
-	 * @param GO_Base_Mail_EmailRecipients $recipients
-	 * @return GO_Base_Mail_EmailRecipients 
+	 * @param EmailRecipients $recipients
+	 * @return EmailRecipients 
 	 */
-	public function mergeWith(GO_Base_Mail_EmailRecipients $recipients){
+	public function mergeWith(EmailRecipients $recipients){
 		$this->_addresses = array_merge($this->_addresses, $recipients->getAddresses());
 		
 		return $this;

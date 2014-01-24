@@ -1,8 +1,12 @@
 <?php
 
-class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelController {
 
-	protected $model = 'GO_Base_Model_User';
+namespace GO\Users\Controller;
+
+
+class User extends \GO\Base\Controller\AbstractModelController {
+
+	protected $model = '\GO\Base\Model\User';
 
 	protected function ignoreAclPermissions() {
 		//ignore acl on submit so normal users can use the users module. 
@@ -20,42 +24,42 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	}
 
 	protected function remoteComboFields() {
-		if(GO::modules()->isInstalled('addressbook')){
+		if(\GO::modules()->isInstalled('addressbook')){
 			return array(
 					'addressbook_id' => '$model->contact->addressbook->name',
 					'company_id' => '$model->contact->company->name',
-					'holidayset'=> 'GO::t($model->holidayset)'
+					'holidayset'=> '\GO::t($model->holidayset)'
 					);
 		}
 	}
 
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('name', '$model->name', array(), 'first_name');
-		$columnModel->formatColumn('enabled', "!empty(\$model->enabled) ? GO::t('yes') : GO::t('no')");
+		$columnModel->formatColumn('enabled', "!empty(\$model->enabled) ? \GO::t('yes') : \GO::t('no')");
 		return parent::formatColumns($columnModel);
 	}
 
 	protected function afterLoad(&$response, &$model, &$params) {
 
 		//Join the contact that belongs to the user in the form response.
-		if(GO::modules()->isInstalled('addressbook')){
+		if(\GO::modules()->isInstalled('addressbook')){
 			$contact=false;
 			if(!empty($model->id)){
 				$contact = $model->contact;
 			}elseif(!empty($params['contact_id'])){
-				$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['contact_id']);
+				$contact = \GO\Addressbook\Model\Contact::model()->findByPk($params['contact_id']);
 				$response['data']['contact_id']=$contact->id;
 			}
 			if(!$contact)
 			{
-				$contact = new GO_Addressbook_Model_Contact();
+				$contact = new \GO\Addressbook\Model\Contact();
 			}
 			if ($contact) {
 				$attr = $contact->getAttributes();
 
 				// Set the default addressbook ID to the "Users" addressbook when it is a new User
 				if($model->isNew){
-					$addressbook = GO_Addressbook_Model_Addressbook::model()->getUsersAddressbook();
+					$addressbook = \GO\Addressbook\Model\Addressbook::model()->getUsersAddressbook();
 					if($addressbook){
 						$attr['addressbook_id'] = $addressbook->id;
 						if(empty($response['remoteComboTexts']))
@@ -83,15 +87,15 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 	private function _getRegisterEmail() {
 		$r = array(
-				'register_email_subject' => GO::config()->get_setting('register_email_subject'),
-				'register_email_body' => GO::config()->get_setting('register_email_body')
+				'register_email_subject' => \GO::config()->get_setting('register_email_subject'),
+				'register_email_body' => \GO::config()->get_setting('register_email_body')
 		);
 
 		if (!$r['register_email_subject']) {
-			$r['register_email_subject'] = GO::t('register_email_subject', 'users');
+			$r['register_email_subject'] = \GO::t('register_email_subject', 'users');
 		}
 		if (!$r['register_email_body']) {
-			$r['register_email_body'] = GO::t('register_email_body', 'users');
+			$r['register_email_body'] = \GO::t('register_email_body', 'users');
 		}
 		return $r;
 	}
@@ -138,7 +142,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			 * Process selected module permissions
 			 */
 			foreach ($modules as $modPermissions) {
-				$modModel = GO_Base_Model_Module::model()->findByPk(
+				$modModel = \GO\Base\Model\Module::model()->findByPk(
 					$modPermissions->id
 				);	
 				$modModel->acl->addUser(
@@ -151,11 +155,11 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			 * User will be member of the selected groups
 			 */
 			foreach ($groupsMember as $group) {
-				if ($group['id'] != GO::config()->group_everyone) {
+				if ($group['id'] != \GO::config()->group_everyone) {
 					if ($group['group_permission']) {
-						GO_Base_Model_Group::model()->findByPk($group['id'])->addUser($model->id);
+						\GO\Base\Model\Group::model()->findByPk($group['id'])->addUser($model->id);
 					} else {
-						GO_Base_Model_Group::model()->findByPk($group['id'])->removeUser($model->id);
+						\GO\Base\Model\Group::model()->findByPk($group['id'])->removeUser($model->id);
 					}
 				}
 			}
@@ -167,7 +171,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			foreach ($groupsVisible as $group) {
 				if ($group['visible_permission']) {
 					
-					$model->acl->addGroup($group['id'], GO_Base_Model_Acl::MANAGE_PERMISSION);
+					$model->acl->addGroup($group['id'], \GO\Base\Model\Acl::MANAGE_PERMISSION);
 				} else {
 					$model->acl->removeGroup($group['id']);
 				}
@@ -189,16 +193,16 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 						$email['register_email_body'] = str_replace('{' . $key . '}', $value, $email['register_email_body']);
 				}
 
-				$email['register_email_body'] = str_replace('{url}', GO::config()->full_url, $email['register_email_body']);
-				$email['register_email_body'] = str_replace('{title}', GO::config()->title, $email['register_email_body']);
+				$email['register_email_body'] = str_replace('{url}', \GO::config()->full_url, $email['register_email_body']);
+				$email['register_email_body'] = str_replace('{title}', \GO::config()->title, $email['register_email_body']);
 				
-				$message = new GO_Base_Mail_Message();
+				$message = new \GO\Base\Mail\Message();
 				$message->setSubject($email['register_email_subject'])
 								->setTo(array($model->email=>$model->name))
-								->setFrom(array(GO::config()->webmaster_email=>GO::config()->title))
+								->setFrom(array(\GO::config()->webmaster_email=>\GO::config()->title))
 								->setBody($email['register_email_body']);								
 
-				GO_Base_Mail_Mailer::newGoInstance()->send($message);
+				\GO\Base\Mail\Mailer::newGoInstance()->send($message);
 				
 			}
 		}
@@ -206,31 +210,31 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 	protected function actionSyncContacts($params) {
 		
-		GO::$ignoreAclPermissions=true; //allow this script access to all
-		GO::$disableModelCache=true; //for less memory usage
+		\GO::$ignoreAclPermissions=true; //allow this script access to all
+		\GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '300');
 
-		$ab = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('users', '1'); //GO::t('users','base'));
+		$ab = \GO\Addressbook\Model\Addressbook::model()->findSingleByAttribute('users', '1'); //\GO::t('users','base'));
 		if (!$ab) {
-			$ab = new GO_Addressbook_Model_Addressbook();
-			$ab->name = GO::t('users');
+			$ab = new \GO\Addressbook\Model\Addressbook();
+			$ab->name = \GO::t('users');
 			$ab->users = true;
 			$ab->save();
 		}
-		$stmt = GO_Base_Model_User::model()->find();
+		$stmt = \GO\Base\Model\User::model()->find();
 		while ($user = $stmt->fetch()) {
 
 			$contact = $user->contact();
 			if (!$contact) {
 				
-				GO::output("Creating contact for ".$user->username);
+				\GO::output("Creating contact for ".$user->username);
 				
-				$contact = new GO_Addressbook_Model_Contact();
+				$contact = new \GO\Addressbook\Model\Contact();
 				$contact->go_user_id = $user->id;
 				$contact->addressbook_id = $ab->id;
 			}else
 			{
-				GO::output("Updating contact for ".$user->username);
+				\GO::output("Updating contact for ".$user->username);
 			}
 			$attr = $user->getAttributes();
 			unset($attr['id']);
@@ -239,37 +243,37 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			$contact->save();
 		}
 		
-		GO::output("Done!");
+		\GO::output("Done!");
 
 		//return array('success' => true);
 	}
 	
 	protected function getStoreParams($params) {
 		
-		$findParams =  GO_Base_Db_FindParams::newInstance();
+		$findParams =  \GO\Base\Db\FindParams::newInstance();
 		
 		if(!empty($params['show_licensed'])){		
 		
-			if(class_exists("GO_Professional_LicenseCheck")){
-				$lc = new GO_Professional_LicenseCheck();
+			if(class_exists("\GO\Professional\LicenseCheck")){
+				$lc = new \GO\Professional\LicenseCheck();
 
 				$proModuleAcls=array();
 				$proModules = $lc->getProModules();
 				foreach($proModules as $module)
 					$proModuleAcls[]=$module->acl_id;
 				
-				$aclJoinCriteria= GO_Base_Db_FindCriteria::newInstance()
+				$aclJoinCriteria= \GO\Base\Db\FindCriteria::newInstance()
 								->addRawCondition('a.user_id', 't.id')
 								->addRawCondition('a.group_id', 'ug.group_id','=',false);
 
 				$findParams
 					->ignoreAcl()
 					->joinModel(array(
-						'model'=>'GO_Base_Model_UserGroup',
+						'model'=>'\GO\Base\Model\UserGroup',
 						'foreignField'=>'user_id',
 						'tableAlias'=>'ug'				
 					))
-					->join(GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria,'a')
+					->join(\GO\Base\Model\AclUsersGroups::model()->tableName(), $aclJoinCriteria,'a')
 					->group('t.id');
 
 				$findParams->getCriteria()->addInCondition('acl_id', $proModuleAcls,'a');
@@ -282,8 +286,8 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	}
 	
 	protected function afterStore(&$response, &$params, &$store, $storeParams) {
-		if(class_exists("GO_Professional_LicenseCheck")){
-			$lc = new GO_Professional_LicenseCheck();
+		if(class_exists("\GO\Professional\LicenseCheck")){
+			$lc = new \GO\Professional\LicenseCheck();
 			try{
 				$lc->checkProModules(true);
 			}catch(Exception $e){
@@ -294,11 +298,11 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		return parent::afterStore($response, $params, $store, $storeParams);
 	}
 	
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		
 		$storeParams->joinModel(
 			array(
-				'model'=>'GO_Base_Model_UserGroup',
+				'model'=>'\GO\Base\Model\UserGroup',
 				'localTableAlias'=>'t',
 				'localField'=>'id',
 				'foreignField'=>'user_id',
@@ -307,9 +311,9 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		
 		$storeParams->group('t.id');
 		
-		$groupsMultiSel = new GO_Base_Component_MultiSelectGrid(
+		$groupsMultiSel = new \GO\Base\Component\MultiSelectGrid(
 			'users-groups-panel', 
-			"GO_Base_Model_Group",$store, $params, true);		
+			"\GO\Base\Model\Group",$store, $params, true);		
 			$groupsMultiSel->addSelectedToFindCriteria($storeParams, 'group_id','ug');
 			
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
@@ -356,9 +360,9 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			);
 		}
 		
-		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_Fs_File("users.csv"));
+		\GO\Base\Util\Http::outputDownloadHeaders(new \GO\Base\Fs\File("users.csv"));
 		
-		$csvFile  = new GO_Base_Csv_Writer('php://output');
+		$csvFile  = new \GO\Base\Csv\Writer('php://output');
 	
 		$header = true;
 		
@@ -389,10 +393,10 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		$params['updateFindAttributes'] = 'username';
 		$params['file'] = $_FILES['files']['tmp_name'][0];
 		
-		GO::setMaxExecutionTime(0);
+		\GO::setMaxExecutionTime(0);
 		
-		if($params['controller']=='GO_Users_Controller_User')
-			$controller = new GO_Users_Controller_User();
+		if($params['controller']=='\GO\Users\Controller\User')
+			$controller = new User();
 		else
 			throw new Exception("No or wrong controller given");
 
@@ -411,7 +415,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	protected function actionImportCsv($params){
 		
 		//allow weak passwords
-		GO::config()->password_validate=false;
+		\GO::config()->password_validate=false;
 		
 		$summarylog = parent::actionImport($params);
 		return $summarylog->getErrorsJson();
@@ -421,7 +425,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	/**
 	 * The afterimport for every imported user.
 	 * 
-	 * @param GO_Base_Model_User $model
+	 * @param \GO\Base\Model\User $model
 	 * @param array $attributes
 	 * @param array $record
 	 * @return boolean success

@@ -17,7 +17,7 @@
  */
  
 /**
- * The GO_ServerManager_Model_InstallationModule
+ * The InstallationModule
  * 
  * Keeps track of when a module was installed for the first time for trail period
  * The enabled boolean is there to see if the module is still enabled for the installation
@@ -31,9 +31,13 @@
  * @property int $mtime a unix timestamp that shows when the module was changed for the last time
  * @property boolean $enabled true if the module is used by the installation
  * 
- * @property GO_ServerManager_Model_Installation $installation the installation this module was installed for
+ * @property Installation $installation the installation this module was installed for
  */
-class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord 
+
+namespace GO\ServerManager\Model;
+
+
+class InstallationModule extends \GO\Base\Db\ActiveRecord 
 {
 
 	public $_usercount; //count of user that are using this module
@@ -55,8 +59,8 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 	
 	public function getModuleName()
 	{
-		return GO::t('name', $this->name);
-		//$module = GO_Base_Module::findByModuleId($this->name);
+		return \GO::t('name', $this->name);
+		//$module = \GO\Base\Module::findByModuleId($this->name);
 		//return $module->name();
 	}
 	
@@ -79,8 +83,8 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 	public function relations()
 	{
 		return array(
-				'installation'=>array('type'=>self::BELONGS_TO, 'model'=>'GO_ServerManager_Model_Installation', 'field'=>'installation_id'),
-				'modulePrice'=>array('type'=>self::BELONGS_TO, 'model'=>'GO_ServerManager_Model_ModulePrice', 'field'=>'name'),
+				'installation'=>array('type'=>self::BELONGS_TO, 'model'=>'\GO\ServerManager\Model\Installation', 'field'=>'installation_id'),
+				'modulePrice'=>array('type'=>self::BELONGS_TO, 'model'=>'\GO\ServerManager\Model\ModulePrice', 'field'=>'name'),
 		);
 	}
 	
@@ -109,7 +113,7 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 	{
 		if(empty($this->ctime)) 
 			return $this->installation->trial_days;
-		$trial_end_stamp = GO_Base_Util_Date::date_add($this->ctime, $this->installation->trial_days);
+		$trial_end_stamp = \GO\Base\Util\Date::date_add($this->ctime, $this->installation->trial_days);
 		
 		$seconds_to_go = $trial_end_stamp - time();
 		$days_to_go = $seconds_to_go / 60 / 60 / 24;
@@ -147,24 +151,24 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 //		if(!$this->isTrial())
 //			return true;
 //		
-//		$message = GO_Base_Mail_Message::newInstance();
-//		$subject = vsprintf(GO::t('module_trial_email_title','servermanager'),array($this->getModuleName()));
+//		$message = \GO\Base\Mail\Message::newInstance();
+//		$subject = vsprintf(\GO::t('module_trial_email_title','servermanager'),array($this->getModuleName()));
 //		$message->setSubject($subject);
 //		
-//		$fromName = GO::config()->title;
+//		$fromName = \GO::config()->title;
 //	
-//		$parts = explode('@', GO::config()->webmaster_email);
+//		$parts = explode('@', \GO::config()->webmaster_email);
 //		$fromEmail = 'noreply@'.$parts[1];
 //		
 //		$toEmail = $this->installation->config['webmaster_email'];
 //
-//		$emailBody = GO::t('module_trial_email_body','servermanager'); //TODO: add to translation
+//		$emailBody = \GO::t('module_trial_email_body','servermanager'); //TODO: add to translation
 //		$emailBody = vsprintf($emailBody,array($this->getModuleName(), $this->trialDaysLeft));
 //		
 //		$message->setBody($emailBody);
 //		$message->addFrom($fromEmail,$fromName);
 //		$message->addTo($toEmail);
 //		
-//		return GO_Base_Mail_Mailer::newGoInstance()->send($message);
+//		return \GO\Base\Mail\Mailer::newGoInstance()->send($message);
 	}
 }

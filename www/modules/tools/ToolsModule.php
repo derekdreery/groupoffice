@@ -1,5 +1,9 @@
 <?php
-class GO_Tools_ToolsModule extends GO_Base_Module{
+
+namespace GO\Tools;
+
+
+class ToolsModule extends \GO\Base\Module{
 	public function autoInstall() {
 		return true;
 	}

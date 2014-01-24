@@ -29,7 +29,7 @@ include __DIR__ . '/../vendor/autoload.php';
 
 fwrite(STDERR, "Generating " . $events . " events\n");
 
-$currentDate = new DateTime('-' . round($events/2) .  ' days');
+$currentDate = new \DateTime('-' . round($events/2) .  ' days');
 
 $calendar = VObject\Component::create('VCALENDAR');
 $calendar->version = '2.0';

@@ -1,5 +1,9 @@
 <?php
-class GO_Servermanager_Cron_SubCron extends GO_Base_Cron_AbstractCron {
+
+namespace GO\Servermanager\Cron;
+
+
+class SubCron extends \GO\Base\Cron\AbstractCron {
 	
 	/**
 	 * Return true or false to enable the selection for users and groups for 
@@ -40,14 +44,14 @@ class GO_Servermanager_Cron_SubCron extends GO_Base_Cron_AbstractCron {
 	 * If $this->enableUserAndGroupSupport() returns FALSE then the 
 	 * $user parameter is null and the run function will be called only once.
 	 * 
-	 * @param GO_Base_Cron_CronJob $cronJob
-	 * @param GO_Base_Model_User $user [OPTIONAL]
+	 * @param \GO\Base\Cron\CronJob $cronJob
+	 * @param \GO\Base\Model\User $user [OPTIONAL]
 	 */
-	public function run(GO_Base_Cron_CronJob $cronJob,GO_Base_Model_User $user = null){
-		$stmt = GO_Servermanager_Model_Installation::model()->find();
+	public function run(\GO\Base\Cron\CronJob $cronJob,\GO\Base\Model\User $user = null){
+		$stmt = \GO\Servermanager\Model\Installation::model()->find();
 		while($installation = $stmt->fetch()){
 			
-			GO::debug($installation->name);
+			\GO::debug($installation->name);
 			
 //			echo $installation->name."\n";
 			
@@ -55,7 +59,7 @@ class GO_Servermanager_Cron_SubCron extends GO_Base_Cron_AbstractCron {
 				trigger_error("Config file ".$installation->configPath." not found");
 				continue;
 			}		
-			$cmd = GO::config()->root_path.'groupofficecli.php -q -r=cron/run -c="'.$installation->configPath.'" &';	
+			$cmd = \GO::config()->root_path.'groupofficecli.php -q -r=cron/run -c="'.$installation->configPath.'" &';	
 			system($cmd);			
 		}
 	}

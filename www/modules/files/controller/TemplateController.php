@@ -10,22 +10,26 @@
  */
 
 /**
- * The GO_files_Controller_GO_Files_Model_Template controller
+ * The GO\Files\Model\Template controller
  *
  * @package GO.modules.files
- * @version $Id: GO_files_Controller_GO_Files_Model_Template.php 7607 2011-09-29 08:42:37Z <<USERNAME>> $
+ * @version $Id: GO\Files\Model\Template.php 7607 2011-09-29 08:42:37Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
-class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelController {
 
-	protected $model = 'GO_Files_Model_Template';
+namespace GO\files\Controller;
+
+
+class Template extends \GO\Base\Controller\AbstractModelController {
+
+	protected $model = '\GO\Files\Model\Template';
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
 
 		if (isset($_FILES['attachments']['tmp_name'][0]) && is_uploaded_file($_FILES['attachments']['tmp_name'][0])) {
-			$file = new GO_Base_Fs_File($_FILES['attachments']['tmp_name'][0]);
-			$fileWithName = new GO_Base_Fs_File($_FILES['attachments']['name'][0]);
+			$file = new \GO\Base\Fs\File($_FILES['attachments']['tmp_name'][0]);
+			$fileWithName = new \GO\Base\Fs\File($_FILES['attachments']['name'][0]);
 			$model->content = $file->contents();
 			$model->extension = $fileWithName->extension();
 		}
@@ -33,9 +37,9 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 		return parent::beforeSubmit($response, $model, $params);
 	}
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		
-		$columnModel->formatColumn('type', 'GO_Base_Fs_File::getFileTypeDescription($model->extension)');
+		$columnModel->formatColumn('type', '\GO\Base\Fs\File::getFileTypeDescription($model->extension)');
 		
 		return parent::formatColumns($columnModel);
 	}
@@ -50,31 +54,31 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	protected function actionDownload($params){
-		$template = GO_Files_Model_Template::model()->findByPk($params['id']);
+		$template = \GO\Files\Model\Template::model()->findByPk($params['id']);
 		
-	  GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_Fs_File($template->name.'.'.$template->extension));
+	  \GO\Base\Util\Http::outputDownloadHeaders(new \GO\Base\Fs\File($template->name.'.'.$template->extension));
 		
 		echo $template->content;
 	}
 	
 	protected function actionCreateFile($params){
 		
-		$filename = GO_Base_Fs_File::stripInvalidChars($params['filename']);
+		$filename = \GO\Base\Fs\File::stripInvalidChars($params['filename']);
 		if(empty($filename))
 			throw new Exception("Filename can not be empty");
 		
-		$template = GO_Files_Model_Template::model()->findByPk($params['template_id']);
+		$template = \GO\Files\Model\Template::model()->findByPk($params['template_id']);
 		
-		$folder = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
+		$folder = \GO\Files\Model\Folder::model()->findByPk($params['folder_id']);
 		
-		$path = GO::config()->file_storage_path.$folder->path.'/'.$filename;
+		$path = \GO::config()->file_storage_path.$folder->path.'/'.$filename;
 		if(!empty($template->extension))
 			$path .= '.'.$template->extension;
 		
-		$fsFile = new GO_Base_Fs_File($path);
+		$fsFile = new \GO\Base\Fs\File($path);
 		$fsFile->putContents($template->content);
 		
-		$fileModel = GO_Files_Model_File::importFromFilesystem($fsFile);
+		$fileModel = \GO\Files\Model\File::importFromFilesystem($fsFile);
 		
 		return array('id'=>$fileModel->id, 'success'=>true);
 	}

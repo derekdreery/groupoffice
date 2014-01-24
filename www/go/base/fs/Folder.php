@@ -17,21 +17,25 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @copyright Copyright Intermesh BV.
  */
-class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
+
+namespace GO\Base\Fs;
+
+
+class Folder extends Base {
 
 	
 	/**
 	 * Get the temporary files folder or obitonally a subfolder of it.
 	 * 
 	 * @var string $sub Optionally create a sub folder
-	 * @return GO_Base_Fs_Folder 
+	 * @return Folder 
 	 */
 	public static function tempFolder($sub=''){
-		$path = GO::config()->orig_tmpdir.GO::user()->id;
+		$path = \GO::config()->orig_tmpdir.\GO::user()->id;
 		if(!empty($sub))
 			$path .= '/'.$sub;
 		
-		$folder = new GO_Base_Fs_Folder($path);
+		$folder = new Folder($path);
 		$folder->create();
 		return $folder;
 	}
@@ -41,7 +45,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * 
 	 * @param boolean $getHidden
 	 * @param boolean|string $sort 'mtime','ctime' or 'name'
-	 * @return GO_Base_Fs_File or GO_Base_Fs_Folder
+	 * @return File or Folder
 	 */
 	public function ls($getHidden=false, $sort=false) {
 		if (!$dir = opendir($this->path))
@@ -54,9 +58,9 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 							($getHidden || !(strpos($item, ".") === 0) )) {
 			
 				if(is_file($folderPath))					
-					$o = new GO_Base_Fs_File($folderPath);
+					$o = new File($folderPath);
 				else
-					$o = new GO_Base_Fs_Folder($folderPath);
+					$o = new Folder($folderPath);
 				
 				if(!$sort){
 					$folders[]=$o;
@@ -85,7 +89,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 */
 	public function delete(){
 		
-		//GO::debug("DELETE: ".$this->path());
+		//\GO::debug("DELETE: ".$this->path());
 		
 		if(!$this->exists())
 			return true;
@@ -108,7 +112,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		if(strpos($srcPath.'/', $destPath.'/')===0)
 		{
 			$msg = 'The destination is located inside the source directory.';
-			if(GO::config()->debug)
+			if(\GO::config()->debug)
 				$msg .= "\n\n".$srcPath.' -> '.$destPath;
 			throw new Exception($msg);
 		}
@@ -118,17 +122,17 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	/**
 	 * Move the folder to another folder.
 	 * 
-	 * @param GO_Base_Fs_Folder $destinationFolder 
+	 * @param Folder $destinationFolder 
 	 * @param string $newFolderName Optionally rename the folder too.
 	 * @param boolean $appendNumberToNameIfDestinationExists Rename the folder like "folder (1)" if it already exists.	 * 
-	 * @return GO_Base_Fs_Folder $destinationFolder
+	 * @return Folder $destinationFolder
 	 */
-	public function move(GO_Base_Fs_Folder $destinationFolder, $newFolderName=false,$appendNumberToNameIfDestinationExists=false){
+	public function move(Folder $destinationFolder, $newFolderName=false,$appendNumberToNameIfDestinationExists=false){
 		if(!$this->exists())
 			throw new Exception("Folder '".$this->path()."' does not exist");
 		
 		if(is_link($this->path)){
-			$link = new GO_Base_Fs_File($this->path);
+			$link = new File($this->path);
 			return $link->move($destinationFolder, $newFolderName, false, $appendNumberToNameIfDestinationExists);
 		}
 		
@@ -140,7 +144,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		$newPath = $destinationFolder->path().'/'.$newFolderName;		
 				
 		if($appendNumberToNameIfDestinationExists){
-			$folder = new GO_Base_Fs_Folder($newPath);
+			$folder = new Folder($newPath);
 			$folder->appendNumberToNameIfExists();
 			$newPath = $folder->path();
 		}		
@@ -149,7 +153,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		if($newPath==$this->path())
 			return true;
 			
-		$movedFolder = new GO_Base_Fs_Folder($newPath);
+		$movedFolder = new Folder($newPath);
 		$movedFolder->create();
 		
 		$ls = $this->ls(true);
@@ -167,8 +171,8 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	/**
 	 * Copy a folder to another folder.
 	 * 
-	 * @param GO_Base_Fs_Folder $destinationFolder 
-	 * @return GO_Base_Fs_Folder
+	 * @param Folder $destinationFolder 
+	 * @return Folder
 	 */
 	public function copy($destinationFolder, $newFolderName=false){
 		$this->_validateSrcAndDestPath($destinationFolder->path(), $this->path());
@@ -176,16 +180,16 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		if(!$newFolderName)
 			$newFolderName=$this->name();
 		
-		GO::debug('folder::copy: '.$this->path().' > '.$destinationFolder->path().'/'.$newFolderName);
+		\GO::debug('folder::copy: '.$this->path().' > '.$destinationFolder->path().'/'.$newFolderName);
 		
-		$copiedFolder = new GO_Base_Fs_Folder($destinationFolder->path().'/'.$newFolderName);
+		$copiedFolder = new Folder($destinationFolder->path().'/'.$newFolderName);
 		if(!$copiedFolder->create())
 			throw new Exception ("Could not create ".$destinationFolder->path());
 		
 		$ls = $this->ls(true);
 		foreach($ls as $fsObject){
 			if($fsObject->isFolder()){				
-				//$newDestinationFolder= new GO_Base_Fs_Folder($destinationFolder->path().'/'.$this->name());				
+				//$newDestinationFolder= new Folder($destinationFolder->path().'/'.$this->name());				
 				$fsObject->copy($copiedFolder);
 			}else
 			{
@@ -211,19 +215,19 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	public function create($permissionsMode=false){
 	
 		if(!$permissionsMode)
-			$permissionsMode=octdec(GO::config()->folder_create_mode);		
+			$permissionsMode=octdec(\GO::config()->folder_create_mode);		
 		
 		if(is_dir($this->path)){
 			
 			//was trying to chmod /tmp. Best way is to leave existing folders alone.
 //			if(!chmod($this->path, $permissionsMode))
-//				GO::debug("chmod failed on ".$this->path);
+//				\GO::debug("chmod failed on ".$this->path);
 			return true;
 		}		
 		
 		if(mkdir($this->path, $permissionsMode,true)){
-			if(GO::config()->file_change_group)
-				chgrp ($this->path, GO::config()->file_change_group);
+			if(\GO::config()->file_change_group)
+				chgrp ($this->path, \GO::config()->file_change_group);
 			
 			return true;
 		}else
@@ -235,12 +239,12 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	/**
 	 * Create a symbolic link in this folder
 	 * 
-	 * @param GO_Base_Fs_Folder $target
+	 * @param Folder $target
 	 * @param string $linkName optional link name. If omitted the name will be the same as the target folder name
-	 * @return GO_Base_Fs_File
+	 * @return File
 	 * @throws Exception
 	 */
-	public function createLink(GO_Base_Fs_Folder $target, $linkName=null){
+	public function createLink(Folder $target, $linkName=null){
 		
 		if(!isset($linkName))
 			$linkName = $target->name ();
@@ -259,9 +263,9 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * Set's default permissions and group ownership
 	 */
 	public function setDefaultPermissions(){
-		chmod($this->path, octdec(GO::config()->folder_create_mode));
-		if(!empty(GO::config()->file_change_group))
-			chgrp($this->path, GO::config()->file_change_group);
+		chmod($this->path, octdec(\GO::config()->folder_create_mode));
+		if(!empty(\GO::config()->file_change_group))
+			chgrp($this->path, \GO::config()->file_change_group);
 	}
 	
 	
@@ -287,7 +291,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	/**
 	 * Check if the given folder is a subfolder of this folder.
 	 * 
-	 * @param GO_Base_Fs_Folder $subFolder
+	 * @param Folder $subFolder
 	 * @return boolean 
 	 */
 	public function isSubFolderOf($parent){

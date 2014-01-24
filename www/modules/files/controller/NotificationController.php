@@ -1,11 +1,15 @@
 <?php
 
-class GO_files_Controller_Notification extends GO_Base_Controller_AbstractModelController {
+
+namespace GO\files\Controller;
+
+
+class Notification extends \GO\Base\Controller\AbstractModelController {
     
-    protected $model = 'GO_Files_Model_FolderNotification';
+    protected $model = '\GO\Files\Model\FolderNotification';
     
     protected function actionUnsent($params){
-        GO_Files_Model_FolderNotification::model()->notifyUser();
+        \GO\Files\Model\FolderNotification::model()->notifyUser();
 
         $response = array(
             'success' => true

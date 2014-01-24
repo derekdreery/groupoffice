@@ -13,13 +13,17 @@
  * @property int $category_id
  * @property int $id
  */
-class GO_Bookmarks_Model_Bookmark extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Bookmarks\Model;
+
+
+class Bookmark extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Bookmarks_Model_Bookmark
+	 * @return Bookmark
 	 */
 	public static function model($className=__CLASS__) {
 		return parent::model($className);
@@ -35,7 +39,7 @@ class GO_Bookmarks_Model_Bookmark extends GO_Base_Db_ActiveRecord {
 
 	public function relations() {
 		return array(
-					'category' => array('type' => self::BELONGS_TO, 'model' => 'GO_Bookmarks_Model_Category', 'field' => 'category_id')
+					'category' => array('type' => self::BELONGS_TO, 'model' => '\GO\Bookmarks\Model\Category', 'field' => 'category_id')
 				);
 	}
 	
@@ -48,9 +52,9 @@ class GO_Bookmarks_Model_Bookmark extends GO_Base_Db_ActiveRecord {
 
 		if ($this->logo!='') {
 			if ($this->public_icon == '1') {
-				return GO::modules()->host .'modules/bookmarks/'.$this->logo;
+				return \GO::modules()->host .'modules/bookmarks/'.$this->logo;
 			} else {
-				return GO::url('core/thumb', array('src'=>$this->logo, 'w'=>16,'h'=>16));
+				return \GO::url('core/thumb', array('src'=>$this->logo, 'w'=>16,'h'=>16));
 			}
 		} else {
 			return false;

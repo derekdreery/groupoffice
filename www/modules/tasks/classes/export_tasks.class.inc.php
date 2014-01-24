@@ -51,7 +51,7 @@ class export_tasks
 		if(!isset($timezone))
 			$timezone = date_default_timezone_get ();
 
-		$tz = new DateTimeZone($_SESSION['GO_SESSION']['timezone']);
+		$tz = new \DateTimeZone($_SESSION['GO_SESSION']['timezone']);
 		$transitions = $tz->getTransitions();
 		$start_of_year = mktime(0,0,0,1,1);
 

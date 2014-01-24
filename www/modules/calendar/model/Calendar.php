@@ -32,7 +32,11 @@
  * @property string $ics_import_url
  */
 
-class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel {
+
+namespace GO\Calendar\Model;
+
+
+class Calendar extends \GO\Base\Model\AbstractUserDefaultModel {
 	
 	/**
 	 * The default color to display this calendar in the view
@@ -45,7 +49,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Calendar_Model_Calendar 
+	 * @return Calendar 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -65,23 +69,23 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	}
 	
 	public function customfieldsModel() {
-		return "GO_Calendar_Customfields_Model_Calendar";
+		return "\GO\Calendar\Customfields\Model\Calendar";
 	}
 
 	public function relations() {
 		return array(
-			'group' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Group', 'field' => 'group_id'),
-			'events' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Event', 'field' => 'calendar_id', 'delete' => true),
-			'categories' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Category', 'field' => 'calendar_id', 'delete' => true),
-			'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'tasklist_id'),
-			'visible_tasklists' => array('type' => self::MANY_MANY, 'model' => 'GO_Tasks_Model_Tasklist', 'linkModel'=>'GO_Calendar_Model_CalendarTasklist', 'field'=>'calendar_id', 'linksTable' => 'cal_visible_tasklists', 'remoteField'=>'tasklist'),
+			'group' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Group', 'field' => 'group_id'),
+			'events' => array('type' => self::HAS_MANY, 'model' => '\GO\Calendar\Model\Event', 'field' => 'calendar_id', 'delete' => true),
+			'categories' => array('type' => self::HAS_MANY, 'model' => '\GO\Calendar\Model\Category', 'field' => 'calendar_id', 'delete' => true),
+			'tasklist' => array('type' => self::BELONGS_TO, 'model' => '\GO\Tasks\Model\Tasklist', 'field' => 'tasklist_id'),
+			'visible_tasklists' => array('type' => self::MANY_MANY, 'model' => '\GO\Tasks\Model\Tasklist', 'linkModel'=>'\GO\Calendar\Model\CalendarTasklist', 'field'=>'calendar_id', 'linksTable' => 'cal_visible_tasklists', 'remoteField'=>'tasklist'),
 			);
 	}
 	
 	public function findDefault($userId){
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->single()
-						->join("cal_settings", GO_Base_Db_FindCriteria::newInstance()
+						->join("cal_settings", \GO\Base\Db\FindCriteria::newInstance()
 										->addCondition('id', 's.calendar_id','=','t',true,true)
 										->addCondition('user_id', $userId,'=','s'),
 										's');
@@ -91,7 +95,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	
 	
 	public function settingsModelName() {
-		return "GO_Calendar_Model_Settings";
+		return "\GO\Calendar\Model\Settings";
 	}
 	
 	public function settingsPkAttribute() {
@@ -105,7 +109,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 * @return string The color or false if no color is found 
 	 */
 	public function getColor($userId){
-		$userColor = GO_Calendar_Model_CalendarUserColor::model()->findByPk(array('calendar_id'=>$this->id,'user_id'=>$userId));
+		$userColor = CalendarUserColor::model()->findByPk(array('calendar_id'=>$this->id,'user_id'=>$userId));
 
 		if($userColor)
 			return $userColor->color;
@@ -130,11 +134,11 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 * @return boolean
 	 */
 	public function userHasCreatePermission(){
-//		if(GO_Base_Model_Acl::hasPermission($this->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION)){
+//		if(\GO\Base\Model\Acl::hasPermission($this->getPermissionLevel(),\GO\Base\Model\Acl::CREATE_PERMISSION)){
 //			return true;
 //		}else 
-		if(GO::modules()->isInstalled('freebusypermissions')){
-			return GO_Freebusypermissions_FreebusypermissionsModule::hasFreebusyAccess(GO::user()->id, $this->user_id);
+		if(\GO::modules()->isInstalled('freebusypermissions')){
+			return \GO\Freebusypermissions\FreebusypermissionsModule::hasFreebusyAccess(\GO::user()->id, $this->user_id);
 		}  else {
 			return true;
 		}
@@ -147,11 +151,11 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		 
 		 foreach($stmt as $user){
 			 if($user->user_id!=$this->user_id)//the owner has already been added automatically with manage permission
-				$this->acl->addUser($user->user_id, GO_Base_Model_Acl::DELETE_PERMISSION);
+				$this->acl->addUser($user->user_id, \GO\Base\Model\Acl::DELETE_PERMISSION);
 		 }
 		}
 		
-		$file = new GO_Base_Fs_File($this->getPublicIcsPath());
+		$file = new \GO\Base\Fs\File($this->getPublicIcsPath());
 		
 		if(!$this->public){
 			if($file->exists())
@@ -180,14 +184,14 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	
 	/**
 	 * 
-	 * @param \GO_Base_Model_User $user
-	 * @return GO_Tasks_Model_Tasklist
+	 * @param \GO\Base\Model\User $user
+	 * @return \GO\Tasks\Model\Tasklist
 	 */
-	public function getDefault(\GO_Base_Model_User $user, &$createdNew=false) {
+	public function getDefault(\GO\Base\Model\User $user, &$createdNew=false) {
 		$default = parent::getDefault($user, $createdNew);
 	
 		if($createdNew){
-			$pt = new GO_Calendar_Model_PortletCalendar();
+			$pt = new PortletCalendar();
 			$pt->user_id=$user->id;
 			$pt->calendar_id=$default->id;
 			$pt->save();
@@ -206,11 +210,11 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		
 		foreach ($free_busy as $min=>$busy) {
 			
-			$model = GO_Calendar_Model_Event::model()->find(
-				GO_Base_Db_FindParams::newInstance()
+			$model = Event::model()->find(
+				\GO\Base\Db\FindParams::newInstance()
 					->single()
 					->ignoreAcl()
-					->criteria(GO_Base_Db_FindCriteria::newInstance()
+					->criteria(\GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('calendar_id', $this->id, '=')
 						->addCondition('start_time',$startTimeUnix+$min*60+15*60,'<')
 						->addCondition('end_time',$startTimeUnix+$min*60,'>')
@@ -233,15 +237,15 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 */
 	public function toVObject(){
 
-		//$stmt = $this->events(GO_Base_Db_FindParams::newInstance()->select("t.*"));
-		$findParams = GO_Base_Db_FindParams::newInstance()->select("t.*");
+		//$stmt = $this->events(\GO\Base\Db\FindParams::newInstance()->select("t.*"));
+		$findParams = \GO\Base\Db\FindParams::newInstance()->select("t.*");
 		$findParams->getCriteria()->addCondition("calendar_id", $this->id);
 	
-		$stmt = GO_Calendar_Model_Event::model()->findForPeriod($findParams, GO_Base_Util_Date::date_add(time(), 0, -1));
+		$stmt = Event::model()->findForPeriod($findParams, \GO\Base\Util\Date::date_add(time(), 0, -1));
 		
-		$string = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->version."//EN\r\n";
+		$string = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Intermesh//NONSGML ".\GO::config()->product_name." ".\GO::config()->version."//EN\r\n";
 
-			$t = new GO_Base_VObject_VTimezone();
+			$t = new \GO\Base\VObject\VTimezone();
 			$string .= $t->serialize();
 
 			while($event = $stmt->fetch()){
@@ -259,7 +263,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 * @return string
 	 */
 	public function getPublicIcsUrl(){
-		return GO::config()->full_url.'public/calendar/'.$this->id.'/calendar.ics';
+		return \GO::config()->full_url.'public/calendar/'.$this->id.'/calendar.ics';
 	}
 	
 	/**
@@ -267,6 +271,6 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 * @return string
 	 */
 	public function getPublicIcsPath(){
-		return GO::config()->file_storage_path.'public/calendar/'.$this->id.'/calendar.ics';
+		return \GO::config()->file_storage_path.'public/calendar/'.$this->id.'/calendar.ics';
 	}
 }

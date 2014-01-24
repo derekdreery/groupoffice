@@ -11,12 +11,12 @@ $funcParams = isset($p) ? $p : '';
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title><?php echo GO::config()->product_name; ?></title>
+<title><?php echo \GO::config()->product_name; ?></title>
 <script type="text/javascript">
 function launchGO(){
 	//var win = window.open('', "groupoffice");
 	
-	var win = window.open('', "<?php echo GO::getId(); ?>");
+	var win = window.open('', "<?php echo \GO::getId(); ?>");
 	
 
 
@@ -29,9 +29,9 @@ function launchGO(){
 		win.close();
 		//the parameters will be handled in default_scripts.inc.php
 		<?php
-		GO::setAfterLoginUrl(GO::createExternalUrl($module,$function, $funcParams, true));
+		\GO::setAfterLoginUrl(\GO::createExternalUrl($module,$function, $funcParams, true));
 		?>
-		self.location.href="<?php echo GO::config()->host; ?>";
+		self.location.href="<?php echo \GO::config()->host; ?>";
 	}
 
 	//self.close();
@@ -42,9 +42,9 @@ function launchGO(){
 </head>
 
 <body onload="launchGO();" style="font:12px arial">
-<h1><?php echo GO::config()->product_name; ?></h1>
+<h1><?php echo \GO::config()->product_name; ?></h1>
 <?php
-echo str_replace('{FUNCTION}', $module.'.'.$function.'()', GO::t('goAlreadyStarted'));
+echo str_replace('{FUNCTION}', $module.'.'.$function.'()', \GO::t('goAlreadyStarted'));
 ?>
 </body>
 

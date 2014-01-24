@@ -29,7 +29,11 @@
  * @package GO.base
  * @abstract
  */
-abstract class GO_Base_Model extends GO_Base_Object{
+
+namespace GO\Base;
+
+
+abstract class Model extends Object{
 	
 	protected $_validationErrors = array();
 	
@@ -62,7 +66,7 @@ abstract class GO_Base_Model extends GO_Base_Object{
 	 * @return string 
 	 */
 	public function getModule(){
-		$arr = explode('_', $this->className());
+		$arr = explode('\\', $this->className());
 		
 		return strtolower($arr[1]);
 	}
@@ -103,7 +107,7 @@ abstract class GO_Base_Model extends GO_Base_Object{
 	
 	/**
 	 * Get the name of the model in short
-	 * eg. GO_Base_Model_User will return 'User'
+	 * eg. Model_User will return 'User'
 	 * @return string Model name
 	 */
 	public function getModelName()

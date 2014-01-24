@@ -30,13 +30,17 @@
  * @property string $table
  */
 
-class GO_Base_Model_SearchCacheRecord extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Base\Model;
+
+
+class SearchCacheRecord extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Base_Model_SearchCacheRecord 
+	 * @return SearchCacheRecord 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -67,10 +71,10 @@ class GO_Base_Model_SearchCacheRecord extends GO_Base_Db_ActiveRecord {
 	 */
 	public function findLinks($model, $findParams=array()){
 		
-		$params = GO_Base_Db_FindParams::newInstance()
+		$params = \GO\Base\Db\FindParams::newInstance()
 						->select("t.*,l.description AS link_description")
 						->order('mtime','DESC')
-						->join('go_links_'.$model->tableName(),  GO_Base_Db_FindCriteria::newInstance()
+						->join('go_links_'.$model->tableName(),  \GO\Base\Db\FindCriteria::newInstance()
 										->ignoreUnknownColumns() //we don't have models for go_links_* tables
 										->addCondition('id', $model->id,'=','l')
 										->addCondition('model_id', 'l.model_id','=','t',true, true)

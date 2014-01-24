@@ -10,31 +10,35 @@
  */
 
 /**
- * The GO_files_Controller_GO_Files_Model_Template controller
+ * The GO\Files\Model\Template controller
  *
  * @package GO.modules.files
- * @version $Id: GO_files_Controller_GO_Files_Model_Template.php 7607 2011-09-29 08:42:37Z <<USERNAME>> $
+ * @version $Id: GO\Files\Model\Template.php 7607 2011-09-29 08:42:37Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
-class GO_files_Controller_Version extends GO_Base_Controller_AbstractModelController {
 
-	protected $model = 'GO_Files_Model_Version';
+namespace GO\files\Controller;
+
+
+class Version extends \GO\Base\Controller\AbstractModelController {
+
+	protected $model = '\GO\Files\Model\Version';
 
 	protected function actionDownload($params){
-		$version = GO_Files_Model_Version::model()->findByPk($params['id']);
+		$version = \GO\Files\Model\Version::model()->findByPk($params['id']);
 		$file = $version->getFilesystemFile();
-	  GO_Base_Util_Http::outputDownloadHeaders($file);		
+	  \GO\Base\Util\Http::outputDownloadHeaders($file);		
 		$file->output();
 	}
 	
 	protected function getStoreParams($params) {		
-		$findParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
+		$findParams = \GO\Base\Db\FindParams::newInstance()->ignoreAcl();
 		$findParams->getCriteria()->addCondition('file_id', $params['file_id']);		
 		
 		return $findParams;
 	}
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		
 		$columnModel->formatColumn('user_name', '$model->user->name');
 		

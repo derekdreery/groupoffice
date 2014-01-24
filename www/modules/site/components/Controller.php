@@ -20,7 +20,11 @@
  * @version $Id AbstractFrontController.php 2012-06-05 10:01:09 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-abstract class GO_Site_Components_Controller extends GO_Base_Controller_AbstractController {
+
+namespace GO\Site\Components;
+
+
+abstract class Controller extends \GO\Base\Controller\AbstractController {
 //	/**
 //	 * Frontend action can be accessed without moduel access
 //	 * @return array actions that can be accessed withou module access 
@@ -119,7 +123,7 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 			return $output;
 		}
 		else
-			throw new GO_Base_Exception_NotFound('cannot find the requested view ' . $view);
+			throw new \GO\Base\Exception\NotFound('cannot find the requested view ' . $view);
 	}
 
 	/**
@@ -165,7 +169,7 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 			$viewName = '/'.$moduleId. '/'.$viewName;	
 		}
 		
-		$file = new GO_Base_Fs_File($module->moduleManager->path() . 'views/site/' . $viewName . '.php');
+		$file = new \GO\Base\Fs\File($module->moduleManager->path() . 'views/site/' . $viewName . '.php');
 		if(!$file->exists())
 			throw new Exception("View '$viewName' not found!");
 		
@@ -222,10 +226,10 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 	 */
 	public function getReturnUrl()
 	{
-		if (isset(GO::session()->values['sites']['returnUrl']))
+		if (isset(\GO::session()->values['sites']['returnUrl']))
 		{
-			$returnUrl = GO::session()->values['sites']['returnUrl'];
-			//unset(GO::session ()->values['sites']['returnUrl']);
+			$returnUrl = \GO::session()->values['sites']['returnUrl'];
+			//unset(\GO::session ()->values['sites']['returnUrl']);
 			return $returnUrl;
 		}
 		else
@@ -240,7 +244,7 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 			$route=isset($url[0]) ? $url[0] : '';
 			$url = Site::urlManager()->createUrl($route, array_splice($url,1));
 		}
-		GO::session()->values['sites']['returnUrl'] = $url;
+		\GO::session()->values['sites']['returnUrl'] = $url;
 	}
 	
 	/**
@@ -255,12 +259,12 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 		
 		if(!in_array($action, $allowGuests) && !in_array('*', $allowGuests)){			
 			//check for logged in user
-			if(!GO::user())
+			if(!\GO::user())
 				return false;			
 		}
 		
 		$module = $this->getModule();
-		return !$module || GO::modules()->isInstalled($module->id);
+		return !$module || \GO::modules()->isInstalled($module->id);
 	}
 
 	public function run($action = '', $params = array(), $render = true, $checkPermissions = true)
@@ -274,11 +278,11 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 
 			$ignoreAcl = in_array($action, $this->ignoreAclPermissions()) || in_array('*', $this->ignoreAclPermissions());
 			if($ignoreAcl){		
-				$oldIgnore = GO::setIgnoreAclPermissions(true);				
+				$oldIgnore = \GO::setIgnoreAclPermissions(true);				
 			}
 			
 			if (!$this->_checkPermission($action))
-				throw new GO_Base_Exception_AccessDenied();
+				throw new \GO\Base\Exception\AccessDenied();
 
 			$this->beforeAction();
 			
@@ -288,27 +292,27 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 			
 			//restore old value for acl permissions if this method was allowed for guests.
 			if(isset($oldIgnore))
-				GO::setIgnoreAclPermissions($oldIgnore);
+				\GO::setIgnoreAclPermissions($oldIgnore);
 		}
-		catch (GO_Base_Exception_MissingParameter $e){
+		catch (\GO\Base\Exception\MissingParameter $e){
 			echo $this->render('/site/404', array('error' => $e));
 		}
-		catch (GO_Base_Exception_AccessDenied $e){
-			GO::debug($e->getMessage());
-			GO::debug($e->getTraceAsString());
+		catch (\GO\Base\Exception\AccessDenied $e){
+			\GO::debug($e->getMessage());
+			\GO::debug($e->getTraceAsString());
 			
-			if(!GO::user()){
+			if(!\GO::user()){
 				//Path the page you tried to visit into lastPath session for redirecting after login
-				GO::session()->values['sites']['returnUrl'] = Site::request()->getRequestUri();
+				\GO::session()->values['sites']['returnUrl'] = Site::request()->getRequestUri();
 				$loginpath = array('site/account/login');
 				$this->redirect($loginpath);
 			}  else {
-//				$controller = new GO_Site_Controller_Site();
+//				$controller = new \GO\Site\Controller\Site();
 				echo $this->render('/site/error', array('error' => $e));
 			}
 			//echo $this->render('error', array('error'=>$e));
 		}
-		catch (GO_Base_Exception_NotFound $e){
+		catch (\GO\Base\Exception\NotFound $e){
 			header("HTTP/1.0 404 Not Found");
       header("Status: 404 Not Found");
 			

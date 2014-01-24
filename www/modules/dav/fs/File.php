@@ -12,7 +12,11 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
+
+namespace GO\Dav\Fs;
+
+
+class File extends Sabre\DAV\FS\File {
 
 	protected $folder;
 	protected $write_permission;
@@ -21,18 +25,18 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 	public function __construct($path) {
 
 		$this->relpath = $path;
-		$path = GO::config()->file_storage_path . $path;
+		$path = \GO::config()->file_storage_path . $path;
 
 		parent::__construct($path);
 	}
 
 	public function checkWritePermission($delete=false) {
 
-		$fsFile = new GO_Base_Fs_File($this->path);
+		$fsFile = new \GO\Base\Fs\File($this->path);
 
-		$this->folder = GO_Files_Model_Folder::model()->findByPath($fsFile->parent()->stripFileStoragePath());
-		if (!GO_Base_Model_Acl::hasPermission($this->folder->getPermissionLevel(), GO_Base_Model_Acl::WRITE_PERMISSION)){
-			throw new Sabre\DAV\Exception\Forbidden("DAV: User ".GO::user()->username." doesn't have write permission for file '".$this->relpath.'"');
+		$this->folder = \GO\Files\Model\Folder::model()->findByPath($fsFile->parent()->stripFileStoragePath());
+		if (!\GO\Base\Model\Acl::hasPermission($this->folder->getPermissionLevel(), \GO\Base\Model\Acl::WRITE_PERMISSION)){
+			throw new Sabre\DAV\Exception\Forbidden("DAV: User ".\GO::user()->username." doesn't have write permission for file '".$this->relpath.'"');
 		}
 
 		/* if($delete){
@@ -52,21 +56,21 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 	 */
 	public function put($data) {
 		
-		GO::debug("DAVFile:put( ".$this->relpath.")");
+		\GO::debug("DAVFile:put( ".$this->relpath.")");
 		$this->checkWritePermission();
 		
-//		$file = GO_Files_Model_File::model()->findByPath($this->relpath);
+//		$file = \GO\Files\Model\File::model()->findByPath($this->relpath);
 //		$file->saveVersion();
 //		$file->putContents($data);
 		
 		
-		$file = new GO_Base_Fs_File($this->path);
+		$file = new \GO\Base\Fs\File($this->path);
 		$file->putContents($data);
 
 //		file_put_contents($this->path, $data);
-//		GO_Files_Model_File::model()->findByPath($this->relpath);
+//		\GO\Files\Model\File::model()->findByPath($this->relpath);
 
-		//GO::debug('ADDED FILE WITH WEBDAV -> FILE_ID: ' . $file_id);
+		//\GO::debug('ADDED FILE WITH WEBDAV -> FILE_ID: ' . $file_id);
 	}
 
 	/**
@@ -77,17 +81,17 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 	 */
 	public function setName($name) {
 		
-		GO::debug("DAVFile::setName($name)");
+		\GO::debug("DAVFile::setName($name)");
 		$this->checkWritePermission();
 
 		parent::setName($name);
 		
-		$file = GO_Files_Model_File::model()->findByPath($this->relpath);
+		$file = \GO\Files\Model\File::model()->findByPath($this->relpath);
 		$file->name=$name;
 		$file->save();
 		
 		$this->relpath = $file->path;
-		$this->path = GO::config()->file_storage_path.$this->relpath;
+		$this->path = \GO::config()->file_storage_path.$this->relpath;
 	}
 
 	public function getServerPath() {
@@ -103,18 +107,18 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 	public function move($newPath) {
 		$this->checkWritePermission();
 
-		GO::debug('DAVFile::move(' . $this->path . ' -> ' . $newPath . ')');
+		\GO::debug('DAVFile::move(' . $this->path . ' -> ' . $newPath . ')');
 		
-		$destFsFolder = new GO_Base_Fs_Folder(dirname($newPath));		
-		$destFolder = GO_Files_Model_Folder::model()->findByPath($destFsFolder->stripFileStoragePath());
+		$destFsFolder = new \GO\Base\Fs\Folder(dirname($newPath));		
+		$destFolder = \GO\Files\Model\Folder::model()->findByPath($destFsFolder->stripFileStoragePath());
 		
-		$file = GO_Files_Model_File::model()->findByPath($this->relpath);
+		$file = \GO\Files\Model\File::model()->findByPath($this->relpath);
 		$file->folder_id=$destFolder->id;
-		$file->name = GO_Base_Fs_File::utf8Basename($newPath);
+		$file->name = \GO\Base\Fs\File::utf8Basename($newPath);
 		$file->save();
 		
 		$this->relpath = $file->path;
-		$this->path = GO::config()->file_storage_path.$this->relpath;
+		$this->path = \GO::config()->file_storage_path.$this->relpath;
 	}
 
 	/**
@@ -134,7 +138,7 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 	 */
 	public function delete() {
 		$this->checkWritePermission(true);
-		$file = GO_Files_Model_File::model()->findByPath($this->relpath);
+		$file = \GO\Files\Model\File::model()->findByPath($this->relpath);
 		$file->delete();
 	}
 
@@ -170,7 +174,7 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 	 */
 	public function getContentType() {
 		
-		$fsFile = new GO_Base_Fs_File($this->path);
+		$fsFile = new \GO\Base\Fs\File($this->path);
 
 		return $fsFile->mimeType();	
 

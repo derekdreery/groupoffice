@@ -14,7 +14,7 @@
  */
  
 /**
- * The GO_Site_Controller_MenuItem controller object
+ * The MenuItem controller object
  *
  * @package GO.modules.Site
  * @version $Id$
@@ -22,7 +22,11 @@
  * @author Wesley Smits wsmits@intermesh.nl
  * 
  */
-class GO_Site_Controller_MenuItem extends GO_Base_Controller_AbstractJsonController {
+
+namespace GO\Site\Controller;
+
+
+class MenuItem extends \GO\Base\Controller\AbstractJsonController {
 	
 	/**
 	 * Loads a store of menu items that can be a parent of the given menu item.
@@ -32,11 +36,11 @@ class GO_Site_Controller_MenuItem extends GO_Base_Controller_AbstractJsonControl
 	 */
 	public function actionParentStore($id = false, $menu_id){
 		
-		$findCriteria = GO_Base_Db_FindCriteria::newInstance()->addCondition('menu_id', $menu_id);
+		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()->addCondition('menu_id', $menu_id);
 		$findCriteria->addCondition('id', $id,'<>');
-		$findParams = GO_Base_Db_FindParams::newInstance()->criteria($findCriteria);
+		$findParams = \GO\Base\Db\FindParams::newInstance()->criteria($findCriteria);
 		
-		$store = new GO_Base_Data_DbStore('GO_Site_Model_MenuItem', new GO_Base_Data_ColumnModel('GO_Site_Model_MenuItem'), $_REQUEST,$findParams);
+		$store = new \GO\Base\Data\DbStore('\GO\Site\Model\MenuItem', new \GO\Base\Data\ColumnModel('\GO\Site\Model\MenuItem'), $_REQUEST,$findParams);
 		
 		echo $this->renderStore($store);
 	}
@@ -68,7 +72,7 @@ class GO_Site_Controller_MenuItem extends GO_Base_Controller_AbstractJsonControl
 		
 		$model = $this->_loadModel($menu_id);
 		
-		if(GO_Base_Util_Http::isPostRequest()){
+		if(\GO\Base\Util\Http::isPostRequest()){
 			$model->setAttributes($_POST);
 			$model->save();
 		}
@@ -83,17 +87,17 @@ class GO_Site_Controller_MenuItem extends GO_Base_Controller_AbstractJsonControl
 	 */
 	public function actionCreateFromContent($target,$content){
 		
-		if(GO_Base_Util_Http::isPostRequest()){
+		if(\GO\Base\Util\Http::isPostRequest()){
 			
 			$target = json_decode($target);
 			$content = json_decode($content);
 			
-			$targetModelName = GO_Site_SiteModule::getModelNameFromTreeNodeType($target->type);
-			$contentModelName = GO_Site_SiteModule::getModelNameFromTreeNodeType($content->type);
+			$targetModelName = \GO\Site\SiteModule::getModelNameFromTreeNodeType($target->type);
+			$contentModelName = \GO\Site\SiteModule::getModelNameFromTreeNodeType($content->type);
 			
 			$targetModel = $targetModelName::model()->findByPk($target->modelId);
 			$contentModel = $contentModelName::model()->findByPk($content->modelId);
-			if($targetModel instanceof GO_Site_Model_MenuItem){
+			if($targetModel instanceof \GO\Site\Model\MenuItem){
 				$menuId = $targetModel->menu_id;
 			}else{
 				$menuId = $targetModel->id;
@@ -136,7 +140,7 @@ class GO_Site_Controller_MenuItem extends GO_Base_Controller_AbstractJsonControl
 		if(!empty($model->content_id))
 			$remoteComboFields['content_id']=$model->content->title;
 		
-		if(GO_Base_Util_Http::isPostRequest()){
+		if(\GO\Base\Util\Http::isPostRequest()){
 			$model->setAttributes($_POST);
 			$model->save();
 		}
@@ -163,15 +167,15 @@ class GO_Site_Controller_MenuItem extends GO_Base_Controller_AbstractJsonControl
 	 * 
 	 * @param int $siteId
 	 * @param int $id
-	 * @return \GO_Site_Model_Menu
+	 * @return \GO\Site\Model\Menu
 	 * @throws Exception
 	 */
 	private function _loadModel($menu_id, $id = false){
 		
 		if(!empty($id)){
-			$model = GO_Site_Model_MenuItem::model()->findByPk($id);
+			$model = \GO\Site\Model\MenuItem::model()->findByPk($id);
 		}else{
-			$model = new GO_Site_Model_MenuItem();
+			$model = new \GO\Site\Model\MenuItem();
 			$model->menu_id = $menu_id;
 		}
 		

@@ -1,6 +1,10 @@
 <?php
 
-class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController {
+
+namespace GO\Files\Controller;
+
+
+class Jupload extends \GO\Base\Controller\AbstractController {
 
 //	protected function allowGuests(){ // TODO: REMOVE THIS AND FIX THE ACCESS TO THE ACTIONS
 //		return array('*');
@@ -46,20 +50,20 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 			<applet
 				code="wjhk.jupload2.JUploadApplet"
 				name="JUpload"
-				archive="' . GO::config()->host . 'go/vendor/jupload/wjhk.jupload.jar' . '"
+				archive="' . \GO::config()->host . 'go/vendor/jupload/wjhk.jupload.jar' . '"
 				width="640"
 				height="480"
 				mayscript="true"
 				alt="The java pugin must be installed.">
-				<param name="lang" value="' . GO::user()->language . '" />
+				<param name="lang" value="' . \GO::user()->language . '" />
 				<param name="readCookieFromNavigator" value="false" />
 				<!--<param name="lookAndFeel" value="system" />-->
-				<param name="postURL" value="' . GO::url('files/jupload/handleUploads') . '" />
+				<param name="postURL" value="' . \GO::url('files/jupload/handleUploads') . '" />
 				<param name="afterUploadURL" value="javascript:afterUpload(%success%);" />
 				<param name="showLogWindow" value="false" />
 				<param name="maxChunkSize" value="1048576" />    
 				<param name="specificHeaders" value="' . $sessionCookie . '" />
-				<param name="maxFileSize" value="' . intval(GO::config()->max_file_size) . '" />
+				<param name="maxFileSize" value="' . intval(\GO::config()->max_file_size) . '" />
 				<param name="nbFilesPerRequest" value="5" />
 				<!--<param name="debugLevel" value="99" />-->
 				Java 1.5 or higher plugin required. 
@@ -70,12 +74,12 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 
 	protected function actionHandleUploads($params) {
 
-		if (!isset(GO::session()->values['files']['uploadqueue']))
-			GO::session()->values['files']['uploadqueue'] = array();
+		if (!isset(\GO::session()->values['files']['uploadqueue']))
+			\GO::session()->values['files']['uploadqueue'] = array();
 
 		try {
-			$chunkTmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'juploadqueue/chunks');
-			$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'juploadqueue');
+			$chunkTmpFolder = new \GO\Base\Fs\Folder(\GO::config()->tmpdir . 'juploadqueue/chunks');
+			$tmpFolder = new \GO\Base\Fs\Folder(\GO::config()->tmpdir . 'juploadqueue');
 
 			$tmpFolder->create();
 			$chunkTmpFolder->create();
@@ -87,13 +91,13 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 					$originalFileName = $uploadedFile['name'];
 					$uploadedFile['name'] = $uploadedFile['name'] . '.part' . $params['jupart'];
 					$chunkTmpFolder->create();
-					GO_Base_Fs_File::moveUploadedFiles($uploadedFile, $chunkTmpFolder);
+					\GO\Base\Fs\File::moveUploadedFiles($uploadedFile, $chunkTmpFolder);
 					if (!empty($params['jufinal'])) {
-						$file = new GO_Base_Fs_File($tmpFolder . '/' . $originalFileName);
+						$file = new \GO\Base\Fs\File($tmpFolder . '/' . $originalFileName);
 
 						$fp = fopen($file->path(), 'w+');
 						for ($i = 1; $i <= $params['jupart']; $i++) {
-							$part = new GO_Base_Fs_File($chunkTmpFolder . '/' . $originalFileName . '.part' . $i);
+							$part = new \GO\Base\Fs\File($chunkTmpFolder . '/' . $originalFileName . '.part' . $i);
 							fwrite($fp, $part->contents());
 							$part->delete();
 						}
@@ -105,7 +109,7 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 						return;
 					}
 				} else {
-					$files = GO_Base_Fs_File::moveUploadedFiles($uploadedFile, $tmpFolder);
+					$files = \GO\Base\Fs\File::moveUploadedFiles($uploadedFile, $tmpFolder);
 					if(!$files)
 						throw new Exception("No file received");
 					
@@ -114,9 +118,9 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 				$subdir = false;
 				if ((!empty($params['relpathinfo' . $count]) && !isset($params['jupart'])) ||
 								(!empty($params['relpathinfo' . $count]) && isset($params['jupart']) && !empty($params['jufinal']))) {
-					$fullpath = GO::config()->tmpdir . 'juploadqueue' . '/' . str_replace('\\','/',$params['relpathinfo'.$count]);
+					$fullpath = \GO::config()->tmpdir . 'juploadqueue' . '/' . str_replace('\\','/',$params['relpathinfo'.$count]);
 
-					$dir = new GO_Base_Fs_Folder($fullpath);
+					$dir = new \GO\Base\Fs\Folder($fullpath);
 					$dir->create();
 					$subdir = true;
 					$file->move($dir);
@@ -128,10 +132,10 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 					$parent = $this->_findHighestParent($dir);
 					
 					go::debug($parent);
-					if (!in_array($parent->path(), GO::session()->values['files']['uploadqueue']))
-						GO::session()->values['files']['uploadqueue'][] = $parent->path();
+					if (!in_array($parent->path(), \GO::session()->values['files']['uploadqueue']))
+						\GO::session()->values['files']['uploadqueue'][] = $parent->path();
 				} else {
-					GO::session()->values['files']['uploadqueue'][] = $file->path();
+					\GO::session()->values['files']['uploadqueue'][] = $file->path();
 				}
 			}
 		} catch (Exception $e) {
@@ -140,7 +144,7 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 		echo "SUCCESS\n";
 	}
 	
-	private function _findHighestParent(GO_Base_Fs_Folder $dir){
+	private function _findHighestParent(\GO\Base\Fs\Folder $dir){
 		$parent = $dir;
 
 		while($parent->parent()->name()!="juploadqueue"){

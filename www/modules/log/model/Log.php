@@ -17,7 +17,7 @@
  */
  
 /**
- * The GO_Log_Model_Log model
+ * The Log model
  *
  * @package GO.modules.log.model
  * @property int $id
@@ -32,7 +32,11 @@
  * @property string $message
  */
 
-class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Log\Model;
+
+
+class Log extends \GO\Base\Db\ActiveRecord {
 	
 	
 	const ACTION_ADD='add';
@@ -47,7 +51,7 @@ class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Notes_Model_Note 
+	 * @return \GO\Notes\Model\Note 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -79,8 +83,8 @@ class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
 		else
 			$attr['user_agent']= isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
 		$attr['ip']=isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
-		$attr['controller_route']=GO::router()->getControllerRoute();
-		$attr['username']=GO::user() ? GO::user()->username : 'notloggedin';
+		$attr['controller_route']=\GO::router()->getControllerRoute();
+		$attr['username']=\GO::user() ? \GO::user()->username : 'notloggedin';
 		return $attr;
 	}
 	
@@ -91,7 +95,7 @@ class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
 	 * @param string $message 
 	 */
 	public static function create($action, $message, $model_name="", $model_id=0){
-		$log = new GO_Log_Model_Log();
+		$log = new Log();
 		
 		$log->model_id=$model_id;
 

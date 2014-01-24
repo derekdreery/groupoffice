@@ -1,5 +1,9 @@
 <?php
-class GO_Calendar_Util_VObjectConvertor {
+
+namespace GO\Calendar\Util;
+
+
+class VObjectConvertor {
 	public function getEventModel(){
 		
 	}

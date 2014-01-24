@@ -8,16 +8,16 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.emailportlet
- * @version $Id: GO_emailportlet_Model_EmailPortletFolder.php 7607 2012-08-24 12:05:55Z <<USERNAME>> $
+ * @version $Id: \GO\emailportlet\Model\EmailPortletFolder.php 7607 2012-08-24 12:05:55Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
  
 /**
- * The GO_emailportlet_Model_EmailPortletFolder model
+ * The \GO\emailportlet\Model\EmailPortletFolder model
  *
  * @package GO.modules.emailportlet
- * @version $Id: GO_emailportlet_Model_EmailPortletFolder.php 7607 2012-08-24 12:05:55Z <<USERNAME>> $
+ * @version $Id: \GO\emailportlet\Model\EmailPortletFolder.php 7607 2012-08-24 12:05:55Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *
@@ -29,7 +29,11 @@
  * @property string $name
  */
 
-class GO_email_Model_PortletFolder extends GO_Base_Db_ActiveRecord{	
+
+namespace GO\email\Model;
+
+
+class PortletFolder extends \GO\Base\Db\ActiveRecord{	
 	
 	public $name = 'UNDEFINED';
 	
@@ -39,7 +43,7 @@ class GO_email_Model_PortletFolder extends GO_Base_Db_ActiveRecord{
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_emailportlet_Model_EmailPortletFolder
+	 * @return \GO\emailportlet\Model\EmailPortletFolder
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -58,7 +62,7 @@ class GO_email_Model_PortletFolder extends GO_Base_Db_ActiveRecord{
 	private function _load(){
 		
 		if(!empty($this->account))
-			$this->_imapMailbox = new GO_Email_Model_ImapMailbox($this->account,array('name'=>$this->folder_name));
+			$this->_imapMailbox = new \GO\Email\Model\ImapMailbox($this->account,array('name'=>$this->folder_name));
 		
 		if(!empty($this->_imapMailbox))
 			$this->name =  $this->_imapMailbox->getDisplayName();
@@ -84,7 +88,7 @@ class GO_email_Model_PortletFolder extends GO_Base_Db_ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-				 'account' => array('type' => self::BELONGS_TO, 'model' => 'GO_Email_Model_Account', 'field' => 'account_id')
+				 'account' => array('type' => self::BELONGS_TO, 'model' => '\GO\Email\Model\Account', 'field' => 'account_id')
 		 );
 	 }
 	 

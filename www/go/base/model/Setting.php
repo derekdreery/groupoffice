@@ -20,13 +20,17 @@
  * @property int $user_id
  */
 
-class GO_Base_Model_Setting extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Base\Model;
+
+
+class Setting extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Base_Model_Setting 
+	 * @return Setting 
 	 */
 	public static function model($className=__CLASS__)
 	{	

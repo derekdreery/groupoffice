@@ -4,23 +4,23 @@
 			<!--								<h1>Shopping cart</h1>-->
 
 			<?php if($cart->isEmpty()): ?>
-				<p><?php echo GO::t('noproductsincart', 'webshop'); ?></p>
+				<p><?php echo \GO::t('noproductsincart', 'webshop'); ?></p>
 			<?php else: ?>
 
-			<?php echo GO_Sites_Components_Html::beginForm('', 'post',array('id'=>'cart')); ?>
+			<?php echo \GO\Sites\Components\Html::beginForm('', 'post',array('id'=>'cart')); ?>
 
 			<table class="cart">
 				<tr>
-					<th><?php echo GO::t('amount', 'webshop'); ?></th>
-					<th><?php echo GO::t('productname', 'webshop'); ?></th>
-					<th style="text-align:right"><?php echo GO::t('price','webshop'); ?></th>
+					<th><?php echo \GO::t('amount', 'webshop'); ?></th>
+					<th><?php echo \GO::t('productname', 'webshop'); ?></th>
+					<th style="text-align:right"><?php echo \GO::t('price','webshop'); ?></th>
 				</tr>
 
 				<?php foreach($cart->getItems() as $product): ?>
 
 				<tr>
 					<td>
-						<?php echo GO_Sites_Components_Html::textField("product[".$product->getId()."]", $product->getAmount(), array('size'=>5)); ?>
+						<?php echo \GO\Sites\Components\Html::textField("product[".$product->getId()."]", $product->getAmount(), array('size'=>5)); ?>
 					</td>
 					<td><?php echo $product->getName(); ?></td>
 					<td align="right"><?php echo $product->getSumPriceText(); ?></td>
@@ -38,7 +38,7 @@
 				<?php if($cart->vatApplicable()): ?>
 
 				<tr>
-					<td colspan="2" align="right" class="minicart_total"><b><?php echo GO::t('subtotal','webshop');?>:</b></td>
+					<td colspan="2" align="right" class="minicart_total"><b><?php echo \GO::t('subtotal','webshop');?>:</b></td>
 					<td align="right" class="minicart_total"><b><?php echo $cart->getSubTotalTexT(); ?></b></td>
 				</tr>
 
@@ -49,7 +49,7 @@
 				<?php endif; ?>
 
 				<tr>
-					<td colspan="2" align="right" class="minicart_total"><b><?php echo GO::t('total', 'webshop'); ?>:</b></td>
+					<td colspan="2" align="right" class="minicart_total"><b><?php echo \GO::t('total', 'webshop'); ?>:</b></td>
 					<td align="right" class="minicart_total"><b><?php echo $cart->getTotalTexT(); ?></b></td>
 				</tr>
 
@@ -63,10 +63,10 @@
 			<div onmouseout="this.className='button-green';" onmouseover="this.className='button-green-hover';" class="button-green">
 				<div class="button-green-right">
 					<a class="button-green-center" onclick="document.forms['cart'].submit();" href="#">
-						<?php echo GO::t('updateamounts', 'webshop'); ?></a>
+						<?php echo \GO::t('updateamounts', 'webshop'); ?></a>
 				</div>
 			</div>
-			<?php echo GO_Base_Html_Form::getHtmlEnd(); ?>
+			<?php echo \GO\Base\Html\Form::getHtmlEnd(); ?>
 
 <?php endif; ?>
 

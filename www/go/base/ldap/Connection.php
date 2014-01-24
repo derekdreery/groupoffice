@@ -1,5 +1,9 @@
 <?php
-class GO_Base_Ldap_Connection{
+
+namespace GO\Base\Ldap;
+
+
+class Connection{
 	
 	private $_host;
 	private $_port;
@@ -16,27 +20,27 @@ class GO_Base_Ldap_Connection{
 	/**
 	 * Connect to the LDAP server defined in config.php
 	 * 
-	 * @return \GO_Base_Ldap_Connection
+	 * @return \Connection
 	 * @throws Exception
 	 */
 	public static function getDefault(){
 		
-		if(empty(GO::config()->ldap_host))
-			GO::config()->ldap_host='localhost';
+		if(empty(\GO::config()->ldap_host))
+			\GO::config()->ldap_host='localhost';
 		
-		if(empty(GO::config()->ldap_port))
-			GO::config()->ldap_port=389;
+		if(empty(\GO::config()->ldap_port))
+			\GO::config()->ldap_port=389;
 		
-		$ldapConn = new GO_Base_Ldap_Connection(GO::config()->ldap_host, GO::config()->ldap_port, !empty(GO::config()->ldap_tls));
+		$ldapConn = new Connection(\GO::config()->ldap_host, \GO::config()->ldap_port, !empty(\GO::config()->ldap_tls));
 
 		//support old deprecated config.
-		if(!empty(GO::config()->ldap_user))
-			GO::config()->ldap_bind_rdn=GO::config()->ldap_user;
+		if(!empty(\GO::config()->ldap_user))
+			\GO::config()->ldap_bind_rdn=\GO::config()->ldap_user;
 		
-		if (!empty(GO::config()->ldap_bind_rdn)) {
-			$bound = $ldapConn->bind(GO::config()->ldap_bind_rdn, GO::config()->ldap_pass);
+		if (!empty(\GO::config()->ldap_bind_rdn)) {
+			$bound = $ldapConn->bind(\GO::config()->ldap_bind_rdn, \GO::config()->ldap_pass);
 			if (!$bound)
-				throw new Exception("Failed to bind to LDAP server with RDN: " . GO::config()->ldap_bind_rdn);
+				throw new Exception("Failed to bind to LDAP server with RDN: " . \GO::config()->ldap_bind_rdn);
 		}
 		
 		return $ldapConn;
@@ -49,7 +53,7 @@ class GO_Base_Ldap_Connection{
 	 */
 	public function connect(){		
 		if(!$this->_link){
-			GO::debug('LDAP::connect() to '.$this->_host.' on port '.$this->_port);
+			\GO::debug('LDAP::connect() to '.$this->_host.' on port '.$this->_port);
 			$this->_link=ldap_connect($this->_host, $this->_port);
 			
 			if(!$this->_link)
@@ -58,7 +62,7 @@ class GO_Base_Ldap_Connection{
 			ldap_set_option($this->_link,LDAP_OPT_PROTOCOL_VERSION,3);
 			
 			if($this->_tls){
-				GO::debug('LDAP: Starting LDAP TLS');
+				\GO::debug('LDAP: Starting LDAP TLS');
 				ldap_start_tls($this->_link);
 			}
 		}
@@ -70,7 +74,7 @@ class GO_Base_Ldap_Connection{
 	 * Disconnect
 	 */
 	public function disconnect(){
-		GO::debug("LDAP::disconnect()");
+		\GO::debug("LDAP::disconnect()");
 		if($this->_link)
 			ldap_close($this->_link);
 	}
@@ -83,7 +87,7 @@ class GO_Base_Ldap_Connection{
 	 * @return boolean 
 	 */
 	public function bind($bindRdn, $password){
-		GO::debug("LDAP::bind($bindRdn, ***)");
+		\GO::debug("LDAP::bind($bindRdn, ***)");
 		
 		$this->connect();
 		
@@ -96,11 +100,11 @@ class GO_Base_Ldap_Connection{
 	 * @param string $baseDN
 	 * @param string $query
 	 * @param array $attributes
-	 * @return GO_Base_Ldap_Result 
+	 * @return Result 
 	 */
 	public function search($baseDN, $query, $attributes=null){
 		
-		GO::debug("LDAP::search($baseDN, $query)");
+		\GO::debug("LDAP::search($baseDN, $query)");
 		
 		$this->connect();		
 		
@@ -113,7 +117,7 @@ class GO_Base_Ldap_Connection{
 		if(!$searchId)
 			throw new Exception("Invalid LDAP search BaseDN: $baseDN, Query: $query");
 		
-		return new GO_Base_Ldap_Result($this, $searchId);
+		return new Result($this, $searchId);
 	}
 	
 	/**

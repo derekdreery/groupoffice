@@ -2,7 +2,11 @@
 /**
  * Pdf instance of the printcategorycount pdf
  */
-class GO_Calendar_Reports_PrintCategoryCount  extends GO_Base_Util_Pdf {
+
+namespace GO\Calendar\Reports;
+
+
+class PrintCategoryCount  extends \GO\Base\Util\Pdf {
 	
 	private $_cellheight = 15;
 	
@@ -95,7 +99,7 @@ class GO_Calendar_Reports_PrintCategoryCount  extends GO_Base_Util_Pdf {
 
 	public function render($model){
 		$this->AddPage();
-		$this->printBlockHeader(sprintf(GO::t('printTimeFormat','calendar'),$model->startDate,$model->endDate));
+		$this->printBlockHeader(sprintf(\GO::t('printTimeFormat','calendar'),$model->startDate,$model->endDate));
 		$this->Ln(15);		
 		$this->htmlTable($model->getHeaders(),$model->getRows(),$model->getTotals());
 	}

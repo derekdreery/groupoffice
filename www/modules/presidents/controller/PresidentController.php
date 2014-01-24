@@ -15,14 +15,18 @@
 /**
  * The President controller
  */
-class GO_Presidents_Controller_President extends GO_Base_Controller_AbstractModelController {
+
+namespace GO\Presidents\Controller;
+
+
+class President extends \GO\Base\Controller\AbstractModelController {
 	
-	protected $model = 'GO_Presidents_Model_President';
+	protected $model = '\GO\Presidents\Model\President';
 
 	/**
 	 * Tell the controller to change some column values
 	 */
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('party_id','$model->party->name');
 		$columnModel->formatColumn('income_val','$model->income');
 		return parent::formatColumns($columnModel);
@@ -37,7 +41,7 @@ class GO_Presidents_Controller_President extends GO_Base_Controller_AbstractMode
 	
 	protected function afterDisplay(&$response, &$model, &$params) {
 		$response['data']['write_permission'] = true;
-		$response['data']['permission_level'] = GO_Base_Model_Acl::MANAGE_PERMISSION;
+		$response['data']['permission_level'] = \GO\Base\Model\Acl::MANAGE_PERMISSION;
 		$response['data']['partyName'] = $model->party->name;
 		return parent::beforeDisplay($response, $model, $params);
 	}

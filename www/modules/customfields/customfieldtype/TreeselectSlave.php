@@ -1,5 +1,9 @@
 <?php
-class GO_Customfields_Customfieldtype_TreeselectSlave extends GO_Customfields_Customfieldtype_Treeselect{
+
+namespace GO\Customfields\Customfieldtype;
+
+
+class TreeselectSlave extends Treeselect{
 	
 	public function name(){
 		return 'Treeselect (slave)';

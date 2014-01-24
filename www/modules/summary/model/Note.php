@@ -12,7 +12,11 @@
  * @property string $text
  */
 
-class GO_Summary_Model_Note extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Summary\Model;
+
+
+class Note extends \GO\Base\Db\ActiveRecord {
 	
 	public static function model($className=__CLASS__)
 	{	
@@ -20,7 +24,7 @@ class GO_Summary_Model_Note extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function getLocalizedName(){
-		return GO::t('note','summary');
+		return \GO::t('note','summary');
 	}
 	
 	public function tableName(){

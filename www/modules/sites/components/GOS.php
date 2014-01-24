@@ -42,7 +42,7 @@ class GOS
 	/**
 	 * Returns the website object $_site will be set only once in index.php and
 	 * This function will be applied as singleton for getting the website component
-	 * @return GO_Sites_Components_Website
+	 * @return \GO\Sites\Components\Website
 	 */
 	public static function site()
 	{
@@ -59,14 +59,14 @@ class GOS
 	
 	/**
 	 * Init GO and return the website component
-	 * @return GO_Sites_Components_Website 
+	 * @return \GO\Sites\Components\Website 
 	 */
 	public static function launch()
 	{
 		//Go up 3 dirs (components, sites, modules) to find GO.php
 		require(dirname(__FILE__).'/../../../GO.php');
 
-		return new GO_Sites_Components_Website();
+		return new \GO\Sites\Components\Website();
 	}
 }
 ?>

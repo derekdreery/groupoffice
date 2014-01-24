@@ -14,7 +14,11 @@
  * @property boolean $summary
  */
 
-class GO_Summary_Model_RssFeed extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Summary\Model;
+
+
+class RssFeed extends \GO\Base\Db\ActiveRecord {
 	
 	public static function model($className=__CLASS__)
 	{	

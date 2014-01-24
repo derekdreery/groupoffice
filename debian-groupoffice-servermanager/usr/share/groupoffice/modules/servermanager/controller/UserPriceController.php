@@ -24,15 +24,19 @@
  * @version $Id UserPriceController.php 2012-10-15 10:51:19 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_ServerManager_Controller_UserPrice extends GO_Base_Controller_AbstractModelController{
+
+namespace GO\ServerManager\Controller;
+
+
+class UserPrice extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = 'GO_ServerManager_Model_UserPrice';
+	protected $model = '\GO\ServerManager\Model\UserPrice';
 
 	protected function beforeSubmit(&$response, &$model, &$params)
 	{
-		$model = GO_ServerManager_Model_UserPrice::model()->findByPk($params['max_users']);
+		$model = \GO\ServerManager\Model\UserPrice::model()->findByPk($params['max_users']);
 		if($model == null)
-			$model = new GO_ServerManager_Model_UserPrice();
+			$model = new \GO\ServerManager\Model\UserPrice();
 	}
 }
 ?>

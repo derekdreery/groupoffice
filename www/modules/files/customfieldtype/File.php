@@ -1,16 +1,20 @@
 <?php
-class GO_Files_Customfieldtype_File extends GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
+
+namespace GO\Files\Customfieldtype;
+
+
+class File extends \GO\Customfields\Customfieldtype\AbstractCustomfieldtype{
 	
 	public function name(){
 		return 'File';
 	}
 	
-	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
+	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
 		$html="";
 		if(!empty($attributes[$key])) {
 
-			if(!GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport){
-				$html='<a href="#" onclick=\'GO.linkHandlers["GO_Files_Model_File"].call(this,"'.
+			if(!\GO\Customfields\Model\AbstractCustomFieldsRecord::$formatForExport){
+				$html='<a href="#" onclick=\'GO.linkHandlers["\GO\Files\Model\File"].call(this,"'.
 					$attributes[$key].'");\' title="'.$attributes[$key].'">'.
 						$attributes[$key].'</a>';
 			}else
@@ -21,9 +25,9 @@ class GO_Files_Customfieldtype_File extends GO_Customfields_Customfieldtype_Abst
 		return $html;
 	}
 	
-	public function formatFormOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
+	public function formatFormOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
 		
-		if(!GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport){
+		if(!\GO\Customfields\Model\AbstractCustomFieldsRecord::$formatForExport){
 			return parent::formatFormOutput($key, $attributes, $model);
 		}else
 		{

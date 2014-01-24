@@ -25,49 +25,53 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  */
 
-class GO_Base_Db_Columns{
+
+namespace GO\Base\Db;
+
+
+class Columns{
 	
 	public static $forceLoad = false;
 	
 	private static $_columns=array();
 	
-	private static function getCacheKey(GO_Base_Db_ActiveRecord $model){
+	private static function getCacheKey(ActiveRecord $model){
 		$tableName = $model->tableName();
 		return 'modelColumns_'.$tableName;		
 	}
 	/**
 	 * Clear the column cache for a particular model.
 	 * 
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param ActiveRecord $model
 	 */
-	public static function clearCache(GO_Base_Db_ActiveRecord $model){
-		GO::cache()->delete(self::getCacheKey($model));
+	public static function clearCache(ActiveRecord $model){
+		\GO::cache()->delete(self::getCacheKey($model));
 	}
 	
 	/**
 	 * Get all columns of a model
 	 * 
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param ActiveRecord $model
 	 * @return array
 	 */
-	public static function getColumns(GO_Base_Db_ActiveRecord $model) {
+	public static function getColumns(ActiveRecord $model) {
 		$tableName = $model->tableName();
 		$cacheKey = self::getCacheKey($model);
 		
 		if(self::$forceLoad){
 			unset(self::$_columns[$tableName]);
-			GO::cache()->delete($cacheKey);
+			\GO::cache()->delete($cacheKey);
 		}
 		
 		if(isset(self::$_columns[$tableName]) && !self::$forceLoad){
 			return self::$_columns[$tableName];
-		}elseif(($columns = GO::cache()->get($cacheKey))){
-//			GO::debug("Got columns from cache for $tableName");
+		}elseif(($columns = \GO::cache()->get($cacheKey))){
+//			\GO::debug("Got columns from cache for $tableName");
 			self::$_columns[$tableName]=$columns;
 			return self::$_columns[$tableName];
 		}else
 		{	
-//			GO::debug("Loading columns for $tableName");
+//			\GO::debug("Loading columns for $tableName");
 			self::$_columns[$tableName]=array();
 			$sql = "SHOW COLUMNS FROM `" . $tableName. "`;";
 			$stmt = $model->getDbConnection()->query($sql);
@@ -172,7 +176,7 @@ class GO_Base_Db_Columns{
 
 			}
 			
-			GO::cache()->set($cacheKey, self::$_columns[$tableName]);
+			\GO::cache()->set($cacheKey, self::$_columns[$tableName]);
 			
 			return self::$_columns[$tableName];			
 		}		

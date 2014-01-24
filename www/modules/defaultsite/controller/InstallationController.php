@@ -1,5 +1,9 @@
 <?php
-class GO_Defaultsite_Controller_Installation extends GO_Base_Controller_AbstractJsonController {
+
+namespace GO\Defaultsite\Controller;
+
+
+class Installation extends \GO\Base\Controller\AbstractJsonController {
 	
 	protected function actionInstallModules($params){
 
@@ -8,26 +12,26 @@ class GO_Defaultsite_Controller_Installation extends GO_Base_Controller_Abstract
 			'feedback'=>'' // Needed when an error occurs
 		);
 		
-		if(!GO::modules()->isAvailable('site')){
+		if(!\GO::modules()->isAvailable('site')){
 			throw new Exception("site module is not available!");
 		}
 		
-		if(!GO::modules()->isAvailable('defaultsite')){
+		if(!\GO::modules()->isAvailable('defaultsite')){
 			throw new Exception("defaultsite module is not available!");
 		}
 
-		$siteModule = new GO_Base_Model_Module();
+		$siteModule = new \GO\Base\Model\Module();
 		$siteModule->id='site';
-		if(GO::modules()->isInstalled('site') || $siteModule->save()){
-			$defaultSiteModule = new GO_Base_Model_Module();
+		if(\GO::modules()->isInstalled('site') || $siteModule->save()){
+			$defaultSiteModule = new \GO\Base\Model\Module();
 			$defaultSiteModule->id='defaultsite';
 			if(!$defaultSiteModule->save()){
 				$response['success'] = false;
-				$response['feedback'] = GO::t('installdefaultsiteerror','defaultsite');
+				$response['feedback'] = \GO::t('installdefaultsiteerror','defaultsite');
 			}
 		} else {
 			$response['success'] = false;
-			$response['feedback'] = GO::t('installsiteerror','defaultsite');
+			$response['feedback'] = \GO::t('installsiteerror','defaultsite');
 		}
 
 		echo $this->renderJson($response);

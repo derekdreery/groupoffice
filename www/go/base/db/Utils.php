@@ -23,7 +23,11 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  */
 
-class GO_Base_Db_Utils{
+
+namespace GO\Base\Db;
+
+
+class Utils{
 	
 	/**
 	 * Check if a database exists
@@ -32,7 +36,7 @@ class GO_Base_Db_Utils{
 	 * @return boolean 
 	 */
 	public static function databaseExists($databaseName){
-		$stmt = GO::getDbConnection()->query('SHOW DATABASES');
+		$stmt = \GO::getDbConnection()->query('SHOW DATABASES');
 		while($r=$stmt->fetch()){
 			if($r[0]==$databaseName){
 				return true;
@@ -49,7 +53,7 @@ class GO_Base_Db_Utils{
 	 * @return boolean 
 	 */
 	public static function tableExists($tableName){
-		$stmt = GO::getDbConnection()->query('SHOW TABLES');
+		$stmt = \GO::getDbConnection()->query('SHOW TABLES');
 		while($r=$stmt->fetch()){
 			if($r[0]==$tableName){
 				return true;
@@ -61,7 +65,7 @@ class GO_Base_Db_Utils{
 	
 	public static function fieldExists($tableName, $fieldName){
 		$sql = "SHOW FIELDS FROM `".$tableName."`";
-		$stmt = GO::getDbConnection()->query($sql);
+		$stmt = \GO::getDbConnection()->query($sql);
 		while($record = $stmt->fetch(PDO::FETCH_ASSOC)){
 			if($record['Field']==$fieldName)
 				return true;

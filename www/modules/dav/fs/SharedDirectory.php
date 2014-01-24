@@ -11,7 +11,11 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
+
+namespace GO\Dav\Fs;
+
+
+class SharedDirectory extends Sabre\DAV\FS\Directory {
 
 	public function __construct($path='') {
 		parent::__construct("Shared");
@@ -22,14 +26,14 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
 
 	public function getChild($name) {
 
-		GO::debug('Shared::getChild('.$name.')');
+		\GO::debug('Shared::getChild('.$name.')');
 		
-		$folder = GO_Files_Model_Folder::model()->getTopLevelShare($name);
+		$folder = \GO\Files\Model\Folder::model()->getTopLevelShare($name);
 		
 		if (!$folder)
 			throw new Sabre\DAV\Exception\NotFound('Shared folder with name ' . $name . ' could not be located');
 
-		return new GO_DAV_FS_Directory($folder->path);
+		return new \GO\DAV\FS\Directory($folder->path);
 	}
 
 	/**
@@ -38,13 +42,13 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
 	 * @return Sabre\DAV\INode[]
 	 */
 	public function getChildren() {
-		GO::debug('Shared::getChildren()');
+		\GO::debug('Shared::getChildren()');
 
-		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
+		$shares =\GO\Files\Model\Folder::model()->getTopLevelShares(\GO\Base\Db\FindParams::newInstance()->limit(100));
 
 		$nodes = array();
 		foreach($shares as $folder){
-			$nodes[]=new GO_DAV_FS_Directory($folder->path);
+			$nodes[]=new \GO\DAV\FS\Directory($folder->path);
 		}
 
 		return $nodes;
@@ -105,7 +109,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
 	 */
 	public function getLastModified() {
 		//checks the folders and returns build time
-		return GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id, false);
+		return \GO\Files\Model\SharedRootFolder::model()->rebuildCache(\GO::user()->id, false);
 	}
 
 }

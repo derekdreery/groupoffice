@@ -1,6 +1,10 @@
 <?php
 
-class GO_Base_Mail_Utils{
+
+namespace GO\Base\Mail;
+
+
+class Utils{
 	public static function mimeHeaderDecode($string, $defaultCharset='UTF-8') {
 		/*
 		 * (=?ISO-8859-1?Q?a?= =?ISO-8859-1?Q?b?=)     (ab)
@@ -24,7 +28,7 @@ class GO_Base_Mail_Utils{
 				elseif (strtoupper($encoding) == 'Q') {
 					$fld = quoted_printable_decode($fld);
 				}
-				$fld = GO_Base_Util_String::clean_utf8($fld, $charset);
+				$fld = \GO\Base\Util\String::clean_utf8($fld, $charset);
 
 				$string = str_replace($v, $fld, $string);
 			}
@@ -35,14 +39,14 @@ class GO_Base_Mail_Utils{
 //			throw new Exception($charset.' : '.substr($string, $pos+2));
 			$string = rawurldecode(substr($string, $pos+2));
 
-			$string=GO_Base_Util_String::clean_utf8($string, $charset);
+			$string=\GO\Base\Util\String::clean_utf8($string, $charset);
 		}else
 		{			
-			$string=GO_Base_Util_String::clean_utf8($string, $defaultCharset);
+			$string=\GO\Base\Util\String::clean_utf8($string, $defaultCharset);
 		}
-//		$string=GO_Base_Util_String::clean_utf8($string);
+//		$string=\GO\Base\Util\String::clean_utf8($string);
 		
-		//GO::debug($string);
+		//\GO::debug($string);
 		return str_replace(array('\\\\', '\\(', '\\)'), array('\\','(', ')'), $string);
 	}
 	

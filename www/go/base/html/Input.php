@@ -1,6 +1,10 @@
 <?php
 
-class GO_Base_Html_Input {
+
+namespace GO\Base\Html;
+
+
+class Input {
 	
 	public static $errors;
 	
@@ -14,7 +18,7 @@ class GO_Base_Html_Input {
 	 * Set error message for a form input field
 	 */
 	public static function setError($inputName, $errorMsg){
-		GO::session()->values['formErrors'][$inputName]=$errorMsg;
+		\GO::session()->values['formErrors'][$inputName]=$errorMsg;
 	}
 	
 	/**
@@ -23,7 +27,7 @@ class GO_Base_Html_Input {
 	 * @return boolean 
 	 */
 	public static function hasErrors(){
-		return !empty(GO::session()->values['formErrors']);
+		return !empty(\GO::session()->values['formErrors']);
 	}
 
 	/**
@@ -32,7 +36,7 @@ class GO_Base_Html_Input {
 	 * @return string 
 	 */
 	public static function getErrorMsg($inputName){
-		return isset(GO::session()->values['formErrors'][$inputName]) ? GO::session()->values['formErrors'][$inputName] : false;
+		return isset(\GO::session()->values['formErrors'][$inputName]) ? \GO::session()->values['formErrors'][$inputName] : false;
 	}
 	
 	public static function getError($inputName){
@@ -364,7 +368,7 @@ class GO_Base_Html_Input {
 		}
 		
 		
-		unset(GO::session()->values['formErrors'][$this->attributes['name']]);
+		unset(\GO::session()->values['formErrors'][$this->attributes['name']]);
 
 		return $html;
 	}

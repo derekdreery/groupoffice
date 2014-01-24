@@ -1,5 +1,9 @@
 <?php
-class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
+
+namespace GO\Ldapauth\Controller;
+
+
+class Sync extends \GO\Base\Controller\AbstractController{
 	
 	protected function allowGuests() {
 		return array("users", "lookupuser","groups");
@@ -11,11 +15,11 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 		$this->requireCli();		
 		$this->checkRequiredParameters(array('uid'), $params);
 		
-		$la = new GO_Ldapauth_Authenticator();
+		$la = new \GO\Ldapauth\Authenticator();
 		
-		$ldapConn = GO_Base_Ldap_Connection::getDefault();
+		$ldapConn = \GO\Base\Ldap\Connection::getDefault();
 		
-		$result = $ldapConn->search(GO::config()->ldap_peopledn, 'uid='.$params['uid']);
+		$result = $ldapConn->search(\GO::config()->ldap_peopledn, 'uid='.$params['uid']);
 		$record = $result->fetch();
 		$attr = $record->getAttributes();
 		
@@ -34,18 +38,18 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 		
 		
 		$this->requireCli();		
-		GO::session()->runAsRoot();
+		\GO::session()->runAsRoot();
 		
 		$dryRun = !empty($params['dry']);
 		
 		if($dryRun)
 			echo "Dry run enabled.\n\n";
 		
-		$la = new GO_Ldapauth_Authenticator();
+		$la = new \GO\Ldapauth\Authenticator();
 	
-		$ldapConn = GO_Base_Ldap_Connection::getDefault();
+		$ldapConn = \GO\Base\Ldap\Connection::getDefault();
 		
-		$result = $ldapConn->search(GO::config()->ldap_peopledn, 'uid=*');
+		$result = $ldapConn->search(\GO::config()->ldap_peopledn, 'uid=*');
 		
 		//keep an array of users that exist in ldap. This array will be used later for deletes.
 		//admin user is not in ldap but should not be removed.
@@ -71,7 +75,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 				{
 					$attr = $la->getUserAttributes($record);		
 					$username = $attr['username'];
-					$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $attr['username']);
+					$user = \GO\Base\Model\User::model()->findSingleByAttribute('username', $attr['username']);
 				}
 				
 				if(!$dryRun)
@@ -97,7 +101,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 		
 		
 		
-		$stmt = GO_Base_Model_User::model()->find();
+		$stmt = \GO\Base\Model\User::model()->find();
 		
 		$totalInGO = $stmt->rowCount();
 		$totalInLDAP = count($usersInLDAP);
@@ -141,19 +145,19 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 		
 		
 		$this->requireCli();		
-		GO::session()->runAsRoot();
+		\GO::session()->runAsRoot();
 		
 		$dryRun = !empty($params['dry']);
 		
 		if($dryRun)
 			echo "Dry run enabled.\n\n";
 	
-		$ldapConn = GO_Base_Ldap_Connection::getDefault();
+		$ldapConn = \GO\Base\Ldap\Connection::getDefault();
 		
-		if(empty(GO::config()->ldap_groupsdn))
+		if(empty(\GO::config()->ldap_groupsdn))
 			throw new Exception('$config[\'ldap_groupsdn\'] is not set!');
 		
-		$result = $ldapConn->search(GO::config()->ldap_groupsdn, 'cn=*');
+		$result = $ldapConn->search(\GO::config()->ldap_groupsdn, 'cn=*');
 		
 //		$record = $result->fetch();
 //		$attr = $record->getAttributes();
@@ -163,7 +167,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 //		
 		//keep an array of groups that exist in ldap. This array will be used later for deletes.
 		//admin group is not in ldap but should not be removed.
-		$groupsInLDAP = array(GO::config()->group_root, GO::config()->group_everyone, GO::config()->group_internal);
+		$groupsInLDAP = array(\GO::config()->group_root, \GO::config()->group_everyone, \GO::config()->group_internal);
 				
 		$i=0;
 		while($record = $result->fetch()){
@@ -176,12 +180,12 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 					throw new Exception("Empty group name in LDAP record!");
 				}
 			
-				$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupname);
+				$group = \GO\Base\Model\Group::model()->findSingleByAttribute('name', $groupname);
 				if(!$group){
 
 					echo "Creating group '".$groupname."'\n";
 
-					$group = new GO_Base_Model_Group();
+					$group = new \GO\Base\Model\Group();
 					$group->name = $groupname;
 					if(!$dryRun && !$group->save()){
 						echo "Error saving group: ".implode("\n", $group->getValidationErrors());
@@ -194,7 +198,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 				$usersInGroup = array();
 				
 				foreach($record->memberuid as $username){
-					$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $username);
+					$user = \GO\Base\Model\User::model()->findSingleByAttribute('username', $username);
 					if(!$user){
 						echo "Error: user '".$username."' does not exist in Group-Office\n";
 					}else
@@ -209,7 +213,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 				
 				echo "Removing users from group\n";
 				
-				$findParams = GO_Base_Db_FindParams::newInstance();				
+				$findParams = \GO\Base\Db\FindParams::newInstance();				
 				$findParams->getCriteria()->addInCondition('user_id', $usersInGroup, 
 								'link_t', true, true);				
 				$usersToRemove = $group->users($findParams);
@@ -245,7 +249,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 		
 		
 		
-		$stmt = GO_Base_Model_Group::model()->find();
+		$stmt = \GO\Base\Model\Group::model()->find();
 		
 		$totalInGO = $stmt->rowCount();
 		$totalInLDAP = count($groupsInLDAP);

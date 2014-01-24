@@ -23,7 +23,7 @@ function generateYuml($className,$withRelations=false){
 	
 	$modelCode = array();
 
-	$model = GO::getModel($className);
+	$model = \GO::getModel($className);
 	
 	$modelCode[$model->className()] = getModelCodeBlock($model);
 
@@ -32,17 +32,17 @@ function generateYuml($className,$withRelations=false){
 		if(!empty($relations)){
 			foreach($relations as $relationName=>$relation){
 
-				$rmodel = GO::getModel($relation['model']);
+				$rmodel = \GO::getModel($relation['model']);
 				$modelCode[$rmodel->className()] = getModelCodeBlock($rmodel);
 
 	//			switch($relation['type']){
-	//				case GO_Base_Db_ActiveRecord::HAS_MANY:
+	//				case \GO\Base\Db\ActiveRecord::HAS_MANY:
 	//					break;
-	//				case GO_Base_Db_ActiveRecord::BELONGS_TO:
+	//				case \GO\Base\Db\ActiveRecord::BELONGS_TO:
 	//					break;
-	//				case GO_Base_Db_ActiveRecord::HAS_ONE:
+	//				case \GO\Base\Db\ActiveRecord::HAS_ONE:
 	//					break;
-	//				case GO_Base_Db_ActiveRecord::MANY_MANY:
+	//				case \GO\Base\Db\ActiveRecord::MANY_MANY:
 	//					break;
 	//			}
 			}
@@ -59,7 +59,7 @@ function generateYuml($className,$withRelations=false){
 	
 }
 	
-function getModelCodeBlock(GO_Base_Db_ActiveRecord $model, $includeArMethods=false){
+function getModelCodeBlock(\GO\Base\Db\ActiveRecord $model, $includeArMethods=false){
 	$mcoutput='';
 	$mcoutput = '['.$model->className().'|';
 
@@ -70,7 +70,7 @@ function getModelCodeBlock(GO_Base_Db_ActiveRecord $model, $includeArMethods=fal
 	}
 	
 	$modelMethods = get_class_methods($model->className());
-	$arMethods = get_class_methods('GO_Base_Db_ActiveRecord');
+	$arMethods = get_class_methods('\GO\Base\Db\ActiveRecord');
 	
 	if($includeArMethods)
 		$methods = $modelMethods;

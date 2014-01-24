@@ -1,10 +1,14 @@
 <?php
-class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractController{
+
+namespace GO\Calendar\Controller;
+
+
+class Attendance extends \GO\Base\Controller\AbstractController{
 	protected function actionLoad($params){
 		
-		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
+		$event = \GO\Calendar\Model\Event::model()->findByPk($params['id']);
 		if(!$event)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		$participant=$event->getParticipantOfCalendar();
 		if(!$participant)
@@ -26,9 +30,9 @@ class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractContr
 	protected function actionSubmit($params){
 		$response = array("success"=>true);
 		
-		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
+		$event = \GO\Calendar\Model\Event::model()->findByPk($params['id']);
 		if(!$event)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		if(!empty($params['exception_date']))
 		{

@@ -1,6 +1,10 @@
 <?php
 
-class GO_Sites_SitesModule extends GO_Base_Module{
+
+namespace GO\Sites;
+
+
+class SitesModule extends \GO\Base\Module{
 	
 	public function autoInstall() {
 		return false;

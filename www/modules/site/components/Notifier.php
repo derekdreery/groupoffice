@@ -17,7 +17,11 @@
  * @version $Id Notifier.php 2012-06-29 16:13:40 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Site_Components_Notifier
+
+namespace GO\Site\Components;
+
+
+class Notifier
 {
 	/**
 	 * checks if there is a notification message with the given value
@@ -37,13 +41,13 @@ class GO_Site_Components_Notifier
 	 */
 	public function getMessage($key,$remove=true)
 	{
-		if(!isset(GO::session()->values['notifier'][$key]))
+		if(!isset(\GO::session()->values['notifier'][$key]))
 			return null;
 		else
-			$value = GO::session()->values['notifier'][$key];
+			$value = \GO::session()->values['notifier'][$key];
 			
 		if($remove)
-			unset(GO::session()->values['notifier'][$key]);
+			unset(\GO::session()->values['notifier'][$key]);
 
 		return $value;
 		
@@ -56,7 +60,7 @@ class GO_Site_Components_Notifier
 	 */
 	public function setMessage($key,$value)
 	{
-		GO::session()->values['notifier'][$key] = $value;	
+		\GO::session()->values['notifier'][$key] = $value;	
 	}
 }
 ?>

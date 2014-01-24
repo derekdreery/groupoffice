@@ -1,5 +1,9 @@
 <?php
-class GO_Users_UsersModule extends GO_Base_Module{	
+
+namespace GO\Users;
+
+
+class UsersModule extends \GO\Base\Module{	
 	public function author() {
 		return 'Merijn Schering';
 	}
@@ -15,14 +19,14 @@ class GO_Users_UsersModule extends GO_Base_Module{
 		return true;
 	}
 	public static function loadSettings(&$settingsController, &$params, &$response, $user) {
-		$startModule = GO_Base_Model_Module::model()->findByPk($user->start_module);
+		$startModule = \GO\Base\Model\Module::model()->findByPk($user->start_module);
 		$response['data']['start_module_name']=$startModule ? $startModule->moduleManager->name() : '';
 		
-		$company = GO_Addressbook_Model_Company::model()->findByPk($response['data']['company_id'], false, true);
+		$company = \GO\Addressbook\Model\Company::model()->findByPk($response['data']['company_id'], false, true);
 		if($company)
 			$response['data']['company_name']=$company->name;
 		
-		$response['remoteComboTexts']['holidayset']=GO::t($user->holidayset);
+		$response['remoteComboTexts']['holidayset']=\GO::t($user->holidayset);
 		
 		return parent::loadSettings($settingsController, $params, $response, $user);
 	}

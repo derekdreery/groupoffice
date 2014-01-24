@@ -1,11 +1,15 @@
 <?php
-class GO_Log_LogModule extends GO_Base_Module{
+
+namespace GO\Log;
+
+
+class LogModule extends \GO\Base\Module{
 	/**
 	 * Initialize the listeners for the ActiveRecords
 	 */
 	public static function initListeners(){	
-		$c = new GO_Core_Controller_Maintenance();
-		$c->addListener('servermanagerReport', 'GO_Log_LogModule', 'rotateLog');
+		$c = new \GO\Core\Controller\Maintenance();
+		$c->addListener('servermanagerReport', '\GO\Log\LogModule', 'rotateLog');
 		
 	}	
 	
@@ -15,8 +19,8 @@ class GO_Log_LogModule extends GO_Base_Module{
 	
 	public static function rotateLog(){
 		
-		echo "Running log rotate for ".GO::config()->id."\n";		
-		$controller = new GO_Log_Controller_Log();
+		echo "Running log rotate for ".\GO::config()->id."\n";		
+		$controller = new Controller\Log();
 		$controller->run("rotate");			
 	}
 }

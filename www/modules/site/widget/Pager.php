@@ -1,6 +1,10 @@
 <?php
 
-class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
+
+namespace GO\Site\Widget;
+
+
+class Pager extends \GO\Site\Components\Widget {
 
 	/**
 	 * A prefix for the pager parameter
@@ -11,7 +15,7 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 	/**
 	 * A store object that is responsable for fetchin results
 	 * 
-	 * @var GO_Base_Data_DbStore 
+	 * @var \GO\Base\Data\DbStore 
 	 */
 	public $store;
 	
@@ -52,10 +56,10 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 			$this->currentPage = $_GET[$this->pageParam];
 		
 		if(empty($this->pageSize))
-			$this->pageSize = GO::user() ? GO::user()->max_rows_list : GO::config()->nav_page_size;
+			$this->pageSize = \GO::user() ? \GO::user()->max_rows_list : \GO::config()->nav_page_size;
 			
-		if(!($this->store instanceof GO_Base_Data_DbStore))
-			throw new Exception('store needs to be an instance of GO_Base_Data_Store');
+		if(!($this->store instanceof \GO\Base\Data\DbStore))
+			throw new Exception('store needs to be an instance of \GO\Base\Data\Store');
 		
 		$this->store->start = $this->pageSize * ($this->currentPage-1);
 		$this->store->limit = $this->pageSize;

@@ -16,10 +16,10 @@
  * a query.
  * 
  * <pre>
- * $columnModel =  new GO_Base_Data_ColumnModel(GO_Notes_Model_Note::model());
+ * $columnModel =  new ColumnModel(\GO\Notes\Model\Note::model());
  * $columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
  * 
- * $store=new GO_Base_Data_Store('GO_Notes_Model_Note', $columnModel, $params);
+ * $store=new Store('\GO\Notes\Model\Note', $columnModel, $params);
  * </pre>
  * 
  * @version $Id$
@@ -27,12 +27,16 @@
  * @author Michael de Hart <mdhart@intermesh.nl>
  * @package GO.base.data
  */
-class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
+
+namespace GO\Base\Data;
+
+
+class DbStore extends AbstractStore {
 	// --- Attributes ---
 
 	/**
 	 * Will be used internaly to save the statement
-	 * @var GO_Base_Db_ActiveStatement 
+	 * @var \GO\Base\Db\ActiveStatement 
 	 */
 	protected $_stmt;
 
@@ -57,7 +61,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	public $limit;
 
 	/**
-	 * offset in limit part of query @see GO_Base_DB_findParams::start()
+	 * offset in limit part of query @see \GO\Base\DB\findParams::start()
 	 * @var integer  
 	 */
 	public $start = 0;
@@ -77,13 +81,13 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 
 	/**
 	 * The name of the model this db store contains record from
-	 * @var string name of model (eg. GO_Base_User)
+	 * @var string name of model (eg. \GO\Base\User)
 	 */
 	protected $_modelClass;
 
 	/**
 	 * Extra find params the be merged with the storeparams 
-	 * @var GO_Base_Db_FindParams
+	 * @var \GO\Base\Db\FindParams
 	 */
 	protected $_extraFindParams;
 
@@ -119,9 +123,9 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	/**
 	 * Create a new store
 	 * @param string $modelClass the classname of the model to execute the find() method on
-	 * @param GO_Base_Data_ColumnModel $columnModel the column model object for formatting this store's columns
+	 * @param ColumnModel $columnModel the column model object for formatting this store's columns
 	 * @param array $storeParams the $_POST params to set to this store @see setStoreParams()
-	 * @param GO_Base_Db_FindParams $findParams extra findParams to be added to the store
+	 * @param \GO\Base\Db\FindParams $findParams extra findParams to be added to the store
 	 */
 	public function __construct($modelClass, $columnModel, $requestParams, $findParams = null) {
 
@@ -129,10 +133,10 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		$this->_columnModel = $columnModel;
 		$this->_requestParams = $requestParams;
 		//$this->setStoreParams($requestParams);
-		if ($findParams instanceof GO_Base_Db_FindParams)
+		if ($findParams instanceof \GO\Base\Db\FindParams)
 			$this->_extraFindParams = $findParams;
 		else
-			$this->_extraFindParams = GO_Base_Db_FindParams::newInstance();
+			$this->_extraFindParams = \GO\Base\Db\FindParams::newInstance();
 		
 		$this->_readRequestParams();
 	}
@@ -169,7 +173,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 			foreach ($this->_deleteRecords as $i => $modelPk) {
 				if (is_array($modelPk)) {
 					foreach ($modelPk as $col => $val) //format input columnvalues to database
-						$modelPk[$col] = GO::getModel($this->_modelClass)->formatInput($col, $val);
+						$modelPk[$col] = \GO::getModel($this->_modelClass)->formatInput($col, $val);
 					$this->_deleteRecords[$i] = $modelPk;
 				}
 			}
@@ -191,7 +195,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		$advancedQueryData = is_string($advancedQueryData) ? json_decode($advancedQueryData, true) : $advancedQueryData;
 		$findCriteria = $this->_extraFindParams->getCriteria();
 
-		$criteriaGroup = GO_Base_Db_FindCriteria::newInstance();
+		$criteriaGroup = \GO\Base\Db\FindCriteria::newInstance();
 		$criteriaGroupAnd = true;
 		for ($i = 0, $count = count($advancedQueryData); $i < $count; $i++) {
 
@@ -203,7 +207,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 			if ($i == 0 || $advQueryRecord['start_group']) {
 				$findCriteria->mergeWith($criteriaGroup, $criteriaGroupAnd);
 				$criteriaGroupAnd = $advQueryRecord['andor'] == 'AND';
-				$criteriaGroup = GO_Base_Db_FindCriteria::newInstance();
+				$criteriaGroup = \GO\Base\Db\FindCriteria::newInstance();
 			}
 
 			if (!empty($advQueryRecord['field'])) {
@@ -225,9 +229,9 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 				}
 
 				if ($tableAlias == 't')
-					$advQueryRecord['value'] = GO::getModel($this->_modelClass)->formatInput($field, $advQueryRecord['value']);
+					$advQueryRecord['value'] = \GO::getModel($this->_modelClass)->formatInput($field, $advQueryRecord['value']);
 				elseif ($tableAlias == 'cf') {
-					$advQueryRecord['value'] = GO::getModel(GO::getModel($this->_modelClass)->customfieldsModel())->formatInput($field, $advQueryRecord['value']);
+					$advQueryRecord['value'] = \GO::getModel(\GO::getModel($this->_modelClass)->customfieldsModel())->formatInput($field, $advQueryRecord['value']);
 				}
 
 				$criteriaGroup->addCondition($field, $advQueryRecord['value'], $advQueryRecord['comparator'], $tableAlias, $advQueryRecord['andor'] == 'AND');
@@ -239,20 +243,20 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 
 	/**
 	 * Create the PDO statment that will query the results
-	 * @return GO_Base_Db_ActiveStatement the PDO statement
+	 * @return \GO\Base\Db\ActiveStatement the PDO statement
 	 */
 	protected function createStatement() {
 	
 		
 		$params = $this->createFindParams();
-		$modelFinder = GO::getModel($this->_modelClass);
+		$modelFinder = \GO::getModel($this->_modelClass);
 		return $modelFinder->find($params);
 	}
 
 	/**
 	 * Create FindParams object to be passen the this models find() function
 	 * If there are extraFind params supplied these well be merged in the end
-	 * @return GO_Base_Db_FindParams the created find params to be passen to AR's find() function
+	 * @return \GO\Base\Db\FindParams the created find params to be passen to AR's find() function
 	 */
 	protected function createFindParams() {
 
@@ -294,7 +298,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 				$dir[] = $dir[$dirCount-1];
 
 
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->joinCustomFields()
 						->order($sort, $dir);
 		
@@ -312,7 +316,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		if (isset($this->limit))
 			$findParams->limit($this->limit);
 		else
-			$findParams->limit(GO::user()->max_rows_list);
+			$findParams->limit(\GO::user()->max_rows_list);
 
 		if (!empty($this->start))
 			$findParams->start($this->start);
@@ -358,7 +362,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 ////			$sort[$i] = $this->getColumnModel()->getSortColumn($sort[$i]);
 ////		}
 //
-//		$findParams = GO_Base_Db_FindParams::newInstance()
+//		$findParams = \GO\Base\Db\FindParams::newInstance()
 //						->joinCustomFields()
 //						->order($sort, $dir);
 //
@@ -376,7 +380,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 //		if (isset($requestParams['limit']))
 //			$findParams->limit($requestParams['limit']);
 //		else
-//			$findParams->limit = 0; //(GO::user()->max_rows_list);
+//			$findParams->limit = 0; //(\GO::user()->max_rows_list);
 //
 //		if (!empty($requestParams['start']))
 //			$findParams->start($requestParams['start']);
@@ -393,7 +397,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	/**
 	 * This method will be called internally before getData().
 	 * It will delete all record that has the pk in $_deleteprimaryKey array
-	 * @see: GO_Base_Db_Store::processDeleteActions()
+	 * @see: \GO\Base\Db\Store::processDeleteActions()
 	 * @return boolean $success true if all went well
 	 */
 	protected function processDeleteActions() {
@@ -403,7 +407,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		$errors = array();
 		foreach ($this->_deleteRecords as $modelPk) {
 			if ($this->extraDeletePk !== null) {
-				$primaryKeyNames = GO::getModel($this->_modelClass)->primaryKey(); //get the primary key names of the delete model in an array
+				$primaryKeyNames = \GO::getModel($this->_modelClass)->primaryKey(); //get the primary key names of the delete model in an array
 				$newPk = array();
 				foreach ($primaryKeyNames as $name) {
 					if (isset($this->extraDeletePk[$name])) //pk is supplied in the extra values
@@ -413,13 +417,13 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 				}
 				$modelPk = $newPk;
 			}
-			$model = GO::getModel($this->_modelClass)->findByPk($modelPk);
+			$model = \GO::getModel($this->_modelClass)->findByPk($modelPk);
 			if (!empty($model)){
 				try {
 					$key = is_array($model->pk) ? implode('-', $model->pk) : $model->pk;
 					if(!$model->delete())
 						$errors[$key] = $model->getValidationErrors();
-				} catch (GO_Base_Exception_AccessDenied $e) {
+				} catch (\GO\Base\Exception\AccessDenied $e) {
 					$errors[$key] = array('access_denied'=>$e->getMessage());
 				}
 			}
@@ -431,7 +435,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 			$error_string = '';
 			foreach($errors as $error)
 				$error_string .= implode("<br>", $error)."<br>";
-			$this->response['feedback'] = str_replace("{count}", count($errors), GO::t('deleteErrors')) . "<br><br>" . $error_string;
+			$this->response['feedback'] = str_replace("{count}", count($errors), \GO::t('deleteErrors')) . "<br><br>" . $error_string;
 		}
 		return empty($errors);
 	}
@@ -440,7 +444,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 * Fetch the next record from the PDO statement.
 	 * Format it using the _columnModel's formatMode() function
 	 * Or return false if there are no more records
-	 * @return GO_Base_Db_ActiveRecord
+	 * @return \GO\Base\Db\ActiveRecord
 	 */
 	public function nextRecord() {
 		if (!isset($this->_stmt))
@@ -464,19 +468,19 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	/**
 	 * If there are summarizeColumn provided select and format them
 	 * Otherwise this returns false
-	 * @return GO_Base_Model a formatted summary
+	 * @return \GO\Base\Model a formatted summary
 	 */
 	public function getSummary() {
 		$summarySelect = $this->_columnModel->getSummarySelect();
 		if($summarySelect===false)
 			return false;
 		
-//		$sumParams = GO_Base_Db_FindParams::newInstance()->single()->select($summarySelect)->criteria($this->_extraFindParams->getCriteria());
+//		$sumParams = \GO\Base\Db\FindParams::newInstance()->single()->select($summarySelect)->criteria($this->_extraFindParams->getCriteria());
 		
 		$findParams = $this->createFindParams(false);
 		$sumParams = $findParams->single()->export(false)->select($summarySelect)->order(null,"");
 		
-		$sumRecord = GO::getModel($this->_modelClass)->find($sumParams);
+		$sumRecord = \GO::getModel($this->_modelClass)->find($sumParams);
 		if($sumRecord)
 			return $this->_columnModel->formatSummary($sumRecord);
 	}
@@ -540,12 +544,12 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 * Select Items that belong to one of the selected Models
 	 * Call this in the grids that get filterable by other selectable stores
 	 * @param string $requestParamName That key that will hold the seleted item in go_setting table
-	 * @param string $selectClassName Name of the related model (eg. GO_Notes_Model_Category)
+	 * @param string $selectClassName Name of the related model (eg. \GO\Notes\Model\Category)
 	 * @param string $foreignKey column name to match the related models PK (eg. category_id)
 	 * @param boolean $checkPermissions check Permission for item defaults to true
 	 */
 	public function multiSelect($requestParamName, $selectClassName, $foreignKey, $checkPermissions = true) {
-		$this->_multiSel = new GO_Base_Component_MultiSelectGrid(
+		$this->_multiSel = new \GO\Base\Component\MultiSelectGrid(
 										$requestParamName,
 										$selectClassName,
 										$this,
@@ -563,7 +567,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 * @param string $requestParamName
 	 */
 	public function multiSelectable($requestParamName) {
-		$this->_multiSel = new GO_Base_Component_MultiSelectGrid($requestParamName, $this->_modelClass, $this, $this->_requestParams);
+		$this->_multiSel = new \GO\Base\Component\MultiSelectGrid($requestParamName, $this->_modelClass, $this, $this->_requestParams);
 		$this->_multiSel->setFindParamsForDefaultSelection($this->_extraFindParams);
 		$this->_multiSel->formatCheckedColumn();
 	}

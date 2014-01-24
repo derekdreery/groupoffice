@@ -1,5 +1,9 @@
 <?php
-class GO_Customfields_Customfieldtype_Select extends GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
+
+namespace GO\Customfields\Customfieldtype;
+
+
+class Select extends AbstractCustomfieldtype{
 	
 	public function name(){
 		return 'Select';
@@ -22,7 +26,7 @@ class GO_Customfields_Customfieldtype_Select extends GO_Customfields_Customfield
 	 * @param array $attributes Customfield model attributes
 	 * @return Mixed 
 	 */
-	public function formatFormInput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model){
+	public function formatFormInput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model){
 		
 		$value = $attributes[$key];
 		
@@ -34,7 +38,7 @@ class GO_Customfields_Customfieldtype_Select extends GO_Customfields_Customfield
 		return $value;
 	}
 	
-//	public function formatFormOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {		
+//	public function formatFormOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {		
 //		
 //		if(!empty($this->field->multiselect) && isset($attributes[$key]))
 //			$attributes[$key.'[]'] = $attributes[$key];
@@ -42,7 +46,7 @@ class GO_Customfields_Customfieldtype_Select extends GO_Customfields_Customfield
 //		return parent::formatFormOutput($key, $attributes, $model);
 //	}
 //	
-	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {		
+	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {		
 		
 		if(!empty($this->field->multiselect) && isset($attributes[$key]))
 			$attributes[$key] = str_replace('|', ', ', $attributes[$key]);

@@ -1,10 +1,14 @@
 <?php
-abstract class GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
+
+namespace GO\Customfields\Customfieldtype;
+
+
+abstract class AbstractCustomfieldtype{
 	
 	/**
 	 * The field model that this datatype will be used for.
 	 * 
-	 * @var GO_Customfields_Model_Field 
+	 * @var \GO\Customfields\Model\Field 
 	 */
 	protected $field;
 	
@@ -27,12 +31,12 @@ abstract class GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
 
 	public function hasLength() {
 		$fieldSql = $this->fieldSql();
-		return ( get_class($this)!=='GO_Addressbook_Customfieldtype_Contact'
-				&& get_class($this)!=='GO_Addressbook_Customfieldtype_Company'
-				&& get_class($this)!=='GO_Files_Customfieldtype_File'
-				&& get_class($this)!=='GO_Addressbook_Customfieldtype_Contact'
-				&& get_class($this)!=='GO_Site_Customfieldtype_Sitefile'
-				&& get_class($this)!=='GO_Site_Customfieldtype_Sitemultifile'
+		return ( get_class($this)!=='\GO\Addressbook\Customfieldtype\Contact'
+				&& get_class($this)!=='\GO\Addressbook\Customfieldtype\Company'
+				&& get_class($this)!=='\GO\Files\Customfieldtype\File'
+				&& get_class($this)!=='\GO\Addressbook\Customfieldtype\Contact'
+				&& get_class($this)!=='\GO\Site\Customfieldtype\Sitefile'
+				&& get_class($this)!=='\GO\Site\Customfieldtype\Sitemultifile'
 			) && (
 				strpos(strtolower($fieldSql),'varchar')===0
 //			|| strpos(strtolower($fieldSql),'int')===0
@@ -58,7 +62,7 @@ abstract class GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
 	 * @param array $attributes Customfield model attributes
 	 * @return Mixed 
 	 */
-	public function formatRawOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model){	
+	public function formatRawOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model){	
 		return $attributes[$key];
 	}
 
@@ -70,7 +74,7 @@ abstract class GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
 	 * @param array $attributes Customfield model attributes
 	 * @return Mixed 
 	 */
-	public function formatFormOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model){	
+	public function formatFormOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model){	
 		return $attributes[$key];
 	}
 	
@@ -83,14 +87,14 @@ abstract class GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
 	 * @return Mixed 
 	 */
 	
-	public function formatFormInput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model){
+	public function formatFormInput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model){
 		return $attributes[$key];
 	}
 	
 	/**
 	 * Can be overridden if you want. For example, if the extended class entails
-	 * companies, return 'GO_Addressbook_Model_Company'. If it entails users,
-	 * return 'GO_Base_Model_User'.
+	 * companies, return '\GO\Addressbook\Model\Company'. If it entails users,
+	 * return '\GO\Base\Model\User'.
 	 * @return boolean/string
 	 */
 	public static function getModelName() {
@@ -105,8 +109,8 @@ abstract class GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
 	 * @param array $attributes Customfield model attributes
 	 * @return Mixed 
 	 */
-	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model){
-		return GO_Base_Util_String::text_to_html($attributes[$key]);
+	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model){
+		return \GO\Base\Util\String::text_to_html($attributes[$key]);
 	}
 	
 	/**
@@ -133,7 +137,7 @@ abstract class GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
 	 * @return string The errormessage for this validator 
 	 */
 	public function getValidationError(){
-		return GO::t('defaultValidationError','customfields');
+		return \GO::t('defaultValidationError','customfields');
 	}
 	
 	
@@ -164,7 +168,7 @@ abstract class GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
 	 * Otherwise it will only be available for the given modeltypes.
 	 * 
 	 * Example:
-	 *	return array('GO_Site_Model_Content','GO_Site_Model_Site');
+	 *	return array('\GO\Site\Model\Content','\GO\Site\Model\Site');
 	 *  
 	 * @return array
 	 */

@@ -9,7 +9,7 @@
  */
 
 /**
- * The GO_Addressbook_Controller_Site controller
+ * The \GO\Addressbook\Controller\Site controller
  * This controller was made for frontend actions
  * Usage requires the Sites module to be installed
  *
@@ -19,7 +19,11 @@
  * @author Wesley Smits wsmits@intermesh.nl
  */
 
-class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
+
+namespace GO\Servermanager\Controller;
+
+
+class Site extends \GO\Sites\Controller\Site{
 	
 
 	public function allowGuests()
@@ -33,16 +37,16 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 	 */
 	protected function actionNewTrial(){
 		
-		if(empty(GO::config()->servermanager_trials_enabled))
+		if(empty(\GO::config()->servermanager_trials_enabled))
 			throw new Exception("Trials are not enabled. Set \$config['servermanager_trials_enabled']=true;");
 		
-		if(!isset(GO::config()->servermanager_wildcard_domain))
+		if(!isset(\GO::config()->servermanager_wildcard_domain))
 			throw new Exception("\$config['servermanager_wildcard_domain']='example.com'; is not defined in /etc/groupoffice/config.php");
 		
 		
-		$newTrial =  new GO_ServerManager_Model_NewTrial();
+		$newTrial =  new \GO\ServerManager\Model\NewTrial();
 		
-		if (GO_Base_Util_Http::isPostRequest()) {
+		if (\GO\Base\Util\Http::isPostRequest()) {
 			
 			$newTrial->setAttributes($_POST['NewTrial']);
 			if($newTrial->validate())
@@ -60,15 +64,15 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 	}
 	
 	public function actionTrialCreated(){
-		$newTrial = GO_ServerManager_Model_NewTrial::model()->findSingleByAttribute('key', $_REQUEST['key']);
+		$newTrial = \GO\ServerManager\Model\NewTrial::model()->findSingleByAttribute('key', $_REQUEST['key']);
 		$this->render('trialcreated', array('model' => $newTrial));
 	}
 //	
 //	private function _writeAddressbookEntries($params) {
-//		if(!empty(GO::config()->servermanager_trials_addressbook_server_url)){
-//			$companyModel = new GO_Addressbook_Model_Company();
+//		if(!empty(\GO::config()->servermanager_trials_addressbook_server_url)){
+//			$companyModel = new \GO\Addressbook\Model\Company();
 //			$companyEmptyAttributes = $companyModel->getAttributes('raw');
-//			$contactModel = new GO_Addressbook_Model_Contact();
+//			$contactModel = new \GO\Addressbook\Model\Contact();
 //			$contactEmptyAttributes = $contactModel->getAttributes('raw');
 //
 //			foreach ($params as $k => $v) {
@@ -96,19 +100,19 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 //				}
 //			}
 //
-//			$serverClient = new GO_Serverclient_HttpClient();
-//			$serverClient->groupofficeLogin(GO::config()->servermanager_trials_addressbook_server_url, GO::config()->servermanager_trials_addressbook_login_username, GO::config()->servermanager_trials_addressbook_login_password);
+//			$serverClient = new \GO\Serverclient\HttpClient();
+//			$serverClient->groupofficeLogin(\GO::config()->servermanager_trials_addressbook_server_url, \GO::config()->servermanager_trials_addressbook_login_username, \GO::config()->servermanager_trials_addressbook_login_password);
 //
 //			if ($companyModel->isModified()) {
-//				$companyModel->addressbook_id = GO::config()->servermanager_trials_addressbook_id;			
-//				$serverClient->request(GO::config()->servermanager_trials_addressbook_server_url.'?r=addressbook/company/submit', $companyModel->getAttributes());
+//				$companyModel->addressbook_id = \GO::config()->servermanager_trials_addressbook_id;			
+//				$serverClient->request(\GO::config()->servermanager_trials_addressbook_server_url.'?r=addressbook/company/submit', $companyModel->getAttributes());
 //			}
 //
 //			if ($contactModel->isModified()) {
-//				$contactModel->addressbook_id = GO::config()->servermanager_trials_addressbook_id;
+//				$contactModel->addressbook_id = \GO::config()->servermanager_trials_addressbook_id;
 //				if ($companyModel->id > 0)
 //					$contactModel->company_id = $companyModel->id;
-//				$serverClient->request(GO::config()->servermanager_trials_addressbook_server_url.'?r=addressbook/contact/submit', $contactModel->getAttributes());
+//				$serverClient->request(\GO::config()->servermanager_trials_addressbook_server_url.'?r=addressbook/contact/submit', $contactModel->getAttributes());
 //			}
 //		}
 //	}

@@ -1,14 +1,18 @@
 <?php
 
-class GO_Calendar_Controller_ViewCalendar extends GO_Base_Controller_AbstractMultiSelectModelController {
+
+namespace GO\Calendar\Controller;
+
+
+class ViewCalendar extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model we are showing and adding to the other model.
 	 * 
-	 * eg. When selecting calendars for a user in the sync settings this is set to GO_Calendar_Model_Calendar
+	 * eg. When selecting calendars for a user in the sync settings this is set to \GO\Calendar\Model\Calendar
 	 */
 	public function modelName() {
-		return 'GO_Calendar_Model_Calendar';
+		return '\GO\Calendar\Model\Calendar';
 	}
 	
 	/**
@@ -16,7 +20,7 @@ class GO_Calendar_Controller_ViewCalendar extends GO_Base_Controller_AbstractMul
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return 'GO_Calendar_Model_ViewCalendar';
+		return '\GO\Calendar\Model\ViewCalendar';
 	}
 	
 	/**
@@ -26,7 +30,7 @@ class GO_Calendar_Controller_ViewCalendar extends GO_Base_Controller_AbstractMul
 		return 'calendar_id';
 	}
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $cm) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $cm) {
 		$cm->formatColumn('username', '$model->user->username');
 		return parent::formatColumns($cm);
 	}

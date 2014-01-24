@@ -1,10 +1,14 @@
 <?php
 
-class GO_Email_Model_ComposerMessage extends GO_Email_Model_Message {
+
+namespace GO\Email\Model;
+
+
+class ComposerMessage extends Message {
 	
 	public function addTo($email){
 		if(!isset($this->attributes['to'])){
-			$this->attributes['to'] = new GO_Base_Mail_EmailRecipients();
+			$this->attributes['to'] = new \GO\Base\Mail\EmailRecipients();
 		}
 		
 		$this->attributes['to']->addRecipient($email);
@@ -12,7 +16,7 @@ class GO_Email_Model_ComposerMessage extends GO_Email_Model_Message {
 	
 	public function addCc($email){
 		if(!isset($this->attributes['cc'])){
-			$this->attributes['cc'] = new GO_Base_Mail_EmailRecipients();
+			$this->attributes['cc'] = new \GO\Base\Mail\EmailRecipients();
 		}
 		
 		$this->attributes['cc']->addRecipient($email);
@@ -20,7 +24,7 @@ class GO_Email_Model_ComposerMessage extends GO_Email_Model_Message {
 	
 	public function addBcc($email){
 		if(!isset($this->attributes['bcc'])){
-			$this->attributes['bcc'] = new GO_Base_Mail_EmailRecipients();
+			$this->attributes['bcc'] = new \GO\Base\Mail\EmailRecipients();
 		}
 		
 		$this->attributes['bcc']->addRecipient($email);

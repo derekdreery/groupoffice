@@ -18,7 +18,11 @@
  * @copyright Copyright Intermesh BV.
  */
 
-class GO_Summary_SummaryModule extends GO_Base_Module{	
+
+namespace GO\Summary;
+
+
+class SummaryModule extends \GO\Base\Module{	
 
 	
 	public function autoInstall() {

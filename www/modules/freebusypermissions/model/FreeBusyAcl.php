@@ -8,16 +8,16 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @package GO.modules.Freebusypermissions
- * @version $Id: GO_Freebusypermissions_Model_FreeBusyAcl.php 7607 2012-07-03 10:31:57Z wsmits $
+ * @version $Id: FreeBusyAcl.php 7607 2012-07-03 10:31:57Z wsmits $
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  */
  
 /**
- * The GO_Freebusypermissions_Model_FreeBusyAcl model
+ * The FreeBusyAcl model
  *
  * @package GO.modules.Freebusypermissions
- * @version $Id: GO_Freebusypermissions_Model_FreeBusyAcl.php 7607 2012-07-03 10:31:57Z wsmits $
+ * @version $Id: FreeBusyAcl.php 7607 2012-07-03 10:31:57Z wsmits $
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  *
@@ -25,13 +25,17 @@
  * @property int $acl_id
  */
 
-class GO_Freebusypermissions_Model_FreeBusyAcl extends GO_Base_Db_ActiveRecord{
+
+namespace GO\Freebusypermissions\Model;
+
+
+class FreeBusyAcl extends \GO\Base\Db\ActiveRecord{
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Freebusypermissions_Model_FreeBusyAcl
+	 * @return FreeBusyAcl
 	 */
 	public static function model($className=__CLASS__)
 	{	

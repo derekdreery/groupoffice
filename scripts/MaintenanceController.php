@@ -1,5 +1,9 @@
 <?php
-class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractController {
+
+namespace GO\Email\Controller;
+
+
+class Maintenance extends \GO\Base\Controller\AbstractController {
 	
 	// SETTINGS
 	private static $_REMOVE_DUPLICATES=false;
@@ -20,24 +24,24 @@ class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractControl
 	
 	protected function actionRemoveDuplicateEmails($params) {
 		
-		GO::setMemoryLimit(self::$_MEM_LIMIT);
-		GO::setMaxExecutionTime(0);
+		\GO::setMemoryLimit(self::$_MEM_LIMIT);
+		\GO::setMaxExecutionTime(0);
 		
-		if (!GO::user()->isAdmin())
+		if (!\GO::user()->isAdmin())
 			throw new AccessDeniedException();
 
 		if (!empty(self::$_EMAIL_ACCOUNT))
 			$params['email'] = self::$_EMAIL_ACCOUNT;
 		
 		
-		self::$_DELETED_LOG_FILE = new GO_Files_Fs_UserLogFile('removeDuplicateEmails_DELETED_IDS_'.self::$_DOMAIN_NAME.'_');
+		self::$_DELETED_LOG_FILE = new \GO\Files\Fs\UserLogFile('removeDuplicateEmails_DELETED_IDS_'.self::$_DOMAIN_NAME.'_');
 		if (!empty(self::$_REMOVE_DUPLICATES) && self::$_REMOVE_DUPLICATES!=='false')
 			self::$_DELETED_LOG_FILE->log('The following messages have been deleted:');
 		else
 			self::$_DELETED_LOG_FILE->log('Dry run. The following messages would have been deleted if this weren\'t a dry run:');
 		
 		
-		if (!empty($params['email']) && GO_Base_Util_String::validate_email($params['email'])) {
+		if (!empty($params['email']) && \GO\Base\Util\String::validate_email($params['email'])) {
 		
 		
 			$this->_handleEmailAccount($params['email']);
@@ -46,9 +50,9 @@ class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractControl
 		} elseif (!isset($params['email'])) {
 
 			
-			self::$_DOMAIN_LOG_FILE = new GO_Files_Fs_UserLogFile('removeDuplicateEmails_DOMAIN_'.self::$_DOMAIN_NAME.'_');
+			self::$_DOMAIN_LOG_FILE = new \GO\Files\Fs\UserLogFile('removeDuplicateEmails_DOMAIN_'.self::$_DOMAIN_NAME.'_');
 			
-			$domainModel = GO_Postfixadmin_Model_Domain::model()->findSingleByAttribute('domain',self::$_DOMAIN_NAME);
+			$domainModel = \GO\Postfixadmin\Model\Domain::model()->findSingleByAttribute('domain',self::$_DOMAIN_NAME);
 			if (empty($domainModel)) {
 				$this->_domainLog('ERROR: Could not find database entry for domain "'.self::$_DOMAIN_NAME.'"');
 				throw new Exception('ERROR: Could not find database entry for domain "'.self::$_DOMAIN_NAME.'"');
@@ -71,7 +75,7 @@ class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractControl
 	
 	private function _handleEmailAccount($emailAddress) {
 		
-		self::$_LOG_FILE = new GO_Files_Fs_UserLogFile('removeDuplicateEmails_'.self::$_DOMAIN_NAME.'_'.$emailAddress.'_');
+		self::$_LOG_FILE = new \GO\Files\Fs\UserLogFile('removeDuplicateEmails_'.self::$_DOMAIN_NAME.'_'.$emailAddress.'_');
 		
 		$accountModel = $this->_findAccountByEmailAndHost($emailAddress, self::$_HOSTNAME);
 		if (!$accountModel) {
@@ -101,21 +105,21 @@ class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractControl
 	}
 	
 	
-	private function _removeDuplicates(GO_Email_Model_Account $accountModel,$mailboxName) {
+	private function _removeDuplicates(\GO\Email\Model\Account $accountModel,$mailboxName) {
 		
-		if (!GO::user()->isAdmin())
+		if (!\GO::user()->isAdmin())
 			throw new AccessDeniedException();
 		
 		$this->_log("[".$accountModel->host.":".$accountModel->username."] === (".$mailboxName.") Looking up messages in mailbox '".$mailboxName."'...");
 
 		$messageNr = 0;
 		
-		$messages = GO_Email_Model_ImapMessage::model()->find(
+		$messages = \GO\Email\Model\ImapMessage::model()->find(
 						$accountModel, 
 						$mailboxName,
 						0,//$params['start'], 
 						99,//$params['limit'], 
-						GO_Base_Mail_Imap::SORT_DATE,//$sortField , 
+						\GO\Base\Mail\Imap::SORT_DATE,//$sortField , 
 						true//$params['dir']!='ASC'
 						);
 	
@@ -137,8 +141,8 @@ class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractControl
 				if (count($uidsArr)>1) { // IF THERE ARE MORE THAN 1 VERSION WITH THE CURRENT $messageId, LOG IT.
 					$this->_log("[".$accountModel->host.":".$accountModel->username."] === (".$mailboxName.") Message ID: ".$messageId." occurs ".count($uidsArr)." times.");
 					foreach ($uidsArr as $copyNr => $uid) {
-						$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($accountModel, $mailboxName, $uid);
-						$this->_log("[".$accountModel->host.":".$accountModel->username."] === (".$mailboxName.") UID #".$uid.": [".GO_Base_Util_Date::get_timestamp($imapMessage->udate)."][".$imapMessage->from."][".$imapMessage->subject."]");
+						$imapMessage = \GO\Email\Model\ImapMessage::model()->findByUid($accountModel, $mailboxName, $uid);
+						$this->_log("[".$accountModel->host.":".$accountModel->username."] === (".$mailboxName.") UID #".$uid.": [".\GO\Base\Util\Date::get_timestamp($imapMessage->udate)."][".$imapMessage->from."][".$imapMessage->subject."]");
 						$response = $imapMessage->toOutputArray(true,false,false);
 	//					$this->_log(var_export($response,true));
 	//					$this->_log("");
@@ -147,19 +151,19 @@ class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractControl
 
 							if ($imapMessage->udate<mktime(18,0,0,07,26,2013)) {
 								if (!empty(self::$_REMOVE_DUPLICATES)) {
-									$this->_log("[".$accountModel->host.":".$accountModel->username."] === (".$mailboxName.") UID #".$uid.": [".GO_Base_Util_Date::get_timestamp($imapMessage->udate)."][".$imapMessage->from."][".$imapMessage->subject."] Deleting duplicate... ");
+									$this->_log("[".$accountModel->host.":".$accountModel->username."] === (".$mailboxName.") UID #".$uid.": [".\GO\Base\Util\Date::get_timestamp($imapMessage->udate)."][".$imapMessage->from."][".$imapMessage->subject."] Deleting duplicate... ");
 									if ($imapMessage->delete()) {
 										$this->_log("Success.");
-										self::$_DELETED_LOG_FILE->log("[".$accountModel->host.":".$accountModel->username."][".$mailboxName."][MESSAGEID:".$messageId."][UID:".$uid."][UDATEUNIX:".$imapMessage->udate."][UDATEFORMATTED:".GO_Base_Util_Date::get_timestamp($imapMessage->udate)."][FROM:".$imapMessage->from."][SUBJECT:".$imapMessage->subject."]");
+										self::$_DELETED_LOG_FILE->log("[".$accountModel->host.":".$accountModel->username."][".$mailboxName."][MESSAGEID:".$messageId."][UID:".$uid."][UDATEUNIX:".$imapMessage->udate."][UDATEFORMATTED:".\GO\Base\Util\Date::get_timestamp($imapMessage->udate)."][FROM:".$imapMessage->from."][SUBJECT:".$imapMessage->subject."]");
 									} else {
 										$this->_log("Failed.");
 									}
 								} else {
-									$this->_log("[".$accountModel->host.":".$accountModel->username."] === (".$mailboxName.") UID #".$uid.": [".GO_Base_Util_Date::get_timestamp($imapMessage->udate)."][".$imapMessage->from."][".$imapMessage->subject."] To be deleted, but not during this dry run... ");
-									self::$_DELETED_LOG_FILE->log("[".$accountModel->host.":".$accountModel->username."][".$mailboxName."][MESSAGEID:".$messageId."][UID:".$uid."][UDATEUNIX:".$imapMessage->udate."][UDATEFORMATTED:".GO_Base_Util_Date::get_timestamp($imapMessage->udate)."][FROM:".$imapMessage->from."][SUBJECT:".$imapMessage->subject."]");
+									$this->_log("[".$accountModel->host.":".$accountModel->username."] === (".$mailboxName.") UID #".$uid.": [".\GO\Base\Util\Date::get_timestamp($imapMessage->udate)."][".$imapMessage->from."][".$imapMessage->subject."] To be deleted, but not during this dry run... ");
+									self::$_DELETED_LOG_FILE->log("[".$accountModel->host.":".$accountModel->username."][".$mailboxName."][MESSAGEID:".$messageId."][UID:".$uid."][UDATEUNIX:".$imapMessage->udate."][UDATEFORMATTED:".\GO\Base\Util\Date::get_timestamp($imapMessage->udate)."][FROM:".$imapMessage->from."][SUBJECT:".$imapMessage->subject."]");
 								}
 							} else {
-								$this->_log("[".$accountModel->host.":".$accountModel->username."] === (".$mailboxName.") UID #".$uid.": [".GO_Base_Util_Date::get_timestamp($imapMessage->udate)."][".$imapMessage->from."][".$imapMessage->subject."] Not deleting this message, because it is from after July 26, 2013, 18:00 o'clock.");
+								$this->_log("[".$accountModel->host.":".$accountModel->username."] === (".$mailboxName.") UID #".$uid.": [".\GO\Base\Util\Date::get_timestamp($imapMessage->udate)."][".$imapMessage->from."][".$imapMessage->subject."] Not deleting this message, because it is from after July 26, 2013, 18:00 o'clock.");
 							}
 
 							$nDuplicates++;
@@ -173,12 +177,12 @@ class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractControl
 		
 			$messageNr+=self::$_N_MESSAGES_PER_ITERATION;
 			
-			$messages = GO_Email_Model_ImapMessage::model()->find(
+			$messages = \GO\Email\Model\ImapMessage::model()->find(
 				$accountModel, 
 				$mailboxName,
 				$messageNr,//$params['start'], 
 				self::$_N_MESSAGES_PER_ITERATION,//$params['limit'], 
-				GO_Base_Mail_Imap::SORT_DATE,//$sortField , 
+				\GO\Base\Mail\Imap::SORT_DATE,//$sortField , 
 				true//$params['dir']!='ASC'
 				);
 			
@@ -195,31 +199,31 @@ class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractControl
 	 *
 	 * @param string $email
 	 * @param string $hostName
-	 * @return GO_Email_Model_Account
+	 * @return \GO\Email\Model\Account
 	 */
 	private function _findAccountByEmailAndHost($email,$hostName){
 		
-		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addRawCondition('t.id', 'a.account_id');
 
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->single()
-						->join(GO_Email_Model_Alias::model()->tableName(), $joinCriteria,'a')
+						->join(\GO\Email\Model\Alias::model()->tableName(), $joinCriteria,'a')
 						->criteria(
-							GO_Base_Db_FindCriteria::newInstance()
+							\GO\Base\Db\FindCriteria::newInstance()
 								->addCondition('email', $email,'=','a')
 								->addCondition('host', $hostName,'=','t')
 						);
 
-		return GO_Email_Model_Account::model()->find($findParams);
+		return \GO\Email\Model\Account::model()->find($findParams);
 	}
 	
 	
 		/**
 	 *
-	 * @return \GO_Email_Model_ImapMailbox 
+	 * @return \GO\Email\Model\ImapMailbox 
 	 */
-	public function _getAllMailboxes(GO_Email_Model_Account $accountModel){
+	public function _getAllMailboxes(\GO\Email\Model\Account $accountModel){
 		$imap = $accountModel->openImapConnection();
 		
 		$folders = $imap->list_folders(false, false,'','*',true);
@@ -229,7 +233,7 @@ class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractControl
 		$rootMailboxes = array();
 				
 		foreach($folders as $folder){
-			$mailbox = new GO_Email_Model_ImapMailbox($accountModel,$folder);
+			$mailbox = new \GO\Email\Model\ImapMailbox($accountModel,$folder);
 			$rootMailboxes[]=$mailbox;			
 		}
 		
@@ -239,13 +243,13 @@ class GO_Email_Controller_Maintenance extends GO_Base_Controller_AbstractControl
 	
 	private function _log($string) {
 		echo($string.'<br />');
-		GO::debug($string);
+		\GO::debug($string);
 		self::$_LOG_FILE->log($string);
 	}
 	
 	private function _domainLog($string) {
 		echo($string.'<br />');
-		GO::debug($string);
+		\GO::debug($string);
 		self::$_DOMAIN_LOG_FILE->log($string);
 	}	
 }

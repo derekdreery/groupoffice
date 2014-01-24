@@ -17,7 +17,11 @@
  * The Dokuwiki module maintenance class
  * 
  */
-class GO_Dokuwiki_DokuwikiModule extends GO_Base_Module{
+
+namespace GO\Dokuwiki;
+
+
+class DokuwikiModule extends \GO\Base\Module{
 	
 	public function autoInstall() {
 		return false;

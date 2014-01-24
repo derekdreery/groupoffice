@@ -1,18 +1,22 @@
 <?php
-class GO_Customfields_Customfieldtype_Heading extends GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
+
+namespace GO\Customfields\Customfieldtype;
+
+
+class Heading extends AbstractCustomfieldtype{
 	
 	public function name(){
 		return 'Heading';
 	}
 	
-	public function formatFormOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model){
+	public function formatFormOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model){
 		return '';
 	}
-	public function formatFormInput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
+	public function formatFormInput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
 		return '';
 	}
 	
-	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
+	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
 		return '';
 	}
 	

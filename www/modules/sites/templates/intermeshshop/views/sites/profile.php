@@ -19,34 +19,34 @@ GOS::site()->scripts->registerScriptFile($this->getTemplateUrl() . 'js/profileTo
 			?>
 
 			<div class="form">
-				<?php echo GO_Sites_Components_Html::beginForm(); ?>
+				<?php echo \GO\Sites\Components\Html::beginForm(); ?>
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'first_name'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($user, 'first_name'); ?>
-					<?php echo GO_Sites_Components_Html::error($user, 'first_name'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($user, 'first_name'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($user, 'first_name'); ?>
+					<?php echo \GO\Sites\Components\Html::error($user, 'first_name'); ?>
 				</div>
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'middle_name'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($user, 'middle_name'); ?>
-					<?php echo GO_Sites_Components_Html::error($user, 'middle_name'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($user, 'middle_name'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($user, 'middle_name'); ?>
+					<?php echo \GO\Sites\Components\Html::error($user, 'middle_name'); ?>
 				</div>
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'last_name'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($user, 'last_name'); ?>
-					<?php echo GO_Sites_Components_Html::error($user, 'last_name'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($user, 'last_name'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($user, 'last_name'); ?>
+					<?php echo \GO\Sites\Components\Html::error($user, 'last_name'); ?>
 				</div>
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'sex'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($contact, 'sex'); ?>
 					<div class="buttonList">
-						<?php echo GO_Sites_Components_Html::activeRadioButtonList($contact, 'sex', array('M' => GOS::t('male'), 'F' => GOS::t('female')), array('separator' => '')); ?>
+						<?php echo \GO\Sites\Components\Html::activeRadioButtonList($contact, 'sex', array('M' => GOS::t('male'), 'F' => GOS::t('female')), array('separator' => '')); ?>
 					</div>
-					<?php echo GO_Sites_Components_Html::error($contact, 'sex'); ?>
+					<?php echo \GO\Sites\Components\Html::error($contact, 'sex'); ?>
 				</div>
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'email'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($user, 'email'); ?>
-					<?php echo GO_Sites_Components_Html::error($user, 'email'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($user, 'email'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($user, 'email'); ?>
+					<?php echo \GO\Sites\Components\Html::error($user, 'email'); ?>
 				</div>
 
 
@@ -54,9 +54,9 @@ GOS::site()->scripts->registerScriptFile($this->getTemplateUrl() . 'js/profileTo
 				
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'cellular'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($contact, 'cellular'); ?>
-					<?php echo GO_Sites_Components_Html::error($contact, 'cellular'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($contact, 'cellular'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($contact, 'cellular'); ?>
+					<?php echo \GO\Sites\Components\Html::error($contact, 'cellular'); ?>
 				</div>
 
 				<br /><hr />
@@ -64,33 +64,33 @@ GOS::site()->scripts->registerScriptFile($this->getTemplateUrl() . 'js/profileTo
 				
 				
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::label('Company', "Company_name", array('required' => true)); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($company, 'name'); ?>
-					<?php echo GO_Sites_Components_Html::error($company, 'name'); ?>
+					<?php echo \GO\Sites\Components\Html::label('Company', "Company_name", array('required' => true)); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($company, 'name'); ?>
+					<?php echo \GO\Sites\Components\Html::error($company, 'name'); ?>
 				</div>
 				
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'vat_no'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($company, 'vat_no'); ?>
-					<?php echo GO_Sites_Components_Html::error($company, 'vat_no'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'vat_no'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($company, 'vat_no'); ?>
+					<?php echo \GO\Sites\Components\Html::error($company, 'vat_no'); ?>
 				</div>
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'department'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($contact, 'department'); ?>
-					<?php echo GO_Sites_Components_Html::error($contact, 'department'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($contact, 'department'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($contact, 'department'); ?>
+					<?php echo \GO\Sites\Components\Html::error($contact, 'department'); ?>
 				</div>
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'function'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($contact, 'function'); ?>
-					<?php echo GO_Sites_Components_Html::error($contact, 'function'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($contact, 'function'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($contact, 'function'); ?>
+					<?php echo \GO\Sites\Components\Html::error($contact, 'function'); ?>
 				</div>
 				
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'phone'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($company, 'phone'); ?>
-					<?php echo GO_Sites_Components_Html::error($company, 'phone'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'phone'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($company, 'phone'); ?>
+					<?php echo \GO\Sites\Components\Html::error($company, 'phone'); ?>
 				</div>
 				
 				
@@ -98,42 +98,42 @@ GOS::site()->scripts->registerScriptFile($this->getTemplateUrl() . 'js/profileTo
 				<h2><?php echo GOS::t('addressDetails'); ?></h2>
 					
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'address'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($company, 'address'); ?>
-					<?php echo GO_Sites_Components_Html::error($company, 'address'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'address'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($company, 'address'); ?>
+					<?php echo \GO\Sites\Components\Html::error($company, 'address'); ?>
 				</div>
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'address_no'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($company, 'address_no'); ?>
-					<?php echo GO_Sites_Components_Html::error($company, 'address_no'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'address_no'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($company, 'address_no'); ?>
+					<?php echo \GO\Sites\Components\Html::error($company, 'address_no'); ?>
 				</div>
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'zip'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($company, 'zip'); ?>
-					<?php echo GO_Sites_Components_Html::error($company, 'zip'); ?>
-				</div>
-
-				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'city'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($company, 'city'); ?>
-					<?php echo GO_Sites_Components_Html::error($company, 'city'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'zip'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($company, 'zip'); ?>
+					<?php echo \GO\Sites\Components\Html::error($company, 'zip'); ?>
 				</div>
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'state'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($company, 'state'); ?>
-					<?php echo GO_Sites_Components_Html::error($company, 'state'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'city'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($company, 'city'); ?>
+					<?php echo \GO\Sites\Components\Html::error($company, 'city'); ?>
 				</div>
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'country'); ?>
-					<?php echo GO_Sites_Components_Html::activeDropDownList($company, 'country', GO::language()->getCountries()); ?>
-					<?php echo GO_Sites_Components_Html::error($company, 'country'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'state'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($company, 'state'); ?>
+					<?php echo \GO\Sites\Components\Html::error($company, 'state'); ?>
+				</div>
+
+				<div class="row">
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'country'); ?>
+					<?php echo \GO\Sites\Components\Html::activeDropDownList($company, 'country', \GO::language()->getCountries()); ?>
+					<?php echo \GO\Sites\Components\Html::error($company, 'country'); ?>
 				</div>
 				
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($company, "postAddressIsEqual"); ?>
-					<?php echo GO_Sites_Components_Html::activeCheckBox($company, 'postAddressIsEqual'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($company, "postAddressIsEqual"); ?>
+					<?php echo \GO\Sites\Components\Html::activeCheckBox($company, 'postAddressIsEqual'); ?>
 				</div>
 
 				<div class="post-address">
@@ -144,37 +144,37 @@ GOS::site()->scripts->registerScriptFile($this->getTemplateUrl() . 'js/profileTo
 
 
 					<div class="row">
-						<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'post_address'); ?>
-						<?php echo GO_Sites_Components_Html::activeTextField($company, 'post_address'); ?>
-						<?php echo GO_Sites_Components_Html::error($company, 'post_address'); ?>
+						<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'post_address'); ?>
+						<?php echo \GO\Sites\Components\Html::activeTextField($company, 'post_address'); ?>
+						<?php echo \GO\Sites\Components\Html::error($company, 'post_address'); ?>
 					</div>
 					<div class="row">
-						<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'post_address_no'); ?>
-						<?php echo GO_Sites_Components_Html::activeTextField($company, 'post_address_no'); ?>
-						<?php echo GO_Sites_Components_Html::error($company, 'post_address_no'); ?>
+						<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'post_address_no'); ?>
+						<?php echo \GO\Sites\Components\Html::activeTextField($company, 'post_address_no'); ?>
+						<?php echo \GO\Sites\Components\Html::error($company, 'post_address_no'); ?>
 					</div>
 					<div class="row">
-						<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'post_zip'); ?>
-						<?php echo GO_Sites_Components_Html::activeTextField($company, 'post_zip'); ?>
-						<?php echo GO_Sites_Components_Html::error($company, 'post_zip'); ?>
-					</div>
-
-					<div class="row">
-						<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'post_city'); ?>
-						<?php echo GO_Sites_Components_Html::activeTextField($company, 'post_city'); ?>
-						<?php echo GO_Sites_Components_Html::error($company, 'post_city'); ?>
+						<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'post_zip'); ?>
+						<?php echo \GO\Sites\Components\Html::activeTextField($company, 'post_zip'); ?>
+						<?php echo \GO\Sites\Components\Html::error($company, 'post_zip'); ?>
 					</div>
 
 					<div class="row">
-						<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'post_state'); ?>
-						<?php echo GO_Sites_Components_Html::activeTextField($company, 'post_state'); ?>
-						<?php echo GO_Sites_Components_Html::error($company, 'post_state'); ?>
+						<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'post_city'); ?>
+						<?php echo \GO\Sites\Components\Html::activeTextField($company, 'post_city'); ?>
+						<?php echo \GO\Sites\Components\Html::error($company, 'post_city'); ?>
 					</div>
 
 					<div class="row">
-						<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'post_country'); ?>
-						<?php echo GO_Sites_Components_Html::activeDropDownList($company, 'post_country', GO::language()->getCountries()); ?>
-						<?php echo GO_Sites_Components_Html::error($company, 'post_country'); ?>
+						<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'post_state'); ?>
+						<?php echo \GO\Sites\Components\Html::activeTextField($company, 'post_state'); ?>
+						<?php echo \GO\Sites\Components\Html::error($company, 'post_state'); ?>
+					</div>
+
+					<div class="row">
+						<?php echo \GO\Sites\Components\Html::activeLabelEx($company, 'post_country'); ?>
+						<?php echo \GO\Sites\Components\Html::activeDropDownList($company, 'post_country', \GO::language()->getCountries()); ?>
+						<?php echo \GO\Sites\Components\Html::error($company, 'post_country'); ?>
 					</div>
 
 				</div>
@@ -187,30 +187,30 @@ GOS::site()->scripts->registerScriptFile($this->getTemplateUrl() . 'js/profileTo
 
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'username'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($user, 'username', array('disabled' => 'on')); ?>
-					<?php echo GO_Sites_Components_Html::error($user, 'username'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($user, 'username'); ?>
+					<?php echo \GO\Sites\Components\Html::activeTextField($user, 'username', array('disabled' => 'on')); ?>
+					<?php echo \GO\Sites\Components\Html::error($user, 'username'); ?>
 				</div>
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::label('Current password', 'currentPassword'); ?>
-					<?php echo GO_Sites_Components_Html::passwordField('currentPassword', "", array('autocomplete' => 'off')); ?>
+					<?php echo \GO\Sites\Components\Html::label('Current password', 'currentPassword'); ?>
+					<?php echo \GO\Sites\Components\Html::passwordField('currentPassword', "", array('autocomplete' => 'off')); ?>
 				</div>
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'password'); ?>
-					<?php echo GO_Sites_Components_Html::activePasswordField($user, 'password', array('autocomplete' => 'off')); ?>
-					<?php echo GO_Sites_Components_Html::error($user, 'password'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($user, 'password'); ?>
+					<?php echo \GO\Sites\Components\Html::activePasswordField($user, 'password', array('autocomplete' => 'off')); ?>
+					<?php echo \GO\Sites\Components\Html::error($user, 'password'); ?>
 				</div>
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'passwordConfirm'); ?>
-					<?php echo GO_Sites_Components_Html::activePasswordField($user, 'passwordConfirm', array('autocomplete' => 'off')); ?>
-					<?php echo GO_Sites_Components_Html::error($user, 'passwordConfirm'); ?>
+					<?php echo \GO\Sites\Components\Html::activeLabelEx($user, 'passwordConfirm'); ?>
+					<?php echo \GO\Sites\Components\Html::activePasswordField($user, 'passwordConfirm', array('autocomplete' => 'off')); ?>
+					<?php echo \GO\Sites\Components\Html::error($user, 'passwordConfirm'); ?>
 				</div>
 
 				<div class="row buttons">
-					<?php echo GO_Sites_Components_Html::submitButton('Save'); ?>
+					<?php echo \GO\Sites\Components\Html::submitButton('Save'); ?>
 				</div>
 				<div style="clear:both;"></div>
-				<?php echo GO_Sites_Components_Html::endForm(); ?>
+				<?php echo \GO\Sites\Components\Html::endForm(); ?>
 			</div>
 		</div>
 	</div>

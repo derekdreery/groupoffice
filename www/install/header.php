@@ -6,7 +6,7 @@ require(dirname(dirname(__FILE__)).'/GO.php');
 
 if(isset($logout)){
 	//make sure exiting logins are killed
-	GO::session()->logout();
+	\GO::session()->logout();
 }
 
 function redirect($url){
@@ -19,7 +19,7 @@ function printHead()
 	echo '<html><head>'.
 	'<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />'.
 	'<link href="install.css" rel="stylesheet" type="text/css" />'.
-	'<title>'.GO::config()->product_name.' Installation</title>'.
+	'<title>'.\GO::config()->product_name.' Installation</title>'.
 	'</head>'.
 	'<body style="font-family: Arial,Helvetica;background-color:#f1f1f1">';
 	echo '<form method="post">';

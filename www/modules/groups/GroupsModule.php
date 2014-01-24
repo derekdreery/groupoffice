@@ -1,6 +1,10 @@
 <?php
 
-class GO_Groups_GroupsModule extends GO_Base_Module{
+
+namespace GO\Groups;
+
+
+class GroupsModule extends \GO\Base\Module{
 	
 	public function autoInstall() {
 		return true;

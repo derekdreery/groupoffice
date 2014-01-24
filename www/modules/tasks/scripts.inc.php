@@ -1,5 +1,5 @@
 <?php
-$show = GO::config()->get_setting("tasks_filter", GO::user()->id);
+$show = \GO::config()->get_setting("tasks_filter", \GO::user()->id);
 
 if(!$show)
 	$show='active';

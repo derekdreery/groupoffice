@@ -23,13 +23,17 @@
  * @property int $user_id
  * @property int $group_id
  */
-class GO_Base_Model_UserGroup extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Base\Model;
+
+
+class UserGroup extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Base_Model_UserGroup 
+	 * @return UserGroup 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -42,7 +46,7 @@ class GO_Base_Model_UserGroup extends GO_Base_Db_ActiveRecord {
   
 	public function relations() {
 		return array(
-				'group' => array('type' => self::BELONGS_TO, 'model' => 'GO_Base_Model_Group', 'field' => 'group_id'),
+				'group' => array('type' => self::BELONGS_TO, 'model' => '\GO\Base\Model\Group', 'field' => 'group_id'),
 		);
 	}
   public function primaryKey() {

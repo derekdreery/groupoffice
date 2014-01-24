@@ -54,7 +54,7 @@ function generateCFModel($extendclassName, $moduleName){
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */	
  
-class '.$className.' extends GO_Customfields_Model_AbstractCustomFieldsRecord {
+class '.$className.' extends \GO\Customfields\Model\AbstractCustomFieldsRecord {
 
 	/**
 	 * Returns a static model of itself

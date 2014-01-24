@@ -20,14 +20,18 @@
  * @property int $addressbook_id
  */
 
-class GO_Addressbook_Model_BirthdaysPortletSetting extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Addressbook\Model;
+
+
+class BirthdaysPortletSetting extends \GO\Base\Db\ActiveRecord {
 
 	public function tableName() { return 'ab_portlet_birthdays'; }
 	public function primaryKey() { return array('addressbook_id','user_id');}
 	
 	public function relations() {
 		return array(
-			'addressbook' => array('type' => self::BELONGS_TO, 'model' => 'GO_Addressbook_Model_Addressbook', 'field' => 'addressbook_id', 'delete' => false),
+			'addressbook' => array('type' => self::BELONGS_TO, 'model' => '\GO\Addressbook\Model\Addressbook', 'field' => 'addressbook_id', 'delete' => false),
 			);
 	}
 	

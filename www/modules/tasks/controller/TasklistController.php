@@ -9,29 +9,33 @@
  */
 
 /**
- * The GO_Tasks_Controller_Tasklist controller
+ * The Tasklist controller
  *
  * @package GO.modules.Tasks
- * @version $Id: GO_Tasks_Controller_Tasklist.php 7607 2011-09-20 10:08:21Z <<USERNAME>> $
+ * @version $Id: Tasklist.php 7607 2011-09-20 10:08:21Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
 
-class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelController{
+
+namespace GO\Tasks\Controller;
+
+
+class Tasklist extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = 'GO_Tasks_Model_Tasklist';
+	protected $model = '\GO\Tasks\Model\Tasklist';
 	
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name','$model->user->name');
 		
 		return parent::formatColumns($columnModel);
 	}
 	
-	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		
-		$multiSel = new GO_Base_Component_MultiSelectGrid(
+		$multiSel = new \GO\Base\Component\MultiSelectGrid(
 						'ta-taskslists', 
-						"GO_Tasks_Model_Tasklist",$store, $params);		
+						"\GO\Tasks\Model\Tasklist",$store, $params);		
 		$multiSel->setFindParamsForDefaultSelection($storeParams);
 		$multiSel->formatCheckedColumn();
 		
@@ -56,13 +60,13 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 		if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
 			throw new Exception($lang['common']['noFileUploaded']);
 		}else {
-			$file = new GO_Base_Fs_File($_FILES['ical_file']['tmp_name'][0]);
+			$file = new \GO\Base\Fs\File($_FILES['ical_file']['tmp_name'][0]);
 			$file->convertToUtf8();
 			$contents = $file->getContents();
-			$vcal = GO_Base_VObject_Reader::read($contents);
-			GO_Base_VObject_Reader::convertVCalendarToICalendar($vcal);
+			$vcal = \GO\Base\VObject\Reader::read($contents);
+			\GO\Base\VObject\Reader::convertVCalendarToICalendar($vcal);
 			foreach($vcal->vtodo as $vtask) {
-				$event = new GO_Tasks_Model_Task();			
+				$event = new \GO\Tasks\Model\Task();			
 				try{
 					$event->importVObject( $vtask, array('tasklist_id'=>$params['tasklist_id']) );
 		
@@ -72,7 +76,7 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 				}
 			}
 		}
-		$response['feedback'] = sprintf(GO::t('import_success','tasks'), $count);
+		$response['feedback'] = sprintf(\GO::t('import_success','tasks'), $count);
 		
 		if(count($failed)){
 			$response['feedback'] .= "\n\n".count($failed)." tasks failed: ".implode('\n', $failed);
@@ -82,10 +86,10 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 	
 	
 	public function actionTruncate($params){
-		$tasklist = GO_Tasks_Model_Tasklist::model()->findByPk($params['tasklist_id']);
+		$tasklist = \GO\Tasks\Model\Tasklist::model()->findByPk($params['tasklist_id']);
 		
 		if(!$tasklist)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
 		$tasklist->truncate();
 		
@@ -97,35 +101,35 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 	
 	public function actionRemoveDuplicates($params){
 		
-		GO::setMaxExecutionTime(300);
-		GO::setMemoryLimit(1024);
+		\GO::setMaxExecutionTime(300);
+		\GO::setMemoryLimit(1024);
 		
 		$this->render('externalHeader');
 		
-		$tasklist = GO_Tasks_Model_Tasklist::model()->findByPk($params['tasklist_id']);
+		$tasklist = \GO\Tasks\Model\Tasklist::model()->findByPk($params['tasklist_id']);
 		
 		if(!$tasklist)
-			throw new GO_Base_Exception_NotFound();
+			throw new \GO\Base\Exception\NotFound();
 		
-		GO_Base_Fs_File::setAllowDeletes(false);
+		\GO\Base\Fs\File::setAllowDeletes(false);
 		//VERY IMPORTANT:
-		GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
+		\GO\Files\Model\Folder::$deleteInDatabaseOnly=true;
 		
 		
-		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
+		\GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
 		$checkModels = array(
-				"GO_Tasks_Model_Task"=>array('name', 'start_time', 'due_time', 'rrule', 'user_id', 'tasklist_id'),
+				"\GO\Tasks\Model\Task"=>array('name', 'start_time', 'due_time', 'rrule', 'user_id', 'tasklist_id'),
 			);		
 		
 		foreach($checkModels as $modelName=>$checkFields){
 			
 			if(empty($params['model']) || $modelName==$params['model']){
 
-				echo '<h1>'.GO::t('removeDuplicates').'</h1>';
+				echo '<h1>'.\GO::t('removeDuplicates').'</h1>';
 
 				$checkFieldsStr = 't.'.implode(', t.',$checkFields);
-				$findParams = GO_Base_Db_FindParams::newInstance()
+				$findParams = \GO\Base\Db\FindParams::newInstance()
 								->ignoreAcl()
 								->select('t.id, count(*) AS n, '.$checkFieldsStr)
 								->group($checkFields)
@@ -133,7 +137,7 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 				
 				$findParams->getCriteria()->addCondition('tasklist_id', $tasklist->id);
 
-				$stmt1 = GO::getModel($modelName)->find($findParams);
+				$stmt1 = \GO::getModel($modelName)->find($findParams);
 
 				echo '<table border="1">';
 				echo '<tr><td>ID</th><th>'.implode('</th><th>',$checkFields).'</th></tr>';
@@ -144,11 +148,11 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 					
 					$select = 't.id';
 					
-					if(GO::getModel($modelName)->hasFiles()){
+					if(\GO::getModel($modelName)->hasFiles()){
 						$select .= ', t.files_folder_id';
 					}
 
-					$findParams = GO_Base_Db_FindParams::newInstance()
+					$findParams = \GO\Base\Db\FindParams::newInstance()
 								->ignoreAcl()
 								->select($select.', '.$checkFieldsStr)
 								->order('id','ASC');
@@ -159,7 +163,7 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 						$findParams->getCriteria()->addCondition($field, $dupModel->getAttribute($field));
 					}							
 
-					$stmt = GO::getModel($modelName)->find($findParams);
+					$stmt = \GO::getModel($modelName)->find($findParams);
 
 					$first = true;
 
@@ -183,9 +187,9 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 							if(!empty($params['delete'])){
 
 								if($model->hasLinks() && $model->countLinks()){
-									echo '<tr><td colspan="99">'.GO::t('skippedDeleteHasLinks').'</td></tr>';
+									echo '<tr><td colspan="99">'.\GO::t('skippedDeleteHasLinks').'</td></tr>';
 								}elseif(($filesFolder = $model->getFilesFolder(false)) && ($filesFolder->hasFileChildren() || $filesFolder->hasFolderChildren())){
-									echo '<tr><td colspan="99">'.GO::t('skippedDeleteHasFiles').'</td></tr>';
+									echo '<tr><td colspan="99">'.\GO::t('skippedDeleteHasFiles').'</td></tr>';
 								}else{									
 									$model->delete();
 								}
@@ -201,8 +205,8 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 
 				echo '</table>';
 
-				echo '<p>'.sprintf(GO::t('foundDuplicates'),$count).'</p>';
-				echo '<br /><br /><a href="'.GO::url('tasks/tasklist/removeDuplicates', array('delete'=>true, 'tasklist_id'=>$tasklist->id)).'">'.GO::t('clickToDeleteDuplicates').'</a>';
+				echo '<p>'.sprintf(\GO::t('foundDuplicates'),$count).'</p>';
+				echo '<br /><br /><a href="'.\GO::url('tasks/tasklist/removeDuplicates', array('delete'=>true, 'tasklist_id'=>$tasklist->id)).'">'.\GO::t('clickToDeleteDuplicates').'</a>';
 				
 			}
 		}

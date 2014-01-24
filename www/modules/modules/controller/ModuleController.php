@@ -1,7 +1,11 @@
 <?php
-class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelController{
+
+namespace GO\Modules\Controller;
+
+
+class Module extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = 'GO_Base_Model_Module';
+	protected $model = '\GO\Base\Model\Module';
 	
 	
 	protected function allowWithoutModuleAccess() {
@@ -12,20 +16,20 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		return array('*');
 	}
 		
-	protected function prepareStore(GO_Base_Data_Store $store){		
+	protected function prepareStore(\GO\Base\Data\Store $store){		
 			
-		$store->getColumnModel()->setFormatRecordFunction(array('GO_Modules_Controller_Module', 'formatRecord'));
+		$store->getColumnModel()->setFormatRecordFunction(array('\GO\Modules\Controller\Module', 'formatRecord'));
 		$store->setDefaultSortOrder('sort_order');
     return parent::prepareStore($store);
 	}
 	
 	protected function getStoreParams($params) {
-		$findParams = GO_Base_Db_FindParams::newInstance()
+		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->ignoreAcl()
 						->limit(0);
 		
-		if(!empty(GO::config()->allowed_modules))
-			$findParams->getCriteria ()->addInCondition ('id', explode(',',GO::config()->allowed_modules));
+		if(!empty(\GO::config()->allowed_modules))
+			$findParams->getCriteria ()->addInCondition ('id', explode(',',\GO::config()->allowed_modules));
 		
 		return $findParams;
 		
@@ -50,7 +54,7 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		
 		$response['results']=array();
 		
-		$modules = GO::modules()->getAvailableModules();
+		$modules = \GO::modules()->getAvailableModules();
 		
 		$availableModules=array();
 						
@@ -81,21 +85,21 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		$modules = json_decode($params['modules'], true);
 		foreach($modules as $moduleId)
 		{
-			$module = new GO_Base_Model_Module();
+			$module = new \GO\Base\Model\Module();
 			$module->id=$moduleId;
 			
 			
 			$module->moduleManager->checkDependenciesForInstallation($modules);	
 			
 			if(!$module->save())
-				throw new GO_Base_Exception_Save();
+				throw new \GO\Base\Exception\Save();
 			
 			$response['results'][]=$module->getAttributes();
 		}
 		
-//		$defaultModels = GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels();
+//		$defaultModels = \GO\Base\Model\AbstractUserDefaultModel::getAllUserDefaultModels();
 //		
-//		$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());		
+//		$stmt = \GO\Base\Model\User::model()->find(\GO\Base\Db\FindParams::newInstance()->ignoreAcl());		
 //		while($user = $stmt->fetch()){
 //			foreach($defaultModels as $model){
 //				$model->getDefault($user);
@@ -104,7 +108,7 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		
 		//todo make this irrelevant
 		//backwards compat
-		require_once(GO::config()->root_path.'Group-Office.php');
+		require_once(\GO::config()->root_path.'Group-Office.php');
 		$GLOBALS['GO_MODULES']->load_modules();
 		
 		return $response;
@@ -116,11 +120,11 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		//check access to users or groups module. Because we allow this action without
 		//access to the modules module		
 		if ($params['paramIdType']=='groupId'){
-			if(!GO::modules()->groups)
-				throw new GO_Base_Exception_AccessDenied();
+			if(!\GO::modules()->groups)
+				throw new \GO\Base\Exception\AccessDenied();
 		}else{
-			if(!GO::modules()->users)
-				throw new GO_Base_Exception_AccessDenied();
+			if(!\GO::modules()->users)
+				throw new \GO\Base\Exception\AccessDenied();
 		}
 			
 		$response = array(
@@ -129,13 +133,13 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 			'total' => 0
 		);
 		$modules = array();
-		$mods = GO::modules()->getAllModules();
+		$mods = \GO::modules()->getAllModules();
 			
 		while ($module=array_shift($mods)) {
 			$permissionLevel = 0;
 			$usersGroupPermissionLevel = false;
 			if (empty($params['id'])) {				
-				$aclUsersGroup = $module->acl->hasGroup(GO::config()->group_everyone); // everybody group
+				$aclUsersGroup = $module->acl->hasGroup(\GO::config()->group_everyone); // everybody group
 				$permissionLevel=$usersGroupPermissionLevel=$aclUsersGroup ? $aclUsersGroup->level : 0;
 			} else {
 				if ($params['paramIdType']=='groupId') {
@@ -144,23 +148,23 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 					$permissionLevel=$aclUsersGroup ? $aclUsersGroup->level : 0;
 				} else {
 					//when looking from the users module
-					$permissionLevel = GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $params['id']);					
-					$usersGroupPermissionLevel= GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $params['id'], true);
+					$permissionLevel = \GO\Base\Model\Acl::getUserPermissionLevel($module->acl_id, $params['id']);					
+					$usersGroupPermissionLevel= \GO\Base\Model\Acl::getUserPermissionLevel($module->acl_id, $params['id'], true);
 				}
 			}
 			
 			$translated = $module->moduleManager ? $module->moduleManager->name() : $module->id;
 			
 			// Module permissions only support read permission and manage permission:
-			if (GO_Base_Model_Acl::hasPermission($permissionLevel,GO_Base_Model_Acl::CREATE_PERMISSION))
-				$permissionLevel = GO_Base_Model_Acl::MANAGE_PERMISSION;			
+			if (\GO\Base\Model\Acl::hasPermission($permissionLevel,\GO\Base\Model\Acl::CREATE_PERMISSION))
+				$permissionLevel = \GO\Base\Model\Acl::MANAGE_PERMISSION;			
 			
 			$modules[$translated]= array(
 				'id' => $module->id,
 				'name' => $translated,
 				'permissionLevel' => $permissionLevel,
-				'disable_none' => $usersGroupPermissionLevel!==false && GO_Base_Model_Acl::hasPermission($usersGroupPermissionLevel,GO_Base_Model_Acl::READ_PERMISSION),
-				'disable_use' => $usersGroupPermissionLevel!==false && GO_Base_Model_Acl::hasPermission($usersGroupPermissionLevel, GO_Base_Model_Acl::CREATE_PERMISSION)
+				'disable_none' => $usersGroupPermissionLevel!==false && \GO\Base\Model\Acl::hasPermission($usersGroupPermissionLevel,\GO\Base\Model\Acl::READ_PERMISSION),
+				'disable_use' => $usersGroupPermissionLevel!==false && \GO\Base\Model\Acl::hasPermission($usersGroupPermissionLevel, \GO\Base\Model\Acl::CREATE_PERMISSION)
 			);
 			$response['total'] += 1;
 		}
@@ -179,11 +183,11 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	 */
 	public function actionCheckDefaultModels($params) {
 		
-		GO::session()->closeWriting();
+		\GO::session()->closeWriting();
 		
-//		GO::$disableModelCache=true;
+//		\GO::$disableModelCache=true;
 		$response = array('success' => true);
-		$module = GO_Base_Model_Module::model()->findByPk($params['moduleId']);
+		$module = \GO\Base\Model\Module::model()->findByPk($params['moduleId']);
 		
 		
 		$models = array();
@@ -191,18 +195,18 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		if ($modMan) {
 			$classes = $modMan->findClasses('model');
 			foreach ($classes as $class) {
-				if ($class->isSubclassOf('GO_Base_Model_AbstractUserDefaultModel')) {
-					$models[] = GO::getModel($class->getName());
+				if ($class->isSubclassOf('\GO\Base\Model\AbstractUserDefaultModel')) {
+					$models[] = \GO::getModel($class->getName());
 				}
 			}
 		}
-//		GO::debug(count($users));
+//		\GO::debug(count($users));
 		
-		$module->acl->getAuthorizedUsers($module->acl_id, GO_Base_Model_Acl::READ_PERMISSION, array("GO_Modules_Controller_Module","checkDefaultModelCallback"), array($models));
+		$module->acl->getAuthorizedUsers($module->acl_id, \GO\Base\Model\Acl::READ_PERMISSION, array("\GO\Modules\Controller\Module","checkDefaultModelCallback"), array($models));
 		
 		
-//		if(class_exists("GO_Professional_LicenseCheck")){
-//			$lc = new GO_Professional_LicenseCheck();
+//		if(class_exists("\GO\Professional\LicenseCheck")){
+//			$lc = new \GO\Professional\LicenseCheck();
 //			$lc->checkProModules(true);
 //		}
 
@@ -219,14 +223,14 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		
 		$i=0;
 		foreach($modules as $module){
-			$moduleModel = GO_Base_Model_Module::model()->findByPk($module->id);
+			$moduleModel = \GO\Base\Model\Module::model()->findByPk($module->id);
 			$moduleModel->sort_order=$i++;
 			$moduleModel->save();
 		}
 		
 		//todo make this irrelevant
 		//backwards compat
-		require_once(GO::config()->root_path.'Group-Office.php');
+		require_once(\GO::config()->root_path.'Group-Office.php');
 		$GLOBALS['GO_MODULES']->load_modules();
 		return array('success'=>true);
 	}

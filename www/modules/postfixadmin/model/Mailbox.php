@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var GO_Postfixadmin_Model_Domain $domain
+ * @var Domain $domain
  * @property int $domain_id
  * @property string $go_installation_id
  * @property string $username
@@ -14,13 +14,17 @@
  * @property boolean $active
  * @property int $usage Usage in kilobytes
  */
-class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Postfixadmin\Model;
+
+
+class Mailbox extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Postfixadmin_Model_Mailbox 
+	 * @return Mailbox 
 	 */
 	public static function model($className = __CLASS__) {
 		return parent::model($className);
@@ -32,7 +36,7 @@ class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
 
 	public function relations() {
 		return array(
-			'domain' => array('type' => self::BELONGS_TO, 'model' => 'GO_Postfixadmin_Model_Domain', 'field' => 'domain_id')
+			'domain' => array('type' => self::BELONGS_TO, 'model' => '\GO\Postfixadmin\Model\Domain', 'field' => 'domain_id')
 		);
 	}
 
@@ -62,7 +66,7 @@ class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 		if (!empty($wasNew)) {
 			// Create alias
-			$aliasModel = GO_Postfixadmin_Model_Alias::model();
+			$aliasModel = Alias::model();
 			$aliasModel->setAttributes(
 							array(
 									'goto' => $this->username,
@@ -102,10 +106,10 @@ class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Get the filesystem folder with mail data.
 	 * 
-	 * @return \GO_Base_Fs_Folder
+	 * @return \GO\Base\Fs\Folder
 	 */
 	public function getMaildirFolder(){
-		return new GO_Base_Fs_Folder('/home/vmail/'.$this->maildir);
+		return new \GO\Base\Fs\Folder('/home/vmail/'.$this->maildir);
 	}
 	
 	public function cacheUsage(){
@@ -126,7 +130,7 @@ class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
 				$sumUsedQuotaOtherwise = $this->domain->getSumUsedQuota() - $existingQuota; // Domain's used quota w/o the current mailbox's quota.
 				if ($sumUsedQuotaOtherwise + $this->quota > $total_quota) {
 					$quotaLeft = $total_quota - $sumUsedQuotaOtherwise;
-					throw new Exception('The maximum quota has been reached. You have ' . GO_Base_Util_Number::localize($quotaLeft / 1024) . 'MB left');
+					throw new Exception('The maximum quota has been reached. You have ' . \GO\Base\Util\Number::localize($quotaLeft / 1024) . 'MB left');
 				}
 			}
 		}

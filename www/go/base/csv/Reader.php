@@ -16,7 +16,11 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base.util 
  */
-class GO_Base_Csv_Reader{
+
+namespace GO\Base\Csv;
+
+
+class Reader{
 	
 	private $filename;
 	public $delimiter=',';
@@ -24,9 +28,9 @@ class GO_Base_Csv_Reader{
 	protected $fp;
 	
 	public function __construct($filename) {
-		if(GO::user()){
-			$this->delimiter=GO::user()->list_separator;
-			$this->enclosure=GO::user()->text_separator;
+		if(\GO::user()){
+			$this->delimiter=\GO::user()->list_separator;
+			$this->enclosure=\GO::user()->text_separator;
 		}
 		$this->filename=$filename;
 	}

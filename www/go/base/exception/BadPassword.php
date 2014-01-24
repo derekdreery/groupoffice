@@ -19,12 +19,16 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_BadPassword extends Exception
+
+namespace GO\Base\Exception;
+
+
+class BadPassword extends \Exception
 {
 	public function __construct($message = '')
 	{
 
-		$message = empty($message) ? GO::t('badPassword') : GO::t('badPassword') . "\n\n" . $message;
+		$message = empty($message) ? \GO::t('badPassword') : \GO::t('badPassword') . "\n\n" . $message;
 
 		parent::__construct($message);
 	}

@@ -10,10 +10,10 @@
  */
 
 /**
- * The GO_Calendar_Model_Group model
+ * The Group model
  *
  * @package GO.modules.Calendar
- * @version $Id: GO_Calendar_Model_Group.php 7607 2011-09-28 10:30:15Z <<USERNAME>> $
+ * @version $Id: Group.php 7607 2011-09-28 10:30:15Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *
@@ -23,13 +23,17 @@
  * @property String $fields
  * @property int $show_not_as_busy
  */
-class GO_Calendar_Model_Group extends GO_Base_Db_ActiveRecord {
+
+namespace GO\Calendar\Model;
+
+
+class Group extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Calendar_Model_Group
+	 * @return Group
 	 */
 	public static function model($className = __CLASS__) {
 		return parent::model($className);
@@ -54,8 +58,8 @@ class GO_Calendar_Model_Group extends GO_Base_Db_ActiveRecord {
 	public function relations() {
 
 		return array(
-				'admins' => array('type' => self::MANY_MANY, 'model' => 'GO_Base_Model_User', 'field' => 'group_id', 'linkModel' => 'GO_Calendar_Model_GroupAdmin'),
-				'calendars' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Calendar', 'field' => 'group_id'),
+				'admins' => array('type' => self::MANY_MANY, 'model' => '\GO\Base\Model\User', 'field' => 'group_id', 'linkModel' => '\GO\Calendar\Model\GroupAdmin'),
+				'calendars' => array('type' => self::HAS_MANY, 'model' => '\GO\Calendar\Model\Calendar', 'field' => 'group_id'),
 		);
 	}
 

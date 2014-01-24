@@ -1,8 +1,12 @@
 <?php
 
-class GO_Base_Util_ConfigEditor {
 
-	public static function save(GO_Base_Fs_File $file, array $config) {
+namespace GO\Base\Util;
+
+
+class ConfigEditor {
+
+	public static function save(\GO\Base\Fs\File $file, array $config) {
 		$configData = "<?php\n";
 		foreach ($config as $key => $value) {
 //			if ($value === true) {

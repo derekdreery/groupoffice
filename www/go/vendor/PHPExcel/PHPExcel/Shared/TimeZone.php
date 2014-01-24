@@ -127,7 +127,7 @@ class PHPExcel_Shared_TimeZone
 			return 0;
 		}
 
-		$objTimezone = new DateTimeZone($timezone);
+		$objTimezone = new \DateTimeZone($timezone);
 		if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
 			$transitions = $objTimezone->getTransitions($timestamp,$timestamp);
 		} else {

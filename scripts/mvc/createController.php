@@ -50,7 +50,7 @@ function generateController($moduleName, $modelName) {
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
 
-class '.$className.' extends GO_Base_Controller_AbstractModelController {
+class '.$className.' extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = \''.$fullModelName.'\';
 

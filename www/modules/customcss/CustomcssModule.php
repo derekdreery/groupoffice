@@ -1,18 +1,22 @@
 <?php
 
-class GO_Customcss_CustomcssModule extends GO_Base_Module {
+
+namespace GO\Customcss;
+
+
+class CustomcssModule extends \GO\Base\Module {
 
 	public static function initListeners() {
 		
-		$c = new GO_Core_Controller_Auth();
-		$c->addListener('head', 'GO_Customcss_CustomcssModule', 'head');
+		$c = new \GO\Core\Controller\Auth();
+		$c->addListener('head', '\GO\Customcss\CustomcssModule', 'head');
 		
 		return parent::initListeners();
 	}
 	public static function head() {
 
-		if (file_exists(GO::config()->file_storage_path . 'customcss/style.css'))
-			echo '<style>' . file_get_contents(GO::config()->file_storage_path . 'customcss/style.css') . '</style>' . "\n";
+		if (file_exists(\GO::config()->file_storage_path . 'customcss/style.css'))
+			echo '<style>' . file_get_contents(\GO::config()->file_storage_path . 'customcss/style.css') . '</style>' . "\n";
 	}
 	
 	public function adminModule() {

@@ -17,7 +17,7 @@ if (!defined('PATH_SEPARATOR')) {
 	define('PATH_SEPARATOR', (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') ? ';' : ':');
 }
 
-$include_path = GO::config()->root_path . 'go/vendor/pear/' . PATH_SEPARATOR;
+$include_path = \GO::config()->root_path . 'go/vendor/pear/' . PATH_SEPARATOR;
 $include_path.= ini_get('include_path');
 
 if (set_include_path($include_path) === false) {
@@ -37,7 +37,11 @@ define('SIEVE_ERROR_INTERNAL', 7);	  // internal error
 define('SIEVE_ERROR_DEACTIVATE', 8);	// script activation
 define('SIEVE_ERROR_OTHER', 255);	   // other/unknown error
 
-class GO_Sieve_Util_Sieve {
+
+namespace GO\Sieve\Util;
+
+
+class Sieve {
 
 	private $sieve;				 // Net_Sieve object
 	private $error = false;		 // error flag
@@ -68,9 +72,9 @@ class GO_Sieve_Util_Sieve {
 	}
 
 	private function rewrite_host($host) {
-		if (isset(GO::config()->sieve_rewrite_hosts)) {
+		if (isset(\GO::config()->sieve_rewrite_hosts)) {
 
-			$maps = explode(',', GO::config()->sieve_rewrite_hosts);
+			$maps = explode(',', \GO::config()->sieve_rewrite_hosts);
 
 			foreach ($maps as $map) {
 				$pair = explode('=', $map);
@@ -87,7 +91,7 @@ class GO_Sieve_Util_Sieve {
 
 		$host = $this->rewrite_host($host);
 
-		GO::debug("sieve::connect($username, ***, $host, $port, $auth_type, $usetls)");
+		\GO::debug("sieve::connect($username, ***, $host, $port, $auth_type, $usetls)");
 		
 		if ($this->_PEAR->isError($this->sieve->connect($host, $port, NULL, $usetls))) {
 			return $this->_set_error(SIEVE_ERROR_CONNECTION);
@@ -135,7 +139,7 @@ class GO_Sieve_Util_Sieve {
 		$res = $this->sieve->installScript($name, $script, true);
 		if ($this->_PEAR->isError($res)){
 			
-			GO::debug("ERROR: ".$res);
+			\GO::debug("ERROR: ".$res);
 			
 			return $this->_set_error(SIEVE_ERROR_INSTALL);
 		}
@@ -272,7 +276,7 @@ class GO_Sieve_Util_Sieve {
 	 */
 	public function get_active($accountId) {
 		$aliasEmails = array();
-		$aliasesStmt = GO_Email_Model_Alias::model()->findByAttribute('account_id',$accountId);
+		$aliasesStmt = \GO\Email\Model\Alias::model()->findByAttribute('account_id',$accountId);
 		while ($aliasModel = $aliasesStmt->fetch())
 			$aliasEmails[] = $aliasModel->email;
 		
@@ -283,10 +287,10 @@ class GO_Sieve_Util_Sieve {
 		if (!$active) {
 
 			$content = "require [\"vacation\",\"fileinto\"];
-# rule:[".GO::t('standardvacation','sieve')."]
+# rule:[".\GO::t('standardvacation','sieve')."]
 if false # anyof (true)
 {
-\tvacation :days 3 :addresses [\"".implode('","',$aliasEmails)."\"] \"".GO::t('standardvacationmessage','sieve')."\";
+\tvacation :days 3 :addresses [\"".implode('","',$aliasEmails)."\"] \"".\GO::t('standardvacationmessage','sieve')."\";
 \tstop;
 }
 # rule:[Spam]
@@ -441,7 +445,7 @@ if anyof (header :contains \"X-Spam-Flag\" \"YES\")
 
 	private function _set_error($error) {
 		$this->error = $error;
-		GO::debug("SIEVE ERROR: ".$error);
+		\GO::debug("SIEVE ERROR: ".$error);
 		return false;
 	}
 
@@ -450,8 +454,8 @@ if anyof (header :contains \"X-Spam-Flag\" \"YES\")
 	 */
 	public function debug_handler(&$sieve, $message) {
 		//write_log('sieve', preg_replace('/\r\n$/', '', $message));
-//		if (isset(GO::config()))
-			GO::debug("SIEVE DEBUG: ".$message);
+//		if (isset(\GO::config()))
+			\GO::debug("SIEVE DEBUG: ".$message);
 	}
 
 }
@@ -741,7 +745,7 @@ class go_sieve_script {
 						trim($content), $matches)) {
 
 			$tests = trim($matches[2]);
-GO::debug($tests);
+\GO::debug($tests);
 			// disabled rule (false + comment): if false #.....
 			if ($matches[3] == 'false') {
 				$tests = preg_replace('/^false\s+#\s+/', '', $tests);
