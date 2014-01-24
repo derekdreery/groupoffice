@@ -1,5 +1,5 @@
 <?php
-abstract class GO_Customfields_Customfieldtype_Abstract{
+abstract class GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
 	
 	/**
 	 * The field model that this datatype will be used for.

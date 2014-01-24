@@ -1,5 +1,5 @@
 <?php
-class GO_Customfields_Customfieldtype_Select extends GO_Customfields_Customfieldtype_Abstract{
+class GO_Customfields_Customfieldtype_Select extends GO_Customfields_Customfieldtype_AbstractCustomfieldtype{
 	
 	public function name(){
 		return 'Select';
