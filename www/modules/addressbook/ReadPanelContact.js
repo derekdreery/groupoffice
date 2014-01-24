@@ -386,7 +386,8 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 			{
 				if(!GO.util.empty(values['url_linkedin']) ||
 					!GO.util.empty(values['url_facebook']) ||
-					!GO.util.empty(values['url_twitter']))
+					!GO.util.empty(values['url_twitter']) ||
+					!GO.util.empty(values['skype_name']))
 				{
 					return true;
 				} else {

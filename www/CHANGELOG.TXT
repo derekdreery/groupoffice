@@ -1,13 +1,18 @@
+22-01-2014 5.1.1
+- Merged fixes of 5.0.34-36
+
+22-01-2014 5.1.0
 - Calendar: Overview of participant and resource availability per day.
 - Tasks & Reminders: get reminder when another user puts a task in your task list
 - Added user quota support
 - Show ticket template per message
 
+24-01-2014 5.0.36
+- Previous version could make invalid dovecot confuration
+- Fixed iOS all day event bug with caldav
 
-
-
-
-- Autolink a contact will check if the same contact is not already selected in the link field
+23-01-2014 5.0.35
+- Mailserver installation on latest Ubuntu and Debian fixed
 - Copy links when creating exception
 - Projects name template not working anymore after saving settings
 - Don't move project to a project in tree drag and drop

@@ -1316,8 +1316,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$dateType = $this->all_day_event ? "DATE" : "DATETIME";
 		
-		if($this->all_day_event)
+		if($this->all_day_event){
 			$e->{"X-FUNAMBOL-ALLDAY"}=1;
+		}
 		
 		if($this->exception_for_event_id>0){
 			//this is an exception
@@ -1329,12 +1330,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		if($recurrenceTime){
 			$dt = GO_Base_Util_Date_DateTime::fromUnixtime($recurrenceTime);			
-			$e->add('recurrence-id', $dt, array('type'=>$dateType));
+			$rId = $e->add('recurrence-id', $dt);
+			if($this->all_day_event){
+				$rId['VALUE']='DATE';
+			}
 		}
 	
 		
-		$e->add('dtstart', GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time), array('type'=>$dateType));
-		
+		$dtstart = $e->add('dtstart', GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time));
+		if($this->all_day_event){
+			$dtstart['VALUE'] = 'DATE';
+		}
 		
 		if($this->all_day_event){
 			$end_time = GO_Base_Util_Date::clear_time($this->end_time);			
@@ -1343,7 +1349,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$end_time = $this->end_time;
 		}
 		
-		$e->add('dtend', GO_Base_Util_Date_DateTime::fromUnixtime($end_time), array('type'=>$dateType));
+		$dtend = $e->add('dtend', GO_Base_Util_Date_DateTime::fromUnixtime($end_time));
+		
+		if($this->all_day_event){
+			$dtend['VALUE'] = 'DATE';
+		}
 
 		if(!empty($this->description))
 			$e->description=$this->description;
@@ -1355,7 +1365,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$rRule = $this->getRecurrencePattern();
 			$rRule->shiftDays(false);
-			$e->rrule=str_replace('RRULE:','',$rRule->createRrule());			
+			$e->add('rrule',str_replace('RRULE:','',$rRule->createRrule()));			
 			
 			$findParams = GO_Base_Db_FindParams::newInstance();
 			
@@ -1367,7 +1377,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //				$exdate = new Sabre\VObject\Property\DateTime('exdate',Sabre\VObject\Property\DateTime::DATE);
 				$dt = GO_Base_Util_Date_DateTime::fromUnixtime($exception->getStartTime());				
 //				$exdate->setDateTime($dt);		
-				$e->add('exdate',$dt, array('type'=>'DATE'));
+				$exdate = $e->add('exdate',$dt);
+				$exdate['VALUE']='DATE';
 			}
 		}
 		
@@ -1505,12 +1516,24 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$dtstart = $vobject->dtstart ? $vobject->dtstart->getDateTime() : new DateTime();
 		$dtend = $vobject->dtend ? $vobject->dtend->getDateTime() : new DateTime();
 		
+		$substractOnEnd=0;
+		
 		//funambol sends this special parameter
 		if((string) $vobject->{"X-FUNAMBOL-ALLDAY"}=="1"){
 			$this->all_day_event=1;
 		}else
 		{
 			$this->all_day_event = isset($vobject->dtstart['VALUE']) && $vobject->dtstart['VALUE']=='DATE' ? 1 : 0;
+			
+			//ios sends start and end date at 00:00 hour
+			//DTEND;TZID=Europe/Amsterdam:20140121T000000
+			//DTSTART;TZID=Europe/Amsterdam:20140120T000000
+			
+			if($dtstart->format('Hi') == $dtstart->format('Hi') && $dtstart->format('Hi') == "0000" ){
+				$this->all_day_event=true;
+				$substractOnEnd=60;
+			}
+
 		}
 		
 		if($this->all_day_event){
@@ -1522,10 +1545,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		
-		
-		
 		$this->start_time =intval($dtstart->format('U'));	
-		$this->end_time = intval($dtend->format('U'));
+		$this->end_time = intval($dtend->format('U'))-$substractOnEnd;
+		
+		
 		
 		if($vobject->duration){
 			$duration = GO_Base_VObject_Reader::parseDuration($vobject->duration);

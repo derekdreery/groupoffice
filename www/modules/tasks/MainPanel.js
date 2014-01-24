@@ -77,7 +77,7 @@ this.gridPanel.store.on('load', function(store, records, options)
 	
 	var filterPanel = new Ext.form.FormPanel({
 		title:GO.tasks.lang.filter,
-		height:170,
+		height:180,
 //		id:'ta-filter-form',
 //		stateId:'ta-filter-form',
 //		cls:'go-form-panel',

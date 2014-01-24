@@ -29,7 +29,12 @@ class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
 		//GOS::site()->config->contact_addressbook_id;	
 		
 		if (GO_Base_Util_Http::isPostRequest()) {
-			$addressbookModel = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name', $_POST['Addressbook']['name']);
+			if(isset($_POST['Addressbook']['name'])){
+				$addressbookModel = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name', $_POST['Addressbook']['name']);
+			}else
+			{
+				$addressbookModel = GO_Addressbook_Model_Addressbook::model()->findByPk($_POST['Addressbook']['id']);
+			}
 			if (!$addressbookModel)
 				throw new Exception(sprintf(GO::t('addressbookNotFound','defaultsite'),$_POST['Addressbook']['name']));
 			
@@ -50,10 +55,15 @@ class GO_Addressbook_Controller_Site extends GO_Site_Components_Controller{
 			$companyModel->setValidationRule('name','required',true);
 			
 			$companyModel->setAttributes($_POST['Company']);
-			if ($companyModel->validate())
+			if ($companyModel->validate()){
 				$companyModel->save();
+				$contactModel->company_id=$companyModel->id;
+			}
 			
 			$contactModel->setAttributes($_POST['Contact']);
+			
+			
+			
 
 			if($contactModel->validate()){
 				$saveSuccess = $contactModel->save();

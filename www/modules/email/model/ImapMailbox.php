@@ -203,8 +203,10 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	
 	public function rename($name){
 		
-	  	if($this->getAccount()->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
+	  if($this->getAccount()->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
 		  throw new GO_Base_Exception_AccessDenied();
+		
+		$this->_validateName($name);
 	  
 		$parentName = $this->getParentName();
 		$newMailbox = empty($parentName) ? $name : $parentName.$this->delimiter.$name;
@@ -229,14 +231,27 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		return $imap->delete($sort);
 	}
 	
+	private function _validateName($name){
+		$illegalChars = '/';
+		
+		if($this->getDelimiter()!='/'){
+			$illegalChars .=$this->getDelimiter();
+		}
+		
+		if(preg_match('/['.preg_quote($illegalChars,'/').']/', $name)){
+			throw new Exception(sprintf(GO::t('illegalCharsError'),': '.$illegalChars));
+		}else
+		{
+			return true;
+		}
+	}
+	
 	public function createChild($name, $subscribe=true){
 	  if($this->getAccount()->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
 		  throw new GO_Base_Exception_AccessDenied();
 		$newMailbox = empty($this->name) ? $name : $this->name.$this->delimiter.$name;
 		
-		if(preg_match('/[.\/]/', $name)){
-			throw new Exception(sprintf(GO::t('illegalCharsError'),': . /'));
-		}
+		$this->_validateName($name);
 		
 		//throw new Exception($newMailbox);
 		
