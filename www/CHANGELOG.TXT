@@ -1,3 +1,7 @@
+24-01-2014 5.0.36
+- Previous version could make invalid dovecot confuration
+- Fixed iOS all day event bug with caldav
+
 23-01-2014 5.0.35
 - Mailserver installation on latest Ubuntu and Debian fixed
 - Copy links when creating exception
