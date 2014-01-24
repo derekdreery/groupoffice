@@ -102,7 +102,7 @@ GO.admin2userlogin.UsersGrid = function(config){
 	// dubbelklik, edit bookmark
 	this.on('rowdblclick', function(grid, rowIndex){
 		var rec = grid.getStore().getAt(rowIndex).data;	
-		document.location=GO.url('admin2userlogin/switch/switch/',{user_id: rec.id});
+		document.location=GO.url('admin2userlogin/login/switch/',{user_id: rec.id});
 	},this)
 	
 	
