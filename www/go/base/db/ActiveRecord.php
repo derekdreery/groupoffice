@@ -2760,7 +2760,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 		// when foreignkey to acl field changes check PermissionLevel of origional related ACL object as well
 		if(!$ignoreAcl && !$this->isNew && $this->_aclModified() && !$this->checkOldPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
-			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : sprintf(GO::t('cannotMoveError'),'this');
+			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : sprintf(GO::t('cannotMoveError'),'1');
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
 		

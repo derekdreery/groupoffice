@@ -131,23 +131,32 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 	lastKeyStrokes: [],
 	
 	correctPunctuation : function(event) {
-		var		spacechar=32, 
-				dotchar=190, 
-				achar=65, 
-				zchar=87;
+		var		enter=13,
+				spacechar=32,
+				dotchar=190,
+				achar=65,
+				zchar=90,
+				semicolumn=186; //special visible char go up
 		
+		//IE doesn't has event.button and uses event.keyCode
 		var key = event.button+1 || event.keyCode;
 		
-		if(key==dotchar){
+		if(key===dotchar) {
 			this.lastKeyStrokes=[];
 			this.lastKeyStrokes.push(key);
-		} else if(key==spacechar) {
+		} else if (key===spacechar || key===enter) {
 			this.lastKeyStrokes.push(key);
-		} else if(this.lastKeyStrokes[0]==dotchar && this.lastKeyStrokes[1]==spacechar && key>=achar && key<=zchar+1) {
+		} else if(key>=achar && key<=zchar) {
+			//console.log(this.lastKeyStrokes);
+			if((this.lastKeyStrokes[0]===dotchar && this.lastKeyStrokes[1]===enter) || 
+			   (this.lastKeyStrokes[0]===dotchar && this.lastKeyStrokes[1]===spacechar)) {
+					var char = String.fromCharCode(key);
+					event.preventDefault();
+					this.insertAtCursor(char.toUpperCase());
+			}
 			this.lastKeyStrokes=[];
-			var char = String.fromCharCode(key);
-			event.preventDefault();
-			this.insertAtCursor(char.toUpperCase());
+		} else if(key >= semicolumn) {
+			this.lastKeyStrokes=[];
 		}
 	},
 
