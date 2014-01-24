@@ -590,7 +590,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 
-		GO_Base_Util_Array::caseInsensitiveSort($folders);
+		GO_Base_Util_ArrayUtil::caseInsensitiveSort($folders);
 		
 //		GO::debug($folders);
 

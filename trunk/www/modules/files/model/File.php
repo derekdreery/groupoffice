@@ -666,7 +666,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	public static $defaultHandlers;
 	/**
 	 * 
-	 * @return GO_Files_Filehandler_Interface
+	 * @return GO_Files_Filehandler_FilehandlerInterface
 	 */
 	public function getDefaultHandler(){
 		
