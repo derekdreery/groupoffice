@@ -23,7 +23,7 @@
  * @version $Id Command.php 2012-06-14 10:22:40 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Base_Db_Statement implements IteratorAggregate
+class GO_Base_Db_Statement implements \IteratorAggregate
 {
 	private $_connection; //The database connection the belongs to this statement
 	private $_statement; //The PDOStatement for this DBCommand

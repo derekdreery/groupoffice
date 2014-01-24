@@ -1,6 +1,6 @@
 <?php
 
-class GO_Base_Vobject_Iterator implements Iterator {
+class GO_Base_Vobject_Iterator implements \Iterator {
 
 	private $file;
 	private $type;

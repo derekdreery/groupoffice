@@ -332,8 +332,8 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 		$jobReflection = new ReflectionClass($this->job);
 		$parentReflection = $jobReflection->getParentClass();
 
-		$jobProperties = $jobReflection->getProperties(ReflectionProperty::IS_PUBLIC);
-		$parentProperties = $parentReflection->getProperties(ReflectionProperty::IS_PUBLIC);
+		$jobProperties = $jobReflection->getProperties(\ReflectionProperty::IS_PUBLIC);
+		$parentProperties = $parentReflection->getProperties(\ReflectionProperty::IS_PUBLIC);
 		
 		$publicProperties = array_diff($jobProperties, $parentProperties);
 		

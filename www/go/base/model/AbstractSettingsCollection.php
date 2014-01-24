@@ -93,7 +93,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	 * Determine which properties are of the childs class. 
 	 * Return them as an array.
 	 * 
-	 * @param ReflectionClass $obj
+	 * @param \ReflectionClass $obj
 	 * @return array
 	 */
 //	public function get_parent_properties_diff( $obj) {
@@ -107,7 +107,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 		if(!$this->validate())
 			return false;
 		
-		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(ReflectionProperty::IS_PUBLIC);
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(\ReflectionProperty::IS_PUBLIC);
 		$success = true;
 		foreach($properties as $property){				
 			$key = $property->name;
@@ -165,7 +165,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	public function getArray(){
 		
 		$data = array();
-		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(ReflectionProperty::IS_PUBLIC);
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(\ReflectionProperty::IS_PUBLIC);
 		
 		foreach($properties as $property){
 			$key = $property->name;	  
