@@ -166,8 +166,13 @@ if(version_compare(2, $version)>0){
 }else
 {
 	$filename = '/etc/dovecot/dovecot-sql.conf.ext';
-	if(!file_contains($filename, 'Group-Office'))
+	if(!file_contains($filename, 'Group-Office')){
+		$firstInstall=true;
 		create_file($filename,'tpl/etc/dovecot/dovecot-sql.conf.ext', $replacements);
+	}else
+	{
+		$firstInstall=false;
+	}
 	
 	$filename = '/etc/dovecot/conf.d/auth-sql.conf.ext';
 	if(!file_contains($filename, 'Group-Office'))
@@ -188,6 +193,12 @@ if(version_compare(2, $version)>0){
 	$filename = '/etc/dovecot/conf.d/15-lda.conf';
 	if(!file_contains($filename, 'Group-Office'))
 		create_file($filename,'tpl/etc/dovecot/conf.d/15-lda.conf', $replacements);
+	
+	if($firstInstall){
+		$filename = '/etc/dovecot/conf.d/15-mailboxes.conf';
+		if(!file_contains($filename, 'Group-Office'))
+			create_file($filename,'tpl/etc/dovecot/conf.d/15-mailboxes.conf', $replacements);
+	}
 	
 	$filename = '/etc/dovecot/conf.d/20-imap.conf';
 	if(!file_contains($filename, 'Group-Office'))
