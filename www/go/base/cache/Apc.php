@@ -18,7 +18,7 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @package GO.base.cache
  */
-class GO_Base_Cache_Apc implements GO_Base_Cache_Interface{
+class GO_Base_Cache_Apc implements GO_Base_Cache_CacheInterface{
 	
 	private $_prefix;
 	

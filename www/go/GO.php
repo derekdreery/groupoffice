@@ -357,7 +357,7 @@ class GO{
 	 * available to all users. When debug is enabled a dummy cache driver is used
 	 * that caches nothing.
 	 * 
-	 * @return GO_Base_Cache_Interface
+	 * @return GO_Base_Cache_CacheInterface
 	 */
 	public static function cache(){
 

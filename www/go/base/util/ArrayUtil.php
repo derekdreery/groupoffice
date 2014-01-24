@@ -1,6 +1,6 @@
 <?php
 
-class GO_Base_Util_Array {
+class GO_Base_Util_ArrayUtil {
 
 	/**
 	 * Merge array recurively. 

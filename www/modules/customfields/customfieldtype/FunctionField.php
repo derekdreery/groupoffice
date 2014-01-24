@@ -1,6 +1,6 @@
 <?php
 
-class GO_Customfields_Customfieldtype_Function extends GO_Customfields_Customfieldtype_Abstract {
+class GO_Customfields_Customfieldtype_FunctionField extends GO_Customfields_Customfieldtype_Abstract {
 
 	public function name() {
 		return 'Function';

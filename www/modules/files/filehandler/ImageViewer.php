@@ -1,5 +1,5 @@
 <?php
-class GO_Files_Filehandler_ImageViewer implements GO_Files_Filehandler_Interface{
+class GO_Files_Filehandler_ImageViewer implements GO_Files_Filehandler_FilehandlerInterface{
 
 	public function isDefault(\GO_Files_Model_File $file) {
 		return $file->isImage();

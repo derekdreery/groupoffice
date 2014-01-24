@@ -1,5 +1,5 @@
 <?php
-interface GO_Files_Filehandler_Interface{
+interface GO_Files_Filehandler_FilehandlerInterface{
 	//public function supportedExtensions();
 	
 	/**

@@ -18,7 +18,7 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @package GO.base.cache
  */
-class GO_Base_Cache_None implements GO_Base_Cache_Interface{
+class GO_Base_Cache_None implements GO_Base_Cache_CacheInterface{
 	
 	
 //	public function __construct() {

@@ -1,5 +1,5 @@
 <?php
-class GO_Files_Filehandler_Inline implements GO_Files_Filehandler_Interface{
+class GO_Files_Filehandler_Inline implements GO_Files_Filehandler_FilehandlerInterface{
 
 	private $defaultExtensions = array('pdf','html','htm','txt','xml','log');
 	

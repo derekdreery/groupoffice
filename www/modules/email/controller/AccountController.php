@@ -457,7 +457,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			}
 			
 		}
-		GO_Base_Util_Array::caseInsensitiveSort($nodes);
+		GO_Base_Util_ArrayUtil::caseInsensitiveSort($nodes);
 
 		return array_values($nodes);
 	}
