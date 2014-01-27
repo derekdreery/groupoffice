@@ -9,11 +9,20 @@
 		
 		<?php 
 		
-		$addressbook = GO_Addressbook_Model_Addressbook::model()->findSingle();
-		
-		//$addressbook = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name','Example');
-		
-		echo $form->hiddenField($addressbook,'id',array('value'=>$addressbook->id)); 
+		// Find the first addressbook that's available:
+		 $addressbook = GO_Addressbook_Model_Addressbook::model()->findSingle();
+
+		// Find addressbook by id:
+		// $addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk(11);
+
+		// Find addressbook by the name attribute:
+		// $addressbook = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name','Example');
+
+		// Use the addressbook model to populate the hidden field:
+		 echo $form->hiddenField($addressbook,'id',array('value'=>$addressbook->id)); 
+
+		// Just set the correct addressbook id in the hidden field manually:
+		// echo $form->hiddenField($addressbook,'id',array('value'=>11));
 		
 		?>
 		
