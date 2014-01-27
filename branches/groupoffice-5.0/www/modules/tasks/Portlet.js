@@ -61,7 +61,7 @@ GO.tasks.SimpleTasksPanel = function(config)
 			delete this.store.baseParams['checked'];
 		}, this);
 	
-		config.paging=false,
+		config.paging=false;
 		config.plugins=checkColumn;
 		config.autoExpandColumn='task-portlet-name-col';
 		config.autoExpandMax=2500;
@@ -91,7 +91,12 @@ GO.tasks.SimpleTasksPanel = function(config)
 			dataIndex: 'tasklist_name',
 			sortable:true,
 			width:150
-		}];
+		},{
+            header:'ID',
+            dataIndex: 'id',
+            sortable:true,
+            width:50
+        }];
 		config.view=new Ext.grid.GroupingView({
 			scrollOffset: 2,
 			//forceFit:true,
@@ -102,7 +107,7 @@ GO.tasks.SimpleTasksPanel = function(config)
 					return 'tasks-late';
 				}
 			}
-		}),
+		});
 		config.sm=new Ext.grid.RowSelectionModel();
 		config.loadMask=true;
 		config.autoHeight=true;
