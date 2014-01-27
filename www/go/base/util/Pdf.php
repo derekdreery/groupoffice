@@ -1,11 +1,10 @@
 <?php
+namespace GO\Base\Util;
+
 require_once \GO::config()->root_path."go/vendor/tcpdf/tcpdf.php";
 
 
-namespace GO\Base\Util;
-
-
-class Pdf extends TCPDF {
+class Pdf extends \TCPDF {
 
 	public function __construct($orientation = 'P') {
 		
