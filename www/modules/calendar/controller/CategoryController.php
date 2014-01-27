@@ -5,7 +5,7 @@ namespace GO\Calendar\Controller;
 
 class Category extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Calendar\Model\Category';
+	protected $model = 'GO\Calendar\Model\Category';
 	
 	
 	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {

@@ -83,8 +83,8 @@ class InstallationModule extends \GO\Base\Db\ActiveRecord
 	public function relations()
 	{
 		return array(
-				'installation'=>array('type'=>self::BELONGS_TO, 'model'=>'\GO\ServerManager\Model\Installation', 'field'=>'installation_id'),
-				'modulePrice'=>array('type'=>self::BELONGS_TO, 'model'=>'\GO\ServerManager\Model\ModulePrice', 'field'=>'name'),
+				'installation'=>array('type'=>self::BELONGS_TO, 'model'=>'GO\ServerManager\Model\Installation', 'field'=>'installation_id'),
+				'modulePrice'=>array('type'=>self::BELONGS_TO, 'model'=>'GO\ServerManager\Model\ModulePrice', 'field'=>'name'),
 		);
 	}
 	

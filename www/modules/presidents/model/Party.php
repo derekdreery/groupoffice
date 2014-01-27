@@ -40,7 +40,7 @@ class Party extends \GO\Base\Db\ActiveRecord {
 
 	public function relations() {
 		return array(
-			'presidents' => array('type' => self::HAS_MANY, 'model' => '\GO\Presidents\Model\President', 'field' => 'party_id', 'delete' => true)		
+			'presidents' => array('type' => self::HAS_MANY, 'model' => 'GO\Presidents\Model\President', 'field' => 'party_id', 'delete' => true)
 		);
 	}
 

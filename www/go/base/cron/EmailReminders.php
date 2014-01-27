@@ -58,7 +58,7 @@ class EmailReminders extends AbstractCron {
 			$remindersStmt = \GO\Base\Model\Reminder::model()->find(
 				\GO\Base\Db\FindParams::newInstance()
 					->joinModel(array(
-						'model' => '\GO\Base\Model\ReminderUser',
+						'model' => 'GO\Base\Model\ReminderUser',
 						'localTableAlias' => 't',
 						'localField' => 'id',
 						'foreignField' => 'reminder_id',

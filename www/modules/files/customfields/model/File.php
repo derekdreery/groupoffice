@@ -35,6 +35,6 @@ class File extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
 	}
 
 	public function extendsModel(){
-		return "\GO\Files\Model\File";
+		return "GO\Files\Model\File";
 	}
 }

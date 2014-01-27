@@ -12,9 +12,11 @@ namespace GO\Addressbook\Controller;
 
 class Company extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Addressbook\Model\Company';
+	protected $model = 'GO\Addressbook\Model\Company';
 
 	protected function afterDisplay(&$response, &$model, &$params) {
+
+        \GO::debug(get_class($this));
 
 		$response['data']['photo_url']=$model->photoThumbURL;
 		$response['data']['original_photo_url']=$model->photoURL;
@@ -44,8 +46,8 @@ class Company extends \GO\Base\Controller\AbstractModelController {
 		}
 		
 		
-		if(\GO::modules()->customfields && isset($response['data']['customfields']) && \GO\Customfields\Model\DisableCategories::isEnabled("\GO\Addressbook\Model\Company", $model->addressbook_id)){
-			$ids = \GO\Customfields\Model\EnabledCategory::model()->getEnabledIds("\GO\Addressbook\Model\Company", $model->addressbook_id);
+		if(\GO::modules()->customfields && isset($response['data']['customfields']) && \GO\Customfields\Model\DisableCategories::isEnabled("GO\Addressbook\Model\Company", $model->addressbook_id)){
+			$ids = \GO\Customfields\Model\EnabledCategory::model()->getEnabledIds("GO\Addressbook\Model\Company", $model->addressbook_id);
 			
 			$enabled = array();
 			foreach($response['data']['customfields'] as $cat){
@@ -61,7 +63,7 @@ class Company extends \GO\Base\Controller\AbstractModelController {
 			
 			$response['data']['items_under_blocks'] = array();
 			
-			$enabledBlocksStmt = \GO\Customfields\Model\EnabledBlock::getEnabledBlocks($model->addressbook_id, '\GO\Addressbook\Model\Addressbook', $model->className());
+			$enabledBlocksStmt = \GO\Customfields\Model\EnabledBlock::getEnabledBlocks($model->addressbook_id, 'GO\Addressbook\Model\Addressbook', $model->className());
 			foreach ($enabledBlocksStmt as $i => $enabledBlockModel) {
 				
 				$items = $enabledBlockModel->block->getItemNames($model->id,$model->name);
@@ -109,7 +111,7 @@ class Company extends \GO\Base\Controller\AbstractModelController {
 	protected function afterLoad(&$response, &$model, &$params) {
 
 		if (\GO::modules()->customfields)
-			$response['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("\GO\Addressbook\Model\Company", $model->addressbook_id);
+			$response['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Addressbook\Model\Company", $model->addressbook_id);
 
 		$response['data']['photo_url']=$model->photoThumbURL;		
 		$response['data']['original_photo_url']=$model->photoURL;
@@ -200,7 +202,7 @@ class Company extends \GO\Base\Controller\AbstractModelController {
 		if(!empty($params['filters'])){
 			$abMultiSel = new \GO\Base\Component\MultiSelectGrid(
 							'books', 
-							"\GO\Addressbook\Model\Addressbook",$store, $params, true);		
+							"GO\Addressbook\Model\Addressbook",$store, $params, true);
 			
 			$abMultiSel->addSelectedToFindCriteria($storeParams, 'addressbook_id');
 			
@@ -209,7 +211,7 @@ class Company extends \GO\Base\Controller\AbstractModelController {
 
 			$addresslistMultiSel = new \GO\Base\Component\MultiSelectGrid(
 							'addresslist_filter', 
-							"\GO\Addressbook\Model\Addresslist",$store, $params, false);				
+							"GO\Addressbook\Model\Addresslist",$store, $params, false);
 
 			if(!empty($params['addresslist_filters']))
 			{
@@ -264,7 +266,7 @@ class Company extends \GO\Base\Controller\AbstractModelController {
 						->joinAclFieldTable()
 						->select('t.*, addressbook.name AS addressbook_name');
 //						->joinModel(array(
-//				'model' => '\GO\Addressbook\Model\Addressbook',
+//				'model' => 'GO\Addressbook\Model\Addressbook',
 //				'localField' => 'addressbook_id',
 //				'tableAlias' => 'ab', //Optional table alias
 //						));
@@ -413,7 +415,7 @@ class Company extends \GO\Base\Controller\AbstractModelController {
 									't.email'
 									))					
 			->joinModel(array(
-				'model'=>'\GO\Addressbook\Model\Addressbook',					
+				'model'=>'GO\Addressbook\Model\Addressbook',
 				'foreignField'=>'id', //defaults to primary key of the remote model
 				'localField'=>'addressbook_id', //defaults to "id"
 				'tableAlias'=>'a', //Optional table alias

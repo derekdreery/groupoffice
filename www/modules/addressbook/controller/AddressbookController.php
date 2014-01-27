@@ -9,14 +9,14 @@ class Addressbook extends \GO\Base\Controller\AbstractModelController{
 		$storeParams->debugSql();
 		$multiSel = new \GO\Base\Component\MultiSelectGrid(
 						'books', 
-						"\GO\Addressbook\Model\Addressbook",$store, $params, true);		
+						"GO\Addressbook\Model\Addressbook",$store, $params, true);
 		$multiSel->setFindParamsForDefaultSelection($storeParams);
 		$multiSel->formatCheckedColumn();
 		
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
 	
-	protected $model = '\GO\Addressbook\Model\Addressbook';
+	protected $model = 'GO\Addressbook\Model\Addressbook';
 	
 	protected function remoteComboFields() {
 		return array('user_id'=>'$model->user->name');
@@ -47,8 +47,8 @@ class Addressbook extends \GO\Base\Controller\AbstractModelController{
 		
 		$record['user_name']=$model->user ? $model->user->name : 'unknown';
 		if(\GO::modules()->customfields){
-			$record['contactCustomfields']=\GO\Customfields\Controller\Category::getEnabledCategoryData("\GO\Addressbook\Model\Contact", $model->id);
-			$record['companyCustomfields']=\GO\Customfields\Controller\Category::getEnabledCategoryData("\GO\Addressbook\Model\Company", $model->id);
+			$record['contactCustomfields']=\GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Addressbook\Model\Contact", $model->id);
+			$record['companyCustomfields']=\GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Addressbook\Model\Company", $model->id);
 		}
 		
 		return parent::formatStoreRecord($record, $model, $store);
@@ -109,9 +109,9 @@ class Addressbook extends \GO\Base\Controller\AbstractModelController{
 				break;
 			default:
 				
-				if($params['controller']=='\GO\Addressbook\Controller\Contact')
+				if($params['controller']=='GO\Addressbook\Controller\Contact')
 					$controller = new Contact();
-				elseif($params['controller']=='\GO\Addressbook\Controller\Company')
+				elseif($params['controller']=='GO\Addressbook\Controller\Company')
 					$controller = new Company();
 				else
 					throw new Exception("No or wrong controller given");
@@ -220,7 +220,7 @@ class Addressbook extends \GO\Base\Controller\AbstractModelController{
 		\GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
 		$checkModels = array(
-				"\GO\Addressbook\Model\Contact"=>array('first_name', 'middle_name', 'last_name', 'company_id', 'email','addressbook_id'),
+				"GO\Addressbook\Model\Contact"=>array('first_name', 'middle_name', 'last_name', 'company_id', 'email','addressbook_id'),
 			);		
 		
 		foreach($checkModels as $modelName=>$checkFields){

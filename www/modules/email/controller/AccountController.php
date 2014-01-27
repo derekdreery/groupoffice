@@ -6,7 +6,7 @@ namespace GO\Email\Controller;
 
 class Account extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = "\GO\Email\Model\Account";
+	protected $model = "GO\Email\Model\Account";
 	
 	
 //	protected function actionTest($params){
@@ -35,7 +35,7 @@ class Account extends \GO\Base\Controller\AbstractModelController {
 						->searchFields(array('a.email','a.name','t.host'))
 						->joinModel(array(
 				'tableAlias' => 'a',
-				'model' => '\GO\Email\Model\Alias',
+				'model' => 'GO\Email\Model\Alias',
 				'foreignField' => 'account_id', //defaults to primary key of the remote model
 				'type' => 'INNER',
 				'criteria' => \GO\Base\Db\FindCriteria::newInstance()->addCondition('default', 1, '=', 'a')
@@ -259,7 +259,7 @@ class Account extends \GO\Base\Controller\AbstractModelController {
 			$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('t.*')
 						->joinModel(array(
-								'model' => '\GO\Email\Model\AccountSort',
+								'model' => 'GO\Email\Model\AccountSort',
 								'foreignField' => 'account_id', //defaults to primary key of the remote model
 								'localField' => 'id', //defaults to primary key of the model
 								'type' => 'LEFT',
@@ -531,7 +531,7 @@ class Account extends \GO\Base\Controller\AbstractModelController {
 		$store = \GO\Base\Data\Store::newInstance(\GO\Base\Model\User::model());
 		$findParams= $store->getDefaultParams($params);
 		$findParams->joinModel(array( 
-					'model'=>'\GO\Email\Model\Account',
+					'model'=>'GO\Email\Model\Account',
 					'localTableAlias'=>'t', //defaults to "t" 
 					'localField'=>'id', //defaults to "id"  
 					'foreignField'=>'user_id', //defaults to primary key of the remote model 

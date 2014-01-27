@@ -53,7 +53,7 @@ class FieldTreeSelectOption extends \GO\Base\Db\ActiveRecord{
 	
 	public function relations() {
 		return array(
-				'field' => array('type' => self::BELONGS_TO, 'model' => '\GO\Customfields\Model\Field', 'field' => 'field_id')		);
+				'field' => array('type' => self::BELONGS_TO, 'model' => 'GO\Customfields\Model\Field', 'field' => 'field_id')		);
 	}	
 	
 	protected function beforeSave() {

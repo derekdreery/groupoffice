@@ -42,7 +42,7 @@ class DefaultTemplate extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations(){
 		return array(
-			'emailTemplate' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Addressbook\Model\Template', 'field'=>'template_id')
+			'emailTemplate' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Addressbook\Model\Template', 'field'=>'template_id')
 		);
 	}
 	

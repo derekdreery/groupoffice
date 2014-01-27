@@ -6,7 +6,7 @@ namespace GO\files\Controller;
 
 class Notification extends \GO\Base\Controller\AbstractModelController {
     
-    protected $model = '\GO\Files\Model\FolderNotification';
+    protected $model = 'GO\Files\Model\FolderNotification';
     
     protected function actionUnsent($params){
         \GO\Files\Model\FolderNotification::model()->notifyUser();

@@ -37,7 +37,7 @@ class Multifile extends \GO\Base\Controller\AbstractJsonController {
 		$findParams->ignoreAcl();
 		$findParams->order('mf.order');
 		$findParams->joinModel(array(
-			'model' => '\GO\Site\Model\MultifileFile',
+			'model' => 'GO\Site\Model\MultifileFile',
 			'localTableAlias' => 't',
 			'localField' => 'id',
 			'foreignField' => 'file_id',
@@ -52,7 +52,7 @@ class Multifile extends \GO\Base\Controller\AbstractJsonController {
 		$columnModel = new \GO\Base\Data\ColumnModel($model);
 		$columnModel->formatColumn('thumb_url', '$model->getThumbUrl(array("lw"=>100, "ph"=>100, "zc"=>1))');
 		
-		$store = new \GO\Base\Data\DbStore('\GO\Files\Model\File',$columnModel,$params,$findParams);
+		$store = new \GO\Base\Data\DbStore('GO\Files\Model\File',$columnModel,$params,$findParams);
 
 		$response = $this->renderStore($store);
 		

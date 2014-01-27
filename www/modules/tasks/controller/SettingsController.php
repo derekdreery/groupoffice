@@ -23,7 +23,7 @@ namespace GO\Tasks\Controller;
 
 class Settings extends \GO\Base\Model\AbstractModelController {
 	
-	protected $model = '\GO\Tasks\Model\Settings';
+	protected $model = 'GO\Tasks\Model\Settings';
 
 	
 }

@@ -81,7 +81,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	public function customfieldsModel() {
-		return "\GO\Files\Customfields\Model\File";
+		return "GO\Files\Customfields\Model\File";
 	}
 
 	public function hasLinks() {
@@ -109,9 +109,9 @@ class File extends \GO\Base\Db\ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'lockedByUser' => array('type' => self::BELONGS_TO, 'model' => '\GO\Base\Model\User', 'field' => 'locked_user_id'),
-				'folder' => array('type' => self::BELONGS_TO, 'model' => '\GO\Files\Model\Folder', 'field' => 'folder_id'),
-				'versions' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Files\Model\Version', 'field'=>'file_id', 'delete'=>true),
+				'lockedByUser' => array('type' => self::BELONGS_TO, 'model' => 'GO\Base\Model\User', 'field' => 'locked_user_id'),
+				'folder' => array('type' => self::BELONGS_TO, 'model' => 'GO\Files\Model\Folder', 'field' => 'folder_id'),
+				'versions' => array('type'=>self::HAS_MANY, 'model'=>'GO\Files\Model\Version', 'field'=>'file_id', 'delete'=>true),
 		);
 	}
 	

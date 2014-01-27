@@ -20,7 +20,7 @@ class CronUser extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations(){
 		return array(	
-			'cronjob' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Cron\CronJob', 'field'=>'user_id', 'linkModel' => '\GO\Base\Model\User'),
+			'cronjob' => array('type'=>self::MANY_MANY, 'model'=>'GO\Base\Cron\CronJob', 'field'=>'user_id', 'linkModel' => 'GO\Base\Model\User'),
     );
 	}
 }

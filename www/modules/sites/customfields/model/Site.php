@@ -35,6 +35,6 @@ class Site extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
 	}
 
 	public function extendsModel(){
-		return "\GO\Sites\Model\Site";
+		return "GO\Sites\Model\Site";
 	}
 }

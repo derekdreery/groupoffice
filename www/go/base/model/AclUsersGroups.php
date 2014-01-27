@@ -65,7 +65,7 @@ class AclUsersGroups extends \GO\Base\Db\ActiveRecord {
 	public function relations() {
 		return array('aclItem'=>array(
 			"type"=>self::BELONGS_TO,
-			"model"=>"\GO\Base\Model\Acl",
+			"model"=>"GO\Base\Model\Acl",
 			"field"=>'acl_id'
 		));
 	}

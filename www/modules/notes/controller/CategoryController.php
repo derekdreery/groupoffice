@@ -29,7 +29,7 @@ class Category extends \GO\Base\Controller\AbstractJsonController {
 		$columnModel = new \GO\Base\Data\ColumnModel(\GO\Notes\Model\Note::model());
 		$columnModel->formatColumn('user_name', '$model->user ? $model->user->name : 0');
 		
-		$store = new \GO\Base\Data\DbStore('\GO\Notes\Model\Category', $columnModel, $params);
+		$store = new \GO\Base\Data\DbStore('GO\Notes\Model\Category', $columnModel, $params);
 		$store->defaultSort = 'name';
 		$store->multiSelectable('no-multiselect');
 

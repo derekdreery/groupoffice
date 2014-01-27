@@ -35,6 +35,6 @@ class President extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
 	}
 
 	public function extendsModel(){
-		return "\GO\Presidents\Model\President";
+		return "GO\Presidents\Model\President";
 	}
 }

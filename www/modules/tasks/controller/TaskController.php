@@ -23,7 +23,7 @@ namespace GO\Tasks\Controller;
 
 class Task extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = '\GO\Tasks\Model\Task';
+	protected $model = 'GO\Tasks\Model\Task';
 	
 	protected function afterDisplay(&$response, &$model,&$params) {
 		$response['data']['user_name']=$model->user ? $model->user->name : '';
@@ -144,14 +144,14 @@ class Task extends \GO\Base\Controller\AbstractModelController{
 		
 		$multiSel = new \GO\Base\Component\MultiSelectGrid(
 						'ta-taskslists', 
-						"\GO\Tasks\Model\Tasklist",$store, $params, true);		
+						"GO\Tasks\Model\Tasklist",$store, $params, true);
 		$multiSel->addSelectedToFindCriteria($storeParams, 'tasklist_id');
 		$multiSel->setButtonParams($response);
 		$multiSel->setStoreTitle();
 		
 		$catMultiSel = new \GO\Base\Component\MultiSelectGrid(
             'categories', 
-            "\GO\Tasks\Model\Category",
+            "GO\Tasks\Model\Category",
             $store, 
             $params
         );		
@@ -227,7 +227,7 @@ class Task extends \GO\Base\Controller\AbstractModelController{
 			//->select('t.*, tl.name AS tasklist_name')
 			->select($fields.', tl.name AS tasklist_name, cat.name AS category_name, completion_time=0 AS incomplete')
 			->joinModel(array(
-					'model'=>'\GO\Tasks\Model\Tasklist',					
+					'model'=>'GO\Tasks\Model\Tasklist',
 					'localField'=>'tasklist_id',
 					'tableAlias'=>'tl', //Optional table alias
 			));
@@ -235,7 +235,7 @@ class Task extends \GO\Base\Controller\AbstractModelController{
 		
 		$storeParams->joinModel(array(
 					'type'=>'LEFT',
-					'model'=>'\GO\Tasks\Model\Category',					
+					'model'=>'GO\Tasks\Model\Category',
 					'localField'=>'category_id',
 					'tableAlias'=>'cat', //Optional table alias
 			));
@@ -245,7 +245,7 @@ class Task extends \GO\Base\Controller\AbstractModelController{
 		if(\GO::modules()->projects){
 		//	$storeParams->select("t.*, tl.name AS tasklist_name,p.name AS project_name");
 			$storeParams->select("t.*, tl.name AS tasklist_name,p.name AS project_name, cat.name AS category_name");
-			$storeParams->joinModel(array('model'=>'\GO\Projects\Model\Project', 'foreignField'=>'id', 'localField'=>'project_id', 'tableAlias'=>'p',  'type'=>'LEFT' ));
+			$storeParams->joinModel(array('model'=>'GO\Projects\Model\Project', 'foreignField'=>'id', 'localField'=>'project_id', 'tableAlias'=>'p',  'type'=>'LEFT' ));
 		}
 		
 		return $storeParams;

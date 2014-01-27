@@ -23,7 +23,7 @@ namespace GO\Smime\Controller;
 
 class PublicCertificate extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = '\GO\Smime\Model\PublicCertificate';
+	protected $model = 'GO\Smime\Model\PublicCertificate';
 	
 	protected function getStoreParams($params) {
 		

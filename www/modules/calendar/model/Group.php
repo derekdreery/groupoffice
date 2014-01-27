@@ -58,8 +58,8 @@ class Group extends \GO\Base\Db\ActiveRecord {
 	public function relations() {
 
 		return array(
-				'admins' => array('type' => self::MANY_MANY, 'model' => '\GO\Base\Model\User', 'field' => 'group_id', 'linkModel' => '\GO\Calendar\Model\GroupAdmin'),
-				'calendars' => array('type' => self::HAS_MANY, 'model' => '\GO\Calendar\Model\Calendar', 'field' => 'group_id'),
+				'admins' => array('type' => self::MANY_MANY, 'model' => 'GO\Base\Model\User', 'field' => 'group_id', 'linkModel' => 'GO\Calendar\Model\GroupAdmin'),
+				'calendars' => array('type' => self::HAS_MANY, 'model' => 'GO\Calendar\Model\Calendar', 'field' => 'group_id'),
 		);
 	}
 

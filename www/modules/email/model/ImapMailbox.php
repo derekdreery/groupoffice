@@ -35,7 +35,7 @@ class ImapMailbox extends \GO\Base\Model {
 	public function __construct(Account $account, $attributes) {
 		$this->_account = $account;
 		
-		\GO::debug("\GO\Email\Model\ImapMailbox:".$attributes['name']);
+		\GO::debug("GO\Email\Model\ImapMailbox:".$attributes['name']);
 
 		$this->_attributes = $attributes;
 		

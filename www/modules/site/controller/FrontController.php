@@ -64,7 +64,7 @@ class Front extends \GO\Site\Components\Controller {
 							);
 		
 		$columnModel = new \GO\Base\Data\ColumnModel();
-		$store = new \GO\Base\Data\DbStore('\GO\Site\Model\Content',$columnModel,$params,$searchParams);
+		$store = new \GO\Base\Data\DbStore('GO\Site\Model\Content',$columnModel,$params,$searchParams);
 	
 		echo $this->render('search', array('searchResults'=>$store));
 	}
@@ -108,7 +108,7 @@ class Front extends \GO\Site\Components\Controller {
 	 * Using an AJAX call this the controller action
 	 * 
 	 * @param array $params
-	 * - string widget_class eg. '\GO\Site\Widget\Plupload\Widget'
+	 * - string widget_class eg. 'GO\Site\Widget\Plupload\Widget'
 	 * - string widget_method name of the widgets static method eg. 'upload'
 	 * @throws Exception when not all required parameters are supplied
 	 */

@@ -28,7 +28,7 @@ class Portlet extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * @return String 
 	 */
 	public function modelName() {
-		return '\GO\Calendar\Model\Calendar';
+		return 'GO\Calendar\Model\Calendar';
 	}
 	
 	/**
@@ -36,7 +36,7 @@ class Portlet extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return '\GO\Calendar\Model\PortletCalendar';
+		return 'GO\Calendar\Model\PortletCalendar';
 	}
 	
 	/**

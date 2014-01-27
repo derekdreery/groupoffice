@@ -90,7 +90,7 @@ class Group extends \GO\Base\Db\ActiveRecord {
   public function relations() {
     
     return array(
-				'users' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\User', 'field'=>'group_id', 'linkModel' => '\GO\Base\Model\UserGroup'),
+				'users' => array('type'=>self::MANY_MANY, 'model'=>'GO\Base\Model\User', 'field'=>'group_id', 'linkModel' => 'GO\Base\Model\UserGroup'),
 		);
   }
   

@@ -17,7 +17,7 @@
  * This is necessary in the corresponding controller:
  * 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
-		$message = new GO_Base_Mail_Message();
+		$message = new GO\\Base\\Mail\\Message();
 		$message->handleEmailFormInput($params);
 		
 		$model->content = $message->toString();
@@ -29,7 +29,7 @@
 	protected function afterLoad(&$response, &$model, &$params) {
 		
 		// create message model from client's content field, turned into HTML format
-		$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($model->content);
+		$message = GO\\Email\\Model\\SavedMessage::model()->createFromMimeData($model->content);
 	
 		$response['data'] = array_merge($response['data'], $message->toOutputArray());
 

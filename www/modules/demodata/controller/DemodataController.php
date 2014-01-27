@@ -36,13 +36,13 @@ class Demodata extends \GO\Base\Controller\AbstractController {
 					foreach($types as $t){
 						\GO\Customfields\Model\Field::model()->createIfNotExists($category->id, $t['type'],array(
 								'datatype'=>$t['className'],
-								'helptext'=>($t['className']=="\GO\Customfields\Customfieldtype\Text" ? "Some help text for this field" : "")
+								'helptext'=>($t['className']=="GO\Customfields\Customfieldtype\Text" ? "Some help text for this field" : "")
 								));
 					}
 				}else
 				{
 					\GO\Customfields\Model\Field::model()->createIfNotExists($category->id, "Custom",array(
-								'datatype'=>"\GO\Customfields\Customfieldtype\Text",
+								'datatype'=>"GO\Customfields\Customfieldtype\Text",
 								'helptext'=>"Some help text for this field"
 								));
 				}

@@ -126,8 +126,8 @@ class CronCollection extends \GO\Base\Model {
 	 * Get an array of all cronjobs that are available for the given module.
 	 * Example output:
 	 * array(
-	 *	'uniqueCronName'=>'\GO\Addressbook\Cron\Check',
-	 *	'uniqueCronName2'=>'\GO\Addressbook\Cron\AutoMail'
+	 *	'uniqueCronName'=>'GO\Addressbook\Cron\Check',
+	 *	'uniqueCronName2'=>'GO\Addressbook\Cron\AutoMail'
 	 * );
 	 * 
 	 * @param \GO\Base\Module $module
@@ -154,13 +154,13 @@ class CronCollection extends \GO\Base\Model {
 	}
 	
 	/**
-	 * Check if the class is a subclass of the "\GO\Base\Cron\AbstractCron" classfile.
+	 * Check if the class is a subclass of the "GO\Base\Cron\AbstractCron" classfile.
 	 * 
 	 * @param ReflectionClass $reflectionClass
 	 * @return boolean
 	 */
 	private function _checkIsCronJobClassFile(ReflectionClass $reflectionClass){
-		return $reflectionClass->isSubclassOf("\GO\Base\Cron\AbstractCron")?true:false;
+		return $reflectionClass->isSubclassOf("GO\Base\Cron\AbstractCron")?true:false;
 	}
 	
 }

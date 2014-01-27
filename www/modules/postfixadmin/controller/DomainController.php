@@ -6,7 +6,7 @@ namespace GO\Postfixadmin\Controller;
 
 class Domain extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Postfixadmin\Model\Domain';
+	protected $model = 'GO\Postfixadmin\Model\Domain';
 	
 	protected function remoteComboFields() {
 		return array('user_id'=>'$model->user->name');
@@ -79,7 +79,7 @@ class Domain extends \GO\Base\Controller\AbstractModelController {
 				->single()
 				->select('SUM(`usage`) AS `usage`')
 				->joinModel(array(
-	 			'model'=>'\GO\Postfixadmin\Model\Domain',
+	 			'model'=>'GO\Postfixadmin\Model\Domain',
 	 			'localField'=>'domain_id',
 	 			'tableAlias'=>'d'	
 				))

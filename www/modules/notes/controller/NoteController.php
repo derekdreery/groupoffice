@@ -115,8 +115,8 @@ class Note extends \GO\Base\Controller\AbstractJsonController {
 		$columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
 
 		//Create store
-		$store = new \GO\Base\Data\DbStore('\GO\Notes\Model\Note', $columnModel, $params);
-		$store->multiSelect('no-multiselect', '\GO\Notes\Model\Category', 'category_id');
+		$store = new \GO\Base\Data\DbStore('GO\Notes\Model\Note', $columnModel, $params);
+		$store->multiSelect('no-multiselect', 'GO\Notes\Model\Category', 'category_id');
 
 		echo $this->renderStore($store);
 	}

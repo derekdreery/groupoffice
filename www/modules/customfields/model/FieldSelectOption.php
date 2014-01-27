@@ -50,7 +50,7 @@ class FieldSelectOption extends \GO\Base\Db\ActiveRecord{
 	
 	public function relations() {
 		return array(
-				'fields' => array('type' => self::BELONGS_TO, 'model' => '\GO\Customfields\Model\Field', 'field' => 'field_id')		);
+				'fields' => array('type' => self::BELONGS_TO, 'model' => 'GO\Customfields\Model\Field', 'field' => 'field_id')		);
 	}	
 
 }

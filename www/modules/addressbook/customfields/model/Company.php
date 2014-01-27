@@ -5,7 +5,7 @@ namespace GO\Addressbook\Customfields\Model;
 
 class Company extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
 	public function extendsModel() {		
-		return "\GO\Addressbook\Model\Company";
+		return "GO\Addressbook\Model\Company";
 	}
 	
 	/**

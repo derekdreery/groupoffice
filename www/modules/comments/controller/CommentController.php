@@ -5,7 +5,7 @@ namespace GO\Comments\Controller;
 
 class Comment extends \GO\Base\Controller\AbstractModelController{
 
-	protected $model = '\GO\Comments\Model\Comment';
+	protected $model = 'GO\Comments\Model\Comment';
 
 
 	protected function getStoreParams($params){
@@ -49,7 +49,7 @@ class Comment extends \GO\Base\Controller\AbstractModelController{
 	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		$modelTypeModel = \GO\Base\Model\ModelType::model()->findSingleByAttribute('id',$model->model_type_id);
-		if ($modelTypeModel->model_name == '\GO\Addressbook\Model\Contact') {
+		if ($modelTypeModel->model_name == 'GO\Addressbook\Model\Contact') {
 			$modelWithComment = \GO::getModel($modelTypeModel->model_name)->findByPk($model->model_id);
 			$modelWithComment->setAttribute('action_date',\GO\Base\Util\Date::to_unixtime($params['action_date']));
 			$modelWithComment->save();
@@ -59,7 +59,7 @@ class Comment extends \GO\Base\Controller\AbstractModelController{
 	
 	protected function afterLoad(&$response, &$model, &$params) {
 		$modelTypeModel = \GO\Base\Model\ModelType::model()->findSingleByAttribute('id',$model->model_type_id);
-		if ($modelTypeModel->model_name == '\GO\Addressbook\Model\Contact') {
+		if ($modelTypeModel->model_name == 'GO\Addressbook\Model\Contact') {
 			$modelWithComment = \GO::getModel($modelTypeModel->model_name)->findByPk($model->model_id);
 			$actionDate = $modelWithComment->getAttribute('action_date');
 			$response['data']['action_date'] = \GO\Base\Util\Date::get_timestamp($actionDate,false);
@@ -75,7 +75,7 @@ class Comment extends \GO\Base\Controller\AbstractModelController{
 		);
 
 		$cm = new \GO\Base\Data\ColumnModel();
-		$cm->setColumnsFromModel(\GO::getModel('\GO\Comments\Model\Comment'));
+		$cm->setColumnsFromModel(\GO::getModel('GO\Comments\Model\Comment'));
 		
 		$store = \GO\Base\Data\Store::newInstance($cm);
 		
@@ -84,7 +84,7 @@ class Comment extends \GO\Base\Controller\AbstractModelController{
 		$findParams = \GO\Base\Db\FindParams::newInstance()
 			->select('t.*,type.model_name')
 			->joinModel(array(
-				'model' => '\GO\Base\Model\ModelType',
+				'model' => 'GO\Base\Model\ModelType',
 				'localTableAlias' => 't',
 				'localField' => 'model_type_id',
 				'foreignField' => 'id',

@@ -15,7 +15,7 @@ class AddressbookModule extends \GO\Base\Module{
 	}
 	
 	public static function initListeners() {
-		\GO\Base\Model\User::model()->addListener('delete', "\GO\Addressbook\AddressbookModule", "deleteUser");
+		\GO\Base\Model\User::model()->addListener('delete', "GO\Addressbook\AddressbookModule", "deleteUser");
 	}
 	
 	// Load the settings for the "Addresslists" tab in the Settings panel

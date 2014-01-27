@@ -6,7 +6,7 @@ namespace GO\Users\Controller;
 
 class User extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Base\Model\User';
+	protected $model = 'GO\Base\Model\User';
 
 	protected function ignoreAclPermissions() {
 		//ignore acl on submit so normal users can use the users module. 
@@ -254,7 +254,7 @@ class User extends \GO\Base\Controller\AbstractModelController {
 		
 		if(!empty($params['show_licensed'])){		
 		
-			if(class_exists("\GO\Professional\LicenseCheck")){
+			if(class_exists("GO\Professional\LicenseCheck")){
 				$lc = new \GO\Professional\LicenseCheck();
 
 				$proModuleAcls=array();
@@ -269,7 +269,7 @@ class User extends \GO\Base\Controller\AbstractModelController {
 				$findParams
 					->ignoreAcl()
 					->joinModel(array(
-						'model'=>'\GO\Base\Model\UserGroup',
+						'model'=>'GO\Base\Model\UserGroup',
 						'foreignField'=>'user_id',
 						'tableAlias'=>'ug'				
 					))
@@ -286,7 +286,7 @@ class User extends \GO\Base\Controller\AbstractModelController {
 	}
 	
 	protected function afterStore(&$response, &$params, &$store, $storeParams) {
-		if(class_exists("\GO\Professional\LicenseCheck")){
+		if(class_exists("GO\Professional\LicenseCheck")){
 			$lc = new \GO\Professional\LicenseCheck();
 			try{
 				$lc->checkProModules(true);
@@ -302,7 +302,7 @@ class User extends \GO\Base\Controller\AbstractModelController {
 		
 		$storeParams->joinModel(
 			array(
-				'model'=>'\GO\Base\Model\UserGroup',
+				'model'=>'GO\Base\Model\UserGroup',
 				'localTableAlias'=>'t',
 				'localField'=>'id',
 				'foreignField'=>'user_id',
@@ -313,7 +313,7 @@ class User extends \GO\Base\Controller\AbstractModelController {
 		
 		$groupsMultiSel = new \GO\Base\Component\MultiSelectGrid(
 			'users-groups-panel', 
-			"\GO\Base\Model\Group",$store, $params, true);		
+			"GO\Base\Model\Group",$store, $params, true);
 			$groupsMultiSel->addSelectedToFindCriteria($storeParams, 'group_id','ug');
 			
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
@@ -395,7 +395,7 @@ class User extends \GO\Base\Controller\AbstractModelController {
 		
 		\GO::setMaxExecutionTime(0);
 		
-		if($params['controller']=='\GO\Users\Controller\User')
+		if($params['controller']=='GO\Users\Controller\User')
 			$controller = new User();
 		else
 			throw new Exception("No or wrong controller given");

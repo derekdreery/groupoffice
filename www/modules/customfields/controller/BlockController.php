@@ -15,7 +15,7 @@ class Block extends \GO\Base\Controller\AbstractJsonController{
 
 		$findParams = \GO\Base\Db\FindParams::newInstance()
 			->joinModel(array(
-				'model'=>'\GO\Customfields\Model\Field',
+				'model'=>'GO\Customfields\Model\Field',
 				'localTableAlias'=>'t',
 				'localField'=>'field_id',
 				'foreignField'=>'id',
@@ -23,7 +23,7 @@ class Block extends \GO\Base\Controller\AbstractJsonController{
 				'type'=>'INNER'
 			))
 			->joinModel(array(
-				'model'=>'\GO\Customfields\Model\Category',
+				'model'=>'GO\Customfields\Model\Category',
 				'localTableAlias'=>'cf',
 				'localField'=>'category_id',
 				'foreignField'=>'id',
@@ -47,7 +47,7 @@ class Block extends \GO\Base\Controller\AbstractJsonController{
 					->addCondition('user_id', \GO::user()->id, '=', 'ug', false)
 			);
 		
-		$store = new \GO\Base\Data\DbStore('\GO\Customfields\Model\Block', $columnModel, $params, $findParams);
+		$store = new \GO\Base\Data\DbStore('GO\Customfields\Model\Block', $columnModel, $params, $findParams);
 
 		echo $this->renderStore($store);
 		
@@ -92,7 +92,7 @@ class Block extends \GO\Base\Controller\AbstractJsonController{
 		$findParams = \GO\Base\Db\FindParams::newInstance()
 			->select('t.*,eb.block_id AS enabled_block_id')
 			->joinModel(array(
-				'model'=>'\GO\Customfields\Model\EnabledBlock',
+				'model'=>'GO\Customfields\Model\EnabledBlock',
 				'localTableAlias'=>'t',
 				'localField'=>'id',
 				'foreignField'=>'block_id',
@@ -103,7 +103,7 @@ class Block extends \GO\Base\Controller\AbstractJsonController{
 					->addCondition('model_id',$params['model_id'],'=','eb')
 			))
 			->joinModel(array(
-				'model'=>'\GO\Customfields\Model\Field',
+				'model'=>'GO\Customfields\Model\Field',
 				'localTableAlias'=>'t',
 				'localField'=>'field_id',
 				'foreignField'=>'id',
@@ -111,7 +111,7 @@ class Block extends \GO\Base\Controller\AbstractJsonController{
 				'type'=>'INNER'
 			))
 			->joinModel(array(
-				'model'=>'\GO\Customfields\Model\Category',
+				'model'=>'GO\Customfields\Model\Category',
 				'localTableAlias'=>'cf',
 				'localField'=>'category_id',
 				'foreignField'=>'id',
@@ -135,7 +135,7 @@ class Block extends \GO\Base\Controller\AbstractJsonController{
 					->addCondition('user_id', \GO::user()->id, '=', 'ug', false)
 			);
 		
-		$store = new \GO\Base\Data\DbStore('\GO\Customfields\Model\Block', $columnModel, $params, $findParams);
+		$store = new \GO\Base\Data\DbStore('GO\Customfields\Model\Block', $columnModel, $params, $findParams);
 
 		echo $this->renderStore($store);
 		

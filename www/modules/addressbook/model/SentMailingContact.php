@@ -41,7 +41,7 @@ class SentMailingContact extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 		return array(
-			'sentMailing' => array('type' => self::BELONGS_TO, 'model' => '\GO\Addressbook\Model\SentMailing', 'field' => 'sent_mailing_id')
+			'sentMailing' => array('type' => self::BELONGS_TO, 'model' => 'GO\Addressbook\Model\SentMailing', 'field' => 'sent_mailing_id')
 		);
 	}
 	

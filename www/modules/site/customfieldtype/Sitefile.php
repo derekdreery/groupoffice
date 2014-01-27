@@ -14,7 +14,7 @@ class Sitefile extends \GO\Customfields\Customfieldtype\AbstractCustomfieldtype{
 		if(!empty($attributes[$key])) {
 
 			if(!\GO\Customfields\Model\AbstractCustomFieldsRecord::$formatForExport){
-				$html='<a href="#" onclick=\'GO.linkHandlers["\GO\Files\Model\File"].call(this,"'.
+				$html='<a href="#" onclick=\'GO.linkHandlers["GO\Files\Model\File"].call(this,"'.
 					$attributes[$key].'");\' title="'.$attributes[$key].'">'.
 						$attributes[$key].'</a>';
 			}else
@@ -41,12 +41,12 @@ class Sitefile extends \GO\Customfields\Customfieldtype\AbstractCustomfieldtype{
 	 * Otherwise it will only be available for the given modeltypes.
 	 * 
 	 * Example:
-	 *	return array('\GO\Site\Model\Content','\GO\Site\Model\Site');
+	 *	return array('GO\Site\Model\Content','GO\Site\Model\Site');
 	 *  
 	 * @return array
 	 */
 	public function supportedModels(){
-		return array('\GO\Site\Model\Content','\GO\Site\Model\Site');
+		return array('GO\Site\Model\Content','GO\Site\Model\Site');
 	}
 	
 }

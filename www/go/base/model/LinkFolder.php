@@ -46,7 +46,7 @@ class LinkFolder extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 		return array(
-				'children' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Base\Model\LinkFolder', 'field'=>'parent_id', 'delete'=>true)
+				'children' => array('type'=>self::HAS_MANY, 'model'=>'GO\Base\Model\LinkFolder', 'field'=>'parent_id', 'delete'=>true)
 				);
 	}
 	

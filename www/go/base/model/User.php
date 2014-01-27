@@ -147,10 +147,10 @@ class User extends \GO\Base\Db\ActiveRecord {
 
 	public function relations() {
 		return array(
-			'contact' => array('type' => self::HAS_ONE, 'model' => '\GO\Addressbook\Model\Contact', 'field' => 'go_user_id'),
-			'reminders' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\Reminder', 'field'=>'user_id', 'linkModel' => '\GO\Base\Model\ReminderUser'),
-			'groups' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\Group', 'field'=>'user_id', 'linkModel' => '\GO\Base\Model\UserGroup'),
-			'_workingWeek' => array('type' => self::HAS_ONE, 'model' => '\GO\Base\Model\WorkingWeek', 'field' => 'user_id')
+			'contact' => array('type' => self::HAS_ONE, 'model' => 'GO\Addressbook\Model\Contact', 'field' => 'go_user_id'),
+			'reminders' => array('type'=>self::MANY_MANY, 'model'=>'GO\Base\Model\Reminder', 'field'=>'user_id', 'linkModel' => 'GO\Base\Model\ReminderUser'),
+			'groups' => array('type'=>self::MANY_MANY, 'model'=>'GO\Base\Model\Group', 'field'=>'user_id', 'linkModel' => 'GO\Base\Model\UserGroup'),
+			'_workingWeek' => array('type' => self::HAS_ONE, 'model' => 'GO\Base\Model\WorkingWeek', 'field' => 'user_id')
 		);
 	}
 	
@@ -169,7 +169,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 	}
 
 	public function customfieldsModel() {
-		return '\GO\Users\Customfields\Model\User';
+		return 'GO\Users\Customfields\Model\User';
 	}
 	
 	public function hasFiles(){
@@ -249,7 +249,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 		if (\GO::modules()->isInstalled('files')) {
 			if (!$bytes) { //recalculated
 				$fp = \GO\Base\Db\FindParams::newInstance()->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('user_id', $this->id));
-				$sumFilesize = Grouped::model()->load('\GO\Files\Model\File', 'user_id', 'SUM(size) as total_size', $fp)->fetch();
+				$sumFilesize = Grouped::model()->load('GO\Files\Model\File', 'user_id', 'SUM(size) as total_size', $fp)->fetch();
 				//\GO::debug($sumFilesize->total_size);
 				if ($sumFilesize)
 					$this->disk_usage = $sumFilesize->total_size;
@@ -375,7 +375,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 			$this->createContact();
 		
 		//remove cache for \GO::user() calls.
-		$cacheKey = '\GO\Base\Model\User:'.$this->id;
+		$cacheKey = 'GO\Base\Model\User:'.$this->id;
 		\GO::cache()->delete($cacheKey);
 		
 		//		deprecated. It's inefficient and can be done with listeners

@@ -183,8 +183,8 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 						idIndex: 0,
 						fields:['value','label'],
 						data: [
-							['GO_Addressbook_Controller_Contact',GO.addressbook.lang.contacts],
-							['GO_Addressbook_Controller_Company',GO.addressbook.lang.companies]
+							['GO\\Addressbook\\Controller\\Contact',GO.addressbook.lang.contacts],
+							['GO\\Addressbook\\Controller\\Company',GO.addressbook.lang.companies]
 						]
 					}),
 					valueField:'value',
@@ -192,7 +192,7 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 					mode:'local',
 					allowBlank: false,
 					triggerAction: 'all',
-					value: 'GO_Addressbook_Controller_Company'
+					value: 'GO\\Addressbook\\Controller\\Company'
 				}),new Ext.Panel({
 					layout: 'form',
 					border: false,
@@ -228,7 +228,7 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		
 		this.fileTypeCB.on('select',function(combo,record,index){
 			if (record.id=='VCard')
-				this.controllerNameCB.setValue('GO_Addressbook_Controller_Contact');
+				this.controllerNameCB.setValue('GO\\Addressbook\\Controller\\Contact');
 			this.controllerNameCB.setDisabled(record.id!='CSV' && record.id!='XLS');
 		},this);
 		
@@ -238,8 +238,8 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 //				['vcf','VCF (vCard)']
 //			],
 //			controllers:[
-//				['GO_Addressbook_Controller_Contact',GO.addressbook.lang.contacts],
-//				['GO_Addressbook_Controller_Company',GO.addressbook.lang.companies]
+//				['GO\\Addressbook\\Controller\\Contact',GO.addressbook.lang.contacts],
+//				['GO\\Addressbook\\Controller\\Company',GO.addressbook.lang.companies]
 //			],
 //			importBaseParams:[
 //				{'addressbook_id':this.remoteModelId}
@@ -271,9 +271,9 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 	setRemoteModelId : function(remoteModelId){
 		
 		if(GO.customfields){
-			this.disableContactsCategoriesPanel.setModel(remoteModelId, "GO_Addressbook_Model_Contact");
-			this.disableCompaniesCategoriesPanel.setModel(remoteModelId, "GO_Addressbook_Model_Company");
-			this.enableBlocksPanel.setModel(remoteModelId,"GO_Addressbook_Model_Addressbook");
+			this.disableContactsCategoriesPanel.setModel(remoteModelId, "GO\\Addressbook\\Model\\Contact");
+			this.disableCompaniesCategoriesPanel.setModel(remoteModelId, "GO\\Addressbook\\Model\\Company");
+			this.enableBlocksPanel.setModel(remoteModelId,"GO\\Addressbook\\Model\\Addressbook");
 		}
 		
 		this.removeDuplicatesButton.setDisabled(!remoteModelId);

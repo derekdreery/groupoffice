@@ -53,7 +53,7 @@ class PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\BackendInterface
      */
     public function getPrincipalsByPrefix($prefixPath) {
 
-		\GO::debug('\GO\DAV\Auth\Backend::getUsers()');
+		\GO::debug('GO\DAV\Auth\Backend::getUsers()');
 
 		if (!isset($this->users)) {
 			$this->users = array($this->_modelToDAVUser(\GO::user()));

@@ -378,7 +378,7 @@ abstract class AbstractCustomFieldsRecord extends \GO\Base\Db\ActiveRecord{
 				->single()
 				->select('`t`.`id`')
 				->joinModel(array(
-					'model' => '\GO\Customfields\Model\Category',
+					'model' => 'GO\Customfields\Model\Category',
 					'localTableAlias' => 't',
 					'localField' => 'category_id',
 					'foreignField' => 'id',

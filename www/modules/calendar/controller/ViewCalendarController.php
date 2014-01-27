@@ -12,7 +12,7 @@ class ViewCalendar extends \GO\Base\Controller\AbstractMultiSelectModelControlle
 	 * eg. When selecting calendars for a user in the sync settings this is set to \GO\Calendar\Model\Calendar
 	 */
 	public function modelName() {
-		return '\GO\Calendar\Model\Calendar';
+		return 'GO\Calendar\Model\Calendar';
 	}
 	
 	/**
@@ -20,7 +20,7 @@ class ViewCalendar extends \GO\Base\Controller\AbstractMultiSelectModelControlle
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return '\GO\Calendar\Model\ViewCalendar';
+		return 'GO\Calendar\Model\ViewCalendar';
 	}
 	
 	/**

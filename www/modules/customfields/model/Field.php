@@ -50,9 +50,9 @@ class Field extends \GO\Base\Db\ActiveRecord{
 	
 	public function relations() {
 		return array(
-				'category' => array('type' => self::BELONGS_TO, 'model' => '\GO\Customfields\Model\Category', 'field' => 'category_id'),		
-				'treeOptions'=>array('type' => self::HAS_MANY, 'model' => '\GO\Customfields\Model\FieldTreeSelectOption', 'field' => 'field_id','delete'=>true),
-				'selectOptions'=>array('type' => self::HAS_MANY, 'model' => '\GO\Customfields\Model\FieldSelectOption', 'field' => 'field_id','delete'=>true)		
+				'category' => array('type' => self::BELONGS_TO, 'model' => 'GO\Customfields\Model\Category', 'field' => 'category_id'),
+				'treeOptions'=>array('type' => self::HAS_MANY, 'model' => 'GO\Customfields\Model\FieldTreeSelectOption', 'field' => 'field_id','delete'=>true),
+				'selectOptions'=>array('type' => self::HAS_MANY, 'model' => 'GO\Customfields\Model\FieldSelectOption', 'field' => 'field_id','delete'=>true)
 			);
 	}
 	
@@ -153,7 +153,7 @@ class Field extends \GO\Base\Db\ActiveRecord{
 	protected function getCustomfieldtype(){
 		
 		if(!isset($this->_datatype)){
-			$className = class_exists($this->datatype) ? $this->datatype : "\GO\Customfields\Customfieldtype\Text";
+			$className = class_exists($this->datatype) ? $this->datatype : "GO\Customfields\Customfieldtype\Text";
 
 			$this->_datatype = new $className($this);
 		}
@@ -209,7 +209,7 @@ class Field extends \GO\Base\Db\ActiveRecord{
 			if(!$field){
 				$field = new Field();
 				$field->name=$this->name.' '.$i;
-				$field->datatype='\GO\Customfields\Customfieldtype\TreeselectSlave';
+				$field->datatype='GO\Customfields\Customfieldtype\TreeselectSlave';
 				$field->treemaster_field_id=$this->id;
 				$field->nesting_level=$i;
 				$field->category_id=$this->category_id;

@@ -58,7 +58,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 		
 		//load cf
 		if(!isset(self::$fields)){
-			$fields = \GO\Customfields\Model\Field::model()->findByModel('\GO\Site\Model\Content', false);
+			$fields = \GO\Customfields\Model\Field::model()->findByModel('GO\Site\Model\Content', false);
 
 			foreach($fields as $field){
 				self::$fields[$field->name]= $field;
@@ -117,7 +117,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	 * Attach the customfield model to this model.
 	 */
 	public function customfieldsModel() {
-		return '\GO\Site\Customfields\Model\Content';
+		return 'GO\Site\Customfields\Model\Content';
 	}
 	
 //	protected function init() {
@@ -138,9 +138,9 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-			'children' => array('type' => self::HAS_MANY, 'model' => '\GO\Site\Model\Content', 'field' => 'parent_id', 'delete' => true, 'findParams' =>\GO\Base\Db\FindParams::newInstance()->select('*')->order(array('sort_order','ptime'))),
-			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Site\Model\Site", 'field'=>'site_id'),
-			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Site\Model\Content", 'field'=>'parent_id','findParams' =>\GO\Base\Db\FindParams::newInstance()->select('*'))
+			'children' => array('type' => self::HAS_MANY, 'model' => 'GO\Site\Model\Content', 'field' => 'parent_id', 'delete' => true, 'findParams' =>\GO\Base\Db\FindParams::newInstance()->select('*')->order(array('sort_order','ptime'))),
+			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO\Site\Model\Site", 'field'=>'site_id'),
+			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO\Site\Model\Content", 'field'=>'parent_id','findParams' =>\GO\Base\Db\FindParams::newInstance()->select('*'))
 		 );
 	 }
 	 

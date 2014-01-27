@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
-$root = 'svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-5.1';
+$root = 'svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/trunk/modules';
 exec('svn ls '.$root, $output, $ret);
 
 if($ret!=0)
@@ -15,6 +15,7 @@ foreach($output as $module){
 	
 	if(substr($module,-1)=='/'){ //check if it's a directory
 				
+		exec('rm -Rf '.$module);
 		if(is_dir($module)){
 			echo "UPDATE ".rtrim($module,'/')."\n";
 		

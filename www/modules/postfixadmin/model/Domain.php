@@ -64,8 +64,8 @@ class Domain extends \GO\Base\Db\ActiveRecord {
 
 	public function relations() {
 		return array(
-			'mailboxes' => array('type' => self::HAS_MANY, 'model' => '\GO\Postfixadmin\Model\Mailbox', 'field' => 'domain_id', 'delete' => true),
-			'aliases' => array('type' => self::HAS_MANY, 'model' => '\GO\Postfixadmin\Model\Alias', 'field' => 'domain_id', 'delete' => true)
+			'mailboxes' => array('type' => self::HAS_MANY, 'model' => 'GO\Postfixadmin\Model\Mailbox', 'field' => 'domain_id', 'delete' => true),
+			'aliases' => array('type' => self::HAS_MANY, 'model' => 'GO\Postfixadmin\Model\Alias', 'field' => 'domain_id', 'delete' => true)
 		);
 	}
 	

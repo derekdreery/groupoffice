@@ -76,7 +76,7 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 							this.linksDialog = new GO.dialog.LinksDialog();							
 						}
 
-						this.linksDialog.setSingleLink(this.data.id, "GO_Savemailas_Model_LinkedEmail");
+						this.linksDialog.setSingleLink(this.data.id, "GO\\Savemailas\\Model\\LinkedEmail");
 						this.linksDialog.show();
 								},
 					scope: this

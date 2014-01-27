@@ -42,7 +42,7 @@ class Router{
 		//$classFile = \GO::config()->root_path . 'modules/' . $module_id . '/controller' . DIRECTORY_SEPARATOR . ucfirst($controller_id) . 'Controller.php';
 
 		if (class_exists($className)) {
-			//if (is_subclass_of($className, '\GO\Site\Components\AbstractFrontController')) {
+			//if (is_subclass_of($className, 'GO\Site\Components\AbstractFrontController')) {
 						
 			$action = $this->getControllerAction($action_id);
 			$controller = new $className;

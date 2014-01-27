@@ -41,7 +41,7 @@ class Tasklist extends \GO\Base\Model\AbstractUserDefaultModel {
 	}
 	
 	public function settingsModelName() {
-		return "\GO\Tasks\Model\Settings";
+		return "GO\Tasks\Model\Settings";
 	}
 	
 	public function settingsPkAttribute() {
@@ -58,7 +58,7 @@ class Tasklist extends \GO\Base\Model\AbstractUserDefaultModel {
 	
 	public function relations() {
 		return array(
-				'tasks' => array('type' => self::HAS_MANY, 'model' => '\GO\Tasks\Model\Task', 'field' => 'tasklist_id', 'delete' => true),			
+				'tasks' => array('type' => self::HAS_MANY, 'model' => 'GO\Tasks\Model\Task', 'field' => 'tasklist_id', 'delete' => true),
 				);
 	}
 	

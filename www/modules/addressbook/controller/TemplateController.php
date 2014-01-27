@@ -16,7 +16,7 @@ namespace GO\Addressbook\Controller;
 
 class Template extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = '\GO\Addressbook\Model\Template';	
+	protected $model = 'GO\Addressbook\Model\Template';
 	
 	protected function remoteComboFields() {
 		return array(

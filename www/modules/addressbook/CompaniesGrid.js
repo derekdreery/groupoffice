@@ -184,7 +184,7 @@ GO.addressbook.CompaniesGrid = function(config){
 	
 	if(GO.customfields)
 	{
-		GO.customfields.addColumns("GO_Addressbook_Model_Company", fields);
+		GO.customfields.addColumns("GO\\Addressbook\\Model\\Company", fields);
 	}
 	
 	config.store = new GO.data.JsonStore({

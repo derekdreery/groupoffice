@@ -5,7 +5,7 @@ namespace GO\Bookmarks\Controller;
 
 class Category extends \GO\Base\Controller\AbstractModelController{
 
-	protected $model ='\GO\Bookmarks\Model\Category';
+	protected $model ='GO\Bookmarks\Model\Category';
 	
 	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name', '$model->user->name');

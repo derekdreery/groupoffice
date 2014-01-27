@@ -40,7 +40,7 @@ class MenuItem extends \GO\Base\Controller\AbstractJsonController {
 		$findCriteria->addCondition('id', $id,'<>');
 		$findParams = \GO\Base\Db\FindParams::newInstance()->criteria($findCriteria);
 		
-		$store = new \GO\Base\Data\DbStore('\GO\Site\Model\MenuItem', new \GO\Base\Data\ColumnModel('\GO\Site\Model\MenuItem'), $_REQUEST,$findParams);
+		$store = new \GO\Base\Data\DbStore('GO\Site\Model\MenuItem', new \GO\Base\Data\ColumnModel('GO\Site\Model\MenuItem'), $_REQUEST,$findParams);
 		
 		echo $this->renderStore($store);
 	}

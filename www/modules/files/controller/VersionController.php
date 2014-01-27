@@ -23,7 +23,7 @@ namespace GO\files\Controller;
 
 class Version extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Files\Model\Version';
+	protected $model = 'GO\Files\Model\Version';
 
 	protected function actionDownload($params){
 		$version = \GO\Files\Model\Version::model()->findByPk($params['id']);

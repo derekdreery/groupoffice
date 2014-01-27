@@ -7,7 +7,7 @@ class ServerclientModule extends \GO\Base\Module{
 	
 	public static function initListeners() {
 		
-		\GO\Base\Model\User::model()->addListener("save", "\GO\Serverclient\ServerclientModule", "saveUser");
+		\GO\Base\Model\User::model()->addListener("save", "GO\Serverclient\ServerclientModule", "saveUser");
 		
 		return parent::initListeners();
 	}

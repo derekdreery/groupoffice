@@ -74,11 +74,11 @@ Ext.extend(GO.sites.SitesTreePanel, Ext.tree.TreePanel,{
 		node.select();
 				
 		if(this.isSiteNode(node)){				
-			this.sitesContextMenu.setSelected(this,'GO_Sites_Model_Site');
+			this.sitesContextMenu.setSelected(this,'GO\\Sites\\Model\\Site');
 			this.sitesContextMenu.showAt(event.xy);
 		}
 	//				else {
-	//					this.pagesContextMenu.setSelected(this,'GO_Sites_Model_Page');
+	//					this.pagesContextMenu.setSelected(this,'GO\\Sites\\Model\\Page');
 	//					this.pagesContextMenu.showAt(event.xy);
 	//				}
 	}

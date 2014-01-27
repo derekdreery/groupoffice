@@ -6,7 +6,7 @@ namespace GO\Core\Controller;
 
 class LinkFolder extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = "\GO\Base\Model\LinkFolder";
+	protected $model = "GO\Base\Model\LinkFolder";
 
 	protected function actionTree($params) {
 
@@ -66,7 +66,7 @@ class LinkFolder extends \GO\Base\Controller\AbstractModelController {
 			$modelName = $link[0];
 			$modelId = $link[1];
 
-			if ($modelName == '\GO\Base\Model\LinkFolder') {
+			if ($modelName == 'GO\Base\Model\LinkFolder') {
 				
 				$moveFolder = \GO\Base\Model\LinkFolder::model()->findByPk($modelId);
 				$moveFolder->parent_id=intval($target->folder_id);

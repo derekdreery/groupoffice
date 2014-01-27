@@ -18,7 +18,7 @@ class IpAddress extends \GO\Base\Controller\AbstractJsonController {
 				)
 				->order('ip_address');
 		
-		$store = new \GO\Base\Data\DbStore('\GO\Ipwhitelist\Model\IpAddress', $columnModel, $params, $storeFindParams);
+		$store = new \GO\Base\Data\DbStore('GO\Ipwhitelist\Model\IpAddress', $columnModel, $params, $storeFindParams);
 		echo $this->renderStore($store);
 		
 	}

@@ -124,7 +124,7 @@ GO.site.HtmlEditorLinkDialog = Ext.extend(GO.Window , {
 				url:'files/folder/checkModelFolder',
 				params:{								
 					mustExist:true,
-					model:'GO_Site_Model_Site',
+					model:'GO\\Site\\Model\\Site',
 					id:this.siteId
 				},
 				success:function(response, options, result){														

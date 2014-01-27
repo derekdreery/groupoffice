@@ -48,7 +48,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	_moduleName : '', // e.g., addressbook
 	_modelName : '', // e.g., contact
 	_fileType : '', // e.g., CSV, VCard
-	_excludedCustomFieldDataTypes : ['GO_Customfields_Customfieldtype_Heading','GO_Customfields_Customfieldtype_Function'], // Default setting. These are the custom field types that are excluded from import.
+	_excludedCustomFieldDataTypes : ['GO\\Customfields\\Customfieldtype\\Heading','GO\\Customfields\\Customfieldtype\\Function'], // Default setting. These are the custom field types that are excluded from import.
 	_excludedAttributes : [], // fields named here are excluded from import.
 	
 	// Fields that are set while the dialog is being used.

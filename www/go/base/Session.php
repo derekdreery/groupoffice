@@ -204,7 +204,7 @@ class Session extends Observable{
 			//also check if the user_id matches because \GO::session()->runAsRoot() may haver changed it.
 			if(empty($this->_user) || $this->_user->id!=$this->values['user_id']){
 				
-//				$cacheKey = '\GO\Base\Model\User:'.\GO::session()->values['user_id'];
+//				$cacheKey = 'GO\Base\Model\User:'.\GO::session()->values['user_id'];
 //				$cachedUser = \GO::cache()->get($cacheKey);
 //				
 //				if($cachedUser){

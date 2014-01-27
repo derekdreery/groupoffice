@@ -40,7 +40,7 @@ class ArrayStore extends AbstractStore {
 	public function getRecords() {
 		$records = array();
 		foreach ($this->response['results'] as $record) {
-			if ($record && is_a($record, '\GO\Base\Model'))
+			if ($record && is_a($record, 'GO\Base\Model'))
 				$records[] = $this->_columnModel->formatModel($record);
 			elseif (is_array($record))
 				$records[] = $record;
@@ -74,7 +74,7 @@ class ArrayStore extends AbstractStore {
 	public function nextRecord() {
 		$record = next($this->response['results']);
 
-		if ($record && is_a($record, '\GO\Base\Model'))
+		if ($record && is_a($record, 'GO\Base\Model'))
 			$record = $this->_columnModel->formatModel($record);
 		return $record;
 	}

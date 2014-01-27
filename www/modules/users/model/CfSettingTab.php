@@ -74,14 +74,14 @@ class CfSettingTab extends \GO\Base\Db\ActiveRecord{
 		 $findParams = \GO\Base\Db\FindParams::newInstance()
 						 ->ignoreAcl()
 						 ->joinModel(array(
-								'model'=>'\GO\Users\Model\CfSettingTab',									
+								'model'=>'GO\Users\Model\CfSettingTab',
 								'localTableAlias'=>'t', //defaults to "t"
 								'localField'=>'id', //defaults to "id"			
 								'foreignField'=>'cf_category_id', //defaults to primary key of the remote model
 								'tableAlias'=>'cfs', //Optional table alias					
 								'type'=>'INNER' //defaults to INNER,
 						 ))
-						 ->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('extends_model', "\GO\Addressbook\Model\Contact"))
+						 ->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('extends_model', "GO\Addressbook\Model\Contact"))
 						 ->order('sort_index');
 		 
 		 $stmt = \GO\Customfields\Model\Category::model()->find($findParams);

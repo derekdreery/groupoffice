@@ -28,7 +28,7 @@ class Portlet extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * @return String 
 	 */
 	public function modelName() {
-		return '\GO\Tasks\Model\Tasklist';
+		return 'GO\Tasks\Model\Tasklist';
 	}
 	
 	/**
@@ -36,7 +36,7 @@ class Portlet extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return '\GO\Tasks\Model\PortletTasklist';
+		return 'GO\Tasks\Model\PortletTasklist';
 	}
 	
 	/**

@@ -16,7 +16,7 @@ GO.ipwhitelist.WhitelistGrid = function(config){
 		totalProperty:'total',
 		fields: ['id','ip_address','description','ctime','username','mtime','mUsername'],
 		remoteSort: true,
-		model:"GO_Ipwhitelist_Model_IpAddress"
+		model:"GO\\Ipwhitelist\\Model\\IpAddress"
 	});
 
 	config.store.on('load', function()

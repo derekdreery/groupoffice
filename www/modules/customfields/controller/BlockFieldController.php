@@ -13,7 +13,7 @@ class BlockField extends \GO\Base\Controller\AbstractJsonController{
 		
 		$findParams = \GO\Base\Db\FindParams::newInstance()
 			->joinModel(array(
-				'model'=>'\GO\Customfields\Model\Category',
+				'model'=>'GO\Customfields\Model\Category',
 				'localTableAlias'=>'t',
 				'localField'=>'category_id',
 				'foreignField'=>'id',
@@ -24,24 +24,24 @@ class BlockField extends \GO\Base\Controller\AbstractJsonController{
 					->addInCondition(
 						'extends_model',
 						array(
-							'\GO\Addressbook\Model\Contact',
-							'\GO\Addressbook\Model\Company',
-							'\GO\Projects\Model\Project',
-							'\GO\Base\Model\User'
+							'GO\Addressbook\Model\Contact',
+							'GO\Addressbook\Model\Company',
+							'GO\Projects\Model\Project',
+							'GO\Base\Model\User'
 						),
 						'c'
 					)
 					->addInCondition(
 						'datatype',
 						array(
-							'\GO\Addressbook\Customfieldtype\Contact',
-							'\GO\Addressbook\Customfieldtype\Company'
+							'GO\Addressbook\Customfieldtype\Contact',
+							'GO\Addressbook\Customfieldtype\Company'
 						),
 						't'
 					)
 			);
 		
-		$store = new \GO\Base\Data\DbStore('\GO\Customfields\Model\Field', $columnModel, $params, $findParams);
+		$store = new \GO\Base\Data\DbStore('GO\Customfields\Model\Field', $columnModel, $params, $findParams);
 
 		echo $this->renderStore($store);
 		

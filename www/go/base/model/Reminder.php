@@ -58,7 +58,7 @@ class Reminder extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 		
-		return array('users' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\User', 'field'=>'reminder_id', 'linkModel' => '\GO\Base\Model\ReminderUser'));
+		return array('users' => array('type'=>self::MANY_MANY, 'model'=>'GO\Base\Model\User', 'field'=>'reminder_id', 'linkModel' => 'GO\Base\Model\ReminderUser'));
 	}
 	
 	/**

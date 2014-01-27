@@ -5,7 +5,7 @@ namespace GO\Calendar\Customfields\Model;
 
 class Event extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
 	public function extendsModel() {		
-		return "\GO\Calendar\Model\Event";
+		return "GO\Calendar\Model\Event";
 	}
 	/**
 	 * Returns a static model of itself

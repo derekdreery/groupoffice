@@ -28,7 +28,7 @@ class TasklistFavorites extends \GO\Base\Controller\AbstractMultiSelectModelCont
 	 * @return String 
 	 */
 	public function modelName() {
-		return '\GO\Tasks\Model\Tasklist';
+		return 'GO\Tasks\Model\Tasklist';
 	}
 	
 	/**
@@ -36,7 +36,7 @@ class TasklistFavorites extends \GO\Base\Controller\AbstractMultiSelectModelCont
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return '\GO\Favorites\Model\Tasklist';
+		return 'GO\Favorites\Model\Tasklist';
 	}
 	
 	/**

@@ -133,37 +133,37 @@ class GO{
 	 * @var array 
 	 */
 	private static $_classes = array (
-		'\GO\Base\Observable' => 'go/base/Observable.php',
-		'\GO\Base\Session' => 'go/base/Session.php',
-		'\GO\Base\Config' => 'go/base/Config.php',
-		'\GO\Base\Model' => 'go/base/Model.php',
-		'\GO\Base\Db\ActiveRecord' => 'go/base/db/ActiveRecord.php',
-		'\GO\Base\Model_User' => 'go/base/model/User.php',
-		'\GO\Base\Cache\Interface' => 'go/base/cache/Interface.php',
-		'\GO\Base\Cache\Disk' => 'go/base/cache/Disk.php',
-		'\GO\Base\Cache\Apc' => 'go/base/cache/Apc.php',
-		'\GO\Base\Db\ActiveStatement' => 'go/base/db/ActiveStatement.php',
-		'\GO\Base\Util\String' => 'go/base/util/String.php',
-		'\GO\Base\Model\ModelCache' => 'go/base/model/ModelCache.php',
-		'\GO\Base\Router' => 'go/base/Router.php',
-		'\GO\Base\Controller\AbstractController' => 'go/base/controller/AbstractController.php',
-		'\GO\Base\Model_Module' => 'go/base/model/Module.php',
-		'\GO\Base\Controller\AbstractModelController' => 'go/base/controller/AbstractModelController.php',
-		'\GO\Base\Model_Acl' => 'go/base/model/Acl.php',
-		'\GO\Base\Model_AclUsersGroups' => 'go/base/model/AclUsersGroups.php',
-		'\GO\Base\Data\AbstractStore' => 'go/base/data/AbstractStore.php',
-		'\GO\Base\Data\Store' => 'go/base/data/Store.php',
-		'\GO\Base\Data\ColumnModel' => 'go/base/data/ColumnModel.php',
-		'\GO\Base\Module' => 'go/base/Module.php',
-		'\GO\Base\Model_AbstractUserDefaultModel' => 'go/base/model/AbstractUserDefaultModel.php',
-		'\GO\Base\Db\FindParams' => 'go/base/db/FindParams.php',
-		'\GO\Base\Db\FindCriteria' => 'go/base/db/FindCriteria.php',
-		'\GO\Base\Util\Date' => 'go/base/util/Date.php',
-		'\GO\Base\Data\Column' => 'go/base/data/Column.php',
-		'\GO\Base\Language' => 'go/base/Language.php',
-		'\GO\Base\Model_ModelCollection' => 'go/base/model/ModelCollection.php',
-		'\GO\Base\ModuleCollection' => 'go/base/ModuleCollection.php',
-		'\GO\Base\Model_Setting' => 'go/base/model/Setting.php',
+		'GO\Base\Observable' => 'go/base/Observable.php',
+		'GO\Base\Session' => 'go/base/Session.php',
+		'GO\Base\Config' => 'go/base/Config.php',
+		'GO\Base\Model' => 'go/base/Model.php',
+		'GO\Base\Db\ActiveRecord' => 'go/base/db/ActiveRecord.php',
+		'GO\Base\Model_User' => 'go/base/model/User.php',
+		'GO\Base\Cache\Interface' => 'go/base/cache/Interface.php',
+		'GO\Base\Cache\Disk' => 'go/base/cache/Disk.php',
+		'GO\Base\Cache\Apc' => 'go/base/cache/Apc.php',
+		'GO\Base\Db\ActiveStatement' => 'go/base/db/ActiveStatement.php',
+		'GO\Base\Util\String' => 'go/base/util/String.php',
+		'GO\Base\Model\ModelCache' => 'go/base/model/ModelCache.php',
+		'GO\Base\Router' => 'go/base/Router.php',
+		'GO\Base\Controller\AbstractController' => 'go/base/controller/AbstractController.php',
+		'GO\Base\Model_Module' => 'go/base/model/Module.php',
+		'GO\Base\Controller\AbstractModelController' => 'go/base/controller/AbstractModelController.php',
+		'GO\Base\Model_Acl' => 'go/base/model/Acl.php',
+		'GO\Base\Model_AclUsersGroups' => 'go/base/model/AclUsersGroups.php',
+		'GO\Base\Data\AbstractStore' => 'go/base/data/AbstractStore.php',
+		'GO\Base\Data\Store' => 'go/base/data/Store.php',
+		'GO\Base\Data\ColumnModel' => 'go/base/data/ColumnModel.php',
+		'GO\Base\Module' => 'go/base/Module.php',
+		'GO\Base\Model_AbstractUserDefaultModel' => 'go/base/model/AbstractUserDefaultModel.php',
+		'GO\Base\Db\FindParams' => 'go/base/db/FindParams.php',
+		'GO\Base\Db\FindCriteria' => 'go/base/db/FindCriteria.php',
+		'GO\Base\Util\Date' => 'go/base/util/Date.php',
+		'GO\Base\Data\Column' => 'go/base/data/Column.php',
+		'GO\Base\Language' => 'go/base/Language.php',
+		'GO\Base\Model_ModelCollection' => 'go/base/model/ModelCollection.php',
+		'GO\Base\ModuleCollection' => 'go/base/ModuleCollection.php',
+		'GO\Base\Model_Setting' => 'go/base/model/Setting.php',
 	);
 
 	private static $_config;
@@ -270,7 +270,7 @@ class GO{
 	 */
 	public static function view(){
 		
-		$class = "\GO\Base\\View\\";
+		$class = "GO\Base\\View\\";
 		
 		if(isset(\GO::session()->values['view'])){
 			$class .= \GO::session()->values['view'];
@@ -1071,7 +1071,7 @@ class GO{
 
 			foreach($items as $item){
 				if($item instanceof \GO\Base_Fs_File){
-					$className = '\GO\Base_'.ucfirst($subfolder).'_'.$item->nameWithoutExtension();
+					$className = 'GO\Base_'.ucfirst($subfolder).'_'.$item->nameWithoutExtension();
 					$classes[] = new \ReflectionClass($className);
 				}
 			}

@@ -6,7 +6,7 @@ namespace GO\Email\Controller;
 
 class Filter extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Email\Model\Filter';
+	protected $model = 'GO\Email\Model\Filter';
 
 	protected function beforeStore(&$response, &$params, &$store) {
 

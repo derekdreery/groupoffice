@@ -31,12 +31,12 @@ abstract class AbstractCustomfieldtype{
 
 	public function hasLength() {
 		$fieldSql = $this->fieldSql();
-		return ( get_class($this)!=='\GO\Addressbook\Customfieldtype\Contact'
-				&& get_class($this)!=='\GO\Addressbook\Customfieldtype\Company'
-				&& get_class($this)!=='\GO\Files\Customfieldtype\File'
-				&& get_class($this)!=='\GO\Addressbook\Customfieldtype\Contact'
-				&& get_class($this)!=='\GO\Site\Customfieldtype\Sitefile'
-				&& get_class($this)!=='\GO\Site\Customfieldtype\Sitemultifile'
+		return ( get_class($this)!=='GO\Addressbook\Customfieldtype\Contact'
+				&& get_class($this)!=='GO\Addressbook\Customfieldtype\Company'
+				&& get_class($this)!=='GO\Files\Customfieldtype\File'
+				&& get_class($this)!=='GO\Addressbook\Customfieldtype\Contact'
+				&& get_class($this)!=='GO\Site\Customfieldtype\Sitefile'
+				&& get_class($this)!=='GO\Site\Customfieldtype\Sitemultifile'
 			) && (
 				strpos(strtolower($fieldSql),'varchar')===0
 //			|| strpos(strtolower($fieldSql),'int')===0
@@ -93,8 +93,8 @@ abstract class AbstractCustomfieldtype{
 	
 	/**
 	 * Can be overridden if you want. For example, if the extended class entails
-	 * companies, return '\GO\Addressbook\Model\Company'. If it entails users,
-	 * return '\GO\Base\Model\User'.
+	 * companies, return 'GO\Addressbook\Model\Company'. If it entails users,
+	 * return 'GO\Base\Model\User'.
 	 * @return boolean/string
 	 */
 	public static function getModelName() {
@@ -168,7 +168,7 @@ abstract class AbstractCustomfieldtype{
 	 * Otherwise it will only be available for the given modeltypes.
 	 * 
 	 * Example:
-	 *	return array('\GO\Site\Model\Content','\GO\Site\Model\Site');
+	 *	return array('GO\Site\Model\Content','GO\Site\Model\Site');
 	 *  
 	 * @return array
 	 */

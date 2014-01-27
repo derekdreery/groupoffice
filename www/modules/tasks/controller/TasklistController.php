@@ -23,7 +23,7 @@ namespace GO\Tasks\Controller;
 
 class Tasklist extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = '\GO\Tasks\Model\Tasklist';
+	protected $model = 'GO\Tasks\Model\Tasklist';
 	
 	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name','$model->user->name');
@@ -35,7 +35,7 @@ class Tasklist extends \GO\Base\Controller\AbstractModelController{
 		
 		$multiSel = new \GO\Base\Component\MultiSelectGrid(
 						'ta-taskslists', 
-						"\GO\Tasks\Model\Tasklist",$store, $params);		
+						"GO\Tasks\Model\Tasklist",$store, $params);
 		$multiSel->setFindParamsForDefaultSelection($storeParams);
 		$multiSel->formatCheckedColumn();
 		
@@ -119,7 +119,7 @@ class Tasklist extends \GO\Base\Controller\AbstractModelController{
 		\GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
 		$checkModels = array(
-				"\GO\Tasks\Model\Task"=>array('name', 'start_time', 'due_time', 'rrule', 'user_id', 'tasklist_id'),
+				"GO\Tasks\Model\Task"=>array('name', 'start_time', 'due_time', 'rrule', 'user_id', 'tasklist_id'),
 			);		
 		
 		foreach($checkModels as $modelName=>$checkFields){

@@ -62,7 +62,7 @@ class Comment extends \GO\Base\Db\ActiveRecord{
 	
 	public function relations(){
 		return array(	
-			'category' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Comments\Model\Category', 'field'=>'category_id'),		);
+			'category' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Comments\Model\Category', 'field'=>'category_id'),		);
 	}
 	
 	public function getAttachedObject(){

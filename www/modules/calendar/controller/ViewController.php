@@ -23,7 +23,7 @@ namespace GO\Calendar\Controller;
 
 class View extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Calendar\Model\View';
+	protected $model = 'GO\Calendar\Model\View';
 	
 	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name','$model->user->name',array(),'user_id');

@@ -24,7 +24,7 @@ namespace GO\Reminders\Controller;
 
 class Reminder extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = '\GO\Base\Model\Reminder';
+	protected $model = 'GO\Base\Model\Reminder';
 	
 	public function formatStoreRecord($record, $model, $store) {
 		$record['time'] = \GO\Base\Util\Date::format_long_date($model->time);

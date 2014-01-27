@@ -63,8 +63,8 @@ class ViewGroup extends \GO\Base\Db\ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-             'view' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\View', 'field' => 'view_id'),
-             'group' => array('type' => self::BELONGS_TO, 'model' => '\GO\Base\Model\Group', 'field' => 'group_id'),
+             'view' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\View', 'field' => 'view_id'),
+             'group' => array('type' => self::BELONGS_TO, 'model' => 'GO\Base\Model\Group', 'field' => 'group_id'),
          );
 	 }
 }

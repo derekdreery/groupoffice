@@ -6,7 +6,7 @@ namespace GO\Sites\Controller;
 
 class SiteBackend extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Sites\Model\Site';
+	protected $model = 'GO\Sites\Model\Site';
 	
 	
 	protected function actionRedirectToFront($params){

@@ -6,7 +6,7 @@ namespace GO\Servermanager\Controller;
 
 class Installation extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Servermanager\Model\Installation';
+	protected $model = 'GO\Servermanager\Model\Installation';
 	
 	protected function allowGuests() {
 		return array('create','destroy', 'report','upgradeall','rename','fixquota');
@@ -761,7 +761,7 @@ class Installation extends \GO\Base\Controller\AbstractModelController {
 		
 		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('count(*) AS usercount')
-						->joinModel(array('model'=>'\GO\ServerManager\Model\InstallationUser', 'localField'=>'user_id','tableAlias'=>'u'))
+						->joinModel(array('model'=>'GO\ServerManager\Model\InstallationUser', 'localField'=>'user_id','tableAlias'=>'u'))
 						->single()
 						->debugSql()
 						->criteria(
@@ -1114,7 +1114,7 @@ class Installation extends \GO\Base\Controller\AbstractModelController {
 		//$report['moduleCounts']=
 		
 
-//		if(class_exists('\GO\Professional\LicenseCheck')){
+//		if(class_exists('GO\Professional\LicenseCheck')){
 //			
 //			if(!isset(\GO::config()->license_name)){
 //				throw new Exception('$config["license_name"] is not set. Please contact Intermesh to get your key.');
@@ -1124,7 +1124,7 @@ class Installation extends \GO\Base\Controller\AbstractModelController {
 //		}
 
 		//Post the report to intermesh
-		if(class_exists('\GO\Professional\LicenseCheck')){
+		if(class_exists('GO\Professional\LicenseCheck')){
 			$c = new \GO\Base\Util\HttpClient();
 			$url = 'https://intermesh.group-office.com/index.php?r=licenses/server/report';
 //			$url = 'http://intermesh.intermesh.dev/index.php?r=licenses/server/report';

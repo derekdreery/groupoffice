@@ -11,7 +11,7 @@ class CalendarTasklist extends \GO\Base\Controller\AbstractMultiSelectModelContr
 	 * @return String 
 	 */
 	public function modelName() {
-		return '\GO\Tasks\Model\Tasklist';
+		return 'GO\Tasks\Model\Tasklist';
 	}
 	
 	/**
@@ -19,7 +19,7 @@ class CalendarTasklist extends \GO\Base\Controller\AbstractMultiSelectModelContr
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return '\GO\Calendar\Model\CalendarTasklist';
+		return 'GO\Calendar\Model\CalendarTasklist';
 	}
 	
 	/**

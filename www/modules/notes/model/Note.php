@@ -75,12 +75,12 @@ class Note extends \GO\Base\Db\ActiveRecord {
 		return true;
 	}
 	public function customfieldsModel(){
-		return "\GO\Notes\Customfields\Model\Note";
+		return "GO\Notes\Customfields\Model\Note";
 	}
 
 	public function relations(){
 		return array(	
-				'category' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Notes\Model\Category', 'field'=>'category_id'),		);
+				'category' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Notes\Model\Category', 'field'=>'category_id'),		);
 	}
 
 

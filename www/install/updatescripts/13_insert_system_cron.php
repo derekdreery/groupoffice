@@ -10,6 +10,6 @@ $cron->hours = '*';
 $cron->monthdays = '*';
 $cron->months = '*';
 $cron->weekdays = '*';
-$cron->job = '\GO\Base\Cron\EmailReminders';
+$cron->job = 'GO\Base\Cron\EmailReminders';
 
 $cron->save();

@@ -96,7 +96,7 @@ class Export extends \GO\Base\Controller\AbstractController {
 		foreach($contents as $exporter) {
 			if(is_file($exporter->path())) {
 				$classname = $classPath.$exporter->nameWithoutExtension();
-				if($classname != '\GO\Base\Export\ExportInterface' && $classname != '\GO\Base\Export\Settings')
+				if($classname != 'GO\Base\Export\ExportInterface' && $classname != 'GO\Base\Export\Settings')
 				{
 					//$export = new $classname('temp');
 					

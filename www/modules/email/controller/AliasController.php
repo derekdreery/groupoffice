@@ -6,7 +6,7 @@ namespace GO\Email\Controller;
 
 class Alias extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Email\Model\Alias';
+	protected $model = 'GO\Email\Model\Alias';
 
 	protected function beforeStore(&$response, &$params, &$store) {
 
@@ -21,7 +21,7 @@ class Alias extends \GO\Base\Controller\AbstractModelController {
 			$findParams = \GO\Base\Db\FindParams::newInstance()
 							->select('t.*')
 							->joinModel(array(
-									'model' => '\GO\Email\Model\AccountSort',
+									'model' => 'GO\Email\Model\AccountSort',
 									'foreignField' => 'account_id', //defaults to primary key of the remote model
 									'localField' => 'account_id', //defaults to primary key of the model
 									'type' => 'LEFT',

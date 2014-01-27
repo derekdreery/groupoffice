@@ -15,7 +15,7 @@ namespace GO\Summary\Controller;
 
 class Note extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = '\GO\Summary\Model\Note';
+	protected $model = 'GO\Summary\Model\Note';
 	
 
 	protected function getModelFromParams($params) {

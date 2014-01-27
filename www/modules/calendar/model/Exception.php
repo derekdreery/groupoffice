@@ -63,8 +63,8 @@ class Exception extends \GO\Base\Db\ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'event' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Event', 'field' => 'exception_event_id'),
-				'mainevent' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Event', 'field' => 'event_id')
+				'event' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Event', 'field' => 'exception_event_id'),
+				'mainevent' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Event', 'field' => 'event_id')
 		);
 	}
 

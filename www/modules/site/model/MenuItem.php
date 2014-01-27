@@ -52,10 +52,10 @@ class MenuItem extends \GO\Base\Db\ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-			'menu'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Site\Model\Menu", 'field'=>'menu_id'),
-			'children' => array('type' => self::HAS_MANY, 'model' => '\GO\Site\Model\MenuItem', 'field' => 'parent_id', 'delete' => false, 'findParams' =>\GO\Base\Db\FindParams::newInstance()->select('*')->order(array('sort_order'))),
-			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Site\Model\MenuItem", 'field'=>'parent_id'),
-			'content'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Site\Model\Content", 'field'=>'content_id'),
+			'menu'=>array('type'=>self::BELONGS_TO, 'model'=>"GO\Site\Model\Menu", 'field'=>'menu_id'),
+			'children' => array('type' => self::HAS_MANY, 'model' => 'GO\Site\Model\MenuItem', 'field' => 'parent_id', 'delete' => false, 'findParams' =>\GO\Base\Db\FindParams::newInstance()->select('*')->order(array('sort_order'))),
+			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO\Site\Model\MenuItem", 'field'=>'parent_id'),
+			'content'=>array('type'=>self::BELONGS_TO, 'model'=>"GO\Site\Model\Content", 'field'=>'content_id'),
 		 );
 	 }
 		 

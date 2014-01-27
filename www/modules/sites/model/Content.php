@@ -47,7 +47,7 @@ class Content extends \GO\Base\Db\ActiveRecord {
 	 * Attach the customfield model to this model.
 	 */
 	public function customfieldsModel() {
-		return '\GO\Sites\Customfields\Model\Content';
+		return 'GO\Sites\Customfields\Model\Content';
 	}
 	
 	public function defaultAttributes()
@@ -63,9 +63,9 @@ class Content extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 		return array(
-//				'children' => array('type' => self::HAS_MANY, 'model' => '\GO\Sites\Model\Content', 'field' => 'parent_id', 'delete' => true, \GO\Base\Db\FindParams::newInstance()->order('sort_order')),
-				'site'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Sites\Model\Site", 'field'=>'site_id'),
-//				'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Sites\Model\Content", 'field'=>'parent_id')
+//				'children' => array('type' => self::HAS_MANY, 'model' => 'GO\Sites\Model\Content', 'field' => 'parent_id', 'delete' => true, \GO\Base\Db\FindParams::newInstance()->order('sort_order')),
+				'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO\Sites\Model\Site", 'field'=>'site_id'),
+//				'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO\Sites\Model\Content", 'field'=>'parent_id')
 				);
 	}
 	

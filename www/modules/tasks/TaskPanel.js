@@ -12,7 +12,7 @@
  */
  
 GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
-	model_name : "GO_Tasks_Model_Task",
+	model_name : "GO\\Tasks\\Model\\Task",
 	
 	stateId : 'ta-task-panel',
 
@@ -57,7 +57,7 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 					'<tpl if="project_name">'+
 						'<tr>'+
 							'<td>'+GO.projects.lang.project+':</td>'+
-							'<td><a href="#" onclick="GO.linkHandlers[\'GO_Projects_Model_Project\'].call(this, {project_id});">{project_name}</a></td>'+
+							'<td><a href="#" onclick="GO.linkHandlers[\'GO\\Projects\\Model\\Project\'].call(this, {project_id});">{project_name}</a></td>'+
 						'</tr>'+
 					'</tpl>';
 				}

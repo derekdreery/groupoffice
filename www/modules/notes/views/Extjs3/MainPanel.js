@@ -203,7 +203,7 @@ GO.moduleManager.addModule('notes', GO.notes.MainPanel, {
  * panel with links. 
  */
 
-GO.linkHandlers["GO_Notes_Model_Note"]=function(id){
+GO.linkHandlers["GO\\Notes\\Model\\Note"]=function(id){
 	if(!GO.notes.linkWindow){
 		var notePanel = new GO.notes.NotePanel();
 		GO.notes.linkWindow= new GO.LinkViewWindow({
@@ -218,7 +218,7 @@ GO.linkHandlers["GO_Notes_Model_Note"]=function(id){
 	return GO.notes.linkWindow;
 }
 
-GO.linkPreviewPanels["GO_Notes_Model_Note"]=function(config){
+GO.linkPreviewPanels["GO\\Notes\\Model\\Note"]=function(config){
 	config = config || {};
 	return new GO.notes.NotePanel(config);
 }
@@ -229,7 +229,7 @@ GO.linkPreviewPanels["GO_Notes_Model_Note"]=function(config){
 
 GO.newMenuItems.push({
 	text: GO.notes.lang.note,
-	iconCls: 'go-model-icon-GO_Notes_Model_Note',
+	iconCls: 'go-model-icon-GO\\Notes\\Model\\Note',
 	handler:function(item, e){		
 		GO.notes.showNoteDialog(0, {
 			link_config: item.parentMenu.link_config			

@@ -80,8 +80,8 @@ class CronJob extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 		return array(
-				'users' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\User', 'field'=>'cronjob_id', 'linkModel' => '\GO\Base\Cron\CronUser'),
-				'groups' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\Group', 'field'=>'cronjob_id', 'linkModel' => '\GO\Base\Cron\CronGroup'),
+				'users' => array('type'=>self::MANY_MANY, 'model'=>'GO\Base\Model\User', 'field'=>'cronjob_id', 'linkModel' => 'GO\Base\Cron\CronUser'),
+				'groups' => array('type'=>self::MANY_MANY, 'model'=>'GO\Base\Model\Group', 'field'=>'cronjob_id', 'linkModel' => 'GO\Base\Cron\CronGroup'),
 		);
 	}
 	
@@ -107,7 +107,7 @@ class CronJob extends \GO\Base\Db\ActiveRecord {
 		$stmnt->bindParam("cronjob_id", $id, PDO::PARAM_INT);
 		$stmnt->execute();
 
-		$stmnt->setFetchMode(PDO::FETCH_CLASS, "\GO\Base\Model\User",array(false));
+		$stmnt->setFetchMode(PDO::FETCH_CLASS, "GO\Base\Model\User",array(false));
 		
 		return $stmnt;
 	}

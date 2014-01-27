@@ -111,7 +111,7 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 		}
 	},
 	toggleActionDate : function(modelName) {
-		var withActionDate = modelName == 'GO_Addressbook_Model_Contact';
+		var withActionDate = modelName == 'GO\\Addressbook\\Model\\Contact';
 		this.actionDateField.setDisabled(!withActionDate);
 		this.actionDateField.setVisible(withActionDate);
 	},
@@ -144,7 +144,7 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 					this.link_config.callback.call(this);					
 				}
 								
-				if (!GO.util.empty(this.formPanel.baseParams['model_name']) && this.formPanel.baseParams['model_name']=='GO_Addressbook_Model_Contact' && !GO.util.empty(GO.addressbook.contactsGrid)) {
+				if (!GO.util.empty(this.formPanel.baseParams['model_name']) && this.formPanel.baseParams['model_name']=='GO\\Addressbook\\Model\\Contact' && !GO.util.empty(GO.addressbook.contactsGrid)) {
 					GO.addressbook.contactsGrid.store.load();
 				}
 				

@@ -19,7 +19,7 @@ class User extends AbstractCustomfieldtype{
 
 			if(!\GO\Customfields\Model\AbstractCustomFieldsRecord::$formatForExport){
 				$name = htmlspecialchars($this->getName($attributes[$key]), ENT_COMPAT, 'UTF-8');
-				$html='<a href="#" onclick=\'GO.linkHandlers["\GO\Base\Model\User"].call(this,'.
+				$html='<a href="#" onclick=\'GO.linkHandlers["GO\Base\Model\User"].call(this,'.
 					$this->getId($attributes[$key]).');\' title="'.$name.'">'.
 						$name.'</a>';
 			}else

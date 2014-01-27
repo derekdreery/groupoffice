@@ -49,7 +49,7 @@ class Addressbook extends \GO\Base\Db\ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-				 'addressbook' => array('type' => self::BELONGS_TO, 'model' => '\GO\Addressbook\Model\Addressbook', 'field' => 'addressbook_id', 'delete' => false),
+				 'addressbook' => array('type' => self::BELONGS_TO, 'model' => 'GO\Addressbook\Model\Addressbook', 'field' => 'addressbook_id', 'delete' => false),
 		 );
 	 }	
 }

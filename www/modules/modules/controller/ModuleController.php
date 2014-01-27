@@ -5,7 +5,7 @@ namespace GO\Modules\Controller;
 
 class Module extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = '\GO\Base\Model\Module';
+	protected $model = 'GO\Base\Model\Module';
 	
 	
 	protected function allowWithoutModuleAccess() {
@@ -18,7 +18,7 @@ class Module extends \GO\Base\Controller\AbstractModelController{
 		
 	protected function prepareStore(\GO\Base\Data\Store $store){		
 			
-		$store->getColumnModel()->setFormatRecordFunction(array('\GO\Modules\Controller\Module', 'formatRecord'));
+		$store->getColumnModel()->setFormatRecordFunction(array('GO\Modules\Controller\Module', 'formatRecord'));
 		$store->setDefaultSortOrder('sort_order');
     return parent::prepareStore($store);
 	}
@@ -195,17 +195,17 @@ class Module extends \GO\Base\Controller\AbstractModelController{
 		if ($modMan) {
 			$classes = $modMan->findClasses('model');
 			foreach ($classes as $class) {
-				if ($class->isSubclassOf('\GO\Base\Model\AbstractUserDefaultModel')) {
+				if ($class->isSubclassOf('GO\Base\Model\AbstractUserDefaultModel')) {
 					$models[] = \GO::getModel($class->getName());
 				}
 			}
 		}
 //		\GO::debug(count($users));
 		
-		$module->acl->getAuthorizedUsers($module->acl_id, \GO\Base\Model\Acl::READ_PERMISSION, array("\GO\Modules\Controller\Module","checkDefaultModelCallback"), array($models));
+		$module->acl->getAuthorizedUsers($module->acl_id, \GO\Base\Model\Acl::READ_PERMISSION, array("GO\Modules\Controller\Module","checkDefaultModelCallback"), array($models));
 		
 		
-//		if(class_exists("\GO\Professional\LicenseCheck")){
+//		if(class_exists("GO\Professional\LicenseCheck")){
 //			$lc = new \GO\Professional\LicenseCheck();
 //			$lc->checkProModules(true);
 //		}

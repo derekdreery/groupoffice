@@ -130,12 +130,12 @@ END:VCALENDAR';
 	protected function actionGrouped($params){
 		
 		$stmt = \GO\Base\Model\Grouped::model()->load(
-						'\GO\Calendar\Model\Event',
+						'GO\Calendar\Model\Event',
 						'c.name', 
 						'c.name, count(*) AS count',
 						\GO\Base\Db\FindParams::newInstance()
 						->joinModel(array(
-								'model'=>'\GO\Calendar\Model\Calendar',
+								'model'=>'GO\Calendar\Model\Calendar',
 								'localField'=>'calendar_id',
 								'tableAlias'=>'c'
 						))
@@ -152,7 +152,7 @@ END:VCALENDAR';
 	protected function actionAddRelation($params){
 		\GO\Base\Model\User::model()->addRelation('events', array(
 				'type'=>  \GO\Base\Db\ActiveRecord::HAS_MANY, 
-				'model'=>'\GO\Calendar\Model\Event', 
+				'model'=>'GO\Calendar\Model\Event',
 				'field'=>'user_id'				
 		));
 		
@@ -170,7 +170,7 @@ END:VCALENDAR';
 	protected function actionGroupRelation($params){
 		\GO\Base\Model\User::model()->addRelation('events', array(
 				'type'=>  \GO\Base\Db\ActiveRecord::HAS_MANY, 
-				'model'=>'\GO\Calendar\Model\Event', 
+				'model'=>'GO\Calendar\Model\Event',
 				'field'=>'user_id'				
 		));
 		
@@ -301,7 +301,7 @@ END:VCALENDAR';
 	
 	protected function actionDuplicateCF(){
 		
-		$stmt = \GO\Customfields\Model\Category::model()->findByModel("\GO\Projects2\Model\Project");
+		$stmt = \GO\Customfields\Model\Category::model()->findByModel("GO\Projects2\Model\Project");
 		$stmt->callOnEach('delete');
 		
 		$sql = "DROP TABLE IF EXISTS cf_pr2_projects";
@@ -314,11 +314,11 @@ END:VCALENDAR';
 		\GO::getDbConnection()->query($sql);
 		
 
-		$stmt = \GO\Customfields\Model\Category::model()->findByModel("\GO\Projects\Model\Project");
+		$stmt = \GO\Customfields\Model\Category::model()->findByModel("GO\Projects\Model\Project");
 
 		foreach($stmt as $category){
 			$category->duplicate(array(
-					'extends_model'=>"\GO\Projects2\Model\Project"
+					'extends_model'=>"GO\Projects2\Model\Project"
 			));
 		}
 		
@@ -336,7 +336,7 @@ END:VCALENDAR';
 		\GO::getDbConnection()->query($sql);
 
 
-		$stmt = \GO\Customfields\Model\Category::model()->findByModel("\GO\Projects2\Model\TimeEntry");
+		$stmt = \GO\Customfields\Model\Category::model()->findByModel("GO\Projects2\Model\TimeEntry");
 		$stmt->callOnEach('delete');
 		
 		
@@ -349,11 +349,11 @@ END:VCALENDAR';
 ) ENGINE=InnoDB;";
 		\GO::getDbConnection()->query($sql);
 
-		$stmt = \GO\Customfields\Model\Category::model()->findByModel("\GO\Projects\Model\Hour");
+		$stmt = \GO\Customfields\Model\Category::model()->findByModel("GO\Projects\Model\Hour");
 
 		foreach($stmt as $category){
 			$category->duplicate(array(
-					'extends_model'=>"\GO\Projects2\Model\TimeEntry"
+					'extends_model'=>"GO\Projects2\Model\TimeEntry"
 			));
 		}
 

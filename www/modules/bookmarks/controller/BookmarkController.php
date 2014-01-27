@@ -6,7 +6,7 @@ namespace GO\Bookmarks\Controller;
 
 class Bookmark extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Bookmarks\Model\Bookmark';
+	protected $model = 'GO\Bookmarks\Model\Bookmark';
 
 	protected function actionDescription($params) {
 

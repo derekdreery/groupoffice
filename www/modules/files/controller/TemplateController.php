@@ -23,7 +23,7 @@ namespace GO\files\Controller;
 
 class Template extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Files\Model\Template';
+	protected $model = 'GO\Files\Model\Template';
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
 
@@ -39,7 +39,7 @@ class Template extends \GO\Base\Controller\AbstractModelController {
 	
 	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		
-		$columnModel->formatColumn('type', '\GO\Base\Fs\File::getFileTypeDescription($model->extension)');
+		$columnModel->formatColumn('type', 'GO\Base\Fs\File::getFileTypeDescription($model->extension)');
 		
 		return parent::formatColumns($columnModel);
 	}

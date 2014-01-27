@@ -66,7 +66,7 @@ class Acl extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 		return array(
-				'records' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Base\Model\AclUsersGroups', 'field'=>'acl_id', 'delete'=>true),
+				'records' => array('type'=>self::HAS_MANY, 'model'=>'GO\Base\Model\AclUsersGroups', 'field'=>'acl_id', 'delete'=>true),
 		);
 	}
 	
@@ -292,7 +292,7 @@ class Acl extends \GO\Base\Db\ActiveRecord {
 		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('t.*,a.level as permission_level')
 						->joinModel(array(
-								'model'=>"\GO\Base\Model\AclUsersGroups",
+								'model'=>"GO\Base\Model\AclUsersGroups",
 								'foreignField'=>'user_id',
 								'tableAlias'=>'a'								
 						));
@@ -313,7 +313,7 @@ class Acl extends \GO\Base\Db\ActiveRecord {
 		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('t.*,a.level as permission_level')
 						->joinModel(array(
-								'model'=>"\GO\Base\Model\AclUsersGroups",
+								'model'=>"GO\Base\Model\AclUsersGroups",
 								'foreignField'=>'group_id',
 								'tableAlias'=>'a'								
 						));
@@ -371,7 +371,7 @@ class Acl extends \GO\Base\Db\ActiveRecord {
 //		$stmt->bindParam("level", $level, PDO::PARAM_INT);
 //		$stmt->execute();
 //		
-//		$stmt->setFetchMode(PDO::FETCH_CLASS, "\GO\Base\Model\User",array(false));
+//		$stmt->setFetchMode(PDO::FETCH_CLASS, "GO\Base\Model\User",array(false));
 //		return $stmt;
 		
 		$joinCriteria = \GO\Base\Db\FindCriteria::newInstance()

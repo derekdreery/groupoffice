@@ -12,7 +12,7 @@ class GroupAdmin extends \GO\Base\Controller\AbstractMultiSelectModelController 
 	 * eg. When selecting calendars for a user in the sync settings this is set to \GO\Calendar\Model\Calendar
 	 */
 	public function modelName() {
-		return '\GO\Base\Model\User';
+		return 'GO\Base\Model\User';
 	}
 	
 	/**
@@ -20,7 +20,7 @@ class GroupAdmin extends \GO\Base\Controller\AbstractMultiSelectModelController 
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return '\GO\Calendar\Model\GroupAdmin';
+		return 'GO\Calendar\Model\GroupAdmin';
 	}
 	
 	/**

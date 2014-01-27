@@ -49,8 +49,8 @@ class Menu extends \GO\Base\Db\ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Site\Model\Site", 'field'=>'site_id'),
-			'children' => array('type' => self::HAS_MANY, 'model' => '\GO\Site\Model\MenuItem', 'field' => 'menu_id', 'delete' => false, 'findParams' =>\GO\Base\Db\FindParams::newInstance()->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('parent_id', null))->select('*')->order(array('sort_order')))
+			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO\Site\Model\Site", 'field'=>'site_id'),
+			'children' => array('type' => self::HAS_MANY, 'model' => 'GO\Site\Model\MenuItem', 'field' => 'menu_id', 'delete' => false, 'findParams' =>\GO\Base\Db\FindParams::newInstance()->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('parent_id', null))->select('*')->order(array('sort_order')))
 		 );
 	 }
 	 

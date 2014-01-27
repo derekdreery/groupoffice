@@ -33,7 +33,7 @@ class ContactVcardProperty extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations(){
 		return array(
-			'contact' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Addressbook\Model\Contact', 'field'=>'contact_id')
+			'contact' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Addressbook\Model\Contact', 'field'=>'contact_id')
 		);
 	}
 	

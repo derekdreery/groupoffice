@@ -22,7 +22,7 @@ class CustomfieldsModule extends \GO\Base\Module {
 
 				foreach ($classes as $class) {
 
-					if ($class->isSubclassOf('\GO\Customfields\Customfieldtype\Abstract') && $class->getName() != '\GO\Customfields\Customfieldtype\TreeselectSlave') {
+					if ($class->isSubclassOf('GO\Customfields\Customfieldtype\AbstractCustomfieldtype') && $class->getName() != 'GO\Customfields\Customfieldtype\TreeselectSlave') {
 
 						$className = $class->getName();
 						$t = new $className;
@@ -64,7 +64,7 @@ class CustomfieldsModule extends \GO\Base\Module {
 
 				foreach ($models as $customFieldModel) {
 
-					if ($customFieldModel->isSubclassOf('\GO\Customfields\Model\AbstractCustomFieldsRecord')) {
+					if ($customFieldModel->isSubclassOf('GO\Customfields\Model\AbstractCustomFieldsRecord')) {
 						$cfModels[]=$customFieldModel;
 					}
 				}

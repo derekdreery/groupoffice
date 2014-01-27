@@ -64,9 +64,9 @@ class Portlet extends \GO\Base\Controller\AbstractJsonController {
 			->having($having)
 			->order('upcoming');
 		
-		$columnModel = new \GO\Base\Data\ColumnModel('\GO\Addressbook\Model\Contact');
+		$columnModel = new \GO\Base\Data\ColumnModel('GO\Addressbook\Model\Contact');
 		
-		$store = new \GO\Base\Data\DbStore('\GO\Addressbook\Model\Contact', $columnModel, $_POST, $findParams);
+		$store = new \GO\Base\Data\DbStore('GO\Addressbook\Model\Contact', $columnModel, $_POST, $findParams);
 		
 		echo $this->renderStore($store);
 		
@@ -126,7 +126,7 @@ class Portlet extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * @return String 
 	 */
 	public function modelName() {
-		return '\GO\Addressbook\Model\Addressbook';
+		return 'GO\Addressbook\Model\Addressbook';
 	}
 	
 	/**
@@ -134,7 +134,7 @@ class Portlet extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return '\GO\Addressbook\Model\BirthdaysPortletSetting';
+		return 'GO\Addressbook\Model\BirthdaysPortletSetting';
 	}
 	
 	/**
@@ -191,12 +191,12 @@ class Portlet extends \GO\Base\Controller\AbstractMultiSelectModelController {
 		
 		
 		//$response['data']['original_photo_url']=$model->photoURL;
-		$columnModel = new \GO\Base\Data\ColumnModel('\GO\Addressbook\Model\Contact');
+		$columnModel = new \GO\Base\Data\ColumnModel('GO\Addressbook\Model\Contact');
 		$columnModel->formatColumn('addressbook_id', '$model->addressbook->name');
 		$columnModel->formatColumn('photo_url', '$model->getPhotoThumbURL()');
 		$columnModel->formatColumn('age', '($model->upcoming != date("Y-m-d")) ? $model->age+1 : $model->age');
 		
-		$store = new \GO\Base\Data\DbStore('\GO\Addressbook\Model\Contact', $columnModel, $_POST, $findParams);
+		$store = new \GO\Base\Data\DbStore('GO\Addressbook\Model\Contact', $columnModel, $_POST, $findParams);
 		
 		return $store->getData();
 		

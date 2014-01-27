@@ -5,7 +5,7 @@ namespace GO\Core\Controller;
 
 class AdvancedSearch extends \GO\Base\Controller\AbstractModelController {
 	
-	protected $model = '\GO\Base\Model\AdvancedSearch';
+	protected $model = 'GO\Base\Model\AdvancedSearch';
 
 	protected function getStoreParams($params) {	
 		

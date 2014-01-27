@@ -6,7 +6,7 @@ namespace GO\Ldapauth;
 class LdapauthModule extends \GO\Base\Module{
 	
 	public static function initListeners() {		
-		\GO::session()->addListener('beforelogin', '\GO\Ldapauth\LdapauthModule', 'beforeLogin');
+		\GO::session()->addListener('beforelogin', 'GO\Ldapauth\LdapauthModule', 'beforeLogin');
 	}
 	
 	

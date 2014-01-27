@@ -51,7 +51,7 @@ class Alias extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 		return array(
-			'domain' => array('type' => self::BELONGS_TO, 'model' => '\GO\Postfixadmin\Model\Domain', 'field' => 'domain_id')
+			'domain' => array('type' => self::BELONGS_TO, 'model' => 'GO\Postfixadmin\Model\Domain', 'field' => 'domain_id')
 		);
 	}
 	

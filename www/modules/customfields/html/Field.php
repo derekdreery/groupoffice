@@ -27,12 +27,12 @@ class Field extends \GO\Base\Html\Input {
 				$column= $columns[$this->attributes['name']];
 				
 				switch($column['customfield']->datatype){
-					case '\GO\Customfields\Customfieldtype\Checkbox':
+					case 'GO\Customfields\Customfieldtype\Checkbox':
 						$this->attributes['type']='checkbox';
 						$this->attributes['class'].=' checkbox';
 					break;
 				
-					case '\GO\Customfields\Customfieldtype\Select':
+					case 'GO\Customfields\Customfieldtype\Select':
 						$this->attributes['type']='select';
 						$this->attributes['class'].=' select';
 						

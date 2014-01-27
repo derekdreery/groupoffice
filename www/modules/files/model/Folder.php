@@ -75,7 +75,7 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	public function customfieldsModel() {
-		return "\GO\Files\Customfields\Model\Folder";
+		return "GO\Files\Customfields\Model\Folder";
 	}
 
 	protected function getCacheAttributes() {
@@ -134,12 +134,12 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-                        'parent' => array('type' => self::BELONGS_TO, 'model' => '\GO\Files\Model\Folder', 'field' => 'parent_id'),
-                        'folders' => array('type' => self::HAS_MANY, 'model' => '\GO\Files\Model\Folder', 'field' => 'parent_id', 'delete' => true, 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order('name','ASC')),
-                        'files' => array('type' => self::HAS_MANY, 'model' => '\GO\Files\Model\File', 'field' => 'folder_id', 'delete' => true),
-                        'notifyUsers'=>array('type' => self::HAS_MANY, 'model' => '\GO\Files\Model\FolderNotification', 'field' => 'folder_id', 'delete' => true),
-                        'preferences'=>array('type' => self::HAS_MANY, 'model' => '\GO\Files\Model\FolderPreference', 'field' => 'folder_id', 'delete' => true),
-												'sharedRootFolders'=>array('type' => self::HAS_MANY, 'model' => '\GO\Files\Model\SharedRootFolder', 'field' => 'folder_id', 'delete' => true),
+                        'parent' => array('type' => self::BELONGS_TO, 'model' => 'GO\Files\Model\Folder', 'field' => 'parent_id'),
+                        'folders' => array('type' => self::HAS_MANY, 'model' => 'GO\Files\Model\Folder', 'field' => 'parent_id', 'delete' => true, 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order('name','ASC')),
+                        'files' => array('type' => self::HAS_MANY, 'model' => 'GO\Files\Model\File', 'field' => 'folder_id', 'delete' => true),
+                        'notifyUsers'=>array('type' => self::HAS_MANY, 'model' => 'GO\Files\Model\FolderNotification', 'field' => 'folder_id', 'delete' => true),
+                        'preferences'=>array('type' => self::HAS_MANY, 'model' => 'GO\Files\Model\FolderPreference', 'field' => 'folder_id', 'delete' => true),
+												'sharedRootFolders'=>array('type' => self::HAS_MANY, 'model' => 'GO\Files\Model\SharedRootFolder', 'field' => 'folder_id', 'delete' => true),
 		);
 	}
 	
@@ -631,7 +631,7 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 		
 		\GO::$disableModelCache=true;
 		
-//		if(class_exists("\GO\Filesearch\FilesearchModule"))
+//		if(class_exists("GO\Filesearch\FilesearchModule"))
 //			\GO\Filesearch\FilesearchModule::$disableIndexing=true;
 		
 		if($this->fsFolder->exists()){

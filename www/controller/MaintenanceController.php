@@ -176,12 +176,12 @@ class Maintenance extends \GO\Base\Controller\AbstractController {
 		\GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
 		$checkModels = array(
-				"\GO\Calendar\Model\Event"=>array('name', 'start_time', 'end_time', 'calendar_id', 'rrule'),
-				"\GO\Tasks\Model\Task"=>array('name', 'start_time', 'due_time', 'tasklist_id', 'rrule', 'user_id'),
-				"\GO\Addressbook\Model\Contact"=>array('first_name', 'middle_name', 'last_name', 'addressbook_id', 'company_id', 'email'),
-				"\GO\Files\Model\Folder"=>array('name', 'parent_id'),
-//				"\GO\Calendar\Model\Participant"=>array('event_id', 'email'),
-				//"\GO\Billing\Model\Order"=>array('order_id','book_id','btime')
+				"GO\Calendar\Model\Event"=>array('name', 'start_time', 'end_time', 'calendar_id', 'rrule'),
+				"GO\Tasks\Model\Task"=>array('name', 'start_time', 'due_time', 'tasklist_id', 'rrule', 'user_id'),
+				"GO\Addressbook\Model\Contact"=>array('first_name', 'middle_name', 'last_name', 'addressbook_id', 'company_id', 'email'),
+				"GO\Files\Model\Folder"=>array('name', 'parent_id'),
+//				"GO\Calendar\Model\Participant"=>array('event_id', 'email'),
+				//"GO\Billing\Model\Order"=>array('order_id','book_id','btime')
 			);
 		
 		
@@ -311,7 +311,7 @@ class Maintenance extends \GO\Base\Controller\AbstractController {
 				
 		$models=\GO::findClasses('model');
 		foreach($models as $model){
-			if($model->isSubclassOf("\GO\Base\Db\ActiveRecord") && !$model->isAbstract()){
+			if($model->isSubclassOf("GO\Base\Db\ActiveRecord") && !$model->isAbstract()){
 				echo "Processing ".$model->getName()."\n";
 				flush();
 				$stmt = \GO::getModel($model->getName())->rebuildSearchCache();			
@@ -396,7 +396,7 @@ class Maintenance extends \GO\Base\Controller\AbstractController {
 		
 		$classes=\GO::findClasses('model');
 		foreach($classes as $model){
-			if($model->isSubclassOf('\GO\Base\Db\ActiveRecord') && !$model->isAbstract()){
+			if($model->isSubclassOf('GO\Base\Db\ActiveRecord') && !$model->isAbstract()){
 		
 				echo "Processing ".$model->getName()."\n";
 				flush();
@@ -709,7 +709,7 @@ class Maintenance extends \GO\Base\Controller\AbstractController {
 		echo '<p><a href="'.\GO::url("maintenance/zipLanguage",array("lang"=>$lang2code)).'">Download zip file for '.$lang2code.'</a></p>';
 		
 		foreach ($commonLangFolderContentArr as $commonContentEl) {
-			if (get_class($commonContentEl)=='\GO\Base\Fs\Folder') {				
+			if (get_class($commonContentEl)=='GO\Base\Fs\Folder') {
 				echo '<h3>'.$commonContentEl->path().'</h3>';
 				echo $this->_compareLangFiles($commonContentEl->path().'/'.$lang1code.'.php', $commonContentEl->path().'/'.$lang2code.'.php');
 				echo '<hr>';
@@ -940,10 +940,10 @@ class Maintenance extends \GO\Base\Controller\AbstractController {
 			$moduleModelArr = \GO::modules()->getAllModules();
 
 			foreach ($commonLangFolderContentArr as $commonLangFolder) {
-				if (get_class($commonLangFolder)=='\GO\Base\Fs\Folder') {
+				if (get_class($commonLangFolder)=='GO\Base\Fs\Folder') {
 					$commonLangFileArr = $commonLangFolder->ls();
 					foreach ($commonLangFileArr as $commonLangFile)
-						if (get_class($commonLangFile)=='\GO\Base\Fs\File' && $commonLangFile->name()==$langCode.'.php') {
+						if (get_class($commonLangFile)=='GO\Base\Fs\File' && $commonLangFile->name()==$langCode.'.php') {
 							$fileNames[] = str_replace(\GO::config()->root_path,'',$commonLangFile->path());
 						}
 				}

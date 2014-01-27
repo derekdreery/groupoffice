@@ -15,7 +15,7 @@ namespace GO\Summary\Controller;
 
 class Announcement extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = '\GO\Summary\Model\Announcement';
+	protected $model = 'GO\Summary\Model\Announcement';
 	
 	protected function getStoreParams($params) {
 		if (!empty($params['active']))

@@ -48,7 +48,7 @@ GO.addressbook.MainPanel = function(config)
 				{
 					this.contactsGrid.contextMenu = new GO.addressbook.ContextMenu({type:'contact'});
 				}
-				this.contactsGrid.contextMenu.setSelected(grid, "GO_Addressbook_Model_Contact");
+				this.contactsGrid.contextMenu.setSelected(grid, "GO\\Addressbook\\Model\\Contact");
 				e.stopEvent();
 				this.contactsGrid.contextMenu.showAt(e.getXY());
 			}
@@ -80,7 +80,7 @@ GO.addressbook.MainPanel = function(config)
 				{
 					this.companiesGrid.contextMenu = new GO.addressbook.ContextMenu({type:'company'});
 				}
-				this.companiesGrid.contextMenu.setSelected(grid, "GO_Addressbook_Model_Company");
+				this.companiesGrid.contextMenu.setSelected(grid, "GO\\Addressbook\\Model\\Company");
 				e.stopEvent();
 				this.companiesGrid.contextMenu.showAt(e.getXY());
 			}
@@ -768,7 +768,7 @@ GO.addressbook.searchSender = function(sender, name){
 					break;
 				case 1:
 					var r = GO.addressbook.searchSenderStore.getAt(0);
-					GO.linkHandlers["GO_Addressbook_Model_Contact"].call(this, r.get('id'));
+					GO.linkHandlers["GO\\Addressbook\\Model\\Contact"].call(this, r.get('id'));
 					break;
 				default:
 					if(!GO.addressbook.searchSenderWin)
@@ -781,7 +781,7 @@ GO.addressbook.searchSender = function(sender, name){
 							var contact_id = dataview.store.data.items[index].id;
 							list.clearSelections();
 							GO.addressbook.searchSenderWin.hide();
-							GO.linkHandlers["GO_Addressbook_Model_Contact"].call(this, contact_id);
+							GO.linkHandlers["GO\\Addressbook\\Model\\Contact"].call(this, contact_id);
 						}, this);
 						GO.addressbook.searchSenderWin=new GO.Window({
 							title:GO.addressbook.lang.strSelectContact,
@@ -819,7 +819,7 @@ GO.moduleManager.addModule('addressbook', GO.addressbook.MainPanel, {
 	iconCls : 'go-tab-icon-addressbook'
 });
 
-GO.linkHandlers["GO_Addressbook_Model_Contact"]=GO.mailFunctions.showContact=GO.addressbook.showContact=function(id){
+GO.linkHandlers["GO\\Addressbook\\Model\\Contact"]=GO.mailFunctions.showContact=GO.addressbook.showContact=function(id){
 	if(!GO.addressbook.linkContactWindow){
 		var contactPanel = new GO.addressbook.ContactReadPanel();
 		GO.addressbook.linkContactWindow = new GO.LinkViewWindow({
@@ -834,18 +834,18 @@ GO.linkHandlers["GO_Addressbook_Model_Contact"]=GO.mailFunctions.showContact=GO.
 	return GO.addressbook.linkContactWindow;
 }
 
-GO.linkPreviewPanels["GO_Addressbook_Model_Contact"]=function(config){
+GO.linkPreviewPanels["GO\\Addressbook\\Model\\Contact"]=function(config){
 	config = config || {};
 	return new GO.addressbook.ContactReadPanel(config);
 }
 
-GO.linkPreviewPanels["GO_Addressbook_Model_Company"]=function(config){
+GO.linkPreviewPanels["GO\\Addressbook\\Model\\Company"]=function(config){
 	config = config || {};
 	return new GO.addressbook.CompanyReadPanel(config);
 }
 
 
-GO.linkHandlers["GO_Addressbook_Model_Company"]=function(id){
+GO.linkHandlers["GO\\Addressbook\\Model\\Company"]=function(id){
 
 	if(!GO.addressbook.linkCompanyWindow){
 		var companyPanel = new GO.addressbook.CompanyReadPanel();

@@ -40,7 +40,7 @@ class Extjs3{
 			function($matches) use($baseurl) { 
 				return Extjs3::_replaceUrlCallback($matches[1], $baseurl);
 			}, $css);
-		 //return preg_replace('/url[\s]*\(([^\)]*)\)/ieU', "\GO\Base\View\Extjs3::_replaceUrlCallback('$1', \$baseurl)", $css);
+		 //return preg_replace('/url[\s]*\(([^\)]*)\)/ieU', "GO\Base\View\Extjs3::_replaceUrlCallback('$1', \$baseurl)", $css);
 	}
 
 	public static function _replaceUrlCallback($url, $baseurl){

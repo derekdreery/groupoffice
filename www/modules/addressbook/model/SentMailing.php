@@ -53,10 +53,10 @@ class SentMailing extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 		return array(
-				'addresslist' => array('type' => self::BELONGS_TO, 'model' => '\GO\Addressbook\Model\Addresslist', 'field' => 'addresslist_id'),
-				'campaign' => array('type' => self::BELONGS_TO, 'model' => '\GO\Campaigns\Model\Campaign', 'field' => 'campaign_id'),
-				'contacts' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Addressbook\Model\Contact', 'field'=>'sent_mailing_id', 'linkModel' => '\GO\Addressbook\Model\SentMailingContact'),
-				'companies' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Addressbook\Model\Company', 'field'=>'sent_mailing_id', 'linkModel' => '\GO\Addressbook\Model\SentMailingCompany')
+				'addresslist' => array('type' => self::BELONGS_TO, 'model' => 'GO\Addressbook\Model\Addresslist', 'field' => 'addresslist_id'),
+				'campaign' => array('type' => self::BELONGS_TO, 'model' => 'GO\Campaigns\Model\Campaign', 'field' => 'campaign_id'),
+				'contacts' => array('type'=>self::MANY_MANY, 'model'=>'GO\Addressbook\Model\Contact', 'field'=>'sent_mailing_id', 'linkModel' => 'GO\Addressbook\Model\SentMailingContact'),
+				'companies' => array('type'=>self::MANY_MANY, 'model'=>'GO\Addressbook\Model\Company', 'field'=>'sent_mailing_id', 'linkModel' => 'GO\Addressbook\Model\SentMailingCompany')
 		);
 	}
 
