@@ -95,7 +95,8 @@ GO.tasks.SimpleTasksPanel = function(config)
             header:'ID',
             dataIndex: 'id',
             sortable:true,
-            width:50
+            width:50,
+            hidden: true
         }];
 		config.view=new Ext.grid.GroupingView({
 			scrollOffset: 2,
