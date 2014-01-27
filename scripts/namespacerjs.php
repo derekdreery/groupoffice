@@ -17,7 +17,8 @@ foreach($scripts as $script){
 
     //All GO classes are build up like GO_Module_SomeClass so we can match them with
     //a regular expression.
-    $regex = '/[^A-Za-z0-9_-](GO(_[A-Za-z0-9]+)+)\b/';
+//    $regex = '/[^A-Za-z0-9_-](GO(_[A-Za-z0-9]+)+)\b/';
+    $regex = '/[^A-Za-z0-9_-](GO(\\\\[A-Za-z0-9]+)+)\b/';
 
     $classes = array();
 
@@ -30,7 +31,7 @@ foreach($scripts as $script){
             //skip all uppercase classnames. They are old eg. GO_USERS, GO_LINKS
             if($className!=strtoupper($className)){
                 if(!in_array($className, $classes)){
-                    $classes[$className]=str_replace('_','\\\\', $className);
+                    $classes[$className]=str_replace('\\\\','_', $className);
                 }
             }
         }

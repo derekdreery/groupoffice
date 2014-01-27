@@ -3,6 +3,10 @@
 namespace GO\Core\Controller;
 
 
+use GO\Base\Data\Store;
+use GO\Base\Db\FindParams;
+use GO\Base\Model\ModelType;
+
 class Search extends \GO\Base\Controller\AbstractModelController{
 	protected $model = 'GO\Base\Model\SearchCacheRecord';
 	
@@ -45,7 +49,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 	}
 	
 	protected function getStoreParams($params) {
-		$storeParams = \GO\Base\Db\FindParams::newInstance();
+		$storeParams = FindParams::newInstance();
 		
 		if(isset($params['model_names'])){
 			$model_names = json_decode($params['model_names'], true);
@@ -99,7 +103,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 	
 	private function _getAllModelTypes(){
 		$types=array();
-		$stmt = \GO\Base\Model\ModelType::model()->find();
+		$stmt = ModelType::model()->find();
 		while($modelType = $stmt->fetch()){
 			if(class_exists($modelType->model_name)){
 				$model = \GO::getModel($modelType->model_name);
@@ -113,7 +117,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 	}
 	
 	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
-		$columnModel->formatColumn('iconCls', '"go-model-".$model->model_name');		
+		$columnModel->formatColumn('iconCls', '"go-model-".str_replace(\'\\\\\',\'_\',$model->model_name)');
 		$columnModel->formatColumn('name_and_type', '"(".$model->type.") ".$model->name');
 		$columnModel->formatColumn('model_name_and_id', '$model->model_name.":".$model->model_id');
 		return parent::formatColumns($columnModel);
@@ -121,7 +125,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 	
 	protected function actionModelTypes($params){
 		
-		$stmt = \GO\Base\Model\ModelType::model()->find();
+		$stmt = ModelType::model()->find();
 		
 		$typesString = \GO::config()->get_setting('link_type_filter',\GO::user()->id);
 		$typesArr = explode(',',$typesString);
@@ -157,7 +161,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 		$model = \GO::getModel($params['model_name'])->findByPk($params['model_id']);
 	
 		
-		$store = \GO\Base\Data\Store::newInstance(\GO\Base\Model\SearchCacheRecord::model());
+		$store = Store::newInstance(\GO\Base\Model\SearchCacheRecord::model());
 		
 		//$model->unlink($model);
 		
@@ -206,7 +210,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 		$store->setStatement($stmt);
 		
 		$cm = $store->getColumnModel();		
-		$cm->formatColumn('iconCls', '"go-model-".$model->model_name');		
+		$cm->formatColumn('iconCls', '"go-model-".str_replace(\'\\\\\',\'_\',$model->model_name)');
 		$cm->formatColumn('name_and_type', '"(".$model->type.") ".$model->name');
 		$cm->formatColumn('model_name_and_id', '$model->model_name.":".$model->model_id');
 		$cm->formatColumn('link_count','\GO::getModel($model->model_name)->countLinks($model->model_id)');
@@ -235,7 +239,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 			$response = array('total' => 0, 'results' => array());
 
 			$userContactIds = array();
-			$findParams = \GO\Base\Db\FindParams::newInstance()
+			$findParams = FindParams::newInstance()
 							->searchQuery($query, array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)", 't.email', 't.email2', 't.email3'))
 							->select('t.*, "' . addslashes(\GO::t('strUser')) . '" AS ab_name,c.name AS company_name')
 							->limit(10)
@@ -286,7 +290,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 			if (count($response['results']) < 10) {
 
 
-				$findParams = \GO\Base\Db\FindParams::newInstance()
+				$findParams = FindParams::newInstance()
 								->ignoreAcl()
 								->select('t.*,c.name AS company_name, a.name AS ab_name')
 								->searchQuery($query, array(
@@ -349,7 +353,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 					
 					
 					if (count($response['results']) < 10) {
-						$findParams = \GO\Base\Db\FindParams::newInstance()
+						$findParams = FindParams::newInstance()
 							->ignoreAcl()
 							->searchQuery($query)
 							->limit(10-count($response['results']));
@@ -383,7 +387,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 		}else {
 
 			//no addressbook module for this user. Fall back to user search.
-			$findParams = \GO\Base\Db\FindParams::newInstance()
+			$findParams = FindParams::newInstance()
 							->searchQuery($query)
 							->select('t.*')
 							->limit(10 - count($response['results']));
