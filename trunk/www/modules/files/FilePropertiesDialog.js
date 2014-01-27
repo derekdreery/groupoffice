@@ -110,11 +110,11 @@ GO.files.FilePropertiesDialog = function(config){
 //	}
 
 
-	if(GO.customfields && GO.customfields.types["GO\\Files\\Model\\File"])
+	if(GO.customfields && GO.customfields.types["GO_Files_Model_File"])
 	{
-		for(var i=0;i<GO.customfields.types["GO\\Files\\Model\\File"].panels.length;i++)
+		for(var i=0;i<GO.customfields.types["GO_Files_Model_File"].panels.length;i++)
 		{
-			items.push(GO.customfields.types["GO\\Files\\Model\\File"].panels[i]);
+			items.push(GO.customfields.types["GO_Files_Model_File"].panels[i]);
 		}
 	}
 

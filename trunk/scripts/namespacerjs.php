@@ -18,7 +18,7 @@ foreach($scripts as $script){
     //All GO classes are build up like GO_Module_SomeClass so we can match them with
     //a regular expression.
 //    $regex = '/[^A-Za-z0-9_-](GO(_[A-Za-z0-9]+)+)\b/';
-    $regex = '/[^A-Za-z0-9_-](GO(\\\\[A-Za-z0-9]+)+)\b/';
+    $regex = '/[^A-Za-z0-9_-](GO(\\\\\\\\[A-Za-z0-9]+)+)\b/';
 
     $classes = array();
 

@@ -12,7 +12,7 @@
  */
  GO.users.UserDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
-	customFieldType : "GO\\Base\\Model\\User",
+	customFieldType : "GO_Base_Model_User",
 	initComponent : function(){
 		
 		Ext.apply(this, {
@@ -165,11 +165,11 @@
     this.addPanel(this.lookAndFeelTab);
      
 
-		if(GO.customfields && GO.customfields.types["GO\\Base\\Model\\User"])
+		if(GO.customfields && GO.customfields.types["GO_Base_Model_User"])
 		{
-			for(var i=0;i<GO.customfields.types["GO\\Base\\Model\\User"].panels.length;i++)
+			for(var i=0;i<GO.customfields.types["GO_Base_Model_User"].panels.length;i++)
 			{
-				this.addPanel(GO.customfields.types["GO\\Base\\Model\\User"].panels[i]);
+				this.addPanel(GO.customfields.types["GO_Base_Model_User"].panels[i]);
 			}
 		}   
 		

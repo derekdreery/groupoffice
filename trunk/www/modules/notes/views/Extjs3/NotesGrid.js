@@ -32,7 +32,7 @@ GO.notes.NotesGrid = function(config){
 		totalProperty:'total',
 		fields: ['id','category_id','user_name','ctime','mtime','name','content'],
 		remoteSort: true,
-		model:"GO\\Notes\\Model\\Note"
+		model:"GO_Notes_Model_Note"
 	});
 
 	config.store.on('load', function()

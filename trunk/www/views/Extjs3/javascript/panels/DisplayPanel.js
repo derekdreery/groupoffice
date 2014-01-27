@@ -503,7 +503,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	_commentsWithActionDate : false,
 	
 	_toggleActionDate : function() {
-		this._commentsWithActionDate = this.model_name == 'GO\\Addressbook\\Model\\Contact';
+		this._commentsWithActionDate = this.model_name == 'GO_Addressbook_Model_Contact';
 		this.actionDateField.setDisabled(!this._commentsWithActionDate);
 		this.actionDateField.setVisible(this._commentsWithActionDate);
 	},

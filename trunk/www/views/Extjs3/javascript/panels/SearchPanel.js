@@ -232,16 +232,18 @@ Ext.extend(GO.grid.SearchPanel, Ext.Panel, {
 
 		this.previewPanel.getLayout().setActiveItem(0);
 
-		var panelId = 'search_pp_'+record.data.model_name;
+        var jsModelName = record.data.model_name.replace(/\\/g,"_");
+
+		var panelId = 'search_pp_'+jsModelName;
 
 		if(record.data.link_type!='folder'){
 
-			if(!GO.linkPreviewPanels[record.data.model_name]){
+			if(!GO.linkPreviewPanels[jsModelName]){
 				this.linkPreviewPanels["search_pp_0"].body.update('Sorry, the preview of this type not implemented yet.');
 			}else
 			{
 				if(!this.linkPreviewPanels[panelId]){
-					this.linkPreviewPanels[panelId] = GO.linkPreviewPanels[record.data.model_name].call(this, {id:panelId});
+					this.linkPreviewPanels[panelId] = GO.linkPreviewPanels[jsModelName].call(this, {id:panelId});
 					this.previewPanel.add(this.linkPreviewPanels[panelId]);
 				}
 				

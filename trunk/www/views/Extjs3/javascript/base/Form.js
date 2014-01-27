@@ -29,7 +29,7 @@ GO.base.form.getFormFieldByType = function(gotype, colName, config){
 			
 			editor = new GO.customfields.getFormField(GO.customfields.columnMap[colName], config);
 			if (editor.xtype=='xcheckbox')			
-				editor = GO.customfields.dataTypes['GO\\Customfields\\Customfieldtype\\BinaryCombobox'].getFormField(GO.customfields.columnMap[colName], config);
+				editor = GO.customfields.dataTypes['GO_Customfields_Customfieldtype_BinaryCombobox'].getFormField(GO.customfields.columnMap[colName], config);
 			
 			break;
 

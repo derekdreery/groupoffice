@@ -32,7 +32,7 @@ GO.site.SelectFile = Ext.extend(Ext.form.TriggerField,{
 			maskEl:this.ownerCt.ownerCt.getEl(),
 			params:{								
 				mustExist:true,
-				model:'GO\\Site\\Model\\Site',
+				model:'GO_Site_Model_Site',
 				id:GO.site.currentSiteId
 			},
 			success:function(response, options, result){														

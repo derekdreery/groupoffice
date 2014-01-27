@@ -39,11 +39,11 @@ GO.calendar.EventDialog = function(calendar) {
 	this.resourcesPanel
 	];
 
-	if(GO.customfields && GO.customfields.types["GO\\Calendar\\Model\\Event"])
+	if(GO.customfields && GO.customfields.types["GO_Calendar_Model_Event"])
 	{
-		for(var i=0;i<GO.customfields.types["GO\\Calendar\\Model\\Event"].panels.length;i++)
+		for(var i=0;i<GO.customfields.types["GO_Calendar_Model_Event"].panels.length;i++)
 		{
-			items.push(GO.customfields.types["GO\\Calendar\\Model\\Event"].panels[i]);
+			items.push(GO.customfields.types["GO_Calendar_Model_Event"].panels[i]);
 		}
 	}
 
@@ -101,7 +101,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				}
 				GO.linkBrowser.show({
 					model_id : this.event_id,
-					model_name : "GO\\Calendar\\Model\\Event",
+					model_name : "GO_Calendar_Model_Event",
 					folder_id : "0"
 				});
 			},
@@ -110,7 +110,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		if (GO.files) {
 			tbar.push(this.fileBrowseButton = new GO.files.FileBrowserButton({
-				model_name:"GO\\Calendar\\Model\\Event"
+				model_name:"GO_Calendar_Model_Event"
 			}));
 			
 			this.fileBrowseButton.on('click',function(){
@@ -360,7 +360,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 //		// save values before all items are removed (checkboxes + statuses)
 //		if(this.win.isVisible())
 //		{
-//			if(GO.customfields && GO.customfields.types["GO\\Calendar\\Model\\Event"])
+//			if(GO.customfields && GO.customfields.types["GO_Calendar_Model_Event"])
 //			{
 //				for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
 //				{
@@ -560,7 +560,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					'private_enabled' : this.formPanel.form.findField('private').getValue(),
 					'has_reminder':!GO.util.empty(this.reminderValue.getValue()),
 					
-					model_name:"GO\\Calendar\\Model\\Event",
+					model_name:"GO_Calendar_Model_Event",
 					all_day_event:this.formPanel.form.findField('all_day_event').getValue() ? true : false,
 					exception_event_id : this.formPanel.form.baseParams['exception_event_id']
 //					has_other_participants: this.participantsPanel.invitationRequired()
@@ -1328,13 +1328,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						var enabled_categories = record.customfields.enabled_categories;
 						var disable_categories = record.customfields.disable_categories;
 					
-						if (GO.customfields.types["GO\\Calendar\\Model\\Calendar"]) {
-							for(var l=0; l<GO.customfields.types["GO\\Calendar\\Model\\Calendar"].panels.length; l++)
+						if (GO.customfields.types["GO_Calendar_Model_Calendar"]) {
+							for(var l=0; l<GO.customfields.types["GO_Calendar_Model_Calendar"].panels.length; l++)
 							{
-									var cf = GO.customfields.types["GO\\Calendar\\Model\\Calendar"].panels[l].customfields;
+									var cf = GO.customfields.types["GO_Calendar_Model_Calendar"].panels[l].customfields;
 									var formFields = [new GO.form.PlainField({
 											hideLabel: true,
-											value: '<b>'+GO.customfields.types["GO\\Calendar\\Model\\Calendar"].panels[l].title+'</b>'
+											value: '<b>'+GO.customfields.types["GO_Calendar_Model_Calendar"].panels[l].title+'</b>'
 										})];
 									for(var m=0; m<cf.length; m++)
 									{
@@ -1359,15 +1359,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 									}
 							}
 						}
-						if (GO.customfields.types["GO\\Calendar\\Model\\Event"]) {
+						if (GO.customfields.types["GO_Calendar_Model_Event"]) {
 							resourceOptions.push({
 								xtype: 'plainfield',
 								value: '<br />'
 							});
-							var panels = GO.customfields.types["GO\\Calendar\\Model\\Event"].panels;
+							var panels = GO.customfields.types["GO_Calendar_Model_Event"].panels;
 							for(var l=0; l<panels.length; l++)
 							{
-								var category_id = GO.customfields.types["GO\\Calendar\\Model\\Event"].panels[l].category_id.toString();
+								var category_id = GO.customfields.types["GO_Calendar_Model_Event"].panels[l].category_id.toString();
 								if(!disable_categories || enabled_categories.indexOf(category_id)>-1){									
 		
 									var cf = panels[l].customfields;

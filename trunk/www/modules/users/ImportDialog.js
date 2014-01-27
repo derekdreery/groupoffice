@@ -28,7 +28,7 @@ GO.users.ImportDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				['csv','CSV (Comma Separated Values)']
 			],
 			controllers:[
-				['GO\\Users\\Controller\\User',GO.lang.user]
+				['GO_Users_Controller_User',GO.lang.user]
 			]
 //			,
 //			importBaseParams:[

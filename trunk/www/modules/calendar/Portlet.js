@@ -132,7 +132,7 @@ Ext.extend(GO.calendar.SummaryGroupPanel, Ext.grid.GridPanel, {
 
 			if(record.data.contact_id)
 			{
-				GO.linkHandlers["GO\\Addressbook\\Model\\Contact"].call(this, record.data.contact_id);
+				GO.linkHandlers["GO_Addressbook_Model_Contact"].call(this, record.data.contact_id);
 			}else
 			{				
 				GO.calendar.showEventDialog({

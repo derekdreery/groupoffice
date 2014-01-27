@@ -102,7 +102,7 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 	setGroupId : function(group_id)
 	{
 		if(GO.customfields)
-			this.disableCategoriesPanel.setModel(group_id,"GO\\Calendar\\Model\\Event");
+			this.disableCategoriesPanel.setModel(group_id,"GO_Calendar_Model_Event");
 		
 		this.formPanel.form.baseParams['id'] = group_id;
 		this.group_id = group_id;
