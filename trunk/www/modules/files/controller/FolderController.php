@@ -6,7 +6,7 @@ namespace GO\Files\Controller;
 
 class Folder extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Files\Model\Folder';
+	protected $model = 'GO\Files\Model\Folder';
 	
 	
 
@@ -616,7 +616,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 		
 		//$fp = \GO\Base\Db\FindParams::newInstance()->calcFoundRows();
 		
-		$cm = new \GO\Base\Data\ColumnModel('\GO\Files\Model\Folder');
+		$cm = new \GO\Base\Data\ColumnModel('GO\Files\Model\Folder');
 		$cm->setFormatRecordFunction(array($this, 'formatListRecord'));
 		
 		
@@ -629,7 +629,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 					->addCondition('user_id', \GO::user()->id,'=','sharedRootFolders');
 		
 		
-		$store = new \GO\Base\Data\DbStore('\GO\Files\Model\Folder',$cm, $params, $findParams);
+		$store = new \GO\Base\Data\DbStore('GO\Files\Model\Folder',$cm, $params, $findParams);
 		$response = $store->getData();
 		$response['permission_level']=\GO\Base\Model\Acl::READ_PERMISSION;
 //		$response['results']=array();
@@ -709,10 +709,10 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 			$ids = $this->_splitFolderAndFileIds(json_decode($params['delete_keys'], true));
 
 			$params['delete_keys'] = json_encode($ids['folders']);
-			$store->processDeleteActions($params, "\GO\Files\Model\Folder");
+			$store->processDeleteActions($params, "GO\Files\Model\Folder");
 
 			$params['delete_keys'] = json_encode($ids['files']);
-			$store->processDeleteActions($params, "\GO\Files\Model\File");
+			$store->processDeleteActions($params, "GO\Files\Model\File");
 		}
 
 
@@ -805,7 +805,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 					->ignoreAcl()
 					->joinCustomFields()
 					->joinModel(array(
-						'model'=>'\GO\Base\Model\SearchCacheRecord',
+						'model'=>'GO\Base\Model\SearchCacheRecord',
 						'localTableAlias'=>'t',
 						'localField'=>'id',
 						'foreignField'=>'model_id',
@@ -814,7 +814,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 					->join(\GO\Base\Model\AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'INNER')->debugSql()
 					->criteria(
 						\GO\Base\Db\FindCriteria::newInstance()
-							->addCondition('model_type_id', \GO::getModel('\GO\Files\Model\File')->modelTypeId(),  '=', 'sc', true)
+							->addCondition('model_type_id', \GO::getModel('GO\Files\Model\File')->modelTypeId(),  '=', 'sc', true)
 							->mergeWith(
 								\GO\Base\Db\FindCriteria::newInstance()
 									->addCondition('name', $queryStr, 'LIKE', 'sc', false)
@@ -935,7 +935,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 
 				\GO::debug("Moved folder to temp:".$folder->fsFolder->path());
 
-				\GO::modelCache()->remove("\GO\Files\Model\Folder");
+				\GO::modelCache()->remove("GO\Files\Model\Folder");
 
 				$destinationFolder = \GO\Files\Model\Folder::model()->findByPath(
 							dirname($newPath), true);

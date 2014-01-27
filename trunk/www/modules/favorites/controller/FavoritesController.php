@@ -15,7 +15,7 @@ class Favorites extends \GO\Base\Controller\AbstractJsonController {
 		$findParams->order('name');
 		$findParams->joinModel(
 			array(
-				'model'=>'\GO\Favorites\Model\Calendar',					
+				'model'=>'GO\Favorites\Model\Calendar',
 				'localTableAlias'=>'t', //defaults to "t"
 				'localField'=>'id', //defaults to "id"
 				'foreignField'=>'calendar_id', //defaults to primary key of the remote model
@@ -24,7 +24,7 @@ class Favorites extends \GO\Base\Controller\AbstractJsonController {
 			)
 		);
 				
-		$store = new \GO\Base\Data\DbStore('\GO\Calendar\Model\Calendar',$colModel , $_POST, $findParams);
+		$store = new \GO\Base\Data\DbStore('GO\Calendar\Model\Calendar',$colModel , $_POST, $findParams);
 		
 		$store->defaultSort = array('name');
 		$store->multiSelectable('calendars');
@@ -41,7 +41,7 @@ class Favorites extends \GO\Base\Controller\AbstractJsonController {
 		$findParams->order('name');
 		$findParams->joinModel(
 			array(
-				'model'=>'\GO\Favorites\Model\Tasklist',					
+				'model'=>'GO\Favorites\Model\Tasklist',
 				'localTableAlias'=>'t', //defaults to "t"
 				'localField'=>'id', //defaults to "id"
 				'foreignField'=>'tasklist_id', //defaults to primary key of the remote model
@@ -49,7 +49,7 @@ class Favorites extends \GO\Base\Controller\AbstractJsonController {
 				'type'=>'INNER' //defaults to INNER,
 			)
 		);
-		$store = new \GO\Base\Data\DbStore('\GO\Tasks\Model\Tasklist',$colModel , $_POST, $findParams);
+		$store = new \GO\Base\Data\DbStore('GO\Tasks\Model\Tasklist',$colModel , $_POST, $findParams);
 //		$store->defaultSort = array('sort','name');
 		$store->multiSelectable('ta-taskslists');
 		
@@ -66,7 +66,7 @@ class Favorites extends \GO\Base\Controller\AbstractJsonController {
 		$findParams->order('name');
 		$findParams->joinModel(
 			array(
-				'model'=>'\GO\Favorites\Model\Addressbook',					
+				'model'=>'GO\Favorites\Model\Addressbook',
 				'localTableAlias'=>'t', //defaults to "t"
 				'localField'=>'id', //defaults to "id"
 				'foreignField'=>'addressbook_id', //defaults to primary key of the remote model
@@ -75,7 +75,7 @@ class Favorites extends \GO\Base\Controller\AbstractJsonController {
 			)
 		);	
 		
-		$store = new \GO\Base\Data\DbStore('\GO\Addressbook\Model\Addressbook',$colModel , $_POST, $findParams);
+		$store = new \GO\Base\Data\DbStore('GO\Addressbook\Model\Addressbook',$colModel , $_POST, $findParams);
 		$store->multiSelectable('books');
 //		$store->defaultSort = array('sort','name');
 		

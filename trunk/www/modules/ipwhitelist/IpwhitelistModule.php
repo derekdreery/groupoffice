@@ -12,10 +12,10 @@ class IpwhitelistModule extends \GO\Base\Module{
 
 	public static function initListeners() {
 		$invoiceController = new \GO\Core\Controller\Auth();
-		$invoiceController->addListener('beforelogin', "\GO\Ipwhitelist\IpwhitelistModule", "checkIpAddress");
+		$invoiceController->addListener('beforelogin', "GO\Ipwhitelist\IpwhitelistModule", "checkIpAddress");
 		$groupController = new \GO\Groups\Controller\Group();
-		$groupController->addListener('load', "\GO\Ipwhitelist\IpwhitelistModule", "getWhitelistEnabled");
-		$groupController->addListener('submit', '\GO\Ipwhitelist\IpwhitelistModule', 'setWhitelist');
+		$groupController->addListener('load', "GO\Ipwhitelist\IpwhitelistModule", "getWhitelistEnabled");
+		$groupController->addListener('submit', 'GO\Ipwhitelist\IpwhitelistModule', 'setWhitelist');
 	}
 	
 	public function autoInstall() {
@@ -38,7 +38,7 @@ class IpwhitelistModule extends \GO\Base\Module{
 			\GO\Base\Db\FindParams::newInstance()
 				->select('t.ip_address')
 				->joinModel(array(
-					'model'=>'\GO\Ipwhitelist\Model\EnableWhitelist',
+					'model'=>'GO\Ipwhitelist\Model\EnableWhitelist',
 					'localTableAlias'=>'t',
 					'localField'=>'group_id',
 					'foreignField'=>'group_id',
@@ -46,7 +46,7 @@ class IpwhitelistModule extends \GO\Base\Module{
 					'type'=>'INNER'
 				))
 				->joinModel(array(
-					'model'=>'\GO\Base\Model\UserGroup',
+					'model'=>'GO\Base\Model\UserGroup',
 					'localTableAlias'=>'ew',
 					'localField'=>'group_id',
 					'foreignField'=>'group_id',

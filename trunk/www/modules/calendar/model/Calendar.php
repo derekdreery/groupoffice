@@ -69,16 +69,16 @@ class Calendar extends \GO\Base\Model\AbstractUserDefaultModel {
 	}
 	
 	public function customfieldsModel() {
-		return "\GO\Calendar\Customfields\Model\Calendar";
+		return "GO\Calendar\Customfields\Model\Calendar";
 	}
 
 	public function relations() {
 		return array(
-			'group' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Group', 'field' => 'group_id'),
-			'events' => array('type' => self::HAS_MANY, 'model' => '\GO\Calendar\Model\Event', 'field' => 'calendar_id', 'delete' => true),
-			'categories' => array('type' => self::HAS_MANY, 'model' => '\GO\Calendar\Model\Category', 'field' => 'calendar_id', 'delete' => true),
-			'tasklist' => array('type' => self::BELONGS_TO, 'model' => '\GO\Tasks\Model\Tasklist', 'field' => 'tasklist_id'),
-			'visible_tasklists' => array('type' => self::MANY_MANY, 'model' => '\GO\Tasks\Model\Tasklist', 'linkModel'=>'\GO\Calendar\Model\CalendarTasklist', 'field'=>'calendar_id', 'linksTable' => 'cal_visible_tasklists', 'remoteField'=>'tasklist'),
+			'group' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Group', 'field' => 'group_id'),
+			'events' => array('type' => self::HAS_MANY, 'model' => 'GO\Calendar\Model\Event', 'field' => 'calendar_id', 'delete' => true),
+			'categories' => array('type' => self::HAS_MANY, 'model' => 'GO\Calendar\Model\Category', 'field' => 'calendar_id', 'delete' => true),
+			'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO\Tasks\Model\Tasklist', 'field' => 'tasklist_id'),
+			'visible_tasklists' => array('type' => self::MANY_MANY, 'model' => 'GO\Tasks\Model\Tasklist', 'linkModel'=>'GO\Calendar\Model\CalendarTasklist', 'field'=>'calendar_id', 'linksTable' => 'cal_visible_tasklists', 'remoteField'=>'tasklist'),
 			);
 	}
 	
@@ -95,7 +95,7 @@ class Calendar extends \GO\Base\Model\AbstractUserDefaultModel {
 	
 	
 	public function settingsModelName() {
-		return "\GO\Calendar\Model\Settings";
+		return "GO\Calendar\Model\Settings";
 	}
 	
 	public function settingsPkAttribute() {

@@ -343,7 +343,7 @@ class Module extends Observable {
 		$models=$this->getModels();
 
 		foreach($models as $model){
-			if($model->isSubclassOf("\GO\Base\Db\ActiveRecord")){
+			if($model->isSubclassOf("GO\Base\Db\ActiveRecord")){
 				echo $response[] = "Processing ".$model->getName()."\n";
 				$stmt = \GO::getModel($model->getName())->rebuildSearchCache();
 			
@@ -366,7 +366,7 @@ class Module extends Observable {
 		
 		
 		foreach($models as $model){	
-			if($model->isSubclassOf("\GO\Base\Db\ActiveRecord")){
+			if($model->isSubclassOf("GO\Base\Db\ActiveRecord")){
 				$m = \GO::getModel($model->getName());
 				if($m->checkDatabaseSupported()){					
 					

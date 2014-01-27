@@ -27,7 +27,7 @@ class AclGroup extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * eg. When selecting calendars for a user in the sync settings this is set to \GO\Calendar\Model\Calendar
 	 */
 	public function modelName() {
-		return '\GO\Base\Model\Group';
+		return 'GO\Base\Model\Group';
 	}
 	
 	/**
@@ -35,7 +35,7 @@ class AclGroup extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return '\GO\Base\Model\AclUsersGroups';
+		return 'GO\Base\Model\AclUsersGroups';
 	}
 	
 	/**

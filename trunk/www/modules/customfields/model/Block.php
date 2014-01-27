@@ -27,8 +27,8 @@ class Block extends \GO\Base\Db\ActiveRecord{
 	
 	public function relations() {
 		return array(
-				'customField' => array('type' => self::BELONGS_TO, 'model' => '\GO\Customfields\Model\Field', 'field' => 'field_id'),
-				'enabledModels'=>array('type' => self::HAS_MANY, 'model' => '\GO\Customfields\Model\EnabledBlock', 'field' => 'block_id','delete'=>true)
+				'customField' => array('type' => self::BELONGS_TO, 'model' => 'GO\Customfields\Model\Field', 'field' => 'field_id'),
+				'enabledModels'=>array('type' => self::HAS_MANY, 'model' => 'GO\Customfields\Model\EnabledBlock', 'field' => 'block_id','delete'=>true)
 			);
 	}
 		
@@ -64,7 +64,7 @@ class Block extends \GO\Base\Db\ActiveRecord{
 		$itemNamesArr = array();
 		
 		foreach ($stmt as $item) {
-			$name = $item->className()=='\GO\Addressbook\Model\Company' || $item->className()=='\GO\Addressbook\Model\Contact'
+			$name = $item->className()=='GO\Addressbook\Model\Company' || $item->className()=='GO\Addressbook\Model\Contact'
 				? $item->name.' ('.$item->addressbook->name.')'
 				: $item->name;
 			$itemNamesArr[] = array('model_id'=>$item->id,'model_name'=>$item->className(),'item_name'=>$name);

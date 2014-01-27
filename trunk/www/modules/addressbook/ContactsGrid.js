@@ -193,7 +193,7 @@ GO.addressbook.ContactsGrid = function(config){
 	}
 	
 	if(GO.customfields)
-		GO.customfields.addColumns("GO_Addressbook_Model_Contact", fields);
+		GO.customfields.addColumns("GO\\Addressbook\\Model\\Contact", fields);
 	
 	config.store = new GO.data.JsonStore({
 		url: GO.url('addressbook/contact/store'),

@@ -41,9 +41,9 @@ class Addresslist extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations(){
 		return array(
-				'contacts' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Addressbook\Model\Contact', 'field'=>'addresslist_id', 'linkModel' => '\GO\Addressbook\Model\AddresslistContact'),
-				'companies' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Addressbook\Model\Company', 'field'=>'addresslist_id', 'linkModel' => '\GO\Addressbook\Model\AddresslistCompany'),
-				'sentMailings' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Addressbook\Model\SentMailing','field'=>'addresslist_id')
+				'contacts' => array('type'=>self::MANY_MANY, 'model'=>'GO\Addressbook\Model\Contact', 'field'=>'addresslist_id', 'linkModel' => 'GO\Addressbook\Model\AddresslistContact'),
+				'companies' => array('type'=>self::MANY_MANY, 'model'=>'GO\Addressbook\Model\Company', 'field'=>'addresslist_id', 'linkModel' => 'GO\Addressbook\Model\AddresslistCompany'),
+				'sentMailings' => array('type'=>self::HAS_MANY, 'model'=>'GO\Addressbook\Model\SentMailing','field'=>'addresslist_id')
 		);
 	}
 	

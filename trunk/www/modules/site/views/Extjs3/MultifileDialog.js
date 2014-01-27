@@ -54,7 +54,7 @@ GO.site.MultifileDialog = Ext.extend(GO.Window , {
 						//maskEl:this.ownerCt.getEl(),
 						params:{								
 							mustExist:true,
-							model:'GO_Site_Model_Site',
+							model:'GO\\Site\\Model\\Site',
 							id:GO.site.currentSiteId
 						},
 						success:function(response, options, result){														

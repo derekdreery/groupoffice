@@ -126,11 +126,11 @@ GO.files.FolderPropertiesDialog = function(config){
 		this.tabPanel.add(this.disableCategoriesPanel);
 		
 		
-		if(GO.customfields && GO.customfields.types["GO_Files_Model_Folder"])
+		if(GO.customfields && GO.customfields.types["GO\\Files\\Model\\Folder"])
 		{
-			for(var i=0;i<GO.customfields.types["GO_Files_Model_Folder"].panels.length;i++)
+			for(var i=0;i<GO.customfields.types["GO\\Files\\Model\\Folder"].panels.length;i++)
 			{
-				this.tabPanel.add(GO.customfields.types["GO_Files_Model_Folder"].panels[i]);
+				this.tabPanel.add(GO.customfields.types["GO\\Files\\Model\\Folder"].panels[i]);
 			}
 		}
 	}
@@ -223,7 +223,7 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 
 				this.tabPanel.setActiveTab(0);
 				if(GO.customfields)
-					this.disableCategoriesPanel.setModel(folder_id,"GO_Files_model_File");
+					this.disableCategoriesPanel.setModel(folder_id,"GO\\Files\\model\\File");
 				
 				this.notifyCheckBox.addListener('check',this.onNotifyChecked,this);
 				

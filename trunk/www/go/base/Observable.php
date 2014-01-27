@@ -44,7 +44,7 @@ class Observable{
 	 */
 	public static function cacheListeners(){
 		
-		\GO::debug("\GO\Base\Observable::cacheListeners");
+		\GO::debug("GO\Base\Observable::cacheListeners");
 		
 		$cacheFolder = \GO::config()->getCacheFolder();
 		$folder = $cacheFolder->createChild('listeners',false);
@@ -90,7 +90,7 @@ class Observable{
 //	 IN THE MODULE ADD THIS TO ATTACH A LISTENER:
 //	 
 //  public static function initListeners() {
-//		Controller\AbstractModelController::attachListener("display", "\GO\Lists\ListsModule", "displayResponse");
+//		Controller\AbstractModelController::attachListener("display", "GO\Lists\ListsModule", "displayResponse");
 //	}
 //	 
 //	 * 

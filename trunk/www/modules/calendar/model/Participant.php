@@ -89,8 +89,8 @@ class Participant extends \GO\Base\Db\ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'event' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Event', 'field' => 'event_id'),
-				'contact' => array('type' => self::BELONGS_TO, 'model' => '\GO\Addressbook\Model\Contact', 'field' => 'contact_id'),
+				'event' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Event', 'field' => 'event_id'),
+				'contact' => array('type' => self::BELONGS_TO, 'model' => 'GO\Addressbook\Model\Contact', 'field' => 'contact_id'),
 		);
 	}
 
@@ -471,7 +471,7 @@ class Participant extends \GO\Base\Db\ActiveRecord {
 		$findParams = \GO\Base\Db\FindParams::newInstance();
 		
 		$findParams->joinModel(array(
-				'model'=>'\GO\Calendar\Model\Event',						  
+				'model'=>'GO\Calendar\Model\Event',
 	 			'localTableAlias'=>'t', //defaults to "t"
 	 			'localField'=>'event_id', //defaults to "id"	  
 	 			'foreignField'=>'id', //defaults to primary key of the remote model

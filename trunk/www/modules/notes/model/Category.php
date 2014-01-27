@@ -53,7 +53,7 @@ class Category extends \GO\Base\Model\AbstractUserDefaultModel {
 
 	public function relations() {
 		return array(
-				'notes' => array('type' => self::HAS_MANY, 'model' => '\GO\Notes\Model\Note', 'field' => 'category_id', 'delete' => true)		);
+				'notes' => array('type' => self::HAS_MANY, 'model' => 'GO\Notes\Model\Note', 'field' => 'category_id', 'delete' => true)		);
 	}
 	
 	protected function init() {

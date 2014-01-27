@@ -4,7 +4,7 @@ namespace GO\Core\Controller;
 
 
 class Search extends \GO\Base\Controller\AbstractModelController{
-	protected $model = '\GO\Base\Model\SearchCacheRecord';
+	protected $model = 'GO\Base\Model\SearchCacheRecord';
 	
 	protected function beforeStore(&$response, &$params, &$store) {
 		//handle deletes for searching differently
@@ -103,7 +103,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 		while($modelType = $stmt->fetch()){
 			if(class_exists($modelType->model_name)){
 				$model = \GO::getModel($modelType->model_name);
-				$module = $modelType->model_name == "\GO\Base\Model\User" ? "users" : $model->module;
+				$module = $modelType->model_name == "GO\Base\Model\User" ? "users" : $model->module;
 				if(\GO::modules()->{$module})
 					$types[]=$modelType->id;
 			}
@@ -131,7 +131,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 			if(class_exists($modelType->model_name)){
 				$model = \GO::getModel($modelType->model_name);
 
-				$module = $modelType->model_name == "\GO\Base\Model\User" ? "users" : $model->module;
+				$module = $modelType->model_name == "GO\Base\Model\User" ? "users" : $model->module;
 
 				if(\GO::modules()->{$module})
 					$types[$model->localizedName.$modelType->id]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
@@ -240,7 +240,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 							->select('t.*, "' . addslashes(\GO::t('strUser')) . '" AS ab_name,c.name AS company_name')
 							->limit(10)
 							->joinModel(array(
-					'model' => '\GO\Addressbook\Model\Company',
+					'model' => 'GO\Addressbook\Model\Company',
 					'foreignField' => 'id', //defaults to primary key of the remote model
 					'localField' => 'company_id', //defaults to "id"
 					'tableAlias' => 'c', //Optional table alias
@@ -258,7 +258,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 
 			if (\GO::user()->sort_email_addresses_by_time==1 && \GO::modules()->addressbook) {
 				$findParams->joinModel(array(
-					'model'=>'\GO\Email\Model\ContactMailTime',
+					'model'=>'GO\Email\Model\ContactMailTime',
 					'localTableAlias'=>'t',
 					'localField'=>'id',
 					'foreignField'=>'contact_id',
@@ -296,7 +296,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 										't.email3'
 								))
 								->joinModel(array(
-										'model' => '\GO\Addressbook\Model\Addressbook',
+										'model' => 'GO\Addressbook\Model\Addressbook',
 										'foreignField' => 'id', //defaults to primary key of the remote model
 										'localField' => 'addressbook_id', //defaults to "id"
 										'tableAlias' => 'a', //Optional table alias
@@ -307,7 +307,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 
 				//		if(!empty($params['joinCompany'])){
 				$findParams->joinModel(array(
-						'model' => '\GO\Addressbook\Model\Company',
+						'model' => 'GO\Addressbook\Model\Company',
 						'foreignField' => 'id', //defaults to primary key of the remote model
 						'localField' => 'company_id', //defaults to "id"
 						'tableAlias' => 'c', //Optional table alias

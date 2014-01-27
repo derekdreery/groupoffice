@@ -59,16 +59,16 @@ class SiteModule extends \GO\Base\Module{
 		switch($nodeType){
 			
 			case 'content':
-				return '\GO\Site\Model\Content';
+				return 'GO\Site\Model\Content';
 				break;
 			case 'site':
-				return '\GO\Site\Model\Site';
+				return 'GO\Site\Model\Site';
 				break;
 			case 'menu':
-				return '\GO\Site\Model\Menu';
+				return 'GO\Site\Model\Menu';
 				break;
 			case 'menuitem':
-				return '\GO\Site\Model\MenuItem';
+				return 'GO\Site\Model\MenuItem';
 				break;
 		}
 		

@@ -13,7 +13,7 @@
  
 GO.site.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
-	customFieldType : "GO_Site_Model_Content",
+	customFieldType : "GO\\Site\\Model\\Content",
 	
 	initComponent : function(){
 		

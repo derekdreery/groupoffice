@@ -21,7 +21,7 @@ namespace GO\Addressbook\Controller;
 
 class Contact extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = '\GO\Addressbook\Model\Contact';	
+	protected $model = 'GO\Addressbook\Model\Contact';
 	
 	protected function allowGuests() {
 		return array('photo');
@@ -95,7 +95,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 	protected function afterLoad(&$response, &$model, &$params) {
 		
 		if (\GO::modules()->customfields)
-			$response['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("\GO\Addressbook\Model\Contact", $model->addressbook_id);
+			$response['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Addressbook\Model\Contact", $model->addressbook_id);
 		
 		$response['data']['photo_url']=$model->photoThumbURL;		
 		$response['data']['original_photo_url']=$model->photoURL;
@@ -151,9 +151,9 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 		
 		$response['data']['action_date']=\GO\Base\Util\Date::get_timestamp($model->action_date,false);
 		
-		if(\GO::modules()->customfields && isset($response['data']['customfields']) && \GO\Customfields\Model\DisableCategories::isEnabled("\GO\Addressbook\Model\Contact", $model->addressbook_id)){
+		if(\GO::modules()->customfields && isset($response['data']['customfields']) && \GO\Customfields\Model\DisableCategories::isEnabled("GO\Addressbook\Model\Contact", $model->addressbook_id)){
 
-			$ids = \GO\Customfields\Model\EnabledCategory::model()->getEnabledIds("\GO\Addressbook\Model\Contact", $model->addressbook_id);
+			$ids = \GO\Customfields\Model\EnabledCategory::model()->getEnabledIds("GO\Addressbook\Model\Contact", $model->addressbook_id);
 			
 			$enabled = array();
 			foreach($response['data']['customfields'] as $cat){
@@ -169,7 +169,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 			
 			$response['data']['items_under_blocks'] = array();
 			
-			$enabledBlocksStmt = \GO\Customfields\Model\EnabledBlock::getEnabledBlocks($model->addressbook_id, '\GO\Addressbook\Model\Addressbook', $model->className());
+			$enabledBlocksStmt = \GO\Customfields\Model\EnabledBlock::getEnabledBlocks($model->addressbook_id, 'GO\Addressbook\Model\Addressbook', $model->className());
 			foreach ($enabledBlocksStmt as $i => $enabledBlockModel) {
 				
 				$items = $enabledBlockModel->block->getItemNames($model->id,$model->name);
@@ -216,7 +216,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 		if(!empty($params['filters'])){
 			$abMultiSel = new \GO\Base\Component\MultiSelectGrid(
 							'books', 
-							"\GO\Addressbook\Model\Addressbook",$store, $params, true);		
+							"GO\Addressbook\Model\Addressbook",$store, $params, true);
 			
 			$abMultiSel->addSelectedToFindCriteria($storeParams, 'addressbook_id');
 	//		$abMultiSel->setButtonParams($response);
@@ -224,7 +224,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 
 			$addresslistMultiSel = new \GO\Base\Component\MultiSelectGrid(
 							'addresslist_filter', 
-							"\GO\Addressbook\Model\Addresslist",$store, $params, false);				
+							"GO\Addressbook\Model\Addresslist",$store, $params, false);
 
 			if(!empty($params['addresslist_filters']))
 			{
@@ -288,7 +288,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 			->criteria($criteria)		
 			->searchFields($searchFields)
 			->joinModel(array(
-				'model'=>'\GO\Addressbook\Model\Company',					
+				'model'=>'GO\Addressbook\Model\Company',
 	 			'foreignField'=>'id', //defaults to primary key of the remote model
 	 			'localField'=>'company_id', //defaults to "id"
 	 			'tableAlias'=>'c', //Optional table alias
@@ -394,7 +394,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 		
 		$storeParams = $store->getDefaultParams($params)->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('company_id',$params['company_id']))
 						->mergeWith($this->getStoreParams($params));
-		$store->setStatement(call_user_func(array('\GO\Addressbook\Model\Contact','model'))->find($storeParams));
+		$store->setStatement(call_user_func(array('GO\Addressbook\Model\Contact','model'))->find($storeParams));
 		return array_merge($response, $store->getData());
 	}
 	
@@ -662,7 +662,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 			
 			$findParams = \GO\Base\Db\FindParams::newInstance()
 			->joinModel(array(
-						'model'=>'\GO\Addressbook\Model\Company',					
+						'model'=>'GO\Addressbook\Model\Company',
 						'foreignField'=>'id', //defaults to primary key of the remote model
 						'localField'=>'company_id', //defaults to "id"
 						'tableAlias'=>'c', //Optional table alias
@@ -694,7 +694,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 					->select('t.*, "'.addslashes(\GO::t('strUser')).'" AS ab_name,c.name AS company_name')
 					->limit(10)
 					->joinModel(array(
-						'model'=>'\GO\Addressbook\Model\Company',					
+						'model'=>'GO\Addressbook\Model\Company',
 						'foreignField'=>'id', //defaults to primary key of the remote model
 						'localField'=>'company_id', //defaults to "id"
 						'tableAlias'=>'c', //Optional table alias
@@ -750,7 +750,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 										't.email3'
 										))					
 				->joinModel(array(
-					'model'=>'\GO\Addressbook\Model\Addressbook',					
+					'model'=>'GO\Addressbook\Model\Addressbook',
 					'foreignField'=>'id', //defaults to primary key of the remote model
 					'localField'=>'addressbook_id', //defaults to "id"
 					'tableAlias'=>'a', //Optional table alias
@@ -762,7 +762,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 
 	//		if(!empty($params['joinCompany'])){
 				$findParams->joinModel(array(
-					'model'=>'\GO\Addressbook\Model\Company',					
+					'model'=>'GO\Addressbook\Model\Company',
 					'foreignField'=>'id', //defaults to primary key of the remote model
 					'localField'=>'company_id', //defaults to "id"
 					'tableAlias'=>'c', //Optional table alias
@@ -829,7 +829,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 						->select('t.*, addressbook.name AS ab_name, c.name AS company_name')
 						//->limit(20)
 						->joinModel(array(
-							'model'=>'\GO\Addressbook\Model\Company',					
+							'model'=>'GO\Addressbook\Model\Company',
 							'foreignField'=>'id', //defaults to primary key of the remote model
 							'localField'=>'company_id', //defaults to "id"
 							'tableAlias'=>'c', //Optional table alias

@@ -21,7 +21,7 @@ namespace GO\Presidents\Controller;
 
 class President extends \GO\Base\Controller\AbstractModelController {
 	
-	protected $model = '\GO\Presidents\Model\President';
+	protected $model = 'GO\Presidents\Model\President';
 
 	/**
 	 * Tell the controller to change some column values

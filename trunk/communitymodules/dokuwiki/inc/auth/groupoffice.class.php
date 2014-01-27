@@ -220,8 +220,8 @@ class auth_groupoffice extends auth_basic {
 	private function _includeGroupOffice(){
 		global $conf;
 		//define("GO_NO_SESSION");
-		if(!empty($conf['\GO\php'])){
-			require_once($conf['\GO\php']);
+		if(!empty($conf['GO\php'])){
+			require_once($conf['GO\php']);
 			error_reporting(E_ALL ^ E_NOTICE);
 		} else {	
 			throw new Exception('NO VALID GO URL GIVEN IN THE DOKUWIKI CONFIGURATION');

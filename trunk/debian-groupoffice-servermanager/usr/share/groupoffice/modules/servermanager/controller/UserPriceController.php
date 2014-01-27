@@ -30,7 +30,7 @@ namespace GO\ServerManager\Controller;
 
 class UserPrice extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = '\GO\ServerManager\Model\UserPrice';
+	protected $model = 'GO\ServerManager\Model\UserPrice';
 
 	protected function beforeSubmit(&$response, &$model, &$params)
 	{

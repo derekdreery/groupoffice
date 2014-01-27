@@ -26,8 +26,8 @@ class FilesModule extends \GO\Base\Module{
 	
 	
 	public static function initListeners() {
-		\GO\Base\Model\User::model()->addListener('save', "\GO\Files\FilesModule", "saveUser");
-		\GO\Base\Model\User::model()->addListener('delete', "\GO\Files\FilesModule", "deleteUser");
+		\GO\Base\Model\User::model()->addListener('save', "GO\Files\FilesModule", "saveUser");
+		\GO\Base\Model\User::model()->addListener('delete', "GO\Files\FilesModule", "deleteUser");
 	}
 	
 

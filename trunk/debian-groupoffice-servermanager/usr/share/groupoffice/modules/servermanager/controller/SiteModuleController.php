@@ -10,7 +10,7 @@ class SiteModule extends \GO\Sites\Controller\AbstractSiteModule {
 		return array(
 				'newtrial'=>array(
 						'site_id'=>$this->site_id,
-						'controller'=>'\GO\Servermanager\Controller\Site',
+						'controller'=>'GO\Servermanager\Controller\Site',
 						'template'=>'newtrial',
 						'controller_action'=>'newTrial',
 						'path'=>'newtrial',
@@ -19,7 +19,7 @@ class SiteModule extends \GO\Sites\Controller\AbstractSiteModule {
 						'name'=>'New trial'),
 				'trialcreated'=>array(
 						'site_id'=>$this->site_id,
-						'controller'=>'\GO\Servermanager\Controller\Site',
+						'controller'=>'GO\Servermanager\Controller\Site',
 						'template'=>'trialcreated',
 						'controller_action'=>'trialcreated',
 						'path'=>'trialcreated',

@@ -46,7 +46,7 @@ class PortletTasklist extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 		return array(
-			'tasklist' => array('type' => self::BELONGS_TO, 'model' => '\GO\Tasks\Model\Tasklist', 'field' => 'tasklist_id', 'delete' => false),
+			'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO\Tasks\Model\Tasklist', 'field' => 'tasklist_id', 'delete' => false),
 			);
 	}
 	

@@ -45,7 +45,7 @@ class Bookmark extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 		return array(
-			'folder' => array('type' => self::BELONGS_TO, 'model' => '\GO\Files\Model\Folder', 'field' => 'folder_id'),
+			'folder' => array('type' => self::BELONGS_TO, 'model' => 'GO\Files\Model\Folder', 'field' => 'folder_id'),
 		);
 	}
 	

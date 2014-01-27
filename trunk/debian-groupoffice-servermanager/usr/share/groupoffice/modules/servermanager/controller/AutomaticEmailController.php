@@ -16,7 +16,7 @@ namespace GO\Servermanager\Controller;
 
 class AutomaticEmail extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = '\GO\Servermanager\Model\AutomaticEmail';	
+	protected $model = 'GO\Servermanager\Model\AutomaticEmail';
 		
 	protected function beforeStore(&$response, &$params, &$store) {
 		$store->setDefaultSortOrder('name');

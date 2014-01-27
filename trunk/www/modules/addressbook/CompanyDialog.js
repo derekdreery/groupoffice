@@ -145,11 +145,11 @@ GO.addressbook.CompanyDialog = function(config)
 	items.push(this.selectAddresslistsPanel);
 	items.push(this.employeePanel);
   
-	if(GO.customfields && GO.customfields.types["GO_Addressbook_Model_Company"])
+	if(GO.customfields && GO.customfields.types["GO\\Addressbook\\Model\\Company"])
 	{
-		for(var i=0;i<GO.customfields.types["GO_Addressbook_Model_Company"].panels.length;i++)
+		for(var i=0;i<GO.customfields.types["GO\\Addressbook\\Model\\Company"].panels.length;i++)
 		{
-			items.push(GO.customfields.types["GO_Addressbook_Model_Company"].panels[i]);
+			items.push(GO.customfields.types["GO\\Addressbook\\Model\\Company"].panels[i]);
 		}
 	}	
 	

@@ -205,7 +205,7 @@ class JSMin {
                         }
                         if ($this->isEOF($this->a)) {
                             throw new JSMin_UnterminatedStringException(
-                                "\GO\Base\Util\Minify\JSMin: Unterminated String at byte {$this->inputIndex}: {$str}");
+                                "GO\Base\Util\Minify\JSMin: Unterminated String at byte {$this->inputIndex}: {$str}");
                         }
                         $str .= $this->a;
                         if ($this->a === '\\') {
@@ -242,7 +242,7 @@ class JSMin {
                                 }
                                 if ($this->isEOF($this->a)) {
                                     throw new JSMin_UnterminatedRegExpException(
-                                        "\GO\Base\Util\Minify\JSMin: Unterminated set in RegExp at byte "
+                                        "GO\Base\Util\Minify\JSMin: Unterminated set in RegExp at byte "
                                             . $this->inputIndex .": {$pattern}");
                                 }
                             }
@@ -256,7 +256,7 @@ class JSMin {
                             $pattern .= $this->a;
                         } elseif ($this->isEOF($this->a)) {
                             throw new JSMin_UnterminatedRegExpException(
-                                "\GO\Base\Util\Minify\JSMin: Unterminated RegExp at byte {$this->inputIndex}: {$pattern}");
+                                "GO\Base\Util\Minify\JSMin: Unterminated RegExp at byte {$this->inputIndex}: {$pattern}");
                         }
                         $this->output .= $this->a;
                         $this->lastByteOut = $this->a;
@@ -406,7 +406,7 @@ class JSMin {
                 }
             } elseif ($get === null) {
                 throw new JSMin_UnterminatedCommentException(
-                    "\GO\Base\Util\Minify\JSMin: Unterminated comment at byte {$this->inputIndex}: /*{$comment}");
+                    "GO\Base\Util\Minify\JSMin: Unterminated comment at byte {$this->inputIndex}: /*{$comment}");
             }
             $comment .= $get;
         }

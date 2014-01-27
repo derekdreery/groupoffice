@@ -49,7 +49,7 @@ class Calendar extends \GO\Base\Db\ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-				 'calendar' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Calendar', 'field' => 'calendar_id', 'delete' => false),
+				 'calendar' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Calendar', 'field' => 'calendar_id', 'delete' => false),
 		 );
 	 }	
 }

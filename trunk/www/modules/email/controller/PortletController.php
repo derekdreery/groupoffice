@@ -11,7 +11,7 @@ class Portlet extends \GO\Base\Controller\AbstractModelController {
 	 * 
 	 * @var string 
 	 */
-	protected $model = '\GO\email\Model\PortletFolder';
+	protected $model = 'GO\email\Model\PortletFolder';
 	
 	/**
 	 * The state of the portlet folders tree (This is the same state as the tree in the email tab)
@@ -128,7 +128,7 @@ class Portlet extends \GO\Base\Controller\AbstractModelController {
 			$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('t.*')
 						->joinModel(array(
-								'model' => '\GO\Email\Model\AccountSort',
+								'model' => 'GO\Email\Model\AccountSort',
 								'foreignField' => 'account_id', //defaults to primary key of the remote model
 								'localField' => 'id', //defaults to primary key of the model
 								'type' => 'LEFT',

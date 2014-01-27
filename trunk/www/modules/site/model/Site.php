@@ -66,7 +66,7 @@ class Site extends \GO\Base\Db\ActiveRecord {
 	private function _loadFields(){
 		//load cf
 		if(!isset(self::$fields) && \GO::modules()->isInstalled('customfields')){
-			$fields = \GO\Customfields\Model\Field::model()->findByModel('\GO\Site\Model\Site', false);
+			$fields = \GO\Customfields\Model\Field::model()->findByModel('GO\Site\Model\Site', false);
 
 			foreach($fields as $field){
 				self::$fields[$field->name]= $field;
@@ -97,7 +97,7 @@ class Site extends \GO\Base\Db\ActiveRecord {
 	 * Attach the customfield model to this model.
 	 */
 	public function customfieldsModel() {
-		return '\GO\Site\Customfields\Model\Site';
+		return 'GO\Site\Customfields\Model\Site';
 	}
 	
 	/**
@@ -126,8 +126,8 @@ class Site extends \GO\Base\Db\ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-			'content' => array('type' => self::HAS_MANY, 'model' => '\GO\Site\Model\Content', 'field' => 'site_id', 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->select('*')->order('sort_order'),  'delete' => true),
-			'contentNodes' => array('type' => self::HAS_MANY, 'model' => '\GO\Site\Model\Content', 'field' => 'site_id', 'findParams'=> \GO\Base\Db\FindParams::newInstance()->select('*')->order('sort_order')->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('parent_id', null)),  'delete' => true)
+			'content' => array('type' => self::HAS_MANY, 'model' => 'GO\Site\Model\Content', 'field' => 'site_id', 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->select('*')->order('sort_order'),  'delete' => true),
+			'contentNodes' => array('type' => self::HAS_MANY, 'model' => 'GO\Site\Model\Content', 'field' => 'site_id', 'findParams'=> \GO\Base\Db\FindParams::newInstance()->select('*')->order('sort_order')->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('parent_id', null)),  'delete' => true)
 		);
 	}
 

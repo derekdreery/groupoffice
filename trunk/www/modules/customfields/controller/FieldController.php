@@ -6,7 +6,7 @@ namespace GO\Customfields\Controller;
 
 class Field extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Customfields\Model\Field';
+	protected $model = 'GO\Customfields\Model\Field';
 
 	protected function actionTypes($params) {
 
@@ -26,7 +26,7 @@ class Field extends \GO\Base\Controller\AbstractModelController {
 	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 							
-		if ($model->datatype == '\GO\Customfields\Customfieldtype\Select') {
+		if ($model->datatype == 'GO\Customfields\Customfieldtype\Select') {
 
 			//select_options
 			$ids = array();

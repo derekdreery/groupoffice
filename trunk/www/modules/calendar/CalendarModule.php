@@ -42,7 +42,7 @@ class CalendarModule extends \GO\Base\Module{
 	} 
 	
 	public static function initListeners() {		
-		\GO\Base\Model\Reminder::model()->addListener('dismiss', "\GO\Calendar\Model\Event", "reminderDismissed");
+		\GO\Base\Model\Reminder::model()->addListener('dismiss', "GO\Calendar\Model\Event", "reminderDismissed");
 	}
 	
 	
@@ -102,7 +102,7 @@ class CalendarModule extends \GO\Base\Module{
 		$cron->monthdays = '*';
 		$cron->months = '*';
 		$cron->weekdays = '*';
-		$cron->job = '\GO\Calendar\Cron\CalendarPublisher';		
+		$cron->job = 'GO\Calendar\Cron\CalendarPublisher';
 
 		$cron->save();
 		

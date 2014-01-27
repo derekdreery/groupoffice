@@ -46,7 +46,7 @@ class Settings extends \GO\Base\Model\AbstractUserDefaultModel {
 
 	public function relations() {
 		return array(
-			'tasklist' => array('type' => self::BELONGS_TO, 'model' => '\GO\Tasks\Model\Tasklist', 'field' => 'default_tasklist_id', 'delete' => false)
+			'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO\Tasks\Model\Tasklist', 'field' => 'default_tasklist_id', 'delete' => false)
 			);
 	}
 		

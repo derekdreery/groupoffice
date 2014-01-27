@@ -49,7 +49,7 @@ class Sitemultifile extends \GO\Customfields\Customfieldtype\AbstractCustomfield
 				->ignoreAcl()
 				->order('mf.order')
 				->joinModel(array(
-					'model' => '\GO\Site\Model\MultifileFile',
+					'model' => 'GO\Site\Model\MultifileFile',
 					'localTableAlias' => 't',
 					'localField' => 'id',
 					'foreignField' => 'file_id',
@@ -72,11 +72,11 @@ class Sitemultifile extends \GO\Customfields\Customfieldtype\AbstractCustomfield
 	 * Otherwise it will only be available for the given modeltypes.
 	 * 
 	 * Example:
-	 *	return array('\GO\Site\Model\Content','\GO\Site\Model\Site');
+	 *	return array('GO\Site\Model\Content','GO\Site\Model\Site');
 	 *  
 	 * @return array
 	 */
 	public function supportedModels(){
-		return array('\GO\Site\Model\Content','\GO\Site\Model\Site');
+		return array('GO\Site\Model\Content','GO\Site\Model\Site');
 	}
 }

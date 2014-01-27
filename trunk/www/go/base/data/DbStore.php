@@ -19,7 +19,7 @@
  * $columnModel =  new ColumnModel(\GO\Notes\Model\Note::model());
  * $columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
  * 
- * $store=new Store('\GO\Notes\Model\Note', $columnModel, $params);
+ * $store=new Store('GO\Notes\Model\Note', $columnModel, $params);
  * </pre>
  * 
  * @version $Id$

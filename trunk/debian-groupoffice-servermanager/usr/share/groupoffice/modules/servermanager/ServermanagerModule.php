@@ -18,7 +18,7 @@ class ServerManagerModule extends \GO\Base\Module{
 		$cron->monthdays = '*';
 		$cron->months = '*';
 		$cron->weekdays = '*';
-		$cron->job = '\GO\Servermanager\Cron\SubCron';		
+		$cron->job = 'GO\Servermanager\Cron\SubCron';
 		
 		$cron->save();
 	}

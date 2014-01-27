@@ -271,7 +271,7 @@ abstract class AbstractJsonController extends AbstractController {
 		
 		if(!empty($params['type'])){
 			//temporary fix for compatibility with AbsractModelController
-			$params['type']=str_replace('\GO\Base\Export', '\GO\Base\Storeexport', $params['type']);
+			$params['type']=str_replace('GO\Base\Export', 'GO\Base\Storeexport', $params['type']);
 			$export = new $params['type']($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation);
 		}else
 			$export = new \GO\Base\Storeexport_ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
@@ -450,7 +450,7 @@ abstract class AbstractJsonController extends AbstractController {
 				$categories[$field->category->id]['fields'] = array();
 			}
 			if (!empty($customAttributes[$field->columnName()])) {
-				if ($field->datatype == "\GO\Customfields\Customfieldtype\Heading") {
+				if ($field->datatype == "GO\Customfields\Customfieldtype\Heading") {
 					$header = array('name' => $field->name, 'value' => $customAttributes[$field->columnName()]);
 				}
 				if (!empty($header)) {
@@ -553,7 +553,7 @@ abstract class AbstractJsonController extends AbstractController {
 										->select('t.*,cat.name AS categoryName')
 										->order('id', 'DESC')
 										->joinModel(array(
-												'model' => '\GO\Comments\Model\Category',
+												'model' => 'GO\Comments\Model\Category',
 												'localTableAlias' => 't',
 												'localField' => 'category_id',
 												'foreignField' => 'id',

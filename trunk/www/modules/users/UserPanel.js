@@ -1,6 +1,6 @@
 GO.users.UserPanel = Ext.extend(GO.DisplayPanel,{
 
-	model_name : "GO_Base_Model_User",
+	model_name : "GO\\Base\\Model\\User",
 
 	loadParams : {task: 'user_with_items'},
 
@@ -41,7 +41,7 @@ GO.users.UserPanel = Ext.extend(GO.DisplayPanel,{
 								'</tr>'+
 								
 								'<tpl if="contact_id"><tr>'+
-									'<td colspan="2"><a href="#" onclick="GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, {contact_id});">'+GO.users.lang.openContact+'</a></td></tr></tpl>'+
+									'<td colspan="2"><a href="#" onclick="GO.linkHandlers[\'GO\\Addressbook\\Model\\Contact\'].call(this, {contact_id});">'+GO.users.lang.openContact+'</a></td></tr></tpl>'+
 								
 							'</table>'+
 							

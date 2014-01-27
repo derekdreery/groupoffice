@@ -611,7 +611,7 @@ class AbstractModelController extends AbstractController {
 				$categories[$field->category->id]['fields']=array();
 			}
 			if(!empty($customAttributes[$field->columnName()]) ){
-				if($field->datatype == "\GO\Customfields\Customfieldtype\Heading")
+				if($field->datatype == "GO\Customfields\Customfieldtype\Heading")
 				{
 					$header = array('name'=>$field->name,'value'=>$customAttributes[$field->columnName()]);
 				}
@@ -695,7 +695,7 @@ class AbstractModelController extends AbstractController {
 		$columnModel->formatColumn('link_count','$model->countLinks()');
 		$columnModel->formatColumn('link_description','$model->link_description');
 		
-		$columnModel->formatColumn('description','\GO\Base\Util\string::cut_string($model->description,500)');
+		$columnModel->formatColumn('description','GO\Base\Util\string::cut_string($model->description,500)');
 
 		$data = $store->getData();
 		$response['data']['events']=$data['results'];
@@ -713,7 +713,7 @@ class AbstractModelController extends AbstractController {
 		$columnModel->formatColumn('calendar_name','$model->calendar->name');
 		$columnModel->formatColumn('link_count','$model->countLinks()');
 		$columnModel->formatColumn('link_description','$model->link_description');
-		$columnModel->formatColumn('description','\GO\Base\Util\string::cut_string($model->description,500)');
+		$columnModel->formatColumn('description','GO\Base\Util\string::cut_string($model->description,500)');
 
 		$data = $store->getData();
 		$response['data']['past_events']=$data['results'];
@@ -728,7 +728,7 @@ class AbstractModelController extends AbstractController {
 								->select('t.*,cat.name AS categoryName')
 								->order('id','DESC')
 								->joinModel(array(
-									'model' => '\GO\Comments\Model\Category',
+									'model' => 'GO\Comments\Model\Category',
 									'localTableAlias' => 't',
 									'localField' => 'category_id',
 									'foreignField' => 'id',
@@ -776,7 +776,7 @@ class AbstractModelController extends AbstractController {
 						->formatColumn('late','$model->due_time<time() ? 1 : 0;')
 						->formatColumn('tasklist_name', '$model->tasklist->name')
 						->formatColumn('link_count','$model->countLinks()')
-						->formatColumn('description','\GO\Base\Util\string::cut_string($model->description,500)')
+						->formatColumn('description','GO\Base\Util\string::cut_string($model->description,500)')
 						->formatColumn('link_description','$model->link_description');		
 
 		$data = $store->getData();
@@ -797,7 +797,7 @@ class AbstractModelController extends AbstractController {
 						->formatColumn('late','$model->due_time<time() ? 1 : 0;')
 						->formatColumn('tasklist_name', '$model->tasklist->name')
 						->formatColumn('link_count','$model->countLinks()')
-						->formatColumn('description','\GO\Base\Util\string::cut_string($model->description,500)')
+						->formatColumn('description','GO\Base\Util\string::cut_string($model->description,500)')
 						->formatColumn('link_description','$model->link_description');		
 		
 

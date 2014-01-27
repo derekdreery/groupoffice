@@ -132,9 +132,9 @@ class Account extends \GO\Base\Db\ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'aliases' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Email\Model\Alias', 'field'=>'account_id','delete'=>true),
-				'filters' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Email\Model\Filter', 'field'=>'account_id','delete'=>true, 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order("priority")),
-				'portletFolders' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Email\Model\PortletFolder', 'field'=>'account_id','delete'=>true)
+				'aliases' => array('type'=>self::HAS_MANY, 'model'=>'GO\Email\Model\Alias', 'field'=>'account_id','delete'=>true),
+				'filters' => array('type'=>self::HAS_MANY, 'model'=>'GO\Email\Model\Filter', 'field'=>'account_id','delete'=>true, 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order("priority")),
+				'portletFolders' => array('type'=>self::HAS_MANY, 'model'=>'GO\Email\Model\PortletFolder', 'field'=>'account_id','delete'=>true)
 		);
 	}
 

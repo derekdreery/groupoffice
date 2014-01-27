@@ -76,7 +76,7 @@ class AutomaticInvoice extends \GO\Base\Db\ActiveRecord {
 	public function relations()
 	{
 		return array(
-				'installation'=>array('type'=>self::BELONGS_TO, 'model'=>'\GO\Servermanager\Model\Installation', 'field'=>'installation_id'),
+				'installation'=>array('type'=>self::BELONGS_TO, 'model'=>'GO\Servermanager\Model\Installation', 'field'=>'installation_id'),
 		);
 	}
 	

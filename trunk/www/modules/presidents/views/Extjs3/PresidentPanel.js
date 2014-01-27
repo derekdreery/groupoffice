@@ -12,7 +12,7 @@
  */
  
 GO.presidents.PresidentPanel = Ext.extend(GO.DisplayPanel,{
-	model_name : "GO_Presidents_Model_President",
+	model_name : "GO\\Presidents\\Model\\President",
 	stateId : 'pm-president-panel',
 	noFileBrowser : true,
 	

@@ -5,7 +5,7 @@ namespace GO\Files\Controller;
 
 class Bookmark extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Files\Model\Bookmark';
+	protected $model = 'GO\Files\Model\Bookmark';
 	
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		// See if folder with this ID can be accessed.
@@ -52,7 +52,7 @@ class Bookmark extends \GO\Base\Controller\AbstractModelController {
 		$storeParams
             ->select('`t`.`folder_id`,`t`.`user_id`,`f`.`name`')
             ->joinModel(array(
-              'model'=>'\GO\Files\Model\Folder',
+              'model'=>'GO\Files\Model\Folder',
               'localTableAlias'=>'t',
               'localField'=>'folder_id',
               'foreignField'=>'id',

@@ -50,7 +50,7 @@ class President extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	public function customfieldsModel(){
-		return "\GO\Presidents\Customfields\Model\President";
+		return "GO\Presidents\Customfields\Model\President";
 	}
 	
 	public function hasLinks() {
@@ -68,7 +68,7 @@ class President extends \GO\Base\Db\ActiveRecord {
 
 	public function relations(){
 		return array(	
-				'party' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Presidents\Model\Party', 'field'=>'party_id'),		);
+				'party' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Presidents\Model\Party', 'field'=>'party_id'),		);
 	}
 
 }

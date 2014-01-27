@@ -81,14 +81,14 @@ class View extends \GO\Base\Db\ActiveRecord{
 				->addCondition('view_id', $this->id,'=', 'vgr'));	
         
         $findParams->joinModel(array(
-            'model'=>'\GO\Base\Model\User',  
+            'model'=>'GO\Base\Model\User',
             'localField'=>'user_id',
             'tableAlias'=>'usr', 
             
         ));
         
         $findParams->joinModel(array(
-            'model'=>'\GO\Base\Model\UserGroup',  
+            'model'=>'GO\Base\Model\UserGroup',
             'localField'=>'user_id',
             'foreignField'=>'user_id',
             'tableAlias'=>'usg', 
@@ -96,14 +96,14 @@ class View extends \GO\Base\Db\ActiveRecord{
         ));
         
 		$findParams->joinModel(array(
-            'model'=>'\GO\Base\Model\Group',  
+            'model'=>'GO\Base\Model\Group',
             'localField'=>'group_id',
             'localTableAlias'=>'usg',
             'tableAlias'=>'grp', 
 		));
         
         $findParams->joinModel(array(
-            'model'=>'\GO\Calendar\Model\ViewGroup',  
+            'model'=>'GO\Calendar\Model\ViewGroup',
             'localField'=>'id',
             'localTableAlias'=>'grp',
             'foreignField'=>'group_id',
@@ -124,16 +124,16 @@ class View extends \GO\Base\Db\ActiveRecord{
 		 return array(
             'calendars' => array(
                 'type' => self::MANY_MANY, 
-                'model' => '\GO\Calendar\Model\Calendar', 
-                'linkModel'=>'\GO\Calendar\Model\ViewCalendar', 
+                'model' => 'GO\Calendar\Model\Calendar',
+                'linkModel'=>'GO\Calendar\Model\ViewCalendar',
                 'field'=>'view_id', 
                 'linksTable' => 'cal_views_calendars', 
                 'remoteField'=>'calendar_id'
             ),
            'groups' => array(
                'type' => self::MANY_MANY, 
-               'model' => '\GO\Calendar\Model\Calendar', 
-               'linkModel'=>'\GO\Calendar\Model\ViewGroup', 
+               'model' => 'GO\Calendar\Model\Calendar',
+               'linkModel'=>'GO\Calendar\Model\ViewGroup',
                'field'=>'view_id', 
                'linksTable' => 'cal_views_groups', 
                'remoteField'=>'group_id'

@@ -35,6 +35,6 @@ class Content extends \GO\Customfields\Model\AbstractCustomFieldsRecord {
 	}
 
 	public function extendsModel(){
-		return "\GO\Site\Model\Content";
+		return "GO\Site\Model\Content";
 	}
 }

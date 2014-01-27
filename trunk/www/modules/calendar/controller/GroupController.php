@@ -5,7 +5,7 @@ namespace GO\Calendar\Controller;
 
 class Group extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Calendar\Model\Group';
+	protected $model = 'GO\Calendar\Model\Group';
 	
 	protected function getStoreParams($params) {
 		$findParams = \GO\Base\Db\FindParams::newInstance();
@@ -30,7 +30,7 @@ class Group extends \GO\Base\Controller\AbstractModelController {
 			$record = $group->getAttributes('formatted');
 			
 			if(\GO::modules()->customfields)
-				$record['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("\GO\Calendar\Model\Event", $group->id);
+				$record['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Calendar\Model\Event", $group->id);
 			else
 				$record['customfields']=array();
 			

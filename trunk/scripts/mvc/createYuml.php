@@ -70,7 +70,7 @@ function getModelCodeBlock(\GO\Base\Db\ActiveRecord $model, $includeArMethods=fa
 	}
 	
 	$modelMethods = get_class_methods($model->className());
-	$arMethods = get_class_methods('\GO\Base\Db\ActiveRecord');
+	$arMethods = get_class_methods('GO\Base\Db\ActiveRecord');
 	
 	if($includeArMethods)
 		$methods = $modelMethods;

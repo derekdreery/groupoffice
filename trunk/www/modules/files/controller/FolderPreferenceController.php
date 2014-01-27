@@ -23,7 +23,7 @@ namespace GO\files\Controller;
 
 class FolderPreference extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Files\Model\FolderPreference';
+	protected $model = 'GO\Files\Model\FolderPreference';
 	
 	/**
 	 * Can be overriden if you have a primary key that's not 'id' or is an array.

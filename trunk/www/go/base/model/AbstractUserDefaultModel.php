@@ -51,7 +51,7 @@ abstract class AbstractUserDefaultModel extends \GO\Base\Db\ActiveRecord {
 				  if($module->moduleManager){
 					  $classes = $module->moduleManager->findClasses('model');
 					  foreach($classes as $class){
-						  if($class->isSubclassOf('\GO\Base\Model\AbstractUserDefaultModel')){							
+						  if($class->isSubclassOf('GO\Base\Model\AbstractUserDefaultModel')){
 							  self::$_allUserDefaultModels[] = \GO::getModel($class->getName());
 						  }					
 					  }

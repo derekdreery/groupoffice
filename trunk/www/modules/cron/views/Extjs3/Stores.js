@@ -5,7 +5,7 @@ GO.cron.cronStore = new GO.data.JsonStore({
 	totalProperty:'total',
 	fields: ['id','name','active','minutes', 'hours', 'monthdays', 'months', 'weekdays','years','job','nextrun','lastrun','completedat'],
 	remoteSort: true,
-	model:"GO_Base_Cron_CronJob"
+	model:"GO\\Base\\Cron\\CronJob"
 });
 	
 GO.cron.periodStore = new GO.data.JsonStore({
@@ -15,7 +15,7 @@ GO.cron.periodStore = new GO.data.JsonStore({
 	totalProperty:'total',
 	fields: ['id','name','active','minutes', 'hours', 'monthdays', 'months', 'weekdays','years','job','nextrun','lastrun','completedat'],
 	remoteSort: true,
-	model:"GO_Base_Cron_CronJob"
+	model:"GO\\Base\\Cron\\CronJob"
 });
 	
 GO.cron.jobStore = new GO.data.JsonStore({

@@ -53,8 +53,8 @@ class Category extends \GO\Base\Db\ActiveRecord{
 	
 	public function relations() {
 		return array(
-		'fields' => array('type' => self::HAS_MANY, 'model' => '\GO\Customfields\Model\Field', 'field' => 'category_id', 'delete' => true, 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order('sort_index')),
-		'_fieldsUnsorted' => array('type' => self::HAS_MANY, 'model' => '\GO\Customfields\Model\Field', 'field' => 'category_id'	)
+		'fields' => array('type' => self::HAS_MANY, 'model' => 'GO\Customfields\Model\Field', 'field' => 'category_id', 'delete' => true, 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order('sort_index')),
+		'_fieldsUnsorted' => array('type' => self::HAS_MANY, 'model' => 'GO\Customfields\Model\Field', 'field' => 'category_id'	)
 				);
 	}
 	

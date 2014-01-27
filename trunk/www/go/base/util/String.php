@@ -1088,7 +1088,7 @@ END;
 	 * @return string 
 	 */
 	public static function htmlReplace($search, $replacement, $html){
-    $html = preg_replace_callback('/<[^>]*('.preg_quote($search).')[^>]*>/uis',array('\GO\Base\Util\String', '_replaceInTags'), $html);
+    $html = preg_replace_callback('/<[^>]*('.preg_quote($search).')[^>]*>/uis',array('GO\Base\Util\String', '_replaceInTags'), $html);
     $html = preg_replace('/([^a-z0-9])'.preg_quote($search).'([^a-z0-9])/i',"\\1".$replacement."\\2", $html);
     
     //$html = str_ireplace($search, $replacement, $html);
@@ -1427,7 +1427,7 @@ END;
 	{
 		$keys = array_keys($name);
 
-		$editedKeys = array_map(array("\GO\Base\Util\String", "_addAccolades"), $keys);
+		$editedKeys = array_map(array("GO\Base\Util\String", "_addAccolades"), $keys);
 
 		$res = trim(preg_replace('/\s+/', ' ',str_replace($editedKeys, array_values($name),$template)));
 

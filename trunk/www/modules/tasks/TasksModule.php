@@ -6,7 +6,7 @@ namespace GO\Tasks;
 class TasksModule extends \GO\Base\Module{
 	public static function initListeners() {
 		
-		\GO\Base\Model\User::model()->addListener('delete', "\GO\Tasks\TasksModule", "deleteUser");
+		\GO\Base\Model\User::model()->addListener('delete', "GO\Tasks\TasksModule", "deleteUser");
 	}
 
 	public function autoInstall() {

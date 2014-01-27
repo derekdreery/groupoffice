@@ -20,9 +20,9 @@ class Setting extends \GO\Base\Controller\AbstractController {
 		$t = \GO::config()->get_setting('login_screen_text_title');
 		$response['data']['login_screen_text_title']=$t ? $t : '';
 
-		$response['data']['addressbook_name_template'] = \GO\Base\Model\AbstractUserDefaultModel::getNameTemplate("\GO\Addressbook\Model\Addressbook");
-		$response['data']['task_name_template'] = \GO\Base\Model\AbstractUserDefaultModel::getNameTemplate("\GO\Tasks\Model\Tasklist");
-		$response['data']['calendar_name_template'] = \GO\Base\Model\AbstractUserDefaultModel::getNameTemplate("\GO\Calendar\Model\Calendar");
+		$response['data']['addressbook_name_template'] = \GO\Base\Model\AbstractUserDefaultModel::getNameTemplate("GO\Addressbook\Model\Addressbook");
+		$response['data']['task_name_template'] = \GO\Base\Model\AbstractUserDefaultModel::getNameTemplate("GO\Tasks\Model\Tasklist");
+		$response['data']['calendar_name_template'] = \GO\Base\Model\AbstractUserDefaultModel::getNameTemplate("GO\Calendar\Model\Calendar");
 		
 //		$GLOBALS['GO_EVENTS']->fire_event('load_global_settings',array(&$response));
 
@@ -44,16 +44,16 @@ class Setting extends \GO\Base\Controller\AbstractController {
 		\GO::config()->save_setting('login_screen_text_enabled', !empty($_POST['login_screen_text_enabled']) ? '1' : '0');
 
 		if (!empty($params['addressbook_name_template']))
-			\GO\Base\Model\AbstractUserDefaultModel::setNameTemplate("\GO\Addressbook\Model\Addressbook",$params['addressbook_name_template']);
+			\GO\Base\Model\AbstractUserDefaultModel::setNameTemplate("GO\Addressbook\Model\Addressbook",$params['addressbook_name_template']);
 		
 		if (!empty($params['task_name_template']))
-			\GO\Base\Model\AbstractUserDefaultModel::setNameTemplate("\GO\Tasks\Model\Tasklist",$params['task_name_template']);
-		if (isset($params['\GO\Tasks\Model\Tasklist_change_all_names']))
+			\GO\Base\Model\AbstractUserDefaultModel::setNameTemplate("GO\Tasks\Model\Tasklist",$params['task_name_template']);
+		if (isset($params['GO\Tasks\Model\Tasklist_change_all_names']))
 			$this->_updateAllDefaultTasklists($reportFeedback);
 		
 		if (!empty($params['calendar_name_template']))
-			\GO\Base\Model\AbstractUserDefaultModel::setNameTemplate("\GO\Calendar\Model\Calendar",$params['calendar_name_template']);
-		if (isset($params['\GO\Calendar\Model\Calendar_change_all_names']))
+			\GO\Base\Model\AbstractUserDefaultModel::setNameTemplate("GO\Calendar\Model\Calendar",$params['calendar_name_template']);
+		if (isset($params['GO\Calendar\Model\Calendar_change_all_names']))
 			$this->_updateAllDefaultCalendars($reportFeedback);	
 		
 		$response['feedback'] = !empty($reportFeedback) ? $reportFeedback : '';
@@ -67,7 +67,7 @@ class Setting extends \GO\Base\Controller\AbstractController {
 				->ignoreAcl()
 				->joinModel(
 					array(
-						'model'=>'\GO\Tasks\Model\Settings',
+						'model'=>'GO\Tasks\Model\Settings',
 						'localTableAlias'=>'t',
 						'localField'=>'id',
 						'foreignField'=>'default_tasklist_id',
@@ -90,7 +90,7 @@ class Setting extends \GO\Base\Controller\AbstractController {
 				->ignoreAcl()
 				->joinModel(
 					array(
-						'model'=>'\GO\Calendar\Model\Settings',
+						'model'=>'GO\Calendar\Model\Settings',
 						'localTableAlias'=>'t',
 						'localField'=>'id',
 						'foreignField'=>'calendar_id',

@@ -23,7 +23,7 @@ namespace GO\Calendar\Controller;
 
 class Calendar extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Calendar\Model\Calendar';
+	protected $model = 'GO\Calendar\Model\Calendar';
 	
 	protected function allowGuests() {
 		return array('exportics');
@@ -124,7 +124,7 @@ class Calendar extends \GO\Base\Controller\AbstractModelController {
 		
 		$record['group_name']= !empty($model->group) ? $model->group->name : '';
 		if(\GO::modules()->customfields)
-			$record['customfields']=\GO\Customfields\Controller\Category::getEnabledCategoryData("\GO\Calendar\Model\Event", $model->group_id);
+			$record['customfields']=\GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Calendar\Model\Event", $model->group_id);
 		
 		
 		return $record;
@@ -327,7 +327,7 @@ class Calendar extends \GO\Base\Controller\AbstractModelController {
 		\GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
 		$checkModels = array(
-				"\GO\Calendar\Model\Event"=>array('name', 'start_time', 'end_time', 'rrule','calendar_id'),
+				"GO\Calendar\Model\Event"=>array('name', 'start_time', 'end_time', 'rrule','calendar_id'),
 			);		
 		
 		foreach($checkModels as $modelName=>$checkFields){

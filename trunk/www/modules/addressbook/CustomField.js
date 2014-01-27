@@ -1,10 +1,10 @@
 GO.moduleManager.onModuleReady('customfields', function(){
 	//GO.customfields.nonGridTypes.push('contact');
-	GO.customfields.dataTypes["GO_Addressbook_Customfieldtype_Contact"]={
+	GO.customfields.dataTypes["GO\\Addressbook\\Customfieldtype\\Contact"]={
 		label : GO.addressbook.lang.contact,
 		getFormField : function(customfield, config){
 
-			var f = GO.customfields.dataTypes.GO_Customfields_Customfieldtype_Text.getFormField(customfield, config);
+			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
 
 			delete f.name;
 
@@ -19,11 +19,11 @@ GO.moduleManager.onModuleReady('customfields', function(){
 		}
 	}
 	
-	GO.customfields.dataTypes["GO_Addressbook_Customfieldtype_Company"]={
+	GO.customfields.dataTypes["GO\\Addressbook\\Customfieldtype\\Company"]={
 		label : GO.addressbook.lang.company,
 		getFormField : function(customfield, config){
 
-			var f = GO.customfields.dataTypes.GO_Customfields_Customfieldtype_Text.getFormField(customfield, config);
+			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
 
 			delete f.name;
 

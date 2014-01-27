@@ -34,8 +34,8 @@ class IpAddress extends \GO\Base\Db\ActiveRecord{
 		
 //	public function relations(){
 //		return array(
-//				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Addressbook\Model\Contact', 'field'=>'addressbook_id', 'delete'=>true),
-//				'companies' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Addressbook\Model\Company', 'field'=>'addressbook_id', 'delete'=>true)
+//				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO\Addressbook\Model\Contact', 'field'=>'addressbook_id', 'delete'=>true),
+//				'companies' => array('type'=>self::HAS_MANY, 'model'=>'GO\Addressbook\Model\Company', 'field'=>'addressbook_id', 'delete'=>true)
 //		);
 //	}
 	

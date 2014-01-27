@@ -40,7 +40,7 @@ class ModelCache{
 		 * This cache mechanism can consume a lot of memory when running large
 		 * batch scripts. That's why it can be disabled.
 		 */
-		if(\GO::$disableModelCache)// && $modelClassName != '\GO\Base\Model\Acl')
+		if(\GO::$disableModelCache)// && $modelClassName != 'GO\Base\Model\Acl')
 			return;
 		
 		if(!$cacheKey)
@@ -88,7 +88,7 @@ class ModelCache{
 		
 		$formatted=$this->_formatCacheKey($cacheKey);
 		
-		//\GO::debug("\GO\Base\Model\ModelCache::get($modelClassName, $cacheKey) ".$formatted);
+		//\GO::debug("GO\Base\Model\ModelCache::get($modelClassName, $cacheKey) ".$formatted);
 		
 		if(isset($this->_models[$modelClassName][$formatted]))
 		{

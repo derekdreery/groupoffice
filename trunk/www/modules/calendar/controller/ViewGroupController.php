@@ -23,7 +23,7 @@ namespace GO\Calendar\Controller;
 
 class ViewGroup extends \GO\Base\Controller\AbstractMultiSelectModelController {
 
-	//protected $model = '\GO\Calendar\Model\ViewGroup';
+	//protected $model = 'GO\Calendar\Model\ViewGroup';
 	
 	//protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 	//	$columnModel->formatColumn('group_name','$model->group->name',array(),'group_id');
@@ -35,11 +35,11 @@ class ViewGroup extends \GO\Base\Controller\AbstractMultiSelectModelController {
   }
 
   public function linkModelName() {
-    return '\GO\Calendar\Model\ViewGroup';
+    return 'GO\Calendar\Model\ViewGroup';
   }
 
   public function modelName() {
-    return '\GO\Base\Model\Group';
+    return 'GO\Base\Model\Group';
   }
 	
 }

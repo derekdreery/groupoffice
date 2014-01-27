@@ -131,11 +131,11 @@ class Installation extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 		return array(
-			'histories' => array('type' => self::HAS_MANY, 'model' => '\GO\ServerManager\Model\UsageHistory', 'field' => 'installation_id','delete'=>true),
-			'currentusage'=> array('type' => self::HAS_ONE, 'model' => '\GO\ServerManager\Model\UsageHistory', 'field' => 'installation_id', 'findParams'=>\GO\Base\Db\FindParams::newInstance()->order('id','DESC')->limit(1)),
-			'users' => array('type'=>self::HAS_MANY, 'model'=>'\GO\ServerManager\Model\InstallationUser', 'field'=>'installation_id','delete'=>true, 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->select()),
-			'modules' => array('type'=>self::HAS_MANY, 'model'=>'\GO\ServerManager\Model\InstallationModule', 'field'=>'installation_id','delete'=>true),
-			'automaticInvoice'=>array('type'=>self::HAS_ONE, 'model'=>'\GO\ServerManager\Model\AutomaticInvoice', 'field'=>'installation_id','delete'=>true),
+			'histories' => array('type' => self::HAS_MANY, 'model' => 'GO\ServerManager\Model\UsageHistory', 'field' => 'installation_id','delete'=>true),
+			'currentusage'=> array('type' => self::HAS_ONE, 'model' => 'GO\ServerManager\Model\UsageHistory', 'field' => 'installation_id', 'findParams'=>\GO\Base\Db\FindParams::newInstance()->order('id','DESC')->limit(1)),
+			'users' => array('type'=>self::HAS_MANY, 'model'=>'GO\ServerManager\Model\InstallationUser', 'field'=>'installation_id','delete'=>true, 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->select()),
+			'modules' => array('type'=>self::HAS_MANY, 'model'=>'GO\ServerManager\Model\InstallationModule', 'field'=>'installation_id','delete'=>true),
+			'automaticInvoice'=>array('type'=>self::HAS_ONE, 'model'=>'GO\ServerManager\Model\AutomaticInvoice', 'field'=>'installation_id','delete'=>true),
 		);
 	}
 	
@@ -372,7 +372,7 @@ class Installation extends \GO\Base\Db\ActiveRecord {
 			$this->setValidationError ('modules',"Please select the allowed modules");
 		}
 		
-		if(class_exists('\GO\Professional\LicenseCheck')){
+		if(class_exists('GO\Professional\LicenseCheck')){
 			
 		}
 							
@@ -416,7 +416,7 @@ class Installation extends \GO\Base\Db\ActiveRecord {
 	
 	
 	protected function afterDbInsert() {
-		if(class_exists("\GO\Professional\LicenseCheck"))
+		if(class_exists("GO\Professional\LicenseCheck"))
 		{
 			$lc = new \GO\Professional\LicenseCheck();
 			$this->token = $lc->generateToken($this);
@@ -537,7 +537,7 @@ class Installation extends \GO\Base\Db\ActiveRecord {
 //		
 //		$findParams = \GO\Base\Db\FindParams::newInstance()
 //						->select('module_id, count(*) AS usercount')
-//						->joinModel(array('model'=>'\GO\ServerManager\Model\InstallationUser',  'localField'=>'user_id','tableAlias'=>'u'))
+//						->joinModel(array('model'=>'GO\ServerManager\Model\InstallationUser',  'localField'=>'user_id','tableAlias'=>'u'))
 //						->group(array('module_id'))
 //						->criteria(
 //										\GO\Base\Db\FindCriteria::newInstance()

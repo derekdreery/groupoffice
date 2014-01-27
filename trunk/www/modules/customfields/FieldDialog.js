@@ -55,7 +55,7 @@ GO.customfields.FieldDialog = function(config){
 			url:GO.url('customfields/field/types'),
 			baseParams:{extend_model:this.extendModel}
 		}),
-		value:'GO_Customfields_Customfieldtype_Text',
+		value:'GO\\Customfields\\Customfieldtype\\Text',
 		valueField:'className',
 		displayField:'type',
 		allowBlank:false,
@@ -67,7 +67,7 @@ GO.customfields.FieldDialog = function(config){
 		forceSelection: true
 	});
     		
-	this.typeField.on('GO_Customfields_Customfieldtype_Select', function(combo, record, index){
+	this.typeField.on('GO\\Customfields\\Customfieldtype\\Select', function(combo, record, index){
 		this.typeChange(combo, record.data.value);
 	}, this);
    
@@ -259,40 +259,40 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 
 	typeChange : function(combo, newValue)
 	{	
-		this.helptextField.setDisabled(newValue=='GO_Customfields_Customfieldtype_Infotext');
-		this.requiredCB.setDisabled(newValue=='GO_Customfields_Customfieldtype_Infotext');
-		this.decimalsField.setDisabled(newValue!='GO_Customfields_Customfieldtype_Number');
-		this.decimalsField.setVisible(newValue=='GO_Customfields_Customfieldtype_Number');
+		this.helptextField.setDisabled(newValue=='GO\\Customfields\\Customfieldtype\\Infotext');
+		this.requiredCB.setDisabled(newValue=='GO\\Customfields\\Customfieldtype\\Infotext');
+		this.decimalsField.setDisabled(newValue!='GO\\Customfields\\Customfieldtype\\Number');
+		this.decimalsField.setVisible(newValue=='GO\\Customfields\\Customfieldtype\\Number');
 
-		this.nameField.setHeight(newValue=='GO_Customfields_Customfieldtype_Infotext' ? 120 : 22);
+		this.nameField.setHeight(newValue=='GO\\Customfields\\Customfieldtype\\Infotext' ? 120 : 22);
 
-		this.treeSelectOptions.setVisible(newValue=='GO_Customfields_Customfieldtype_Treeselect');
-		if(newValue=='GO_Customfields_Customfieldtype_Treeselect')
+		this.treeSelectOptions.setVisible(newValue=='GO\\Customfields\\Customfieldtype\\Treeselect');
+		if(newValue=='GO\\Customfields\\Customfieldtype\\Treeselect')
 		{
 			this.treeSelectOptions.setFieldId(this.field_id);
 		}
 
-		this.masterTree.container.up('div.x-form-item').setDisplayed(newValue=='GO_Customfields_Customfieldtype_TreeselectSlave');
+		this.masterTree.container.up('div.x-form-item').setDisplayed(newValue=='GO\\Customfields\\Customfieldtype\\TreeselectSlave');
 
-		this.functionPanel.setVisible(newValue=='GO_Customfields_Customfieldtype_Function');
-		if(newValue=='GO_Customfields_Customfieldtype_Function')
+		this.functionPanel.setVisible(newValue=='GO\\Customfields\\Customfieldtype\\Function');
+		if(newValue=='GO\\Customfields\\Customfieldtype\\Function')
 		{
 			this.functionPanel.doLayout();
 		}
 
-		this.multiSelectCB.container.up('div.x-form-item').setDisplayed(newValue=='GO_Customfields_Customfieldtype_Select' || newValue=='GO_Customfields_Customfieldtype_TreeselectSlave');
+		this.multiSelectCB.container.up('div.x-form-item').setDisplayed(newValue=='GO\\Customfields\\Customfieldtype\\Select' || newValue=='GO\\Customfields\\Customfieldtype\\TreeselectSlave');
 
-		this.multiSelectCB.helpTextEl.setDisplayed(newValue=='GO_Customfields_Customfieldtype_TreeselectSlave');
+		this.multiSelectCB.helpTextEl.setDisplayed(newValue=='GO\\Customfields\\Customfieldtype\\TreeselectSlave');
 
-		this.heightField.container.up('div.x-form-item').setDisplayed(newValue=='GO_Customfields_Customfieldtype_Textarea');
+		this.heightField.container.up('div.x-form-item').setDisplayed(newValue=='GO\\Customfields\\Customfieldtype\\Textarea');
 
-		this.optionsGrid.setVisible(newValue=='GO_Customfields_Customfieldtype_Select');
-		if(newValue=='GO_Customfields_Customfieldtype_Select')
+		this.optionsGrid.setVisible(newValue=='GO\\Customfields\\Customfieldtype\\Select');
+		if(newValue=='GO\\Customfields\\Customfieldtype\\Select')
 		{
 			this.optionsGrid.setFieldId(this.field_id);
 		}
 
-		this.regexField.setDisabled(newValue!='GO_Customfields_Customfieldtype_Text');
+		this.regexField.setDisabled(newValue!='GO\\Customfields\\Customfieldtype\\Text');
 
 		this.syncShadow();
 		this.center();
@@ -303,7 +303,7 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 		if(!this.typeField.store.loaded){
 			this.typeField.store.load({
 				callback:function(){
-					this.typeField.setValue("GO_Customfields_Customfieldtype_Text");
+					this.typeField.setValue("GO\\Customfields\\Customfieldtype\\Text");
 					this.show(field_id);					
 				},
 				scope:this
@@ -353,7 +353,7 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 			else
 				this.categoryField.selectFirst();
 			
-			this.typeChange(this.typeField, 'GO_Customfields_Customfieldtype_Text');
+			this.typeChange(this.typeField, 'GO\\Customfields\\Customfieldtype\\Text');
 			this.maxLengthField.setDisabled(false);
 			this.maxLengthField.setVisible(true);
 			GO.customfields.FieldDialog.superclass.show.call(this);
@@ -379,10 +379,10 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 	{		
 		this.formPanel.form.baseParams['id']=field_id;
 		this.field_id=field_id;
-		if(this.typeField.getValue()=='GO_Customfields_Customfieldtype_Select')
+		if(this.typeField.getValue()=='GO\\Customfields\\Customfieldtype\\Select')
 			this.optionsGrid.setFieldId(field_id);
 
-		if(this.typeField.getValue()=='GO_Customfields_Customfieldtype_Treeselect')
+		if(this.typeField.getValue()=='GO\\Customfields\\Customfieldtype\\Treeselect')
 			this.treeSelectOptions.setFieldId(field_id);
 	},
 	

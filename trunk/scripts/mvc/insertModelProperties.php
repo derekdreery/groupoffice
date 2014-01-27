@@ -45,7 +45,7 @@ while($module = $stmt->fetch()){
 
 
 foreach($classes as $model){
-	if($model->isSubclassOf('\GO\Base\Db\ActiveRecord') && !$model->isAbstract()){
+	if($model->isSubclassOf('GO\Base\Db\ActiveRecord') && !$model->isAbstract()){
 		
 		$changed = false;
 

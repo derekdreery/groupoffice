@@ -39,7 +39,7 @@ class Bookmark extends \GO\Base\Db\ActiveRecord {
 
 	public function relations() {
 		return array(
-					'category' => array('type' => self::BELONGS_TO, 'model' => '\GO\Bookmarks\Model\Category', 'field' => 'category_id')
+					'category' => array('type' => self::BELONGS_TO, 'model' => 'GO\Bookmarks\Model\Category', 'field' => 'category_id')
 				);
 	}
 	

@@ -6,7 +6,7 @@ namespace GO\Addressbook\Controller;
 
 class SentMailing extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Addressbook\Model\SentMailing';
+	protected $model = 'GO\Addressbook\Model\SentMailing';
 	
 	/**
 	 * Disable email sending

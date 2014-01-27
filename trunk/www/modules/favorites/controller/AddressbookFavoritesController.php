@@ -28,7 +28,7 @@ class AddressbookFavorites extends \GO\Base\Controller\AbstractMultiSelectModelC
 	 * @return String 
 	 */
 	public function modelName() {
-		return '\GO\Addressbook\Model\Addressbook';
+		return 'GO\Addressbook\Model\Addressbook';
 	}
 	
 	/**
@@ -36,7 +36,7 @@ class AddressbookFavorites extends \GO\Base\Controller\AbstractMultiSelectModelC
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return '\GO\Favorites\Model\Addressbook';
+		return 'GO\Favorites\Model\Addressbook';
 	}
 	
 	/**

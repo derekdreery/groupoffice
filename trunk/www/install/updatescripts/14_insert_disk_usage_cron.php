@@ -9,6 +9,6 @@ $cron->hours = '0';
 $cron->monthdays = '*';
 $cron->months = '*';
 $cron->weekdays = '*';
-$cron->job = '\GO\Base\Cron\CalculateDiskUsage';		
+$cron->job = 'GO\Base\Cron\CalculateDiskUsage';
 
 $cron->save();

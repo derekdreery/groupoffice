@@ -23,7 +23,7 @@ namespace GO\Calendar\Controller;
 
 class Participant extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Calendar\Model\Participant';
+	protected $model = 'GO\Calendar\Model\Participant';
 	
 	protected function getStoreParams($params) {
 		$c = \GO\Base\Db\FindParams::newInstance()

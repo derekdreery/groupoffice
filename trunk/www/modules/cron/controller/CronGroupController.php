@@ -11,7 +11,7 @@ class CronGroup extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * @return String 
 	 */
 	public function modelName() {
-		return '\GO\Base\Model\Group';
+		return 'GO\Base\Model\Group';
 	}
 	
 	/**
@@ -19,7 +19,7 @@ class CronGroup extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return '\GO\Base\Cron\CronGroup';
+		return 'GO\Base\Cron\CronGroup';
 	}
 	
 	/**

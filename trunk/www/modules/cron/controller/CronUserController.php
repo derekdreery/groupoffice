@@ -11,7 +11,7 @@ class CronUser extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * @return String 
 	 */
 	public function modelName() {
-		return '\GO\Base\Model\User';
+		return 'GO\Base\Model\User';
 	}
 	
 	/**
@@ -19,7 +19,7 @@ class CronUser extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return '\GO\Base\Cron\CronUser';
+		return 'GO\Base\Cron\CronUser';
 	}
 	
 	/**

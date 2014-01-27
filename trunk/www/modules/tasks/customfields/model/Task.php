@@ -37,6 +37,6 @@ class Task extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
 	}
 
 	public function extendsModel(){
-		return "\GO\Tasks\Model\Task";
+		return "GO\Tasks\Model\Task";
 	}
 }

@@ -6,7 +6,7 @@ namespace GO\Files\Controller;
 
 class File extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Files\Model\File';
+	protected $model = 'GO\Files\Model\File';
 	
 	protected function allowGuests() {
 		return array('download'); //permissions will be checked manually in that action
@@ -116,7 +116,7 @@ class File extends \GO\Base\Controller\AbstractModelController {
 		$response['data']['name']=$model->fsFile->nameWithoutExtension();
 		
 		if (\GO::modules()->customfields)
-			$response['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("\GO\Files\Model\File", $model->folder_id);
+			$response['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Files\Model\File", $model->folder_id);
 		
 		
 		$fh = \GO\Files\Model\FileHandler::model()->findByPk(

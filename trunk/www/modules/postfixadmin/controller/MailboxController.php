@@ -6,7 +6,7 @@ namespace GO\Postfixadmin\Controller;
 
 class Mailbox extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Postfixadmin\Model\Mailbox';
+	protected $model = 'GO\Postfixadmin\Model\Mailbox';
 	
 	
 	protected function allowGuests() {

@@ -109,7 +109,7 @@ GO.customfields.DisableCategoriesPanel = Ext.extend(Ext.Panel, {
 	 * Set the model to edit.
 	 * 
 	 * @param int model_id
-	 * @param string model_name The name of the model that controls the disabled categories. eg. GO_Addressbook_Model_Addressbook controls them for GO_Addressbook_Model_Contact
+	 * @param string model_name The name of the model that controls the disabled categories. eg. GO\\Addressbook\\Model\\Addressbook controls them for GO\\Addressbook\\Model\\Contact
 	 */
 	setModel : function(model_id, model_name){
 		this.setDisabled(!model_id);

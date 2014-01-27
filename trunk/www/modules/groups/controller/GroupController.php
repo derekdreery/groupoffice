@@ -6,7 +6,7 @@ namespace GO\Groups\Controller;
 
 class Group extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Base\Model\Group';
+	protected $model = 'GO\Base\Model\Group';
 
 	protected function allowWithoutModuleAccess() {
 		return array('getusers', 'getrecipientsasstring');
@@ -50,7 +50,7 @@ class Group extends \GO\Base\Controller\AbstractModelController {
 
 			// The users in the group "everyone" cannot be deleted
 			if ($group->id != \GO::config()->group_everyone) {
-				$store->processDeleteActions($params, '\GO\Base\Model\UserGroup', array('group_id' => $group->id));
+				$store->processDeleteActions($params, 'GO\Base\Model\UserGroup', array('group_id' => $group->id));
 			} else {
 				$delresponse['deleteSuccess'] = false;
 				$delresponse['deleteFeedback'] = 'Members of the group everyone cannot be deleted.';

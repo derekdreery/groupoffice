@@ -100,7 +100,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		$cron->monthdays = '*';
 		$cron->months = '*';
 		$cron->weekdays = '*';
-		$cron->job = '\GO\Base\Cron\EmailReminders';
+		$cron->job = 'GO\Base\Cron\EmailReminders';
 		
 		$cron->save();
 		
@@ -114,7 +114,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		$cron->monthdays = '*';
 		$cron->months = '*';
 		$cron->weekdays = '*';
-		$cron->job = '\GO\Base\Cron\CalculateDiskUsage';		
+		$cron->job = 'GO\Base\Cron\CalculateDiskUsage';
 
 		$cron->save();
 		

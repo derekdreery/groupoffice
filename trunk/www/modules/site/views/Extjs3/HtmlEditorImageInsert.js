@@ -34,7 +34,7 @@ Ext.extend(GO.site.HtmlEditorImageInsert, Ext.util.Observable, {
 	toolbarSeparatorAfter : false,
 	
 	root_folder_id : 0,
-	model_name: "GO_Site_Model_Site",
+	model_name: "GO\\Site\\Model\\Site",
 	folder_id : 0,
 	
 	isTempFile : true,

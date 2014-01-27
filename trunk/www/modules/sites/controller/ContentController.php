@@ -30,7 +30,7 @@ namespace GO\Sites\Controller;
 
 class Content extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Sites\Model\Content';
+	protected $model = 'GO\Sites\Model\Content';
 	
 	/**
 	 * TODO: fix the action

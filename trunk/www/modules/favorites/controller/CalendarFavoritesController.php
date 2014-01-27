@@ -28,7 +28,7 @@ class CalendarFavorites extends \GO\Base\Controller\AbstractMultiSelectModelCont
 	 * @return String 
 	 */
 	public function modelName() {
-		return '\GO\Calendar\Model\Calendar';
+		return 'GO\Calendar\Model\Calendar';
 	}
 	
 	/**
@@ -36,7 +36,7 @@ class CalendarFavorites extends \GO\Base\Controller\AbstractMultiSelectModelCont
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return '\GO\Favorites\Model\Calendar';
+		return 'GO\Favorites\Model\Calendar';
 	}
 	
 	/**

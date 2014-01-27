@@ -16,6 +16,6 @@ class User extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
 		return parent::model($className);
 	}
 	public function extendsModel() {
-		return "\GO\Base\Model\User";
+		return "GO\Base\Model\User";
 	}
 }

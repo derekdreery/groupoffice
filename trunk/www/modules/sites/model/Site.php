@@ -47,7 +47,7 @@ class Site extends \GO\Base\Db\ActiveRecord {
 	 * Attach the customfield model to this model.
 	 */
 	public function customfieldsModel() {
-		return '\GO\Sites\Customfields\Model\Site';
+		return 'GO\Sites\Customfields\Model\Site';
 	}
 	
 	protected function init() {
@@ -88,7 +88,7 @@ class Site extends \GO\Base\Db\ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'content' => array('type' => self::HAS_MANY, 'model' => '\GO\Sites\Model\Content', 'field' => 'site_id', 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order('sort_order'),  'delete' => true)
+				'content' => array('type' => self::HAS_MANY, 'model' => 'GO\Sites\Model\Content', 'field' => 'site_id', 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order('sort_order'),  'delete' => true)
 			);
 	}	
 	

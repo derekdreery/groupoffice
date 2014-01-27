@@ -225,7 +225,7 @@ class FindParams{
 	 * 
 	 *  \GO\Base\Model\User::model()->addRelation('events', array(
 	 *		'type'=>  ActiveRecord::HAS_MANY, 
-	 *		'model'=>'\GO\Calendar\Model\Event', 
+	 *		'model'=>'GO\Calendar\Model\Event',
 	 *		'field'=>'user_id'				
 	 *	));
 	 *		
@@ -421,7 +421,7 @@ class FindParams{
 	 * @param array $config
 	 * 
 	 * array(
-	 *			'model'=>'\GO\Billing\Model\OrderStatusLanguage',					
+	 *			'model'=>'GO\Billing\Model\OrderStatusLanguage',
 	 * 
 	 *			'localTableAlias'=>'t', //defaults to "t"
 	 *			'localField'=>'id', //defaults to "id"

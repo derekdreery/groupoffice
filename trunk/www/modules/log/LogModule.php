@@ -9,7 +9,7 @@ class LogModule extends \GO\Base\Module{
 	 */
 	public static function initListeners(){	
 		$c = new \GO\Core\Controller\Maintenance();
-		$c->addListener('servermanagerReport', '\GO\Log\LogModule', 'rotateLog');
+		$c->addListener('servermanagerReport', 'GO\Log\LogModule', 'rotateLog');
 		
 	}	
 	

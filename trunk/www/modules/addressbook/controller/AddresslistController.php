@@ -18,7 +18,7 @@ namespace GO\Addressbook\Controller;
 
 class Addresslist extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Addressbook\Model\Addresslist';
+	protected $model = 'GO\Addressbook\Model\Addresslist';
 	
 	protected function beforeStore(&$response, &$params, &$store) {
 		
@@ -32,7 +32,7 @@ class Addresslist extends \GO\Base\Controller\AbstractModelController {
 		if (empty($params['forContextMenu'])) {
 			$multiSel = new \GO\Base\Component\MultiSelectGrid(
 							'addresslist_filter', 
-							"\GO\Addressbook\Model\Addresslist",$store, $params, false);		
+							"GO\Addressbook\Model\Addresslist",$store, $params, false);
 			$multiSel->formatCheckedColumn();
 		}
 		
@@ -68,7 +68,7 @@ class Addresslist extends \GO\Base\Controller\AbstractModelController {
 		$store->getColumnModel()->formatColumn('company_name', '$model->company->name', array(), 'company_id');
 		$store->getColumnModel()->formatColumn('addressbook_name', '$model->addressbook->name', array(), 'addressbook_id');
 
-		$store->processDeleteActions($params, "\GO\Addressbook\Model\AddresslistContact", array('addresslist_id' => $params['addresslist_id']));
+		$store->processDeleteActions($params, "GO\Addressbook\Model\AddresslistContact", array('addresslist_id' => $params['addresslist_id']));
 
 		$response = array();
 
@@ -110,7 +110,7 @@ class Addresslist extends \GO\Base\Controller\AbstractModelController {
 		$store->getColumnModel()->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
 		$store->getColumnModel()->formatColumn('addressbook_name', '$model->addressbook->name', array(), 'addressbook_id');
 		
-		$store->processDeleteActions($params, "\GO\Addressbook\Model\AddresslistCompany", array('addresslist_id' => $params['addresslist_id']));
+		$store->processDeleteActions($params, "GO\Addressbook\Model\AddresslistCompany", array('addresslist_id' => $params['addresslist_id']));
 
 		$response = array();
 

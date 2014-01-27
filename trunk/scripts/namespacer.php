@@ -1,5 +1,29 @@
 <?php
-
+/**
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014 Intermesh BV <mschering@intermesh.nl>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ */
 
 //First I refactored all classes that ended on "_Function", "_Interface", "_Abstract", "_Switch" and
 //"_Array", "_List". Otherwise this script would create illegal class names as
@@ -10,13 +34,14 @@
 //throw new Exception -> throw new \Exception
 
 //After this script I still had to prefix some manual usages of php classes.
-//for exmple PDO had to become \PDO
+//for example PDO had to become \PDO
 
 
-//find all PHP files except updates.php and updates.inc.php because we shouldn't touch them
+
 
 chdir('/var/www/trunk');
 
+//find all PHP files except updates.php and updates.inc.php because we shouldn't touch them
 $cmd = 'find . -type f \( -iname "*.php" ! -iname "updates*" \);';
 exec($cmd, $scripts, $return_var);
 
@@ -32,7 +57,7 @@ foreach($scripts as $script){
 	
 	
 	
-	//get the contents
+	//get the contents of the PHP Script
 	$content = $oldContent = file_get_contents($script);
 	
 	//Our main global static function GO::function() is easiest to identify like this
@@ -60,7 +85,7 @@ foreach($scripts as $script){
 			}
 		}
 		
-		//replace all class names
+		//replace all old class names with the new namespaced ones.
 		foreach($classes as $oldClassName=>$newClassName){
 			$content = str_replace($oldClassName, $newClassName, $content);
 		}
@@ -69,7 +94,8 @@ foreach($scripts as $script){
 		//we only have one class per file!
 		foreach($classes as $oldClassName=>$newClassName){
 			$classDeclarationRegex = '/(class|interface)\s('.preg_quote($newClassName,'/').')/';
-			
+
+            //Attempt to find a class definition in this file.
 			if(preg_match($classDeclarationRegex,$content, $classDeclarationMatches,PREG_OFFSET_CAPTURE)){
 				
 				echo "Found ".$newClassName."\n";
@@ -85,25 +111,19 @@ foreach($scripts as $script){
 				//find place in the file to enter the "namespace GO\Email\Model;" declaration.
 				//we can do this above the line with declaration "class ImapMessageAttachment"				
 				$offset = $classDeclarationMatches[0][1];
-				
-//				echo substr($content,0,$offset)."\n";
-				
 				$lastLineBreakPos = strrpos(substr($content,0,$offset), "\n");
-//				var_dump($classDeclarationMatches);
-				
-//				echo $offset.':'.$lastLineBreakPos.':'.strlen($content)."\n";
 				
 				$declaration = "\n\nnamespace ".$namespace.";\n\n";
-				
+
+                //Inset the declaration in the file content
 				$firstPart = substr($content,0,$lastLineBreakPos);
 				$lastPart = substr($content, $lastLineBreakPos);				
 				$content = $firstPart.$declaration.$lastPart;
 				
 				//now we must remove the namespace from class usages in this file.
+                //eg. \GO\Base\Db\ActiveRecord becomes ActiveRecord.
 				$content = preg_replace('/([^"\'])\\\\'.preg_quote($namespace,'/').'\\\\/', "$1", $content);
-				
-//				echo $content; 
-//				exit();
+
 			}
 		}
 		
@@ -118,6 +138,9 @@ foreach($scripts as $script){
 		echo "\nReplacing $script\n";
 		file_put_contents($script, $content);
 	}
+
+
+    echo "All done!\n";
 	
 }
 

@@ -53,7 +53,7 @@ class Alias extends \GO\Base\Db\ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'account' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Email\Model\Account', 'field'=>'account_id')
+				'account' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Email\Model\Account', 'field'=>'account_id')
 		);
 	}
 	

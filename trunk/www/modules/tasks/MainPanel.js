@@ -433,7 +433,7 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 		});               
 		
 		GO.mainLayout.on('linksDeleted', function(deleteConfig, link_types){
-			GO.mainLayout.onLinksDeletedHandler(link_types["GO_Tasks_Model_Task"], this, this.gridPanel.store);
+			GO.mainLayout.onLinksDeletedHandler(link_types["GO\\Tasks\\Model\\Task"], this, this.gridPanel.store);
 		}, this);    
 	},
   
@@ -687,7 +687,7 @@ GO.moduleManager.addModule('tasks', GO.tasks.MainPanel, {
  * Basically this function opens a task window when a user clicks on it from a 
  * panel with links. 
  */
-GO.linkHandlers["GO_Tasks_Model_Task"]=function(id, link_config){
+GO.linkHandlers["GO\\Tasks\\Model\\Task"]=function(id, link_config){
 
 	if(!GO.tasks.taskLinkWindow){
 		var taskPanel = new GO.tasks.TaskPanel();
@@ -703,7 +703,7 @@ GO.linkHandlers["GO_Tasks_Model_Task"]=function(id, link_config){
 	return GO.tasks.taskLinkWindow;
 }
 
-GO.linkPreviewPanels["GO_Tasks_Model_Task"]=function(config){
+GO.linkPreviewPanels["GO\\Tasks\\Model\\Task"]=function(config){
 	config = config || {};
 	return new GO.tasks.TaskPanel(config);
 }
@@ -711,7 +711,7 @@ GO.linkPreviewPanels["GO_Tasks_Model_Task"]=function(config){
 
 GO.newMenuItems.push({
 	text: GO.tasks.lang.task,
-	iconCls: 'go-model-icon-GO_Tasks_Model_Task',
+	iconCls: 'go-model-icon-GO\\Tasks\\Model\\Task',
 	itemId:'ta-new-task',
 	handler:function(item, e){
 

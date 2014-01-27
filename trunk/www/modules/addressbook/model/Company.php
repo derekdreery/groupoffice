@@ -99,7 +99,7 @@ class Company extends \GO\Base\Db\ActiveRecord {
 	
 	public function customfieldsModel() {
 		
-		return "\GO\Addressbook\Customfields\Model\Company";
+		return "GO\Addressbook\Customfields\Model\Company";
 	}
 	
 	public function defaultAttributes() {
@@ -144,9 +144,9 @@ class Company extends \GO\Base\Db\ActiveRecord {
 
 	public function relations(){
 		return array(
-			'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Addressbook\Model\Addressbook', 'field'=>'addressbook_id'),
-			'contacts' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Addressbook\Model\Contact', 'field'=>'company_id', 'delete'=>false),
-			'addresslists' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Addressbook\Model\Addresslist', 'field'=>'company_id', 'linkModel' => '\GO\Addressbook\Model\AddresslistCompany'),
+			'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Addressbook\Model\Addressbook', 'field'=>'addressbook_id'),
+			'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO\Addressbook\Model\Contact', 'field'=>'company_id', 'delete'=>false),
+			'addresslists' => array('type'=>self::MANY_MANY, 'model'=>'GO\Addressbook\Model\Addresslist', 'field'=>'company_id', 'linkModel' => 'GO\Addressbook\Model\AddresslistCompany'),
 		);
 	}
 

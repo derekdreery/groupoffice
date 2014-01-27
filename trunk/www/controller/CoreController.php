@@ -211,7 +211,7 @@ class Core extends \GO\Base\Controller\AbstractController {
 //								->addCondition('user_id', \GO::user()->id,'=','ug');
 //				
 //				$findParams->joinModel(array(
-//						'model'=>"\GO\Base\Model\UserGroup",
+//						'model'=>"GO\Base\Model\UserGroup",
 //						'localTableAlias'=>'t', //defaults to "t"	  
 //						'foreignField'=>'group_id', //defaults to primary key of the remote model
 //						'tableAlias'=>'ug', //Optional table alias
@@ -778,7 +778,7 @@ class Core extends \GO\Base\Controller\AbstractController {
 //				$remindersStmt = \GO\Base\Model\Reminder::model()->find(
 //					\GO\Base\Db\FindParams::newInstance()
 //						->joinModel(array(
-//							'model' => '\GO\Base\Model\ReminderUser',
+//							'model' => 'GO\Base\Model\ReminderUser',
 //							'localTableAlias' => 't',
 //							'localField' => 'id',
 //							'foreignField' => 'reminder_id',

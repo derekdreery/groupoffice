@@ -39,7 +39,7 @@ class SharedRootFolder extends \GO\Base\Db\ActiveRecord {
 
 	public function relations() {
 		return array(
-				'folder' => array('type' => self::BELONGS_TO, 'model' => '\GO\Files\Model\Folder', 'field' => 'folder_id')
+				'folder' => array('type' => self::BELONGS_TO, 'model' => 'GO\Files\Model\Folder', 'field' => 'folder_id')
 		);
 	}
 
@@ -66,7 +66,7 @@ class SharedRootFolder extends \GO\Base\Db\ActiveRecord {
 		
 		Folder::model()->addRelation('aclItem',array(
 			"type"=>self::BELONGS_TO,
-			"model"=>"\GO\Base\Model\Acl",
+			"model"=>"GO\Base\Model\Acl",
 			"field"=>'acl_id'
 		));
 		
@@ -74,7 +74,7 @@ class SharedRootFolder extends \GO\Base\Db\ActiveRecord {
 						->select("max(a.mtime) AS mtime")
 						->single()
 						->joinModel(array(
-								'model'=>"\GO\Base\Model\Acl",
+								'model'=>"GO\Base\Model\Acl",
 								'localField'=>'acl_id',
 								'tableAlias'=>'a'
 						));

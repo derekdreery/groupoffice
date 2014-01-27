@@ -55,7 +55,7 @@ class HtmlReplacer {
 			$end_boundary = '\\b';
 		}
 
-		$text = preg_replace_callback('/<[^>]*(' . $keyword . ')[^>]*>/uis', array('\GO\Base\Util\HtmlReplacer', '_replaceInTags'), $text);
+		$text = preg_replace_callback('/<[^>]*(' . $keyword . ')[^>]*>/uis', array('GO\Base\Util\HtmlReplacer', '_replaceInTags'), $text);
 		
 		$regex = "/" . $begin_boundary . "(" . $keyword . ")" . $end_boundary . "/sui";
 

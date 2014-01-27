@@ -31,7 +31,7 @@ class EnabledBlock extends \GO\Base\Db\ActiveRecord{
 	
 	public function relations() {
 		return array(
-				'block' => array('type' => self::BELONGS_TO, 'model' => '\GO\Customfields\Model\Block', 'field' => 'block_id')
+				'block' => array('type' => self::BELONGS_TO, 'model' => 'GO\Customfields\Model\Block', 'field' => 'block_id')
 			);
 	}
 		
@@ -45,15 +45,15 @@ class EnabledBlock extends \GO\Base\Db\ActiveRecord{
 
 	public static function getEnabledBlocks($modelId,$listedModelTypeName,$listingModelName) {
 		
-		if ($listingModelName=='\GO\Addressbook\Model\Contact')
-			$dataType = '\GO\Addressbook\Customfieldtype\Contact';
+		if ($listingModelName=='GO\Addressbook\Model\Contact')
+			$dataType = 'GO\Addressbook\Customfieldtype\Contact';
 		else
-			$dataType = '\GO\Addressbook\Customfieldtype\Company';
+			$dataType = 'GO\Addressbook\Customfieldtype\Company';
 		
 		return self::model()->find(
 				\GO\Base\Db\FindParams::newInstance()
 					->joinModel(array(
-						'model'=>'\GO\Customfields\Model\Block',
+						'model'=>'GO\Customfields\Model\Block',
 						'localTableAlias'=>'t',
 						'localField'=>'block_id',
 						'foreignField'=>'id',
@@ -61,7 +61,7 @@ class EnabledBlock extends \GO\Base\Db\ActiveRecord{
 						'type'=>'INNER'
 					))
 					->joinModel(array(
-						'model'=>'\GO\Customfields\Model\Field',
+						'model'=>'GO\Customfields\Model\Field',
 						'localTableAlias'=>'b',
 						'localField'=>'field_id',
 						'foreignField'=>'id',

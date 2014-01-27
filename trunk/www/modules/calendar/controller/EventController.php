@@ -23,7 +23,7 @@ namespace GO\Calendar\Controller;
 
 class Event extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Calendar\Model\Event';
+	protected $model = 'GO\Calendar\Model\Event';
 	
 	private $_uuidEvents = array();
 	
@@ -557,7 +557,7 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 		$response['data']['end_date'] = \GO\Base\Util\Date::get_timestamp($model->end_time, false);
 
 		if (\GO::modules()->customfields)
-			$response['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("\GO\Calendar\Model\Event", $model->calendar->group_id);
+			$response['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Calendar\Model\Event", $model->calendar->group_id);
 
 		$response['group_id'] = $model->calendar->group_id;
 		
@@ -585,7 +585,7 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 			if(!empty($params['linkModelNameAndId'])){
 				$arr = explode(':', $params['linkModelNameAndId']);
 				
-				if($arr[0]=='\GO\Addressbook\Model\Contact'){
+				if($arr[0]=='GO\Addressbook\Model\Contact'){
 					$contact = \GO\Addressbook\Model\Contact::model()->findByPk($arr[1]);
 					
 					if($contact){
@@ -987,7 +987,7 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 					'start_time'=>$startTime,
 					'end_time'=>$endTime,
 					'all_day_event'=>1,
-					'model_name'=>'\GO\Tasks\Model\Task',
+					'model_name'=>'GO\Tasks\Model\Task',
 					//'background'=>$calendar->displayColor,
 					'background'=>'EBF1E2',
 					'day'=>$dayString[date('w', ($task->due_time))].' '.\GO\Base\Util\Date::get_timestamp($task->due_time,false),
@@ -1131,7 +1131,7 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 					'time'=>date(\GO::user()->time_format, $start_unixtime),												
 					'start_time'=>$contact->upcoming.' 00:00',
 					'end_time'=>$contact->upcoming.' 23:59',
-					'model_name'=>'\GO\Adressbook\Model\Contact',
+					'model_name'=>'GO\Adressbook\Model\Contact',
 //					'background'=>$calendar->displayColor,
 					'background'=>'EBF1E2',
 					'calendar_id'=>$calendar->id,

@@ -56,7 +56,7 @@ GO.site.MainPanel = function(config){
 	
 	if (GO.files) {
 		this.fileBrowserButton = new GO.files.FileBrowserButton({
-			model_name:"GO_Site_Model_Site"
+			model_name:"GO\\Site\\Model\\Site"
 		});
 		config.tbar.insertButton(2,this.fileBrowserButton);
 		this.treePanel.on('click', function(node,event){

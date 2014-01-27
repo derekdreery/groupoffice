@@ -5,7 +5,7 @@ namespace GO\Customfields\Controller;
 
 class FieldTreeSelectOption extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = '\GO\Customfields\Model\FieldTreeSelectOption';
+	protected $model = 'GO\Customfields\Model\FieldTreeSelectOption';
 	
 
 	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
@@ -25,7 +25,7 @@ class FieldTreeSelectOption extends \GO\Base\Controller\AbstractModelController{
 		
 		$fieldModel = \GO\Customfields\Model\Field::model()->findByPk($field_id);
 		
-		if ($params['parent_id']==0 && $fieldModel->datatype=='\GO\Customfields\Customfieldtype\TreeselectSlave') {
+		if ($params['parent_id']==0 && $fieldModel->datatype=='GO\Customfields\Customfieldtype\TreeselectSlave') {
 			return \GO\Base\Db\FindParams::newInstance()
 						->order(array("parent_id","sort"))
 						->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('field_id', $fieldModel->treemaster_field_id));

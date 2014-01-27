@@ -30,7 +30,7 @@ class AclUser extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * @return String 
 	 */
 	public function modelName() {
-		return '\GO\Base\Model\User';
+		return 'GO\Base\Model\User';
 	}
 	
 	/**
@@ -38,7 +38,7 @@ class AclUser extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	 * @return String 
 	 */
 	public function linkModelName() {
-		return '\GO\Base\Model\AclUsersGroups';
+		return 'GO\Base\Model\AclUsersGroups';
 	}
 	
 	/**

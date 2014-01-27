@@ -146,16 +146,16 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 	
 	public function customfieldsModel() {
 		
-		return "\GO\Addressbook\Customfields\Model\Contact";
+		return "GO\Addressbook\Customfields\Model\Contact";
 	}
 
 	public function relations(){
 		return array(
-			'goUser' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Base\Model\User', 'field'=>'go_user_id'),
-			'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Addressbook\Model\Addressbook', 'field'=>'addressbook_id'),
-			'company' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Addressbook\Model\Company', 'field'=>'company_id'),
-			'addresslists' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Addressbook\Model\Addresslist', 'field'=>'contact_id', 'linkModel' => '\GO\Addressbook\Model\AddresslistContact'),
-			'vcardProperties' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Addressbook\Model\ContactVcardProperty', 'field'=>'contact_id', 'delete'=> true)
+			'goUser' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Base\Model\User', 'field'=>'go_user_id'),
+			'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Addressbook\Model\Addressbook', 'field'=>'addressbook_id'),
+			'company' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Addressbook\Model\Company', 'field'=>'company_id'),
+			'addresslists' => array('type'=>self::MANY_MANY, 'model'=>'GO\Addressbook\Model\Addresslist', 'field'=>'contact_id', 'linkModel' => 'GO\Addressbook\Model\AddresslistContact'),
+			'vcardProperties' => array('type'=>self::HAS_MANY, 'model'=>'GO\Addressbook\Model\ContactVcardProperty', 'field'=>'contact_id', 'delete'=> true)
 		);
 	}
 	

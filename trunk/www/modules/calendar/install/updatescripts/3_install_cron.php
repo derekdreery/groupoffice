@@ -9,6 +9,6 @@ $cron->hours = '*';
 $cron->monthdays = '*';
 $cron->months = '*';
 $cron->weekdays = '*';
-$cron->job = '\GO\Calendar\Cron\CalendarPublisher';		
+$cron->job = 'GO\Calendar\Cron\CalendarPublisher';
 
 $cron->save();

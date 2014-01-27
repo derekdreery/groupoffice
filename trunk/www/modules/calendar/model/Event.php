@@ -175,20 +175,20 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	public function customfieldsModel() {
-		return "\GO\Calendar\Customfields\Model\Event";
+		return "GO\Calendar\Customfields\Model\Event";
 	}
 
 
 	public function relations() {
 		return array(
-				'_exceptionEvent'=>array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Event', 'field' => 'exception_for_event_id'),
-				'recurringEventException'=>array('type' => self::HAS_ONE, 'model' => '\GO\Calendar\Model\Exception', 'field' => 'exception_event_id'),//If this event is an exception for a recurring series. This relation points to the exception of the recurring series.
-				'calendar' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Calendar', 'field' => 'calendar_id'),
-				'category' => array('type' => self::BELONGS_TO, 'model' => '\GO\Calendar\Model\Category', 'field' => 'category_id'),
-				'participants' => array('type' => self::HAS_MANY, 'model' => '\GO\Calendar\Model\Participant', 'field' => 'event_id', 'delete' => true),
-				'exceptions' => array('type' => self::HAS_MANY, 'model' => '\GO\Calendar\Model\Exception', 'field' => 'event_id', 'delete' => true),
-				'exceptionEvents' => array('type' => self::HAS_MANY, 'model' => '\GO\Calendar\Model\Event', 'field' => 'exception_for_event_id', 'delete' => true),
-				'resources' => array('type' => self::HAS_MANY, 'model' => '\GO\Calendar\Model\Event', 'field' => 'resource_event_id', 'delete' => true)
+				'_exceptionEvent'=>array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Event', 'field' => 'exception_for_event_id'),
+				'recurringEventException'=>array('type' => self::HAS_ONE, 'model' => 'GO\Calendar\Model\Exception', 'field' => 'exception_event_id'),//If this event is an exception for a recurring series. This relation points to the exception of the recurring series.
+				'calendar' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Calendar', 'field' => 'calendar_id'),
+				'category' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Category', 'field' => 'category_id'),
+				'participants' => array('type' => self::HAS_MANY, 'model' => 'GO\Calendar\Model\Participant', 'field' => 'event_id', 'delete' => true),
+				'exceptions' => array('type' => self::HAS_MANY, 'model' => 'GO\Calendar\Model\Exception', 'field' => 'event_id', 'delete' => true),
+				'exceptionEvents' => array('type' => self::HAS_MANY, 'model' => 'GO\Calendar\Model\Event', 'field' => 'exception_for_event_id', 'delete' => true),
+				'resources' => array('type' => self::HAS_MANY, 'model' => 'GO\Calendar\Model\Event', 'field' => 'resource_event_id', 'delete' => true)
 		);
 	}
 
@@ -2168,7 +2168,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		$findParams = \GO\Base\Db\FindParams::newInstance();
 		
 		$findParams->joinModel(array(
-				'model'=>'\GO\Calendar\Model\Event',						  
+				'model'=>'GO\Calendar\Model\Event',
 	 			'localTableAlias'=>'t', //defaults to "t"
 	 			'localField'=>'event_id', //defaults to "id"	  
 	 			'foreignField'=>'id', //defaults to primary key of the remote model

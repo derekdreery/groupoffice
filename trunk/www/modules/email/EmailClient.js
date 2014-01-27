@@ -1622,7 +1622,7 @@ GO.newMenuItems.push({
 	handler:function(item, e){
 		var panel = item.parentMenu.panel;
 
-		if (panel.model_name == 'GO_Files_Model_File') {
+		if (panel.model_name == 'GO\\Files\\Model\\File') {
 			GO.request({
 				url:'files/file/display',
 				maskEl:panel.ownerCt.getEl(),

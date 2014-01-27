@@ -35,6 +35,6 @@ class Note extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
 	}
 
 	public function extendsModel(){
-		return "\GO\Notes\Model\Note";
+		return "GO\Notes\Model\Note";
 	}
 }

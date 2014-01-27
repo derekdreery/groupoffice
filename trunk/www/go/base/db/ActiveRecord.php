@@ -79,7 +79,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
    * This relation type is used when this model has many related models.
    * The relation makes use of a linked table that has a combined key of the related model and this model.
    * 
-   * Example use in the model class relationship array: 'users' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\User', 'linkModel'=>'\GO\Base\Model\UserGroups', 'field'=>'group_id', 'remoteField'=>'user_id'),
+   * Example use in the model class relationship array: 'users' => array('type'=>self::MANY_MANY, 'model'=>'GO\Base\Model\User', 'linkModel'=>'GO\Base\Model\UserGroups', 'field'=>'group_id', 'remoteField'=>'user_id'),
    * 
    */
   const MANY_MANY=4; // n:n
@@ -166,10 +166,10 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * 
 	 * Example return value:
 	 * array(
-				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Addressbook\Model\Contact', 'field'=>'addressbook_id', 'delete'=>true //with this enabled the relation will be deleted along with the model),
-				'companies' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Addressbook\Model\Company', 'field'=>'addressbook_id', 'delete'=>true),
-				'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Addressbook\Model\Addressbook', 'field'=>'addressbook_id')
-				'users' => array('type'=>self::MANY_MANY, 'model'=>'\GO\Base\Model\User', 'field'=>'group_id', 'linkModel' => '\GO\Base\Model\UserGroup'), // The "field" property is the key of the current model that is defined in the linkModel
+				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO\Addressbook\Model\Contact', 'field'=>'addressbook_id', 'delete'=>true //with this enabled the relation will be deleted along with the model),
+				'companies' => array('type'=>self::HAS_MANY, 'model'=>'GO\Addressbook\Model\Company', 'field'=>'addressbook_id', 'delete'=>true),
+				'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Addressbook\Model\Addressbook', 'field'=>'addressbook_id')
+				'users' => array('type'=>self::MANY_MANY, 'model'=>'GO\Base\Model\User', 'field'=>'group_id', 'linkModel' => 'GO\Base\Model\UserGroup'), // The "field" property is the key of the current model that is defined in the linkModel
 		);
 	 * 
 	 * The relations can be accessed as functions:
@@ -203,7 +203,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * 
 	 * \GO\Base\Model\User::model()->addRelation('events', array(
 	 *		'type'=>  ActiveRecord::HAS_MANY, 
-	 *		'model'=>'\GO\Calendar\Model\Event', 
+	 *		'model'=>'GO\Calendar\Model\Event',
 	 *		'field'=>'user_id'				
 	 *	));
 	 * 
@@ -532,7 +532,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 //	 */
 //	public static function model($className=__CLASS__)
 //	{		
-////	    if ($className=='\GO\Base\Db\ActiveRecord') throw new Exception($className);
+////	    if ($className=='GO\Base\Db\ActiveRecord') throw new Exception($className);
 //		if(isset(self::$_models[$className]))
 //			return self::$_models[$className];
 //		else
@@ -1942,11 +1942,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$r= array_merge($this->relations(), self::$_addedRelations);		
 		
 		if(isset($this->columns['user_id']) && !isset($r['user'])){
-			$r['user']=array('type'=>self::BELONGS_TO, 'model'=>'\GO\Base\Model\User', 'field'=>'user_id');
+			$r['user']=array('type'=>self::BELONGS_TO, 'model'=>'GO\Base\Model\User', 'field'=>'user_id');
 		}
 		
 		if(isset($this->columns['muser_id']) && !isset($r['mUser'])){
-			$r['mUser']=array('type'=>self::BELONGS_TO, 'model'=>'\GO\Base\Model\User', 'field'=>'muser_id');
+			$r['mUser']=array('type'=>self::BELONGS_TO, 'model'=>'GO\Base\Model\User', 'field'=>'muser_id');
 		}
 		
 		$this->_checkRelations($r);
@@ -3485,9 +3485,9 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		//We do this in a separate loop because relations that should be deleted should be processed first.
 		//Consider these relation definitions:
 		//
-		// 'messagesCustomer' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Tickets\Model\Message', 'field'=>'ticket_id', 'findParams'=>FindParams::newInstance()->order('id','DESC')->select('t.*')->criteria(FindCriteria::newInstance()->addCondition('is_note', 0))),
-		// 'messagesNotes' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Tickets\Model\Message', 'field'=>'ticket_id', 'findParams'=>FindParams::newInstance()->order('id','DESC')->select('t.*')->criteria(FindCriteria::newInstance()->addCondition('is_note', 0))),
-		// 'messages' => array('type'=>self::HAS_MANY, 'model'=>'\GO\Tickets\Model\Message', 'field'=>'ticket_id','delete'=>true, 'findParams'=>FindParams::newInstance()->order('id','DESC')->select('t.*')),
+		// 'messagesCustomer' => array('type'=>self::HAS_MANY, 'model'=>'GO\Tickets\Model\Message', 'field'=>'ticket_id', 'findParams'=>FindParams::newInstance()->order('id','DESC')->select('t.*')->criteria(FindCriteria::newInstance()->addCondition('is_note', 0))),
+		// 'messagesNotes' => array('type'=>self::HAS_MANY, 'model'=>'GO\Tickets\Model\Message', 'field'=>'ticket_id', 'findParams'=>FindParams::newInstance()->order('id','DESC')->select('t.*')->criteria(FindCriteria::newInstance()->addCondition('is_note', 0))),
+		// 'messages' => array('type'=>self::HAS_MANY, 'model'=>'GO\Tickets\Model\Message', 'field'=>'ticket_id','delete'=>true, 'findParams'=>FindParams::newInstance()->order('id','DESC')->select('t.*')),
 		//
 		// messagesCustomer and messagesNotes are just subsets of the messages 
 		// relation that must all be deleted anyway. We don't want to clear foreign keys first and then fail to delete them.
@@ -3918,7 +3918,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	public function linkExists(ActiveRecord $model){		
 		
-		if($model->className()=="\GO\Base\Model_SearchCacheRecord"){
+		if($model->className()=="GO\Base\Model_SearchCacheRecord"){
 			$model_id = $model->model_id;
 			$model_type_id = $model->model_type_id;
 		}else
@@ -3930,8 +3930,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(!$model_id)
 			return false;
 		
-		$table = $this->className()=="\GO\Base\Model_SearchCacheRecord" ? \GO::getModel($this->model_name)->model()->tableName() : $this->tableName();		
-		$this_id = $this->className()=="\GO\Base\Model_SearchCacheRecord" ? $this->model_id : $this->id;
+		$table = $this->className()=="GO\Base\Model_SearchCacheRecord" ? \GO::getModel($this->model_name)->model()->tableName() : $this->tableName();
+		$this_id = $this->className()=="GO\Base\Model_SearchCacheRecord" ? $this->model_id : $this->id;
 		
 		$sql = "SELECT count(*) FROM `go_links_$table` WHERE ".
 			"`id`=".intval($this_id)." AND model_type_id=".$model_type_id." AND `model_id`=".intval($model_id);

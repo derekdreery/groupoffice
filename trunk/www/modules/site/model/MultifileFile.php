@@ -50,7 +50,7 @@ class MultifileFile extends \GO\Base\Db\ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-				'file'=>array('type'=>self::BELONGS_TO, 'model'=>"\GO\Files\Model\File", 'field'=>'file_id')
+				'file'=>array('type'=>self::BELONGS_TO, 'model'=>"GO\Files\Model\File", 'field'=>'file_id')
 		 );
 	 }
 	 

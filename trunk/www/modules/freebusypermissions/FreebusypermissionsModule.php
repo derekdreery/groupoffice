@@ -10,7 +10,7 @@ class FreebusypermissionsModule extends \GO\Base\Module{
 	 * Initialize the listeners for the ActiveRecords
 	 */
 	public static function initListeners(){	
-		\GO\Calendar\Model\Event::model()->addListener('load', '\GO\Freebusypermissions\FreebusypermissionsModule', 'has_freebusy_access');
+		\GO\Calendar\Model\Event::model()->addListener('load', 'GO\Freebusypermissions\FreebusypermissionsModule', 'has_freebusy_access');
 	}
 	
 	public function autoInstall() {

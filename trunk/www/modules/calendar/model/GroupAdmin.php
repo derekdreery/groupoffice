@@ -61,7 +61,7 @@ class GroupAdmin extends \GO\Base\Db\ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-			 'group' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Calendar\Model\Group', 'field'=>'group_id')
+			 'group' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Calendar\Model\Group', 'field'=>'group_id')
 		 );
 	 }
 	 

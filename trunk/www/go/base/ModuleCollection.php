@@ -32,7 +32,7 @@ class ModuleCollection extends Model\ModelCollection{
 	
 	private $_allowedModules;
 	
-	public function __construct($model='\GO\Base\Model\Module'){
+	public function __construct($model='GO\Base\Model\Module'){
 
 		parent::__construct($model);
 	}

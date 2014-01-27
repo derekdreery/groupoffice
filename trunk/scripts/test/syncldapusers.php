@@ -36,7 +36,7 @@ $rec['user_id']=1;
 $db->insert_row('ldap_sync',$rec);
 
 // overwrites openlog from Group-Office.php
-openlog("\GO\UserSyncLDAP", LOG_PID | LOG_CONS | LOG_ODELAY, LOG_LOCAL0);
+openlog("GO\UserSyncLDAP", LOG_PID | LOG_CONS | LOG_ODELAY, LOG_LOCAL0);
 syslog(LOG_INFO, "GO-UserSyncLDAP started ".date("H:i").".");
 
 syslog(LOG_INFO, "Sending query for all users to LDAP server");

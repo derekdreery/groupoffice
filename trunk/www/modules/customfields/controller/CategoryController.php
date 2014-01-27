@@ -5,7 +5,7 @@ namespace GO\Customfields\Controller;
 
 class Category extends \GO\Base\Controller\AbstractModelController{
 	
-	protected $model = '\GO\Customfields\Model\Category';	
+	protected $model = 'GO\Customfields\Model\Category';
 
 
 	protected function actionSaveSort($params){		

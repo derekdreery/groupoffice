@@ -104,14 +104,14 @@ class Task extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	public function customfieldsModel(){
-		return "\GO\Tasks\Customfields\Model\Task";
+		return "GO\Tasks\Customfields\Model\Task";
 	}
 	
 	public function relations() {
 		return array(
-				'tasklist' => array('type' => self::BELONGS_TO, 'model' => '\GO\Tasks\Model\Tasklist', 'field' => 'tasklist_id', 'delete' => false),
-				'category' => array('type' => self::BELONGS_TO, 'model' => '\GO\Tasks\Model\Category', 'field' => 'category_id', 'delete' => false),
-				'project' => array('type' => self::BELONGS_TO, 'model' => '\GO\Projects\Model\Project', 'field' => 'project_id', 'delete' => false)
+				'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO\Tasks\Model\Tasklist', 'field' => 'tasklist_id', 'delete' => false),
+				'category' => array('type' => self::BELONGS_TO, 'model' => 'GO\Tasks\Model\Category', 'field' => 'category_id', 'delete' => false),
+				'project' => array('type' => self::BELONGS_TO, 'model' => 'GO\Projects\Model\Project', 'field' => 'project_id', 'delete' => false)
 				);
 	}
 	
@@ -145,7 +145,7 @@ class Task extends \GO\Base\Db\ActiveRecord {
 //		$modelName = $isSearchCacheModel ? $model->model_name : $model->className;
 //		$modelId = $isSearchCacheModel ? $model->model_id : $model->id;
 //		echo $modelName;
-//		if($modelName=="\GO\Projects\Model\Project")
+//		if($modelName=="GO\Projects\Model\Project")
 //		{
 //			$this->project_id=$modelId;
 //			$this->save();

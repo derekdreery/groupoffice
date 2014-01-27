@@ -82,7 +82,7 @@ GO.presidents.PresidentsGrid = function(config){
 		url: GO.url('presidents/president/store'),
 		fields: ['id','firstname','lastname','party_id','tookoffice','leftoffice','income', 'income_val'],
 		remoteSort: true,
-		model: 'GO_Presidents_Model_President'
+		model: 'GO\\Presidents\\Model\\President'
 	});
 	
 	//Adding the gridview to the grid panel

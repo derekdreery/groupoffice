@@ -206,13 +206,13 @@ class Website {
 		$classFile = \GO::config()->root_path . 'modules/' . $module_id . '/controller' . DIRECTORY_SEPARATOR . ucfirst($controller_id) . 'Controller.php';
 
 		if (is_file($classFile)) {
-			//if (is_subclass_of($className, '\GO\Sites\Components\AbstractFrontController')) {
+			//if (is_subclass_of($className, 'GO\Sites\Components\AbstractFrontController')) {
 			return array(
 					new $className($this),
 					$this->parseActionParams($action_id),
 			);
 			//}
-			//echo is_subclass_of($className, '\GO\Sites\Components\AbstractFrontController')  ? "is" : "not";
+			//echo is_subclass_of($className, 'GO\Sites\Components\AbstractFrontController')  ? "is" : "not";
 			return null;
 		}
 	}

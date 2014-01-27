@@ -55,7 +55,7 @@ class Settings extends \GO\Base\Model\AbstractUserDefaultModel{
 	
 	public function relations() {
 		return array(
-				'calendar' => array('type'=>self::BELONGS_TO, 'model'=>'\GO\Calendar\Model\Calendar', 'field'=>'calendar_id')
+				'calendar' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Calendar\Model\Calendar', 'field'=>'calendar_id')
 		);
 	}
 	

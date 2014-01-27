@@ -6,7 +6,7 @@ namespace GO\Postfixadmin\Controller;
 
 class Alias extends \GO\Base\Controller\AbstractModelController {
 
-	protected $model = '\GO\Postfixadmin\Model\Alias';
+	protected $model = 'GO\Postfixadmin\Model\Alias';
 	
 	
 	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {

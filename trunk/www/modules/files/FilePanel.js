@@ -12,7 +12,7 @@
  */
 
 GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
-	model_name : "GO_Files_Model_File",
+	model_name : "GO\\Files\\Model\\File",
 
 	noFileBrowser:true,
 

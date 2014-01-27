@@ -63,7 +63,7 @@ GO.files.RecentFilesGrid = Ext.extend(GO.grid.GridPanel,{
 				var selectionModel = grid.getSelectionModel();
 				var record = selectionModel.getSelected();
 				
-				GO.linkHandlers["GO_Files_Model_File"].call(this, record.id);
+				GO.linkHandlers["GO\\Files\\Model\\File"].call(this, record.id);
 				
 			},
 			scope:this

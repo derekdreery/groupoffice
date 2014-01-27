@@ -41,7 +41,7 @@ class Menu extends \GO\Base\Controller\AbstractJsonController {
 		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()->addCondition('site_id', $menu->site_id);
 		$findParams = \GO\Base\Db\FindParams::newInstance()->criteria($findCriteria);
 		
-		$store = new \GO\Base\Data\DbStore('\GO\Site\Model\Content', new \GO\Base\Data\ColumnModel('\GO\Site\Model\Content'), $_REQUEST,$findParams);
+		$store = new \GO\Base\Data\DbStore('GO\Site\Model\Content', new \GO\Base\Data\ColumnModel('GO\Site\Model\Content'), $_REQUEST,$findParams);
 		
 		echo $this->renderStore($store);
 	}

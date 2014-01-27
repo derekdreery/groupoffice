@@ -1027,7 +1027,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 					
 					if($linkedMessage){
 						
-						$tag = $this->_createAutoLinkTag($account, "\GO\Addressbook\Model\Contact", $contact->id);
+						$tag = $this->_createAutoLinkTag($account, "GO\Addressbook\Model\Contact", $contact->id);
 
 
 						if($html){
@@ -1066,7 +1066,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 		$findParams = \GO\Base\Db\FindParams::newInstance()
 				->select('t.*')
 				->joinModel(array(
-						'model' => '\GO\Email\Model\AccountSort',
+						'model' => 'GO\Email\Model\AccountSort',
 						'foreignField' => 'account_id', //defaults to primary key of the remote model
 						'localField' => 'account_id', //defaults to primary key of the model
 						'type' => 'LEFT'
@@ -1501,11 +1501,11 @@ class Message extends \GO\Base\Controller\AbstractController {
 				\GO\Savemailas\Model\LinkedEmail::model()->createFromImapMessage($imapMessage, $contact);
 
 //				$response['htmlbody']='<div class="em-autolink-message">'.
-//								sprintf(\GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\'\GO\Addressbook\Model\Contact\'].call(this, '.
+//								sprintf(\GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\'GO\Addressbook\Model\Contact\'].call(this, '.
 //												$contact->id.');">'.$contact->name.'</div>').
 //								$response['htmlbody'];
 				
-				$response['autolink_items'][] = '<span class="em-autolink-link" onclick="GO.linkHandlers[\'\GO\Addressbook\Model\Contact\'].call(this, '.
+				$response['autolink_items'][] = '<span class="em-autolink-link" onclick="GO.linkHandlers[\'GO\Addressbook\Model\Contact\'].call(this, '.
 												$contact->id.');">'.$contact->name.'</span>';
 			}
 		}
@@ -1657,7 +1657,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 		$folder = \GO\Files\Model\Folder::model()->findByPk($params['folder_id']);
 		
 		if(!$folder){
-			trigger_error("\GO\Email\Controller\Message::actionSaveAttachment(".$params['folder_id'].") folder not found", E_USER_WARNING);
+			trigger_error("GO\Email\Controller\Message::actionSaveAttachment(".$params['folder_id'].") folder not found", E_USER_WARNING);
 			throw new \GO\Base\Exception\NotFound("Specified folder not found");
 		}
 		
