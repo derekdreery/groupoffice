@@ -207,7 +207,7 @@ class ImapMailbox extends \GO\Base\Model {
 	
 	public function rename($name){
 		
-	  if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model_Acl::READ_PERMISSION)
+	  if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
 		  throw new \GO\Base\Exception\AccessDenied();
 		
 		$this->_validateName($name);
@@ -221,14 +221,14 @@ class ImapMailbox extends \GO\Base\Model {
 	}
 	
 	public function delete(){	
-	  if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model_Acl::READ_PERMISSION)
+	  if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
 		 throw new \GO\Base\Exception\AccessDenied();
 	  
 	  return $this->getAccount()->openImapConnection()->delete_folder($this->name);
 	}
 	
 	public function truncate(){
-	  if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model_Acl::READ_PERMISSION)
+	  if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
 		  throw new \GO\Base\Exception\AccessDenied();
 		$imap = $this->getAccount()->openImapConnection($this->name);
 		$sort = $imap->sort_mailbox();
@@ -251,7 +251,7 @@ class ImapMailbox extends \GO\Base\Model {
 	}
 	
 	public function createChild($name, $subscribe=true){
-	  if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model_Acl::READ_PERMISSION)
+	  if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
 		  throw new \GO\Base\Exception\AccessDenied();
 		$newMailbox = empty($this->name) ? $name : $this->name.$this->delimiter.$name;
 		
@@ -263,7 +263,7 @@ class ImapMailbox extends \GO\Base\Model {
 	}
 	
 	public function move(ImapMailbox $targetMailbox){
-		if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model_Acl::READ_PERMISSION)
+		if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
 		  throw new \GO\Base\Exception\AccessDenied();
 		$newMailbox = "";
 		

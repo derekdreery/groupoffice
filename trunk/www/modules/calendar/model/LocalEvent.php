@@ -83,7 +83,7 @@ class LocalEvent extends \GO\Base\Model {
 	 * @param string $periodStartTime
 	 * @param string $periodEndTime 
 	 */
-	public function LocalEvent(Event $event, $periodStartTime, $periodEndTime){
+	public function __construct(Event $event, $periodStartTime, $periodEndTime){
 		$this->_event = $event;
 		$this->_startTime = $periodStartTime;
 		$this->_endTime = $periodEndTime;
@@ -460,7 +460,7 @@ class LocalEvent extends \GO\Base\Model {
 						$this->_event->read_only || 
 						!$this->_event->is_organizer || 
 						$this->isPrivate() && \GO::user()->id != $this->_event->user_id || 
-						$this->_event->permissionLevel < \GO\Base\Model_Acl::WRITE_PERMISSION;
+						$this->_event->permissionLevel < \GO\Base\Model\Acl::WRITE_PERMISSION;
 	}
 	
 	/**
