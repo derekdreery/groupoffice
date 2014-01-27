@@ -226,7 +226,7 @@ GO.files.FileBrowser = function(config){
 
 	if(GO.customfields)
 	{
-		GO.customfields.addColumns("GO\\Files\\Model\\File", fields);
+		GO.customfields.addColumns("GO_Files_Model_File", fields);
 	}
 
 	this.gridStore = new GO.data.JsonStore({
@@ -2100,7 +2100,7 @@ GO.files.createSelectFileBrowser = function(){
 }
 
 
-GO.linkHandlers["GO\\Files\\Model\\File"]=function(id, record){
+GO.linkHandlers["GO_Files_Model_File"]=function(id, record){
 	//GO.files.showFilePropertiesDialog(id+"");
 	if(!GO.files.linkFileWindow){
 		var filePanel = new GO.files.FilePanel();
@@ -2115,13 +2115,13 @@ GO.linkHandlers["GO\\Files\\Model\\File"]=function(id, record){
 	GO.files.linkFileWindow.show();
 	return GO.files.linkFileWindow;
 }
-GO.linkPreviewPanels["GO\\Files\\Model\\File"]=function(config){
+GO.linkPreviewPanels["GO_Files_Model_File"]=function(config){
 	config = config || {};
 	return new GO.files.FilePanel(config);
 }
 
 
-GO.linkHandlers["GO\\Files\\Model\\Folder"]=function(id, record){
+GO.linkHandlers["GO_Files_Model_Folder"]=function(id, record){
 	//GO.files.showFilePropertiesDialog(id+"");
 	if(!GO.files.linkFolderWindow){
 		var filePanel = new GO.files.FolderPanel();
@@ -2136,7 +2136,7 @@ GO.linkHandlers["GO\\Files\\Model\\Folder"]=function(id, record){
 	GO.files.linkFolderWindow.show();
 	return GO.files.linkFolderWindow;
 }
-GO.linkPreviewPanels["GO\\Files\\Model\\Folder"]=function(config){
+GO.linkPreviewPanels["GO_Files_Model_Folder"]=function(config){
 	config = config || {};
 	return new GO.files.FolderPanel(config);
 }

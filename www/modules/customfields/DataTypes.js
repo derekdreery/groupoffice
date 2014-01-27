@@ -1,9 +1,9 @@
 GO.customfields.dataTypes={
-	"GO\\Customfields\\Customfieldtype\\User":{
+	"GO_Customfields_Customfieldtype_User":{
 		label : GO.lang.strUser,
 		getFormField : function(customfield, config){
 
-			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
+			var f = GO.customfields.dataTypes["GO_Customfields_Customfieldtype_Text"].getFormField(customfield, config);
 
 			delete f.name;
 
@@ -20,11 +20,11 @@ GO.customfields.dataTypes={
 			return f;
 		}
     },
-	"GO\\Customfields\\Customfieldtype\\Datetime":{
+	"GO_Customfields_Customfieldtype_Datetime":{
 		label:'Date time',
 		getFormField : function(customfield, config){			
 			
-			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
+			var f = GO.customfields.dataTypes["GO_Customfields_Customfieldtype_Text"].getFormField(customfield, config);
 
 			delete f.anchor;
 
@@ -38,11 +38,11 @@ GO.customfields.dataTypes={
 		}
 	},
 
-	"GO\\Customfields\\Customfieldtype\\Date" : {
+	"GO_Customfields_Customfieldtype_Date" : {
 		label:'Date',
 		getFormField : function(customfield, config){
 
-			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
+			var f = GO.customfields.dataTypes["GO_Customfields_Customfieldtype_Text"].getFormField(customfield, config);
 
 			delete f.anchor;
 
@@ -54,11 +54,11 @@ GO.customfields.dataTypes={
 		}
 	},
 
-	"GO\\Customfields\\Customfieldtype\\Number" : {
+	"GO_Customfields_Customfieldtype_Number" : {
 		label : 'Number',
 		getFormField : function(customfield, config){
 
-			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
+			var f = GO.customfields.dataTypes["GO_Customfields_Customfieldtype_Text"].getFormField(customfield, config);
 
 			return Ext.apply(f, {
 				xtype:'numberfield',
@@ -66,11 +66,11 @@ GO.customfields.dataTypes={
 			});
 		}
 	},
-	"GO\\Customfields\\Customfieldtype\\Checkbox" :{
+	"GO_Customfields_Customfieldtype_Checkbox" :{
 		label: 'Checkbox',
 		getFormField : function(customfield, config){
 
-			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
+			var f = GO.customfields.dataTypes["GO_Customfields_Customfieldtype_Text"].getFormField(customfield, config);
 
 			delete f.fieldLabel;
 
@@ -81,11 +81,11 @@ GO.customfields.dataTypes={
 			});
 		}
 	},
-	"GO\\Customfields\\Customfieldtype\\BinaryCombobox" :{
+	"GO_Customfields_Customfieldtype_BinaryCombobox" :{
 		label: 'Binary Combobox',
 		getFormField : function(customfield, config){
 
-			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
+			var f = GO.customfields.dataTypes["GO_Customfields_Customfieldtype_Text"].getFormField(customfield, config);
 
 			delete f.fieldLabel;
 
@@ -110,10 +110,10 @@ GO.customfields.dataTypes={
 			});
 		}
 	},
-	"GO\\Customfields\\Customfieldtype\\Textarea" : {
+	"GO_Customfields_Customfieldtype_Textarea" : {
 		label : 'Textarea',
 		getFormField : function(customfield, config){
-			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
+			var f = GO.customfields.dataTypes["GO_Customfields_Customfieldtype_Text"].getFormField(customfield, config);
 
                         if(!customfield.height)
                         {
@@ -127,10 +127,10 @@ GO.customfields.dataTypes={
 			}, config);
 		}
 	},
-	"GO\\Customfields\\Customfieldtype\\Html" : {
+	"GO_Customfields_Customfieldtype_Html" : {
 		label : 'HTML',
 		getFormField : function(customfield, config){
-			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
+			var f = GO.customfields.dataTypes["GO_Customfields_Customfieldtype_Text"].getFormField(customfield, config);
 
 			return Ext.apply(f, {
 				xtype:'xhtmleditor',
@@ -139,10 +139,10 @@ GO.customfields.dataTypes={
 			}, config);
 		}
 	},
-	"GO\\Customfields\\Customfieldtype\\Select" : {
+	"GO_Customfields_Customfieldtype_Select" : {
 		label : 'Select',
 		getFormField : function(customfield, config){
-			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
+			var f = GO.customfields.dataTypes["GO_Customfields_Customfieldtype_Text"].getFormField(customfield, config);
 			var store = new GO.data.JsonStore({
 				//url: GO.settings.modules.customfields.url+'json.php',
 				url:GO.url('customfields/field/selectOptions'),
@@ -193,15 +193,15 @@ GO.customfields.dataTypes={
 		}
 	},
 	/*
-	 * A GO\\Customfields\\Customfieldtype\\Treeselect consists of one master and one or more slave comboboxes.
+	 * A GO_Customfields_Customfieldtype_Treeselect consists of one master and one or more slave comboboxes.
 	 * The slave is loaded with data depending on the selection of it's parent.
 	 * The last slave can be a multiselect combo (superboxselect).
 	 */
-	"GO\\Customfields\\Customfieldtype\\Treeselect" : {
+	"GO_Customfields_Customfieldtype_Treeselect" : {
 		label : 'Tree select',
 		getFormField : function(customfield, config){
 
-			//store the slaves of this GO\\Customfields\\Customfieldtype\\Treeselect in an array
+			//store the slaves of this GO_Customfields_Customfieldtype_Treeselect in an array
 			if(!GO.customfields.slaves)
 				GO.customfields.slaves={};
 
@@ -212,7 +212,7 @@ GO.customfields.dataTypes={
 
 			GO.customfields.slaves[treemaster_field_id][parseInt(customfield.nesting_level)]=customfield.dataname;
 
-			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
+			var f = GO.customfields.dataTypes["GO_Customfields_Customfieldtype_Text"].getFormField(customfield, config);
 
 			var isMaster = customfield.nesting_level==0;
 
@@ -276,8 +276,8 @@ GO.customfields.dataTypes={
 									return true;
 							});
 							//add listener to form to set the correct form values and store parameters
-							if(!GO.util.empty(formPanel) && !formPanel["GO\\Customfields\\Customfieldtype\\TreeselectListenerAdded"]){
-								formPanel["GO\\Customfields\\Customfieldtype\\TreeselectListenerAdded"]=true;
+							if(!GO.util.empty(formPanel) && !formPanel["GO_Customfields_Customfieldtype_TreeselectListenerAdded"]){
+								formPanel["GO_Customfields_Customfieldtype_TreeselectListenerAdded"]=true;
 
 								formPanel.on('actioncomplete', function(form, action){
 									if(action.type=='load'){
@@ -366,13 +366,13 @@ GO.customfields.dataTypes={
 
 		}
 	},
-	"GO\\Customfields\\Customfieldtype\\TreeselectSlave" : {
+	"GO_Customfields_Customfieldtype_TreeselectSlave" : {
 		label:'Tree select slave',
 		getFormField : function(customfield, config){
-			return GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Treeselect"].getFormField(customfield, config);
+			return GO.customfields.dataTypes["GO_Customfields_Customfieldtype_Treeselect"].getFormField(customfield, config);
 		}
 	},
-	"GO\\Customfields\\Customfieldtype\\Heading ": {
+	"GO_Customfields_Customfieldtype_Heading ": {
 		label : 'Heading',
 		getFormField : function(customfield, config){
 			return new GO.form.HtmlComponent(Ext.apply({
@@ -380,7 +380,7 @@ GO.customfields.dataTypes={
 			}, config));
 		}
 	},
-	"GO\\Customfields\\Customfieldtype\\Function" : {
+	"GO_Customfields_Customfieldtype_Function" : {
 		label : 'Function',
 		getFormField : function(customfield, config){
 			return new Ext.form.Hidden(Ext.apply({
@@ -389,7 +389,7 @@ GO.customfields.dataTypes={
 //			return false;
 		}
 	},
-	"GO\\Customfields\\Customfieldtype\\Text": {
+	"GO_Customfields_Customfieldtype_Text": {
 		label : 'Text',
 		getFormField : function(customfield, config){
 
@@ -423,7 +423,7 @@ GO.customfields.dataTypes={
 			}, config);
 		}
 	},
-	"GO\\Customfields\\Customfieldtype\\EncryptedText": {
+	"GO_Customfields_Customfieldtype_EncryptedText": {
 		label : 'Encrypted text',
 		getFormField : function(customfield, config) {
 			config = config || {};
@@ -447,7 +447,7 @@ GO.customfields.dataTypes={
 			}, config);
 		}
 	},
-	"GO\\Customfields\\Customfieldtype\\Infotext": {
+	"GO_Customfields_Customfieldtype_Infotext": {
 		label : 'Info text',
 		getFormField : function(customfield, config){
 
@@ -460,10 +460,10 @@ GO.customfields.dataTypes={
 			}, config);
 		}
 	},
-	"GO\\Customfields\\Customfieldtype\\Yesno" : {
+	"GO_Customfields_Customfieldtype_Yesno" : {
 		label : 'Yes No Field',
 		getFormField : function(customfield, config){
-			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
+			var f = GO.customfields.dataTypes["GO_Customfields_Customfieldtype_Text"].getFormField(customfield, config);
 
 			var store = new Ext.data.SimpleStore({
 				id: 'id',

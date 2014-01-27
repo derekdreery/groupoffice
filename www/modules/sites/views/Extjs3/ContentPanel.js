@@ -35,7 +35,7 @@ GO.sites.ContentPanel = Ext.extend(GO.grid.GridPanel,{
 				site_id:0
 			},
 			remoteSort: true,
-			model:"GO\\Sites\\Model\\Content"
+			model:"GO_Sites_Model_Content"
 		});
 	
 		config.columns=[

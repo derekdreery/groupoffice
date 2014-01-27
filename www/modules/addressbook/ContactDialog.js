@@ -182,11 +182,11 @@ GO.addressbook.ContactDialog = function(config)
 				
 	items.push(this.selectAddresslistsPanel);
 	
-	if(GO.customfields && GO.customfields.types["GO\\Addressbook\\Model\\Contact"])
+	if(GO.customfields && GO.customfields.types["GO_Addressbook_Model_Contact"])
 	{
-		for(var i=0;i<GO.customfields.types["GO\\Addressbook\\Model\\Contact"].panels.length;i++)
+		for(var i=0;i<GO.customfields.types["GO_Addressbook_Model_Contact"].panels.length;i++)
 		{
-			items.push(GO.customfields.types["GO\\Addressbook\\Model\\Contact"].panels[i]);
+			items.push(GO.customfields.types["GO_Addressbook_Model_Contact"].panels[i]);
 		}
 	}
 

@@ -13,7 +13,7 @@
  
 GO.presidents.PresidentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 
-	customFieldType : "GO\\Presidents\\Model\\President",
+	customFieldType : "GO_Presidents_Model_President",
 
 	initComponent : function(){
 		

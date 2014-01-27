@@ -69,28 +69,28 @@ foreach($moduleObjects as $moduleObject)
 
 
 				GO.customfields.columns["'.String::escape_javascript($model->extendsModel()).'"]=[];
-				
+
 
 				GO.customfields.types["'.String::escape_javascript($model->extendsModel()).'"]={
 					name: "'.\GO::getModel($model->extendsModel())->localizedName.'",
 					panels: []
 				};'."\n";
-				
+
 				$stmt = \GO\Customfields\Model\Category::model()->findByModel($model->extendsModel());
-				
+
 				while($category = $stmt->fetch()){
-					
+
 					$fields = array();
 					$fstmt = $category->fields();
 					while($field = $fstmt->fetch()){
 						$fields[]=$field->toJsonArray();
 					}
-                                                                            
-                                        
+
+
 					// Makes global, client-side, editable form panels for every customfield category
 					if($category->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION))
 						$GO_SCRIPTS_JS .= "\n\n".'GO.customfields.types["'.String::escape_javascript($model->extendsModel()).'"].panels.push({xtype : "customformpanel", itemId:"cf-panel-'.$category->id.'", category_id: '.$category->id.', title : "'.htmlspecialchars($category->name,ENT_QUOTES, 'UTF-8').'", customfields : '.json_encode($fields).'});'."\n";
-					
+
 					/**
 					 * Registers customfield column information in a global, client-side object, ordered by model.
 					 * Also, this loop ensures that every customfield data being used has such information
@@ -99,11 +99,11 @@ foreach($moduleObjects as $moduleObject)
 					foreach($fields as $field) {
 						$align = $field['datatype']=='GO\Customfields\Customfieldtype\Number' || $field['datatype']=='GO\Customfields\Customfieldtype\Date' || $field['datatype']=='GO\Customfields\Customfieldtype\Datetime' ? 'right' : 'left';
             $exclude_from_grid = $field['exclude_from_grid'] || $field['datatype']=='GO\Customfields\Customfieldtype\Heading' ? 'true' : 'false';
-						
+
 						$GO_SCRIPTS_JS .= 'GO.customfields.columns["'.String::escape_javascript($model->extendsModel()).'"].push({'.
 								'header: "'.\GO\Base\Util\String::escape_javascript($field['name']).'",'.
 								'dataIndex: "'.$field['dataname'].'" ,'.
-								'datatype:"'.$field['datatype'].'", '.								
+								'datatype:"'.$field['datatype'].'", '.
 								'align:"'.$align.'", '.
 								'sortable:true,'.
 								'id: "'.$field['dataname'].'",'.

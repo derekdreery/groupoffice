@@ -10,7 +10,7 @@ GO.moduleManager.on('moduleconstructed',function(mm,moduleName,panel){
 				width: 300
 			},{
 				xtype:'checkbox',
-				name:'GO\\Tasks\\Model\\Tasklist\\change\\all\\names',
+				name:'GO_Tasks_Model_Tasklist_change_all_names',
 				fieldLabel:GO.tasks.lang.globalsettings_allchangelabel,
 				listeners: {
 	  			 "check": function(cb, isenabled) {

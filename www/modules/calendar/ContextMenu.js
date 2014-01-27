@@ -134,7 +134,7 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 //			this.actionCreateMail.setDisabled(event.has_other_participants==0);
 
 		this.newMenuItem.setLinkConfig({
-			model_name:"GO\\Calendar\\Model\\Event",
+			model_name:"GO_Calendar_Model_Event",
 			model_id:event.event_id,
 			text:event.name
 		});
@@ -185,7 +185,7 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 	},
 	showEventInfoDialog : function()
 	{
-		GO.linkHandlers["GO\\Calendar\\Model\\Event"].call(this, this.event.event_id);
+		GO.linkHandlers["GO_Calendar_Model_Event"].call(this, this.event.event_id);
 	},
 	menuHandler : function()
 	{

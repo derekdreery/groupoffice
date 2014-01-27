@@ -13,7 +13,7 @@
 
 GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 	
-	model_name : "GO\\Addressbook\\Model\\Company",
+	model_name : "GO_Addressbook_Model_Company",
 
 	stateId : 'ab-company-panel',
 
@@ -285,8 +285,8 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 											
 						'<tpl for="employees">'+
 							'<tr>'+
-								'<td><div class="go-icon go-model-icon-GO\\Addressbook\\Model\\Contact"></div></td>'+
-								'<td><a href="#" onclick="GO.linkHandlers[\'GO\\Addressbook\\Model\\Contact\'].call(this, {id});">{name}</a></td>'+
+								'<td><div class="go-icon go-model-icon-GO_Addressbook_Model_Contact"></div></td>'+
+								'<td><a href="#" onclick="GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, {id});">{name}</a></td>'+
 								'<td>{function}</td>'+
 								'<td>{[this.mailTo(values.email, values.name)]}</td>'+
 							'</tr>'+							
@@ -504,7 +504,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 				this.scheduleCallItem.setLinkConfig({
 					name: name,
 					model_id: this.data.id, 
-					model_name:"GO\\Addressbook\\Model\\Company",
+					model_name:"GO_Addressbook_Model_Company",
 					callback:this.reload,
 					scope: this
 				});

@@ -176,7 +176,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	
 	lookupContact : function(){
 		if(this.data.sender_contact_id){
-			GO.linkHandlers["GO\\Addressbook\\Model\\Contact"].call(this, this.data.sender_contact_id);
+			GO.linkHandlers["GO_Addressbook_Model_Contact"].call(this, this.data.sender_contact_id);
 		}else{
 			GO.addressbook.searchSender(this.data.sender, this.data.from);
 		}
@@ -456,9 +456,9 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 							GO.request({
 								url:'core/unlink',
 								params:{
-									model_name1:'GO\\Addressbook\\Model\\Contact',
+									model_name1:'GO_Addressbook_Model_Contact',
 									id1:this.data.sender_contact_id,
-									model_name2:'GO\\Savemailas\\Model\\LinkedEmail',
+									model_name2:'GO_Savemailas_Model_LinkedEmail',
 									id2:this.data.contact_linked_message_id
 								},
 								maskEl:Ext.getBody()
@@ -494,9 +494,9 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 							GO.request({
 								url:'core/unlink',
 								params:{
-									model_name1:'GO\\Addressbook\\Model\\Company',
+									model_name1:'GO_Addressbook_Model_Company',
 									id1:this.data.sender_company_id,
-									model_name2:'GO\\Savemailas\\Model\\LinkedEmail',
+									model_name2:'GO_Savemailas_Model_LinkedEmail',
 									id2:this.data.company_linked_message_id
 								},
 								maskEl:Ext.getBody()

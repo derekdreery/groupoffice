@@ -26,7 +26,7 @@ GO.addressbook.SelectContact = function(config){
 	var fields = {fields: ['id', 'cf', 'name', 'salutation', 'email', 'first_name', 'middle_name','last_name', 'home_phone', 'work_phone', 'cellular', 'cellular2', 'company_id','company_name','address','address_no','zip','city','state','country','ab_name','go_user_id','department'], columns:[]};
 	if(GO.customfields)
 	{
-		GO.customfields.addColumns("GO\\Addressbook\\Model\\Contact", fields);
+		GO.customfields.addColumns("GO_Addressbook_Model_Contact", fields);
 	}
 	
 	config.store = new GO.data.JsonStore({
