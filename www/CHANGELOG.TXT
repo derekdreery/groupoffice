@@ -1,3 +1,5 @@
+- Calendar: Fixed display of mini calendar in older themes 
+
 27-01-2014 5.0.37
 - Fixed bug that mail is not saved in the sent items folder when the addressbook module is not installed.
 
