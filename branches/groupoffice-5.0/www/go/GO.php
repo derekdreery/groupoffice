@@ -540,8 +540,7 @@ class GO{
 							}
 						}
 					}
-					GO::debug("WARNING: could not find UTF8 locale");
-					
+					GO::debug("WARNING: could not find UTF8 locale. Run locale -a and set \$config['locale_all']. See https://www.group-office.com/wiki/Configuration_file#Localization_settings_list");					
 				}
 			}
 //			exit(GO::session()->values['locale_all']);
