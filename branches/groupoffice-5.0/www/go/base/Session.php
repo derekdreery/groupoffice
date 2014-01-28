@@ -159,6 +159,9 @@ class GO_Base_Session extends GO_Base_Observable{
 		$username = GO::user() ? GO::user()->username : 'notloggedin';				
 		
 		GO::debug("Logout called for ".$username);
+		
+		if(!empty(GO::session()->values['countLogin']))
+			$this->_log(GO_Log_Model_Log::ACTION_LOGOUT);
 
 		$old_session = $_SESSION;
 		$_SESSION=array();
@@ -181,8 +184,7 @@ class GO_Base_Session extends GO_Base_Observable{
 
 		$this->fireEvent('logout', array($old_session));
 		
-		if(!empty(GO::session()->values['countLogin']))
-			$this->_log(GO_Log_Model_Log::ACTION_LOGOUT);
+		
 		
 		GO::infolog("LOGOUT for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 	}
