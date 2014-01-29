@@ -81,3 +81,10 @@ width:6px;
 	background-image:url(../../../../views/Extjs3/ext/resources/images/default/layout/panel-title-light-bg.gif) !important;
 	border-bottom:1px solid #98C0F4 !important;
 }
+
+.cal-date-picker-wrap{
+	width:210px;
+	margin:auto;
+	margin-top: 4px;
+	margin-bottom: 4px;
+}

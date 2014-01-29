@@ -55,6 +55,9 @@ class GO_Base_Util_Date {
 		
 		return $hours.':'.$minutes;
 	}
+	
+	
+	private static $holidays;
 
 	/**
 	 * Returns true if the time is a holiday or in the weekend
@@ -69,15 +72,20 @@ class GO_Base_Util_Date {
 		if ($weekday==6 || $weekday==0) {
 			return true;
 		} else {
-			$startDate = date('d.m.Y', $time);
-			$endDate = date('d.m.Y', $time);
-
+			$date = date('Y-m-d', $time);
+			
 			$region = $region ? $region : GO::config()->language;
-
-			$hstmt = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startDate, $endDate, $region);
-			if ($hstmt && $hstmt->rowCount()) {
-				return true;
+			
+			$year = date('Y', $time);
+			if(!isset(self::$holidays[$region][$year])){
+				$hstmt = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($year.'-01-01', $year.'-12-31', $region);			
+				
+				foreach($hstmt as $h){
+					self::$holidays[$region][$year][$h->date]=$h->name;
+				}
 			}
+			
+			return isset(self::$holidays[$region][$year][$date]);
 		}
 		return false;
 	}

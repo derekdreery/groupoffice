@@ -7,7 +7,7 @@ table td {padding:0px;}
 table td:first-child{width:100px; height:24px}
 table th {text-align: left;}
 
-input[type=text],input[type=password] {
+input[type=text],input[type=password],input[type=email], select {
 	border:1px solid #aaa; 
 	padding:1px;
 	margin:2px;
@@ -17,6 +17,8 @@ input[type=text],input[type=password] {
 }
 
 label{width:150px;display:block}
+#Contact_sex label{width:100px;}
+
 textarea {width:350px; height:80px;border:1px solid #aaa; }
 
 .clear {clear:both;}

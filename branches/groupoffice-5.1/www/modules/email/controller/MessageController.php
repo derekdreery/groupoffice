@@ -696,46 +696,46 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					}
 				}
 			}
+		}
 			
-			if (!empty($params['reply_uid'])) {
-				//set \Answered flag on IMAP message
-				GO::debug("Reply");
-				$account2 = GO_Email_Model_Account::model()->findByPk($params['reply_account_id']);
-				$imap = $account2->openImapConnection($params['reply_mailbox']);
-				$imap->set_message_flag(array($params['reply_uid']), "\Answered");
-			}
+		if (!empty($params['reply_uid'])) {
+			//set \Answered flag on IMAP message
+			GO::debug("Reply");
+			$account2 = GO_Email_Model_Account::model()->findByPk($params['reply_account_id']);
+			$imap = $account2->openImapConnection($params['reply_mailbox']);
+			$imap->set_message_flag(array($params['reply_uid']), "\Answered");
+		}
 
-			if (!empty($params['forward_uid'])) {
-				//set forwarded flag on IMAP message
-				$account2 = GO_Email_Model_Account::model()->findByPk($params['forward_account_id']);
-				$imap = $account2->openImapConnection($params['forward_mailbox']);
-				$imap->set_message_flag(array($params['forward_uid']), "\$Forwarded");
-			}
+		if (!empty($params['forward_uid'])) {
+			//set forwarded flag on IMAP message
+			$account2 = GO_Email_Model_Account::model()->findByPk($params['forward_account_id']);
+			$imap = $account2->openImapConnection($params['forward_mailbox']);
+			$imap->set_message_flag(array($params['forward_uid']), "\$Forwarded");
+		}
 
-			/**
-			 * if you want ignore default sent folder message will be store in
-			 * folder wherefrom user sent it
-			 */
-			if ($account->ignore_sent_folder && !empty($params['reply_mailbox']))
-				$account->sent = $params['reply_mailbox'];
-			
-		
-			if ($account->sent) {
-				
-				GO::debug("Sent");
-				//if a sent items folder is set in the account then save it to the imap folder
-				$imap = $account->openImapConnection($account->sent);
-				if(!$imap->append_message($account->sent, $message, "\Seen")){
-					$response['success']=false;
-					$response['feedback'].='Failed to save send item to '.$account->sent;
-				}
-			}
+		/**
+		 * if you want ignore default sent folder message will be store in
+		 * folder wherefrom user sent it
+		 */
+		if ($account->ignore_sent_folder && !empty($params['reply_mailbox']))
+			$account->sent = $params['reply_mailbox'];
 
-			if (!empty($params['draft_uid'])) {
-				//remove drafts on send
-				$imap = $account->openImapConnection($account->drafts);
-				$imap->delete(array($params['draft_uid']));
+
+		if ($account->sent) {
+
+			GO::debug("Sent");
+			//if a sent items folder is set in the account then save it to the imap folder
+			$imap = $account->openImapConnection($account->sent);
+			if(!$imap->append_message($account->sent, $message, "\Seen")){
+				$response['success']=false;
+				$response['feedback'].='Failed to save send item to '.$account->sent;
 			}
+		}
+
+		if (!empty($params['draft_uid'])) {
+			//remove drafts on send
+			$imap = $account->openImapConnection($account->drafts);
+			$imap->delete(array($params['draft_uid']));
 		}
 
 		if(count($failedRecipients)){
