@@ -450,6 +450,14 @@ class Maintenance extends \GO\Base\Controller\AbstractController {
 		
 	}
 	
+	public static function ob_upgrade_log($buffer)
+	{
+		global $logFile;
+
+		file_put_contents($logFile, $buffer, FILE_APPEND);
+		return $buffer;
+	}
+	
 	protected function actionUpgrade($params) {
 		
 		if(!$this->isCli()){
@@ -487,16 +495,10 @@ class Maintenance extends \GO\Base\Controller\AbstractController {
 			die('Fatal error: Could not write to log file');
 		}
 
-		function ob_upgrade_log($buffer)
-		{
-			global $logFile;
-
-			file_put_contents($logFile, $buffer, FILE_APPEND);
-			return $buffer;
-		}
 		
 		
-		ob_start("ob_upgrade_log");
+		
+		ob_start("GO\Core\Controller\Maintenance::ob_upgrade_log");
 		
 		
 		echo "Updating ".\GO::config()->product_name." database\n";
@@ -585,9 +587,14 @@ class Maintenance extends \GO\Base\Controller\AbstractController {
 								try {
 									if(!empty($query))
 										\GO::getDbConnection()->query($query);
-								} catch (PDOException $e) {
+								} catch (\PDOException $e) {
 									//var_dump($e);
+									
+									
+									
 									echo $e->getMessage() . "\n";
+									
+									echo "Query: ".$query;
 //									if ($e->getCode() == 1091 || $e->getCode() == 1060) {
 //										//duplicate and drop errors. Ignore those on updates
 //									} else {

@@ -389,5 +389,5 @@ $updates['201401071347'][]="ALTER TABLE `go_users` ADD COLUMN `disk_quota` INT N
 $updates['201401071347'][]="ALTER TABLE `go_users` ADD COLUMN `disk_usage` INT NOT NULL DEFAULT '0' AFTER `files_folder_id`;";
 
 
-$updates['201401271043'][]="update `go_model_types` set `model_name` = replace(`model_name`,'_','\\');";
-$updates['201401271043'][]="update `go_search_cache` set `model_name` = replace(`model_name`,'_','\\');";
+$updates['201401271043'][]="update `go_model_types` set `model_name` = replace(`model_name`,'_','\\\\');";
+$updates['201401271043'][]="update `go_search_cache` set `model_name` = replace(`model_name`,'_','\\\\');";
