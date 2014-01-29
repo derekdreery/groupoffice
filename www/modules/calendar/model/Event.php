@@ -1601,7 +1601,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 		}elseif($vobject->aalarm){ //funambol sends old vcalendar 1.0 format
 			$aalarm = explode(';', (string) $vobject->aalarm);
-			if(isset($aalarm[0])) {				
+			if(!empty($aalarm[0])) {				
 				$p = Sabre\VObject\DateTimeParser::parse($aalarm[0]);
 				$this->reminder = $this->start_time-$p->format('U');
 			}
@@ -1844,8 +1844,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			//Add exception dates to Event
 			foreach($vobject->select('EXDATE') as $i => $exdate) {
-				$dt = $exdate->getDateTime();
-				$this->addException($dt->format('U'));
+				if(!empty($exdate->value)){
+					$dt = $exdate->getDateTime();
+					$this->addException($dt->format('U'));
+				}
 			}
 
 			if($importExternal && $this->isRecurring()){
