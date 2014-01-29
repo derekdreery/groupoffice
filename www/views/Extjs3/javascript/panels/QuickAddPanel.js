@@ -21,7 +21,7 @@ GO.panels.QuickAddPanel = Ext.extend(Ext.Container, {
 		
 		Ext.apply(this, {
 			border:false,
-			hidden:true,
+			hidden:false,
 			layout:{
 				type: 'hbox',
 				align: 'top',
@@ -66,6 +66,15 @@ GO.mainLayout.on('render', function(){
 
 		// Declare variable to keep the click state
 		toggleButton.enableClick = true;
+
+
+/////// FORCE VISIBILITY OF THE QUICK ADD MENU ///////
+		GO.quickAddPanel.setVisible(true);
+		menu.setVisible(true);
+		toggleButton.setVisible(false); // Hide toggle button
+		// align the menu to the button
+		menu.alignTo('quick-add-menu-collapse','r-l');
+/////// FORCE VISIBILITY OF THE QUICK ADD MENU ///////
 
 		// Set the click handler on the toggle button
 		toggleButton.on('click',function(){

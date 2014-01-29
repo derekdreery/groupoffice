@@ -249,7 +249,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 								}elseif(($filesFolder = $model->getFilesFolder(false)) && ($filesFolder->hasFileChildren() || $filesFolder->hasFolderChildren())){
 									echo '<tr><td colspan="99">Skipped delete because model has folder or files</td></tr>';
 								}else{									
-									$model->delete();
+									$model->delete(true);
 								}
 							}
 

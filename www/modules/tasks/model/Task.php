@@ -430,7 +430,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		
-		if(!empty($vobject->completed)){
+		if((string) $vobject->completed!=''){
 			$this->completion_time=$vobject->completed->getDateTime()->format('U');
 			$this->status='COMPLETED';
 		}else
