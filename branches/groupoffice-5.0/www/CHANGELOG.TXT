@@ -1,3 +1,6 @@
+- Fixed SyncML server for Funambol client
+- Some mailservers returned folders as "false".
+
 29-01-2014 5.0.38
 - Optimized ticket listing page
 - logout in activity log
