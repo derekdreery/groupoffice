@@ -163,6 +163,9 @@ class Session extends Observable{
 		$username = \GO::user() ? \GO::user()->username : 'notloggedin';				
 		
 		\GO::debug("Logout called for ".$username);
+		
+		if(!empty(\GO::session()->values['countLogin']))
+			$this->_log(\GO\Log\Model\Log::ACTION_LOGOUT);
 
 		$old_session = $_SESSION;
 		$_SESSION=array();
@@ -185,8 +188,6 @@ class Session extends Observable{
 
 		$this->fireEvent('logout', array($old_session));
 		
-		if(!empty(\GO::session()->values['countLogin']))
-			$this->_log(\GO\Log\Model\Log::ACTION_LOGOUT);
 		
 		\GO::infolog("LOGOUT for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 	}

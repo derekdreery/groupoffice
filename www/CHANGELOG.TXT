@@ -1,11 +1,25 @@
-22-01-2014 5.1.1
-- Merged fixes of 5.0.34-36
+29-01-2014 5.1.1
+- Merged fixes of 5.0.34-39
 
 22-01-2014 5.1.0
 - Calendar: Overview of participant and resource availability per day.
 - Tasks & Reminders: get reminder when another user puts a task in your task list
 - Added user quota support
 - Show ticket template per message
+
+
+- Fixed SyncML server for Funambol client
+- Some mailservers returned folders as "false".
+- Corrected postfixadmin_token error message. Should be serverclient_token.
+
+29-01-2014 5.0.38
+- Optimized ticket listing page
+- logout in activity log
+- Calendar: Fixed display of mini calendar in older themes 
+
+27-01-2014 5.0.37
+- Fixed bug that mail is not saved in the sent items folder when the addressbook module is not installed.
+
 
 24-01-2014 5.0.36
 - Previous version could make invalid dovecot confuration
