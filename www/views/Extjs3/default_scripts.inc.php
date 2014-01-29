@@ -200,7 +200,7 @@ if(\GO::config()->debug || !file_exists($path)) {
 		$scripts[]=$view_root_uri.'ext/src/locale/ext-lang-'.$extjsLang.'.js';
 	}
 
-	require(\GO::config()->root_path.'language/languages.inc.php');
+	require(\GO::config()->root_path.'language/languages.php');
 	$fp=fopen($cacheFolder->path().'/languages.js','w');
 	if(!$fp){
 		die('Could not write to cache directory');
