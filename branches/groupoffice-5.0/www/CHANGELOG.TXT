@@ -1,5 +1,6 @@
 - Fixed SyncML server for Funambol client
 - Some mailservers returned folders as "false".
+- Corrected postfixadmin_token error message. Should be serverclient_token.
 
 29-01-2014 5.0.38
 - Optimized ticket listing page
