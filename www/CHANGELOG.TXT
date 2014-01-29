@@ -1,3 +1,5 @@
+- Optimized ticket listing page
+- logout in activity log
 - Calendar: Fixed display of mini calendar in older themes 
 
 27-01-2014 5.0.37
