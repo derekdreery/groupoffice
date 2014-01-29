@@ -256,7 +256,7 @@ class Language{
 	 * @return array array('en'=>'English');
 	 */
 	public function getLanguages(){
-		require(\GO::config()->root_path.'language/languages.inc.php');
+		require(\GO::config()->root_path.'language/languages.php');
 		asort($languages);
 		return $languages;
 	}
