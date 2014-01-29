@@ -130,7 +130,7 @@ class ServerclientModule extends \GO\Base\Module{
 			$accountModel->mbroot = \GO::config()->serverclient_mbroot;
 			$accountModel->use_ssl = \GO::config()->serverclient_use_ssl;
 			$accountModel->novalidate_cert = \GO::config()->serverclient_novalidate_cert;
-			$accountModel->type=\GO::config()->serverclient_type;
+//			$accountModel->type=\GO::config()->serverclient_type;
 			$accountModel->host=\GO::config()->serverclient_host;
 			$accountModel->port=\GO::config()->serverclient_port;
 

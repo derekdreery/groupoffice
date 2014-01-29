@@ -33,7 +33,7 @@ class Mailbox extends \GO\Base\Controller\AbstractModelController {
 	protected function actionSetPassword($params){
 		
 		if(!\GO::user()){
-			if(!empty($params['token']) && $params['token']!=\GO::config()->postfixadmin_token){
+			if(empty($params['token']) ||  $params['token']!=\GO::config()->postfixadmin_token){
 				throw new \GO\Base\Exception\AccessDenied();
 			}else
 			{
@@ -62,7 +62,7 @@ class Mailbox extends \GO\Base\Controller\AbstractModelController {
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
 		if(!\GO::user()){
-			if(!empty($params['tokem']) && $params['token']!=\GO::config()->postfixadmin_token){
+			if(empty($params['token']) ||  $params['token']!=\GO::config()->postfixadmin_token){
 				throw new \GO\Base\Exception\AccessDenied();
 			}else
 			{

@@ -434,7 +434,7 @@ class Task extends \GO\Base\Db\ActiveRecord {
 			}
 		}
 		
-		if(!empty($vobject->completed)){
+		if((string) $vobject->completed!=''){
 			$this->completion_time=$vobject->completed->getDateTime()->format('U');
 			$this->status='COMPLETED';
 		}else

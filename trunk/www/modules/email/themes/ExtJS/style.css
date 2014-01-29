@@ -95,7 +95,9 @@
 	padding-left: 5px;
 }
 
-
+.ml-folder-unseen a span{
+    color: #15428B !important;
+}
 
 .x-tree-node img.folder-account, .x-tree-node-collapsed img.folder-account{
     background-image:  url("images/16x16/account.png");

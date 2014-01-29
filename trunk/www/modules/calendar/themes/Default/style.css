@@ -693,3 +693,9 @@ background-color:#f6f6f6;
 	width:16px !important;
 	height:16px !important;
 }
+
+.cal-date-picker-wrap{
+	width:210px;
+	margin:auto;
+	margin-bottom: 4px;
+}

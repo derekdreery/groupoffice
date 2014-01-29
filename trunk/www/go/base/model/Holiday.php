@@ -130,11 +130,12 @@ class Holiday extends \GO\Base\Db\ActiveRecord {
 					->addCondition('region', $locale);
 
 		$findParams = \GO\Base\Db\FindParams::newInstance()
-					->criteria($findCriteria);
+					->criteria($findCriteria)
+					->single();
 
 		$result = Holiday::model()->find($findParams);
 
-		return ($result->rowCount() >= 1);
+		return $result!=false;
 	}
 	
 	/**
