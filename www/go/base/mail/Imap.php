@@ -488,6 +488,23 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				if (!$this->delimiter) {
 					$this->set_mailbox_delimiter($delim);
 				}
+				
+				
+				//in some case the mailserver return the mailbox twice when it has subfolders:
+				//R: * LIST ( ) / Drafts
+				//R: * LIST ( ) / Folder3
+				//R: * LIST ( ) / Trash
+				//R: * LIST ( ) / Sent
+				//R: * LIST ( ) / Folder2
+				//R: * LIST ( ) / INBOX
+				//R: * LIST ( ) / INBOX/
+				//R: * LIST ( ) / Test &- test/
+				//R: * LIST ( ) / Test &- test
+				
+				//We trim the delimiter of the folder to fix that.
+				$folder = trim($folder, $this->delimiter);
+				
+				
 
 				if (stristr($flags, 'marked')) {
 					$marked = true;
