@@ -1,3 +1,4 @@
+- Fixed button to add template folders and files in projects V2
 - Fixed SyncML server for Funambol client
 - Some mailservers returned folders as "false".
 - Corrected postfixadmin_token error message. Should be serverclient_token.

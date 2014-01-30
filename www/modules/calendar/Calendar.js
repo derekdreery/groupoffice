@@ -781,11 +781,11 @@ GO.calendar.MainPanel = function(config){
 				border:true,
 				autoHeight:true,
 				split:false,
-				cls:'cal-date-picker-wrap-outer',
+				cls:'go-date-picker-wrap-outer',
 				baseCls:'x-plain',
 				items:[
 					new Ext.Panel({
-						cls:'cal-date-picker-wrap',
+						cls:'go-date-picker-wrap',
 						items:[this.datePicker]
 					})
 				]
