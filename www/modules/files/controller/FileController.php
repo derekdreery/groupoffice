@@ -116,7 +116,7 @@ class FileController extends \GO\Base\Controller\AbstractModelController {
 		$response['data']['name']=$model->fsFile->nameWithoutExtension();
 		
 		if (\GO::modules()->customfields)
-			$response['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Files\Model\File", $model->folder_id);
+			$response['customfields'] = \GO\Customfields\Controller\CategoryController::getEnabledCategoryData("GO\Files\Model\File", $model->folder_id);
 		
 		
 		$fh = \GO\Files\Model\FileHandler::model()->findByPk(

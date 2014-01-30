@@ -124,7 +124,7 @@ class CalendarController extends \GO\Base\Controller\AbstractModelController {
 		
 		$record['group_name']= !empty($model->group) ? $model->group->name : '';
 		if(\GO::modules()->customfields)
-			$record['customfields']=\GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Calendar\Model\Event", $model->group_id);
+			$record['customfields']=\GO\Customfields\Controller\CategoryController::getEnabledCategoryData("GO\Calendar\Model\Event", $model->group_id);
 		
 		
 		return $record;

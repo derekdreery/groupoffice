@@ -557,7 +557,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 		$response['data']['end_date'] = \GO\Base\Util\Date::get_timestamp($model->end_time, false);
 
 		if (\GO::modules()->customfields)
-			$response['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Calendar\Model\Event", $model->calendar->group_id);
+			$response['customfields'] = \GO\Customfields\Controller\CategoryController::getEnabledCategoryData("GO\Calendar\Model\Event", $model->calendar->group_id);
 
 		$response['group_id'] = $model->calendar->group_id;
 		

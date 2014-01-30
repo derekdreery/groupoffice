@@ -111,7 +111,7 @@ class CompanyController extends \GO\Base\Controller\AbstractModelController {
 	protected function afterLoad(&$response, &$model, &$params) {
 
 		if (\GO::modules()->customfields)
-			$response['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Addressbook\Model\Company", $model->addressbook_id);
+			$response['customfields'] = \GO\Customfields\Controller\CategoryController::getEnabledCategoryData("GO\Addressbook\Model\Company", $model->addressbook_id);
 
 		$response['data']['photo_url']=$model->photoThumbURL;		
 		$response['data']['original_photo_url']=$model->photoURL;

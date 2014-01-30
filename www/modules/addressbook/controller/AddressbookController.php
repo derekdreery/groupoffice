@@ -47,8 +47,8 @@ class AddressbookController extends \GO\Base\Controller\AbstractModelController{
 		
 		$record['user_name']=$model->user ? $model->user->name : 'unknown';
 		if(\GO::modules()->customfields){
-			$record['contactCustomfields']=\GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Addressbook\Model\Contact", $model->id);
-			$record['companyCustomfields']=\GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Addressbook\Model\Company", $model->id);
+			$record['contactCustomfields']=\GO\Customfields\Controller\CategoryController::getEnabledCategoryData("GO\Addressbook\Model\Contact", $model->id);
+			$record['companyCustomfields']=\GO\Customfields\Controller\CategoryController::getEnabledCategoryData("GO\Addressbook\Model\Company", $model->id);
 		}
 		
 		return parent::formatStoreRecord($record, $model, $store);
