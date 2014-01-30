@@ -77,7 +77,7 @@ class CalendarModule extends \GO\Base\Module{
 			$response['remoteComboTexts']['default_calendar_id']=$calendar->name;
 		}
 		
-		$response = Controller\Event::reminderSecondsToForm($response);
+		$response = Controller\EventController::reminderSecondsToForm($response);
 		
 		
 		
