@@ -21,7 +21,7 @@
 namespace GO\Tasks\Controller;
 
 
-class Task extends \GO\Base\Controller\AbstractModelController{
+class TaskController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO\Tasks\Model\Task';
 	
@@ -119,7 +119,7 @@ class Task extends \GO\Base\Controller\AbstractModelController{
 		}
 		
 		if(\GO::modules()->files){
-		 $f = new \GO\Files\Controller\Folder();
+		 $f = new \GO\Files\Controller\FolderController();
 		 $f->processAttachments($response, $model, $params);
 		}
 		

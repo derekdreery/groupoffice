@@ -19,7 +19,7 @@
 namespace GO\Presidents\Controller;
 
 
-class President extends \GO\Base\Controller\AbstractModelController {
+class PresidentController extends \GO\Base\Controller\AbstractModelController {
 	
 	protected $model = 'GO\Presidents\Model\President';
 

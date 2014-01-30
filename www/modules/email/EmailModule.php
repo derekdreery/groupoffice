@@ -26,10 +26,10 @@ class EmailModule extends \GO\Base\Module{
 
 	public static function initListeners() {
 		
-		$c = new \GO\Core\Controller\Reminder();
+		$c = new \GO\Core\Controller\ReminderController();
 		$c->addListener('reminderdisplay', "GO\Email\EmailModule", "reminderDisplay");
 		
-		$c = new \GO\Core\Controller\Auth();
+		$c = new \GO\Core\Controller\AuthController();
 		$c->addListener('head', 'GO\Email\EmailModule', 'head');
 		
 		\GO\Base\Model\User::model()->addListener('delete', "GO\Email\EmailModule", "deleteUser");

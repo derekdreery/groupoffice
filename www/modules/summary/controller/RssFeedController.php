@@ -12,7 +12,7 @@
 namespace GO\Summary\Controller;
 
 
-class RssFeed extends \GO\Base\Controller\AbstractModelController {
+class RssFeedController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Summary\Model\RssFeed';
 

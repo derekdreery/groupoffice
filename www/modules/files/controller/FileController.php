@@ -4,7 +4,7 @@
 namespace GO\Files\Controller;
 
 
-class File extends \GO\Base\Controller\AbstractModelController {
+class FileController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Files\Model\File';
 	

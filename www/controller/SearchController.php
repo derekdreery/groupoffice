@@ -7,7 +7,7 @@ use GO\Base\Data\Store;
 use GO\Base\Db\FindParams;
 use GO\Base\Model\ModelType;
 
-class Search extends \GO\Base\Controller\AbstractModelController{
+class SearchController extends \GO\Base\Controller\AbstractModelController{
 	protected $model = 'GO\Base\Model\SearchCacheRecord';
 	
 	protected function beforeStore(&$response, &$params, &$store) {

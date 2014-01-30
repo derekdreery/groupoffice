@@ -26,7 +26,7 @@
 namespace GO\Site\Controller;
 
 
-class MenuItem extends \GO\Base\Controller\AbstractJsonController {
+class MenuItemController extends \GO\Base\Controller\AbstractJsonController {
 	
 	/**
 	 * Loads a store of menu items that can be a parent of the given menu item.

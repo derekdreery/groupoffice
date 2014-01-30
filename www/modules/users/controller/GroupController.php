@@ -3,7 +3,7 @@
 namespace GO\Users\Controller;
 
 
-class Group extends \GO\Base\Controller\AbstractJsonController{
+class GroupController extends \GO\Base\Controller\AbstractJsonController{
 	
 	protected function actionStore($params) {
 		

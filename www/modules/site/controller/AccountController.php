@@ -4,7 +4,7 @@
 namespace GO\Site\Controller;
 
 
-class Account extends \GO\Site\Components\Controller {
+class AccountController extends \GO\Site\Components\Controller {
 	
 	protected function allowGuests() {
 		return array('register','login','lostpassword','recoverpassword','resetpassword');

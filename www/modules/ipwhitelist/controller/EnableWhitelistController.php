@@ -3,7 +3,7 @@
 namespace GO\Ipwhitelist\Controller;
 
 
-//class EnableWhitelist extends \GO\Base\Controller\AbstractJsonController {
+//class EnableWhitelistController extends \GO\Base\Controller\AbstractJsonController {
 //	
 //	protected function actionSetWhitelist($params) {
 //		

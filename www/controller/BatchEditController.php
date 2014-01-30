@@ -23,7 +23,7 @@
 namespace GO\Core\Controller;
 
 
-class BatchEdit extends \GO\Base\Controller\AbstractController {
+class BatchEditController extends \GO\Base\Controller\AbstractController {
 	
 	/**
 	 * Update the given id's with the given data

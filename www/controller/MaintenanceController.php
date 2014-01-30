@@ -8,7 +8,7 @@
 namespace GO\Core\Controller;
 
 
-class Maintenance extends \GO\Base\Controller\AbstractController {
+class MaintenanceController extends \GO\Base\Controller\AbstractController {
 	
 	protected function allowGuests() {
 		return array('upgrade','checkdatabase','servermanagerreport','test','downloadfromshop', 'removeduplicates','buildsearchcache');

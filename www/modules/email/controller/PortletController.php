@@ -4,7 +4,7 @@
 namespace GO\Email\Controller;
 
 
-class Portlet extends \GO\Base\Controller\AbstractModelController {
+class PortletController extends \GO\Base\Controller\AbstractModelController {
 	
 	/**
 	 * The full name of the used model in this controller

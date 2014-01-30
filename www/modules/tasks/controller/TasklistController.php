@@ -21,7 +21,7 @@
 namespace GO\Tasks\Controller;
 
 
-class Tasklist extends \GO\Base\Controller\AbstractModelController{
+class TasklistController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO\Tasks\Model\Tasklist';
 	

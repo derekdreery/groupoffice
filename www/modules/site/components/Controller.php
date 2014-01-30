@@ -24,7 +24,7 @@
 namespace GO\Site\Components;
 
 
-abstract class Controller extends \GO\Base\Controller\AbstractController {
+abstract class ControllerController extends \GO\Base\Controller\AbstractController {
 //	/**
 //	 * Frontend action can be accessed without moduel access
 //	 * @return array actions that can be accessed withou module access 
@@ -307,7 +307,7 @@ abstract class Controller extends \GO\Base\Controller\AbstractController {
 				$loginpath = array('site/account/login');
 				$this->redirect($loginpath);
 			}  else {
-//				$controller = new \GO\Site\Controller\Site();
+//				$controller = new \GO\Site\Controller\SiteController();
 				echo $this->render('/site/error', array('error' => $e));
 			}
 			//echo $this->render('error', array('error'=>$e));

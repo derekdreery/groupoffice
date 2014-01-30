@@ -4,7 +4,7 @@
 namespace GO\Email\Controller;
 
 
-class Register extends \GO\Base\Controller\AbstractController {
+class RegisterController extends \GO\Base\Controller\AbstractController {
 
 	protected function actionDownload($params) {
 		

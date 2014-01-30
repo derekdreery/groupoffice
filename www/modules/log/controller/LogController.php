@@ -4,7 +4,7 @@
 namespace GO\Log\Controller;
 
 
-class Log extends \GO\Base\Controller\AbstractModelController {
+class LogController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Log\Model\Log';
 	

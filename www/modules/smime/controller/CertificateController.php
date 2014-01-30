@@ -4,7 +4,7 @@
 namespace GO\Smime\Controller;
 
 
-class Certificate extends \GO\Base\Controller\AbstractController {
+class CertificateController extends \GO\Base\Controller\AbstractController {
 
 	public function actionDownload($params) {
 

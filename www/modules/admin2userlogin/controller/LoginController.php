@@ -3,7 +3,7 @@
 namespace GO\Admin2userlogin\Controller;
 
 
-class Login extends \GO\Base\Controller\AbstractController {
+class LoginController extends \GO\Base\Controller\AbstractController {
 	protected function actionSwitch($params){
 //		
 //		if(!\GO::user()->isAdmin())

@@ -4,7 +4,7 @@
 namespace GO\Postfixadmin\Controller;
 
 
-class Domain extends \GO\Base\Controller\AbstractModelController {
+class DomainController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Postfixadmin\Model\Domain';
 	

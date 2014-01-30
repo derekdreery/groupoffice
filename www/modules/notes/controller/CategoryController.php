@@ -22,7 +22,7 @@
 namespace GO\Notes\Controller;
 
 
-class Category extends \GO\Base\Controller\AbstractJsonController {
+class CategoryController extends \GO\Base\Controller\AbstractJsonController {
 
 	protected function actionStore($params) {
 

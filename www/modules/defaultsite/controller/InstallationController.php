@@ -3,7 +3,7 @@
 namespace GO\Defaultsite\Controller;
 
 
-class Installation extends \GO\Base\Controller\AbstractJsonController {
+class InstallationController extends \GO\Base\Controller\AbstractJsonController {
 	
 	protected function actionInstallModules($params){
 

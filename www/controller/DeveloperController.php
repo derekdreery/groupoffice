@@ -4,7 +4,7 @@
 namespace GO\Core\Controller;
 
 
-class Developer extends \GO\Base\Controller\AbstractController {
+class DeveloperController extends \GO\Base\Controller\AbstractController {
 
 	protected function allowGuests() {
 		return array('testvobject');

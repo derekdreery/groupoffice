@@ -20,7 +20,7 @@
 namespace GO\Notes\Controller;
 
 
-class Note extends \GO\Base\Controller\AbstractJsonController {
+class NoteController extends \GO\Base\Controller\AbstractJsonController {
 
 	/**
 	 * Load data for the display panel on the right of the screen

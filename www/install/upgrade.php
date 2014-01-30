@@ -10,7 +10,7 @@ printHead();
 <h1>Upgrading</h1>
 <?php
 
-$mc = new \GO\Core\Controller\Maintenance();
+$mc = new \GO\Core\Controller\MaintenanceController();
 $mc->run("upgrade",array(),false);
 
 continueButton();

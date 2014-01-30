@@ -3,7 +3,7 @@
 namespace GO\Demodata\Controller;
 
 
-class Demodata extends \GO\Base\Controller\AbstractController {
+class DemodataController extends \GO\Base\Controller\AbstractController {
 	
 	protected function allowGuests() {
 		return array('create');

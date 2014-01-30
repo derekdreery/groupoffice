@@ -21,7 +21,7 @@
 namespace GO\files\Controller;
 
 
-class Template extends \GO\Base\Controller\AbstractModelController {
+class TemplateController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Files\Model\Template';
 

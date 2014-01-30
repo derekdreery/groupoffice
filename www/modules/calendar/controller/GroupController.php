@@ -3,7 +3,7 @@
 namespace GO\Calendar\Controller;
 
 
-class Group extends \GO\Base\Controller\AbstractModelController {
+class GroupController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Calendar\Model\Group';
 	

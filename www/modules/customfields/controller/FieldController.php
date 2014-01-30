@@ -4,7 +4,7 @@
 namespace GO\Customfields\Controller;
 
 
-class Field extends \GO\Base\Controller\AbstractModelController {
+class FieldController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Customfields\Model\Field';
 

@@ -3,7 +3,7 @@
 namespace GO\Comments\Controller;
 
 
-class Comment extends \GO\Base\Controller\AbstractModelController{
+class CommentController extends \GO\Base\Controller\AbstractModelController{
 
 	protected $model = 'GO\Comments\Model\Comment';
 

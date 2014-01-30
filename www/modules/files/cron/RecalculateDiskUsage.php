@@ -31,7 +31,7 @@ class RecalculateDiskUsage extends \GO\Base\Cron\AbstractCron {
 	 * @param \GO\Base\Model\User $user [OPTIONAL]
 	 */
 	public function run(\GO\Base\Cron\CronJob $cronJob, \GO\Base\Model\User $user = null) {
-		$controller = new \GO\Files\Controller\File();
+		$controller = new \GO\Files\Controller\FileController();
 		$controller->run('RecalculateDiskUsage');
 	}
 

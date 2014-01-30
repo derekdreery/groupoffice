@@ -4,7 +4,7 @@
 namespace GO\Tasks\Controller;
 
 
-class ScheduleCall extends \GO\Base\Controller\AbstractJsonController {
+class ScheduleCallController extends \GO\Base\Controller\AbstractJsonController {
 
 	protected function actionLoad($params){
 		$scheduleCall = new \GO\Tasks\Model\Task();

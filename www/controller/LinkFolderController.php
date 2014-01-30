@@ -4,7 +4,7 @@
 namespace GO\Core\Controller;
 
 
-class LinkFolder extends \GO\Base\Controller\AbstractModelController {
+class LinkFolderController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = "GO\Base\Model\LinkFolder";
 

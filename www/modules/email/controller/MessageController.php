@@ -4,7 +4,7 @@
 namespace GO\Email\Controller;
 
 
-class Message extends \GO\Base\Controller\AbstractController {
+class MessageController extends \GO\Base\Controller\AbstractController {
 	
 	protected function allowGuests() {
 		return array("mailto");

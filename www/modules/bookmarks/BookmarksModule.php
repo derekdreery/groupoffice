@@ -9,7 +9,7 @@ class BookmarksModule extends \GO\Base\Module{
 	}
 	
 	public static function initListeners() {
-		$c = new \GO\Core\Controller\Auth();
+		$c = new \GO\Core\Controller\AuthController();
 		$c->addListener('head', "GO\Bookmarks\BookmarksModule", "head");
 	}
 	

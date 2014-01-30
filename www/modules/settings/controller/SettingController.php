@@ -4,7 +4,7 @@
 namespace GO\Settings\Controller;
 
 
-class Setting extends \GO\Base\Controller\AbstractController {
+class SettingController extends \GO\Base\Controller\AbstractController {
 
 	protected function actionLoad($params){
 		$response = array();

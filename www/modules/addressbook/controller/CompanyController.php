@@ -10,7 +10,7 @@
 namespace GO\Addressbook\Controller;
 
 
-class Company extends \GO\Base\Controller\AbstractModelController {
+class CompanyController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Addressbook\Model\Company';
 

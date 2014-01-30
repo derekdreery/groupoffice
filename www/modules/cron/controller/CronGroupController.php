@@ -4,7 +4,7 @@
 namespace GO\Cron\Controller;
 
 
-class CronGroup extends \GO\Base\Controller\AbstractMultiSelectModelController {
+class CronGroupController extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called

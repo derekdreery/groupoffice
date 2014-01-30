@@ -18,7 +18,7 @@
  */
 namespace GO\Addressbook\Controller;
 
-class Portlet extends \GO\Base\Controller\AbstractMultiSelectModelController {
+class PortletController extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called

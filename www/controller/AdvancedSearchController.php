@@ -3,7 +3,7 @@
 namespace GO\Core\Controller;
 
 
-class AdvancedSearch extends \GO\Base\Controller\AbstractModelController {
+class AdvancedSearchController extends \GO\Base\Controller\AbstractModelController {
 	
 	protected $model = 'GO\Base\Model\AdvancedSearch';
 

@@ -4,7 +4,7 @@
 namespace GO\Core\Controller;
 
 
-class External extends \GO\Base\Controller\AbstractController {
+class ExternalController extends \GO\Base\Controller\AbstractController {
 	protected function allowGuests() {
 		return array('index');
 	}

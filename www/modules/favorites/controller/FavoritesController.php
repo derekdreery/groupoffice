@@ -4,7 +4,7 @@
 namespace GO\Favorites\Controller;
 
 
-class Favorites extends \GO\Base\Controller\AbstractJsonController {
+class FavoritesController extends \GO\Base\Controller\AbstractJsonController {
 	
 	protected function actionCalendarStore(){
 		$colModel = new \GO\Base\Data\ColumnModel(\GO\Favorites\Model\Calendar::model());

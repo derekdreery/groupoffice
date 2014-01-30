@@ -4,7 +4,7 @@
 namespace GO\Phpbb3\Controller;
 
 
-class Bridge extends \GO\Base\Controller\AbstractController {
+class BridgeController extends \GO\Base\Controller\AbstractController {
 
 	protected function actionRedirect() {
 		$tmpFile = \GO\Base\Fs\File::tempFile();

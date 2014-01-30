@@ -4,7 +4,7 @@
 namespace GO\Site\Controller;
 
 
-class Site extends \GO\Base\Controller\AbstractJsonController {
+class SiteController extends \GO\Base\Controller\AbstractJsonController {
 	
 	/**
 	 * Redirect to the homepage

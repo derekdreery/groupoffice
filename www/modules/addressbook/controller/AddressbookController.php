@@ -3,7 +3,7 @@
 namespace GO\Addressbook\Controller;
 
 
-class Addressbook extends \GO\Base\Controller\AbstractModelController{
+class AddressbookController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		$storeParams->debugSql();

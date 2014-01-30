@@ -3,7 +3,7 @@
 namespace GO\Customfields\Controller;
 
 
-class FieldTreeSelectOption extends \GO\Base\Controller\AbstractModelController{
+class FieldTreeSelectOptionController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO\Customfields\Model\FieldTreeSelectOption';
 	

@@ -456,8 +456,6 @@ class GO{
 					for($i=0,$c=count($arr);$i<$c;$i++){
 						if($i==$c-1){
 							$file .= ucfirst($arr[$i]);
-							if(isset($arr[$c-2]) && $arr[$c-2]=='Controller')
-								$file .= 'Controller';
 							$file .='.php';
 						}else
 						{

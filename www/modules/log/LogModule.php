@@ -8,7 +8,7 @@ class LogModule extends \GO\Base\Module{
 	 * Initialize the listeners for the ActiveRecords
 	 */
 	public static function initListeners(){	
-		$c = new \GO\Core\Controller\Maintenance();
+		$c = new \GO\Core\Controller\MaintenanceController();
 		$c->addListener('servermanagerReport', 'GO\Log\LogModule', 'rotateLog');
 		
 	}	

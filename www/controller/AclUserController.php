@@ -19,7 +19,7 @@
 namespace GO\Core\Controller;
 
 
-class AclUser extends \GO\Base\Controller\AbstractMultiSelectModelController {
+class AclUserController extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	protected function init() {
 		

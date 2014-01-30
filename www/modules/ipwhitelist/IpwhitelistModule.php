@@ -11,9 +11,9 @@ class IpwhitelistModule extends \GO\Base\Module{
 	}
 
 	public static function initListeners() {
-		$invoiceController = new \GO\Core\Controller\Auth();
+		$invoiceController = new \GO\Core\Controller\AuthController();
 		$invoiceController->addListener('beforelogin', "GO\Ipwhitelist\IpwhitelistModule", "checkIpAddress");
-		$groupController = new \GO\Groups\Controller\Group();
+		$groupController = new \GO\Groups\Controller\GroupController();
 		$groupController->addListener('load', "GO\Ipwhitelist\IpwhitelistModule", "getWhitelistEnabled");
 		$groupController->addListener('submit', 'GO\Ipwhitelist\IpwhitelistModule', 'setWhitelist');
 	}

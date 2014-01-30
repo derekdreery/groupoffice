@@ -4,7 +4,7 @@
 namespace GO\Site\Controller;
 
 
-class Multifile extends \GO\Base\Controller\AbstractJsonController {
+class MultifileController extends \GO\Base\Controller\AbstractJsonController {
 	
 	public function actionStore($params){
 		

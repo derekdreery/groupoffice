@@ -4,7 +4,7 @@
 namespace GO\Calendar\Controller;
 
 
-class CalendarTasklist extends \GO\Base\Controller\AbstractMultiSelectModelController {
+class CalendarTasklistController extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called

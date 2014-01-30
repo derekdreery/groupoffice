@@ -4,7 +4,7 @@
 namespace GO\Files\Controller;
 
 
-class Jupload extends \GO\Base\Controller\AbstractController {
+class JuploadController extends \GO\Base\Controller\AbstractController {
 
 //	protected function allowGuests(){ // TODO: REMOVE THIS AND FIX THE ACCESS TO THE ACTIONS
 //		return array('*');

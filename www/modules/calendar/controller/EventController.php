@@ -21,7 +21,7 @@
 namespace GO\Calendar\Controller;
 
 
-class Event extends \GO\Base\Controller\AbstractModelController {
+class EventController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Calendar\Model\Event';
 	
@@ -216,7 +216,7 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 		
 		if(\GO::modules()->files){
 			//handle attachment when event is saved from an email.
-			$f = new \GO\Files\Controller\Folder();
+			$f = new \GO\Files\Controller\FolderController();
 			$f->processAttachments($response, $model, $params);
 		}
 		 

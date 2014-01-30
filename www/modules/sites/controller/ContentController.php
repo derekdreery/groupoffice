@@ -28,7 +28,7 @@
 namespace GO\Sites\Controller;
 
 
-class Content extends \GO\Base\Controller\AbstractModelController {
+class ContentController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Sites\Model\Content';
 	

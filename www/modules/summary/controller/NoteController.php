@@ -13,7 +13,7 @@
 namespace GO\Summary\Controller;
 
 
-class Note extends \GO\Base\Controller\AbstractModelController{
+class NoteController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO\Summary\Model\Note';
 	

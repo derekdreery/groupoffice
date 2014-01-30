@@ -3,7 +3,7 @@
 namespace GO\Customfields\Controller;
 
 
-class BlockField extends \GO\Base\Controller\AbstractJsonController{
+class BlockFieldController extends \GO\Base\Controller\AbstractJsonController{
 
 	protected function actionSelectStore($params) {
 		

@@ -20,7 +20,7 @@
 namespace GO\Core\Controller;
 
 
-class Cron extends \GO\Base\Controller\AbstractJsonController{
+class CronController extends \GO\Base\Controller\AbstractJsonController{
 
 	protected function allowGuests() {
 		return array('run');

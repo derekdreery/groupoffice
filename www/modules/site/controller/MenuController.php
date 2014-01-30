@@ -26,7 +26,7 @@
 namespace GO\Site\Controller;
 
 
-class Menu extends \GO\Base\Controller\AbstractJsonController {
+class MenuController extends \GO\Base\Controller\AbstractJsonController {
 		
 	/**
 	 * Loads a store of content items of the current website

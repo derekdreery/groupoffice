@@ -130,7 +130,7 @@ class Router{
 		if(!empty($module))
 			$controllerClass.=ucfirst($module).'\\';
 		
-		$controllerClass.='Controller\\'.$controller;
+		$controllerClass.='Controller\\'.$controller.'Controller';
 		
 		if(preg_match('/[^A-Za-z0-9_\\\\]+/', $controllerClass, $matches)){
 			$err = "Only these charactes are allowed in controller names: A-Za-z0-9_";
@@ -139,6 +139,7 @@ class Router{
 		}
 		
 		$this->_action=$action;		
+		
 		
 		if(!class_exists($controllerClass)){
 			if(!headers_sent()){

@@ -21,7 +21,7 @@
 namespace GO\files\Controller;
 
 
-class FolderPreference extends \GO\Base\Controller\AbstractModelController {
+class FolderPreferenceController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Files\Model\FolderPreference';
 	

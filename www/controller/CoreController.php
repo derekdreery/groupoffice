@@ -11,7 +11,7 @@
 namespace GO\Core\Controller;
 
 
-class Core extends \GO\Base\Controller\AbstractController {
+class CoreController extends \GO\Base\Controller\AbstractController {
 	
 	protected function allowGuests() {
 		return array('compress','cron');

@@ -4,7 +4,7 @@
 namespace GO\Users\Controller;
 
 
-class User extends \GO\Base\Controller\AbstractModelController {
+class UserController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Base\Model\User';
 

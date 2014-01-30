@@ -12,7 +12,7 @@
 namespace GO\Addressbook\Controller;
 
 
-class ExportContactsWithCompanies extends \GO\Base\Controller\AbstractExportController{
+class ExportContactsWithCompaniesController extends \GO\Base\Controller\AbstractExportController{
 	
 	/**
 	 * Export the contact model to a .csv, including the company.

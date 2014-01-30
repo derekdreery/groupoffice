@@ -170,7 +170,7 @@ class Website {
 			throw new \GO\Base\Exception\NotFound('Unable to resolve the request "' . $route . '".');
 //		} catch (\Exception $e)
 //		{
-//			$controller = new \GO\Sites\Controller\Site($this);
+//			$controller = new \GO\Sites\Controller\SiteController($this);
 //			$controller->template = $this->_site->template;
 //			$this->_controller = $controller;
 //			$controller->render('error', array('error'=>$e));
