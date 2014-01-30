@@ -70,7 +70,7 @@ class Message extends Swift_Message{
 		));
 		
 		if(!$structure)
-			throw new Exception("Could not decode mime data:\n\n $mimeData");
+			throw new \Exception("Could not decode mime data:\n\n $mimeData");
 
 		if(!empty($structure->headers['subject'])){
 			$this->setSubject($structure->headers['subject']);
@@ -428,7 +428,7 @@ class Message extends Swift_Message{
 
 						//$tmpFile = new \GO\Base\Fs\File(\GO::config()->tmpdir.$ia['tmp_file']);
 						if(empty($ia->tmp_file)){
-							throw new Exception("No temp file for inline attachment ".$ia->name);
+							throw new \Exception("No temp file for inline attachment ".$ia->name);
 						}
 
 						$path = empty($ia->from_file_storage) ? \GO::config()->tmpdir.$ia->tmp_file : \GO::config()->file_storage_path.$ia->tmp_file;
@@ -449,11 +449,11 @@ class Message extends Swift_Message{
 							{
 								//this may happen when an inline image was attached but deleted in the editor afterwards.
 							//
-								//throw new Exception("Error: inline attachment could not be found in text: ".$ia->token);
+								//throw new \Exception("Error: inline attachment could not be found in text: ".$ia->token);
 							}
 						}else
 						{							
-							throw new Exception("Error: inline attachment missing on server: ".$tmpFile->stripTempPath().".<br /><br />The temporary files folder is cleared on each login. Did you relogin?");
+							throw new \Exception("Error: inline attachment missing on server: ".$tmpFile->stripTempPath().".<br /><br />The temporary files folder is cleared on each login. Did you relogin?");
 						}
 					}
 				}
@@ -495,7 +495,7 @@ body p{
 					//$tmpFile->delete();
 				}else
 				{
-					throw new Exception("Error: attachment missing on server: ".$tmpFile->stripTempPath().".<br /><br />The temporary files folder is cleared on each login. Did you relogin?");
+					throw new \Exception("Error: attachment missing on server: ".$tmpFile->stripTempPath().".<br /><br />The temporary files folder is cleared on each login. Did you relogin?");
 				}
 			}
 		}

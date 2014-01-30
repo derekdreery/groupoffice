@@ -97,7 +97,7 @@ class Imap extends ImapBodyStruct {
 
 		$this->handle = fsockopen($server, $this->port, $errorno, $errorstr, 10);
 		if (!is_resource($this->handle)) {
-			throw new Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
+			throw new \Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
 		}
 		
 		
@@ -316,7 +316,7 @@ class Imap extends ImapBodyStruct {
 		$this->clean($mailbox, 'mailbox');
 
 		$command = "SETACL \"$mailbox\" $identifier $permissions\r\n";
-		//throw new Exception($command);
+		//throw new \Exception($command);
 		$this->send_command($command);
 
 		$response = $this->get_response();
@@ -352,7 +352,7 @@ class Imap extends ImapBodyStruct {
 //				$this->send_command($cmd);
 //				$result = $this->get_response(false, true);
 //				var_dump($result);
-//				throw new Exception("test");
+//				throw new \Exception("test");
 			}
 		}
 		return $this->delimiter;
@@ -574,7 +574,7 @@ class Imap extends ImapBodyStruct {
 //		if($namespace=="" && $pattern=="%" && $listSubscribed && !isset($folders['INBOX'])){
 //			//inbox is not subscribed. Let's fix that/
 //			if(!$this->subscribe('INBOX'))
-//				throw new Exception("Could not subscribe to INBOX folder!");
+//				throw new \Exception("Could not subscribe to INBOX folder!");
 //			return $this->list_folders($listSubscribed, $withStatus, $namespace, $pattern);
 //		}
 		
@@ -1022,7 +1022,7 @@ class Imap extends ImapBodyStruct {
 		}
 		
 		if(!$this->selected_mailbox)
-			throw new Exception('No mailbox selected');
+			throw new \Exception('No mailbox selected');
 
 		$this->get_capability();
 
@@ -1629,7 +1629,7 @@ class Imap extends ImapBodyStruct {
 			\GO::debug($unseenCheck);
 			//var_dump($unseenCheck);
 			if(isset(\GO::session()->values['emailmod'][$key]['unseen']) && \GO::session()->values['emailmod'][$key]['unseen']==$unseenCheck){
-					//throw new Exception("From cache");
+					//throw new \Exception("From cache");
 				\GO::debug("IMAP sort from session cache");
 				$uids = \GO::session()->values['emailmod'][$key]['uids'];
 				$this->sort_count=count($uids);
@@ -1679,7 +1679,7 @@ class Imap extends ImapBodyStruct {
 
 		$list = $this->get_folders('', false,'%');
 //		\GO::debug($list);
-//		throw new Exception($mbroot);
+//		throw new \Exception($mbroot);
 		if (is_array($list)) {
 			while ($folder = array_shift($list)) {
 				if (!$this->delimiter && strlen($folder['delimiter']) > 0) {
@@ -2541,11 +2541,11 @@ class Imap extends ImapBodyStruct {
 		$children = $this->get_folders($mailbox.$delim);
 
 		//\GO::debug($children);
-		//throw new Exception('test');
+		//throw new \Exception('test');
 
 		$command = 'RENAME "'.$this->addslashes($this->utf7_encode($mailbox)).'" "'.
 						$this->addslashes($this->utf7_encode($new_mailbox)).'"'."\r\n";
-//		throw new Exception($command);
+//		throw new \Exception($command);
 //		\GO::debug($command);
 		
 		$this->send_command($command);

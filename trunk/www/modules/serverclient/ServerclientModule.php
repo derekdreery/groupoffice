@@ -32,8 +32,8 @@ class ServerclientModule extends \GO\Base\Module{
 				if($wasNew){					
 //					try{
 //						$httpClient->postfixLogin();
-//					}catch(Exception $e){
-//						throw new Exception("Could not login to postfixadmin module. Check the username and password in /etc/groupoffice/globalconfig.inc.php\n\nMessage from Postfixadmin:\n\n".$e->getMessage());
+//					}catch(\Exception $e){
+//						throw new \Exception("Could not login to postfixadmin module. Check the username and password in /etc/groupoffice/globalconfig.inc.php\n\nMessage from Postfixadmin:\n\n".$e->getMessage());
 //					}
 					
 					self::_addMailbox($httpClient,$user,$domain);
@@ -43,8 +43,8 @@ class ServerclientModule extends \GO\Base\Module{
 					if($user->unencryptedPassword){						
 //						try{
 //							$httpClient->postfixLogin();
-//						}catch(Exception $e){
-//							throw new Exception("Could not login to postfixadmin module. Check the username and password in /etc/groupoffice/globalconfig.inc.php\n\nMessage from Postfixadmin:\n\n".$e->getMessage());
+//						}catch(\Exception $e){
+//							throw new \Exception("Could not login to postfixadmin module. Check the username and password in /etc/groupoffice/globalconfig.inc.php\n\nMessage from Postfixadmin:\n\n".$e->getMessage());
 //						}
 
 						self::_setMailboxPassword($httpClient, $user,$domain);
@@ -79,7 +79,7 @@ class ServerclientModule extends \GO\Base\Module{
 		$result = json_decode($response);
 
 		if (!$result->success)
-			throw new Exception("Could not create mailbox on postfixadmin module. " . $result->feedback);
+			throw new \Exception("Could not create mailbox on postfixadmin module. " . $result->feedback);
 	}
 
 	
@@ -105,7 +105,7 @@ class ServerclientModule extends \GO\Base\Module{
 		$result=json_decode($response);
 
 		if(!$result->success)
-			throw new Exception("Could not set mailbox password on postfixadmin module. ".$result->feedback);
+			throw new \Exception("Could not set mailbox password on postfixadmin module. ".$result->feedback);
 		
 		if(\GO::modules()->isInstalled('email')){
 			$stmt = \GO\Email\Model\Account::model()->findByAttributes(array(

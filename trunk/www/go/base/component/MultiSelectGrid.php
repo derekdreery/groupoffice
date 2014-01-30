@@ -61,7 +61,7 @@ class MultiSelectGrid {
 		$this->_extraPks = $extraPks;
 		
 		if(\GO::config()->debug && !class_exists($modelName))
-			throw new Exception("Invalid argument \$modelName for MultiSelectGrid. Class $modelName does not exist.");
+			throw new \Exception("Invalid argument \$modelName for MultiSelectGrid. Class $modelName does not exist.");
 		
 		if($checkPermissions===null)
 		  $checkPermissions=(\GO::getModel($this->_modelName)->aclField()!=false);
@@ -207,7 +207,7 @@ class MultiSelectGrid {
 	 * @return \GO\Base\Db\ActiveRecord[] 
 	 */
 	private function _getSelectedModels(){
-//		throw new Exception();
+//		throw new \Exception();
 		if(!isset($this->_models))
 		{			
 			$this->_models=array();
@@ -218,7 +218,7 @@ class MultiSelectGrid {
 						$this->_models[]=$model;
 
 				}
-				catch(Exception $e){
+				catch(\Exception $e){
 					//might happen when a user no longer has access to a selected model
 				}
 			}

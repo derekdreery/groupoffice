@@ -24,7 +24,7 @@
  *    //.... other SQL executions
  *    $transaction->commit();
  * }
- * catch(Exception $e)
+ * catch(\Exception $e)
  * {
  *    $transaction->rollBack();
  * }

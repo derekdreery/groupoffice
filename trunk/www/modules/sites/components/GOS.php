@@ -36,7 +36,7 @@ class GOS
 		if(self::$_site===null || $app===null)
 			self::$_site=$app;
 		else
-			throw new Exception('Frontend site can only be created once.');
+			throw new \Exception('Frontend site can only be created once.');
 	}
 
 	/**

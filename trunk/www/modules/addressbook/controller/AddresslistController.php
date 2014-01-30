@@ -149,7 +149,7 @@ class Addresslist extends \GO\Base\Controller\AbstractModelController {
 	protected function actionGetRecipientsAsString($params){
 				
 		if(empty($params['addresslists']))
-			throw new Exception();
+			throw new \Exception();
 			
 		$recipients = new \GO\Base\Mail\EmailRecipients();
 		

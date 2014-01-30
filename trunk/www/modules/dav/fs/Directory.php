@@ -71,7 +71,7 @@ class Directory extends Sabre\DAV\FS\Directory{
 
 		$newFile = new \GO\Base\Fs\File($this->path . '/' . $name);
 		if($newFile->exists())
-			throw new Exception("File already exists!");
+			throw new \Exception("File already exists!");
 		
 		if(!\GO\Files\Model\File::checkQuota(strlen($data)))
 			throw new Sabre\DAV\Exception\InsufficientStorage();
@@ -117,7 +117,7 @@ class Directory extends Sabre\DAV\FS\Directory{
 		\GO::debug("FSD::move($newPath)");
 
 		if (!is_dir(dirname($newPath)))
-			throw new Exception('Invalid move!');
+			throw new \Exception('Invalid move!');
 
 		$folder = $this->_getFolder();
 

@@ -141,7 +141,7 @@ class Task extends \GO\Base\Db\ActiveRecord {
 	}
 	
 //	public function afterLink(\GO\Base\Db\ActiveRecord $model, $isSearchCacheModel, $description = '', $this_folder_id = 0, $model_folder_id = 0, $linkBack = true) {
-//		throw new Exception();
+//		throw new \Exception();
 //		$modelName = $isSearchCacheModel ? $model->model_name : $model->className;
 //		$modelId = $isSearchCacheModel ? $model->model_id : $model->id;
 //		echo $modelName;

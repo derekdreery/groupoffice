@@ -305,7 +305,7 @@ class Maintenance extends \GO\Base\Controller\AbstractController {
 //		echo "Dropping full text search index\n";
 //		try{
 //			\GO::getDbConnection()->query("ALTER TABLE go_search_cache DROP INDEX ft_keywords");
-//		}catch(Exception $e){
+//		}catch(\Exception $e){
 //			echo $e->getMessage()."\n";
 //		}
 				
@@ -919,7 +919,7 @@ class Maintenance extends \GO\Base\Controller\AbstractController {
 //			echo $newData;
 			
 			if(eval(str_replace('<?php', '', $newData))===false)
-				throw new Exception("Parse error in generated data for ".$file->path());
+				throw new \Exception("Parse error in generated data for ".$file->path());
 			
 			$file->putContents($newData);
 		}

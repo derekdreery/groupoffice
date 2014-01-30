@@ -25,19 +25,19 @@ class EventHandlers {
 		if (isset($_FILES['cert']['tmp_name'][0]) && is_uploaded_file($_FILES['cert']['tmp_name'][0])) {
 			//check Group-Office password
 			if (!\GO::user()->checkPassword($params['smime_password']))
-				throw new Exception(\GO::t('badGoLogin', 'smime'));
+				throw new \Exception(\GO::t('badGoLogin', 'smime'));
 
 			$certData = file_get_contents($_FILES['cert']['tmp_name'][0]);
 
 			//smime password may not match the Group-Office password
 			openssl_pkcs12_read($certData, $certs, $params['smime_password']);
 			if (!empty($certs))
-				throw new Exception(\GO::t('smime_pass_matches_go', 'smime'));
+				throw new \Exception(\GO::t('smime_pass_matches_go', 'smime'));
 
 			//password may not be empty.
 			openssl_pkcs12_read($certData, $certs, "");
 			if (!empty($certs))
-				throw new Exception(\GO::t('smime_pass_empty', 'smime'));
+				throw new \Exception(\GO::t('smime_pass_empty', 'smime'));
 		}
 
 		$cert = Model\Certificate::model()->findByPk($account->id);
@@ -168,10 +168,10 @@ class EventHandlers {
 
 				
 //				$imapMessage->getImapConnection()->save_to_file($imapMessage->uid, $infile->path(), 'TEXT', 'base64');
-//				throw new Exception($infile->path());
+//				throw new \Exception($infile->path());
 								
 				if(!$imapMessage->saveToFile($infile->path()))
-					throw new Exception("Could not save IMAP message to file for decryption");
+					throw new \Exception("Could not save IMAP message to file for decryption");
 				
 				$password = \GO::session()->values['smime']['passwords'][$account->id];
 				openssl_pkcs12_read($cert->cert, $certs, $password);
@@ -233,7 +233,7 @@ class EventHandlers {
 			openssl_pkcs12_read($cert->cert, $certs, $password);
 
 			if (!isset($certs['cert']))
-				throw new Exception("Failed to get your public key for encryption");
+				throw new \Exception("Failed to get your public key for encryption");
 
 
 			$to = $message->getTo();
@@ -262,7 +262,7 @@ class EventHandlers {
 			}
 
 			if (count($failed))
-				throw new Exception(sprintf(\GO::t('noPublicCertForEncrypt', 'smime'), implode(', ', $failed)));
+				throw new \Exception(sprintf(\GO::t('noPublicCertForEncrypt', 'smime'), implode(', ', $failed)));
 
 			$message->setEncryptParams($publicCerts);
 		}

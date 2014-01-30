@@ -100,7 +100,7 @@ class Website {
 		$getter = 'get' . $name;
 		if (method_exists($this, $getter))
 			return $this->$getter();
-		throw new Exception('Property "' . get_class($this) . '.' . $name . '" is not defined.');
+		throw new \Exception('Property "' . get_class($this) . '.' . $name . '" is not defined.');
 	}
 
 	public function getId() {
@@ -168,7 +168,7 @@ class Website {
 		}
 		else
 			throw new \GO\Base\Exception\NotFound('Unable to resolve the request "' . $route . '".');
-//		} catch (Exception $e)
+//		} catch (\Exception $e)
 //		{
 //			$controller = new \GO\Sites\Controller\Site($this);
 //			$controller->template = $this->_site->template;

@@ -290,7 +290,7 @@ class User extends \GO\Base\Controller\AbstractModelController {
 			$lc = new \GO\Professional\LicenseCheck();
 			try{
 				$lc->checkProModules(true);
-			}catch(Exception $e){
+			}catch(\Exception $e){
 				$response['feedback']=$e->getMessage();
 			}
 		}
@@ -398,7 +398,7 @@ class User extends \GO\Base\Controller\AbstractModelController {
 		if($params['controller']=='GO\Users\Controller\User')
 			$controller = new User();
 		else
-			throw new Exception("No or wrong controller given");
+			throw new \Exception("No or wrong controller given");
 
 		$response = array_merge($response,$controller->run("importCsv",$params,false));
 		

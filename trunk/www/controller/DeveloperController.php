@@ -13,7 +13,7 @@ class Developer extends \GO\Base\Controller\AbstractController {
 	protected function init() {
 		
 		if(!\GO::config()->debug)
-			throw new Exception("Developer controller can only be accessed in debug mode");
+			throw new \Exception("Developer controller can only be accessed in debug mode");
 		
 		return parent::init();
 	}
@@ -21,7 +21,7 @@ class Developer extends \GO\Base\Controller\AbstractController {
 	public function actionCreateManyUsers($params) {
 		
 		if(!\GO::user()->isAdmin())
-			throw new Exception("You must be logged in as admin");
+			throw new \Exception("You must be logged in as admin");
 		
 		$amount = 1000;
 		$prefix = 'user';

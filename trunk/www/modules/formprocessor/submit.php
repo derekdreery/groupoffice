@@ -27,7 +27,7 @@ try
 	$fp->process_form();
 	$response['success']= true;
 }
-catch(Exception $e)
+catch(\Exception $e)
 {
 	$response['feedback']=$e->getMessage();
 	$response['success']= false;

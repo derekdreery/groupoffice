@@ -64,7 +64,7 @@ class Bookmark extends \GO\Base\Controller\AbstractModelController {
 					$response['title'] = $match ? preg_replace('/\s+/', ' ', trim($match[1])) : '';
 				}
 			}
-			catch(Exception $e){
+			catch(\Exception $e){
 				
 			}
 
@@ -88,7 +88,7 @@ class Bookmark extends \GO\Base\Controller\AbstractModelController {
 					$response['logo'] = $relpath . $filename;
 				}
 			}
-			catch(Exception $e){
+			catch(\Exception $e){
 				$response['logo'] = '';
 			}
 		}

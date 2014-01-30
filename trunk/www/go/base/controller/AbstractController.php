@@ -119,7 +119,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 //		$lockedConfig = 'locked_action_'.$this->_currentAction;
 //		
 //		if(\GO::config()->get_setting($lockedConfig)){
-//			throw new Exception("Action ".$this->_currentAction." locked. Another user is currently running this action.");
+//			throw new \Exception("Action ".$this->_currentAction." locked. Another user is currently running this action.");
 //		}else
 //		{
 //			\GO::config()->save_setting($lockedConfig,1);
@@ -451,7 +451,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 
 			return $response;
 			
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			
 			
 			$this->_unlockAction();
@@ -620,7 +620,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 		}
 		
 		if(count($missingParams))
-			throw new Exception("The following required controller action params are missing: ".implode(",", $missingParams));
+			throw new \Exception("The following required controller action params are missing: ".implode(",", $missingParams));
 				
 	}
 
@@ -633,7 +633,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 			
 			$maxFileSize = $postMaxSize > $uploadMaxFileSize ? $uploadMaxFileSize : $postMaxSize;
 			
-			throw new Exception(sprintf(\GO::t('maybeMaxUploadExceeded'),$maxFileSize));
+			throw new \Exception(sprintf(\GO::t('maybeMaxUploadExceeded'),$maxFileSize));
 		}
 	}
 	

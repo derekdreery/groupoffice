@@ -46,7 +46,7 @@ class Widget extends \GO\Site\Components\Widget {
 				Site::scripts()->registerScriptFile($assetUrl.$langFile); 
 //			}
 		}
-		catch(Exception $e){
+		catch(\Exception $e){
 			echo '<h2 style="color:red;">AN ERROR HAS OCCURED</h2>';
 			//echo '<p style="color:red;">'.$e->getMessage().'</p>';
 			echo '<p style="color:red;">Please check if the folder( <b>'.\GO::config()->assets_path.'</b> ) is writable for the webserver.<br />This path is also configurable in the Group-Office <b>config.php</b> file.<br />Please check the options: <b>assets_path</b> and <b>assets_url</b></p>';

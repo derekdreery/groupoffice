@@ -48,7 +48,7 @@ class Front extends \GO\Site\Components\Controller {
 	protected function actionSearch($params){
 		
 		if(!isset($params['searchString']))
-			throw new Exception('No searchstring provided');
+			throw new \Exception('No searchstring provided');
 		
 		$searchString = $params['searchString'];
 		
@@ -114,10 +114,10 @@ class Front extends \GO\Site\Components\Controller {
 	 */
 	protected function actionAjaxWidget($params){
 		if(!isset($params['widget_class']))
-			throw new Exception ('Widget class not given.');
+			throw new \Exception ('Widget class not given.');
 		
 		if(!isset($params['widget_method']))
-			throw new Exception('Widget method not given.');
+			throw new \Exception('Widget method not given.');
 			
 		$widgetClassName = $params['widget_class'];
 		$widgetMethod = $params['widget_method'];

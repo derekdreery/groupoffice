@@ -156,7 +156,7 @@ class Calendar extends \GO\Base\Controller\AbstractModelController {
 		$count = 0;
 		$failed=array();
 		if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
-			throw new Exception(\GO::t('noFileUploaded'));
+			throw new \Exception(\GO::t('noFileUploaded'));
 		}else {
 			$file = new \GO\Base\Fs\File($_FILES['ical_file']['tmp_name'][0]);
 			$i = new \GO\Base\Vobject\Iterator($file, "VEVENT");
@@ -166,7 +166,7 @@ class Calendar extends \GO\Base\Controller\AbstractModelController {
 				try{
 					$event->importVObject( $vevent, array('calendar_id'=>$params['calendar_id']) );
 					$count++;
-				}catch(Exception $e){
+				}catch(\Exception $e){
 					$failed[]=$e->getMessage();
 				}
 			}

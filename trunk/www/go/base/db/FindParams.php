@@ -79,7 +79,7 @@ class FindParams{
 			if($findParams instanceof FindParams)
 				$findParams = $findParams->getParams();
 			else
-				throw new Exception('$findParams must be an instance of FindParams');
+				throw new \Exception('$findParams must be an instance of FindParams');
 		}
 		
 		
@@ -472,7 +472,7 @@ class FindParams{
 //	 */
 //	public function joinRelation($relationName, $type='INNER'){
 //		if($type!='INNER' && $type!='LEFT' && $type!='RIGHT')
-//			throw new Exception("Must be INNER, LEFT or RIGHT");
+//			throw new \Exception("Must be INNER, LEFT or RIGHT");
 //		
 //		$this->_params['joinRelations'][$relationName] = $type;
 //	}

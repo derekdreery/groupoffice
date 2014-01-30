@@ -96,7 +96,7 @@ class Statement implements \IteratorAggregate
 			try {
 				$this->_statement = $this->_connection->getPdoInstance()->prepare($this->getText());
 				$this->_paramLog = array();
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				$errorInfo = $e instanceof PDOException ? $e->errorInfo : null;
 				throw new \GO\Base\Exception\Database('DbCommand failed to prepare the SQL statement: '. $e->getMessage(), $e->getCode(), $errorInfo);
 			}
@@ -129,7 +129,7 @@ class Statement implements \IteratorAggregate
 			$n = $this->_statement->rowCount();
 			return $n;
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
 			$errorInfo = $e instanceof PDOException ? $e->errorInfo : null;
 			$message = $e->getMessage();
@@ -205,7 +205,7 @@ class Statement implements \IteratorAggregate
 
 			return $result;
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
 			$errorInfo = $e instanceof PDOException ? $e->errorInfo : null;
 			$message = $e->getMessage();

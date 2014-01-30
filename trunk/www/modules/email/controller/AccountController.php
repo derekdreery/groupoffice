@@ -192,7 +192,7 @@ class Account extends \GO\Base\Controller\AbstractModelController {
 					
 				}
 				
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				\GO::debug($e->getMessage());
 			}
 		}
@@ -340,7 +340,7 @@ class Account extends \GO\Base\Controller\AbstractModelController {
 		return $response;
 	}
 	
-//	private function _checkImapConnectException(Exception $e, &$node) {
+//	private function _checkImapConnectException(\Exception $e, &$node) {
 //		if (strpos($e->getMessage(),'Authentication failed')==0) {
 //			$node['isAccount'] = false;
 //			$node['hasError'] = true;

@@ -60,7 +60,7 @@ class Request
 			else if (strpos($_SERVER['PHP_SELF'], $scriptUrl) === 0)
 				$pathInfo = substr($_SERVER['PHP_SELF'], strlen($scriptUrl));
 			else
-				throw new Exception('HttpRequest is unable to determine the path info of the request.');
+				throw new \Exception('HttpRequest is unable to determine the path info of the request.');
 
 //echo $pathInfo;
 			$this->_pathInfo = trim($pathInfo, '/');
@@ -117,7 +117,7 @@ class Request
 					$this->_requestUri.='?' . $_SERVER['QUERY_STRING'];
 			}
 			else
-				throw new Exception('HttpRequest is unable to determine the request URI.');
+				throw new \Exception('HttpRequest is unable to determine the request URI.');
 		}
 
 		return $this->_requestUri;
@@ -147,7 +147,7 @@ class Request
 			else if (isset($_SERVER['DOCUMENT_ROOT']) && strpos($_SERVER['SCRIPT_FILENAME'], $_SERVER['DOCUMENT_ROOT']) === 0)
 				$this->_scriptUrl = str_replace('\\', '/', str_replace($_SERVER['DOCUMENT_ROOT'], '', $_SERVER['SCRIPT_FILENAME']));
 			else
-				throw new Exception('Request is unable to determine the entry script URL.');
+				throw new \Exception('Request is unable to determine the entry script URL.');
 		}
 		return $this->_scriptUrl;
 	}

@@ -19,12 +19,12 @@ class Content extends \GO\Base\Controller\AbstractJsonController {
 		$response['success'] = false;
 		
 		if(empty($params['parentId']))
-			Throw new Exception('No Parent ID given!');
+			Throw new \Exception('No Parent ID given!');
 		
 		$parent = \GO\Site\Model\Content::model()->findByPk($params['parentId']);
 		
 		if(!$parent)
-			Throw new Exception('No content item found with the following id: '.$params['parentId']);
+			Throw new \Exception('No content item found with the following id: '.$params['parentId']);
 		
 		$response['defaultslug']=$parent->slug.'/';
 		$response['success'] = true;
@@ -35,12 +35,12 @@ class Content extends \GO\Base\Controller\AbstractJsonController {
 	protected function actionTemplateStore($params){
 		
 		if(empty($params['siteId']))
-			Throw new Exception('No Site ID given!');
+			Throw new \Exception('No Site ID given!');
 		
 		$site = \GO\Site\Model\Site::model()->findByPk($params['siteId']);
 		
 		if(!$site)
-			Throw new Exception('No site found with the following id: '.$id);
+			Throw new \Exception('No site found with the following id: '.$id);
 		
 		$templateFiles = array();
 		
@@ -72,7 +72,7 @@ class Content extends \GO\Base\Controller\AbstractJsonController {
 	protected function actionUpdate($params){
 		
 		if(empty($params['id']))
-			Throw new Exception('No ID given!');
+			Throw new \Exception('No ID given!');
 		
 		$model = $this->_loadModel($params['id']);
 			
@@ -109,7 +109,7 @@ class Content extends \GO\Base\Controller\AbstractJsonController {
 		
 	protected function actionDelete($params) {
 		if(empty($params['id']))
-			Throw new Exception('No ID given!');
+			Throw new \Exception('No ID given!');
 		
 		$model = $this->_loadModel($params['id']);
 		
@@ -124,7 +124,7 @@ class Content extends \GO\Base\Controller\AbstractJsonController {
 		$model = \GO\Site\Model\Content::model()->findByPk($id);
 		
 		if(!$model)
-			Throw new Exception('No content item found with the following id: '.$id);
+			Throw new \Exception('No content item found with the following id: '.$id);
 
 		return $model;
 	}
@@ -133,7 +133,7 @@ class Content extends \GO\Base\Controller\AbstractJsonController {
 		$response=array();
 	
 		if(empty($params['site_id']))
-			Throw new Exception('No Site ID given!');
+			Throw new \Exception('No Site ID given!');
 				
 		if(!isset($params['node']))
 			return $response;

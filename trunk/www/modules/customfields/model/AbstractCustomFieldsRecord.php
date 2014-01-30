@@ -415,7 +415,7 @@ abstract class AbstractCustomFieldsRecord extends \GO\Base\Db\ActiveRecord{
 //					$cField = Field::model()->findByPk($cfMatches[1]);
 //					$cFieldPath = $cField->category->name.':'.$cField->name;
 //					$feedbackString = str_replace('%cf',$cFieldPath,\GO::t('duplicateExistsFeedback','customfields'));
-//					throw new Exception($feedbackString);
+//					throw new \Exception($feedbackString);
 //				} else {
 //					throw $e;
 //				}

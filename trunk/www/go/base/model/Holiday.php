@@ -119,7 +119,7 @@ class Holiday extends \GO\Base\Db\ActiveRecord {
 	public function checkHolidaysExist($year,$locale){
 
 		if(empty($year) || empty($locale))
-			Throw new Exception('No year or locale given for the holidays checker.');
+			Throw new \Exception('No year or locale given for the holidays checker.');
 		
 //		$startYear = mktime(0, 0, 0, 1, 1, $year);
 //		$endYear   = mktime(23, 59, 59, 12, 31, $year);
@@ -148,7 +148,7 @@ class Holiday extends \GO\Base\Db\ActiveRecord {
 	public function deleteHolidays($year,$locale='en'){
 		
 		if(empty($year) || empty($locale))
-			Throw new Exception('No year or locale given for the holidays delete function.');
+			Throw new \Exception('No year or locale given for the holidays delete function.');
 		
 		$startYear = mktime(0, 0, 0, 1, 1, $year);
 		$endYear   = mktime(23, 59, 59, 12, 31, $year);
@@ -202,7 +202,7 @@ class Holiday extends \GO\Base\Db\ActiveRecord {
 		if(is_file(\GO::config()->root_path.'language/holidays/'.$locale.'.php'))
 			require(\GO::config()->root_path.'language/holidays/'.$locale.'.php');
 //		else
-//			throw new Exception('No holidays file for this language: '.$locale.'.');
+//			throw new \Exception('No holidays file for this language: '.$locale.'.');
 		
 		if(empty($year)) {			
 			$year = date('Y');

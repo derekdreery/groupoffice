@@ -97,7 +97,7 @@ class File extends \GO\Base\Controller\AbstractModelController {
 				}
 			}
 		}
-		catch(Exception $e){
+		catch(\Exception $e){
 			\GO::debug((string) $e);
 			
 			$response['data']['text'] = "Index out of date. Please rebuild it using the admin tools.";
@@ -232,7 +232,7 @@ class File extends \GO\Base\Controller\AbstractModelController {
 				throw new \GO\Base\Exception\NotFound();
 			
 			if(time()>$file->expire_time)
-				throw new Exception(\GO::t('downloadLinkExpired', 'files'));				
+				throw new \Exception(\GO::t('downloadLinkExpired', 'files'));				
 		}else
 		{
 			if(!\GO::user())

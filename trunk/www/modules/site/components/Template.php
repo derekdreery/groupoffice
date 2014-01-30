@@ -34,7 +34,7 @@ class Template{
 		if(!is_link($folder->path().'/template')){
 			
 			if(!symlink($this->getPath().'assets',$folder->path().'/template')){
-				throw new Exception("Could not publish template assets. Is the \$config['file_storage_path'] path writable?");
+				throw new \Exception("Could not publish template assets. Is the \$config['file_storage_path'] path writable?");
 			}
 		}
 	}

@@ -186,7 +186,7 @@ class XlsFile extends File{
 	 * @return int The length of the written string, or false on failure.
 	 */
 	public function putRecord($fields){
-		throw new Exception('TODO: Write record to XLS.');
+		throw new \Exception('TODO: Write record to XLS.');
 		return false;
 	}
 	

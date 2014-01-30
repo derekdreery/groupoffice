@@ -42,7 +42,7 @@ class ImapMailbox extends \GO\Base\Model {
 //		if(isset($this->_attributes['name']))
 //			$this->_attributes['name']=\GO\Base\Mail\Utils::utf7_decode($this->_attributes["name"]);
 		
-		//throw new Exception(var_export($attributes, true));
+		//throw new \Exception(var_export($attributes, true));
 
 		//$this->_children = array();
 	}
@@ -160,7 +160,7 @@ class ImapMailbox extends \GO\Base\Model {
 	}
 	
 	public function isRootMailbox(){
-		//throw new Exception($this->name.$this->delimiter.' = '.$this->getAccount()->mbroot);
+		//throw new \Exception($this->name.$this->delimiter.' = '.$this->getAccount()->mbroot);
 		return $this->name.$this->delimiter==$this->getAccount()->mbroot;
 	}
 
@@ -215,7 +215,7 @@ class ImapMailbox extends \GO\Base\Model {
 		$parentName = $this->getParentName();
 		$newMailbox = empty($parentName) ? $name : $parentName.$this->delimiter.$name;
 		
-//		throw new Exception($this->name." -> ".$newMailbox);
+//		throw new \Exception($this->name." -> ".$newMailbox);
 		
 		return $this->getAccount()->openImapConnection()->rename_folder($this->name, $newMailbox);
 	}
@@ -243,7 +243,7 @@ class ImapMailbox extends \GO\Base\Model {
 		}
 		
 		if(preg_match('/['.preg_quote($illegalChars,'/').']/', $name)){
-			throw new Exception(sprintf(\GO::t('illegalCharsError'),': '.$illegalChars));
+			throw new \Exception(sprintf(\GO::t('illegalCharsError'),': '.$illegalChars));
 		}else
 		{
 			return true;
@@ -257,7 +257,7 @@ class ImapMailbox extends \GO\Base\Model {
 		
 		$this->_validateName($name);
 		
-		//throw new Exception($newMailbox);
+		//throw new \Exception($newMailbox);
 		
 		return $this->getAccount()->openImapConnection()->create_folder($newMailbox, $subscribe);
 	}

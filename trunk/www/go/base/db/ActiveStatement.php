@@ -107,7 +107,7 @@ class ActiveStatement implements \IteratorAggregate {
 						flush();
 					}
 					$m->$function();
-				} catch (Exception $e) {
+				} catch (\Exception $e) {
 					echo (string) $e;
 				}
 		}

@@ -116,7 +116,7 @@ class File extends Base{
 		else{
 			$errorMsg = "The program tried to delete a file (".$this->stripFileStoragePath().") while File::\$allowDeletes is set to false.";
 			\GO::debug($errorMsg);
-			throw new Exception($errorMsg);
+			throw new \Exception($errorMsg);
 		}
 	}
 	
@@ -321,7 +321,7 @@ class File extends Base{
 		$handle = fopen($this->path(), "rb");
 
 		if (!is_resource($handle))
-			throw new Exception("Could not read file");
+			throw new \Exception("Could not read file");
 		
 		while (!feof($handle)) {
 			echo fread($handle, 1024);
@@ -390,7 +390,7 @@ class File extends Base{
 			$old = str_replace(\GO::config()->file_storage_path, '', $this->path);
 			$new = str_replace(\GO::config()->file_storage_path, '', $newPath);
 			
-			throw new Exception("Could not copy ".$old." to ".$new);
+			throw new \Exception("Could not copy ".$old." to ".$new);
 		}
 				
 		chmod($newPath, octdec(\GO::config()->file_create_mode));

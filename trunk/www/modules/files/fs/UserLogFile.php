@@ -15,7 +15,7 @@ class UserLogFile extends \GO\Base\Fs\File{
 	public function __construct($prefixString='') {
 		
 		if (!\GO::modules()->isInstalled('files'))
-			throw new Exception('The current action requires the files module to be activated for the current user.');
+			throw new \Exception('The current action requires the files module to be activated for the current user.');
 		
 		// Make sure the current user's folder exists.
 

@@ -192,7 +192,7 @@ abstract class AbstractMultiSelectModelController extends AbstractController{
 			} else {
 				$response['deleteSuccess'] = true;
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			$response['deleteSuccess'] = false;
 			$response['deleteFeedback'] = $e->getMessage();
 		}

@@ -18,7 +18,7 @@ class Fpdi extends FPDI {
 	 * @param string $msg  Error-Message
 	 */
 	function error($msg) {
-		throw new Exception('<b>FPDI Error:</b> ' . $msg);	
+		throw new \Exception('<b>FPDI Error:</b> ' . $msg);	
 	}		
 	
 }

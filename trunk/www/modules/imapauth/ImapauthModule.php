@@ -27,7 +27,7 @@ class ImapauthModule extends \GO\Base\Module {
 //				if (!$user) {
 //					$response['needCompleteProfile'] = true;
 //				}
-//			} catch (Exception $e) {
+//			} catch (\Exception $e) {
 //				\GO::debug('IMAPAUTH: Authentication to IMAP server failed with Exception: ' . $e->getMessage() . ' IMAP error:' . $imap->last_error());
 //				$imap->clear_errors();
 //
@@ -68,7 +68,7 @@ class ImapauthModule extends \GO\Base\Module {
 						try {
 
 							if(!$user->save()){
-								throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
+								throw new \Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
 							}
 							if (!empty($ia->config['groups']))
 								$user->addToGroups($ia->config['groups']);
@@ -79,7 +79,7 @@ class ImapauthModule extends \GO\Base\Module {
 
 							//todo testen of deze regel nodig is om e-mail account aan te maken voor nieuwe gebruiker
 							$ia->createEmailAccount($user, $ia->config, $ia->imapUsername, $ia->imapPassword);
-						} catch (Exception $e) {
+						} catch (\Exception $e) {
 							\GO::debug('IMAPAUTH: Failed creating user ' .
 											$ia->goUsername . ' and e-mail ' . $ia->email .
 											'Exception: ' .

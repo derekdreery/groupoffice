@@ -402,7 +402,7 @@ class DbStore extends AbstractStore {
 	 */
 	protected function processDeleteActions() {
 		if (isset($this->_records))
-			throw new Exception("deleteRecord should be called before loading data. If you run the statement before the deletes then the deleted items will still be in the result.");
+			throw new \Exception("deleteRecord should be called before loading data. If you run the statement before the deletes then the deleted items will still be in the result.");
 
 		$errors = array();
 		foreach ($this->_deleteRecords as $modelPk) {
@@ -504,7 +504,7 @@ class DbStore extends AbstractStore {
 
 		$columns = $this->_columnModel->getColumns();
 		if (empty($columns))
-			throw new Exception('No columns given for this store');
+			throw new \Exception('No columns given for this store');
 
 		if(!isset($this->response['results']))
 			$this->response['results']=array();

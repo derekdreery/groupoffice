@@ -102,7 +102,7 @@ class Store extends AbstractStore {
 	public function processDeleteActions($params, $deleteModelName, $extraPkValue=false){
 		
 		if(isset($this->_stmt))
-			throw new Exception("processDeleteActions should be called before setStatement. If you run the statement before the deletes then the deleted items will still be in the result.");
+			throw new \Exception("processDeleteActions should be called before setStatement. If you run the statement before the deletes then the deleted items will still be in the result.");
 		
 		if (isset($params['delete_keys'])) {
       try {
@@ -146,7 +146,7 @@ class Store extends AbstractStore {
 						$model->delete();
         }
         $this->response['deleteSuccess'] = true;
-      } catch (Exception $e) {
+      } catch (\Exception $e) {
         $this->response['deleteSuccess'] = false;
         $this->response['deleteFeedback'] = $e->getMessage();
 				if(\GO::config()->debug)
@@ -186,11 +186,11 @@ class Store extends AbstractStore {
   public function getData() {
 		
 		if(!isset($this->_stmt))
-			throw new Exception('You must provide a statement with setStatement()');
+			throw new \Exception('You must provide a statement with setStatement()');
 
 		$columns = $this->_columnModel->getColumns();
     if (empty($columns))
-      throw new Exception('No columns given for this grid.');   		
+      throw new \Exception('No columns given for this grid.');   		
 		
 		while ($record = $this->nextRecord()) {			
 			$this->response['results'][] = $record;

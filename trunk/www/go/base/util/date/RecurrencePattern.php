@@ -130,7 +130,7 @@ class RecurrencePattern{
 	
 	protected function _setFreq($freq){
 		if(empty($freq))
-			throw new Exception("Frequency can't be empty!");
+			throw new \Exception("Frequency can't be empty!");
 			
 		$this->_freq=$freq;
 	}

@@ -13,11 +13,11 @@ class Installation extends \GO\Base\Controller\AbstractJsonController {
 		);
 		
 		if(!\GO::modules()->isAvailable('site')){
-			throw new Exception("site module is not available!");
+			throw new \Exception("site module is not available!");
 		}
 		
 		if(!\GO::modules()->isAvailable('defaultsite')){
-			throw new Exception("defaultsite module is not available!");
+			throw new \Exception("defaultsite module is not available!");
 		}
 
 		$siteModule = new \GO\Base\Model\Module();

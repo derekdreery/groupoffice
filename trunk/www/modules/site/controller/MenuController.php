@@ -136,7 +136,7 @@ class Menu extends \GO\Base\Controller\AbstractJsonController {
 		}
 		
 		if(!$model)
-			Throw new Exception('Model with id: '.$id.' not found.');
+			Throw new \Exception('Model with id: '.$id.' not found.');
 		
 		return $model;
 	}

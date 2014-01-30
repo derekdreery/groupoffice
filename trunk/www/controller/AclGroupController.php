@@ -93,7 +93,7 @@ class AclGroup extends \GO\Base\Controller\AbstractMultiSelectModelController {
 					throw new \GO\Base\Exception\AccessDenied();
 			foreach ($delKeys as $delKey) {
 				if ($delKey==\GO::config()->group_root) {
-					throw new Exception(\GO::t('dontChangeAdminsPermissions'));
+					throw new \Exception(\GO::t('dontChangeAdminsPermissions'));
 				}
 			}
 		} else {

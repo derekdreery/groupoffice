@@ -23,7 +23,7 @@ class Settings extends \GO\Base\Controller\AbstractController {
 				throw new \GO\Base\Exception\BadPassword();
 			
 //			if ($params["password"] != $params["passwordConfirm"]) {
-//				throw new Exception(\GO::t('error_match_pass', 'users'));
+//				throw new \Exception(\GO::t('error_match_pass', 'users'));
 //			}
 //			if (!empty($params["passwordConfirm"])) {
 //				$user->setAttribute('password', $_POST['passwordConfirm']);

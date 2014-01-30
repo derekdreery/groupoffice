@@ -487,11 +487,11 @@ class GO{
 			
 			if(strpos($filePath, '..')!==false){
 				echo "Invalid PHP file autoloaded!";
-				throw new Exception("Invalid PHP file autoloaded!");
+				throw new \Exception("Invalid PHP file autoloaded!");
 			}
 
 			if(!file_exists($filePath) || is_dir($filePath)){
-				//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
+				//throw new \Exception('Class '.$orgClassName.' not found! ('.$file.')');
 				return false;
 			}else
 			{
@@ -512,7 +512,7 @@ class GO{
 	public static function init() {
 
 		if(self::$initialized){
-			throw new Exception("Group-Office was already initialized");
+			throw new \Exception("Group-Office was already initialized");
 		}
 		self::$initialized=true;
 		
@@ -863,7 +863,7 @@ class GO{
 
 					
 					if ($text == 'undefined')
-						throw new Exception();
+						throw new \Exception();
 					
 					//$username=\GO::user() ? \GO::user()->username : 'nobody';
 
@@ -962,7 +962,7 @@ class GO{
 		$modelName = str_replace('_','\\', $modelName);
 		
 		if(!class_exists($modelName))
-			throw new Exception("Model class '$modelName' not found in \GO::getModel()");
+			throw new \Exception("Model class '$modelName' not found in \GO::getModel()");
 
 		return call_user_func(array($modelName, 'model'));
 	}
@@ -984,10 +984,10 @@ class GO{
 
 		if(\GO::config()->debug){
 			if(!preg_match('/[a-z]+/', $module))
-				throw new Exception('$module param may only contain a-z characters.');
+				throw new \Exception('$module param may only contain a-z characters.');
 
 			if(!preg_match('/[a-z]+/i', $function))
-				throw new Exception('$function param may only contain a-z characters.');
+				throw new \Exception('$function param may only contain a-z characters.');
 		}
 
 		$p = array('m'=>$module,'f'=>$function, 'p'=>$params);

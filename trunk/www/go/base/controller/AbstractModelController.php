@@ -256,7 +256,7 @@ class AbstractModelController extends AbstractController {
 			
 		foreach ($this->remoteComboFields() as $property => $map) {			
 			if(is_numeric($property))
-				throw new Exception("remoteComboFields() must return a key=>value array.");			
+				throw new \Exception("remoteComboFields() must return a key=>value array.");			
 			
 			$value='';
 			$eval = '$value = '.$map.';';
@@ -1167,7 +1167,7 @@ class AbstractModelController extends AbstractController {
 							$summarylog->addError($nameStr, implode("\n", $model->getValidationErrors()));
 						}
 					}
-					catch(Exception $e){
+					catch(\Exception $e){
 						$summarylog->addError($record[0], $e->getMessage());
 					}
 					
@@ -1175,7 +1175,7 @@ class AbstractModelController extends AbstractController {
 //						$model->save();
 //						$summarylog->addSuccessful();
 //					}
-//					catch(Exception $e){
+//					catch(\Exception $e){
 //						$summarylog->addError($record[0], $e->getMessage());
 //					}
 				//	$summarylog->add();

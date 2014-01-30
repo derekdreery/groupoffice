@@ -70,7 +70,7 @@ class Authenticator {
 
 					$user->password = $this->imapPassword;
 					if(!$user->save()){
-						throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
+						throw new \Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
 					}
 				}
 				$this->user = $user;
@@ -83,7 +83,7 @@ class Authenticator {
 			}
 
 			return true;
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			\GO::debug('IMAPAUTH: Authentication to IMAP server failed with Exception: ' . $e->getMessage() . ' IMAP error:' . $imap->last_error());
 			$imap->clear_errors();
 
@@ -116,7 +116,7 @@ class Authenticator {
 				$account->smtp_password = $password;
 			}
 			if(!$account->save()){
-				throw new Exception("Could not save e-mail account: ".implode("\n", $account->getValidationErrors()));				
+				throw new \Exception("Could not save e-mail account: ".implode("\n", $account->getValidationErrors()));				
 			}
 		}
 		
@@ -160,7 +160,7 @@ class Authenticator {
 			$model->setAttributes($account);
 			$model->save();
 			if(!$model->save()){
-				throw new Exception("Could not save e-mail account: ".implode("\n", $model->getValidationErrors()));				
+				throw new \Exception("Could not save e-mail account: ".implode("\n", $model->getValidationErrors()));				
 			}
 			$model->addAlias($user->email, $user->name);
 			

@@ -114,7 +114,7 @@ class Folder extends Base {
 			$msg = 'The destination is located inside the source directory.';
 			if(\GO::config()->debug)
 				$msg .= "\n\n".$srcPath.' -> '.$destPath;
-			throw new Exception($msg);
+			throw new \Exception($msg);
 		}
 	}
 	
@@ -129,7 +129,7 @@ class Folder extends Base {
 	 */
 	public function move(Folder $destinationFolder, $newFolderName=false,$appendNumberToNameIfDestinationExists=false){
 		if(!$this->exists())
-			throw new Exception("Folder '".$this->path()."' does not exist");
+			throw new \Exception("Folder '".$this->path()."' does not exist");
 		
 		if(is_link($this->path)){
 			$link = new File($this->path);
@@ -184,7 +184,7 @@ class Folder extends Base {
 		
 		$copiedFolder = new Folder($destinationFolder->path().'/'.$newFolderName);
 		if(!$copiedFolder->create())
-			throw new Exception ("Could not create ".$destinationFolder->path());
+			throw new \Exception ("Could not create ".$destinationFolder->path());
 		
 		$ls = $this->ls(true);
 		foreach($ls as $fsObject){
@@ -232,7 +232,7 @@ class Folder extends Base {
 			return true;
 		}else
 		{			
-			throw new Exception("Could not create folder ".$this->path);
+			throw new \Exception("Could not create folder ".$this->path);
 		}
 	}
 	
@@ -251,12 +251,12 @@ class Folder extends Base {
 		
 		$link = $this->createChild($linkName, true);
 		if($link->exists())
-			throw new Exception("Path ".$link->path()." already exists");
+			throw new \Exception("Path ".$link->path()." already exists");
 		
 		if(symlink($target->path(), $link->path()))
 			return $link;
 		else
-			throw new Exception("Failed to create link ".$link->path()." to ".$target->path());
+			throw new \Exception("Failed to create link ".$link->path()." to ".$target->path());
 	}
 	
 	/**

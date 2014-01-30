@@ -71,13 +71,13 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 				$folder = \GO\Files\Model\Folder::model()->findByPath($name, true);
 				
 				if(!$folder)
-					throw new Exception("Could not find or create folder");
+					throw new \Exception("Could not find or create folder");
 				
 				$folder->syncFilesystem(true);
 				
 				
 			}
-			catch(Exception $e){
+			catch(\Exception $e){
 				if (PHP_SAPI != 'cli')
 					echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
 				else
@@ -102,7 +102,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 					if($folder)
 							$folder->delete();
 				}
-				catch(Exception $e){
+				catch(\Exception $e){
 					if (PHP_SAPI != 'cli')
 						echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
 					else
@@ -131,7 +131,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 				if($folder)
 						$folder->delete();
 			}
-			catch(Exception $e){
+			catch(\Exception $e){
 				if (PHP_SAPI != 'cli')
 					echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
 				else
@@ -521,10 +521,10 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 
 			if ($params['paste_mode'] == 'cut') {
 				if (!$file->move($destinationFolder))
-					throw new Exception("Could not move " . $file->name);
+					throw new \Exception("Could not move " . $file->name);
 			}else {
 				if (!$file->copy($destinationFolder,$newFileName))
-					throw new Exception("Could not copy " . $file->name);
+					throw new \Exception("Could not copy " . $file->name);
 			}
 		}
 
@@ -570,10 +570,10 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 
 			if ($params['paste_mode'] == 'cut') {
 				if (!$folder->move($destinationFolder))
-					throw new Exception("Could not move " . $folder->name);
+					throw new \Exception("Could not move " . $folder->name);
 			}else {
 				if (!$folder->copy($destinationFolder, $folderName))
-					throw new Exception("Could not copy " . $folder->name);
+					throw new \Exception("Could not copy " . $folder->name);
 			}
 		}
 
@@ -876,7 +876,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 
 		if(!$folder->fsFolder->exists())
 		{
-			//throw new Exception("Fs folder doesn't exist! ".$folder->fsFolder->path());
+			//throw new \Exception("Fs folder doesn't exist! ".$folder->fsFolder->path());
 			\GO::debug("Deleting it because filesystem folder doesn't exist");
 			$folder->readonly = 1; //makes sure acl is not deleted
 			$folder->delete(true);
@@ -946,7 +946,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 			}
 
 			if($destinationFolder->id==$folder->id){
-				throw new Exception("Same ID's!");
+				throw new \Exception("Same ID's!");
 			}
 
 			$fsFolder = new \GO\Base\Fs\Folder($newPath);
@@ -985,7 +985,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 				$folder->readonly = 1;
 				if($folder->isModified())
 					if(!$folder->save(true)){
-						throw new Exception(var_export($folder->getValidationErrors(), true));
+						throw new \Exception(var_export($folder->getValidationErrors(), true));
 					}
 			}
 		}else
@@ -1013,7 +1013,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 		$folder = \GO\Files\Model\Folder::model()->findByPath($model->buildFilesPath(),true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
 		
 		if(!$folder){
-			throw new Exception("Failed to create folder ".$model->buildFilesPath());
+			throw new \Exception("Failed to create folder ".$model->buildFilesPath());
 		}
 //      if (!empty($model->acl_id))
 //          $folder->acl_id = $model->acl_id;
@@ -1150,7 +1150,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 		$archiveFile = new \GO\Base\Fs\File(\GO::config()->file_storage_path.$destinationFolder->path . '/' . $params['archive_name'] . '.zip');
 		
 		if($archiveFile->exists())
-			throw new Exception(sprintf(\GO::t('filenameExists','files'), $archiveFile->stripFileStoragePath()));
+			throw new \Exception(sprintf(\GO::t('filenameExists','files'), $archiveFile->stripFileStoragePath()));
 		
 		$sourceObjects = array();
 		for($i=0;$i<count($sources);$i++){			
@@ -1162,7 +1162,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 			\GO\Files\Model\File::importFromFilesystem($archiveFile);
 			$response['success']=true;
 		}  else {
-			throw new Exception("ZIP creation failed");
+			throw new \Exception("ZIP creation failed");
 		}
 
 		return $response;
@@ -1201,7 +1201,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 						exec($cmd, $output, $ret);
 						if($ret!=0)
 						{
-							throw new Exception("Could not decompress\n".implode("\n",$output));
+							throw new \Exception("Could not decompress\n".implode("\n",$output));
 						}
 					}
 					
@@ -1221,7 +1221,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 
 					if($ret!=0)
 					{
-						throw new Exception("Could not decompress\n".implode("\n",$output));
+						throw new \Exception("Could not decompress\n".implode("\n",$output));
 					}
 					break;
 
@@ -1232,7 +1232,7 @@ class Folder extends \GO\Base\Controller\AbstractModelController {
 
 					if($ret!=0)
 					{
-						throw new Exception("Could not decompress\n".implode("\n",$output));
+						throw new \Exception("Could not decompress\n".implode("\n",$output));
 					}
 					break;
 			}

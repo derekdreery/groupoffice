@@ -82,7 +82,7 @@ class Sync extends \GO\Base\Controller\AbstractController{
 					$this->fireEvent("ldapsyncuser", array($user, $record));
 				
 				echo "Synced ".$username."\n";
-			} catch(Exception $e){
+			} catch(\Exception $e){
 				echo "ERROR:\n";
 				echo (string) $e;
 				
@@ -155,7 +155,7 @@ class Sync extends \GO\Base\Controller\AbstractController{
 		$ldapConn = \GO\Base\Ldap\Connection::getDefault();
 		
 		if(empty(\GO::config()->ldap_groupsdn))
-			throw new Exception('$config[\'ldap_groupsdn\'] is not set!');
+			throw new \Exception('$config[\'ldap_groupsdn\'] is not set!');
 		
 		$result = $ldapConn->search(\GO::config()->ldap_groupsdn, 'cn=*');
 		
@@ -177,7 +177,7 @@ class Sync extends \GO\Base\Controller\AbstractController{
 				$groupname = $record->cn[0];
 				
 				if(empty($groupname)){
-					throw new Exception("Empty group name in LDAP record!");
+					throw new \Exception("Empty group name in LDAP record!");
 				}
 			
 				$group = \GO\Base\Model\Group::model()->findSingleByAttribute('name', $groupname);
@@ -230,7 +230,7 @@ class Sync extends \GO\Base\Controller\AbstractController{
 				}
 				
 				echo "Synced ".$groupname."\n";
-			} catch(Exception $e){
+			} catch(\Exception $e){
 				echo "ERROR:\n";
 				echo (string) $e;
 				

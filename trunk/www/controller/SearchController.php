@@ -28,7 +28,7 @@ class Search extends \GO\Base\Controller\AbstractModelController{
 				unset($params['delete_keys']);
 				$response['deleteSuccess']=true;
 			}
-			catch(Exception $e){
+			catch(\Exception $e){
 				$response['deleteSuccess']=false;
 				$response['deleteFeedback']=$e->getMessage();
 			}

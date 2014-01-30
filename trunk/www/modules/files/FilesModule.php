@@ -65,7 +65,7 @@ class FilesModule extends \GO\Base\Module{
 	}
 	
 	public static function saveUser($user, $wasNew) {
-		//throw new Exception($user->getOldAttributeValue('username'));
+		//throw new \Exception($user->getOldAttributeValue('username'));
 		if($wasNew){
 			$folder = Model\Folder::model()->findHomeFolder($user);			
 		}elseif($user->isModified('username')){
@@ -74,7 +74,7 @@ class FilesModule extends \GO\Base\Module{
 			{
 				$folder->name=$user->username;
 				$folder->systemSave=true;
-				//throw new Exception($folder->path);
+				//throw new \Exception($folder->path);
 				$folder->save();				
 			}
 		}

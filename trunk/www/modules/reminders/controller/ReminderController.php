@@ -74,7 +74,7 @@ class Reminder extends \GO\Base\Controller\AbstractModelController{
 			{
 				$reminderModel->removeManyMany('users', $delUserId);
 			}
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
 			$response['deleteSuccess']=false;
 			$response['deleteFeedback']=$e->getMessage();
 		}

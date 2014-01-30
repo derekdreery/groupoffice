@@ -93,7 +93,7 @@ class Addressbook extends \GO\Base\Controller\AbstractModelController{
 //		\GO::debug($import_filename);
 //
 //		if(!move_uploaded_file($import_filename, $params['file'])) {
-//			throw new Exception('Could not move '.$import_filename);
+//			throw new \Exception('Could not move '.$import_filename);
 //	  }
 
 //		$file = new \GO\Base\Fs\File($_FILES['importFiles']['tmp_name']);
@@ -114,7 +114,7 @@ class Addressbook extends \GO\Base\Controller\AbstractModelController{
 				elseif($params['controller']=='GO\Addressbook\Controller\Company')
 					$controller = new Company();
 				else
-					throw new Exception("No or wrong controller given");
+					throw new \Exception("No or wrong controller given");
 				
 				$response = array_merge($response,$controller->run("ImportCsv",$params,false));
 				break;
@@ -175,7 +175,7 @@ class Addressbook extends \GO\Base\Controller\AbstractModelController{
 //		
 //		
 //		if(!empty($params["addressbook_id"]))
-//			throw new Exception("Param addressbook_id may not be empty");
+//			throw new \Exception("Param addressbook_id may not be empty");
 //		//$params['addressbook_id'] = !empty($params['a']) ? $params['a'] : 1;
 //		
 //		if (is_array($vcard)) {

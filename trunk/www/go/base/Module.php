@@ -218,7 +218,7 @@ class Module extends Observable {
 					$moduleNames[]=$modManager ? $modManager->name () : $moduleId;
 				}				
 				
-				throw new Exception("Module ".$this->name()." depends on ".implode(",",$moduleNames).". Please make sure all dependencies are installed.");
+				throw new \Exception("Module ".$this->name()." depends on ".implode(",",$moduleNames).". Please make sure all dependencies are installed.");
 			}
 		}
 	}
@@ -241,7 +241,7 @@ class Module extends Observable {
 					\GO::getDbConnection ()->query($query);
 			}
 		}catch(PDOException $e){
-			throw new Exception("SQL query failed: ".$query."\n\n".$e->getMessage());
+			throw new \Exception("SQL query failed: ".$query."\n\n".$e->getMessage());
 		}
 		
 		\GO::clearCache();

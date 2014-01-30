@@ -110,7 +110,7 @@ class Assets
 		if(($basePath=realpath($value))!==false && is_dir($basePath) && is_writable($basePath))
 			$this->_basePath=$basePath;
 		else
-			throw new Exception('Assets.basePath "'.getcwd().'/' .$value.'" is invalid. Please make sure the directory exists and is writable by the Web server process.');
+			throw new \Exception('Assets.basePath "'.getcwd().'/' .$value.'" is invalid. Please make sure the directory exists and is writable by the Web server process.');
 	}
 
 	/**
@@ -212,7 +212,7 @@ class Assets
 				return $this->_published[$path]=$this->getBaseUrl().'/'.$dir;
 			}
 		}
-		throw new Exception('The asset "'.$path.'" to be published does not exist.');
+		throw new \Exception('The asset "'.$path.'" to be published does not exist.');
 	}
 
 	/**

@@ -142,7 +142,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 
 				$acl_id = $this->findAclId();
 				if(!$acl_id){
-					throw new Exception("Could not find ACL for ".$this->className()." with pk: ".$this->pk);
+					throw new \Exception("Could not find ACL for ".$this->className()." with pk: ".$this->pk);
 				}
 
 				$this->_permissionLevel=\GO\Base\Model\Acl::getUserPermissionLevel($acl_id);// model()->findByPk($acl_id)->getUserPermissionLevel();
@@ -224,7 +224,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 		
 		//blocked database check. We check this in the controller now.
 		if($this->isLocked() && !\GO::user()->isAdmin())
-			throw new Exception(\GO::t("fileIsLocked","files").': '.$this->path);
+			throw new \Exception(\GO::t("fileIsLocked","files").': '.$this->path);
 		
 		return parent::beforeDelete();
 	}
@@ -253,13 +253,13 @@ class File extends \GO\Base\Db\ActiveRecord {
 		//check permissions on the filesystem
 		if($this->isNew){
 			if(!$this->folder->fsFolder->isWritable()){
-				throw new Exception("Folder ".$this->folder->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
+				throw new \Exception("Folder ".$this->folder->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}else
 		{
 			if($this->isModified('name') || $this->isModified('folder_id')){
 				if(!$this->_getOldFsFile()->isWritable())
-					throw new Exception("File ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
+					throw new \Exception("File ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}
 		
@@ -267,7 +267,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 			
 			if($this->isModified('name')){				
 				//rename filesystem file.
-				//throw new Exception($this->getOldAttributeValue('name'));
+				//throw new \Exception($this->getOldAttributeValue('name'));
 				$oldFsFile = $this->_getOldFsFile();		
 				if($oldFsFile->exists())
 					$oldFsFile->rename($this->name);
@@ -285,7 +285,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 					$oldFsFile = $this->_getOldFsFile();
 
 				if (!$oldFsFile->move(new \GO\Base\Fs\Folder(\GO::config()->file_storage_path . dirname($this->path))))
-					throw new Exception("Could not rename folder on the filesystem");
+					throw new \Exception("Could not rename folder on the filesystem");
 				
 				//get old folder objekt
                                 $oldFolderId = $this->getOldAttributeValue('folder_id');
@@ -320,7 +320,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 		
 		$existingFile = $this->folder->hasFile($this->name);
 		if($existingFile && $existingFile->id!=$this->id)
-			throw new Exception(sprintf(\GO::t('filenameExists','files'), $this->path));
+			throw new \Exception(sprintf(\GO::t('filenameExists','files'), $this->path));
 		
 		return parent::beforeSave();
 	}

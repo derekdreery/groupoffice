@@ -48,7 +48,7 @@ class Reader{
 		if(!isset($this->fp))
 			$this->fp = fopen($this->filename, $mode);	
 		if(!is_resource($this->fp))
-			throw new Exception("Could not read CSV file");
+			throw new \Exception("Could not read CSV file");
 	}
 	
 	/**

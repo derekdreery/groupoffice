@@ -79,7 +79,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 			$c = new \GO\Base\Util\HttpClient();
 			
 			if(!$c->downloadFile($params['download_photo_url'], $file))
-				throw new Exception("Could not download photo from: '".$params['download_photo_url']."'");
+				throw new \Exception("Could not download photo from: '".$params['download_photo_url']."'");
 						
 			$model->setPhoto($file);
 			$model->save();					
@@ -366,7 +366,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 					$contact->save();
 				}
 			}
-			catch (Exception $e)
+			catch (\Exception $e)
 			{
 				$response['deleteFeedback'] = $strDeleteError;
 				$response['deleteSuccess'] = false;
@@ -603,7 +603,7 @@ class Contact extends \GO\Base\Controller\AbstractModelController{
 					$summaryLog->addSuccessful();
 				if ($readOnly)
 					$contactsAttr[] = $contact->getAttributes('formatted');
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				$summaryLog->addError($nr, $e->getMessage());
 			}
 		}

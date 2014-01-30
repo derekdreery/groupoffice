@@ -85,7 +85,7 @@ class MessageAttachment extends \GO\Base\Model{
 	 */
 	public function setTempFile(\GO\Base\Fs\File $file){
 		if(!$file->isTempFile())
-			throw new Exception("File $file->name is not a temporary file");
+			throw new \Exception("File $file->name is not a temporary file");
 		
 		$this->_tmp_file = $file->stripTempPath();
 	}

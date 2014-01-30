@@ -67,7 +67,7 @@ class Alias extends \GO\Base\Db\ActiveRecord {
 	protected function beforeSave() {
 		if ($this->isNew && !empty($this->domain->max_aliases))
 			if ($this->domain->getSumAliases() >= $this->domain->max_aliases)
-				throw new Exception('The maximum number of aliases for this domain has been reached.');
+				throw new \Exception('The maximum number of aliases for this domain has been reached.');
 		return parent::beforeSave();
 	}
 }

@@ -267,10 +267,10 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	public function addException($date, $exception_event_id=0) {
 		
 		if(!$this->isRecurring())
-			throw new Exception("Can't add exception to non recurring event ".$this->id);
+			throw new \Exception("Can't add exception to non recurring event ".$this->id);
 		
 		if(!$this->hasException($date)){
-			$exception = new Exception();
+			$exception = new \Exception();
 			$exception->event_id = $this->id;
 			$exception->time = mktime(date('G',$this->start_time),date('i',$this->start_time),0,date('n',$date),date('j',$date),date('Y',$date)); // Needs to be a unix timestamp
 			$exception->exception_event_id=$exception_event_id;
@@ -330,7 +330,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		
 		
 		if(!$this->isRecurring()){
-			throw new Exception("Can't create exception event for non recurring event ".$this->id);
+			throw new \Exception("Can't create exception event for non recurring event ".$this->id);
 		}
 		
 		$oldIgnore = \GO::setIgnoreAclPermissions();
@@ -355,7 +355,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$exceptionEvent->dontSendEmails = $dontSendEmails;
 			$exceptionEvent->setAttributes($attributes);
 			if(!$exceptionEvent->save())
-				throw new Exception("Could not create exception: ".var_export($exceptionEvent->getValidationErrors(), true));
+				throw new \Exception("Could not create exception: ".var_export($exceptionEvent->getValidationErrors(), true));
 			
 
 			$event->copyLinks($exceptionEvent);
@@ -544,7 +544,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 //		}
 		
 //			
-//			//copy particpants to new exception
+//			//copy particpants to new \Exception
 //			$stmt = $newExeptionEvent->participants();
 //			while($participant = $stmt->fetch()){
 //				$newParticipant = new Participant();
@@ -803,7 +803,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	public function findException($exceptionDate) {
 
 		if ($this->exception_for_event_id != 0)
-			throw new Exception("This is not a master event");
+			throw new \Exception("This is not a master event");
 
 		$startOfDay = \GO\Base\Util\Date::clear_time($exceptionDate);
 		$endOfDay = \GO\Base\Util\Date::date_add($startOfDay, 1);
@@ -816,7 +816,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		$exceptionJoinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('id', 'e.exception_event_id', '=', 't', true, true);
 
-		$findParams->join(Exception::model()->tableName(), $exceptionJoinCriteria, 'e');
+		$findParams->join(\Exception::model()->tableName(), $exceptionJoinCriteria, 'e');
 
 //			$dayStart = \GO\Base\Util\Date::clear_time($exceptionDate);
 //			$dayEnd = \GO\Base\Util\Date::date_add($dayStart,1);	
@@ -1108,7 +1108,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$exceptionJoinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('id', 'e.exception_event_id','=','t',true,true);
 			
-			$params->join(Exception::model()->tableName(),$exceptionJoinCriteria,'e');
+			$params->join(\Exception::model()->tableName(),$exceptionJoinCriteria,'e');
 			
 			$dayStart = \GO\Base\Util\Date::clear_time($exceptionDate);
 			$dayEnd = \GO\Base\Util\Date::date_add($dayStart,1);	
@@ -1653,7 +1653,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					$this->exception_for_event_id=$recurringEvent->id;
 					
 					//will be saved later
-					$exception = new Exception();
+					$exception = new \Exception();
 					$exception->time=$recurrenceTime;
 					$exception->event_id=$recurringEvent->id;
 				}
@@ -1795,8 +1795,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					
 				}
 				$this->_isImport=false;
-//			} catch (Exception $e) {
-//				throw new Exception($this->name.' ['.\GO\Base\Util\Date::get_timestamp($this->start_time).' - '.\GO\Base\Util\Date::get_timestamp($this->end_time).'] '.$e->getMessage());
+//			} catch (\Exception $e) {
+//				throw new \Exception($this->name.' ['.\GO\Base\Util\Date::get_timestamp($this->start_time).' - '.\GO\Base\Util\Date::get_timestamp($this->end_time).'] '.$e->getMessage());
 //			}
 			
 			if(!empty($exception)){			
@@ -1872,7 +1872,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					$this->addException($exceptionEventModel->start_time, $exceptionEventModel->id);
 					
 					
-//					\GO::debug('=== EXCEPTION EVENT === ['.\GO\Base\Util\Date::get_timestamp($exceptionEventModel->start_time).'] '.$exceptionEventModel->name.' (exception for event: '.$exceptionEventModel->exception_for_event_id.')');
+//					\GO::debug('=== EXCEPTION EVENT === ['.\GO\Base\Util\Date::get_timestamp($exceptionEventModel->start_time).'] '.$exceptionEventModel->name.' (\Exception for event: '.$exceptionEventModel->exception_for_event_id.')');
 				}
 			}
 		}
@@ -2190,7 +2190,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	
 //	public function sendReply(){
 //		if($this->is_organizer)
-//			throw new Exception("Meeting reply can only be send from the organizer's event");
+//			throw new \Exception("Meeting reply can only be send from the organizer's event");
 //	}	
 	
 	/**
@@ -2205,7 +2205,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	public function replyToOrganizer($recurrenceTime=false, $sendingParticipant=false, $includeIcs=true){
 		
 //		if($this->is_organizer)
-//			throw new Exception("Meeting reply can't be send from the organizer's event");
+//			throw new \Exception("Meeting reply can't be send from the organizer's event");
 		
 
 		//we need to pass the sending participant to the toIcs function. 
@@ -2215,11 +2215,11 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			
 
 		if(!$sendingParticipant)
-			throw new Exception("Could not find your participant model");
+			throw new \Exception("Could not find your participant model");
 
 		$organizer = $this->getOrganizer();
 		if(!$organizer)
-			throw new Exception("Could not find organizer to send message to!");
+			throw new \Exception("Could not find organizer to send message to!");
 
 		$updateReponses = \GO::t('updateReponses','calendar');
 		$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $this->name);
@@ -2263,7 +2263,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	
 	public function sendCancelNotice(){
 //		if(!$this->is_organizer)
-//			throw new Exception("Meeting request can only be send from the organizer's event");
+//			throw new \Exception("Meeting request can only be send from the organizer's event");
 		
 		$stmt = $this->participants;
 
@@ -2342,7 +2342,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	public function sendMeetingRequest($newParticipantsOnly=false){		
 		
 		if(!$this->is_organizer)
-			throw new Exception("Meeting request can only be send from the organizer's event");
+			throw new \Exception("Meeting request can only be send from the organizer's event");
 		
 		$stmt = $this->participants;
 		

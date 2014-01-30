@@ -63,7 +63,7 @@ class Note extends \GO\Base\Controller\AbstractJsonController {
 		// BEFORE LOAD: a password is entered to decrypt the content
 		if (isset($params['userInputPassword'])) {
 			if (!$model->decrypt($params['userInputPassword']))
-				throw new Exception(\GO::t('badPassword'));
+				throw new \Exception(\GO::t('badPassword'));
 		}
 
 		// Build remote combo field array
@@ -95,7 +95,7 @@ class Note extends \GO\Base\Controller\AbstractJsonController {
 		// decrypt model if password provided
 		if (isset($params['userInputPassword'])) {
 			if (!$model->decrypt($params['userInputPassword']))
-				throw new Exception(\GO::t('badPassword'));
+				throw new \Exception(\GO::t('badPassword'));
 		}
 		$extraFields = array();
 		if ($model->encrypted)

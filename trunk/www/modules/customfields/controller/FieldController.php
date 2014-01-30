@@ -71,11 +71,11 @@ class Field extends \GO\Base\Controller\AbstractModelController {
 			$msg = $e->getMessage();
 			if (strpos($msg,'SQLSTATE[42000]')===0 && strpos($msg,'1118')>14) {
 				$catModel = \GO\Customfields\Model\Category::model()->findByPk($params['category_id']);
-				throw new Exception(sprintf(\GO::t('tooManyCustomfields','customfields'),  \GO::t($catModel->extends_model,'customfields')));
+				throw new \Exception(sprintf(\GO::t('tooManyCustomfields','customfields'),  \GO::t($catModel->extends_model,'customfields')));
 			} else if (strpos($msg,'SQLSTATE[42000]')===0 && strpos($msg,'1074')>14) {
 				preg_match('/(max = ([0-9]+))/',$msg,$matches);
 				$str = !empty($matches[2]) ? $matches[2] : '';
-				throw new Exception(sprintf(\GO::t('customfieldTooLarge','customfields'),$str));
+				throw new \Exception(sprintf(\GO::t('customfieldTooLarge','customfields'),$str));
 			} else {
 				throw $e;
 			}
@@ -152,7 +152,7 @@ class Field extends \GO\Base\Controller\AbstractModelController {
 		}
 
 		if (!file_exists($importFile)) {
-			throw new Exception('File was not uploaded!');
+			throw new \Exception('File was not uploaded!');
 		}
 		$csv = new \GO\Base\Fs\CsvFile($importFile);
 		$sortOrder = 0;
@@ -176,7 +176,7 @@ class Field extends \GO\Base\Controller\AbstractModelController {
 		}
 
 		if (!file_exists($importFile)) {
-			throw new Exception('File was not uploaded!');
+			throw new \Exception('File was not uploaded!');
 		}
 		
 		$field = \GO\Customfields\Model\Field::model()->findByPk($params['field_id']);

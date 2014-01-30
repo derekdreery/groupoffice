@@ -114,7 +114,7 @@ class XMLRPCClient {
 	public function __call($method, $params) {
 
 		if (!function_exists('xmlrpc_encode_request')) {
-			throw new Exception("The php5-xmlrpc extension is not installed. Please install this to use this functionality");
+			throw new \Exception("The php5-xmlrpc extension is not installed. Please install this to use this functionality");
 		}
 		$xml = xmlrpc_encode_request($method, $params);
 //\GO::debug($xml);
@@ -146,7 +146,7 @@ class XMLRPCClient {
 		$errorNo = curl_errno($this->curl_hdl);
 
 		if ($errorNo) {
-			throw new Exception($this->_curlErrorCodes[$errorNo]);
+			throw new \Exception($this->_curlErrorCodes[$errorNo]);
 		}
 //\GO::debug($response);
 		$result = xmlrpc_decode_request($response, $method);

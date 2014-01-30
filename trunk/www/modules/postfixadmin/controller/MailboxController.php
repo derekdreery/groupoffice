@@ -93,7 +93,7 @@ class Mailbox extends \GO\Base\Controller\AbstractModelController {
 		}
 		
 		if ($params['password']!=$params['password2'])
-			throw new Exception(\GO::t('passwordMatchError'));
+			throw new \Exception(\GO::t('passwordMatchError'));
 		
 		if(empty($params['password']))
 			unset($params['password']);
@@ -163,11 +163,11 @@ class Mailbox extends \GO\Base\Controller\AbstractModelController {
 //		
 //		$imap = new \GO\Base\Mail\Imap();
 //		if(!$imap->connect($source['host'], $source['port'], $source['username'], $source['password'], $source['ssl']))
-//				throw new Exception("Could not connect to source host");
+//				throw new \Exception("Could not connect to source host");
 //		
 //		$folders = $imap->list_folders(true, false, "", "*");
 //		if(!is_array($folders))
-//			throw new Exception("Failed to fetch folder list");
+//			throw new \Exception("Failed to fetch folder list");
 //		
 //		$folderNames = array_keys($folders);
 //		if(!in_array('INBOX', $folderNames))
