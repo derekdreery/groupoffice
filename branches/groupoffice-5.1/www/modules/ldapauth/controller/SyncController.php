@@ -19,8 +19,6 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 		$record = $result->fetch();
 		$attr = $record->getAttributes();
 		
-		var_dump($attr);
-		
 	}
 	
 	/**
