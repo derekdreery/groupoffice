@@ -30,7 +30,7 @@ class GroupController extends \GO\Base\Controller\AbstractModelController {
 			$record = $group->getAttributes('formatted');
 			
 			if(\GO::modules()->customfields)
-				$record['customfields'] = \GO\Customfields\Controller\Category::getEnabledCategoryData("GO\Calendar\Model\Event", $group->id);
+				$record['customfields'] = \GO\Customfields\Controller\CategoryController::getEnabledCategoryData("GO\Calendar\Model\Event", $group->id);
 			else
 				$record['customfields']=array();
 			

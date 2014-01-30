@@ -18,7 +18,7 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 		
 	protected function prepareStore(\GO\Base\Data\Store $store){		
 			
-		$store->getColumnModel()->setFormatRecordFunction(array('GO\Modules\Controller\Module', 'formatRecord'));
+		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatRecord'));
 		$store->setDefaultSortOrder('sort_order');
     return parent::prepareStore($store);
 	}
@@ -35,7 +35,7 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 		
 	}
 	
-	public static function formatRecord($record, $model, $store){
+	public function formatRecord($record, $model, $store){
 
 		//if($model->moduleManager){
 		$record['description'] = $model->moduleManager->description();
@@ -105,12 +105,7 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 //				$model->getDefault($user);
 //			}
 //		}
-		
-		//todo make this irrelevant
-		//backwards compat
-		require_once(\GO::config()->root_path.'Group-Office.php');
-		$GLOBALS['GO_MODULES']->load_modules();
-		
+				
 		return $response;
 	}
 	
