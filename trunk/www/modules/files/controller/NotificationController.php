@@ -4,7 +4,7 @@
 namespace GO\files\Controller;
 
 
-class Notification extends \GO\Base\Controller\AbstractModelController {
+class NotificationController extends \GO\Base\Controller\AbstractModelController {
     
     protected $model = 'GO\Files\Model\FolderNotification';
     

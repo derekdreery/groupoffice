@@ -3,7 +3,7 @@
 namespace GO\Customfields\Controller;
 
 
-class Block extends \GO\Base\Controller\AbstractJsonController{
+class BlockController extends \GO\Base\Controller\AbstractJsonController{
 
 	protected function actionManageStore($params) {
 		

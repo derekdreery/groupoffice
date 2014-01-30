@@ -4,7 +4,7 @@
 namespace GO\Bookmarks\Controller;
 
 
-class Bookmark extends \GO\Base\Controller\AbstractModelController {
+class BookmarkController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Bookmarks\Model\Bookmark';
 

@@ -21,7 +21,7 @@
 namespace GO\Calendar\Controller;
 
 
-class ViewGroup extends \GO\Base\Controller\AbstractMultiSelectModelController {
+class ViewGroupController extends \GO\Base\Controller\AbstractMultiSelectModelController {
 
 	//protected $model = 'GO\Calendar\Model\ViewGroup';
 	

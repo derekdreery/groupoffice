@@ -22,7 +22,7 @@
 namespace GO\Reminders\Controller;
 
 
-class Reminder extends \GO\Base\Controller\AbstractModelController{
+class ReminderController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO\Base\Model\Reminder';
 	

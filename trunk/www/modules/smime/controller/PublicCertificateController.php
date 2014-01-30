@@ -21,7 +21,7 @@
 namespace GO\Smime\Controller;
 
 
-class PublicCertificate extends \GO\Base\Controller\AbstractModelController{
+class PublicCertificateController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO\Smime\Model\PublicCertificate';
 	

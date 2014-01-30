@@ -3,7 +3,7 @@
 namespace GO\Core\Controller;
 
 
-class Reminder extends \GO\Base\Controller\AbstractController {
+class ReminderController extends \GO\Base\Controller\AbstractController {
 	
 	protected function actionSnooze($params){
 		$reminderIds = json_decode($params['reminders'], true);

@@ -4,7 +4,7 @@
 namespace GO\Calendar\Controller;
 
 
-class GroupAdmin extends \GO\Base\Controller\AbstractMultiSelectModelController {
+class GroupAdminController extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model we are showing and adding to the other model.

@@ -15,7 +15,7 @@ foreach($output as $module){
 	
 	if(substr($module,-1)=='/'){ //check if it's a directory
 				
-		exec('rm -Rf '.$module);
+//		exec('rm -Rf '.$module);
 		if(is_dir($module)){
 			echo "UPDATE ".rtrim($module,'/')."\n";
 		

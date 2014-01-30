@@ -21,7 +21,7 @@
 namespace GO\Favorites\Controller;
 
 
-class TasklistFavorites extends \GO\Base\Controller\AbstractMultiSelectModelController {
+class TasklistFavoritesController extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called

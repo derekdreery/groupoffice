@@ -21,7 +21,7 @@
 namespace GO\Sites\Controller;
 
 
-class Site extends \GO\Sites\Components\AbstractFrontController
+class SiteController extends \GO\Sites\Components\AbstractFrontController
 {
 	public function allowGuests()
 	{

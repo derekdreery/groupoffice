@@ -21,7 +21,7 @@
 namespace GO\Calendar\Controller;
 
 
-class Calendar extends \GO\Base\Controller\AbstractModelController {
+class CalendarController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Calendar\Model\Calendar';
 	

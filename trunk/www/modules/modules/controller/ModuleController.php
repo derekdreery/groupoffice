@@ -3,7 +3,7 @@
 namespace GO\Modules\Controller;
 
 
-class Module extends \GO\Base\Controller\AbstractModelController{
+class ModuleController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO\Base\Model\Module';
 	

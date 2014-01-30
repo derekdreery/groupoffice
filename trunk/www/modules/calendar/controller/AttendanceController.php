@@ -3,7 +3,7 @@
 namespace GO\Calendar\Controller;
 
 
-class Attendance extends \GO\Base\Controller\AbstractController{
+class AttendanceController extends \GO\Base\Controller\AbstractController{
 	protected function actionLoad($params){
 		
 		$event = \GO\Calendar\Model\Event::model()->findByPk($params['id']);

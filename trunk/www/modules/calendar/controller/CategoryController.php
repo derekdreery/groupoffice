@@ -3,7 +3,7 @@
 namespace GO\Calendar\Controller;
 
 
-class Category extends \GO\Base\Controller\AbstractModelController {
+class CategoryController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Calendar\Model\Category';
 	

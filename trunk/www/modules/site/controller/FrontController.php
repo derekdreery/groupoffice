@@ -4,7 +4,7 @@
 namespace GO\Site\Controller;
 
 
-class Front extends \GO\Site\Components\Controller {
+class FrontController extends \GO\Site\Components\Controller {
 	protected function allowGuests() {
 		return array('content','thumb','search','ajaxwidget', 'sitemap');
 	}
@@ -99,7 +99,7 @@ class Front extends \GO\Site\Components\Controller {
 			throw new \GO\Base\Exception\AccessDenied();
 		
 		
-		$c = new \GO\Core\Controller\Core();
+		$c = new \GO\Core\Controller\CoreController();
 		return $c->run('thumb', $params, true, false);
 	}
 	

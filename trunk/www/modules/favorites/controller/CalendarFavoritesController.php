@@ -21,7 +21,7 @@
 namespace GO\Favorites\Controller;
 
 
-class CalendarFavorites extends \GO\Base\Controller\AbstractMultiSelectModelController {
+class CalendarFavoritesController extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	
 	/**
 	 * The name of the model from where the MANY_MANY relation is called

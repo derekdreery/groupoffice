@@ -22,7 +22,7 @@
 namespace GO\Sites\Components;
 
 
-abstract class AbstractFrontController extends \GO\Base\Controller\AbstractController
+abstract class AbstractFrontControllerController extends \GO\Base\Controller\AbstractController
 {
 //	/**
 //	 * Frontend action can be accessed without moduel access
@@ -332,7 +332,7 @@ abstract class AbstractFrontController extends \GO\Base\Controller\AbstractContr
 				$loginpath = !empty(GOS::site()->getSite()->login_url) ? GOS::site()->getSite()->login_url : '/sites/site/login';
 				$this->redirect(array($loginpath));
 			}  else {
-				$controller = new \GO\Sites\Controller\Site();
+				$controller = new \GO\Sites\Controller\SiteController();
 				$controller->template = $this->template;
 				$controller->render('error', array('error' => $e));
 			}
@@ -342,14 +342,14 @@ abstract class AbstractFrontController extends \GO\Base\Controller\AbstractContr
 			header("HTTP/1.0 404 Not Found");
       header("Status: 404 Not Found");
 			
-			$controller = new \GO\Sites\Controller\Site();
+			$controller = new \GO\Sites\Controller\SiteController();
 			$controller->template = $this->template;
 			$controller->setPageTitle("404 Not found");
 			$controller->render('404');
 		}
 		catch (\Exception $e)
 		{
-			$controller = new \GO\Sites\Controller\Site();
+			$controller = new \GO\Sites\Controller\SiteController();
 			$controller->template = $this->template;
 			$controller->render('error', array('error' => $e));
 		}

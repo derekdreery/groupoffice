@@ -290,7 +290,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 		if(!isset($this->_filesFolder)){		
 			
 			if($autoCreate){
-				$c = new \GO\Files\Controller\Folder();
+				$c = new \GO\Files\Controller\FolderController();
 				$folder_id = $c->checkModelFolder($this, true, true);
 			}elseif(empty($this->files_folder_id)){
 				return false;
@@ -2823,7 +2823,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			if ($this->hasFiles() && \GO::modules()->isInstalled('files')) {
 				//ACL must be generated here.
-				$fc = new \GO\Files\Controller\Folder();
+				$fc = new \GO\Files\Controller\FolderController();
 				$this->files_folder_id = $fc->checkModelFolder($this);
 			}
 
@@ -2854,7 +2854,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			if ($this->hasFiles() && \GO::modules()->isInstalled('files')) {
 				//ACL must be generated here.
-				$fc = new \GO\Files\Controller\Folder();
+				$fc = new \GO\Files\Controller\FolderController();
 				$this->files_folder_id = $fc->checkModelFolder($this);
 			}
 
@@ -4175,7 +4175,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 		if ($this->hasFiles() && \GO::modules()->isInstalled('files')) {
 			//ACL must be generated here.
-			$fc = new \GO\Files\Controller\Folder();	
+			$fc = new \GO\Files\Controller\FolderController();	
 			$this->files_folder_id = $fc->checkModelFolder($this);
 		}
 		

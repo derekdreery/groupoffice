@@ -9,7 +9,7 @@ class ImapauthModule extends \GO\Base\Module {
 	public static function initListeners() {
 		//\GO::session()->addListener('beforelogin', 'GO\Imapauth\ImapauthModule', 'beforeLogin');
 
-		$controller = new \GO\Core\Controller\Auth();
+		$controller = new \GO\Core\Controller\AuthController();
 		$controller->addListener('beforelogin', 'GO\Imapauth\ImapauthModule', 'beforeLogin');
 	}
 

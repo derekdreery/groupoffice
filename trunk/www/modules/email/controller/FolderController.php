@@ -4,7 +4,7 @@
 namespace GO\Email\Controller;
 
 
-class Folder extends \GO\Base\Controller\AbstractController {
+class FolderController extends \GO\Base\Controller\AbstractController {
 	protected function actionCreate($params){
 		
 		$account = \GO\Email\Model\Account::model()->findByPk($params['account_id']);

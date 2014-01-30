@@ -19,7 +19,7 @@
 namespace GO\Addressbook\Controller;
 
 
-class Contact extends \GO\Base\Controller\AbstractModelController{
+class ContactController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO\Addressbook\Model\Contact';
 	

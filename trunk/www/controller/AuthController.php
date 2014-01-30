@@ -12,7 +12,7 @@
 namespace GO\Core\Controller;
 
 
-class Auth extends \GO\Base\Controller\AbstractController {
+class AuthController extends \GO\Base\Controller\AbstractController {
 
 	protected $defaultAction = 'Init';
 	

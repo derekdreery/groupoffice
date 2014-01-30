@@ -6,7 +6,7 @@ namespace GO\Settings;
 class SettingsModule extends \GO\Base\Module{
 	public static function initListeners() {
 		
-		$c = new \GO\Core\Controller\Auth();
+		$c = new \GO\Core\Controller\AuthController();
 		$c->addListener('inlinescripts', 'GO\Settings\SettingsModule', 'inlinescripts');
 		
 		return parent::initListeners();

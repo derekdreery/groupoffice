@@ -639,7 +639,7 @@ class AbstractModelController extends AbstractController {
 	private function _processFilesDisplay($model,$response){
 		if (!empty(\GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
 
-			$fc = new \GO\Files\Controller\Folder();
+			$fc = new \GO\Files\Controller\FolderController();
 			$listResponse = $fc->run("list",array('skip_fs_sync'=>true, 'folder_id'=>$response['data']['files_folder_id'], "limit"=>20,"sort"=>'mtime',"dir"=>'DESC'),false. false);
 			$response['data']['files'] = $listResponse['results'];
 		} else {

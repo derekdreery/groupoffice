@@ -12,7 +12,7 @@
 namespace GO\Addressbook\Controller;
 
 
-class Site extends \GO\Site\Components\Controller{
+class SiteController extends \GO\Site\Components\Controller{
 	
 	/**
 	 * Sets the access permissions for guests

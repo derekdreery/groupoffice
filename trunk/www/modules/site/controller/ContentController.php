@@ -4,7 +4,7 @@
 namespace GO\Site\Controller;
 
 
-class Content extends \GO\Base\Controller\AbstractJsonController {
+class ContentController extends \GO\Base\Controller\AbstractJsonController {
 	
 	/**
 	 * 

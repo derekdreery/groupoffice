@@ -3,7 +3,7 @@
 namespace GO\Sieve\Controller;
 
 
-class Sieve extends \GO\Base\Controller\AbstractModelController{
+class SieveController extends \GO\Base\Controller\AbstractModelController{
 	
 	private $_sieve;
 	

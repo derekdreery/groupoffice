@@ -4,7 +4,7 @@
 namespace GO\Email\Controller;
 
 
-class Filter extends \GO\Base\Controller\AbstractModelController {
+class FilterController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Email\Model\Filter';
 

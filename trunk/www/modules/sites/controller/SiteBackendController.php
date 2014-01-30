@@ -4,7 +4,7 @@
 namespace GO\Sites\Controller;
 
 
-class SiteBackend extends \GO\Base\Controller\AbstractModelController {
+class SiteBackendController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Sites\Model\Site';
 	

@@ -3,7 +3,7 @@
 namespace GO\Ldapauth\Controller;
 
 
-class Sync extends \GO\Base\Controller\AbstractController{
+class SyncController extends \GO\Base\Controller\AbstractController{
 	
 	protected function allowGuests() {
 		return array("users", "lookupuser","groups");

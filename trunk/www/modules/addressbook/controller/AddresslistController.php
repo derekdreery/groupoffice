@@ -16,7 +16,7 @@
 namespace GO\Addressbook\Controller;
 
 
-class Addresslist extends \GO\Base\Controller\AbstractModelController {
+class AddresslistController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Addressbook\Model\Addresslist';
 	

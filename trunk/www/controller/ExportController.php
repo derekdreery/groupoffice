@@ -23,7 +23,7 @@
 namespace GO\Core\Controller;
 
 
-class Export extends \GO\Base\Controller\AbstractController { 
+class ExportController extends \GO\Base\Controller\AbstractController { 
 
 	/**
 	 * Get the exporttypes that can be used and get the data for the checkboxes
