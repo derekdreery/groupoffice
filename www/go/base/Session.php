@@ -70,7 +70,7 @@ class Session extends Observable{
 			
 				if(isset($_REQUEST['GOSID'])){
 					if(!isset($_REQUEST['security_token']) || $_SESSION['GO_SESSION']['security_token']!=$_REQUEST['security_token']){
-						throw new Exception\SecurityTokenMismatch();
+						throw new \Exception\SecurityTokenMismatch();
 					}
 				}		
 			}
@@ -372,7 +372,7 @@ class Session extends Observable{
 		
 		
 		if(!\GO::user())
-			throw new Exception("Could not set user with id ".$user_id." in Session::setCurrentUser()!");
+			throw new \Exception("Could not set user with id ".$user_id." in Session::setCurrentUser()!");
 		
 		//for logging
 		\GO::session()->values['username']=\GO::user()->username;

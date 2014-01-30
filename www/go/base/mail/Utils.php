@@ -36,7 +36,7 @@ class Utils{
 			//eg. iso-8859-1''%66%6F%73%73%2D%69%74%2D%73%6D%61%6C%6C%2E%67%69%66
 			$charset = substr($string,0, $pos);
 			
-//			throw new Exception($charset.' : '.substr($string, $pos+2));
+//			throw new \Exception($charset.' : '.substr($string, $pos+2));
 			$string = rawurldecode(substr($string, $pos+2));
 
 			$string=\GO\Base\Util\String::clean_utf8($string, $charset);

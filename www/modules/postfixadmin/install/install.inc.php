@@ -82,7 +82,7 @@ if(!empty($GLOBALS['GO_CONFIG']->serverclient_domains))
 						$email->synchronize_folders($account);
 					}
 				}
-				catch(Exception $e){
+				catch(\Exception $e){
 					go_debug('POSTFIXADMIN: '.$e->getMessage());
 				}
 			}

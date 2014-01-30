@@ -374,7 +374,7 @@ class ColumnModel {
 				{
 					$str = $this->_formatRecordFunction;
 				}
-				throw new Exception("Fatal error: $str should return the record");
+				throw new \Exception("Fatal error: $str should return the record");
 			}
 		}
 

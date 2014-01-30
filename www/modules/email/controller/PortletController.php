@@ -168,7 +168,7 @@ class Portlet extends \GO\Base\Controller\AbstractModelController {
 						if($node['expanded'])
 							$node['children']=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
 						
-					}catch(Exception $e){
+					}catch(\Exception $e){
 						$this->_checkImapConnectException($e,$node);
 					}
 					

@@ -37,7 +37,7 @@ class Log extends \GO\Base\Controller\AbstractModelController {
 
 			while($log = $stmt->fetch()){
 				if(!$csvLogFile->putRecord(array_values($log->getAttributes('formatted'))))
-					throw new Exception("Could not write to CSV log file: ".$csvLogFile->path());
+					throw new \Exception("Could not write to CSV log file: ".$csvLogFile->path());
 
 				$log->delete();
 			}

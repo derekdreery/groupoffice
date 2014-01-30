@@ -80,7 +80,7 @@ class RssFeed extends \GO\Base\Controller\AbstractModelController {
 				$xml = $httpclient->request($feed);
 			} else {
 				if (!\GO\Base\Fs\File::checkPathInput($feed))
-					throw new Exception("Invalid request");
+					throw new \Exception("Invalid request");
 
 				$xml = @file_get_contents($feed);
 			}

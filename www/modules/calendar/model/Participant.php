@@ -428,11 +428,11 @@ class Participant extends \GO\Base\Db\ActiveRecord {
 //	private function _notifyOrganizer(){
 //
 ////		if(!$sendingParticipant)
-////			throw new Exception("Could not find your participant model");
+////			throw new \Exception("Could not find your participant model");
 //
 //		$organizer = $this->event->getOrganizer();
 //		if(!$organizer)
-//			throw new Exception("Could not find organizer to send message to!");
+//			throw new \Exception("Could not find organizer to send message to!");
 //
 //		$updateReponses = \GO::t('updateReponses','calendar');
 //		$subject= sprintf($updateReponses[$this->status], $this->user->name, $this->event->name);

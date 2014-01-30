@@ -59,7 +59,7 @@ class Pager extends \GO\Site\Components\Widget {
 			$this->pageSize = \GO::user() ? \GO::user()->max_rows_list : \GO::config()->nav_page_size;
 			
 		if(!($this->store instanceof \GO\Base\Data\DbStore))
-			throw new Exception('store needs to be an instance of \GO\Base\Data\Store');
+			throw new \Exception('store needs to be an instance of \GO\Base\Data\Store');
 		
 		$this->store->start = $this->pageSize * ($this->currentPage-1);
 		$this->store->limit = $this->pageSize;

@@ -63,10 +63,10 @@ class Group extends \GO\Base\Db\ActiveRecord {
 	
 	protected function beforeDelete() {
 		if($this->id==\GO::config()->group_root){
-			throw new Exception(\GO::t('noDeleteAdmins','groups'));
+			throw new \Exception(\GO::t('noDeleteAdmins','groups'));
 		}	
 		if($this->id==\GO::config()->group_everyone){
-			throw new Exception(\GO::t('noDeleteEveryone','groups'));
+			throw new \Exception(\GO::t('noDeleteEveryone','groups'));
 		}
 		return parent::beforeDelete();
 	}

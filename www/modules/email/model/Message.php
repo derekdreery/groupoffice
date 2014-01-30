@@ -216,7 +216,7 @@ abstract class Message extends \GO\Base\Model {
 		else
 			return $att[$number];
 //			false}else{
-//			//throw new Exception("Attachment number $number not found");
+//			//throw new \Exception("Attachment number $number not found");
 //			return ;
 //		}
 	}

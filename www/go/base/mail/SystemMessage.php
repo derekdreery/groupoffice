@@ -53,16 +53,16 @@ class SystemMessage extends SmimeMessage {
 		
 		// Check if the smime module is installed
 		if(!\GO::modules()->isInstalled("smime"))
-			Throw new Exception('Smime module not installed');
+			Throw new \Exception('Smime module not installed');
 
 		if(empty(\GO::config()->smtp_account_smime_password))
-			Throw new Exception('No password for smime set in the Group-Office config file');
+			Throw new \Exception('No password for smime set in the Group-Office config file');
 		
 		// Check for a certificate for the give email account
 		$cert = \GO\Smime\Model\Certificate::model()->findByPk($this->_account->id);
 		
 		if(!$cert || empty($cert->cert))
-			Throw new Exception('No certificate enabled for the given account');
+			Throw new \Exception('No certificate enabled for the given account');
 
 		// If the certificate is found, then get the password and attach the certificate to the message
 		$this->setSignParams($cert->cert, \GO::config()->smtp_account_smime_password);

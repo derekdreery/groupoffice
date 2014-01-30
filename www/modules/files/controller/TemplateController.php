@@ -65,7 +65,7 @@ class Template extends \GO\Base\Controller\AbstractModelController {
 		
 		$filename = \GO\Base\Fs\File::stripInvalidChars($params['filename']);
 		if(empty($filename))
-			throw new Exception("Filename can not be empty");
+			throw new \Exception("Filename can not be empty");
 		
 		$template = \GO\Files\Model\Template::model()->findByPk($params['template_id']);
 		

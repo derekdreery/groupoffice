@@ -54,7 +54,7 @@ class Plupload {
 
 		$file = new \GO\Base\Fs\File($targetDir . DIRECTORY_SEPARATOR . $fileName);
 		if ($file->exists() && $file->size() > \GO::config()->max_file_size)
-			throw new Exception("File too large");
+			throw new \Exception("File too large");
 
 // Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
 		if (strpos($contentType, "multipart") !== false) {

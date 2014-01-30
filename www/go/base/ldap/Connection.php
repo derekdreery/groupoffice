@@ -40,7 +40,7 @@ class Connection{
 		if (!empty(\GO::config()->ldap_bind_rdn)) {
 			$bound = $ldapConn->bind(\GO::config()->ldap_bind_rdn, \GO::config()->ldap_pass);
 			if (!$bound)
-				throw new Exception("Failed to bind to LDAP server with RDN: " . \GO::config()->ldap_bind_rdn);
+				throw new \Exception("Failed to bind to LDAP server with RDN: " . \GO::config()->ldap_bind_rdn);
 		}
 		
 		return $ldapConn;
@@ -57,7 +57,7 @@ class Connection{
 			$this->_link=ldap_connect($this->_host, $this->_port);
 			
 			if(!$this->_link)
-				throw new Exception ("LDAP connection to ".$this->_host." on ".$this->_port." failed");
+				throw new \Exception ("LDAP connection to ".$this->_host." on ".$this->_port." failed");
 			
 			ldap_set_option($this->_link,LDAP_OPT_PROTOCOL_VERSION,3);
 			
@@ -115,7 +115,7 @@ class Connection{
 			$searchId = ldap_search($this->_link, $baseDN, $query);
 		
 		if(!$searchId)
-			throw new Exception("Invalid LDAP search BaseDN: $baseDN, Query: $query");
+			throw new \Exception("Invalid LDAP search BaseDN: $baseDN, Query: $query");
 		
 		return new Result($this, $searchId);
 	}

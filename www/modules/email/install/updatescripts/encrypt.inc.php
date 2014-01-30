@@ -8,7 +8,7 @@ while ($accountModel = $accountsStmt->fetch()) {
 			$accountModel->smtp_password = "";
 			$accountModel->smtp_password = $pwBuffer;
 			$accountModel->save();
-		}catch(Exception $e){
+		}catch(\Exception $e){
 			echo $e->getMessage();
 		}
 	}

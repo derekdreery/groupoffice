@@ -257,7 +257,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 				$this->disk_usage+=$bytes;
 			}
 		} else
-			throw new Exceptions('Can not calculated diskusage without the files module');
+			throw new \Exceptions('Can not calculated diskusage without the files module');
 		return $this;
 	}
 	
@@ -409,9 +409,9 @@ class User extends \GO\Base\Db\ActiveRecord {
 	
 	protected function beforeDelete() {
 		if($this->id==1){
-			throw new Exception(\GO::t('deletePrimaryAdmin','users'));
+			throw new \Exception(\GO::t('deletePrimaryAdmin','users'));
 		}elseif($this->id==\GO::user()->id){
-			throw new Exception(\GO::t('deleteYourself','users'));			
+			throw new \Exception(\GO::t('deleteYourself','users'));			
 		}else
 		{
 			return parent::beforeDelete();

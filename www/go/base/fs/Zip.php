@@ -60,7 +60,7 @@ class Zip {
 			
 			
 			if(!$zip->close() || !$archiveFile->exists()){
-				throw new Exception($zip->getStatusString());
+				throw new \Exception($zip->getStatusString());
 			}else
 			{
 				return true;
@@ -84,7 +84,7 @@ class Zip {
 			exec($cmd, $output, $ret);
 
 			if ($ret!=0 || !$archiveFile->exists()) {
-				throw new Exception('Command failed: ' . $cmd . "<br /><br />" . implode("<br />", $output));
+				throw new \Exception('Command failed: ' . $cmd . "<br /><br />" . implode("<br />", $output));
 			}
 			
 			return true;
@@ -111,7 +111,7 @@ class Zip {
 		}  else {
 			\GO::debug("Add empty dir: ".$relative_path);
 			if(!$zip->addEmptyDir(rtrim($relative_path,'/')))
-				throw new Exception("Could not add emty directory ".$relative_path);
+				throw new \Exception("Could not add emty directory ".$relative_path);
 							
 		}
 		

@@ -117,7 +117,7 @@ class Site extends \GO\Sites\Components\AbstractFrontController
 					if(\GO::session()->login($user->username, $_POST['User']['password']))
 						$this->redirect($this->getReturnUrl());
 					else
-						throw new Exception('Login after registreation failed.');
+						throw new \Exception('Login after registreation failed.');
 				}
 			}
 			else {
@@ -167,12 +167,12 @@ class Site extends \GO\Sites\Components\AbstractFrontController
 	public function actionResetPassword()
 	{
 		if(empty($_GET['email']))
-			throw new Exception(\GO::t("noemail","sites"));
+			throw new \Exception(\GO::t("noemail","sites"));
 
 		$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $_GET['email']);
 
 		if(!$user)
-			throw new Exception(\GO::t("invaliduser","sites"));
+			throw new \Exception(\GO::t("invaliduser","sites"));
 		
 //		\GO::language()->setLanguage($user->language);
 

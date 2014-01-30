@@ -189,7 +189,7 @@ class AssetManager
 				return $this->_published[$path]=$this->getBaseUrl().'/'.$dir;
 			}
 		}
-		throw new Exception('The asset "'.$path.'" to be published does not exist.');
+		throw new \Exception('The asset "'.$path.'" to be published does not exist.');
 	}
 
 	/**

@@ -200,7 +200,7 @@ class Validate {
 			if($ret!="INVALID_INPUT")
 				throw new \GO\Base\Exception\ViesDown();
 			
-			throw new Exception("Could not check VAT number: ".$msg);
+			throw new \Exception("Could not check VAT number: ".$msg);
 		}
 
 		return $ret->valid;

@@ -315,7 +315,7 @@ abstract class AbstractJsonController extends AbstractController {
 
 		foreach ($combofields as $property => $map) {
 			if (is_numeric($property))
-				throw new Exception("remoteComboFields() must return a key=>value array.");
+				throw new \Exception("remoteComboFields() must return a key=>value array.");
 
 			$value = '';
 			$eval = '$value = ' . $map . ';';

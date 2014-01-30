@@ -98,7 +98,7 @@ class Mailbox extends \GO\Base\Db\ActiveRecord {
 		$this->_checkQuota();
 		
 		if (!empty($this->domain->max_mailboxes) && $this->isNew && $this->domain->getSumMailboxes() >= $this->domain->max_mailboxes)
-						throw new Exception('The maximum number of mailboxes for this domain has been reached.');
+						throw new \Exception('The maximum number of mailboxes for this domain has been reached.');
 
 		return parent::validate();
 	}
@@ -130,7 +130,7 @@ class Mailbox extends \GO\Base\Db\ActiveRecord {
 				$sumUsedQuotaOtherwise = $this->domain->getSumUsedQuota() - $existingQuota; // Domain's used quota w/o the current mailbox's quota.
 				if ($sumUsedQuotaOtherwise + $this->quota > $total_quota) {
 					$quotaLeft = $total_quota - $sumUsedQuotaOtherwise;
-					throw new Exception('The maximum quota has been reached. You have ' . \GO\Base\Util\Number::localize($quotaLeft / 1024) . 'MB left');
+					throw new \Exception('The maximum quota has been reached. You have ' . \GO\Base\Util\Number::localize($quotaLeft / 1024) . 'MB left');
 				}
 			}
 		}

@@ -59,12 +59,12 @@ class Certificate extends \GO\Base\Controller\AbstractController {
 
 				$srcFile = \GO\Base\Fs\File::tempFile();
 				if (!$imapMessage->saveToFile($srcFile->path()))
-					throw new Exception("Could not fetch message from IMAP server");
+					throw new \Exception("Could not fetch message from IMAP server");
 
 				$this->_decryptFile($srcFile, $account);
 			}
 			
-//			throw new Exception($srcFile->path());
+//			throw new \Exception($srcFile->path());
 
 			$pubCertFile = \GO\Base\Fs\File::tempFile();
 			//Command line:
@@ -75,7 +75,7 @@ class Certificate extends \GO\Base\Controller\AbstractController {
 			//Error msg: error:21075075:PKCS7 routines:PKCS7_verify:certificate verify error
 			//
 //			$valid = openssl_pkcs7_verify($srcFile->path(), PKCS7_NOVERIFY, $pubCertFile->path(), $this->_getRootCertificates());
-//			throw new Exception($srcFile->path());
+//			throw new \Exception($srcFile->path());
 			$srcFile->delete();
 
 			if ($valid) {
@@ -89,11 +89,11 @@ class Certificate extends \GO\Base\Controller\AbstractController {
 
 					$this->_savePublicCertificate($certData, $email);
 				} else {					
-					throw new Exception('Certificate appears to be valid but could not get certificate from signature. SSL Error: '.openssl_error_string());
+					throw new \Exception('Certificate appears to be valid but could not get certificate from signature. SSL Error: '.openssl_error_string());
 				}
 
 				if (empty($certData))
-					throw new Exception('Certificate appears to be valid but could not get certificate from signature.');
+					throw new \Exception('Certificate appears to be valid but could not get certificate from signature.');
 			}
 		}
 	
@@ -212,7 +212,7 @@ class Certificate extends \GO\Base\Controller\AbstractController {
 			$ret = openssl_pkcs7_decrypt($srcFile->path(), $decryptedFile->path(), $certs['cert'], array($certs['pkey'], $password));
 			
 			if(!$decryptedFile->exists())
-				throw new Exception("Could not decrypt message: ".openssl_error_string());
+				throw new \Exception("Could not decrypt message: ".openssl_error_string());
 			
 			$decryptedFile->move($srcFile->parent(), $srcFile->name());
 		}

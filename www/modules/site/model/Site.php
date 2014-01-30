@@ -170,7 +170,7 @@ class Site extends \GO\Base\Db\ActiveRecord {
 		$module = \GO::modules()->isInstalled($this->module);		
 		
 		if(!$module)
-			throw new Exception("Module ".$this->module." not found!");
+			throw new \Exception("Module ".$this->module." not found!");
 		
 		return $module;
 	}

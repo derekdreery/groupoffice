@@ -121,7 +121,7 @@ class AclUser extends \GO\Base\Controller\AbstractMultiSelectModelController {
 			
 			foreach ($delKeys as $delKey) {
 //				if ($delKey==1)
-//					throw new Exception(\GO::t('dontChangeAdminPermissions'));
+//					throw new \Exception(\GO::t('dontChangeAdminPermissions'));
 				
 				$aclItem = \GO\Base\Model\Acl::model()->findByPk($params['model_id']);
 				if ($aclItem->user_id == $delKey) {
@@ -133,7 +133,7 @@ class AclUser extends \GO\Base\Controller\AbstractMultiSelectModelController {
 						$aclItem->save();
 					}else
 					{
-						throw new Exception(\GO::t('dontChangeOwnersPermissions'));
+						throw new \Exception(\GO::t('dontChangeOwnersPermissions'));
 					}
 				}
 			}
@@ -146,11 +146,11 @@ class AclUser extends \GO\Base\Controller\AbstractMultiSelectModelController {
 	protected function beforeUpdateRecord($params, &$record, $model) {
 		
 		if($record['id']==\GO::user()->id && !\GO::user()->isAdmin()){
-			throw new Exception(\GO::t('dontChangeOwnersPermissions'));
+			throw new \Exception(\GO::t('dontChangeOwnersPermissions'));
 		}
 		
 		if($model->aclItem->user_id==$record['id']){
-			throw new Exception(\GO::t('dontChangeOwnersPermissions'));
+			throw new \Exception(\GO::t('dontChangeOwnersPermissions'));
 		}
 		return true;
 	}

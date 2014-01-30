@@ -127,7 +127,7 @@ class SentMailing extends \GO\Base\Db\ActiveRecord {
 	
 	protected function beforeDelete() {
 		if($this->status==self::STATUS_RUNNING)
-			throw new Exception("Can't delete a running mailing. Pause it first.");		
+			throw new \Exception("Can't delete a running mailing. Pause it first.");		
 		return parent::beforeDelete();
 	}
 	

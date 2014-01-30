@@ -58,7 +58,7 @@ class Tasklist extends \GO\Base\Controller\AbstractModelController{
 		$count = 0;
 		$failed=array();
 		if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
-			throw new Exception($lang['common']['noFileUploaded']);
+			throw new \Exception($lang['common']['noFileUploaded']);
 		}else {
 			$file = new \GO\Base\Fs\File($_FILES['ical_file']['tmp_name'][0]);
 			$file->convertToUtf8();
@@ -71,7 +71,7 @@ class Tasklist extends \GO\Base\Controller\AbstractModelController{
 					$event->importVObject( $vtask, array('tasklist_id'=>$params['tasklist_id']) );
 		
 					$count++;
-				}catch(Exception $e){
+				}catch(\Exception $e){
 					$failed[]=$e->getMessage();
 				}
 			}

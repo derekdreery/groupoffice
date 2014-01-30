@@ -38,14 +38,14 @@ abstract class Base{
 //		\GO::debug("FS construct $path");
 		
 		if(empty($path))
-			throw new Exception("Path may not be empty in Base");
+			throw new \Exception("Path may not be empty in Base");
 		
 		//normalize path slashes
 		if(\GO\Base\Util\Common::isWindows())
 			$path=str_replace('\\','/', $path);
 		
 		if(!self::checkPathInput($path))
-			throw new Exception("The supplied path '$path' was invalid");
+			throw new \Exception("The supplied path '$path' was invalid");
 		
 		$parent = dirname($path);
 		if($parent != '/')

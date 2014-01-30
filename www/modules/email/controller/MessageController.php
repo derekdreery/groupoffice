@@ -482,7 +482,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 					try {
 						$linkedEmail->save();
 					} catch (\GO\Base\Exception\AccessDenied $e) {
-						throw new Exception(\GO::t('linkMustHavePermissionToWrite','email'));
+						throw new \Exception(\GO::t('linkMustHavePermissionToWrite','email'));
 					}
 					$linkedEmail->link($model);
 				}
@@ -522,7 +522,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 		$account = \GO\Email\Model\Account::model()->findByPk($alias->account_id);
 
 		if (empty($account->drafts))
-			throw new Exception(\GO::t('draftsDisabled', 'email'));
+			throw new \Exception(\GO::t('draftsDisabled', 'email'));
 
 		$message = new \GO\Base\Mail\Message();
 
@@ -624,7 +624,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 		$message->handleEmailFormInput($params);
 
 		if(!$message->hasRecipients())
-			throw new Exception(\GO::t('feedbackNoReciepent','email'));
+			throw new \Exception(\GO::t('feedbackNoReciepent','email'));
 
 		$message->setFrom($alias->email, $alias->name);
 
@@ -651,7 +651,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 			$msg = $e->getMessage();
 			preg_match('/(554 5\.7\.1).*:(.*)\"/s', $msg, $matches);
 			if (!empty($matches))
-				throw new Exception($matches[2]);
+				throw new \Exception($matches[2]);
 			
 			$success=false;
 		}
@@ -754,7 +754,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 				$logStr = trim(substr($matches[0], 2, -2));
 			}
 
-			throw new Exception($msg.nl2br($logStr));
+			throw new \Exception($msg.nl2br($logStr));
 		}
 
 		$this->_link($params, $message);
@@ -1343,7 +1343,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 				//import to check if there are relevant updates
 				$event->importVObject($vevent, array(), true);				
 				$alreadyProcessed=!$event->isModified($event->getRelevantMeetingAttributes());
-//				throw new Exception(\GO\Base\Util\Date::get_timestamp($vevent->{"last-modified"}->getDateTime()->format('U')).' < '.\GO\Base\Util\Date::get_timestamp($event->mtime));
+//				throw new \Exception(\GO\Base\Util\Date::get_timestamp($vevent->{"last-modified"}->getDateTime()->format('U')).' < '.\GO\Base\Util\Date::get_timestamp($event->mtime));
 //				$alreadyProcessed=$vevent->{"last-modified"}->getDateTime()->format('U')<$event->mtime;
 			}
 			
@@ -1396,7 +1396,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 									$event->toHtml().
 									'</div>';
 					}
-					catch(Exception $e){
+					catch(\Exception $e){
 						//$response['htmlbody'].= '<div style="border: 1px solid black;margin-top:10px">Could not render event</div>';
 					}
 			}
@@ -1555,12 +1555,12 @@ class Message extends \GO\Base\Controller\AbstractController {
 		
 		$success = $imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
 		if(!$success)
-			throw new Exception("Could not save temp file for tnef extraction");
+			throw new \Exception("Could not save temp file for tnef extraction");
 		
 		chdir($tmpFolder->path());
 		exec(\GO::config()->cmd_tnef.' '.$tmpFile->path(), $output, $retVar);
 		if($retVar!=0)
-			throw new Exception("TNEF extraction failed: ".implode("\n", $output));		
+			throw new \Exception("TNEF extraction failed: ".implode("\n", $output));		
 		$tmpFile->delete();
 		
 		$items = $tmpFolder->ls();
@@ -1571,7 +1571,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 
 		exec(\GO::config()->cmd_zip.' -r "winmail.zip" *', $output, $retVar);
 		if($retVar!=0)
-			throw new Exception("ZIP compression failed: ".implode("\n", $output));		
+			throw new \Exception("ZIP compression failed: ".implode("\n", $output));		
 		
 		$zipFile = $tmpFolder->child('winmail.zip');
 		\GO\Base\Util\Http::outputDownloadHeaders($zipFile,false,true);
@@ -1639,11 +1639,11 @@ class Message extends \GO\Base\Controller\AbstractController {
 				chdir($tmpFolder->path());
 		exec(\GO::config()->cmd_tnef.' -C '.$tmpFolder->path().' '.$tmpFile->path(), $output, $retVar);
 		if($retVar!=0)
-			throw new Exception("TNEF extraction failed: ".implode("\n", $output));		
+			throw new \Exception("TNEF extraction failed: ".implode("\n", $output));		
 		
 		exec(\GO::config()->cmd_zip.' -r "winmail.zip" *', $output, $retVar);
 		if($retVar!=0)
-			throw new Exception("ZIP compression failed: ".implode("\n", $output));		
+			throw new \Exception("ZIP compression failed: ".implode("\n", $output));		
 		
 		$zipFile = $tmpFolder->child('winmail.zip');
 		\GO\Base\Util\Http::outputDownloadHeaders($zipFile,false,true);
@@ -1709,7 +1709,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 		
 		if($params['mailbox']==$params['target_mailbox'])
 		{
-			throw new Exception(\GO::t("sourceAndTargetSame","email"));
+			throw new \Exception(\GO::t("sourceAndTargetSame","email"));
 		}
 
 		$account = \GO\Email\Model\Account::model()->findByPk($params['account_id']);
@@ -1718,7 +1718,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 
 		$before_timestamp = \GO\Base\Util\Date::to_unixtime($params['until_date']);
 		if (empty($before_timestamp))
-			throw new Exception(\GO::t('untilDateError','email').': '.$params['until_date']);
+			throw new \Exception(\GO::t('untilDateError','email').': '.$params['until_date']);
 
 		$date_string = date('d-M-Y',$before_timestamp);
 		
@@ -1731,7 +1731,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 			$chunks = array_chunk($uids, 1000);
 			while($uids=array_shift($chunks)){
 				if(!$imap->move($uids, $params['target_mailbox'])){
-					throw new Exception("Could not move mails! ".$imap->last_error());
+					throw new \Exception("Could not move mails! ".$imap->last_error());
 				}
 			}
 		}
@@ -1748,7 +1748,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 //
 //		$before_timestamp = \GO\Base\Util\Date::to_unixtime($params['until_date']);
 //		if (empty($before_timestamp))
-//			throw new Exception(\GO::t('untilDateError','email').': '.$params['until_date']);
+//			throw new \Exception(\GO::t('untilDateError','email').': '.$params['until_date']);
 //
 //		$date_string = date('d-M-Y',$before_timestamp);
 //		
@@ -1812,7 +1812,7 @@ class Message extends \GO\Base\Controller\AbstractController {
 
 				if(!$imap2->append_message($params['to_mailbox'], $source, $flags)) {
 					$imap2->disconnect();
-					throw new Exception('Could not move message');
+					throw new \Exception('Could not move message');
 				}
 
 				$delete_messages[]=$uid;

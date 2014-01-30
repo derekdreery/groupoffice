@@ -219,7 +219,7 @@ class Scripts
 				$this->gapiScripts[$position][$package] = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js';
 				break;
 			default:
-				throw new Exception('unknown GapiScript');
+				throw new \Exception('unknown GapiScript');
 				break;
 		}
 		$this->hasScripts = true;

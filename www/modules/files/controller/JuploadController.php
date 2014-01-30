@@ -111,7 +111,7 @@ class Jupload extends \GO\Base\Controller\AbstractController {
 				} else {
 					$files = \GO\Base\Fs\File::moveUploadedFiles($uploadedFile, $tmpFolder);
 					if(!$files)
-						throw new Exception("No file received");
+						throw new \Exception("No file received");
 					
 					$file = $files[0];
 				}
@@ -138,7 +138,7 @@ class Jupload extends \GO\Base\Controller\AbstractController {
 					\GO::session()->values['files']['uploadqueue'][] = $file->path();
 				}
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			echo 'WARNING: ' . $e->getMessage() . "\n";
 		}
 		echo "SUCCESS\n";

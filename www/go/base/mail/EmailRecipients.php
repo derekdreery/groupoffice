@@ -264,7 +264,7 @@ class EmailRecipients{
 		if(!empty($this->_buffer))
 		{
 			if($this->strict && !\GO\Base\Util\String::validate_email($this->_buffer)){
-				throw new Exception("Address ".$this->_buffer." is not valid");
+				throw new \Exception("Address ".$this->_buffer." is not valid");
 			}else
 			{
 				$this->addRecipient($this->_buffer, $this->_personal);

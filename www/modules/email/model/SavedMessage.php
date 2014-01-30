@@ -45,7 +45,7 @@ class SavedMessage extends ComposerMessage {
 		$file = new \GO\Base\Fs\File($fullPath);
 		
 		if(!$file->exists()){
-			throw new Exception("E-mail message file does not exist!");
+			throw new \Exception("E-mail message file does not exist!");
 		}
 		
 		$mimeData = $file->contents();
@@ -71,7 +71,7 @@ class SavedMessage extends ComposerMessage {
 						));
 		
 		if (!$structure)
-			throw new Exception("Could not decode mime data:\n\n $mimeData");
+			throw new \Exception("Could not decode mime data:\n\n $mimeData");
 
 		$attributes=array();
 		

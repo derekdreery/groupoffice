@@ -28,7 +28,7 @@ class Sieve extends \GO\Base\Controller\AbstractModelController{
 		
 		if (empty($connectResponse))
 		{
-			throw new Exception('Sorry, manage sieve filtering not supported on '.$accountModel->host.' using port '.$accountModel->sieve_port);				
+			throw new \Exception('Sorry, manage sieve filtering not supported on '.$accountModel->host.' using port '.$accountModel->sieve_port);				
 		}
 		
 		return true;
@@ -39,7 +39,7 @@ class Sieve extends \GO\Base\Controller\AbstractModelController{
 		
 		try{
 			$supported=$this->_sieveConnect($params['account_id']);
-		}catch (Exception $e){
+		}catch (\Exception $e){
 			$supported=false;
 		}
 		return array('success'=>true, 'supported'=>$supported);
@@ -99,7 +99,7 @@ class Sieve extends \GO\Base\Controller\AbstractModelController{
 				$response['deleteSuccess']=true;
 			}
 
-			catch(Exception $e)
+			catch(\Exception $e)
 			{
 				$response['deleteSuccess']=false;
 				$response['deleteFeedback']=$e->getMessage();
@@ -147,7 +147,7 @@ class Sieve extends \GO\Base\Controller\AbstractModelController{
 			{
 				//\GO::debug("TEST: ".$rule['tests'][$i]['arg1']);
 				if(preg_match('/[^a-z_\-_0-9]/i',$rule['tests'][$i]['arg1'])){
-					throw new Exception("Invalid value ".$rule['tests'][$i]['arg1']);
+					throw new \Exception("Invalid value ".$rule['tests'][$i]['arg1']);
 				}
 			}
 		
@@ -229,7 +229,7 @@ class Sieve extends \GO\Base\Controller\AbstractModelController{
 				$response['feedback'] = "Could not save filtering rules. Please check your input.<br />".$this->_sieve->error();
 				$response['success'] = false;
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			// you can change the feedback when debugging
 			$response['feedback'] = nl2br($e->getMessage()); //.'<br>'.$e->getTraceAsString();
 		}

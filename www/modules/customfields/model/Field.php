@@ -121,7 +121,7 @@ class Field extends \GO\Base\Db\ActiveRecord{
 		\GO::getDbConnection()->query("SET sql_mode=''");
 		
 		if(!$this->getDbConnection()->query($sql))
-			throw new Exception("Could not create custom field");
+			throw new \Exception("Could not create custom field");
 		
 //		if ($this->isModified('unique_values')) {
 //			
@@ -131,7 +131,7 @@ class Field extends \GO\Base\Db\ActiveRecord{
 //				$sqlUnique = "ALTER TABLE `".$table."` DROP INDEX ".$this->columnName()."_unique";
 //			
 //			if (!$this->getDbConnection()->query($sqlUnique))
-//				throw new Exception("Could not change custom field uniqueness.");
+//				throw new \Exception("Could not change custom field uniqueness.");
 //		}
 		
 		$this->_clearColumnCache();
@@ -170,7 +170,7 @@ class Field extends \GO\Base\Db\ActiveRecord{
 		
 		try{
 			$this->getDbConnection()->query($sql);
-		}catch(Exception $e){
+		}catch(\Exception $e){
 			trigger_error("Dropping custom field column failed with error: ".$e->getMessage());
 		}
 			

@@ -90,7 +90,7 @@ class String {
 				return $converted;
 			}else
 			{
-				throw new Exception("Could not convert string to ASCII");
+				throw new \Exception("Could not convert string to ASCII");
 			}							
 		}
 		//return preg_replace('/[^a-zA-Z0-9 ,-:_]+/','',$string);
@@ -1117,7 +1117,7 @@ END;
 		
 		if (!is_string($string)) {
 			\GO::debug($string);
-			throw new Exception('Passed parameter is not a string.');
+			throw new \Exception('Passed parameter is not a string.');
 		}
 
 // Keep a copy of the original string before cleaning up

@@ -38,7 +38,7 @@ class Convertor{
 		exec($cmd);
 
 		if(!file_exists($this->_xmlFile))
-			throw new Exception('wbxml2xml conversion failed');
+			throw new \Exception('wbxml2xml conversion failed');
 
 		//read xml
 		$xml = trim(file_get_contents($this->_xmlFile));
@@ -63,7 +63,7 @@ class Convertor{
 		exec($cmd);
 
 		if(!file_exists($this->_wbxmlFile))
-			throw new Exception('xml2wbxml conversion failed');
+			throw new \Exception('xml2wbxml conversion failed');
 		
 		if($output){
 			readfile($this->_wbxmlFile);

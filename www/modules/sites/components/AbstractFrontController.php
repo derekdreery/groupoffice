@@ -347,13 +347,13 @@ abstract class AbstractFrontController extends \GO\Base\Controller\AbstractContr
 			$controller->setPageTitle("404 Not found");
 			$controller->render('404');
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
 			$controller = new \GO\Sites\Controller\Site();
 			$controller->template = $this->template;
 			$controller->render('error', array('error' => $e));
 		}
-//		catch(Exception $e)
+//		catch(\Exception $e)
 //		{
 //			echo $e->getMessage();
 //		}

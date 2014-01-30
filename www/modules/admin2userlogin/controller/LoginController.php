@@ -7,7 +7,7 @@ class Login extends \GO\Base\Controller\AbstractController {
 	protected function actionSwitch($params){
 //		
 //		if(!\GO::user()->isAdmin())
-//			throw new Exception("This feature is for admins only!");
+//			throw new \Exception("This feature is for admins only!");
 		
 		$oldUsername=\GO::user()->username;
 		

@@ -320,7 +320,7 @@ class Account extends \GO\Base\Db\ActiveRecord {
 		
 		if(!$imap->select_mailbox($mailbox))
 			throw new \GO\Base\Mail\Exception\MailboxNotFound($mailbox,$imap);
-			//throw new Exception ("Could not open IMAP mailbox $mailbox\nIMAP error: ".$imap->last_error());
+			//throw new \Exception ("Could not open IMAP mailbox $mailbox\nIMAP error: ".$imap->last_error());
 	
 		return $imap;
 	}

@@ -78,7 +78,7 @@ class Setting extends \GO\Base\Controller\AbstractController {
 			try{
 				$updateModel->setDefaultAttributes(false);
 				$updateModel->save();
-			}catch(Exception $e){
+			}catch(\Exception $e){
 				$feedback .= $e->getMessage();
 			}
 		}
@@ -101,7 +101,7 @@ class Setting extends \GO\Base\Controller\AbstractController {
 			try{
 				$updateModel->setDefaultAttributes(false);
 				$updateModel->save();
-			}catch(Exception $e){
+			}catch(\Exception $e){
 				$feedback .= $e->getMessage();
 			}
 		}

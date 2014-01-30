@@ -33,7 +33,7 @@ while($category = $stmt->fetch()){
 					$event->category_id = $newCategory->id;
 					$event->save();
 				}
-			}catch(Exception $e){
+			}catch(\Exception $e){
 				echo $e->getMessage()."\n";
 			}
 		}

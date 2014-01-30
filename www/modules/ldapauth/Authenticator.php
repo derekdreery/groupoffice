@@ -79,7 +79,7 @@ class Authenticator {
 //		if (!empty(\GO::config()->ldap_bind_rdn)) {
 //			$bound = $ldapConn->bind(\GO::config()->ldap_bind_rdn, \GO::config()->ldap_pass);
 //			if (!$bound)
-//				throw new Exception("Failed to bind to LDAP server with RDN: " . \GO::config()->ldap_bind_rdn);
+//				throw new \Exception("Failed to bind to LDAP server with RDN: " . \GO::config()->ldap_bind_rdn);
 //		}
 		$ldapConn = \GO\Base\Ldap\Connection::getDefault();
 
@@ -115,7 +115,7 @@ class Authenticator {
 			\GO::infolog($str);
 			
 			//Don't throw exception because this won't be catched by cookie login.
-//			throw new Exception(\GO::t('badLogin').' (LDAP)');
+//			throw new \Exception(\GO::t('badLogin').' (LDAP)');
 			
 			return false;
 		} else {
@@ -126,7 +126,7 @@ class Authenticator {
 			if(!empty(\GO::config()->ldap_create_mailbox_domains)){
 				
 				if(!\GO::modules()->serverclient)
-					throw new Exception("The serverclient module must be installed and configured when using \$config['\GO::config()->ldap_create_mailbox_domains']. See https://www.group-office.com/wiki/Mailserver#Optionally_install_the_serverclient");
+					throw new \Exception("The serverclient module must be installed and configured when using \$config['\GO::config()->ldap_create_mailbox_domains']. See https://www.group-office.com/wiki/Mailserver#Optionally_install_the_serverclient");
 				
 				$_POST['serverclient_domains']=\GO::config()->ldap_create_mailbox_domains;
 			}
@@ -139,7 +139,7 @@ class Authenticator {
 
 			try{
 				$this->_checkEmailAccounts($user, $password);
-			}catch(Exception $e){
+			}catch(\Exception $e){
 //				\GO::debug("LDAPAUTH: Failed to create or update e-mail account!\n\n".(string) $e);
 				trigger_error("LDAPAUTH: Failed to create or update e-mail account for user ".$user->username."\n\n".$e->getMessage());
 			}
@@ -201,7 +201,7 @@ class Authenticator {
 				}
 
 				if(!$user->save()){
-					throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
+					throw new \Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
 				}
 			} else {
 				\GO::debug("LDAPAUTH: Group-Office user does not exist. Attempting to create it.");
@@ -213,7 +213,7 @@ class Authenticator {
 				$user->password = $password;
 
 				if(!$user->save()){
-					throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
+					throw new \Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
 				}
 				if (!empty(\GO::config()->ldap_groups))
 					$user->addToGroups(explode(',', \GO::config()->ldap_groups));
@@ -223,7 +223,7 @@ class Authenticator {
 				$user->checkDefaultModels();
 			}
 		
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 				\GO::debug('LDAPAUTH: Failed creating user ' .
 								$attr['username'] .
 								' Exception: ' .

@@ -12,11 +12,11 @@ class Attendance extends \GO\Base\Controller\AbstractController{
 		
 		$participant=$event->getParticipantOfCalendar();
 		if(!$participant)
-			throw new Exception("The participant of this event is missing");
+			throw new \Exception("The participant of this event is missing");
 		
 		$organizer = $event->getOrganizer();
 		if(!$organizer)
-			throw new Exception("The organizer of this event is missing");
+			throw new \Exception("The organizer of this event is missing");
 		
 		$response = array("success"=>true, 'data'=>array(
 				'notify_organizer'=>true,

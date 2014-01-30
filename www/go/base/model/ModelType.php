@@ -45,7 +45,7 @@ class ModelType extends \GO\Base\Db\ActiveRecord {
 	public function findByModelName($modelName){
 		
 		if(empty($modelName))
-			throw new Exception("Model name may not be empty");
+			throw new \Exception("Model name may not be empty");
 		
 		$model = $this->findSingleByAttribute('model_name', $modelName);
 		if($model)

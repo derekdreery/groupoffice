@@ -66,7 +66,7 @@ class Crypt {
 		if (empty($k)) {
 			$k = self::getKey();
 			if (empty($k)) {
-				throw new Exception('Could not generate private encryption key. Please check the file permissions of the folder defined as $config[\'file_storage_path\'] in your config.php and the file key.txt in it.');
+				throw new \Exception('Could not generate private encryption key. Please check the file permissions of the folder defined as $config[\'file_storage_path\'] in your config.php and the file key.txt in it.');
 			}
 		}		
 
@@ -117,7 +117,7 @@ class Crypt {
 		if (empty($k)) {
 			$k = self::getKey();
 			if (empty($k)) {
-				throw new Exception('Could not generate private key');
+				throw new \Exception('Could not generate private key');
 			}
 		}
 

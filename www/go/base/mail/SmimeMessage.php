@@ -119,7 +119,7 @@ class SmimeMessage extends Message
 			parent::toByteStream($fbs);
 
 			if(!file_exists($this->tempin))
-				throw new Exception('Could not write temporary message for signing');
+				throw new \Exception('Could not write temporary message for signing');
 		}	
 	}
 	

@@ -66,7 +66,7 @@ class Language{
 		
 		//validate given language string
 		if(!preg_match('/^[a-z_-]+$/i', $this->_langIso)){
-			throw new Exception("Invalid language iso code given (".$this->_langIso);
+			throw new \Exception("Invalid language iso code given (".$this->_langIso);
 		}
 		
 		if($oldIso!=$this->_langIso)

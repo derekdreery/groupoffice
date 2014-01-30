@@ -171,7 +171,7 @@ abstract class Controller extends \GO\Base\Controller\AbstractController {
 		
 		$file = new \GO\Base\Fs\File($module->moduleManager->path() . 'views/site/' . $viewName . '.php');
 		if(!$file->exists())
-			throw new Exception("View '$viewName' not found!");
+			throw new \Exception("View '$viewName' not found!");
 		
 		return $file->path();
 	}
@@ -318,7 +318,7 @@ abstract class Controller extends \GO\Base\Controller\AbstractController {
 			
 			echo $this->render('/site/404', array('error' => $e));
 		}
-		catch (Exception $e){
+		catch (\Exception $e){
 			echo $this->render('/site/error', array('error' => $e));
 		}
 	}

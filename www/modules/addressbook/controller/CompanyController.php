@@ -175,7 +175,7 @@ class Company extends \GO\Base\Controller\AbstractModelController {
 			$c = new \GO\Base\Util\HttpClient();
 			
 			if(!$c->downloadFile($params['download_photo_url'], $file))
-				throw new Exception("Could not download photo from: '".$params['download_photo_url']."'");
+				throw new \Exception("Could not download photo from: '".$params['download_photo_url']."'");
 						
 			$model->setPhoto($file);
 			$model->save();					

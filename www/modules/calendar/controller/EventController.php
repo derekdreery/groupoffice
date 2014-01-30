@@ -110,7 +110,7 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 				if(!empty($rrule->byday)){
 					if (!empty($params['duplicate']))
 						$model->delete();
-					throw new Exception(\GO::t('cantMoveRecurringByDay', 'calendar'));
+					throw new \Exception(\GO::t('cantMoveRecurringByDay', 'calendar'));
 				}
 			}
 		}
@@ -131,7 +131,7 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 			unset($params['id']);
 			
 			if(!$model)
-				throw new Exception("Could not create exception!");
+				throw new \Exception("Could not create exception!");
 			
 			$this->_setEventAttributes($model, $params);
 		}
@@ -146,7 +146,7 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 
 			$exception_for_event_id=empty($params['exception_for_event_id']) ? 0 : $params['exception_for_event_id'];
 			if(count($event->getConflictingEvents($exception_for_event_id)))
-				throw new Exception('Ask permission');
+				throw new \Exception('Ask permission');
 		}
 //		
 //		/* Check for conflicts with other events in the calendar */		
@@ -162,7 +162,7 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 //			\GO::debug("Conflict: ".$event->id." ".$event->name);
 //
 //			if($conflictEvent["id"]!=$event->id && (empty($params['exception_for_event_id']) || $params['exception_for_event_id']!=$conflictEvent["id"])){
-//				throw new Exception('Ask permission');
+//				throw new \Exception('Ask permission');
 //			}
 //		}
 		
@@ -360,7 +360,7 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 					$participant->setAttributes($p);
 					$participant->event_id = $event->id;
 					if(!$participant->save()){
-						throw new Exception("Could not save participant ".var_export($participant->getValidationErrors(), true));
+						throw new \Exception("Could not save participant ".var_export($participant->getValidationErrors(), true));
 					}
 					
 					if(!$hasOrganizer){
@@ -780,7 +780,7 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 		}else
 		{
 			if(!isset($params['calendars']))
-				throw new Exception("Missing parameter 'calendars'");
+				throw new \Exception("Missing parameter 'calendars'");
 			
 			$calendars = json_decode($params['calendars']);
 		}
@@ -1312,14 +1312,14 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 		$masterEvent = \GO\Calendar\Model\Event::model()->findByUuid((string)$vevent->uid, 0, $settings->calendar_id);		
 
 		if (!$settings->calendar->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION))
-			throw new Exception(sprintf(\GO::t('cannotHandleInvitation','calendar'),$masterEvent->calendar->name));
+			throw new \Exception(sprintf(\GO::t('cannotHandleInvitation','calendar'),$masterEvent->calendar->name));
 		
 		//delete existing data		
 		if(!$recurrenceDate){
 			//if no recurring instance was given delete the master event
 			if($masterEvent) {
 				if (!$masterEvent->calendar->checkPermissionLevel(\GO\Base\Model\Acl::DELETE_PERMISSION))
-					throw new Exception(sprintf(\GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
+					throw new \Exception(sprintf(\GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
 				$masterEvent->delete();
 			}
 		}  else if($masterEvent)
@@ -1329,14 +1329,14 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 				
 			if($exceptionEvent) {
 				if (!$masterEvent->calendar->checkPermissionLevel(\GO\Base\Model\Acl::DELETE_PERMISSION))
-					throw new Exception(sprintf(\GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
+					throw new \Exception(sprintf(\GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
 				$exceptionEvent->delete();
 			}
 			
 			$exception = $masterEvent->hasException($recurrenceDate);
 			if($exception) {
 				if (!$masterEvent->calendar->checkPermissionLevel(\GO\Base\Model\Acl::DELETE_PERMISSION))
-					throw new Exception(sprintf(\GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
+					throw new \Exception(sprintf(\GO::t('cannotHandleInvitation2','calendar'),$masterEvent->calendar->name));
 				$exception->delete();
 			}
 		}
@@ -1446,7 +1446,7 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 				break;
 			
 			default:
-				throw new Exception("Unsupported method: ".$vcalendar->method);
+				throw new \Exception("Unsupported method: ".$vcalendar->method);
 				
 		}
 	}
@@ -1491,11 +1491,11 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 		));
 		
 		if(!$participant){
-			throw new Exception("Could not find the event");
+			throw new \Exception("Could not find the event");
 		}
 		
 		if($participant->getSecurityToken()!=$params['participantToken']){
-			throw new Exception("Invalid request");
+			throw new \Exception("Invalid request");
 		}
 		
 		if(empty($params['accept']))		
@@ -1593,14 +1593,14 @@ class Event extends \GO\Base\Controller\AbstractModelController {
 		$this->requireCli();
 		
 		if(!\GO::user()->isAdmin())
-			throw new Exception("You must be admin");
+			throw new \Exception("You must be admin");
 		
 		$this->checkRequiredParameters(array('date'), $params);
 
 		$params['date']=strtotime($params['date']);
 		
 		if($params['date']>\GO\Base\Util\Date::date_add(time(), 0, 0, -1)){
-			throw new Exception("Please give a date at least one year in the past.");
+			throw new \Exception("Please give a date at least one year in the past.");
 		}
 		
 		$sure = readline("If you continue all events older than '".\GO\Base\Util\Date::get_timestamp($params['date'], false)."' will be deleted. Are you sure? (y/n)");

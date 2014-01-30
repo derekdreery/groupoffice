@@ -23,7 +23,7 @@ class ScheduleCall extends \GO\Base\Controller\AbstractJsonController {
 	protected function actionSave($params){		
 		
 		if(empty($params['number']) || empty($params['remind_date']) || empty($params['remind_time']))
-			throw new Exception('Not all parameters are given');
+			throw new \Exception('Not all parameters are given');
 
 		$scheduleCall = new \GO\Tasks\Model\Task();
 				

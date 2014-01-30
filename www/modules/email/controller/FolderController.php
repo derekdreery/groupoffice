@@ -62,7 +62,7 @@ class Folder extends \GO\Base\Controller\AbstractController {
 				
 		$mailbox = new \GO\Email\Model\ImapMailbox($account, array("name"=>$params["mailbox"]));
 		if($mailbox->isSpecial())
-			throw new Exception(\GO::t("cantDeleteSpecialFolder","email"));
+			throw new \Exception(\GO::t("cantDeleteSpecialFolder","email"));
 		
 		$success = $mailbox->delete();
 		
@@ -107,7 +107,7 @@ class Folder extends \GO\Base\Controller\AbstractController {
 		$sourceMailbox = new \GO\Email\Model\ImapMailbox($account, array("name"=>$params["sourceMailbox"]));
 		
 		if($sourceMailbox->isSpecial())
-			throw new Exception(\GO::t("cantMoveSpecialFolder","email"));
+			throw new \Exception(\GO::t("cantMoveSpecialFolder","email"));
 		
 		$targetMailbox = new \GO\Email\Model\ImapMailbox($account, array("name"=>$params["targetMailbox"]));
 			
@@ -153,7 +153,7 @@ class Folder extends \GO\Base\Controller\AbstractController {
 				foreach ($delete_ids as $id) {
 					$imap->delete_acl($params['mailbox'], $id);
 				}
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				$response['deleteSuccess'] = false;
 				$response['deleteFeedback'] = $e->getMessage();
 			}

@@ -54,7 +54,7 @@ class SentMailing extends \GO\Base\Controller\AbstractModelController {
 
 	protected function actionSend($params) {
 		if (empty($params['addresslist_id'])) {
-			throw new Exception(\GO::t('feedbackNoReciepent', 'email'));
+			throw new \Exception(\GO::t('feedbackNoReciepent', 'email'));
 		} else {
 			try {
 				//$params = $this->_convertOldParams($params);
@@ -70,7 +70,7 @@ class SentMailing extends \GO\Base\Controller\AbstractModelController {
 						|| empty(\GO::config()->campaigns_from) || empty(\GO::config()->campaigns_max_mails_per_period)
 					)
 				) {
-					throw new Exception(\GO::t('mustSetCampaignsConfig','campaigns'));
+					throw new \Exception(\GO::t('mustSetCampaignsConfig','campaigns'));
 				}
 					
 				$message = \GO\Base\Mail\Message::newInstance();
@@ -96,13 +96,13 @@ class SentMailing extends \GO\Base\Controller\AbstractModelController {
 				if (!$sentMailing->save()) {
 								\GO::debug('===== VALIDATION ERRORS =====');
 								\GO::debug('Could not create new mailing:<br />'.implode('<br />',$sentMailing->getValidationErrors()));
-								throw new Exception('Could not create new mailing:<br />'.implode('<br />',$sentMailing->getValidationErrors()).'<br />MAILING PARAMS:<br />'.var_export($mailing,true));
+								throw new \Exception('Could not create new mailing:<br />'.implode('<br />',$sentMailing->getValidationErrors()).'<br />MAILING PARAMS:<br />'.var_export($mailing,true));
 				}       
 
 				$this->_launchBatchSend($sentMailing->id);
 
 				$response['success'] = true;
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				$response['feedback'] = \GO::t('feedbackUnexpectedError', 'email') . $e->getMessage();
 			}
 		}
@@ -146,7 +146,7 @@ class SentMailing extends \GO\Base\Controller\AbstractModelController {
 
 		$mailing = \GO\Addressbook\Model\SentMailing::model()->findByPk($params['mailing_id']);
 		if (!$mailing)
-			throw new Exception("Mailing not found!\n");
+			throw new \Exception("Mailing not found!\n");
 
 		\GO::session()->runAs($mailing->user_id);
 		
@@ -273,7 +273,7 @@ class SentMailing extends \GO\Base\Controller\AbstractModelController {
 						$errors=0;
 
 					}
-				}catch(Exception $e){
+				}catch(\Exception $e){
 					echo "Error for ".$contact->firstEmail.": ".$e->getMessage()."\n";
 				}
 
@@ -340,7 +340,7 @@ class SentMailing extends \GO\Base\Controller\AbstractModelController {
 						$errors=0;
 					}
 
-				}catch(Exception $e){
+				}catch(\Exception $e){
 					echo "Error for ".$company->email.": ".$e->getMessage()."\n";
 				}
 
@@ -372,7 +372,7 @@ class SentMailing extends \GO\Base\Controller\AbstractModelController {
 				$contact = \GO\Addressbook\Model\Contact::model()->findByPk($params['contact_id']);
 				
 				if(md5($contact->ctime.$contact->addressbook_id.$contact->firstEmail) != $params['token'])
-					throw new Exception("Invalid token!");
+					throw new \Exception("Invalid token!");
 				
 				$contact->email_allowed=0;
 				$contact->save();					
@@ -384,7 +384,7 @@ class SentMailing extends \GO\Base\Controller\AbstractModelController {
 					$company = \GO\Addressbook\Model\Company::model()->findByPk($params['company_id']);
 
 					if(md5($company->ctime.$company->addressbook_id.$company->email) != $params['token'])
-						throw new Exception("Invalid token!");
+						throw new \Exception("Invalid token!");
 
 					$company->email_allowed=0;
 					$company->save();
@@ -437,7 +437,7 @@ class SentMailing extends \GO\Base\Controller\AbstractModelController {
 				$this->_sentEmails[]=$email;
 				$mailer->send($message);
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			$status = $e->getMessage();
 		}
 		if (!empty($status)) {
