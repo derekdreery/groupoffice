@@ -261,11 +261,21 @@ class GO{
 
 		\GO\Base\Model::clearCache();
 	}
+	
+	
+	public static function viewName(){
+		if(isset(self::session()->values['view'])){
+			return self::session()->values['view'];
+		}else
+		{
+			return self::config()->defaultView;
+		}
+	}
 
 	/**
 	 *
 	 * @return \GO\Base\View\Extjs3 Returns the currently selected theme.
-	 *
+	 * @deprecated 
 	 * 
 	 */
 	public static function view(){
