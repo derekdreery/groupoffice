@@ -259,31 +259,21 @@ abstract class AbstractController extends \GO\Base\Observable {
 		
 //		if(!headers_sent())
 //			$this->headers();
-		$layoutFile = \GO::view()->getPath().'layout/'.$this->layout.'.php';
+		
+		$viewPath = \GO::config()->root_path.'views/'.\GO::viewName().'/';
+		
+		if(!($file = $this->findViewFile($viewName))){
+			$file = $viewPath.'/Default.php';						
+		}
+		
+		require($file);
+		
+		$layoutFile = $viewPath.'layout/'.$this->layout.'.php';
 		$masterPage = file_exists($layoutFile);
 		
 		if($masterPage){
 			ob_start();
 			ob_implicit_flush(false);
-		}
-		$module = $this->getModule();
-		
-		if(!$module){
-			$file = \GO::view()->getPath().$viewName.'.php';
-		}else
-		{
-			$file = $module->path.'views/'.\GO::view()->getName().'/'.$viewName.'.php';
-		}
-		
-		if(file_exists($file)){
-			require($file);
-		}elseif(($file = \GO::config()->root_path.'views/'.\GO::view()->getName().'/'.$viewName.'.php') && file_exists($file))
-		{
-			require($file);
-		}else
-		{			
-			$file = \GO::config()->root_path.'views/'.\GO::view()->getName().'/Default.php';			
-			require($file);
 		}
 		
 		if($masterPage){
@@ -292,6 +282,32 @@ abstract class AbstractController extends \GO\Base\Observable {
 			$content = ob_get_clean();			
 			require($layoutFile);
 		}
+	}
+	
+	
+	public function findViewFile($viewName){
+		
+		$viewPath = \GO::config()->root_path.'views/'.\GO::viewName().'/';
+		
+		$module = $this->getModule();
+		
+		if(!$module){
+			$file = $viewPath.$viewName.'.php';
+		}else
+		{
+			$file = $module->path.'views/'.\GO::viewName().'/'.$viewName.'.php';
+		}
+		
+		if(file_exists($file)){
+			return $file;
+		}elseif(($file = $viewPath.$viewName.'.php') && file_exists($file))
+		{
+			return $file;
+		}else
+		{			
+			return false;
+		}
+		
 	}
 	
 //	protected function renderPartial($data=array()) {
