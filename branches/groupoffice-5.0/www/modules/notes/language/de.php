@@ -8,7 +8,7 @@ $l['name']='Notizen';
 $l['description']='Modul zum Anlegen von Notizen';
 $l['category']='Notizbuch';
 $l['categories']='Notizbücher';
-$l['note']='Notiz';
+$lang['link_type'][4]=$l['note']='Notiz';
 $l['notes']='Notizen';
 $l['general'] = 'Allgemein';
 $l['incomplete_delete']='Sie haben nicht für alle Notizen die Berechtigung zum Löschen';
