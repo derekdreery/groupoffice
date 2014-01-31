@@ -1,3 +1,5 @@
+- Fixed ticket batch edit.
+- Fixed state saving of addressbook westpanel accordeon.
 - Fixed button to add template folders and files in projects V2
 - Fixed SyncML server for Funambol client
 - Some mailservers returned folders as "false".
