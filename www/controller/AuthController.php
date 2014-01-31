@@ -52,7 +52,7 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 		
 		$this->layout='html';
 		
-		if(!file_exists(\GO::view()->getPath().'Login.php')){
+		if(!$this->findViewFile('Login')){
 			//for backwards theme compat
 			require(\GO::view()->getTheme()->getPath().'Layout.php');
 		}  else {
@@ -62,11 +62,7 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 			{
 				$this->render('Login');
 			}
-		}
-		
-		
-		
-		
+		}		
 	}
 
 	protected function actionSetView($params) {
