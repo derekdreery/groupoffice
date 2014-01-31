@@ -218,7 +218,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	},
 	
 	getLinkName : function(){
-		return this.data.name;
+		return Ext.util.Format.htmlDecode(this.data.name);
 	},
 	
 	onSave : function(panel, saved_id)
