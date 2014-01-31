@@ -445,8 +445,9 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 					if (!GO.smscampaigns.singleSmsDialog)
 						GO.smscampaigns.singleSmsComposer = new GO.smscampaigns.SingleSmsComposer();
 
-					GO.smscampaigns.singleSmsComposer.show(this.model_id);
-				}
+					GO.smscampaigns.singleSmsComposer.show(this.model_id,this.data['last_name']);
+				},
+				scope: this
 			});
 		}
 		
