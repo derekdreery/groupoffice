@@ -94,6 +94,12 @@ class GO_Base_Util_Excel extends PHPExcel {
 		
 	}
 	
+	public function setHeight($row=1,$height=-1) {
+		
+		$this->getActiveSheet()->getRowDimension($row)->setRowHeight($height);
+		
+	}
+	
 	public function setCellValue($cellId,$value) {
 		
 		$this->getActiveSheet()->setCellValue($cellId,$value);
