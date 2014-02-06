@@ -1,3 +1,4 @@
+- Fixed html decode problem in the subjects when using the Mail saveas functionality.
 - Fixed ticket batch edit.
 - Fixed state saving of addressbook westpanel accordeon.
 - Fixed button to add template folders and files in projects V2
