@@ -41,10 +41,7 @@ GO.tools.MainPanel = function(config){
 	
 		
 	this.store = new GO.data.JsonStore({
-		url: GO.settings.modules.tools.url+ 'json.php',
-		baseParams: {
-			task: 'scripts'  	
-		},
+		url:GO.url('tools/tools/store'),
 		root: 'results',
 		id: 'id',
 		totalProperty:'total',
