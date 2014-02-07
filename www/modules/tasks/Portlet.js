@@ -15,14 +15,8 @@ GO.tasks.SimpleTasksPanel = function(config)
 		});
 	
 		config.store = new Ext.data.GroupingStore({
-//			url: GO.settings.modules.tasks.url+'json.php',
 			url: GO.url('tasks/portlet/portletGrid'),
-			baseParams: {
-//				'task': 'tasks',
-//				'user_id' : GO.settings.user_id,
-//				'active_only' : true,
-//				'portlet' : true
-			},
+			baseParams: {},
 			reader: reader,
 			sortInfo: {
 				field: 'due_time',
