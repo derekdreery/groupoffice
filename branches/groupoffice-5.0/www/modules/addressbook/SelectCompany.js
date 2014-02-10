@@ -55,9 +55,8 @@ GO.addressbook.SelectCompany = function(config){
 			fields: config.fields.fields,
 			remoteSort: true
 		});
+		this.store.setDefaultSort('name', 'asc');		
 	}
-	
-	this.store.setDefaultSort('name', 'asc');
 	
 	config.triggerAction='all';
 	config.selectOnFocus=true;
