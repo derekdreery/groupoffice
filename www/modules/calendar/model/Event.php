@@ -2444,8 +2444,4 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			return true;
 	}
-	
-	public function getLogMessage($action) {
-		parent::getLogMessage($action);
-	}
 }
