@@ -775,7 +775,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if (GO::modules()->addressbook && !empty($params['template_id'])) {
 			try {
 				$template = GO_Addressbook_Model_Template::model()->findByPk($params['template_id']);
-				$templateContent = $template->content;
+				$templateContent = $template ? $template->content : '';
 			} catch (GO_Base_Exception_AccessDenied $e) {
 				$templateContent = "";
 			}
