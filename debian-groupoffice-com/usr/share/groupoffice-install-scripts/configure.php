@@ -114,5 +114,11 @@ if(file_exists($config['file_storage_path'].'key.txt'))
 if(!file_exists('/var/www/public'))
 	system('ln -s '.$config['file_storage_path'].'public /var/www/public');
 
+
+if(is_dir('/etc/apache2/conf-enabled')){
+	system('mv /etc/apache2/conf.d/groupoffice.conf /etc/apache2/conf-enabled/groupoffice.conf');
+	system('rmdir /etc/apache2/conf.d');
+}
+
 echo "Done!\n\n";
 ?>
