@@ -129,6 +129,10 @@ class GO_Base_Mail_Message extends Swift_Message{
 			  $this->_loadedBody = call_user_func_array($replaceCallback, $replaceCallbackArgs);
 			}
 		}
+		$date=isset($structure->headers['date']) ? $structure->headers['date'] : date('c');		
+		$udate=strtotime($date);
+		
+		$this->setDate($udate);
 		
 		
 		
