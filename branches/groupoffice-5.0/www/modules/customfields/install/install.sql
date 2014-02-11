@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `cf_fields` (
 	`number_decimals` tinyint(4) NOT NULL DEFAULT '2',
 	`unique_values` tinyint(1) NOT NULL DEFAULT '0',
 	`max_length` INT( 5 ) NOT NULL DEFAULT '50',
-	`addressbook_ids` VARCHAR(64) NOT NULL DEFAULT '',
+	`addressbook_ids` VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `type` (`category_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
