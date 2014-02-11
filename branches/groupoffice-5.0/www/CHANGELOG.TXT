@@ -1,3 +1,6 @@
+11-02-2014 5.0.40
+- restart apache later on installation
+
 11-02-2014 5.0.39
 - Added -p option for cli password
 - Fixed html decode problem in the subjects when using the Mail saveas functionality.
