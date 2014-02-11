@@ -126,7 +126,14 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 
 			exit();
 		} else {
-			$this->redirect();
+			
+			if(isset(GO::config()->logout_url)){
+				header('Location: ' .GO::config()->logout_url);
+				exit();
+			}else
+			{
+				$this->redirect();
+			}
 		}
 	}
 
