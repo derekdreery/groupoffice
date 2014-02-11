@@ -1,3 +1,6 @@
+- Custom fields & Address books: optional address book restriction on Contact &
+Company Custom Fields.
+
 11-02-2014 5.0.40
 - restart apache later on installation
 
