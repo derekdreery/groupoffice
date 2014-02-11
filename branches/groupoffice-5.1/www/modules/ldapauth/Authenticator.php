@@ -82,6 +82,11 @@ class GO_Ldapauth_Authenticator {
 				throw new Exception("The serverclient module must be installed and configured when using \$config['GO::config()->ldap_create_mailbox_domains']. See https://www.group-office.com/wiki/Mailserver#Optionally_install_the_serverclient");
 
 			$_POST['serverclient_domains']=GO::config()->ldap_create_mailbox_domains;
+		}else
+		{
+			GO::debug("LDAPAUTH: Found LDAP entry found for " . $username);
+			
+//			GO::debug($record->getAttributes());
 		}
 
 		$user = $this->syncUserWithLdapRecord($record, $password);

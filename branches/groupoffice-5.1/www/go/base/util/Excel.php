@@ -57,9 +57,46 @@ class GO_Base_Util_Excel extends PHPExcel {
 		
 	}
 	
+//	public function setFontByColIdAndRowNr($colId,$rowNr,$fontFamily='Arial',$fontSize=10,$colorRGB='00000000',$bold=false,$italic=false,$underline=false) {
+//		
+//		require_once(GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style.php');
+//		require_once(GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Font.php');
+//		require_once(GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Color.php');
+//		$colorObj = new PHPExcel_Style_Color();
+//		$colorObj->setRGB($colorRGB);
+//		$fontObj = new PHPExcel_Style_Font();
+//		$fontObj->setName($fontFamily);
+//		$fontObj->setSize($fontSize);
+//		$fontObj->setColor($colorObj);
+//		$fontObj->setBold($bold);
+//		$fontObj->setItalic($italic);
+//		$fontObj->setUnderline($underline);
+//		
+//		$this->getActiveSheet()->getCellByColumnAndRow($colId, $rowNr)->getStyle()->setFont($fontObj);
+//		
+//	}
+	
+	public function setWrapContent($cellRange,$wrapContent=true) {
+		$this->getActiveSheet()->getStyle($cellRange)->getAlignment()->setWrapText($wrapContent);
+	}
+	
+	public function setTextHorizontalAlignment($cellRange,$alignment=PHPExcel_Style_Alignment::HORIZONTAL_LEFT) {
+		$this->getActiveSheet()->getStyle($cellRange)->getAlignment()->setHorizontal($alignment);
+	}
+	
+	public function setDefaultWidth($width=-1) {
+		$this->getActiveSheet()->getDefaultColumnDimension()->setWidth($width);
+	}
+	
 	public function setWidth($column='A',$width=-1) {
 		
 		$this->getActiveSheet()->getColumnDimension($column)->setWidth($width);
+		
+	}
+	
+	public function setHeight($row=1,$height=-1) {
+		
+		$this->getActiveSheet()->getRowDimension($row)->setRowHeight($height);
 		
 	}
 	

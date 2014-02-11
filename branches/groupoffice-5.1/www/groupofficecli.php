@@ -28,9 +28,9 @@ if (empty($args['r'])) {
 	"eg.:\n\n" .
 	"sudo -u www-data php index.php -c=/path/to/config.php -r=maintenance/upgrade --param=value\n\n";
 	exit();
-} elseif (isset($args['u'])) {// && isset($args['p']))
+} elseif (isset($args['u'])) {
 	
-	$password = GO_Base_Util_Cli::passwordPrompt("Enter password for user ".$args['u'].":");
+	$password = isset($args['p']) ? $args['p'] : GO_Base_Util_Cli::passwordPrompt("Enter password for user ".$args['u'].":");
 
 	$user = GO::session()->login($args['u'], $password);
 	if (!$user) {

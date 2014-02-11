@@ -423,7 +423,20 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 
 		if(!empty($params['addressbook_id'])){		
 			$abs= array($params['addressbook_id']);
-		}else
+		}else if (GO::modules()->customfields && !empty($params['customfield_id'])) {
+			
+			$colId = preg_replace('/[\D]/','',$params['customfield_id']);
+			$customfieldModel = GO_Customfields_Model_Field::model()->findByPk($colId);
+			$abs =
+					!empty($customfieldModel->addressbook_ids)
+					? explode(',',$customfieldModel->addressbook_ids)
+					: GO_Addressbook_Model_Addressbook::model()->getAllReadableAddressbookIds();
+			$readableAddressbookIds = GO_Addressbook_Model_Addressbook::model()->getAllReadableAddressbookIds();
+			foreach ($abs as $k => $abId) {
+				if (!in_array($abId,$readableAddressbookIds))
+					unset($abs[$k]);
+			}
+		} else 
 		{
 			$abs = GO_Addressbook_Model_Addressbook::model()->getAllReadableAddressbookIds();			
 		}

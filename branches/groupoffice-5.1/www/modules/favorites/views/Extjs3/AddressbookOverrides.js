@@ -16,10 +16,22 @@ GO.moduleManager.onModuleReady('addressbook',function(){
 	Ext.override(GO.addressbook.MainPanel, {	
 		
 		initComponent : GO.addressbook.MainPanel.prototype.initComponent.createSequence(function(){
-			this.addressbookFavoritesList = new GO.favorites.AddressbookFavoritesList({
-				id:'addressbookFavoritesList'
-			});
+//			this.addressbookFavoritesList = new GO.favorites.AddressbookFavoritesList(
+//			{
+//				id:'addressbookFavoritesList'
+//			});
 			
+			this.addressbookFavoritesList = new GO.favorites.AddressbookFavoritesList(
+			{
+				id:'addressbookFavoritesList',
+					stateEvents: ['collapse', 'expand'],
+					getState: function () {                              
+							return {
+									collapsed: !this.addressbooksGrid.collapsed
+							}
+				}.createDelegate(this)
+			});
+						
 			this.addressbookFavoritesList.on('change', function(grid, abooks, records){
 				var books = Ext.encode(abooks);
 				var panel = this.tabPanel.getActiveTab();
@@ -53,7 +65,14 @@ GO.moduleManager.onModuleReady('addressbook',function(){
 			}, this);
 
 			this.westPanel.insert(0,this.addressbookFavoritesList);
-			
+
+			this.addressbooksGrid.stateEvents = ['collapse', 'expand'];
+			this.addressbooksGrid.getState= function () {                              
+				return {
+					collapsed: !this.addressbookFavoritesList.collapsed
+				}
+			}.createDelegate(this);
+
 			GO.favorites.favoritesAddressbookStore.load();
 		})
 	});

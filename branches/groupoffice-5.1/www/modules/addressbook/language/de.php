@@ -275,6 +275,9 @@ $l['downloadFullImage']='Bild herunterladen';
 $l['upcomingBirthdays'] = "Anstehende Geburtstage";
 
 $l['age'] = "Alter";
+$l['actionDate']='Handlungsdatum';
+$l['selectCurrentActions']='Nur Aktive anzeigen';
+$l['showActieveToolTip']='Nur die Kontakte mit einem aktiven Handlungsdatum anzeigen.';
 $l['linkedinUrl'] = 'LinkedIn';
 $l['facebookUrl'] = 'Facebook';
 $l['twitterUrl'] = 'Twitter';

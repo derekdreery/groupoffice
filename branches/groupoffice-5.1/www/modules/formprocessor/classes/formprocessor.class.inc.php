@@ -177,7 +177,7 @@ class formprocessor{
 			$credentials = array ('first_name','middle_name','last_name','title','initials','sex','email',
 			'email2','email3','home_phone','fax','cellular','comment','address','address_no',
 			'zip','city','state','country','company','department','function','work_phone',
-			'work_fax','salutation');			
+			'work_fax','salutation','url_linkedin','url_facebook','url_twitter','skype_name');			
 
 			foreach($credentials as $key)
 			{

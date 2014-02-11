@@ -538,9 +538,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		$file->name = $name;
 		
 		
-		$file->save();
-
-		return $file;
+		if($file->save())
+			return $file;
+		else
+			return false;
 	}
 	
 	/**
