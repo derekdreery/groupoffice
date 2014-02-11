@@ -84,3 +84,10 @@ $l["taskCompletion_time"]='Завършен на';
 $l["taskProject_name"]='Проект';
 
 $l['taskPercentage_complete']='Завършен в проценти';
+
+$l['completedTasks']='Завършени задачи';
+$l['phoneNr']='Тел. номер';
+$l['savePhoneNr']='Запиши тел. номер към';
+$l['scheduleCallTaskName']='Обади се на {name} с номер {number}';
+$l['overwritePhoneNumber']='Презапиши {field} ({number})';
+$l['addToPhoneNumber']='Добави към {field}';

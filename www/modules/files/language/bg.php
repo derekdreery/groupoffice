@@ -118,3 +118,18 @@ $l['notificationEmailSubject'] = 'Актуализации в папка';
 
 $l['downloadLinkExpired'] = "Връзката за изтегляне на този файл е с изтекъл срок";
 $l['recentFiles']="Файлове, модифицирани през последните 7 дни";
+
+$l['bookmarkFolder']="Добави към фаворити";
+$l['bookmarks']="Фаворити";
+$l['bookmarkAlreadyExists']="Папка '%fn' е вече добавена в списъка с фаворити за текущият потребител.";
+$l['removeBookmark']="Премахни фаворит";
+$l['removeBookmarkQuestion']="Премахване на папка '%fn' от списъка с фаворити?";
+$l['notInSearchMode']="Не може да се изпълни това в режим търсене.";
+$l['openInBrowser']='Отваряне в браузъра';
+$l['selectApplication']="Избор на приложение за отваряне на този файл...";
+$l['rememberFileHandler']="Запомни решението ми за този файлов тип";
+$l['alwaysAsk']="Питай винаги";
+$l['openWith']='Отвори с';
+$l['dontDeleteSystemFolder']="Не можете да изтриете тази системна папка";
+$l['open']='Отвори';
+$l['rightClickToCopy']='Десен клик за копиране';
