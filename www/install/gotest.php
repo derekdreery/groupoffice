@@ -305,7 +305,7 @@ function test_system(){
 	
 	$test['name']='JSON functions';
 	$test['pass']=function_exists('json_encode');
-	$test['feedback']='Fatal error: json_encode and json_decode functions are not available.';
+	$test['feedback']='Fatal error: json_encode and json_decode functions are not available. Try apt-get install php5-json on Debian or Ubuntu.';
 	$test['fatal']=true;
 
 	$tests[]=$test;

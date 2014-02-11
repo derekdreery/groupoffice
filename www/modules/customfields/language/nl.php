@@ -67,3 +67,4 @@ $l['GO_Billing_Model_Product'] = 'Product';
 $l['GO_Billing_Model_Order'] = 'Factuur/Offerte';
 $l['GO_Site_Model_Site'] = 'Site';
 $l['GO_Site_Model_Content'] = 'Content';
+$l['addressbookIds'] = 'Alleen uit deze adresboeken (IDs)';

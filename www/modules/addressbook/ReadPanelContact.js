@@ -435,6 +435,22 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 			this.scheduleCallItem = new GO.tasks.ScheduleCallMenuItem();
 			this.newMenuButton.menu.add(this.scheduleCallItem);
 		}
+		
+		if (GO.smscampaigns) {
+			this.newMenuButton.menu.add({
+				itemId : 'sms',
+				text: GO.smscampaigns.lang['singleSms'],
+				iconCls: 'go-model-icon-GO_Email_Model_ImapMessage',
+				handler:function(item, e){
+					if (!GO.smscampaigns.singleSmsDialog)
+						GO.smscampaigns.singleSmsComposer = new GO.smscampaigns.SingleSmsComposer();
+
+					GO.smscampaigns.singleSmsComposer.show(this.model_id,this.data['last_name']);
+				},
+				scope: this
+			});
+		}
+		
 	},
 	
 	createTopToolbar : function(){

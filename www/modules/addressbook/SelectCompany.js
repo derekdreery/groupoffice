@@ -25,6 +25,7 @@ GO.addressbook.SelectCompany = function(config){
 
 //	Ext.apply(this, config);
 	
+	var customfieldId = config.customfieldId || '';
 
 	if (typeof(config.fields)=='undefined') {
 		config.fields = {
@@ -47,7 +48,8 @@ GO.addressbook.SelectCompany = function(config){
 			url: GO.url("addressbook/company/selectCompany"),
 			baseParams: {				
 				addressbook_id : this.addressbook_id,		
-				noMultiSelectFilter:true
+				noMultiSelectFilter:true,
+				customfield_id : customfieldId
 			},
 			root: 'results',
 			id: 'id',
@@ -55,9 +57,8 @@ GO.addressbook.SelectCompany = function(config){
 			fields: config.fields.fields,
 			remoteSort: true
 		});
+		this.store.setDefaultSort('name', 'asc');		
 	}
-	
-	this.store.setDefaultSort('name', 'asc');
 	
 	config.triggerAction='all';
 	config.selectOnFocus=true;

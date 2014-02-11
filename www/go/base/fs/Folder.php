@@ -149,17 +149,22 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		if($newPath==$this->path())
 			return true;
 			
-		$movedFolder = new GO_Base_Fs_Folder($newPath);
-		$movedFolder->create();
+		if(!rename($this->path(), $newPath))
+			throw new Exception("Rename failed");
 		
-		$ls = $this->ls(true);
-		foreach($ls as $fsObject){
-			$fsObject->move($movedFolder);
-		}
+		$this->path = $newPath;
+			
+//		$movedFolder = new GO_Base_Fs_Folder($newPath);
+//		$movedFolder->create();
+//		
+//		$ls = $this->ls(true);
+//		foreach($ls as $fsObject){
+//			$fsObject->move($movedFolder);
+//		}
+//		
+//		$this->delete();
 		
-		$this->delete();
-		
-		$this->path = $movedFolder->path();
+//		$this->path = $movedFolder->path();
 		
 		return true;
 	}

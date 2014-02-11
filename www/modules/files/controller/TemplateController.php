@@ -75,7 +75,10 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 		$fsFile->putContents($template->content);
 		
 		$fileModel = GO_Files_Model_File::importFromFilesystem($fsFile);
-		
+		if(!$fileModel)
+		{
+			throw new Exception("Could not create file");
+		}
 		return array('id'=>$fileModel->id, 'success'=>true);
 	}
 

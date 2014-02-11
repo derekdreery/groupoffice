@@ -29,7 +29,7 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	protected function actionSetPassword($params){
 		
 		if(!GO::user()){
-			if(empty($params['token']) || $params['token']!=GO::config()->postfixadmin_token){
+			if(empty($params['serverclient_token']) || $params['serverclient_token']!=GO::config()->serverclient_token){
 				throw new GO_Base_Exception_AccessDenied();
 			}else
 			{
@@ -58,7 +58,7 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
 		if(!GO::user()){
-			if(empty($params['token']) || $params['token']!=GO::config()->postfixadmin_token){
+			if(empty($params['serverclient_token']) || $params['serverclient_token']!=GO::config()->serverclient_token){
 				throw new GO_Base_Exception_AccessDenied();
 			}else
 			{

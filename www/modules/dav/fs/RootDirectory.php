@@ -34,6 +34,9 @@ class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory{
 		if(GO::modules()->projects)
 			$children[] = new GO_Dav_Fs_Directory('projects');
 		
+		if(GO::modules()->projects2)
+			$children[] = new GO_Dav_Fs_Directory('projects2');
+		
 		if(GO::modules()->addressbook)
 			$children[] = new GO_Dav_Fs_Directory('addressbook');
 

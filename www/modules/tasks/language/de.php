@@ -27,7 +27,7 @@ $l["createLink"]='Verknüpfung hinzufügen';
 $l["startsAt"]='Beginnt am';
 $l["completedAt"]='Beendet am';
 $l["showInactiveTasks"]='offen (inaktiv)';
-$l["scheduleCall"]='Erinnnerungsruf';
+$l["scheduleCall"]='Erinnerungsruf';
 $l["taskDefaults"]='Standardeinstellungen für Aufgaben';
 $l["daysBeforeStart"]= 'Tag(e) vorher';
 $l["defaultTasklist"]='Standard Aufgabenliste';
@@ -82,7 +82,7 @@ $l["taskProject_name"]='Projekt';
 $l['taskPercentage_complete']='Fortschritt';
 
 $l['phoneNr']='Telefonnummer';
-$l['savePhoneNr']='Nummer speichern...';
+$l['savePhoneNr']='Nummer speichern';
 $l['scheduleCallTaskName']='{name} anrufen über {number}';
 $l['overwritePhoneNumber']='{field} überschreiben mit ({number})';
 $l['addToPhoneNumber']='Hinzufügen zu {field}';
