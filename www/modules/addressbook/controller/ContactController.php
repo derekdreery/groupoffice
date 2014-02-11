@@ -683,7 +683,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		
 		$userContactIds=array();
-		if(empty($params['addressbook_id']) && empty($params['no_user_contacts'])) {
+		if(empty($params['addressbook_id']) && empty($params['no_user_contacts']) && empty($params['customfield_id'])) {
 			$findParams = GO_Base_Db_FindParams::newInstance()
 					->searchQuery($query,
 									array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3'))
@@ -769,10 +769,21 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				
 				$findParams->getCriteria()->addInTemporaryTableCondition('usercontacts', 'id', $userContactIds,'t',true,true);
 		
-
-			if(!empty($params['addressbook_id'])){		
+			if (!empty($params['addressbook_id'])){		
 				$abs= array($params['addressbook_id']);
-			}else
+			} else if (GO::modules()->customfields && !empty($params['customfield_id'])) {
+				$colId = preg_replace('/[\D]/','',$params['customfield_id']);
+				$customfieldModel = GO_Customfields_Model_Field::model()->findByPk($colId);
+				$abs =
+						!empty($customfieldModel->addressbook_ids)
+						? explode(',',$customfieldModel->addressbook_ids)
+						: GO_Addressbook_Model_Addressbook::model()->getAllReadableAddressbookIds();
+				$readableAddressbookIds = GO_Addressbook_Model_Addressbook::model()->getAllReadableAddressbookIds();
+				foreach ($abs as $k => $abId) {
+					if (!in_array($abId,$readableAddressbookIds))
+						unset($abs[$k]);
+				}
+			} else
 			{
 				$abs = GO_Addressbook_Model_Addressbook::model()->getAllReadableAddressbookIds();			
 			}
