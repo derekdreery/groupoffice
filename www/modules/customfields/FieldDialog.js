@@ -169,7 +169,7 @@ GO.customfields.FieldDialog = function(config){
 		}),
 		this.addressbookIdsField = new Ext.form.TextField({
 			name:'addressbook_ids',
-			maxLength:64,
+			maxLength:255,
 			fieldLabel:GO.customfields.lang.addressbookIds,
 			hidden: true,
 			disabled: true,
