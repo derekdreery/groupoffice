@@ -93,6 +93,11 @@ class GO_Ldapauth_Authenticator {
 			GO::debug("LDAPAUTH: No LDAP entry found for " . $username);
 			//return true here because this should not block normal authentication
 			return true;
+		}else
+		{
+			GO::debug("LDAPAUTH: Found LDAP entry found for " . $username);
+			
+//			GO::debug($record->getAttributes());
 		}
 
 		$authenticated = $ldapConn->bind($record->getDn(), $password);
