@@ -87,11 +87,6 @@ chmod('/etc/groupoffice/config.php', 0640);
 
 require_once('/etc/groupoffice/config.php');
 
-system('/usr/bin/php '.$config['root_path'].'install/autoinstall.php -c=/etc/groupoffice/config.php --adminpassword=admin --adminusername=admin --adminemail=admin@example.com');
-system('/usr/bin/php '.$config['root_path'].'groupofficecli.php -r=maintenance/upgrade -c=/etc/groupoffice/config.php');
-
-
-
 echo "Setting cache permissions\n\n";
 
 if(is_dir($config['tmpdir'].'cache'))
@@ -110,12 +105,19 @@ if(is_dir($config['file_storage_path'].'log'))
 if(file_exists($config['file_storage_path'].'key.txt'))
 	system('chown www-data:www-data '.$config['file_storage_path'].'key.txt');
 
+system('chown www-data /etc/groupoffice/config.php');
+
+system('su www-data -c "/usr/bin/php '.$config['root_path'].'install/autoinstall.php -c=/etc/groupoffice/config.php --adminpassword=admin --adminusername=admin --adminemail=admin@example.com"');
+system('su www-data -c "/usr/bin/php '.$config['root_path'].'groupofficecli.php -r=maintenance/upgrade -c=/etc/groupoffice/config.php"');
+
+system('chown root /etc/groupoffice/config.php');
+
 //create symlink for site module public files
 if(!file_exists('/var/www/public'))
 	system('ln -s '.$config['file_storage_path'].'public /var/www/public');
 
 
-if(is_dir('/etc/apache2/conf-enabled')){
+if(is_dir('/etc/apache2/conf-enabled') && file_exists('/etc/apache2/conf.d/groupoffice.conf')){
 	system('mv /etc/apache2/conf.d/groupoffice.conf /etc/apache2/conf-enabled/groupoffice.conf');
 	system('rmdir /etc/apache2/conf.d');
 }
