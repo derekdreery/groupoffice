@@ -373,3 +373,27 @@ $l['addToAddresslistPrompt']='Вие сте на път да добавите и
 $l['addAddresslistSuccess']='Те бяха успешно добавени към адрес листа.';
 
 $l['addContactsSuccess'] = '%i контакта бяха успешно добавени към адрес листа.';
+
+$l['bankBicNo']= 'BIC номер на банката';
+$l['newContact']= "Нов контакт";
+$l['existingContact']= "Съществуващ контакт";
+$l['contactCellular2']= "Мобилен 2";
+$l['searchForImages']='Търси за изображения';
+$l['downloadPhotoUrl']='Изтегли адреса на изображението';
+$l['orBrowseComputer']='или качи от компютъра';
+$l['currentImage']='Настоящо изображение';
+$l['downloadFullImage']='Свали пълното изображение';
+$l['upcomingBirthdays']= "Предстоящи рождени дни";
+$l['age']= "Възраст";
+$l['actionDate']='Дата за събитие';
+$l['selectCurrentActions']='Покажи активни';
+$l['showActieveToolTip']='Покажи контакти, които имат настояща дата за събитие.';
+$l['linkedinUrl']= 'LinkedIn адрес';
+$l['facebookUrl']= 'Facebook адрес';
+$l['twitterUrl']= 'Twitter адрес';
+$l['skypeName']= 'Skype име';
+$l['cmdPanelSocialMedia']= 'Social media';
+$l['setCurrentTemplateAsDefaultEAccount']='Задай този образец, като образец по подразбиране за този имейл акаунт';
+$l['callOnSkype']= 'Обаждане чрез Skype';
+$l['userDefaultTemplate']= 'Потребителски образец по подразбиране';
+$l['exportContactsWithCompanies']= 'Контакти с фирми';
