@@ -81,3 +81,4 @@ $l['GO_Billing_Model_Product'] = 'Product';
 $l['GO_Billing_Model_Order'] = 'Invoice/Quote';
 $l['GO_Site_Model_Site'] = 'Site';
 $l['GO_Site_Model_Content'] = 'Content';
+$l['addressbookIds'] = 'Only from these addressbooks (IDs)';
