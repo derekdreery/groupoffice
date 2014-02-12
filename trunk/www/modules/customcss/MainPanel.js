@@ -30,7 +30,7 @@ GO.customcss.MainPanel = function(config){
 				text:GO.lang.cmdSave,
 				handler:function(){
 					this.form.submit({
-						url: GO.settings.modules.customcss.url+'action.php',
+						url:GO.url('customcss/customcss/data'),
 						waitMsg:GO.lang['waitMsgSave'],
 						callback:function(){
 
@@ -66,7 +66,7 @@ Ext.extend(GO.customcss.MainPanel, Ext.form.FormPanel, {
 	afterRender : function(){
 		GO.customcss.MainPanel.superclass.afterRender.call(this);
 		this.form.load({
-			url: GO.settings.modules.customcss.url+'json.php',
+			url:GO.url('customcss/customcss/data'),
 			waitMsg:GO.lang['waitMsgLoad']
 		});
 	}
