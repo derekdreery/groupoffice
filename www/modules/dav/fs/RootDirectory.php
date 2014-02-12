@@ -66,6 +66,11 @@ class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory{
 						return new GO_Dav_Fs_Directory('projects');
 					break;
 					
+				case 'projects2':
+					if(GO::modules()->projects2)
+						return new GO_Dav_Fs_Directory('projects2');
+					break;
+					
 				case 'addressbook':
 					if(GO::modules()->addressbook)
 						return new GO_Dav_Fs_Directory('addressbook');
