@@ -1,3 +1,5 @@
+- Import VCard: works again.
+
 12-02-2014 5.0.41
 - Updated bulgarian language
 - Fixed problem with automatic mailbox creation
