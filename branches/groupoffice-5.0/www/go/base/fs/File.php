@@ -204,7 +204,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 */
 	public function getContents(){
 		return file_get_contents($this->path());
-	}
+		}
 	
 	/**
 	 * Get the contents of this file.
@@ -470,6 +470,12 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		$enc = $this->detectEncoding($str);
 		if(!$enc)
 			$enc='UTF-8';
+		
+		$bom = pack("CCC", 0xef, 0xbb, 0xbf);
+		if (0 == strncmp($str, $bom, 3)) {
+			//echo "BOM detected - file is UTF-8\n";
+			$str = substr($str, 3);
+		}
 		
 		return $this->putContents(GO_Base_Util_String::clean_utf8($str, $enc));
 	}
