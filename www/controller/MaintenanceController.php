@@ -498,7 +498,7 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 		
 		
 		
-		ob_start("GO\Core\Controller\Maintenance::ob_upgrade_log");
+		ob_start("GO\Core\Controller\MaintenanceController::ob_upgrade_log");
 		
 		
 		echo "Updating ".\GO::config()->product_name." database\n";
