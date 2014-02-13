@@ -1,18 +1,15 @@
-11-02-2014 5.1.2
-- Included LDAP setting saving feature
+12-02-2014 5.0.42
+- Fixed projects grid
+- Import VCard: works again.
 
-29-01-2014 5.1.1
-- Merged fixes of 5.0.34-39
-
-22-01-2014 5.1.0
-- Calendar: Overview of participant and resource availability per day.
-- Tasks & Reminders: get reminder when another user puts a task in your task list
-- Added user quota support
-- Show ticket template per message
-
-
+12-02-2014 5.0.41
+- Updated bulgarian language
+- Fixed problem with automatic mailbox creation
+- Projects 2 folders were not available through webdav
+- Always return an INBOX when IMAP connection fails on ActiveSync to prevent some devices from crashing.
+- Email: Fixed bug in Email Composer's "send to" field.
 - Custom fields & Address books: optional address book restriction on Contact &
-Company Custom Fields.
+  Company Custom Fields.
 
 11-02-2014 5.0.40
 - restart apache later on installation
@@ -35,7 +32,6 @@ Company Custom Fields.
 
 27-01-2014 5.0.37
 - Fixed bug that mail is not saved in the sent items folder when the addressbook module is not installed.
-
 
 24-01-2014 5.0.36
 - Previous version could make invalid dovecot confuration
@@ -231,6 +227,7 @@ Company Custom Fields.
 - Default Site Module: able to register for Address List from contact form.
 - 4.2.26 fixes
 
+
 21-10-2013 5.0.15
 - Install bug in projects2 module.
 
@@ -248,7 +245,6 @@ Company Custom Fields.
 - Added date and time indicator
 - Custom Fields & Addressbook Advanced Search: can now search through multiselect custom fields.
 - Billing: able to import order items from CSV file.
-- Fixes of 4.2.25
 
 10-10-2013 5.0.10
 - Searchbar was missing in add contact dialog for the address list

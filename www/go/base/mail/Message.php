@@ -56,7 +56,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 	 * @param String $mimeData
 	 * @param array/string $replaceCallback A function that will be called with the body so you can replace tags in the body.
 	 */
-	public function loadMimeMessage($mimeData, $replaceCallback=false, $replaceCallbackArgs=array()){
+	public function loadMimeMessage($mimeData, $loadDate=false, $replaceCallback=false, $replaceCallbackArgs=array()){
 		
 		$decoder = new GO_Base_Mail_MimeDecode($mimeData);
 		$structure = $decoder->decode(array(
@@ -129,10 +129,13 @@ class GO_Base_Mail_Message extends Swift_Message{
 			  $this->_loadedBody = call_user_func_array($replaceCallback, $replaceCallbackArgs);
 			}
 		}
-		$date=isset($structure->headers['date']) ? $structure->headers['date'] : date('c');		
-		$udate=strtotime($date);
 		
-		$this->setDate($udate);
+		if($loadDate){
+			$date=isset($structure->headers['date']) ? $structure->headers['date'] : date('c');		
+			$udate=strtotime($date);
+
+			$this->setDate($udate);
+		}
 		
 		
 		

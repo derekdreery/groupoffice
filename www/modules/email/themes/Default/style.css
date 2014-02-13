@@ -168,12 +168,10 @@ margin:5px 2px;
 	background-image:url('images/16x16/attach.png') !important;
 }
 
-
-.ml-folder-unseen span{
+.ml-folder-unseen a span{
 	color:#15428B; 
 	font-weight:bold ;
 }
-
 
 .ml-seen-mail{
 	margin:2px 0px;

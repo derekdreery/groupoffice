@@ -27,3 +27,11 @@ $l['invalidCert']="Сертификатът е невалиден!";
 $l['validCert']="Валиден сертификат";
 $l['certEmailMismatch']="Сертификатът е валиден, но E-mail-а на сертификата не съвпада с E-mail-а на подателя.";
 $l['decryptionFailed']='SMIME декриптирането за това съобщение се провали.';
+
+$l['email']="E-mail";
+$l['hash']="Hash";
+$l['serial_number']="Сериен номер";
+$l['version']="Версия";
+$l['issuer']="Издател";
+$l['valid_to']="Важи до";
+$l['valid_from']="Важи от";
