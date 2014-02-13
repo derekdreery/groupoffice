@@ -534,9 +534,15 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 		$tmpFile =\GO\Base\Fs\File::tempFile($params['filename'], 'vcf');
 		$imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
 				
-		$abController = new Contact();
-		$response = $abController->run('importVCard', array('file'=>$tmpFile->path(),'readOnly'=>true), false, true);
-		echo json_encode($response);
+
+		GO\Base\Util\Http::outputDownloadHeaders($tmpFile);
+		
+		echo $tmpFile->getContents();
+//		
+//		$abController = new GO_Addressbook_Controller_Contact();
+//		$response = $abController->run('importVCard', array('file'=>$tmpFile->path(),'readOnly'=>true), false, true);
+//		echo json_encode($response);
+
 	}
 	
 	/**
@@ -687,7 +693,7 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 		
 		
 		$userContactIds=array();
-		if(empty($params['addressbook_id']) && empty($params['no_user_contacts'])) {
+		if(empty($params['addressbook_id']) && empty($params['no_user_contacts']) && empty($params['customfield_id'])) {
 			$findParams = \GO\Base\Db\FindParams::newInstance()
 					->searchQuery($query,
 									array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3'))
@@ -773,10 +779,21 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 				
 				$findParams->getCriteria()->addInTemporaryTableCondition('usercontacts', 'id', $userContactIds,'t',true,true);
 		
-
-			if(!empty($params['addressbook_id'])){		
+			if (!empty($params['addressbook_id'])){		
 				$abs= array($params['addressbook_id']);
-			}else
+			} else if (GO::modules()->customfields && !empty($params['customfield_id'])) {
+				$colId = preg_replace('/[\D]/','',$params['customfield_id']);
+				$customfieldModel = GO_Customfields_Model_Field::model()->findByPk($colId);
+				$abs =
+						!empty($customfieldModel->addressbook_ids)
+						? explode(',',$customfieldModel->addressbook_ids)
+						: GO_Addressbook_Model_Addressbook::model()->getAllReadableAddressbookIds();
+				$readableAddressbookIds = GO_Addressbook_Model_Addressbook::model()->getAllReadableAddressbookIds();
+				foreach ($abs as $k => $abId) {
+					if (!in_array($abId,$readableAddressbookIds))
+						unset($abs[$k]);
+				}
+			} else
 			{
 				$abs = \GO\Addressbook\Model\Addressbook::model()->getAllReadableAddressbookIds();			
 			}

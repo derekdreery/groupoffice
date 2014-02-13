@@ -779,7 +779,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		if (\GO::modules()->addressbook && !empty($params['template_id'])) {
 			try {
 				$template = \GO\Addressbook\Model\Template::model()->findByPk($params['template_id']);
-				$templateContent = $template->content;
+				$templateContent = $template ? $template->content : '';
 			} catch (\GO\Base\Exception\AccessDenied $e) {
 				$templateContent = "";
 			}
@@ -970,7 +970,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		}
 
 		//will be set at send action
-		$response['data']['in_reply_to'] = $message->message_id;
+//		$response['data']['in_reply_to'] = $message->message_id;
 
 		if (stripos($message->subject, 'Re:') === false) {
 			$response['data']['subject'] = 'Re: ' . $message->subject;
@@ -1010,7 +1010,8 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		if($message instanceof \GO\Email\Model\ImapMessage){
 			$response['sendParams']['reply_uid'] = $message->uid;
 			$response['sendParams']['reply_mailbox'] = $params['mailbox'];
-			$response['sendParams']['reply_account_id'] = $params['account_id'];
+			$response['sendParams']['reply_account_id'] = $params['account_id'];			
+			$response['sendParams']['in_reply_to'] = $message->message_id;
 			
 			//We need to link the contact if a manual link was made of the message to the sender.
 			//Otherwise the new sent message may not be linked if an autolink tag is not present.

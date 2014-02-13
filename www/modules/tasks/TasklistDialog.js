@@ -232,11 +232,9 @@ Ext.extend(GO.tasks.TasklistDialog, Ext.Window, {
 	loadTasklist : function(tasklist_id)
 	{
 		this.propertiesTab.form.load({
-			//url: GO.settings.modules.tasks.url+'json.php',
 			url: GO.url('tasks/tasklist/load'),
 			params: {
 				id:tasklist_id
-//				task: 'tasklist'
 			},
 			
 			success: function(form, action) {

@@ -22,8 +22,7 @@ class HttpClient extends \GO\Base\Util\HttpClient{
 			throw new \Exception("Could not connect to mailserver. Please set a strong password in /etc/groupoffice/globalconfig.inc.php.\n\nPlease remove serverclient_username and serverclient_password.\n\nPlease add:\n\n \$config['serverclient_token']='aStrongPasswordOfYourChoice';");
 		}
 		
-		$params['postfixadmin_token']=\GO::config()->serverclient_token;
-	
+		$params['serverclient_token']=\GO::config()->serverclient_token;	
 		
 		return parent::request($url, $params);
 	}

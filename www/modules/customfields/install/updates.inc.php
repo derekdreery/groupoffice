@@ -146,8 +146,14 @@ $updates['201304180930'][]="CREATE TABLE IF NOT EXISTS `cf_enabled_blocks` (
 $updates['201304241300'][]="ALTER TABLE `cf_fields` ADD `unique_values` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `number_decimals`;";
 
 $updates['201309181440'][]="ALTER TABLE `cf_fields` ADD `max_length` INT( 5 ) NOT NULL DEFAULT '50';";
+
 $updates['201309191000'][]="UPDATE `cf_fields` SET max_length=255;";
 
 
+
+$updates['201402110930'][]="ALTER TABLE `cf_fields` ADD `addressbook_ids` VARCHAR(64) NOT NULL DEFAULT '';";
+$updates['201402111315'][]="ALTER TABLE `cf_fields` CHANGE `addressbook_ids` `addressbook_ids` VARCHAR(255) NOT NULL DEFAULT '';";
+
+				
 $updates['201401271043'][]="update `cf_categories` set `extends_model` = replace(`extends_model`,'_','\\');";
 $updates['201401271043'][]="update `cf_fields` set `datatype` = replace(`datatype`,'_','\\');";

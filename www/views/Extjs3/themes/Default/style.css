@@ -2238,3 +2238,12 @@ box-sizing: border-box;
 .permissions-error .x-grid3-cell-inner{
 	color:red;
 }
+
+
+.go-date-picker-wrap{
+	width:210px;
+	margin:auto;
+	margin-bottom: 4px;
+}
+.go-date-picker-wrap-outer{
+}

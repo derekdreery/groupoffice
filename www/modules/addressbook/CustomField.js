@@ -7,14 +7,15 @@ GO.moduleManager.onModuleReady('customfields', function(){
 			var f = GO.customfields.dataTypes["GO_Customfields_Customfieldtype_Text"].getFormField(customfield, config);
 
 			delete f.name;
-
+			
 			return Ext.apply(f, {
 				xtype: 'selectcontact',
 				noUserContacts:true,
 				idValuePair:true,
 				hiddenName:customfield.dataname,
 				forceSelection:true,				
-				valueField:'cf'
+				valueField:'cf',
+				customfieldId: customfield.dataname
 			});
 		}
 	}
@@ -32,7 +33,8 @@ GO.moduleManager.onModuleReady('customfields', function(){
 				idValuePair:true,
 				hiddenName:customfield.dataname,
 				forceSelection:true,				
-				valueField:'cf'
+				valueField:'cf',
+				customfieldId: customfield.dataname
 			});
 		}
 	}

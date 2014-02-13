@@ -2448,8 +2448,4 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			
 			return true;
 	}
-	
-	public function getLogMessage($action) {
-		parent::getLogMessage($action);
-	}
 }

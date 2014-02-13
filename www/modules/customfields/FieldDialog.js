@@ -167,6 +167,14 @@ GO.customfields.FieldDialog = function(config){
 			value:2,
 			fieldLabel:GO.customfields.lang.nDecimals
 		}),
+		this.addressbookIdsField = new Ext.form.TextField({
+			name:'addressbook_ids',
+			maxLength:255,
+			fieldLabel:GO.customfields.lang.addressbookIds,
+			hidden: true,
+			disabled: true,
+			anchor: '-20'
+		}),
 		this.requiredCB = new Ext.ux.form.XCheckbox({
 			xtype:'xcheckbox',
 			name:'required',
@@ -259,6 +267,9 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 
 	typeChange : function(combo, newValue)
 	{	
+		this.addressbookIdsField.setVisible(newValue=='GO_Addressbook_Customfieldtype_Contact' || newValue=='GO_Addressbook_Customfieldtype_Company');
+		this.addressbookIdsField.setDisabled(newValue!='GO_Addressbook_Customfieldtype_Contact' && newValue!='GO_Addressbook_Customfieldtype_Company');
+		
 		this.helptextField.setDisabled(newValue=='GO_Customfields_Customfieldtype_Infotext');
 		this.requiredCB.setDisabled(newValue=='GO_Customfields_Customfieldtype_Infotext');
 		this.decimalsField.setDisabled(newValue!='GO_Customfields_Customfieldtype_Number');

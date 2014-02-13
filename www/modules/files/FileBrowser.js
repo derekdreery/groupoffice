@@ -23,7 +23,7 @@ Ext.namespace("GO.files");
 //	name: 'id',
 //	type: 'string'
 //},
-//{
+//{email_files
 //	name: 'name',
 //	type: 'string'
 //},
@@ -1422,26 +1422,33 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		this.file_data = records[0].data;
 
 		if (!this.expireDateWindow) {
-			this.expireForm = new Ext.form.FormPanel({
-				items: [new Ext.DatePicker({
+			this.datePicker = new Ext.DatePicker({
 					itemId: 'expire_time',
 					name : 'expire_time',
 					format: GO.settings.date_format,
 					hideLabel: true
-				})]
 			});
 			this.expireDateWindow = new GO.Window({
 				title: GO.files.lang.expireTime,
-				height:218,
-				width:224,
-				layout:'fit',
+				height:280,
+				width:260,
 				border:false,
 				maximizable:true,
 				collapsible:true,
 				closeAction:'hide',
-				items: [this.expireForm]
+				items: [new Ext.Panel({
+					autoHeight:true,
+					cls:'go-date-picker-wrap-outer',
+					baseCls:'x-plain',
+					items:[
+						new Ext.Panel({
+							cls:'go-date-picker-wrap',
+							items:[this.datePicker]
+						})
+					]
+				})]
 			});
-			this.expireForm.items.get('expire_time').on('select', function(field,date){
+			this.datePicker.on('select', function(field,date){
 				if(this.emailDownloadLink){
 
 					GO.email.showComposer({

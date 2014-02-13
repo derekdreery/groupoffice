@@ -66,6 +66,7 @@ $l['duplicateExistsFeedback'] = 'The value "%val" entered for the field "%cf" al
 $l['maxLength'] = 'Max. number of characters';
 $l['tooManyCustomfields'] = 'The total amount of data reserved for your custom fields (belonging to object type %s) exceeded the limit. You can correct this by lowering the maximum number of characters of some custom fields. The current custom field was not saved.';
 $l['customfieldTooLarge'] = 'The custom field you tried to save, has more than the allowed number of characters (%s). Please decrease the maximum number of characters of this extra field and try to save again.';
+
 $l['GO\Tasks\Model\Task'] = 'Task';
 $l['GO\Notes\Model\Note'] = 'Note';
 $l['GO\Addressbook\Model\Company'] = 'Company';
@@ -81,3 +82,5 @@ $l['GO\Billing\Model\Product'] = 'Product';
 $l['GO\Billing\Model\Order'] = 'Invoice/Quote';
 $l['GO\Site\Model\Site'] = 'Site';
 $l['GO\Site\Model\Content'] = 'Content';
+
+$l['addressbookIds'] = 'Only from these addressbooks (IDs)';

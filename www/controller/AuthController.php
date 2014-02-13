@@ -140,7 +140,14 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 
 			exit();
 		} else {
-			$this->redirect();
+			
+			if(isset(GO::config()->logout_url)){
+				header('Location: ' .GO::config()->logout_url);
+				exit();
+			}else
+			{
+				$this->redirect();
+			}
 		}
 	}
 
@@ -151,8 +158,14 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 		
 		$response = array();
 		
-		if(!$this->fireEvent('beforelogin', array(&$params, &$response)))
+		if(!$this->fireEvent('beforelogin', array(&$params, &$response))){
+			$response['success'] = false;
+			
+			if(!isset($response['feedback']))
+				$response['feedback']=GO::t('badLogin');
+
 			return $response;		
+		}
 		
 		$user = \GO::session()->login($params['username'], $params['password']);
 
