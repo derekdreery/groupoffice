@@ -60,7 +60,7 @@ class Message extends Swift_Message{
 	 * @param String $mimeData
 	 * @param array/string $replaceCallback A function that will be called with the body so you can replace tags in the body.
 	 */
-	public function loadMimeMessage($mimeData, $replaceCallback=false, $replaceCallbackArgs=array()){
+	public function loadMimeMessage($mimeData, $loadDate=false, $replaceCallback=false, $replaceCallbackArgs=array()){
 		
 		$decoder = new MimeDecode($mimeData);
 		$structure = $decoder->decode(array(
@@ -132,6 +132,13 @@ class Message extends Swift_Message{
 			  array_unshift($replaceCallbackArgs, $this->_loadedBody);
 			  $this->_loadedBody = call_user_func_array($replaceCallback, $replaceCallbackArgs);
 			}
+		}
+		
+		if($loadDate){
+			$date=isset($structure->headers['date']) ? $structure->headers['date'] : date('c');		
+			$udate=strtotime($date);
+
+			$this->setDate($udate);
 		}
 		
 		

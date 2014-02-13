@@ -79,7 +79,10 @@ class TemplateController extends \GO\Base\Controller\AbstractModelController {
 		$fsFile->putContents($template->content);
 		
 		$fileModel = \GO\Files\Model\File::importFromFilesystem($fsFile);
-		
+		if(!$fileModel)
+		{
+			throw new Exception("Could not create file");
+		}
 		return array('id'=>$fileModel->id, 'success'=>true);
 	}
 

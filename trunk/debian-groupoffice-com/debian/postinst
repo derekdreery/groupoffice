@@ -14,9 +14,9 @@ dbc_go groupoffice-com $@
 #	ln -s /var/www/community/trunk/www /usr/share/groupoffice
 #fi
 
-invoke-rc.d apache2 reload > /dev/null || true
-
 php /usr/share/groupoffice-install-scripts/configure.php
+
+invoke-rc.d apache2 reload > /dev/null || true
 
 #DEBHELPER#
 

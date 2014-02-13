@@ -20,6 +20,7 @@
  * @property boolean $unique_values
  * @property int $number_decimals
  * @property int $max_length
+ * @property string $addressbook_ids
  */
 
 namespace GO\Customfields\Model;
@@ -221,6 +222,12 @@ class Field extends \GO\Base\Db\ActiveRecord{
 	protected function beforeSave() {
 		if($this->isNew)
 			$this->sort_index=$this->count();		
+		
+		$this->addressbook_ids = preg_replace('/[^\d^,]/','',$this->addressbook_ids);
+		if (strlen($this->addressbook_ids)>0 && $this->addressbook_ids[0]==',')
+			$this->addressbook_ids = substr($this->addressbook_ids,1);
+		if (strlen($this->addressbook_ids)>0 && $this->addressbook_ids[strlen($this->addressbook_ids)-1]==',')
+			$this->addressbook_ids = substr($this->addressbook_ids,0,-1);
 		
 		return parent::beforeSave();
 	}

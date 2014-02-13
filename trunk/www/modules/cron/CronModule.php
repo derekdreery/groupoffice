@@ -18,4 +18,8 @@ class CronModule extends \GO\Base\Module{
 		return true;
 	}
 	
+	public function autoInstall() {
+		return true;
+	}
+	
 }

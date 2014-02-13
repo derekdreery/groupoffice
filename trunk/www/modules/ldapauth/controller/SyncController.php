@@ -23,8 +23,6 @@ class SyncController extends \GO\Base\Controller\AbstractController{
 		$record = $result->fetch();
 		$attr = $record->getAttributes();
 		
-		var_dump($attr);
-		
 	}
 	
 	/**

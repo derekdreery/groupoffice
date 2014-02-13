@@ -41,7 +41,9 @@ class RootDirectory extends Sabre\DAV\FS\Directory{
 		if(\GO::modules()->addressbook)
 			$children[] = new Directory('addressbook');
 
-
+		if(\GO::modules()->projects2)
+			$children[] = new Directory('projects2');
+		
 		return $children;
 	}
 	
@@ -65,6 +67,11 @@ class RootDirectory extends Sabre\DAV\FS\Directory{
 				case 'projects':
 					if(\GO::modules()->projects)
 						return new Directory('projects');
+					break;
+					
+				case 'projects2':
+					if(GO::modules()->projects2)
+						return new GO_Dav_Fs_Directory('projects2');
 					break;
 					
 				case 'addressbook':

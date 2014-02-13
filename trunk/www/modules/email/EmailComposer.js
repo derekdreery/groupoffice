@@ -654,9 +654,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 //		}
 
 		//check the right template menu item.
-		if(this.templatesStore && config.template_id && this.templatesMenu.items){
+		if(this.templatesStore && this.templatesMenu.items){
+			var templateId = config.template_id || this.getDefaultTemplateId();
 			var item = this.templatesMenu.items.find(function(item){
-				return item.template_id==config.template_id;
+				return item.template_id==templateId;
 			});
 			item.setChecked(true);
 		}

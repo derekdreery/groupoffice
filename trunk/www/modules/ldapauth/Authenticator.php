@@ -6,20 +6,21 @@ namespace GO\Ldapauth;
 
 class Authenticator {
 
-	private $_mapping = false;
 
-	private function _getMapping() {
-		if ($this->_mapping) {
-			return $this->_mapping;
+	private static $_mapping = false;
+
+	public static function getMapping() {
+		if (self::$_mapping) {
+			return self::$_mapping;
 		}
 
 		$conf = str_replace('config.php', 'ldapauth.config.php', \GO::config()->get_config_file());
 
 		if (file_exists($conf)) {
 			require($conf);
-			$this->_mapping = $mapping;
+			self::$_mapping = $mapping;
 		} else {
-			$this->_mapping = array(
+			self::$_mapping = array(
 					'exclude' => new Mapping\Constant(false),
 					'enabled' => new Mapping\Constant('1'),
 					'username' => 'uid',
@@ -53,101 +54,72 @@ class Authenticator {
 			);
 		}
 
-		return $this->_mapping;
+		return self::$_mapping;
 	}
 
 	public function authenticate($username, $password) {
 
-		
-
-		$mapping = $this->_getMapping();
-
-		if (empty(\GO::config()->ldap_host) || empty(\GO::config()->ldap_peopledn)) {
-			\GO::debug("LDAPAUTH: Aborting because one or more of the following " .
-							"required values is not set: \$config['ldap_host'] and \$config['ldap_peopledn'].");
+		if (empty(\GO::config()->ldap_peopledn)) {
+			\GO::debug('LDAPAUTH: Aborting because the following required value is not set: $config["ldap_peopledn"]');
 			return true;
 		}
-		
-		
 
-//		$ldapConn = new \GO\Base\Ldap\Connection(\GO::config()->ldap_host, \GO::config()->ldap_port, !empty(\GO::config()->ldap_tls));
-//
-//		//support old deprecated config.
-//		if(!empty(\GO::config()->ldap_user))
-//			\GO::config()->ldap_bind_rdn=\GO::config()->ldap_user;
-//		
-//		if (!empty(\GO::config()->ldap_bind_rdn)) {
-//			$bound = $ldapConn->bind(\GO::config()->ldap_bind_rdn, \GO::config()->ldap_pass);
-//			if (!$bound)
-//				throw new \Exception("Failed to bind to LDAP server with RDN: " . \GO::config()->ldap_bind_rdn);
-//		}
-		$ldapConn = \GO\Base\Ldap\Connection::getDefault();
+		$record = GO_Ldapauth_Model_Person::findByUsername($username);
 
-		if (!empty(\GO::config()->ldap_search_template))
-			$query = str_replace('{username}', $username, \GO::config()->ldap_search_template);
-		else
-			$query = $mapping['username'] . '=' . $username;
-		
-		\GO::debug("LDAPAUTH: Search People DN: ".\GO::config()->ldap_peopledn." Query: ". $query);
-
-		$result = $ldapConn->search(\GO::config()->ldap_peopledn, $query);
-		$record = $result->fetch();
 
 		if (!$record) {
 			\GO::debug("LDAPAUTH: No LDAP entry found for " . $username);
 			//return true here because this should not block normal authentication
 			return true;
 		}
-
-		$authenticated = $ldapConn->bind($record->getDn(), $password);
-		if (!$authenticated) {
 		
-			\GO::debug("LDAPAUTH: LDAP authentication FAILED for " . $username);
-			\GO::session()->logout();
-			
-			
-			$str = "LOGIN FAILED" ;		
-			$str .= " for user: \"" . $username . "\" from IP: ";
-			if(isset($_SERVER['REMOTE_ADDR']))
-				$str .= $_SERVER['REMOTE_ADDR'];
-			else
-				$str .= 'unknown';
-			\GO::infolog($str);
-			
-			//Don't throw exception because this won't be catched by cookie login.
-//			throw new \Exception(\GO::t('badLogin').' (LDAP)');
-			
+		//$authenticated = $ldapConn->bind($record->getDn(), $password);
+		if (!$record->authenticate($password)) {
 			return false;
-		} else {
-			\GO::debug("LDAPAUTH: LDAP authentication SUCCESS for " . $username);
-			
-			$oldIgnoreAcl = \GO::setIgnoreAclPermissions(true);
-			
-			if(!empty(\GO::config()->ldap_create_mailbox_domains)){
-				
-				if(!\GO::modules()->serverclient)
-					throw new \Exception("The serverclient module must be installed and configured when using \$config['\GO::config()->ldap_create_mailbox_domains']. See https://www.group-office.com/wiki/Mailserver#Optionally_install_the_serverclient");
-				
-				$_POST['serverclient_domains']=\GO::config()->ldap_create_mailbox_domains;
-			}
-
-			$user = $this->syncUserWithLdapRecord($record, $password);
-			if(!$user){
-				\GO::setIgnoreAclPermissions($oldIgnoreAcl);
-				return false;
-			}
-
-			try{
-				$this->_checkEmailAccounts($user, $password);
-			}catch(\Exception $e){
-//				\GO::debug("LDAPAUTH: Failed to create or update e-mail account!\n\n".(string) $e);
-				trigger_error("LDAPAUTH: Failed to create or update e-mail account for user ".$user->username."\n\n".$e->getMessage());
-			}
-
-			\GO::setIgnoreAclPermissions($oldIgnoreAcl);
 		}
-	}
+		
+		\GO::debug("LDAPAUTH: LDAP authentication SUCCESS for " . $username);
 
+
+		$oldIgnoreAcl = GO::setIgnoreAclPermissions(true);
+
+
+		if(!empty(GO::config()->ldap_create_mailbox_domains)){
+
+			if(!GO::modules()->serverclient)
+				throw new Exception("The serverclient module must be installed and configured when using \$config['GO::config()->ldap_create_mailbox_domains']. See https://www.group-office.com/wiki/Mailserver#Optionally_install_the_serverclient");
+
+			$_POST['serverclient_domains']=GO::config()->ldap_create_mailbox_domains;
+		}else
+		{
+			GO::debug("LDAPAUTH: Found LDAP entry found for " . $username);
+			
+//			GO::debug($record->getAttributes());
+		}
+
+
+		$user = $this->syncUserWithLdapRecord($record, $password);
+		if(!$user){
+			GO::setIgnoreAclPermissions($oldIgnoreAcl);
+
+			return false;
+
+		}
+
+
+
+		try{
+			$this->_checkEmailAccounts($user, $password);
+		}catch(Exception $e){
+//				GO::debug("LDAPAUTH: Failed to create or update e-mail account!\n\n".(string) $e);
+			trigger_error("LDAPAUTH: Failed to create or update e-mail account for user ".$user->username."\n\n".$e->getMessage());
+		}
+
+
+		\GO::setIgnoreAclPermissions($oldIgnoreAcl);
+
+	}
+	
 	/**
 	 * 
 	 * @param \GO\Base\Ldap\Record $user
@@ -299,7 +271,7 @@ class Authenticator {
 
 		$userAttributes = array();
 
-		$mapping = $this->_getMapping();
+		$mapping = $this->getMapping();
 
 		$lowercase = $record->getAttributes();
 
@@ -343,7 +315,7 @@ class Authenticator {
 	 */
 	public function validateUserEmail(\GO\Base\Ldap\Record $record, $email, &$validAddresses = array()) {
 
-		$mapping = $this->_getMapping();
+		$mapping = $this->getMapping();
 
 		$lowercase = $record->getAttributes();
 

@@ -144,30 +144,4 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 
 		this.continueTaskButton.setDisabled(true);
 	}
-	
-	/*loadTask : function(task_id)
-	{
-		this.body.mask(GO.lang.waitMsgLoad);
-		Ext.Ajax.request({
-			url: GO.settings.modules.tasks.url+'json.php',
-			params: {
-				task: 'task_with_items',
-				task_id: task_id
-			},
-			callback: function(options, success, response)
-			{
-				this.body.unmask();
-				if(!success)
-				{
-					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-				}else
-				{
-					var responseParams = Ext.decode(response.responseText);
-					this.setData(responseParams.data);
-				}				
-			},
-			scope: this			
-		});
-	}	 */
-	
 });			

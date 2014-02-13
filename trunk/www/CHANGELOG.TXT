@@ -1,16 +1,29 @@
-29-01-2014 5.1.1
-- Merged fixes of 5.0.34-39
+12-02-2014 5.0.42
+- Fixed projects grid
+- Import VCard: works again.
 
-22-01-2014 5.1.0
-- Calendar: Overview of participant and resource availability per day.
-- Tasks & Reminders: get reminder when another user puts a task in your task list
-- Added user quota support
-- Show ticket template per message
+12-02-2014 5.0.41
+- Updated bulgarian language
+- Fixed problem with automatic mailbox creation
+- Projects 2 folders were not available through webdav
+- Always return an INBOX when IMAP connection fails on ActiveSync to prevent some devices from crashing.
+- Email: Fixed bug in Email Composer's "send to" field.
+- Custom fields & Address books: optional address book restriction on Contact &
+  Company Custom Fields.
 
+11-02-2014 5.0.40
+- restart apache later on installation
 
+11-02-2014 5.0.39
+- Added -p option for cli password
+- Fixed html decode problem in the subjects when using the Mail saveas functionality.
+- Fixed ticket batch edit.
+- Fixed state saving of addressbook westpanel accordeon.
+- Fixed button to add template folders and files in projects V2
 - Fixed SyncML server for Funambol client
 - Some mailservers returned folders as "false".
 - Corrected postfixadmin_token error message. Should be serverclient_token.
+- Form Processor: enabled social media fields in formprocessor
 
 29-01-2014 5.0.38
 - Optimized ticket listing page
@@ -19,7 +32,6 @@
 
 27-01-2014 5.0.37
 - Fixed bug that mail is not saved in the sent items folder when the addressbook module is not installed.
-
 
 24-01-2014 5.0.36
 - Previous version could make invalid dovecot confuration
@@ -215,6 +227,7 @@
 - Default Site Module: able to register for Address List from contact form.
 - 4.2.26 fixes
 
+
 21-10-2013 5.0.15
 - Install bug in projects2 module.
 
@@ -232,7 +245,6 @@
 - Added date and time indicator
 - Custom Fields & Addressbook Advanced Search: can now search through multiselect custom fields.
 - Billing: able to import order items from CSV file.
-- Fixes of 4.2.25
 
 10-10-2013 5.0.10
 - Searchbar was missing in add contact dialog for the address list

@@ -89,6 +89,7 @@ class ImapauthModule extends \GO\Base\Module {
 				}
 			}else
 			{
+				$response['feedback'] = GO::t('badLogin').' (IMAP)';
 				return false;
 			}
 		}

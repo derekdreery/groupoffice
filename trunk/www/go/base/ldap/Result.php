@@ -17,6 +17,9 @@ class Result{
 	
 	private $_entryId;
 	
+
+	public $fetchClass = 'GO\Base\Ldap\Record';
+	
 	public function __construct(Connection $ldapConn, $searchId) {
 		$this->_searchId=$searchId;
 		$this->_ldapConn=$ldapConn;
@@ -40,7 +43,11 @@ class Result{
 		if(!$this->_entryId)
 			return false;
 		
-		return new Record($this->_ldapConn, $this->_entryId);
+		$record = new $this->fetchClass($this->_ldapConn, $this->_entryId);
+		if(!is_a($record, 'GO\Base\Ldap\Record'))
+			throw new Exception($this->fetchClass.' is not a GO_Base_Ldap_Record subclass');
+		return $record;
+
 	}
 	
 	/**

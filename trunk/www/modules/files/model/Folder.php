@@ -542,9 +542,10 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 		$file->name = $name;
 		
 		
-		$file->save();
-
-		return $file;
+		if($file->save())
+			return $file;
+		else
+			return false;
 	}
 	
 	/**
