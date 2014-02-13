@@ -4401,7 +4401,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 */
 	public function deleteReminders(){
 		
-		$stmt = \GO\Base\Model_Reminder::model()->findByModel($this->className(), $this->pk);
+		$stmt = \GO\Base\Model\Reminder::model()->findByModel($this->className(), $this->pk);
 		$stmt->callOnEach("delete");
 	}
 	
@@ -4412,11 +4412,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * @param int $time This needs to be an unixtimestamp
 	 * @param int $user_id The user where this reminder belongs to.
 	 * @param int $vtime The time that will be displayed in the reminder
-	 * @return \GO\Base\Model_Reminder 
+	 * @return \GO\Base\Model\Reminder
 	 */
 	public function addReminder($name, $time, $user_id, $vtime=null){	
 	
-		$reminder = \GO\Base\Model_Reminder::newInstance($name, $time, $this->className(), $this->pk, $vtime);
+		$reminder = \GO\Base\Model\Reminder::newInstance($name, $time, $this->className(), $this->pk, $vtime);
 		$reminder->setForUser($user_id);
 		
 		return $reminder;
