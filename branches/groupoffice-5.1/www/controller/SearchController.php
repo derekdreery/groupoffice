@@ -286,7 +286,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 								->ignoreAcl()
 								->select('t.*,c.name AS company_name, a.name AS ab_name')
 								->searchQuery($query, array(
-										"CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name, ' ',a.name)",
+										"CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",
 										't.email',
 										't.email2',
 										't.email3'

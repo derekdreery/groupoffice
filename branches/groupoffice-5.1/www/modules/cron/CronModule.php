@@ -14,4 +14,8 @@ class GO_Cron_CronModule extends GO_Base_Module{
 		return true;
 	}
 	
+	public function autoInstall() {
+		return true;
+	}
+	
 }

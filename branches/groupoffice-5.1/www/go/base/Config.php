@@ -168,13 +168,6 @@ class GO_Base_Config {
 	 */
 	var $default_country = "NL";
 	
-	/**
-	 * Default disk quota for a new user in MBs
-	 *
-	 * @var     integer
-	 * @access  public
-	 */
-	var $default_diskquota = 1000;
 	
 	/**
 	 * Default VAT percentage
@@ -470,7 +463,7 @@ class GO_Base_Config {
 	var $limit_usersearch=0;
 
 	/**
-	 * The maximum number of Bytes this Group-Office installation may use. 0 will allow unlimited usage of disk space.
+	 * The maximum number KB this Group-Office installation may use. 0 will allow unlimited usage of disk space.
 	 *
 	 * @var     int
 	 * @access  public
@@ -952,7 +945,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '5.1.2';
+	var $version = '5.0.42';
 
 	
 	/**
@@ -961,8 +954,8 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	
-	var $mtime = '20140211';
+
+	var $mtime = '20140212-1';
 
 	#group configuration
 	/**

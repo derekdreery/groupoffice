@@ -97,7 +97,8 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 			this._loadMask = new Ext.LoadMask(Ext.getBody(), {msg: GO.addressbook.lang.importing+'...'});
 		this._loadMask.show();
 
-		this._fieldsDialog.hide();
+		if (this._fieldsDialog)
+			this._fieldsDialog.hide();
 
 		this.formPanel.form.submit({
 			url : GO.url(this._moduleName + '/' + this._modelName + '/import' + this._fileType),

@@ -530,9 +530,13 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$tmpFile =GO_Base_Fs_File::tempFile($params['filename'], 'vcf');
 		$imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
 				
-		$abController = new GO_Addressbook_Controller_Contact();
-		$response = $abController->run('importVCard', array('file'=>$tmpFile->path(),'readOnly'=>true), false, true);
-		echo json_encode($response);
+		GO_Base_Util_Http::outputDownloadHeaders($tmpFile);
+		
+		echo $tmpFile->getContents();
+//		
+//		$abController = new GO_Addressbook_Controller_Contact();
+//		$response = $abController->run('importVCard', array('file'=>$tmpFile->path(),'readOnly'=>true), false, true);
+//		echo json_encode($response);
 	}
 	
 	/**
