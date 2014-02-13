@@ -65,8 +65,8 @@ class JsonResponse implements \ArrayAccess {
 		header('Content-type: application/json; charset=UTF-8'); //tell the browser we are returning json
 	}
 
-	public function offsetGet($offset) {
-		return isset($this->_data[$offset]) ? $this->_data[$offset] : null;
+	public function &offsetGet($offset) {
+		return $this->_data[$offset];
 	}
 
 	public function offsetSet($offset, $value) {
