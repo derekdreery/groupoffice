@@ -141,8 +141,8 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 			exit();
 		} else {
 			
-			if(isset(GO::config()->logout_url)){
-				header('Location: ' .GO::config()->logout_url);
+			if(isset(\GO::config()->logout_url)){
+				header('Location: ' .\GO::config()->logout_url);
 				exit();
 			}else
 			{
@@ -221,9 +221,12 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 		//return $response;
 
 		if (\GO\Base\Util\Http::isAjaxRequest())
+		{
 			return $response;
-		else
+		}else{
 			$this->redirect();
+		
+		}
 	}
 
 

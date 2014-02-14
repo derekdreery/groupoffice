@@ -1135,6 +1135,21 @@ class GO{
 	public static function isInstalled(){
 		return !empty(\GO::config()->db_user);
 	}
+	
+	
+	
+	private static $_scripts;
+	
+	/**
+	 * 
+	 * @return \GO\Base\Html\Scripts
+	 */
+	public static function scripts() {
+		if(!isset(self::$_scripts)){
+			self::$_scripts = new \GO\Base\Html\Scripts ();
+		}
+		return self::$_scripts;
+	}
 
 }
 
