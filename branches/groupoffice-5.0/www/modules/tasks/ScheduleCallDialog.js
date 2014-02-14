@@ -80,16 +80,39 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			fieldLabel: GO.lang.strDescription
 		});		
 
-		this.selectContact = new GO.addressbook.SelectContact ({
+//		this.selectContact = new GO.addressbook.SelectContact ({
+//			name: 'contact_name',
+//			fieldLabel:GO.addressbook.lang.contact,
+//			enableKeyEvents : true,
+//			remoteSort: true,
+//			allowBlank:false,
+//			anchor: '100%',
+//			tpl:'<tpl for="."><div class="x-combo-list-item">{name} ({ab_name}) <tpl if="email">({email})</tpl></div></tpl>'
+//		});
+		
+		this.selectContact = new GO.form.ComboBoxReset({
 			name: 'contact_name',
 			fieldLabel:GO.addressbook.lang.contact,
-			enableKeyEvents : true,
-			remoteSort: true,
-			allowBlank:false,
 			anchor: '100%',
-			tpl:'<tpl for="."><div class="x-combo-list-item">{name} ({ab_name}) <tpl if="email">({email})</tpl></div></tpl>'
+			allowBlank:false,
+			mode:'remote',
+			triggerAction:'all',
+			enableKeyEvents : true,
+			selectOnFocus:true,
+			displayField:'name',
+			valueField: 'id',
+			tpl:'<tpl for="."><div class="x-combo-list-item">{name} ({ab_name}) <tpl if="email">({email})</tpl></div></tpl>',
+			store: new GO.data.JsonStore({
+				url: GO.url('addressbook/contact/store'),
+				root: 'results',
+				id: 'id',
+				totalProperty:'total',
+				fields: ['id','name','email','ab_name','work_phone','home_phone','cellular','cellular2'],
+				remoteSort: true
+			})
 		});
 		
+				
 		this.contactIdField = new Ext.form.Hidden({
 			name:'contact_id'
 		});
@@ -179,7 +202,7 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			var record = this.selectContact.store.getById(new_val);
 			
 			new_val = record ? new_val :  0;
-			
+
 			this.contactIdField.setValue(new_val);
 			this.populatePhoneFields();
 			this.btnAddContact.setDisabled(new_val!=0);
@@ -264,6 +287,9 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		];
 		
 		var record = this.selectContact.store.getById(this.contactIdField.getValue());
+		
+		console.log(record);
+		
 		if(GO.util.empty(record)){
 			record = {};
 			record.data = {};
