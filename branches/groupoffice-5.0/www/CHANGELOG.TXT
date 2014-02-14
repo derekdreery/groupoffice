@@ -1,4 +1,5 @@
 5.0.43
+- Billing: Fixed break as last item inside itemGroups when printing PDF
 - Calendar: Print Category Count - Only print count for items that are visible for the user.
 - Group-office theme: Added strong/b style for fixing bold text inside blockquotes
 
