@@ -15,8 +15,10 @@ chown root:www-data /etc/groupoffice/config-servermanager.inc.php
 chmod 640 /etc/groupoffice/config-servermanager.inc.php
 
 
-
+echo "Running configure.php"
 php /usr/share/groupoffice-servermanager/configure.php
+
+echo "Running installservermanager.php"
 php /usr/share/groupoffice-servermanager/installservermanager.php
 
 a2enmod vhost_alias
@@ -25,7 +27,7 @@ a2enmod vhost_alias
 
 invoke-rc.d apache2 reload 3> /dev/null || true
 
-/usr/share/groupoffice/groupofficecli.php -r=servermanager/installation/upgradeAll
+/usr/share/groupoffice/groupofficecli.php -r=servermanager/installation/upgradeAll -c=/etc/groupoffice/config.php -q
 
 #DEBHELPER#
 
