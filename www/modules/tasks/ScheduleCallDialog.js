@@ -287,9 +287,7 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		];
 		
 		var record = this.selectContact.store.getById(this.contactIdField.getValue());
-		
-		console.log(record);
-		
+	
 		if(GO.util.empty(record)){
 			record = {};
 			record.data = {};
