@@ -96,8 +96,9 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 			$htmlAttributes['value']=1;
 		if(!isset($htmlAttributes['checked']) && $this->_resolveValue($model,$attribute)==$htmlAttributes['value'])
 			$htmlAttributes['checked']='checked';
+		$hidden = $this->_inputField('hidden',$model,$attribute,array('value'=>0));
 		
-		return $this->_inputField('checkbox',$model,$attribute,$htmlAttributes);
+		return $hidden.$this->_inputField('checkbox',$model,$attribute,$htmlAttributes);
 	}
 	
 	/**
