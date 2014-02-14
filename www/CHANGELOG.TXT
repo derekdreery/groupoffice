@@ -1,3 +1,6 @@
+5.0.43
+- Group-office theme: Added strong/b style for fixing bold text inside blockquotes
+
 12-02-2014 5.0.42
 - Fixed projects grid
 - Import VCard: works again.
