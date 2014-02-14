@@ -243,6 +243,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 			
 	}
 	
+	
 	/**
 	 * Includes the file from the views folder
 	 * 
@@ -266,7 +267,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 			$file = $viewPath.'/Default.php';						
 		}
 		
-		require($file);
+		
 		
 		$layoutFile = $viewPath.'layout/'.$this->layout.'.php';
 		$masterPage = file_exists($layoutFile);
@@ -274,13 +275,25 @@ abstract class AbstractController extends \GO\Base\Observable {
 		if($masterPage){
 			ob_start();
 			ob_implicit_flush(false);
-		}
-		
-		if($masterPage){
 			
 			extract($data);
+			
+			require($file);
+			
 			$content = ob_get_clean();			
+			
+			ob_start();
+			ob_implicit_flush(false);
 			require($layoutFile);
+			
+			$fullPage = ob_get_clean();
+			
+			\GO::scripts()->render($fullPage);
+			
+			echo $fullPage;
+		}else
+		{
+			require($file);
 		}
 	}
 	
