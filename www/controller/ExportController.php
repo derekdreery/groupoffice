@@ -22,8 +22,12 @@
 
 namespace GO\Core\Controller;
 
+use GO;
+use GO\Base\Controller\AbstractController;
+use GO\Base\Fs\Folder;
+use GO\Base\Export\Settings;
 
-class ExportController extends \GO\Base\Controller\AbstractController { 
+class ExportController extends AbstractController { 
 
 	/**
 	 * Get the exporttypes that can be used and get the data for the checkboxes
@@ -35,7 +39,7 @@ class ExportController extends \GO\Base\Controller\AbstractController {
 		$response = array();		
 		$response['data'] = array();
 		
-		$settings =  \GO\Base\Export\Settings::load();
+		$settings =  Settings::load();
 		$data = $settings->getArray();
 		
 		// retreive checkbox settings
@@ -43,10 +47,10 @@ class ExportController extends \GO\Base\Controller\AbstractController {
 		$response['data']['humanHeaders'] = $data['export_human_headers'];
 		$response['data']['includeHidden'] = $data['export_include_hidden'];
 		
-		$response['outputTypes'] = $this->_getExportTypes(\GO::config()->root_path.'go/base/export/');
+		$response['outputTypes'] = $this->_getExportTypes(GO::config()->root_path.'go/base/export/');
 		
 		if(!empty($params['exportClassPath']))
-			$response['outputTypes'] = array_merge($response['outputTypes'], $this->_getExportTypes(\GO::config()->root_path.$params['exportClassPath']));
+			$response['outputTypes'] = array_merge($response['outputTypes'], $this->_getExportTypes(GO::config()->root_path.$params['exportClassPath']));
 		
 		$response['success'] =true;
 		return $response;
@@ -82,7 +86,7 @@ class ExportController extends \GO\Base\Controller\AbstractController {
 		
 		$defaultTypes = array();
 		
-		$folder = new \GO\Base\Fs\Folder($path);
+		$folder = new Folder($path);
 		$contents = $folder->ls();
 		
 		$classParts = explode('/',$folder->stripRootPath());
@@ -104,7 +108,7 @@ class ExportController extends \GO\Base\Controller\AbstractController {
 					//$classname::$showInView
 					//so we use ReflectionClass
 					
-					$class = new ReflectionClass($classname);
+					$class = new \ReflectionClass($classname);
 					$showInView=$class->getStaticPropertyValue('showInView');
 					$name = $class->getStaticPropertyValue('name');
 					$useOrientation = $class->getStaticPropertyValue('useOrientation');
