@@ -115,7 +115,7 @@ class SmimeMessage extends Message
 			 * This class will stream the MIME structure to the tempin text file in 
 			 * a memory efficient way.
 			 */
-			$fbs = new Swift_ByteStream_FileByteStream($this->tempin, true);		
+			$fbs = new \Swift_ByteStream_FileByteStream($this->tempin, true);		
 			parent::toByteStream($fbs);
 
 			if(!file_exists($this->tempin))
@@ -207,7 +207,7 @@ class SmimeMessage extends Message
 * Write this message to a {@link Swift_InputByteStream}.
 * @param Swift_InputByteStream $is
 */
-  public function toByteStream(Swift_InputByteStream $is)
+  public function toByteStream(\Swift_InputByteStream $is)
   {		
 		if(empty($this->pkcs12_data) && empty($this->recipcerts)){
 			//no sign or encrypt parameters. Do parent method.

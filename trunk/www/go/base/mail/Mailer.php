@@ -22,7 +22,7 @@
 namespace GO\Base\Mail;
 
 
-class Mailer extends Swift_Mailer{
+class Mailer extends \Swift_Mailer{
 	
 	/**
    * Create a new Mailer instance.
@@ -42,7 +42,7 @@ class Mailer extends Swift_Mailer{
 		return $mailer;
   }
 	
-	public function send(Swift_Mime_Message $message, &$failedRecipients = null) {
+	public function send(\Swift_Mime_Message $message, &$failedRecipients = null) {
 		
 		if(\GO::config()->debug)
 			\GO::debug("Sending e-mail to ".implode(",",array_keys($message->getTo())));

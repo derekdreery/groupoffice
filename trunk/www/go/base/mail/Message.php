@@ -9,8 +9,14 @@
  *
  */
 
+namespace GO\Base\Mail;
+
+use GO;
+use GO\Base\Fs\Folder;
+
+
 //make sure temp dir exists
-$cacheFolder = new \GO\Base\Fs\Folder(\GO::config()->tmpdir);
+$cacheFolder = new Folder(GO::config()->tmpdir);
 $cacheFolder->create();
 
 /**
@@ -22,10 +28,10 @@ $cacheFolder->create();
  * @copyright Copyright Intermesh BV.
  */
 
-namespace GO\Base\Mail;
 
 
-class Message extends Swift_Message{
+
+class Message extends \Swift_Message{
 	
 	private $_loadedBody;
 	
@@ -271,7 +277,7 @@ class Message extends Swift_Message{
 					if(isset($part->headers['content-id']))
 					{
 						$content_id=trim($part->headers['content-id'],' <>');
-						$img = Swift_EmbeddedFile::fromPath($tmp_file);
+						$img = \Swift_EmbeddedFile::fromPath($tmp_file);
 						$img->setContentType($mime_type);
 						
 						//Only set valid ID's. Iphone sends invalid content ID's sometimes.
@@ -283,7 +289,7 @@ class Message extends Swift_Message{
 					}else
 					{
 					//echo $tmp_file."\n";
-						$attachment = Swift_Attachment::fromPath($tmp_file,$mime_type);
+						$attachment = \Swift_Attachment::fromPath($tmp_file,$mime_type);
 						$this->attach($attachment);
 					}
 				}
@@ -347,7 +353,7 @@ class Message extends Swift_Message{
 				$tmpFile = \GO\Base\Fs\File::tempFile('', $extension);
 				$tmpFile->putContents(base64_decode($matches[3]));
 
-				$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
+				$img = \Swift_EmbeddedFile::fromPath($tmpFile->path());
 				$img->setContentType($tmpFile->mimeType());
 				$contentId = $this->embed($img);
 
@@ -446,7 +452,7 @@ class Message extends Swift_Message{
 							//$filename = rawurlencode($tmpFile->name());
 							$result = preg_match('/="([^"]*'.preg_quote($ia->token).'[^"]*)"/',$params['htmlbody'],$matches);
 							if($result){
-								$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
+								$img = \Swift_EmbeddedFile::fromPath($tmpFile->path());
 								$img->setContentType($tmpFile->mimeType());
 								$contentId = $this->embed($img);
 
@@ -494,7 +500,7 @@ body p{
 				$path = empty($att->from_file_storage) ? \GO::config()->tmpdir.$att->tmp_file : \GO::config()->file_storage_path.$att->tmp_file;
 				$tmpFile = new \GO\Base\Fs\File($path);
 				if ($tmpFile->exists()) {
-					$file = Swift_Attachment::fromPath($tmpFile->path());
+					$file = \Swift_Attachment::fromPath($tmpFile->path());
 					$file->setContentType($tmpFile->mimeType());
 					$file->setFilename($att->fileName);
 					$this->attach($file);

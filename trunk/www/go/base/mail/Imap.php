@@ -2747,11 +2747,11 @@ class Imap extends ImapBodyStruct {
 	public function append_message($mailbox, $data, $flags=""){
 
 
-		if($data instanceof Swift_Message){
+		if($data instanceof \Swift_Message){
 			
 			$tmpfile = \GO\Base\Fs\File::tempFile();
 
-			$is = new Swift_ByteStream_FileByteStream($tmpfile->path(), true);
+			$is = new \Swift_ByteStream_FileByteStream($tmpfile->path(), true);
 			$data->toByteStream($is);			
 
 			unset($data);
