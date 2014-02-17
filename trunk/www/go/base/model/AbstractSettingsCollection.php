@@ -23,6 +23,7 @@
 
 namespace GO\Base\Model;
 
+use GO;
 
 abstract class AbstractSettingsCollection extends \GO\Base\Model {
 
@@ -73,14 +74,14 @@ abstract class AbstractSettingsCollection extends \GO\Base\Model {
 	
 	private function _loadData(){
 		
-		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(ReflectionProperty::IS_PUBLIC);
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(\ReflectionProperty::IS_PUBLIC);
 		
 		$propertyNames=array();
 		foreach($properties as $property){
 			$propertyNames[] = $this->myPrefix().$property->name;
 		}
 		
-		$values = \GO::config()->getSettings($propertyNames,$this->_userId);
+		$values = GO::config()->getSettings($propertyNames,$this->_userId);
 
 		foreach($values as $property=>$value){
 			if(isset($value)){
@@ -120,7 +121,7 @@ abstract class AbstractSettingsCollection extends \GO\Base\Model {
 			if(is_array($value) || is_object($value))
 				$value = 'serialized:'.serialize ($value);
 
-			$success = $success && \GO::config()->save_setting($this->myPrefix().$key, $value, $this->_userId);			
+			$success = $success && GO::config()->save_setting($this->myPrefix().$key, $value, $this->_userId);			
 		}
 		return $success;
 	}
@@ -141,7 +142,7 @@ abstract class AbstractSettingsCollection extends \GO\Base\Model {
 	 */
 	public function saveFromArray($data){
 		
-		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(ReflectionProperty::IS_PUBLIC);
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(\ReflectionProperty::IS_PUBLIC);
 				
 		foreach($properties as $property){
 			$key = $property->name;

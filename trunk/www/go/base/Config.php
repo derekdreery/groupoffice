@@ -303,6 +303,15 @@ class Config {
 //	var $allow_registration = false;
 
 
+	/**
+	 * The maximum number of MB a new Group-Office user will be able to use. 
+	 * This can be changed per user after creating it. 
+	 * Empty means unlimited disk space (Option is NOT yet released) 
+	 * 
+	 * @var int 
+	 */
+	var $default_diskquota = 1000;
+	
 
 	/**
 	 * Allow e-mail address more then once
