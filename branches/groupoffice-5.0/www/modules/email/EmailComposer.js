@@ -127,7 +127,7 @@ GO.email.EmailComposer = function(config) {
 		}),
 		this.ccFieldCheck = new Ext.menu.CheckItem({
 			text : GO.email.lang.ccField,
-			checked : false,
+			checked : true,
 			checkHandler : this.onShowFieldCheck,
 			scope : this
 		}),
@@ -587,7 +587,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.sendParams = {};
 		Ext.apply(this.sendParams, this.defaultSendParams);
 
-		GO.email.showCCfield = false;
+		GO.email.showCCfield = true;
 		GO.email.showBCCfield = false;
 
 		this.showCC(GO.email.showCCfield);
@@ -991,7 +991,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 		this.startAutoSave();
 
-		this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
+		this.ccFieldCheck.setChecked(GO.email.showCCfield);
 		this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
 	
 		if(config.afterLoad)
