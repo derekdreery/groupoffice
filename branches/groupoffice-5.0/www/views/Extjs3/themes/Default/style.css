@@ -2225,3 +2225,7 @@ box-sizing: border-box;
 }
 .go-date-picker-wrap-outer{
 }
+
+.go-row-body{
+	font-size:11px;
+}
