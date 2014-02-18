@@ -62,7 +62,13 @@ class JsonResponse implements \ArrayAccess {
 
 		header('Cache-Control: no-cache, must-revalidate, post-check=0, pre-check=0'); //prevent caching
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); //resolves problem with IE GET requests
-		header('Content-type: application/json; charset=UTF-8'); //tell the browser we are returning json
+		
+		// Iframe hack, weird Content-Type crap is happening here
+		if(isset($_FILES)){
+			header('Content-Type: text/html; charset=UTF-8');
+		}else{
+			header('Content-type: application/json; charset=UTF-8'); //tell the browser we are returning json
+		}
 	}
 
 	public function &offsetGet($offset) {
