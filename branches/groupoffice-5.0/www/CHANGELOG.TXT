@@ -1,3 +1,8 @@
+18-02-2014 5.0.44
+- Fixed bug in custom fields copying from projects1 to projects2.
+- Improved project reporting.
+- Show time tracking comments in hours approval 2.
+
 17-02-2014 5.0.43
 - Schedule Call Dialog: Fixed permission problem.
 - Billing: Fixed break as last item inside itemGroups when printing PDF
@@ -9,6 +14,7 @@
 - Corrected query for hoursapproval
 - Updated German
 - Subprojects of projects possible
+- Fixed Bynari collaborator Outlook sync
 
 12-02-2014 5.0.42
 - Fixed projects grid
