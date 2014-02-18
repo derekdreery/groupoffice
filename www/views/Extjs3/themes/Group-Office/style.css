@@ -2320,3 +2320,8 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 	background-color: #FFF;
 	border-bottom:5px #009CC5 solid;
 }
+
+
+.go-row-body{
+	font-size:11px;
+}
