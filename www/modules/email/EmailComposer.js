@@ -659,7 +659,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			var item = this.templatesMenu.items.find(function(item){
 				return item.template_id==templateId;
 			});
-			item.setChecked(true);
+			if(item){
+				item.setChecked(true);
+			}
 		}
 	},
 					
