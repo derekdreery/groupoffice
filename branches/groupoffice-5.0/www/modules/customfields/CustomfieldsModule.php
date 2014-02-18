@@ -69,5 +69,42 @@ class GO_Customfields_CustomfieldsModule extends GO_Base_Module {
 		
 		return $cfModels;
 	}
+	
+	
+	
+	
+	public static function replaceRecords($sourceModelName, $targetModelName){
+		
+		//delete existing
+		$stmt = GO_Customfields_Model_Category::model()->findByModel($targetModelName);
+		$stmt->callOnEach('delete');
+
+
+		$cfTargetModel = GO::getModel(GO::getModel($targetModelName)->customfieldsModel());
+		$cfSourceModel = GO::getModel(GO::getModel($sourceModelName)->customfieldsModel());
+
+
+		$sql = "DROP TABLE IF EXISTS `".$cfTargetModel->tableName()."`;";
+		GO::getDbConnection()->query($sql);
+
+		$sql = "CREATE TABLE IF NOT EXISTS `".$cfTargetModel->tableName()."` (
+			`model_id` int(11) NOT NULL DEFAULT '0',
+			PRIMARY KEY (`model_id`)
+		) ENGINE=InnoDB;";
+
+		GO::getDbConnection()->query($sql);
+
+
+		$stmt = GO_Customfields_Model_Category::model()->findByModel($sourceModelName);
+
+		foreach ($stmt as $category) {
+			$category->duplicate(array(
+					'extends_model' => $targetModelName
+			));
+		}
+
+		$sql = "INSERT INTO `".$cfTargetModel->tableName()."` SELECT * FROM `".$cfSourceModel->tableName()."`";
+		GO::getDbConnection()->query($sql);
+	}
 
 }
