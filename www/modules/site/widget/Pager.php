@@ -122,4 +122,8 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 		return $this->_models;
 	}
 	
+	public function getRecords() {
+		return $this->store->getRecords();
+	}
+	
 }
