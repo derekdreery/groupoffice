@@ -506,7 +506,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$nextTime = $rRule->getNextRecurrence();
 			}
 			
-			if($nextTime){				
+			if($nextTime>time()){				
 				return $nextTime-$this->reminder;
 			}else
 				return false;
