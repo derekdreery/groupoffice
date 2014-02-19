@@ -2,6 +2,10 @@
 - Fixed bug in custom fields copying from projects1 to projects2.
 - Improved project reporting.
 - Show time tracking comments in hours approval 2.
+- Timer bug used end time as start time
+- Undismissable reminders bug with recurring events
+- ActiveSync: Don't enter meeting data if there's no organizer
+- Fixed task recurring bug that didn't work for tasks in the future
 
 17-02-2014 5.0.43
 - Schedule Call Dialog: Fixed permission problem.
@@ -42,6 +46,7 @@
 - Some mailservers returned folders as "false".
 - Corrected postfixadmin_token error message. Should be serverclient_token.
 - Form Processor: enabled social media fields in formprocessor
+- Z-Push UTF8 iphone bug with missing messages fixed
 
 29-01-2014 5.0.38
 - Optimized ticket listing page
