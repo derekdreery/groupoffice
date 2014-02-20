@@ -13,7 +13,7 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	//Extra html attributes for the field tags
 	public $inputOptions = array();
 	public $labelOptions = array();
-	public $errorOptions = array();
+	public $errorOptions = array('class'=>'error');
 	
 	/**
 	 * Should not be used for rendering a form
