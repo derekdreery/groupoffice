@@ -135,3 +135,9 @@ $l['dontDeleteSystemFolder']="U kunt deze systeemmap niet verwijderen";
 $l['open']='Openen';
 
 $l['rightClickToCopy']='Klik met de rechtermuis knop om te kopiëren';
+
+$l['deleteExpiredLabel']='Verwijder beëindigde downloadlinkbestanden';
+$l['deleteExpiredDescription']='Verwijder downloadlinkbestanden die niet meer geldig zijn';
+
+$l['deleteWhenExpired'] = 'Bestand automatisch verwijderen wanneer de downloadlink verloopt';
+$l['automaticallyDeleted'] = 'Bestand wordt automatisch verwijderd wanneer zijn downloadlink verloopt';

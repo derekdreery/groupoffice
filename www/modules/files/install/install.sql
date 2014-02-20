@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `fs_files` (
   `extension` varchar(20) NOT NULL,
   `expire_time` int(11) NOT NULL DEFAULT '0',
   `random_code` char(11) DEFAULT NULL,
+	`delete_when_expired` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `folder_id` (`folder_id`),
   KEY `name` (`name`),
