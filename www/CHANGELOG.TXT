@@ -1,5 +1,6 @@
 - Files & Email: option to automatically delete expired download links.
 - Holidays: possible to delete an employee's entire year record.
+- Holidays: when registering new holiday, show hours in national holidays.
 
 18-02-2014 5.0.44
 - Fixed bug in custom fields copying from projects1 to projects2.
