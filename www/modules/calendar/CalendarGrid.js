@@ -187,6 +187,26 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 		this.rowsPerHour=this.scale/24;
 		this.rowHeight = this.hourHeight/this.rowsPerHour;
+		
+		this.on('show',function(){
+
+			var self = this;
+
+			var timeIndicatorTask = {
+				interval: 60000,
+				run: function(){
+					if (self.isVisible()) {
+						self._setTimeIndicator();
+//						self.store.load();
+					} else {
+						Ext.TaskMgr.stop(timeIndicatorTask);
+					}
+				}
+			}
+
+			Ext.TaskMgr.start(timeIndicatorTask);
+
+		},this);
 	},
 
 
@@ -496,33 +516,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		
 //		var now = new Date();
 		
-		if(this.todaysHeading){
-			var minutesElapsed = now.getMinutes()+now.getHours()*60;
-			var indicatorTop = Math.ceil((11/15)*minutesElapsed);
-
-			var x = this.todaysHeading.getX()-this.gridTable.getX()-this.theWeekDay+1;
-			
-			if(!Ext.isIE){
-				x+=4;
-			}
-
-			this.timeIndicator = Ext.DomHelper.append(this.gridContainer,
-				{
-					tag: 'div',
-					id: Ext.id(),
-					cls: "x-calGrid-indicator",
-					style:"left:"+x+"px;top:"+indicatorTop+"px;width:"+(this.todaysHeading.getWidth()-3)+"px;"
-				},true);
-
-			this.timeIndicator = Ext.DomHelper.append(this.gridContainer,
-				{
-					tag: 'div',
-					id: Ext.id(),
-					cls: "x-calGrid-indicator",
-					style:"left:0px;top:"+indicatorTop+"px;width:6px;"
-				},true);
-
-		}
+		this._setTimeIndicator(true);
 
 		//the start of the grid
 		//var position = FirstCol.getXY();
@@ -2033,7 +2027,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			this.scrollPosition=Ext.get(container).getScroll();
 		}
 	},
-	onShow : function(){
+	onShow : function(){		
 		GO.grid.CalendarGrid.superclass.onShow.call(this);
 
 		this.scrollToLastPosition();
@@ -2310,5 +2304,65 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			}
 			this.allDayDragEvent=false;
 		}
+	},
+					
+	_setTimeIndicator : function(reloaded) {
+		
+		var reloaded = reloaded || false;
+		
+		var now = new Date();
+				
+		if(this.todaysHeading){
+			var minutesElapsed = now.getMinutes()+now.getHours()*60;
+			var indicatorTop = Math.ceil((11/15)*minutesElapsed);
+
+			var x = this.todaysHeading.getX()-this.gridTable.getX()-this.theWeekDay+1;
+			
+			if(!Ext.isIE){
+				x+=4;
+			}
+
+			if(!reloaded && this.timeIndicator1) {
+				this.timeIndicator1.replaceWith({
+						tag: 'div',
+						id: Ext.id(),
+						cls: "x-calGrid-indicator",
+						style:"left:"+x+"px;top:"+indicatorTop+"px;width:"+(this.todaysHeading.getWidth()-3)+"px;"
+					});
+			} else {
+				if (this.timeIndicator1)
+					Ext.removeNode(this.timeIndicator1);
+				this.timeIndicator1 = Ext.DomHelper.append(this.gridContainer,
+					{
+						tag: 'div',
+						id: Ext.id(),
+						cls: "x-calGrid-indicator",
+						style:"left:"+x+"px;top:"+indicatorTop+"px;width:"+(this.todaysHeading.getWidth()-3)+"px;"
+					},true);
+			}
+
+			if(!reloaded && this.timeIndicator2) {
+				this.timeIndicator2.replaceWith({
+						tag: 'div',
+						id: Ext.id(),
+						cls: "x-calGrid-indicator",
+						style:"left:0px;top:"+indicatorTop+"px;width:6px;"
+					});
+			} else {
+				if (this.timeIndicator2)
+					Ext.removeNode(this.timeIndicator2);
+				this.timeIndicator2 = Ext.DomHelper.append(this.gridContainer,
+					{
+						tag: 'div',
+						id: Ext.id(),
+						cls: "x-calGrid-indicator",
+						style:"left:0px;top:"+indicatorTop+"px;width:6px;"
+					},true);
+			}
+
+		}
+
+		
 	}
+	
 });
