@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `show_holidays` tinyint(1) NOT NULL DEFAULT '1',
 	`enable_ics_import` tinyint(1) NOT NULL DEFAULT '0',
 	`ics_import_url` varchar(512) NOT NULL DEFAULT '',
+	`tooltip` varchar(127) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `group_id` (`group_id`),
   KEY `project_id` (`project_id`)

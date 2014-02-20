@@ -225,3 +225,5 @@ $updates['201310141130'][]="ALTER TABLE `cal_calendars` ADD `enable_ics_import` 
 ADD `ics_import_url` VARCHAR( 512 ) NOT NULL DEFAULT '';";
 
 $updates["201311261700"][]="script:3_install_cron.php";
+
+$updates["201402171130"][]="ALTER TABLE `cal_calendars` ADD `tooltip` varchar(127) NOT NULL DEFAULT '';";
