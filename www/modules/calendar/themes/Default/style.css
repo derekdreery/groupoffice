@@ -322,7 +322,7 @@ background-color: #F1F1F1 !important;
 
 .x-calGrid-indicator{
 	position:absolute;
-	border-top:2px solid #dd4b39;
+	border-top:2px solid green; /* #dd4b39; */
 	z-index:3001;
 }
 .x-calGrid-table{

@@ -205,13 +205,18 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($this->due_time, $this->rrule, true);
 		
-			$this->duplicate(array(
-				'completion_time'=>0,
-				'start_time'=>time(),
-				'due_time'=>$rrule->getNextRecurrence(time()),
-				'status'=>GO_Tasks_Model_Task::STATUS_NEEDS_ACTION,
-				'percentage_complete'=>0
-			));
+			$nextDueTime = $rrule->getNextRecurrence($this->due_time+1);
+			
+			if($nextDueTime){
+			
+				$this->duplicate(array(
+					'completion_time'=>0,
+					'start_time'=>$nextDueTime-$this->due_time+$this->start_time,
+					'due_time'=>$nextDueTime,
+					'status'=>GO_Tasks_Model_Task::STATUS_NEEDS_ACTION,
+					'percentage_complete'=>0
+				));
+			}
 		}
 	}
 	
@@ -310,7 +315,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 //		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time));		
 //		$e->add($dtstart);
 //		
-		$e->add('dtstart', GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time), array('type'=>$dateType));
+		$e->add('dtstart', GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time), array('VALUE'=>$dateType));
 		
 		
 		
@@ -318,7 +323,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 //		$due->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->due_time));		
 //		$e->add($due);
 		
-		$e->add('due', GO_Base_Util_Date_DateTime::fromUnixtime($this->due_time), array('type'=>$dateType));
+		$e->add('due', GO_Base_Util_Date_DateTime::fromUnixtime($this->due_time), array('VALUE'=>$dateType));
 		
 		
 		
@@ -327,7 +332,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 //			$completed->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->completion_time));		
 //			$e->add($completed);
 			
-			$e->add('completed', GO_Base_Util_Date_DateTime::fromUnixtime($this->completion_time), array('type'=>$dateType));
+			$e->add('completed', GO_Base_Util_Date_DateTime::fromUnixtime($this->completion_time), array('VALUE'=>$dateType));
 		
 		}
 		
@@ -349,7 +354,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 				break;
 			
 			default:
-				$e->priority=5;
+				$e->priority=3;
 				break;
 		}
 		
@@ -421,12 +426,12 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 			if((string) $vobject->priority>5)
 			{
 				$this->priority=self::PRIORITY_LOW;
-			}elseif((string) $vobject->priority==5)
+			}elseif((string) $vobject->priority<3)
 			{
-				$this->priority=self::PRIORITY_NORMAL;
+				$this->priority=self::PRIORITY_HIGH;				
 			}else
 			{
-				$this->priority=self::PRIORITY_HIGH;
+				$this->priority=self::PRIORITY_NORMAL;
 			}
 		}
 		

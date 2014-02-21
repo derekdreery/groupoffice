@@ -1430,13 +1430,21 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			});
 			this.expireDateWindow = new GO.Window({
 				title: GO.files.lang.expireTime,
-				height:280,
+				height:310,
 				width:260,
 				border:false,
 				maximizable:true,
 				collapsible:true,
 				closeAction:'hide',
-				items: [new Ext.Panel({
+				items: [this.deleteWhenExpiredCB = new Ext.ux.form.XCheckbox({
+					hideLabel: true,
+					anchor: '-20',
+					boxLabel: GO.files.lang['deleteWhenExpired'],
+					name: 'delete_when_expired',
+					value: false,
+					disabled: true,
+					hidden: true
+				}), new Ext.Panel({
 					autoHeight:true,
 					cls:'go-date-picker-wrap-outer',
 					baseCls:'x-plain',
@@ -1449,13 +1457,20 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				})]
 			});
 			this.datePicker.on('select', function(field,date){
+				
+				if (!this.deleteWhenExpiredCB.disabled)
+					var deleteWhenExpired = this.deleteWhenExpiredCB.getValue() ? 1 : 0;
+				else
+					var deleteWhenExpired = 0;
+				
 				if(this.emailDownloadLink){
 
 					GO.email.showComposer({
 						loadUrl:GO.url('files/file/emailDownloadLink'),
 						loadParams:{
 							ids: Ext.encode(this.downloadLinkIds),
-							expire_time: parseInt(date.setDate(date.getDate())/1000)
+							expire_time: parseInt(date.setDate(date.getDate())/1000),
+							delete_when_expired: deleteWhenExpired
 						}
 					});
 				} else {
@@ -1464,7 +1479,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						url: 'files/file/createDownloadLink',
 						params: {
 							id:this.file_data.id,
-							expire_time: parseInt(date.setDate(date.getDate())/1000)
+							expire_time: parseInt(date.setDate(date.getDate())/1000),
+							delete_when_expired: deleteWhenExpired
 						},
 						success: function(options, response, result)
 						{
@@ -1477,15 +1493,24 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				this.expireDateWindow.hide();
 			}, this);
 		}
-/*
+
 		this.expireDateWindow.on('show', function(){
-			var myDate = new Date;
-			var unixtime_ms = myDate.setDate(myDate.getDate()+7);
-			var unixtime = parseInt(unixtime_ms/1000);
-			this.expireForm.items.get('expire_time').setValue(myDate.format(GO.settings.date_format));
-			//this.expireForm.items.get('expire_unixtime').setValue(unixtime);
+			GO.request({
+				url: 'files/email/checkDeleteCron',
+				success: function(options, response, result) {
+					this.deleteWhenExpiredCB.setValue(false);
+					this.deleteWhenExpiredCB.setVisible(result.data.enabled);
+					this.deleteWhenExpiredCB.setDisabled(!result.data.enabled);
+				},
+				scope: this
+			});
+//			var myDate = new Date;
+//			var unixtime_ms = myDate.setDate(myDate.getDate()+7);
+//			var unixtime = parseInt(unixtime_ms/1000);
+//			this.expireForm.items.get('expire_time').setValue(myDate.format(GO.settings.date_format));
+//			//this.expireForm.items.get('expire_unixtime').setValue(unixtime);
 		}, this);
-*/
+
 
 		this.expireDateWindow.show();
 	},

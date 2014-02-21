@@ -102,6 +102,14 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 		
 		return parent::afterSave($wasNew);
 	}
+	
+	protected function afterDuplicate(&$duplicate) {
+		
+		$this->duplicateRelation('selectOptions', $duplicate);
+		$this->duplicateRelation('treeOptions', $duplicate);
+		
+		return parent::afterDuplicate($duplicate);
+	}
 		
 	public function alterDatabase($wasNew){
 			$table=$this->category->customfieldsTableName();
