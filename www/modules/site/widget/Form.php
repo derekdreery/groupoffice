@@ -17,7 +17,7 @@ class Form extends \GO\Site\Components\Widget {
 	//Extra html attributes for the field tags
 	public $inputOptions = array();
 	public $labelOptions = array();
-	public $errorOptions = array();
+	public $errorOptions = array('class'=>'error');
 	
 	/**
 	 * Should not be used for rendering a form
@@ -100,8 +100,9 @@ class Form extends \GO\Site\Components\Widget {
 			$htmlAttributes['value']=1;
 		if(!isset($htmlAttributes['checked']) && $this->_resolveValue($model,$attribute)==$htmlAttributes['value'])
 			$htmlAttributes['checked']='checked';
+		$hidden = $this->_inputField('hidden',$model,$attribute,array('value'=>0));
 		
-		return $this->_inputField('checkbox',$model,$attribute,$htmlAttributes);
+		return $hidden.$this->_inputField('checkbox',$model,$attribute,$htmlAttributes);
 	}
 	
 	/**

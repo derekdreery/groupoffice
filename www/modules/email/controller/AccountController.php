@@ -87,13 +87,15 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 		if(empty($params['password']))
 			unset($params['password']);
 		
-		if(!empty($params['smtp_auth'])){			
-			if(empty($params['smtp_password']))
-				unset($params['smtp_password']);			
-		}else
-		{
-			$params['smtp_password']="";
-			$params['smtp_username']="";
+		if(isset($params['smtp_auth'])) {
+			if (!empty($params['smtp_auth'])){			
+				if(empty($params['smtp_password']))
+					unset($params['smtp_password']);			
+			}else
+			{
+				$params['smtp_password']="";
+				$params['smtp_username']="";
+			}
 		}
 		
 		return parent::beforeSubmit($response, $model, $params);

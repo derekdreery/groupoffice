@@ -134,3 +134,9 @@ $l['dontDeleteSystemFolder']="You can't delete this system folder";
 $l['open']='Open';
 
 $l['rightClickToCopy']='Right click to copy';
+
+$l['deleteExpiredLabel']='Delete expired download link files';
+$l['deleteExpiredDescription']='Delete download link files that are no longer valid';
+
+$l['deleteWhenExpired'] = 'Automatically delete file when download link expires';
+$l['automaticallyDeleted'] = 'File will be automatically deleted when its download link expires';

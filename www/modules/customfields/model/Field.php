@@ -106,6 +106,14 @@ class Field extends \GO\Base\Db\ActiveRecord{
 		
 		return parent::afterSave($wasNew);
 	}
+	
+	protected function afterDuplicate(&$duplicate) {
+		
+		$this->duplicateRelation('selectOptions', $duplicate);
+		$this->duplicateRelation('treeOptions', $duplicate);
+		
+		return parent::afterDuplicate($duplicate);
+	}
 		
 	public function alterDatabase($wasNew){
 			$table=$this->category->customfieldsTableName();

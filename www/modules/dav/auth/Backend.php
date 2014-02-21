@@ -30,28 +30,35 @@ class Backend extends Sabre\DAV\Auth\Backend\AbstractDigest {
 	public function getDigestHash($realm, $username) {
 		$user = \GO\Base\Model\User::model()->findSingleByAttribute("username", $username);
 		
-		//check dav module access		
-		$davModule = \GO\Base\Model\Module::model()->findByPk($this->checkModuleAccess, false, true);		
-		if(!\GO\Base\Model\Acl::getUserPermissionLevel($davModule->acl_id, $user->id))
-		{
-			$errorMsg = "No '".$this->checkModuleAccess."' module access for user '".$user->username."'";
-			\GO::debug($errorMsg);			
-			throw new Sabre\DAV\Exception\Forbidden($errorMsg);			
-		}
-		
-		if(!$user)
+		if($user){
+			//check dav module access		
+			$davModule = \GO\Base\Model\Modul::model()->findByPk($this->checkModuleAccess, false, true);		
+			if(!\GO\Base\Model\Acl::getUserPermissionLevel($davModule->acl_id, $user->id))
+			{
+				$errorMsg = "No '".$this->checkModuleAccess."' module access for user '".$user->username."'";
+				\GO::debug($errorMsg);			
+				throw new Sabre\DAV\Exception\Forbidden($errorMsg);			
+			}else{		
+
+				$this->_user=$user;
+				return $user->digest;
+			}		
+		}else{
 			return null;
-		else{	
-			$this->_user=$user;
-			return $user->digest;
 		}
 	}	
 	
 	public function authenticate(\Sabre\DAV\Server $server, $realm) {		
+		
+//		if(GO::user()){
+//			$this->_user = GO::user();
+//			return true;
+//		}	
 		if(parent::authenticate($server, $realm)){
 			\GO::session()->setCurrentUser($this->_user);
 			return true;
 		}
+
 	}
 	
 //	For basic auth

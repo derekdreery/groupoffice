@@ -35,8 +35,14 @@ function set_value($file, $str, $detect=false) {
 
 echo 'Configuring apache'."\n";
 
-if(!file_exists('/etc/apache2/sites-enabled/000-groupoffice'))
-	create_file('/etc/apache2/sites-enabled/000-groupoffice', 'tpl/etc/apache2/sites-enabled/000-groupoffice', $replacements);
+if(file_exists('/etc/apache2/sites-enabled/000-groupoffice')){
+	//for new apache 2.4 config
+	rename('/etc/apache2/sites-enabled/000-groupoffice','/etc/apache2/sites-enabled/000-groupoffice.conf');
+}
+	
+
+if(!file_exists('/etc/apache2/sites-enabled/000-groupoffice.conf'))
+	create_file('/etc/apache2/sites-enabled/000-groupoffice.conf', 'tpl/etc/apache2/sites-enabled/000-groupoffice.conf', $replacements);
 
 //if(file_exists('/etc/apache2/sites-enabled/000-default'))
 //	unlink('/etc/apache2/sites-enabled/000-default');

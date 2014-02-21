@@ -178,7 +178,8 @@ color:#000;
 		$this->SetFont($this->font,'B',16);
 //		$this->SetTextColor(50,135,172);
 		//$this->Cell($this->getPageWidth()-$this->lMargin-$this->rMargin,20, $title,0,1);
-		$this->MultiCell($this->getPageWidth()-$this->lMargin-$this->rMargin,20, $title, 0, 'L', false, '1');
+		$this->Write(20, $title,'', false,'', true);
+//		$this->MultiCell($this->getPageWidth()-$this->lMargin-$this->rMargin,20, $title, 0, 'L', false, '1');
 //		$this->setDefaultTextColor();
 		$this->SetFont($this->font,'',$this->font_size);
 	}
@@ -190,7 +191,9 @@ color:#000;
 //		$this->SetTextColor(125,165, 65);
 		$this->SetTextColor(50,135,172);
 		//$this->Cell($this->getPageWidth()-$this->lMargin-$this->rMargin,24, $title,0,1);
-		$this->MultiCell($this->getPageWidth()-$this->lMargin-$this->rMargin,24, $title, 0, 'L', false, '1');
+		
+		$this->Write(24, $title,'', false,'', true);
+//		$this->MultiCell($this->getPageWidth()-$this->lMargin-$this->rMargin,24, $title, 0, 'L', false, '1');
 		$this->setDefaultTextColor();
 		$this->SetFont($this->font,'',$this->font_size);
 	}
@@ -200,7 +203,8 @@ color:#000;
 //		$this->SetTextColor(102,102, 102);
 		$this->SetFont($this->font,'B',11);
 //		$this->Cell($this->getPageWidth()-$this->lMargin-$this->rMargin,14, $title,'',1);
-		$this->MultiCell($this->getPageWidth()-$this->lMargin-$this->rMargin,14, $title, '', 'L', false, '1');
+		$this->Write(14, $title,'', false,'', true);
+//		$this->MultiCell($this->getPageWidth()-$this->lMargin-$this->rMargin,14, $title, '', 'L', false, '1');
 		$this->SetFont($this->font,'',$this->font_size);
 //		$this->setDefaultTextColor();
 		$this->ln(4);
@@ -213,7 +217,8 @@ color:#000;
 		//$this->SetDrawColor(128, 128, 128);
 		
 //		$this->Cell($this->getPageWidth()-$this->lMargin-$this->rMargin,14, $title,'',1);
-		$this->MultiCell($this->getPageWidth()-$this->lMargin-$this->rMargin,14, $title, '', 'L', false, '1');
+		$this->Write(14, $title,'', false,'', true);
+//		$this->MultiCell($this->getPageWidth()-$this->lMargin-$this->rMargin,14, $title, '', 'L', false, '1');
 		
 		//$this->SetDrawColor(0,0,0);
 		$this->SetFont($this->font,'',$this->font_size);

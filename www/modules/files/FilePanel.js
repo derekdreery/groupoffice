@@ -182,7 +182,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 						'<td>URL:</td>'+
 						'<td><a target="_blank" href="{url}">'+GO.files.lang.rightClickToCopy+'</a></td>'+
 					'</tr>'+
-					
+										
 					'<tpl if="!GO.util.empty(locked_user_name)">'+
 						'<tr>'+
             '<td>'+GO.files.lang.lockedBy+':</td>'+
@@ -212,6 +212,13 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 						//'</tpl>'+
 						'</td>'+
 						'</tr>'+
+						
+						'<tpl if="!GO.util.empty(delete_when_expired)">'+
+							'<tr>'+
+								'<td colspan="2"><span style="color:red;">'+GO.files.lang['automaticallyDeleted']+'</span></td>'+
+							'</tr>'+
+						'</tpl>'+
+						
           '</tpl>'+
 
 					'<tpl if="!GO.util.empty(thumbnail_url)"><tr><td colspan="2">'+

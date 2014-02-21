@@ -151,8 +151,10 @@ class Columns{
 				
 
 				//HACK: When a database may not be null and has no default value value is empty string
-				if($field['Null']=='NO' && is_null($default) && !$ai)
-					$default='';
+				if(!GO::config()->debug){
+					if($field['Null']=='NO' && is_null($default) && !$ai)
+						$default='';
+				}
 				
 				//workaround for old boolean fields as enums. Should be using bool now.
 				

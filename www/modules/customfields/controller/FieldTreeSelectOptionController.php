@@ -23,7 +23,7 @@ class FieldTreeSelectOptionController extends \GO\Base\Controller\AbstractModelC
 		
 		$field_id = str_replace('col_','',$params['field_id']);
 		
-		$fieldModel = \GO\Customfields\Model\Field::model()->findByPk($field_id);
+		$fieldModel = \GO\Customfields\Model\Field::model()->findByPk($field_id, false, true);
 		
 		if ($params['parent_id']==0 && $fieldModel->datatype=='GO\Customfields\Customfieldtype\TreeselectSlave') {
 			return \GO\Base\Db\FindParams::newInstance()

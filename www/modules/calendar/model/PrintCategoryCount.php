@@ -68,7 +68,7 @@ class PrintCategoryCount extends \GO\Base\Model {
 
 					$findParams = \GO\Base\Db\FindParams::newInstance();
 					$findParams->select('COUNT(*) as count');
-					$findParams->ignoreAcl();
+//					$findParams->ignoreAcl();							// Only count items that are visible for this user.
 	//				$findParams->group('calendar_id');
 
 					$findCriteria = \GO\Base\Db\FindCriteria::newInstance();

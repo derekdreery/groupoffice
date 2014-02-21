@@ -1,3 +1,31 @@
+- Projects2: Search for employees and resources works now
+- Corrected key event for auto capitalize. It didn't work in Firefox.
+- Files & Email: option to automatically delete expired download links.
+- Holidays: possible to delete an employee's entire year record.
+- Holidays: when registering new holiday, show hours in national holidays.
+
+18-02-2014 5.0.44
+- Fixed bug in custom fields copying from projects1 to projects2.
+- Improved project reporting.
+- Show time tracking comments in hours approval 2.
+- Timer bug used end time as start time
+- Undismissable reminders bug with recurring events
+- ActiveSync: Don't enter meeting data if there's no organizer
+- Fixed task recurring bug that didn't work for tasks in the future
+
+17-02-2014 5.0.43
+- Schedule Call Dialog: Fixed permission problem.
+- Billing: Fixed break as last item inside itemGroups when printing PDF
+- Calendar: Print Category Count - Only print count for items that are visible for the user.
+- Group-office theme: Added strong/b style for fixing bold text inside blockquotes
+- Fixed auto capitalize function
+- Show CC field by default.
+- Double click show email message in popup rather than an expanded preview
+- Corrected query for hoursapproval
+- Updated German
+- Subprojects of projects possible
+- Fixed Bynari collaborator Outlook sync
+
 12-02-2014 5.0.42
 - Fixed projects grid
 - Import VCard: works again.
@@ -24,6 +52,7 @@
 - Some mailservers returned folders as "false".
 - Corrected postfixadmin_token error message. Should be serverclient_token.
 - Form Processor: enabled social media fields in formprocessor
+- Z-Push UTF8 iphone bug with missing messages fixed
 
 29-01-2014 5.0.38
 - Optimized ticket listing page
@@ -4030,3 +4059,4 @@ First release including:
 - Addressbook
 - Scheduler
 - Project management (alpha)﻿
+

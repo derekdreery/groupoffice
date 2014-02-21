@@ -75,6 +75,13 @@ GO.calendar.CalendarDialog = function(config)
 			name:'comment',
 			anchor:'100%',
 			height:50
+		},{
+			xtype:'textarea',
+			fieldLabel:GO.calendar.lang['tooltip'],
+			name:'tooltip',
+			anchor:'100%',
+			height:50,
+			maxLength: 127
 		}
 		]
 	});

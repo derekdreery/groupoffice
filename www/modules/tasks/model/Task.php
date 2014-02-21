@@ -209,13 +209,18 @@ class Task extends \GO\Base\Db\ActiveRecord {
 			$rrule = new \GO\Base\Util\Icalendar\Rrule();
 			$rrule->readIcalendarRruleString($this->due_time, $this->rrule, true);
 		
-			$this->duplicate(array(
-				'completion_time'=>0,
-				'start_time'=>time(),
-				'due_time'=>$rrule->getNextRecurrence(time()),
-				'status'=>Task::STATUS_NEEDS_ACTION,
-				'percentage_complete'=>0
-			));
+			$nextDueTime = $rrule->getNextRecurrence($this->due_time+1);
+			
+			if($nextDueTime){
+			
+				$this->duplicate(array(
+					'completion_time'=>0,
+					'start_time'=>$nextDueTime-$this->due_time+$this->start_time,
+					'due_time'=>$nextDueTime,
+					'status'=>Task::STATUS_NEEDS_ACTION,
+					'percentage_complete'=>0
+				));
+			}
 		}
 	}
 	
@@ -314,7 +319,7 @@ class Task extends \GO\Base\Db\ActiveRecord {
 //		$dtstart->setDateTime(\GO\Base\Util\Date_DateTime::fromUnixtime($this->start_time));		
 //		$e->add($dtstart);
 //		
-		$e->add('dtstart', \GO\Base\Util\Date_DateTime::fromUnixtime($this->start_time), array('type'=>$dateType));
+		$e->add('dtstart', \GO\Base\Util\Date\DateTime::fromUnixtime($this->start_time), array('VALUE'=>$dateType));
 		
 		
 		
@@ -322,7 +327,7 @@ class Task extends \GO\Base\Db\ActiveRecord {
 //		$due->setDateTime(\GO\Base\Util\Date_DateTime::fromUnixtime($this->due_time));		
 //		$e->add($due);
 		
-		$e->add('due', \GO\Base\Util\Date_DateTime::fromUnixtime($this->due_time), array('type'=>$dateType));
+		$e->add('due', \GO\Base\Util\Date\DateTime::fromUnixtime($this->due_time), array('VALUE'=>$dateType));
 		
 		
 		
@@ -331,7 +336,7 @@ class Task extends \GO\Base\Db\ActiveRecord {
 //			$completed->setDateTime(\GO\Base\Util\Date_DateTime::fromUnixtime($this->completion_time));		
 //			$e->add($completed);
 			
-			$e->add('completed', \GO\Base\Util\Date_DateTime::fromUnixtime($this->completion_time), array('type'=>$dateType));
+			$e->add('completed', \GO\Base\Util\Date\DateTime::fromUnixtime($this->completion_time), array('VALUE'=>$dateType));
 		
 		}
 		
@@ -353,7 +358,7 @@ class Task extends \GO\Base\Db\ActiveRecord {
 				break;
 			
 			default:
-				$e->priority=5;
+				$e->priority=3;
 				break;
 		}
 		
@@ -425,12 +430,12 @@ class Task extends \GO\Base\Db\ActiveRecord {
 			if((string) $vobject->priority>5)
 			{
 				$this->priority=self::PRIORITY_LOW;
-			}elseif((string) $vobject->priority==5)
+			}elseif((string) $vobject->priority<3)
 			{
-				$this->priority=self::PRIORITY_NORMAL;
+				$this->priority=self::PRIORITY_HIGH;				
 			}else
 			{
-				$this->priority=self::PRIORITY_HIGH;
+				$this->priority=self::PRIORITY_NORMAL;
 			}
 		}
 		

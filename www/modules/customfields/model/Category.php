@@ -54,7 +54,8 @@ class Category extends \GO\Base\Db\ActiveRecord{
 	public function relations() {
 		return array(
 		'fields' => array('type' => self::HAS_MANY, 'model' => 'GO\Customfields\Model\Field', 'field' => 'category_id', 'delete' => true, 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order('sort_index')),
-		'_fieldsUnsorted' => array('type' => self::HAS_MANY, 'model' => 'GO\Customfields\Model\Field', 'field' => 'category_id'	)
+		'_fieldsUnsorted' => array('type' => self::HAS_MANY, 'model' => 'GO\Customfields\Model\Field', 'field' => 'category_id'	),
+		'_fieldsSortedById' => array('type' => self::HAS_MANY, 'model' => 'GO\Customfields\Model\Field', 'field' => 'category_id', 'delete' => true, 'findParams'=>  \GO\Base\Db\FindParams::newInstance()->order('id')),
 				);
 	}
 	
@@ -107,7 +108,9 @@ class Category extends \GO\Base\Db\ActiveRecord{
 	
 	protected function afterDuplicate(&$duplicate) {
 		
-		$this->duplicateRelation('_fieldsUnsorted', $duplicate);
+//		$this->duplicateRelation('_fieldsUnsorted', $duplicate);
+//		$this->duplicateRelation('fields', $duplicate);
+		$this->duplicateRelation('_fieldsSortedById', $duplicate);
 		
 		return parent::afterDuplicate($duplicate);
 	}

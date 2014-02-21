@@ -262,8 +262,8 @@ class FileController extends \GO\Base\Controller\AbstractModelController {
 		$response=array();
 		
 		$file = \GO\Files\Model\File::model()->findByPk($params['id']);
-	
-		$url = $file->getEmailDownloadURL(true,\GO\Base\Util\Date::date_add($params['expire_time'],1));
+		
+		$url = $file->getEmailDownloadURL(true,\GO\Base\Util\Date::date_add($params['expire_time'],1),$params['delete_when_expired']);
 		
 		$response['url']=$url;
 		$response['success']=true;
@@ -295,7 +295,7 @@ class FileController extends \GO\Base\Controller\AbstractModelController {
 		$linktext = $html ? "<ul>" : $lb;
 		
 		foreach($files as $file) {
-			$url = $file->getEmailDownloadURL($html,\GO\Base\Util\Date::date_add($params['expire_time'],1));
+			$url = $file->getEmailDownloadURL($html,\GO\Base\Util\Date::date_add($params['expire_time'],1),$params['delete_when_expired']);
 			$linktext .= $html ?  '<li><a href="'.$url.'">'.$file->name.'</a></li>'.$lb : $url.$lb;
 		}
 		$linktext .= $html ? "</ul>" : "\n";

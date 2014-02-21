@@ -281,11 +281,11 @@ abstract class ControllerController extends \GO\Base\Controller\AbstractControll
 				$oldIgnore = \GO::setIgnoreAclPermissions(true);				
 			}
 			
+			$this->beforeAction();
+			
 			if (!$this->_checkPermission($action))
 				throw new \GO\Base\Exception\AccessDenied();
 
-			$this->beforeAction();
-			
 			$methodName = 'action' . $action;
 			//$this->$methodName($_REQUEST);
 			$this->callActionMethod($methodName, $params);
