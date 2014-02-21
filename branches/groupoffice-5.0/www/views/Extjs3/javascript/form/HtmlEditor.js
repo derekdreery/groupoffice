@@ -123,9 +123,8 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 		
 		var me = this;
     var doc = me.getDoc();
-        
-		var keyevent = (Ext.isIE || Ext.isWebKit || Ext.isOpera) ? 'keydown' : 'keypress';
-    Ext.EventManager.on(doc, keyevent, me.correctPunctuation, me);
+
+    Ext.EventManager.on(doc, 'keydown', me.correctPunctuation, me);
 	},
 	
 	lastChar: false,
