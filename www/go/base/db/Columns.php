@@ -27,6 +27,7 @@
 
 
 namespace GO\Base\Db;
+use GO;
 
 
 class Columns{
