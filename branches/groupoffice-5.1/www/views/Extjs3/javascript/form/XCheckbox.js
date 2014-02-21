@@ -63,6 +63,12 @@ Ext.ux.form.XCheckbox = Ext.extend(Ext.form.Checkbox, {
 			this.hiddenField.dom.value = this.checked ? this.submitOnValue : this.submitOffValue;
 			this.hiddenField.dom.name = this.checked ? '' : this.el.dom.name;
 		}
+	},
+	setBoxLabel: function(boxLabel){
+		this.boxLabel = boxLabel;
+		if(this.rendered){
+			this.wrap.child('.x-form-cb-label').update(boxLabel);
+		}
 	}
 
 }); 

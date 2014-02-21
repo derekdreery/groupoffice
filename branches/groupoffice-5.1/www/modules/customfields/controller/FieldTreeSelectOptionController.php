@@ -19,7 +19,7 @@ class GO_Customfields_Controller_FieldTreeSelectOption extends GO_Base_Controlle
 		
 		$field_id = str_replace('col_','',$params['field_id']);
 		
-		$fieldModel = GO_Customfields_Model_Field::model()->findByPk($field_id);
+		$fieldModel = GO_Customfields_Model_Field::model()->findByPk($field_id, false, true);
 		
 		if ($params['parent_id']==0 && $fieldModel->datatype=='GO_Customfields_Customfieldtype_TreeselectSlave') {
 			return GO_Base_Db_FindParams::newInstance()

@@ -124,7 +124,22 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	clearLastSearch : function(){
 		this.lastQuery=false;
 		this.hasSearch=false;
-	}
+	},
+	
+	setBoxLabel: function(boxLabel){
+		this.boxLabel = boxLabel;
+		if(this.rendered){
+			this.wrap.child('.x-form-cb-label').update(boxLabel);
+		}
+	},
+	
+	setLabel: function(label){
+		if(this.rendered){
+			this.label.update(label+':');
+		} else {
+			this.label = label;
+		}
+	}		
 });
 
 Ext.reg('combo', GO.form.ComboBox);

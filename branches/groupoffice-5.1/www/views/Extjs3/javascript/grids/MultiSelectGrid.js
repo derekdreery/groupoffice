@@ -140,7 +140,13 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 		var columns = [this.checkColumn,{
 			header:GO.lang.strName,
 			dataIndex: 'name',
-			id:'name'
+			id:'name',
+			renderer:function(value, p, record){
+				if(!GO.util.empty(record.data.tooltip)) {
+					p.attr = 'ext:qtip="'+record.data.tooltip+'"';
+				}
+				return value;
+			}
 		}];		
 		return columns;
 	},

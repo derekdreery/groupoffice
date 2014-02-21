@@ -61,10 +61,10 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 			GO.form.HtmlEditor.superclass.syncValue.call(this);
 		}
 	},	
-	correctify: function(full, prefix, letter){
-		var regex = /([:\?]\s+)(.)/g;
-		return prefix + letter.toUpperCase();
-	},
+//	correctify: function(full, prefix, letter){
+//		var regex = /([:\?]\s+)(.)/g;
+//		return prefix + letter.toUpperCase();
+//	},
 
 //	urlify : function () {
 //		
@@ -122,42 +122,55 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 			return;
 		
 		var me = this;
-        var doc = me.getDoc();
-        
-		var keyevent = (Ext.isIE || Ext.isWebKit || Ext.isOpera) ? 'keydown' : 'keypress';
-        Ext.EventManager.on(doc, keyevent, me.correctPunctuation, me);
+    var doc = me.getDoc();
+
+    Ext.EventManager.on(doc, 'keydown', me.correctPunctuation, me);
 	},
 	
-	lastKeyStrokes: [],
+	lastChar: false,
+	autoCapitalizeNextChar: true,
 	
 	correctPunctuation : function(event) {
 		var		enter=13,
 				spacechar=32,
 				dotchar=190,
+				questonmark=191,
+				exclamationmark=49,
 				achar=65,
-				zchar=90,
-				semicolumn=186; //special visible char go up
+				zchar=90;
 		
 		//IE doesn't has event.button and uses event.keyCode
-		var key = event.button+1 || event.keyCode;
+		var key = event.button+1 || event.keyCode;	
+			
+		var sentenceEnds = [dotchar, exclamationmark, questonmark];
 		
-		if(key===dotchar) {
-			this.lastKeyStrokes=[];
-			this.lastKeyStrokes.push(key);
-		} else if (key===spacechar || key===enter) {
-			this.lastKeyStrokes.push(key);
-		} else if(key>=achar && key<=zchar) {
-			//console.log(this.lastKeyStrokes);
-			if((this.lastKeyStrokes[0]===dotchar && this.lastKeyStrokes[1]===enter) || 
-			   (this.lastKeyStrokes[0]===dotchar && this.lastKeyStrokes[1]===spacechar)) {
-					var char = String.fromCharCode(key);
-					event.preventDefault();
-					this.insertAtCursor(char.toUpperCase());
+		if(!this.autoCapitalizeNextChar){
+			switch(key){
+
+				case spacechar:
+					if(sentenceEnds.indexOf(this.lastChar)!=-1){
+						this.autoCapitalizeNextChar=true;
+					}
+				break;
+				case enter:				
+						this.autoCapitalizeNextChar=true;
+					break;
 			}
-			this.lastKeyStrokes=[];
-		} else if(key >= semicolumn) {
-			this.lastKeyStrokes=[];
+		}else
+		{
+			if(key>=achar && key<=zchar) {
+				var char = String.fromCharCode(key);
+				event.preventDefault();
+				this.insertAtCursor(char.toUpperCase());
+				
+				this.autoCapitalizeNextChar=false;
+				
+			}else if(key!=spacechar && key!=enter){			
+				this.autoCapitalizeNextChar=false;
+			}
 		}
+		
+		this.lastChar=key;
 	},
 
 	getDocMarkup : function(){

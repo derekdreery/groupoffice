@@ -73,8 +73,8 @@ GO.email.MessageDialog = function(config){
 	config.stateId='email-message-dialog';
 	config.maximizable=true;
 	config.modal=false;
-	config.width=500;
-	config.height=400;
+	config.width=600;
+	config.height=500;
 	config.resizable=true;
 	config.minizable=true;
 	config.closeAction='hide';	
@@ -93,6 +93,12 @@ GO.email.MessageDialog = function(config){
 }
 
 Ext.extend(GO.email.MessageDialog, Ext.Window,{
+		
+	showData : function(data){
+		GO.email.MessageDialog.superclass.show.call(this);
+		
+		this.messagePanel.setData(data);
+	},
 		
 	show : function(uid, mailbox, account_id, no_max_body_size)
 	{
