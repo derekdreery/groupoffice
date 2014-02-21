@@ -126,4 +126,8 @@ class Pager extends \GO\Site\Components\Widget {
 		return $this->_models;
 	}
 	
+	public function getRecords() {
+		return $this->store->getRecords();
+	}
+	
 }

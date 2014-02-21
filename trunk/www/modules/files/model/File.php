@@ -40,6 +40,8 @@
  * @property \GO\Base\Fs\File $fsFile
  * @property Folder $folder
  * @property \GO\Base\Model\User $lockedByUser
+ * 
+ * @property boolean $delete_when_expired
  */
 
 namespace GO\Files\Model;
@@ -405,11 +407,12 @@ class File extends \GO\Base\Db\ActiveRecord {
 	 * 
 	 * @return string 
 	 */
-	public function getEmailDownloadURL($html=true, $newExpireTime=false) {
+	public function getEmailDownloadURL($html=true, $newExpireTime=false, $deleteWhenExpired=false) {
 		
 		if($newExpireTime){
 			$this->random_code=\GO\Base\Util\String::randomPassword(11,'a-z,A-Z,0-9');
 			$this->expire_time = $newExpireTime;
+			$this->delete_when_expired = $deleteWhenExpired;
 			$this->save();
 		}
 		

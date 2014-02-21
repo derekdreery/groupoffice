@@ -113,7 +113,7 @@ GO.calendar.MainPanel = function(config){
 		
 	GO.calendar.calendarsStore = this.calendarsStore = new GO.data.JsonStore({
 		url:GO.url("calendar/calendar/store"),
-		fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id'],
+		fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id','tooltip'],
 		remoteSort:true
 	});
 
@@ -136,7 +136,7 @@ GO.calendar.MainPanel = function(config){
 			root: 'results',
 			id: 'id',
 			totalProperty: 'total',
-			fields:['id','name','comment','user_name','group_id', 'group_name']
+			fields:['id','name','comment','user_name','group_id', 'group_name','tooltip']
 		}),
 		proxy: new Ext.data.HttpProxy({
 			url: GO.url("calendar/calendar/calendarsWithGroup")
@@ -271,12 +271,26 @@ GO.calendar.MainPanel = function(config){
 			header:GO.lang.strName,
 			dataIndex: 'name',
 			id:'name',
-			width:188
+			width:188,
+			renderer:function(value, p, record){
+				if(!GO.util.empty(record.data.tooltip)) {
+					p.attr = 'ext:qtip="'+record.data.tooltip+'"';
+				}
+				return value;
+			}
 		},{
 			header:GO.calendar.lang.group,
 			dataIndex: 'group_name',
 			id:'group_name',
-			width:188
+			width:188,
+			renderer:function(value, p, record){
+				if(!GO.util.empty(record.data.tooltip)) {
+					p.attr = 'ext:qtip="'+record.data.tooltip+'"';
+				} else {
+					p.attr = 'ext:qtip="'+record.data.name+'"';
+				}
+				return value;
+			}
 		}],
 		view: new Ext.grid.GroupingView({
 			forceFit:true,

@@ -866,9 +866,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 				});
 			}else
 			{
-				//var messageDialog = new GO.email.MessageDialog();
-				//messageDialog.show(this.messagePanel.uid, this.mailbox, this.account_id);
-				this.messagesGrid.collapse();
+				this.messagePanel.popup();
+				//this.messagesGrid.collapse();
 			}
 		}, this);
 

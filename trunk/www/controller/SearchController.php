@@ -342,6 +342,19 @@ class SearchController extends \GO\Base\Controller\AbstractModelController{
 //					}
 
 					$stmt = \GO\Addressbook\Model\Contact::model()->find($findParams);
+					if (\GO::user()->sort_email_addresses_by_time==1 && GO::modules()->addressbook) {
+						$findParams->joinModel(array(
+							'model'=>'GO\Email\Model\ContactMailTime',
+							'localTableAlias'=>'t',
+							'localField'=>'id',
+							'foreignField'=>'contact_id',
+							'tableAlias'=>'cmt',
+							'type'=>'LEFT',
+							'criteria'=>  \GO\Base\Db\FindCriteria::newInstance()->addCondition('user_id', GO::user()->id, '=', 'cmt')
+						))->order('cmt.last_mail_time','DESC');
+					}
+						
+					$stmt = \GO\Addressbook\Model\Contact::model()->find($findParams);
 
 					$user_ids = array();
 					foreach ($stmt as $contact) {

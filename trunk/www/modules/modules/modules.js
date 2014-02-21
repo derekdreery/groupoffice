@@ -251,7 +251,8 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 		if (records.length > 0) {
 			GO.request({
 				maskEl:grid.container,
-				url : 'modules/module/install',		
+				url : 'modules/module/install',	
+				timeout : 10 * 60 * 1000,
 				params:{
 					modules:Ext.encode(keys)
 				},

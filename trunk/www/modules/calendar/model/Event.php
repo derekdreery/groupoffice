@@ -510,7 +510,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				$nextTime = $rRule->getNextRecurrence();
 			}
 			
-			if($nextTime){				
+			if($nextTime>time()){				
 				return $nextTime-$this->reminder;
 			}else
 				return false;
