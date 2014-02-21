@@ -1,3 +1,5 @@
+- Projects2: Search for employees and resources works now
+- Corrected key event for auto capitalize. It didn't work in Firefox.
 - Files & Email: option to automatically delete expired download links.
 - Holidays: possible to delete an employee's entire year record.
 - Holidays: when registering new holiday, show hours in national holidays.
