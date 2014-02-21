@@ -1,3 +1,4 @@
+- Billing: Fixed bug in the selection (date range) of expense items when exporting them.
 - Projects2: Search for employees and resources works now
 - Corrected key event for auto capitalize. It didn't work in Firefox.
 - Files & Email: option to automatically delete expired download links.
