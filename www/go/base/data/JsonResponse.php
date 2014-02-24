@@ -64,7 +64,7 @@ class JsonResponse implements \ArrayAccess {
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); //resolves problem with IE GET requests
 		
 		// Iframe hack, weird Content-Type crap is happening here
-		if(isset($_FILES)){
+		if(\GO\Base\Util\Http::isMultipartRequest()){
 			header('Content-Type: text/html; charset=UTF-8');
 		}else{
 			header('Content-type: application/json; charset=UTF-8'); //tell the browser we are returning json

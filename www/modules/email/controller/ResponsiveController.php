@@ -3,12 +3,12 @@ namespace GO\Email\Controller;
 
 use GO\Base\Controller\AbstractController;
 
-class ViewController extends AbstractController{
+class ResponsiveController extends AbstractController{
 	
 	protected $layout='html';
 
 
-	public function actionResponsive(){
+	public function actionLoad(){
 		$this->render('load');
 	}
 	
