@@ -226,10 +226,10 @@ class Form extends \GO\Site\Components\Widget {
 				$dateFormatArr[] = $goDateFormat[$i].$goDateFormat[$i];
 		}
 		
-		Site::scripts()->registerGapiScript('jquery');
-		Site::scripts()->registerGapiScript('jquery-ui');
-		Site::scripts()->registerCssFile('http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
-		Site::scripts()->registerScript('datepicker', '$(function() {
+		\Site::scripts()->registerGapiScript('jquery');
+		\Site::scripts()->registerGapiScript('jquery-ui');
+		\Site::scripts()->registerCssFile('http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
+		\Site::scripts()->registerScript('datepicker', '$(function() {
 $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFormatArr).'" });
 });');
 		$htmlAttributes['id'] = 'datepicker';

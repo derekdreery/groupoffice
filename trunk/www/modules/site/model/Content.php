@@ -155,7 +155,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	 public static function findBySlug($slug, $siteId=false){
 		 
 		 if(!$siteId)
-			$siteId = Site::model()->id;
+			$siteId = \Site::model()->id;
 		 
 //		 if(!$siteId)
 //			$model = self::model()->findSingleByAttribute('slug', $slug);
@@ -180,7 +180,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 		 
 		// var_dump($this->slug);
 		 
-		 return Site::urlManager()->createUrl($route,array('slug'=>$this->slug));
+		 return \Site::urlManager()->createUrl($route,array('slug'=>$this->slug));
 	 }
 	 
 	 /**
@@ -246,7 +246,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 				'text' => $child->title,
 				'hasChildren' => $hasChildren,
 				//'expanded' => !$hasChildren,
-				'expanded' => !$hasChildren || Site::isExpandedNode($child->site_id.'_content_'.$child->id),	 
+				'expanded' => !$hasChildren || \Site::isExpandedNode($child->site_id.'_content_'.$child->id),	 
 				'children'=> $hasChildren ? null : array(),
 			);
 			 
@@ -387,7 +387,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 				if (empty($linkAttr['path']))
 					$linkAttr['path'] = '#';
 
-				$html .= ' href="' . Site::file($linkAttr['path'], false) . '"';
+				$html .= ' href="' . \Site::file($linkAttr['path'], false) . '"';
 				break;
 			case 'manual':
 				// $linkAttr['url'] = 'www.google.nl';
@@ -435,14 +435,14 @@ class Content extends \GO\Base\Db\ActiveRecord{
 		if(key_exists('path', $imageAttr)){
 			if( key_exists('width', $imageAttr) && key_exists('height', $imageAttr)){
 				if(key_exists('crop', $imageAttr))
-					$thumb = Site::thumb($imageAttr['path'],array("lw"=>$imageAttr['width'], "ph"=>$imageAttr['height'], "zc"=>1));
+					$thumb = \Site::thumb($imageAttr['path'],array("lw"=>$imageAttr['width'], "ph"=>$imageAttr['height'], "zc"=>1));
 				else
-					$thumb = Site::thumb($imageAttr['path'],array("lw"=>$imageAttr['width'], "ph"=>$imageAttr['height'], "zc"=>0));
+					$thumb = \Site::thumb($imageAttr['path'],array("lw"=>$imageAttr['width'], "ph"=>$imageAttr['height'], "zc"=>0));
 				if(isset($imageAttr['link_to_original']))
-					$imageAttr['href'] = Site::file($imageAttr['path']); // Create an url to the original image
+					$imageAttr['href'] = \Site::file($imageAttr['path'],false); // Create an url to the original image
 				
 			} else {
-				$thumb = Site::file($imageAttr['path']);
+				$thumb = \Site::file($imageAttr['path']);
 			}
 			
 			$html .= '<img src="'.$thumb.'"';

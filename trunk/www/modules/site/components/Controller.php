@@ -24,7 +24,7 @@
 namespace GO\Site\Components;
 
 
-abstract class ControllerController extends \GO\Base\Controller\AbstractController {
+abstract class Controller extends \GO\Base\Controller\AbstractController {
 //	/**
 //	 * Frontend action can be accessed without moduel access
 //	 * @return array actions that can be accessed withou module access 
@@ -105,7 +105,7 @@ abstract class ControllerController extends \GO\Base\Controller\AbstractControll
 		if (($layoutFile = $this->getLayoutFile($this->layout)) !== false)
 			$output = $this->renderFile($layoutFile, array('content' => $output), true);
 
-		Site::scripts()->render($output);
+		\Site::scripts()->render($output);
 		
 		return $output;
 	}
@@ -161,7 +161,7 @@ abstract class ControllerController extends \GO\Base\Controller\AbstractControll
 	 */
 	public function getViewFile($viewName)
 	{	
-		$module = Site::model()->getSiteModule();
+		$module = \Site::model()->getSiteModule();
 
 		if( substr($viewName, 0,1) != "/") {
 			$classParts = explode('_',get_class($this));
@@ -183,7 +183,7 @@ abstract class ControllerController extends \GO\Base\Controller\AbstractControll
 	 */
 	public function getLayoutFile($layoutName)
 	{
-		$module = Site::model()->getSiteModule();
+		$module = \Site::model()->getSiteModule();
 		
 		return $module->moduleManager->path() . 'views/site/layouts/' . $layoutName . '.php';
 	}
@@ -197,10 +197,10 @@ abstract class ControllerController extends \GO\Base\Controller\AbstractControll
 //	 */
 //	public function createUrl($route, $params = array(), $relative = true)
 //	{
-//		$relativeUrl = Site::urlManager()->createUrl($route, $params);
+//		$relativeUrl = \Site::urlManager()->createUrl($route, $params);
 //		
 //		if (!$relative)
-//			return Site::model()->request()->getHostInfo() .$relativeUrl;
+//			return \Site::model()->request()->getHostInfo() .$relativeUrl;
 //		else
 //			return $relativeUrl;
 //	}
@@ -215,9 +215,9 @@ abstract class ControllerController extends \GO\Base\Controller\AbstractControll
 	{
 		if(is_array($url)){
 			$route=isset($url[0]) ? $url[0] : '';
-			$url = Site::urlManager()->createUrl($route, array_splice($url,1));
+			$url = \Site::urlManager()->createUrl($route, array_splice($url,1));
 		}
-		Site::request()->redirect($url, true, $statusCode);
+		\Site::request()->redirect($url, true, $statusCode);
 	}
 
 	/**
@@ -233,7 +233,7 @@ abstract class ControllerController extends \GO\Base\Controller\AbstractControll
 			return $returnUrl;
 		}
 		else
-			return Site::urlManager()->getHomeUrl(); //Homepage
+			return \Site::urlManager()->getHomeUrl(); //Homepage
 	}
 	/**
 	 * Return to this url its return value can be used in redirect()
@@ -242,7 +242,7 @@ abstract class ControllerController extends \GO\Base\Controller\AbstractControll
 	public function setReturnUrl($url) {
 		if(is_array($url)){
 			$route=isset($url[0]) ? $url[0] : '';
-			$url = Site::urlManager()->createUrl($route, array_splice($url,1));
+			$url = \Site::urlManager()->createUrl($route, array_splice($url,1));
 		}
 		\GO::session()->values['sites']['returnUrl'] = $url;
 	}
@@ -303,7 +303,7 @@ abstract class ControllerController extends \GO\Base\Controller\AbstractControll
 			
 			if(!\GO::user()){
 				//Path the page you tried to visit into lastPath session for redirecting after login
-				\GO::session()->values['sites']['returnUrl'] = Site::request()->getRequestUri();
+				\GO::session()->values['sites']['returnUrl'] = \Site::request()->getRequestUri();
 				$loginpath = array('site/account/login');
 				$this->redirect($loginpath);
 			}  else {

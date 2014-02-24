@@ -25,12 +25,12 @@ class FrontController extends \GO\Site\Components\Controller {
 		}else{
 			
 			$this->setPageTitle($content->metaTitle);
-			Site::scripts()->registerMetaTag($content->meta_description, 'description');
-			Site::scripts()->registerMetaTag($content->meta_keywords, 'keywords');
+			\Site::scripts()->registerMetaTag($content->meta_description, 'description');
+			\Site::scripts()->registerMetaTag($content->meta_keywords, 'keywords');
 			
 			// Check if the template is not empty
 			if(empty($content->template)) {
-				$defaultTemplate = Site::config()->getDefaultTemplate();
+				$defaultTemplate = \Site::config()->getDefaultTemplate();
 				if(!empty($defaultTemplate))
 					$content->template = $defaultTemplate;
 			}
@@ -89,8 +89,8 @@ class FrontController extends \GO\Site\Components\Controller {
 	 */
 	protected function actionThumb($params){
 			
-		$rootFolder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'site/'.Site::model()->id);
-		$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.'site/'.Site::model()->id.'/'.$params['src']);
+		$rootFolder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'site/'.\Site::model()->id);
+		$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.'site/'.\Site::model()->id.'/'.$params['src']);
 		$folder = $file->parent();
 		
 		$ok = $folder->isSubFolderOf($rootFolder);

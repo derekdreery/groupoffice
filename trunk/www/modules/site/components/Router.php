@@ -38,7 +38,7 @@ class Router{
 			$action_id = $aroute[2];
 		}
 
-		$className = 'GO\\' . ucfirst($module_id) . '\\Controller\\' . ucfirst($controller_id); //TODO: set $module
+		$className = 'GO\\' . ucfirst($module_id) . '\\Controller\\' . ucfirst($controller_id)."Controller"; //TODO: set $module
 		//$classFile = \GO::config()->root_path . 'modules/' . $module_id . '/controller' . DIRECTORY_SEPARATOR . ucfirst($controller_id) . 'Controller.php';
 
 		if (class_exists($className)) {
@@ -59,11 +59,11 @@ class Router{
 	}
 	
 	public function getRoute() {
-		$route = Site::urlManager()->parseUrl(Site::request());
+		$route = \Site::urlManager()->parseUrl(\Site::request());
 	
 		if (($route = trim($route, '/')) === '')
 			$route = $this->defaultController;
-		if (!Site::urlManager()->caseSensitive)
+		if (!\Site::urlManager()->caseSensitive)
 			$route = strtolower($route);
 		return $route;
 	}
@@ -79,7 +79,7 @@ class Router{
 	 */
 	protected function getControllerAction($pathInfo) {
 		if (($pos = strpos($pathInfo, '/')) !== false) {
-			$manager = Site::urlManager();
+			$manager = \Site::urlManager();
 			$manager->parsePathInfo((string) substr($pathInfo, $pos + 1));
 			$actionID = substr($pathInfo, 0, $pos);
 			return $manager->caseSensitive ? $actionID : strtolower($actionID);

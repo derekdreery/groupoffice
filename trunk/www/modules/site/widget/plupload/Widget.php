@@ -25,25 +25,25 @@ class Widget extends \GO\Site\Components\Widget {
 		
 	public function init() {
 		try{
-			$this->uploadTarget = Site::urlManager()->createUrl('site/front/ajaxWidget', array('widget_method'=>'upload', 'widget_class'=>$this->className()));
+			$this->uploadTarget = \Site::urlManager()->createUrl('site/front/ajaxWidget', array('widget_method'=>'upload', 'widget_class'=>$this->className()));
 
 			if(empty($this->max_file_size))
 				$this->max_file_size = \GO::config()->max_file_size;
 
-			Site::scripts()->registerGapiScript('jquery');
-			Site::scripts()->registerGapiScript('jquery-ui');
+			\Site::scripts()->registerGapiScript('jquery');
+			\Site::scripts()->registerGapiScript('jquery-ui');
 
-			$assetUrl = Site::assetManager()->publish(\GO::config()->root_path.'modules/site/widget/plupload/assets');
+			$assetUrl = \Site::assetManager()->publish(\GO::config()->root_path.'modules/site/widget/plupload/assets');
 
 			$this->_swfUrl = $assetUrl.'/assets/js/plupload.flash.swf';
 
-			Site::scripts()->registerCssFile($assetUrl.'/assets/style.css');
-			Site::scripts()->registerScriptFile($assetUrl.'/assets/js/plupload.full.js');
-			Site::scripts()->registerScriptFile($assetUrl.'/assets/js/jquery.plupload.queue/jquery.plupload.queue.js'); 
+			\Site::scripts()->registerCssFile($assetUrl.'/assets/style.css');
+			\Site::scripts()->registerScriptFile($assetUrl.'/assets/js/plupload.full.js');
+			\Site::scripts()->registerScriptFile($assetUrl.'/assets/js/jquery.plupload.queue/jquery.plupload.queue.js'); 
 
 			$langFile = '/assets/js/i18n/'.\GO::language()->getLanguage().'.js';
-//			if(file_exists(Site::assetManager()->getBasePath().$langFile)){
-				Site::scripts()->registerScriptFile($assetUrl.$langFile); 
+//			if(file_exists(\Site::assetManager()->getBasePath().$langFile)){
+				\Site::scripts()->registerScriptFile($assetUrl.$langFile); 
 //			}
 		}
 		catch(\Exception $e){
@@ -59,7 +59,7 @@ class Widget extends \GO\Site\Components\Widget {
 	 */
 	public function render() {
 
-		Site::scripts()->registerScript('plupload#'.$this->id, $this->createjs(), \GO\Site\Components\Scripts::POS_END);
+		\Site::scripts()->registerScript('plupload#'.$this->id, $this->createjs(), \GO\Site\Components\Scripts::POS_END);
 
 		return '<div id="'.$this->id.'">Loading upload widget...</div>';
 	}

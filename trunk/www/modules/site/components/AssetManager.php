@@ -86,7 +86,7 @@ class AssetManager
 	public function getBasePath()
 	{
 		if($this->_basePath===null){
-			$basePath= new \GO\Base\Fs\Folder(Site::model()->getPublicPath().'assets');					
+			$basePath= new \GO\Base\Fs\Folder(\Site::model()->getPublicPath().'assets');					
 			$basePath->create();
 			
 			$this->_basePath=$basePath->path();
@@ -104,7 +104,7 @@ class AssetManager
 	{
 		if($this->_baseUrl===null)
 		{
-			$this->_baseUrl=Site::model()->getPublicUrl().'assets';
+			$this->_baseUrl=\Site::model()->getPublicUrl().'assets';
 		}
 		return $this->_baseUrl;
 	}

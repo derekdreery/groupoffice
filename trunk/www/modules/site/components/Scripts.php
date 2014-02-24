@@ -180,7 +180,7 @@ class Scripts
 	 */
 	public function registerCssFile($url, $media = '')
 	{
-//		$url = Site::model()->templateUrl.$url;
+//		$url = \Site::model()->templateUrl.$url;
 		
 		$this->hasScripts = true;
 		$this->cssFiles[$url] = $media;
@@ -195,7 +195,7 @@ class Scripts
 	 */
 	public function registerScriptFile($url, $position = self::POS_HEAD)
 	{
-//		$url = Site::model()->templateUrl.$url;
+//		$url = \Site::model()->templateUrl.$url;
 		
 		$this->hasScripts = true;
 		$this->scriptFiles[$position][$url] = $url;
