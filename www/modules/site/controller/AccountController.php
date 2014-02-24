@@ -96,16 +96,16 @@ class AccountController extends \GO\Site\Components\Controller {
 			$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $_POST['email']);
 			
 			if($user == null){
-				Site::notifier()->setMessage('error', \GO::t("invaliduser","sites"));
+				\Site::notifier()->setMessage('error', \GO::t("invaliduser","sites"));
 			}else{
-				$siteTitle = Site::model()->name;
-				$url = Site::request()->getHostInfo(). Site::urlManager()->createUrl('/site/account/resetpassword', array(), false);
+				$siteTitle = \Site::model()->name;
+				$url = \Site::request()->getHostInfo(). \Site::urlManager()->createUrl('/site/account/resetpassword', array(), false);
 
-				$fromName = Site::model()->name;
+				$fromName = \Site::model()->name;
 				$fromEmail = 'noreply@intermesh.nl';
 
 				$user->sendResetPasswordMail($siteTitle,$url,$fromName,$fromEmail);
-				Site::notifier()->setMessage('success', \GO::t('recoverEmailSent', 'site')." ".$user->email);
+				\Site::notifier()->setMessage('success', \GO::t('recoverEmailSent', 'site')." ".$user->email);
 			}
 		}
 		
@@ -132,11 +132,11 @@ class AccountController extends \GO\Site\Components\Controller {
 				\GO::$ignoreAclPermissions = true; 
 				
 				if($user->validate() && $user->save())
-					Site::notifier()->setMessage('success',\GO::t('resetPasswordSuccess', 'sites'));
+					\Site::notifier()->setMessage('success',\GO::t('resetPasswordSuccess', 'sites'));
 			}
 		}
 		else
-			Site::notifier()->setMessage('error',\GO::t("invalidusertoken","sites"));
+			\Site::notifier()->setMessage('error',\GO::t("invalidusertoken","sites"));
 				
 		$user->password = null;
 		echo $this->render('resetPassword', array('user'=>$user));
@@ -158,11 +158,11 @@ class AccountController extends \GO\Site\Components\Controller {
 			$user = \GO::session()->login($model->username, $password);
 			
 			//reset language after login
-			if(!empty(Site::model()->language))
-				\GO::language()->setLanguage(Site::model()->language);
+			if(!empty(\Site::model()->language))
+				\GO::language()->setLanguage(\Site::model()->language);
 			
 			if (!$user) {
-				Site::notifier()->setMessage('error', \GO::t('badLogin')); // set the correct login failure message
+				\Site::notifier()->setMessage('error', \GO::t('badLogin')); // set the correct login failure message
 			} else {
 				if (!empty($_POST['rememberMe'])) {
 
@@ -190,7 +190,7 @@ class AccountController extends \GO\Site\Components\Controller {
 	public function actionLogout(){
 		\GO::session()->logout();
 		\GO::session()->start();
-		$this->redirect(Site::urlManager()->getHomeUrl());
+		$this->redirect(\Site::urlManager()->getHomeUrl());
 	}
 	
 	protected function actionProfile(){

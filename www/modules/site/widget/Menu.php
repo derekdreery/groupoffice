@@ -17,7 +17,7 @@ class Menu extends \GO\Site\Components\Widget {
 	
 	public function __construct($config = array()) {
 		parent::__construct($config);
-		$this->_menuModel = \GO\Site\Model\Menu::model()->findSingleByAttributes(array('site_id'=>Site::model()->id,'menu_slug'=>$this->id));	
+		$this->_menuModel = \GO\Site\Model\Menu::model()->findSingleByAttributes(array('site_id'=>\Site::model()->id,'menu_slug'=>$this->id));	
 	}
 	
 	public function render(){

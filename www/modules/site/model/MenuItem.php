@@ -93,7 +93,7 @@ class MenuItem extends \GO\Base\Db\ActiveRecord{
 				'iconCls' => 'go-model-icon-Menuitem', 
 				'text' => $child->label,
 				'hasChildren' => $hasChildren,
-				'expanded' => !$hasChildren || Site::isExpandedNode($this->menu->site_id.'_menu_'.$child->id),	 
+				'expanded' => !$hasChildren || \Site::isExpandedNode($this->menu->site_id.'_menu_'.$child->id),	 
 				'children'=> $hasChildren ? null : $child->getChildrenTree(),
 			);
 			 

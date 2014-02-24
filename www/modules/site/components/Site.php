@@ -19,6 +19,9 @@
  * @author Wesley Smits <wsmits@intermesh.nl> 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
+
+//echo "NS:". __NAMESPACE__;
+
 class Site {
 	
 	/**
@@ -120,7 +123,7 @@ class Site {
 			
 			self::$_urlManager = new \GO\Site\Components\UrlManager();
 			
-			$urls = Site::model()->getConfig()->urls;
+			$urls = \Site::model()->getConfig()->urls;
 
 			if(!empty($urls))
 				self::$_urlManager->rules = $urls;
@@ -150,11 +153,9 @@ class Site {
 			GO::session()->values['site_id'] = $_GET['site_id'];
 		
 		if(isset(GO::session()->values['site_id']))
-			self::$_site=\GO\Site\Model\Site::model()->findByPk(GO::session()->values['site_id'],false,true); // Find the website model from its id
+			self::$_site=\GO\Site\Model\Site::model()->findByPk(GO::session()->values['site_id'],false,false); // Find the website model from its id
 		else
 			self::$_site=\GO\Site\Model\Site::model()->findSingleByAttribute('domain', $_SERVER["SERVER_NAME"]); // Find the website model from its domainname
-
-		self::$_site=\GO\Site\Model\Site::model()->findSingleByAttribute('domain', $_SERVER["SERVER_NAME"]); // Find the website model from its domainname
 
 		if(!self::$_site)
 			self::$_site=\GO\Site\Model\Site::model()->findSingleByAttribute('domain', '*'); // Find the website model from its domainname
@@ -234,10 +235,10 @@ class Site {
 	public static function file($relativePath, $template=true){
 
 		if(!$template){			
-			$folder = new \GO\Base\Fs\Folder(Site::model()->getPublicPath());
+			$folder = new \GO\Base\Fs\Folder(\Site::model()->getPublicPath());
 			
 			$relativePath=str_replace($folder->stripFileStoragePath().'/files/', '', $relativePath);
-			return Site::model()->getPublicUrl().'files/'.$relativePath;	
+			return \Site::model()->getPublicUrl().'files/'.$relativePath;	
 		}else{
 			return self::template()->getUrl().$relativePath;
 		}
@@ -263,7 +264,7 @@ class Site {
 	 */
 	public static function filePath($relativePath, $template=true){
 		if(!$template){
-			return Site::model()->getPublicPath().'/files/'.$relativePath;
+			return \Site::model()->getPublicPath().'/files/'.$relativePath;
 		}else
 		{
 			return self::template()->getPath().$relativePath;
@@ -286,7 +287,7 @@ class Site {
 		$thumbParams['filemtime']=$file->mtime();
 		$thumbParams['src']=$relativePath;
 	
-		return Site::urlManager()->createUrl('site/front/thumb', $thumbParams);
+		return \Site::urlManager()->createUrl('site/front/thumb', $thumbParams);
 	}
 	
 }

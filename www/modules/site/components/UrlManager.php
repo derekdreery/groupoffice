@@ -97,7 +97,7 @@ class UrlManager
 	public function init()
 	{
 		//Check if we have mod rewrite enabled for pretty URL's
-		$this->_urlFormat = Site::model()->mod_rewrite ? self::PATH_FORMAT : self::GET_FORMAT;
+		$this->_urlFormat = \Site::model()->mod_rewrite ? self::PATH_FORMAT : self::GET_FORMAT;
 		
 		$this->processRules();
 
@@ -211,7 +211,7 @@ class UrlManager
 			return $this->_baseUrl;
 		else
 		{
-			$this->_baseUrl = Site::request()->getBaseUrl();
+			$this->_baseUrl = \Site::request()->getBaseUrl();
 			
 			if($this->showScriptName && $this->_urlFormat===self::GET_FORMAT)
 				$this->_baseUrl.='/index.php';
@@ -221,9 +221,9 @@ class UrlManager
 	}
 	
 	public function getHomeUrl() {
-		$url = Site::model()->ssl ? 'https://' : 'http://';
+		$url = \Site::model()->ssl ? 'https://' : 'http://';
 		
-		$domain = Site::model()->domain == '*' ? $_SERVER['SERVER_NAME'] : Site::model()->domain;
+		$domain = \Site::model()->domain == '*' ? $_SERVER['SERVER_NAME'] : \Site::model()->domain;
 		
 		$url .= $domain.rtrim($this->getBaseUrl(),'/');
 		return $url;

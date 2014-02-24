@@ -96,7 +96,7 @@ class Pager extends \GO\Site\Components\Widget {
 	 */
 	private function getPageUrl($pageNum){
 		$params = array_merge($_GET,array($this->requestPrefix.$this->pageParam=>$pageNum));
-		return site::urlManager()->createUrl(Site::router()->getRoute(), $params);
+		return \Site::urlManager()->createUrl(\Site::router()->getRoute(), $params);
 	}
 	
 	/**
