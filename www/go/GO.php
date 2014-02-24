@@ -415,7 +415,7 @@ class GO{
 		
 		//for namespaces
 //		$className = str_replace('\\', '_', $className);
-		
+			
 		if(isset(self::$_classes[$className])){
 			//don't use \GO::config()->root_path here because it might not be autoloaded yet causing an infite loop.
 			require(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
