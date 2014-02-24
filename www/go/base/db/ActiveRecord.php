@@ -1317,7 +1317,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					$joinRelationjoins .=') ';
 					
 					//if a diffent fetch class is passed then we should not join the relational fields because it makes no sense.
-					//\GO\Base\Model_Grouped does this for example.
+					//\GO\Base\Model\Grouped does this for example.
 					if(empty($params['fetchClass'])){
 						$cols = $model->getColumns();
 
@@ -3096,7 +3096,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	}
 	
 	/**
-	 * Put this model in the go_search_cache table as a \GO\Base\Model_SearchCacheRecord so it's searchable and linkable.
+	 * Put this model in the go_search_cache table as a \GO\Base\Model\SearchCacheRecord so it's searchable and linkable.
 	 * Generally you don't need to do this. It's called from the save function automatically when getCacheAttributes is overridden.
 	 * This method is only public so that the maintenance script can access it to rebuid the search cache.
 	 * 
@@ -3194,7 +3194,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	}
 	
 	public function getCachedSearchRecord(){
-		$model = \GO\Base\Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()));
+		$model = \GO\Base\Model\SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()));
 		if($model)
 			return $model;
 		else
@@ -3204,7 +3204,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	/**
 	 * Override this function if you want to put your model in the search cache.
 	 * 
-	 * @return array cache parameters with at least 'name', 'description' and 'type'. All are strings. See \GO\Base\Model_SearchCacheRecord for more info.
+	 * @return array cache parameters with at least 'name', 'description' and 'type'. All are strings. See \GO\Base\ModelSearchCacheRecord for more info.
 	 */
 	protected function getCacheAttributes(){
 		return false;
@@ -3531,7 +3531,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$attr = $this->getCacheAttributes();
 		
 		if($attr){
-			$model = \GO\Base\Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()),false,true);
+			$model = \GO\Base\Model\SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()),false,true);
 			if($model)
 				$model->delete(true);
 		}
@@ -3566,7 +3566,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	private function _deleteLinks(){
 		//cleanup links
 		if($this->hasLinks()){
-			$stmt = \GO\Base\Model_ModelType::model()->find();
+			$stmt = \GO\Base\Model\ModelType::model()->find();
 			while($modelType = $stmt->fetch()){
 				if(class_exists($modelType->model_name)){
 					$model = \GO::getModel($modelType->model_name);
@@ -3836,7 +3836,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	public function link($model, $description='', $this_folder_id=0, $model_folder_id=0, $linkBack=true){
 		
-		$isSearchCacheModel = ($this instanceof \GO\Base\Model_SearchCacheRecord);
+		$isSearchCacheModel = ($this instanceof \GO\Base\Model\SearchCacheRecord);
 		
 		if(!$this->hasLinks() && !$isSearchCacheModel)
 			throw new \Exception("Links not supported by ".$this->className ());
@@ -3844,7 +3844,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if($this->linkExists($model))
 			return true;
 		
-		if($model instanceof \GO\Base\Model_SearchCacheRecord){
+		if($model instanceof \GO\Base\Model\SearchCacheRecord){
 			$model_id = $model->model_id;
 			$model_type_id = $model->model_type_id;			
 		}else
@@ -3918,7 +3918,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	public function linkExists(ActiveRecord $model){		
 		
-		if($model->className()=="GO\Base\Model_SearchCacheRecord"){
+		if($model->className()=="GO\Base\Model\SearchCacheRecord"){
 			$model_id = $model->model_id;
 			$model_type_id = $model->model_type_id;
 		}else
@@ -3930,8 +3930,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(!$model_id)
 			return false;
 		
-		$table = $this->className()=="GO\Base\Model_SearchCacheRecord" ? \GO::getModel($this->model_name)->model()->tableName() : $this->tableName();
-		$this_id = $this->className()=="GO\Base\Model_SearchCacheRecord" ? $this->model_id : $this->id;
+		$table = $this->className()=="GO\Base\Model\SearchCacheRecord" ? \GO::getModel($this->model_name)->model()->tableName() : $this->tableName();
+		$this_id = $this->className()=="GO\Base\Model\SearchCacheRecord" ? $this->model_id : $this->id;
 		
 		$sql = "SELECT count(*) FROM `go_links_$table` WHERE ".
 			"`id`=".intval($this_id)." AND model_type_id=".$model_type_id." AND `model_id`=".intval($model_id);
@@ -4054,7 +4054,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(!$this->hasLinks() || !$targetModel->hasLinks())
 			return false;
 			
-		$stmt = \GO\Base\Model_SearchCacheRecord::model()->findLinks($this);
+		$stmt = \GO\Base\Model\SearchCacheRecord::model()->findLinks($this);
 		while($searchCacheModel = $stmt->fetch()){
 			$targetModel->link($searchCacheModel, $searchCacheModel->link_description);
 		}
