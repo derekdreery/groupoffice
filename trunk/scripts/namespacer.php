@@ -39,7 +39,7 @@
 
 
 
-chdir('/var/www/trunk');
+chdir('/var/www/trunk/www/modules/smscampaigns');
 
 //find all PHP files except updates.php and updates.inc.php because we shouldn't touch them
 $cmd = 'find . -type f \( -iname "*.php" ! -iname "updates*" \);';

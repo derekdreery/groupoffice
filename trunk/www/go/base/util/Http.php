@@ -169,6 +169,15 @@ class Http {
 	}
 	
 	/**
+	 * Check if this was a HTTP multipart request
+	 * 
+	 * @return boolean
+	 */
+	public static function isMultipartRequest(){
+		return isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'],'multipart/form-data')!==false;
+	}
+	
+	/**
 	 * Check if the request was made with ajax.
 	 * 
 	 * @return boolean 
@@ -176,9 +185,15 @@ class Http {
 	public static function isAjaxRequest($withExtjsIframeHack=true){
 		//dirty hack with $_FILES for extjs iframe file upload
 		
-		if($withExtjsIframeHack && (!empty($_REQUEST['ajax']) || !empty($_FILES)))
+		if(!empty($_REQUEST['ajax'])){
 			return true;
+		}
 		
+		
+		if($withExtjsIframeHack && self::isMultipartRequest()){
+			return true;
+		}
+
 		return isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest";  
 	}
 	

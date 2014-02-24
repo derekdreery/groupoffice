@@ -197,7 +197,10 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 		}
 //		\GO::debug(count($users));
 		
-		$module->acl->getAuthorizedUsers($module->acl_id, \GO\Base\Model\Acl::READ_PERMISSION, array("GO\Modules\Controller\Module","checkDefaultModelCallback"), array($models));
+		$module->acl->getAuthorizedUsers(
+						$module->acl_id, 
+						\GO\Base\Model\Acl::READ_PERMISSION, 
+						array("GO\Modules\Controller\ModuleController","checkDefaultModelCallback"), array($models));
 		
 		
 //		if(class_exists("GO\Professional\LicenseCheck")){

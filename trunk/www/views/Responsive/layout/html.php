@@ -1,6 +1,12 @@
 <!doctype html>
 <html lang="en">
 	<head>
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- Latest compiled and minified JavaScript -->
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
@@ -36,19 +42,9 @@
 			<div class="navbar-collapse collapse">
 				<ul id="go-module-menu" class="nav navbar-nav">
 					
-					<?php
-//					foreach (GO::modules()->getAllModules() as $module){
-//						echo '<li><a href="#" rel="email/view/responsive">'.$module->moduleManager->name().'</a></li>';
-//					}
+					<li><a href="<?php echo GO::url("email/responsive/load"); ?>">E-mail</a></li>
+					<li><a href="<?php echo GO::url("email/responsive/load"); ?> ">Address book</a></li>
 					
-					?>
-					<li><a href="<?php echo GO::url("email/view/responsive"); ?>">E-mail</a></li>
-					<li><a href="<?php echo GO::url("email/view/responsive"); ?> ">Addressbook</a></li>
-					
-<!--					<li class="active"><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>					
-					</li>-->
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="<?php echo GO::url('setttings/edit'); ?>"><span class="glyphicon glyphicon-user"></span> <?php echo GO::user()->name; ?></a></li>
@@ -67,11 +63,7 @@
 
 </div> <!-- /container -->
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <!-- Latest compiled and minified JavaScript -->
-		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    
 		
 		<script src="/trunk/www/views/Responsive/resources/GO.js"></script>
 		<script src="/trunk/www/views/Responsive/resources/template.js"></script>
