@@ -1,0 +1,13 @@
+body{
+	background-color: #009cc5;
+}
+
+.container{
+	background-color:white;
+}
+
+.toc.affix{
+	position:fixed;
+	top:20px;
+}
+

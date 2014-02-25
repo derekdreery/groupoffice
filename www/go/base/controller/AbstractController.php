@@ -590,7 +590,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 	 * @return string 
 	 */
 	public function getRoute($action=''){
-		$arr = explode('_',get_class($this));
+		$arr = explode('\\',get_class($this));
 
 		if($arr[1]!='Core')
 			$route=lcfirst($arr[1]).'/'.lcfirst($arr[3]);				

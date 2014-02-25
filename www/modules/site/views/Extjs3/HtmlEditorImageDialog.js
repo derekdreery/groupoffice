@@ -27,6 +27,8 @@ GO.site.HtmlEditorImageDialog = Ext.extend(GO.Window , {
 	imgZoom : false,
 	imgAlt : false,
 	
+	imgLinkToOriginal: true,
+	
 	dimensionSmallWidth : 100,
 	dimensionSmallHeight : 100,
 	
@@ -61,7 +63,7 @@ GO.site.HtmlEditorImageDialog = Ext.extend(GO.Window , {
 		Ext.apply(this, {
 			goDialogId:'imageEditor',
 			title:GO.site.lang.imageEditor,
-			height:376,
+			height:400,
 			width:700,
 			layout:'fit',
 			modal:false,
@@ -348,14 +350,28 @@ GO.site.HtmlEditorImageDialog = Ext.extend(GO.Window , {
 			}
 		});
 		
+		this.linkToOriginal = new Ext.form.Checkbox({
+			name: 'link_to_original',
+			checked:true,			
+			hideLabel:true,
+			boxLabel: GO.site.lang.linkToOriginal,
+			listeners:{
+				check:function(cb,checked){
+					this.imgLinkToOriginal = checked;
+				},
+				scope:this
+			}
+		});
+		
 		this.otherOptionsFieldset = new Ext.form.FieldSet({
 			title: GO.site.lang.otherOptions,
-			autoHeight: true,
+			height: 200,
 			labelWidth: 45,
 			border: true,
 			collapsed: false,
 			items:[
-				this.altTextField
+				this.altTextField,
+				this.linkToOriginal
 			]
 		});
 
@@ -444,6 +460,9 @@ GO.site.HtmlEditorImageDialog = Ext.extend(GO.Window , {
 
 		if(this.imgAlt)
 			tag += ' alt="'+this.imgAlt+'"';
+		
+		if(this.imgLinkToOriginal)
+			tag += ' link_to_original="true"';
 
 		if(this.imgAlign){
 			if(this.imgAlign === 'center'){
