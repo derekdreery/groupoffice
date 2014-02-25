@@ -230,6 +230,26 @@ class Content extends \GO\Base\Db\ActiveRecord{
 		 }
 	 }
 	 
+	 
+	 public function getTreeNodeAttributes(){
+		 
+		 $hasChildren = $this->hasChildren();
+		 
+		 return array(
+					'id' => $this->site_id.'_content_'.$this->id,
+					'site_id'=>$this->site_id,
+					'content_id'=>$this->id,
+					'slug'=>$this->slug,
+					'cls' => 'site-node-content',
+					'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
+					//'expanded' => !$hasChildren,
+					'expanded' => !$hasChildren || Site::isExpandedNode($this->site_id.'_content_'.$this->id),
+					'hasChildren' => $hasChildren,
+					'children'=> $hasChildren ? $this->getChildrenTree() : array(),
+					'text' => $this->title
+			);
+	 }
+	 
 	 /**
 	  * # Backend Functionality
 	  * 
@@ -241,25 +261,8 @@ class Content extends \GO\Base\Db\ActiveRecord{
 		 $tree = array();
 		 $children = $this->children;
 		 		 	 
-		 foreach($children as $child){
-			 
-			 $hasChildren = $child->hasChildren();
-			 
-			 $childNode = array(
-				'id' => $child->site_id.'_content_'.$child->id,
-				'content_id'=>$child->id,
-				'site_id'=>$child->site->id,
-				'slug'=>$child->slug,
-				'cls' => 'site-node-content',
-				'iconCls' => 'go-model-icon-Content', 
-				'text' => $child->title,
-				'hasChildren' => $hasChildren,
-				//'expanded' => !$hasChildren,
-				'expanded' => !$hasChildren || Site::isExpandedNode($child->site_id.'_content_'.$child->id),	 
-				'children'=> $hasChildren ? null : array(),
-			);
-			 
-			$tree[] = $childNode;
+		 foreach($children as $child){		 
+			$tree[] = $child->getTreeNodeAttributes();
 		 }
 		 
 		 return $tree;

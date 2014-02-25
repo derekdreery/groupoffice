@@ -190,7 +190,7 @@ class Site extends \GO\Base\Db\ActiveRecord {
 				'id' => 'site_' . $site->id,
 				'cls' => 'site-node-site',
 				'site_id'=>$site->id, 
-				'iconCls' => 'go-model-icon-Site', 
+				'iconCls' => 'go-model-icon-GO_Site_Model_Site', 
 				'text' => $site->name, 
 				'expanded' => true,
 				'children' => array(
@@ -230,22 +230,8 @@ class Site extends \GO\Base\Db\ActiveRecord {
 		
 		$contentItems = $this->contentNodes;
 			
-		foreach($contentItems as $content){
-			
-			$hasChildren = $content->hasChildren();
-			
-			$treeNodes[] = array(
-					'id' => $this->id.'_content_'.$content->id,
-					'site_id'=>$this->id,
-					'content_id'=>$content->id,
-					'slug'=>$content->slug,
-					'iconCls' => 'go-model-icon-Content', 
-					//'expanded' => !$hasChildren,
-					'expanded' => !$hasChildren || self::isExpandedNode($this->id.'_content_'.$content->id),
-					'hasChildren' => $hasChildren,
-					'children'=> $hasChildren ? $content->getChildrenTree() : array(),
-					'text' => $content->title
-			);
+		foreach($contentItems as $content){			
+			$treeNodes[] = $content->getTreeNodeAttributes();
 		}
 		
 		return $treeNodes;
