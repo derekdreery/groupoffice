@@ -16,10 +16,21 @@ abstract class Widget extends \GO\Base\Object {
 	private $_id;
 	
 	public function __construct($config=array()) {
-		$ref = new ReflectionClass($this);
-		foreach($config as $key => $value)
-			if($ref->getProperty ($key)->isPublic())
+		
+		if(!is_array($config))
+			throw new \Exception('Widget::__construct param \$config must be an array!');
+		
+		$ref = new \ReflectionClass($this);
+		foreach($config as $key => $value){
+			
+			if(!$ref->hasProperty($key)){
+				throw new \Exception('Config option '.$key.' does not exist for '. get_class($this));	
+			}
+			
+			if($ref->getProperty ($key)->isPublic()){
 				$this->{$key}=$value;
+			}
+		}
 			
 		$this->init();
 	}

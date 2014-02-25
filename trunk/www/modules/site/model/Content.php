@@ -184,12 +184,21 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	 }
 	 
 	 /**
+	  * Return the first child or false if it doesn't have one.
+	  * 
+	  * @return \GO\Site\Model\Site
+	  */
+	 public function firstChild(){
+		 return $this->children(\GO\Base\Db\FindParams::newInstance()->single());
+	 }
+	 
+	 /**
 	  * Check if this content item has children
 	  * 
 	  * @return boolean
 	  */
 	 public function hasChildren(){
-		 $child = $this->children(\GO\Base\Db\FindParams::newInstance()->single());
+		 $child = $this->firstChild();
 		 return !empty($child); 
 	 }
 	 
@@ -246,7 +255,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 				'text' => $child->title,
 				'hasChildren' => $hasChildren,
 				//'expanded' => !$hasChildren,
-				'expanded' => !$hasChildren || \Site::isExpandedNode($child->site_id.'_content_'.$child->id),	 
+				'expanded' => !$hasChildren || Site::isExpandedNode($child->site_id.'_content_'.$child->id),	 
 				'children'=> $hasChildren ? null : array(),
 			);
 			 
@@ -463,7 +472,15 @@ class Content extends \GO\Base\Db\ActiveRecord{
 					$target = ' target="'.$imageAttr['target'].'"';
 				}
 				
-			 $html = sprintf('<a href="%s"'.$target.'>%s</a>',$imageAttr['href'],$html);
+				$a = '<a ';
+				
+				if(isset($imageAttr['data-lightbox'])){
+					$a .= 'data-lightbox="'.$imageAttr['data-lightbox'].'"';
+				}
+				
+				$a .= 'href="%s"'.$target.'>%s</a>';
+				
+			 $html = sprintf($a,$imageAttr['href'],$html);
 			}
 		}
 		 return $html;
