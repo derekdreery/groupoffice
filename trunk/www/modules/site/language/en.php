@@ -167,3 +167,5 @@ $l["menuitemTarget"] = "Target";
 
 $l["sureCreateContentMenuItemTitle"] = "Create menu item from content";
 $l["sureCreateContentMenuItem"] = "Are you sure that you want to create a menu item from this content item?";
+
+$l['linkToOriginal']='Link to original';

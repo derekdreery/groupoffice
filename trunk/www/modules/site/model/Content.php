@@ -450,8 +450,10 @@ class Content extends \GO\Base\Db\ActiveRecord{
 					$thumb = \Site::thumb($imageAttr['path'],array("lw"=>$imageAttr['width'], "ph"=>$imageAttr['height'], "zc"=>1));
 				else
 					$thumb = \Site::thumb($imageAttr['path'],array("lw"=>$imageAttr['width'], "ph"=>$imageAttr['height'], "zc"=>0));
-				if(isset($imageAttr['link_to_original']))
+				if(isset($imageAttr['link_to_original'])){
 					$imageAttr['href'] = \Site::file($imageAttr['path'],false); // Create an url to the original image
+					$imageAttr['data-lightbox']=$imageAttr['path'];
+				}
 				
 			} else {
 				$thumb = \Site::file($imageAttr['path']);
