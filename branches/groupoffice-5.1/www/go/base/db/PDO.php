@@ -1,8 +1,6 @@
 <?php
-namespace GO\Base\Db;
-use GO;
 
-class PDO extends \PDO{
+class GO_Base_Db_PDO extends PDO{
 	public function __construct($dsn, $username, $passwd, $options=null) {
 		parent::__construct($dsn, $username, $passwd, $options);
 		
