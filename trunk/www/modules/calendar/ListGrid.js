@@ -205,7 +205,7 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 				});
 			}else	if(record.data.contact_id)
 			{
-				GO.linkHandlers["GO_Addressbook_Model_Contact"].call(this, record.data.contact_id);
+				GO.linkHandlers["GO\\Addressbook\\Model\\Contact"].call(this, record.data.contact_id);
 			}
 			
 		}, this);

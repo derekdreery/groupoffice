@@ -1702,17 +1702,17 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		
 	
 		switch(event.model_name){
-			case "GO_Tasks_Model_Task":
+			case "GO\\Tasks\\Model\\Task":
 				GO.tasks.showTaskDialog({
 					task_id : event.task_id
 				})	
 			break;
 			
-			case "GO_Adressbook_Model_Contact":
-				GO.linkHandlers["GO_Addressbook_Model_Contact"].call(this, event['contact_id']);
+			case "GO\\Adressbook\\Model\\Contact":
+				GO.linkHandlers["GO\\Addressbook\\Model\\Contact"].call(this, event['contact_id']);
 			break;
 			
-			case "GO_Calendar_Model_Event":
+			case "GO\\Calendar\\Model\\Event":
 				if(event.permission_level<GO.permissionLevels.write)
 					return;
 		
@@ -2192,7 +2192,7 @@ GO.mainLayout.onReady(function(){
 
 	GO.newMenuItems.push({
 		text: GO.calendar.lang.appointment,
-		iconCls: 'go-model-icon-GO_Calendar_Model_Event',
+		iconCls: 'go-model-icon-GO\\Calendar\\Model\\Event',
 		handler:function(item, e){
 
 			var eventShowConfig = item.parentMenu.eventShowConfig || {};
@@ -2235,7 +2235,7 @@ GO.calendar.showEventDialog = function(config){
 	GO.calendar.eventDialog.show(config);
 }
 
-GO.linkHandlers["GO_Calendar_Model_Event"]=function(id){
+GO.linkHandlers["GO\\Calendar\\Model\\Event"]=function(id){
 	//GO.calendar.showEventDialog({event_id:id});
 	if(!GO.calendar.eventLinkWindow){
 		var eventPanel = new GO.calendar.EventPanel();
@@ -2261,7 +2261,7 @@ GO.quickAddPanel.addButton(new Ext.Button({
 	scope: this
 }),0);
 
-GO.linkPreviewPanels["GO_Calendar_Model_Event"]=function(config){
+GO.linkPreviewPanels["GO\\Calendar\\Model\\Event"]=function(config){
 	var config = config || {};
 	return new GO.calendar.EventPanel(config);
 }

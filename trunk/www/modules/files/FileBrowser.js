@@ -226,7 +226,7 @@ GO.files.FileBrowser = function(config){
 
 	if(GO.customfields)
 	{
-		GO.customfields.addColumns("GO_Files_Model_File", fields);
+		GO.customfields.addColumns("GO\\\\Files\\\\Model\\\\File", fields);
 	}
 
 	this.gridStore = new GO.data.JsonStore({
@@ -1972,17 +1972,17 @@ GO.files.showFolderPropertiesDialog = function(folder_id){
 
 GO.mainLayout.onReady(function(){
 
-	if(GO.workflowLinkHandlers)
-	{
-		GO.workflowLinkHandlers[6]=function(id, process_file_id){
-			GO.files.showFilePropertiesDialog(id+"", {
-				loadParams:{
-					process_file_id:process_file_id
-				}
-			});
-			GO.files.filePropertiesDialog.tabPanel.setActiveTab(3);
-		}
-	}
+//	if(GO.workflowLinkHandlers)
+//	{
+//		GO.workflowLinkHandlers[6]=function(id, process_file_id){
+//			GO.files.showFilePropertiesDialog(id+"", {
+//				loadParams:{
+//					process_file_id:process_file_id
+//				}
+//			});
+//			GO.files.filePropertiesDialog.tabPanel.setActiveTab(3);
+//		}
+//	}
 
 	GO.checker.registerRequest("files/notification/unsent",{},function(checker, data){});
 });
@@ -2132,7 +2132,7 @@ GO.files.createSelectFileBrowser = function(){
 }
 
 
-GO.linkHandlers["GO_Files_Model_File"]=function(id, record){
+GO.linkHandlers["GO\\Files\\Model\\File"]=function(id, record){
 	//GO.files.showFilePropertiesDialog(id+"");
 	if(!GO.files.linkFileWindow){
 		var filePanel = new GO.files.FilePanel();
@@ -2147,13 +2147,13 @@ GO.linkHandlers["GO_Files_Model_File"]=function(id, record){
 	GO.files.linkFileWindow.show();
 	return GO.files.linkFileWindow;
 }
-GO.linkPreviewPanels["GO_Files_Model_File"]=function(config){
+GO.linkPreviewPanels["GO\\Files\\Model\\File"]=function(config){
 	config = config || {};
 	return new GO.files.FilePanel(config);
 }
 
 
-GO.linkHandlers["GO_Files_Model_Folder"]=function(id, record){
+GO.linkHandlers["GO\\Files\\Model\\Folder"]=function(id, record){
 	//GO.files.showFilePropertiesDialog(id+"");
 	if(!GO.files.linkFolderWindow){
 		var filePanel = new GO.files.FolderPanel();
@@ -2168,7 +2168,7 @@ GO.linkHandlers["GO_Files_Model_Folder"]=function(id, record){
 	GO.files.linkFolderWindow.show();
 	return GO.files.linkFolderWindow;
 }
-GO.linkPreviewPanels["GO_Files_Model_Folder"]=function(config){
+GO.linkPreviewPanels["GO\\Files\\Model\\Folder"]=function(config){
 	config = config || {};
 	return new GO.files.FolderPanel(config);
 }

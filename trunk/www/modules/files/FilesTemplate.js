@@ -21,10 +21,10 @@ GO.files.filesTemplate =
 				'<a class="go-grid-icon filetype filetype-{extension}" href="#" onclick="'+
 
 				'<tpl if="extension!=\'folder\'">'+
-				'GO.linkHandlers[\'GO_Files_Model_File\'].call(this, {id});'+
+				'GO.linkHandlers[\'GO\\\\\\\\Files\\\\\\\\Model\\\\\\\\File\'].call(this, {id});'+
 				'</tpl>'+
 				'<tpl if="extension==\'folder\'">'+
-				'GO.linkHandlers[\'GO_Files_Model_Folder\'].call(this, {id});'+
+				'GO.linkHandlers[\'GO\\\\\\\\Files\\\\\\\\Model\\\\\\\\Folder\'].call(this, {id});'+
 				//'GO.files.openFolder({[this.panel.data.files_folder_id]}, {id});'+
 				'</tpl>'+
 

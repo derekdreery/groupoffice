@@ -124,11 +124,11 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				'<tpl if="iCalendar.invitation">'+
 				
 				'<tpl if="!GO.util.empty(iCalendar.invitation.is_processed)">'+
-					'<a id="em-icalendar-open-'+this.bodyId+'" class="go-model-icon-GO_Calendar_Model_Event normal-link" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon">'+GO.email.lang.appointementAlreadyProcessed+'</a>'+
+					'<a id="em-icalendar-open-'+this.bodyId+'" class="go-model-icon-GO_Calendar_Model_Event normal-link" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO\\Calendar\\Model\\Event message-icalendar-icon">'+GO.email.lang.appointementAlreadyProcessed+'</a>'+
 					'</tpl>'+
 					'<tpl if="iCalendar.invitation.is_invitation">'+
 		
-								'<a id="em-icalendar-accept-invitation-'+this.bodyId+'" class="go-model-icon-GO_Calendar_Model_Event normal-link" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon">'+GO.calendar.lang.clickForAttendance+'</a>'+
+								'<a id="em-icalendar-accept-invitation-'+this.bodyId+'" class="go-model-icon-GO_Calendar_Model_Event normal-link" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO\\Calendar\\Model\\Event message-icalendar-icon">'+GO.calendar.lang.clickForAttendance+'</a>'+
 						
 					'</tpl>'+
 					
@@ -176,7 +176,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	
 	lookupContact : function(){
 		if(this.data.sender_contact_id){
-			GO.linkHandlers["GO_Addressbook_Model_Contact"].call(this, this.data.sender_contact_id);
+			GO.linkHandlers["GO\\Addressbook\\Model\\Contact"].call(this, this.data.sender_contact_id);
 		}else{
 			GO.addressbook.searchSender(this.data.sender, this.data.from);
 		}
@@ -493,9 +493,9 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 							GO.request({
 								url:'core/unlink',
 								params:{
-									model_name1:'GO_Addressbook_Model_Contact',
+									model_name1:'GO\\Addressbook\\Model\\Contact',
 									id1:this.data.sender_contact_id,
-									model_name2:'GO_Savemailas_Model_LinkedEmail',
+									model_name2:'GO\\Savemailas\\Model\\LinkedEmail',
 									id2:this.data.contact_linked_message_id
 								},
 								maskEl:Ext.getBody()
@@ -531,9 +531,9 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 							GO.request({
 								url:'core/unlink',
 								params:{
-									model_name1:'GO_Addressbook_Model_Company',
+									model_name1:'GO\\Addressbook\\Model\\Company',
 									id1:this.data.sender_company_id,
-									model_name2:'GO_Savemailas_Model_LinkedEmail',
+									model_name2:'GO\\Savemailas\\Model\\LinkedEmail',
 									id2:this.data.company_linked_message_id
 								},
 								maskEl:Ext.getBody()
