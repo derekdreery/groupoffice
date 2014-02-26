@@ -66,24 +66,19 @@ class GO_Files_Model_FolderNotificationMessage extends GO_Base_Db_ActiveRecord {
      * 
      * @return array 
      */
-    public static function getNotifications($user_id) {
+    public static function getNotifications($user_id=null) {
 
-        $user_id = (int)$user_id;
-        if (!$user_id)
+        if ($user_id===null)
             $user_id = GO::user()->id;
 
         $stmt = self::model()->findByAttributes(
-                array(
-                    'user_id' => GO::user()->id,
-                    'status'  => 0
-                )
+			array(
+				'user_id' => $user_id,
+				'status'  => 0
+			)
         );
-
-        $notifications = array();
-        while ($fnRow = $stmt->fetch()) {
-                $notifications[] = $fnRow;
-        }
-        return $notifications;               
+		
+		return $stmt->fetchAll();             
     }
     
     public function defaultAttributes() {
