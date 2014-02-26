@@ -31,7 +31,7 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 	protected function beforeSubmit(&$response, &$model, &$params) {	
 		
 		//workaroud extjs iframe hack for file upload
-		$_SERVER["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest";
+//		$_SERVER["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest";
 		
 		$this->checkMaxPostSizeExceeded();
 		
