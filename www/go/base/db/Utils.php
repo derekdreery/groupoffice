@@ -25,7 +25,7 @@
 
 
 namespace GO\Base\Db;
-
+use PDO;
 
 class Utils{
 	

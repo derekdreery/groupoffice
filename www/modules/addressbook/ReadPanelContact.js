@@ -13,7 +13,7 @@
 
 GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	
-	model_name : "GO\\\\Addressbook\\\\Model\\\\Contact",
+	model_name : "GO\\Addressbook\\Model\\Contact",
 
 	stateId : 'ab-contact-panel',
 
