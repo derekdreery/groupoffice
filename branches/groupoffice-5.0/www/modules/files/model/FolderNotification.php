@@ -100,8 +100,8 @@ class GO_Files_Model_FolderNotification extends GO_Base_Db_ActiveRecord {
 	}
 
 	public function notifyUser() {
-		$notifications = GO_Files_Model_FolderNotificationMessage::getNotifications(GO::user()->id);
-		if (!count($notifications))
+		$notifications = GO_Files_Model_FolderNotificationMessage::getNotifications();
+		if (empty($notifications))
 			return false;
 
 		//userCache
