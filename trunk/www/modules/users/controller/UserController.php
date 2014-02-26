@@ -3,6 +3,8 @@
 
 namespace GO\Users\Controller;
 
+use GO\Base\Model\User;
+
 
 class UserController extends \GO\Base\Controller\AbstractModelController {
 
@@ -221,7 +223,7 @@ class UserController extends \GO\Base\Controller\AbstractModelController {
 			$ab->users = true;
 			$ab->save();
 		}
-		$stmt = \GO\Base\Model\User::model()->find();
+		$stmt = User::model()->find();
 		while ($user = $stmt->fetch()) {
 
 			$contact = $user->contact();
@@ -425,7 +427,7 @@ class UserController extends \GO\Base\Controller\AbstractModelController {
 	/**
 	 * The afterimport for every imported user.
 	 * 
-	 * @param \GO\Base\Model\User $model
+	 * @param User $model
 	 * @param array $attributes
 	 * @param array $record
 	 * @return boolean success
@@ -444,5 +446,62 @@ class UserController extends \GO\Base\Controller\AbstractModelController {
 		$model->checkDefaultModels();
 		
 		return parent::afterImport($model, $attributes, $record);
+	}
+	
+	
+	protected function actionGroupStore($user_id=0){
+		
+		$selectedGroupIds=array();
+		if(empty($user_id))
+		{
+			$selectedGroupIds=User::getDefaultGroupIds();
+		}else
+		{
+//			$user = User::model()->findByPk($user_id);
+			$selectedGroupIds = User::getGroupIds($user_id);
+		}
+		
+		
+		$columnModel = new \GO\Base\Data\ColumnModel('GO\Base\Model\Group');
+		
+		$columnModel->formatColumn('selected', 'in_array($model->id, $selectedGroupIds)', array('selectedGroupIds'=>$selectedGroupIds));
+		$columnModel->formatColumn('disabled', 
+						'($user_id==1 && $model->id==GO::config()->group_root) || $model->id==GO::config()->group_everyone', array('user_id'=>$user_id));
+		
+		$store = new \GO\Base\Data\DbStore('GO\Base\Model\Group', $columnModel);
+		$store->defaultSort = array('name');
+		
+		return $store->getData();
+		
+	}
+	
+	
+	protected function actionVisibleGroupStore($user_id=0){
+		
+		$selectedGroupIds=array();
+		if(empty($user_id))
+		{
+			$selectedGroupIds=User::getDefaultVisibleGroupIds();
+		}else
+		{
+			$user = User::model()->findByPk($user_id);
+			$groups = $user->getAcl()->getGroups();
+			
+			foreach($groups as $group){
+				$selectedGroupIds[] = $group->id;
+			}
+		}
+		
+		
+		$columnModel = new \GO\Base\Data\ColumnModel('GO\Base\Model\Group');
+		
+		$columnModel->formatColumn('selected', 'in_array($model->id, $selectedGroupIds)', array('selectedGroupIds'=>$selectedGroupIds));
+		$columnModel->formatColumn('disabled', '$model->id==GO::config()->group_root');
+		
+		$store = new \GO\Base\Data\DbStore('GO\Base\Model\Group', $columnModel);
+		$store->defaultSort = array('name');
+		
+		return $store->getData();
+		
 	}
 }

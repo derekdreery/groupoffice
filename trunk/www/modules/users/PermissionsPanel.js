@@ -45,19 +45,18 @@ GO.users.PermissionsPanel = function(config)
 	
     var groupsMemberOfColumn = new GO.grid.CheckColumn({
         header: '',
-        dataIndex: 'group_permission',
+        dataIndex: 'selected',
         width: 55,
         menuDisabled:true
     });
 	
 	
     this.groupMemberStore = new GO.data.JsonStore({
-        url:GO.settings.modules.users.url+'json.php',
+        url:GO.url('users/user/groupStore'),
         baseParams: {
-            user_id: -1,
-            task: 'groups'
+            user_id: 0
         },
-        fields: ['id', 'disabled', 'group', 'group_permission'],
+        fields: ['id', 'disabled', 'name', 'selected'],
         root: 'results'
     });
 	
@@ -69,7 +68,7 @@ GO.users.PermissionsPanel = function(config)
         {
             id:'name',
             header: GO.users.lang.group,
-            dataIndex: 'group',
+            dataIndex: 'name',
             menuDisabled:true
         },
         groupsMemberOfColumn
@@ -90,7 +89,7 @@ GO.users.PermissionsPanel = function(config)
 	
     var groupsVisibleToColumn = new GO.grid.CheckColumn({
         header: '',
-        dataIndex: 'visible_permission',
+        dataIndex: 'selected',
         width: 55,
         menuDisabled:true
     });
@@ -98,12 +97,12 @@ GO.users.PermissionsPanel = function(config)
 	
 	
     this.groupVisibleStore = new GO.data.JsonStore({
-        url:GO.settings.modules.users.url+'json.php',
+        url:GO.url('users/user/visibleGroupStore'),
         baseParams: {
             user_id: -1,
             task: 'visible'
         },
-        fields: ['id', 'disabled', 'group', 'visible_permission'],
+        fields: ['id', 'disabled', 'name', 'selected'],
         root: 'results'
     });
 	
@@ -115,7 +114,7 @@ GO.users.PermissionsPanel = function(config)
         {
             id:'name',
             header: GO.users.lang.group,
-            dataIndex: 'group',
+            dataIndex: 'name',
             menuDisabled:true
         },
         groupsVisibleToColumn
