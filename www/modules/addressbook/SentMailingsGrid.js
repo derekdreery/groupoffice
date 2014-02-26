@@ -90,7 +90,7 @@ GO.addressbook.SentMailingsGrid = function(config){
 
 						break;
 					case 'ml-btn-view':
-						GO.linkHandlers["GO_Savemailas_Model_LinkedEmail"].call(this, 0, {action: "path", path:record.get('message_path')});
+						GO.linkHandlers["GO\\Savemailas\\Model\\LinkedEmail"].call(this, 0, {action: "path", path:record.get('message_path')});
 						break;
 					case 'ml-btn-view-log':
 						window.open(GO.url("addressbook/sentMailing/viewLog",{'mailing_id': record.id}));

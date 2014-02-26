@@ -1461,7 +1461,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 						//we need this just to display a unified name
 						$searchCacheModel = $linkModel->getCachedSearchRecord();
 
-						$response['autolink_items'][] = '<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
+						$response['autolink_items'][] = '<span class="em-autolink-link" onclick="GO.linkHandlers[\''.  \GO\Base\Util\String::escape_javascript($tag['model']).'\'].call(this, '.
 												$tag['model_id'].');">'.$searchCacheModel->name.'</span>';
 						
 //						$response['htmlbody']='<div class="em-autolink-message">'.

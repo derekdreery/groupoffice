@@ -28,7 +28,7 @@ GO.linksTemplate =
 			'<tpl for="links">'+
 				'<tr class="display-panel-link">'+
 					//'<td><div class="display-panel-link-icon {iconCls}" ext:qtip="{type}">&nbsp;<sup>{link_count}</sup></div></td>'+
-					'<td style="padding-right:0px !important;"><div class="display-panel-link-icon go-model-icon-{model_name}" ext:qtip="{type}"></div></td>'+
+					'<td style="padding-right:0px !important;"><div class="display-panel-link-icon go-model-icon-{[values.model_name.replace(/\\\\/g,"_")]}" ext:qtip="{type}"></div></td>'+
 					'<td style="padding-right:0px !important;padding-left:0px !important;"><div class="display-panel-has-links <tpl if="link_count&gt;1">has-links</tpl>"></div></td>'+
 					'<td><a href="#link_{[xindex-1]}">{name}</a><tpl if="link_description.length"><br />{link_description}</tpl></td>'+
 					'<td style="white-space:nowrap">{mtime}</td>'+

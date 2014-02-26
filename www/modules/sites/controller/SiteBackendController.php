@@ -49,7 +49,7 @@ class SiteBackendController extends \GO\Base\Controller\AbstractModelController 
 			$siteNode = array(
 					'id' => 'site_' . $site->id,  
 					'site_id'=>$site->id, 
-					'iconCls' => 'go-model-icon-\GO\Sites\Model\Site', 
+					'iconCls' => 'go-model-icon-GO_Sites_Model_Site', 
 					'text' => $site->name, 
 					'expanded' => true, 
 					'children' => $children);

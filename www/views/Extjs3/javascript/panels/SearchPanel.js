@@ -232,7 +232,7 @@ Ext.extend(GO.grid.SearchPanel, Ext.Panel, {
 
 		this.previewPanel.getLayout().setActiveItem(0);
 
-        var jsModelName = record.data.model_name.replace(/\\/g,"_");
+        var jsModelName = record.data.model_name;//.replace(/\\/g,"_");
 
 		var panelId = 'search_pp_'+jsModelName;
 

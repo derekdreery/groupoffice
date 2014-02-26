@@ -81,7 +81,7 @@ GO.moduleManager.addModule(
 /*
  * Add linkHandeler for linking models from this module to other GroupOffice models
  */
-GO.linkHandlers["GO_Presidents_Model_President"]=function(id){
+GO.linkHandlers["GO\\Presidents\\Model\\President"]=function(id){
 	if(!GO.presidents.linkWindow){
 		var presidentPanel = new GO.presidents.PresidentPanel();
 		GO.presidents.linkWindow= new GO.LinkViewWindow({
