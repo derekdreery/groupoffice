@@ -30,7 +30,7 @@
 		<div class="container">
 			
 			<div class="page-header">
-				<h1>Group-Office manual <small>for adminusrators</small></h1>
+				<h1><img src="<?php echo Site::file('images/groupoffice.gif'); ?>" alt="Group-Office" /> <small>manual  for administrators</small></h1>
 			</div>
 			
 			<?php echo $content; ?>
