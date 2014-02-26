@@ -1,3 +1,4 @@
+- Tickets: Fixed dependency problem with loading the tickettypes dialog when the email module is not installed.
 - Tickets: Fixed searching for default type when loading a new ticket. Now it also checks if the user has create permission for the type.
 - Billing: Fixed bug in the selection (date range) of expense items when exporting them.
 - Projects2: Search for employees and resources works now
