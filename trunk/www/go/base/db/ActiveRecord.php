@@ -41,6 +41,8 @@
 
 namespace GO\Base\Db;
 
+use PDO;
+
 
 abstract class ActiveRecord extends \GO\Base\Model{
 	
