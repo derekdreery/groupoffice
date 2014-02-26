@@ -1,19 +1,35 @@
+/* start Bootstrap overrides */
 body{
 	background-color: #009cc5;
 }
 
+.container{
+	background-color:white;
+}
+
+
 h3{
 	font-size: 20px;
 }
+
+.page-header {
+ border-bottom: 0px;
+}
+
+/* end bootstrap overrides */
 
 #footer{
 	text-align:center;
 	padding:30px;
 }
 
-.container{
-	background-color:white;
+.top-link{
+	padding:14px;
 }
+.top-link a{
+	color: #333;
+}
+
 
 .toc.affix{
 	position:fixed;

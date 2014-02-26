@@ -40,6 +40,9 @@ use GO\Site\Widget\TOC;
 				echo $toc->render();
 
 				?>
+					
+				<div class="top-link"><a title="Jump to the top of the page" href="#header"><span class="glyphicon glyphicon-chevron-up"></span> Jump to top</a></div>
+				
 				</div>
 			</div>
 	
@@ -54,6 +57,9 @@ use GO\Site\Widget\TOC;
 			echo '<h'.$level.' id="'.$content->baseslug.'">' . $content->title . '</h'.$level.'>';
 
 			echo '<div>' . $content->getHtml() . '</div>';
+			
+			
+//			echo '<div class="top-link"><a title="Jump to the top of the page" href="#top"><span class="glyphicon glyphicon-chevron-up"></span></a></div>';
 
 			foreach ($content->children() as $child) {
 
