@@ -53,6 +53,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	
 	public $parentslug;
 	public $baseslug;
+
 	
 	protected function afterLoad() {
 		
@@ -120,10 +121,10 @@ class Content extends \GO\Base\Db\ActiveRecord{
 		return 'GO\Site\Customfields\Model\Content';
 	}
 	
-//	protected function init() {
-//		$this->columns['slug']['unique'] = array('site_id');
-//		parent::init();
-//	}
+	protected function init() {
+		$this->columns['slug']['unique'] = array('site_id');
+		parent::init();
+	}
 	
 	/**
 	 * Returns the table name
@@ -291,6 +292,12 @@ class Content extends \GO\Base\Db\ActiveRecord{
 			 $this->ptime = time();
 		 }
 		 
+		 if(!empty($this->parent_id)){
+			$this->slug = $this->parent->slug.'/'.$this->baseslug;
+		 }else{
+			$this->slug = $this->baseslug;
+		 }
+		 
 	 }
 	 
 	 
@@ -336,16 +343,12 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	 }
 	 
 	 
+	 
 	 protected function beforeSave() {
 		 
-		 // This check is needed to set the correct slug when the item is dragged/dropped to another parent
-//		 if($this->isModified('parent_id') && !$this->isNew){
-			 
-			 if(!empty($this->parent_id))
-				$this->slug = $this->parent->slug.'/'.$this->baseslug;
-			 else
-				$this->slug = $this->baseslug;
-//		 }
+		 if($this->isNew){
+			$this->sort_order=$this->count();	
+		 }
 		 
 		 return parent::beforeSave();
 	 }

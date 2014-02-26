@@ -83,7 +83,7 @@ Ext.extend(GO.site.MainPanel, Ext.Panel,{
 	rebuildTree: function(select){
 		
 		var selectedNode = this.treePanel.getSelectionModel().getSelectedNode();
-		this.treePanel.getLoader().load(this.treePanel.getRootNode());
+		this.treePanel.getRootNode().reload();
 		
 		if(select)
 			this.treePanel.getSelectionModel().select(selectedNode); 
