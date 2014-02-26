@@ -26,8 +26,7 @@
 	Ext.apply(this, config);
 
 	this.store = new GO.data.JsonStore({
-		url: GO.url('core/groups'),//GO.settings.modules.groups.url+'non_admin_json.php',
-//		baseParams: {'task':'groups'},
+		url: GO.url('core/groups'),
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
