@@ -1514,4 +1514,26 @@ class AbstractModelController extends AbstractController {
 		return $response;
 	}
 	
+	
+	/**
+	 * Default headers to send. 
+	 */
+	protected function headers(){
+		//iframe hack for file uploads fails with application/json		
+		
+		if(!\GO\Base\Util\Http::isAjaxRequest(false) || \GO\Base\Util\Http::isMultipartRequest()){
+			header('Content-Type: text/html; charset=UTF-8');
+		}else
+		{
+			header('Content-Type: application/json; charset=UTF-8');
+		}
+		
+			
+		foreach(\GO::config()->extra_headers as $header){
+			header($header);
+		}
+			
+			
+	}
+	
 }
