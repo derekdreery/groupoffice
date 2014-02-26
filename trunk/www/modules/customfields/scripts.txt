@@ -10,7 +10,6 @@ modules/customfields/TreeSelectOptions.js
 modules/customfields/ImportDialog.js
 modules/customfields/DataTypes.js
 modules/customfields/MainPanel.js
-modules/customfields/BulkEditDialog.js
 modules/customfields/CategoryFormPanel.js
 modules/customfields/DisableCategoriesPanel.js
 modules/customfields/Functions.js

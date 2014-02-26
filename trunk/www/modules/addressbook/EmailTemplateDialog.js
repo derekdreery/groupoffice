@@ -273,16 +273,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 
 		if(GO.customfields){
 			autodata=[];
-//			if(GO.customfields.types["2"] && GO.customfields.types["2"].panels.length)
-//			{
-//				for(var i=0;i<GO.customfields.types["2"].panels.length;i++)
-//				{
-//					var p = GO.customfields.types["2"].panels[i];
-//					for(var c=0;c<p.customfields.length;c++){
-//						autodata.push(['{'+p.customfields[c].dataname+'}',p.customfields[c].name]);
-//					}
-//				}
-//			}
+
 			if(autodata.length){
 				items.push(new Ext.Panel({
 					autoScroll:true,
@@ -306,16 +297,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 			}
 
 			autodata=[];
-//			if(GO.customfields.types["GO_B"] && GO.customfields.types["3"].panels.length)
-//			{
-//				for(var i=0;i<GO.customfields.types["3"].panels.length;i++)
-//				{
-//					var p = GO.customfields.types["3"].panels[i];
-//					for(var c=0;c<p.customfields.length;c++){
-//						autodata.push(['{'+p.customfields[c].dataname+'}',p.customfields[c].name]);
-//					}
-//				}
-//			}
+
 			if(autodata.length){
 				items.push(new Ext.Panel({
 					autoScroll:true,
@@ -340,16 +322,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 			
 			
 			autodata=[];
-//			if(GO.customfields.types["8"] && GO.customfields.types["8"].panels.length)
-//			{
-//				for(var i=0;i<GO.customfields.types["8"].panels.length;i++)
-//				{
-//					var p = GO.customfields.types["8"].panels[i];
-//					for(var c=0;c<p.customfields.length;c++){
-//						autodata.push(['{user:'+p.customfields[c].dataname+'}',p.customfields[c].name]);
-//					}
-//				}
-//			}
+
 			if(autodata.length){
 				items.push(new Ext.Panel({
 					autoScroll:true,

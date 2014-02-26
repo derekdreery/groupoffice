@@ -164,27 +164,7 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 			}]
 		});
 
-		//		if(GO.customfields && GO.customfields.types["1"])
-		//		{
-		//			if(GO.customfields.types["1"].panels.length > 0)
-		//			{
-		//				var cfFieldset = new Ext.form.FieldSet({
-		//					autoHeight:true,
-		//					title:GO.customfields.lang.customfields
-		//				});
-		//				for(var i=0;i<GO.customfields.types["1"].panels.length;i++)
-		//				{
-		//					cfFieldset.add({
-		//						xtype:'checkbox',
-		//						name:'fields[cf_category_'+GO.customfields.types["1"].panels[i].category_id+']',
-		//						hideLabel: true,
-		//						boxLabel:GO.customfields.types["1"].panels[i].title
-		//					});
-		//				}
-		//				this.propertiesPanel.add(cfFieldset);
-		//			}
-		//		}
-		//	
+
 		var items = [this.propertiesPanel];
 
 		this.groupAdminsPanel = new GO.base.model.multiselect.panel({
