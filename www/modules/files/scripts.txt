@@ -8,7 +8,6 @@ modules/files/ThumbsPanel.js
 modules/files/SaveAsDialog.js
 modules/files/VersionsGrid.js
 modules/files/NewFolderDialog.js
-modules/files/UploadDialog.js
 modules/files/SelectFile.js
 modules/files/SelectFolder.js
 modules/files/CustomField.js

@@ -9,6 +9,10 @@ class File extends \GO\Customfields\Customfieldtype\AbstractCustomfieldtype{
 		return 'File';
 	}
 	
+	public function fieldSql(){
+		return "VARCHAR(255) NOT NULL default ''";
+	}
+	
 	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
 		$html="";
 		if(!empty($attributes[$key])) {

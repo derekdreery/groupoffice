@@ -1,4 +1,4 @@
-GO.customfields.nonGridTypes = ['GO_Customfields_Customfieldtype_Textarea','GO_Customfields_Customfieldtype_Html', 'GO_Customfields_Customfieldtype_Header', 'GO_Customfields_Customfieldtype_Infotext'];
+GO.customfields.nonGridTypes = ['GO\\Customfields\\Customfieldtype\\Textarea','GO\\Customfields\\Customfieldtype\\Html', 'GO\\Customfields\\Customfieldtype\\Header', 'GO\\Customfields\\Customfieldtype\\Infotext'];
 
 GO.customfields.addColumns=function(link_type, fields){	
 	if(GO.customfields.columns[link_type])
@@ -194,7 +194,7 @@ GO.customfields.displayPanelTemplate =
 '<td>{name}:</td>'+
 
 '<td'+
-'<tpl if="datatype && datatype==\'GO_Customfields_Customfieldtype_Number\'">'+
+'<tpl if="datatype && datatype==\'GO\\Customfields\\Customfieldtype\\Number\'">'+
 	' style="text-align:right;"'+
 '</tpl>'+
 '>{value}</td>'+

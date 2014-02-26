@@ -106,7 +106,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		if (!GO.util.empty(config.tasklist_id))
 			params.tasklist_id=config.tasklist_id;
 		
-		if (config.link_config && config.link_config.model_name=="GO_Projects_Model_Project")
+		if (config.link_config && config.link_config.model_name=="GO\\Projects\\Model\\Project")
 			params.project_id=config.link_config.model_id;	
 		
 		// this.selectTaskList.container.up('div.x-form-item').setDisplayed(false);
@@ -127,7 +127,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				this.selectTaskList.setRemoteText(action.result.remoteComboTexts.tasklist_id);
 				
 				if(this.selectProject){
-					if(config.link_config && config.link_config.model_name=="GO_Projects_Model_Project"){					
+					if(config.link_config && config.link_config.model_name=="GO\\Projects\\Model\\Project"){					
 						this.selectProject.setValue(config.link_config.model_id);
 						this.selectProject.setRemoteText(config.link_config.text);
 					}else
@@ -614,11 +614,11 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		var items = [propertiesPanel, this.recurrencePanel, optionsPanel];
 
 
-		if(GO.customfields && GO.customfields.types["GO_Tasks_Model_Task"])
+		if(GO.customfields && GO.customfields.types["GO\\Tasks\\Model\\Task"])
 		{
-			for(var i=0;i<GO.customfields.types["GO_Tasks_Model_Task"].panels.length;i++)
+			for(var i=0;i<GO.customfields.types["GO\\Tasks\\Model\\Task"].panels.length;i++)
 			{
-				items.push(GO.customfields.types["GO_Tasks_Model_Task"].panels[i]);
+				items.push(GO.customfields.types["GO\\Tasks\\Model\\Task"].panels[i]);
 			}
 		}
 		this.tabPanel = new Ext.TabPanel({
