@@ -127,11 +127,11 @@ class DbStore extends AbstractStore {
 	 * @param array $storeParams the $_POST params to set to this store @see setStoreParams()
 	 * @param \GO\Base\Db\FindParams $findParams extra findParams to be added to the store
 	 */
-	public function __construct($modelClass, $columnModel, $requestParams, $findParams = null) {
+	public function __construct($modelClass, $columnModel, $requestParams=null, $findParams = null) {
 
 		$this->_modelClass = $modelClass;
 		$this->_columnModel = $columnModel;
-		$this->_requestParams = $requestParams;
+		$this->_requestParams = isset($requestParams) ? $requestParams : $_REQUEST;
 		//$this->setStoreParams($requestParams);
 		if ($findParams instanceof \GO\Base\Db\FindParams)
 			$this->_extraFindParams = $findParams;

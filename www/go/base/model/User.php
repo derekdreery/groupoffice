@@ -75,6 +75,8 @@
 
 namespace GO\Base\Model;
 
+use GO;
+
 
 class User extends \GO\Base\Db\ActiveRecord {
   
@@ -101,7 +103,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return User 
+	 * @return GO\Base\Model\User 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -129,7 +131,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 		$user->addToGroups($groups);	
 		
 		foreach($modulePermissionLevels as $module=>$permissionLevel){
-			\GO::modules()->$module->acl->addUser($user->id, $permissionLevel);
+			GO::modules()->$module->acl->addUser($user->id, $permissionLevel);
 		}
 		
 		$user->checkDefaultModels();
@@ -165,7 +167,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	protected function getLocalizedName() {
-		return \GO::t('strUser');
+		return GO::t('strUser');
 	}
 
 	public function customfieldsModel() {
@@ -190,7 +192,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 	
 	public function attributeLabels() {
 		$labels = parent::attributeLabels();
-		$labels['passwordConfirm']=\GO::t("passwordConfirm");
+		$labels['passwordConfirm']=GO::t("passwordConfirm");
 		return $labels;
 	}
 	
@@ -237,7 +239,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 	}
 
 	private function _maxUsersReached() {
-		return \GO::config()->max_users > 0 && $this->count() >= \GO::config()->max_users;
+		return GO::config()->max_users > 0 && $this->count() >= GO::config()->max_users;
 	}
 
         /**
@@ -246,11 +248,11 @@ class User extends \GO\Base\Db\ActiveRecord {
 	 * @return User itself for chaining eg. $user->calculatedDiskUsage()->save()
 	 */
 	public function calculatedDiskUsage($bytes = false) {
-		if (\GO::modules()->isInstalled('files')) {
+		if (GO::modules()->isInstalled('files')) {
 			if (!$bytes) { //recalculated
 				$fp = \GO\Base\Db\FindParams::newInstance()->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('user_id', $this->id));
 				$sumFilesize = Grouped::model()->load('GO\Files\Model\File', 'user_id', 'SUM(size) as total_size', $fp)->fetch();
-				//\GO::debug($sumFilesize->total_size);
+				//GO::debug($sumFilesize->total_size);
 				if ($sumFilesize)
 					$this->disk_usage = $sumFilesize->total_size;
 			} else {
@@ -272,33 +274,33 @@ class User extends \GO\Base\Db\ActiveRecord {
 	public function validate() {
 		
 		if($this->max_rows_list > 250)
-				$this->setValidationError('max_rows_list', \GO::t('maxRowslistTooHigh'));
+				$this->setValidationError('max_rows_list', GO::t('maxRowslistTooHigh'));
 		
 		if($this->isModified('password') && isset($this->passwordConfirm) && $this->passwordConfirm!=$this->password){
-			$this->setValidationError('passwordConfirm', \GO::t('passwordMatchError'));
+			$this->setValidationError('passwordConfirm', GO::t('passwordMatchError'));
 		}
 		
-		if($this->isModified('disk_quota') && \GO::user()->getModulePermissionLevel('users') < Acl::MANAGE_PERMISSION)
+		if($this->isModified('disk_quota') && GO::user()->getModulePermissionLevel('users') < Acl::MANAGE_PERMISSION)
 			$this->setValidationError('disk_quota', 'Only managers of the "users"  module may modify disk quota');
 		
-		if(\GO::config()->password_validate && $this->isModified('password')){
+		if(GO::config()->password_validate && $this->isModified('password')){
 			if(!\GO\Base\Util\Validate::strongPassword($this->password)){
 				$this->setValidationError('password', \GO\Base\Util\Validate::getPasswordErrorString($this->password));
 			}
 		}
 
 		if ($this->isNew && $this->_maxUsersReached())				
-			$this->setValidationError('form', \GO::t('max_users_reached', 'users'));
+			$this->setValidationError('form', GO::t('max_users_reached', 'users'));
 			
-		if (!\GO::config()->allow_duplicate_email) {
+		if (!GO::config()->allow_duplicate_email) {
 			$existing = $this->findSingleByAttribute('email', $this->email);
 			if (($this->isNew && $existing) || $existing && $existing->id != $this->id )
-				$this->setValidationError('email', \GO::t('error_email_exists', 'users'));
+				$this->setValidationError('email', GO::t('error_email_exists', 'users'));
 		}
 
 		$existing = $this->findSingleByAttribute('username', $this->username);
 		if (($this->isNew && $existing) || $existing && $existing->id != $this->id )
-			$this->setValidationError('username', \GO::t('error_username_exists', 'users'));
+			$this->setValidationError('username', GO::t('error_username_exists', 'users'));
 
 		if (empty($this->password) && $this->isNew) {
 			$this->password = \GO\Base\Util\String::randomPassword();
@@ -333,7 +335,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 			$this->password=crypt($this->password);
 			$this->password_type='crypt';
 			
-			$this->digest = md5($this->username.":".\GO::config()->product_name.":".$this->_unencryptedPassword);
+			$this->digest = md5($this->username.":".GO::config()->product_name.":".$this->_unencryptedPassword);
 		}
 		
 		return parent::beforeSave();
@@ -353,14 +355,14 @@ class User extends \GO\Base\Db\ActiveRecord {
 	protected function afterSave($wasNew) {
 
 		if($wasNew){
-			$everyoneGroup = Group::model()->findByPk(\GO::config()->group_everyone);		
+			$everyoneGroup = Group::model()->findByPk(GO::config()->group_everyone);		
 			$everyoneGroup->addUser($this->id);			
 			
 			$this->acl->user_id=$this->id;
 			$this->acl->save();
 			
-			if(!empty(\GO::config()->register_user_groups)){
-				$groups = explode(',',\GO::config()->register_user_groups);
+			if(!empty(GO::config()->register_user_groups)){
+				$groups = explode(',',GO::config()->register_user_groups);
 				foreach($groups as $groupName){
 					$group = Group::model()->findSingleByAttribute('name', trim($groupName));
 					if($group)
@@ -374,19 +376,19 @@ class User extends \GO\Base\Db\ActiveRecord {
 		if(!$this->skip_contact_update && ($this->isNew || $this->isModified(array('first_name','middle_name','last_name','email'))))
 			$this->createContact();
 		
-		//remove cache for \GO::user() calls.
+		//remove cache for GO::user() calls.
 		$cacheKey = 'GO\Base\Model\User:'.$this->id;
-		\GO::cache()->delete($cacheKey);
+		GO::cache()->delete($cacheKey);
 		
 		//		deprecated. It's inefficient and can be done with listeners
-		//\GO::modules()->callModuleMethod('saveUser', array(&$this, $wasNew));
+		//GO::modules()->callModuleMethod('saveUser', array(&$this, $wasNew));
 
 		return parent::afterSave($wasNew);
 	}
 	
 	private function _setVisibility(){
-		if(!empty(\GO::config()->register_visible_user_groups)){
-			$groups = explode(',',\GO::config()->register_visible_user_groups);
+		if(!empty(GO::config()->register_visible_user_groups)){
+			$groups = explode(',',GO::config()->register_visible_user_groups);
 			foreach($groups as $groupName){
 				$group = Group::model()->findSingleByAttribute('name', trim($groupName));
 				if($group)
@@ -399,19 +401,19 @@ class User extends \GO\Base\Db\ActiveRecord {
 	 * Makes shure that this model's user has all the default models it should have.
 	 */
 	public function checkDefaultModels(){
-		$oldIgnore = \GO::setIgnoreAclPermissions(true);
+		$oldIgnore = GO::setIgnoreAclPermissions(true);
 	  $defaultModels = AbstractUserDefaultModel::getAllUserDefaultModels($this->id);	
 		foreach($defaultModels as $model){
 			$model->getDefault($this);
 		}		
-		\GO::setIgnoreAclPermissions($oldIgnore);
+		GO::setIgnoreAclPermissions($oldIgnore);
 	}
 	
 	protected function beforeDelete() {
 		if($this->id==1){
-			throw new \Exception(\GO::t('deletePrimaryAdmin','users'));
-		}elseif($this->id==\GO::user()->id){
-			throw new \Exception(\GO::t('deleteYourself','users'));			
+			throw new \Exception(GO::t('deletePrimaryAdmin','users'));
+		}elseif($this->id==GO::user()->id){
+			throw new \Exception(GO::t('deleteYourself','users'));			
 		}else
 		{
 			return parent::beforeDelete();
@@ -435,7 +437,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 			$model->deleteByAttribute('user_id',$this->id);
 		}
 //		deprecated. It's inefficient and can be done with listeners
-//		\GO::modules()->callModuleMethod('deleteUser', array(&$this));
+//		GO::modules()->callModuleMethod('deleteUser', array(&$this));
 
 		return parent::afterDelete();
 	}
@@ -449,8 +451,8 @@ class User extends \GO\Base\Db\ActiveRecord {
 	public function getName($sort=false) {
 		
 		if(!$sort){
-			if(\GO::user()){
-				$sort = \GO::user()->sort_name;
+			if(GO::user()){
+				$sort = GO::user()->sort_name;
 			}else
 			{
 				$sort = 'first_name';
@@ -482,10 +484,10 @@ class User extends \GO\Base\Db\ActiveRecord {
 	 * @return Array 
 	 */
 	public static function getGroupIds($userId) {
-		$user = \GO::user();
+		$user = GO::user();
 		if ($user && $userId == $user->id) {
-			if (!isset(\GO::session()->values['user_groups'])) {
-				\GO::session()->values['user_groups'] = array();
+			if (!isset(GO::session()->values['user_groups'])) {
+				GO::session()->values['user_groups'] = array();
 
 				$stmt= UserGroup::model()->find(
 								\GO\Base\Db\FindParams::newInstance()
@@ -494,11 +496,11 @@ class User extends \GO\Base\Db\ActiveRecord {
 												->addCondition("user_id", $userId))
 								);
 				while ($r = $stmt->fetch()) {
-					\GO::session()->values['user_groups'][] = $r->group_id;
+					GO::session()->values['user_groups'][] = $r->group_id;
 				}
 			}
 		
-			return \GO::session()->values['user_groups'];
+			return GO::session()->values['user_groups'];
 		} else {
 			$ids = array();
 			$stmt= UserGroup::model()->find(
@@ -516,6 +518,49 @@ class User extends \GO\Base\Db\ActiveRecord {
 		}
 	}
 	
+	/**
+	 * Get the default group ID's for a new user.
+	 * 
+	 * @return array
+	 */
+	public static function getDefaultGroupIds(){
+		$groupIds=array();
+		if(!empty(GO::config()->register_user_groups)){
+			$groups = explode(',',GO::config()->register_user_groups);
+			foreach($groups as $groupName){
+				$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', trim($groupName));
+				$groupIds[]=$group->id;
+			}
+		}
+
+		if(!in_array(GO::config()->group_everyone, $groupIds))
+		{
+			$groupIds[]=GO::config()->group_everyone;
+		}
+		
+		return $groupIds;
+	}
+	
+	
+	/**
+	 * Get the default group ID's for a new user.
+	 * 
+	 * @return array
+	 */
+	public static function getDefaultVisibleGroupIds(){
+		$groupIds=array();
+		if(!empty(GO::config()->register_visible_user_groups)){
+			$groups = explode(',',GO::config()->register_visible_user_groups);
+			foreach($groups as $groupName){
+				$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', trim($groupName));
+				$groupIds[]=$group->id;
+			}
+		}
+		
+		return $groupIds;
+	}
+	
+	
 	
 	
 	/**
@@ -524,7 +569,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 	 * @return boolean 
 	 */
 	public function isAdmin() {
-		return in_array(\GO::config()->group_root, User::getGroupIds($this->id));
+		return in_array(GO::config()->group_root, User::getGroupIds($this->id));
 	}
 
 	
@@ -535,8 +580,8 @@ class User extends \GO\Base\Db\ActiveRecord {
 	 * @return int 
 	 */
 	public function getModulePermissionLevel($moduleId) {
-		if (\GO::modules()->$moduleId)
-			return \GO::modules()->$moduleId->permissionLevel;
+		if (GO::modules()->$moduleId)
+			return GO::modules()->$moduleId->permissionLevel;
 		else
 			return false;
 	}
@@ -568,13 +613,13 @@ class User extends \GO\Base\Db\ActiveRecord {
 				return false;
 			} else {				
 				$this->password=$password;
-				$oldIgnore=\GO::setIgnoreAclPermissions(true);
+				$oldIgnore=GO::setIgnoreAclPermissions(true);
 				$this->save();				
-				\GO::setIgnoreAclPermissions($oldIgnore);
+				GO::setIgnoreAclPermissions($oldIgnore);
 			}
 		}
 		
-		$digest = md5($this->username.":".\GO::config()->product_name.":".$password);
+		$digest = md5($this->username.":".GO::config()->product_name.":".$password);
 		if($digest != $this->digest)
 		{
 			$this->digest=$digest;
@@ -587,19 +632,19 @@ class User extends \GO\Base\Db\ActiveRecord {
 	public function defaultAttributes() {
 		$attr = parent::defaultAttributes();
 		
-		$attr['language']=\GO::config()->language;
-		$attr['date_format']=\GO::config()->default_date_format;
-		$attr['date_separator']=\GO::config()->default_date_separator;
-		$attr['theme']=\GO::config()->theme;
-		$attr['timezone']=\GO::config()->default_timezone;
-		$attr['first_weekday']=\GO::config()->default_first_weekday;
-		$attr['currency']=\GO::config()->default_currency;
-		$attr['decimal_separator']=\GO::config()->default_decimal_separator;
-		$attr['thousands_separator']=\GO::config()->default_thousands_separator;
-		$attr['time_format']=\GO::config()->default_time_format;
-		$attr['sort_name']=\GO::config()->default_sort_name;
-		$attr['max_rows_list']=\GO::config()->default_max_rows_list;
-		$attr['disk_quota']=\GO::config()->default_diskquota;
+		$attr['language']=GO::config()->language;
+		$attr['date_format']=GO::config()->default_date_format;
+		$attr['date_separator']=GO::config()->default_date_separator;
+		$attr['theme']=GO::config()->theme;
+		$attr['timezone']=GO::config()->default_timezone;
+		$attr['first_weekday']=GO::config()->default_first_weekday;
+		$attr['currency']=GO::config()->default_currency;
+		$attr['decimal_separator']=GO::config()->default_decimal_separator;
+		$attr['thousands_separator']=GO::config()->default_thousands_separator;
+		$attr['time_format']=GO::config()->default_time_format;
+		$attr['sort_name']=GO::config()->default_sort_name;
+		$attr['max_rows_list']=GO::config()->default_max_rows_list;
+		$attr['disk_quota']=GO::config()->default_diskquota;
 		
 		
 		return $attr;
@@ -612,7 +657,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 	 * @return \GO\Addressbook\Model\Contact 
 	 */
 	public function createContact(){
-		if (\GO::modules()->isInstalled("addressbook")) {
+		if (GO::modules()->isInstalled("addressbook")) {
 			
 			if(!empty($this->contact_id)){
 				//this is for old databases
@@ -689,27 +734,27 @@ class User extends \GO\Base\Db\ActiveRecord {
 	 */
 	public function sendResetPasswordMail($siteTitle=false,$url=false,$fromName=false,$fromEmail=false){
 		$message = \GO\Base\Mail\Message::newInstance();
-		$message->setSubject(\GO::t('lost_password_subject','base','lostpassword'));
+		$message->setSubject(GO::t('lost_password_subject','base','lostpassword'));
 		
 		if(!$siteTitle)
-			$siteTitle=\GO::config()->title;
+			$siteTitle=GO::config()->title;
 		
 		if(!$url){
-			$url=\GO::url("auth/resetPassword", array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()),false);
-//			$url = \GO::config()->full_url."index.php".$url;		
+			$url=GO::url("auth/resetPassword", array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()),false);
+//			$url = GO::config()->full_url."index.php".$url;		
 		}else{
 			$url=\GO\Base\Util\Http::addParamsToUrl($url, array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()),false);
 		}
 		//$url="<a href='".$url."'>".$url."</a>";
 		
 		if(!$fromName)
-			$fromName = \GO::config()->title;
+			$fromName = GO::config()->title;
 		
 		if(!$fromEmail){
-			$fromEmail = \GO::config()->webmaster_email;
+			$fromEmail = GO::config()->webmaster_email;
 		}
 
-		$emailBody = \GO::t('lost_password_body','base','lostpassword');
+		$emailBody = GO::t('lost_password_body','base','lostpassword');
 		$emailBody = sprintf($emailBody,$this->contact->salutation, $siteTitle, $this->username, $url);
 		
 		$message->setBody($emailBody);
