@@ -92,11 +92,14 @@ abstract class AbstractController extends \GO\Base\Observable {
 		
 		
 
-		if(!headers_sent())
-			$this->headers();
+		
 			
 		
 		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+			
+			if(!headers_sent())
+				$this->headers();
+			
 			\GO::debug("OPTIONS request");
 			exit(0);
 		}
@@ -257,8 +260,8 @@ abstract class AbstractController extends \GO\Base\Observable {
 	 */
 	protected function render($viewName, $data=array()){
 		
-//		if(!headers_sent())
-//			$this->headers();
+		if(!headers_sent())
+			$this->headers();
 		
 		$viewPath = \GO::config()->root_path.'views/'.\GO::viewName().'/';
 		

@@ -2749,41 +2749,81 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		return $this->_forceSave || $this->isNew || $this->isModified();// || ($this->customfieldsRecord  !$this->customfieldsRecord->isModified());
 	}
 	
-	
-	private function _processFileColumns(){
+	/**
+	 * We need to get the modified file columns before save because we need the ID field
+	 * for the filePathTemplate.
+	 */
+	private function _getModifiedFileColumns(){
 		
-		$mofified = $this->getModifiedAttributes();
-		
-		foreach($mofified as $column=>$oldValue){
+		$cols = array();
+		$modified = $this->getModifiedAttributes();
+		foreach($modified as $column=>$oldValue){
 			if($this->columns[$column]['gotype']=='file'){
+				$cols[$column]=$this->_attributes[$column];
 				
-				$newValue = $this->$column;
-				
-				if($oldValue=='' && empty($this->$column)){
-					
-					//unset of file column
-					$file = new \GO\Base\Fs\File(GO::config()->file_storage_path.$oldValue);
-					$file->delete();
-				}elseif($newValue instanceof \GO\Base\Fs\File)
-				{
-					if(!isset($this->columns[$column]['filePathTemplate'])){
-						throw new \Exception('For file columns you must set a filePathTemplate');
-					}
-					$destination = $this->columns[$column]['filePathTemplate'];
-					foreach($this->_attributes as $key=>$value){
-						$destination = str_replace('{'.$key.'}', $value, $destination);
-					}
-					$destination = str_replace('{extension}', $this->$column->extension(), $destination);
+				$this->resetAttribute($column);
+			}
+		}
+		
+		return $cols;
+	}
+	
 
-					$destinationFile = new \GO\Base\Fs\File(GO::config()->file_storage_path.$destination);
-					$destinationFolder = $destinationFile->parent();					
-					$destinationFolder->create();
+	private function _processFileColumns($cols){
+		
 					
-					$newValue->move($destinationFolder, $destinationFile->name());
-					$this->$column=$destinationFile->stripFileStoragePath();
-				}else
-				{
-					throw new \Exception("Column $column must be an instance of GO\Base\Fs\File");
+		foreach($cols as $column=>$newValue){
+				
+				$oldValue = $this->_attributes[$column];
+					
+			if($oldValue!='' && empty($newValue)){
+
+				//unset of file column
+				$file = new \GO\Base\Fs\File(GO::config()->file_storage_path.$oldValue);
+				$file->delete();
+
+				$this->$column="";
+			}elseif($newValue instanceof \GO\Base\Fs\File)
+			{
+				if(!isset($this->columns[$column]['filePathTemplate'])){
+					throw new \Exception('For file columns you must set a filePathTemplate');
+				}
+				$destination = $this->columns[$column]['filePathTemplate'];
+				foreach($this->_attributes as $key=>$value){
+					$destination = str_replace('{'.$key.'}', $value, $destination);
+				}
+				$destination = str_replace('{extension}', $newValue->extension(), $destination);
+
+				$destinationFile = new \GO\Base\Fs\File(GO::config()->file_storage_path.$destination);
+				$destinationFolder = $destinationFile->parent();					
+				$destinationFolder->create();
+
+				$newValue->move($destinationFolder, $destinationFile->name());
+				$this->$column=$destinationFile->stripFileStoragePath();
+
+
+			}else
+			{
+				throw new \Exception("Column $column must be an instance of GO\Base\Fs\File. ".var_export($newValue, true));
+			}
+		}		
+		
+		return !empty($cols);
+	}
+	
+	private function _duplicateFileColumns(){
+		
+		
+		foreach($this->columns as $column=>$attr){
+			if($attr['gotype']=='file'){
+				if(!empty($this->_attributes[$column])){
+				
+					$file = new \GO\Base\Fs\File(GO::config()->file_storage_path.$this->_attributes[$column]);
+					
+					$tmpFile = \GO\Base\Fs\File::tempFile('', $file->extension());
+										
+					$file->copy($tmpFile->parent(), $tmpFile->name());
+					$this->$column=$tmpFile->stripFileStoragePath();
 				}
 			}
 		}
@@ -2798,11 +2838,15 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 */
 	public function getFileColumnUrl($column){
 		
+		$value= $this->_attributes[$column];
+		if(empty($value))
+			return false;
+		
 		if(substr($this->logo,0,7)=='public/'){	
-			return GO::url('core/downloadPublicFile',array('path'=>substr($this->_attributes[$column],7)));
+			return GO::url('core/downloadPublicFile',array('path'=>substr($value,7)));
 		}else
 		{
-			return GO::url('files/file/download',array('path'=>substr($this->_attributes[$column],7)));
+			return GO::url('files/file/download',array('path'=>substr($value,7)));
 		}
 	
 	}
@@ -2864,10 +2908,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		 */
 		$this->fireEvent('beforesave',array(&$this));
 
-
-		$this->_processFileColumns();
-
-
+		$fileColumns = $this->_getModifiedFileColumns();
+		
 		if($this->isNew){		
 			
 			//automatically set sort order column
@@ -2907,12 +2949,14 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 			$this->setIsNew(false);
 			
-			if($this->afterDbInsert()){
+			if($this->_processFileColumns($fileColumns) || $this->afterDbInsert()){
 				$this->_dbUpdate();
 			}
 		}else
 		{
 			$wasNew=false;
+			
+			$this->_processFileColumns($fileColumns);
 			
 			
 			if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
@@ -4323,8 +4367,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			unset($cfAtt['model_id']);
 			$copy->customFieldsRecord->setAttributes($cfAtt, false);
 		}
+		
+		$this->_duplicateFileColumns();
 
 		if($save){
+			
 			if(!$copy->save($ignoreAclPermissions)){
 				throw new \Exception("Could not save duplicate: ".implode("\n",$copy->getValidationErrors()));
 							
