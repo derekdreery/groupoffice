@@ -547,17 +547,26 @@ class DbStore extends AbstractStore {
 	 * @param string $selectClassName Name of the related model (eg. \GO\Notes\Model\Category)
 	 * @param string $foreignKey column name to match the related models PK (eg. category_id)
 	 * @param boolean $checkPermissions check Permission for item defaults to true
+	 * @param string $prefix a prefix for the request param that can change every store load
+	 * @param array $extraPks valid pks of models not in the database
+	 * 
+	 * @return \GO\Base\Component\MultiSelectGrid
 	 */
-	public function multiSelect($requestParamName, $selectClassName, $foreignKey, $checkPermissions = true) {
+	public function multiSelect($requestParamName, $selectClassName, $foreignKey, $checkPermissions = null,$prefix="",$extraPks=array()) {
 		$this->_multiSel = new \GO\Base\Component\MultiSelectGrid(
 										$requestParamName,
 										$selectClassName,
 										$this,
 										$this->_requestParams,
-										$checkPermissions
+										$checkPermissions,
+										$prefix,
+										$extraPks
 		);
 		$this->_multiSel->addSelectedToFindCriteria($this->_extraFindParams, $foreignKey);
 		$this->_multiSel->setStoreTitle();
+		
+		
+		return $this->_multiSel;
 
 
 	}
@@ -565,11 +574,18 @@ class DbStore extends AbstractStore {
 	/**
 	 * Call this in the selectable stores that effect other grids by selecting values
 	 * @param string $requestParamName
+	 * @param boolean $checkPermissions check Permission for item defaults to true
+	 * @param string $prefix a prefix for the request param that can change every store load
+	 * @param array $extraPks valid pks of models not in the database
+	 * 
+	 * @return \GO\Base\Component\MultiSelectGrid
 	 */
-	public function multiSelectable($requestParamName) {
-		$this->_multiSel = new \GO\Base\Component\MultiSelectGrid($requestParamName, $this->_modelClass, $this, $this->_requestParams);
+	public function multiSelectable($requestParamName,$checkPermissions = null,$prefix="",$extraPks=array()) {
+		$this->_multiSel = new \GO\Base\Component\MultiSelectGrid($requestParamName, $this->_modelClass, $this, $this->_requestParams, $checkPermissions,$prefix,$extraPks);
 		$this->_multiSel->setFindParamsForDefaultSelection($this->_extraFindParams);
 		$this->_multiSel->formatCheckedColumn();
+		
+		return $this->_multiSel;
 	}
 
 	/**

@@ -49,7 +49,7 @@ class MultiSelectGrid {
 	 * @param array $requestParams The request parameters
 	 * @param boolean $checkPermission  Enable permission checking on this model. This makes sure that only 
 	 * @param string $prefix a prefix for the request param that can change every store load
-	 * @param array $extraPks valid pks of models not in hte database
+	 * @param array $extraPks valid pks of models not in the database
 	 * readbable addressbooks are used with contacts for example.
 	 * This will disable acl checking for the contacts query which improves performance.
 	 */
@@ -70,6 +70,7 @@ class MultiSelectGrid {
 		if(empty($requestParams['noMultiSelectFilter']))
 			$this->_setSelectedIds($requestParams);
 	}
+	
 	
 	/**
 	 * Call this if you want the first item or all items to be selected by default.
@@ -118,7 +119,7 @@ class MultiSelectGrid {
 		//in the addSelectedToFindCriteria() function. The permissions are checked by 
 		//the following query.
 		
-		if($this->_checkPermissions && empty($this->selectedIds)){
+		if($this->_checkPermissions && $this->selectedIds==""){
 			$stmt = \GO::getModel($this->_modelName)->find();
 			foreach($stmt as $model){
 				$this->selectedIds[]=$model->pk;
