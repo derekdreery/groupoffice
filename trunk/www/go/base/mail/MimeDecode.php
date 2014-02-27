@@ -246,7 +246,7 @@ class MimeDecode
      */
     function _decode($headers, $body, $default_ctype = 'text/plain')
     {
-        $return = new stdClass;
+        $return = new \stdClass;
         $return->headers = array();
         $headers = $this->_parseHeaders($headers);
 
