@@ -2756,12 +2756,17 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	private function _getModifiedFileColumns(){
 		
 		$cols = array();
-		$modified = $this->getModifiedAttributes();
-		foreach($modified as $column=>$oldValue){
+		$modified = $this->isNew ? $this->columns : $this->getModifiedAttributes();
+		foreach($modified as $column=>$void){
 			if($this->columns[$column]['gotype']=='file'){
 				$cols[$column]=$this->_attributes[$column];
 				
-				$this->resetAttribute($column);
+				if(!$this->isNew){
+					$this->resetAttribute($column);
+				}else
+				{
+					$this->_attributes[$column]="";
+				}
 			}
 		}
 		
@@ -2774,15 +2779,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					
 		foreach($cols as $column=>$newValue){
 				
-				$oldValue = $this->_attributes[$column];
+			$oldValue = $this->_attributes[$column];
 					
-			if($oldValue!='' && empty($newValue)){
+			if(empty($newValue)){
 
 				//unset of file column
-				$file = new \GO\Base\Fs\File(GO::config()->file_storage_path.$oldValue);
-				$file->delete();
-
-				$this->$column="";
+				if(!empty($oldValue)){
+					$file = new \GO\Base\Fs\File(GO::config()->file_storage_path.$oldValue);
+					$file->delete();
+					$this->$column="";
+				}
 			}elseif($newValue instanceof \GO\Base\Fs\File)
 			{
 				if(!isset($this->columns[$column]['filePathTemplate'])){
@@ -2811,7 +2817,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		return !empty($cols);
 	}
 	
-	private function _duplicateFileColumns(){
+	private function _duplicateFileColumns(ActiveRecord $duplicate){
 		
 		
 		foreach($this->columns as $column=>$attr){
@@ -2823,7 +2829,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					$tmpFile = \GO\Base\Fs\File::tempFile('', $file->extension());
 										
 					$file->copy($tmpFile->parent(), $tmpFile->name());
-					$this->$column=$tmpFile->stripFileStoragePath();
+					
+					$duplicate->$column=$tmpFile;
 				}
 			}
 		}
@@ -4368,7 +4375,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			$copy->customFieldsRecord->setAttributes($cfAtt, false);
 		}
 		
-		$this->_duplicateFileColumns();
+		$this->_duplicateFileColumns($copy);
 
 		if($save){
 			
