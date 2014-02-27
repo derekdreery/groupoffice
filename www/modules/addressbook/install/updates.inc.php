@@ -434,3 +434,5 @@ $updates['201401031040'][]="ALTER TABLE `ab_contacts` ADD `last_email_time` int(
 $updates['201401061330'][]="ALTER TABLE `ab_contacts` DROP `last_email_time`;";
 
 $updates['201402211238'][]="ALTER TABLE  `ab_contacts` CHANGE  `photo`  `photo` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';";
+
+$updates['201402271100'][]="ALTER TABLE `ab_companies` CHANGE `photo` `photo` VARCHAR( 255 ) NOT NULL DEFAULT '';";
