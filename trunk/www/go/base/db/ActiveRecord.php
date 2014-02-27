@@ -345,7 +345,8 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * 'required'=>true, //Will be true automatically if field in database may not be null and doesn't have a default value
 	 * 'length'=><max length of the value>, //Autodetected from db
 	 * 'validator'=><a function to call to validate the value>, This may be an array: array("Class", "method", "error message")
-	 * 'gotype'=>'number|textfield|textarea|unixtimestamp|unixdate|user', //Autodetected from db as far as possible. See loadColumns()
+	 * 'gotype'=>'number|textfield|textarea|unixtimestamp|unixdate|user|file(GO\Base\Fs\File can be set).', //Autodetected from db as far as possible. See loadColumns()
+	 * 'filePathTemplate'=>'Only when gotype='file'. Eg. billing/templates/{id}.{extension}
 	 * 'decimals'=>2//only for gotype=number)
 	 * 'regex'=>'A preg_match expression for validation',
 	 * 'dbtype'=>'varchar' //mysql database type
