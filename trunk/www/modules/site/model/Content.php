@@ -56,16 +56,6 @@ class Content extends \GO\Base\Db\ActiveRecord{
 
 	
 	protected function afterLoad() {
-		
-		//load cf
-		if(!isset(self::$fields)){
-			$fields = \GO\Customfields\Model\Field::model()->findByModel('GO\Site\Model\Content', false);
-
-			foreach($fields as $field){
-				self::$fields[$field->name]= $field;
-			}
-		}
-		
 	
 		$this->_loadSlug();
 		
@@ -95,7 +85,21 @@ class Content extends \GO\Base\Db\ActiveRecord{
 		}
 	}
 	
+	private function _loadCf(){
+			//load cf
+		if(!isset(self::$fields)){
+			$fields = \GO\Customfields\Model\Field::model()->findByModel('GO\Site\Model\Content', false);
+			self::$fields=array();
+			foreach($fields as $field){
+				self::$fields[$field->name]= $field;
+			}
+		}		
+	}
+	
 	public function __get($name) {
+		
+		$this->_loadCf();
+		
 		if(isset(self::$fields[$name])){
 			return $this->getCustomFieldValueByName($name);
 		}  else {
@@ -105,6 +109,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	}
 	
 	public function __isset($name) {
+		$this->_loadCf();
 		if(isset(self::$fields[$name])){
 			$var= $this->getCustomFieldValueByName($name);
 			return isset($var);
@@ -336,7 +341,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 		 
 		 parent::setAttribute($name, $value, $format);
 		 
-		 if($name=='parent_id'){
+		 if($name=='parent_id' && !$this->loadingFromDatabase){
 			 $this->_loadSlug();
 		 }
 		 
