@@ -111,7 +111,7 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 		}
 	},
 	toggleActionDate : function(modelName) {
-		var withActionDate = modelName == 'GO_Addressbook_Model_Contact';
+		var withActionDate = modelName == 'GO\\Addressbook\\Model\\Contact';
 		this.actionDateField.setDisabled(!withActionDate);
 		this.actionDateField.setVisible(withActionDate);
 	},
