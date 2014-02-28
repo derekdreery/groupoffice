@@ -92,13 +92,12 @@ class Validate {
 	}
 	
 	/**
-	 * Check for the given country if it is an EU country or not.
+	 * Return array of uppercase European country codes. eg. NL, GB, DE
 	 * 
-	 * @param string $country eg. "NL" or "BE"
-	 * @return boolean  
+	 * @return array
 	 */
-	public static function isEUCountry($country){
-		return in_array(strtoupper($country), array(
+	public static function getEUCountries(){
+		return array(
 			'AT',
 			'BE',
 			'BG',
@@ -127,7 +126,17 @@ class Validate {
 			'ES',
 			'SE',
 			'GB'
-		));
+		);
+	}
+	
+	/**
+	 * Check for the given country if it is an EU country or not.
+	 * 
+	 * @param string $country eg. "NL" or "BE"
+	 * @return boolean  
+	 */
+	public static function isEUCountry($country){
+		return in_array(strtoupper($country), self::getEUCountries());
 	}
 	
 	/**
