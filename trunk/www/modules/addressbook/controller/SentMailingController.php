@@ -205,10 +205,10 @@ class SentMailingController extends \GO\Base\Controller\AbstractModelController 
 			\GO::config()->mailing_messages_per_minute=30;
 
 		//Rate limit to 100 emails per-minute
-		$mailer->registerPlugin(new Swift_Plugins_ThrottlerPlugin(\GO::config()->mailing_messages_per_minute, Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE));
+		$mailer->registerPlugin(new \Swift_Plugins_ThrottlerPlugin(\GO::config()->mailing_messages_per_minute, \Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE));
 		
 		// Use AntiFlood to re-connect after 50 emails
-		$mailer->registerPlugin(new Swift_Plugins_AntiFloodPlugin(\GO::config()->mailing_messages_per_minute));
+		$mailer->registerPlugin(new \Swift_Plugins_AntiFloodPlugin(\GO::config()->mailing_messages_per_minute));
 
 		echo 'Sending a maximum of ' . \GO::config()->mailing_messages_per_minute . ' messages per minute' . "\n";
 

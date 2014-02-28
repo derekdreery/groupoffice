@@ -45,7 +45,7 @@ class SmimeMessage extends Message
    * @param string $body
    * @param string $contentType
    * @param string $charset
-   * @return Swift_Mime_Message
+   * @return \Swift_Mime_Message
    */
   public static function newInstance($subject = null, $body = null,
     $contentType = null, $charset = null)
@@ -204,8 +204,8 @@ class SmimeMessage extends Message
 	}
 	
   /**
-* Write this message to a {@link Swift_InputByteStream}.
-* @param Swift_InputByteStream $is
+* Write this message to a {@link \Swift_InputByteStream}.
+* @param \Swift_InputByteStream $is
 */
   public function toByteStream(\Swift_InputByteStream $is)
   {		

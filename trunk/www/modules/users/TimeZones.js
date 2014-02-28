@@ -187,7 +187,7 @@ GO.users.TimeZones=[
 ["America/St_Lucia"],
 ["America/St_Thomas"],
 ["America/St_Vincent"],
-["America/Swift_Current"],
+["America/\Swift_Current"],
 ["America/Tegucigalpa"],
 ["America/Thule"],
 ["America/Thunder_Bay"],

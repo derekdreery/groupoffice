@@ -27,7 +27,7 @@ class Mailer extends \Swift_Mailer{
 	/**
    * Create a new Mailer instance.
    * 
-	 * @var Swift_SmtpTransport $transport. 
+	 * @var \Swift_SmtpTransport $transport. 
 	 * Optionally supply a transport class. If omitted a Transport 
 	 * object will be created that uses the smtp settings from config.php
 	 * 

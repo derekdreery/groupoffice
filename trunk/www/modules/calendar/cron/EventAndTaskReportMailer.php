@@ -94,7 +94,7 @@ class EventAndTaskReportMailer extends \GO\Base\Cron\AbstractCron {
 										->addTo($user->email);
 
 		$message->setHtmlAlternateBody(nl2br($body));
-		$message->attach(Swift_Attachment::newInstance($pdf,$filename,'application/pdf'));
+		$message->attach(\Swift_Attachment::newInstance($pdf,$filename,'application/pdf'));
 		\GO::debug('CRON SEND MAIL TO: '.$user->email);
 		return \GO\Base\Mail\Mailer::newGoInstance()->send($message);
 	}
