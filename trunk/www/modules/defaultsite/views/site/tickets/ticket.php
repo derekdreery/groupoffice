@@ -1,10 +1,10 @@
-<?php Site::scripts()->registerCssFile(Site::file('css/ticket.css')); ?>
+<?php \Site::scripts()->registerCssFile(\Site::file('css/ticket.css')); ?>
 
 <div class="external-ticket-page ticket">
 	<div class="wrapper">
 		
 		<?php if(\GO::user()): ?>
-				&lt;&lt;&nbsp;<a id="back-to-overview-button" href="<?php echo Site::urlManager()->createUrl('tickets/externalpage/ticketlist'); ?>"><?php echo \GO::t('ticketBackToList','defaultsite'); ?></a>			
+				&lt;&lt;&nbsp;<a id="back-to-overview-button" href="<?php echo \Site::urlManager()->createUrl('tickets/externalpage/ticketlist'); ?>"><?php echo \GO::t('ticketBackToList','defaultsite'); ?></a>			
 		<?php endif; ?>
 		
 		<h2><?php echo \GO::t('ticket','defaultsite').' '. $ticket->ticket_number; ?></h2>
@@ -95,7 +95,7 @@
 					<?php if (!empty($message->attachments)): ?>
 						<span class="ticketmessage-files"><?php echo \GO::t('ticketFiles','defaultsite'); ?>:</span>
 							<?php foreach ($message->getFiles() as $file => $obj): ?>
-								<a target="_blank" href="<?php echo Site::urlManager()->createUrl('tickets/site/downloadAttachment',array('file'=>$obj->id,'ticket_number'=>$ticket->ticket_number,'ticket_verifier'=>$ticket->ticket_verifier)); ?>">
+								<a target="_blank" href="<?php echo \Site::urlManager()->createUrl('tickets/site/downloadAttachment',array('file'=>$obj->id,'ticket_number'=>$ticket->ticket_number,'ticket_verifier'=>$ticket->ticket_verifier)); ?>">
 									<?php echo $file; ?>
 								</a>
 							<?php endforeach; ?>
