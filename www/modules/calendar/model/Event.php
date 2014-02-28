@@ -2242,14 +2242,14 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
 		if($includeIcs){
 			$ics=$this->toICS("REPLY", $sendingParticipant, $recurrenceTime);				
-			$a = Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REPLY"');
-			$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+			$a = \Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REPLY"');
+			$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 			$a->setDisposition("inline");
 			$message->attach($a);
 			
 			//for outlook 2003 compatibility
-			$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
-			$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+			$a2 = \Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
+			$a2->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 			$message->attach($a2);
 		}
 //		}
@@ -2299,14 +2299,14 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				
 
 				$ics=$this->toICS("CANCEL");				
-				$a = Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="CANCEL"');
-				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$a = \Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="CANCEL"');
+				$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$a->setDisposition("inline");
 				$message->attach($a);
 				
 				//for outlook 2003 compatibility
-				$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
-				$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$a2 = \Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
+				$a2->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$message->attach($a2);
 				
 //			}else{
@@ -2414,14 +2414,14 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	//				}
 
 					$ics=$this->toICS("REQUEST");				
-					$a = Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REQUEST"');
-					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+					$a = \Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REQUEST"');
+					$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 					$a->setDisposition("inline");
 					$message->attach($a);
 
 					//for outlook 2003 compatibility
-					$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
-					$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+					$a2 = \Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
+					$a2->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 					$message->attach($a2);
 
 					if($participantEvent){

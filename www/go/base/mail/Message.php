@@ -174,7 +174,7 @@ class Message extends \Swift_Message{
 	
 	/**
 	 * 
-	 * @return Swift_MimePart
+	 * @return \Swift_MimePart
 	 */
 	public function findPlainTextBody(){
 		

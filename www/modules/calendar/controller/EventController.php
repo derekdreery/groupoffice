@@ -491,8 +491,8 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 //
 //					$message->setHtmlAlternateBody($body);
 //					//$message->setBody($body, 'text/html','UTF-8');
-//					$a = Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
-//					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+//					$a = \Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
+//					$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 //					$a->setDisposition("inline");
 //					$message->attach($a);
 //					\GO\Base\Mail\Mailer::newGoInstance()->send($message);

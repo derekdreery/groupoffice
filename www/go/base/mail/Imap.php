@@ -2740,7 +2740,7 @@ class Imap extends ImapBodyStruct {
 	 * Append a message to a mailbox
 	 * 
 	 * @param string $mailbox
-	 * @param string|Swift_Message $data
+	 * @param string|\Swift_Message $data
 	 * @param string $flags See set_message_flag
 	 * @return boolean
 	 */

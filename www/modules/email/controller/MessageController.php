@@ -444,7 +444,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 			$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path . $path);
 			$file->parent()->create();
 
-			$fbs = new Swift_ByteStream_FileByteStream($file->path(), true);
+			$fbs = new \Swift_ByteStream_FileByteStream($file->path(), true);
 			$message->toByteStream($fbs);
 
 			if ($file->exists()) {
@@ -569,7 +569,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 
 		$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.$params['save_to_path']);
 
-		$fbs = new Swift_ByteStream_FileByteStream($file->path(), true);
+		$fbs = new \Swift_ByteStream_FileByteStream($file->path(), true);
 
 		$message->toByteStream($fbs);
 
@@ -630,8 +630,8 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 
 		$mailer = \GO\Base\Mail\Mailer::newGoInstance(\GO\Email\Transport::newGoInstance($account));
 
-		$logger = new Swift_Plugins_Loggers_ArrayLogger();
-		$mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
+		$logger = new \Swift_Plugins_Loggers_ArrayLogger();
+		$mailer->registerPlugin(new \Swift_Plugins_LoggerPlugin($logger));
 
 
 		$this->fireEvent('beforesend', array(
