@@ -29,9 +29,9 @@ class ColumnModel {
 	 *
 	 * @var Array 
 	 */
-	private $_columns;
+	private $_columns = array();
 	
-	private $_columnSort;
+	private $_columnSort = array();
 	
 	//private $_sortFieldsAliases=array();
 

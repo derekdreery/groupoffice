@@ -316,7 +316,7 @@ class Task extends \GO\Base\Db\ActiveRecord {
 		$dateType = "DATE";
 		
 //		$dtstart = new Sabre\VObject\Property\DateTime('dtstart',$dateType);
-//		$dtstart->setDateTime(\GO\Base\Util\Date_DateTime::fromUnixtime($this->start_time));		
+//		$dtstart->setDateTime(\GO\Base\Util\Date\DateTime::fromUnixtime($this->start_time));		
 //		$e->add($dtstart);
 //		
 		$e->add('dtstart', \GO\Base\Util\Date\DateTime::fromUnixtime($this->start_time), array('VALUE'=>$dateType));
@@ -324,7 +324,7 @@ class Task extends \GO\Base\Db\ActiveRecord {
 		
 		
 //		$due = new Sabre\VObject\Property\DateTime('due',$dateType);
-//		$due->setDateTime(\GO\Base\Util\Date_DateTime::fromUnixtime($this->due_time));		
+//		$due->setDateTime(\GO\Base\Util\Date\DateTime::fromUnixtime($this->due_time));		
 //		$e->add($due);
 		
 		$e->add('due', \GO\Base\Util\Date\DateTime::fromUnixtime($this->due_time), array('VALUE'=>$dateType));
@@ -333,7 +333,7 @@ class Task extends \GO\Base\Db\ActiveRecord {
 		
 		if($this->completion_time>0){
 //			$completed = new Sabre\VObject\Property\DateTime('completed',Sabre\VObject\Property\DateTime::LOCALTZ);
-//			$completed->setDateTime(\GO\Base\Util\Date_DateTime::fromUnixtime($this->completion_time));		
+//			$completed->setDateTime(\GO\Base\Util\Date\DateTime::fromUnixtime($this->completion_time));		
 //			$e->add($completed);
 			
 			$e->add('completed', \GO\Base\Util\Date\DateTime::fromUnixtime($this->completion_time), array('VALUE'=>$dateType));
