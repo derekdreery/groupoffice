@@ -55,19 +55,14 @@ class Site extends \GO\Base\Db\ActiveRecord {
 	
 	private static $fields;
 	
-	protected function afterLoad() {
-		
-		$this->_loadFields();
-			
-		
-		return parent::afterLoad();
-	}
+
 	
 	private function _loadFields(){
 		//load cf
 		if(!isset(self::$fields) && \GO::modules()->isInstalled('customfields')){
 			$fields = \GO\Customfields\Model\Field::model()->findByModel('GO\Site\Model\Site', false);
 
+			self::$fields=array();
 			foreach($fields as $field){
 				self::$fields[$field->name]= $field;
 			}
@@ -85,6 +80,9 @@ class Site extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	public function __get($name) {
+		
+		$this->_loadFields();
+		
 		if(isset(self::$fields[$name])){
 			return $this->getCustomFieldValueByName($name);
 		}  else {
@@ -178,10 +176,9 @@ class Site extends \GO\Base\Db\ActiveRecord {
 	public static function getTreeNodes(){
 		
 		$tree = array();
-		$findParams = \GO\Base\Db\FindParams::newInstance()
-						->ignoreAcl();
+//		$findParams = \GO\Base\Db\FindParams::newInstance();
 		
-		$sites = self::model()->find($findParams);
+		$sites = self::model()->find();
 		
 		foreach($sites as $site){
 
