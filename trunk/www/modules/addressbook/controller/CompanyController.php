@@ -8,7 +8,7 @@
  */
 
 namespace GO\Addressbook\Controller;
-
+use GO;
 
 class CompanyController extends \GO\Base\Controller\AbstractModelController {
 

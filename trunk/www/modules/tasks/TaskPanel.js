@@ -12,7 +12,7 @@
  */
  
 GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
-	model_name : "GO\\\\\\\\Tasks\\\\\\\\Model\\\\\\\\Task",
+	model_name : "GO\\Tasks\\Model\\Task",
 	
 	stateId : 'ta-task-panel',
 
