@@ -528,7 +528,7 @@ class User extends \GO\Base\Db\ActiveRecord {
 		if(!empty(GO::config()->register_user_groups)){
 			$groups = explode(',',GO::config()->register_user_groups);
 			foreach($groups as $groupName){
-				$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', trim($groupName));
+				$group = GO\Base\Model\Group::model()->findSingleByAttribute('name', trim($groupName));
 				$groupIds[]=$group->id;
 			}
 		}

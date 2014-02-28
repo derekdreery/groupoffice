@@ -1050,7 +1050,7 @@ class AbstractModelController extends AbstractController {
 			if (!isset($params['importType']))
 				$params['importType'] = 'Csv';
 			
-			$fileClassName = 'GO_Base_Fs_'.$params['importType'].'File';
+			$fileClassName = 'GO\\Base\\Fs\\'.$params['importType'].'File';
 			if ($params['importType']=='Xls' && !empty($params['maxColumnNr']))
 				$importFile = new $fileClassName($params['file'],$params['maxColumnNr']);
 			else

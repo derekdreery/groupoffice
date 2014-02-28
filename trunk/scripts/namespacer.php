@@ -39,7 +39,7 @@
 
 
 
-chdir('/var/www/trunk/www/modules/smscampaigns');
+chdir('/var/www/trunk/www/modules/ads');
 
 //find all PHP files except updates.php and updates.inc.php because we shouldn't touch them
 $cmd = 'find . -type f \( -iname "*.php" ! -iname "updates*" \);';
@@ -48,6 +48,10 @@ exec($cmd, $scripts, $return_var);
 //return var should be 0 otherwise something went wrong
 if($return_var!=0)
 	exit("Find command did not run successfully.\n");
+
+//$scripts = array(
+//	'/var/www/trunk/www/modules/billing/controller/ExportIncomeController.php'
+//);
 
 foreach($scripts as $script){
 	
