@@ -4,8 +4,8 @@
 		<?php $form = new \GO\Site\Widget\Form(); ?>
 		<?php echo $form->beginForm(); ?>
 		
-		<?php if (Site::notifier()->hasMessage('error')): ?>
-			<div class="notification error"><?php echo Site::notifier()->getMessage('error'); ?></div>
+		<?php if (\Site::notifier()->hasMessage('error')): ?>
+			<div class="notification error"><?php echo \Site::notifier()->getMessage('error'); ?></div>
 		<?php endif; ?>
 			
 		<table class="table-login">
@@ -18,9 +18,9 @@
 				<td><?php echo $form->passwordField($model, 'password'); ?><?php echo $form->error($model, 'password'); ?></td>
 			</tr>
 			
-			<?php if(Site::notifier()->hasMessage('error')): ?>
+			<?php if(\Site::notifier()->hasMessage('error')): ?>
 				<tr>
-					<td><?php echo Site::notifier()->getMessage('error'); ?></td>
+					<td><?php echo \Site::notifier()->getMessage('error'); ?></td>
 				</tr>
 			<?php endif; ?>
 				
@@ -32,7 +32,7 @@
 			
 		<div class="button-bar">
 			<input class="button" type="submit" id="submit-login-button" value="Login">
-			<a id="recover-login-button" href="<?php echo Site::urlManager()->createUrl('/site/account/recoverpassword'); ?> " class="button"><?php echo \GO::t('lostPassword', 'defaultsite'); ?></a>
+			<a id="recover-login-button" href="<?php echo \Site::urlManager()->createUrl('/site/account/recoverpassword'); ?> " class="button"><?php echo \GO::t('lostPassword', 'defaultsite'); ?></a>
 			<div class="clear"></div>
 		</div>
 		

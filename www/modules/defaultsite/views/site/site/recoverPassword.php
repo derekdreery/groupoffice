@@ -5,12 +5,12 @@
 		<?php $form = new \GO\Site\Widget\Form(); ?>
 		<?php echo $form->beginForm(); ?>
 
-		<?php if (Site::notifier()->hasMessage('success')): ?>
-			<div class="notification success"><?php echo Site::notifier()->getMessage('success') ?></div>
+		<?php if (\Site::notifier()->hasMessage('success')): ?>
+			<div class="notification success"><?php echo \Site::notifier()->getMessage('success') ?></div>
 		<?php else: ?>
 
-			<?php if (Site::notifier()->hasMessage('error')): ?>
-				<div class="notification error"><?php echo Site::notifier()->getMessage('error'); ?></div>
+			<?php if (\Site::notifier()->hasMessage('error')): ?>
+				<div class="notification error"><?php echo \Site::notifier()->getMessage('error'); ?></div>
 			<?php endif; ?>
 
 			<table class="table-login">

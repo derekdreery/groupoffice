@@ -1,10 +1,10 @@
-<?php Site::scripts()->registerCssFile(Site::file('css/ticket.css')); ?>
+<?php \Site::scripts()->registerCssFile(\Site::file('css/ticket.css')); ?>
 
 <div class="external-ticket-page newticket ticket">
 	<div class="wrapper">
 		
 			<?php if(\GO::user()): ?>
-				&lt;&lt;&nbsp;<a id="back-to-overview-button" href="<?php echo Site::urlManager()->createUrl('tickets/externalpage/ticketlist'); ?>"><?php echo \GO::t('ticketBackToList','defaultsite'); ?></a>			
+				&lt;&lt;&nbsp;<a id="back-to-overview-button" href="<?php echo \Site::urlManager()->createUrl('tickets/externalpage/ticketlist'); ?>"><?php echo \GO::t('ticketBackToList','defaultsite'); ?></a>			
 			<?php endif; ?>
 
 		

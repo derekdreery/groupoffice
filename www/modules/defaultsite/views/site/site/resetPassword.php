@@ -1,7 +1,7 @@
 <div class="reset-password-page page">
 	<div class="wrapper">
 
-		<?php if (Site::notifier()->hasMessage('success')): ?>
+		<?php if (\Site::notifier()->hasMessage('success')): ?>
 			<h2><?php echo \GO::t('passwordChanged', 'defaultsite'); ?></h2>
 		<?php else: ?>
 			<h2><?php echo \GO::t('changePassword', 'defaultsite'); ?></h2>
@@ -10,16 +10,16 @@
 		<?php $form = new \GO\Site\Widget\Form(); ?>
 		<?php echo $form->beginForm(); ?>
 
-		<?php if (Site::notifier()->hasMessage('success')): ?>
-			<div class="notification success"><?php echo Site::notifier()->getMessage('success') ?></div>
+		<?php if (\Site::notifier()->hasMessage('success')): ?>
+			<div class="notification success"><?php echo \Site::notifier()->getMessage('success') ?></div>
 			<div class="button-bar">
-				<a id="reset-login-button" class="button" href="<?php echo Site::urlManager()->createUrl('/site/account/login'); ?>"><?php echo \GO::t('login', 'defaultsite'); ?></a>
+				<a id="reset-login-button" class="button" href="<?php echo \Site::urlManager()->createUrl('/site/account/login'); ?>"><?php echo \GO::t('login', 'defaultsite'); ?></a>
 				<div class="clear"></div>
 			</div>
 		<?php else: ?>
 
-			<?php if (Site::notifier()->hasMessage('error')): ?>
-				<div class="notification error"><?php echo Site::notifier()->getMessage('error'); ?></div>
+			<?php if (\Site::notifier()->hasMessage('error')): ?>
+				<div class="notification error"><?php echo \Site::notifier()->getMessage('error'); ?></div>
 			<?php endif; ?>
 
 			<table class="table-reset-password">	
