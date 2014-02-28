@@ -252,8 +252,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	 * @return array 
 	 */
 	public function getDiff() {
-		$startDateTime = new \GO\Base\Util\Date_DateTime(date('c', $this->start_time));
-		$endDateTime = new \GO\Base\Util\Date_DateTime(date('c', $this->end_time));
+		$startDateTime = new \GO\Base\Util\Date\DateTime(date('c', $this->start_time));
+		$endDateTime = new \GO\Base\Util\Date\DateTime(date('c', $this->end_time));
 
 		return $startDateTime->diff($endDateTime);
 	}
@@ -299,7 +299,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 
 		$att['start_time'] = strtotime($d . ' ' . $t);
 
-		$endTime = new \GO\Base\Util\Date_DateTime(date('c', $att['start_time']));
+		$endTime = new \GO\Base\Util\Date\DateTime(date('c', $att['start_time']));
 		$endTime->add($diff);
 		$att['end_time'] = $endTime->format('U');
 		
@@ -986,7 +986,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 
 				$diff = $event->getDiff();
 
-				$endTime = new \GO\Base\Util\Date_DateTime(date('c', $occurenceStartTime));
+				$endTime = new \GO\Base\Util\Date\DateTime(date('c', $occurenceStartTime));
 				$endTime->add($diff);
 				
 				$localEvent->setAlternateEndTime($endTime->format('U'));
@@ -1024,7 +1024,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 //
 //				$diff = $this->getDiff();
 //
-//				$endTime = new \GO\Base\Util\Date_DateTime(date('c', $occurenceStartTime));
+//				$endTime = new \GO\Base\Util\Date\DateTime(date('c', $occurenceStartTime));
 //				$endTime->addDiffCompat($diff);
 //				$origEventAttr['end_time'] = \GO\Base\Util\Date::get_timestamp($endTime->format('U'));
 //
@@ -1333,7 +1333,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			}
 		}
 		if($recurrenceTime){
-			$dt = \GO\Base\Util\Date_DateTime::fromUnixtime($recurrenceTime);			
+			$dt = \GO\Base\Util\Date\DateTime::fromUnixtime($recurrenceTime);			
 			$rId = $e->add('recurrence-id', $dt);
 			if($this->all_day_event){
 				$rId['VALUE']='DATE';
@@ -1341,7 +1341,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		}
 	
 		
-		$dtstart = $e->add('dtstart', \GO\Base\Util\Date_DateTime::fromUnixtime($this->start_time));
+		$dtstart = $e->add('dtstart', \GO\Base\Util\Date\DateTime::fromUnixtime($this->start_time));
 		if($this->all_day_event){
 			$dtstart['VALUE'] = 'DATE';
 		}
@@ -1353,7 +1353,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$end_time = $this->end_time;
 		}
 		
-		$dtend = $e->add('dtend', \GO\Base\Util\Date_DateTime::fromUnixtime($end_time));
+		$dtend = $e->add('dtend', \GO\Base\Util\Date\DateTime::fromUnixtime($end_time));
 		
 		if($this->all_day_event){
 			$dtend['VALUE'] = 'DATE';
@@ -1379,7 +1379,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$stmt = $this->exceptions($findParams);
 			while($exception = $stmt->fetch()){
 //				$exdate = new Sabre\VObject\Property\DateTime('exdate',Sabre\VObject\Property\DateTime::DATE);
-				$dt = \GO\Base\Util\Date_DateTime::fromUnixtime($exception->getStartTime());				
+				$dt = \GO\Base\Util\Date\DateTime::fromUnixtime($exception->getStartTime());				
 //				$exdate->setDateTime($dt);		
 				$exdate = $e->add('exdate',$dt);
 				$exdate['VALUE']='DATE';

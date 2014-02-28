@@ -380,8 +380,8 @@ class RecurrencePattern{
 	 * @return int Number of periods that fall between event start and start time
 	 */
 	protected function _findNumberOfDays($startTime, $interval=1, $ceil=true){
-		$eventStartDateTime = new \GO\Base\Util\Date_DateTime(date('c',$this->_eventstarttime));
-		$startDateTime= new \GO\Base\Util\Date_DateTime(date('c',$startTime));
+		$eventStartDateTime = new \GO\Base\Util\Date\DateTime(date('c',$this->_eventstarttime));
+		$startDateTime= new \GO\Base\Util\Date\DateTime(date('c',$startTime));
 		
 		//diff is only compatible with 5.3 and we want 5.2 compatibility
 		//$diff = $eventStartDateTime->diff($startDateTime, true); 

@@ -22,7 +22,7 @@
 namespace GO\Base\Util\Date;
 
 
-class DateTime extends DateTime {
+class DateTime extends \DateTime {
 
   /**
    * Overwrite constructor to used groupoffice default timezone and not systems default timezone
