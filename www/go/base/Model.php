@@ -112,7 +112,7 @@ abstract class Model extends Object{
 	 */
 	public function getModelName()
 	{
-		$classParts = explode('_',get_class($this));
+		$classParts = explode('\\',get_class($this));
 		return array_pop($classParts);
 	}
 	
