@@ -798,7 +798,7 @@ class GO{
 		if (!empty(self::config()->info_log)) {
 
 			if (empty(\GO::session()->values["logdircheck"])) {
-				$folder = new \GO\Base_Fs_Folder(dirname(self::config()->info_log));
+				$folder = new \GO\Base\Fs\Folder(dirname(self::config()->info_log));
 				$folder->create();
 				\GO::session()->values["logdircheck"] = true;
 			}
@@ -1072,14 +1072,14 @@ class GO{
 	public static function findClasses($subfolder){
 
 		$classes=array();
-		$folder = new \GO\Base_Fs_Folder(\GO::config()->root_path.'go/base/'.$subfolder);
+		$folder = new \GO\Base\Fs\Folder(\GO::config()->root_path.'go/base/'.$subfolder);
 		if($folder->exists()){
 
 			$items = $folder->ls();
 
 			foreach($items as $item){
-				if($item instanceof \GO\Base_Fs_File){
-					$className = 'GO\Base_'.ucfirst($subfolder).'_'.$item->nameWithoutExtension();
+				if($item instanceof \GO\Base\Fs\File){
+					$className = 'GO\Base\\'.ucfirst($subfolder).'\\'.$item->nameWithoutExtension();
 					$classes[] = new \ReflectionClass($className);
 				}
 			}
@@ -1098,13 +1098,13 @@ class GO{
 	public static function findFsClasses($subfolder, $subClassOf=null){
 
 		$classes=array();
-		$folder = new \GO\Base_Fs_Folder(\GO::config()->file_storage_path.'php/'.$subfolder);
+		$folder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'php/'.$subfolder);
 		if($folder->exists()){
 
 			$items = $folder->ls();
 
 			foreach($items as $item){
-				if($item instanceof \GO\Base_Fs_File){
+				if($item instanceof \GO\Base\Fs\File){
 					$className = 'GOFS_';
 					
 					$subFolders = explode('/', $subfolder);
