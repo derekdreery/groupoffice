@@ -164,7 +164,7 @@ abstract class Controller extends \GO\Base\Controller\AbstractController {
 		$module = \Site::model()->getSiteModule();
 
 		if( substr($viewName, 0,1) != "/") {
-			$classParts = explode('_',get_class($this));
+			$classParts = explode('\\',get_class($this));
 			$moduleId = strtolower($classParts[1]);
 			$viewName = '/'.$moduleId. '/'.$viewName;	
 		}
