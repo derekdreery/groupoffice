@@ -158,7 +158,7 @@ class UserController extends \GO\Base\Controller\AbstractModelController {
 			 */
 			foreach ($groupsMember as $group) {
 				if ($group['id'] != \GO::config()->group_everyone) {
-					if ($group['group_permission']) {
+					if ($group['selected']) {
 						\GO\Base\Model\Group::model()->findByPk($group['id'])->addUser($model->id);
 					} else {
 						\GO\Base\Model\Group::model()->findByPk($group['id'])->removeUser($model->id);
@@ -171,7 +171,7 @@ class UserController extends \GO\Base\Controller\AbstractModelController {
 			 * User will be visible to the selected groups
 			 */
 			foreach ($groupsVisible as $group) {
-				if ($group['visible_permission']) {
+				if ($group['selected']) {
 					
 					$model->acl->addGroup($group['id'], \GO\Base\Model\Acl::MANAGE_PERMISSION);
 				} else {

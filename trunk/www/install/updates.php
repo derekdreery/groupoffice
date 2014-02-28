@@ -391,3 +391,4 @@ $updates['201401071347'][]="ALTER TABLE `go_users` ADD COLUMN `disk_usage` INT N
 
 $updates['201401271043'][]="update `go_model_types` set `model_name` = replace(`model_name`,'_','\\\\');";
 $updates['201401271043'][]="update `go_search_cache` set `model_name` = replace(`model_name`,'_','\\\\');";
+$updates['201401271043'][]="update `go_cron` set `job` = replace(`job`,'_','\\\\');";

@@ -1511,7 +1511,6 @@ GO.email.showComposer = function(config){
 	GO.email.composers = GO.email.composers || [];
 
 	var availableComposer;
-		this.selectFiles = config.selectFilesFromFolderID;
 
 	for(var i=0;i<GO.email.composers.length;i++)
 	{
@@ -1561,13 +1560,6 @@ GO.email.showComposer = function(config){
 			}
 		});
 
-		availableComposer.on('dialog_ready', function(composer)
-		{
-			if(this.selectFiles)
-			{
-				GO.files.selectFilesDialog.show(this.selectFiles);
-			}
-		},this);
 
 		GO.email.composers.push(availableComposer);
 	}

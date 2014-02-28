@@ -1,6 +1,15 @@
 <?php
 
-class GO_Files_Cron_DeleteExpiredLinks extends GO_Base_Cron_AbstractCron {
+namespace GO\Files\Cron;
+use GO;
+use GO\Base\Cron\AbstractCron;
+
+use GO\Files\Model\File;
+use GO\Base\Db\FindParams;
+use GO\Base\Db\FindCriteria;
+
+
+class DeleteExpiredLinks extends AbstractCron {
 
     /**
      * Return true or false to enable the selection for users and groups for
@@ -39,13 +48,13 @@ class GO_Files_Cron_DeleteExpiredLinks extends GO_Base_Cron_AbstractCron {
      * @param GO_Base_Cron_CronJob $cronJob
      * @param GO_Base_Model_User $user
      */
-    public function run(GO_Base_Cron_CronJob $cronJob, GO_Base_Model_User $user = null)
+    public function run(GO\Base\Cron\CronJob $cronJob, GO\Base\Model\User $user = null)
     {
 			
-			$filesStmt = GO_Files_Model_File::model()->find(
-				GO_Base_Db_FindParams::newInstance()
+			$filesStmt = File::model()->find(
+				FindParams::newInstance()
 					->ignoreAcl()
-					->criteria(GO_Base_Db_FindCriteria::newInstance()
+					->criteria(FindCriteria::newInstance()
 						->addCondition('expire_time',time(),'<')
 						->addCondition('expire_time','0','>')
 						->addCondition('random_code','','!=')
