@@ -169,8 +169,8 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * 
 	 * Example return value:
 	 * array(
-				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO\Addressbook\Model\Contact', 'field'=>'addressbook_id', 'delete'=>true //with this enabled the relation will be deleted along with the model),
-				'companies' => array('type'=>self::HAS_MANY, 'model'=>'GO\Addressbook\Model\Company', 'field'=>'addressbook_id', 'delete'=>true),
+				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO\Addressbook\Model\Contact', 'field'=>'addressbook_id', 'delete'=>self::DELETE_CASCADE //with this enabled the relation will be deleted along with the model),
+				'companies' => array('type'=>self::HAS_MANY, 'model'=>'GO\Addressbook\Model\Company', 'field'=>'addressbook_id', 'delete'=>self::DELETE_CASCADE),
 				'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Addressbook\Model\Addressbook', 'field'=>'addressbook_id')
 				'users' => array('type'=>self::MANY_MANY, 'model'=>'GO\Base\Model\User', 'field'=>'group_id', 'linkModel' => 'GO\Base\Model\UserGroup'), // The "field" property is the key of the current model that is defined in the linkModel
 		);
@@ -2078,6 +2078,9 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if($r['type']==self::BELONGS_TO){
 		
 			$joinAttribute = $r['field'];
+			
+			if(GO::config()->debug && !$this->hasAttribute($joinAttribute))
+				throw new \Exception("You defined a non existing attribute in the 'field' property in relation '$name' in model '".$this->className()."'");
 			
 			/**
 			 * Related stuff can be put in the relatedCache array for when a relation is

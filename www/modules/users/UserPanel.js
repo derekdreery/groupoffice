@@ -1,6 +1,6 @@
 GO.users.UserPanel = Ext.extend(GO.DisplayPanel,{
 
-	model_name : "GO\\\\\\\\Base\\\\\\\\Model\\\\\\\\User",
+	model_name : "GO\\Base\\Model\\User",
 
 	loadParams : {task: 'user_with_items'},
 
