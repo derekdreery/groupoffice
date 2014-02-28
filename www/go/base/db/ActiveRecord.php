@@ -474,7 +474,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 		if(!isset($this->_attributeLabels)){
 			$this->_attributeLabels = array();
 
-			$classParts = explode('_',$this->className());
+			$classParts = explode('\\',$this->className());
 			$prefix = strtolower(array_pop($classParts));
 			
 			foreach($this->columns as $columnName=>$columnData){
