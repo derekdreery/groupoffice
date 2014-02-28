@@ -124,7 +124,14 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 */
 	protected $insertDelayed=false;
 	
-	private $_loadingFromDatabase=true;
+	/**
+	 * Indiciates that the ActiveRecord is being contructed by PDO.
+	 * Used in setAttribute so it skips fancy features that we know will only
+	 * cause overhead.
+	 * 
+	 * @var boolean 
+	 */
+	protected $loadingFromDatabase=true;
 	
 	
 	private static $_addedRelations=array();
@@ -388,14 +395,14 @@ abstract class ActiveRecord extends \GO\Base\Model{
 		
 		if($this->isNew){
 			$this->setAttributes($this->getDefaultAttributes(),false);
-			$this->_loadingFromDatabase=false;
+			$this->loadingFromDatabase=false;
 			$this->afterCreate();
 		}elseif(!$isStaticModel){
 			$this->castMySqlValues();
 			$this->_cacheRelatedAttributes();
 			$this->afterLoad();		
 			
-			$this->_loadingFromDatabase=false;
+			$this->loadingFromDatabase=false;
 		}
 		
 		$this->_modifiedAttributes=array();
@@ -2079,8 +2086,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 			$joinAttribute = $r['field'];
 			
-			if(GO::config()->debug && !$this->hasAttribute($joinAttribute))
-				throw new \Exception("You defined a non existing attribute in the 'field' property in relation '$name' in model '".$this->className()."'");
+			if(GO::config()->debug && !isset($this->columns[$joinAttribute])){
+//				var_dump($this->columns);
+				throw new \Exception("You defined a non existing attribute in the 'field'='$joinAttribute' property in relation '$name' in model '".$this->className()."'");
+			}
 			
 			/**
 			 * Related stuff can be put in the relatedCache array for when a relation is
@@ -3888,7 +3897,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 */
 	public function setAttribute($name,$value, $format=false)
 	{			
-		if($this->_loadingFromDatabase){
+		if($this->loadingFromDatabase){
 			//skip fancy features when loading from the database.
 			$this->_attributes[$name]=$value;			
 			return true;
