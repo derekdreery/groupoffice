@@ -299,7 +299,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	{
 		//this.body.removeAllListeners();
 		
-		data.model_name=data.model_name=this.model_name;
+		data.model_name=this.model_name.replace(/\\/g,"\\\\");
+		data.model_name_underscores = this.model_name.replace(/\\/g,"_")
 		data.panelId=this.getId();
 		
 		// Action date is used in Contacts with Comments module.
@@ -503,7 +504,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	_commentsWithActionDate : false,
 	
 	_toggleActionDate : function() {
-		this._commentsWithActionDate = this.model_name == 'GO_Addressbook_Model_Contact';
+		this._commentsWithActionDate = this.model_name == 'GO\\Addressbook\\Model\\Contact';
 		this.actionDateField.setDisabled(!this._commentsWithActionDate);
 		this.actionDateField.setVisible(this._commentsWithActionDate);
 	},
@@ -511,8 +512,9 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	afterLoad : function(loadResponseData) {
 	
 		if (GO.comments && this.data.comments.length>0) {
+			
 		  this.newCommentPanel = new Ext.form.FormPanel({			
-			  renderTo: 'newCommentForModelDiv_'+this.data.model_name+'_'+this.data.id,
+			  renderTo: 'newCommentForModelDiv_'+this.model_name.replace(/\\/g,"_")+'_'+this.data.id,
 			  layout: 'form',
 			  border: false,
 
