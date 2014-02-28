@@ -62,6 +62,6 @@ abstract class AbstractCron extends \GO\Base\Model{
 	 * @param CronJob $cronJob
 	 * @param \GO\Base\Model_User $user [OPTIONAL]
 	 */
-	public abstract function run(CronJob $cronJob,\GO\Base\Model_User $user = null);
+	public abstract function run(CronJob $cronJob,\GO\Base\Model\User $user = null);
 		
 }

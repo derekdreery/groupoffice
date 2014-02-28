@@ -359,7 +359,7 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 				$this->_checkCoreModels();
 			}else
 			{
-				$class='GO_'.ucfirst($params['module']).'_'.ucfirst($params['module']).'Module';
+				$class='GO\\'.ucfirst($params['module']).'\\'.ucfirst($params['module']).'Module';
 				$module = new $class;
 				$module->checkDatabase($response);
 			}

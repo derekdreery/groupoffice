@@ -83,7 +83,7 @@ class IpwhitelistModule extends \GO\Base\Module{
 		return true;
 	}
 	
-	public static function setWhitelist(\GO\Groups\Controller\Group $groupController, array &$response, \GO\Base\Model\Group $groupModel, array &$params, array $modifiedAttributes) {
+	public static function setWhitelist(\GO\Groups\Controller\GroupController $groupController, array &$response, \GO\Base\Model\Group $groupModel, array &$params, array $modifiedAttributes) {
 				
 		$enable = $params['enable_whitelist'];
 		$groupId = $groupModel->id;
@@ -104,7 +104,7 @@ class IpwhitelistModule extends \GO\Base\Module{
 		}
 	}
 
-	public static function getWhitelistEnabled(\GO\Groups\Controller\Group $groupController, array &$response, \GO\Base\Model\Group $groupModel, array &$params) {
+	public static function getWhitelistEnabled(\GO\Groups\Controller\GroupController $groupController, array &$response, \GO\Base\Model\Group $groupModel, array &$params) {
 		$enabledWhitelistModel = Model\EnableWhitelist::model()->findByPk($groupModel->id);
 		$response['data']['enable_whitelist'] = !empty($enabledWhitelistModel);
 	}

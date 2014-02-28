@@ -75,8 +75,8 @@ class CronCollection extends \GO\Base\Model {
 			$reflectionClasses = array();
 			foreach($items as $item){
 				if(is_file($item)){
-					$className = 'GO_Base_Cron_'.$item->nameWithoutExtension();
-					$reflectionClasses[] = new ReflectionClass($className);
+					$className = 'GO\\Base\\Cron\\'.$item->nameWithoutExtension();
+					$reflectionClasses[] = new \ReflectionClass($className);
 				}
 			}
 			
@@ -104,7 +104,7 @@ class CronCollection extends \GO\Base\Model {
 			foreach($items as $item){
 				if(is_file($item)){
 					$className = 'GOFS_Cron_'.$item->nameWithoutExtension();
-					$reflectionClasses[] = new ReflectionClass($className);
+					$reflectionClasses[] = new \ReflectionClass($className);
 				}
 			}
 			
@@ -159,7 +159,7 @@ class CronCollection extends \GO\Base\Model {
 	 * @param ReflectionClass $reflectionClass
 	 * @return boolean
 	 */
-	private function _checkIsCronJobClassFile(ReflectionClass $reflectionClass){
+	private function _checkIsCronJobClassFile(\ReflectionClass $reflectionClass){
 		return $reflectionClass->isSubclassOf("GO\Base\Cron\AbstractCron")?true:false;
 	}
 	

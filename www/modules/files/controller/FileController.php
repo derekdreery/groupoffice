@@ -18,6 +18,9 @@ class FileController extends \GO\Base\Controller\AbstractModelController {
 	 * @param integer $id id of the user to recalculate used space for
 	 */
 	protected function actionRecalculateDiskUsage($id=false) {
+		
+		\GO::session()->closeWriting();
+						
 		if(!empty($id)) {
 			$user = \GO\Base\Model\User::model()->findByPk($id);
 			if(!empty($user) && $user->calculatedDiskUsage()->save())

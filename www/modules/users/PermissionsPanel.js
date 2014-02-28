@@ -205,7 +205,7 @@ Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
             {
                 id: this.groupMemberStore.data.items[i].get('id'),
                 group: this.groupMemberStore.data.items[i].get('name'),
-                group_permission: this.groupMemberStore.data.items[i].get('group_permission')
+                selected: this.groupMemberStore.data.items[i].get('selected')
             };
         }
 
@@ -215,7 +215,7 @@ Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
             {
                 id: this.groupVisibleStore.data.items[i].get('id'),
                 group: this.groupVisibleStore.data.items[i].get('name'),
-                visible_permission: this.groupVisibleStore.data.items[i].get('visible_permission')
+                selected: this.groupVisibleStore.data.items[i].get('selected')
             };
         }
 	

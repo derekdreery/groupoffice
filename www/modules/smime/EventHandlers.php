@@ -6,7 +6,7 @@ namespace GO\Smime;
 
 class EventHandlers {
 
-	public static function loadAccount(\GO\Email\Controller\Account $controller, &$response, \GO\Email\Model\Account $account, $params) {
+	public static function loadAccount(\GO\Email\Controller\AccountController $controller, &$response, \GO\Email\Model\Account $account, $params) {
 		$cert = Model\Certificate::model()->findByPk($account->id);
 		if ($cert && !empty($cert->cert)) {
 			$response['data']['cert'] = true;
@@ -20,7 +20,7 @@ class EventHandlers {
 			$cert->delete();		
 	}
 
-	public static function submitAccount(\GO\Email\Controller\Account $controller, &$response, \GO\Email\Model\Account $account, $params, $modifiedAttributes) {
+	public static function submitAccount(\GO\Email\Controller\AccountController $controller, &$response, \GO\Email\Model\Account $account, $params, $modifiedAttributes) {
 
 		if (isset($_FILES['cert']['tmp_name'][0]) && is_uploaded_file($_FILES['cert']['tmp_name'][0])) {
 			//check Group-Office password
@@ -58,7 +58,7 @@ class EventHandlers {
 			$response['cert'] = true;
 	}
 
-	public static function aliasesStore(\GO\Email\Controller\Alias $controller, &$response, \GO\Base\Data\Store $store, $params) {
+	public static function aliasesStore(\GO\Email\Controller\AliasController $controller, &$response, \GO\Base\Data\Store $store, $params) {
 
 		foreach ($response['results'] as &$alias) {
 			$cert = Model\Certificate::model()->findByPk($alias['account_id']);
@@ -70,7 +70,7 @@ class EventHandlers {
 		}
 	}
 
-	public static function viewMessage(\GO\Email\Controller\Message $controller, array &$response, \GO\Email\Model\ImapMessage $imapMessage, \GO\Email\Model\Account $account, $params) {
+	public static function viewMessage(\GO\Email\Controller\MessageController $controller, array &$response, \GO\Email\Model\ImapMessage $imapMessage, \GO\Email\Model\Account $account, $params) {
 		
 		if($imapMessage->content_type == 'application/x-pkcs7-mime')
 			$imapMessage->content_type = 'application/pkcs7-mime';
@@ -214,7 +214,7 @@ class EventHandlers {
 		}
 	}
 
-	public static function beforeSend(\GO\Email\Controller\Message $controller, array &$response, \GO\Base\Mail\SmimeMessage $message, \GO\Base\Mail\Mailer $mailer, \GO\Email\Model\Account $account, \GO\Email\Model\Alias $alias, $params) {
+	public static function beforeSend(\GO\Email\Controller\MessageController $controller, array &$response, \GO\Base\Mail\SmimeMessage $message, \GO\Base\Mail\Mailer $mailer, \GO\Email\Model\Account $account, \GO\Email\Model\Alias $alias, $params) {
 		if (!empty($params['sign_smime'])) {
 
 			//$password = trim(file_get_contents("/home/mschering/password.txt"));

@@ -41,7 +41,7 @@ class CronController extends \GO\Base\Controller\AbstractJsonController{
 		
 		// Add parameter for checking if the use
 		if(!empty($model->job)){
-			$cron = new $model->job();
+			$cron = new $model->job;
 			$select = $cron->enableUserAndGroupSupport();
 			$remoteComboFields['job']='"'.$cron->getLabel().'"';
 		} else {
