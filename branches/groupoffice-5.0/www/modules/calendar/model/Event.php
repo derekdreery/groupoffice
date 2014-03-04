@@ -1219,7 +1219,21 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		//$html .= '<tr><td colspan="2">&nbsp;</td></tr>';
 
-		
+		$cfRecord = $this->getCustomfieldsRecord();
+		if (!empty($cfRecord)) {
+			$columns = $cfRecord->getColumns();
+			foreach ($columns as $column) {
+				if (isset($column['customfield'])) {
+					$colId = $column['customfield']->id;
+					$colId = 'col_'.$colId;
+					$recordAttributes = $cfRecord->getAttributes();
+					$colValue = $cfRecord->getAttribute($column['customfield']->name);
+					$html .= '<tr><td style="vertical-align:top">'.($column['customfield']->name).'</td>'.
+									'<td>'.$recordAttributes[$colId].'</td></tr>';
+					
+				}
+			}
+		}
 		
 		$html .= '</table>';
 		
