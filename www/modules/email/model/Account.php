@@ -47,6 +47,8 @@
  */
 class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	
+	const ACL_DELEGATED_PERMISSION=15;
+	
 	/**
 	 * Set to false if you don't want the IMAP connection on save.
 	 * 
