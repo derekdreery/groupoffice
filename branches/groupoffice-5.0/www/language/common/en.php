@@ -555,7 +555,7 @@ $l["unused"]='Unused';
 $l["fieldsetContact"]= 'Contact details';
 
 $l["attributeGreater"]="Field '%s' must be greater than '%s'";
-$l["attributeGreaterOrEqual"]="Field '%s' must be greater or equal to '%s'";
+$l["attributeGreaterOrEqual"]="Field '%s' must be greater or equal than '%s'";
 
 
 $l['userFirst_name']='Firstname';
