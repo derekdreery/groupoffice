@@ -31,7 +31,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 	changed : false,
 	loaded : false,
 	managePermission : false,
-	levelLabels : [],
+	levelLabels : null,
 	
 	cls:'go-permissions-panel',
 
@@ -44,21 +44,57 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 		
 		var levelData = [];
 		
-		if(!this.levels || this.levels.indexOf(GO.permissionLevels.read)!=-1)
-			levelData.push([GO.permissionLevels.read, this.levelLabels[GO.permissionLevels.read] ? this.levelLabels[GO.permissionLevels.read] : GO.lang.permissionRead]);
+//		if(!this.levels || this.levels.indexOf(GO.permissionLevels.read)!=-1)
+//			levelData.push([GO.permissionLevels.read, this.levelLabels[GO.permissionLevels.read] ? this.levelLabels[GO.permissionLevels.read] : GO.lang.permissionRead]);
+//		
+//		if(!this.levels || this.levels.indexOf(GO.permissionLevels.delegated)!=-1)
+//			levelData.push([GO.permissionLevels.delegated, this.levelLabels[GO.permissionLevels.delegated] ? this.levelLabels[GO.permissionLevels.delegated] : 'delegated']);		
+//		
+//		
+//		if(!this.levels || this.levels.indexOf(GO.permissionLevels.create)!=-1)
+//			levelData.push([GO.permissionLevels.create, this.levelLabels[GO.permissionLevels.create] ? this.levelLabels[GO.permissionLevels.create] : GO.lang.permissionCreate]);
+//		
+//		if(!this.levels || this.levels.indexOf(GO.permissionLevels.write)!=-1)
+//			levelData.push([GO.permissionLevels.write, this.levelLabels[GO.permissionLevels.write] ? this.levelLabels[GO.permissionLevels.write] : GO.lang.permissionWrite]);		
+//		
+//		
+//		if(!this.levels || this.levels.indexOf(GO.permissionLevels.writeAndDelete)!=-1)
+//			levelData.push([GO.permissionLevels.writeAndDelete, this.levelLabels[GO.permissionLevels.writeAndDelete] ? this.levelLabels[GO.permissionLevels.writeAndDelete] : GO.lang.permissionDelete]);
+//		
+//		if(!this.levels || this.levels.indexOf(GO.permissionLevels.manage)!=-1)
+//			levelData.push([GO.permissionLevels.manage, this.levelLabels[GO.permissionLevels.manage] ? this.levelLabels[GO.permissionLevels.manage] : GO.lang.permissionManage]);
+
+		this.levelLabels = this.levelLabels || {};
 		
-		if(!this.levels || this.levels.indexOf(GO.permissionLevels.create)!=-1)
-			levelData.push([GO.permissionLevels.create, this.levelLabels[GO.permissionLevels.create] ? this.levelLabels[GO.permissionLevels.create] : GO.lang.permissionCreate]);
+		if(!this.levelLabels[GO.permissionLevels.read])
+			this.levelLabels[GO.permissionLevels.read] =GO.lang.permissionRead;
+		if(!this.levelLabels[GO.permissionLevels.create])
+			this.levelLabels[GO.permissionLevels.create] =GO.lang.permissionCreate;
+		if(!this.levelLabels[GO.permissionLevels.write])
+			this.levelLabels[GO.permissionLevels.write] =GO.lang.permissionWrite;
+		if(!this.levelLabels[GO.permissionLevels.writeAndDelete])
+			this.levelLabels[GO.permissionLevels.writeAndDelete] =GO.lang.permissionDelete;
+		if(!this.levelLabels[GO.permissionLevels.manage])
+			this.levelLabels[GO.permissionLevels.manage] =GO.lang.permissionManage;
 		
-		if(!this.levels || this.levels.indexOf(GO.permissionLevels.write)!=-1)
-			levelData.push([GO.permissionLevels.write, this.levelLabels[GO.permissionLevels.write] ? this.levelLabels[GO.permissionLevels.write] : GO.lang.permissionWrite]);		
+		if(!this.levels){
+			this.levels=[
+				GO.permissionLevels.read,
+				GO.permissionLevels.create,
+				GO.permissionLevels.write,
+				GO.permissionLevels.writeAndDelete,
+				GO.permissionLevels.manage
+			];
+		}
 		
-		
-		if(!this.levels || this.levels.indexOf(GO.permissionLevels.writeAndDelete)!=-1)
-			levelData.push([GO.permissionLevels.writeAndDelete, this.levelLabels[GO.permissionLevels.writeAndDelete] ? this.levelLabels[GO.permissionLevels.writeAndDelete] : GO.lang.permissionDelete]);
-		
-		if(!this.levels || this.levels.indexOf(GO.permissionLevels.manage)!=-1)
-			levelData.push([GO.permissionLevels.manage, this.levelLabels[GO.permissionLevels.manage] ? this.levelLabels[GO.permissionLevels.manage] : GO.lang.permissionManage]);
+		for(var i=0;i<this.levels.length;i++){			
+			if(!this.levelLabels[this.levels[i]]){
+				alert('Warning: you must define a label for permission level: '+this.levels[i]);
+			}else
+			{
+				levelData.push([this.levels[i],this.levelLabels[this.levels[i]]]);
+			}
+		}
 		
 
 		this.showLevel = (this.hideLevel) ? false : true;			
