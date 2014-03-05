@@ -122,8 +122,7 @@ GO.moduleManager.onModuleReady('email',function(){
 			if(record.json.has_smime_cert && record.json.always_sign=="1"){
 				this.signCheck.setChecked(true);
 				this.sendParams['sign_smime'] ="1";	
-			}
-			if(!record.json.has_smime_cert){
+			} else if(!record.json.has_smime_cert){
 				this.signCheck.setChecked(false);
 				this.sendParams['sign_smime'] ="0";	
 			}
