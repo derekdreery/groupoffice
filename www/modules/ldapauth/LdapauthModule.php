@@ -53,4 +53,29 @@ class GO_Ldapauth_LdapauthModule extends GO_Base_Module{
 		}
 	}
 	
+	
+	public static function getPeopleDn($username=null){
+		
+		$hasVDomain = strpos(GO::config()->ldap_peopledn, '{VDOMAIN}');
+		
+		if($hasVDomain && !isset($username)){
+			throw new Exception("You can't use this function with a {VDOMAIN} configured.");
+		}
+		
+		if(isset($username) && $hasVDomain){
+			
+			$parts = explode('@', $username);
+			
+			if(!isset($parts[1])){
+				throw new Exception("You can only use {VDOMAIN} when you login with an e-mail address");
+			}
+			
+			return str_replace('{VDOMAIN}', $parts[1],GO::config()->ldap_peopledn);
+		}  else {
+			return GO::config()->ldap_peopledn;
+		}
+		
+		
+	}
+	
 }

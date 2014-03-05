@@ -76,7 +76,7 @@ class GO_Ldapauth_Model_Person extends GO_Base_Ldap_Record {
 		$mapping = self::getMapping();
 		$query = $mapping['username'] . '=' . $username;
 
-		$person = self::find($query, GO::config()->ldap_peopledn);
+		$person = self::find($query, GO_Ldapauth_LdapauthModule::getPeopleDn($username));
 		GO::debug("LDAPAUTH: Loaded $username!");
 		
 		if(!empty($person))
@@ -104,7 +104,7 @@ class GO_Ldapauth_Model_Person extends GO_Base_Ldap_Record {
 		if(!empty($newpass) && isset($oldpass)) {
 			if($this->authenticate($oldpass)) {
 				$mapping = self::getMapping();
-				$query = $mapping['username'] . '=' . $this->username.','.GO::config()->ldap_peopledn;
+				$query = $mapping['username'] . '=' . $this->username.','.GO_Ldapauth_LdapauthModule::getPeopleDn($this->username);
 				$this->_ldapConn->bind(GO::config()->ldap_user, GO::config()->ldap_pass); // become LDAP root
 				return @ldap_modify($this->_ldapConn->getLink(), $query, array('userpassword' => $this->encodePassword($newpass)));
 				
