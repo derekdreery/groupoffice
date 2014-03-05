@@ -652,7 +652,7 @@ $l['maybeMaxUploadExceeded'] = 'Der Server konnte die benötigten Parameter nich
 
 $l['relationDeleteRestrict']="%s kann nicht gelöscht werden, da es '%s' Objekte beinhaltet. Bitte entfernen Sie diese zuerst.";
 
-//$l['pspell_lang']='DE_de';
+$l['pspell_lang']='DE_de';
 
 $l['dependenciesCannotDelete']="Das ausgewählte Modul kann nicht gelöscht werden, da die folgenden (installierten) Module davon abhängen: %s.";
 
