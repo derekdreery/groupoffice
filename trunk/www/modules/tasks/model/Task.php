@@ -41,6 +41,7 @@
 
 
 namespace GO\Tasks\Model;
+use Sabre;
 
 
 class Task extends \GO\Base\Db\ActiveRecord {

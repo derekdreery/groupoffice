@@ -5,7 +5,7 @@
 
 
 namespace GO\Base\VObject;
-
+use Sabre;
 
 class VTimezone extends Sabre\VObject\Document {
 

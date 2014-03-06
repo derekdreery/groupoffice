@@ -70,6 +70,7 @@
  */
 
 namespace GO\Addressbook\Model;
+use Sabre;
 
 
 class Contact extends \GO\Base\Db\ActiveRecord {

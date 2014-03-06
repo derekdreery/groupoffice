@@ -19,7 +19,7 @@
 namespace GO\Dav\DavAcl;
 
 
-class PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\BackendInterface {
+class PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend\BackendInterface {
 
 	private function _modelToDAVUser(\GO\Base\Model\User $user){
 

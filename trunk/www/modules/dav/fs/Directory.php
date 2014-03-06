@@ -14,9 +14,9 @@
  */
 
 namespace GO\Dav\Fs;
+use Sabre;
 
-
-class Directory extends Sabre\DAV\FS\Directory{
+class Directory extends \Sabre\DAV\FS\Directory{
 
 	protected $_folder;
 	protected $relpath;

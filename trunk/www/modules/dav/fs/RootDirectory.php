@@ -13,12 +13,13 @@
  */
 
 namespace GO\Dav\Fs;
-
+use GO;
+use Sabre;
 
 class RootDirectory extends Sabre\DAV\FS\Directory{
 
 	public function __construct($path="") {
-		parent::__construct(\GO::config()->file_storage_path);
+		parent::__construct(GO::config()->file_storage_path);
 	}
 	public function getName() {
 		return "root";
@@ -32,16 +33,16 @@ class RootDirectory extends Sabre\DAV\FS\Directory{
 	public function getChildren() {
 		
 		$children = array();
-		$children[] = new Directory('users/' . \GO::user()->username);
+		$children[] = new Directory('users/' . GO::user()->username);
 		$children[] = new SharedDirectory();
 		
-		if(\GO::modules()->projects)
+		if(GO::modules()->projects)
 			$children[] = new Directory('projects');
 		
-		if(\GO::modules()->addressbook)
+		if(GO::modules()->addressbook)
 			$children[] = new Directory('addressbook');
 
-		if(\GO::modules()->projects2)
+		if(GO::modules()->projects2)
 			$children[] = new Directory('projects2');
 		
 		return $children;
@@ -57,25 +58,25 @@ class RootDirectory extends Sabre\DAV\FS\Directory{
     public function getChild($name) {
 			
 			switch($name){
-				case \GO::user()->username:
-					return new Directory('users/' . \GO::user()->username);
+				case GO::user()->username:
+					return new Directory('users/' . GO::user()->username);
 					break;
 				
 				case 'Shared':
 						return new SharedDirectory();
 					break;
 				case 'projects':
-					if(\GO::modules()->projects)
+					if(GO::modules()->projects)
 						return new Directory('projects');
 					break;
 					
 				case 'projects2':
 					if(GO::modules()->projects2)
-						return new GO_Dav_Fs_Directory('projects2');
+						return new Directory('projects2');
 					break;
 					
 				case 'addressbook':
-					if(\GO::modules()->addressbook)
+					if(GO::modules()->addressbook)
 						return new Directory('addressbook');
 					break;
 			}
@@ -138,7 +139,7 @@ class RootDirectory extends Sabre\DAV\FS\Directory{
 	 */
 	public function getLastModified() {
 
-		return filemtime(\GO::config()->file_storage_path);
+		return filemtime(GO::config()->file_storage_path);
 	}
 
 }

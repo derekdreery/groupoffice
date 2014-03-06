@@ -4,7 +4,7 @@
 		
 
 namespace GO\Base\VObject;
-
+use Sabre;
 
 class VCalendar extends Sabre\VObject\Component\VCalendar {
 

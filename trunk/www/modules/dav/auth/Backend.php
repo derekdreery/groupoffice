@@ -14,9 +14,9 @@
  */
 
 namespace GO\Dav\Auth;
+use Sabre;
 
-
-class Backend extends Sabre\DAV\Auth\Backend\AbstractDigest {
+class Backend extends \Sabre\DAV\Auth\Backend\AbstractDigest {
 	
 	private $_user;
 	
@@ -32,7 +32,7 @@ class Backend extends Sabre\DAV\Auth\Backend\AbstractDigest {
 		
 		if($user){
 			//check dav module access		
-			$davModule = \GO\Base\Model\Modul::model()->findByPk($this->checkModuleAccess, false, true);		
+			$davModule = \GO\Base\Model\Module::model()->findByPk($this->checkModuleAccess, false, true);		
 			if(!\GO\Base\Model\Acl::getUserPermissionLevel($davModule->acl_id, $user->id))
 			{
 				$errorMsg = "No '".$this->checkModuleAccess."' module access for user '".$user->username."'";

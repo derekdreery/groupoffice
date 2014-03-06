@@ -47,7 +47,7 @@
  */
 
 namespace GO\Calendar\Model;
-
+use Sabre;
 
 class Event extends \GO\Base\Db\ActiveRecord {
 
