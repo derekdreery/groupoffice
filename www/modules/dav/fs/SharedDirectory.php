@@ -15,7 +15,7 @@
 namespace GO\Dav\Fs;
 
 
-class SharedDirectory extends Sabre\DAV\FS\Directory {
+class SharedDirectory extends \Sabre\DAV\FS\Directory {
 
 	public function __construct($path='') {
 		parent::__construct("Shared");

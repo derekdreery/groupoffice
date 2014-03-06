@@ -15,7 +15,7 @@
 namespace GO\Dav;
 
 
-class ObjectTree extends Sabre\DAV\ObjectTree{
+class ObjectTree extends \Sabre\DAV\ObjectTree{
 	/**
      * Moves a file from one location to another
      *

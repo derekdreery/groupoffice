@@ -12,7 +12,7 @@
 		
 
 namespace GO\Base\VObject;
-
+use Sabre;
 
 class Reader extends Sabre\VObject\Reader{
 	

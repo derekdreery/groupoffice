@@ -14,9 +14,9 @@
  */
 
 namespace GO\Dav\Fs;
+use Sabre;
 
-
-class File extends Sabre\DAV\FS\File {
+class File extends \Sabre\DAV\FS\File {
 
 	protected $folder;
 	protected $write_permission;
