@@ -1,3 +1,6 @@
+- Calendar: Able to import very large VCards.
+- Calendar: Notification to user when attempting to import a VCard with a recurrence containing 'Last X of month' pattern.
+
 05-03-2014 5.0.45
 - CalDAV will update and delete the correct event when events are imported and exported with the same URI
 - Fixed rename(move files/folders) functionality (move files/folders did not work properly)
