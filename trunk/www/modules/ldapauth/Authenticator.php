@@ -2,7 +2,7 @@
 
 
 namespace GO\Ldapauth;
-
+use GO;
 
 class Authenticator {
 
@@ -64,7 +64,7 @@ class Authenticator {
 			return true;
 		}
 
-		$record = GO_Ldapauth_Model_Person::findByUsername($username);
+		$record = \GO\Ldapauth\Model\Person::findByUsername($username);
 
 
 		if (!$record) {

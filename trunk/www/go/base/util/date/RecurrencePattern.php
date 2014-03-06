@@ -170,9 +170,7 @@ class RecurrencePattern{
 		if(!isset($this->_recurPositionStartTime) || $this->_recurPositionStartTime<$this->_eventstarttime)
 			$this->_recurPositionStartTime=$this->_eventstarttime;
 		
-		
-		\GO::debug(date('c', $this->_recurPositionStartTime));
-		
+				
 		if(!$startTime)
 			$startTime=$this->_recurPositionStartTime;
 

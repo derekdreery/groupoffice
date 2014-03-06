@@ -433,9 +433,11 @@ GO.email.AccountDialog = function(config) {
 	
 	var levelLabels={};
 	levelLabels[GO.permissionLevels.create]=GO.email.lang.useAccount;
+	levelLabels[GO.email.permissionLevels.delegated]=GO.email.lang['permissionDelegated'];
 
 	this.permissionsTab = new GO.grid.PermissionsPanel({levels:[
 			GO.permissionLevels.read,
+			GO.email.permissionLevels.delegated,
 			GO.permissionLevels.create,
 			GO.permissionLevels.manage
 	  ],

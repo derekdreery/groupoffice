@@ -478,9 +478,7 @@ class GO{
 					
 				}elseif(strpos($className,'Sabre\VObject')===0) {
 					$filePath = self::config()->root_path . 'go/vendor/VObject/lib/'.str_replace('\\','/',$className).'.php';
-				}elseif(strpos($className,'Sabre')===0) {
-					require self::config()->root_path . 'go/vendor/SabreDAV/lib/'.str_replace('_','/',$className). '.php';
-					return true;					
+				}elseif(strpos($className,'Sabre')===0) {				
 					$filePath = self::config()->root_path . 'go/vendor/SabreDAV/lib/'.str_replace('\\','/',$className). '.php';
 				}else	if (0 === strpos($className, 'Swift'))
 				{

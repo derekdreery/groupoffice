@@ -104,8 +104,9 @@ class FolderNotification extends \GO\Base\Db\ActiveRecord {
 	}
 
 	public function notifyUser() {
-		$notifications = FolderNotificationMessage::getNotifications(\GO::user()->id);
-		if (!count($notifications))
+
+		$notifications = FolderNotificationMessage::getNotifications();
+		if (empty($notifications))
 			return false;
 
 		//userCache

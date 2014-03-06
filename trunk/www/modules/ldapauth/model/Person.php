@@ -7,7 +7,7 @@
  */
 
 namespace GO\Ldapauth\Model;
-
+use GO;
 
 class Person extends GO\Base\Ldap\Record {
 
@@ -72,14 +72,14 @@ class Person extends GO\Base\Ldap\Record {
 	/**
 	 * Get an LDAP person record by username
 	 * @param string $username just the username
-	 * @return GO_Ldapauth_Model_Person
+	 * @return \GO\Ldapauth\Model\Person
 	 */
 	public static function findByUsername($username) {
 
 		$mapping = self::getMapping();
 		$query = $mapping['username'] . '=' . $username;
 
-		$person = self::find($query, GO::config()->ldap_peopledn);
+		$person = self::find($query, \GO\Ldapauth\LdapauthModule::getPeopleDn($username));
 		GO::debug("LDAPAUTH: Loaded $username!");
 		
 		if(!empty($person))
@@ -107,7 +107,7 @@ class Person extends GO\Base\Ldap\Record {
 		if(!empty($newpass) && isset($oldpass)) {
 			if($this->authenticate($oldpass)) {
 				$mapping = self::getMapping();
-				$query = $mapping['username'] . '=' . $this->username.','.GO::config()->ldap_peopledn;
+				$query = $mapping['username'] . '=' . $this->username.','.\GO\Ldapauth\LdapauthModule::getPeopleDn($this->username);
 				$this->_ldapConn->bind(GO::config()->ldap_user, GO::config()->ldap_pass); // become LDAP root
 				return @ldap_modify($this->_ldapConn->getLink(), $query, array('userpassword' => $this->encodePassword($newpass)));
 				
@@ -133,8 +133,8 @@ class Person extends GO\Base\Ldap\Record {
 			self::$_mapping = $mapping;
 		} else {
 			self::$_mapping = array(
-					'exclude' => new GO_Ldapauth_Mapping_Constant(false),
-					'enabled' => new GO_Ldapauth_Mapping_Constant('1'),
+					'exclude' => new \GO\Ldapauth\Mapping\Constant(false),
+					'enabled' => new \GO\Ldapauth\Mapping\Constant('1'),
 					'username' => 'uid',
 					//'password' => 'userpassword',
 					'first_name' => 'givenname',

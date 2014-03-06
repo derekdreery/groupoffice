@@ -368,7 +368,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		
 		$account = \GO\Email\Model\Account::model()->findByPk($params['account_id']);
 		
-		if(!$account->checkPermissionLevel(\GO\Base\Model\Acl::CREATE_PERMISSION))
+		if(!$account->checkPermissionLevel(\GO\Email\Model\Account::ACL_DELEGATED_PERMISSION))
 		  throw new \GO\Base\Exception\AccessDenied();
 		
 		$imap = $account->openImapConnection($params["mailbox"]);
@@ -1072,12 +1072,13 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 						'localField' => 'account_id', //defaults to primary key of the model
 						'type' => 'LEFT'
 				))
+				->permissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION)
 				->ignoreAdminGroup()
 				->order('order', 'DESC');
 		
 		
 		//find the right sender alias
-		$stmt = $account ? $account->aliases : \GO\Email\Model\Alias::model()->find($findParams);
+		$stmt = $account && $account->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION) ? $account->aliases : \GO\Email\Model\Alias::model()->find($findParams);
 		while($possibleAlias = $stmt->fetch()){
 			
 			if(!$defaultAlias)
