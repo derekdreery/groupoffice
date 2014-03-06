@@ -49,6 +49,8 @@ if(empty($font_size))
 else
 	$GO_SCRIPTS_JS .= 'GO.email.fontSize="'.$font_size.'";';
 
+$GO_SCRIPTS_JS .= 'GO.email.permissionLevels={delegated:15};';
+
 if(isset($_GET['mail_to']))
 {
 	//$qs=strtolower(str_replace('mailto:','mail_to=', $_GET['mail_to']));

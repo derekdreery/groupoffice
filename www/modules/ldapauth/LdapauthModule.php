@@ -2,6 +2,7 @@
 
 namespace GO\Ldapauth;
 
+use GO;
 
 class LdapauthModule extends \GO\Base\Module{
 	
@@ -58,6 +59,31 @@ class LdapauthModule extends \GO\Base\Module{
 		} catch (Exception $e) {
 			//LDAP record not available
 		}
+	}
+	
+	
+	public static function getPeopleDn($username=null){
+		
+		$hasVDomain = strpos(GO::config()->ldap_peopledn, '{VDOMAIN}');
+		
+		if($hasVDomain && !isset($username)){
+			throw new Exception("You can't use this function with a {VDOMAIN} configured.");
+		}
+		
+		if(isset($username) && $hasVDomain){
+			
+			$parts = explode('@', $username);
+			
+			if(!isset($parts[1])){
+				throw new Exception("You can only use {VDOMAIN} when you login with an e-mail address");
+			}
+			
+			return str_replace('{VDOMAIN}', $parts[1],GO::config()->ldap_peopledn);
+		}  else {
+			return GO::config()->ldap_peopledn;
+		}
+		
+		
 	}
 	
 }

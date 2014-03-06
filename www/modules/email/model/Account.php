@@ -51,6 +51,8 @@ namespace GO\Email\Model;
 
 class Account extends \GO\Base\Db\ActiveRecord {
 	
+	const ACL_DELEGATED_PERMISSION=15;
+	
 	/**
 	 * Set to false if you don't want the IMAP connection on save.
 	 * 

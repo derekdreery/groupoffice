@@ -584,5 +584,37 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 		
 		return array('success'=>true);
 	}
+
+	protected function actionLoadAddress($params) {
+		
+		$accountModel = GO_Email_Model_Account::model()->find(
+			GO_Base_Db_FindParams::newInstance()
+				->single()
+				->select('t.*,al.name,al.email')
+				->ignoreAcl()
+				->joinModel(array(
+					'model'=>'GO_Email_Model_Alias',
+					'localTableAlias'=>'t',
+					'localField'=>'id',
+					'foreignField'=>'account_id',
+					'tableAlias'=>'al'
+				))
+				->criteria(GO_Base_Db_FindCriteria::newInstance()
+					->addCondition('id',$params['id'])
+					->addCondition('default','1','=','al')
+				)
+		);
+		
+		$response = array(
+			'success' => true,
+			'data' => array(
+				'name' => $accountModel->name,
+				'email' => $accountModel->email
+			)
+		);
+		
+		echo json_encode($response);
+		
+	}
 	
 }

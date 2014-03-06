@@ -412,7 +412,6 @@ GO.email.EmailClient = function(config){
 
 
 
-
 	//select the first inbox to be displayed in the messages grid
 	this.treePanel.getRootNode().on('load', function(node)
 	{
@@ -615,12 +614,22 @@ GO.email.EmailClient = function(config){
 		cls: 'x-btn-text-icon',
 		handler: function(){
 
-			GO.email.showComposer({
-				uid: this.messagePanel.uid,
-				task: 'reply',
-				mailbox: this.mailbox,
-				account_id: this.account_id
-			});
+			if (!this._permissionDelegated) {
+				GO.email.showComposer({
+					uid: this.messagePanel.uid,
+					task: 'reply',
+					mailbox: this.mailbox,
+					account_id: this.account_id
+				});
+			} else {
+				GO.email.showComposer({
+					uid: this.messagePanel.uid,
+					task: 'reply',
+					mailbox: this.mailbox,
+					account_id: this.account_id,
+					delegated_cc_enabled: true
+				});
+			}
 		},
 		scope: this
 	}),this.replyAllButton=new Ext.Button({
@@ -634,7 +643,6 @@ GO.email.EmailClient = function(config){
 				task: 'reply_all',
 				mailbox: this.mailbox,
 				account_id: this.account_id
-
 			});
 		},
 		scope: this
@@ -644,12 +652,22 @@ GO.email.EmailClient = function(config){
 		text: GO.email.lang.forward,
 		cls: 'x-btn-text-icon',
 		handler: function(){
-			GO.email.showComposer({
-				uid: this.messagePanel.uid,
-				task: 'forward',
-				mailbox: this.mailbox,
-				account_id: this.account_id
-			});
+			if (!this._permissionDelegated) {
+				GO.email.showComposer({
+					uid: this.messagePanel.uid,
+					task: 'forward',
+					mailbox: this.mailbox,
+					account_id: this.account_id
+				});
+			} else {
+				GO.email.showComposer({
+					uid: this.messagePanel.uid,
+					task: 'forward',
+					mailbox: this.mailbox,
+					account_id: this.account_id,
+					delegated_cc_enabled: true
+				});
+			}
 		},
 		scope: this
 	}),
@@ -732,12 +750,13 @@ GO.email.EmailClient = function(config){
 			//this.messagePanel.uid=record.data['uid'];
 
 		var readOnly = this.messagesGrid.store.reader.jsonData.permission_level < GO.permissionLevels.create || this.messagesGrid.store.reader.multipleFolders;
+		this._permissionDelegated = this.messagesGrid.store.reader.jsonData.permission_level == GO.email.permissionLevels.delegated;
 		
 		this.deleteButton.setDisabled(readOnly);
 
-			this.replyAllButton.setDisabled(readOnly);
-			this.replyButton.setDisabled(readOnly);
-			this.forwardButton.setDisabled(readOnly);
+			this.replyAllButton.setDisabled(readOnly && !this._permissionDelegated);
+			this.replyButton.setDisabled(readOnly && !this._permissionDelegated);
+			this.forwardButton.setDisabled(readOnly && !this._permissionDelegated);
 			this.printButton.setDisabled(readOnly);
 			
 			var record = this.messagesGrid.store.getById(this.messagePanel.uid);
@@ -815,6 +834,7 @@ GO.email.EmailClient = function(config){
 
 Ext.extend(GO.email.EmailClient, Ext.Panel,{
 
+	_permissionDelegated : false,
 
 	moveGrid : function(){	
 		if(this.topMessagesGrid.isVisible())

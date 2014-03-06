@@ -141,7 +141,7 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 			exit();
 		} else {
 			
-			if(isset(\GO::config()->logout_url)){
+			if(!empty(\GO::config()->logout_url)){
 				header('Location: ' .\GO::config()->logout_url);
 				exit();
 			}else

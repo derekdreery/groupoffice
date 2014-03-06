@@ -864,7 +864,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				var fromRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
 
 				
-				params.account_id =fromRecord.get('account_id');
+				if (!GO.util.empty(config.account_id))
+					params.account_id = config.account_id;
+				else
+					params.account_id =fromRecord.get('account_id');
+				
 				params.alias_id=fromRecord.get('id');					
 				
 				params.template_id=config.template_id;
@@ -935,6 +939,24 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					this.selectLinkField.setRemoteText(config.link_config.text);
 				}
 			}
+			
+			if (!GO.util.empty(config['delegated_cc_enabled'])) {
+				
+				GO.request({
+					url: 'email/account/loadAddress',
+					params: {
+						id: config.account_id
+					},
+					success: function( options, response, result ) {
+						var name = result.data['name'];
+						var email = result.data['email'];
+						this.ccCombo.setValue('"'+name+'" <'+email+'>');
+					},
+					scope: this
+				});
+				
+			}
+				
 		}
 	},
 	

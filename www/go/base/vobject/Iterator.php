@@ -48,7 +48,7 @@ class Iterator implements \Iterator {
 				}
 			}
 			
-			if($count==1000)
+			if($count==5000)
 				break;
 		}		
 		

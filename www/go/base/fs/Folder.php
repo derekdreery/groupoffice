@@ -153,23 +153,30 @@ class Folder extends Base {
 		if($newPath==$this->path())
 			return true;
 			
-		if(!rename($this->path(), $newPath))
-			throw new Exception("Rename failed");
-		
-		$this->path = $newPath;
+		if(!@rename($this->path(), $newPath)){ // Notice suppressed by @
+			//	throw new Exception("Rename failed");
 			
-//		$movedFolder = new GO_Base_Fs_Folder($newPath);
-//		$movedFolder->create();
-//		
-//		$ls = $this->ls(true);
-//		foreach($ls as $fsObject){
-//			$fsObject->move($movedFolder);
-//		}
-//		
-//		$this->delete();
-		
-//		$this->path = $movedFolder->path();
-		
+			// If renaming is throwing an error then do it the old way.
+			// This is done because of problems when moving items across partitions.
+			// See https://bugs.php.net/bug.php?id=50676 for more info about this.
+			
+			// If rename fails then try the old method
+			$movedFolder = new GO_Base_Fs_Folder($newPath);
+			$movedFolder->create();
+
+			$ls = $this->ls(true);
+			foreach($ls as $fsObject){
+				$fsObject->move($movedFolder);
+			}
+
+			$this->delete();
+
+			$newPath = $movedFolder->path();
+			
+		}
+
+		$this->path = $newPath;
+
 		return true;
 	}
 	
