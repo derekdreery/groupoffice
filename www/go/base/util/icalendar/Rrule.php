@@ -340,6 +340,8 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		$this->_interval = !empty($rrule_arr['INTERVAL']) ? intval($rrule_arr['INTERVAL']) : 1;
 		$this->_bysetpos = !empty($rrule_arr['BYSETPOS']) ? intval($rrule_arr['BYSETPOS']) : 0;
 		
+		if($this->_bysetpos<0)
+			throw new Exception("'Last X of month' recurrence pattern currently not supported by Group-Office.");
 		
 		
 		$this->_splitDaysAndSetPos();
