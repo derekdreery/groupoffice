@@ -446,8 +446,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			
 		this.setRemoteModelId(remoteModelId);
 		
-		//set dialog in new or edit mode
-		this.checkSubmitMethod();
+//		//set dialog in new or edit mode
+//		this.checkSubmitMethod();
 		
 		if(remoteModelId || this.loadOnNewModel)
 		{
@@ -548,7 +548,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	{
 		this.formPanel.form.baseParams[this.remoteModelIdName]=remoteModelId;
 		this.remoteModelId=remoteModelId;		
-		
+		this.checkSubmitMethod();
 		this.setRelatedGridParams(remoteModelId);
 	},
 	
