@@ -167,7 +167,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 			$this->_recurPositionStartTime=$this->_eventstarttime;
 		
 		
-		GO::debug(date('c', $this->_recurPositionStartTime));
+//		GO::debug(date('c', $this->_recurPositionStartTime));
 		
 		if(!$startTime)
 			$startTime=$this->_recurPositionStartTime;

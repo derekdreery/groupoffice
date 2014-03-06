@@ -1,8 +1,22 @@
+- Calendar: Able to import very large VCards.
+- Calendar: Notification to user when attempting to import a VCard with a recurrence containing 'Last X of month' pattern.
+
+05-03-2014 5.0.45
+- CalDAV will update and delete the correct event when events are imported and exported with the same URI
+- Fixed rename(move files/folders) functionality (move files/folders did not work properly)
+- Tickets: Fixed dependency problem with loading the tickettypes dialog when the email module is not installed.
+- Tickets: Fixed searching for default type when loading a new ticket. Now it also checks if the user has create permission for the type.
+- Billing: Fixed bug in the selection (date range) of expense items when exporting them.
 - Projects2: Search for employees and resources works now
 - Corrected key event for auto capitalize. It didn't work in Firefox.
 - Files & Email: option to automatically delete expired download links.
 - Holidays: possible to delete an employee's entire year record.
 - Holidays: when registering new holiday, show hours in national holidays.
+- Projects2: Default icon in the absence of an icon in the subprojects grid.
+- Projects2: Columns are sortable in sub projects grid.
+- Projects2: reports didn't include last day of period
+- Projects2: New project shows available tempaltes sorted by name 
+- Email: Able to reply to e-mails with a read-only account: permission level "Read Only & Delegated"
 
 18-02-2014 5.0.44
 - Fixed bug in custom fields copying from projects1 to projects2.
