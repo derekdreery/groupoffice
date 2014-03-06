@@ -28,7 +28,7 @@
  * @property boolean $status
  */
 
-
+namespace GO\Files\Model;
 
 class FolderNotificationMessage extends \GO\Base\Db\ActiveRecord {
         
