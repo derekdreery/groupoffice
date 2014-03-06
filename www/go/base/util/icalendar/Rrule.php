@@ -352,12 +352,13 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		
 		
 		//figure out end time of event
-		//UNTESTED
 		if($this->_count>0 && empty($this->_until)){
-			$this->_until=0;
-			for($i=1;$i<$this->_count;$i++) {
-				$this->_until=$this->getNextRecurrence();
+			$this->_until=$until=0;
+			for($i=0;$i<$this->_count;$i++) {
+				$until=$this->getNextRecurrence();
+				
 			}			
+			$this->_until=$until;
 		}
 		
 		return true;
