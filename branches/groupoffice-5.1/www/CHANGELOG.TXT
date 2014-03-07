@@ -1,3 +1,4 @@
+- Files: Users without disk quota can still upload files.
 - Calendar: Able to import very large VCards.
 - Calendar: Notification to user when attempting to import a VCard with a recurrence containing 'Last X of month' pattern.
 
