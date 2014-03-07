@@ -23,10 +23,14 @@ namespace GO\Base\Data;
 
 class JsonResponse implements \ArrayAccess {
 	
-	private $_data;
+	/**
+	 * The json data in an array
+	 * @var array
+	 */
+	public $data;
 	
 	public function __construct($data=array()) {
-		$this->_data = $data;
+		$this->data = $data;
 	}
 	
 	public function __toString() {
@@ -39,7 +43,7 @@ class JsonResponse implements \ArrayAccess {
 //				$item = stripslashes(str_replace(array('\t','\n', 'startjs:', ':endjs'),'',$item));
 //		});
 		
-		$string = json_encode($this->_data);
+		$string = json_encode($this->data);
 
 		if(strpos($string,'startjs:')!==false){
 			preg_match_all('/"startjs:(.*?):endjs"/usi', $string, $matches, PREG_SET_ORDER);
@@ -70,33 +74,36 @@ class JsonResponse implements \ArrayAccess {
 			header('Content-type: application/json; charset=UTF-8'); //tell the browser we are returning json
 		}
 	}
-
+/**
+ * 
+ * @todo We need to support php 5.3.3 so we can't get by reference here.
+ */
 	public function offsetGet($offset) {
-		return $this->_data[$offset];
+		return $this->data[$offset];
 	}
 
 	public function offsetSet($offset, $value) {
 		if (is_null($offset)) {
-            $this->_data[] = $value;
+            $this->data[] = $value;
         } else {
-            $this->_data[$offset] = $value;
+            $this->data[$offset] = $value;
         }
 	}
 
 	public function offsetExists($offset) {
-		return isset($this->_data[$offset]);
+		return isset($this->data[$offset]);
 	}
 
 	public function offsetUnset($offset) {
-		unset($this->_data[$offset]);
+		unset($this->data[$offset]);
 	}
 	
-	public function getData(){
-		return $this->_data;
+	public function &getData(){
+		return $this->data;
 	}
 	
 	public function mergeWith(JsonResponse $response){
-		$this->_data = array_merge($this->_data, $response->getData());
+		$this->data = array_merge($this->data, $response->getData());
 	}
 	
 }
