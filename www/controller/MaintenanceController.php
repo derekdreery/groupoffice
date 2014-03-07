@@ -6,7 +6,7 @@
  */
 
 namespace GO\Core\Controller;
-use PDO;
+use GO\Base\Db\PDO;
 
 class MaintenanceController extends \GO\Base\Controller\AbstractController {
 	
