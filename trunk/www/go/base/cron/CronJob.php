@@ -36,7 +36,7 @@
 
 namespace GO\Base\Cron;
 
-use PDO;
+use GO\Base\Db\PDO;
 
 
 class CronJob extends \GO\Base\Db\ActiveRecord {

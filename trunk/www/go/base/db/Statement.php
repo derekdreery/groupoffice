@@ -25,7 +25,7 @@
  */
 
 namespace GO\Base\Db;
-use PDO;
+use GO\Base\Db\PDO;
 
 class Statement implements \IteratorAggregate
 {
