@@ -81,21 +81,6 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		return parent::afterLoad($response, $model, $params);
 	}
 
-	private function _getRegisterEmail() {
-		$r = array(
-				'register_email_subject' => GO::config()->get_setting('register_email_subject'),
-				'register_email_body' => GO::config()->get_setting('register_email_body')
-		);
-
-		if (!$r['register_email_subject']) {
-			$r['register_email_subject'] = GO::t('register_email_subject', 'users');
-		}
-		if (!$r['register_email_body']) {
-			$r['register_email_body'] = GO::t('register_email_body', 'users');
-		}
-		return $r;
-	}
-
 	protected function beforeSubmit(&$response, &$model, &$params) {
 
 		if(empty($params['password'])){
@@ -178,29 +163,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 		if (!empty($params['send_invitation'])) {
 
-			$email = $this->_getRegisterEmail();
-
-			if (!empty($email['register_email_body']) && !empty($email['register_email_subject'])) {
-				
-				$email['register_email_body'] = str_replace('{password}', $params["password"], $email['register_email_body']);
-
-				foreach ($model->getAttributes() as $key => $value) {
-					if(is_string($value))
-						$email['register_email_body'] = str_replace('{' . $key . '}', $value, $email['register_email_body']);
-				}
-
-				$email['register_email_body'] = str_replace('{url}', GO::config()->full_url, $email['register_email_body']);
-				$email['register_email_body'] = str_replace('{title}', GO::config()->title, $email['register_email_body']);
-				
-				$message = new GO_Base_Mail_Message();
-				$message->setSubject($email['register_email_subject'])
-								->setTo(array($model->email=>$model->name))
-								->setFrom(array(GO::config()->webmaster_email=>GO::config()->title))
-								->setBody($email['register_email_body']);								
-
-				GO_Base_Mail_Mailer::newGoInstance()->send($message);
-				
-			}
+			$model->sendRegistrationMail();
 		}
 	}
 
