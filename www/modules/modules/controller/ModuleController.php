@@ -226,10 +226,6 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 			$moduleModel->save();
 		}
 		
-		//todo make this irrelevant
-		//backwards compat
-		require_once(\GO::config()->root_path.'Group-Office.php');
-		$GLOBALS['GO_MODULES']->load_modules();
 		return array('success'=>true);
 	}
 

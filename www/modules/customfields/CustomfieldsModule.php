@@ -80,7 +80,7 @@ class CustomfieldsModule extends \GO\Base\Module {
 	public static function replaceRecords($sourceModelName, $targetModelName){
 		
 		//delete existing
-		$stmt = GO_Customfields_Model_Category::model()->findByModel($targetModelName);
+		$stmt = \GO\Customfields\Model\Category::model()->findByModel($targetModelName);
 		$stmt->callOnEach('delete');
 
 
@@ -99,7 +99,7 @@ class CustomfieldsModule extends \GO\Base\Module {
 		GO::getDbConnection()->query($sql);
 
 
-		$stmt = GO_Customfields_Model_Category::model()->findByModel($sourceModelName);
+		$stmt = \GO\Customfields\Model\Category::model()->findByModel($sourceModelName);
 
 		foreach ($stmt as $category) {
 			$category->duplicate(array(

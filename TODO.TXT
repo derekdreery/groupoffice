@@ -1,3 +1,25 @@
+oude CMS ?!?
+
+forms
+gastouderbureau
+erp
+elitelog
+lavenderprofiles
+campaigns
+sms
+tbi
+werkplaatsplanning
+orderplanning
+
+Remove:
+projects,time,hoursappr
+twain
+print2flash
+documentconvertor
+
+
+
+
 Branch maken
 
 svn cp

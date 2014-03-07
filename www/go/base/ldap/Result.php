@@ -45,7 +45,7 @@ class Result{
 		
 		$record = new $this->fetchClass($this->_ldapConn, $this->_entryId);
 		if(!is_a($record, 'GO\Base\Ldap\Record'))
-			throw new Exception($this->fetchClass.' is not a GO_Base_Ldap_Record subclass');
+			throw new Exception($this->fetchClass.' is not a GO\Base\Ldap\Record subclass');
 		return $record;
 
 	}

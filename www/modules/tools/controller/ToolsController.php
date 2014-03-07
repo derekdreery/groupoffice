@@ -9,7 +9,7 @@
  */
 
 /**
- * The GO_Tools_Controller_Tools controller
+ * The GO\Tools\Controller\Tools controller
  *
  * @package GO.modules.Tools
  * @version $Id$
@@ -17,13 +17,16 @@
  * @author Wesley Smits wsmits@intermesh.nl
  */
 
-class GO_Tools_Controller_Tools extends GO_Base_Controller_AbstractJsonController{
+namespace GO\Tools\Controller;
+use GO;
+
+class Tools extends GO\Base\Controller\AbstractJsonController{
 	
 	public function actionStore($params){
 	
-		$columnModel = new GO_Base_Data_ColumnModel(false,array(),array('name','script'));
+		$columnModel = new GO\Base\Data\ColumnModel(false,array(),array('name','script'));
 		
-		$store = new GO_Base_Data_ArrayStore($columnModel);
+		$store = new GO\Base\Data\ArrayStore($columnModel);
 
 		$store->addRecord(array('name'=>GO::t('dbcheck','tools'),'script'=>GO::url('maintenance/checkDatabase')));
 		$store->addRecord(array('name'=>GO::t('buildsearchcache','tools'),'script'=>GO::url('maintenance/buildSearchCache')));

@@ -56,7 +56,6 @@ class SmimeMessage extends Message
 	/**
 	 * Call this function to sign a message with a pkcs12 certificate.
 	 * 
-	 * @global type $GO_CONFIG
 	 * @param type $pkcs12_data
 	 * @param type $passphrase 
 	 */

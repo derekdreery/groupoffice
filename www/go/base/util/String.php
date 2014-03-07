@@ -665,50 +665,50 @@ END;
 		}
 	}
 
-	/**
-	 * Return a formatted address string
-	 *
-	 * @param	array $object User or contact
-	 * @access public
-	 * @return string Address formatted
-	 */
-	public static function address_format($object, $linebreak = '<br />') {
-		if (isset ($object['name'])) {
-			$name = $object['name'];
-		} else {
-			$middle_name = $object['middle_name'] == '' ? '' : $object['middle_name'].' ';
-
-			if ($object['title'] != '' && $object['initials'] != '') {
-				$name = $object['title'].' '.$object['initials'].' '.$middle_name.$object['last_name'];
-			} else {
-				$name = $object['first_name'].' '.$middle_name.$object['last_name'];
-			}
-		}
-
-		$address = $name.$linebreak;
-
-		if ($object['address'] != '') {
-			$address .= $object['address'];
-			if (isset ($object['address_no'])) {
-				$address .= ' '.$object['address_no'];
-			}
-			$address .= $linebreak;
-		}
-		if ($object['zip'] != '') {
-			$address .= $object['zip'].' ';
-		}
-		if ($object['city'] != '') {
-			$address .= $object['city'].$linebreak;
-		}
-		if ($object['country'] != '') {
-			global $lang;
-			require_once($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
-
-			$address .= $countries[$object['country']].$linebreak;
-		}
-		return $address;
-
-	}
+//	/**
+//	 * Return a formatted address string
+//	 *
+//	 * @param	array $object User or contact
+//	 * @access public
+//	 * @return string Address formatted
+//	 */
+//	public static function address_format($object, $linebreak = '<br />') {
+//		if (isset ($object['name'])) {
+//			$name = $object['name'];
+//		} else {
+//			$middle_name = $object['middle_name'] == '' ? '' : $object['middle_name'].' ';
+//
+//			if ($object['title'] != '' && $object['initials'] != '') {
+//				$name = $object['title'].' '.$object['initials'].' '.$middle_name.$object['last_name'];
+//			} else {
+//				$name = $object['first_name'].' '.$middle_name.$object['last_name'];
+//			}
+//		}
+//
+//		$address = $name.$linebreak;
+//
+//		if ($object['address'] != '') {
+//			$address .= $object['address'];
+//			if (isset ($object['address_no'])) {
+//				$address .= ' '.$object['address_no'];
+//			}
+//			$address .= $linebreak;
+//		}
+//		if ($object['zip'] != '') {
+//			$address .= $object['zip'].' ';
+//		}
+//		if ($object['city'] != '') {
+//			$address .= $object['city'].$linebreak;
+//		}
+//		if ($object['country'] != '') {
+//			global $lang;
+//			require_once($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
+//
+//			$address .= $countries[$object['country']].$linebreak;
+//		}
+//		return $address;
+//
+//	}
 
 
 	/**

@@ -161,7 +161,7 @@ class Folder extends Base {
 			// See https://bugs.php.net/bug.php?id=50676 for more info about this.
 			
 			// If rename fails then try the old method
-			$movedFolder = new GO_Base_Fs_Folder($newPath);
+			$movedFolder = new \GO\Base\Fs\Folder($newPath);
 			$movedFolder->create();
 
 			$ls = $this->ls(true);

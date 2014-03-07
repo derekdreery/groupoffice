@@ -1,14 +1,16 @@
 <?php
-class GO_Files_Controller_Email extends GO_Base_Controller_AbstractJsonController {
+namespace GO\Files\Controller;
+use GO;
+class Email extends GO\Base\Controller\AbstractJsonController {
 	
 	protected function actionCheckDeleteCron( $params ) {
 		
 		if (empty(GO::modules()->cron)) {
-			echo json_encode(array('success'=>true,'data'=>array('enabled'=>false,'reason'=>'noCronModule')));
+			echo json\encode(array('success'=>true,'data'=>array('enabled'=>false,'reason'=>'noCronModule')));
 			exit();
 		}
 		
-		$cronJob = GO_Base_Cron_CronJob::model()->findSingleByAttribute('job','GO_Files_Cron_DeleteExpiredLinks');
+		$cronJob = GO\Base\Cron\CronJob::model()->findSingleByAttribute('job','GO\Files\Cron\DeleteExpiredLinks');
 		
 		if (!$cronJob) {
 			echo json_encode(array('success'=>true,'data'=>array('enabled'=>false,'reason'=>'noCronJob')));
