@@ -453,7 +453,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 			 * The response is added to the controller's action parameters.
 			 */
 			if($module && !isset(\GO::session()->values['firstRunDone'][$module->id])){
-				$moduleClass = "GO_".ucfirst($module->id)."_".ucfirst($module->id)."Module";
+				$moduleClass = "GO\\".ucfirst($module->id)."\\".ucfirst($module->id)."Module";
 
 				if(class_exists($moduleClass)){
 

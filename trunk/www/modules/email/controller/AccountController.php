@@ -2,6 +2,7 @@
 
 
 namespace GO\Email\Controller;
+use GO;
 
 
 class AccountController extends \GO\Base\Controller\AbstractModelController {
@@ -587,19 +588,19 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 
 	protected function actionLoadAddress($params) {
 		
-		$accountModel = GO_Email_Model_Account::model()->find(
-			GO_Base_Db_FindParams::newInstance()
+		$accountModel = GO\Email\Model\Account::model()->find(
+			GO\Base\Db\FindParams::newInstance()
 				->single()
 				->select('t.*,al.name,al.email')
 				->ignoreAcl()
 				->joinModel(array(
-					'model'=>'GO_Email_Model_Alias',
+					'model'=>'GO\Email\Model\Alias',
 					'localTableAlias'=>'t',
 					'localField'=>'id',
 					'foreignField'=>'account_id',
 					'tableAlias'=>'al'
 				))
-				->criteria(GO_Base_Db_FindCriteria::newInstance()
+				->criteria(GO\Base\Db\FindCriteria::newInstance()
 					->addCondition('id',$params['id'])
 					->addCondition('default','1','=','al')
 				)
