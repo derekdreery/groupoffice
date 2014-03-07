@@ -118,7 +118,7 @@ class CronController extends \GO\Base\Controller\AbstractJsonController{
 		
 		if(!$till){
 			$till = new \GO\Base\Util\Date\DateTime();
-			$till->add(new DateInterval('P1D'));
+			$till->add(new \DateInterval('P1D'));
 		}
 		
 		$findParams = \GO\Base\Db\FindParams::newInstance()

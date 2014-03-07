@@ -1502,7 +1502,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		if(!$sub)
 			$offset *= -1;
 
-		$interval = new DateInterval('PT'.$offset.'S');	
+		$interval = new \DateInterval('PT'.$offset.'S');	
 		if(!$sub){
 			$date->add($interval);
 		}else{
