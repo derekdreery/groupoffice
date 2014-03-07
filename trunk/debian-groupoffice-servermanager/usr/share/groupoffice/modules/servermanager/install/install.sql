@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `sm_installations` (
   `admin_email` varchar(100) DEFAULT NULL,
   `admin_name` varchar(100) DEFAULT NULL,
   `status` varchar(50) NOT NULL DEFAULT 'ignore',
-  `token` varchar(100) NOT NULL,
+  `token` varchar(100) DEFAULT NULL,
   `file_storage_usage` bigint(20) NOT NULL DEFAULT '0',
   `database_usage` int(11) NOT NULL DEFAULT '0',
   `mailbox_usage` int(11) NOT NULL DEFAULT '0',

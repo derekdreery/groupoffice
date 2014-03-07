@@ -4,7 +4,7 @@
 namespace GO\Servermanager\Controller;
 
 
-class Trial extends \GO\Site\Components\Controller {
+class TrialController extends \GO\Site\Components\Controller {
 
 	protected $newTrial;
 	

@@ -46,7 +46,7 @@
 
 
 namespace GO\ServerManager\Model;
-
+use Exception;
 
 class Installation extends \GO\Base\Db\ActiveRecord {
 

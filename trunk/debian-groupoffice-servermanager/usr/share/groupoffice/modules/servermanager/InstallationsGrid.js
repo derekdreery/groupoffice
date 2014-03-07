@@ -139,6 +139,10 @@ GO.servermanager.InstallationsGrid = function(config){
 	config.tbar=new Ext.Toolbar({
 		cls:'go-head-tb',
 		items:[{
+				xtype:'htmlcomponent',
+				html:GO.servermanager.lang.installations,
+				cls:'go-module-title-tbar'
+			},{
 			iconCls: 'btn-add',
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',

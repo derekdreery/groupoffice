@@ -28,7 +28,7 @@
 namespace GO\ServerManager\Controller;
 
 
-class UserPrice extends \GO\Base\Controller\AbstractModelController{
+class UserPriceController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO\ServerManager\Model\UserPrice';
 
