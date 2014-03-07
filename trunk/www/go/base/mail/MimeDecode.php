@@ -169,7 +169,7 @@ class MimeDecode
      * @param string The input to decode
      * @access public
      */
-    function MimeDecode($input)
+    function __construct($input)
     {
         list($header, $body)   = $this->_splitBodyHeader($input);
 
@@ -200,37 +200,22 @@ class MimeDecode
      */
     function decode($params = null)
     {
-        // determine if this method has been called statically
-        $isStatic = empty($this) || !is_a($this, __CLASS__);
+        
+				$this->_include_bodies = isset($params['include_bodies']) ?
+													 $params['include_bodies'] : false;
+				$this->_decode_bodies  = isset($params['decode_bodies']) ?
+													 $params['decode_bodies']  : false;
+				$this->_decode_headers = isset($params['decode_headers']) ?
+													 $params['decode_headers'] : false;
+				$this->_rfc822_bodies  = isset($params['rfc_822bodies']) ?
+													 $params['rfc_822bodies']  : false;
 
-        // Have we been called statically?
-	// If so, create an object and pass details to that.
-        if ($isStatic AND isset($params['input'])) {
 
-            $obj = new MimeDecode($params['input']);
-            $structure = $obj->decode($params);
-
-        // Called statically but no input
-        } elseif ($isStatic) {
-            return false;
-
-        // Called via an object
-        } else {
-            $this->_include_bodies = isset($params['include_bodies']) ?
-	                             $params['include_bodies'] : false;
-            $this->_decode_bodies  = isset($params['decode_bodies']) ?
-	                             $params['decode_bodies']  : false;
-            $this->_decode_headers = isset($params['decode_headers']) ?
-	                             $params['decode_headers'] : false;
-            $this->_rfc822_bodies  = isset($params['rfc_822bodies']) ?
-	                             $params['rfc_822bodies']  : false;
-
-            $structure = $this->_decode($this->_header, $this->_body);
-            if ($structure === false) {
-                $structure = $this->raiseError($this->_error);
-            }
-        }
-
+				$structure = $this->_decode($this->_header, $this->_body);
+				if ($structure === false) {
+						$structure = $this->raiseError($this->_error);
+				}
+       
         return $structure;
     }
 
