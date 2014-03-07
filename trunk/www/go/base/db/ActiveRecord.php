@@ -41,7 +41,7 @@
 
 namespace GO\Base\Db;
 
-use PDO;
+use GO\Base\Db\PDO;
 use GO;
 
 
