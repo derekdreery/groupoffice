@@ -27,7 +27,7 @@
 namespace GO\Servermanager\Controller;
 
 
-class Price extends \GO\Base\Controller\AbstractController
+class PriceController extends \GO\Base\Controller\AbstractController
 {
 
 	/**

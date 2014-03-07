@@ -3,8 +3,10 @@
 
 namespace GO\Servermanager\Controller;
 
+use GO;
+use Exception;
 
-class Installation extends \GO\Base\Controller\AbstractModelController {
+class InstallationController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = 'GO\Servermanager\Model\Installation';
 	

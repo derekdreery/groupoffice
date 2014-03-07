@@ -309,3 +309,6 @@ $updates["201304021023"][]="ALTER TABLE  `sm_installation_users` ADD  `email` VA
 
 
 $updates["201304080841"][]="ALTER TABLE  `sm_installations` CHANGE  `file_storage_usage`  `file_storage_usage` BIGINT NOT NULL DEFAULT  '0'";
+
+
+$updates["201403071221"][]="ALTER TABLE  `sm_installations` CHANGE  `token`  `token` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ;";

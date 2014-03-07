@@ -14,7 +14,7 @@
 namespace GO\Servermanager\Controller;
 
 
-class AutomaticEmail extends \GO\Base\Controller\AbstractModelController{
+class AutomaticEmailController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected $model = 'GO\Servermanager\Model\AutomaticEmail';
 		
