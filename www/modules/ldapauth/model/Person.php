@@ -76,10 +76,16 @@ class Person extends GO\Base\Ldap\Record {
 	 */
 	public static function findByUsername($username) {
 
+		$peopleDn = \GO\Ldapauth\LdapauthModule::getPeopleDn($username);
+		
+		if(empty($peopleDn)){
+			return false;
+		}
+		
 		$mapping = self::getMapping();
 		$query = $mapping['username'] . '=' . $username;
 
-		$person = self::find($query, \GO\Ldapauth\LdapauthModule::getPeopleDn($username));
+		$person = self::find($query, $peopleDn);
 		GO::debug("LDAPAUTH: Loaded $username!");
 		
 		if(!empty($person))

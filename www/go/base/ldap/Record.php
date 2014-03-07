@@ -1,8 +1,10 @@
 <?php
 namespace GO\Base\Ldap;
 
+use GO;
+use GO\Base\Model;
 
-class Record extends GO\Base\Model{
+class Record extends Model{
 
 	/**
 	 * The LDAP connection object holding the link
