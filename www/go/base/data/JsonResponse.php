@@ -71,7 +71,7 @@ class JsonResponse implements \ArrayAccess {
 		}
 	}
 
-	public function &offsetGet($offset) {
+	public function offsetGet($offset) {
 		return $this->_data[$offset];
 	}
 
