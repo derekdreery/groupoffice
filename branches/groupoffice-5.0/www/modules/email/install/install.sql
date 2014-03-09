@@ -243,3 +243,16 @@ CREATE TABLE IF NOT EXISTS `em_contacts_last_mail_times` (
   `last_mail_time` int(11) NOT NULL,
   PRIMARY KEY (`contact_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+DROP TABLE IF EXISTS `em_labels`;
+CREATE TABLE IF NOT EXISTS `em_labels` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `flag` varchar(100) NOT NULL,
+  `color` varchar(6) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `default` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
