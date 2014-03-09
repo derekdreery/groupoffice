@@ -270,3 +270,7 @@ $l['linkMustHavePermissionToWrite'] = 'You do not have the required WRITE permis
 
 $l['sortAddressesByMailTime'] = 'Sort recipient addresses by time of last email sending (requires Address Book module)';
 $l['permissionDelegated'] = 'Read only and delegated';
+
+$l['label'] = 'Label';
+$l['labels'] = 'Labels';
+$l['labelsLimit'] = 'Label\'s limit reached. The maximum number of labels is %d';
