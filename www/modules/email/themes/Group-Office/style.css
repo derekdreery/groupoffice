@@ -1,5 +1,5 @@
-@media print { 
- .em-autolink-message,.em-contact-link-container{ display: none !important; } 
+@media print {
+ .em-autolink-message,.em-contact-link-container{ display: none !important; }
 }
 
 .em-autolink-message{
@@ -51,7 +51,7 @@ margin:5px 2px;
 	float:left;
 	padding-left:20px;
 	line-height:16px;
-	background: url(images/16x16/message.png) no-repeat;	
+	background: url(images/16x16/message.png) no-repeat;
 	height:16px;
 	vertical-align:middle;
 	color:#666666;
@@ -60,7 +60,7 @@ margin:5px 2px;
 }
 
 /*.ml-unseen-row .x-grid3-cell-inner{
-	font-weight:bold !important;	
+	font-weight:bold !important;
 }*/
 
 .go-model-icon-GO_Email_Model_ImapMessage, .go-model-icon-GO_Savemailas_Model_LinkedEmail {
@@ -170,7 +170,7 @@ margin:5px 2px;
 
 
 .ml-folder-unseen span{
-	color:#000 !important; 
+	color:#000 !important;
 	font-weight:bold !important;
 }
 
@@ -182,7 +182,7 @@ margin:5px 2px;
 .ml-unseen-mail{
  margin:2px 0px;
  font-weight:bold;
- color:#15428B; 
+ color:#15428B;
 }
 
 .ml-seen-from{
@@ -194,7 +194,7 @@ margin:5px 2px;
 	line-height: 15px;
 	margin: 4px 0 0 0;
 	font-weight:bold;
-	color:#000; 
+	color:#000;
 }
 
 .ml-seen-subject{
@@ -219,16 +219,16 @@ margin:5px 2px;
 
 .message-header a{
 	color: black;
-	text-decoration: none;	
+	text-decoration: none;
 }
 
 .message-header a:hover{
 	color: black;
-	text-decoration: underline;	
+	text-decoration: underline;
 }
 
 .message-header-table td{
-	vertical-align:top;	
+	vertical-align:top;
 }
 
 .message-header-table{
@@ -245,7 +245,7 @@ margin:5px 2px;
 	line-height:20px;
 }
 .message-icalendar-icon{
-	background-repeat:no-repeat;	
+	background-repeat:no-repeat;
 	background-position:0 2px;
 	padding:0px 0px 2px 20px;
 	white-space:nowrap;
@@ -267,7 +267,7 @@ margin:5px 2px;
 }
 
 .message-body{
-	padding: 8px;	
+	padding: 8px;
 	position: relative;
 }
 .message-body p, .em-message p, .em-composer p{
@@ -350,7 +350,7 @@ margin:5px 2px;
 .email-upload-pc td.x-btn-tl, .email-upload-pc td.x-btn-tc, .email-upload-pc td.x-btn-tr,
 .email-upload-pc td.x-btn-ml, .email-upload-pc td.x-btn-mc, .email-upload-pc td.x-btn-mr,
 .email-upload-pc td.x-btn-bl, .email-upload-pc td.x-btn-bc, .email-upload-pc td.x-btn-br {
-	background:transparent !important;	
+	background:transparent !important;
 }
 
 .email-upload-pc button.x-btn-text
@@ -396,5 +396,22 @@ margin:5px 2px;
 }
 
 #em-pnl-west .x-grid3-row td{
-	border-bottom: 1px solid #666;	
+	border-bottom: 1px solid #666;
+}
+
+div.em-message-labels-container span {
+	float: left;
+	border-radius: 5px;
+	padding: 3px 8px;
+	line-height: 15px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+div.em-messages-grid-labels-container > div {
+	border-radius: 4px;
+	float: left;
+	height: 16px;
+	margin: 0 4px 4px 0;
+	width: 16px;
 }
