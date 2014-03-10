@@ -487,7 +487,9 @@ class GO{
 					require_once self::config()->root_path.'go/vendor/swift/lib/swift_init.php';
 
 					$filePath = self::config()->root_path.'go/vendor/swift/lib/classes/'.str_replace('_', '/', $className).'.php';
-				}				
+				}else if(substr($className, 0,7)=='Michelf'){
+					$filePath = self::config()->root_path."go/vendor/Markdown/".preg_replace('{\\\\|_(?!.*\\\\)}', "/", ltrim($className, '\\')).'.php';
+				}
 			}
 
 			
