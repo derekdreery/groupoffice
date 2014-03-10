@@ -15,7 +15,7 @@
 		<link rel="stylesheet" href="<?php echo Site::template()->getUrl(); ?>css/site.css">
 
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <!-- Latest compiled and minified JavaScript -->
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
@@ -37,8 +37,8 @@
 			});
 		</script>
 
-		<script src="http://lokeshdhakar.com/projects/lightbox2/js/lightbox-2.6.min.js"></script>
-		<link href="http://lokeshdhakar.com/projects/lightbox2/css/lightbox.css" rel="stylesheet" />
+		<script src="<?php echo Site::file('js/lightbox-2.6.min.js'); ?>"></script>
+		<link href="<?php echo Site::file('css/lightbox.css'); ?>" rel="stylesheet" />
 	</head>
 
 	<body>
