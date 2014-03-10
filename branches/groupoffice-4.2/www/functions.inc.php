@@ -36,6 +36,18 @@ function get_model_by_type_id($model_type_id){
 		return GO::getModel($r['model_name']);
 }
 
+function get_model_type_id_by_model_name($model_name){
+	require_once('GO.php');
+	$db = new db();
+	$sql = "SELECT id FROM go_model_types WHERE model_name='$model_name';";
+	$db->query($sql);
+	$r = $db->next_record();
+	if(empty($r['id']))
+		return false;
+	else
+		return $r['id'];
+}
+
 
 function ini_return_bytes($val) {
     $val = trim($val);
