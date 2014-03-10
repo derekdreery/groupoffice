@@ -12,6 +12,9 @@
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
+
+namespace GO\Sieve\Util;
+
 // make sure path_separator is defined
 if (!defined('PATH_SEPARATOR')) {
 	define('PATH_SEPARATOR', (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') ? ';' : ':');
@@ -36,9 +39,6 @@ define('SIEVE_ERROR_DELETE', 6);		// script deletion
 define('SIEVE_ERROR_INTERNAL', 7);	  // internal error
 define('SIEVE_ERROR_DEACTIVATE', 8);	// script activation
 define('SIEVE_ERROR_OTHER', 255);	   // other/unknown error
-
-
-namespace GO\Sieve\Util;
 
 
 class Sieve {
@@ -66,9 +66,9 @@ class Sieve {
 	 */
 
 	public function __construct() {
-		$this->sieve = new Net_Sieve();
+		$this->sieve = new \Net_Sieve();
 		$this->sieve->setDebug(true, array($this, "debug_handler"));
-		$this->_PEAR = new PEAR();
+		$this->_PEAR = new \PEAR();
 	}
 
 	private function rewrite_host($host) {
