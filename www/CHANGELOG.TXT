@@ -1,4 +1,5 @@
 - Exporting contact as vcard now sets it's address type as home instead of work.
+- Projects2: New csv export of time entries.
 
 05-03-2014 5.0.45
 - CalDAV will update and delete the correct event when events are imported and exported with the same URI
