@@ -41,6 +41,7 @@ GO.email.MessagesGrid = function(config){
 				hideable:false,
 				sortable:false
 			},{
+				id: 'labels',
 				header: GO.email.lang.labels,
 				width:50,
 				xtype: 'templatecolumn',
@@ -109,6 +110,7 @@ GO.email.MessagesGrid = function(config){
 			hideable:false,
 			sortable:false
 		},{
+			id: 'labels',
 			header: GO.email.lang.labels,
 			width:50,
 			xtype: 'templatecolumn',
