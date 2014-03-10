@@ -8,7 +8,7 @@ class GO_Ldapauth_LdapauthModule extends GO_Base_Module{
 	
 	public static function beforeLogin($username, $password){
 		
-		if(!GO::config()->ldap_peopledn)
+		if(empty(GO::config()->ldap_peopledn))
 			return true;
 		GO::debug("LDAPAUTH: Active");
 		try{
