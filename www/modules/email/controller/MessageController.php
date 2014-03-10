@@ -386,7 +386,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$params["flag"] = "\\".$params["flag"];
 		}
 
-		$response['success']=$imap->set_message_flag($messages, $params["flag"], !empty($params["clear"]))
+		$response['success']=$imap->set_message_flag($messages, $params["flag"], !empty($params["clear"]));
 
 		$mailbox = new GO_Email_Model_ImapMailbox($account, array('name'=>$params['mailbox']));
 		$mailbox->snoozeAlarm();
