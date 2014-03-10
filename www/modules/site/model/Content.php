@@ -44,6 +44,7 @@
 
 namespace GO\Site\Model;
 
+use Michelf\MarkdownExtra;
 
 class Content extends \GO\Base\Db\ActiveRecord{
 
@@ -316,10 +317,11 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	  */
 	 public function getShortText($length=100,$cutwords=false,$append='...'){
 		 
-		 $text = \GO\Base\Util\String::html_to_text($this->content);
-		 $text = \GO\Base\Util\String::cut_string($text,$length,!$cutwords,$append);
+//		 $text = \GO\Base\Util\String::html_to_text($this->content);
 		 
-		 return $text;
+		 $text = \GO\Base\Util\String::cut_string($this->content,$length,!$cutwords,$append);
+		 $html = MarkdownExtra::defaultTransform($text);
+		 return strip_tags($html);
 	 }
 	 
 	 protected function afterSave($wasNew) {
@@ -359,7 +361,15 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	 }
 	 
 	 public function getHtml(){
-		 return self::replaceContentTags($this->content);
+		 $text =  self::replaceContentTags($this->content);
+		 
+		 $html = MarkdownExtra::defaultTransform($text);
+		 
+		 //temp fix for tables
+		 
+		 $html = str_replace('<table>', '<table class="table table-striped">', $html);
+		 
+		 return $html;
 	 }
 	 
 	 public static function replaceContentTags($content=''){

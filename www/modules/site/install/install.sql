@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `site_content` (
   `sort_order` int(11) NOT NULL DEFAULT '0',
   `template` varchar(255) DEFAULT NULL,
   `default_child_template` varchar(255) DEFAULT NULL,
+  `content_type` VARCHAR( 20 ) NOT NULL DEFAULT  'markdown',
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`,`site_id`)
 ) ENGINE=InnoDB;
