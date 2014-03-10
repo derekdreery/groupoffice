@@ -1,6 +1,11 @@
 - Files: Users without disk quota can still upload files.
+
+
+
+
 - Calendar: Able to import very large VCards.
 - Calendar: Notification to user when attempting to import a VCard with a recurrence containing 'Last X of month' pattern.
+- Exporting contact as vcard now sets it's address type as home instead of work.
 
 05-03-2014 5.0.45
 - CalDAV will update and delete the correct event when events are imported and exported with the same URI
@@ -17,7 +22,6 @@
 - Projects2: Columns are sortable in sub projects grid.
 - Projects2: reports didn't include last day of period
 - Projects2: New project shows available tempaltes sorted by name 
-- Email: Able to reply to e-mails with a read-only account: permission level "Read Only & Delegated"
 
 18-02-2014 5.0.44
 - Fixed bug in custom fields copying from projects1 to projects2.
