@@ -29,7 +29,7 @@ var cf = new Ext.form.ColorField({
 
 GO.form.ColorField =  Ext.extend(function(config){
 
-
+	
 
 	GO.form.ColorField.superclass.constructor.call(this, config);
 
@@ -129,7 +129,7 @@ GO.form.ColorField =  Ext.extend(function(config){
 	/**
    * Sets the value of the color field.  Format as hex value 'FFFFFF'
    * without the '#'.
-	 *
+	 * 
    * @param {String} hex The color value
    */
 	setValue : function(hex){
@@ -162,15 +162,15 @@ GO.form.ColorField =  Ext.extend(function(config){
 				this.el.setStyle({
 					'text-indent': '-100px'
 				});
-
-				if(Ext.isIE7) {	// Check this because in IE7 this fix is not needed anymore
+					
+				if(Ext.isIE7) {	// Check this because in IE7 this fix is not needed anymore				
 					this.el.setStyle({
 						'margin-left': '100px'
 					});
 				}
 			}
 
-			if(this.menu && !GO.util.empty(this.curColor) && Ext.isDefined(this.colors) && this.colors.indexOf(this.curColor)>-1)
+			if(this.menu && !GO.util.empty(this.curColor ) && this.colors.indexOf(this.curColor)>-1)
 				this.menu.palette.select(this.curColor);
 		}
 	},
@@ -208,7 +208,7 @@ GO.form.ColorField =  Ext.extend(function(config){
 			this.menu = new Ext.menu.ColorMenu();
 			this.menu.palette.on('select', this.handleSelect, this );
 			this.menu.palette.value=this.curColor;
-
+			
 			this.menu.on(Ext.apply({}, this.menuListeners, {
 				scope:this
 			}));
