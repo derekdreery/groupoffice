@@ -666,7 +666,7 @@ class AbstractModelController extends AbstractController {
 		$store->setStatement($stmt);
 
 		$columnModel = $store->getColumnModel();		
-		$columnModel->formatColumn('link_count','\GO::getModel($model->model_name)->countLinks($model->model_id)');
+		$columnModel->formatColumn('link_count','$model->countLinks($model->model_id)');
 		$columnModel->formatColumn('link_description','$model->link_description');
 
 		$data = $store->getData();
