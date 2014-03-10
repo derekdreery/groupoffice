@@ -517,8 +517,13 @@ class CoreController extends \GO\Base\Controller\AbstractController {
 		$inline = !isset($params['inline']) || !empty($params['inline']);
 		
 		$file = new \GO\Base\Fs\File(\GO::config()->tmpdir.$params['path']);
-		\GO\Base\Util\Http::outputDownloadHeaders($file, $inline, !empty($params['cache']));
-		$file->output();		
+		if($file->exists()){
+			\GO\Base\Util\Http::outputDownloadHeaders($file, $inline, !empty($params['cache']));
+			$file->output();		
+		}else
+		{
+			echo "File not found!";
+		}
 	}
 	
 	/**
@@ -530,8 +535,14 @@ class CoreController extends \GO\Base\Controller\AbstractController {
 	 */
 	protected function actionDownloadPublicFile($params){
 		$file = new \GO\Base\Fs\File(\GO::config()->file_storage_path.'public/'.$params['path']);
-		\GO\Base\Util\Http::outputDownloadHeaders($file,false,!empty($params['cache']));
-		$file->output();		
+		
+		if($file->exists()){
+			\GO\Base\Util\Http::outputDownloadHeaders($file,false,!empty($params['cache']));
+			$file->output();		
+		}else
+		{
+			echo "File not found!";
+		}
 	}
 	
 	
