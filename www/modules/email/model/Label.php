@@ -120,12 +120,13 @@ class GO_Email_Model_Label extends GO_Base_Db_ActiveRecord
             throw new Exception(sprintf(GO::t('labelsLimit', 'email'), 10));
         }
 
-        $flag = preg_replace('~[^\\pL0-9_]+~u', '-', $this->name);
-        $flag = trim($flag, "-");
-        $flag = iconv("utf-8", "us-ascii//TRANSLIT", $flag);
-        $flag = strtolower($flag);
-        $this->flag = preg_replace('~[^-a-z0-9_]+~', '', $flag);
-
+        if (!$this->default) {
+            $flag = preg_replace('~[^\\pL0-9_]+~u', '-', $this->name);
+            $flag = trim($flag, "-");
+            $flag = iconv("utf-8", "us-ascii//TRANSLIT", $flag);
+            $flag = strtolower($flag);
+            $this->flag = preg_replace('~[^-a-z0-9_]+~', '', $flag);
+        }
         return true;
     }
 
