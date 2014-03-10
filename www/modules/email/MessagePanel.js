@@ -1,9 +1,9 @@
-/**
+/** 
  * Copyright Intermesh
- *
+ * 
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- *
+ * 
  * If you have questions write an e-mail to info@intermesh.nl
  * @version $Id$
  * @copyright Copyright Intermesh
@@ -13,17 +13,17 @@
 
 
 GO.email.MessagePanel = Ext.extend(Ext.Panel, {
-
+	
 	uid : 0,
 
 	mailbox:  "",
-
+	
 	account_id: 0,
-
+	
 	initComponent : function(){
-
+		
 		GO.email.MessagePanel.superclass.initComponent.call(this);
-
+		
 		this.attachmentContextMenu = new GO.email.AttachmentContextMenu();
 		this.addEvents({
 			attachmentClicked : true,
@@ -32,49 +32,49 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			load : true,
 			reset : true
 		});
-
+		
 		this.bodyId = Ext.id();
 		this.attachmentsId = Ext.id();
-
+		
 		this.contactImageId = Ext.id();
-
+		
 		this.linkMessageId = Ext.id();
-
-
-
-		var templateStr =
+		
+	
+				
+		var templateStr = 
 		'<div class="message-header">'+
 			'<table class="message-header-table">'+
 			'<tr>'+
-
+			
 			'<td rowspan="99"><img id="'+this.contactImageId+'" src="{contact_thumb_url}" style="height:60px;border:1px solid #d0d0d0;margin-right:10px;cursor:pointer" /></td>'+
-
-
+			
+			
 			'<td style="width:70px"><b>'+GO.email.lang.from+'</b></td>'+
 
 			'<td>: {from} &lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{sender}\', \'{[this.addSlashes(values.from)]}\');">{sender}</a>&gt;</td>'+
 //			'<td rowspan="99"><span id="'+this.linkMessageId+'" class="em-contact-link"></span></td>'+
-
+			
 			'</tr>'+
 			'<tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>'+
 			'<tr><td><b>'+GO.lang.strDate+'</b></td><td>: {date}</td></tr>'+
 			//'<tr><td><b>'+GO.lang.strSize+'</b></td><td>: {size}</td></tr>'+
 			'<tr><td><b>'+GO.email.lang.to+'</b></td><td>: '+
 			'<tpl for="to">'+
-			'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.personal)]}\');">{email}</a>&gt;; </tpl>'+
+			'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.personal)]}\');">{email}</a>&gt;; </tpl>'+	
 			'</tpl>'+
 			'</td></tr>'+
 			'<tpl if="cc.length">'+
 			'<tr><td><b>'+GO.email.lang.cc+'</b></td><td>: '+
 			'<tpl for="cc">'+
-			'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.personal)]}\');">{email}</a>&gt;; </tpl>'+
+			'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.personal)]}\');">{email}</a>&gt;; </tpl>'+	
 			'</tpl>'+
 			'</td></tr>'+
 			'</tpl>'+
 			'<tpl if="bcc.length">'+
 			'<tr><td><b>'+GO.email.lang.bcc+'</b></td><td>: '+
 			'<tpl for="bcc">'+
-			'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+
+			'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
 			'</tpl>'+
 			'</td></tr>'+
 			'</tpl>'+
@@ -104,43 +104,34 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			'<div style="clear:both;"></div>'+
 			'<tpl if="blocked_images&gt;0">'+
 			'<div class="go-warning-msg em-blocked">'+GO.email.lang.blocked+' <a id="em-unblock-'+this.bodyId+'" href="#" class="normal-link">'+GO.email.lang.unblock+'</a></div>'+
-			'</tpl>'+
+			'</tpl>'+			
 			'<tpl if="xssDetected">'+
 			'<div class="go-warning-msg em-blocked"><a id="em-filterxss-'+this.bodyId+'" href="#" class="normal-link">'+GO.email.lang.xssDetected+'</a></div>'+
-			'</tpl>'+
-
-			'<tpl if="labels.length">' +
-				'<div class="em-message-labels-container">' +
-				'<tpl for="labels">'+
-					'<span style="background-color: #{color}">{name}</span>' +
-				'</tpl>'+
-				'</div>' +
-				'<div style="clear: both"></div>' +
-			'</tpl>' +
+			'</tpl>'+	
 		'</div>';
-
+		
 		if(GO.calendar){
-
-
-
-
+			
+			
+		
+		
 			templateStr += '<tpl if="!GO.util.empty(values.iCalendar)">'+
 				'<tpl if="iCalendar.feedback">'+
 				'<div class="message-icalendar">'+
-
-
-
+				
+				
+				
 				'<tpl if="iCalendar.invitation">'+
-
+				
 				'<tpl if="!GO.util.empty(iCalendar.invitation.is_processed)">'+
 					'<a id="em-icalendar-open-'+this.bodyId+'" class="go-model-icon-GO_Calendar_Model_Event normal-link" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon">'+GO.email.lang.appointementAlreadyProcessed+'</a>'+
 					'</tpl>'+
 					'<tpl if="iCalendar.invitation.is_invitation">'+
-
+		
 								'<a id="em-icalendar-accept-invitation-'+this.bodyId+'" class="go-model-icon-GO_Calendar_Model_Event normal-link" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon">'+GO.calendar.lang.clickForAttendance+'</a>'+
-
+						
 					'</tpl>'+
-
+					
 					'<tpl if="iCalendar.invitation.is_cancellation">'+
 						'<div class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon ">'+
 						'{[values.iCalendar.feedback]}</div>'+
@@ -148,30 +139,30 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 							'<a class="normal-link" id="em-icalendar-delete-event-'+this.bodyId+'" href="#">'+GO.email.lang.icalendarDeleteEvent+'</a>'+
 							'</div>'+
 					'</tpl>'+
-
+					
 					'<tpl if="iCalendar.invitation.is_update">'+
 						'<div class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon ">'+
 						'{[values.iCalendar.feedback]}</div>'+
 						'<div class="message-icalendar-actions">'+
 							'<a class="normal-link" id="em-icalendar-update-event-'+this.bodyId+'" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
 							'</div>'+
-					'</tpl>'+
-
+					'</tpl>'+				
+						
 				'</tpl>'+
 				'<div style="clear:both"></div>'+
 				'</div>'+
 				'</tpl>'+
 				'</tpl>';
 		}
-
+	
 		templateStr += '<div id="'+this.bodyId+'" class="message-body go-html-formatted">{htmlbody}'+
 			'<tpl if="body_truncated">'+
 			'<br /><a href="javascript:GO.email.showMessageDialog({uid},\'{[this.addSlashes(values.mailbox)]}\',{account_id},true);" class="normal-link">'+GO.email.lang.clickSeeWholeMessage+'</a>'+
 			'</tpl>'+
 			'</div>';
-
+		
 		this.template = new Ext.XTemplate(templateStr,{
-
+			
 			addSlashes : function(str)
 			{
 				str = GO.util.html_entity_decode(str, 'ENT_QUOTES');
@@ -179,10 +170,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				return str;
 			}
 
-		});
-		this.template.compile();
+		});		
+		this.template.compile();	
 	},
-
+	
 	lookupContact : function(){
 		if(this.data.sender_contact_id){
 			GO.linkHandlers["GO_Addressbook_Model_Contact"].call(this, this.data.sender_contact_id);
@@ -190,12 +181,12 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			GO.addressbook.searchSender(this.data.sender, this.data.from);
 		}
 	},
-
+	
 	data: null,
-
-
+	
+	
 	popup : function(){
-
+		
 		if(this.loading){
 			this.on('load', function(){this.popup()}, this, {single:true});
 		}else{
@@ -213,17 +204,17 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			this.messageDialog.messagePanel.mailbox=this.mailbox;
 			this.messageDialog.messagePanel.params=this.params;
 		}
-
+		
 	},
-
+	
 	loadMessage : function(uid, mailbox, account_id, password, no_max_body_size)
-	{
+	{		
 		if(uid)
 		{
 			this.uid=uid;
 			this.account_id=account_id;
 			this.mailbox=mailbox;
-
+			
 			this.params = {
 				uid: uid,
 				mailbox: mailbox,
@@ -234,18 +225,18 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				this.params.password=password;
 			}
 		}
-
+		
 		this.params['no_max_body_size'] = GO.util.empty(no_max_body_size) ? false : true;
-
-
+						
+						
 		this.loading=true;
-		this.el.mask(GO.lang.waitMsgLoad);
+		this.el.mask(GO.lang.waitMsgLoad);				
 		GO.request({
 			url: "email/message/view",
 			params: this.params,
 			scope: this,
 			success: function(options, response, data)
-			{
+			{							   
 				this.setData(data);
 				this.loading=false;
 				this.fireEvent('load', options, true, response, data, password);
@@ -255,11 +246,11 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			}
 		});
 	},
-
+	
 	setData : function (data){
 		this.data=data;
-
-
+				
+		
 
 //				if(this.updated)
 //				{
@@ -283,7 +274,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 //				}
 
 		if(data.iCalendar && this.icalendarFeedback){
-			data.iCalendar.feedback = this.icalendarFeedback;
+			data.iCalendar.feedback = this.icalendarFeedback;			
 			delete this.icalendarFeedback;
 		}
 
@@ -301,12 +292,12 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 							this.reset();
 							this.el.unmask();
 						}else
-						{
+						{									
 							this.loadMessage(passwordDialog.data.uid, passwordDialog.data.mailbox, passwordDialog.data.account_id, password);
 						}
 					},
 					scope:this
-				});
+				});							
 			}
 			this.passwordDialog.data={
 				uid:this.uid,
@@ -315,26 +306,26 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			};
 			this.passwordDialog.show();
 		}else
-		{
-			this.setMessage(data);
+		{						
+			this.setMessage(data);						
 			this.el.unmask();
 		}
 
 		if(data.feedback)
 		{
 			GO.errorDialog.show(data.feedback);
-		}
+		}	
 	},
-
+	
 	reset : function(){
 		this.data=false;
 		this.uid=0;
-
+		
 		if(this.contactImageEl)
 		{
 			this.contactImageEl.removeAllListeners();
 		}
-
+		
 		if(this.messageBodyEl)
 		{
 			this.messageBodyEl.removeAllListeners();
@@ -343,21 +334,21 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		{
 			this.attachmentsEl.removeAllListeners();
 		}
-
+		
 		if(this.unblockEl)
 		{
 			this.unblockEl.removeAllListeners();
 		}
-
+		
 		this.body.update('');
-
+		
 		this.fireEvent('reset', this);
 	},
-
+	
 	setMessage : function(data)
 	{
 		this.data = data;
-
+		
 		//remove old listeners
 		if(this.messageBodyEl)
 		{
@@ -367,20 +358,20 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		{
 			this.attachmentsEl.removeAllListeners();
 		}
-
+		
 		if(this.unblockEl)
 		{
 			this.unblockEl.removeAllListeners();
 		}
-
+		
 		if(this.contactImageEl)
 		{
 			this.contactImageEl.removeAllListeners();
 		}
-
-		this.template.overwrite(this.body, data);
-
-
+		
+		this.template.overwrite(this.body, data);		
+		
+		
 		this.unblockEl = Ext.get('em-unblock-'+this.bodyId);
 		if(this.unblockEl)
 		{
@@ -389,7 +380,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				this.loadMessage();
 			}, this);
 		}
-
+		
 		this.filterXssEl = Ext.get('em-filterxss-'+this.bodyId);
 		if(this.filterXssEl)
 		{
@@ -441,7 +432,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				this.processInvitation();
 			}, this);
 		}
-
+		
 		var icalUpdateOpenEl = Ext.get('em-icalendar-open-'+this.bodyId);
 		if(icalUpdateOpenEl)
 		{
@@ -456,27 +447,27 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			}, this);
 		}
 
-		this.messageBodyEl = Ext.get(this.bodyId);
+		this.messageBodyEl = Ext.get(this.bodyId);		
 		this.messageBodyEl.on('click', this.onMessageBodyClick, this);
 		this.messageBodyEl.on('contextmenu', this.onMessageBodyContextMenu, this);
-
+		
 		if(data.attachments.length)
 		{
-			this.attachmentsEl = Ext.get(this.attachmentsId);
+			this.attachmentsEl = Ext.get(this.attachmentsId);	
 			this.attachmentsEl.on('click', this.openAttachment, this);
 			if(this.attachmentContextMenu)
-			{
+			{			
 				this.attachmentContextMenu.messagePanel = this;
 				this.attachmentsEl.on('contextmenu', this.onAttachmentContextMenu, this);
 			}
 		}
-
-
-		this.contactImageEl = Ext.get(this.contactImageId);
+		
+		
+		this.contactImageEl = Ext.get(this.contactImageId);		
 		this.contactImageEl.on('click', this.lookupContact, this);
-
+		
 		this.body.scrollTo('top',0);
-
+		
 		if(GO.savemailas && this.data.sender_contact_id){
 			this.linkMessageCB = new Ext.form.Checkbox({
 				name:'link',
@@ -494,7 +485,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 									account_id:this.account_id,
 									mailbox:this.mailbox,
 									uid:this.uid,
-									contact_id:this.data.sender_contact_id
+									contact_id:this.data.sender_contact_id								
 								},
 								maskEl:Ext.getBody()
 							});
@@ -514,7 +505,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				}
 			});
 		}
-
+		
 		if(GO.savemailas && this.data.sender_company_id){
 			this.linkCompanyMessageCB = new Ext.form.Checkbox({
 				name:'link',
@@ -532,7 +523,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 									account_id:this.account_id,
 									mailbox:this.mailbox,
 									uid:this.uid,
-									company_id:this.data.sender_company_id
+									company_id:this.data.sender_company_id								
 								},
 								maskEl:Ext.getBody()
 							});
@@ -552,29 +543,29 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				}
 			});
 		}
-
+		
 	},
-
+	
 	onAttachmentContextMenu : function (e, target){
-
-
+		
+		
 		if(target.id.substr(0,this.attachmentsId.length)==this.attachmentsId)
-		{
+		{			
 			var attachment_no = target.id.substr(this.attachmentsId.length+1);
-
+			
 			e.preventDefault();
-			var attachment = this.data.attachments[attachment_no];
+			var attachment = this.data.attachments[attachment_no];				
 			this.attachmentContextMenu.showAt(e.getXY(), attachment);
 		}
-
+			
 	},
-
+	
 	openAttachment :  function(e, target)
 	{
 		if(target.id.substr(0,this.attachmentsId.length)==this.attachmentsId)
 		{
-			var attachment_no = target.id.substr(this.attachmentsId.length+1);
-
+			var attachment_no = target.id.substr(this.attachmentsId.length+1);			
+			
 			var attachment = this.data.attachments[attachment_no];
 			this.fireEvent('attachmentClicked', attachment, this);
 		}
@@ -597,27 +588,27 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 
 		GO.email.addressContextMenu.showAt(e.getXY(), email, '', queryString);
 	},
-
+	
 	onMessageBodyContextMenu :  function(e, target){
-
+		
 		if(target.tagName!='A')
 		{
 			target = Ext.get(target).findParent('A', 10);
 			if(!target)
 				return false;
 		}
-
+		
 		if(target.tagName=='A')
 		{
 			var href=target.attributes['href'].value;
-
+			
 			if(href.substr(0,6)=='mailto')
-			{
+			{				
 				this.launchAddressContextMenu(e, href);
 			}
-		}
+		}		
 	},
-
+	
 	onMessageBodyClick :  function(e, target){
 		if(target.tagName!='A')
 		{
@@ -625,33 +616,33 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			if(!target)
 				return false;
 		}
-
+		
 		if(target.tagName=='A')
 		{
-
+			
 			var href=target.attributes['href'].value;
-
+			
 			if(href.substr(0,6)=='mailto')
 			{
 				this.launchAddressContextMenu(e, href);
 			}else if(href.substr(0,3)=='go:')
 			{
 				e.preventDefault();
-
+				
 				var cmd = 'GO.mailFunctions.'+href.substr(3);
-				eval(cmd);
+				eval(cmd); 
 			}else
 			{
 //				if (target.href && target.href.indexOf('#') != -1 && target.pathname == document.location.pathname){
 //				//internal link, do default
-//
+//					
 //				}else
 //				{
 //					e.preventDefault();
 //					this.fireEvent('linkClicked', href);
 //				}
 			}
-		}
+		}		
 	},
 
 	cal_id:0,
@@ -663,7 +654,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	processInvitation : function()
 	{
 //		this.status_id = status_id || 0;
-
+			
 		GO.request({
 			url: 'calendar/event/acceptInvitation',
 			params: {
@@ -675,16 +666,16 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			scope: this,
 			success: function(options, response, data)
 			{
-				this.icalendarFeedback = data.feedback;
-
+				this.icalendarFeedback = data.feedback;			
+				
 				if(data.attendance_event_id){
 					GO.email.showAttendanceWindow(data.attendance_event_id);
 				}
-
+					
 				this.loadMessage();
 			}
 		});
-	}
+	}	
 });
 
 
@@ -693,13 +684,13 @@ GO.email.readVCard = function(url) {
 		Ext.Ajax.request({
 			url: url,
 			callback: function(options, success, response)
-			{
+			{	
 				var responseData = Ext.decode(response.responseText);
 				if(!success)
 				{
 					Ext.MessageBox.alert(GO.lang['strError'], responseData['feedback']);
 				} else {
-					if (!GO.util.empty(responseData.contacts[0])) {
+					if (!GO.util.empty(responseData.contacts[0])) {						
 						GO.addressbook.showContactDialog(0,{contactData : responseData.contacts[0]});
 					}
 				}

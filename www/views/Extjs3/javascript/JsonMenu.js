@@ -6,11 +6,10 @@ GO.menu.JsonMenu = function(config) {
 	this.on('show', this.onMenuLoad, this);
 	//this.store.on('beforeload', this.onBeforeLoad, this);
 	this.store.on('load', this.onLoad, this);
-	this.addEvents('load');
 };
 
 Ext.extend(GO.menu.JsonMenu, Ext.menu.Menu, {
-
+	
 	loadingText: GO.lang.waitMsgLoad,
 
 	loaded:      false,
@@ -42,7 +41,7 @@ Ext.extend(GO.menu.JsonMenu, Ext.menu.Menu, {
 				this.add(records[i].json);
 			}
 
-			this.fireEvent('load', this, records);
+
 			this.loaded = true;
 		}
 	},

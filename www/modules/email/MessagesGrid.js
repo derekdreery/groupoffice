@@ -1,27 +1,27 @@
-/**
+/** 
  * Copyright Intermesh
- *
+ * 
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- *
+ * 
  * If you have questions write an e-mail to info@intermesh.nl
- *
+ * 
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-
+ 
 GO.email.MessagesGrid = function(config){
-
+	
 	if(!config)
 	{
 		config = {};
 	}
-
+	
 	config.layout='fit';
 	config.autoScroll=true;
 	config.paging=true;
-
+	
 	config.hideMode='offsets';
 
 	if(config.region=='north')
@@ -39,13 +39,6 @@ GO.email.MessagesGrid = function(config){
 				dataIndex: 'icon',
 				renderer: this.renderIcon,
 				hideable:false,
-				sortable:false
-			},{
-				header: GO.email.lang.labels,
-				width:50,
-				xtype: 'templatecolumn',
-				tpl: new Ext.XTemplate('<div class="em-messages-grid-labels-container"><tpl for="labels"><div ext:qtip="{name}" style="background-color: #{color}">&nbsp;</div></tpl></div>'),
-				hideable:true,
 				sortable:false
 			},{
 				header: GO.email.lang.from,
@@ -82,7 +75,7 @@ GO.email.MessagesGrid = function(config){
 		});
 //		config.view=new Ext.grid.GridView({
 //			emptyText: GO.lang['strNoItems'],
-//			getRowClass:function(row, index) {
+//			getRowClass:function(row, index) {				
 //				if (row.data.seen == '0') {
 //					return 'ml-unseen-row';
 //				} else {
@@ -90,7 +83,7 @@ GO.email.MessagesGrid = function(config){
 //				}
 //			}
 //		});
-
+	
 	}else
 	{
 		this.searchtypeWidth = 120;
@@ -109,19 +102,12 @@ GO.email.MessagesGrid = function(config){
 			hideable:false,
 			sortable:false
 		},{
-			header: GO.email.lang.labels,
-			width:50,
-			xtype: 'templatecolumn',
-			tpl: new Ext.XTemplate('<div class="em-messages-grid-labels-container"><tpl for="labels"><div ext:qtip="{name}" style="background-color: #{color}">&nbsp;</div></tpl></div>'),
-			hideable:true,
-			sortable:false
-		},{
 			header: GO.email.lang.message,
 			dataIndex: 'from',
 			renderer: this.renderMessage,
 			css: 'white-space:normal;',
 			id:'message'
-
+		
 		},{
 			id:'arrival',
 			header: GO.lang.strDate,
@@ -155,17 +141,17 @@ GO.email.MessagesGrid = function(config){
 			displayMsg: GO.lang.displayingItemsShort,
 			emptyMsg: GO.lang['strNoItems']
 		});
-
+				
 		config.autoExpandColumn='message';
-
+		
 //		config.view=new Ext.grid.GridView({
 //			emptyText: GO.lang['strNoItems']
 //		});
 	}
-
+	
 	config.view=new Ext.grid.GridView({
 			emptyText: GO.lang['strNoItems'],
-			getRowClass:function(row, index) {
+			getRowClass:function(row, index) {				
 				if (row.data.seen == '0') {
 					return 'ml-unseen-row';
 				} else {
@@ -173,10 +159,10 @@ GO.email.MessagesGrid = function(config){
 				}
 			}
 		});
-
+	
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
-
+			
 	config.border=false;
 	config.split= true;
 	config.header=false;
@@ -212,7 +198,7 @@ GO.email.MessagesGrid = function(config){
 		emptyText:GO.lang['strSearch'],
 		width:this.searchfieldWidth
 	});
-
+        
 	this.showUnreadButton = new Ext.Button({
 		text:GO.email.lang.showUnread,
 		enableToggle:true,
@@ -224,8 +210,8 @@ GO.email.MessagesGrid = function(config){
 	if(!config.hideSearch)
 	{
 		config.tbar = [this.searchType, this.searchField, this.showUnreadButton];
-	}
-
+	}	
+	
 	GO.email.MessagesGrid.superclass.constructor.call(this, config);
 
 	var origRefreshHandler = this.getBottomToolbar().refresh.handler;
@@ -235,7 +221,7 @@ GO.email.MessagesGrid = function(config){
 		origRefreshHandler.call(this);
 		delete this.store.baseParams.refresh;
 	};
-
+	
 	//stop/start drag and drop when store loads when account is readOnly
 	this.store.on('load', function(store, records, options) {
 	  if(store.reader.jsonData.permission_level <= GO.permissionLevels.read)
@@ -252,16 +238,16 @@ GO.email.MessagesGrid = function(config){
 		{
 			GO.email.messagesGrid.store.baseParams['search'] = this.searchField.getValue();
 			this.searchField.hasSearch = true;
-
+                        
 			GO.email.messagesGrid.store.reload();
 		}
-
+                
 	}, this);
-
+        
 };
 
 Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
-
+        
 	show : function()
 	{
 		if(GO.email.messagesGrid.store.baseParams['unread'] === 1 || GO.email.messagesGrid.store.baseParams['unread'] === true){
@@ -271,7 +257,7 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 			this.showUnreadButton.pressed=false;
 			this.showUnreadButton.setText(GO.email.lang.showUnread);
 		}
-
+		
 		if(!GO.email.search_type)
 		{
 			GO.email.search_type = GO.email.search_type_default;
@@ -284,7 +270,7 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 	{
 		GO.email.search_type = GO.email.search_type_default;
 		GO.email.search_query = '';
-
+                
 		this.setSearchFields(GO.email.search_type, GO.email.search_query);
 	},
 	setSearchFields : function(type, query)
@@ -297,24 +283,24 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 	toggleUnread : function(item, pressed)
 	{
 		GO.email.messagesGrid.store.baseParams['unread']=pressed ? 1 : 0;
-
+                
 		if(pressed)
 			item.setText(GO.email.lang.showAll);
 		else
 			item.setText(GO.email.lang.showUnread);
-
+								
 		GO.email.messagesGrid.store.load();
 	},
-
+	
 	renderNorthMessageRow : function(value, p, record){
 		if(record.data['seen']=='0')
 			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-unseen-mail">{0}</div>', value);
 		else
 			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-seen-mail">{0}</div>', value);
 	},
-
+	
 	renderMessageSmallRes : function(value, p, record){
-
+		
 		if(record.data['seen']=='0')
 		{
 			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-unseen-from">{0}</div><div class="ml-unseen-subject">{1}</div>', value, record.data['subject']);
@@ -323,7 +309,7 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-seen-from">{0}</div><div class="ml-seen-subject">{1}</div>', value, record.data['subject']);
 		}
 	},
-
+	
 	renderMessage : function(value, p, record){
 		if(record.data['seen']=='0')
 		{
@@ -333,15 +319,15 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-seen-from">{0}</div><div class="ml-seen-subject">{1}</div>', value, record.data['subject']);
 		}
 	},
-
+					
 	renderNorthDate : function(value, p, record){
 		return value+' '+record.data.date_time;
 	},
-
+					
 	renderNorthArrival : function(value, p, record){
 		return value+' '+record.data.arrival_time;
 	},
-
+					
 	renderArrival : function(value, p, record){
 		if(record.data['seen']=='0')
 		{
@@ -351,7 +337,7 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 			return String.format('<div id="arr_'+record.data['uid']+'" class="ml-seen-from">{0}</div><div class="ml-seen-subject">{1}</div>', value, record.data['arrival_time']);
 		}
 	},
-
+					
 	renderDate : function(value, p, record){
 		if(record.data['seen']=='0')
 		{
@@ -361,7 +347,7 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 			return String.format('<div id="date_'+record.data['uid']+'" class="ml-seen-from">{0}</div><div class="ml-seen-subject">{1}</div>', value, record.data['date_time']);
 		}
 	},
-
+					
 	renderIcon : function(src, p, record){
 		var str = '';
 
@@ -382,7 +368,7 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 				cls += "btn-message";
 		}
 		str += '<div class="'+cls+'"></div>';
-
+		
 		if(record.data['has_attachments']=='1')
 		{
 			str += '<div class="email-grid-icon ml-icon-attach"></div>';
@@ -391,31 +377,31 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 		{
 		//str += '<br />';
 		}
-
+		
 		if(record.data['x_priority'])
 		{
 			if(record.data['x_priority'] < 3)
 			{
 				str += '<div class="email-grid-icon btn-high-priority"></div>';
 			}
-
+			
 			if(record.data['x_priority'] > 3)
 			{
 				str += '<div class="email-grid-icon btn-low-priority"></div>';
 			}
 		}
-
+		
 		if(record.data['flagged']==1)
 		{
 			//str += '<img src=\"' + GOimages['flag'] +' \" style="display:block" />';
 			str += '<div class="email-grid-icon btn-flag"></div>';
 		}
-
+		
 		return str;
-
+		
 	},
 
-
+		
 
 	renderFlagged : function(value, p, record){
 
