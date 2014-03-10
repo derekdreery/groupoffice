@@ -191,15 +191,24 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 			this.slugField.setValue(this.formatSlug(field.getValue()));
 		},this);
 	
+//		
+//		this.editor = new GO.form.HtmlEditor({
+//			hideLabel:true,
+//			name: 'content',
+//			anchor: '100% -80',
+//			allowBlank:true,
+//			enableLinks:false,
+//			fieldLabel: GO.site.lang.contentContent,
+//			plugins:this.initHtmlEditorPlugins()
+//		});
 		
-		this.editor = new GO.form.HtmlEditor({
+		this.editor = new Ext.form.TextArea({
 			hideLabel:true,
+			style:'font-family: Lucida Console", Monaco, monospace',
 			name: 'content',
 			anchor: '100% -80',
-			allowBlank:true,
-			enableLinks:false,
-			fieldLabel: GO.site.lang.contentContent,
-			plugins:this.initHtmlEditorPlugins()
+			allowBlank:true,			
+			fieldLabel: GO.site.lang.contentContent			
 		});
 		
 		config.items = [
@@ -226,16 +235,16 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		slug = slug.replace(/^-|-$/g, '');		
 		
 		return slug;
-	},
-	initHtmlEditorPlugins : function(htmlEditorConfig) {		
-		// insertLink plugin
-		this.editorLinkInsertPlugin = new GO.site.HtmlEditorLinkInsert({toolbarPosition : 17,toolbarSeparatorAfter:true});
-		
-		// optional image attachment
-		this.editorImageInsertPlugin = new GO.site.HtmlEditorImageInsert({toolbarPosition : 19,toolbarSeparatorAfter:true});
-		this.editorTablePlugin = new Ext.ux.form.HtmlEditor.Table();
-			
-		return [this.editorLinkInsertPlugin,this.editorImageInsertPlugin,this.editorTablePlugin, new Ext.ux.form.HtmlEditor.HeadingMenu()];
 	}
+//	initHtmlEditorPlugins : function(htmlEditorConfig) {		
+//		// insertLink plugin
+//		this.editorLinkInsertPlugin = new GO.site.HtmlEditorLinkInsert({toolbarPosition : 17,toolbarSeparatorAfter:true});
+//		
+//		// optional image attachment
+//		this.editorImageInsertPlugin = new GO.site.HtmlEditorImageInsert({toolbarPosition : 19,toolbarSeparatorAfter:true});
+//		this.editorTablePlugin = new Ext.ux.form.HtmlEditor.Table();
+//			
+//		return [this.editorLinkInsertPlugin,this.editorImageInsertPlugin,this.editorTablePlugin, new Ext.ux.form.HtmlEditor.HeadingMenu()];
+//	}
 });
 

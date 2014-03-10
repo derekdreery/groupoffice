@@ -20,3 +20,7 @@ $updates["201401101441"][]="CREATE TABLE IF NOT EXISTS `site_menu_item` (
   `target` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
+
+
+$updates["201403101413"][]="ALTER TABLE  `site_content` ADD  `content_type` VARCHAR( 20 ) NOT NULL DEFAULT  'markdown';";
+$updates["201403101413"][]="UPDATE  `site_content` SET  `content_type` ='html';";
