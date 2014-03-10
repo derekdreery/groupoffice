@@ -538,6 +538,11 @@ GO.email.EmailClient = function(config){
 					node.attributes.mailbox,
 					usage
 					);
+
+				var labelsColumnIndex = this.messagesGrid.getColumnModel().getIndexById('labels');
+				if (!this.messagesGrid.getColumnModel().isHidden(labelsColumnIndex) && !node.attributes.permittedFlags) {
+					this.messagesGrid.getColumnModel().setHidden(labelsColumnIndex, true);
+				}
 			}
 //		}
 	}, this);
