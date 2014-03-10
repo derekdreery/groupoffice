@@ -37,8 +37,8 @@
 			});
 		</script>
 
-		<script src="<?php echo Site::file('js/lightbox-2.6.min.js'); ?>"></script>
-		<link href="<?php echo Site::file('css/lightbox.css'); ?>" rel="stylesheet" />
+		<script src="<?php echo Site::file('lightbox/js/lightbox-2.6.min.js'); ?>"></script>
+		<link href="<?php echo Site::file('lightbox/css/lightbox.css'); ?>" rel="stylesheet" />
 	</head>
 
 	<body>

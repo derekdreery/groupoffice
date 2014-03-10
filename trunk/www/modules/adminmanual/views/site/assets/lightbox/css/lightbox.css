@@ -30,19 +30,18 @@ body:after {
 .lightbox .lb-image {
   display: block;
   height: auto;
-  max-width: inherit;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   border-radius: 3px;
 }
-/* line 33, ../sass/lightbox.sass */
+/* line 32, ../sass/lightbox.sass */
 .lightbox a img {
   border: none;
 }
 
-/* line 36, ../sass/lightbox.sass */
+/* line 35, ../sass/lightbox.sass */
 .lb-outerContainer {
   position: relative;
   background-color: white;
@@ -63,12 +62,12 @@ body:after {
   clear: both;
 }
 
-/* line 45, ../sass/lightbox.sass */
+/* line 44, ../sass/lightbox.sass */
 .lb-container {
   padding: 4px;
 }
 
-/* line 48, ../sass/lightbox.sass */
+/* line 47, ../sass/lightbox.sass */
 .lb-loader {
   position: absolute;
   top: 43%;
@@ -79,7 +78,7 @@ body:after {
   line-height: 0;
 }
 
-/* line 57, ../sass/lightbox.sass */
+/* line 56, ../sass/lightbox.sass */
 .lb-cancel {
   display: block;
   width: 32px;
@@ -88,7 +87,7 @@ body:after {
   background: url(../img/loading.gif) no-repeat;
 }
 
-/* line 64, ../sass/lightbox.sass */
+/* line 63, ../sass/lightbox.sass */
 .lb-nav {
   position: absolute;
   top: 0;
@@ -98,17 +97,17 @@ body:after {
   z-index: 10;
 }
 
-/* line 72, ../sass/lightbox.sass */
+/* line 71, ../sass/lightbox.sass */
 .lb-container > .nav {
   left: 0;
 }
 
-/* line 75, ../sass/lightbox.sass */
+/* line 74, ../sass/lightbox.sass */
 .lb-nav a {
   outline: none;
 }
 
-/* line 78, ../sass/lightbox.sass */
+/* line 77, ../sass/lightbox.sass */
 .lb-prev, .lb-next {
   width: 49%;
   height: 100%;
@@ -117,43 +116,27 @@ body:after {
   display: block;
 }
 
-/* line 85, ../sass/lightbox.sass */
+/* line 84, ../sass/lightbox.sass */
 .lb-prev {
   left: 0;
   float: left;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-  opacity: 0;
-  -webkit-transition: opacity 0.6s;
-  -moz-transition: opacity 0.6s;
-  -o-transition: opacity 0.6s;
-  transition: opacity 0.6s;
 }
-/* line 90, ../sass/lightbox.sass */
+/* line 87, ../sass/lightbox.sass */
 .lb-prev:hover {
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-  opacity: 1;
   background: url(../img/prev.png) left 48% no-repeat;
 }
 
-/* line 94, ../sass/lightbox.sass */
+/* line 90, ../sass/lightbox.sass */
 .lb-next {
   right: 0;
   float: right;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-  opacity: 0;
-  -webkit-transition: opacity 0.6s;
-  -moz-transition: opacity 0.6s;
-  -o-transition: opacity 0.6s;
-  transition: opacity 0.6s;
 }
-/* line 99, ../sass/lightbox.sass */
+/* line 93, ../sass/lightbox.sass */
 .lb-next:hover {
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-  opacity: 1;
   background: url(../img/next.png) right 48% no-repeat;
 }
 
-/* line 103, ../sass/lightbox.sass */
+/* line 96, ../sass/lightbox.sass */
 .lb-dataContainer {
   margin: 0 auto;
   padding-top: 5px;
@@ -173,25 +156,25 @@ body:after {
   clear: both;
 }
 
-/* line 110, ../sass/lightbox.sass */
+/* line 103, ../sass/lightbox.sass */
 .lb-data {
   padding: 0 4px;
   color: #bbbbbb;
 }
-/* line 113, ../sass/lightbox.sass */
+/* line 106, ../sass/lightbox.sass */
 .lb-data .lb-details {
   width: 85%;
   float: left;
   text-align: left;
   line-height: 1.1em;
 }
-/* line 118, ../sass/lightbox.sass */
+/* line 111, ../sass/lightbox.sass */
 .lb-data .lb-caption {
   font-size: 13px;
   font-weight: bold;
   line-height: 1em;
 }
-/* line 122, ../sass/lightbox.sass */
+/* line 115, ../sass/lightbox.sass */
 .lb-data .lb-number {
   display: block;
   clear: left;
@@ -199,7 +182,7 @@ body:after {
   font-size: 12px;
   color: #999999;
 }
-/* line 128, ../sass/lightbox.sass */
+/* line 121, ../sass/lightbox.sass */
 .lb-data .lb-close {
   display: block;
   float: right;
@@ -210,12 +193,8 @@ body:after {
   outline: none;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
   opacity: 0.7;
-  -webkit-transition: opacity 0.2s;
-  -moz-transition: opacity 0.2s;
-  -o-transition: opacity 0.2s;
-  transition: opacity 0.2s;
 }
-/* line 138, ../sass/lightbox.sass */
+/* line 130, ../sass/lightbox.sass */
 .lb-data .lb-close:hover {
   cursor: pointer;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
