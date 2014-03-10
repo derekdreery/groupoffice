@@ -32,7 +32,7 @@
 
 
 namespace GO\Base\Model;
-
+use GO;
 
 class SearchCacheRecord extends \GO\Base\Db\ActiveRecord {
 
@@ -97,5 +97,10 @@ class SearchCacheRecord extends \GO\Base\Db\ActiveRecord {
 	 * @var type 
 	 */
 	public $joinAclField = true;
+	
+	
+	public function countLinks($model_id = 0) {
+		return class_exists($this->model_name) ? GO::getModel($this->model_name)->countLinks($model_id) :0;
+	}
 
 }
