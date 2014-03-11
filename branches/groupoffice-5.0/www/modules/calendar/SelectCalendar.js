@@ -49,7 +49,6 @@ GO.calendar.SelectCalendar = function(config){
 		pageSize:parseInt(GO.settings['max_rows_list']),
 		mode:'remote',
         tpl: new Ext.XTemplate(
-            '<h1></h1>',
             '<tpl for=".">',
             '<tpl if="this.group_name != values.group_name">',
             '<tpl exec="this.group_name = values.group_name"></tpl>',
