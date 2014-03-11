@@ -32,8 +32,7 @@ GO.email.EmailClient = function(config){
 	this.messagesStore.setDefaultSort('arrival', 'DESC');	
 	
 	this.messagesStore.on('load', function(){
-			
-			console.log(this.messagesGrid.store.reader.jsonData.permission_level);
+
 			this.readOnly = this.messagesGrid.store.reader.jsonData.permission_level < GO.permissionLevels.create || this.messagesGrid.store.reader.multipleFolders;
 			this._permissionDelegated = this.messagesGrid.store.reader.jsonData.permission_level == GO.email.permissionLevels.delegated;
 
