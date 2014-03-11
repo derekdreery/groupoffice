@@ -34,7 +34,7 @@ class GO_Ldapauth_LdapauthModule extends GO_Base_Module{
 			$response['feedback'] = 'Save failed: LDAP '. $person->getError();
 		} catch(Exception $e) {
 			$response['success'] = false;
-			$response['feedback'] = 'Exception duration LDAP save';
+			$response['feedback'] = 'Exception duration LDAP save: '.$e->getMessage();
 		}
 	}
 
