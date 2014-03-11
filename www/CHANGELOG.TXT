@@ -1,5 +1,8 @@
 - Exporting contact as vcard now sets it's address type as home instead of work.
 - Projects2: New csv export of time entries.
+- Removed z-push 2 backend. Everyone should upgrade to 2.1.
+- Updated z-push 2.1 download link
+- GOTA 1.1.13: fixed launch problem for utf8 characters in filename on Mac OS X
 
 05-03-2014 5.0.45
 - CalDAV will update and delete the correct event when events are imported and exported with the same URI
