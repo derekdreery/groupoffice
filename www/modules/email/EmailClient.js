@@ -543,6 +543,9 @@ GO.email.EmailClient = function(config){
 				if (!this.messagesGrid.getColumnModel().isHidden(labelsColumnIndex) && !node.attributes.permittedFlags) {
 					this.messagesGrid.getColumnModel().setHidden(labelsColumnIndex, true);
 				}
+				this.settingsMenu.items.find(function(item) {
+					return (item.iconCls == 'btn-labels');
+				}).setVisible(node.attributes.permittedFlags);
 			}
 //		}
 	}, this);
