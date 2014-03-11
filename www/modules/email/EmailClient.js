@@ -543,9 +543,7 @@ GO.email.EmailClient = function(config){
 				if (!this.messagesGrid.getColumnModel().isHidden(labelsColumnIndex) && !node.attributes.permittedFlags) {
 					this.messagesGrid.getColumnModel().setHidden(labelsColumnIndex, true);
 				}
-				this.settingsMenu.items.find(function(item) {
-					return (item.iconCls == 'btn-labels');
-				}).setVisible(node.attributes.permittedFlags);
+				this.settingsMenuItemLabels.setVisible(node.attributes.permittedFlags);
 			}
 //		}
 	}, this);
@@ -589,7 +587,8 @@ GO.email.EmailClient = function(config){
 				this.moveGrid();
 			},
 			scope: this
-		},{
+		},
+		this.settingsMenuItemLabels = new Ext.menu.Item({
 			iconCls:'btn-labels',
 			text: GO.email.lang.labels,
 			cls: 'x-btn-text-icon',
@@ -597,7 +596,8 @@ GO.email.EmailClient = function(config){
 				this.showLabelsDialog();
 			},
 			scope: this
-		}]
+		})
+		]
 	});
 
 	if(GO.gnupg)
