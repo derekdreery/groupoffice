@@ -16,7 +16,7 @@ GO.moduleManager.onModuleReady('calendar',function(){
 	Ext.override(GO.calendar.MainPanel, {	
 		
 		init : GO.calendar.MainPanel.prototype.init.createSequence(function(){
-			GO.favorites.favoritesCalendarStore.load();
+			//GO.favorites.favoritesCalendarStore.load();
 		}),
 		
 		initComponent : GO.calendar.MainPanel.prototype.initComponent.createSequence(function(){
