@@ -170,7 +170,7 @@ class Validate {
 		//$wsdl = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 		$wsdl = \GO::config()->root_path.'go/vendor/wsdl/checkVatService.wsdl';
 
-		$vies = new SoapClient($wsdl);
+		$vies = new \SoapClient($wsdl);
 		
 		//lower the timeout becuase it can hang too long
 		ini_set("default_socket_timeout", 5);
@@ -180,13 +180,13 @@ class Validate {
 			var_dump($vies->__getTypes());
 		*/
 		
-		$message = new stdClass();
+		$message = new \stdClass();
 		$message->countryCode = $countryCode;
 		$message->vatNumber = $vat;
 
 		try {
 			$ret = $vies->checkVat($message);
-		} catch (SoapFault $e) {
+		} catch (\SoapFault $e) {
 			$ret = $e->faultstring;
 			$regex = '/\{ \'([A-Z_]*)\' \}/';
 			$n = preg_match($regex, $ret, $matches);
