@@ -30,6 +30,23 @@ GO.email.EmailClient = function(config){
 	});
 
 	this.messagesStore.setDefaultSort('arrival', 'DESC');	
+	
+	this.messagesStore.on('load', function(){
+			
+			console.log(this.messagesGrid.store.reader.jsonData.permission_level);
+			this.readOnly = this.messagesGrid.store.reader.jsonData.permission_level < GO.permissionLevels.create || this.messagesGrid.store.reader.multipleFolders;
+			this._permissionDelegated = this.messagesGrid.store.reader.jsonData.permission_level == GO.email.permissionLevels.delegated;
+
+			this.permissionLevel = this.messagesGrid.store.reader.jsonData.permission_level;
+			
+			this.deleteButton.setDisabled(this.readOnly);
+
+			this.replyAllButton.setDisabled(this.readOnly && !this._permissionDelegated);
+			this.replyButton.setDisabled(this.readOnly && !this._permissionDelegated);
+			this.forwardButton.setDisabled(this.readOnly && !this._permissionDelegated);
+			this.printButton.setDisabled(this.readOnly);
+			
+		}, this);		
 
 	var messagesAtTop = Ext.state.Manager.get('em-msgs-top');
 	if(messagesAtTop)
@@ -251,38 +268,38 @@ GO.email.EmailClient = function(config){
 	}
 
 	  var contextItems = [
-	  {
+	  this.contextMenuMarkAsRead = new Ext.menu.Item({
 		  text: GO.email.lang.markAsRead,
 		  handler: function(){
 			  this.flagMessages('Seen', false);
 		  },
 		  scope:this,
 		  multiple:true
-	  },
-	  {
+	  }),
+	  this.contextMenuMarkAsUnread = new Ext.menu.Item({
 		  text: GO.email.lang.markAsUnread,
 		  handler: function(){
 			  this.flagMessages('Seen', true);
 		  },
 		  scope: this,
 		  multiple:true
-	  },
-	  {
+	  }),
+	  this.contextMenuFlag = new Ext.menu.Item({
 		  text: GO.email.lang.flag,
 		  handler: function(){
 			  this.flagMessages('Flagged', false);
 		  },
 		  scope: this,
 		  multiple:true
-	  },
-	  {
+	  }),
+	  this.contextMenuUnflag = new Ext.menu.Item({
 		  text: GO.email.lang.unflag,
 		  handler: function(){
 			  this.flagMessages('Flagged', true);
 		  },
 		  scope: this,
 		  multiple:true
-	  },
+	  }),
 	  '-',
 	  this.contextMenuSource = new Ext.menu.Item ({
 		  text: GO.email.lang.viewSource,
@@ -310,7 +327,7 @@ GO.email.EmailClient = function(config){
 		  scope: this,
 		  multiple:true
 	  }),
-	  {
+	  this.contextMenuDelete = new Ext.menu.Item({
 		  iconCls: 'btn-delete',
 		  text: GO.lang.cmdDelete,
 		  cls: 'x-btn-text-icon',
@@ -319,7 +336,7 @@ GO.email.EmailClient = function(config){
 		  },
 		  scope: this,
 		  multiple:true
-	  },'-',{
+	  }),'-',{
 		  iconCls: 'btn-add',
 		  text: GO.email.lang.addSendersTo,
 		  cls: 'x-btn-text-icon',
@@ -368,6 +385,17 @@ GO.email.EmailClient = function(config){
 		minWidth: 180,
 		items: contextItems
 	});
+	
+	
+	this.gridContextMenu.on("show", function(){
+		this.contextMenuMarkAsUnread.setDisabled(this.permissionLevel<GO.permissionLevels.write);
+		this.contextMenuMarkAsRead.setDisabled(this.permissionLevel<GO.email.permissionLevels.delegated);
+
+		this.contextMenuFlag.setDisabled(this.permissionLevel<GO.permissionLevels.write);
+		this.contextMenuUnflag.setDisabled(this.permissionLevel<GO.permissionLevels.write);
+
+		this.contextMenuDelete.setDisabled(this.readOnly);
+	}, this);
 	
 	this.gridReadOnlyContextMenu = new GO.menu.RecordsContextMenu({
 		shadow: "frame",
@@ -736,7 +764,7 @@ GO.email.EmailClient = function(config){
 		this.leftMessagesGrid
 		]
 	}];
-
+	
 
 	this.messagePanel.on('load', function(options, success, response, data, password){
 		if(!success)
@@ -747,18 +775,8 @@ GO.email.EmailClient = function(config){
 			this.messagePanel.do_not_mark_as_read = 0;
 			if(!GO.util.empty(data.do_not_mark_as_read))
 				this.messagePanel.do_not_mark_as_read = data.do_not_mark_as_read;
-			//this.messagePanel.uid=record.data['uid'];
+			//this.messagePanel.uid=record.data['uid'];	
 
-		var readOnly = this.messagesGrid.store.reader.jsonData.permission_level < GO.permissionLevels.create || this.messagesGrid.store.reader.multipleFolders;
-		this._permissionDelegated = this.messagesGrid.store.reader.jsonData.permission_level == GO.email.permissionLevels.delegated;
-		
-		this.deleteButton.setDisabled(readOnly);
-
-			this.replyAllButton.setDisabled(readOnly && !this._permissionDelegated);
-			this.replyButton.setDisabled(readOnly && !this._permissionDelegated);
-			this.forwardButton.setDisabled(readOnly && !this._permissionDelegated);
-			this.printButton.setDisabled(readOnly);
-			
 			var record = this.messagesGrid.store.getById(this.messagePanel.uid);
 
 			if(!record.data.seen && data.notification)

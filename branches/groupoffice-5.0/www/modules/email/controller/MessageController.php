@@ -364,7 +364,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		
-		if(!$account->checkPermissionLevel(GO_Email_Model_Account::ACL_DELEGATED_PERMISSION))
+		$requiredPermissionLevel = $params["flag"]=='Seen' && empty($params["clear"]) ? GO_Email_Model_Account::ACL_DELEGATED_PERMISSION : GO_Base_Model_Acl::WRITE_PERMISSION;
+
+		if(!$account->checkPermissionLevel($requiredPermissionLevel))
 		  throw new GO_Base_Exception_AccessDenied();
 		
 		$imap = $account->openImapConnection($params["mailbox"]);

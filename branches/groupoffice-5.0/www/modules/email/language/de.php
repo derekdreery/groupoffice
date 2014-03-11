@@ -261,3 +261,5 @@ $l['useAuth']="Authentifizierung benutzen";
 $l['linkMustHavePermissionToWrite'] = 'Sie haben nicht die benötigten Schreibberechtigungen auf das Objekt, um die E-Mail darauf zu verlinken.';
 
 $l['sortAddressesByMailTime'] = 'Adressen der Empfänger nach der Zeit der letzten gesendeten E-Mail sortieren (benötigt das Adressbuch-Modul)';
+
+$l['permissionDelegated']= 'Stellvertreter';
