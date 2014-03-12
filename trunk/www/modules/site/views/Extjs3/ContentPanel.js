@@ -204,7 +204,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		
 		this.editor = new Ext.form.TextArea({
 			hideLabel:true,
-			style:'font-family: Lucida Console", Monaco, monospace',
+			style:'font-family: "Lucida Console", Monaco, monospace',
 			name: 'content',
 			anchor: '100% -80',
 			allowBlank:true,			

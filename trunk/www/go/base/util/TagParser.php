@@ -31,9 +31,17 @@ class TagParser{
 				"
 			}
 	 */
-	public static function getTags($tagName, $text){
+	
+	public $tagStart='<';
+	public $tagEnd='>';
+	
+	public function getTags($text){
 		
-		$pattern = '/<'.$tagName.'([^>]*)>(.*?)<\/'.$tagName.'>/s';		
+		$closeTagStart = strlen($this->tagStart) > 1 ? substr($this->tagStart,0,1).'/'.substr($this->tagStart,1) : $this->tagStart.'/';
+		
+				
+		$pattern = '/'.preg_quote($this->tagStart,'/').'([a-zA-Z0-9-^ ]+) ([^'.preg_quote($this->tagEnd,'/').']*)'.preg_quote($this->tagEnd,'/').'(.*?)'.preg_quote($closeTagStart,'/').'[^'.preg_quote($this->tagEnd,'/').']+'.preg_quote($this->tagEnd,'/').'/s';		
+
 		
 		$matched_tags=array();		
 		preg_match_all($pattern,$text,$matched_tags, PREG_SET_ORDER);
@@ -44,7 +52,7 @@ class TagParser{
 			// parse params
 			$params_array = array();
 			$params=array();
-			preg_match_all('/\s*([^=]+)="([^"]*)"/',$matched_tags[$n][1],$params, PREG_SET_ORDER);
+			preg_match_all('/\s*([^=]+)="([^"]*)"/',$matched_tags[$n][2],$params, PREG_SET_ORDER);
 			for ($i=0; $i<count($params);$i++) {
 				$right = $params[$i][2];
 				$left = $params[$i][1];
@@ -52,9 +60,11 @@ class TagParser{
 			}
 			
 			$tag = array(
-					'xml'=>$matched_tags[$n][0],
+					
+					'outerText'=>$matched_tags[$n][0],
+					'tagName'=>$matched_tags[$n][1],
 					'params'=>$params_array,
-					'innerXml'=>isset($matched_tags[$n][2]) ? $matched_tags[$n][2]	: null
+					'innerText'=>isset($matched_tags[$n][3]) ? $matched_tags[$n][3]	: null
 					);
 			
 			$tags[] = $tag;
