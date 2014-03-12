@@ -37,6 +37,13 @@ class Thumb implements TagInterface{
 		
 		$thumb = Site::thumb($fullRelPath, $thumbParams);
 		
+		
+		if(!isset($params['caption'])){
+			$file = new \GO\Base\Fs\File($fullRelPath);
+			
+			$params['caption'] = $file->nameWithoutExtension();
+		}
+		
 		if(!isset($params['alt'])){
 			$params['alt']=isset($params['caption']) ? $params['caption'] :  basename($tag['params']['path']);
 		}
