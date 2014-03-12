@@ -20,8 +20,8 @@ $siteconfig['urls']=array(
 		'<module:\w+>/<controller:\w+>/<action:\w+>'=>'<module>/<controller>/<action>'
 );
 
-$siteconfig['autolinks']=array(
-		
-		'Tickets'=>'home/tickets'
-		
-);
+//$siteconfig['autolinks']=array(
+//		
+//		'Tickets'=>'home/tickets'
+//		
+//);
