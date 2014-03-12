@@ -31,7 +31,7 @@ class Thumb implements TagInterface{
 		$thumb = Site::thumb($fullRelPath, $thumbParams);
 		
 		if(!isset($params['alt'])){
-			$params['alt']=basename($tag['params']['path']);
+			$params['alt']=isset($params['caption']) ? $params['caption'] :  basename($tag['params']['path']);
 		}
 		
 		$html .= '<img src="' . $thumb . '" alt="' . $params['alt'] . '"';
@@ -53,6 +53,10 @@ class Thumb implements TagInterface{
 		if(isset($params['lightbox'])){
 			$a = '<a';
 			
+			if(isset($params['caption'])){
+				$html .= ' title="'.$params['caption'].'"';
+			}
+
 			if(!isset($params['aclass'])){
 				$params['aclass']='thumb-a';
 			}
