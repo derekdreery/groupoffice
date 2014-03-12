@@ -2,15 +2,14 @@ GO.files.FileBrowserButton = Ext.extend(Ext.Button, {
 	
 	model_name : "",
 	id: 0,
-	
+	iconCls: 'btn-files',
 	setId : function(id){
 		this.id=id;
 		this.setDisabled(!id);
 	},
 	
 	initComponent : function(){
-		Ext.apply(this, {
-				iconCls: 'btn-files',
+		Ext.apply(this, {				
 				cls: 'x-btn-text-icon', 
 				text: GO.files.lang.files,
 				handler: function(){			
