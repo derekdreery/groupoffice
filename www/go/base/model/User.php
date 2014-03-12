@@ -76,6 +76,8 @@
 namespace GO\Base\Model;
 
 use GO;
+use GO\Base\Mail\Message;
+use GO\Base\Mail\Mailer;
 
 
 class User extends \GO\Base\Db\ActiveRecord {
@@ -762,6 +764,57 @@ class User extends \GO\Base\Db\ActiveRecord {
 		$message->addTo($this->email,$this->getName());
 
 		\GO\Base\Mail\Mailer::newGoInstance()->send($message);
+	}
+	
+	/**
+	 * Send an email to the newly registrated user when he just created an account.
+	 * The mail should contain a welcome message and a username and password
+	 * @param string $view path to a template for the email. If the view is not set or
+	 * not found the default email body will be loaded from groupoffice
+	 * @param string $title title of email
+	 * @param array $_data this array will be explode to the view. if the view template
+	 * is not found it will be ignored
+	 * @return boolean true when email was send
+	 */
+	public function sendRegistrationMail($view=null, $title=null, $_data=array(),$message=false) {
+		
+		$this->password=$this->_unencryptedPassword; //to non-crypted email password
+		
+		if(!empty($view) && is_readable($view.'.php')) {
+			$model = $this;
+			if(!empty($_data))
+				extract($_data, EXTR_PREFIX_SAME, 'data');
+			ob_start();
+			ob_implicit_flush(false);
+
+			require($view.'.php');
+
+			$emailBody = ob_get_clean();
+			$type= 'text/html';
+		} else { //fallback to register_email_body when no view
+			$emailBody = GO::config()->get_setting('register_email_body') ?: GO::t('register_email_body', 'users');
+			foreach ($this->getAttributes() as $key => $value) {
+				if(is_string($value))
+					$emailBody = str_replace('{' . $key . '}', $value, $emailBody);
+			}
+			$emailBody = str_replace('{url}', GO::config()->full_url, $emailBody);
+			$emailBody = str_replace('{title}', GO::config()->title, $emailBody);
+			$type= null;
+		}
+		if(!$title)
+			$title=GO::config()->get_setting('register_email_subject') ?: GO::t('register_email_subject', 'users');
+
+		if(empty($title) || empty($emailBody))
+			return false;
+		if(!$message) {
+			$message = new Message();
+			$message->addFrom(GO::config()->webmaster_email,GO::config()->title);
+		}
+		$message->setSubject($title)
+			->setBody($emailBody, $type)
+			->addTo($this->email,$this->getName());
+
+		return Mailer::newGoInstance()->send($message);
 	}
 	
 	/**

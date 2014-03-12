@@ -2,9 +2,9 @@
 
 /**
  * A message from the imap server
- * 
+ *
  * @package GO.modules.email
- * 
+ *
  * @property \GO\Base\Mail\EmailRecipients $to
  * @property \GO\Base\Mail\EmailRecipients $cc
  * @property \GO\Base\Mail\EmailRecipients $bcc
@@ -17,7 +17,7 @@
  * @property string $date Date sent
  * @property int $udate Unix time stamp sent
  * @property int $internal_udate Unix time stamp received
- * @property string $x_priority 
+ * @property string $x_priority
  * @property string $message_id
  * @property string $content_type
  * @property array $content_typeattributes
@@ -30,6 +30,7 @@
  * @property bool $forwarded
  * @property Account $account
  * @property String $mailbox
+ * @property array $labels
  */
 
 namespace GO\Email\Model;
@@ -64,18 +65,18 @@ abstract class Message extends \GO\Base\Model {
 			'account',
 			'smime_signed'=>false
 	);
-	
+
 	protected $attachments=array();
-	
+
 	protected $defaultCharset='UTF-8';
-	
+
 	/**
 	 * True iff the actual message's body is larger than the maximum allowed. See
 	 * also how \GO\Base\Mail\Imap::max_read is used.
 	 * @var boolean
 	 */
 	protected $_bodyTruncated;
-	
+
 	public function __construct() {
 		$this->attributes['to'] = new \GO\Base\Mail\EmailRecipients($this->attributes['to']);
 		$this->attributes['cc'] = new \GO\Base\Mail\EmailRecipients($this->attributes['cc']);
@@ -91,8 +92,8 @@ abstract class Message extends \GO\Base\Model {
 	 * @return mixed property value
 	 * @see getAttribute
 	 */
-	public function __get($name) {		
-		
+	public function __get($name) {
+
 		$getter = 'get'.$name;
 		if(method_exists($this, $getter))
 			return $this->$getter();
@@ -100,7 +101,7 @@ abstract class Message extends \GO\Base\Model {
 			return $this->attributes[$name];
 		}
 	}
-	
+
 	public function __set($name, $value){
 		$setter = 'set'.$name;
 		if(method_exists($this, $setter))
@@ -108,19 +109,19 @@ abstract class Message extends \GO\Base\Model {
 		else
 			$this->attributes[$name]=$value;
 	}
-	
+
 	public function __isset($name) {
 		$value = $this->__get($name);
 		return isset($value);
 	}
-	
+
 	public function __unset($name) {
 		unset($this->attributes[$name]);
 	}
 
 	/**
 	 * Returns a static model of itself
-	 * 
+	 *
 	 * @param String $className
 	 * @return ImapMessage
 	 */
@@ -137,22 +138,22 @@ abstract class Message extends \GO\Base\Model {
 		$this->attributes['bcc'] = new \GO\Base\Mail\EmailRecipients($this->attributes['bcc']);
 		$this->attributes['from'] = new \GO\Base\Mail\EmailRecipients($this->attributes['from']);
 		$this->attributes['reply_to'] = new \GO\Base\Mail\EmailRecipients($this->attributes['reply_to']);
-		
-		
+
+
 	$this->attributes['x_priority']= isset($this->attributes['x_priority']) ? strtolower($this->attributes['x_priority']) : 3;
 		switch($this->attributes['x_priority']){
 			case 'high':
 				$this->attributes['x_priority']=1;
 				break;
-			
+
 			case 'low':
 				$this->attributes['x_priority']=5;
 				break;
-			
+
 			case 'normal':
 				$this->attributes['x_priority']=3;
 				break;
-			
+
 			default:
 				$this->attributes['x_priority']= intval($this->attributes['x_priority']);
 				break;
@@ -162,52 +163,52 @@ abstract class Message extends \GO\Base\Model {
 	/**
 	 * Get the body in HTML format. If no HTML body was found the text version will
 	 * be converted to HTML.
-	 * 
-	 * @return string 
+	 *
+	 * @return string
 	 */
 	abstract public function getHtmlBody();
-	
+
 	/**
 	 * Get the body in plain text format. If no plain text body was found the HTML version will
 	 * be converted to plain text.
-	 * 
-	 * @return string 
+	 *
+	 * @return string
 	 */
 	abstract public function getPlainBody();
-		
+
 	/**
 	 * Return the raw MIME source as string
-	 * 
+	 *
 	 * @return string
 	 */
 	abstract public function getSource();
 
 	/**
 	 * Get an array of attachments in this message.
-	 * 
+	 *
 	 * @return array MessageAttachment
-	 * 
+	 *
 	 */
-	
+
 	public function &getAttachments() {
 		return $this->attachments;
 	}
-	
+
 	public function addAttachment(MessageAttachment $a){
 		$this->attachments[$a->number]=$a;
 	}
-	
+
 	public function isAttachment($number){
-		$att = $this->getAttachments();		
+		$att = $this->getAttachments();
 		return isset($att[$number]);
 	}
-	
+
 	/**
 	 * Get an attachment by MIME partnumber.
 	 * eg. 1.1 or 2
-	 * 
+	 *
 	 * @param string $number
-	 * @return array See getAttachments 
+	 * @return array See getAttachments
 	 */
 	public function getAttachment($number){
 		$att = $this->getAttachments();
@@ -220,8 +221,8 @@ abstract class Message extends \GO\Base\Model {
 //			return ;
 //		}
 	}
-	
-	
+
+
 	protected function extractUuencodedAttachments(&$body)
  {
 //		$body = str_replace("\r", '', $body);
@@ -231,7 +232,7 @@ abstract class Message extends \GO\Base\Model {
 
 		$regex = "/(begin ([0-7]{3}) (.+))\n/";
 
-		
+
 
 		if (preg_match_all($regex, $body, $matches, PREG_OFFSET_CAPTURE)) {
 
@@ -245,10 +246,10 @@ abstract class Message extends \GO\Base\Model {
 				$offset = $matches[3][$i][1] + strlen($matches[3][$i][0]) + 1;
 
 				$endpos = strpos($body, 'end', $offset) - $offset - 1;
-				
-				
+
+
 				if($endpos){
-					
+
 					if(!isset($startPosAtts))
 						$startPosAtts=$offset;
 
@@ -265,7 +266,7 @@ abstract class Message extends \GO\Base\Model {
 					$this->addAttachment($a);
 				}
 			}
-			
+
 			$body = substr($body, 0, $startPosAtts);
 		}
 	}
@@ -274,10 +275,10 @@ abstract class Message extends \GO\Base\Model {
 		$new = array();
 		foreach($r as $email=>$personal)
 			$new[]=array('email'=>$email, 'personal'=>(string) $personal);
-		
+
 		return $new;
 	}
-	
+
 	public function getZipOfAttachmentsUrl(){
 		return '';
 	}
@@ -285,22 +286,22 @@ abstract class Message extends \GO\Base\Model {
 	/**
 	 * Returns MIME fields contained in this class's instance as an associative
 	 * array.
-	 * 
+	 *
 	 * @param boolean $html Whether or not to return the HTML body. The alternative is
 	 * plain text. Defaults to true.
-	 * 
+	 *
 	 * @return Array
 	 */
 	public function toOutputArray($html=true, $recipientsAsString=false, $noMaxBodySize=false,$useHtmlSpecialChars=true) {
 
-		$from = $this->from->getAddresses();		
+		$from = $this->from->getAddresses();
 
 		$response['notification'] = $this->disposition_notification_to;
-		
+
 		//seen is expensive because it can't be recovered from cache.
 		// We'll use the grid to check if a message was seen or not.
 		//$response['seen']=$this->seen;
-				
+
 		$from = $this->from->getAddress();
 		$response['from'] = $from['personal'];
 		$response['sender'] = $from['email'];
@@ -322,6 +323,18 @@ abstract class Message extends \GO\Base\Model {
 		$response['date'] = \GO\Base\Util\Date::get_timestamp($this->udate);
 		$response['size'] = $this->size;
 
+		$labels = GO_Email_Model_Label::model()->getUserLabels();
+
+		$response['labels'] = array();
+		foreach ($this->labels as $label) {
+			if (isset($labels[$label])) {
+				$response['labels'][] = array(
+					'name' => $labels[$label]->name,
+					'color' => $labels[$label]->color
+				);
+			}
+		}
+
 		$response['attachments'] = array();
 		$response['zip_of_attachments_url']=$this->getZipOfAttachmentsUrl();
 
@@ -332,30 +345,30 @@ abstract class Message extends \GO\Base\Model {
 		} else {
 			$response['plainbody'] =$this->getPlainBody(false,$noMaxBodySize);
 		}
-		
+
 		if($useHtmlSpecialChars){
 			$response['subject'] = htmlspecialchars($this->subject,ENT_COMPAT,'UTF-8');
 		} else {
 			$response['subject'] = $this->subject;
 		}
-		
+
 
 		$response['body_truncated'] = $this->bodyIsTruncated();
-		
-		$response['smime_signed'] = isset($this->content_type_attributes['smime-type']) && $this->content_type_attributes['smime-type']=='signed-data';	
+
+		$response['smime_signed'] = isset($this->content_type_attributes['smime-type']) && $this->content_type_attributes['smime-type']=='signed-data';
 
 		$attachments = $this->getAttachments();
 
 		foreach($attachments as $att){
 			$replaceCount = 0;
-			
-			$a = $att->getAttributes();				
-			
+
+			$a = $att->getAttributes();
+
 			//add unique token for detecting precense of inline attachment when we submit the message in handleFormInput
 			$a['token']=md5($a['tmp_file']);
-			$a['url'] .= '&amp;token='.$a['token'];				
+			$a['url'] .= '&amp;token='.$a['token'];
 
-			
+
 			if ($html && !empty($a['content_id']))
 				$response['htmlbody'] = str_replace('cid:' . $a['content_id'], $a['url'], $response['htmlbody'], $replaceCount);
 
@@ -368,15 +381,15 @@ abstract class Message extends \GO\Base\Model {
 				$response['attachments'][] = $a;
 			else
 				$response['inlineAttachments'][]=$a;
-				
+
 		}
-		
+
 		$response['blocked_images']=0;
 		$response['xssDetected']=false;
 
 		return $response;
 	}
-	
+
 	/**
 	 * Returns true iff message body has exceeded maximum size.
 	 * @return boolean
@@ -384,5 +397,5 @@ abstract class Message extends \GO\Base\Model {
 	public function bodyIsTruncated() {
 		return $this->_bodyTruncated;
 	}
-	
+
 }

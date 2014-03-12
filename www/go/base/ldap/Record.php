@@ -69,11 +69,23 @@ class Record extends Model{
 		foreach($attributes as $key => $value) {
 			$key = isset($mapping[$key]) ? $mapping[$key]:$key;
 			if($this->hasAttribute($key)) {
-				if(substr($value, 0,1)==='[') //set json array as php array
-					$value = json_decode($value);
-				//if(!is_array($value))
-				//	$value = array(0=>$value);
-				$this->_attributes[$key] = $value;
+				
+				if(is_string($value)){
+					if(substr($value, 0,1)==='[') //set json array as php array
+						$value = json_decode($value);
+					//if(!is_array($value))
+					//	$value = array(0=>$value);
+					$this->_attributes[$key] = $value;
+				}else
+				{
+					$this->_attributes[$key] = array();
+					
+					foreach($value as $el){
+						if(!empty($el)){
+							$this->_attributes[$key][]=$el;
+						}
+					}
+				}
 			}
 			
 		}
@@ -87,8 +99,11 @@ class Record extends Model{
 		if(empty($this->_validAttributes)) {
 			$extraVarKeys = array(); 
 			foreach(static::getExtraVars() as $vars) {
-				if(isset($vars[1])) //Key
-					$extraVarKeys[$vars[1]] = $vars[1];
+				if(isset($vars[1])){ //Key
+					
+					$key = str_replace('[]','', $vars[1]);
+					$extraVarKeys[$key] = $key;
+				}
 			}
 			//Attributes that are not in the objectClass can not be set
 			//$validAttributes = array_merge($extraVarKeys, static::getMapping());

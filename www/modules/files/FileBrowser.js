@@ -389,8 +389,7 @@ GO.files.FileBrowser = function(config){
 					}),
 					this.quotaBar = new Ext.ProgressBar({
 						width: 200,
-						value: quotaPercentage,
-						text: Math.round(quotaPercentage*100)+'% ('+ GO.settings.disk_usage+' of '+GO.settings.disk_quota+'MB)'
+						value: quotaPercentage
 					}),
 					this.searchField = new GO.form.SearchField({
 						store: this.gridStore,
@@ -912,8 +911,11 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			var quotaPercentage = (GO.settings.disk_quota && GO.settings.disk_quota>0) ? GO.settings.disk_usage/GO.settings.disk_quota : 0;
 			if(quotaPercentage==0 && GO.settings.disk_quota==0)
 				quotaPercentage=1;
-			var text = Math.round(quotaPercentage*100)+'% ('+ GO.settings.disk_usage+' of '+GO.settings.disk_quota+'MB)';
-			this.quotaBar.updateProgress(quotaPercentage, text);
+			var text ='';
+			if(GO.settings.disk_quota) {
+				text = Math.round(quotaPercentage*100)+'% ('+ GO.settings.disk_usage+' of '+GO.settings.disk_quota+'MB)';
+				this.quotaBar.updateProgress(quotaPercentage, text);
+			}
 			this.quotaBar.removeClass('warning');
 			this.quotaBar.removeClass('error');
 			if(quotaPercentage*100 > 99)

@@ -59,7 +59,10 @@ class SubCron extends \GO\Base\Cron\AbstractCron {
 				trigger_error("Config file ".$installation->configPath." not found");
 				continue;
 			}		
-			$cmd = \GO::config()->root_path.'groupofficecli.php -q -r=cron/run -c="'.$installation->configPath.'" &';	
+			
+			$config = $installation->getConfig();
+			
+			$cmd = $config['root_path'].'groupofficecli.php -q -r=cron/run -c="'.$installation->configPath.'" &';	
 			system($cmd);			
 		}
 	}

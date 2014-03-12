@@ -63,7 +63,11 @@ class File extends Base{
 		if(!empty($extension))
 			$p.='.'.$extension;
 		
-		return new File($p);
+		$file =  new static($p);
+		
+		$file->delete();
+		
+		return $file;
 	}
 	
 	/**
