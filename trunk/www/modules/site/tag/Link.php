@@ -6,7 +6,7 @@ use GO\Site\Model\Content;
 
 class Link implements TagInterface {
 
-	static function render($params, $tag, GO\Site\Model\Content $content) {
+	static function render($params, $tag, \GO\Site\Model\Content $content) {
 
 		$html = '<a';
 
