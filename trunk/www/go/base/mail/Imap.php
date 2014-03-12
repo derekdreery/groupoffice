@@ -4,7 +4,7 @@ namespace GO\Base\Mail;
 
 
 class Imap extends ImapBodyStruct {
-	
+
 	const SORT_NAME='NAME';
 	const SORT_FROM='FROM';
 	const SORT_TO='TO';
@@ -32,19 +32,32 @@ class Imap extends ImapBodyStruct {
 	var $delimiter=false;
 
 	var $sort_count = false;
-	
+
+	var $gmail_server = false;
+
+	var $permittedFlags = false;
+
+	public static $systemFlags = array(
+		'Seen',
+		'Answered',
+		'Flagged',
+		'Deleted',
+		'Draft',
+		'Recent'
+	);
+
 	public function __construct(){
-		
+
 	}
 
 	public function __destruct() {
 		$this->disconnect();
 	}
-	
+
 	public function checkConnection(){
 		if(!is_resource($this->handle)){
 			return $this->connect(
-							$this->server, 
+							$this->server,
 							$this->port,
 							$this->username,
 							$this->password,
@@ -78,11 +91,11 @@ class Imap extends ImapBodyStruct {
 //		{
 //			\GO::session()->values['imap'][$server]=gethostbyname($server);
 //		}
-		
+
 		if(empty($password)){
 			throw new ImapAuthenticationFailedException('Authententication failed for user '.$username.' on IMAP server '.$this->server);
 		}
-		
+
 		$this->ssl = $ssl;
 		$this->starttls = $starttls;
 		$this->auth = strtolower($auth);
@@ -93,24 +106,24 @@ class Imap extends ImapBodyStruct {
 		$this->password=$password;
 
 		$server = $this->ssl ? 'ssl://'.$this->server : $this->server;
-		
+
 
 		$this->handle = fsockopen($server, $this->port, $errorno, $errorstr, 10);
 		if (!is_resource($this->handle)) {
 			throw new \Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
 		}
-		
-		
+
+
 		$authed = $this->authenticate($username, $password);
-		
+
 		if(!$authed)
 			return false;
-		
+
 //		just testing for gmail
 //		$this->send_command("ENABLE UTF8=ACCEPT\r\n");
-		
-		
-		
+
+
+
 		return true;
 	}
 
@@ -121,14 +134,14 @@ class Imap extends ImapBodyStruct {
 	 */
 
 	public function disconnect() {
-		if (is_resource($this->handle)) {			
+		if (is_resource($this->handle)) {
 			$command = "LOGOUT\r\n";
 			$this->send_command($command);
 			$this->state = 'disconnected';
 			$result = $this->get_response();
 			$this->check_response($result);
 			fclose($this->handle);
-			
+
 			foreach($this->errors as $error){
 				trigger_error("IMAP error: ".$error);
 			}
@@ -206,12 +219,12 @@ class Imap extends ImapBodyStruct {
 				if (isset($res[0])) {
 					$this->banner = $res[0];
 				}
-			}	
+			}
 			if (stristr($response, 'A'.$this->command_count.' OK')) {
 				$authed = true;
 				$this->state = 'authed';
-				
-				
+
+
 				//some imap servers like dovecot respond with the capability after login.
 				//Set this in the session so we don't need to do an extra capability command.
 				if(($startpos = strpos($response, 'CAPABILITY'))!==false){
@@ -221,13 +234,13 @@ class Imap extends ImapBodyStruct {
 						$capability = substr($response, $startpos, $endpos-$startpos);
 						\GO::session()->values['GO_IMAP'][$this->server]['imap_capability']=$capability;
 					}
-					
+
 				}
 			}else
 			{
 //				if(!\GO::config()->debug)
 //					$this->errors[]=$response;
-				
+
 				throw new ImapAuthenticationFailedException('Authententication failed for user '.$username.' on IMAP server '.$this->server."\n\n".$response);
 
 			}
@@ -260,29 +273,29 @@ class Imap extends ImapBodyStruct {
 		}
 		return $this->capability;
 	}
-	
+
 	/**
 	 * Check if the IMAP server has a particular capability.
 	 * eg. QUOTA, ACL, LIST-EXTENDED etc.
-	 * 
+	 *
 	 * @param string $str
 	 * @return boolean
 	 */
 	public function has_capability($str){
 		$has = stripos($this->get_capability(), $str)!==false;
-	
+
 		if(isset(\GO::session()->values['imap_disable_capabilites_'.$this->server])){
 			if(!isset(\GO::config()->disable_imap_capabilities))
 				\GO::config()->disable_imap_capabilities='';
 
 			\GO::config()->disable_imap_capabilities.=" ".\GO::session()->values['imap_disable_capabilites_'.$this->server];
 		}
-		
+
 		//We stumbled upon a dovecot server that crashed when sending a command
 		//using LIST-EXTENDED. With this option we can workaround that issue.
 		if($has && stripos(\GO::config()->disable_imap_capabilities, $str)!==false)
-			$has=false;		
-		
+			$has=false;
+
 		return $has;
 	}
 
@@ -295,7 +308,7 @@ class Imap extends ImapBodyStruct {
 		$command = "GETACL \"$mailbox\"\r\n";
 		$this->send_command($command);
 		$response = $this->get_response(false, true);
-		
+
 		$ret = array();
 
 		foreach($response as $line)
@@ -306,7 +319,7 @@ class Imap extends ImapBodyStruct {
 				}
 			}
 		}
-		
+
 		return $ret;
 	}
 
@@ -320,14 +333,14 @@ class Imap extends ImapBodyStruct {
 		$this->send_command($command);
 
 		$response = $this->get_response();
-		
+
 		return $this->check_response($response);
 	}
 
 	public function delete_acl($mailbox, $identifier){
 		$mailbox = $this->utf7_encode($this->_escape( $mailbox));
 		$this->clean($mailbox, 'mailbox');
-		
+
 		$command = "DELETEACL \"$mailbox\" $identifier\r\n";
 		$this->send_command($command);
 		$response = $this->get_response();
@@ -361,12 +374,12 @@ class Imap extends ImapBodyStruct {
 	private function set_mailbox_delimiter($delimiter) {
 		$this->delimiter=\GO::session()->values['imap_delimiter'][$this->server]=$delimiter;
 	}
-	
-	
+
+
 	private $_subscribedFoldersCache;
-	
+
 	private function _isSubscribed($mailboxName, $flags){
-		
+
 		if(strtoupper($mailboxName)=="INBOX"){
 			return true;
 			//returning subscribed flag with list-extended doesn't work with public folders.
@@ -376,66 +389,66 @@ class Imap extends ImapBodyStruct {
 		}else
 		{
 			if(!isset($this->_subscribedFoldersCache[$this->server.$this->username])){
-				$this->_subscribedFoldersCache[$this->server.$this->username] = $this->list_folders(true, false, '', '*');	
-				
+				$this->_subscribedFoldersCache[$this->server.$this->username] = $this->list_folders(true, false, '', '*');
+
 //				\GO::debug(array_keys($this->_subscribedFoldersCache));
 			}
 			return isset($this->_subscribedFoldersCache[$this->server.$this->username][$mailboxName]);
 		}
 	}
-	
+
 	public function list_folders($listSubscribed=true, $withStatus=false, $namespace='', $pattern='*', $isRoot=false){
-		
+
 		\GO::debug("list_folders($listSubscribed, $withStatus, $namespace, $pattern)");
 		//$delim = false;
-		
+
 		//unset($this->_subscribedFoldersCache);
-		
+
 //		$listStatus = $this->has_capability('LIST-STATUS');
-		
+
 		$listCmd = $listSubscribed ? 'LSUB' : 'LIST';
-		
+
 //		if($listSubscribed && $this->has_capability("LIST-EXTENDED"))
-////		$listCmd = "LIST (SUBSCRIBED)";		
+////		$listCmd = "LIST (SUBSCRIBED)";
 //			$listCmd = "LIST";
-		
-				
+
+
 		$cmd = $listCmd.' "'.$this->addslashes($this->utf7_encode($namespace)).'" "'.$this->addslashes($this->utf7_encode($pattern)).'"';
-		
+
 //		if($listSubscribed && $this->has_capability("LIST-EXTENDED"))
 //			$listCmd = 'LIST';
-		
+
 //		if($listStatus && $withStatus){
 //			$cmd .= ' RETURN (CHILDREN SUBSCRIBED STATUS (MESSAGES UNSEEN))';
 //		}
-		
+
 		if($this->has_capability("LIST-EXTENDED") && !$listSubscribed){
 				$cmd .= ' RETURN (CHILDREN';
-				
+
 				if($withStatus){
 					$cmd .= ' STATUS (MESSAGES UNSEEN)';
 				}
 
 			$cmd .= ')';
 		}
-		
+
 //		\GO::debug($cmd);
-		
+
 		$cmd .= "\r\n";
-		
+
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
-		
-		if(!$this->check_response($result, true, false) && $this->has_capability("LIST-EXTENDED")){			
-	
+
+		if(!$this->check_response($result, true, false) && $this->has_capability("LIST-EXTENDED")){
+
 			//some servers pretend to support list-extended but fail on the commands.
 			//work around by disabling support and try again.
 			\GO::session()->values['imap_disable_capabilites_'.$this->server]='LIST-EXTENDED';
-			
+
 			return $this->list_folders($listSubscribed, $withStatus, $namespace, $pattern, $isRoot);
 		}
 //		\GO::debug($result);
-		
+
 		$delim=false;
 
 		$folders = array();
@@ -445,8 +458,8 @@ class Imap extends ImapBodyStruct {
 			}
 			if ($vals[0] == 'A'.$this->command_count) {
 				continue;
-			}			
-			
+			}
+
 			if($vals[1]==$listCmd){
 				$flags = false;
 				//$count = count($vals);
@@ -459,7 +472,7 @@ class Imap extends ImapBodyStruct {
 				$can_have_kids = true;
 				$has_no_kids=false;
 				$has_kids = false;
-				$marked = false;				
+				$marked = false;
 				//$subscribed=$listSubscribed;
 
 				foreach ($vals as $v) {
@@ -481,19 +494,19 @@ class Imap extends ImapBodyStruct {
 								$folder = $v;
 						}
 					}
-				}	
-				
+				}
+
 				if(strtoupper($folder)=='INBOX')
 					$folder='INBOX'; //fix lowercase or mixed case inbox strings
-				
+
 				if($folder=='dovecot')
 					continue;
 
 				if (!$this->delimiter) {
 					$this->set_mailbox_delimiter($delim);
 				}
-				
-				
+
+
 				//in some case the mailserver return the mailbox twice when it has subfolders:
 				//R: * LIST ( ) / Drafts
 				//R: * LIST ( ) / Folder3
@@ -504,11 +517,11 @@ class Imap extends ImapBodyStruct {
 				//R: * LIST ( ) / INBOX/
 				//R: * LIST ( ) / Test &- test/
 				//R: * LIST ( ) / Test &- test
-				
+
 				//We trim the delimiter of the folder to fix that.
 				$folder = trim($folder, $this->delimiter);
-				
-				
+
+
 
 				if (stristr($flags, 'marked')) {
 					$marked = true;
@@ -519,21 +532,21 @@ class Imap extends ImapBodyStruct {
 				if (stristr($flags, 'haschildren')) {
 					$has_kids = true;
 				}
-				
+
 				if (stristr($flags, 'hasnochildren')) {
 					$has_no_kids = true;
 				}
-				
-				
+
+
 				$subscribed = $listSubscribed || $this->_isSubscribed($folder, $flags);
-				
+
 				$nonexistent = stristr($flags, 'NonExistent');
-				
+
 				if ($folder != 'INBOX' && (stristr($flags, 'noselect') || $nonexistent)) {
 					$no_select = true;
 				}
-				
-				
+
+
 
 				if (!isset($folders[$folder]) && $folder) {
 					$folders[$folder] = array(
@@ -565,19 +578,19 @@ class Imap extends ImapBodyStruct {
 							$folders[$folder]['unseen']=intval($v);
 						}
 					}
-					
+
 					$lastProp=$v;
 				}
 			}
 		}
-		
+
 //		if($namespace=="" && $pattern=="%" && $listSubscribed && !isset($folders['INBOX'])){
 //			//inbox is not subscribed. Let's fix that/
 //			if(!$this->subscribe('INBOX'))
 //				throw new \Exception("Could not subscribe to INBOX folder!");
 //			return $this->list_folders($listSubscribed, $withStatus, $namespace, $pattern);
 //		}
-		
+
 			//sometimes shared folders like "Other user.shared" are in the folder list
 		//but there's no "Other user" parent folder. We create a dummy folder here.
 		if(!isset($folders['INBOX']) && $isRoot){
@@ -603,7 +616,7 @@ class Imap extends ImapBodyStruct {
 						$folders[$name]['unseen']=0;
 					}else
 					{
-						$status = $this->get_status($folder["name"]);				
+						$status = $this->get_status($folder["name"]);
 						$folders[$name]['messages']=$status['messages'];
 						$folders[$name]['unseen']=$status['unseen'];
 					}
@@ -612,34 +625,34 @@ class Imap extends ImapBodyStruct {
 		}
 
 		\GO\Base\Util\ArrayUtil::caseInsensitiveSort($folders);
-		
+
 //		\GO::debug($folders);
 
 		return $folders;
 	}
-	
+
 	/**
 	 * Get the namespaces that are available on the mailserver.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_namespaces(){
 		// Array with the namespaces that are found.
 		$nss = array();
-		
+
 		if($this->has_capability('NAMESPACE')){
 			//IMAP ccommand
-			
+
 			$command = "NAMESPACE\r\n";
 			$this->send_command($command);
 			$result = $this->get_response(false, true);
 
 			$namespaceCmdFound=false;
-			
+
 			$insideNamespace=false;
-			
+
 			$namespace = array('name'=>null, 'delimiter'=>null);
-			
+
 			foreach ($result as $vals) {
 				foreach ($vals as $val) {
 					if (!$namespaceCmdFound && strtoupper($val) == 'NAMESPACE') {
@@ -653,7 +666,7 @@ class Imap extends ImapBodyStruct {
 
 							case ')':
 								$insideNamespace = false;
-								
+
 								if(isset($namespace['name'])){
 									$namespace['name']=$this->utf7_decode(trim($namespace['name'], $namespace['delimiter']));
 									$nss[] = $namespace;
@@ -779,7 +792,7 @@ class Imap extends ImapBodyStruct {
 
 
 
-		
+
 
 		//sometimes shared folders like "Other user.shared" are in the folder list
 		//but there's no "Other user" parent folder. We create a dummy folder here.
@@ -833,18 +846,18 @@ class Imap extends ImapBodyStruct {
 
 		$box = $this->utf7_encode($this->_escape( $mailbox_name));
 		$this->clean($box, 'mailbox');
-		
+
 		\GO::debug("Selecting IMAP mailbox $box");
 
 		$command = "SELECT \"$box\"\r\n";
-	
+
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 		$status = $this->check_response($res, true);
 
 		if(!$status)
 			return false;
-		
+
 		$highestmodseq=false;
 		$uidvalidity = 0;
 		$exists = 0;
@@ -874,7 +887,7 @@ class Imap extends ImapBodyStruct {
 					}
 				}
 			}
-			
+
 			if (in_array('HIGHESTMODSEQ', $vals)) {
 				foreach ($vals as $i => $v) {
 					if (intval($v) && isset($vals[($i - 1)]) && $vals[($i - 1)] == 'HIGHESTMODSEQ') {
@@ -894,6 +907,10 @@ class Imap extends ImapBodyStruct {
 					if ($v == '(') {
 						$collect_flags = true;
 					}
+				}
+
+				if (implode(' ', array_slice($vals, -2)) == 'Flags permitted.') {
+					$this->permittedFlags = true;
 				}
 			}
 			if (in_array('FLAGS', $vals)) {
@@ -927,9 +944,9 @@ class Imap extends ImapBodyStruct {
 		$mailbox['messages'] = $exists;
 		$mailbox['flags'] = $flags;
 		$mailbox['permanentflags'] = $pflags;
-		
+
 		$this->selected_mailbox=$mailbox;
-		
+
 		return $mailbox;
 	}
 
@@ -939,14 +956,14 @@ class Imap extends ImapBodyStruct {
 	 * @param <type> $folder
 	 * @return <type>
 	 */
-	
+
 	private $_unseen;
 
 	public function get_unseen($mailbox=false, $nocache=false) {
-		
+
 		if(!$mailbox)
 			$mailbox = $this->selected_mailbox['name'];
-		
+
 		if(isset($this->_unseen[$mailbox])){
 			return $this->_unseen[$mailbox];
 		}
@@ -956,28 +973,28 @@ class Imap extends ImapBodyStruct {
 				return false;
 			}
 		}
-		
+
 //		\GO::debug(\GO::session()->values['GO_IMAP'][$this->server][$mailbox]);
 //		\GO::debug($this->selected_mailbox['uidvalidity']);
 //		\GO::debug($this->selected_mailbox['highestmodseq']);
 //		//get from session cache
 //		if(isset(\GO::session()->values['GO_IMAP'][$this->server][$mailbox]) && !empty(\GO::session()->values['GO_IMAP'][$this->server][$mailbox]['highestmodseq'])){
 //			if(\GO::session()->values['GO_IMAP'][$this->server][$mailbox]['uidvalidity']==$this->selected_mailbox['uidvalidity'] && \GO::session()->values['GO_IMAP'][$this->server][$mailbox]['highestmodseq']==$this->selected_mailbox['highestmodseq']){
-//				
+//
 //				\GO::debug("Returning unseen from cache");
-//							
-//				
+//
+//
 //				return \GO::session()->values['GO_IMAP'][$this->server][$mailbox];
 //			}
 //		}
-//		
+//
 //		\GO::debug("Getting unseen");
 
 		#some servers don't seem to support brackets
 		#$command = "UID SEARCH (UNSEEN) ALL\r\n";
-		
+
 		$command = "UID SEARCH UNSEEN ALL\r\n";
-		
+
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 		$status = $this->check_response($res, true);
@@ -998,11 +1015,11 @@ class Imap extends ImapBodyStruct {
 
 		$this->selected_mailbox['unseen']=$unseen;
 
-		
+
 //		$this->_unseen[$mailbox]=\GO::session()->values['GO_IMAP'][$this->server][$mailbox]=array('count'=>$unseen, 'uids'=>$uids, 'uidvalidity'=>$this->selected_mailbox['uidvalidity'], 'highestmodseq'=>$this->selected_mailbox['highestmodseq']);
 		$this->_unseen[$mailbox]=array('count'=>$unseen, 'uids'=>$uids);
-		
-		
+
+
 		return $this->_unseen[$mailbox];
 	}
 
@@ -1020,7 +1037,7 @@ class Imap extends ImapBodyStruct {
 		if(empty($filter)){
 			$filter = 'ALL';
 		}
-		
+
 		if(!$this->selected_mailbox)
 			throw new \Exception('No mailbox selected');
 
@@ -1069,9 +1086,9 @@ class Imap extends ImapBodyStruct {
 
 		$this->clean($sort, 'keyword');
 		//$this->clean($filter, 'keyword');
-		
+
 		$charset = $forceAscii || !\GO\Base\Util\String::isUtf8($filter) ? 'US-ASCII' : 'UTF-8';
-		
+
 		$command = 'UID SORT ('.$sort.') '.$charset.' '.$filter."\r\n";
 		$this->send_command($command);
 		/*if ($this->disable_sort_speedup) {
@@ -1124,7 +1141,7 @@ class Imap extends ImapBodyStruct {
 		$charset = '';
 		//$charset =  'CHARSET UTF-8 ';
 
-		
+
 		$command = 'UID SEARCH '.$charset.trim($terms)."\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false, true);
@@ -1146,7 +1163,7 @@ class Imap extends ImapBodyStruct {
 
 	/* use the FETCH command to manually sort the mailbox */
 	private function client_side_sort($sort, $reverse, $filter='ALL') {
-		
+
 		\GO::debug("imap::client_side_sort($sort, $reverse, $filter)");
 
 		$uid_string='1:*';
@@ -1198,7 +1215,7 @@ class Imap extends ImapBodyStruct {
 				break;
 		}
 		$command = $command1.'('.$command2.")\r\n";
-		
+
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 		$status = $this->check_response($res, true);
@@ -1437,25 +1454,32 @@ class Imap extends ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function get_message_headers($uids, $full_data=false) {
-		
+
 		if(empty($uids))
 			return array();
 
 		$sorted_string = implode(',', $uids);
 		$this->clean($sorted_string, 'uid_list');
-		$command = 'UID FETCH '.$sorted_string.' (FLAGS INTERNALDATE RFC822.SIZE BODY.PEEK[HEADER.FIELDS (SUBJECT FROM '.
+
+		$flags_string = 'FLAGS';
+		if ($this->server == 'imap.gmail.com') {
+			$this->gmail_server = true;
+			$flags_string = 'X-GM-LABELS FLAGS';
+		}
+
+		$command = 'UID FETCH '.$sorted_string.' (' . $flags_string . ' INTERNALDATE RFC822.SIZE BODY.PEEK[HEADER.FIELDS (SUBJECT FROM '.
 						"DATE CONTENT-TYPE X-PRIORITY TO CC";
 
 		if($full_data)
 			$command .= " BCC REPLY-TO DISPOSITION-NOTIFICATION-TO CONTENT-TRANSFER-ENCODING MESSAGE-ID";
-		
+
 		$command .= ")])\r\n";
-		
+
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 
 		$status = $this->check_response($res, true);
-		$tags = array('UID' => 'uid', 'FLAGS' => 'flags', 'RFC822.SIZE' => 'size', 'INTERNALDATE' => 'internal_date');
+		$tags = array('UID' => 'uid', 'FLAGS' => 'flags', 'X-GM-LABELS' => 'flags', 'RFC822.SIZE' => 'size', 'INTERNALDATE' => 'internal_date');
 		$junk = array('SUBJECT', 'FROM', 'CONTENT-TYPE', 'TO', 'CC','BCC', '(', ')', ']', 'X-PRIORITY', 'DATE','REPLY-TO','DISPOSITION-NOTIFICATION-TO','CONTENT-TRANSFER-ENCODING', 'MESSAGE-ID');
 		//$flds = array('uid','flags','size','internal_date','answered','seen','','reply-to', 'content-type','x-priority','disposition-notification-to');
 		$headers = array();
@@ -1485,7 +1509,8 @@ class Imap extends ImapBodyStruct {
 					'flagged'=>0,
 					'answered'=>0,
 					'forwarded'=>0,
-					'has_attachments'=>0
+					'has_attachments'=>0,
+					'labels'=>array()
 				);
 
 				$count = count($vals);
@@ -1498,14 +1523,14 @@ class Imap extends ImapBodyStruct {
 
 						$header = str_replace("\r\n", "\n", $vals[$i]);
 						$header = preg_replace("/\n\s/", " ", $header);
-						
+
 						$lines = explode("\n", $header);
 
 						foreach ($lines as $line) {
 							if(!empty($line)) {
 								$header = trim(strtolower(substr($line, 0, strpos($line, ':'))));
 								$header = str_replace('-','_',$header);
-								
+
 								if (!$header && !empty($last_header)) {
 									$message[$last_header] .= "\n".trim($line);
 								}else {
@@ -1524,8 +1549,11 @@ class Imap extends ImapBodyStruct {
 								while (isset($vals[$i + $n]) && $vals[$i + $n] != ')') {
 									$prop = str_replace('-','_',strtolower(substr($vals[$i + $n],1)));
 									//\GO::debug($prop);
-									if(isset($message[$prop]))
+									if(isset($message[$prop])) {
 										$message[$prop]=true;
+									} else {
+										$message['labels'][] = strtolower($vals[$i + $n]);
+									}
 
 									$n++;
 								}
@@ -1533,7 +1561,7 @@ class Imap extends ImapBodyStruct {
 							}
 							else {
 								$prop = $tags[strtoupper($vals[$i])];
-								
+
 								if(isset($message[$prop]))
 										$message[$prop] = trim($vals[($i + 1)]);
 								$i++;
@@ -1547,19 +1575,19 @@ class Imap extends ImapBodyStruct {
 						if (strpos($message['content_type'], 'charset=')!==false) {
 							if (preg_match("/charset\=([^\s]+)/", $message['content_type'], $matches)) {
 								$message['charset'] = trim(str_replace(array('"', "'", ';'), '', $matches[1]));
-							}							
+							}
 						}
 						if(preg_match("/([^\/]*\/[^;]*)(.*)/", $message['content_type'], $matches)){
 							$message['content_type']=$matches[1];
-							$atts = trim($matches[2], ' ;');							
+							$atts = trim($matches[2], ' ;');
 							$atts=explode(';', $atts);
-							
+
 							for($i=0;$i<count($atts);$i++){
 								$keyvalue=explode('=', $atts[$i]);
 								if(isset($keyvalue[1]) && $keyvalue[0]!='boundary')
 									$message['content_type_attributes'][trim($keyvalue[0])]=trim($keyvalue[1],' "');
 							}
-							
+
 							//$message['content-type-attributes']=$atts;
 						}
 					}
@@ -1577,25 +1605,25 @@ class Imap extends ImapBodyStruct {
 					$message['to']=$this->mime_header_decode($message['to']);
 					$message['reply_to']=$this->mime_header_decode($message['reply_to']);
 					$message['disposition_notification_to']=$this->mime_header_decode($message['disposition_notification_to']);
-					
+
 					if(isset($message['cc']))
 						$message['cc']=$this->mime_header_decode($message['cc']);
-					
+
 					if(isset($message['bcc']))
 						$message['bcc']=$this->mime_header_decode($message['bcc']);
-					
+
 					preg_match("'([^/]*)/([^ ;\n\t]*)'i", $message['content_type'], $ct);
 
 					if (isset($ct[2]) && $ct[1] != 'text' && $ct[2] != 'alternative' && $ct[2] != 'related')
 					{
 						$message["has_attachments"] = 1;
 					}
-					
+
 					$headers[$message['uid']] = $message;
-					
+
 					//$message['priority']=intval($message['x-priority']);
-		
-					
+
+
 				}
 			}
 		}
@@ -1609,23 +1637,22 @@ class Imap extends ImapBodyStruct {
 		//\GO::debug($final_headers);
 		return $final_headers;
 	}
-	
-	
+
+
 	public function get_message_headers_set($start, $limit, $sort_field , $reverse=false, $query='ALL')
 	{
 		\GO::debug("get_message_headers_set($start, $limit, $sort_field , $reverse, $query)");
-		
+
 		if($query=='ALL' || $query==""){
 			$unseen = $this->get_unseen($this->selected_mailbox['name']);
 
 			$key = 'sort_cache_'.$this->selected_mailbox['name'].'_'.$this->server.'_'.$sort_field;
 			$key .= $reverse ? '_1' : '_0';
 			
-			//var_dump(\GO::session()->values['emailmod'][$key]);			
 			$unseenCheck = $unseen['count'].':'.$this->selected_mailbox['messages'];
 			if(!empty($this->selected_mailbox['uidnext']))
 				$unseenCheck .= ':'.$this->selected_mailbox['uidnext'];
-			
+
 			\GO::debug($unseenCheck);
 			//var_dump($unseenCheck);
 			if(isset(\GO::session()->values['emailmod'][$key]['unseen']) && \GO::session()->values['emailmod'][$key]['unseen']==$unseenCheck){
@@ -1634,7 +1661,7 @@ class Imap extends ImapBodyStruct {
 				$uids = \GO::session()->values['emailmod'][$key]['uids'];
 				$this->sort_count=count($uids);
 			}else
-			{		
+			{
 				\GO::debug("IMAP sort from server");
 				\GO::session()->values['emailmod'][$key]['unseen']=$unseenCheck;
 				$uids = \GO::session()->values['emailmod'][$key]['uids'] = $this->sort_mailbox($sort_field, $reverse, $query);
@@ -1643,17 +1670,17 @@ class Imap extends ImapBodyStruct {
 		{
 			$uids = $this->sort_mailbox($sort_field, $reverse, $query);
 		}
-		
+
 		\GO::debug("Count uids: ".count($uids));
-		
+
 		if(!is_array($uids))
 			return array();
 
 		if($limit>0)
 			$uids=array_slice($uids,$start, $limit);
-		
+
 		$chunks = array_chunk($uids, 1000);
-		
+
 		$headers = array();
 		while($subset = array_shift($chunks)){
 			$headers = array_merge($headers, $this->get_message_headers($subset, true));
@@ -1673,7 +1700,7 @@ class Imap extends ImapBodyStruct {
 
 	function check_mbroot($mbroot) {
 		$mbroot = trim($mbroot);
-		
+
 		if(empty($mbroot))
 			return "";
 
@@ -1705,10 +1732,10 @@ class Imap extends ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function get_quota() {
-		
+
 		if(!$this->has_capability("QUOTA"))
 			return false;
-		
+
 		$command = "GETQUOTAROOT \"INBOX\"\r\n";
 
 		$this->send_command($command);
@@ -1719,7 +1746,7 @@ class Imap extends ImapBodyStruct {
 				if(strpos($response, 'STORAGE')!==false){
 					$parts = explode(" ", $response);
 					$storage_part = array_search("STORAGE", $parts);
-					if ($storage_part>0){						
+					if ($storage_part>0){
 						return array(
 							'usage'=>intval($parts[$storage_part+1]),
 							'limit'=>intval($parts[$storage_part+2]));
@@ -1743,7 +1770,7 @@ class Imap extends ImapBodyStruct {
 		$command = "UID FETCH $uid BODYSTRUCTURE\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false, true);
-				
+
 		while (isset($result[0][0]) && isset($result[0][1]) && $result[0][0] == '*' && strtoupper($result[0][1]) == 'OK') {
 			array_shift($result);
 		}
@@ -1807,7 +1834,7 @@ class Imap extends ImapBodyStruct {
 				}
 			}
 			if (empty($res) && isset($vals['subs'])) {
-				$this->find_message_parts($vals['subs'], $number, $type, $subtype, $parts);				
+				$this->find_message_parts($vals['subs'], $number, $type, $subtype, $parts);
 			}
 		}
 		return $parts;
@@ -1860,7 +1887,7 @@ class Imap extends ImapBodyStruct {
 		if (!is_array($struct) || empty($struct)) {
 			return $parts;
 		}
-		
+
 //		\GO::debug($struct);
 
 		if(!$parts)
@@ -1887,7 +1914,7 @@ class Imap extends ImapBodyStruct {
 						//\GO::debug($vals);
 						//work around ugly stuff. Some mails contain stuff with type image/gif but it's actually an html file.
 						//so we double check if the image has a filename that it has a valid image extension
-						$file = empty($vals['name']) ? false : new \GO\Base\Fs\File($vals['name']);						
+						$file = empty($vals['name']) ? false : new \GO\Base\Fs\File($vals['name']);
 						if(!$file || $file->isImage()){
 
 							//an inline image without ID. We'll display in the part order. Apple
@@ -1896,7 +1923,7 @@ class Imap extends ImapBodyStruct {
 						}
 					}
 				}
-			
+
 				//don't decent into message/RFC822 files. Sometimes they come nested in the body from the IMAP server.
 				if (isset($vals['subs']) && (!isset($vals['subtype']) || $vals['subtype']!='rfc822')){
 
@@ -2028,7 +2055,7 @@ class Imap extends ImapBodyStruct {
 
 			if(isset($vals['type']) && !in_array($id, $skip_ids)){
 				$vals['number'] = $id;
-				
+
 				//sometimes NIL is returned from Dovecot?!?
 				if($vals['id']=='NIL')
 					$vals['id']='';
@@ -2051,7 +2078,7 @@ class Imap extends ImapBodyStruct {
 	 */
 
 	public function decode_message_part($str, $encoding, $charset=false) {
-		
+
 		switch(strtolower($encoding)) {
 			case 'base64':
 				$str = base64_decode($str);
@@ -2066,7 +2093,7 @@ class Imap extends ImapBodyStruct {
 			//some clients don't send the charset.
 			if($charset=='us-ascii')
 				$charset = 'windows-1252';
-			
+
 			$str = \GO\Base\Util\String::clean_utf8($str, $charset);
 			if($charset != 'utf-8') {
 				$str = str_replace($charset, 'utf-8', $str);
@@ -2077,7 +2104,7 @@ class Imap extends ImapBodyStruct {
 
 	/**
 	 * Get's a message part and returned in binary form or UTF-8 charset.
-	 * 
+	 *
 	 * @param int $uid
 	 * @param string $part_no
 	 * @param stirng $encoding
@@ -2088,30 +2115,30 @@ class Imap extends ImapBodyStruct {
 
 	public function get_message_part_decoded($uid, $part_no, $encoding, $charset=false, $peek=false, $cutofflength=false, $fp=false) {
 		\GO::debug("get_message_part_decoded($uid, $part_no, $encoding, $charset)");
-		
+
 		$str = '';
 		if($this->get_message_part_start($uid, $part_no, $peek)){
-		
-		
+
+
 			$leftOver='';
 
 			while ($line = $this->get_message_part_line()) {
 
 				switch (strtolower($encoding)) {
-					case 'base64':						
+					case 'base64':
 						$line = trim($leftOver.$line);
 						$leftOver = "";
-						
+
 						if(strlen($line) % 4 == 0){
-							
+
 							if(!$fp){
 								$str .= base64_decode($line);
 							}  else {
 								fputs($fp, base64_decode($line));
 							}
-						}else{						
+						}else{
 
-							$buffer = "";					
+							$buffer = "";
 							while(strlen($line)>4){
 								$buffer .= substr($line, 0, 4);
 								$line = substr($line, 4);
@@ -2135,7 +2162,7 @@ class Imap extends ImapBodyStruct {
 							fputs($fp, quoted_printable_decode($line));
 						}
 						break;
-					default:					
+					default:
 						if(!$fp){
 							$str .= $line;
 						}else{
@@ -2146,13 +2173,13 @@ class Imap extends ImapBodyStruct {
 
 				if($cutofflength && strlen($line)>$cutofflength){
 					break;
-				}	
+				}
 			}
 
 			if(!empty($leftOver))
 			{
 				\GO::debug($leftOver);
-				
+
 				if(!$fp){
 					$str .= base64_decode($leftOver);
 				}  else {
@@ -2173,10 +2200,10 @@ class Imap extends ImapBodyStruct {
 				}
 			}
 		}
-		
+
 		return $fp ? true : $str;
-		
-		
+
+
 //		return $this->decode_message_part(
 //						$this->get_message_part($uid, $part_no, $peek, $cutofflength),
 //						$encoding,
@@ -2209,11 +2236,11 @@ class Imap extends ImapBodyStruct {
 //		$this->send_command($command);
 //
 //		$result = $this->get_response($max, true);
-//		
+//
 //		$status = $this->check_response($result, true, false);
-//		
+//
 //		$res = '';
-//		foreach ($result as $vals) {			
+//		foreach ($result as $vals) {
 //			if ($vals[0] != '*') {
 //				continue;
 //			}
@@ -2229,7 +2256,7 @@ class Imap extends ImapBodyStruct {
 //			}
 //		}
 //		return $res;
-		
+
 		$str = '';
 		$this->get_message_part_start($uid,$message_part, $peek);
 		while ($line = $this->get_message_part_line()) {
@@ -2247,9 +2274,9 @@ class Imap extends ImapBodyStruct {
 	 */
 	public function get_message_part_start($uid, $message_part=0, $peek=false) {
 		$this->clean($uid, 'uid');
-		
+
 		$peek_str = $peek ? '.PEEK' : '';
-		
+
 		if (empty($message_part)) {
 			$command = "UID FETCH $uid BODY".$peek_str."[]\r\n";
 		}
@@ -2259,7 +2286,7 @@ class Imap extends ImapBodyStruct {
 		}
 		$this->send_command($command);
 		$result = fgets($this->handle);
-		
+
 		$size = false;
 		if (preg_match("/\{(\d+)\}\r\n/", $result, $matches)) {
 			$size = $matches[1];
@@ -2270,7 +2297,7 @@ class Imap extends ImapBodyStruct {
 
 		$this->message_part_size=$size;
 		$this->message_part_read=0;
-		
+
 //		\GO::debug("Part size: ".$size);
 		return $size;
 	}
@@ -2280,29 +2307,29 @@ class Imap extends ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function get_message_part_line() {
-		
+
 		$line=false;
 		$leftOver = $this->message_part_size-$this->message_part_read;
 		if($leftOver>0){
-			
+
 			//reading exact length doesn't work if the last char is just one char somehow.
 			//we cut the left over later with substr.
-			$blockSize = 1024;//$leftOver>1024 ? 1024 : $leftOver;			
+			$blockSize = 1024;//$leftOver>1024 ? 1024 : $leftOver;
 			$line = fgets($this->handle,$blockSize);
-			$this->message_part_read+=strlen($line);			
-		}			
-		
-		if ($this->message_part_size < $this->message_part_read) {
-			
-			$line = substr($line, 0, ($this->message_part_read-$this->message_part_size)*-1);			
+			$this->message_part_read+=strlen($line);
 		}
-		
+
+		if ($this->message_part_size < $this->message_part_read) {
+
+			$line = substr($line, 0, ($this->message_part_read-$this->message_part_size)*-1);
+		}
+
 		if($line===false){
-			
+
 			//read and check left over response.
 			$response=$this->get_response();
 			$this->check_response($response);
-			
+
 		}
 		return $line;
 	}
@@ -2322,21 +2349,21 @@ class Imap extends ImapBodyStruct {
 		 */
 		if($imap_part_id==-1){
 			$header = $this->get_message_part($uid, 'HEADER', $peek)."\r\n\r\n";
-			
+
 			if(empty($header))
 				return false;
 
 			if(!fputs($fp, $header))
 				return false;
-			
+
 			$imap_part_id='TEXT';
 		}
-		
-		
+
+
 		$this->get_message_part_decoded($uid, $imap_part_id, $encoding, false, false, false, $fp);
 
 //		$size = $this->get_message_part_start($uid,$imap_part_id, $peek);
-//		
+//
 //		if(!$size)
 //			return false;
 //
@@ -2349,7 +2376,7 @@ class Imap extends ImapBodyStruct {
 //					$line= quoted_printable_decode($line);
 //					break;
 //			}
-//						
+//
 //			if($line != "" && !fputs($fp, $line))
 //				return false;
 //		}
@@ -2372,7 +2399,7 @@ class Imap extends ImapBodyStruct {
 		$uid_strings = array();
 		if (empty($uids))
 			return true;
-			
+
 		if (count($uids) > 500) {
 			while (count($uids) > 500) {
 				$uid_strings[] = implode(',', array_splice($uids, 0, 2));
@@ -2384,7 +2411,7 @@ class Imap extends ImapBodyStruct {
 		else {
 			$uid_strings[] = implode(',', $uids);
 		}
-		
+
 		foreach ($uid_strings as $uid_string) {
 			if ($uid_string) {
 				$this->clean($uid_string, 'uid_list');
@@ -2397,13 +2424,13 @@ class Imap extends ImapBodyStruct {
 				return $status;
 			}
 		}
-		
+
 		return $status;
 	}
-	
+
 	/**
 	 * Set or clear flags of an UID range. Flags can be:
-	 * 
+	 *
 	 * \Seen
 	 * \Answered
 	 * \Flagged
@@ -2418,6 +2445,8 @@ class Imap extends ImapBodyStruct {
 	public function set_message_flag($uids, $flags, $clear=false) {
 		$status=false;
 
+		//TODO parhaps we can manage X-GM-LABEL too (but only what we can read is type like \\Starred)
+
 		if($clear)
 			$command = "UID STORE %s -FLAGS.SILENT ($flags)\r\n";
 		else
@@ -2426,7 +2455,7 @@ class Imap extends ImapBodyStruct {
 		$status = $this->_runInChunks($command,$uids,false);
 		return $status;
 	}
-	
+
 	/**
 	 * Copy a message from the currently selected mailbox to another mailbox
 	 *
@@ -2435,10 +2464,10 @@ class Imap extends ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function copy($uids, $mailbox) {
-		
+
 		if(empty($mailbox))
 			$mailbox='INBOX';
-		
+
 		$this->clean($mailbox, 'mailbox');
 
 		$uid_string = implode(',',$uids);
@@ -2457,7 +2486,7 @@ class Imap extends ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function move($uids, $mailbox, $expunge=true) {
-		
+
 		if(empty($mailbox))
 			$mailbox='INBOX';
 
@@ -2473,7 +2502,7 @@ class Imap extends ImapBodyStruct {
 
 	/**
 	 * Delete messages from the currently selected mailbox
-	 * 
+	 *
 	 * @param <type> $uids
 	 * @param <type> $expunge
 	 * @return <type>
@@ -2504,7 +2533,7 @@ class Imap extends ImapBodyStruct {
 
 	/**
 	 * Removes a mailbox
-	 * 
+	 *
 	 * @param <type> $mailbox
 	 * @return <type>
 	 */
@@ -2516,7 +2545,7 @@ class Imap extends ImapBodyStruct {
 		$command = 'DELETE "'.$this->addslashes($this->utf7_encode($mailbox))."\"\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false);
-		return $success;		
+		return $success;
 	}
 
 	public function get_folder_tree($mailbox) {
@@ -2547,13 +2576,13 @@ class Imap extends ImapBodyStruct {
 						$this->addslashes($this->utf7_encode($new_mailbox)).'"'."\r\n";
 //		throw new \Exception($command);
 //		\GO::debug($command);
-		
+
 		$this->send_command($command);
 		$result = $this->get_response(false);
-		
+
 		$status = $this->check_response($result, false);
 
-		if($status && $this->unsubscribe($mailbox) && $this->subscribe($new_mailbox)){			
+		if($status && $this->unsubscribe($mailbox) && $this->subscribe($new_mailbox)){
 
 			foreach($children as $old_child) {
 				if($old_child['name']!=$mailbox){
@@ -2569,7 +2598,7 @@ class Imap extends ImapBodyStruct {
 		}else
 		{
 			return false;
-		}		
+		}
 	}
 
 	/**
@@ -2594,11 +2623,11 @@ class Imap extends ImapBodyStruct {
 
 		return !$subscribe || $this->subscribe($mailbox);
 	}
-	
-	
+
+
 	/**
 	 * Subscribe to a mailbox
-	 * 
+	 *
 	 * @param <type> $mailbox
 	 * @return <type>
 	 */
@@ -2630,11 +2659,11 @@ class Imap extends ImapBodyStruct {
 
 	public function get_uidnext(){
 
-		if(empty($this->selected_mailbox['uidnext'])){			
+		if(empty($this->selected_mailbox['uidnext'])){
 			$command = 'STATUS "'.$this->addslashes($this->utf7_encode($this->selected_mailbox['name'])).'" (UIDNEXT)'."\r\n";
 			$this->send_command($command);
 			$result = $this->get_response(false, true);
-			
+
 			$vals = array_shift($result);
 			if($vals){
 				foreach ($vals as $i => $v) {
@@ -2645,16 +2674,16 @@ class Imap extends ImapBodyStruct {
 			}
 		}
 
-		return $this->selected_mailbox['uidnext'];		
+		return $this->selected_mailbox['uidnext'];
 	}
-	
+
 	/**
 	 * Get unseen and messages in an array. eg:
-	 * 
+	 *
 	 * array('messages'=>2, 'unseen'=>1);
-	 * 
+	 *
 	 * @param string $mailbox
-	 * @return array  
+	 * @return array
 	 */
 	public function get_status($mailbox){
 		$command = 'STATUS "'.$this->addslashes($this->utf7_encode($mailbox)).'" (MESSAGES UNSEEN)'."\r\n";
@@ -2662,9 +2691,9 @@ class Imap extends ImapBodyStruct {
 		$result = $this->get_response(false, true);
 
 		$vals = array_shift($result);
-		
+
 		$status = array('unseen'=>0, 'messages'=>0);
-		
+
 		$lastProp=false;
 		foreach ($vals as $v) {
 			if ($v == '(') {
@@ -2683,8 +2712,8 @@ class Imap extends ImapBodyStruct {
 
 			$lastProp=$v;
 		}
-		
-		return $status;	
+
+		return $status;
 	}
 
 	/**
@@ -2707,7 +2736,7 @@ class Imap extends ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function append_feed($string) {
-		return fwrite($this->handle, $string);		
+		return fwrite($this->handle, $string);
 	}
 
 	/**
@@ -2738,7 +2767,7 @@ class Imap extends ImapBodyStruct {
 
 	/**
 	 * Append a message to a mailbox
-	 * 
+	 *
 	 * @param string $mailbox
 	 * @param string|\Swift_Message $data
 	 * @param string $flags See set_message_flag
@@ -2748,38 +2777,38 @@ class Imap extends ImapBodyStruct {
 
 
 		if($data instanceof \Swift_Message){
-			
+
 			$tmpfile = \GO\Base\Fs\File::tempFile();
 
 			$is = new \Swift_ByteStream_FileByteStream($tmpfile->path(), true);
-			$data->toByteStream($is);			
+			$data->toByteStream($is);
 
 			unset($data);
-			
+
 
 			if(!$this->append_start($mailbox, $tmpfile->size(), $flags))
 				return false;
-			
+
 			$fp = fopen($tmpfile->path(), 'r');
-			
+
 			while($line = fgets($fp, 1024)){
 				if(!$this->append_feed($line))
 					return false;
-			}			
-			
+			}
+
 			fclose($fp);
 			$tmpfile->delete();
 		}else
-		{			
+		{
 			if(!$this->append_start($mailbox, strlen($data), $flags))
 				return false;
 
 			if(!$this->append_feed($data))
 				return false;
 		}
-		
+
 		$this->append_feed("\r\n");
-		
+
 		return $this->append_end();
 	}
 
@@ -2800,35 +2829,35 @@ class Imap extends ImapBodyStruct {
 
 		preg_match_all($regex, $body, $matches);
 
-    $attachments = array();
+		$attachments = array();
 
-    for ($i = 0; $i < count($matches[3]); $i++) {
-			$boundary	= $matches[1][$i];
-			$fileperm	= $matches[2][$i];
-			$filename	= $matches[3][$i];
+		for ($i = 0; $i < count($matches[3]); $i++) {
+				$boundary	= $matches[1][$i];
+				$fileperm	= $matches[2][$i];
+				$filename	= $matches[3][$i];
 
-			$size = strlen($matches[4][$i]);
+				$size = strlen($matches[4][$i]);
 
-			$mime = File::get_mime($matches[3][$i]);
-			$ct = explode('/', $mime);
-			$attachments[]=array(
-				'boundary'=>$matches[1][$i],
-				'permissions'=>$matches[2][$i],
-				'name'=>$matches[3][$i],
-				'data'=>$matches[4][$i],
-				'disposition'=>'ATTACHMENT',
-				'encoding'=>'',
-				'type'=>$ct[0],
-				'subtype'=>$ct[1],
-				'size'=>$size,
-				'human_size'=>Number::format_size($size)
-			);
-    }
+				$mime = File::get_mime($matches[3][$i]);
+				$ct = explode('/', $mime);
+				$attachments[]=array(
+					'boundary'=>$matches[1][$i],
+					'permissions'=>$matches[2][$i],
+					'name'=>$matches[3][$i],
+					'data'=>$matches[4][$i],
+					'disposition'=>'ATTACHMENT',
+					'encoding'=>'',
+					'type'=>$ct[0],
+					'subtype'=>$ct[1],
+					'size'=>$size,
+					'human_size'=>Number::format_size($size)
+				);
+		}
 
     //remove it from the body.
     $body = preg_replace($regex, "", $body);
     //\GO::debug($body);
 
-    return $attachments;
+		return $attachments;
 	}
 }

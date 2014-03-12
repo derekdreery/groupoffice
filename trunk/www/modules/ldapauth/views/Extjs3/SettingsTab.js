@@ -44,7 +44,7 @@ GO.ldapauth.SettingsTab = Ext.extend(Ext.Panel, {
 				var fieldType = fields[i][0],
 					field = {};
 				field.name = fields[i][1] || '';
-				var value = action.result.data[field.name.toLowerCase()] || null;
+				var value = action.result.data[field.name.toLowerCase().replace(/\[\]/,"")] || null;
 				if(!fieldType)
 					continue;
 				
@@ -90,11 +90,30 @@ GO.ldapauth.SettingsTab = Ext.extend(Ext.Panel, {
 						field.anchor ='100%';
 						break;
 					case 'checkbox': 
+						
+						if(typeof(fields[i]['onValue'])=='undefined')
+							fields[i]['onValue']='true';
+						
+						if(typeof(fields[i]['offValue'])=='undefined')
+							fields[i]['onValue']='false';
+						
+						if(!Ext.isArray(value)){
+							value = [value];
+						}
+
+						
 						field.xtype='xcheckbox'; 
 						field.boxLabel = fields[i]['label'] || '';
-						field.submitOnValue=fields[i]['onValue'] || 'true';
-						field.submitOffValue=fields[i]['offValue'] || 'false';
-						field.checked = (value && field.submitOnValue==value[0]) ? true : false;
+						field.submitOnValue=fields[i]['onValue'];
+						field.submitOffValue=fields[i]['offValue'];
+
+						
+						if(!GO.util.empty(field.submitOnValue)){
+							field.checked = value && value.indexOf(field.submitOnValue)!==-1 ? true : false;
+						}else if (!GO.util.empty(field.submitOffValue)){
+							field.checked = value && value.indexOf(field.submitOffValue)===-1 ? true : false;
+						}
+	
 						break;
 					case 'list': 
 						field.xtype='listfield'; 

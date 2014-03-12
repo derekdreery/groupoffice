@@ -965,7 +965,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				this.state = {
 					displayType:'days',
 					days: 5,
-					calendars:0,
+					calendars:[GO.calendar.defaultCalendar.id],
 					view_id: 0
 				};
 			}else
@@ -976,7 +976,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			if(this.state.displayType=='view')
 				this.state.displayType='days';
 
-			this.state.calendars=[GO.calendar.defaultCalendar.id];
+			if(!this.state.calendars)
+				this.state.calendars=[GO.calendar.defaultCalendar.id];
+			
 			this.state.view_id=0;
 			this.state.group_id=1;
 //		}
@@ -1499,7 +1501,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	{
 		var state = {
 			displayType: this.displayType,
-			days: this.days
+			days: this.days,
+			calendars:this.calendars
 		}
 
 		Ext.state.Manager.set('calendar-state', Ext.encode(state));

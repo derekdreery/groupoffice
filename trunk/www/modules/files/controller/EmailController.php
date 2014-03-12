@@ -5,7 +5,7 @@ class Email extends GO\Base\Controller\AbstractJsonController {
 	
 	protected function actionCheckDeleteCron( $params ) {
 		
-		if (empty(GO::modules()->cron)) {
+		if (!GO::modules()->isInstalled('cron')) {
 			echo json\encode(array('success'=>true,'data'=>array('enabled'=>false,'reason'=>'noCronModule')));
 			exit();
 		}

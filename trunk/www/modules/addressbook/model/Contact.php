@@ -983,13 +983,13 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 //			$e->add($p);
 			
 			$e->add('ORG',array($this->company->name,$this->department,$this->company->name2));
-			$e->add('ADR',array('','',$this->company->address.' '.$this->company->address_no,$this->company->city,$this->company->state,$this->company->zip,$this->company->country),array('type'=>'work'));
+			$e->add('ADR',array('','',$this->company->address.' '.$this->company->address_no,$this->company->city,$this->company->state,$this->company->zip,$this->company->country),array('type'=>'WORK'));
 			
 //			$p = new Sabre\VObject\Property('ADR',';;'.$this->company->post_address.' '.$this->company->post_address_no,
 //				$this->company->post_city,$this->company->post_state,$this->company->post_zip,$this->company->post_country);
 //			$e->add($p);
 			$e->add('ADR',array('','',$this->company->post_address.' '.$this->company->post_address_no,
-				$this->company->post_city,$this->company->post_state,$this->company->post_zip,$this->company->post_country),array('type'=>'work'));
+				$this->company->post_city,$this->company->post_state,$this->company->post_zip,$this->company->post_country),array('type'=>'WORK'));
 			
 		}
 		
@@ -999,7 +999,7 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 //		$e->add($p);
 //		
 		$e->add('ADR',array('','',$this->address.' '.$this->address_no,
-			$this->city,$this->state,$this->zip,$this->country),array('type'=>'work'));
+			$this->city,$this->state,$this->zip,$this->country),array('type'=>'HOME'));
 		
 		if(!empty($this->comment)){
 			$e->note=$this->comment;

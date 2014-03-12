@@ -19,6 +19,8 @@
 
 namespace GO\Notes\Controller;
 
+use GO;
+use GO\Notes\Model\Note;
 
 class NoteController extends \GO\Base\Controller\AbstractJsonController {
 
@@ -28,7 +30,7 @@ class NoteController extends \GO\Base\Controller\AbstractJsonController {
 	 */
 	protected function actionSubmit($params) {
 
-		$model = \GO\Notes\Model\Note::model()->createOrFindByParams($params);
+		$model = Note::model()->createOrFindByParams($params);
 
 		if(isset($params['currentPassword'])){
 			//if the note was encrypted and no new password was supplied the current
@@ -39,7 +41,7 @@ class NoteController extends \GO\Base\Controller\AbstractJsonController {
 		$model->setAttributes($params);
 
 		if ($model->save()) {
-			if (\GO::modules()->files) {
+			if (GO::modules()->files) {
 				$f = new \GO\Files\Controller\Folder();
 				$response = array(); //never used in processAttachements?
 				$f->processAttachments($response, $model, $params);
@@ -58,12 +60,12 @@ class NoteController extends \GO\Base\Controller\AbstractJsonController {
 	protected function actionLoad($params) {
 
 		//Load or create model
-		$model = \GO\Notes\Model\Note::model()->createOrFindByParams($params);
+		$model = Note::model()->createOrFindByParams($params);
 
 		// BEFORE LOAD: a password is entered to decrypt the content
 		if (isset($params['userInputPassword'])) {
 			if (!$model->decrypt($params['userInputPassword']))
-				throw new \Exception(\GO::t('badPassword'));
+				throw new \Exception(GO::t('badPassword'));
 		}
 
 		// Build remote combo field array
@@ -73,7 +75,7 @@ class NoteController extends \GO\Base\Controller\AbstractJsonController {
 		$extraFields = array('encrypted' => $model->encrypted);
 		
 		if ($model->encrypted){
-			$extraFields['content'] = \GO::t('contentEncrypted');
+			$extraFields['content'] = GO::t('contentEncrypted');
 		}
 
 		echo $this->renderForm($model, $remoteComboFields, $extraFields);
@@ -88,18 +90,18 @@ class NoteController extends \GO\Base\Controller\AbstractJsonController {
 	 */
 	protected function actionDisplay($params) {
 
-		$model = \GO\Notes\Model\Note::model()->findByPk($params['id']);
+		$model = Note::model()->findByPk($params['id']);
 		if (!$model)
 			throw new \GO\Base\Exception\NotFound();
 
 		// decrypt model if password provided
 		if (isset($params['userInputPassword'])) {
 			if (!$model->decrypt($params['userInputPassword']))
-				throw new \Exception(\GO::t('badPassword'));
+				throw new \Exception(GO::t('badPassword'));
 		}
 		$extraFields = array();
 		if ($model->encrypted)
-			$extraFields['content'] = \GO::t('clickHereToDecrypt');
+			$extraFields['content'] = GO::t('clickHereToDecrypt');
 		$extraFields['encrypted'] = $model->encrypted;
 
 		echo $this->renderDisplay($model, $extraFields);
@@ -111,7 +113,7 @@ class NoteController extends \GO\Base\Controller\AbstractJsonController {
 	 */
 	protected function actionStore($params) {
 		//Create ColumnModel from model
-		$columnModel = new \GO\Base\Data\ColumnModel(\GO\Notes\Model\Note::model());
+		$columnModel = new \GO\Base\Data\ColumnModel(Note::model());
 		$columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
 
 		//Create store
