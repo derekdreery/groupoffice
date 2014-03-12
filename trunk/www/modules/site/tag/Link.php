@@ -23,6 +23,8 @@ class Link implements TagInterface {
 			return "Broken link to slug: '".$params['slug'][0]."'";
 		}
 		
+		var_dump($model->url);
+		
 		$params['href'] = $model->url;
 
 		if (isset($params['slug'][1]))
