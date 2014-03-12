@@ -61,6 +61,18 @@ class GO_Base_Db_FindParams{
 		return new self;
 	}
 	
+	
+	/**
+	 * Fetch a stored findparams object for export purposes.
+	 * You can save it with ->export('name');
+	 * 
+	 * @param string $name
+	 * @return GO_Base_Db_FindParams
+	 */
+	public static function loadExportFindParams($name){
+		return GO::session()->values[$name]['findParams'];
+	}
+	
 	/**
 	 * Merge this with another findParams object.
 	 * 
@@ -293,7 +305,7 @@ class GO_Base_Db_FindParams{
 	/**
 	 * Make this query available for exports to CSV, PDF etc.
 	 * It will be stored in the session so that 
-	 * GO_Base_Controller_AbstractModelController can reuise the params.
+	 * GO_Base_Controller_AbstractModelController can reuse the params.
 	 * 
 	 * @param string $name
 	 * @return GO_Base_Db_FindParams 
