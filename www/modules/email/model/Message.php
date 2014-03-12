@@ -323,7 +323,7 @@ abstract class Message extends \GO\Base\Model {
 		$response['date'] = \GO\Base\Util\Date::get_timestamp($this->udate);
 		$response['size'] = $this->size;
 
-		$labels = GO_Email_Model_Label::model()->getUserLabels();
+		$labels = \GO\Email\Model\Label::model()->getUserLabels();
 
 		$response['labels'] = array();
 		foreach ($this->labels as $label) {
