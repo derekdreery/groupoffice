@@ -6,7 +6,7 @@ use GO\Site\Model\Content;
 
 class Link implements TagInterface {
 
-	static function render($params, $tag) {
+	static function render($params, $tag, GO\Site\Model\Content $content) {
 
 		$html = '<a';
 
@@ -17,7 +17,7 @@ class Link implements TagInterface {
 		$params['slug']=explode('#', $params['slug']);
 
 
-		$model = Content::model()->findBySlug($params['slug'][0], $this->site_id);
+		$model = Content::model()->findBySlug($params['slug'][0], $content->site_id);
 		
 		if(!$model){
 			return "Broken link to slug: '".$params['slug'][0]."'";

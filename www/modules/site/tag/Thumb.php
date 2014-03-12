@@ -4,7 +4,7 @@ namespace GO\Site\Tag;
 use Site;
 
 class Thumb implements TagInterface{	
-	static function render($params, $tag){
+	static function render($params, $tag, GO\Site\Model\Content $content){
 		
 		$html = '';
 		

@@ -29,5 +29,5 @@ interface  TagInterface{
 	 * @param array $params Key value array of all attributes of the tag
 	 * @param array $tag Tag parameters 
 	 */
-	public static function render($params, $tag);	
+	public static function render($params, $tag, GO\Site\Model\Content $content);	
 }
