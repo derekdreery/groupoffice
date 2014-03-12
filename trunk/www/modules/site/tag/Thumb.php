@@ -28,11 +28,11 @@ class Thumb implements TagInterface{
 						$thumbParams['caption'],
 						$thumbParams['aclass']);
 		
-		if(!isset($p['lw']) && !isset($p['w']))
-			$p['lw']=300;
+		if(!isset($thumbParams['lw']) && !isset($thumbParams['w']))
+			$thumbParams['lw']=300;
 		
-		if(!isset($p['ph']) && !isset($p['ph']))
-			$p['ph']=300;
+		if(!isset($p['ph']) && !isset($thumbParams['ph']))
+			$thumbParams['ph']=300;
 		
 		$thumb = Site::thumb($fullRelPath, $thumbParams);
 		
