@@ -54,7 +54,7 @@ class Thumb implements TagInterface{
 			$a = '<a';
 			
 			if(isset($params['caption'])){
-				$html .= ' title="'.$params['caption'].'"';
+				$a .= ' title="'.$params['caption'].'"';
 			}
 
 			if(!isset($params['aclass'])){
