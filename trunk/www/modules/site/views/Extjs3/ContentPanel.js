@@ -144,7 +144,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		},this);
 		
 		config.tbar=new Ext.Toolbar({
-			hideBorders:true,
+//			hideBorders:true,
 			items: [
 				this.saveButton,
 				this.reloadButton,
@@ -204,7 +204,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		
 		this.editor = new Ext.form.TextArea({
 			hideLabel:true,
-			style:'font-family: "Lucida Console", Monaco, monospace',
+			style:'font-family: "Lucida Console", Monaco, monospace;padding:10px;line-height:16px;',
 			name: 'content',
 			anchor: '100% -80',
 			allowBlank:true,			
