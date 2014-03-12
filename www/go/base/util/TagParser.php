@@ -11,25 +11,21 @@ class TagParser{
 	 * @param string $tagName eg. img
 	 * @param string $text The text to parse
 	 * 
-	 * @return array eg. array(3) {
-				["xml"]=>
-				string(82) "<site:img id="1" lightbox="1" path="testing">
-				<img src="blabla" />
-				</site:img>"
-				["params"]=>
-				array(3) {
-					["id"]=>
-					string(1) "1"
-					["lightbox"]=>
-					string(1) "1"
-					["path"]=>
-					string(7) "testing"
-				}
-				["innerXml"]=>
-				string(26) "
-				<img src="blabla" />
-				"
-			}
+	 * @return array Example of $tag array:
+	 * 
+	 * array (size=4)
+   * 'outerText' => string '{site:thumb path="Tickets.png" lw="300" ph="300" zoom="true" lightbox="docs" caption="Screenshot of the tickets module"}{/site:thumb}' (length=133)
+   * 'tagName' => string 'thumb' (length=5)
+   * 'params' => 
+   *   array (size=6)
+   *     'path' => string 'Tickets.png' (length=11)
+   *     'lw' => string '300' (length=3)
+   *     'ph' => string '300' (length=3)
+   *     'zoom' => string 'true' (length=4)
+   *     'lightbox' => string 'docs' (length=4)
+   *     'caption' => string 'Screenshot of the tickets module' (length=32)
+   * 'innerText' => string '' (length=0)
+	 * 
 	 */
 	
 	public $tagStart='<';
