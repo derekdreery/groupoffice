@@ -40,11 +40,17 @@
  * 
  * @method Content model()
  */
-
-
 namespace GO\Site\Model;
 
+use GO;
+
+require_once (GO::config()->root_path.'modules/site/components/Site.php');
+
+
 use Michelf\MarkdownExtra;
+use GO\Base\Util\TagParser;
+use GO\Site\Model\Site As SiteModel;
+use Site;
 
 class Content extends \GO\Base\Db\ActiveRecord{
 
@@ -250,10 +256,11 @@ class Content extends \GO\Base\Db\ActiveRecord{
 					'cls' => 'site-node-content',
 					'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
 					//'expanded' => !$hasChildren,
-					'expanded' => !$hasChildren || Site::isExpandedNode($this->site_id.'_content_'.$this->id),
+					'expanded' => !$hasChildren || SiteModel::isExpandedNode($this->site_id.'_content_'.$this->id),
 					'hasChildren' => $hasChildren,
 					'children'=> $hasChildren ? $this->getChildrenTree() : array(),
-					'text' => $this->title
+					'text' => $this->title,
+					'qtip'=>'Slug: '.$this->slug
 			);
 	 }
 	 
@@ -365,6 +372,11 @@ class Content extends \GO\Base\Db\ActiveRecord{
 		 
 		 $html = MarkdownExtra::defaultTransform($text);
 		 
+		
+		 
+		 
+		 $html = $this->replaceMarkdownContentTags($html);
+		 
 		 //temp fix for tables
 		 
 		 $html = str_replace('<table>', '<table class="table table-striped">', $html);
@@ -372,22 +384,145 @@ class Content extends \GO\Base\Db\ActiveRecord{
 		 return $html;
 	 }
 	 
-	 public static function replaceContentTags($content=''){
+	 public function replaceMarkdownContentTags($html) {
 
-		 $links = \GO\Base\Util\TagParser::getTags('site:link', $content);
-		 
-		 foreach($links as $link){
-			 $template = self::processLink($link['params'],$link['xml']);
-			 $content = str_replace($link['xml'], $template, $content);
-		 }
-		 
-		 $images = \GO\Base\Util\TagParser::getTags('site:img', $content);
-		 
-		 foreach($images as $image){
-			 $template = self::processImage($image['params']);
-			 $content = str_replace($image['xml'], $template, $content);
-		 }
+		$tagParser = new TagParser();
+		$tagParser->tagStart = '{site:';
+		$tagParser->tagEnd = '}';
 
+		$tags = $tagParser->getTags($html);
+
+		foreach ($tags as $tag) {
+			
+			$method = "processTag".ucfirst($tag['tagName']);
+			
+			if(method_exists($this, $method)){
+				$tagHtml = $this->$method($tag);
+			}else
+			{
+				$tagHtml = 'Error: unsuppoted tag: "'.$tag['tagName'].'".';
+			}
+			
+			$html = str_replace($tag['outerText'], $tagHtml, $html);
+		}
+
+		return $html;
+	}
+	
+	
+	public function processTagThumb($tag) {
+		$html = '';
+		
+		$p = $tag['params'];
+		
+		if(empty($p['path'])){
+			return "Error: path attribute must be set in img tag!";
+		}
+		
+		//Change Tickets.png into public/site/1/files/Tickets.png
+		
+		$folder = new \GO\Base\Fs\Folder(Site::model()->getPublicPath());
+		
+		$fullRelPath = $folder->stripFileStoragePath().'/files/'.$p['path'];
+//		var_dump($p);
+		
+		$thumbParams = $p;
+		unset($thumbParams['path'], $thumbParams['alt'], $thumbParams['class'], $thumbParams['style'], $thumbParams['astyle'], $thumbParams['aclass']);
+		
+		$thumb = Site::thumb($fullRelPath, $thumbParams);
+		
+		if(!isset($p['alt'])){
+			$p['alt']=basename($tag['params']['path']);
+		}
+		
+		$html .= '<img src="' . $thumb . '" alt="' . $p['alt'] . '"';
+		
+		if(isset($p['class'])){
+			$html .= 'class="'.$p['class'].'"';
+		}
+		
+		if(isset($p['style'])){
+			$html .= 'style="'.$p['style'].'"';
+		}
+	
+		
+		$html .= ' />';
+		
+		
+		if(isset($p['lightbox'])){
+			$a = '<a';
+			
+			if(isset($p['aclass'])){
+				$html .= 'class="'.$p['aclass'].'"';
+			}
+
+			if(isset($p['style'])){
+				$html .= 'style="'.$p['astyle'].'"';
+			}
+			
+			$a .= ' data-lightbox="'.$p['lightbox'].'" href="'.\Site::file($p['path'], false).'">'.$html.'</a>'; // Create an url to the original image
+			
+			return $a;
+		}else
+		{
+			return $html;
+		}	
+	}
+	
+	public function processTagLink($tag){
+		$html = '<a';
+		
+		$p = $tag['params'];
+		
+		if(empty($p['slug'])){
+			return "Error: slug must be set in link tag!";
+		}
+		
+		
+		$model = Content::model()->findBySlug($p['slug'], $this->site_id);		
+		$p['href']=$model->url;
+		
+		if(isset($p['anchor']))
+			$p['href'].='#'.$p['anchor'];
+		
+		unset($p['anchor'], $p['slug']);
+		
+		
+		foreach($p as $key=>$value){
+			$html .= ' '.$key.'="'.$value.'"';
+		}
+		
+		$html .= '>'.$tag['innerText'].'</a>';
+		
+		return $html;
+		
+		
+	}
+
+	public static function replaceContentTags($content=''){
+		 
+		 $tagParser = new TagParser();
+		 $tagParser->tagStart='<site:';
+		 $tagParser->tagEnd='>';
+		 
+		 $tags = $tagParser->getTags($content);
+		 
+//		 var_dump($tags);
+		 foreach($tags as $tag){
+			 
+			 switch($tag['tagName']){
+				 case 'link':
+						$template = self::processLink($tag['params'],$tag['outerText']);
+						$content = str_replace($tag['outerText'], $template, $content);
+					break;
+				
+				 case 'img':
+					 $template = self::processImage($tag['params']);
+						$content = str_replace($tag['outerText'], $template, $content);
+					 break;
+			 }
+		 }
+		
 		 return $content;
 	 }
 	 
