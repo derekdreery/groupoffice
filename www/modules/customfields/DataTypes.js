@@ -49,7 +49,7 @@ GO.customfields.dataTypes={
 			return Ext.apply(f, {				
 				xtype:'datefield',
 				format: GO.settings['date_format'],
-				width : 100
+				width : 120
 			});
 		}
 	},
@@ -59,10 +59,12 @@ GO.customfields.dataTypes={
 		getFormField : function(customfield, config){
 
 			var f = GO.customfields.dataTypes.GO_Customfields_Customfieldtype_Text.getFormField(customfield, config);
-
+			delete f.anchor;
+			
 			return Ext.apply(f, {
 				xtype:'numberfield',
-				decimals: customfield.number_decimals
+				decimals: customfield.number_decimals,
+				width:120
 			});
 		}
 	},
