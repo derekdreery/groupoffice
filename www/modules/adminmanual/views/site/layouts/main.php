@@ -21,18 +21,16 @@
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
 		<script type="text/javascript">
-			$(function() {
-				$('a[href*=#]:not([href=#])').click(function() {
-					if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-						var target = $(this.hash);
-						target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-						if (target.length) {
-							$('html,body').animate({
-								scrollTop: target.offset().top
-							}, 1000);
-							return false;
-						}
-					}
+			$(function() {				
+				$('a[href^="#"]').bind('click.smoothscroll',function (e) {
+						e.preventDefault();
+						var target = this.hash;
+								$target = $(target);
+						$('html, body').stop().animate({
+								'scrollTop': $target.offset().top - 15
+						}, 1000, 'swing', function () {
+								window.location.hash = target;
+						});
 				});
 			});
 		</script>

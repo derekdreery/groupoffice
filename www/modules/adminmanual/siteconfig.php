@@ -19,3 +19,9 @@ $siteconfig['urls']=array(
 //		'<slug:[\w\/.-]+>'=>'site/front/content', //TODO: requirements, contact	
 		'<module:\w+>/<controller:\w+>/<action:\w+>'=>'<module>/<controller>/<action>'
 );
+
+$siteconfig['autolinks']=array(
+		
+		'Tickets'=>'home/tickets'
+		
+);
