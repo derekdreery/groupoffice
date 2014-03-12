@@ -368,23 +368,47 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	 }
 	 
 	 public function getHtml(){
-		 $text =  self::replaceContentTags($this->content);
+		 $html =  self::replaceContentTags($this->content);	 
 		 
-		 $html = MarkdownExtra::defaultTransform($text);
-		 
-		
+				 
+		 $html = MarkdownExtra::defaultTransform($html);
 		 
 		 
 		 $html = $this->replaceMarkdownContentTags($html);
 		 
-		 //temp fix for tables
 		 
+		 $html = $this->replaceAutoLinks($html);
+		 
+		 
+		 //temp fix for tables		 
 		 $html = str_replace('<table>', '<table class="table table-striped">', $html);
 		 
 		 return $html;
 	 }
 	 
-	 public function replaceMarkdownContentTags($html) {
+	 private function replaceAutoLinks($html){
+		 
+		 $al = \Site::config()->autolinks;
+		 
+		 $replacer = new GO\Base\Util\HtmlReplacer();
+		 
+		 
+		 if(!empty($al)){
+			 foreach($al as $word=>$slug){
+				 
+				 if(isset($_REQUEST['slug']) && $slug!=$_REQUEST['slug']){				 
+					$model = Content::model()->findBySlug($slug, $this->site_id);
+
+					if($model)
+						$html = $replacer->replace($word, '<a href="'.$model->url.'">'.$word.'</a>', $html);
+				 }
+			 }
+		 }
+		 
+		 return $html;
+	 }
+	 
+	 private function replaceMarkdownContentTags($html) {
 
 		$tagParser = new TagParser();
 		$tagParser->tagStart = '{site:';
@@ -394,10 +418,10 @@ class Content extends \GO\Base\Db\ActiveRecord{
 
 		foreach ($tags as $tag) {
 			
-			$method = "processTag".ucfirst($tag['tagName']);
+			$class = "GO\\Site\\Tag\\".ucfirst($tag['tagName']);
 			
-			if(method_exists($this, $method)){
-				$tagHtml = $this->$method($tag);
+			if(class_exists($class)){
+				$tagHtml = $class::render($tag['params'], $tag);
 			}else
 			{
 				$tagHtml = 'Error: unsuppoted tag: "'.$tag['tagName'].'".';
@@ -410,94 +434,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	}
 	
 	
-	public function processTagThumb($tag) {
-		$html = '';
-		
-		$p = $tag['params'];
-		
-		if(empty($p['path'])){
-			return "Error: path attribute must be set in img tag!";
-		}
-		
-		//Change Tickets.png into public/site/1/files/Tickets.png
-		
-		$folder = new \GO\Base\Fs\Folder(Site::model()->getPublicPath());
-		
-		$fullRelPath = $folder->stripFileStoragePath().'/files/'.$p['path'];
-//		var_dump($p);
-		
-		$thumbParams = $p;
-		unset($thumbParams['path'], $thumbParams['alt'], $thumbParams['class'], $thumbParams['style'], $thumbParams['astyle'], $thumbParams['aclass']);
-		
-		$thumb = Site::thumb($fullRelPath, $thumbParams);
-		
-		if(!isset($p['alt'])){
-			$p['alt']=basename($tag['params']['path']);
-		}
-		
-		$html .= '<img src="' . $thumb . '" alt="' . $p['alt'] . '"';
-		
-		if(isset($p['class'])){
-			$html .= 'class="'.$p['class'].'"';
-		}
-		
-		if(isset($p['style'])){
-			$html .= 'style="'.$p['style'].'"';
-		}
 	
-		
-		$html .= ' />';
-		
-		
-		if(isset($p['lightbox'])){
-			$a = '<a';
-			
-			if(isset($p['aclass'])){
-				$html .= 'class="'.$p['aclass'].'"';
-			}
-
-			if(isset($p['style'])){
-				$html .= 'style="'.$p['astyle'].'"';
-			}
-			
-			$a .= ' data-lightbox="'.$p['lightbox'].'" href="'.\Site::file($p['path'], false).'">'.$html.'</a>'; // Create an url to the original image
-			
-			return $a;
-		}else
-		{
-			return $html;
-		}	
-	}
-	
-	public function processTagLink($tag){
-		$html = '<a';
-		
-		$p = $tag['params'];
-		
-		if(empty($p['slug'])){
-			return "Error: slug must be set in link tag!";
-		}
-		
-		
-		$model = Content::model()->findBySlug($p['slug'], $this->site_id);		
-		$p['href']=$model->url;
-		
-		if(isset($p['anchor']))
-			$p['href'].='#'.$p['anchor'];
-		
-		unset($p['anchor'], $p['slug']);
-		
-		
-		foreach($p as $key=>$value){
-			$html .= ' '.$key.'="'.$value.'"';
-		}
-		
-		$html .= '>'.$tag['innerText'].'</a>';
-		
-		return $html;
-		
-		
-	}
 
 	public static function replaceContentTags($content=''){
 		 
