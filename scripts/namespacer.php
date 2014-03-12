@@ -49,9 +49,9 @@ exec($cmd, $scripts, $return_var);
 if($return_var!=0)
 	exit("Find command did not run successfully.\n");
 
-//$scripts = array(
-//	'/var/www/trunk/www/modules/billing/controller/ExportIncomeController.php'
-//);
+$scripts = array(
+	'/var/www/trunk/www/modules/projects2/report/TimeTrackingCsv.php'
+);
 
 foreach($scripts as $script){
 	

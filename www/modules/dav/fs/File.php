@@ -38,14 +38,6 @@ class File extends \Sabre\DAV\FS\File {
 		if (!\GO\Base\Model\Acl::hasPermission($this->folder->getPermissionLevel(), \GO\Base\Model\Acl::WRITE_PERMISSION)){
 			throw new Sabre\DAV\Exception\Forbidden("DAV: User ".\GO::user()->username." doesn't have write permission for file '".$this->relpath.'"');
 		}
-
-		/* if($delete){
-		  if(!$this->files->has_delete_permission($GLOBALS['GO_SECURITY']->user_id, $this->folder))
-		  throw new Sabre\DAV\Exception\Forbidden();
-		  }else {
-		  if(!$this->files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->folder))
-		  throw new Sabre\DAV\Exception\Forbidden();
-		  } */
 	}
 
 	/**
