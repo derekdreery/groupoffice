@@ -50,7 +50,6 @@ require_once (GO::config()->root_path.'modules/site/components/Site.php');
 use Michelf\MarkdownExtra;
 use GO\Base\Util\TagParser;
 use GO\Site\Model\Site As SiteModel;
-use Site;
 
 class Content extends \GO\Base\Db\ActiveRecord{
 
