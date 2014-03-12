@@ -36,8 +36,10 @@ class TagParser{
 		$closeTagStart = strlen($this->tagStart) > 1 ? substr($this->tagStart,0,1).'/'.substr($this->tagStart,1) : $this->tagStart.'/';
 		
 				
-		$pattern = '/'.preg_quote($this->tagStart,'/').'([a-zA-Z0-9-^ ]+) ([^'.preg_quote($this->tagEnd,'/').']*)'.preg_quote($this->tagEnd,'/').'(.*?)'.preg_quote($closeTagStart,'/').'[^'.preg_quote($this->tagEnd,'/').']+'.preg_quote($this->tagEnd,'/').'/s';		
+		//$pattern = '/'.preg_quote($this->tagStart,'/').'([a-zA-Z0-9-^ ]+) ([^'.preg_quote($this->tagEnd,'/').']*)'.preg_quote($this->tagEnd,'/').'(.*?)'.preg_quote($closeTagStart,'/').'[^'.preg_quote($this->tagEnd,'/').']+'.preg_quote($this->tagEnd,'/').'/s';		
+		$pattern = '/'.preg_quote($this->tagStart,'/').'([a-zA-Z0-9-^ ]+) ([^'.preg_quote($this->tagEnd,'/').']*)'.preg_quote($this->tagEnd,'/').'((.*?)'.preg_quote($closeTagStart,'/').'\1'.preg_quote($this->tagEnd,'/').')?/s';		
 
+//		var_dump($pattern);
 		
 		$matched_tags=array();		
 		preg_match_all($pattern,$text,$matched_tags, PREG_SET_ORDER);
@@ -60,7 +62,7 @@ class TagParser{
 					'outerText'=>$matched_tags[$n][0],
 					'tagName'=>$matched_tags[$n][1],
 					'params'=>$params_array,
-					'innerText'=>isset($matched_tags[$n][3]) ? $matched_tags[$n][3]	: null
+					'innerText'=>isset($matched_tags[$n][4]) ? $matched_tags[$n][4]	: null
 					);
 			
 			$tags[] = $tag;
