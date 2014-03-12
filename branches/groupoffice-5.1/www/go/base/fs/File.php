@@ -59,7 +59,12 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if(!empty($extension))
 			$p.='.'.$extension;
 		
-		return new GO_Base_Fs_File($p);
+		$file =  new static($p);
+		
+		$file->delete();
+		
+		return $file;
+		
 	}
 	
 	/**

@@ -3,7 +3,7 @@ class GO_Files_Controller_Email extends GO_Base_Controller_AbstractJsonControlle
 	
 	protected function actionCheckDeleteCron( $params ) {
 		
-		if (empty(GO::modules()->cron)) {
+		if (!GO::modules()->isInstalled('cron')) {
 			echo json_encode(array('success'=>true,'data'=>array('enabled'=>false,'reason'=>'noCronModule')));
 			exit();
 		}

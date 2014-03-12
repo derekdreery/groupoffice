@@ -3441,12 +3441,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 							//has_many relations result in a statement.
 							while($child = $result->fetch()){			
 								if($child->className()!=$this->className() || $child->pk != $this->pk)//prevent delete of self
-									$child->delete();
+									$child->delete($ignoreAcl);
 							}
 						}elseif($result)
 						{
 							//single relations return a model.
-							$result->delete();
+							$result->delete($ignoreAcl);
 						}
 						break;
 						

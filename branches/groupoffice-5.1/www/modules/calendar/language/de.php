@@ -254,3 +254,4 @@ $l['noParticipants']='Keine Teilnehmer';
 $l['cannotHandleInvitation']='Der Kalender, der mit dem E-Mail-Account verbunden ist, ist "%s" und Sie haben keine Schreibberechtigung darauf. Da der Termin in diesem Kalender liegt, konnte der Status nicht geändert werden.';
 $l['cannotHandleInvitation2']='Der Termin konnte nicht aktualisiert werden, da Sie nicht die notwendigen Berechtigungen auf den Kalender haben (Kalender: "%s"), der mit dem E-Mail-Account verbunden ist. Da der Termin sich in diesem Kalender befindet, konnte der Status nicht geändert werden.';
 
+$l['tooltip']= 'Tooltip-Text';

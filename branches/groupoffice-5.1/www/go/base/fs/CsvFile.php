@@ -25,9 +25,9 @@
  */
 
 class GO_Base_Fs_CsvFile extends GO_Base_Fs_File{
-	public $delimiter=',';
+	public $delimiter;
 	
-	public $enclosure='"';
+	public $enclosure;
 	
 	/**
 	 * @var GO_Base_Csv_Writer or GO_Base_Csv_Reader, see _setCSV
@@ -35,6 +35,15 @@ class GO_Base_Fs_CsvFile extends GO_Base_Fs_File{
 	private $_csv;
 	
 	private function _setCSV($mode){
+		
+		if(!isset($this->delimiter)){
+			$this->delimiter = GO::user() ? GO::user()->list_separator : ',';
+		}
+		
+		if(!isset($this->enclosure)){
+			$this->enclosure = GO::user() ? GO::user()->text_separator : '"';
+		}
+		
 		if(!isset($this->_csv)){
 			$this->_csv = new GO_Base_Csv_Writer($this->path());			
 			$this->_csv->delimiter=$this->delimiter;
