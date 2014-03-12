@@ -21,6 +21,7 @@ class Thumb implements TagInterface{
 		
 		$thumbParams = $params;
 		unset($thumbParams['path'], 
+						$thumbParams['lightbox'],
 						$thumbParams['alt'], 
 						$thumbParams['class'],
 						$thumbParams['style'], 
@@ -31,7 +32,7 @@ class Thumb implements TagInterface{
 		if(!isset($thumbParams['lw']) && !isset($thumbParams['w']))
 			$thumbParams['lw']=300;
 		
-		if(!isset($p['ph']) && !isset($thumbParams['ph']))
+		if(!isset($thumbParams['ph']) && !isset($thumbParams['ph']))
 			$thumbParams['ph']=300;
 		
 		$thumb = Site::thumb($fullRelPath, $thumbParams);
