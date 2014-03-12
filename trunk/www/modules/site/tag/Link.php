@@ -26,7 +26,7 @@ class Link implements TagInterface {
 		$params['href'] = $model->url;
 
 		if (isset($params['slug'][1]))
-			$params['href'].='#' . $params['slug'][1];
+			$params['href'].= '#' . $params['slug'][1];
 
 		unset($params['anchor'], $params['slug']);
 
