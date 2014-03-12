@@ -420,7 +420,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 			$class = "GO\\Site\\Tag\\".ucfirst($tag['tagName']);
 			
 			if(class_exists($class)){
-				$tagHtml = $class::render($tag['params'], $tag);
+				$tagHtml = $class::render($tag['params'], $tag, $this);
 			}else
 			{
 				$tagHtml = 'Error: unsuppoted tag: "'.$tag['tagName'].'".';
