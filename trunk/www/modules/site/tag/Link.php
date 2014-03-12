@@ -2,6 +2,8 @@
 
 namespace GO\Site\Tag;
 
+use GO\Site\Model\Content;
+
 class Link implements TagInterface {
 
 	static function render($params, $tag) {
@@ -11,18 +13,20 @@ class Link implements TagInterface {
 		if (empty($params['slug'])) {
 			return "Error: slug must be set in link tag!";
 		}
+		
+		$params['slug']=explode('#', $params['slug']);
 
 
-		$model = Content::model()->findBySlug($params['slug'], $this->site_id);
+		$model = Content::model()->findBySlug($params['slug'][0], $this->site_id);
 		
 		if(!$model){
-			return "Broken link to slug: '".$params['slug']."'";
+			return "Broken link to slug: '".$params['slug'][0]."'";
 		}
 		
 		$params['href'] = $model->url;
 
-		if (isset($params['anchor']))
-			$params['href'].='#' . $params['anchor'];
+		if (isset($params['slug'][1]))
+			$params['href'].='#' . $params['slug'][1];
 
 		unset($params['anchor'], $params['slug']);
 
