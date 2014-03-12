@@ -74,7 +74,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		if(isset($params['action']) && $params['action']=='move') {
 
 			if(!$account->checkPermissionLevel(Acl::WRITE_PERMISSION)){
-				throw new GO_Base_Exception_AccessDenied();
+				throw new \GO\Base\Exception\AccessDenied();
 			}
 			
 			$messages = json_decode($params['messages']);

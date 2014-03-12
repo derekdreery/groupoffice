@@ -1,6 +1,12 @@
 <?php
+
+namespace GO\Email\Model;
+
+use GO;
+use GO\Base\Db\ActiveRecord;
+
 /**
- * Class GO_Email_Model_Label
+ * Class Label
  *
  * @property int id
  * @property string name
@@ -9,7 +15,7 @@
  * @property int user_id
  * @property boolean default
  */
-class GO_Email_Model_Label extends GO_Base_Db_ActiveRecord
+class Label extends ActiveRecord
 {
 
     /**
@@ -17,7 +23,7 @@ class GO_Email_Model_Label extends GO_Base_Db_ActiveRecord
      *
      * @param String $className
      *
-     * @return GO_Email_Model_Label
+     * @return Label
      */
     public static function model($className = __CLASS__)
     {
@@ -96,7 +102,7 @@ class GO_Email_Model_Label extends GO_Base_Db_ActiveRecord
         );
 
         for ($i = 1; $i < 6; $i++) {
-            $label = new GO_Email_Model_Label;
+            $label = new Label;
             $label->user_id = $user_id;
             $label->name = 'Label ' . $i;
             $label->flag = '$label' . $i;
@@ -134,7 +140,7 @@ class GO_Email_Model_Label extends GO_Base_Db_ActiveRecord
     {
         $labels = array();
 
-        $stmt = GO_Email_Model_Label::model()->findByAttribute('user_id', GO::user()->id);
+        $stmt = Label::model()->findByAttribute('user_id', GO::user()->id);
         while ($label = $stmt->fetch()) {
             $labels[$label->flag] = $label;
         }
