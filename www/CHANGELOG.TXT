@@ -1,3 +1,4 @@
+- Made number custom fields smaller so they stand out more with right alignment.
 - Exporting contact as vcard now sets it's address type as home instead of work.
 - Projects2: New csv export of time entries.
 - Removed z-push 2 backend. Everyone should upgrade to 2.1.
