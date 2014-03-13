@@ -10,7 +10,7 @@ error_reporting($oldLvl);
 namespace GO\Base\Util;
 
 
-class Fpdi extends FPDI {
+class Fpdi extends \FPDI {
 	
 	/**
 	 * Pass error message in Exception
@@ -22,4 +22,3 @@ class Fpdi extends FPDI {
 	}		
 	
 }
-?>

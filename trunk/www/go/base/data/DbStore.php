@@ -514,6 +514,8 @@ class DbStore extends AbstractStore {
 
 		if($summary = $this->getSummary())
 			$this->response['summary'] = $summary;
+		if (!empty($this->_multiSel))
+			$this->_multiSel->setButtonParams($this->response);
 		while ($record = $this->nextRecord())
 			$this->response['results'][] = $record;
 		return $this->response;
