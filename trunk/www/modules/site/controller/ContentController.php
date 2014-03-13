@@ -6,31 +6,31 @@ namespace GO\Site\Controller;
 
 class ContentController extends \GO\Base\Controller\AbstractJsonController {
 	
-	/**
-	 * 
-	 * 
-	 * @param array $params
-	 * @return array
-	 */
-	protected function actionDefaultSlug($params){
-		
-		$response = array();
-		$response['defaultslug']=false;
-		$response['success'] = false;
-		
-		if(empty($params['parentId']))
-			Throw new \Exception('No Parent ID given!');
-		
-		$parent = \GO\Site\Model\Content::model()->findByPk($params['parentId']);
-		
-		if(!$parent)
-			Throw new \Exception('No content item found with the following id: '.$params['parentId']);
-		
-		$response['defaultslug']=$parent->slug.'/';
-		$response['success'] = true;
-		
-		return $response;
-	}
+//	/**
+//	 * 
+//	 * 
+//	 * @param array $params
+//	 * @return array
+//	 */
+//	protected function actionDefaultSlug($params){
+//		
+//		$response = array();
+//		$response['defaultslug']=false;
+//		$response['success'] = false;
+//		
+//		if(empty($params['parentId']))
+//			Throw new \Exception('No Parent ID given!');
+//		
+//		$parent = \GO\Site\Model\Content::model()->findByPk($params['parentId']);
+//		
+//		if(!$parent)
+//			Throw new \Exception('No content item found with the following id: '.$params['parentId']);
+//		
+//		$response['defaultslug']=$parent->slug.'/';
+//		$response['success'] = true;
+//		
+//		return $response;
+//	}
 	
 	protected function actionTemplateStore($params){
 		
@@ -89,7 +89,9 @@ class ContentController extends \GO\Base\Controller\AbstractJsonController {
 		}  else {
 			$remoteComboFields = array();
 		
-			echo $this->renderForm($model, $remoteComboFields);
+			echo $this->renderForm($model, $remoteComboFields, array(
+					'baseslug'=>$model->baseslug, 
+					'parentslug'=>$model->parentslug));
 		}
 	}
 	
@@ -103,7 +105,9 @@ class ContentController extends \GO\Base\Controller\AbstractJsonController {
 			$model->save();
 			echo $this->renderSubmit($model);
 		}  else {
-			echo $this->renderForm($model);
+			echo $this->renderForm($model, array() , array(
+					'baseslug'=>$model->baseslug, 
+					'parentslug'=>$model->parentslug));
 		}
   }
 		

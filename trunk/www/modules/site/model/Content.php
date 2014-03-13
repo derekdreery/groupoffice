@@ -57,38 +57,58 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	
 	private static $fields;
 	
-	public $parentslug;
-	public $baseslug;
+//	public $parentslug;
+//	public $baseslug;
 
 	
-	protected function afterLoad() {
-	
-		$this->_loadSlug();
-		
-		return parent::afterLoad();
-	}
+//	protected function afterLoad() {
+//	
+//		$this->_loadSlug();
+//		
+//		return parent::afterLoad();
+//	}
 	
 //	protected function afterCreate() {
 //		$this->_loadSlug();
 //		return parent::afterCreate();
 //	}
 	
-	private function _loadSlug(){
-		
-		if($this->isNew && $this->parent){
-			$this->parentslug=$this->parent->slug.'/';
-			$this->baseslug="";
-		}  else {
-			
-		
+//	private function _loadSlug(){
+//		if($this->isNew && $this->parent){
+//			$this->parentslug=$this->parent->slug.'/';
+//			$this->baseslug="";
+//		}  else {
+//			
+//		
+//			if(($pos = strrpos($this->slug, "/"))){
+//				$this->parentslug=substr($this->slug,0, $pos+1);
+//			}else {
+//				$this->parentslug="";
+//			}
+//		
+//			$this->baseslug=basename($this->slug);
+//		}
+//	}
+	
+	public function getParentslug(){
+		if($this->isNew){
+			return $this->parent ? $this->parent->slug.'/' : '';
+		}  else {		
 			if(($pos = strrpos($this->slug, "/"))){
-				$this->parentslug=substr($this->slug,0, $pos+1);
+				return substr($this->slug,0, $pos+1);
 			}else {
-				$this->parentslug="";
+				return "";
 			}
-		
-			$this->baseslug=basename($this->slug);
 		}
+	}
+	
+	public function getBaseslug(){
+		return basename($this->slug);
+	}
+	
+	public function setBaseslug($slug){
+	
+		$this->slug = $this->parentslug.$slug;
 	}
 	
 	private function _loadCf(){
@@ -104,9 +124,12 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	
 	public function __get($name) {
 		
-		$this->_loadCf();
+		$isAttr = isset($this->columns[$name]);
 		
-		if(isset(self::$fields[$name])){
+		if(!$isAttr)
+			$this->_loadCf();
+		
+		if(!$isAttr && isset(self::$fields[$name])){
 			return $this->getCustomFieldValueByName($name);
 		}  else {
 			return parent::__get($name);
@@ -115,8 +138,13 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	}
 	
 	public function __isset($name) {
-		$this->_loadCf();
-		if(isset(self::$fields[$name])){
+		
+		$isAttr = isset($this->columns[$name]);
+		
+		if(!$isAttr)
+			$this->_loadCf();
+		
+		if(!$isAttr && isset(self::$fields[$name])){
 			$var= $this->getCustomFieldValueByName($name);
 			return isset($var);
 		}  else {
@@ -150,7 +178,13 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-			'children' => array('type' => self::HAS_MANY, 'model' => 'GO\Site\Model\Content', 'field' => 'parent_id', 'delete' => true, 'findParams' =>\GO\Base\Db\FindParams::newInstance()->select('*')->order(array('sort_order','ptime'))),
+			'children' => array(
+					'type' => self::HAS_MANY, 
+					'model' => 'GO\Site\Model\Content', 
+					'field' => 'parent_id', 
+					'delete' => self::DELETE_RESTRICT, 
+					'findParams' =>\GO\Base\Db\FindParams::newInstance()->select('*')->order(array('sort_order','ptime'))
+			),
 			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO\Site\Model\Site", 'field'=>'site_id'),
 			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO\Site\Model\Content", 'field'=>'parent_id','findParams' =>\GO\Base\Db\FindParams::newInstance()->select('*'))
 		 );
@@ -307,11 +341,11 @@ class Content extends \GO\Base\Db\ActiveRecord{
 			 $this->ptime = time();
 		 }
 		 
-		 if(!empty($this->parent_id)){
-			$this->slug = $this->parent->slug.'/'.$this->baseslug;
-		 }else{
-			$this->slug = $this->baseslug;
-		 }
+//		 if(!empty($this->parent_id)){
+//			$this->slug = $this->parent->slug.'/'.$this->baseslug;
+//		 }else{
+//			$this->slug = $this->baseslug;
+//		 }
 		 
 	 }
 	 
@@ -335,12 +369,14 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	 
 	 protected function afterSave($wasNew) {
 		 
-		 if($this->isModified('slug') && $this->hasChildren()){
+//		 if($this->isModified('slug')){
 			 foreach($this->children as $child){
 					$slugArray = explode('/',$child->slug);
 					$ownSlug = array_pop($slugArray);
 
 					$child->slug = $child->parent->slug;
+					
+//					GO::debug("Parent SLUG: ".$child->slug);
 					
 					if(!empty($child->slug)){
 						$child->slug .= '/';
@@ -348,9 +384,11 @@ class Content extends \GO\Base\Db\ActiveRecord{
 					
 					$child->slug .= $ownSlug;
 					
+//					GO::debug("SLUG new: ".$child->slug);
+					
 					$child->save();
 			 }
-		 }
+//		 }
 		
 		 return parent::afterSave($wasNew);
 	 }
@@ -359,9 +397,9 @@ class Content extends \GO\Base\Db\ActiveRecord{
 		 
 		 parent::setAttribute($name, $value, $format);
 		 
-		 if($name=='parent_id' && !$this->loadingFromDatabase){
-			 $this->_loadSlug();
-		 }
+//		 if($name=='parent_id' && !$this->loadingFromDatabase){
+//			 $this->_loadSlug();
+//		 }
 		 
 	 }
 	 
