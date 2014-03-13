@@ -12,7 +12,7 @@ use GO\Site\Widget\TOC;
 	<?php echo $content->getHtml(); ?>
 	</div>
 	
-	<blockquote>
+	<blockquote style="margin:10px auto; display:block; width:300px;">
   <h4>Under construction!</h4>
   
   <p>This manual is incomplete and we're working on it every day.</p>
