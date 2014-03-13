@@ -39,11 +39,6 @@ GO.email.EmailClient = function(config){
 			this.permissionLevel = this.messagesGrid.store.reader.jsonData.permission_level;
 			
 			this.deleteButton.setDisabled(this.readOnly);
-
-			this.replyAllButton.setDisabled(this.readOnly && !this._permissionDelegated);
-			this.replyButton.setDisabled(this.readOnly && !this._permissionDelegated);
-			this.forwardButton.setDisabled(this.readOnly && !this._permissionDelegated);
-			this.printButton.setDisabled(this.readOnly);
 			
 		}, this);		
 
@@ -775,6 +770,12 @@ GO.email.EmailClient = function(config){
 			if(!GO.util.empty(data.do_not_mark_as_read))
 				this.messagePanel.do_not_mark_as_read = data.do_not_mark_as_read;
 			//this.messagePanel.uid=record.data['uid'];	
+			
+			
+			this.replyAllButton.setDisabled(this.readOnly && !this._permissionDelegated);
+			this.replyButton.setDisabled(this.readOnly && !this._permissionDelegated);
+			this.forwardButton.setDisabled(this.readOnly && !this._permissionDelegated);
+			this.printButton.setDisabled(this.readOnly && !this._permissionDelegated);
 
 			var record = this.messagesGrid.store.getById(this.messagePanel.uid);
 
