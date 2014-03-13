@@ -10,13 +10,15 @@ use GO\Site\Widget\TOC;
 	<div class="jumbotron">
   <h1>Welcome!</h1>
 	<?php echo $content->getHtml(); ?>
-	</div>
 	
-	<blockquote style="margin:10px auto; display:block; width:300px;">
+	<blockquote>
   <h4>Under construction!</h4>
   
   <p>This manual is incomplete and we're working on it every day.</p>
 	</blockquote>
+	</div>
+	
+	
 	
 	<?php
 	
