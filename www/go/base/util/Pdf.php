@@ -1,7 +1,7 @@
 <?php
 require_once GO::config()->root_path."go/vendor/tcpdf/tcpdf.php";
 
-class GO_Base_Util_Pdf extends TCPDF {
+class GO_Base_Util_Pdf extends GO_Base_Util_Fpdi {
 
 	public function __construct($orientation = 'P') {
 		
@@ -54,6 +54,34 @@ color:#000;
 		return '<style>'.$this->style.'</style>';
 	}
 	
+	
+	
+	/**
+	 * Set this to a closure with the PDF object as only parameter
+	 * @see Header()
+	 * @var Closure(TCPDF) 
+	 */
+	private $headerFunction;
+	
+	/**
+	 * Set this to a closure with the PDF object as only parameter
+	 * @see Footer()
+	 * @var Closure(TCPDF)
+	 */
+	private $footerFunction;
+	
+	public function setHeaderFunction($val) {
+		if(!is_callable($val))
+			throw new Exception('TCPDF header ender function should be callable');
+		$this->headerFunction = $val;
+	}
+	
+	public function setFooterFunction($val) {
+		if(!is_callable($val))
+			throw new Exception('TCPDF header ender function should be callable');
+		$this->footerFunction = $val;
+	}
+	
 	protected function init() {
 		
 		//set image scale factor
@@ -94,6 +122,11 @@ color:#000;
 	
 	public function Footer() {
 		
+		if(is_callable($this->footerFunction)) {
+			call_user_func($this->footerFunction);
+			return;
+		}
+		
 		$this->setDefaultTextColor();
 		$this->SetFont($this->font,'',$this->font_size);
 		$this->SetY(-20);
@@ -103,6 +136,11 @@ color:#000;
 	}
 
 	public function Header() {
+		
+		if(is_callable($this->headerFunction)) {
+			call_user_func($this->headerFunction);
+			return;
+		}
 		
 		$this->SetY(10); // DEZE WAS T
 
