@@ -147,15 +147,20 @@ class Site {
 	 * 
 	 * @throws \GO\Base\Exception\NotFound
 	 */
-	public static function launch() {
+	public static function launch($site_id=null) {
 		
-		if(isset($_GET['site_id']))
-			GO::session()->values['site_id'] = $_GET['site_id'];
+		if(isset($site_id)){
+			self::$_site=\GO\Site\Model\Site::model()->findByPk($site_id,false,true); // Find the website model from its id
+		}else{
 		
-		if(isset(GO::session()->values['site_id']))
-			self::$_site=\GO\Site\Model\Site::model()->findByPk(GO::session()->values['site_id'],false,true); // Find the website model from its id
-		else
-			self::$_site=\GO\Site\Model\Site::model()->findSingleByAttribute('domain', $_SERVER["SERVER_NAME"]); // Find the website model from its domainname
+			if(isset($_GET['site_id']))
+				GO::session()->values['site_id'] = $_GET['site_id'];
+
+			if(isset(GO::session()->values['site_id']))
+				self::$_site=\GO\Site\Model\Site::model()->findByPk(GO::session()->values['site_id'],false,true); // Find the website model from its id
+			else
+				self::$_site=\GO\Site\Model\Site::model()->findSingleByAttribute('domain', $_SERVER["SERVER_NAME"]); // Find the website model from its domainname
+		}
 
 		if(!self::$_site)
 			self::$_site=\GO\Site\Model\Site::model()->findSingleByAttribute('domain', '*'); // Find the website model from its domainname
