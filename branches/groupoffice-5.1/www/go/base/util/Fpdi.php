@@ -18,4 +18,3 @@ class GO_Base_Util_Fpdi extends FPDI {
 	}		
 	
 }
-?>
