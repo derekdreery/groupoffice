@@ -66,7 +66,7 @@ class Thumb implements TagInterface{
 		
 		if(!isset($params['lightbox']))
 		{
-			$params['lightbox']=$content->baseslug;
+			$params['lightbox']="thumb";
 		}
 		
 		if(!empty($params['lightbox'])){
