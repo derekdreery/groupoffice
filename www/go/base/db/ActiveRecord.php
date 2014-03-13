@@ -2013,7 +2013,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			$findParams
 					->mergeWith($r['findParams'])		
-					->ignoreAcl()->debugSql()
+					->ignoreAcl()
 					->relation($name);
 			
 			//the extra find params supplied with call are merged last so that you 
