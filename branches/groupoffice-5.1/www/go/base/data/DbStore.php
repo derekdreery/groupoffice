@@ -510,6 +510,8 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 
 		if($summary = $this->getSummary())
 			$this->response['summary'] = $summary;
+		if (!empty($this->_multiSel))
+			$this->_multiSel->setButtonParams($this->response);
 		while ($record = $this->nextRecord())
 			$this->response['results'][] = $record;
 		return $this->response;
