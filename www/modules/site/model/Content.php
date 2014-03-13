@@ -191,8 +191,11 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	 public function getUrl($route='site/front/content'){
 		 
 		// var_dump($this->slug);
-		 
-		 return \Site::urlManager()->createUrl($route,array('slug'=>$this->slug));
+		 if(empty($this->slug)){
+			return \Site::urlManager()->createUrl($route); 
+		 }else{
+			return \Site::urlManager()->createUrl($route,array('slug'=>$this->slug));
+		 }
 	 }
 	 
 	 /**
