@@ -337,7 +337,14 @@ class Content extends \GO\Base\Db\ActiveRecord{
 					$slugArray = explode('/',$child->slug);
 					$ownSlug = array_pop($slugArray);
 
-					$child->slug = $child->parent->slug.'/'.$ownSlug;
+					$child->slug = $child->parent->slug;
+					
+					if(!empty($child->slug)){
+						$child->slug .= '/';
+					}
+					
+					$child->slug .= $ownSlug;
+					
 					$child->save();
 			 }
 		 }
