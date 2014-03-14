@@ -194,7 +194,9 @@ if(version_compare(2, $version)>0){
 	if(!file_contains($filename, 'Group-Office'))
 		create_file($filename,'tpl/etc/dovecot/conf.d/15-lda.conf', $replacements);
 	
-	if($firstInstall){
+	if($firstInstall && version_compare(2.1, $version)<1){
+		
+		//only on dovecot 2.1+
 		$filename = '/etc/dovecot/conf.d/15-mailboxes.conf';
 		if(!file_contains($filename, 'Group-Office'))
 			create_file($filename,'tpl/etc/dovecot/conf.d/15-mailboxes.conf', $replacements);
