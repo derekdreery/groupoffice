@@ -10,7 +10,7 @@ echo $breadcrump->render();
   <div class="col-md-3">
 	
 			
-			<div data-spy="affix" data-offset-top="100" class="panel panel-default toc" style="width:240px;">
+			<div data-spy="affix" data-offset-top="100" class="panel panel-default toc">
 				<div class="panel-heading">Table of contents</div>
 				<div class="panel-body">
 				<?php
