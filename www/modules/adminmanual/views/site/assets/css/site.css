@@ -23,10 +23,11 @@ h3{
 	padding:30px;
 }
 
-.top-link{
+.nav-bottom{
 	padding:14px;
+	line-height:2em;
 }
-.top-link a{
+.top-link a, .home-link a{
 	color: #333;
 }
 
@@ -69,12 +70,25 @@ blockquote p:last-child {
 		position:fixed;
 		top:20px;
 	}
+	
+#top-link.affix-top{
+	visibility: hidden;
+}
+
+#top-link{
+	visibility: hidden;
+	position:fixed;
+	bottom:10px;
+	right:10px;
+	z-index:10000;
+}
 
 @media (max-width: 767px){
 	
-	.top-link{
+	.nav-bottom{
 		display:none;
 	}
+	
 	.toc{
 		width: auto;
 		top: 0;
@@ -83,4 +97,9 @@ blockquote p:last-child {
 	.toc.affix {         
 		position: static;   
 	}  
+	
+	#top-link.affix{
+		visibility: visible;
+	}
 }
+
