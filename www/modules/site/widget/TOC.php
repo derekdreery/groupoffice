@@ -3,8 +3,9 @@
 
 namespace GO\Site\Widget;
 
+use \GO\Site\Components\Widget;
 
-class TOC extends \GO\Site\Components\Widget {
+class TOC extends Widget {
 	
 	/**
 	 *
@@ -44,6 +45,10 @@ class TOC extends \GO\Site\Components\Widget {
 			$html .= '<li>';
 			
 			$attr = $child->getAttributes();
+			
+			$attr['baseslug']=$child->getBaseslug();
+			$attr['parentslug']=$child->getParentslug();
+			
 			$attr['url']=$child->getUrl();
 			$attr['chapter']=$prefix . $count;
 			
