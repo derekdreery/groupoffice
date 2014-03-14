@@ -226,7 +226,7 @@ GO.files.FileBrowser = function(config){
 
 	if(GO.customfields)
 	{
-		GO.customfields.addColumns("GO\\\\Files\\\\Model\\\\File", fields);
+		GO.customfields.addColumns("GO\\Files\\Model\\File", fields);
 	}
 
 	this.gridStore = new GO.data.JsonStore({

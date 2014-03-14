@@ -40,7 +40,7 @@ GO.addressbook.SelectCompany = function(config){
 
 	if(GO.customfields)
 	{
-		GO.customfields.addColumns("GO_Addressbook_Model_Company", config.fields);
+		GO.customfields.addColumns("GO\\Addressbook\\Model\\Company", config.fields);
 	}
 
 	if (typeof(config.store)=='undefined') {

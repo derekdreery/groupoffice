@@ -3350,12 +3350,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		{
 			if(isset($this->$key)){
 				$value = $this->$key;
-				if(($attr['gotype']=='textfield' || $attr['gotype']=='customfield' || $attr['gotype']=='textarea') && !in_array($value,$keywords)){
+				
+				if(is_string($value) && ($attr['gotype']=='textfield' || $attr['gotype']=='customfield' || $attr['gotype']=='textarea') && !in_array($value,$keywords)){
 					if(!empty($value))
 						$keywords[]=$value;
 				}
 			}
 		}
+		
+		
+		
 		
 		$keywords = $prepend.','.implode(',',$keywords);
 		
