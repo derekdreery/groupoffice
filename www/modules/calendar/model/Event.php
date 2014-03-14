@@ -1392,7 +1392,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$dt = GO_Base_Util_Date_DateTime::fromUnixtime($exception->getStartTime());				
 //				$exdate->setDateTime($dt);		
 				$exdate = $e->add('exdate',$dt);
-				$exdate['VALUE']='DATE';
+//				$exdate['VALUE']='DATE';
 			}
 		}
 		
