@@ -270,7 +270,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			throw new \Exception("Can't add exception to non recurring event ".$this->id);
 		
 		if(!$this->hasException($date)){
-			$exception = new \Exception();
+			$exception = new Exception();
 			$exception->event_id = $this->id;
 			$exception->time = mktime(date('G',$this->start_time),date('i',$this->start_time),0,date('n',$date),date('j',$date),date('Y',$date)); // Needs to be a unix timestamp
 			$exception->exception_event_id=$exception_event_id;
@@ -816,7 +816,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		$exceptionJoinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('id', 'e.exception_event_id', '=', 't', true, true);
 
-		$findParams->join(\Exception::model()->tableName(), $exceptionJoinCriteria, 'e');
+		$findParams->join(Exception::model()->tableName(), $exceptionJoinCriteria, 'e');
 
 //			$dayStart = \GO\Base\Util\Date::clear_time($exceptionDate);
 //			$dayEnd = \GO\Base\Util\Date::date_add($dayStart,1);	
@@ -1108,7 +1108,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$exceptionJoinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('id', 'e.exception_event_id','=','t',true,true);
 			
-			$params->join(\Exception::model()->tableName(),$exceptionJoinCriteria,'e');
+			$params->join(Exception::model()->tableName(),$exceptionJoinCriteria,'e');
 			
 			$dayStart = \GO\Base\Util\Date::clear_time($exceptionDate);
 			$dayEnd = \GO\Base\Util\Date::date_add($dayStart,1);	
