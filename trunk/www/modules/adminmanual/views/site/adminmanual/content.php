@@ -1,30 +1,10 @@
 <?php
 use GO\Site\Widget\TOC;
+use GO\Site\Widget\Breadcrumb;
+
+$breadcrump = new Breadcrumb(array('content'=>$content));
+echo $breadcrump->render();
 ?>
-
-<ol class="breadcrumb">
-	<?php
-	$count=0;
-	$crumbs = array($content);
-	$slugContent=$content;
-	while($parent = $slugContent->parent){
-		$crumbs[]=$parent;
-		
-		$slugContent=$parent;
-	}
-	
-	$crumbs=array_reverse($crumbs);
-	
-	foreach($crumbs as $crumb){
-		if($crumb->id==$content->id){
-			echo '<li class="active">'.$crumb->title.'</li>';
-		}  else {
-			echo '<li><a href="'.$crumb->getUrl().'">'.$crumb->title.'</a></li>';
-		}
-	}
-
-	?>
-</ol>
 
 <div class="row">
   <div class="col-md-3">
@@ -33,7 +13,7 @@ use GO\Site\Widget\TOC;
 			<div data-spy="affix" data-offset-top="100" class="panel panel-default toc" style="width:240px;">
 				<div class="panel-heading">Table of contents</div>
 				<div class="panel-body">
-			<?php
+				<?php
 
 				$toc = new TOC(array('content'=>$content));
 				
@@ -56,8 +36,7 @@ use GO\Site\Widget\TOC;
 		
 			echo '<h'.$level.' id="'.$content->baseslug.'">' . $content->title . '</h'.$level.'>';
 
-			echo '<div>' . $content->getHtml() . '</div>';
-			
+			echo '<div>' . $content->getHtml() . '</div>';			
 			
 //			echo '<div class="top-link"><a title="Jump to the top of the page" href="#top"><span class="glyphicon glyphicon-chevron-up"></span></a></div>';
 

@@ -47,6 +47,11 @@
 			</div>
 
 			<?php echo $content; ?>
+			
+			
+			<div id="footer">
+				Copyright Intermesh BV.<br /><a href="https://www.group-office.com">https://www.group-office.com</a>
+			</div>
 
 		</div>
 
