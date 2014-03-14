@@ -10,25 +10,31 @@ class Link implements TagInterface {
 
 		$html = '<a';
 
-		if (empty($params['slug'])) {
-			return "Error: slug must be set in link tag!";
+		if (empty($params['slug']) && empty($params['path'])) {
+			return "Error: slug or path must be set in link tag!";
 		}
-		
-		$params['slug']=explode('#', $params['slug']);
+
+		if(isset($params['slug'])){
+			$params['slug']=explode('#', $params['slug']);
 
 
-		$model = Content::model()->findBySlug($params['slug'][0], $content->site_id);
+			$model = Content::model()->findBySlug($params['slug'][0], $content->site_id);
+
+			if(!$model){
+				return "Broken link to slug: '".$params['slug'][0]."'";
+			}
+
+			$params['href'] = $model->getUrl();
+
+			if (isset($params['slug'][1]))
+				$params['href'].= '#' . $params['slug'][1];
 		
-		if(!$model){
-			return "Broken link to slug: '".$params['slug'][0]."'";
+		}else
+		{
+			$params['href'] = \Site::file($params['path'], false);
 		}
-				
-		$params['href'] = $model->getUrl();
 
-		if (isset($params['slug'][1]))
-			$params['href'].= '#' . $params['slug'][1];
-
-		unset($params['anchor'], $params['slug']);
+		unset($params['anchor'], $params['slug'], $params['path']);
 
 
 		foreach ($params as $key => $value) {
