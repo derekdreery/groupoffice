@@ -6,9 +6,10 @@ $breadcrump = new Breadcrumb(array('content'=>$content));
 echo $breadcrump->render();
 ?>
 
+
+
 <div class="row">
   <div class="col-md-3">
-	
 			
 			<div data-spy="affix" data-offset-top="100" class="panel panel-default toc">
 				<div class="panel-heading">Table of contents</div>
@@ -20,9 +21,10 @@ echo $breadcrump->render();
 				echo $toc->render();
 
 				?>
-					
-				<div class="top-link"><a title="Jump to the top of the page" href="#header"><span class="glyphicon glyphicon-chevron-up"></span> Jump to top</a></div>
-				
+				<div class="nav-bottom">
+					<!--<div class="top-link"><a title="Jump to the top of the page" href="#header"><span class="glyphicon glyphicon-chevron-up"></span> Jump to top</a></div>-->				
+					<div class="home-link"><a title="Go to home page" href="<?php echo Site::urlManager()->getHomeUrl(); ?>"><span class="glyphicon glyphicon-chevron-left"></span> Home</a></div>
+				</div>
 				</div>
 			</div>
 	
@@ -51,5 +53,12 @@ echo $breadcrump->render();
 	</div>
 </div>
 
+
+<div id="top-link" data-spy="affix" data-offset-top="400">
+	<a title="Jump to the top of the page" href="#header">
+		<span class="glyphicon glyphicon-chevron-up"></span>
+	</a>
+</div>
+
 <?php
-Site::scripts()->registerScript('scrollspy', "$('body').scrollspy({ target: '.toc' })");
+Site::scripts()->registerScript('scrollspy', "$('body').scrollspy({ target: '.toc' });$('body').scrollspy({ target: '#top-link' })");
