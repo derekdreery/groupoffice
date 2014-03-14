@@ -1,3 +1,4 @@
+- Billing: PDF Templates can have stationery paper
 - Ticket messages styled like conversation and notes display yellow.
 - Files: Users without disk quota can still upload files.
 - Calendar: Able to import very large ICalendar objects.
