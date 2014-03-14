@@ -69,6 +69,12 @@ abstract class Message extends \GO\Base\Model {
 	protected $attachments=array();
 
 	protected $defaultCharset='UTF-8';
+	
+	/**
+	 * Custom labels set on IMAP server
+	 * @var array 
+	 */
+	public $labels=array();
 
 	/**
 	 * True iff the actual message's body is larger than the maximum allowed. See
