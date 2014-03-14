@@ -1,4 +1,7 @@
-- Billing: changed export income so it looks to the costcodes of the separate items instead of the full order.
+14-03-2014 5.0.46
+- Wrong mime type for PDF in billing. "application/x-pdf" was used instead of "application/pdf".
+- Calendar export exdate property must have time as well for android
+- Billing: changed export income so it looks to the cost codes of the separate items instead of the full order.
 - Made number custom fields smaller so they stand out more with right alignment.
 - Exporting contact as vcard now sets it's address type as home instead of work.
 - Projects2: New csv export of time entries.
