@@ -50,15 +50,11 @@ class Thumb implements TagInterface{
 		
 		$html .= '<img src="' . $thumb . '" alt="' . $params['alt'] . '"';
 		
-		if(!isset($params['class'])){
-			$params['class']='thumb-img';
-		}
+	
 		
-		$html .= 'class="'.$params['class'].'"';
+		$html .= 'class="thumb-img"';
 		
-		if(isset($params['style'])){
-			$html .= 'style="'.$params['style'].'"';
-		}
+		
 	
 		
 		$html .= ' />';
@@ -96,7 +92,20 @@ class Thumb implements TagInterface{
 		}
 		
 		
-		$html = '<div class="thumb-wrap">'.$html.'</div>';
+		if(!isset($params['class'])){
+			$params['class']='thumb-wrap';
+		}
+		
+		$wrap = '<div class="'.$params['class'].'"';
+		
+		if(isset($params['style'])){
+			$wrap .= 'style="'.$params['style'].'"';
+		}
+		
+		$wrap .= '>';
+		
+		
+		$html = $wrap.$html.'</div>';
 		
 		return $html;
 	}
