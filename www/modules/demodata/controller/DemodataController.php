@@ -32,7 +32,7 @@ class DemodataController extends \GO\Base\Controller\AbstractController {
 				$category = \GO\Customfields\Model\Category::model()->createIfNotExists(\GO::getModel($model->getName())->extendsModel(), "Demo Custom fields");
 				$category->acl->addGroup(\GO::config()->group_internal, \GO\Base\Model\Acl::WRITE_PERMISSION);
 				
-				if(strpos(\GO::getModel($model->getName())->extendsModel(), 'Addresbook_')){
+				if(strpos(\GO::getModel($model->getName())->extendsModel(), 'Addressbook\\')){
 					foreach($types as $t){
 						\GO\Customfields\Model\Field::model()->createIfNotExists($category->id, $t['type'],array(
 								'datatype'=>$t['className'],
@@ -892,23 +892,30 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 		if(\GO::modules()->projects2){
 			
-			$employee = new \GO\Projects2\Model\Employee();
-			$employee->user_id=$elmer->id;
-			$employee->external_fee=120;
-			$employee->internal_fee=60;
-			$employee->save();
 			
-			$employee = new \GO\Projects2\Model\Employee();
-			$employee->user_id=$demo->id;
-			$employee->external_fee=80;
-			$employee->internal_fee=40;
-			$employee->save();
+			if(!\GO\Projects2\Model\Employee::model()->count()){
 			
-			$employee = new \GO\Projects2\Model\Employee();
-			$employee->user_id=$linda->id;
-			$employee->external_fee=90;
-			$employee->internal_fee=45;
-			$employee->save();
+				$employee = new \GO\Projects2\Model\Employee();
+				$employee->user_id=$elmer->id;
+				$employee->external_fee=120;
+				$employee->internal_fee=60;
+				$employee->save();
+
+				$employee = new \GO\Projects2\Model\Employee();
+				$employee->user_id=$demo->id;
+				$employee->external_fee=80;
+				$employee->internal_fee=40;
+				$employee->save();
+
+				$employee = new \GO\Projects2\Model\Employee();
+				$employee->user_id=$linda->id;
+				$employee->external_fee=90;
+				$employee->internal_fee=45;
+				$employee->save();
+			}else
+			{
+				$employee = \GO\Projects2\Model\Employee::model()->findSingle();
+			}
 			
 			
 			$templates = \GO\Projects2\Model\Template::model()->find();
