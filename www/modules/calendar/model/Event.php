@@ -1396,7 +1396,6 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				$dt = \GO\Base\Util\Date\DateTime::fromUnixtime($exception->getStartTime());				
 //				$exdate->setDateTime($dt);		
 				$exdate = $e->add('exdate',$dt);
-//				$exdate['VALUE']='DATETIME';
 			}
 		}
 		
