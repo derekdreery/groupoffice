@@ -1,3 +1,4 @@
+- Billing: changed export income so it looks to the costcodes of the separate items instead of the full order.
 - Made number custom fields smaller so they stand out more with right alignment.
 - Exporting contact as vcard now sets it's address type as home instead of work.
 - Projects2: New csv export of time entries.
