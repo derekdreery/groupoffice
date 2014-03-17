@@ -270,7 +270,7 @@ http://t.co/zy3JDoVTEC"
  * @var type 
  */
 	public $template = '<div>
-	<a id="twitter-account-name" href="https://twitter.com/{user:screen_name}">@{user:screen_name}</a>
+	<a class="twitter-account-name" href="https://twitter.com/{user:screen_name}">@{user:screen_name}</a>
 	<p class="tweet">{text}</p>
 	<p class="interact">
 	<a href="https://twitter.com/intent/tweet?in_reply_to={id}" class="twitter_reply_icon">Reply</a>
