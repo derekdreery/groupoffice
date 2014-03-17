@@ -48,6 +48,7 @@
 
 namespace GO\Calendar\Model;
 use Sabre;
+use DateTime;
 
 class Event extends \GO\Base\Db\ActiveRecord {
 
@@ -1614,7 +1615,9 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		if($vobject->valarm && $vobject->valarm->trigger){
 			
 			$duration = \GO\Base\VObject\Reader::parseDuration($vobject->valarm->trigger);
-			$this->reminder = $duration*-1;
+			if($duration>0){
+				$this->reminder = $duration*-1;
+			}
 			
 		}elseif($vobject->aalarm){ //funambol sends old vcalendar 1.0 format
 			$aalarm = explode(';', (string) $vobject->aalarm);
@@ -1676,7 +1679,10 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		if($vobject->valarm){
 			$reminderTime = $vobject->valarm->getEffectiveTriggerTime();
 			//echo $reminderTime->format('c');
-			$this->reminder = $this->start_time-$reminderTime->format('U');
+			$seconds = $reminderTime->format('U');
+			$this->reminder = $this->start_time-$seconds;
+			if($this->reminder<0)
+				$this->reminder=0;
 		}
 		
 		
