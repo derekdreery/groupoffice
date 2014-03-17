@@ -1,3 +1,5 @@
+- Updated SabreDAV to version 1.8.9
+- Billing: group headers were printed after first group item.
 - Mark as unread was not possible anymore with a shared account
 - IMAP Flags are enabled for delegated e-mail account.
 - Removed irrelevant permission levels in module permissions window.
