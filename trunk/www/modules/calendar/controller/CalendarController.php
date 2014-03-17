@@ -20,6 +20,12 @@
 
 namespace GO\Calendar\Controller;
 
+use SimpleXMLElement;
+
+use GO;
+use GO\Base\Fs\File;
+use GO\Calendar\Model\Event;
+
 
 class CalendarController extends \GO\Base\Controller\AbstractModelController {
 
@@ -158,19 +164,67 @@ class CalendarController extends \GO\Base\Controller\AbstractModelController {
 		if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
 			throw new \Exception(\GO::t('noFileUploaded'));
 		}else {
-			$file = new \GO\Base\Fs\File($_FILES['ical_file']['tmp_name'][0]);
-			$i = new \GO\Base\Vobject\Iterator($file, "VEVENT");
-			foreach($i as $vevent){					
+			$file = new File($_FILES['ical_file']['tmp_name'][0]);
 			
-				$event = new \GO\Calendar\Model\Event();
+			$ext = strtolower(File::getExtension($_FILES['ical_file']['name'][0]));
+			
+			if($ext == 'ics'){
+				$i = new \GO\Base\Vobject\Iterator($file, "VEVENT");
+				foreach($i as $vevent){					
+
+					$event = new Event();
+					try{
+						$event->importVObject( $vevent, array('calendar_id'=>$params['calendar_id']) );
+						$count++;
+					}catch(\Exception $e){
+						$failed[]=$e->getMessage();
+					}
+				}
+			}elseif($ext=='xml')
+			{
+				return $this->_importSmarterMailXml($params, $file);
+			}else
+			{
+				throw new \Exception("Extension $ext is not supported");
+			}
+		}
+		$response['feedback'] = sprintf(\GO::t('import_success','calendar'), $count);
+		
+		if(count($failed)){
+			$response['feedback'] .= "\n\n".count($failed)." events failed: ".implode("\n", $failed);
+		}
+		
+		return $response;
+	}
+	
+	private function _importSmarterMailXml($params, File $file){
+		$sXml=new SimpleXMLElement($file->getContents());
+		
+		$count = 0;
+		$failed=array();
+		
+		foreach($sXml->children() as $obj)
+		{
+			if($obj->getName()=='Event'){
+				$event = new Event();
 				try{
-					$event->importVObject( $vevent, array('calendar_id'=>$params['calendar_id']) );
+					
+					$data = (string) $obj->Data;
+					
+//					GO::debug($data);
+					
+					$vObject = \GO\Base\VObject\Reader::read($data);
+					
+					$event->importVObject($vObject->vevent[0], array('calendar_id'=>$params['calendar_id']) );
 					$count++;
+					
+//					break;
 				}catch(\Exception $e){
 					$failed[]=$e->getMessage();
 				}
-			}
+			}		
 		}
+		
 		$response['feedback'] = sprintf(\GO::t('import_success','calendar'), $count);
 		
 		if(count($failed)){
@@ -275,9 +329,9 @@ class CalendarController extends \GO\Base\Controller\AbstractModelController {
 		$findParams->getCriteria()->addCondition("calendar_id", $params["calendar_id"]);
 		
 		if(!empty($params['months_in_past']))		
-			$stmt = \GO\Calendar\Model\Event::model()->findForPeriod($findParams, \GO\Base\Util\Date::date_add(time(), 0, -$months_in_past));
+			$stmt = Event::model()->findForPeriod($findParams, \GO\Base\Util\Date::date_add(time(), 0, -$months_in_past));
 		else
-			$stmt = \GO\Calendar\Model\Event::model()->find($findParams);		
+			$stmt = Event::model()->find($findParams);		
 		
 		\GO\Base\Util\Http::outputDownloadHeaders(new \GO\Base\FS\File($calendar->name.'.ics'));
 
@@ -319,7 +373,7 @@ class CalendarController extends \GO\Base\Controller\AbstractModelController {
 		if(!$calendar)
 			throw new \GO\Base\Exception\NotFound();
 		
-		\GO\Base\Fs\File::setAllowDeletes(false);
+		File::setAllowDeletes(false);
 		//VERY IMPORTANT:
 		\GO\Files\Model\Folder::$deleteInDatabaseOnly=true;
 		
