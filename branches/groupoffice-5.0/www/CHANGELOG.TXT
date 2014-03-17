@@ -1,4 +1,7 @@
-- Email on new would run from the external ticket page as well
+- Mark as unread was not possible anymore with a shared account
+- IMAP Flags are enabled for delegated e-mail account.
+- Removed irrelevant permission levels in module permissions window.
+- Email on new ticket runs from the external ticket page as well
 
 14-03-2014 5.0.46
 - Wrong mime type for PDF in billing. "application/x-pdf" was used instead of "application/pdf".
