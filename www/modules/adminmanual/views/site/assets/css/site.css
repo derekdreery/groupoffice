@@ -16,6 +16,19 @@ h3{
  border-bottom: 0px;
 }
 
+.panel{
+	border-radius: 0;
+}
+.panel-default>.panel-heading {
+	background-image: none;
+	filter: none;
+}
+
+.breadcrumb {
+border: 1px solid #ddd;
+border-radius: 0px;
+}
+
 /* end bootstrap overrides */
 
 #footer{
@@ -90,10 +103,15 @@ blockquote p:last-child {
 	}
 	
 	.toc{
+		display:none;
 		width: auto;
 		top: 0;
 	}
 	
+/*	.toc.active{
+		display:block;
+	}
+	*/
 	.toc.affix {         
 		position: static;   
 	}  
