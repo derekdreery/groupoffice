@@ -133,10 +133,13 @@ class DbStore extends AbstractStore {
 		$this->_columnModel = $columnModel;
 		$this->_requestParams = isset($requestParams) ? $requestParams : $_REQUEST;
 		//$this->setStoreParams($requestParams);
-		if ($findParams instanceof \GO\Base\Db\FindParams)
+		if ($findParams instanceof \GO\Base\Db\FindParams){
 			$this->_extraFindParams = $findParams;
-		else
+		}elseif($findParams!=null){
+			throw new Exception("FindParams must be an instance of '\GO\Base\Db\FindParams'. '".get_class($findParams)."' given.");
+		}else{
 			$this->_extraFindParams = \GO\Base\Db\FindParams::newInstance();
+		}
 		
 		$this->_readRequestParams();
 	}
