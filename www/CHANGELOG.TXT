@@ -1,3 +1,4 @@
+19-03-2014 5.0.47
 - Calendar: resource application and confirmation workflow now also works in shared calendars
 - In some cases participants did not get events when they were added to an existing recurring meeting
 - Fixed duplicate linking with experimental auto_link_contacts enabled.
@@ -7,6 +8,7 @@
 - IMAP Flags are enabled for delegated e-mail account.
 - Removed irrelevant permission levels in module permissions window.
 - Email on new ticket runs from the external ticket page as well
+- Check for CLI works on cgi versions now too.
 
 14-03-2014 5.0.46
 - Wrong mime type for PDF in billing. "application/x-pdf" was used instead of "application/pdf".
