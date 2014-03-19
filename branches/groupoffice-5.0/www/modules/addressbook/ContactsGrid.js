@@ -29,7 +29,8 @@ GO.addressbook.ContactsGrid = function(config){
 		{
 			header: GO.lang['strCompany'],
 			dataIndex: 'company_name',
-			width:200
+			width:200,
+			sortable:false
 		},
 		{
 			header: GO.lang['strFirstName'],
