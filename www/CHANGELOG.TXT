@@ -1,3 +1,4 @@
+- In some cases participants did not get events when they were added to an existing recurring meeting
 - Fixed duplicate linking with experimental auto_link_contacts enabled.
 - Updated SabreDAV to version 1.8.9
 - Billing: group headers were printed after first group item.
