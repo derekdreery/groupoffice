@@ -1,0 +1,84 @@
+body{
+	
+	font-family:"Verdana";
+	font-size:12px;
+	line-height:20px;
+	padding:20px;
+	margin:0px;
+}
+
+
+
+img {
+	margin:5px;
+	margin-right:10px;
+}
+
+p{
+margin:0px;	
+}
+
+
+.formrow, .row{
+	display:block;
+	clear:both;
+	margin-bottom:10px;
+	line-height: 16px;
+}
+
+.formlabel, label{
+	float:left;
+	width:150px;
+}
+label.checkbox, .buttonList label { width: auto; margin-right: 10px; float: none; }
+.buttonList {min-height: 22px;}
+
+label {
+	float:left;
+}
+
+span.required {
+	color: #26687C;
+}
+
+.button, .buttons input {
+	width: 100px;
+	float: left;
+	clear:none;
+	margin-right:4px;
+}
+
+.errortext, .errorMessage {
+	color:red;
+	padding:2px;
+}
+
+.formrow .errortext {
+	float:left;
+	color:red;
+	padding:2px;
+}
+
+.formrow input[type="text"],input[type="password"] .formrow textarea, .formrow select, .formrow file{
+	width:250px;
+}
+.row input[type="text"],input[type="password"], .row textarea, .row select, .row file{
+	width:250px;
+}
+
+.checkbox{
+	vertical-align: middle;
+}
+.textarea{
+	display:block;
+	height:100px;
+}
+
+.radio{
+	width:auto;
+	vertical-align: middle;
+	margin:0px 2px;
+	padding:0px;			
+
+}
+
