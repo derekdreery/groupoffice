@@ -940,7 +940,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$response['data'] = $message->toOutputArray($params['content_type'] == 'html', true,false,false);
 		
 		if(!empty($params['uid'])){
-			$alias = $this->_findAliasFromRecipients($account, $message->from);	
+			$alias = $this->_findAliasFromRecipients($account, $message->from,0,true);	
 			if($alias)
 				$response['data']['alias_id']=$alias->id;
 		}
@@ -1101,7 +1101,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 * @param GO_Base_Mail_EmailRecipients $recipients
 	 * @return GO_Email_Model_Alias|false 
 	 */
-	private function _findAliasFromRecipients($account, GO_Base_Mail_EmailRecipients $recipients, $alias_id=0){
+	private function _findAliasFromRecipients($account, GO_Base_Mail_EmailRecipients $recipients, $alias_id=0, $allAvailableAliases=false){
 		$alias=false;
 		$defaultAlias=false;
 		
@@ -1120,7 +1120,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		
 		//find the right sender alias
-		$stmt = $account && $account->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION) ? $account->aliases : GO_Email_Model_Alias::model()->find($findParams);
+		$stmt = !$allAvailableAliases && $account && $account->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION) ? $account->aliases : GO_Email_Model_Alias::model()->find($findParams);
 		while($possibleAlias = $stmt->fetch()){
 			
 			if(!$defaultAlias)
@@ -1137,7 +1137,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		return $alias;
 	}
-
+	
 	/**
 	 * Forward a mail message. It can handle an IMAP message or a saved message.
 	 *
