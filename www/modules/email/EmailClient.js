@@ -443,11 +443,11 @@ GO.email.EmailClient = function(config){
 
 	
 	this.gridContextMenu.on("show", function(){
-		this.contextMenuMarkAsUnread.setDisabled(this.permissionLevel<GO.permissionLevels.write);
+		this.contextMenuMarkAsUnread.setDisabled(this.permissionLevel<GO.permissionLevels.create);
 		this.contextMenuMarkAsRead.setDisabled(this.permissionLevel<GO.email.permissionLevels.delegated);
 
-		this.contextMenuFlag.setDisabled(this.permissionLevel<GO.permissionLevels.write);
-		this.contextMenuUnflag.setDisabled(this.permissionLevel<GO.permissionLevels.write);
+		this.contextMenuFlag.setDisabled(this.permissionLevel<GO.email.permissionLevels.delegated);
+		this.contextMenuUnflag.setDisabled(this.permissionLevel<GO.email.permissionLevels.delegated);
 
 		this.contextMenuDelete.setDisabled(this.readOnly);
 	}, this);

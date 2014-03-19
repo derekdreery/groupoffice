@@ -59,7 +59,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	private function _moveMessages($imap, $params, &$response, $account){
 		if(isset($params['action']) && $params['action']=='move') {
 
-			if(!$account->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)){
+			if(!$account->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION)){
 				throw new GO_Base_Exception_AccessDenied();
 			}
 			
@@ -259,8 +259,6 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		if(!empty($params['delete_keys'])){
 
-			// TODO: Fix this on the clientside so the user is unable to delete emails with the GUI when he has insufficient rights
-			// Check if the current user has at least Delete permissions for deleting.
 			if(!$account->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION))
 			  $response['deleteFeedback']=GO::t('strUnauthorizedText');
 			else {
@@ -381,7 +379,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 
-		$requiredPermissionLevel = $params["flag"]=='Seen' && empty($params["clear"]) ? GO_Email_Model_Account::ACL_DELEGATED_PERMISSION : GO_Base_Model_Acl::WRITE_PERMISSION;
+		$requiredPermissionLevel = $params["flag"]=='Seen' && !empty($params["clear"]) ? GO_Base_Model_Acl::CREATE_PERMISSION : GO_Email_Model_Account::ACL_DELEGATED_PERMISSION;
 
 		if(!$account->checkPermissionLevel($requiredPermissionLevel))
 		  throw new GO_Base_Exception_AccessDenied();
@@ -437,7 +435,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	}
 
 
-	private function _link($params, GO_Base_Mail_Message $message, $model=false) {
+	private function _link($params, GO_Base_Mail_Message $message, $model=false, $tags=array()) {
 
 		$autoLinkContacts=false;
 		if(!$model){
@@ -493,20 +491,58 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$attributes['time'] = $message->getDate();
 				$attributes['uid']= $alias->email.'-'.$message->getDate();
 
+				$linkedModels = array();
+				
 				if($model){
 
-					$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
-					$linkedEmail->setAttributes($attributes);
-					$linkedEmail->acl_id = $model->findAclId();
-					try {
-						$linkedEmail->save();
-					} catch (GO_Base_Exception_AccessDenied $e) {
-						throw new Exception(GO::t('linkMustHavePermissionToWrite','email'));
+					$attributes['acl_id']=$model->findAclId();
+					
+					$linkedEmail = GO_Savemailas_Model_LinkedEmail::model()->findSingleByAttributes(array(
+							'uid'=>$attributes['uid'], 
+							'acl_id'=>$attributes['acl_id']));
+					
+					if(!$linkedEmail){					
+						$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
+						$linkedEmail->setAttributes($attributes);
+						try {
+							$linkedEmail->save();
+						} catch (GO_Base_Exception_AccessDenied $e) {
+							throw new Exception(GO::t('linkMustHavePermissionToWrite','email'));
+						}
 					}
 					$linkedEmail->link($model);
+					
+					$linkedModels[]=$model;
+					
+					GO::debug('1');
 				}
 
 
+				//process tags in the message body
+				while($tag = array_shift($tags)){
+					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id'], false, true);
+					if($linkModel && !$linkModel->equals($linkedModels) && $linkModel->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)){
+						
+						$attributes['acl_id']=$linkModel->findAclId();
+						
+						$linkedEmail = GO_Savemailas_Model_LinkedEmail::model()->findSingleByAttributes(array(
+							'uid'=>$attributes['uid'], 
+							'acl_id'=>$attributes['acl_id']));
+
+						if(!$linkedEmail){
+							$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
+							$linkedEmail->setAttributes($attributes);
+							$linkedEmail->save();
+						}
+
+
+						$linkedEmail->link($linkModel);
+
+						$linkedModels[]=$linkModel;
+					}					
+				}
+				
+				
 				if($autoLinkContacts){
 					$to = new GO_Base_Mail_EmailRecipients($params['to'].",".$params['bcc']);
 					$to = $to->getAddresses();
@@ -519,11 +555,20 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						$contact = $stmt->fetch();
 
 
-						if($contact && (empty($model) || !$model->equals($contact)) ){
-							$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
-							$linkedEmail->setAttributes($attributes);
-							$linkedEmail->acl_id = $contact->findAclId();
-							$linkedEmail->save();
+						if($contact && !$contact->equals($linkedModels)){						
+							
+							$attributes['acl_id']= $contact->findAclId();
+							
+							$linkedEmail = GO_Savemailas_Model_LinkedEmail::model()->findSingleByAttributes(array(
+								'uid'=>$attributes['uid'], 
+								'acl_id'=>$attributes['acl_id']));
+							
+							if(!$linkedEmail){
+								$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
+								$linkedEmail->setAttributes($attributes);
+								$linkedEmail->save();
+							}
+
 
 							$linkedEmail->link($contact);
 						}
@@ -775,18 +820,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 			throw new Exception($msg.nl2br($logStr));
 		}
-
-		$this->_link($params, $message);
-
+		
 		//if there's an autolink tag in the message we want to link outgoing messages too.
-		$tags = $this->_findAutoLinkTags($params['content_type']=='html' ? $params['htmlbody'] : $params['plainbody']);
-		while($tag = array_shift($tags)){
-			if($tag['account_id']==$account->id){
-				$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id'], false, true);
-				if($linkModel && $linkModel->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-					$this->_link($params,$message, $linkModel);
-			}
-		}
+		$tags = $this->_findAutoLinkTags($params['content_type']=='html' ? $params['htmlbody'] : $params['plainbody'], $account->id);
+
+		$this->_link($params, $message, false, $tags);
 
 		$response['unknown_recipients'] = $this->_findUnknownRecipients($params);
 
@@ -917,7 +955,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$response['data'] = $message->toOutputArray($params['content_type'] == 'html', true,false,false);
 
 		if(!empty($params['uid'])){
-			$alias = $this->_findAliasFromRecipients($account, $message->from);
+			$alias = $this->_findAliasFromRecipients($account, $message->from,0,true);	
+			
 			if($alias)
 				$response['data']['alias_id']=$alias->id;
 		}
@@ -1078,7 +1117,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 * @param GO_Base_Mail_EmailRecipients $recipients
 	 * @return GO_Email_Model_Alias|false
 	 */
-	private function _findAliasFromRecipients($account, GO_Base_Mail_EmailRecipients $recipients, $alias_id=0){
+	private function _findAliasFromRecipients($account, GO_Base_Mail_EmailRecipients $recipients, $alias_id=0, $allAvailableAliases=false){
 		$alias=false;
 		$defaultAlias=false;
 
@@ -1091,13 +1130,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						'localField' => 'account_id', //defaults to primary key of the model
 						'type' => 'LEFT'
 				))
-				->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)
+				->permissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION)
 				->ignoreAdminGroup()
 				->order('order', 'DESC');
 
 
 		//find the right sender alias
-		$stmt = $account && $account->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION) ? $account->aliases : GO_Email_Model_Alias::model()->find($findParams);
+		$stmt = !$allAvailableAliases && $account && $account->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION) ? $account->aliases : GO_Email_Model_Alias::model()->find($findParams);
 		while($possibleAlias = $stmt->fetch()){
 
 			if(!$defaultAlias)
@@ -1114,7 +1153,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		return $alias;
 	}
-
+	
 	/**
 	 * Forward a mail message. It can handle an IMAP message or a saved message.
 	 *
@@ -1250,19 +1289,20 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 			//Don't do these special actions in the special folders
 			if($params['mailbox']!=$account->sent && $params['mailbox']!=$account->trash && $params['mailbox']!=$account->drafts){
-				$response = $this->_handleAutoLinkTag($imapMessage, $params, $response);
+				$linkedModels = $this->_handleAutoLinkTag($imapMessage, $response);
 				$response = $this->_handleInvitations($imapMessage, $params, $response);
 
-				//Commented out because it would autolink to email every time you read it @see _link() where it's already handeled
-				$response = $this->_handleAutoContactLinkFromSender($imapMessage, $params, $response);
+				$linkedModels = $this->_handleAutoContactLinkFromSender($imapMessage, $linkedModels);				
 
 				// Process found autolink tags
-				if(isset($response['autolink_items']) && count($response['autolink_items']) > 0){
+				if(count($linkedModels) > 0){
 
 					$linkedItems = '';
+					
 
-					foreach($response['autolink_items'] as $autolinkItem){
-						$linkedItems .= ', '.$autolinkItem;
+					foreach($linkedModels as $linkedModel){
+						$linkedItems .= ', <span class="em-autolink-link" onclick="GO.linkHandlers[\''.$linkedModel->className().'\'].call(this, '.
+												$linkedModel->id.');">'.$linkedModel->name.' ('.$linkedModel->localizedName.')</span>';
 					}
 
 					$linkedItems = trim($linkedItems,' ,');
@@ -1426,7 +1466,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 
-	private function _findAutoLinkTags($data){
+	private function _findAutoLinkTags($data, $account_id=0){
 		preg_match_all('/\[link:([^]]+)\]/',$data, $matches, PREG_SET_ORDER);
 
 		$tags = array();
@@ -1438,12 +1478,16 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 				if($props[0]==$_SERVER['SERVER_NAME']){
 					$tag=array();
+					
+					if(!$account_id || $account_id==$props[1]){
 	//				$tag['server'] = $props[0];
-					$tag['account_id'] = $props[1];
-					$tag['model'] = $props[2];
-					$tag['model_id'] = $props[3];
 
-					$tags[]=$tag;
+						$tag['account_id'] = $props[1];
+						$tag['model'] = $props[2];
+						$tag['model_id'] = $props[3];
+
+						$tags[]=$tag;
+					}
 				}
 
 				$unique[]=$match[1];
@@ -1461,40 +1505,34 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 * @param string $response
 	 * @return string
 	 */
-	private function _handleAutoLinkTag(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
+	private function _handleAutoLinkTag(GO_Email_Model_ImapMessage $imapMessage, $response) {
 		//seen flag is expensive because it can't be recovered from cache
 //		if(!$imapMessage->seen){
 
 
+		$linkedModels = array();
+		
+
 		if(GO::modules()->savemailas){
-			$tags = $this->_findAutoLinkTags($response['htmlbody']);
+			$tags = $this->_findAutoLinkTags($response['htmlbody'], $imapMessage->account->id);
 
 			if(!isset($response['autolink_items']))
 				$response['autolink_items'] = array();
 
 			while($tag = array_shift($tags)){
-				if($imapMessage->account->id == $tag['account_id']){
+//				if($imapMessage->account->id == $tag['account_id']){
 					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id'],false, true);
-					if($linkModel && $linkModel->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)){
+					if($linkModel && !$linkModel->equals($linkedModels) && $linkModel->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)){
 						GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $linkModel);
 
-						//we need this just to display a unified name
-						$searchCacheModel = $linkModel->getCachedSearchRecord();
-
-						$response['autolink_items'][] = '<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
-												$tag['model_id'].');">'.$searchCacheModel->name.'</span>';
-
-//						$response['htmlbody']='<div class="em-autolink-message">'.
-//										sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
-//														$tag['model_id'].');">'.$searchCacheModel->name.'</span>').'</div>'.
-//										$response['htmlbody'];
+						
+						$linkedModels[]=$linkModel;
 					}
-				}
+
 			}
 		}
-//		}
 
-		return $response;
+		return $linkedModels;
 	}
 
 
@@ -1506,32 +1544,23 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 * @param string $response
 	 * @return string
 	 */
-	private function _handleAutoContactLinkFromSender(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
+	private function _handleAutoContactLinkFromSender(GO_Email_Model_ImapMessage $imapMessage, $linkedModels) {
 
 		if(GO::modules()->addressbook && GO::modules()->savemailas && !empty(GO::config()->email_autolink_contacts)){
-
-			if(!isset($response['autolink_items']))
-				$response['autolink_items'] = array();
 
 			$from = $imapMessage->from->getAddress();
 
 			$stmt = GO_Addressbook_Model_Contact::model()->findByEmail($from['email'], GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->limit(1));
 			$contact = $stmt->fetch();
 
-			if($contact){
+			if($contact && !$contact->equals($linkedModels)){
 				GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $contact);
 
-//				$response['htmlbody']='<div class="em-autolink-message">'.
-//								sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, '.
-//												$contact->id.');">'.$contact->name.'</div>').
-//								$response['htmlbody'];
-
-				$response['autolink_items'][] = '<span class="em-autolink-link" onclick="GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, '.
-												$contact->id.');">'.$contact->name.'</span>';
+				$linkedModels[]=$contact;
 			}
 		}
 
-		return $response;
+		return $linkedModels;
 	}
 
 
