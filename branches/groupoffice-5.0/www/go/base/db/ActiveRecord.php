@@ -320,11 +320,22 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * Compares this ActiveRecord with $record.
-	 * @param GO_Base_Db_ActiveRecord $record record to compare to
+	 * @param GO_Base_Db_ActiveRecord $record record to compare to or an array of records
 	 * @return boolean whether the active records are the same database row.
 	 */
 	public function equals($record) {
-		   return $this->tableName()===$record->tableName() && $this->getPk()===$record->getPk();
+		
+		if(!is_array($record)){
+			$record=array($record);
+		}
+		
+		foreach($record as $r){
+		   if($this->tableName()===$r->tableName() && $this->getPk()===$r->getPk())
+			 {
+				 return true;
+			 }
+		}
+		return false;
 	}
 	
 	/**
