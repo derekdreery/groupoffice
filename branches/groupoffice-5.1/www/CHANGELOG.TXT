@@ -4,6 +4,20 @@
 - Calendar: Able to import very large ICalendar objects.
 - Calendar: Notification to user when attempting to import an ICalendar with a recurrence containing 'Last X of month' pattern.
 
+
+19-03-2014 5.0.47
+- Billing: able to turn off reference in billing PDF template
+- Calendar: resource application and confirmation workflow now also works in shared calendars
+- In some cases participants did not get events when they were added to an existing recurring meeting
+- Fixed duplicate linking with experimental auto_link_contacts enabled.
+- Updated SabreDAV to version 1.8.9
+- Billing: group headers were printed after first group item.
+- Mark as unread was not possible anymore with a shared account
+- IMAP Flags are enabled for delegated e-mail account.
+- Removed irrelevant permission levels in module permissions window.
+- Email on new ticket runs from the external ticket page as well
+- Check for CLI works on cgi versions now too.
+
 14-03-2014 5.0.46
 - Wrong mime type for PDF in billing. "application/x-pdf" was used instead of "application/pdf".
 - Calendar export exdate property must have time as well for android

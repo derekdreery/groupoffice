@@ -267,6 +267,10 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 						->ignoreAdminGroup()
 						->order('order', 'DESC');
 
+			if(isset($params['permissionLevel'])){
+				$findParams->permissionLevel($params['permissionLevel']);
+			}
+			
 			$stmt = GO_Email_Model_Account::model()->find($findParams);
 
 			while ($account = $stmt->fetch()) {
@@ -571,7 +575,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 			$targetAccountModel = GO_Email_Model_Account::model()->findByPk($params['targetAccountId']);
 
-			if($targetAccountModel->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
+			if(!$targetAccountModel->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION))
 			  throw new GO_Base_Exception_AccessDenied();
 
 			$targetImapConnection = $targetAccountModel->openImapConnection($params["targetMailboxPath"]);

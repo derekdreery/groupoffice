@@ -708,9 +708,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(!$this->dontSendEmails && $this->hasModificationsForParticipants()){			
 			$url = GO::createExternalUrl('calendar', 'showEventDialog', array('event_id' => $this->id));		
 
+			//send updates to the resource admins
+			$adminUserIds=array();
 			$stmt = $this->calendar->group->admins;
-			while($user = $stmt->fetch()){
-				if($user->id!=GO::user()->id){
+			while($adminUser = $stmt->fetch()){
+				$adminUserIds[] = $adminUser->id;
+				if($adminUser->id!=GO::user()->id){
 					if($wasNew){
 						$body = sprintf(GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
 										. $this->toHtml()
@@ -729,7 +732,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					$message = GO_Base_Mail_Message::newInstance(
 										$subject
 										)->setFrom(GO::user()->email, GO::user()->name)
-										->addTo($user->email, $user->name);
+										->addTo($adminUser->email, $adminUser->name);
 
 					$message->setHtmlAlternateBody($body);					
 
@@ -738,8 +741,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 			
 			
-			//send update to user
-			if($this->user_id!=GO::user()->id){
+			//send update to user that booked the resource
+			if($this->user_id!=GO::user()->id
+						&& in_array(GO::user()->id,$adminUserIds)
+//						&& GO_Base_Model_Acl::getUserPermissionLevel($this->calendar->acl_id,GO::user()->id) < GO_Base_Model_Acl::CREATE_PERMISSION
+				) {
+
 				if($this->isModified('status')){				
 					if($this->status==GO_Calendar_Model_Event::STATUS_CONFIRMED){
 						$body = sprintf(GO::t('your_resource_accepted_mail_body','calendar'),GO::user()->name,$this->calendar->name).'<br /><br />'
@@ -757,7 +764,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					}
 				}else
 				{
-					$body = sprintf(GO::t('your_resource_modified_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
+					$body = sprintf(GO::t('your_resource_modified_mail_body','calendar'),GO::user()->name,$this->calendar->name).'<br /><br />'
 								. $this->toHtml();
 //								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
 					$subject = sprintf(GO::t('your_resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
@@ -874,7 +881,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	public function findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents=false) {
 
-		GO::debug("findCalculatedForPeriod ".date('c', $periodStartTime)." - ".date('c', $periodEndTime));
+//		GO::debug("findCalculatedForPeriod ".date('c', $periodStartTime)." - ".date('c', $periodEndTime));
 		
 		$stmt = $this->findForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents);
 
@@ -958,7 +965,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->_calculatedEvents[$event->start_time.'-'.$event->name.'-'.$event->id] = $localEvent;
 		} else {
 			
-			GO::debug("Calculating recurrences for event: ".$event->id);
+//			GO::debug("Calculating recurrences for event: ".$event->id);
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($localEvent->getEvent()->start_time, $localEvent->getEvent()->rrule, true);
 			
@@ -2031,13 +2038,21 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //			'is_organizer'=>false
 //		));
 		
+		GO::debug("Creating event copy for ".$participant->name);
+		
 		//create event in participant's default calendar if the current user has the permission to do that
 		$calendar = $participant->getDefaultCalendar();
 		if ($calendar && $calendar->userHasCreatePermission()){
 			
-			$existing = GO_Calendar_Model_Event::model()->findSingleByAttributes(array('calendar_id'=>$calendar->id, 'uuid'=>$this->uuid));
+			//find if an event for this exception already exists.
+			$exceptionDate = $this->exception_for_event_id>0 ? $this->start_time : false;			
+			$existing = GO_Calendar_Model_Event::model()->findByUuid($this->uuid, 0, $calendar->id, $exceptionDate);
+			
+			
 			
 			if(!$existing){
+				
+			
 				//ignore acl permissions because we allow users to schedule events directly when they have access through
 				//the special freebusypermissions module.			
 				$participantEvent = $this->duplicate(array(
@@ -2048,6 +2063,20 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						),
 								true,true);			
 				return $participantEvent;
+			}else
+			{
+				GO::debug("Found existing event: ".$existing->id.' - '.$existing->getAttribute('start_time', 'formatted'));
+				
+					
+				//correct errors that somehow occurred.
+				$attributes = $this->getAttributeSelection(array('name','start_time','end_time','rrule','repeat_end_time','location','description','private'), 'raw');
+				$existing->setAttributes($attributes, false);
+				if($existing->isModified()){
+					$existing->updatingRelatedEvent=true;
+					$existing->save(true);
+				}
+				
+				return $existing;
 			}
 			
 		}

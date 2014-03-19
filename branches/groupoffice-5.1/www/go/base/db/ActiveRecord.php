@@ -320,11 +320,22 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * Compares this ActiveRecord with $record.
-	 * @param GO_Base_Db_ActiveRecord $record record to compare to
+	 * @param GO_Base_Db_ActiveRecord $record record to compare to or an array of records
 	 * @return boolean whether the active records are the same database row.
 	 */
 	public function equals($record) {
-		   return $this->tableName()===$record->tableName() && $this->getPk()===$record->getPk();
+		
+		if(!is_array($record)){
+			$record=array($record);
+		}
+		
+		foreach($record as $r){
+		   if($this->tableName()===$r->tableName() && $this->getPk()===$r->getPk())
+			 {
+				 return true;
+			 }
+		}
+		return false;
 	}
 	
 	/**
@@ -1023,7 +1034,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return $tableAlias.'.*';
 		
 		foreach($this->columns as $name=>$attr){
-			if(isset($attr['gotype']) && $attr['gotype']!='blob' && $attr['gotype']!='textarea')
+			if(isset($attr['gotype']) && $attr['gotype']!='blob' && $attr['gotype']!='textarea'  && $attr['gotype']!='html')
 				$fields[]=$name;
 		}
 		
@@ -1693,7 +1704,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			arsort($criteriaObjectParams);	
 			
 			foreach($criteriaObjectParams as $param=>$value){
-				$sql = preg_replace('/'.$param.'([^0-9])/', '"'.$value[0].'"$1', $sql);
+				$sql = preg_replace('/'.$param.'([^0-9])?/', '"'.$value[0].'"$1', $sql);
 				
 //				$sql = str_replace($param, '"'.$value[0].'"', $sql);									
 			}
@@ -1705,11 +1716,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			arsort($params['bindParams']);			
 			
 			foreach($params['bindParams'] as $key=>$value){	
-				$sql = preg_replace('/:'.$key.'[^0-9]/', '"'.$value.'"', $sql);
+				$sql = preg_replace('/:'.$key.'([^0-9])?/', '"'.$value.'"$1', $sql);
 			}
 		}
 		
-		GO::debug($sql);				
+		GO::debug($sql);		
 	}
 	
 	private function _appendAclJoin($findParams, $aclJoinProps){		
@@ -1998,7 +2009,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			$findParams
 					->mergeWith($r['findParams'])		
-					->ignoreAcl()->debugSql()
+					->ignoreAcl()
 					->relation($name);
 			
 			//the extra find params supplied with call are merged last so that you 
@@ -3408,7 +3419,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 		GO::setMaxExecutionTime(180); // Added this because the deletion of all relations sometimes takes a lot of time (3 minutes) 
 		
-		//GO::debug("Delete ".$this->className()." pk: ".$this->pk);
+		//GO::debug("Delete ".$this->className()." pk: ".$this->pk);		
 		
 		if($this->isNew)
 			return true;
@@ -3487,7 +3498,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		//
 		// messagesCustomer and messagesNotes are just subsets of the messages 
 		// relation that must all be deleted anyway. We don't want to clear foreign keys first and then fail to delete them.
-	
+		
 		foreach($r as $name => $attr){
 			if(empty($attr['delete'])){
 				if($attr['type']==self::HAS_ONE){

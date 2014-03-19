@@ -278,6 +278,9 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$searchFields = GO_Addressbook_Model_Contact::model()->getFindSearchQueryParamFields();
 		$searchFields[]="c.name";
 		
+		$selectFields = GO_Addressbook_Model_Contact::model()->getDefaultFindSelectFields().
+						',c.name AS company_name, addressbook.name AS ab_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name';
+		
 		$storeParams = GO_Base_Db_FindParams::newInstance()
 			->export("contact")
 			->joinAclFieldTable()
@@ -288,10 +291,10 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	 			'foreignField'=>'id', //defaults to primary key of the remote model
 	 			'localField'=>'company_id', //defaults to "id"
 	 			'tableAlias'=>'c', //Optional table alias
-	 			'type'=>'LEFT' //defaults to INNER,
+	 			'type'=> 'LEFT' //defaults to INNER,
 	 			
 			))			
-			->select('t.*,c.name AS company_name, addressbook.name AS ab_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name');
+			->select($selectFields);
 	
 		return $storeParams;
 		
