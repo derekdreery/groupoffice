@@ -1509,22 +1509,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						
 						
 						$linkedModels[]=$linkModel;
-
-						//we need this just to display a unified name
-//						$searchCacheModel = $linkModel->getCachedSearchRecord();
-
-//						$response['autolink_items'][] = '<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
-//												$tag['model_id'].');">'.$searchCacheModel->name.'</span>';
-						
-//						$response['htmlbody']='<div class="em-autolink-message">'.
-//										sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
-//														$tag['model_id'].');">'.$searchCacheModel->name.'</span>').'</div>'.
-//										$response['htmlbody'];
 					}
-//				}
+
 			}
 		}
-//		}
 
 		return $linkedModels;
 	}
@@ -1540,13 +1528,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 */
 	private function _handleAutoContactLinkFromSender(GO_Email_Model_ImapMessage $imapMessage, $linkedModels) {
 		
-//		$linkedModels = array();
-		
 		if(GO::modules()->addressbook && GO::modules()->savemailas && !empty(GO::config()->email_autolink_contacts)){
-			
-//			if(!isset($response['autolink_items']))
-//				$response['autolink_items'] = array();
-			
+
 			$from = $imapMessage->from->getAddress();
 
 			$stmt = GO_Addressbook_Model_Contact::model()->findByEmail($from['email'], GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->limit(1));
@@ -1554,14 +1537,6 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			
 			if($contact && !$contact->equals($linkedModels)){
 				GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $contact);
-
-//				$response['htmlbody']='<div class="em-autolink-message">'.
-//								sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, '.
-//												$contact->id.');">'.$contact->name.'</div>').
-//								$response['htmlbody'];
-				
-//				$response['autolink_items'][] = '<span class="em-autolink-link" onclick="GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, '.
-//												$contact->id.');">'.$contact->name.'</span>';
 				
 				$linkedModels[]=$contact;
 			}
