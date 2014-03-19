@@ -417,34 +417,6 @@ if(count($load_modules)) {
 	 */
 	$GO_SCRIPTS_JS='';
 	
-	//START FOR BACKWARDS COMPAT. REMOVE WHEN BILLING MODULE IS REFACTORED.	
-	$folder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'customexports');
-	$ce=array();
-	if($folder->exists()){
-
-		//$GLOBALS['GO_CONFIG']=$GO_CONFIG=\GO::config();
-
-		require_once(\GO::config()->root_path.'Group-Office.php');
-		require_once(\GO::config()->root_path.'classes/export/export_query.class.inc.php');
-
-		$files = $folder->ls();
-		while($file = array_shift($files)){
-			require_once($file->path());
-			$names = explode('.', $file->name());
-
-			$cls = new $names[0];
-
-			if(!isset($ce[$cls->query]))
-				$ce[$cls->query]=array();
-
-			$ce[$cls->query][]=array('name'=>$cls->name, 'cls'=>$names[0]);
-		}
-	}
-
-	$GO_SCRIPTS_JS.='GO.customexports='.json_encode($ce).';';
-	//END FOR BACKWARDS COMPAT. REMOVE WHEN BILLING MODULE IS REFACTORED.
-	
-	
 	foreach($load_modules as $module) {
 		if($module->permissionLevel) {
 			if(file_exists($module->moduleManager->path().'scripts.inc.php')) {
