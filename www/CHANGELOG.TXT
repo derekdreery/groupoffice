@@ -1,3 +1,4 @@
+- Fixed duplicate linking with experimental auto_link_contacts enabled.
 - Updated SabreDAV to version 1.8.9
 - Billing: group headers were printed after first group item.
 - Mark as unread was not possible anymore with a shared account
