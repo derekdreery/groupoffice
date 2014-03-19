@@ -351,7 +351,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 		
 		
-		if(!$this->isNew && $this->updateRelatedParticipants && $this->isModified('status')){
+		if(!$wasNew && $this->updateRelatedParticipants && $this->isModified('status')){
 			$stmt = $this->getRelatedParticipants();
 			
 			foreach($stmt as $participant){
