@@ -173,7 +173,8 @@ GO.addressbook.ContactsGrid = function(config){
 		},{
 			header: GO.addressbook.lang.addressbook,
 			dataIndex: 'ab_name',
-			hidden:true
+			hidden:true,
+			sortable:false
 		},
 		{
 			header: GO.lang.strMtime,
