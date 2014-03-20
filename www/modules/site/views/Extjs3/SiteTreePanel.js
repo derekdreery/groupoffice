@@ -20,6 +20,7 @@ GO.site.SiteTreePanel = function (config){
 	}, this);
 
 	Ext.applyIf(config, {
+		ddGroup:'site-tree',
 		enableDD:true,
 		layout:'fit',
 		split:true,
@@ -118,6 +119,9 @@ Ext.extend(GO.site.SiteTreePanel, Ext.tree.TreePanel,{
 	// When clicked on a treenode
 	onTreeNodeClick: function(node,e){
 		node.select();
+		
+		GO.site.currentSiteId=node.attributes.site_id;
+		
 		return this.getNodeObject(node).click(node,e);
 	},
 	

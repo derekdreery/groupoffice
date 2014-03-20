@@ -28,6 +28,18 @@ Ext.override(Ext.Panel,{
 	})
 });
 
+Ext.override(Ext.form.TextArea,{
+	insertAtCursor: function(v) {
+		var document_id = this.getEl().id;
+		var text_field = document.getElementById(document_id);
+		var startPos = text_field.selectionStart;
+		var endPos = text_field.selectionEnd;
+		text_field.value = text_field.value.substring(0, startPos) + v + text_field.value.substring(endPos, text_field.value.length); 
+		this.el.focus();
+		text_field.setSelectionRange(endPos+v.length, endPos+v.length);
+	}
+});
+
 Ext.override(Ext.grid.Column,{
 	renderer:function(value, metaData, record, rowIndex, colIndex, store){
 		//console.log(this);

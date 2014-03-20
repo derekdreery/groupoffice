@@ -35,7 +35,7 @@
  * @property String $localizedName The localized human friendly name of this model.
  * @property int $permissionLevel @see \GO\Base\Model\Acl for available levels. Returns -1 if no aclField() is set in the model.
  * 
- * @property \GO\Files\Model\Folder $filesFolder The folder model that belongs to this model if hasFiles is true.
+ * @property GO\Files\Model\Folder $filesFolder The folder model that belongs to this model if hasFiles is true.
  */
 
 

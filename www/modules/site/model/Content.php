@@ -296,7 +296,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 					'hasChildren' => $hasChildren,
 					'children'=> $hasChildren ? $this->getChildrenTree() : array(),
 					'text' => $this->title,
-					'qtip'=>'Slug: '.$this->slug
+					'qtip'=>'Drag me to the editor to create a link.'
 			);
 	 }
 	 
