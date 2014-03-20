@@ -155,7 +155,7 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 	
 	setRenderers : function() {
 		for (var i=0; i<this.editorGridParams.gridColumns.length; i++) {
-			if (this.editorGridParams.gridColumns[i].datatype=='GO_Customfields_Customfieldtype_Checkbox') {
+			if (this.editorGridParams.gridColumns[i].datatype=='GO\\Customfields\\Customfieldtype\\Checkbox') {
 				this.editorGridParams.gridColumns[i].renderer = function(v) {
 					if (v==0 || v==false)
 						return GO.lang.cmdNo;

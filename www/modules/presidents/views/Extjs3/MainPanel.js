@@ -96,7 +96,7 @@ GO.linkHandlers["GO\\Presidents\\Model\\President"]=function(id){
 	return GO.presidents.linkWindow;
 }
 
-GO.linkPreviewPanels["GO_Presidents_Model_President"]=function(config){
+GO.linkPreviewPanels["GO\\Presidents\\Model\\President"]=function(config){
 	config = config || {};
 	return new GO.presidents.PresidentPanel(config);
 }

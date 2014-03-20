@@ -154,7 +154,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		
 		if (GO.files) {
 			config.tbar.add(this.fileBrowseButton = new GO.files.FileBrowserButton({
-				model_name:"GO_Site_Model_Site"
+				model_name:"GO\\Site\\Model\\Site"
 			}));
 		}
 		

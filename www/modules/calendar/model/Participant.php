@@ -355,7 +355,7 @@ class Participant extends \GO\Base\Db\ActiveRecord {
 	protected function afterSave($wasNew) {
 		
 		
-		if(!$this->isNew && $this->updateRelatedParticipants && $this->isModified('status')){
+		if(!$wasNew && $this->updateRelatedParticipants && $this->isModified('status')){
 			$stmt = $this->getRelatedParticipants();
 			
 			foreach($stmt as $participant){

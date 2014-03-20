@@ -45,8 +45,8 @@ class DeleteExpiredLinks extends AbstractCron {
     /**
      * The code that needs to be called when the cron is running
      *
-     * @param GO_Base_Cron_CronJob $cronJob
-     * @param GO_Base_Model_User $user
+     * @param GO\Base\Cron\CronJob $cronJob
+     * @param GO\Base\Model\User $user
      */
     public function run(GO\Base\Cron\CronJob $cronJob, GO\Base\Model\User $user = null)
     {

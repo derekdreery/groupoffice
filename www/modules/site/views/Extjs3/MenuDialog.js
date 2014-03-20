@@ -12,8 +12,7 @@
  */
  
 GO.site.MenuDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
-	
-//	customFieldType : "GO_Site_Model_Menu",
+
 	siteId : 0,
 	
 	initComponent : function(){

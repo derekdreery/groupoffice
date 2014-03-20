@@ -242,44 +242,6 @@ class LocalEvent extends \GO\Base\Model {
 		$this->_calendarNames[] = $event->getCalendar()->name;
 		$this->_backgroundColor = 'FFFFFF';
 		
-		//append start_time for recurring events.
-////		$merge_index = $current_event['uuid'].'-'.$current_event['start_time'];
-////		
-////		
-////		if (array_key_exists($merge_index,$uuid_array)) {
-////			
-////			$uuid_array[$merge_index][] = $event_nr;
-////			if (count($uuid_array[$merge_index])==2) {
-////				$merged_event_nr = $uuid_array[$merge_index][0];
-////				
-////				$chosen_events[$merged_event_nr]['background'] = 'FFFFFF';
-////				$chosen_events[$merged_event_nr]['username'] = '';//$lang['calendar']['non_selected'];
-////				
-////				$name_exploded = explode('(',$chosen_events[$merged_event_nr]['name']);
-////				if (count($name_exploded)>1) array_pop($name_exploded);
-////				$chosen_events[$merged_event_nr]['name'] = implode('(',$name_exploded);
-////				$chosen_events[$merged_event_nr]['name'] .= ' ('.String::get_first_letters($calendar_names[$chosen_events[$merged_event_nr]['calendar_id']]).')';
-////			}
-////			if (count($uuid_array[$merge_index])>=2) {
-////				$merged_event_nr = $uuid_array[$merge_index][0];
-////				
-////				$chosen_events[$merged_event_nr]['calendar_name'] .= '; '.$calendar_names[$current_event['calendar_id']];
-////				$chosen_events[$merged_event_nr]['name'] = substr($chosen_events[$merged_event_nr]['name'],0,-1);
-////				$chosen_events[$merged_event_nr]['name'] .= ','.String::get_first_letters($calendar_names[$current_event['calendar_id']]).')';
-////				//$chosen_events[$merged_event_nr]['name'] .= ', '.$participating_calendar['name'];
-////				//if ($current_event['invitation_uuid']=='') {
-////					//$chosen_events[$merged_event_nr]['username'] = $GO_USERS->get_user_realname($current_event['user_id']);
-////					//$chosen_events[$merged_event_nr]['num_participants']++;
-////				//}
-////				return true;
-////			}
-////		} else {
-////			$uuid_array[$merge_index] = array($event_nr);
-////		}
-//		
-//		return $response;
-		
-		
 	}
 
 	/**

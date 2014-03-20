@@ -71,7 +71,7 @@ class FindParams{
 	 * You can save it with ->export('name');
 	 * 
 	 * @param string $name
-	 * @return GO_Base_Db_FindParams
+	 * @return \GO\Base\Db\FindParams
 	 */
 	public static function loadExportFindParams($name){
 		return GO::session()->values[$name]['findParams'];
