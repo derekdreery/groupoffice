@@ -92,7 +92,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 	
 	public function getParentslug(){
 		if($this->isNew){
-			return $this->parent ? $this->parent->slug.'/' : '';
+			return $this->parent && !empty($this->parent->slug) ? $this->parent->slug.'/' : '';
 		}  else {		
 			if(($pos = strrpos($this->slug, "/"))){
 				return substr($this->slug,0, $pos+1);
