@@ -42,7 +42,7 @@ class NoteController extends \GO\Base\Controller\AbstractJsonController {
 
 		if ($model->save()) {
 			if (GO::modules()->files) {
-				$f = new \GO\Files\Controller\Folder();
+				$f = new \GO\Files\Controller\FolderController();
 				$response = array(); //never used in processAttachements?
 				$f->processAttachments($response, $model, $params);
 			}
