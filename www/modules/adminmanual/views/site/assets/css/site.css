@@ -7,6 +7,10 @@ body{
 	background-color:white;
 }
 
+.container .jumbotron {
+border-radius: 0px;
+}
+
 
 h3{
 	font-size: 20px;
@@ -121,3 +125,38 @@ blockquote p:last-child {
 	}
 }
 
+
+
+.tile{
+	padding:20px;
+	height:120px;
+	color:white;
+}
+
+.tile a{
+	color:white;
+	font-size: 120%;
+	line-height:120%;
+	display:block;
+	margin-bottom:10px;
+}
+
+.tile.blue{
+		background-color:#009ac7;
+}
+
+.tile.green{
+		background-color:#78a22e;
+}
+.tile.orange{
+		background-color:#f8971d;
+}
+
+.tile.grey{
+		background-color:#eee;
+		color:black;
+}
+
+.tile.grey a{
+	color:black;
+}

@@ -9,6 +9,12 @@ echo $breadcrump->render();
 
 
 <div class="row">
+	
+	<?php
+	if($content->hasChildren()){
+	?>
+	
+	
   <div class="col-md-3">
 			
 			<div data-spy="affix" data-offset-top="100" class="panel panel-default toc">
@@ -29,8 +35,18 @@ echo $breadcrump->render();
 			</div>
 	
 	</div>
+	
+	
 
 	<div class="col-md-9">
+		
+	<?php
+	}  else {
+		echo '<div class="col-md-12">';
+	}
+	?>
+		
+		
 
 		<?php
 		
