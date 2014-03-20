@@ -132,10 +132,12 @@ class SiteController extends \GO\Base\Controller\AbstractJsonController {
 		echo  '<pre style="padding:10px; font-family: \'Lucida Console\', Monaco, monospace;">
 			
 Links:
-1. Drag and drop images or files from the file manager 
+1. Paste images from the clipboard to insert them.
+
+2. Drag and drop images or files from the file manager 
    to the content editor to insert them.
 
-2. Drag and drop content items from the tree to 
+3. Drag and drop content items from the tree to 
    link to those pages.
 
 Markdown syntax:
