@@ -24,8 +24,6 @@ class SettingController extends \GO\Base\Controller\AbstractController {
 		$response['data']['task_name_template'] = \GO\Base\Model\AbstractUserDefaultModel::getNameTemplate("GO\Tasks\Model\Tasklist");
 		$response['data']['calendar_name_template'] = \GO\Base\Model\AbstractUserDefaultModel::getNameTemplate("GO\Calendar\Model\Calendar");
 		
-//		$GLOBALS['GO_EVENTS']->fire_event('load_global_settings',array(&$response));
-
 		$response['success']=true;
 		return $response;
 	}

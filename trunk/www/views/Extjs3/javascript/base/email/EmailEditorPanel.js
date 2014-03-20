@@ -29,7 +29,7 @@
 	protected function afterLoad(&$response, &$model, &$params) {
 		
 		// create message model from client's content field, turned into HTML format
-		$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($model->content);
+		$message = \GO\Email\Model\SavedMessage::model()->createFromMimeData($model->content);
 	
 		$response['data'] = array_merge($response['data'], $message->toOutputArray());
 

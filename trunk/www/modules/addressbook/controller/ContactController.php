@@ -282,6 +282,9 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 		
 		$searchFields = \GO\Addressbook\Model\Contact::model()->getFindSearchQueryParamFields();
 		$searchFields[]="c.name";
+
+		$selectFields = \GO\Addressbook\Model\Contact::model()->getDefaultFindSelectFields().
+						',c.name AS company_name, addressbook.name AS ab_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name';
 		
 		$storeParams = \GO\Base\Db\FindParams::newInstance()
 			->export("contact")
@@ -293,10 +296,10 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 	 			'foreignField'=>'id', //defaults to primary key of the remote model
 	 			'localField'=>'company_id', //defaults to "id"
 	 			'tableAlias'=>'c', //Optional table alias
-	 			'type'=>'LEFT' //defaults to INNER,
+	 			'type'=> 'LEFT' //defaults to INNER,
 	 			
 			))			
-			->select('t.*,c.name AS company_name, addressbook.name AS ab_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name');
+			->select($selectFields);
 	
 		return $storeParams;
 		
@@ -539,10 +542,6 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 		GO\Base\Util\Http::outputDownloadHeaders($tmpFile);
 		
 		echo $tmpFile->getContents();
-//		
-//		$abController = new GO_Addressbook_Controller_Contact();
-//		$response = $abController->run('importVCard', array('file'=>$tmpFile->path(),'readOnly'=>true), false, true);
-//		echo json_encode($response);
 
 	}
 	

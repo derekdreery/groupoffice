@@ -30,7 +30,7 @@ GO.users.SelectSettingPanels = Ext.extend(Ext.Panel,{
 		
 		this.items.push(new GO.form.HtmlComponent({html:'<br /><h1>'+GO.users.lang.show_addresslists_panel+'</h1>'}));
 		
-		// This item is saved in the GO_settings table as "globalsettings_show_tab_addresslist".
+		// This item is saved in the go_settings table as "globalsettings_show_tab_addresslist".
 		this.items.push({
 			xtype:'xcheckbox',
 			boxLabel: GO.users.lang.addresslist_panel,

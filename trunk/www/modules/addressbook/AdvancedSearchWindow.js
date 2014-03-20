@@ -37,7 +37,7 @@ GO.addressbook.AdvancedSearchWindow = function(config){
 			layout:'border',
 			items:[this._contactsQueryPanel = new GO.query.QueryPanel({
 					region:'center',
-					modelName:'GO_Addressbook_Model_Contact',
+					modelName:'GO\\Addressbook\\Model\\Contact',
 					modelAttributesUrl:GO.url('addressbook/contact/attributes')
 				}), this._contactsQueriesGrid = new GO.query.SavedQueryGrid({
 					region: 'west',
@@ -51,7 +51,7 @@ GO.addressbook.AdvancedSearchWindow = function(config){
 			items:[this._companiesQueryPanel = new GO.query.QueryPanel({			
 					region:'center',
 					layout:'fit',
-					modelName:'GO_Addressbook_Model_Company',
+					modelName:'GO\\Addressbook\\Model\\Company',
 					modelAttributesUrl:GO.url('addressbook/company/attributes')
 				}), this._companiesQueriesGrid = new GO.query.SavedQueryGrid({
 					region: 'west',
@@ -69,7 +69,7 @@ GO.addressbook.AdvancedSearchWindow = function(config){
 		config.buttons=[{
 			text: GO.lang['cmdSave'],
 			handler: function(){
-				if(this._getModelName()=='GO_Addressbook_Model_Company')
+				if(this._getModelName()=='GO\\Addressbook\\Model\\Company')
 					this._companiesQueriesGrid.showSavedQueryDialog();
 				else
 					this._contactsQueriesGrid.showSavedQueryDialog();
@@ -129,10 +129,10 @@ Ext.extend(GO.addressbook.AdvancedSearchWindow, GO.Window, {
 	_getModelName : function() {
 		switch (this.getDatatype()) {
 			case 'contacts':
-				return 'GO_Addressbook_Model_Contact';
+				return 'GO\\Addressbook\\Model\\Contact';
 				break;
 			case 'companies':
-				return 'GO_Addressbook_Model_Company';
+				return 'GO\\Addressbook\\Model\\Company';
 				break;
 			default:
 				return false;

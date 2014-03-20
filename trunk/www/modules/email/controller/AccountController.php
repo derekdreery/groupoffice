@@ -272,7 +272,12 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 						->ignoreAdminGroup()
 						->order('order', 'DESC');
 
-			$stmt = \GO\Email\Model\Account::model()->find($findParams);
+
+			if(isset($params['permissionLevel'])){
+				$findParams->permissionLevel($params['permissionLevel']);
+			}
+			
+			$stmt =  \GO\Email\Model\Account::model()->find($findParams);
 
 			while ($account = $stmt->fetch()) {
 
@@ -576,7 +581,7 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 
 			$targetAccountModel = \GO\Email\Model\Account::model()->findByPk($params['targetAccountId']);
 
-			if($targetAccountModel->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
+			if(!$targetAccountModel->checkPermissionLevel(\GO\Base\Model\Acl::CREATE_PERMISSION))
 			  throw new \GO\Base\Exception\AccessDenied();
 
 			$targetImapConnection = $targetAccountModel->openImapConnection($params["targetMailboxPath"]);

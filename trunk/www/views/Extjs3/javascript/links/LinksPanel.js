@@ -105,7 +105,7 @@ GO.grid.LinksPanel = function(config){
 		}else
 		{
 			//dropped from tree		  
-			selections = ['GO_Base_Model_LinkFolder:'+e.data.node.id.substr(10)];
+			selections = ['GO\\Base\\Model\\LinkFolder:'+e.data.node.id.substr(10)];
 		}
 		
 		this.moveSelections(selections, target);

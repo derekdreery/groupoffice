@@ -18,7 +18,7 @@ class LabelController extends AbstractModelController
      * Get store params
      *
      * @param array $params
-     * @return GO_Base_Db_FindParams
+     * @return \GO\Base\Db\FindParams
      */
     protected function getStoreParams($params)
     {

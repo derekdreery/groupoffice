@@ -3,13 +3,16 @@ GO.modules.ModulePermissionsWindow = Ext.extend(GO.Window,{
 	module_id : '',
 	initComponent : function(){
 		this.permissionsTab = new GO.grid.PermissionsPanel({
-					title : GO.users.lang.useModule
+					title : GO.users.lang.useModule,
+					levels:[
+						GO.permissionLevels.read,
+						GO.permissionLevels.manage,
+					]
 				});
 				
 		Ext.apply(this,{
 			title : GO.lang['strPermissions'],
 			layout : 'fit',
-			modal : false,
 			height : 600,
 			width : 440,
 			modal:true,

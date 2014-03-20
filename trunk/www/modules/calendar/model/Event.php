@@ -47,6 +47,8 @@
  */
 
 namespace GO\Calendar\Model;
+
+use GO;
 use Sabre;
 use DateTime;
 
@@ -713,9 +715,15 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		if(!$this->dontSendEmails && $this->hasModificationsForParticipants()){			
 			$url = \GO::createExternalUrl('calendar', 'showEventDialog', array('event_id' => $this->id));		
 
+			//send updates to the resource admins
+			$adminUserIds=array();
 			$stmt = $this->calendar->group->admins;
-			while($user = $stmt->fetch()){
-				if($user->id!=\GO::user()->id){
+
+			while($adminUser = $stmt->fetch()){
+				$adminUserIds[] = $adminUser->id;
+				if($adminUser->id!=GO::user()->id){
+					
+				
 					if($wasNew){
 						$body = sprintf(\GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
 										. $this->toHtml()
@@ -734,7 +742,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					$message = \GO\Base\Mail\Message::newInstance(
 										$subject
 										)->setFrom(\GO::user()->email, \GO::user()->name)
-										->addTo($user->email, $user->name);
+										->addTo($adminUser->email, $adminUser->name);
 
 					$message->setHtmlAlternateBody($body);					
 
@@ -743,8 +751,10 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			}
 			
 			
-			//send update to user
-			if($this->user_id!=\GO::user()->id){
+			//send update to user that booked the resource
+			if($this->user_id!=GO::user()->id
+						&& in_array(GO::user()->id,$adminUserIds)
+				) {
 				if($this->isModified('status')){				
 					if($this->status==Event::STATUS_CONFIRMED){
 						$body = sprintf(\GO::t('your_resource_accepted_mail_body','calendar'),\GO::user()->name,$this->calendar->name).'<br /><br />'
@@ -762,7 +772,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					}
 				}else
 				{
-					$body = sprintf(\GO::t('your_resource_modified_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
+					$body = sprintf(GO::t('your_resource_modified_mail_body','calendar'),GO::user()->name,$this->calendar->name).'<br /><br />'
 								. $this->toHtml();
 //								. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
 					$subject = sprintf(\GO::t('your_resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
@@ -878,8 +888,6 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	 * @return LocalEvent  
 	 */
 	public function findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents=false) {
-
-		\GO::debug("findCalculatedForPeriod ".date('c', $periodStartTime)." - ".date('c', $periodEndTime));
 		
 		$stmt = $this->findForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents);
 
@@ -963,7 +971,6 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$this->_calculatedEvents[$event->start_time.'-'.$event->name.'-'.$event->id] = $localEvent;
 		} else {
 			
-			\GO::debug("Calculating recurrences for event: ".$event->id);
 			$rrule = new \GO\Base\Util\Icalendar\Rrule();
 			$rrule->readIcalendarRruleString($localEvent->getEvent()->start_time, $localEvent->getEvent()->rrule, true);
 			
@@ -2040,13 +2047,18 @@ class Event extends \GO\Base\Db\ActiveRecord {
 //			'is_organizer'=>false
 //		));
 		
+		GO::debug("Creating event copy for ".$participant->name);
+		
 		//create event in participant's default calendar if the current user has the permission to do that
 		$calendar = $participant->getDefaultCalendar();
 		if ($calendar && $calendar->userHasCreatePermission()){
 			
-			$existing = Event::model()->findSingleByAttributes(array('calendar_id'=>$calendar->id, 'uuid'=>$this->uuid));
+			//find if an event for this exception already exists.
+			$exceptionDate = $this->exception_for_event_id>0 ? $this->start_time : false;			
+			$existing = Event::model()->findByUuid($this->uuid, 0, $calendar->id, $exceptionDate);
 			
-			if(!$existing){
+			if(!$existing){				
+			
 				//ignore acl permissions because we allow users to schedule events directly when they have access through
 				//the special freebusypermissions module.			
 				$participantEvent = $this->duplicate(array(
@@ -2057,6 +2069,20 @@ class Event extends \GO\Base\Db\ActiveRecord {
 						),
 								true,true);			
 				return $participantEvent;
+			}else
+			{
+				GO::debug("Found existing event: ".$existing->id.' - '.$existing->getAttribute('start_time', 'formatted'));
+				
+					
+				//correct errors that somehow occurred.
+				$attributes = $this->getAttributeSelection(array('name','start_time','end_time','rrule','repeat_end_time','location','description','private'), 'raw');
+				$existing->setAttributes($attributes, false);
+				if($existing->isModified()){
+					$existing->updatingRelatedEvent=true;
+					$existing->save(true);
+				}
+				
+				return $existing;
 			}
 			
 		}
