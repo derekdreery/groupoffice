@@ -1,3 +1,6 @@
+19-03-2014 5.0.48
+- 5.0.47 had an invalid folder www in it.
+
 19-03-2014 5.0.47
 - Billing: able to turn off reference in billing PDF template
 - Calendar: resource application and confirmation workflow now also works in shared calendars
