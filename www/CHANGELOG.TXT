@@ -1,4 +1,5 @@
 - Custom fields: File custom field maximum number of characters: 255.
+- Calendar: Improved workflow of resource allocation by resource group admins.
 
 19-03-2014 5.0.48
 - 5.0.47 had an invalid folder www in it.
