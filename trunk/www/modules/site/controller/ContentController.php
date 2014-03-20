@@ -3,6 +3,9 @@
 
 namespace GO\Site\Controller;
 
+use GO\Site\Model\Site;
+
+
 
 class ContentController extends \GO\Base\Controller\AbstractJsonController {
 	
@@ -37,7 +40,7 @@ class ContentController extends \GO\Base\Controller\AbstractJsonController {
 		if(empty($params['siteId']))
 			Throw new \Exception('No Site ID given!');
 		
-		$site = \GO\Site\Model\Site::model()->findByPk($params['siteId']);
+		$site = Site::model()->findByPk($params['siteId']);
 		
 		if(!$site)
 			Throw new \Exception('No site found with the following id: '.$id);
@@ -142,7 +145,7 @@ class ContentController extends \GO\Base\Controller\AbstractJsonController {
 		if(!isset($params['node']))
 			return $response;
 		
-		$site = \GO\Site\Model\Site::model()->findByPk($params['site_id']);
+		$site = Site::model()->findByPk($params['site_id']);
 		
 		$args = explode('_', $params['node']);
 		
@@ -175,5 +178,31 @@ class ContentController extends \GO\Base\Controller\AbstractJsonController {
 		
 		echo $this->renderJson($response);
 	}
+
+	public function actionPaste($site_id, $filename, $filetype){
+		
+		$site = Site::model()->findByPk($site_id);
+		
+		
+		$type = explode('/', $filetype);
+		$extension=$type[1];
+		
+		
+		$_FILES['pastedFile']['name']=$filename.'.'.$extension;
+		
+		$file = $site->filesFolder->addUploadedFile($_FILES["pastedFile"]);	
+			
+		
+		$response = new \GO\Base\Data\JsonResponse(array(
+				'success'=>true,
+				'file_id'=>$file->id,
+				'path'=>substr($file->path,strlen($site->filesFolder->path)+1),
+				'isImage'=>$file->isImage()
+		));
+		
+		echo $response;
+		
+		
+	}
+	
 }
-?>
