@@ -252,16 +252,21 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 		}
 	},
 	uploadFile: function(file) {
+		
+		var progress = Ext.MessageBox.progress("Uploading", "pasted file");
+		
 		var xhr = new XMLHttpRequest();
 
 		xhr.upload.onprogress = function(e) {
 			var percentComplete = (e.loaded / e.total) * 100;
-			console.log("Uploaded: " + percentComplete + "%");
+//			console.log("Uploaded: " + percentComplete + "%");
+
+			progress.updateProgress(percentComplete);
 		};
 
 		xhr.onload = function() {
 			if (xhr.status == 200) {
-				alert("Sucess! Upload completed");
+//				alert("Sucess! Upload completed");
 			} else {
 				alert("Error! Upload failed");
 			}
@@ -275,6 +280,8 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 
 		xhr.onreadystatechange = function()
 		{
+			progress.hide();
+			
 			if (xhr.readyState == 4 && xhr.status == 200)
 			{
 				var result = Ext.decode(xhr.responseText);
@@ -304,6 +311,8 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 		formData.append("pastedFile", file);
 
 		xhr.send(formData);
+		
+		
 	},
 	showContentDialog: function(id) {
 		if (!this.contentDialog) {
