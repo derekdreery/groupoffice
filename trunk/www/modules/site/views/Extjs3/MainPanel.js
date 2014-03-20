@@ -28,9 +28,24 @@ GO.site.MainPanel = function(config){
 
 	config.layout='border';
 	
+	
+	this.eastPanel = new Ext.Panel({
+		region:'east',
+		id:'site-cheat-sheet',
+		width:500,
+		collapsible:true,
+		title:'Cheat sheet',
+		autoScroll:true,
+		split:true,
+		autoLoad : {
+        url : GO.url('site/site/cheatSheet')
+    }
+	});
+	
 	config.items=[
 		this.treePanel,
-		this.centerPanel
+		this.centerPanel,
+		this.eastPanel
 	];
 	
 	this.reloadButton = new Ext.Button({
@@ -54,15 +69,15 @@ GO.site.MainPanel = function(config){
 			]
 	});
 	
-	if (GO.files) {
-		this.fileBrowserButton = new GO.files.FileBrowserButton({
-			model_name:"GO\\Site\\Model\\Site"
-		});
-		config.tbar.insertButton(2,this.fileBrowserButton);
-		this.treePanel.on('click', function(node,event){
-			this.fileBrowserButton.setId(node.attributes['site_id']);
-		}, this);
-	}
+//	if (GO.files) {
+//		this.fileBrowserButton = new GO.files.FileBrowserButton({
+//			model_name:"GO\\Site\\Model\\Site"
+//		});
+//		config.tbar.insertButton(2,this.fileBrowserButton);
+//		this.treePanel.on('click', function(node,event){
+//			this.fileBrowserButton.setId(node.attributes['site_id']);
+//		}, this);
+//	}
 	
 	GO.site.MainPanel.superclass.constructor.call(this, config);
 }
