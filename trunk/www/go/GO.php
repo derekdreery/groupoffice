@@ -384,7 +384,7 @@ class GO{
 						}else{
 							if(!isset(GO::session()->values['cacheDriver'])){
 								$cachePref = array(
-										"\\GO\\Base\\Cache\\XCache",
+//										"\\GO\\Base\\Cache\\XCache",
 										"\\GO\\Base\\Cache\\Apc",
 										"\\GO\\Base\\Cache\\Disk"
 								);
