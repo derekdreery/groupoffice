@@ -139,4 +139,8 @@ class Disk implements CacheInterface{
 		if($this->_ttlsDirty)
 			file_put_contents($this->_ttlFile, serialize($this->_ttls));
 	}
+	
+	public function supported() {
+		return true;
+	}
 }

@@ -65,5 +65,9 @@ class None implements CacheInterface{
 	public function flush(){
 	}
 	
+	public function supported() {
+		return true;
+	}
+	
 
 }

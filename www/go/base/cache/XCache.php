@@ -1,4 +1,8 @@
 <?php
+namespace GO\Base\Cache;
+
+use GO;
+
 /*
  * 
  * Copyright Intermesh
@@ -18,16 +22,12 @@
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @package GO.base.cache
  */
-
-namespace GO\Base\Cache;
-
-
-class Apc implements CacheInterface{
+class XCache implements CacheInterface{
 	
 	private $_prefix;
 	
-	public function __construct() {
-		$this->_prefix=\GO::config()->db_name.'-';
+	public function __construct() {		
+		$this->_prefix=GO::config()->db_name.'-';
 	}
 
 	/**
@@ -37,7 +37,7 @@ class Apc implements CacheInterface{
 	 * @param int $ttl Seconds to live
 	 */
 	public function set($key, $value, $ttl=0){
-		return apc_store ($this->_prefix.$key , $value, $ttl );
+		return xcache_set ($this->_prefix.$key , serialize($value), $ttl );
 	}
 	
 	/**
@@ -48,7 +48,14 @@ class Apc implements CacheInterface{
 	 */
 	public function get($key){
 		
-		return apc_fetch($this->_prefix.$key);
+		$v = xcache_get($this->_prefix.$key);
+		
+		if($v){
+			return unserialize($v);
+		}  else {
+			
+			return null;
+		}
 	}
 	
 	/**
@@ -57,18 +64,18 @@ class Apc implements CacheInterface{
 	 * @param string $key 
 	 */
 	public function delete($key){
-		apc_delete($this->_prefix.$key);
+		xcache_unset($this->_prefix.$key);
 	}
 	/**
 	 * Flush all values 
 	 */
 	public function flush(){
-		apc_clear_cache("user");
+		xcache_unset_by_prefix($this->_prefix);
 	}
+	
 	
 	public function supported(){
-		return function_exists("apc_store");
+		return function_exists("xcache_get");
 	}
-	
 
 }

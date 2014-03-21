@@ -369,20 +369,44 @@ class GO{
 	 * 
 	 * @return \GO\Base\Cache\CacheInterface
 	 */
+	/**
+	 * Returns cache driver. Cached items will persist between connections and are
+	 * available to all users. When debug is enabled a dummy cache driver is used
+	 * that caches nothing.
+	 * 
+	 * @return GO_Base_Cache_Interface
+	 */
 	public static function cache(){
 
-		if (!isset(self::$_cache)) {
-			if(\GO::config()->debug || !\GO::isInstalled())
-//			if(!\GO::isInstalled())
-				self::$_cache=new \GO\Base\Cache\None();
-//			Disable apc cache temporarily because it seems to cause the random logouts
-//			elseif(function_exists("apc_store"))
-//				self::$_cache=new \GO\Base\Cache\Apc();
-			else
-				self::$_cache=new \GO\Base\Cache\Disk();
-		}
-		return self::$_cache;
-	}
+        if (!isset(self::$_cache)) {
+            if(GO::config()->debug || !GO::isInstalled()){
+              self::$_cache=new GO_Base_Cache_None();
+						}else{
+							if(!isset(GO::session()->values['cacheDriver'])){
+								$cachePref = array(
+										"\\GO\\Base\\Cache\\XCache",
+										"\\GO\\Base\\Cache\\Apc",
+										"\\GO\\Base\\Cache\\Disk"
+								);
+								foreach($cachePref as $cacheDriver){
+									$cache = new $cacheDriver;
+									if($cache->supported()){
+
+										GO::debug("Using $cacheDriver cache");
+										GO::session()->values['cacheDriver'] = $cacheDriver;
+										self::$_cache=$cache;
+										break;
+									}
+								}
+							}else
+							{
+								$cacheDriver = GO::session()->values['cacheDriver'];
+								self::$_cache = new $cacheDriver;
+							}
+						}
+        }
+        return self::$_cache;
+    }
 
 	/**
 	 *
