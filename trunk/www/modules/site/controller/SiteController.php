@@ -134,8 +134,8 @@ class SiteController extends \GO\Base\Controller\AbstractJsonController {
 Links:
 1. Paste images from the clipboard to insert them.
 Note: Supported in Chrome,Safari and IE 11. 
-In Firefox make sure the editor has focus, then click anywhere OUTSIDE the 
-editor and press CTRL+V.
+In Firefox make sure the editor has focus, then click 
+anywhere OUTSIDE the editor and press CTRL+V.
 
 2. Drag and drop images or files from the file manager 
    to the content editor to insert them.
@@ -160,7 +160,7 @@ for hours.
 
 Here is a Markdown link:
 
-[Group-Office](https://warpedvisionswww.group-office.com), and a literal . 
+[Group-Office](https://www.group-office.com) 
 
 Now some inline markup like *italics*,  **bold**, and 
 `code()`.
