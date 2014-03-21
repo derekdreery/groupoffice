@@ -179,30 +179,6 @@ class ContentController extends \GO\Base\Controller\AbstractJsonController {
 		echo $this->renderJson($response);
 	}
 
-	public function actionPaste($site_id, $filename, $filetype){
-		
-		$site = Site::model()->findByPk($site_id);
-		
-		
-		$type = explode('/', $filetype);
-		$extension=$type[1];
-		
-		
-		$_FILES['pastedFile']['name']=$filename.'.'.$extension;
-		
-		$file = $site->filesFolder->addUploadedFile($_FILES["pastedFile"]);	
-			
-		
-		$response = new \GO\Base\Data\JsonResponse(array(
-				'success'=>true,
-				'file_id'=>$file->id,
-				'path'=>substr($file->path,strlen($site->filesFolder->path)+1),
-				'isImage'=>$file->isImage()
-		));
-		
-		echo $response;
-		
-		
-	}
+	
 	
 }

@@ -8,6 +8,9 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 	submitAction: 'update',
 	setSiteId: function(siteId) {
 		this.form.baseParams.site_id = siteId;
+		
+		
+		this.paster.model_id=siteId;
 
 		if (this.fileBrowseButton) {
 			this.fileBrowseButton.setId(siteId);
@@ -182,7 +185,20 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 			fieldLabel: GO.site.lang.contentContent,
 			listeners: {
 				render: function() {
-					this.editor.getEl().on('paste', this.handlePaste, this);
+					
+					this.paster = new GO.base.upload.Paster({
+						pasteEl: this.editor.getEl(),
+						model_name:'GO\\Site\\Model\\Site',
+						model_id:0, //will be updated in this.setSiteId
+						scope:this,
+						callback:function(paster, result, xhr){
+						
+							var tag;
+							tag = "{site:thumb path=\"" + result.path + "\" lw=\"300\" ph=\"300\"}";
+
+							this.editor.insertAtCursor(tag);
+						}
+					});
 
 					var editor = this.editor;
 
@@ -191,7 +207,6 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 						ddGroup: 'site-tree',
 						notifyDrop: function(dd, e, node) {
 							
-							console.log(node);
 							
 							if(node.node && node.node.attributes.slug){
 								//dragged from content tree
@@ -240,80 +255,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 		];
 		GO.site.ContentPanel.superclass.constructor.call(this, config);
 	},
-	handlePaste: function(e) {
-
-		var bE = e.browserEvent;
-
-		for (var i = 0; i < bE.clipboardData.items.length; i++) {
-			var item = bE.clipboardData.items[i];
-			if (item.kind === "file") {
-				this.uploadFile(item.getAsFile());
-			}
-		}
-	},
-	uploadFile: function(file) {
-		
-		var progress = Ext.MessageBox.progress("Uploading", "pasted file");
-		
-		var xhr = new XMLHttpRequest();
-
-		xhr.upload.onprogress = function(e) {
-			var percentComplete = (e.loaded / e.total) * 100;
-//			console.log("Uploaded: " + percentComplete + "%");
-
-			progress.updateProgress(percentComplete);
-		};
-
-		xhr.onload = function() {
-			if (xhr.status == 200) {
-//				alert("Sucess! Upload completed");
-			} else {
-				alert("Error! Upload failed");
-			}
-		};
-
-		xhr.onerror = function() {
-			alert("Error! Upload failed. Can not connect to server.");
-		};
-
-		var self = this;
-
-		xhr.onreadystatechange = function()
-		{
-			progress.hide();
-			
-			if (xhr.readyState == 4 && xhr.status == 200)
-			{
-				var result = Ext.decode(xhr.responseText);
-
-				var tag;
-
-				if (result.isImage) {
-					tag = "{site:thumb path=\"" + result.path + "\" lw=\"300\" ph=\"300\"}";
-				} else
-				{
-					tag = "{site:link path=\"" + result.path + "\"}" + result.path + "{/site:link}";
-				}
-
-				self.editor.insertAtCursor(tag);
-			}
-		}
-
-		var filename = prompt("Please enter the file name", this.slugField.getValue());
-
-		xhr.open("POST", GO.url('site/content/paste', {
-			site_id: this.form.baseParams.site_id,
-			filename: filename,
-			filetype: file.type
-		}));
-
-		var formData = new FormData();
-		formData.append("pastedFile", file);
-
-		xhr.send(formData);
-		
-		
-	},
+	
 	showContentDialog: function(id) {
 		if (!this.contentDialog) {
 			this.contentDialog = new GO.site.ContentDialog();

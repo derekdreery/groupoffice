@@ -380,7 +380,7 @@ class GO{
 
         if (!isset(self::$_cache)) {
             if(GO::config()->debug || !GO::isInstalled()){
-              self::$_cache=new GO_Base_Cache_None();
+              self::$_cache=new \GO\Base\Cache\None();
 						}else{
 							if(!isset(GO::session()->values['cacheDriver'])){
 								$cachePref = array(

@@ -133,6 +133,9 @@ class SiteController extends \GO\Base\Controller\AbstractJsonController {
 			
 Links:
 1. Paste images from the clipboard to insert them.
+Note: Supported in Chrome,Safari and IE 11. 
+In Firefox make sure the editor has focus, then click anywhere OUTSIDE the 
+editor and press CTRL+V.
 
 2. Drag and drop images or files from the file manager 
    to the content editor to insert them.
@@ -142,11 +145,11 @@ Links:
 
 Markdown syntax:
 
-# Header 1 #
-## Header 2 ##
-### Header 3 ###             (Hashes on right are optional)
-#### Header 4 ####
-##### Header 5 #####
+# Header 1
+## Header 2
+### Header 3
+#### Header 4
+##### Header 5
 
 ## Markdown plus h2 with a custom ID ## {#id-goes-here}
 [Link back to H2](#id-goes-here)
@@ -155,7 +158,9 @@ This is a paragraph, which is text surrounded by whitespace.
 Paragraphs can be on one line (or many), and can drone on 
 for hours.  
 
-Here is a Markdown link to [Warped](http://warpedvisions.org), and a literal . 
+Here is a Markdown link:
+
+[Group-Office](https://warpedvisionswww.group-office.com), and a literal . 
 
 Now some inline markup like *italics*,  **bold**, and 
 `code()`.
