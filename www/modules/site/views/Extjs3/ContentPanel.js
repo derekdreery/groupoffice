@@ -152,7 +152,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 
 		this.titleField = new Ext.form.TextField({
 			name: 'title',
-			width: 300,
+			anchor:'100%',
 			maxLength: 255,
 			allowBlank: false,
 			fieldLabel: GO.site.lang.contentTitle
@@ -160,7 +160,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 
 		this.parentSlug = new Ext.form.TextField({
 			name: 'parentslug',
-			width: 147,
+			flex: 2,
 			maxLength: 255,
 			allowBlank: true,
 			disabled: true
@@ -168,7 +168,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 
 		this.slugField = new Ext.form.TextField({
 			name: 'baseslug',
-			width: 148,
+			flex: 1,
 			maxLength: 255,
 			allowBlank: true,
 			fieldLabel: GO.site.lang.contentSlug
@@ -176,7 +176,8 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 
 		this.completeSlug = new Ext.form.CompositeField({
 			fieldLabel: GO.site.lang.contentSlug,
-			items: [this.parentSlug, this.slugField]
+			items: [this.parentSlug, this.slugField],
+			anchor:'100%'
 		});
 
 		this.titleField.on('change', function(field) {
