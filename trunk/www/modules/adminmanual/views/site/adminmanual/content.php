@@ -2,6 +2,14 @@
 use GO\Site\Widget\TOC;
 use GO\Site\Widget\Breadcrumb;
 
+
+//redirect if we're on the 3rd level because we use anchor tags
+if(strpos($content->slug,'/')){
+	header('Location: '.$content->parent->getUrl().'#'.$content->baseslug, true, 302);
+	exit();
+}
+
+
 $breadcrump = new Breadcrumb(array('content'=>$content));
 echo $breadcrump->render();
 ?>
