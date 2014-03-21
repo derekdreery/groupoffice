@@ -372,7 +372,12 @@ class GO_Base_Module extends GO_Base_Observable {
 					$stmt = $m->find(array(
 							'ignoreAcl'=>true
 					));
-					$stmt->callOnEach('checkDatabase');
+					while ($m = $this->fetch()) {
+						$m->checkDatabase();
+						unset($m);
+					}
+					
+					unset($stmt);
 				}else
 				{
 					echo "No check needed for ".$model->getName()."\n";
