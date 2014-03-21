@@ -52,6 +52,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 	setContentId: function(contentId, parentId) {
 		this.form.baseParams.id = contentId;
 		this.advancedButton.setDisabled(!contentId);
+		this.viewButton.setDisabled(!contentId);
 
 		delete this.form.baseParams.parent_id;
 
@@ -116,13 +117,30 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 			this.showContentDialog(this.form.baseParams.id);
 
 		}, this);
+		
+		
+		
+		this.viewButton = new Ext.Button({
+			iconCls: 'btn-view',
+			itemId: 'view',
+			text: GO.lang.strView,
+			cls: 'x-btn-text-icon',
+			handler : function(){
+				window.open(GO.url('site/content/redirect', {content_id: this.form.baseParams.id}));	
+			},
+			scope:this
+		});
+		
+		
+		
 
 		config.tbar = new Ext.Toolbar({
 //			hideBorders:true,
 			style: 'margin-bottom:10px;',
 			items: [
 				this.saveButton,
-				this.advancedButton
+				this.advancedButton,
+				this.viewButton
 			]
 		});
 
@@ -210,9 +228,9 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 							
 							if(node.node && node.node.attributes.slug){
 								//dragged from content tree
-								var tag = '{site:link slug="' + node.node.attributes.slug + '"}' + node.node.text + '{/site:link}';
+								var markdown = '['+node.node.text+'](slug://' + node.node.attributes.slug + ')';
 
-								editor.insertAtCursor(tag);
+								editor.insertAtCursor(markdown);
 							
 							}else{
 								//dragged from file browser
@@ -227,9 +245,9 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel, {
 									
 									var pos = record.path.indexOf('files/');
 									
-									var tag = '{site:link path="' + record.path.substring(pos,record.path.length)+'"}' +record.name + '{/site:link}';
+									var markdown = '['+record.name+'](file://'+record.path.substring(pos+6,record.path.length)+')';
 									
-									editor.insertAtCursor(tag);
+									editor.insertAtCursor(markdown);
 								}
 								
 								
