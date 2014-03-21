@@ -414,26 +414,43 @@ class Content extends \GO\Base\Db\ActiveRecord{
 		 return parent::beforeSave();
 	 }
 	 
-	 public function getHtml(){
-		 $html =  self::replaceContentTags($this->content);	 
-		 
-				 
-		 $html = MarkdownExtra::defaultTransform($html);
-		 
-		 
-		 $html = $this->replaceMarkdownContentTags($html);
-		 
-		 
-		 $html = $this->replaceAutoLinks($html);
-		 
-		 
-		 //temp fix for tables		 
-		 $html = str_replace('<table>', '<table class="table table-striped">', $html);
-		 
-		 return $html;
-	 }
-	 
-	 private function replaceAutoLinks($html){
+	 public function getHtml() {
+		$html = self::replaceContentTags($this->content);
+
+
+		$site_id = $this->site_id;
+		$html = preg_replace_callback('/slug:\/\/([a-z0-9\-\/]+)/', function($matches) use ($site_id) {
+
+			$content = Content::model()->findBySlug($matches[1], $site_id);
+
+			return $content ? $content->getUrl() : '/404-not-found';
+		}, $html);
+
+		$html = preg_replace_callback('/file:\/\/(.*\.[a-z0-9]{3,4})/', function($matches) use ($site_id) {
+
+
+			return \Site::file($matches[1], false);
+		}, $html);
+
+
+		//temp fix for tables		 
+		$html = str_replace('<table>', '<table class="table table-striped">', $html);
+
+
+
+
+		$html = MarkdownExtra::defaultTransform($html);
+
+
+		$html = $this->replaceMarkdownContentTags($html);
+
+
+		$html = $this->replaceAutoLinks($html);
+
+		return $html;
+	}
+
+	private function replaceAutoLinks($html){
 		 
 		 $al = \Site::config()->autolinks;
 		 

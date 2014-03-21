@@ -1454,5 +1454,20 @@ END;
 	public static function substr($string, $start, $length=null){
 		return function_exists("mb_substr") ? mb_substr($string, $start, $length) : substr($string, $start, $length);
 	}
+	
+	
+	/**
+	 * Encode an url but leave the forward slashes alone
+	 * 
+	 * @param string $str
+	 * @return string
+	 */
+	public static function rawurlencodeWithourSlash($str){
+		$parts = explode('/', $str);
+		
+		$parts = array_map('rawurlencode', $parts);
+		
+		return implode('/', $parts);
+	}
 
 }

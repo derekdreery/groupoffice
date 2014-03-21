@@ -243,11 +243,13 @@ class Site {
 			$folder = new \GO\Base\Fs\Folder(\Site::model()->getPublicPath());
 			
 			$relativePath=str_replace($folder->stripFileStoragePath().'/files/', '', $relativePath);
-			return \Site::model()->getPublicUrl().'files/'.$relativePath;	
+			return \Site::model()->getPublicUrl().'files/'.\GO\Base\Util\String::rawurlencodeWithourSlash($relativePath);	
 		}else{
-			return self::template()->getUrl().$relativePath;
+			return self::template()->getUrl().\GO\Base\Util\String::rawurlencodeWithourSlash($relativePath);
 		}
 	}
+	
+	
 	
 	
 	/**

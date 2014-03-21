@@ -3,11 +3,27 @@
 
 namespace GO\Site\Controller;
 
+use GO;
+use GO\Site\Model\Content;
 use GO\Site\Model\Site;
 
 
 
 class ContentController extends \GO\Base\Controller\AbstractJsonController {
+	
+	
+	/**
+	 * Redirect to the homepage
+	 * 
+	 * @param array $params
+	 */
+	protected function actionRedirect($content_id){
+		
+		$content = Content::model()->findByPk($content_id);
+		
+		header("Location: ".GO::config()->host.'modules/site/index.php?site_id='.$content->site_id.'&slug='.$content->slug);
+		exit();
+	}
 	
 //	/**
 //	 * 
