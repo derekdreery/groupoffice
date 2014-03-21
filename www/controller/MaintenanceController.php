@@ -16,8 +16,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	protected function init() {
 		GO::$disableModelCache=true; //for less memory usage
 		GO::setMaxExecutionTime(0); //allow long runs		
-		ini_set('memory_limit','512M');
+		GO::setMemoryLimit(256);
 		ini_set('display_errors','on');
+	}
+	
+	public function actionTestCache($params){
+		
+		GO::cache()->set('test','test');
 	}
 	
 	protected function actionDownloadFromShop($params){
@@ -341,6 +346,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		$this->lockAction();
 		
 		
+		GO::$disableModelCache=true;
 		
 		$response = array();
 		
@@ -671,6 +677,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 		
 		ob_end_flush();
+		
+		
+		GO_Base_Db_Columns::$forceLoad=false;
 		//return $response;
 	}
 	
@@ -1069,4 +1078,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 		
 	}
+	
+	
+	
 }
