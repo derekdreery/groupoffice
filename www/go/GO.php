@@ -277,8 +277,6 @@ class GO{
 		GO::session()->values['view']=$viewName;
 	}
 
-	private static $_user;
-
 	/**
 	 * Get the logged in user
 	 *
