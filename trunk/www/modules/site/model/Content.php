@@ -433,13 +433,12 @@ class Content extends \GO\Base\Db\ActiveRecord{
 		}, $html);
 
 
-		//temp fix for tables		 
-		$html = str_replace('<table>', '<table class="table table-striped">', $html);
-
-
-
+		
 
 		$html = MarkdownExtra::defaultTransform($html);
+		
+		//temp fix for tables		 
+		$html = str_replace('<table>', '<table class="table table-striped">', $html);
 
 
 		$html = $this->replaceMarkdownContentTags($html);
