@@ -51,4 +51,11 @@ interface CacheInterface{
 	 * Flush all values 
 	 */
 	public function flush();
+	
+	/**
+	 * Returns true if this system supports this cache driver
+	 * 
+	 * @return boolean
+	 */
+	public function supported();
 }
