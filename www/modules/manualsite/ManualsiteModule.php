@@ -39,7 +39,12 @@ class ManualsiteModule extends Module {
 				$defaultSite = new Site();
 				$defaultSite->setAttributes($siteProperties);
 				$defaultSite->save();
+				
+				
 			}
+			
+			$category = \GO\Customfields\Model\Category::model()->createIfNotExists("GO\Site\Model\Site", "Extra");
+			\GO\Customfields\Model\Field::model()->createIfNotExists($category->id, "Google tracking code");
 		}
 		
 		return parent::install();
