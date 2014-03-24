@@ -203,6 +203,12 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
                  function (v) { this.uploader.bind(v, eval("this." + v), this); }, this
                 );
         this.uploader.init();
+				
+				
+				//auto start after adding files
+				this.uploader.bind('FilesAdded', function(up, files) {
+						up.start();
+				});
     },
     remove_file: function (id) {
         var fileObj = this.uploader.getFile( id );

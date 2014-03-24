@@ -378,13 +378,6 @@ class User extends \GO\Base\Db\ActiveRecord {
 		if(!$this->skip_contact_update && ($this->isNew || $this->isModified(array('first_name','middle_name','last_name','email'))))
 			$this->createContact();
 		
-		//remove cache for GO::user() calls.
-		$cacheKey = 'GO\Base\Model\User:'.$this->id;
-		GO::cache()->delete($cacheKey);
-		
-		//		deprecated. It's inefficient and can be done with listeners
-		//GO::modules()->callModuleMethod('saveUser', array(&$this, $wasNew));
-
 		return parent::afterSave($wasNew);
 	}
 	
