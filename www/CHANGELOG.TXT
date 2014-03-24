@@ -1,3 +1,5 @@
+- RSS feeds were broken
+- Automatically open file chooser and auto start file upload in e-mail and file module
 - Custom fields: File custom field maximum number of characters: 255.
 - Calendar: Improved workflow of resource allocation by resource group admins.
 

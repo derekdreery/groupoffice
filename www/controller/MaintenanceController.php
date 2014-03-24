@@ -17,7 +17,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		GO::$disableModelCache=true; //for less memory usage
 		GO::setMaxExecutionTime(0); //allow long runs		
 		GO::setMemoryLimit(256);
-		ini_set('display_errors','on');
+		ini_set('display_errors','on');		
 	}
 	
 	public function actionTestCache($params){
@@ -345,9 +345,6 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		$this->lockAction();
 		
-		
-		GO::$disableModelCache=true;
-		
 		$response = array();
 		
 		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
@@ -409,7 +406,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 					$stmt = $m->find(array(
 							'ignoreAcl'=>true
 					));
-					$stmt->callOnEach('checkDatabase');
+					while ($m = $stmt->fetch()) {
+						$m->checkDatabase();
+					}
 				}
 			}
 		}
