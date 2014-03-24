@@ -42,7 +42,7 @@
 	<body>
 		
 		<?php 
-		if(!empty(Site::model()->{"Google tracking code"})){
+		if(Site::model()->{"Google tracking code"}){
 		?>
 		
 		<script>
