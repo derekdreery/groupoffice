@@ -6,6 +6,8 @@
  */
 
 namespace GO\Core\Controller;
+
+use GO;
 use GO\Base\Db\PDO;
 
 class MaintenanceController extends \GO\Base\Controller\AbstractController {
@@ -689,7 +691,7 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 		ob_end_flush();
 		
 		
-		GO_Base_Db_Columns::$forceLoad=false;
+		\GO\Base\Db\Columns::$forceLoad=false;
 		//return $response;
 	}
 	
