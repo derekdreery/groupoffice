@@ -1,13 +1,13 @@
 <?php
 
 
-namespace GO\AdminManual;
+namespace GO\Manualsite;
 
 use GO;
 use GO\Base\Module;
 use GO\Site\Model\Site;
 
-class AdminmanualModule extends Module {
+class ManualsiteModule extends Module {
 
 	public function adminModule() {
 		return false;
@@ -25,10 +25,10 @@ class AdminmanualModule extends Module {
 			if(!$alreadyExists){
 				
 				$siteProperties = array(
-					'name'=>"Admin manual",
+					'name'=>"Manual",
 					'user_id'=>1,
 					'domain'=>'*',
-					'module'=>'adminmanual',
+					'module'=>'manualsite',
 					'ssl'=>'0',
 					'mod_rewrite'=>'0',
 					'mod_rewrite_base_path'=>'/',
