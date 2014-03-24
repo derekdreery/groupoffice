@@ -960,7 +960,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 				//delete empty folder.
 				$folder->readonly = 1; //makes sure acl is not deleted
-				$folder->delete();
+				$folder->delete(true);
 
 				return $existingFolder->id;
 
