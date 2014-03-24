@@ -2,8 +2,8 @@
 
 $siteconfig['templates']=array(
 		
-		'/adminmanual/content'=>'Content with children',
-		'/adminmanual/home'=>'Home',
+		'/manualsite/content'=>'Content with children',
+		'/manualsite/home'=>'Home',
 
 );
 
