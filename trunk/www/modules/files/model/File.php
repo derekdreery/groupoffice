@@ -352,7 +352,9 @@ class File extends \GO\Base\Db\ActiveRecord {
 			\GO::debug("Removing quota: $this->size");
 			\GO::config()->save_setting("file_storage_usage", \GO::config()->get_setting('file_storage_usage')-$this->size);
 		}
-                $this->user->calculatedDiskUsage (0-$this->size)->save();
+		if($this->user){
+			$this->user->calculatedDiskUsage (0-$this->size)->save();
+		}
 	}
 	
 	protected function afterSave($wasNew) {
