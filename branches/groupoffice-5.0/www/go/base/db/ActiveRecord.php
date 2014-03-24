@@ -2108,6 +2108,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					$this->_relatedCache[$cacheKey] = $model;
 				}
 				
+				return $model;
+				
 			}elseif(!isset($this->_relatedCache[$cacheKey]))
 			{
 				//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
