@@ -62,7 +62,7 @@ class ModelType extends \GO\Base\Db\ActiveRecord {
 		
 		//delete if module is no longer installed. This should happen automatically
 		//after module uninstall but in some cases this went wrong.
-		$parts = explode('_',$this->model_name);
+		$parts = explode('\\',$this->model_name);
 		$module = strtolower($parts[1]);
 		if($module!='base' && !\GO::modules()->isInstalled($module)){
 			$this->delete();

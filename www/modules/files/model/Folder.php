@@ -43,6 +43,8 @@
 
 namespace GO\Files\Model;
 
+use GO;
+
 
 class Folder extends \GO\Base\Db\ActiveRecord {
     
