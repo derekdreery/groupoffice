@@ -26,8 +26,30 @@ class GO_Calendar_Model_PrintCategoryCount extends GO_Base_Model {
 		$this->startDate = $startDate;
 		$this->endDate = $endDate;
 		
-		$this->categories = GO_Calendar_Model_Category::model()->find()->fetchAll(); //GLOBAL
+		
+		
+		
 		$this->calendars = GO_Calendar_Model_Calendar::model()->find()->fetchAll();
+		
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->join('cal_events', GO_Base_Db_FindCriteria::newInstance()->addRawCondition('t.id', 'e.category_id'),'e')
+						->group('t.id')
+						->having('count(*)>0');
+		
+		$calendars=array(0);
+		
+		foreach($this->calendars as $calendar){
+			$calendars[]=$calendar->id;
+		}
+		
+		$findParams->getCriteria()->addInCondition('calendar_id', $calendars);
+		
+		
+		$this->categories = GO_Calendar_Model_Category::model()->find($findParams)->fetchAll(); //GLOBAL
+		
+		
+	
 	}
 	
 	/**
@@ -57,35 +79,43 @@ class GO_Calendar_Model_PrintCategoryCount extends GO_Base_Model {
 		if(empty($this->_rows)){
 			foreach($this->calendars as $calendar){
 
-				$row = array();
-				$row[] = $calendar->name;
+				$row = array(
+						'name'=>$calendar->name
+				);
+				
+//				foreach($this->categories as $category){
 
-				foreach($this->categories as $category){
-
-					$findParams = GO_Base_Db_FindParams::newInstance();
-					$findParams->select('COUNT(*) as count');
+					$findParams = GO_Base_Db_FindParams::newInstance()
+									->ignoreAcl()
+									->select('COUNT(*) as count, category_id')									
+									->group('category_id');
 //					$findParams->ignoreAcl();							// Only count items that are visible for this user.
 	//				$findParams->group('calendar_id');
 
 					$findCriteria = GO_Base_Db_FindCriteria::newInstance();
-
-					$findCriteria->addCondition('category_id', $category->id);
+					
 					$findCriteria->addCondition('calendar_id', $calendar->id);
 					$findCriteria->addCondition('start_time', strtotime($this->startDate),'>');
 					$findCriteria->addCondition('end_time', strtotime($this->endDate),'<');
 
 					$findParams->criteria($findCriteria);
 
-					$result = GO_Calendar_Model_Event::model()->find($findParams)->fetch();
+					$catRecord = array();
+					foreach(GO_Calendar_Model_Event::model()->find($findParams) as $record){
+						 $catRecord[intval($record->category_id)]=$record->count;
+					}
+					
+					foreach($this->categories as $category){
+						$row[]=isset($catRecord[$category->id]) ? $catRecord[$category->id] : 0;
+					}
+					
+					
+					$this->_rows[] = $row;
 
-					if(empty($result->count))
-						$row[] = 0;
-					else
-						$row[] = $result->count;
 				}
 
-				$this->_rows[] = $row;
-			}
+				
+//			}
 		}
 
 		return $this->_rows;
