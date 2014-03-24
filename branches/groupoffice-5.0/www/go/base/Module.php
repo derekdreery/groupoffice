@@ -372,9 +372,9 @@ class GO_Base_Module extends GO_Base_Observable {
 					$stmt = $m->find(array(
 							'ignoreAcl'=>true
 					));
-					while ($m = $this->fetch()) {
+					while ($m = $stmt->fetch()) {
 						$m->checkDatabase();
-						unset($m);
+						echo memory_get_usage()."\n";
 					}
 					
 					unset($stmt);
