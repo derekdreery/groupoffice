@@ -968,7 +968,7 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 
 				//delete empty folder.
 				$folder->readonly = 1; //makes sure acl is not deleted
-				$folder->delete();
+				$folder->delete(true);
 
 				return $existingFolder->id;
 
