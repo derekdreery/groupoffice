@@ -16,8 +16,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	protected function init() {
 		GO::$disableModelCache=true; //for less memory usage
 		GO::setMaxExecutionTime(0); //allow long runs		
-		ini_set('memory_limit','512M');
-		ini_set('display_errors','on');
+		GO::setMemoryLimit(256);
+		ini_set('display_errors','on');		
+	}
+	
+	public function actionTestCache($params){
+		
+		GO::cache()->set('test','test');
 	}
 	
 	protected function actionDownloadFromShop($params){
@@ -340,8 +345,6 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		$this->lockAction();
 		
-		
-		
 		$response = array();
 		
 		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
@@ -403,7 +406,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 					$stmt = $m->find(array(
 							'ignoreAcl'=>true
 					));
-					$stmt->callOnEach('checkDatabase');
+					while ($m = $stmt->fetch()) {
+						$m->checkDatabase();
+					}
 				}
 			}
 		}
@@ -671,6 +676,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 		
 		ob_end_flush();
+		
+		
+		GO_Base_Db_Columns::$forceLoad=false;
 		//return $response;
 	}
 	
@@ -1068,7 +1076,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			}
 		}
 		
-	}
+	}	
 	
 	
 	protected function actionConvertToInnoDB(){

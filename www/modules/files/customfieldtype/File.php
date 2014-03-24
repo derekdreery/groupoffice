@@ -5,6 +5,10 @@ class GO_Files_Customfieldtype_File extends GO_Customfields_Customfieldtype_Abst
 		return 'File';
 	}
 	
+	public function fieldSql(){
+		return "VARCHAR(255) NOT NULL default ''";
+	}
+	
 	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
 		$html="";
 		if(!empty($attributes[$key])) {

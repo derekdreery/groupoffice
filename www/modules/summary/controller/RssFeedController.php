@@ -62,6 +62,7 @@ class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelCont
 		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('user_id', GO::user()->id);
 		return GO_Base_Db_FindParams::newInstance()
+						->select('t.*')
 						->criteria($findCriteria);
 	}
 
