@@ -20,8 +20,13 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 	protected function init() {
 		\GO::$disableModelCache=true; //for less memory usage
 		\GO::setMaxExecutionTime(0); //allow long runs		
-		ini_set('memory_limit','512M');
-		ini_set('display_errors','on');
+		GO::setMemoryLimit(256);
+		ini_set('display_errors','on');		
+	}
+	
+	public function actionTestCache($params){
+		
+		GO::cache()->set('test','test');
 	}
 	
 	protected function actionDownloadFromShop($params){
@@ -344,8 +349,6 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 		
 		$this->lockAction();
 		
-		
-		
 		$response = array();
 		
 		$oldAllowDeletes = \GO\Base\Fs\File::setAllowDeletes(false);
@@ -407,7 +410,9 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 					$stmt = $m->find(array(
 							'ignoreAcl'=>true
 					));
-					$stmt->callOnEach('checkDatabase');
+					while ($m = $stmt->fetch()) {
+						$m->checkDatabase();
+					}
 				}
 			}
 		}
@@ -682,6 +687,9 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 		}
 		
 		ob_end_flush();
+		
+		
+		GO_Base_Db_Columns::$forceLoad=false;
 		//return $response;
 	}
 	
@@ -1079,7 +1087,7 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 			}
 		}
 		
-	}
+	}	
 	
 	
 	protected function actionConvertToInnoDB(){

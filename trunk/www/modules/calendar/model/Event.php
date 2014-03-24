@@ -434,6 +434,18 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		
 		
 		if($this->isResource()){
+			
+			// If resource is added by its admin, automatically set it to CONFIRMED.
+			$groupAdminsStmt= $this->calendar->group->admins;
+			while($adminUser = $groupAdminsStmt->fetch()){
+				$adminUserIds[] = $adminUser->id;
+			}
+			
+			if (in_array(GO::user()->id,$adminUserIds) && $this->getIsNew()) {
+				$this->status = 'CONFIRMED';
+			}
+
+			
 			if($this->status=='CONFIRMED'){
 				$this->background='CCFFCC';
 			}else
@@ -578,7 +590,13 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		}
 	
 		if($this->isResource()){
-			$this->_sendResourceNotification($wasNew);
+			$groupAdminsStmt= $this->calendar->group->admins;
+			while($adminUser = $groupAdminsStmt->fetch()){
+				$adminUserIds[] = $adminUser->id;
+			}
+			if (!in_array(GO::user()->id,$adminUserIds)) {
+				$this->_sendResourceNotification($wasNew);
+			}
 		}else
 		{
 			if(!$wasNew && $this->hasModificationsForParticipants())

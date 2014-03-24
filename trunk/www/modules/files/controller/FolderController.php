@@ -3,6 +3,8 @@
 
 namespace GO\Files\Controller;
 
+use GO;
+
 
 class FolderController extends \GO\Base\Controller\AbstractModelController {
 
@@ -1008,8 +1010,8 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 
 	private function _createNewModelFolder(\GO\Base\Db\ActiveRecord $model) {
 
-		//\GO::debug("Create new model folder ".$model->className()."(ID:".$model->id.")");
-
+		GO::debug("Create new model folder ".$model->className()."(ID:".$model->id.")");
+		
 		$folder = \GO\Files\Model\Folder::model()->findByPath($model->buildFilesPath(),true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
 		
 		if(!$folder){
@@ -1046,6 +1048,9 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 
 		$folder = false;
 		if ($model->files_folder_id > 0){
+			
+			GO::debug('Model has files_folder_id '.$model->files_folder_id);
+
 			$folder = \GO\Files\Model\Folder::model()->findByPk($model->files_folder_id, false, true);
 			
 			//record has an ID but the folder is missing from the database. Attempt to create new one.
@@ -1053,11 +1058,17 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 		}
 
 		if ($folder) {
+			
+			GO::debug('Folder exists in database');
+					
 			$model->files_folder_id = $this->_checkExistingModelFolder($model, $folder, $mustExist);
 
 			if ($saveModel && $model->isModified())
 				$model->save(true);
 		}elseif (isset($model->acl_id) || $mustExist) {
+			
+			GO::debug('Folder does not exist in database. Will create it.');
+		
 			//this model has an acl_id. So we should create a shared folder with this acl.
 			//this folder should always exist.
 			//only new models that have it's own acl field should always have a folder.

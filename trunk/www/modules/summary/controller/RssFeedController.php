@@ -66,6 +66,7 @@ class RssFeedController extends \GO\Base\Controller\AbstractModelController {
 		$findCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('user_id', \GO::user()->id);
 		return \GO\Base\Db\FindParams::newInstance()
+						->select('t.*')
 						->criteria($findCriteria);
 	}
 

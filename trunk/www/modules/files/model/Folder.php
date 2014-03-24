@@ -479,8 +479,9 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 	//				$folder->setAttributes($autoCreateAttributes);
 	//				$folder->save();	
 				}
-
-				$this->_folderCache[$cacheKey]=$folder;
+				if(!GO::$disableModelCache){
+					$this->_folderCache[$cacheKey]=$folder;
+				}
 			}else
 			{
 				$folder = $this->_folderCache[$cacheKey];
@@ -1085,8 +1086,11 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 			$this->_folderCache['Shared/'.$folderName]=$folder;
 			
 			//for findByPath
-			if($folder)
-				$this->_folderCache[$folder->parent_id.'/'.$folderName]=$folder;
+			if($folder){
+				if(!GO::$disableModelCache){
+					$this->_folderCache[$folder->parent_id.'/'.$folderName]=$folder;
+				}
+			}
 			
 		}
 		

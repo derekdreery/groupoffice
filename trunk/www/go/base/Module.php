@@ -376,7 +376,12 @@ class Module extends Observable {
 					$stmt = $m->find(array(
 							'ignoreAcl'=>true
 					));
-					$stmt->callOnEach('checkDatabase');
+					while ($m = $stmt->fetch()) {
+						$m->checkDatabase();
+						echo memory_get_usage()."\n";
+					}
+					
+					unset($stmt);
 				}else
 				{
 					echo "No check needed for ".$model->getName()."\n";

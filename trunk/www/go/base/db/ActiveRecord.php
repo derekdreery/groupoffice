@@ -2119,18 +2119,35 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				
 				$attr = $this->_joinRelationAttr[$name];
 				
-				$this->_relatedCache[$cacheKey]=new $model;
-				$this->_relatedCache[$cacheKey]->setAttributes($attr, false);
-				$this->_relatedCache[$cacheKey]->castMySqlValues();	
+				$model=new $model;
+				$model->setAttributes($attr, false);
+				$model->castMySqlValues();	
 				
 				unset($this->_joinRelationAttr[$cacheKey]);
+				
+				if(!GO::$disableModelCache){
+					$this->_relatedCache[$cacheKey] = $model;
+				}
 				
 			}elseif(!isset($this->_relatedCache[$cacheKey]))
 			{
 				//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
-				$this->_relatedCache[$cacheKey] = !empty($this->_attributes[$joinAttribute]) ? GO::getModel($model)->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true) : null;
+				if(!empty($this->_attributes[$joinAttribute])){
+					$model = GO::getModel($model)->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true);
+					
+					if(!GO::$disableModelCache){
+						$this->_relatedCache[$cacheKey] = $model;
+					}
+					
+					return $model;
+				}else
+				{
+					return null;
+				}
+			}else
+			{
+				return $this->_relatedCache[$cacheKey];
 			}
-			return $this->_relatedCache[$cacheKey];
 			
 		}elseif($r['type']==self::HAS_ONE){			
 			//We can't put this in the related cache because there's no reliable way to check if the situation has changed.
@@ -3620,6 +3637,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 												)											
 								);
 				$stmt->callOnEach('delete');
+				unset($stmt);
 			}
 		}
 		
