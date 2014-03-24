@@ -25,8 +25,14 @@ class FrontController extends \GO\Site\Components\Controller {
 		}else{
 			
 			$this->setPageTitle($content->metaTitle);
-			\Site::scripts()->registerMetaTag($content->meta_description, 'description');
-			\Site::scripts()->registerMetaTag($content->meta_keywords, 'keywords');
+			
+			if(!empty($content->meta_description)){
+				\Site::scripts()->registerMetaTag($content->meta_description, 'description');
+			}
+			
+			if(!empty($content->meta_keywords)){
+				\Site::scripts()->registerMetaTag($content->meta_keywords, 'keywords');
+			}
 			
 			// Check if the template is not empty
 			if(empty($content->template)) {
