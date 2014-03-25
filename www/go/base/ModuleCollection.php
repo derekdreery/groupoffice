@@ -58,8 +58,8 @@ class ModuleCollection extends Model\ModelCollection{
 		foreach($folders as $folder){
 			if($folder->isFolder()){
 				$ucfirst = ucfirst($folder->name());
-				$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
-				if(file_exists($moduleClass) && $this->_isAllowed($folder->name()) && ($returnInstalled || !Model\Module::model()->findByPk($folder->name(), false, true))){
+//				$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
+				if($this->isAvailable($folder->name()) && ($returnInstalled || !Model\Module::model()->findByPk($folder->name(), false, true))){
 					$modules[]='GO\\'.$ucfirst.'\\'.$ucfirst.'Module';
 				}
 			}
@@ -80,13 +80,27 @@ class ModuleCollection extends Model\ModelCollection{
 			return false;
 		
 		$folder = new Fs\Folder(\GO::config()->root_path.'modules/'.$moduleId);
-		if($folder->exists()){
-			$ucfirst = ucfirst($folder->name());
-			$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
-			
-			return file_exists($moduleClass);
+		
+		$ucfirst = ucfirst($moduleId);
+		$moduleClassPath = $folder->path().'/'.$ucfirst.'Module.php';
+		
+		if(!file_exists($moduleClassPath) || !\GO::scriptCanBeDecoded($moduleClassPath)){
+			return false;
 		}
+
+		$moduleClass = 'GO\\'.$ucfirst.'\\'.$ucfirst.'Module';
+
+		if(!class_exists($moduleClass)){
+			return false;
+		}
+
+		$mod = new $moduleClass;
+		return $mod->isAvailable();			
+
 	}
+	
+	
+	
 	
 
 	/**
@@ -128,12 +142,12 @@ class ModuleCollection extends Model\ModelCollection{
 	public function __get($name) {
 		
 		if(!isset($this->_modules[$name])){		
-			if(!$this->_isAllowed($name))
+			if(!$this->isAvailable($name))
 				return false;
 
 			$model = parent::__get($name);
 
-			if(!$model || !is_dir($model->path))
+			if(!$model)
 				$model=false;
 
 			$this->_modules[$name]=$model;

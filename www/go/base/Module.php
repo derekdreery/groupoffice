@@ -177,6 +177,15 @@ class Module extends Observable {
 	}
 	
 	/**
+	 * Override this function if for some reason this module can become unavailable.
+	 * 
+	 * @return boolean
+	 */
+	public function isAvailable(){
+		return true;
+	}
+	
+	/**
 	 * Find the module manager class by id.
 	 * 
 	 * @param string $moduleId eg. "addressbook"
