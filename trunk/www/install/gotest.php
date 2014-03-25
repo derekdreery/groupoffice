@@ -273,24 +273,24 @@ function test_system(){
 	$tests[]=$test;
 	$test['name']='Ioncube';
 	$test['pass']=ioncube_tester();
-	$test['feedback']='Warning: Ioncube is not installed. The professional version will not run.';
+	$test['feedback']='Warning: Ioncube is not installed. The professional modules will not be enabled.';
 	$test['fatal']=false;
 
 	$tests[]=$test;
 
-	if(is_dir('../modules/professional') && class_exists('GO'))
+	if($test['pass'] && is_dir('../modules/professional') && class_exists('GO'))
 	{
+		
 		$test['name']='Professional license';
-		$check_url = \GO::config()->full_url.'modules/professional/checklicense.php';
-		$content = @file_get_contents($check_url);
-		if(empty($content)){
-			$test['feedback']='Warning: Could not determine if your license file works properly. Probably becuase URL file-access is disabled in your server configuration. This is not really a problem but you should check it manually now. <a target="_blank" href="'.$check_url.'">Click here to check it</a>. The output from the server was: '.$content;
+		
+		if(!file_exists(GO::config()->root_path.'groupoffice-pro-'.\GO::config()->getMajorVersion().'-license.txt')){
+			$test['feedback']='Warning: There\'s no license file. The professional modules will not be enabled';
 			$test['fatal']=false;
 			$test['pass']=false;
-		}elseif(strpos($content,'Your license works!')===false)
+		}elseif(!\GO::scriptCanBeDecoded('../modules/professional/License.php'))
 		{
-			$test['feedback']='Fatal: Your professional license is invalid. Please contact Intermesh about this problem and supply the output of this page. <a target="_blank" href="'.$check_url.'">Click here to check the output of an encoded file.</a>';
-			$test['fatal']=true;
+			$test['feedback']='Warning: Your professional license is invalid. The professional modules will not be enabled. Please contact Intermesh about this problem and supply the output of this page.';
+			$test['fatal']=false;
 			$test['pass']=false;
 		}else
 		{

@@ -1326,6 +1326,11 @@ class Config {
 			$this->noreply_email = 'noreply@'.$wmdomain;
 		}
 	}
+	
+	
+	public function getMajorVersion(){
+		return substr($this->version,0,3);;
+	}
 
 	/**
 	 * Get the temporary files folder.
