@@ -48,6 +48,9 @@ Ext.apply(GO.base.upload.Paster.prototype, {
 	dataURItoBlob: function(dataURI, callback) {
 // convert base64 to raw binary data held in a string
 // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+
+		
+
 		var byteString = atob(dataURI.split(',')[1]);
 // separate out the mime component
 		var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
@@ -67,22 +70,42 @@ Ext.apply(GO.base.upload.Paster.prototype, {
 	findImageEl: function() {
 
 		if (this.pasteCatcher.children.length > 0) {
+		
+			var dataURI = this.pasteCatcher.firstElementChild.src;
+			if(dataURI){
+				if(dataURI.indexOf('base64')===-1){
+					alert("Sorry, with Firefox you can only paste local screenshots and files. Use Chrome or IE11 if you need this feature.");
+					return;
+				}
+
+				var file = this.dataURItoBlob(dataURI);
+				this.uploadFile(file);				
+			}
 			
-			var file = this.dataURItoBlob(this.pasteCatcher.firstElementChild.src);
-			this.uploadFile(file);
 			this.pasteCatcher.innerHTML = '';
+			
 		} else
 		{
 			Ext.defer(this.findImageEl, 100, this);
 		}
 	},
 	
+	processing : false, //some wierd chrome bug makes the paste event fire twice when using javascript prompt for the filename
+	
 	handlePaste: function(e) {
+		
+		if(this.processing){
+			return;			
+		}
+		
 		var bE = e.browserEvent;
 
 		for (var i = 0; i < bE.clipboardData.items.length; i++) {
 			var item = bE.clipboardData.items[i];
 			if (item.kind === "file") {
+				
+				this.processing=true;
+				e.preventDefault();
 				this.uploadFile(item.getAsFile());
 			}
 		}
@@ -102,6 +125,8 @@ Ext.apply(GO.base.upload.Paster.prototype, {
 			} else {
 				alert("Error! Upload failed");
 			}
+			
+			this.processing=false;
 		};
 		xhr.onerror = function() {
 			alert("Error! Upload failed. Can not connect to server.");
