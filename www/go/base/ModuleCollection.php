@@ -94,8 +94,10 @@ class ModuleCollection extends Model\ModelCollection{
 			return false;
 		}
 
-		$mod = new $moduleClass;
-		return $mod->isAvailable();			
+		//$mod = new $moduleClass;
+		//return $mod->isAvailable();			
+		
+		return true;
 
 	}
 	

@@ -1196,9 +1196,16 @@ class GO{
 
 			if(!extension_loaded('ionCube Loader')){
 				return false;
-			}	
-
-			self::$ioncubeWorks = ioncube_license_matches_server($path);
+			}
+			
+			
+			if(!file_exists(GO::config()->root_path.'groupoffice-pro-'.GO::config()->getMajorVersion().'-license.txt')){
+				return false;
+			}
+			
+			//require(GO::config()->root_path.'modules/professional/checklicense.php');
+		
+			self::$ioncubeWorks = \GO\Professional\License::check();
 		}
 		
 		return self::$ioncubeWorks;
