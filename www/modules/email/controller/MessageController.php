@@ -1315,7 +1315,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 					
 
 					foreach($linkedModels as $linkedModel){
-						$linkedItems .= ', <span class="em-autolink-link" onclick="GO.linkHandlers[\''.$linkedModel->className().'\'].call(this, '.
+						$linkedItems .= ', <span class="em-autolink-link" onclick="GO.linkHandlers[\''.  \GO\Base\Util\String::escape_javascript($linkedModel->className()).'\'].call(this, '.
 												$linkedModel->id.');">'.$linkedModel->name.' ('.$linkedModel->localizedName.')</span>';
 					}
 
