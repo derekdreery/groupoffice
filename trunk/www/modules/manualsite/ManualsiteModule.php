@@ -41,6 +41,45 @@ class ManualsiteModule extends Module {
 				$defaultSite->save();
 				
 				
+				$home = new GO\Site\Model\Content();
+				$home->site_id=$defaultSite->id;
+				$home->title="Home";
+				$home->slug="";
+				$home->template="/manualsite/home";
+				$home->save();
+				
+				
+				$chapter = new GO\Site\Model\Content();
+				$chapter->parent_id=$home->id;
+				$chapter->site_id=$home->id;
+				$chapter->title="Example chapter";
+				$chapter->content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+				$chapter->slug="example-chapter";
+				$chapter->template="/manualsite/content";
+				$chapter->save();
+				
+				$sub = new GO\Site\Model\Content();
+				$sub->parent_id=$chapter->id;
+				$sub->site_id=$defaultSite->id;
+				$sub->title="Sub 1";
+				$sub->content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+				$sub->slug="example-chapter";
+				$sub->template="/manualsite/content";
+				$sub->save();
+				
+				
+				$sub = new GO\Site\Model\Content();
+				$sub->parent_id=$chapter->id;
+				$sub->site_id=$defaultSite->id;
+				$sub->title="Sub 2";
+				$sub->content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+				$sub->slug="example-chapter";
+				$sub->template="/manualsite/content";
+				$sub->save();
+				
+				
+				
+				
 			}
 			
 			$category = \GO\Customfields\Model\Category::model()->createIfNotExists("GO\Site\Model\Site", "Extra");
