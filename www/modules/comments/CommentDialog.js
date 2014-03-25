@@ -145,7 +145,7 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 				}
 								
 				if (!GO.util.empty(this.formPanel.baseParams['model_name']) && this.formPanel.baseParams['model_name']=='GO_Addressbook_Model_Contact' && !GO.util.empty(GO.addressbook.contactsGrid)) {
-					GO.addressbook.contactsGrid.store.load();
+					GO.addressbook.contactsGrid.store.reload();
 				}
 				
 				this.fireEvent('save', this);				
