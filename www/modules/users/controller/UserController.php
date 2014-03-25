@@ -212,55 +212,7 @@ class UserController extends \GO\Base\Controller\AbstractModelController {
 		//return array('success' => true);
 	}
 	
-	protected function getStoreParams($params) {
-		
-		$findParams =  \GO\Base\Db\FindParams::newInstance();
-		
-		if(!empty($params['show_licensed'])){		
-		
-			if(class_exists("GO\Professional\LicenseCheck")){
-				$lc = new \GO\Professional\LicenseCheck();
 
-				$proModuleAcls=array();
-				$proModules = $lc->getProModules();
-				foreach($proModules as $module)
-					$proModuleAcls[]=$module->acl_id;
-				
-				$aclJoinCriteria= \GO\Base\Db\FindCriteria::newInstance()
-								->addRawCondition('a.user_id', 't.id')
-								->addRawCondition('a.group_id', 'ug.group_id','=',false);
-
-				$findParams
-					->ignoreAcl()
-					->joinModel(array(
-						'model'=>'GO\Base\Model\UserGroup',
-						'foreignField'=>'user_id',
-						'tableAlias'=>'ug'				
-					))
-					->join(\GO\Base\Model\AclUsersGroups::model()->tableName(), $aclJoinCriteria,'a')
-					->group('t.id');
-
-				$findParams->getCriteria()->addInCondition('acl_id', $proModuleAcls,'a');
-
-			}		
-		}
-		
-		return $findParams;
-		
-	}
-	
-	protected function afterStore(&$response, &$params, &$store, $storeParams) {
-		if(class_exists("GO\Professional\LicenseCheck")){
-			$lc = new \GO\Professional\LicenseCheck();
-			try{
-				$lc->checkProModules(true);
-			}catch(\Exception $e){
-				$response['feedback']=$e->getMessage();
-			}
-		}
-		
-		return parent::afterStore($response, $params, $store, $storeParams);
-	}
 	
 	protected function beforeStoreStatement(array &$response, array &$params, \GO\Base\Data\AbstractStore &$store, \GO\Base\Db\FindParams $storeParams) {
 		
