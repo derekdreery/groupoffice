@@ -120,7 +120,33 @@ class Module extends \GO\Base\Db\ActiveRecord {
 	 * @return boolean 
 	 */
 	public function isAvailable(){
-		return is_dir($this->path);
+		
+		if(!$this->enabled)
+			return false;
+		
+		$ucfirst = ucfirst($this->id);
+		$moduleClassPath = $this->path.'/'.$ucfirst.'Module.php';
+		
+		if(!file_exists($moduleClassPath) || !\GO::scriptCanBeDecoded($moduleClassPath)){
+			return false;
+		}
+
+		$moduleClass = 'GO\\'.$ucfirst.'\\'.$ucfirst.'Module';
+
+		if(!class_exists($moduleClass)){
+			return false;
+		}
+
+		$mod = new $moduleClass;
+		return $mod->isAvailable();	
+		
+		
+	}
+	
+	public function isAllowed(){
+		$allowedModules=empty(\GO::config()->allowed_modules) ? array() : explode(',', \GO::config()->allowed_modules);
+		
+		return empty($allowedModules) || in_array($this->id, $allowedModules);
 	}
 
 //	protected function getName() {

@@ -1174,6 +1174,36 @@ class GO{
 		}
 		return self::$_scripts;
 	}
+	
+	
+	public static $ioncubeWorks;
+	
+	/**
+	 * Check if a file is encoded and if so check if it can be decrypted with
+	 * Ioncube.
+	 * 
+	 * @param string $path
+	 * @return boolean
+	 */
+	public static function scriptCanBeDecoded($path){
+		
+		if(!isset(self::$ioncubeWorks)){					
+		
+			$data=  file_get_contents($path, false, null, -1, 100);		
+			if(strpos($data, 'ionCube')===false){				
+				return true;
+			}
+
+			if(!extension_loaded('ionCube Loader')){
+				return false;
+			}	
+
+			self::$ioncubeWorks = ioncube_license_matches_server($path);
+		}
+		
+		return self::$ioncubeWorks;
+		
+	}
 
 }
 
