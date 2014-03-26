@@ -1,4 +1,7 @@
 <?php
+
+//echo "CONFIG: ".str_replace('<?php' ,'', file_get_contents('/var/www/trunk/config.php'));
+
 require('header.php');
 
 $stmt = \GO::getDbConnection()->query("SHOW TABLES");
@@ -67,6 +70,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		$admin->username=$_POST['username'];
 		$admin->password=$_POST['password1'];
 		$admin->email=\GO::config()->webmaster_email=$_POST['email'];
+		
+
+		\GO::config()->noreply_email='';
 		
 		\GO::config()->save();
 		

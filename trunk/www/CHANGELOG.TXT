@@ -9,10 +9,16 @@
 - Calendar: Notification to user when attempting to import an ICalendar with a recurrence containing 'Last X of month' pattern.
 
 
+26-03-2014 5.0.49
+- new PHP 5.5 OPCache caused database install problem.
+- Database check uses less system memory
 - RSS feeds were broken
 - Automatically open file chooser and auto start file upload in e-mail and file module
 - Custom fields: File custom field maximum number of characters: 255.
 - Calendar: Improved workflow of resource allocation by resource group admins.
+- Fixed reload pagination problem of the contacts grid when adding comments to a contact
+- Added override of Ext.removeNode function because of IE9 problems
+- Updated German translation
 
 19-03-2014 5.0.48
 - 5.0.47 had an invalid folder www in it.

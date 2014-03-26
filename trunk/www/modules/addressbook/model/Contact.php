@@ -741,11 +741,13 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 		//some attributes can be specified with multiple values like tel and email.
 		//We don't know which value is going to map to which exact GO attribute because every client handles this differently.
 		//Clear the values if they haven't been found at all.
-		$attributesMultiple=array('home_phone','work_phone','fax', 'work_fax','cellular','email','email2','email3');
-		foreach($attributesMultiple as $attributeName){
-			if(!isset($attributes[$attributeName]))
-				$attributes[$attributeName]="";
-		}
+		//
+		// Not clearing them cause some client might not send it and this can cause data loss.
+//		$attributesMultiple=array('home_phone','work_phone','fax', 'work_fax','cellular','email','email2','email3');
+//		foreach($attributesMultiple as $attributeName){
+//			if(!isset($attributes[$attributeName]))
+//				$attributes[$attributeName]="";
+//		}
 		
 		$attributes=array_map('trim',$attributes);
 		

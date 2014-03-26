@@ -124,7 +124,7 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 		//fetching contact will check read permission
 		$contact = \GO\Addressbook\Model\Contact::model()->findByPk($params['id']);
 		
-		\GO\Base\Util\Http::outputDownloadHeaders($contact->getPhotoFile(), true, false);
+		\GO\Base\Util\Http::outputDownloadHeaders($contact->getPhotoFile(), true, true);
 		$contact->getPhotoFile()->output();
 	}
 	

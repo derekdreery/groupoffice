@@ -190,20 +190,27 @@ GO.customfields.displayPanelTemplate =
 '</tr>'+
 '</tpl>'+
 '<tpl if="value && value.length">'+
-'<tr>'+
-'<td>{name}:</td>'+
-
-'<td'+
-'<tpl if="datatype && datatype==\'GO\\Customfields\\Customfieldtype\\Number\'">'+
-	' style="text-align:right;"'+
-'</tpl>'+
-'>{value}</td>'+
-'</tr>'+
+	'<tr>'+
+	'<td>{name}:</td>'+
+	'{[GO.customfields.renderType(values)]}'+
+	'</tr>'+
 '</tpl>'+
 '</tpl>'+
 '</table>'+
 '</tpl>'+
 '</tpl>';
+
+GO.customfields.renderType = function(data) {
+	switch(data.datatype) {
+		case 'GO\\Customfields\\Customfieldtype\\Number':
+			return '<td style="text-align: right;">'+data.value+'</td>';
+		case 'GO\\Files\\Customfieldtype\\File':
+			return '<td>'+data.value+'</td>'; /* '<td>'+data.value+'</td>'+
+				'<td style="white-space:nowrap;"><a onclick="" style="display:block;float: right;" class="go-icon btn-edit" href="#">&nbsp;</a></td>';*/
+		default:
+			return '<td>'+data.value+'</td>';
+	}
+};
 
 GO.customfields.displayPanelBlocksTemplate =
 '<tpl if="items_under_blocks">'+'<tpl if="items_under_blocks.length">'+
