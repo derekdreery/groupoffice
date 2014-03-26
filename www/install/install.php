@@ -68,6 +68,8 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		$admin->password=$_POST['password1'];
 		$admin->email=GO::config()->webmaster_email=$_POST['email'];
 		
+		GO::config()->noreply_email='';
+		
 		GO::config()->save();
 		
 		//disable password validation
