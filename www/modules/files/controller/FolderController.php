@@ -653,9 +653,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		//This will check permissions too.
 		$folder = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
 		if(!$folder)
-			return false;
+			$folder = GO_Files_Model_Folder::model()->findHomeFolder (GO::user());
+		if(!$folder)
+			throw new Exception('No Folder found with id '.$params['folder_id']);
 
 		$this->_listFolderPermissionLevel=$folder->permissionLevel;
+
 
 		$response['permission_level']=$folder->permissionLevel;//$folder->readonly ? GO_Base_Model_Acl::READ_PERMISSION : $folder->permissionLevel;
 
