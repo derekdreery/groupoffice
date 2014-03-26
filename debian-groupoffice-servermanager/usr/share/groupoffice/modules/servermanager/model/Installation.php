@@ -372,9 +372,6 @@ class Installation extends \GO\Base\Db\ActiveRecord {
 			$this->setValidationError ('modules',"Please select the allowed modules");
 		}
 		
-		if(class_exists('GO\Professional\LicenseCheck')){
-			
-		}
 							
 		return parent::validate();
 	}
@@ -415,15 +412,15 @@ class Installation extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	
-	protected function afterDbInsert() {
-		if(class_exists("GO\Professional\LicenseCheck"))
-		{
-			$lc = new \GO\Professional\LicenseCheck();
-			$this->token = $lc->generateToken($this);
-			
-			return true;
-		}
-	}
+//	protected function afterDbInsert() {
+//		if(class_exists("GO\Professional\LicenseCheck"))
+//		{
+//			$lc = new \GO\Professional\LicenseCheck();
+//			$this->token = $lc->generateToken($this);
+//			
+//			return true;
+//		}
+//	}
 	
 	/**
 	 * check if the installation is expired
