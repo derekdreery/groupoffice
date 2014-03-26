@@ -90,7 +90,7 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 			if(!$module->save())
 				throw new GO_Base_Exception_Save();
 			
-			$response['results'][]=$module->getAttributes();
+			$response['results'][]=array_merge($module->getAttributes(), array('name'=>$module->moduleManager->name()));
 		}
 		
 //		$defaultModels = GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels();

@@ -374,7 +374,7 @@ class GO_Base_Module extends GO_Base_Observable {
 					));
 					while ($m = $stmt->fetch()) {
 						$m->checkDatabase();
-						echo memory_get_usage()."\n";
+//						echo memory_get_usage()."\n";
 					}
 					
 					unset($stmt);

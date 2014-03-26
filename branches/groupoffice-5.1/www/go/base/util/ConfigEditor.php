@@ -18,6 +18,12 @@ class GO_Base_Util_ConfigEditor {
 		
 		//make sure directory exists
 		$file->parent()->create();
+		
+		//clear opcache in PHP 5.5
+		if(function_exists('opcache_invalidate')){
+			opcache_invalidate($file->path(), true);
+		}
+
 
 		return file_put_contents($file->path(), $configData);
 	}

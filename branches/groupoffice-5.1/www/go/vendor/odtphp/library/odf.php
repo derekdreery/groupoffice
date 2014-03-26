@@ -181,10 +181,10 @@ IMG;
 
 	private function _fix_segments($xml) {
 
-		$reg = '@\[!--\sBEGIN\s[^\]]*--\]@smUe';
-		$xml = preg_replace($reg, "odf::_fix_segments_callback('$0')", $xml);
-		$reg = '@\[!--\sEND\s[^\]]*--\]@smUe';
-		$xml = preg_replace($reg, "odf::_fix_segments_callback('$0')", $xml);
+		$reg = '@\[!--\sBEGIN\s[^\]]*--\]@smU';
+		$xml = preg_replace_callback($reg, "self::_fix_segments_callback", $xml);
+		$reg = '@\[!--\sEND\s[^\]]*--\]@smU';
+		$xml = preg_replace_callback($reg, "self::_fix_segments_callback", $xml);
 		return $xml;
 	}
 
@@ -192,7 +192,7 @@ IMG;
 		//Sometimes people change styles within a {autodata} tag.
 		//Then there are XML tags inside the GO template tag.
 		//We place them outside the tag.
-		$tag = stripslashes($tag);
+		$tag = stripslashes($tag[0]);
 		preg_match_all('/<[^>]*>/', $tag, $matches);
 		$garbage_tags = implode('', $matches[0]);
 

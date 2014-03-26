@@ -37,3 +37,31 @@ $l['numberValidationError']='Feld war keine Zahl';
 
 $l['invalidRegex']="Der reguläre Ausdruck ist ungültig.";
 $l['nDecimals'] = 'Anzahl der Nachkommastellen';
+
+$l['block']= 'Block';
+$l['blocks']= 'Blöcke';
+
+$l['cfDatatype']= 'Datentyp des benutzerdefinierten Feldes';
+
+$l['GO_Addressbook_Model_Contact']= 'Kontakt';
+$l['GO_Addressbook_Model_Company']= 'Firma';
+$l['GO_Base_Model_User']= 'Benutzer';
+$l['GO_Projects_Model_Project']= 'Projekt';
+$l['GO_Addressbook_Customfieldtype_Contact']= 'Kontakt';
+$l['GO_Addressbook_Customfieldtype_Company']= 'Firma';
+
+$l['manageBlocks']= 'Blöcke verwalten';
+
+$l['cfName']= 'Benutzerdefinierter Feldname';
+$l['customfield']= 'Benutzerdefiniertes Feld';
+
+$l['enableBlocks']= 'Blöcke aktivieren';
+$l['enabled']= 'Aktiviert';
+
+$l['uniqueValues']= 'Eindeutige Werte';
+$l['makeUnique']= 'Benutzerdefinierte Felder mit eindeutigen Werten versehen';
+$l['duplicateExistsFeedback']= 'Der eingegebene Wert "%val" für das Feld "%cf" ist in der Datenbank schon vorhanden. Der Wert muss eindeutig sein. Bitte geben Sie für das Feld einen anderen Wert ein.';
+$l['maxLength']= 'Maximale Anzahl von Zeichen';
+
+$l['GO_Tasks_Model_Task']= 'Aufgabe';
+$l['GO_Notes_Model_Note']= 'Notiz';

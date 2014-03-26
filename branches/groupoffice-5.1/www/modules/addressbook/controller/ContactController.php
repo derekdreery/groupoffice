@@ -119,7 +119,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		//fetching contact will check read permission
 		$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['id']);
 		
-		GO_Base_Util_Http::outputDownloadHeaders($contact->getPhotoFile(), true, false);
+		GO_Base_Util_Http::outputDownloadHeaders($contact->getPhotoFile(), true, true);
 		$contact->getPhotoFile()->output();
 	}
 	

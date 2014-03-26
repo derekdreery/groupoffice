@@ -428,6 +428,9 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	 */
 	public function actionPrintCategoryCount($params){
 		
+		
+		GO::session()->closeWriting();
+		
 		// If a year is posted then determine the correct start and end date and set them here
 		if(isset($params['fullYear'])){
 			$params['startDate'] = ''; // TODO: Find this 

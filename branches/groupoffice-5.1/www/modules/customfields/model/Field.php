@@ -21,6 +21,7 @@
  * @property int $number_decimals
  * @property int $max_length
  * @property string $addressbook_ids
+ * @property string $extra_options Some types of data fields can have some extra options (use json format for multiple options)
  */
 class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	
