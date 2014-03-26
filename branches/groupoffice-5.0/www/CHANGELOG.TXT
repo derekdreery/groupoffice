@@ -1,3 +1,4 @@
+- new PHP 5.5 OPCache caused database install problem.
 - Database check uses less system memory
 - RSS feeds were broken
 - Automatically open file chooser and auto start file upload in e-mail and file module
