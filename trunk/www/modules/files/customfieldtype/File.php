@@ -17,7 +17,7 @@ class File extends \GO\Customfields\Customfieldtype\AbstractCustomfieldtype{
 		$html="";
 		if(!empty($attributes[$key])) {
 			
-			$file = GO_Files_Model_File::model()->findByPath($attributes[$key]);
+			$file = \GO\Files\Model\File::model()->findByPath($attributes[$key]);
 
 			if(!\GO\Customfields\Model\AbstractCustomFieldsRecord::$formatForExport){
 				$html='<a href="#" onclick="GO.linkHandlers[\'GO\\Files\\Model\\File\'].call(this,\''.$attributes[$key].'\');">'.basename($attributes[$key]).'</a>'.

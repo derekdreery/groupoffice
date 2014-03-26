@@ -88,7 +88,7 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		this.store = new GO.data.JsonStore({
 			url: GO.url('batchEdit/attributesStore'),
 			baseParams:{
-				model_name: '' // config.modelType example: GO_Addressbook_Model_Company
+				model_name: '' // config.modelType example: GO\\Addressbook\\Model\\Company
 			},
 			fields: fields.fields,
 			//fields: ['name','label','edit','value','gotype'],
