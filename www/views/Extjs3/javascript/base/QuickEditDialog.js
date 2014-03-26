@@ -295,9 +295,9 @@ GO.base.QuickEditDialog.getValidColDataIds = function (colArray) {
 	var validColDataIds = [];
 	for (var i=0; i<colArray.length; i++) {
 		if (
-				colArray[i].datatype!='GO_Customfields_Customfieldtype_Heading' // Doesn't make sense to put a non-editable field in the editorGrid
-				&& colArray[i].datatype!='GO_Customfields_Customfieldtype_Treeselect' // Treeselect may be implemented later
-				&& colArray[i].datatype!='GO_Customfields_Customfieldtype_TreeselectSlave' // Treeselect may be implemented later
+				colArray[i].datatype!='GO\\Customfields\\Customfieldtype\\Heading' // Doesn't make sense to put a non-editable field in the editorGrid
+				&& colArray[i].datatype!='GO\\Customfields\\Customfieldtype\\Treeselect' // Treeselect may be implemented later
+				&& colArray[i].datatype!='GO\\Customfields\\Customfieldtype\\TreeselectSlave' // Treeselect may be implemented later
 			)
 			validColDataIds.push(colArray[i].dataIndex);
 	}

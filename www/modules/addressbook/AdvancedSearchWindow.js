@@ -44,7 +44,7 @@ GO.addressbook.AdvancedSearchWindow = function(config){
 					queryPanel: this._contactsQueryPanel,
 					width:120,
 					split:true,
-					modelName:'GO_Addressbook_Model_Contact'
+					modelName:'GO\\Addressbook\\Model\\Contact'
 				})]
 		},{
 			layout:'border',
@@ -58,7 +58,7 @@ GO.addressbook.AdvancedSearchWindow = function(config){
 					width:120,
 					split:true,
 					queryPanel: this._companiesQueryPanel,
-					modelName:'GO_Addressbook_Model_Company'
+					modelName:'GO\\Addressbook\\Model\\Company'
 				})
 			]
 		}];

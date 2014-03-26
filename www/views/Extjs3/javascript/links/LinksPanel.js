@@ -70,7 +70,7 @@ GO.grid.LinksPanel = function(config){
 		if(folder_id!='')
 		{
 			var coords = e.getXY();
-			this.linksContextMenu.showAt([coords[0], coords[1]], ['GO_Base_Model_LinkFolder:'+folder_id], 'folder');	
+			this.linksContextMenu.showAt([coords[0], coords[1]], ['GO\\Base\\Model\\LinkFolder:'+folder_id], 'folder');	
 		}		
 	}, this);
 	
@@ -261,7 +261,7 @@ GO.grid.LinksPanel = function(config){
 	
 	this.linksContextMenu.on('delete', function(menu,selections){
 
-		if(selections.indexOf('GO_Base_Model_LinkFolder:'+this.folder_id)>-1){
+		if(selections.indexOf('GO\\Base\\Model\\LinkFolder:'+this.folder_id)>-1){
 			this.setFolder(0,true);
 		}
 		
