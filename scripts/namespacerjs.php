@@ -1,8 +1,8 @@
 <?php
-chdir('/var/www/trunk');
+//chdir('/var/www/trunk');
 
 //find all PHP files except updates.php and updates.inc.php because we shouldn't touch them
-$cmd = 'find . -type f -name *.js';
+$cmd = 'find . -type f -name "*.js"';
 exec($cmd, $scripts, $return_var);
 
 //return var should be 0 otherwise something went wrong
