@@ -30,8 +30,28 @@ class PrintCategoryCount extends \GO\Base\Model {
 		$this->startDate = $startDate;
 		$this->endDate = $endDate;
 		
-		$this->categories = Category::model()->find()->fetchAll(); //GLOBAL
+		
 		$this->calendars = Calendar::model()->find()->fetchAll();
+		
+		
+		$findParams = \GO\Base\Db\FindParams::newInstance()
+						->join('cal_events', \GO\Base\Db\FindCriteria::newInstance()->addRawCondition('t.id', 'e.category_id'),'e')
+						->group('t.id')
+						->having('count(*)>0');
+		
+		$calendars=array(0);
+		
+		foreach($this->calendars as $calendar){
+			$calendars[]=$calendar->id;
+		}
+		
+		$findParams->getCriteria()->addInCondition('calendar_id', $calendars);
+		
+		
+		$this->categories = Category::model()->find($findParams)->fetchAll(); //GLOBAL
+		
+		
+	
 	}
 	
 	/**
@@ -61,35 +81,44 @@ class PrintCategoryCount extends \GO\Base\Model {
 		if(empty($this->_rows)){
 			foreach($this->calendars as $calendar){
 
-				$row = array();
-				$row[] = $calendar->name;
+				$row = array(
+						'name'=>$calendar->name
+				);
+				
+//				foreach($this->categories as $category){
 
-				foreach($this->categories as $category){
-
-					$findParams = \GO\Base\Db\FindParams::newInstance();
-					$findParams->select('COUNT(*) as count');
+					$findParams = \GO\Base\Db\FindParams::newInstance()
+									->ignoreAcl()
+									->select('COUNT(*) as count, category_id')									
+									->group('category_id');
 //					$findParams->ignoreAcl();							// Only count items that are visible for this user.
 	//				$findParams->group('calendar_id');
 
 					$findCriteria = \GO\Base\Db\FindCriteria::newInstance();
-
-					$findCriteria->addCondition('category_id', $category->id);
+					
 					$findCriteria->addCondition('calendar_id', $calendar->id);
 					$findCriteria->addCondition('start_time', strtotime($this->startDate),'>');
 					$findCriteria->addCondition('end_time', strtotime($this->endDate),'<');
 
 					$findParams->criteria($findCriteria);
 
-					$result = Event::model()->find($findParams)->fetch();
+					$catRecord = array();
+					foreach(Event::model()->find($findParams) as $record){
+						 $catRecord[intval($record->category_id)]=$record->count;
+					}
+					
+					foreach($this->categories as $category){
+						$row[]=isset($catRecord[$category->id]) ? $catRecord[$category->id] : 0;
+					}
+					
+					
+					$this->_rows[] = $row;
 
-					if(empty($result->count))
-						$row[] = 0;
-					else
-						$row[] = $result->count;
+
 				}
 
-				$this->_rows[] = $row;
-			}
+				
+//			}
 		}
 
 		return $this->_rows;

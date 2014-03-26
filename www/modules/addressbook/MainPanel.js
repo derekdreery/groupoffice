@@ -109,7 +109,7 @@ GO.addressbook.MainPanel = function(config)
 	});
 
 	this.contactEastPanel.on('commentAdded',function(){
-		this.contactsGrid.store.load();
+		this.contactsGrid.store.reload();
 	},this);
 
 	this.companyEastPanel = new GO.addressbook.CompanyReadPanel({

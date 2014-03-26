@@ -410,14 +410,7 @@ class Config {
 	 */
 	var $force_ssl=false;
 
-	/**
-	 * Full URL to reach Group-Office with trailing slash. This value is determined
-	 * automatically if not set in config.php
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $full_url = '';
+	
 
 	/**
 	 * Title of Group-Office
@@ -903,6 +896,15 @@ class Config {
 	 //////////      Variables that are not touched by the installer   /////////////
 	 //////////////////////////////////////////////////////////////////////////////*/
 	
+	/**
+	 * Full URL to reach Group-Office with trailing slash. This value is determined
+	 * automatically if not set in config.php
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $full_url = '';
+	
 	
 	/**
 	 * Enable zlib compression for faster downloading of scripts and css
@@ -958,7 +960,7 @@ class Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '5.0.48';
+	var $version = '5.0.49';
 
 	
 	/**
@@ -968,7 +970,7 @@ class Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20140320';
+	var $mtime = '20140326';
 
 	#group configuration
 	/**
@@ -1691,7 +1693,7 @@ class Config {
 
 		foreach($values as $key=>$value)
 		{
-			if($key == 'version')
+			if($key == 'full_url')
 			break;
 
 			if(!is_object($value))

@@ -118,6 +118,14 @@ GO.customfields.FieldDialog = function(config){
   
 	this.functionPanel.setVisible(false);
 	
+	this.extraOptionsField = new Ext.form.TextField({
+		name:'extra_options',
+		maxLength:255,
+		fieldLabel:'Options', // use this.extraOptionsField.label.update('New label')
+		hidden: true, //unhide by overwriting: Ext.override(GO.customfields.FieldDialog, {--todo--});
+		anchor: '-20'
+	});
+	
 	this.formPanel = new Ext.FormPanel({
 		labelWidth:140,
 		//	autoHeight:true,
@@ -128,6 +136,7 @@ GO.customfields.FieldDialog = function(config){
 		items: [
 		this.nameField,
 		this.typeField,
+		this.extraOptionsField,
 		this.maxLengthField,
 		this.multiSelectCB = new Ext.ux.form.XCheckbox({
 			name:'multiselect',

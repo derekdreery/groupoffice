@@ -2,6 +2,8 @@
 if(!isset($logout))
 	define('GO_NO_SESSION',true);
 
+define('GO_INSTALLER',true);
+
 require(dirname(dirname(__FILE__)).'/GO.php');
 
 if(isset($logout)){

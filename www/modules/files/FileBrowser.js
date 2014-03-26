@@ -1070,13 +1070,12 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		rootID ? this.bookmarksGrid.hide() : this.bookmarksGrid.show();
 		
 		
-				
 		if(this.treePanel.getLoader().baseParams.root_folder_id!=rootID || (folder_id>0 && this.folder_id!=folder_id)){
 		
 				this.folder_id=folder_id;
 				this.treePanel.getLoader().baseParams.root_folder_id=rootID;
 				this.treePanel.setExpandFolderId(folder_id);
-				if(folder_id)
+				if(folder_id || folder_id==0)
 					this.refresh();
 		}
                 

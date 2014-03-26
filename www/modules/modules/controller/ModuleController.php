@@ -94,7 +94,7 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 			if(!$module->save())
 				throw new \GO\Base\Exception\Save();
 			
-			$response['results'][]=$module->getAttributes();
+			$response['results'][]=array_merge($module->getAttributes(), array('name'=>$module->moduleManager->name()));
 		}
 		
 //		$defaultModels = \GO\Base\Model\AbstractUserDefaultModel::getAllUserDefaultModels();

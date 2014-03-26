@@ -8,10 +8,9 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 			\GO::config()->$key=$value;
 		}
 		\GO::config()->save();
-		
 		$conn = \GO::getDbConnection();
 		
-		header('Location: install.php');
+		redirect('install.php');
 		
 	}
 	catch(Exception $e){
