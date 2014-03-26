@@ -1126,23 +1126,23 @@ class InstallationController extends \GO\Base\Controller\AbstractModelController
 //		}
 
 		//Post the report to intermesh
-		if(class_exists('GO\Professional\LicenseCheck')){
-			$c = new \GO\Base\Util\HttpClient();
-			$url = 'https://intermesh.group-office.com/index.php?r=licenses/server/report';
-//			$url = 'http://intermesh.intermesh.dev/index.php?r=licenses/server/report';
-			$response = $c->request($url, array(
-					'report'=>json_encode($report)
-			));
-
-			$response = json_decode($response, true);
-
-			if($response['success'])
-				echo "Report was sent to Intermesh\n";
-			else{
-				echo "ERROR: sending report to Intermesh\n";
-				var_dump($response);
-			}
-		}
+//		if(class_exists('GO\Professional\LicenseCheck')){
+//			$c = new \GO\Base\Util\HttpClient();
+//			$url = 'https://intermesh.group-office.com/index.php?r=licenses/server/report';
+////			$url = 'http://intermesh.intermesh.dev/index.php?r=licenses/server/report';
+//			$response = $c->request($url, array(
+//					'report'=>json_encode($report)
+//			));
+//
+//			$response = json_decode($response, true);
+//
+//			if($response['success'])
+//				echo "Report was sent to Intermesh\n";
+//			else{
+//				echo "ERROR: sending report to Intermesh\n";
+//				var_dump($response);
+//			}
+//		}
 
 //		$message = \GO\Base\Mail\Message::newInstance();
 //		$message->setSubject("Servermanager report for ". $report['hostname']);
