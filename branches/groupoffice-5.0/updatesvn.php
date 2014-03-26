@@ -14,6 +14,8 @@ chdir($wd);
 foreach($output as $module){
 	
 	if(substr($module,-1)=='/'){ //check if it's a directory
+		//uncomment the following line if subversion is upgraded
+		//system('svn upgrade '.$module);
 				
 		if(is_dir($module)){
 			echo "UPDATE ".rtrim($module,'/')."\n";
