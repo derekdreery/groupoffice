@@ -1,3 +1,5 @@
+- Holidays: Fixed client-side bug when creating a new leave day entry.
+
 26-03-2014 5.0.49
 - new PHP 5.5 OPCache caused database install problem.
 - Database check uses less system memory
