@@ -1635,15 +1635,19 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if(GO_Base_Util_Http::isInternetExplorer() && in_array($file->extension(), $officeExtensions)){
 			$inline=false;
 		}
-
-		GO_Base_Util_Http::outputDownloadHeaders($file,$inline,true);
 		
 		$imap = $account->openImapConnection($params['mailbox']);				
+		
+		GO_Base_Util_Http::outputDownloadHeaders($file,$inline,true);
 		$fp =fopen("php://output",'w');
 		$imap->get_message_part_decoded($params['uid'], $params['number'], $params['encoding'], false, true, false, $fp);
 		fclose($fp);
-		
-//		echo base64_decode($imap->get_message_part($params['uid'], $params['number']));
+
+//		
+//		$file = new GO_Base_Fs_MemoryFile($params['filename'], base64_decode($imap->get_message_part($params['uid'], $params['number'])));
+//		header('Content-Type: audio/x-wav');
+////		GO_Base_Util_Http::outputDownloadHeaders($file,$inline,false);
+//		$file->output();
 	}
 
 //	Z-push testing
