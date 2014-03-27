@@ -1272,7 +1272,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 	 * @return boolean
 	 * @throws \GO\Base\Exception\NotFound
 	 */
-	private function _handleIcalendarReply(Sabre\VObject\Component $vevent, $recurrenceDate, \GO\Email\Model\Account $account){
+	private function _handleIcalendarReply(\Sabre\VObject\Component $vevent, $recurrenceDate, \GO\Email\Model\Account $account){
 		//find existing event
 		$masterEvent = \GO\Calendar\Model\Event::model()->findByUuid((string)$vevent->uid, $account->user_id);
 		if(!$masterEvent)
@@ -1305,7 +1305,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 	 * @return boolean
 	 * @throws \GO\Base\Exception\NotFound
 	 */
-	private function _handleIcalendarRequest(Sabre\VObject\Component $vevent, $recurrenceDate, \GO\Email\Model\Account $account){
+	private function _handleIcalendarRequest(\Sabre\VObject\Component $vevent, $recurrenceDate, \GO\Email\Model\Account $account){
 		
 		$settings = \GO\Calendar\Model\Settings::model()->getDefault($account->user);
 		
@@ -1379,7 +1379,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 		return $response;
 	}
 	
-	private function _handleIcalendarCancel(Sabre\VObject\Component $vevent, $recurrenceDate,\GO\Email\Model\Account $account){
+	private function _handleIcalendarCancel(\Sabre\VObject\Component $vevent, $recurrenceDate,\GO\Email\Model\Account $account){
 		$masterEvent = \GO\Calendar\Model\Event::model()->findByUuid((string)$vevent->uid, $account->user_id);
 				
 		//delete existing data		
