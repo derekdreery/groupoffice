@@ -1,3 +1,6 @@
+27-03-2014 5.0.50
+- Updated German translation
+- Disable swiftmailer disk cache on windows
 - Resource can be added and used without administrators
 - Calendar will only send an email to the resource administrator when the booked event is in the future
 - Holidays: Fixed client-side bug when creating a new leave day entry.
