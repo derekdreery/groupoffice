@@ -42,7 +42,7 @@ GO.base.upload.PluploadMenuItem = Ext.extend(Ext.menu.Item, {
 			this.uploadpanel.doLayout();
 			
 			//automatically open file chooser if possible
-			if (this.uploadpanel.uploader.features.triggerDialog) {
+			if (this.uploadpanel.uploader.features.triggerDialog && GO.settings.upload_quickselect) {
 				var input = document.getElementById(this.uploadpanel.uploader.id + '_html5');
 				if (input && !input.disabled) { // for some reason FF (up to 8.0.1 so far) lets to click disabled input[type=file]
 						input.click();

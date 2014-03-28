@@ -1166,6 +1166,13 @@ class GO_Base_Config {
 	
 	
 	/**
+	 * Automatically opens the file select dialog when opening the upload dialog.
+	 * 
+	 * @var boolean 
+	 */
+	public $upload_quickselect = true;
+	
+	/**
 	 * EXPERIMENTAL! Minifies JS and CSS on the fly.
 	 * Doesn't seem to make much difference when gzip is used.
 	 * 
