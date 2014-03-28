@@ -1,3 +1,6 @@
+5.0.51
+- Added config option ("upload_quickselect") to disable the opening of the file select dialog when using the upload dialog.
+
 27-03-2014 5.0.50
 - Updated German translation
 - Disable swiftmailer disk cache on windows
