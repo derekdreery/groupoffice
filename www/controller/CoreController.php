@@ -893,4 +893,37 @@ class CoreController extends \GO\Base\Controller\AbstractController {
 		
 		
 	}
+	
+	public function actionPasteUploadTemporary($filename, $filetype){
+		
+		
+		$type = explode('/', $filetype);
+		$extension=$type[1];
+		
+		
+		$_FILES['pastedFile']['name']=$filename.'.'.$extension;
+		
+		
+		$file = new GO\Base\Fs\File($_FILES['pastedFile']['tmp_name']);
+		
+		$file->move(GO::config()->getTempFolder(), $filename.'.'.$extension, true);
+			
+		
+		$response = new \GO\Base\Data\JsonResponse(array(
+				'success'=>true,
+				'data'=>array(
+						'tmp_file'=>$file->stripTempPath(),
+						'name'=>$file->name(),
+						'size'=>$file->size(), 
+						'type'=>$file->mimeType(),
+						'extension'=>$file->extension(),
+						'human_size'=>$file->humanSize(),
+						'from_file_storage'=>false						
+						)
+		));
+		
+		echo $response;
+		
+		
+	}
 }

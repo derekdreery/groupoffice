@@ -4,23 +4,22 @@ GO.base.upload.Paster = function(config) {
 	this.init();
 };
 Ext.apply(GO.base.upload.Paster.prototype, {
+	
+	temporaryFile:false,
 	pasteEl: null,
 	init: function() {
 		if (window.Clipboard) {
-			//IE11, Chrome, Safari
-			this.pasteEl.on('paste', this.handlePaste, this);
+			//IE11, Chrome, Safari		
+			 Ext.EventManager.addListener(
+				this.pasteEl,
+				'paste',
+				this.handlePaste,
+				this
+				 
+			 );
+//			this.pasteEl.on('paste', this.handlePaste, this);
 		} else
 		{
-			
-//			var map = new Ext.KeyMap(this.pasteEl,{	
-//					key: Ext.EventObject.V,
-//					ctrl:true,
-//					fn: function() {
-//							console.log("key map");
-//							this.pasteCatcher.focus();
-//					},
-//					scope:this					
-//			});
 			//Firefox
 			this.canvas = document.createElement('canvas');
 			this.pasteCatcher = document.createElement("div");
@@ -114,9 +113,11 @@ Ext.apply(GO.base.upload.Paster.prototype, {
 
 		var xhr = new XMLHttpRequest();
 		xhr.upload.onprogress = function(e) {
-			var percentComplete = (e.loaded / e.total) * 100;
+			if (e.lengthComputable){
+				var percentComplete = (e.loaded / e.total) * 100;
 
-			progress.updateProgress(percentComplete);
+				progress.updateProgress(percentComplete);
+			}
 		};
 		var self = this;
 		xhr.onload = function() {
@@ -142,18 +143,29 @@ Ext.apply(GO.base.upload.Paster.prototype, {
 				}
 			}
 		};
+		
+		var progress = Ext.MessageBox.progress("Uploading", "pasted file");
+		
 		var dt = new Date();
-		var filename = prompt("Please enter the file name", "Pasted image " + dt.format("Y-m-d H:i:s"));
+		var filename = this.temporaryFile ? 'temp-'+dt.format("Y-m-d H:i:s") : prompt("Please enter the file name", "Pasted image " + dt.format("Y-m-d H:i:s"));
 		
 		if(filename){
-			var progress = Ext.MessageBox.progress("Uploading", "pasted file");
+			
 		
-			xhr.open("POST", GO.url('core/pasteUpload', {
-				model_name: this.model_name,
-				model_id: this.model_id,
-				filename: filename,
-				filetype: file.type
-			}));
+			if(!this.temporaryFile){
+				xhr.open("POST", GO.url('core/pasteUpload', {
+					model_name: this.model_name,
+					model_id: this.model_id,
+					filename: filename,
+					filetype: file.type
+				}));
+			}else
+			{
+				xhr.open("POST", GO.url('core/pasteUploadTemporary', {
+					filename: filename,
+					filetype: file.type
+				}));
+			}
 			var formData = new FormData();
 			formData.append("pastedFile", file);
 			xhr.send(formData);
