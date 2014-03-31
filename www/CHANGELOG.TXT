@@ -1,3 +1,4 @@
+- Paste images in chrome
 - Support for pasting images and drag and drop nodes in site module
 - Use XCache for caching values
 

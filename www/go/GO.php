@@ -1189,6 +1189,7 @@ class GO{
 		
 		if(!isset(self::$ioncubeWorks)){					
 		
+			//check data for presence of ionCube in code.
 			$data=  file_get_contents($path, false, null, -1, 100);		
 			if(strpos($data, 'ionCube')===false){				
 				return true;
