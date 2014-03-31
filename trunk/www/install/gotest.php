@@ -284,7 +284,7 @@ function test_system(){
 		$test['name']='Professional license';
 		
 		if(!file_exists(GO::config()->root_path.'groupoffice-pro-'.\GO::config()->getMajorVersion().'-license.txt')){
-			$test['feedback']='Warning: There\'s no license file. The professional modules will not be enabled';
+			$test['feedback']='Warning: There\'s no license file "groupoffice-pro-'.\GO::config()->getMajorVersion().'-license.txt" in the root of Group-Office. The professional modules will not be enabled.';
 			$test['fatal']=false;
 			$test['pass']=false;
 		}elseif(!\GO::scriptCanBeDecoded('../modules/professional/License.php'))
