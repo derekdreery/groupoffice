@@ -91,6 +91,12 @@ Ext.extend(GO.base.email.EmailEditorAttachmentsView, Ext.DataView, {
 		this.fireEvent('attachmentschanged', this);
 		
 	},
+	
+	
+	addTempFile : function(recordData){
+		this.store.loadData({results: [recordData]}, true);
+	},
+	
 	onAttachmentDblClick : function(view, index, node, e){
 		
 		var record = this.store.getAt(index);	

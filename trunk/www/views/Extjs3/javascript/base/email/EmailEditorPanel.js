@@ -174,7 +174,6 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 			anchor: '100% '+anchorHeight,
 			plugins:this.initHtmlEditorPlugins(),			
 			listeners:{
-				
 				activate:function(){
 
 					var doc = this.htmlEditor.getDoc();				
@@ -190,6 +189,43 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 					}
 					
 					this.setOriginalValue();
+					
+					
+					
+					
+					
+					var pasteEl = this.htmlEditor.getDoc();
+
+					if(Ext.isChrome){
+						var paster = new GO.base.upload.Paster({
+							pasteEl: pasteEl,
+							temporaryFile:true,
+							callback:function(paster, result, xhr){
+//								this.attachmentsView.addTempFile(result.data);
+
+									var token = GO.base.util.MD5(result.data.tmp_file);
+
+									var url = GO.url("core/downloadTempFile", {path:result.data.tmp_file, token: token});
+
+									var html = '<img src="'+url+'" border="0" />';
+									
+									this.htmlEditor.focus();
+									this.htmlEditor.insertAtCursor(html);	
+									
+									
+									this.inlineAttachments.push({
+										tmp_file : result.data.tmp_file,
+										from_file_storage : false,
+										token:token
+									});				
+									this.setInlineAttachments(this.inlineAttachments);	
+							},
+							scope:this
+						});
+						
+						console.log('ja2');
+
+					}					
 				},
 				scope:this
 			}
@@ -200,7 +236,7 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 			anchor : '100% '+anchorHeight,
 			hideLabel : true,
 			cls:'em-plaintext-body-field'
-		})
+		});
 
 		if (!GO.util.empty(config.enableSubjectField))
 			config.items.push({
@@ -338,6 +374,9 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 			});				
 			this.setInlineAttachments(this.inlineAttachments);	
 		}, this);	
+		
+		
+		
 	
 		return [imageInsertPlugin];
 	},
