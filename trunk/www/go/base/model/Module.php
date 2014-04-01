@@ -71,8 +71,12 @@ class Module extends \GO\Base\Db\ActiveRecord {
 			return '';
 		}else
 		{
-			return 'You have unlicensed users. You can click "Buy" to get more licenses.';
+			return 'You have unlicensed users. Double click to buy more licenses.';
 		}
+	}
+	
+	public function getBuyEnabled(){
+		return $this->moduleManager->appCentre() && \GO\Professional\License::moduleIsRestricted($this->id);
 	}
 	
 	public function getSortOrderColumn() {
