@@ -1,4 +1,6 @@
 <?php
+namespace GO\Base;
+
 /**
  * Group-Office
  * 
@@ -27,9 +29,6 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base 
  */
-
-namespace GO\Base;
-
 
 class Module extends Observable {
 
@@ -151,11 +150,21 @@ class Module extends Observable {
 	}
 	
 	/**
-	 *
+	 * Return true if this module has a GUI
+	 * 
 	 * @return boolean 
 	 */
 	public function hasInterface(){
 		return true;
+	}
+	
+	/**
+	 * Return true if this module can be bought in the Group-Office app centre
+	 * 
+	 * @return boolean
+	 */
+	public function appCentre(){
+		return false;
 	}
 	
 	/**

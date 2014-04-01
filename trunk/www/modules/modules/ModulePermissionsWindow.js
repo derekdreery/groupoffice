@@ -6,7 +6,7 @@ GO.modules.ModulePermissionsWindow = Ext.extend(GO.Window,{
 					title : GO.users.lang.useModule,
 					levels:[
 						GO.permissionLevels.read,
-						GO.permissionLevels.manage,
+						GO.permissionLevels.manage
 					]
 				});
 				

@@ -19,7 +19,7 @@ GO.modules.MainPanel = function(config) {
 
 	this.installedModulesDS = new GO.data.JsonStore({
 		url : GO.url('modules/module/store'),
-		fields : ['name', 'description', 'id', 'sort_order','admin_menu', 'acl_id','icon'],
+		fields : ['name', 'description', 'id', 'sort_order','admin_menu', 'acl_id','icon','enabled', 'warning'],
 		remoteSort : true
 	});
 
@@ -63,6 +63,27 @@ GO.modules.MainPanel = function(config) {
 			scope : this
 		}]
 	});
+	
+	var checkColumn = new GO.grid.CheckColumn({
+		header: GO.modules.lang.enabled,
+		dataIndex: 'enabled',
+		width: 20,
+		listeners:{
+			scope:this,
+			change: function(record, checked){
+				GO.request({
+					url:'modules/module/update',
+					params:{
+						id:record.id,						
+						enabled:checked
+					},
+					success:function(){
+						record.commit();
+					}
+				});
+			}
+		}
+	});
 
 	config.cm = new Ext.grid.ColumnModel([{
 		header : GO.lang['strName'],
@@ -70,7 +91,14 @@ GO.modules.MainPanel = function(config) {
 		id:'name',
 		renderer : this.iconRenderer,
 		width:250
-	}
+	},{
+		header:'-',
+		dataIndex : "warning",
+		id:"warning",
+		renderer:this.warningRenderer,
+		width:20
+	},
+	checkColumn
 //	,{
 //		header : GO.lang.users,
 //		dataIndex:'user_count',
@@ -341,7 +369,14 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 	iconRenderer : function(name, cell, record) {
 		return '<div class="mo-title" style="background-image:url('+record.data["icon"]+')">'
 		+ name + '</div>';
+	},
+	
+	warningRenderer : function(name, cell, record) {
+		return record.data.warning != '' ? '<div class="go-icon go-warning-msg" ext:qtip="'+record.data.warning+'"></div>' : '';
 	}
+	
+	
+	
 });
 
 GO.moduleManager.addModule('modules', GO.modules.MainPanel, {

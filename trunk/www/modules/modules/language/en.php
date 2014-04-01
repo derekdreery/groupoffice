@@ -12,3 +12,5 @@ $l["cmdModulesCannotBeDeleted"]= 'The Module "Modules" cannot be deleted!.';
 $l['name'] = 'Modules';
 $l['description'] = 'Admin module; Managing modules.';
 $l['deleteModule'] = 'The module "Modules" cannot be deleted!';
+
+$l['enabled']='Enabled';

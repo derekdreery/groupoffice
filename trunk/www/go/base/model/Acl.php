@@ -66,7 +66,11 @@ class Acl extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 		return array(
-				'records' => array('type'=>self::HAS_MANY, 'model'=>'GO\Base\Model\AclUsersGroups', 'field'=>'acl_id', 'delete'=>true),
+				'records' => array(
+						'type'=>self::HAS_MANY, 
+						'model'=>'GO\Base\Model\AclUsersGroups', 
+						'field'=>'acl_id', 
+						'delete'=>self::DELETE_CASCADE),
 		);
 	}
 	

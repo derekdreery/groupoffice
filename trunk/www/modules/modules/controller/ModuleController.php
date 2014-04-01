@@ -2,11 +2,17 @@
 
 namespace GO\Modules\Controller;
 
+use GO;
+use GO\Base\Model\Module;
+use GO\Base\Controller\AbstractJsonController;
+use GO\Base\Model\Acl;
 
-class ModuleController extends \GO\Base\Controller\AbstractModelController{
-	
-	protected $model = 'GO\Base\Model\Module';
-	
+use GO\Base\Data\DbStore;
+use GO\Base\Data\ColumnModel;
+use GO\Base\Db\FindParams;
+use GO\Base\Data\JsonResponse;
+
+class ModuleController extends AbstractJsonController{
 	
 	protected function allowWithoutModuleAccess() {
 		return array('permissionsstore');
@@ -15,46 +21,54 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 	protected function ignoreAclPermissions() {		
 		return array('*');
 	}
+	
+	
+	protected function actionUpdate($id) {
+
+		$model = Module::model()->findByPk($id);
+		$model->setAttributes($_POST);		
+		$model->save();
 		
-	protected function prepareStore(\GO\Base\Data\Store $store){		
-			
-		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatRecord'));
-		$store->setDefaultSortOrder('sort_order');
-    return parent::prepareStore($store);
+		echo $this->renderSubmit($model);
 	}
 	
-	protected function getStoreParams($params) {
-		$findParams = \GO\Base\Db\FindParams::newInstance()
+	
+	/**
+	 * Render JSON output that can be used by ExtJS GridPanel
+	 * @param array $params the $_REQUEST params
+	 */
+	protected function actionStore() {
+		//Create ColumnModel from model
+		$columnModel = new ColumnModel(Module::model());
+		
+		$columnModel->formatColumn('description', '$model->moduleManager->description()');
+		$columnModel->formatColumn('name', '$model->moduleManager->name()');
+		$columnModel->formatColumn('author', '$model->moduleManager->author()');
+		$columnModel->formatColumn('icon', '$model->moduleManager->icon()');
+		$columnModel->formatColumn('appCentre', '$model->moduleManager->appCentre()');
+		$columnModel->formatColumn('warning', '$model->getWarning()');
+		
+		$findParams = FindParams::newInstance()
 						->ignoreAcl()
 						->limit(0);
 		
-		if(!empty(\GO::config()->allowed_modules))
-			$findParams->getCriteria ()->addInCondition ('id', explode(',',\GO::config()->allowed_modules));
+		if(!empty(GO::config()->allowed_modules)){
+			$findParams->getCriteria ()->addInCondition ('id', explode(',',GO::config()->allowed_modules));
+		}
 		
-		return $findParams;
-		
-	}
-	
-	public function formatRecord($record, $model, $store){
-
-		//if($model->moduleManager){
-		$record['description'] = $model->moduleManager->description();
-		$record['name'] = $model->moduleManager->name();
-		$record['author'] = $model->moduleManager->author();
-		$record['icon'] = $model->moduleManager->icon();
-
-		
-		//$record['user_count']=$model->acl->countUsers();
-		
-		return $record;
+		//Create store
+		$store = new DbStore('GO\Base\Model\Module', $columnModel, $_POST, $findParams);
+		$store->defaultSort='sort_order';
+		$response = $this->renderStore($store);		
+		echo $response;
 	}
 	
 	
 	protected function actionAvailableModulesStore($params){
 		
-		$response['results']=array();
+		$response=new JsonResponse(array('results','success'=>true));
 		
-		$modules = \GO::modules()->getAvailableModules();
+		$modules = GO::modules()->getAvailableModules();
 		
 		$availableModules=array();
 						
@@ -75,26 +89,28 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 		
 		$response['total']=count($response['results']);
 		
-		return $response;
+		echo $response;
 	}
 	
 	
 	protected function actionInstall($params){
 		
-		$response = array('success'=>true,'results'=>array());
+		$response =new JsonResponse(array('success'=>true,'results'=>array()));
 		$modules = json_decode($params['modules'], true);
 		foreach($modules as $moduleId)
 		{
-			$module = new \GO\Base\Model\Module();
-			$module->id=$moduleId;
-			
-			
-			$module->moduleManager->checkDependenciesForInstallation($modules);	
-			
-			if(!$module->save())
-				throw new \GO\Base\Exception\Save();
-			
-			$response['results'][]=array_merge($module->getAttributes(), array('name'=>$module->moduleManager->name()));
+			if(!GO::modules()->$moduleId){
+				$module = new Module();
+				$module->id=$moduleId;
+
+
+				$module->moduleManager->checkDependenciesForInstallation($modules);	
+
+				if(!$module->save())
+					throw new \GO\Base\Exception\Save();
+
+				$response->data['results'][]=array_merge($module->getAttributes(), array('name'=>$module->moduleManager->name()));
+			}
 		}
 		
 //		$defaultModels = \GO\Base\Model\AbstractUserDefaultModel::getAllUserDefaultModels();
@@ -106,7 +122,7 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 //			}
 //		}
 				
-		return $response;
+		echo $response;
 	}
 	
 	public function actionPermissionsStore($params) {
@@ -115,26 +131,26 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 		//check access to users or groups module. Because we allow this action without
 		//access to the modules module		
 		if ($params['paramIdType']=='groupId'){
-			if(!\GO::modules()->groups)
+			if(!GO::modules()->groups)
 				throw new \GO\Base\Exception\AccessDenied();
 		}else{
-			if(!\GO::modules()->users)
+			if(!GO::modules()->users)
 				throw new \GO\Base\Exception\AccessDenied();
 		}
 			
-		$response = array(
+		$response = new JsonResponse(array(
 			'success' => true,
 			'results' => array(),
 			'total' => 0
-		);
+		));
 		$modules = array();
-		$mods = \GO::modules()->getAllModules();
+		$mods = GO::modules()->getAllModules();
 			
 		while ($module=array_shift($mods)) {
 			$permissionLevel = 0;
 			$usersGroupPermissionLevel = false;
 			if (empty($params['id'])) {				
-				$aclUsersGroup = $module->acl->hasGroup(\GO::config()->group_everyone); // everybody group
+				$aclUsersGroup = $module->acl->hasGroup(GO::config()->group_everyone); // everybody group
 				$permissionLevel=$usersGroupPermissionLevel=$aclUsersGroup ? $aclUsersGroup->level : 0;
 			} else {
 				if ($params['paramIdType']=='groupId') {
@@ -143,23 +159,23 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 					$permissionLevel=$aclUsersGroup ? $aclUsersGroup->level : 0;
 				} else {
 					//when looking from the users module
-					$permissionLevel = \GO\Base\Model\Acl::getUserPermissionLevel($module->acl_id, $params['id']);					
-					$usersGroupPermissionLevel= \GO\Base\Model\Acl::getUserPermissionLevel($module->acl_id, $params['id'], true);
+					$permissionLevel = Acl::getUserPermissionLevel($module->acl_id, $params['id']);					
+					$usersGroupPermissionLevel= Acl::getUserPermissionLevel($module->acl_id, $params['id'], true);
 				}
 			}
 			
 			$translated = $module->moduleManager ? $module->moduleManager->name() : $module->id;
 			
 			// Module permissions only support read permission and manage permission:
-			if (\GO\Base\Model\Acl::hasPermission($permissionLevel,\GO\Base\Model\Acl::CREATE_PERMISSION))
-				$permissionLevel = \GO\Base\Model\Acl::MANAGE_PERMISSION;			
+			if (Acl::hasPermission($permissionLevel,Acl::CREATE_PERMISSION))
+				$permissionLevel = Acl::MANAGE_PERMISSION;			
 			
 			$modules[$translated]= array(
 				'id' => $module->id,
 				'name' => $translated,
 				'permissionLevel' => $permissionLevel,
-				'disable_none' => $usersGroupPermissionLevel!==false && \GO\Base\Model\Acl::hasPermission($usersGroupPermissionLevel,\GO\Base\Model\Acl::READ_PERMISSION),
-				'disable_use' => $usersGroupPermissionLevel!==false && \GO\Base\Model\Acl::hasPermission($usersGroupPermissionLevel, \GO\Base\Model\Acl::CREATE_PERMISSION)
+				'disable_none' => $usersGroupPermissionLevel!==false && Acl::hasPermission($usersGroupPermissionLevel,Acl::READ_PERMISSION),
+				'disable_use' => $usersGroupPermissionLevel!==false && Acl::hasPermission($usersGroupPermissionLevel, Acl::CREATE_PERMISSION)
 			);
 			$response['total'] += 1;
 		}
@@ -178,11 +194,11 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 	 */
 	public function actionCheckDefaultModels($params) {
 		
-		\GO::session()->closeWriting();
+		GO::session()->closeWriting();
 		
-//		\GO::$disableModelCache=true;
-		$response = array('success' => true);
-		$module = \GO\Base\Model\Module::model()->findByPk($params['moduleId']);
+//		GO::$disableModelCache=true;
+		$response = new JsonResponse(array('success' => true));
+		$module = Module::model()->findByPk($params['moduleId']);
 		
 		
 		$models = array();
@@ -191,29 +207,22 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 			$classes = $modMan->findClasses('model');
 			foreach ($classes as $class) {
 				if ($class->isSubclassOf('GO\Base\Model\AbstractUserDefaultModel')) {
-					$models[] = \GO::getModel($class->getName());
+					$models[] = GO::getModel($class->getName());
 				}
 			}
 		}
-//		\GO::debug(count($users));
 		
 		$module->acl->getAuthorizedUsers(
 						$module->acl_id, 
-						\GO\Base\Model\Acl::READ_PERMISSION, 
-						array("GO\Modules\Controller\ModuleController","checkDefaultModelCallback"), array($models));
+						Acl::READ_PERMISSION, 
+						function($user, $models){		
+							foreach ($models as $model)
+								$model->getDefault($user);		
+						}, array($models));
 		
-		
-//		if(class_exists("GO\Professional\LicenseCheck")){
-//			$lc = new \GO\Professional\LicenseCheck();
-//			$lc->checkProModules(true);
-//		}
 
-		return $response;
-	}
-	
-	public static function checkDefaultModelCallback($user, $models){		
-		foreach ($models as $model)
-			$model->getDefault($user);		
+
+		echo $response;
 	}
 	
 	public function actionSaveSortOrder($params){
@@ -221,12 +230,12 @@ class ModuleController extends \GO\Base\Controller\AbstractModelController{
 		
 		$i=0;
 		foreach($modules as $module){
-			$moduleModel = \GO\Base\Model\Module::model()->findByPk($module->id);
+			$moduleModel = Module::model()->findByPk($module->id);
 			$moduleModel->sort_order=$i++;
 			$moduleModel->save();
 		}
 		
-		return array('success'=>true);
+		echo new JsonResponse(array('success'=>true));
 	}
 
 }

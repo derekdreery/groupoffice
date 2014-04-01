@@ -112,17 +112,20 @@ foreach($scripts as $script){
 				$namespace = substr($namespace,0, $lastBackSlashPos);
 				
 
-				//find place in the file to enter the "namespace GO\Email\Model;" declaration.
-				//we can do this above the line with declaration "class ImapMessageAttachment"				
-				$offset = $classDeclarationMatches[0][1];
-				$lastLineBreakPos = strrpos(substr($content,0,$offset), "\n");
+//				//find place in the file to enter the "namespace GO\Email\Model;" declaration.
+//				//we can do this above the line with declaration "class ImapMessageAttachment"				
+//				$offset = $classDeclarationMatches[0][1];
+//				$lastLineBreakPos = strrpos(substr($content,0,$offset), "\n");
+//				
+//				$declaration = "\n\nnamespace ".$namespace.";\n\n";
+//
+//                //Inset the declaration in the file content
+//				$firstPart = substr($content,0,$lastLineBreakPos);
+//				$lastPart = substr($content, $lastLineBreakPos);				
+//				$content = $firstPart.$declaration.$lastPart;
 				
-				$declaration = "\n\nnamespace ".$namespace.";\n\n";
-
-                //Inset the declaration in the file content
-				$firstPart = substr($content,0,$lastLineBreakPos);
-				$lastPart = substr($content, $lastLineBreakPos);				
-				$content = $firstPart.$declaration.$lastPart;
+				//Put namespace on top of file
+				$content = str_replace('<?php', "<?php\n\nnamespace ".$namespace.";\n\n", $content, 1);
 				
 				//now we must remove the namespace from class usages in this file.
                 //eg. \GO\Base\Db\ActiveRecord becomes ActiveRecord.
