@@ -1,7 +1,7 @@
 - Paste images in chrome
 - Support for pasting images and drag and drop nodes in site module
 - Use XCache for caching values
-
+- Workflow: email and reminder for file uploader when file is disapproved.
 
 - Billing: PDF Templates can have stationery paper
 - Ticket messages styled like conversation and notes display yellow.
