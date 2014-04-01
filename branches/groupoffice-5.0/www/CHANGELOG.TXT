@@ -1,5 +1,6 @@
 5.0.51
 - Fixed automatic sort order for ticket type groups
+- Workflow: email and reminder for file uploader when file is disapproved.
 
 27-03-2014 5.0.50
 - Updated German translation
