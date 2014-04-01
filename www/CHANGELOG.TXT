@@ -2,6 +2,7 @@
 - Fixed automatic sort order for ticket type groups
 - Fixed problem with ticketmessage "type_id" and "has_type" properties.
 - Workflow: email and reminder for file uploader when file is disapproved.
+- Calendar: new Dutch King's Day.
 - Fixed: Ticketmessages imported from IMAP can be edited again.
 
 27-03-2014 5.0.50
