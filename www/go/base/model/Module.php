@@ -1,4 +1,6 @@
 <?php
+namespace GO\Base\Model;
+
 /*
  * Copyright Intermesh BV.
  *
@@ -28,7 +30,7 @@
  * @property boolean $enabled
  */
 
-namespace GO\Base\Model;
+
 
 
 class Module extends \GO\Base\Db\ActiveRecord {
@@ -64,10 +66,22 @@ class Module extends \GO\Base\Db\ActiveRecord {
 		return $this->_moduleManager;
 	}
 	
+	public function getWarning(){
+		if(!$this->moduleManager->appCentre() || $this->moduleManager->checkPermissionsWithLicense()){
+			return '';
+		}else
+		{
+			return 'You have unlicensed users. You can click "Buy" to get more licenses.';
+		}
+	}
+	
+	public function getSortOrderColumn() {
+		return 'sort_order';
+	}
+	
 	protected function beforeSave() {
 		if($this->isNew){			
 			$this->version = $this->moduleManager->databaseVersion();		
-			$this->sort_order = $this->count()+1;
 			$this->admin_menu = $this->moduleManager->adminModule();
 		}		
 		return parent::beforeSave();
