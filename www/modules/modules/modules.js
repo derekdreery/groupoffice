@@ -19,7 +19,7 @@ GO.modules.MainPanel = function(config) {
 
 	this.installedModulesDS = new GO.data.JsonStore({
 		url : GO.url('modules/module/store'),
-		fields : ['name', 'description', 'id', 'sort_order','admin_menu', 'acl_id','icon','enabled', 'warning'],
+		fields : ['name', 'description', 'id', 'sort_order','admin_menu', 'acl_id','icon','enabled', 'warning','buyEnabled'],
 		remoteSort : true
 	});
 
@@ -97,6 +97,10 @@ GO.modules.MainPanel = function(config) {
 		id:"warning",
 		renderer:this.warningRenderer,
 		width:20
+	},{
+		header:'-',
+		renderer:this.buyRenderer,
+		width:60
 	},
 	checkColumn
 //	,{
@@ -372,7 +376,12 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 	},
 	
 	warningRenderer : function(name, cell, record) {
-		return record.data.warning != '' ? '<div class="go-icon go-warning-msg" ext:qtip="'+record.data.warning+'"></div>' : '';
+		return record.data.warning != '' ? 
+			'<div class="go-icon go-warning-msg" ext:qtip="'+Ext.util.Format.htmlEncode(record.data.warning)+'"></div>' : '';
+	},
+	
+	buyRenderer : function(name, cell, record){
+		return record.data.buyEnabled ? '<a href="#" class="normal-link" onclick="GO.modules.showBuyDialog(\''+record.data.id+'\');">Buy</a>' : '';
 	}
 	
 	

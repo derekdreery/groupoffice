@@ -45,8 +45,9 @@ class ModuleController extends AbstractJsonController{
 		$columnModel->formatColumn('name', '$model->moduleManager->name()');
 		$columnModel->formatColumn('author', '$model->moduleManager->author()');
 		$columnModel->formatColumn('icon', '$model->moduleManager->icon()');
-		$columnModel->formatColumn('appCentre', '$model->moduleManager->appCentre()');
+//		$columnModel->formatColumn('appCentre', '$model->moduleManager->appCentre()');
 		$columnModel->formatColumn('warning', '$model->getWarning()');
+		$columnModel->formatColumn('buyEnabled', '$model->getBuyEnabled()');
 		
 		$findParams = FindParams::newInstance()
 						->ignoreAcl()

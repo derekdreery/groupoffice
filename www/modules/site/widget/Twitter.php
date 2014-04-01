@@ -271,6 +271,7 @@ http://t.co/zy3JDoVTEC"
  */
 	public $template = '<div>
 	<a class="twitter-account-name" href="https://twitter.com/{user:screen_name}">@{user:screen_name}</a>
+	<p class="date">{created_at}</p>
 	<p class="tweet">{text}</p>
 	<p class="interact">
 	<a href="https://twitter.com/intent/tweet?in_reply_to={id}" class="twitter_reply_icon">Reply</a>
@@ -306,15 +307,24 @@ http://t.co/zy3JDoVTEC"
 			
 			\GO::cache()->set($cacheKey, $tweets,$this->cacheLifeTime);
 		}
-//var_dump($tweets);
+
 		$html = '';
 		foreach($tweets as $tweet){
 			if(is_object($tweet)){
 				$str = $this->template;
 				foreach($tweet as $key=>$value){
 					if(!is_object($value)){
+						
 						if($key=='text')
 							$value = \GO\Base\Util\String::text_to_html($value);
+						
+						if($key=='created_at'){
+							$value = strtotime($value);
+							
+							if($value){
+								$value = date('Y-m-d G:i', $value);
+							}
+						}
 						
 						$str = str_replace('{'.$key.'}', $value, $str); 
 					}else
