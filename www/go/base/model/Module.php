@@ -67,22 +67,30 @@ class Module extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	public function getWarning(){
-		if(!$this->moduleManager->appCentre() || $this->moduleManager->checkPermissionsWithLicense()){
+//		if(!$this->moduleManager->appCentre() || $this->moduleManager->checkPermissionsWithLicense()){
 			return '';
-		}else
-		{
-			return 'You have unlicensed users. Double click to buy more licenses.';
-		}
+//		}else
+//		{
+//			return 'You have unlicensed users. Double click to buy more licenses.';
+//		}
 	}
 	
-	public function getBuyEnabled(){
-		return $this->moduleManager->appCentre() && \GO\Professional\License::moduleIsRestricted($this->id);
-	}
+//	public function getBuyEnabled(){
+//		return $this->moduleManager->appCentre() && \GO\Professional\License::moduleIsRestricted($this->id);
+//	}
 	
 	public function getSortOrderColumn() {
 		return 'sort_order';
 	}
 	
+	public function validate() {
+		
+		if($this->id=='modules' && $this->enabled=0){
+			$this->setValidationError('enabled', GO::t('cmdModulesCannotBeDeleted','modules'));
+		}
+		
+		return parent::validate();
+	}
 	protected function beforeSave() {
 		if($this->isNew){			
 			$this->version = $this->moduleManager->databaseVersion();		
@@ -104,6 +112,11 @@ class Module extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	protected function beforeDelete() {
+		
+		
+		if($this->id=='modules'){
+			$this->setValidationError('delete', GO::t('cmdModulesCannotBeDeleted','modules'));
+		}
 		
 		$this->_checkDependencies();
 		return parent::beforeDelete();
