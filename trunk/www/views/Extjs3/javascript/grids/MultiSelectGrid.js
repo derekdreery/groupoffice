@@ -166,7 +166,7 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 		{
 			if( this.store.data.items[i].get('checked'))
 			{
-				ids.push(this.store.data.items[i].get('id'));
+				ids.push(this.store.data.items[i].id);
 			}
 		}
 		return ids;
@@ -182,6 +182,10 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 			}
 		}
 		return records;
+	},
+	
+	clearSelections : function(){
+		this.applyFilter('clear');
 	},
 
 	applyFilter : function(select_records, suppressEvent){

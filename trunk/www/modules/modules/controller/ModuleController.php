@@ -23,13 +23,32 @@ class ModuleController extends AbstractJsonController{
 	}
 	
 	
+	protected function actionDelete($id){
+		$module = Module::model()->findByPk($id);
+		$module->delete();
+		
+		echo json_encode(array('success'=>true));
+	}
+	
+	
 	protected function actionUpdate($id) {
 
-		$model = Module::model()->findByPk($id);
-		$model->setAttributes($_POST);		
-		$model->save();
+		$module = Module::model()->findByPk($id);
+		if(!$module){
+			if(!GO::modules()->$id){
+				$module = new Module();
+				$module->id=$id;
+				$module->moduleManager->checkDependenciesForInstallation();	
+
+				if(!$module->save())
+					throw new \GO\Base\Exception\Save();
+			}
+		}
 		
-		echo $this->renderSubmit($model);
+		$module->setAttributes($_POST);		
+		$module->save();
+		
+		echo $this->renderSubmit($module);
 	}
 	
 	
@@ -37,7 +56,7 @@ class ModuleController extends AbstractJsonController{
 	 * Render JSON output that can be used by ExtJS GridPanel
 	 * @param array $params the $_REQUEST params
 	 */
-	protected function actionStore() {
+	protected function _actionStore() {
 		//Create ColumnModel from model
 		$columnModel = new ColumnModel(Module::model());
 		
@@ -46,7 +65,7 @@ class ModuleController extends AbstractJsonController{
 		$columnModel->formatColumn('author', '$model->moduleManager->author()');
 		$columnModel->formatColumn('icon', '$model->moduleManager->icon()');
 //		$columnModel->formatColumn('appCentre', '$model->moduleManager->appCentre()');
-		$columnModel->formatColumn('warning', '$model->getWarning()');
+//		$columnModel->formatColumn('warning', '$model->getWarning()');
 		$columnModel->formatColumn('buyEnabled', '$model->getBuyEnabled()');
 		
 		$findParams = FindParams::newInstance()
@@ -61,6 +80,42 @@ class ModuleController extends AbstractJsonController{
 		$store = new DbStore('GO\Base\Model\Module', $columnModel, $_POST, $findParams);
 		$store->defaultSort='sort_order';
 		$response = $this->renderStore($store);		
+		echo $response;
+	}
+	
+	
+	protected function actionStore($params){
+		
+		$response=new JsonResponse(array('results','success'=>true));
+		
+		$modules = GO::modules()->getAvailableModules(true);
+		
+		$availableModules=array();
+						
+		foreach($modules as $moduleClass){		
+			
+			$module = new $moduleClass;	
+			
+			$model = GO::modules()->isInstalled($module->id());
+			
+			
+			$availableModules[$module->name()] = array(
+					'id'=>$module->id(),
+					'name'=>$module->name(),
+					'author'=>$module->author(),
+					'description'=>$module->description(),
+					'icon'=>$module->icon(),
+					'acl_id'=>$model ? $model->acl_id : 0,
+					'buyEnabled'=>$module->appCentre() && \GO\Professional\License::moduleIsRestricted($module->id()),
+					'enabled'=>$model && $model->enabled
+			);
+		}
+		
+		ksort($availableModules);		
+		
+		$response['results']=array_values($availableModules);		
+		$response['total']=count($response['results']);
+		
 		echo $response;
 	}
 	
@@ -94,37 +149,37 @@ class ModuleController extends AbstractJsonController{
 	}
 	
 	
-	protected function actionInstall($params){
-		
-		$response =new JsonResponse(array('success'=>true,'results'=>array()));
-		$modules = json_decode($params['modules'], true);
-		foreach($modules as $moduleId)
-		{
-			if(!GO::modules()->$moduleId){
-				$module = new Module();
-				$module->id=$moduleId;
-
-
-				$module->moduleManager->checkDependenciesForInstallation($modules);	
-
-				if(!$module->save())
-					throw new \GO\Base\Exception\Save();
-
-				$response->data['results'][]=array_merge($module->getAttributes(), array('name'=>$module->moduleManager->name()));
-			}
-		}
-		
-//		$defaultModels = \GO\Base\Model\AbstractUserDefaultModel::getAllUserDefaultModels();
+//	protected function actionInstall($params){
 //		
-//		$stmt = \GO\Base\Model\User::model()->find(\GO\Base\Db\FindParams::newInstance()->ignoreAcl());		
-//		while($user = $stmt->fetch()){
-//			foreach($defaultModels as $model){
-//				$model->getDefault($user);
+//		$response =new JsonResponse(array('success'=>true,'results'=>array()));
+//		$modules = json_decode($params['modules'], true);
+//		foreach($modules as $moduleId)
+//		{
+//			if(!GO::modules()->$moduleId){
+//				$module = new Module();
+//				$module->id=$moduleId;
+//
+//
+//				$module->moduleManager->checkDependenciesForInstallation($modules);	
+//
+//				if(!$module->save())
+//					throw new \GO\Base\Exception\Save();
+//
+//				$response->data['results'][]=array_merge($module->getAttributes(), array('name'=>$module->moduleManager->name()));
 //			}
 //		}
-				
-		echo $response;
-	}
+//		
+////		$defaultModels = \GO\Base\Model\AbstractUserDefaultModel::getAllUserDefaultModels();
+////		
+////		$stmt = \GO\Base\Model\User::model()->find(\GO\Base\Db\FindParams::newInstance()->ignoreAcl());		
+////		while($user = $stmt->fetch()){
+////			foreach($defaultModels as $model){
+////				$model->getDefault($user);
+////			}
+////		}
+//				
+//		echo $response;
+//	}
 	
 	public function actionPermissionsStore($params) {
 		
