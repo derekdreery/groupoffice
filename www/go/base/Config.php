@@ -97,6 +97,14 @@ class GO_Base_Config {
 	var $debug = false;
 	
 	
+	/**
+	 * Enable display_errors = on for php
+	 * 
+	 * @var boolean 
+	 */
+	public $debug_display_errors=false;
+	
+	
 //	/**
 //	 * Only log debug messages for this remote IP address.
 //	 *
