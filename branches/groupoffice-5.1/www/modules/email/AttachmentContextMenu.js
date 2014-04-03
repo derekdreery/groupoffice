@@ -44,9 +44,26 @@ GO.email.AttachmentContextMenu = function(config)
 					scope: this
 				});
 		config.items.push(this.saveButton);
-	}						
+	
+		// Save to item button.
+		// Shows the link dialog so you can select an item to add the attachment to.
+		this.saveToItemButton = new Ext.menu.Item({
+			iconCls: 'btn-save',
+			text: GO.email.lang.saveToItem,
+			cls: 'x-btn-text-icon',
+			handler: function(){
 
-					
+				if(!GO.email.linkAttachmentDialog){
+					GO.email.linkAttachmentDialog = new GO.email.LinkAttachmentDialog();
+				}
+
+				GO.email.linkAttachmentDialog.show(this.attachment,this.messagePanel);
+			},
+			scope: this
+		});
+		config.items.push(this.saveToItemButton);
+	}		
+	
 	GO.email.AttachmentContextMenu.superclass.constructor.call(this, config);	
 }
 
