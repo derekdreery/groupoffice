@@ -208,7 +208,7 @@ abstract class Controller extends \GO\Base\Controller\AbstractController {
 	/**
 	 * Redirect to another page.
 	 * 
-	 * @param mixed $url String or array with route and params.
+	 * @param mixed $url String or array with route and params. eg array('site/front/content','slug'=>'booking-succes', 'param1'=>'value')
 	 * @param int $statusCode HTTP Status code
 	 */
 	protected function redirect($url = '', $statusCode = 302)
