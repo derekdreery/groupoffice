@@ -141,7 +141,7 @@ GO.grid.SearchPanel = function(config){
 		loadMask:{
 			msg: GO.lang['waitMsgLoad']
 			},
-		sm:new Ext.grid.RowSelectionModel({single:config.singleSelect})
+		sm:new Ext.grid.RowSelectionModel({singleSelect:config.singleSelect})
 	};
 	
 //	if(config.noOpenLinks)
