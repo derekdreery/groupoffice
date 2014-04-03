@@ -16,7 +16,11 @@ GO.dialog.LinksDialog = function(config){
 
 	Ext.apply(this, config);
 	
+	if(!config.filesupport) // Load only the models that can handle files then set to true else false
+		config.filesupport = false;
+	
 	this.grid = new GO.grid.SearchPanel({
+			filesupport: config.filesupport,
 			noTitle:true,
 			noOpenLinks:true,
 			hideDescription:config.hideDescription,
@@ -184,6 +188,17 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 			},
 			scope: this
 		});
+	},
+	
+	show : function(filesupport){
+		if(!filesupport) // Load only the models that can handle files then set to true else false
+			filesupport = this.filesupport
+		
+		this.setFileSupport(filesupport);
+		GO.dialog.LinksDialog.superclass.show.call(this);
+	},
+	setFileSupport : function(filesupport){
+		this.grid.setFileSupport(filesupport);
 	}
 });
 

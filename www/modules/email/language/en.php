@@ -274,3 +274,6 @@ $l['permissionDelegated'] = 'Read only and delegated';
 $l['label'] = 'Label';
 $l['labels'] = 'Labels';
 $l['labelsLimit'] = 'Label\'s limit reached. The maximum number of labels is %d';
+
+$l['saveToItem'] = 'Save to item';
+$l['saveAttachmentTo'] = 'Save the attachment to these items';
