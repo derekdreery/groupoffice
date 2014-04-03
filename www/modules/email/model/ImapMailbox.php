@@ -97,7 +97,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 
 	public function areFlagsPermitted()
 	{
-		return GO::config()->email_enable_labels;
+		return !empty(GO::config()->email_enable_labels);
 
 		/**
 		 * Use config until we found better way how detect flags from IMAP headers
