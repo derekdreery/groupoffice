@@ -7,9 +7,9 @@ use GO\Base\Model\Module;
 use GO\Base\Controller\AbstractJsonController;
 use GO\Base\Model\Acl;
 
-use GO\Base\Data\DbStore;
-use GO\Base\Data\ColumnModel;
-use GO\Base\Db\FindParams;
+//use GO\Base\Data\DbStore;
+//use GO\Base\Data\ColumnModel;
+//use GO\Base\Db\FindParams;
 use GO\Base\Data\JsonResponse;
 
 class ModuleController extends AbstractJsonController{
@@ -56,32 +56,32 @@ class ModuleController extends AbstractJsonController{
 	 * Render JSON output that can be used by ExtJS GridPanel
 	 * @param array $params the $_REQUEST params
 	 */
-	protected function _actionStore() {
-		//Create ColumnModel from model
-		$columnModel = new ColumnModel(Module::model());
-		
-		$columnModel->formatColumn('description', '$model->moduleManager->description()');
-		$columnModel->formatColumn('name', '$model->moduleManager->name()');
-		$columnModel->formatColumn('author', '$model->moduleManager->author()');
-		$columnModel->formatColumn('icon', '$model->moduleManager->icon()');
-//		$columnModel->formatColumn('appCentre', '$model->moduleManager->appCentre()');
-//		$columnModel->formatColumn('warning', '$model->getWarning()');
-		$columnModel->formatColumn('buyEnabled', '$model->getBuyEnabled()');
-		
-		$findParams = FindParams::newInstance()
-						->ignoreAcl()
-						->limit(0);
-		
-		if(!empty(GO::config()->allowed_modules)){
-			$findParams->getCriteria ()->addInCondition ('id', explode(',',GO::config()->allowed_modules));
-		}
-		
-		//Create store
-		$store = new DbStore('GO\Base\Model\Module', $columnModel, $_POST, $findParams);
-		$store->defaultSort='sort_order';
-		$response = $this->renderStore($store);		
-		echo $response;
-	}
+//	protected function _actionStore() {
+//		//Create ColumnModel from model
+//		$columnModel = new ColumnModel(Module::model());
+//		
+//		$columnModel->formatColumn('description', '$model->moduleManager->description()');
+//		$columnModel->formatColumn('name', '$model->moduleManager->name()');
+//		$columnModel->formatColumn('author', '$model->moduleManager->author()');
+//		$columnModel->formatColumn('icon', '$model->moduleManager->icon()');
+////		$columnModel->formatColumn('appCentre', '$model->moduleManager->appCentre()');
+////		$columnModel->formatColumn('warning', '$model->getWarning()');
+//		$columnModel->formatColumn('buyEnabled', '$model->getBuyEnabled()');
+//		
+//		$findParams = FindParams::newInstance()
+//						->ignoreAcl()
+//						->limit(0);
+//		
+//		if(!empty(GO::config()->allowed_modules)){
+//			$findParams->getCriteria ()->addInCondition ('id', explode(',',GO::config()->allowed_modules));
+//		}
+//		
+//		//Create store
+//		$store = new DbStore('GO\Base\Model\Module', $columnModel, $_POST, $findParams);
+//		$store->defaultSort='sort_order';
+//		$response = $this->renderStore($store);		
+//		echo $response;
+//	}
 	
 	
 	protected function actionStore($params){
@@ -106,7 +106,7 @@ class ModuleController extends AbstractJsonController{
 					'description'=>$module->description(),
 					'icon'=>$module->icon(),
 					'acl_id'=>$model ? $model->acl_id : 0,
-					'buyEnabled'=>$module->appCentre() && \GO\Professional\License::moduleIsRestricted($module->id()),
+					'buyEnabled'=>$module->appCentre() && \GO\Professional\License::moduleIsRestricted($module->id())!==false,
 					'enabled'=>$model && $model->enabled
 			);
 		}

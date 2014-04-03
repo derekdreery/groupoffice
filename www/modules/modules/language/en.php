@@ -14,3 +14,5 @@ $l['description'] = 'Admin module; Managing Apps.';
 $l['deleteModule'] = 'The module "Apps" cannot be deleted!';
 
 $l['enabled']='Enabled';
+
+$l['buyLicenses']='Buy licenses';
