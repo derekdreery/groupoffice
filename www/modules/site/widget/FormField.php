@@ -186,4 +186,14 @@ class FormField extends \GO\Site\Components\Widget {
 		return $this;
 	}
 
+	public function date($htmlOptions = array(),$datePickerOptions=array()) {
+		$this->parts['{input}'] = $this->form->dateField($this->model,$this->attribute,$htmlOptions,$datePickerOptions);
+		return $this;
+	}
+	
+	public function setTemplate($templateString) {
+		$this->template = $templateString;
+		return $this;
+	}
+	
 }
