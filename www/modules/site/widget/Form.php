@@ -663,7 +663,7 @@ $( "#datepicker'.$this->_nDateFields.'" ).datepicker({ dateFormat: "'.implode($g
 					return $model->$attribute;
 			}
 			$name=substr($attribute,0,$pos);
-			$value=$model->$name;
+			$value=$model->getAttribute($name,'formatted');
 			foreach(explode('][',rtrim(substr($attribute,$pos+1),']')) as $id)
 			{
 				if(is_array($value) && isset($value[$id]))
@@ -673,8 +673,10 @@ $( "#datepicker'.$this->_nDateFields.'" ).datepicker({ dateFormat: "'.implode($g
 			}
 			return $value;
 		}
-		else
-			return $model->$attribute;
+		else {
+			$value = $model->getAttribute($attribute,'formatted');
+			return $value;
+		}
 	}
 	
 	/**
