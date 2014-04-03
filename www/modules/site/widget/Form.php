@@ -240,9 +240,10 @@ class Form extends \GO\Site\Components\Widget {
 		}
 		
 		$datePickerOptionsString = '';
+		$allowedWeekdaysArray = '[0,1,2,3,4,5,6]';
 		foreach ($datePickerOptions as $name=>$value) {
 			if ($name=='allowedWeekDays') {
-				$datePickerOptionsString .= ',beforeShowDay: function(date) { var day = date.getDay(); return [day=='.implode('||day==',$value).',\'\'] }';
+				$allowedWeekdaysArray = json_encode($value);
 			} else {
 				$datePickerOptionsString .= ','.$name.': '.var_export($value,true).'';
 			}
@@ -251,15 +252,30 @@ class Form extends \GO\Site\Components\Widget {
 		\Site::scripts()->registerGapiScript('jquery');
 		\Site::scripts()->registerGapiScript('jquery-ui');
 		\Site::scripts()->registerCssFile('http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
-		\Site::scripts()->registerScript('datepicker'.$this->_nDateFields, '$(function() {
-$( "#datepicker'.$this->_nDateFields.'" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFormatArr).'" '.$datePickerOptionsString.'
-	,beforeShow:function(input) {
+		\Site::scripts()->registerScript('datepicker'.$this->_nDateFields, '
+$(function() {
+	var extension = {
+		_allowedWeekdaysArray : '.$allowedWeekdaysArray.',
+		setAllowedWeekdays: function(allowedWeekdaysArray) {
+			$("#datepicker'.$this->_nDateFields.'")._allowedWeekdaysArray = allowedWeekdaysArray;
+		},
+		checkDateFn : function(date) {
+			var day = date.getDay();
+			return [(jQuery.inArray(day,$("#datepicker'.$this->_nDateFields.'")._allowedWeekdaysArray)),\'\'];
+		}
+	}
+	$.fn.extend(extension);
+	$( "#datepicker'.$this->_nDateFields.'" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFormatArr).'" '.$datePickerOptionsString.'
+		,beforeShow:function(input) {
         $(input).css({
             "position": "relative",
             "z-index": 999999
         });
-    }});
-});');
+    },
+		beforeShowDay:$("#datepicker'.$this->_nDateFields.'").checkDateFn
+	});
+});
+');
 		$htmlAttributes['id'] = 'datepicker'.$this->_nDateFields;
 		return $this->_inputField('text',$model,$attribute,$htmlAttributes);
 	}
@@ -408,8 +424,10 @@ $( "#datepicker'.$this->_nDateFields.'" ).datepicker({ dateFormat: "'.implode($g
 		$htmlAttributes = $this->_resolveNameID($model,$attribute,$htmlAttributes);
 		$selection=$this->_resolveValue($model,$attribute);
 		$options="\n".$this->_listOptions($selection,$data,$htmlAttributes);
-		if (isset($htmlAttributes['placeholder']))
-			$options = "\n<option value=\"\" disabled selected style=\"color:lightgray;display:none;\">".$htmlAttributes['placeholder']."</option>".$options;
+		if (isset($htmlAttributes['placeholder'])){
+			$placeholderSelected=$selection=="" ? 'selected' : '';
+			$options = "\n<option value=\"\" disabled $placeholderSelected style=\"color:lightgray;display:none;\">".$htmlAttributes['placeholder']."</option>".$options;
+		}
 		//self::clientChange('change',$htmlOptions);
 		if($model->hasValidationErrors($attribute))
 			$this->_addErrorCss($htmlAttributes);
