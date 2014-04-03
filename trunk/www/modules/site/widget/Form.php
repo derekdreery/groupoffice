@@ -19,6 +19,15 @@ class Form extends \GO\Site\Components\Widget {
 	public $labelOptions = array();
 	public $errorOptions = array('class'=>'error');
 	
+	public $defaultTemplate = '';
+	public $placeholderLabels=false;
+	
+	/**
+	 * The number of date fields used in this form.
+	 * @var integer
+	 */
+	private $_nDateFields = 0;
+	
 	/**
 	 * Should not be used for rendering a form
 	 * Use beginForm() to render the starting tag instead
@@ -36,6 +45,8 @@ class Form extends \GO\Site\Components\Widget {
 		
 		$field = new FormField($options);
 		
+		if (!empty($this->defaultTemplate))
+			$field->template = $this->defaultTemplate;
 		if(!empty($template))
 			$field->template = $template;
 		$field->form = $this;
@@ -79,7 +90,7 @@ class Form extends \GO\Site\Components\Widget {
 		if($model->hasValidationErrors($attribute))
 			$htmlAttributes = $this->_addErrorCss($htmlAttributes);
 		
-		$htmlAttributes = $this->_resolveRequired($model, $attribute, $htmlAttributes);
+		$htmlAttributes = $this->_resolveDefaultAttributes($model, $attribute, $htmlAttributes);
 		
 		$htmlAttributes = array_merge($this->labelOptions, $htmlAttributes);
 		
@@ -212,7 +223,9 @@ class Form extends \GO\Site\Components\Widget {
 		return $hidden . $this->staticInputField('radio',$name,$value,$htmlOptions);
 	}
 	
-	public function dateField($model,$attribute,$htmlAttributes=array()){
+	public function dateField($model,$attribute,$htmlAttributes=array(),$datePickerOptions=array()){
+		
+		$this->_nDateFields++;
 		
 		$currentUser = \GO::user();		
 		$dateFormatArr = array();
@@ -226,13 +239,28 @@ class Form extends \GO\Site\Components\Widget {
 				$dateFormatArr[] = $goDateFormat[$i].$goDateFormat[$i];
 		}
 		
+		$datePickerOptionsString = '';
+		foreach ($datePickerOptions as $name=>$value) {
+			if ($name=='allowedWeekDays') {
+				$datePickerOptionsString .= ',beforeShowDay: function(date) { var day = date.getDay(); return [day=='.implode('||day==',$value).',\'\'] }';
+			} else {
+				$datePickerOptionsString .= ','.$name.': '.var_export($value,true).'';
+			}
+		}
+		
 		\Site::scripts()->registerGapiScript('jquery');
 		\Site::scripts()->registerGapiScript('jquery-ui');
 		\Site::scripts()->registerCssFile('http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
-		\Site::scripts()->registerScript('datepicker', '$(function() {
-$( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFormatArr).'" });
+		\Site::scripts()->registerScript('datepicker'.$this->_nDateFields, '$(function() {
+$( "#datepicker'.$this->_nDateFields.'" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFormatArr).'" '.$datePickerOptionsString.'
+	,beforeShow:function(input) {
+        $(input).css({
+            "position": "relative",
+            "z-index": 999999
+        });
+    }});
 });');
-		$htmlAttributes['id'] = 'datepicker';
+		$htmlAttributes['id'] = 'datepicker'.$this->_nDateFields;
 		return $this->_inputField('text',$model,$attribute,$htmlAttributes);
 	}
 	
@@ -255,7 +283,7 @@ $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFor
 		else
 			$label=$model->getAttributeLabel($attribute);
 		
-		$htmlAttributes = $this->_resolveRequired($model, $attribute, $htmlAttributes);
+		$htmlAttributes = $this->_resolveDefaultAttributes($model, $attribute, $htmlAttributes);
 		$htmlAttributes['name'] = $this->_resolveName($model, $attribute, $htmlAttributes);
 		
 		return $this->staticTextArea($htmlAttributes['name'],$model->{$attribute},$htmlAttributes);
@@ -380,6 +408,8 @@ $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFor
 		$htmlAttributes = $this->_resolveNameID($model,$attribute,$htmlAttributes);
 		$selection=$this->_resolveValue($model,$attribute);
 		$options="\n".$this->_listOptions($selection,$data,$htmlAttributes);
+		if (isset($htmlAttributes['placeholder']))
+			$options = "\n<option value=\"\" disabled selected style=\"color:lightgray;display:none;\">".$htmlAttributes['placeholder']."</option>".$options;
 		//self::clientChange('change',$htmlOptions);
 		if($model->hasValidationErrors($attribute))
 			$this->_addErrorCss($htmlAttributes);
@@ -516,7 +546,7 @@ $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFor
 		return $htmlAttributes;
 	}
 	
-	private function _resolveRequired($model,$attribute,$htmlAttributes){
+	private function _resolveDefaultAttributes($model,$attribute,$htmlAttributes){
 
 		if(isset($htmlAttributes['required']) && $htmlAttributes['required']==false) {
 			unset($htmlAttributes['required']);
@@ -527,18 +557,21 @@ $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFor
 				unset($htmlAttributes['required']);
 		}
 		
+		if($this->placeholderLabels===true && !isset($htmlAttributes['placeholder'])) {
+			$htmlAttributes['placeholder']=$model->getAttributeLabel($attribute);
+		}
+		
 		return $htmlAttributes;
 	}
 	
 	private function _inputField($type,$model,$attribute,$htmlAttributes){
 		
 		$htmlAttributes = $this->_resolveNameID($model, $attribute, $htmlAttributes);
-		$htmlAttributes = $this->_resolveRequired($model, $attribute, $htmlAttributes);
+		$htmlAttributes = $this->_resolveDefaultAttributes($model, $attribute, $htmlAttributes);
 		
 		$htmlAttributes['type']=$type;
 		
-		// TODO: Check maxlength
-
+		
 		if($type==='file')
 			unset($htmlAttributes['value']);
 		else if(!isset($htmlAttributes['value']))
