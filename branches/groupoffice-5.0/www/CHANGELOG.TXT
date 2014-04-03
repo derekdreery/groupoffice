@@ -1,9 +1,10 @@
-5.0.51
+- when another agent commented on a ticket, the agent got an invalid e-mail.
+- pass through original smime source for iphones
 - Fixed automatic sort order for ticket type groups
 - Fixed problem with ticketmessage "type_id" and "has_type" properties.
 - Workflow: email and reminder for file uploader when file is disapproved.
 - Calendar: new Dutch King's Day.
-- Fixed: Ticketmessages imported from IMAP can be edited again.
+- Fixed: Ticket messages imported from IMAP can be edited again.
 - Bring back export button for ticket users so they can export the tickets that are currently on the screen.
 
 27-03-2014 5.0.50
