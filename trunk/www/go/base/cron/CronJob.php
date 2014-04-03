@@ -291,6 +291,7 @@ class CronJob extends \GO\Base\Db\ActiveRecord {
 				
 				GO\Base\Mail\AdminNotifier::sendMail("CronJob ".$this->name." is disabled because of a failure", "EXCEPTION: ".(string) $e);
 				
+				$this->error=(string)$e;
 			}
 			
 			$this->_finishRun($failed);
@@ -404,6 +405,11 @@ class CronJob extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	private function _finishRun($failed=false){
+		
+		if($this->autodestroy){
+			return $this->delete();
+		}
+		
 		if(!$this->runonce){
 			$this->active = !$failed;
 			if($failed){

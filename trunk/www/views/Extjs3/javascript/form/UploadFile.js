@@ -297,6 +297,10 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 			}
 		}, this);
 	},
+	
+	reset : function(){
+		this.clearQueue();
+	},
 
 	/**
 	* Disables/Enables the whole form by masking/unmasking it

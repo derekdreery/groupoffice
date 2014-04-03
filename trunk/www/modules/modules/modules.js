@@ -38,6 +38,19 @@ GO.modules.MainPanel = function(config) {
 					this.store.load();
 				},
 				scope: this
+			},{
+				iconCls: 'btn-settings',
+				text: "Install license file",
+				cls: 'x-btn-text-icon',
+				handler: function() {
+					if(!this.installLicenseDialog){
+						this.installLicenseDialog = new GO.modules.InstallLicenseDialog({
+							
+						});						
+					}					
+					this.installLicenseDialog.show();
+				},
+				scope: this
 			}]
 	});
 

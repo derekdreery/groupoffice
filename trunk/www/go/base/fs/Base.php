@@ -335,7 +335,8 @@ abstract class Base{
 	 * @return boolean 
 	 */
 	public function isFolder(){
-		return is_dir($this->path);
+//		return is_dir($this->path);
+		return is_a($this, "\GO\Base\Fs\Folder"); //works with non existing files
 	}
 	
 	/**
@@ -344,7 +345,8 @@ abstract class Base{
 	 * @return boolean 
 	 */
 	public function isFile(){
-		return is_file($this->path);
+//		return is_file($this->path);
+		return is_a($this, "\GO\Base\Fs\File"); //works with non existing files
 	}
 	
 	/**

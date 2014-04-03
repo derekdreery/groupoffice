@@ -347,6 +347,8 @@ CREATE TABLE IF NOT EXISTS `go_cron` (
   `nextrun` int(11) NOT NULL DEFAULT '0',
   `lastrun` int(11) NOT NULL DEFAULT '0',
   `completedat` int(11) NOT NULL DEFAULT '0',
+  `error` TEXT NULL ,
+  `autodestroy` BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
