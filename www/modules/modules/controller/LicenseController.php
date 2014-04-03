@@ -2,7 +2,9 @@
 
 namespace GO\Modules\Controller;
 
-//use GO;
+use Exception;
+
+use GO;
 use GO\Base\Model\Module;
 use GO\Base\Controller\AbstractJsonController;
 
@@ -41,5 +43,33 @@ class LicenseController extends AbstractJsonController{
 		
 		
 		echo $response;
+	}
+	
+	
+	protected function actionUpload(){
+
+		if(!is_uploaded_file($_FILES['license_file']['tmp_name'][0])){
+			throw new Exception("No file received");
+		}
+		
+		$licenseFile = \GO\Professional\License::getLicenseFile();
+		
+		
+		
+		if($_FILES['license_file']['name'][0]!=$licenseFile->name()){
+			throw new Exception("File should be named ".$licenseFile->name());
+		}
+		
+		$destinationFolder = new GO\Base\Fs\Folder(GO::config()->file_storage_path.'license/');
+		$destinationFolder->create();
+						
+		$success = move_uploaded_file($_FILES['license_file']['tmp_name'][0], $destinationFolder->path().'/'.$licenseFile->name());
+		
+		//use cron to move the license as root.
+		GO\Modules\Cron\LicenseInstaller::runOnce();
+
+		
+		echo json_encode(array('success'=>$success));
+			
 	}
 }

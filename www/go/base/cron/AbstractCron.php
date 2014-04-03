@@ -26,6 +26,31 @@ namespace GO\Base\Cron;
 
 abstract class AbstractCron extends \GO\Base\Model{
 	
+	
+	public static function runOnce(){
+		$jobClass = get_called_class();
+		
+		$job = new $jobClass;
+		
+			
+		$cron = new \GO\Base\Cron\CronJob();		
+		$cron->name = $job->getLabel();
+		$cron->active = true;
+		$cron->autodestroy = true;
+		$cron->minutes = '*';
+		$cron->hours = '*';
+		$cron->monthdays = '*';
+		$cron->months = '*';
+		$cron->weekdays = '*';
+		$cron->job = $jobClass;
+
+		if(!$cron->save()){
+			throw new Exception("Failed to save cron job '$jobClass'");
+		}
+		
+		return $cron;
+	}
+	
 	/**
 	 * Return true or false to enable the selection fo users and groups for 
 	 * this cronjob.

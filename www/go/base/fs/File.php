@@ -336,18 +336,24 @@ class File extends Base{
 	/**
 	 * Move a file to another folder.
 	 * 
-	 * @param Folder $destinationFolder 
+	 * @param Folder|File $destination If a file is given it will be replaced.
 	 * @param string $newFileName Optionally rename the file too.
 	 * @param boolean $isUploadedFile Check if this file was upload for security reasons.
 	 * @param boolean $appendNumberToNameIfDestinationExists Rename the file like "File (1)" if it already exists. 
 	 * @return boolean
 	 */
-	public function move($destinationFolder, $newFileName=false, $isUploadedFile=false,$appendNumberToNameIfDestinationExists=false){
+	public function move(Base $destination, $newFileName=false, $isUploadedFile=false,$appendNumberToNameIfDestinationExists=false){
 		
-		if(!$newFileName)
-			$newFileName=$this->name();
+		if($destination->isFile()){
+			$newFileName=$destination->name();
+			$destination=$destination->parent();
+		}else{
+			if(!$newFileName){
+				$newFileName=$this->name();
+			}
+		}
 		
-		$newPath = $destinationFolder->path().'/'.$newFileName;
+		$newPath = $destination->path().'/'.$newFileName;
 		
 		if($appendNumberToNameIfDestinationExists){
 			$file = new File($newPath);

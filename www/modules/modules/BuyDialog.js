@@ -15,7 +15,6 @@ GO.modules.BuyDialog = Ext.extend(GO.Window, {
 		});
 		
 		store.on('load', function(){
-			console.log(store.reader);
 			
 			this.licenseIdField.setValue(store.reader.jsonData.license_id);
 			this.hostnameField.setValue(store.reader.jsonData.hostname);
