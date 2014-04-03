@@ -50,7 +50,7 @@ class SmimeMessage extends Message
   public static function newInstance($subject = null, $body = null,
     $contentType = null, $charset = null)
   {
-    return new self($subject, $body, $contentType, $charset);
+    return new static($subject, $body, $contentType, $charset);
   }
 	
 	/**

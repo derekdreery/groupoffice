@@ -262,7 +262,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 						'<div class="go-icon go-warning-msg" ext:qtip="' + Ext.util.Format.htmlEncode(record.data.warning) + '"></div>' : '';
 	},
 	buyRenderer: function(name, cell, record) {
-		return record.data.buyEnabled ? '<a href="#" class="normal-link" onclick="GO.modules.showBuyDialog(\'' + record.data.id + '\');">Buy</a>' : '';
+		return record.data.buyEnabled ? '<a href="#" class="normal-link" onclick="GO.modules.showBuyDialog(\'' + record.data.id + '\');">'+GO.modules.lang.buyLicenses+'</a>' : '';
 	}
 
 
