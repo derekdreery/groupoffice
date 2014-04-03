@@ -6,6 +6,7 @@
 - Calendar: new Dutch King's Day.
 - Fixed: Ticket messages imported from IMAP can be edited again.
 - Bring back export button for ticket users so they can export the tickets that are currently on the screen.
+- Dropbox: Added new Curl.php for NSS SSL backend and fixed bug in Database
 
 27-03-2014 5.0.50
 - Updated German translation
