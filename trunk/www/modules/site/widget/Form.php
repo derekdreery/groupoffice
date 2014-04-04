@@ -254,25 +254,13 @@ class Form extends \GO\Site\Components\Widget {
 		\Site::scripts()->registerCssFile('http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
 		\Site::scripts()->registerScript('datepicker'.$this->_nDateFields, '
 $(function() {
-	var extension = {
-		_allowedWeekdaysArray : '.$allowedWeekdaysArray.',
-		setAllowedWeekdays: function(allowedWeekdaysArray) {
-			$("#datepicker'.$this->_nDateFields.'")._allowedWeekdaysArray = allowedWeekdaysArray;
-		},
-		checkDateFn : function(date) {
-			var day = date.getDay();
-			return [(jQuery.inArray(day,$("#datepicker'.$this->_nDateFields.'")._allowedWeekdaysArray)),\'\'];
-		}
-	}
-	$.fn.extend(extension);
 	$( "#datepicker'.$this->_nDateFields.'" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFormatArr).'" '.$datePickerOptionsString.'
-		,beforeShow:function(input) {
-        $(input).css({
-            "position": "relative",
-            "z-index": 999999
-        });
-    },
-		beforeShowDay:$("#datepicker'.$this->_nDateFields.'").checkDateFn
+//		,beforeShow:function(input) {
+//        $(input).css({
+//            "position": "relative",
+//            "z-index": 999999
+//        });
+//    }
 	});
 });
 ');
