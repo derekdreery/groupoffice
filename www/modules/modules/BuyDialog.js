@@ -76,7 +76,7 @@ GO.modules.BuyDialog = Ext.extend(GO.Window, {
 			},
 			scope:this
 		},{
-				text:"Add to shopping cart",
+				text:GO.modules.lang.addToCart,
 				scope:this,
 				handler:function(){
 					
@@ -100,7 +100,7 @@ GO.modules.BuyDialog = Ext.extend(GO.Window, {
 	},
 	setModule: function(record) {
 		
-		this.setTitle('Select users for package "'+record.data.package+'"');
+		this.setTitle(GO.modules.lang.selectUsersForPackage.replace('{package}',record.data.package));
 		
 		this.usersGrid.store.baseParams.module=record.id;
 		this.moduleField.setValue(record.id);
