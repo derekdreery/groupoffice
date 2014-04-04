@@ -16,3 +16,6 @@ $l['deleteModule'] = 'The module "Apps" cannot be deleted!';
 $l['enabled']='Enabled';
 
 $l['buyLicenses']='Buy licenses';
+
+$l['addToCart']="Add to shopping cart";
+$l['selectUsersForPackage']='Select users for package {package}';
