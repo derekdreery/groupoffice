@@ -16,12 +16,43 @@ GO.modules.MainPanel = function(config) {
 	if (!config) {
 		config = {};
 	}
+	
+	
+	
+	var reader = new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			fields: ['name', 'package', 'description', 'id', 'sort_order', 'admin_menu', 'acl_id', 'icon', 'enabled', 'warning', 'buyEnabled'],
+			id: 'id'
+		});
 
-	this.store = new GO.data.JsonStore({
+	this.store = new GO.data.GroupingStore({
 		url: GO.url('modules/module/store'),
-		fields: ['name', 'description', 'id', 'sort_order', 'admin_menu', 'acl_id', 'icon', 'enabled', 'warning', 'buyEnabled'],
-		remoteSort: true
+		reader: reader,
+		sortInfo: {
+			field: 'name',
+			direction: 'ASC'
+		},
+		groupField: 'package',
+		remoteGroup:false,
+		remoteSort:false
 	});
+	
+	
+//	config.store = new GO.data.GroupingStore({
+//			url: GO.url('tasks/task/store'),
+////			baseParams: {
+////				'show': 'all'
+////			},
+//			reader: reader,
+//			sortInfo: {
+//				field: 'due_time',
+//				direction: 'ASC'
+//			},
+//			groupField: 'tasklist_name',
+//			remoteGroup:true,
+//			remoteSort:true
+//		});
 
 	config.tbar = new Ext.Toolbar({
 		cls: 'go-head-tb',
@@ -88,8 +119,7 @@ GO.modules.MainPanel = function(config) {
 			header: GO.lang['strName'],
 			dataIndex: 'name',
 			id: 'name',
-			renderer: this.iconRenderer,
-			width: 250
+			renderer: this.iconRenderer
 		}, {
 //		header:'-',
 //		dataIndex : "warning",
@@ -101,7 +131,12 @@ GO.modules.MainPanel = function(config) {
 			renderer: this.buyRenderer,
 			width: 60
 		},
-		checkColumn
+		checkColumn,{
+			header: "Package",
+			dataIndex: 'package',
+			id: 'package'
+			
+		}
 //	,{
 //		header : GO.lang.users,
 //		dataIndex:'user_count',
@@ -112,11 +147,13 @@ GO.modules.MainPanel = function(config) {
 	
 	config.loadMask=true;
 
-	config.view = new Ext.grid.GridView({
+	config.view = new Ext.grid.GroupingView({
+		hideGroupedColumn:true,
 		enableRowBody: true,
 		showPreview: true,
 		autoFill: true,
 		emptyText: GO.lang.strNoItems,
+		groupEnd: '</div><a href="#">Buy licenses</a></div>',
 		getRowClass: function(record, rowIndex, p, store) {
 			if (this.showPreview && record.data.description.length) {
 				p.body = '<div class="mo-description">' + record.data.description + '</div>';
@@ -126,10 +163,12 @@ GO.modules.MainPanel = function(config) {
 		}
 	});
 
+
 //	config.ddGroup = 'ModulesGridDD';
 //
 //	config.enableDragDrop = true;
 
+	config.autoExpandColumn='name';
 	config.layout = 'fit';
 	config.sm = new Ext.grid.RowSelectionModel({
 		singleSelect: false
@@ -149,6 +188,8 @@ GO.modules.MainPanel = function(config) {
 };
 
 Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
+	
+
 	afterRender: function() {
 
 		GO.modules.MainPanel.superclass.afterRender.call(this);
