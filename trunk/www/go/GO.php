@@ -1185,9 +1185,13 @@ class GO{
 	 * @param string $path
 	 * @return boolean
 	 */
-	public static function scriptCanBeDecoded($path){
+	public static function scriptCanBeDecoded($path=null){
 		
 		if(!isset(self::$ioncubeWorks)){					
+			
+			if(!isset($path)){
+				$path = GO::config()->root_path.'modules/professional/License.php';
+			}
 		
 			//check data for presence of ionCube in code.
 			$data=  file_get_contents($path, false, null, -1, 100);		

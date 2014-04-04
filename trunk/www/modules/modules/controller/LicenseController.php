@@ -24,7 +24,7 @@ class LicenseController extends AbstractJsonController{
 		//Create ColumnModel from model
 		$columnModel = new ColumnModel(Module::model());
 		
-		$columnModel->formatColumn('checked', '\GO\Professional\License::userHasModule($model->username, $module, true)', array('module'=>$module));
+		$columnModel->formatColumn('checked', '\GO::scriptCanBeDecoded() && \GO\Professional\License::userHasModule($model->username, $module, true)', array('module'=>$module));
 		
 		$findParams = FindParams::newInstance()			
 						->select('t.first_name,t.middle_name,t.last_name,t.username')
@@ -36,7 +36,7 @@ class LicenseController extends AbstractJsonController{
 		$store->defaultSort='username';
 		$response = $this->renderStore($store);		
 		
-		$props = \GO\Professional\License::properties();
+		$props = \GO::scriptCanBeDecoded() ? \GO\Professional\License::properties() : array();
 		
 		$response['license_id']=isset($props['licenseid']) ? $props['licenseid'] : 0;
 		$response['hostname']=$_SERVER['HTTP_HOST'];
@@ -52,7 +52,11 @@ class LicenseController extends AbstractJsonController{
 			throw new Exception("No file received");
 		}
 		
-		$licenseFile = \GO\Professional\License::getLicenseFile();
+		if(!extension_loaded('ionCube loader')){
+			throw new Exception("The required free ionCube loader is not installed. ");
+		}
+		
+		$licenseFile = \GO::getLicenseFile();
 		
 		
 		

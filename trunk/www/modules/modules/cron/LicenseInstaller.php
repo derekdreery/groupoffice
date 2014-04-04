@@ -57,7 +57,7 @@ class LicenseInstaller extends AbstractCron {
 		
 		GO::session()->runAsRoot();
 		
-		$licenseFile = \GO\Professional\License::getLicenseFile();
+		$licenseFile = \GO::getLicenseFile();
 		
 		$temporaryLicenseFile = new \GO\Base\Fs\File(GO::config()->file_storage_path.'license/'.$licenseFile->name());
 		
