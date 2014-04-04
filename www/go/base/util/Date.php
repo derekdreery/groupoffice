@@ -186,7 +186,12 @@ class Date {
 
 		//$time = strtotime(Date::to_input_format($date_string));
 		//return $time;
-		$date = new \DateTime(Date::to_input_format($date_string));
+		try{
+			$date = new \DateTime(Date::to_input_format($date_string));
+		}catch(\Exception $e){
+			return false;
+		}
+		
 		return intval($date->format("U"));
 	}
 
