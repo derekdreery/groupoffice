@@ -1216,6 +1216,16 @@ class GO{
 		return self::$ioncubeWorks;
 		
 	}
+	
+	
+	/**
+	 * Get the license file object
+	 * 
+	 * @return \GO\Base\Fs\File
+	 */
+	public static function getLicenseFile(){
+		return new \GO\Base\Fs\File(GO::config()->root_path.'groupoffice-pro-'.GO::config()->getMajorVersion().'-license.txt');
+	}
 
 }
 
