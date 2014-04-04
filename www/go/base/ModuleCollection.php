@@ -84,7 +84,7 @@ class ModuleCollection extends Model\ModelCollection{
 		$ucfirst = ucfirst($moduleId);
 		$moduleClassPath = $folder->path().'/'.$ucfirst.'Module.php';
 		
-		if(!file_exists($moduleClassPath) || !\GO::scriptCanBeDecoded($moduleClassPath)){
+		if(!file_exists($moduleClassPath)){// || !\GO::scriptCanBeDecoded($moduleClassPath)){
 			return false;
 		}
 
@@ -167,7 +167,7 @@ class ModuleCollection extends Model\ModelCollection{
 	public function isInstalled($moduleId){
 		$model = $this->model->findByPk($moduleId, false, true);
 		
-		if(!$model || !$this->_isAllowed($model->id) || !$model->isAvailable())
+		if(!$model || !$this->_isAllowed($model->id))
 				return false;
 		
 		return $model;
