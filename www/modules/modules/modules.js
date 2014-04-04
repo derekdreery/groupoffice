@@ -9,7 +9,6 @@
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
- * @author Boy Wijnmaalen <bwijnmaalen@intermesh.nl>
  */
 
 GO.modules.MainPanel = function(config) {
@@ -37,22 +36,6 @@ GO.modules.MainPanel = function(config) {
 		remoteGroup:false,
 		remoteSort:false
 	});
-	
-	
-//	config.store = new GO.data.GroupingStore({
-//			url: GO.url('tasks/task/store'),
-////			baseParams: {
-////				'show': 'all'
-////			},
-//			reader: reader,
-//			sortInfo: {
-//				field: 'due_time',
-//				direction: 'ASC'
-//			},
-//			groupField: 'tasklist_name',
-//			remoteGroup:true,
-//			remoteSort:true
-//		});
 
 	config.tbar = new Ext.Toolbar({
 		cls: 'go-head-tb',
@@ -120,40 +103,69 @@ GO.modules.MainPanel = function(config) {
 			dataIndex: 'name',
 			id: 'name',
 			renderer: this.iconRenderer
-		}, {
-//		header:'-',
-//		dataIndex : "warning",
-//		id:"warning",
-//		renderer:this.warningRenderer,
-//		width:20
-//	},{
-			header: '-',
-			renderer: this.buyRenderer,
-			width: 60
-		},
+		}, 
 		checkColumn,{
 			header: "Package",
 			dataIndex: 'package',
 			id: 'package'
 			
 		}
-//	,{
-//		header : GO.lang.users,
-//		dataIndex:'user_count',
-//		width:80,
-//		align:'right'
-//	}
 	]);
 	
 	config.loadMask=true;
+	
+	var store = this.store;
 
 	config.view = new Ext.grid.GroupingView({
 		hideGroupedColumn:true,
 		enableRowBody: true,
 		showPreview: true,
-		autoFill: true,
+		showGroupName: false,
+//		autoFill: true,
+		startCollapsed:true,
 		emptyText: GO.lang.strNoItems,
-		groupEnd: '</div><a href="#">Buy licenses</a></div>',
+		groupTextTpl: '{text}<tpl if="values.rs[0].data.buyEnabled"><div class="mo-buy">Buy licenses</div></tpl>',
+		processEvent: function(name, e){
+			
+			
+        Ext.grid.GroupingView.superclass.processEvent.call(this, name, e);
+				
+				var buyLink = Ext.get(e.getTarget('.mo-buy', this.mainBody));
+        if(buyLink){
+					
+					if(name == 'mousedown' && e.button == 0){
+						var group = buyLink.parent('.x-grid-group');
+						var row = group.query('.x-grid3-row');					
+						var rowIndex = this.findRowIndex(row[0]);
+						var record = store.getAt(rowIndex);
+
+						GO.modules.showBuyDialog(record);
+					}
+				}else
+				{
+				
+					var hd = e.getTarget('.x-grid-group-hd', this.mainBody);
+					if(hd){
+							// group value is at the end of the string
+							var field = this.getGroupField(),
+									prefix = this.getPrefix(field),
+									groupValue = hd.id.substring(prefix.length),
+									emptyRe = new RegExp('gp-' + Ext.escapeRe(field) + '--hd');
+
+							// remove trailing '-hd'
+							groupValue = groupValue.substr(0, groupValue.length - 3);
+
+							// also need to check for empty groups
+							if(groupValue || emptyRe.test(hd.id)){
+									this.grid.fireEvent('group' + name, this.grid, field, groupValue, e);
+							}
+							if(name == 'mousedown' && e.button == 0){
+									this.toggleGroup(hd.parentNode);
+							}
+					}
+				}
+
+    },
 		getRowClass: function(record, rowIndex, p, store) {
 			if (this.showPreview && record.data.description.length) {
 				p.body = '<div class="mo-description">' + record.data.description + '</div>';
@@ -193,6 +205,8 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 	afterRender: function() {
 
 		GO.modules.MainPanel.superclass.afterRender.call(this);
+		
+		
 //
 //		var notifyDrop = function(dd, e, data) {
 //			var sm = this.getSelectionModel();
@@ -322,6 +336,16 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 
 
 });
+
+
+GO.modules.clickBuy = function(e){
+	
+	e.preventDefault();
+	
+	var el = Ext.get(this);
+	
+	console.log(el);
+}
 
 GO.moduleManager.addModule('modules', GO.modules.MainPanel, {
 	title: GO.modules.lang.modules,

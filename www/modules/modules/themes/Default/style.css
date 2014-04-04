@@ -28,3 +28,13 @@ padding: 0px 0px 0px 0px;
 	background-repeat:no-repeat;
 	font-weight:bold;
 }
+
+.mo-buy{
+	margin-left:10px;
+	text-decoration:underline;
+	display:inline;
+	cursor:pointer;
+	color:#26687C;
+	z-index:9999999;
+	
+}
