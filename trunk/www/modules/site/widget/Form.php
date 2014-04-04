@@ -669,7 +669,7 @@ $(function() {
 					return $model->$attribute;
 			}
 			$name=substr($attribute,0,$pos);
-			$value=$model->getAttribute($name,'formatted');
+			$value = method_exists($model, 'getAttribute') ? $model->getAttribute($attribute,'formatted') : $model->$attribute;
 			foreach(explode('][',rtrim(substr($attribute,$pos+1),']')) as $id)
 			{
 				if(is_array($value) && isset($value[$id]))
@@ -680,7 +680,7 @@ $(function() {
 			return $value;
 		}
 		else {
-			$value = $model->getAttribute($attribute,'formatted');
+			$value = method_exists($model, 'getAttribute') ? $model->getAttribute($attribute,'formatted') : $model->$attribute;
 			return $value;
 		}
 	}

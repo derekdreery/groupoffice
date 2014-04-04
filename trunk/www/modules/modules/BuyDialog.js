@@ -98,23 +98,23 @@ GO.modules.BuyDialog = Ext.extend(GO.Window, {
 
 		GO.modules.BuyDialog.superclass.initComponent.call(this);
 	},
-	setModule: function(module) {
+	setModule: function(record) {
 		
-		this.setTitle('Select users for module "'+module+'"');
+		this.setTitle('Select users for package "'+record.data.package+'"');
 		
-		this.usersGrid.store.baseParams.module=module;
-		this.moduleField.setValue(module);
+		this.usersGrid.store.baseParams.module=record.id;
+		this.moduleField.setValue(record.id);
 		this.usersGrid.store.load();
 	}
 });
 
-GO.modules.showBuyDialog = function(module) {
+GO.modules.showBuyDialog = function(record) {
 	if (!GO.modules.buyDialog) {
 		GO.modules.buyDialog = new GO.modules.BuyDialog();
 	}
 
 	GO.modules.buyDialog.show();
-	GO.modules.buyDialog.setModule(module);
+	GO.modules.buyDialog.setModule(record);
 
 	
 };
