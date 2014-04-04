@@ -93,6 +93,10 @@ class Module extends Observable {
 		return $icon;
 	}
 	
+	public function package(){
+		return 'Community (AGPL)';
+	}
+	
 	private function _findIconByTheme($theme){
 		$path = $this->path();
 		if(file_exists($path.'/themes/'.$theme.'/images/'.$this->id().'.png')){
@@ -159,11 +163,11 @@ class Module extends Observable {
 	}
 	
 	/**
-	 * Return true if this module can be bought in the Group-Office app centre
+	 * Return true if this module can be bought in the Group-Office app center
 	 * 
 	 * @return boolean
 	 */
-	public function appCentre(){
+	public function appCenter(){
 		return false;
 	}
 	
