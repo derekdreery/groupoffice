@@ -89,13 +89,15 @@ if(isset($installModules)){
 
 foreach ($modules as $moduleClass) {
 	$moduleController = new $moduleClass;
-	if ((!isset($installModules) && $moduleController->autoInstall()) || (isset($installModules) && in_array($moduleController->id(), $installModules))) {
-		
-		echo "Installing module ".$moduleController->id()."\n";
-		
-		$module = new \GO\Base\Model\Module();
-		$module->id = $moduleController->id();
-		$module->save();
+	if($moduleController->isInstallable()){
+		if ((!isset($installModules) && $moduleController->autoInstall()) || (isset($installModules) && in_array($moduleController->id(), $installModules))) {
+
+			echo "Installing module ".$moduleController->id()."\n";
+
+			$module = new \GO\Base\Model\Module();
+			$module->id = $moduleController->id();
+			$module->save();
+		}
 	}
 }
 

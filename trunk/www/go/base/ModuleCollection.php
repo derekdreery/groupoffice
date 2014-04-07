@@ -48,6 +48,10 @@ class ModuleCollection extends Model\ModelCollection{
 	/**
 	 * Returns an array of all module classes as string found in the modules folder.
 	 * 
+	 * This function does not check the module isAvailable function. So pro modules
+	 * will be returned even if they can't be decoded. Check the availability manually
+	 * if needed.
+	 * 
 	 * @return array Module class names eg. \GO\Calendar\Module
 	 */
 	public function getAvailableModules($returnInstalled=false){
@@ -59,7 +63,7 @@ class ModuleCollection extends Model\ModelCollection{
 			if($folder->isFolder()){
 				$ucfirst = ucfirst($folder->name());
 //				$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
-				if($this->isAvailable($folder->name()) && ($returnInstalled || !Model\Module::model()->findByPk($folder->name(), false, true))){
+				if($this->isAvailable($folder->name(), false) && ($returnInstalled || !Model\Module::model()->findByPk($folder->name(), false, true))){
 					$modules[]='GO\\'.$ucfirst.'\\'.$ucfirst.'Module';
 				}
 			}
@@ -72,9 +76,10 @@ class ModuleCollection extends Model\ModelCollection{
 	 * Check if a module is available
 	 * 
 	 * @param string $moduleId
+	 * @param boolean Check the module manager class isAvailable function too. (Used in pro modules to check license for example).
 	 * @return boolean
 	 */
-	public function isAvailable($moduleId){
+	public function isAvailable($moduleId, $checkModuleAvailabiltiy=true){
 		
 		if(!$this->_isAllowed($moduleId))
 			return false;
@@ -94,10 +99,14 @@ class ModuleCollection extends Model\ModelCollection{
 			return false;
 		}
 
-		//$mod = new $moduleClass;
-		//return $mod->isAvailable();			
+		if($checkModuleAvailabiltiy){
+			$mod = new $moduleClass;
+			return $mod->isAvailable();			
+		}else
+		{
+			return true;
+		}
 		
-		return true;
 
 	}
 	

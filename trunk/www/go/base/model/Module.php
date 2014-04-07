@@ -46,6 +46,24 @@ class Module extends \GO\Base\Db\ActiveRecord {
 	{	
 		return parent::model($className);
 	}
+	
+	/**
+	 * Install a module
+	 * 
+	 * @param string $moduleId
+	 * @return \GO\Base\Model\Module
+	 * @throws \GO\Base\Exception\Save
+	 */
+	public static function install($moduleId){
+			$module = new Module();
+			$module->id=$moduleId;
+			$module->moduleManager->checkDependenciesForInstallation();	
+
+			if(!$module->save())
+				throw new \GO\Base\Exception\Save();
+			
+			return $module;
+	}
 
 	public function aclField() {
 		return 'acl_id';
@@ -109,6 +127,30 @@ class Module extends \GO\Base\Db\ActiveRecord {
 				$this->moduleManager->install();
 		}		
 		return parent::afterSave($wasNew);
+	}
+	
+	/**
+	 * Checks if all default modules are created for each user.
+	 */
+	public function checkDefaultModels(){
+		$models = array();
+		$modMan = $this->moduleManager;
+		if ($modMan) {
+			$classes = $modMan->findClasses('model');
+			foreach ($classes as $class) {
+				if ($class->isSubclassOf('GO\Base\Model\AbstractUserDefaultModel')) {
+					$models[] = GO::getModel($class->getName());
+				}
+			}
+		}
+		
+		$this->acl->getAuthorizedUsers(
+						$this->acl_id, 
+						Acl::READ_PERMISSION, 
+						function($user, $models){		
+							foreach ($models as $model)
+								$model->getDefault($user);		
+						}, array($models));
 	}
 	
 	protected function beforeDelete() {

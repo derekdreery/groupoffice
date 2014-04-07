@@ -57,7 +57,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 
 		foreach($modules as $moduleClass){
 			$moduleController = new $moduleClass;
-			if($moduleController->autoInstall()){
+			if($moduleController->autoInstall() && $moduleController->isInstallable()){
 				$module = new \GO\Base\Model\Module();
 				$module->id=$moduleController->id();
 				$module->save();

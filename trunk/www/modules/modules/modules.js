@@ -21,7 +21,7 @@ GO.modules.MainPanel = function(config) {
 	var reader = new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			fields: ['name', 'package', 'description', 'id', 'sort_order', 'admin_menu', 'acl_id', 'icon', 'enabled', 'warning', 'buyEnabled'],
+			fields: ['name', 'package', 'description', 'id', 'sort_order', 'admin_menu', 'acl_id', 'icon', 'enabled', 'warning', 'buyEnabled','not_installable'],
 			id: 'id'
 		});
 
@@ -72,6 +72,7 @@ GO.modules.MainPanel = function(config) {
 		header: GO.modules.lang.enabled,
 		dataIndex: 'enabled',
 		width: 20,
+		disabled_field:'not_installable',
 		listeners: {
 			scope: this,
 			change: function(record, checked) {

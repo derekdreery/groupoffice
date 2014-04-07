@@ -36,12 +36,7 @@ class ModuleController extends AbstractJsonController{
 		$module = Module::model()->findByPk($id);
 		if(!$module){
 			if(!GO::modules()->$id){
-				$module = new Module();
-				$module->id=$id;
-				$module->moduleManager->checkDependenciesForInstallation();	
-
-				if(!$module->save())
-					throw new \GO\Base\Exception\Save();
+				$module = Module::install($id);
 			}
 		}
 		
@@ -77,7 +72,8 @@ class ModuleController extends AbstractJsonController{
 					'acl_id'=>$model ? $model->acl_id : 0,
 					'buyEnabled'=>!GO::scriptCanBeDecoded() || ($module->appCenter() && \GO\Professional\License::moduleIsRestricted($module->id())!==false),
 					'package'=>$module->package(),
-					'enabled'=>$model && $model->enabled
+					'enabled'=>$model && $model->enabled,
+					'not_installable'=>!GO::scriptCanBeDecoded()
 			);
 		}
 		
@@ -222,31 +218,9 @@ class ModuleController extends AbstractJsonController{
 		
 		GO::session()->closeWriting();
 		
-//		GO::$disableModelCache=true;
 		$response = new JsonResponse(array('success' => true));
 		$module = Module::model()->findByPk($params['moduleId']);
-		
-		
-		$models = array();
-		$modMan = $module->moduleManager;
-		if ($modMan) {
-			$classes = $modMan->findClasses('model');
-			foreach ($classes as $class) {
-				if ($class->isSubclassOf('GO\Base\Model\AbstractUserDefaultModel')) {
-					$models[] = GO::getModel($class->getName());
-				}
-			}
-		}
-		
-		$module->acl->getAuthorizedUsers(
-						$module->acl_id, 
-						Acl::READ_PERMISSION, 
-						function($user, $models){		
-							foreach ($models as $model)
-								$model->getDefault($user);		
-						}, array($models));
-		
-
+		$module->checkDefaultModels();
 
 		echo $response;
 	}

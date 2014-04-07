@@ -65,6 +65,16 @@ class LicenseInstaller extends AbstractCron {
 		if($temporaryLicenseFile->exists()){
 			if(!$temporaryLicenseFile->move($licenseFile)){
 				throw new \Exception("Could not move license file to Group-Office root!");
+			}else
+			{
+				if(!GO::scriptCanBeDecoded()){
+					GO\Base\Mail\AdminNotifier::sendMail("Group-Office license invalid", "You attempted to install a license but the license file you provided didn't work. Please contant Intermesh about this error.");
+				}  else {
+					//add all users to the modules they have access too
+					
+					\GO\Professional\License::autoConfigureModulePermissions();
+					
+				}
 			}
 		}
 	}

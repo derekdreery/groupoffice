@@ -190,11 +190,21 @@ class Module extends Observable {
 	}
 	
 	/**
-	 * Override this function if for some reason this module can become unavailable.
+	 * Override this function if for some reason this module can becomes 
+	 * unavailable.
 	 * 
 	 * @return boolean
 	 */
 	public function isAvailable(){
+		return true;
+	}
+	
+	/**
+	 * Return false is for some reason this module is not instalable.
+	 * 
+	 * @return boolean
+	 */
+	public function isInstallable(){
 		return true;
 	}
 	
