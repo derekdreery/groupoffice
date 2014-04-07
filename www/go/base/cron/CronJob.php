@@ -275,7 +275,7 @@ class CronJob extends \GO\Base\Db\ActiveRecord {
 					throw new Exception('Aborted because module ' . $moduleId . ' is not installed');
 				}
 
-				if (!GO::modules()->isAvailable($moduleId)) {
+				if ($moduleId != 'base' && !GO::modules()->isAvailable($moduleId)) {
 					throw new Exception('Aborted because module ' . $moduleId . ' is not available');
 				}
 
