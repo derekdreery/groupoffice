@@ -103,7 +103,7 @@ class Module extends \GO\Base\Db\ActiveRecord {
 	
 	public function validate() {
 		
-		if($this->id=='modules' && $this->enabled=0){
+		if($this->id=='modules' && $this->enabled==0){
 			$this->setValidationError('enabled', GO::t('cmdModulesCannotBeDeleted','modules'));
 		}
 		

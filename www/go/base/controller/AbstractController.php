@@ -571,8 +571,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 				
 			}
 			return call_user_func_array(array($this, $methodName),$methodArgs);
-		}
-		
+		}		
 	}
 	
 	/**
