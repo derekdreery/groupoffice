@@ -31,6 +31,10 @@ namespace GO\Base;
  */
 
 class Module extends Observable {
+	
+	const PACKAGE_COMMUNITY = 'Community (AGPL)';
+	
+	const PACKAGE_CUSTOM = 'Custom made';
 
 	private $_id;
 	/**
@@ -253,6 +257,23 @@ class Module extends Observable {
 				throw new \Exception("Module ".$this->name()." depends on ".implode(",",$moduleNames).". Please make sure all dependencies are installed.");
 			}
 		}
+	}
+	
+	
+	public function getDependencies(){
+		$depends = $this->depends();
+		
+		$moduleIds = array();
+		
+		foreach($depends as $moduleId){
+			if(!($module = \GO::modules()->isInstalled($moduleId)) || $module->isAvailable()){
+				foreach($depends as $moduleId){
+					$moduleIds[]=$moduleId;
+				}				
+			}
+		}
+		
+		return $moduleIds;
 	}
 
 	/**

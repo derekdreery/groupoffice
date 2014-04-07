@@ -283,11 +283,12 @@ function test_system(){
 		
 		$test['name']='Professional license';
 		
-		if(!file_exists(GO::config()->root_path.'groupoffice-pro-'.\GO::config()->getMajorVersion().'-license.txt')){
-			$test['feedback']='Warning: There\'s no license file "groupoffice-pro-'.\GO::config()->getMajorVersion().'-license.txt" in the root of Group-Office. The professional modules will not be enabled.';
-			$test['fatal']=false;
-			$test['pass']=false;
-		}elseif(!\GO::scriptCanBeDecoded('../modules/professional/License.php'))
+//		if(!file_exists(GO::config()->root_path.'groupoffice-pro-'.\GO::config()->getMajorVersion().'-license.txt')){
+//			$test['feedback']='Warning: There\'s no license file "groupoffice-pro-'.\GO::config()->getMajorVersion().'-license.txt" in the root of Group-Office. The professional modules will not be enabled.';
+//			$test['fatal']=false;
+//			$test['pass']=false;
+//		}else
+		if(file_exists(GO::config()->root_path.'groupoffice-pro-'.\GO::config()->getMajorVersion().'-license.txt') && !\GO::scriptCanBeDecoded('../modules/professional/License.php'))
 		{
 			$test['feedback']='Warning: Your professional license is invalid. The professional modules will not be enabled. Please contact Intermesh about this problem and supply the output of this page.';
 			$test['fatal']=false;

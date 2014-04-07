@@ -33,13 +33,8 @@ class ModuleController extends AbstractJsonController{
 	
 	protected function actionUpdate($id) {
 
-		$module = Module::model()->findByPk($id);
-		if(!$module){
-			if(!GO::modules()->$id){
-				$module = Module::install($id);
-			}
-		}
 		
+		$module = Module::install($id);		
 		$module->setAttributes($_POST);		
 		$module->save();
 		
@@ -50,7 +45,7 @@ class ModuleController extends AbstractJsonController{
 	
 	protected function actionStore($params){
 		
-		$response=new JsonResponse(array('results','success'=>true));
+		$response=new JsonResponse(array('success'=>true));
 		
 		$modules = GO::modules()->getAvailableModules(true);
 		
@@ -79,6 +74,9 @@ class ModuleController extends AbstractJsonController{
 		
 		ksort($availableModules);		
 		
+		
+		$response['has_license']=GO::getLicenseFile()->exists();
+						
 		$response['results']=array_values($availableModules);		
 		$response['total']=count($response['results']);
 		
