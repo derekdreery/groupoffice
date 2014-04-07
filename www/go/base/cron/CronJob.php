@@ -263,15 +263,8 @@ class CronJob extends \GO\Base\Db\ActiveRecord {
 		GO::debug('CRONJOB ('.$this->name.') START : '.date('d-m-Y H:i:s'));
 		
 		if($this->_prepareRun()){
-			
-			
-			
-			
-			
-			// Run the specified cron file code
-			$cronFile = new $this->job;
+
 			$failed = false;
-			//$cronFile->setParams();
 			try {
 
 				//check if module is available
@@ -289,6 +282,9 @@ class CronJob extends \GO\Base\Db\ActiveRecord {
 				if (!class_exists($this->job)) {
 					throw new Exception('Aborted because cron job class file is missing');
 				}
+				
+				// Run the specified cron file code
+				$cronFile = new $this->job;
 
 				if ($cronFile->enableUserAndGroupSupport()){
 

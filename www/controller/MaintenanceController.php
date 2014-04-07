@@ -526,18 +526,21 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 		$modules = \GO::modules()->getAllModules();
 			
 		while ($module=array_shift($modules)) {
-			$updatesFile = $module->path . 'install/updates.php';
-			if (!file_exists($updatesFile))
-				$updatesFile = $module->path . 'install/updates.inc.php';
+			
+			if($module->isAvailable()){
+				$updatesFile = $module->path . 'install/updates.php';
+				if (!file_exists($updatesFile))
+					$updatesFile = $module->path . 'install/updates.inc.php';
 
-			if (file_exists($updatesFile)) {
-				$updates = array();
-				require($updatesFile);
+				if (file_exists($updatesFile)) {
+					$updates = array();
+					require($updatesFile);
 
-				//put the updates in an extra array dimension so we know to which module
-				//they belong too.
-				foreach ($updates as $timestamp => $updatequeries) {
-					$u["$timestamp"][$module->id] = $updatequeries;
+					//put the updates in an extra array dimension so we know to which module
+					//they belong too.
+					foreach ($updates as $timestamp => $updatequeries) {
+						$u["$timestamp"][$module->id] = $updatequeries;
+					}
 				}
 			}
 		}
