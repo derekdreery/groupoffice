@@ -1,6 +1,8 @@
 <?php
 namespace GO\Base\Model;
 
+use GO;
+
 /*
  * Copyright Intermesh BV.
  *
@@ -29,9 +31,6 @@ namespace GO\Base\Model;
  * @property int $acl_write
  * @property boolean $enabled
  */
-
-
-
 
 class Module extends \GO\Base\Db\ActiveRecord {
 
