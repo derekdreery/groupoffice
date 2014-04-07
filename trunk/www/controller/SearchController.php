@@ -2,7 +2,7 @@
 
 namespace GO\Core\Controller;
 
-
+use GO;
 use GO\Base\Data\Store;
 use GO\Base\Db\FindParams;
 use GO\Base\Model\ModelType;
@@ -49,6 +49,12 @@ class SearchController extends \GO\Base\Controller\AbstractModelController{
 	}
 	
 	protected function getStoreParams($params) {
+		$filesupport = false;
+		
+		if(isset($params['filesupport'])){
+			$filesupport = $params['filesupport']==="true" || $params['filesupport']==="1"?true:false;
+		}
+		
 		$storeParams = FindParams::newInstance();
 		
 		if(isset($params['model_names'])){
@@ -72,7 +78,7 @@ class SearchController extends \GO\Base\Controller\AbstractModelController{
 			
 			//only search for available types. eg. don't search for contacts if the user doesn't have access to the addressbook
 			if(empty($types))
-					$types=$this->_getAllModelTypes();
+					$types=$this->_getAllModelTypes($filesupport);
 			
 			if(!isset($params['no_filter_save']) && isset($params['types']))
 				\GO::config()->save_setting ('link_type_filter', implode(',',$types), \GO::user()->id);
@@ -101,15 +107,17 @@ class SearchController extends \GO\Base\Controller\AbstractModelController{
 		return $storeParams;
 	}
 	
-	private function _getAllModelTypes(){
+	private function _getAllModelTypes($filesupport=false){
 		$types=array();
 		$stmt = ModelType::model()->find();
 		while($modelType = $stmt->fetch()){
 			if(class_exists($modelType->model_name)){
 				$model = \GO::getModel($modelType->model_name);
 				$module = $modelType->model_name == "GO\Base\Model\User" ? "users" : $model->module;
-				if(\GO::modules()->{$module})
-					$types[]=$modelType->id;
+				if(GO::modules()->{$module}){
+					if(!$filesupport || $filesupport && $model->hasFiles())
+						$types[]=$modelType->id;
+				}
 			}
 		}
 		return $types;
@@ -123,7 +131,13 @@ class SearchController extends \GO\Base\Controller\AbstractModelController{
 		return parent::formatColumns($columnModel);
 	}
 	
-	protected function actionModelTypes($params){
+		protected function actionModelTypes($params){
+		
+
+		$filesupport = false;
+		
+		if(isset($params['filesupport']))
+			$filesupport = $params['filesupport']==="true" || $params['filesupport']==="1"?true:false;
 		
 		$stmt = ModelType::model()->find();
 		
@@ -137,8 +151,11 @@ class SearchController extends \GO\Base\Controller\AbstractModelController{
 
 				$module = $modelType->model_name == "GO\Base\Model\User" ? "users" : $model->module;
 
-				if(\GO::modules()->{$module})
-					$types[$model->localizedName.$modelType->id]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
+				if(GO::modules()->{$module}){
+					
+					if(!$filesupport || $filesupport && $model->hasFiles())					
+						$types[$model->localizedName.$modelType->id]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
+				}
 			}else
 			{
 				\GO::debug("Missing class ".$modelType->model_name);

@@ -113,7 +113,9 @@ if(\GO::modules()->addressbook){
 		}
 	}
 }
-	
+
+$settings['upload_quickselect'] = GO::config()->upload_quickselect;
+
 $root_uri = \GO::config()->debug ? \GO::config()->host : \GO::config()->root_path;
 $view_root_uri = $root_uri.'views/Extjs3/';
 $view_root_path = \GO::config()->root_path.'views/Extjs3/';

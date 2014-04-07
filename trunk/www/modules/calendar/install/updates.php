@@ -224,11 +224,12 @@ $updates['201309121148'][]="ALTER TABLE  `cal_participants` ADD  `contact_id` IN
 $updates['201310141130'][]="ALTER TABLE `cal_calendars` ADD `enable_ics_import` TINYINT( 1 ) NOT NULL DEFAULT '0',
 ADD `ics_import_url` VARCHAR( 512 ) NOT NULL DEFAULT '';";
 
-
 $updates["201310141130"][]="script:3_install_cron.php";
 
 $updates["201402171130"][]="ALTER TABLE `cal_calendars` ADD `tooltip` varchar(127) NOT NULL DEFAULT '';";
 
-$updates['201402211130'][]="ALTER TABLE `cal_categories` ADD `acl_id` int(11) NOT NULL DEFAULT '0';";
-$updates['201402211130'][]="script:3_preset_category_acls.php";
+$updates["201404011700"][]="script:4_nl_koningsdag.php";
+
+$updates['201404011700'][]="ALTER TABLE `cal_categories` ADD `acl_id` int(11) NOT NULL DEFAULT '0';";
+$updates['201404011700'][]="script:3_preset_category_acls.php";
 				

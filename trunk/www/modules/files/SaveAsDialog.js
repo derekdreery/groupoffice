@@ -63,7 +63,7 @@ GO.files.SaveAsDialog = Ext.extend(GO.Window, {
 			},
 			scope: this
 		});
-		
+				
 		this.fb.on('fileselected',function(fb, r){
 			if(r.data.extension!='folder')
 				this.formPanel.form.findField('filename').setValue(r.data.name);
@@ -100,6 +100,11 @@ GO.files.SaveAsDialog = Ext.extend(GO.Window, {
 		this.nameField.setValue(config.filename.replace(/[&\/:\*\?"<>|\\]/g, ""));
 		
 		var extension = GO.util.getFileExtension(config.filename);
+		
+		if(config.folder_id){
+			this.fb.setRootID(config.folder_id, config.folder_id);
+		}
+		
 		this.fb.setFilesFilter(extension);		
 		
 		if(!config.scope)

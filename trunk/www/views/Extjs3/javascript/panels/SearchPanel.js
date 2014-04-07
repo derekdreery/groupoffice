@@ -33,7 +33,11 @@ GO.grid.SearchPanel = function(config){
 	
 	config.cls='go-white-bg';
 
+	if(!config.filesupport) // Load only the models that can handle files then set to true else false
+		config.filesupport = false;
+
 	this.filterPanel = new GO.LinkTypeFilterPanel({
+		filesupport:config.filesupport,
 		region:'west',		
 		split:true,
 		border:true,
@@ -51,6 +55,7 @@ GO.grid.SearchPanel = function(config){
 		//url: BaseHref+'json.php',			
 		url: GO.url('search/store'),
 		baseParams: {
+			filesupport:config.filesupport,
 			link_id: this.link_id,
 			link_type: this.link_type,
 			folder_id: this.folder_id,
@@ -141,7 +146,7 @@ GO.grid.SearchPanel = function(config){
 		loadMask:{
 			msg: GO.lang['waitMsgLoad']
 			},
-		sm:new Ext.grid.RowSelectionModel({single:config.singleSelect})
+		sm:new Ext.grid.RowSelectionModel({singleSelect:config.singleSelect})
 	};
 	
 //	if(config.noOpenLinks)
@@ -269,5 +274,10 @@ Ext.extend(GO.grid.SearchPanel, Ext.Panel, {
 	
 	iconRenderer : function(src,cell,record){
 		return '<div class=\"go-icon ' + record.data.iconCls +' \"></div>';
+	},
+	
+	setFileSupport : function(filesupport){
+		this.filterPanel.setFileSupport(filesupport);
+		this.store.baseParams.filesupport = filesupport;
 	}
 });
