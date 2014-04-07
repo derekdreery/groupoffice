@@ -406,9 +406,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 					$stmt = $m->find(array(
 							'ignoreAcl'=>true
 					));
-					while ($m = $stmt->fetch()) {
-						$m->checkDatabase();
-					}
+					
+					$stmt->callOnEach('checkDatabase');
+					
 				}
 			}
 		}

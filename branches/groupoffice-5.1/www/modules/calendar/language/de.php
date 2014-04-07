@@ -238,7 +238,7 @@ $l['shareCalendarsCron'] = 'Freigegebene Kalenderdateien aktualisieren';
 $l['shareCalendarsCronDescription'] = 'Freigegebene Kalenderdateien von veröffentlichten Kalendern aktualisieren';
 
 $l['cmdPrintView'] = 'Aktuelle Ansicht drucken';
-$l['cmdPrintCategoryCount'] = 'Nach Kategorie drucken';
+$l['cmdPrintCategoryCount'] = 'Anzahl pro Kategorie drucken';
 $l['startDate'] = 'Startdatum';
 $l['endDate'] = 'Enddatum';
 $l['eventsPerCategoryCount'] = 'Anzahl der Termine pro Kategorie';
