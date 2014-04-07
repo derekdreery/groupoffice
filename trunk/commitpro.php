@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 
-$commitMsg='shop packages';
+$commitMsg='Licensing system';
 
 $root = 'svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/trunk/modules';
 exec('svn ls '.$root, $output, $ret);

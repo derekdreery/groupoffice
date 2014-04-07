@@ -73,7 +73,7 @@ class ModuleController extends AbstractJsonController{
 					'buyEnabled'=>!GO::scriptCanBeDecoded() || ($module->appCenter() && \GO\Professional\License::moduleIsRestricted($module->id())!==false),
 					'package'=>$module->package(),
 					'enabled'=>$model && $model->enabled,
-					'not_installable'=>!GO::scriptCanBeDecoded()
+					'not_installable'=> $module->appCenter() && !GO::scriptCanBeDecoded()
 			);
 		}
 		
