@@ -271,7 +271,7 @@ class CronJob extends \GO\Base\Db\ActiveRecord {
 				$parts = explode('\\', $this->job);
 				$moduleId = strtolower($parts[1]);
 				
-				if (!GO::modules()->isInstalled($moduleId)) {
+				if ($moduleId != 'base' && !GO::modules()->isInstalled($moduleId)) {
 					throw new Exception('Aborted because module ' . $moduleId . ' is not installed');
 				}
 
