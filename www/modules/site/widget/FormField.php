@@ -76,7 +76,7 @@ class FormField extends \GO\Site\Components\Widget {
 	 */
 	public function begin() {
 		list($tag, $options) = $this->stripTag();
-		return $this->form->tag($tag, $options);
+		return $this->form->tag($tag, $options, false, false);
 	}
 	private function stripTag() {
 		$options = $this->options;
