@@ -227,7 +227,8 @@ class Scripts
 	}
 
 	/**
-	 * Reguster a ouece if havascript
+	 * Register a javascript string.
+	 * 
 	 * @param string $id unique identifier for the piece of code
 	 * @param string $script the javascript code
 	 * @param int $position position code shoudl be inserted (HEAD, BEGIN, END, READY)
