@@ -74,6 +74,9 @@ class LicenseInstaller extends AbstractCron {
 					
 					\GO\Professional\License::autoConfigureModulePermissions();
 					
+					
+					GO\Base\Mail\AdminNotifier::sendMail("Group-Office license installed successfully!", "Your license was installed and the new users were automatically added to the App permissions if necessary.\n\nThank you for using Group-Office!");
+					
 				}
 			}
 		}

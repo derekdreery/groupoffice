@@ -12,8 +12,7 @@ class AdminNotifier {
 	 * @param string $message 
 	 */
 	public static function sendMail($subject, $body){
-		$subject = "ALERT: ".$subject;
-		
+
 		$message = Message::newInstance();
 		$message->setSubject($subject);
 
