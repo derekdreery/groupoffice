@@ -4,6 +4,7 @@
 - Fixed problem with ticketmessage "type_id" and "has_type" properties.
 - Workflow: email and reminder for file uploader when file is disapproved.
 - Calendar: new Dutch King's Day.
+- Remove (0) from telephone numbers when parsing to the callto link
 - Fixed: Ticket messages imported from IMAP can be edited again.
 - Bring back export button for ticket users so they can export the tickets that are currently on the screen.
 - Dropbox: Added new Curl.php for NSS SSL backend and fixed bug in Database
