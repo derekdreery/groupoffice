@@ -47,21 +47,50 @@ class Module extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	/**
-	 * Install a module
+	 * Install's a module with all it's dependencies
 	 * 
 	 * @param string $moduleId
 	 * @return \GO\Base\Model\Module
 	 * @throws \GO\Base\Exception\Save
 	 */
-	public static function install($moduleId){
+	public static function install($moduleId,$ignoreDependentModule=false){
+		
+		
+		GO::debug("install($moduleId,$ignoreDependentModule)");
+		
+		if(!($module = Module::model()->findByPk($moduleId, false, true))){
 			$module = new Module();
 			$module->id=$moduleId;
-			$module->moduleManager->checkDependenciesForInstallation();	
+			
+			$dependencies = $module->moduleManager->getDependencies();	
+			
+			foreach($dependencies as $dependency){
+				if($ignoreDependentModule!==$dependency){
+					self::install($dependency, $moduleId);
+				}
+			}
 
 			if(!$module->save())
 				throw new \GO\Base\Exception\Save();
+		}else
+		{
+			if(!$module->enabled){
+				$module->enabled=true;
+				
+				$dependencies = $module->moduleManager->getDependencies();	
+				
+				GO::debug($dependencies);
 			
-			return $module;
+				foreach($dependencies as $dependency){
+					if($ignoreDependentModule!==$dependency){
+						self::install($dependency, $moduleId);
+					}
+				}
+				$module->save();				
+			}
+		}
+			
+		return $module;
 	}
 
 	public function aclField() {

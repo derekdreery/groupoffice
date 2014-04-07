@@ -17,7 +17,6 @@ GO.modules.MainPanel = function(config) {
 	}
 	
 	
-	
 	var reader = new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -36,6 +35,14 @@ GO.modules.MainPanel = function(config) {
 		remoteGroup:false,
 		remoteSort:false
 	});
+	
+	this.store.on('load',function(){
+		if(!this.store.reader.jsonData.has_license)
+			this.trialButton.show();
+		else
+			this.trialButton.hide();
+		
+	}, this);
 
 	config.tbar = new Ext.Toolbar({
 		cls: 'go-head-tb',
@@ -65,18 +72,28 @@ GO.modules.MainPanel = function(config) {
 					this.installLicenseDialog.show();
 				},
 				scope: this
-			}]
+			},this.trialButton = new Ext.Button({
+				iconCls: 'btn-settings',
+				text: "Get a 30 day trial",
+				cls: 'x-btn-text-icon',
+				hidden:true,
+				handler: function() {
+					window.open('http://test.group-office.com/30-day-trial?hostname='+document.domain);
+				},
+				scope: this
+			})]
 	});
-
+	
 	var checkColumn = new GO.grid.CheckColumn({
 		header: GO.modules.lang.enabled,
 		dataIndex: 'enabled',
-		width: 20,
+		width: 100,
 		disabled_field:'not_installable',
 		listeners: {
 			scope: this,
 			change: function(record, checked) {
 				GO.request({
+					maskEl:this.getEl(),
 					url: 'modules/module/update',
 					params: {
 						id: record.id,
@@ -90,6 +107,7 @@ GO.modules.MainPanel = function(config) {
 
 							if (record.data.enabled) {
 								this.showPermissions(record.data.id, record.data.name, record.data.acl_id);
+								this.store.load();
 							}
 						}
 						record.commit();
