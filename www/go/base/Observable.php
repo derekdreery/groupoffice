@@ -126,6 +126,9 @@ class GO_Base_Observable{
 	 * 
 	 * @param String $eventName Name fo the event
 	 * @param Array $params Paramters for the listener function
+	 * 
+	 * @return boolean If one listerner returned false it will stop execution of 
+	 *  other listeners and will return false.
 	 */
 	protected function fireEvent($eventName, $params=array()){
 		

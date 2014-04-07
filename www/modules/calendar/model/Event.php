@@ -583,11 +583,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 	
 		if($this->isResource()){
+			$adminUserIds=array();
+			
 			$groupAdminsStmt= $this->calendar->group->admins;
 			while($adminUser = $groupAdminsStmt->fetch()){
 				$adminUserIds[] = $adminUser->id;
 			}
-			if (!in_array(GO::user()->id,$adminUserIds)) {
+			if (!in_array(GO::user()->id,$adminUserIds) && $this->end_time > time()) {
 				$this->_sendResourceNotification($wasNew);
 			}
 		}else

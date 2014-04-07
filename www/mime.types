@@ -188,7 +188,9 @@ audio/x-pn-realaudio ra rm ram
 audio/x-realaudio ra
 audio/x-scpls pls
 audio/x-sd2 sd2
-audio/x-wav wav
+#audio/vnd.wave wav
+#audio/x-wav wav
+application/octet-stream wav
 chemical/x-alchemy alc
 chemical/x-cache cac cache
 chemical/x-cache-csf csf

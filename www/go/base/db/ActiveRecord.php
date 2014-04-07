@@ -3449,7 +3449,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		}
 		
 		
-		if(!$this->beforeDelete())
+		if(!$this->beforeDelete() || $this->fireEvent('beforedelete', array(&$this, $ignoreAcl))===false)
 				return false;
 		
 		$r= $this->relations();

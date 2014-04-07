@@ -127,5 +127,5 @@ $l['rightClickToCopy']='Rechtsklick zum Kopieren';
 $l['deleteExpiredLabel']='Dateien mit abgelaufenem Download-Link löschen';
 $l['deleteExpiredDescription']='Dateien löschen, deren Download-Link nicht mehr gültig ist';
 
-$l['deleteWhenExpired'] = 'Dateien automatisch löschen, wenn der Download-Link zeitlich abgelaufen ist';
-$l['automaticallyDeleted'] = 'Datei wird automaitsch gelöscht, wenn der Download-Link zeitlich abgelaufen ist';
+$l['deleteWhenExpired'] = 'Datei(en) automatisch löschen, wenn der Download-Link zeitlich abgelaufen ist';
+$l['automaticallyDeleted'] = 'Datei wird automatisch gelöscht, wenn der Download-Link zeitlich abgelaufen ist';

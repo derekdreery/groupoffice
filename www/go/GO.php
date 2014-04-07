@@ -570,7 +570,7 @@ class GO{
 			GO::debug($log);
 		}
 		
-		if(GO::config()->debug)
+		if(GO::config()->debug_display_errors)
 			ini_set("display_errors","On");
 		elseif(PHP_SAPI!='cli')
 			ini_set("display_errors","Off");

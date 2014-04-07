@@ -222,13 +222,19 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 */
 	protected function headers(){
 		//iframe hack for file uploads fails with application/json
-//		if(!empty($_FILES)){
-			header('Content-Type: text/html; charset=UTF-8');
-//		}else
-//		{
-//			header('Content-Type: application/json; charset=UTF-8');
-//		}
+////		if(!empty($_FILES)){
+//			header('Content-Type: text/html; charset=UTF-8');
+////		}else
+////		{
+////			header('Content-Type: application/json; charset=UTF-8');
+////		}
 			
+			if(!GO_Base_Util_Http::isAjaxRequest(false)){
+				header('Content-Type: text/html; charset=UTF-8');
+			}else
+			{
+				header('Content-Type: application/json; charset=UTF-8');
+			}
 			
 			
 			
