@@ -39,6 +39,8 @@ namespace GO\Base\Cron;
 use GO;
 use GO\Base\Db\PDO;
 
+use Exception;
+
 
 class CronJob extends \GO\Base\Db\ActiveRecord {
 		
@@ -261,16 +263,34 @@ class CronJob extends \GO\Base\Db\ActiveRecord {
 		GO::debug('CRONJOB ('.$this->name.') START : '.date('d-m-Y H:i:s'));
 		
 		if($this->_prepareRun()){
-			if(!class_exists($this->job)){
-				GO::debug('Abort because cron job class file is missing');
-				return false;
-			}
+			
+			
+			
+			
+			
 			// Run the specified cron file code
 			$cronFile = new $this->job;
 			$failed = false;
 			//$cronFile->setParams();
-			try{
-				if($cronFile->enableUserAndGroupSupport()){
+			try {
+
+				//check if module is available
+				$parts = explode('\\', $this->job);
+				$moduleId = strtolower($parts[1]);
+				
+				if (!GO::modules()->isInstalled($moduleId)) {
+					throw new Exception('Aborted because module ' . $moduleId . ' is not installed');
+				}
+
+				if (!GO::modules()->isAvailable($moduleId)) {
+					throw new Exception('Aborted because module ' . $moduleId . ' is not available');
+				}
+
+				if (!class_exists($this->job)) {
+					throw new Exception('Aborted because cron job class file is missing');
+				}
+
+				if ($cronFile->enableUserAndGroupSupport()){
 
 					$stmnt = $this->getAllUsers();
 					foreach($stmnt as $user){
@@ -309,6 +329,13 @@ class CronJob extends \GO\Base\Db\ActiveRecord {
 //		$this->params = $this->_paramsToJson();
 		
 		$this->nextrun = $this->_calculateNextRun();
+		
+		//if the cron happens within a minute then substract one minute for immediate testing.
+		if(GO::config()->debug && PHP_SAPI!='cli'){
+			if($this->nextrun<time()+61){
+				$this->nextrun-=60;
+			}
+		}
 		GO::debug('CRONJOB ('.$this->name.') NEXTRUN : '.$this->getAttribute('nextrun','formatted'));
 		return parent::beforeSave();
 	}

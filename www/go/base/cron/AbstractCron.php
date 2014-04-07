@@ -22,7 +22,7 @@
  */
 
 namespace GO\Base\Cron;
-
+use Exception;
 
 abstract class AbstractCron extends \GO\Base\Model{
 	

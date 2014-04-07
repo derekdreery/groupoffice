@@ -134,6 +134,17 @@ class Acl extends \GO\Base\Db\ActiveRecord {
 		else 
 			return false;
 	}
+	
+	/**
+	 * Return the permission level that a user has for this ACL.
+	 *  
+	 * @param int $userId If omitted then it will check the currently logged in user and return manage permission if \GO::$ignoreAclPermissions is set.
+	 * @param bool $checkGroupPermissionOnly
+	 * @return int Permission level. See constants in Acl for values. 
+	 */
+	public function getUserLevel($userId){
+		return Acl::getUserPermissionLevel($this->id, $userId);
+	}
 
 	/**
 	 * Add a user to the ACL with a permission level.
