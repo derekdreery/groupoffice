@@ -10,6 +10,24 @@
 - Calendar: Notification to user when attempting to import an ICalendar with a recurrence containing 'Last X of month' pattern.
 
 
+
+- when another agent commented on a ticket, the agent got an invalid e-mail.
+- pass through original smime source for iphones
+- Fixed automatic sort order for ticket type groups
+- Fixed problem with ticketmessage "type_id" and "has_type" properties.
+- Workflow: email and reminder for file uploader when file is disapproved.
+- Calendar: new Dutch King's Day.
+- Fixed: Ticket messages imported from IMAP can be edited again.
+- Bring back export button for ticket users so they can export the tickets that are currently on the screen.
+- Dropbox: Added new Curl.php for NSS SSL backend and fixed bug in Database
+
+27-03-2014 5.0.50
+- Updated German translation
+- Disable swiftmailer disk cache on windows
+- Resource can be added and used without administrators
+- Calendar will only send an email to the resource administrator when the booked event is in the future
+- Holidays: Fixed client-side bug when creating a new leave day entry.
+
 26-03-2014 5.0.49
 - new PHP 5.5 OPCache caused database install problem.
 - Database check uses less system memory

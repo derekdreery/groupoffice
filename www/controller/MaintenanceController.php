@@ -412,9 +412,9 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 					$stmt = $m->find(array(
 							'ignoreAcl'=>true
 					));
-					while ($m = $stmt->fetch()) {
-						$m->checkDatabase();
-					}
+					
+					$stmt->callOnEach('checkDatabase');
+					
 				}
 			}
 		}

@@ -52,6 +52,10 @@ $l['GO_Addressbook_Customfieldtype_Company']= 'Firma';
 
 $l['manageBlocks']= 'Blöcke verwalten';
 
+$l['GO_Tickets_Model_Ticket']= 'Ticket';
+$l['GO_Files_Model_Folder']= 'Ordner';
+$l['GO_Files_Model_File']= 'Datei';
+
 $l['cfName']= 'Benutzerdefinierter Feldname';
 $l['customfield']= 'Benutzerdefiniertes Feld';
 
@@ -65,3 +69,5 @@ $l['maxLength']= 'Maximale Anzahl von Zeichen';
 
 $l['GO_Tasks_Model_Task']= 'Aufgabe';
 $l['GO_Notes_Model_Note']= 'Notiz';
+$l['GO_Billing_Model_Product']= 'Produkt';
+$l['GO_Site_Model_Site']= 'Seite';

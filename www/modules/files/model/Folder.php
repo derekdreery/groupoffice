@@ -1002,14 +1002,14 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 			if(!$mergeFolders){
 				$subfolder->parent_id=$this->id;
 				$subfolder->appendNumberToNameIfExists();
-				if(!$subfolder->save()){
+				if(!$subfolder->save(true)){
 					throw new \Exception("Could not save folder ".$subfolder->name." ".implode("\n", $subfolder->getValidationErrors()));
 				}
 			}else
 			{
 				if(($existingFolder = $this->hasFolder($subfolder->name))){
 					$existingFolder->moveContentsFrom($subfolder, true);
-					if(!$subfolder->delete()){
+					if(!$subfolder->delete(true)){
 						throw new \Exception("Could not delete folder ".$subfolder->name);
 					}
 				}else

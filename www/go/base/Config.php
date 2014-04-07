@@ -101,6 +101,14 @@ class Config {
 	var $debug = false;
 	
 	
+	/**
+	 * Enable display_errors = on for php
+	 * 
+	 * @var boolean 
+	 */
+	public $debug_display_errors=false;
+	
+	
 //	/**
 //	 * Only log debug messages for this remote IP address.
 //	 *
@@ -960,7 +968,7 @@ class Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '5.0.49';
+	var $version = '5.0.50';
 
 	
 	/**
@@ -970,7 +978,7 @@ class Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20140326';
+	var $mtime = '20140327';
 
 	#group configuration
 	/**
@@ -1177,6 +1185,13 @@ class Config {
 	 */
 	var $allow_quicklink = true;	
 	
+	
+	/**
+	 * Automatically opens the file select dialog when opening the upload dialog.
+	 * 
+	 * @var boolean 
+	 */
+	public $upload_quickselect = true;
 	
 	/**
 	 * EXPERIMENTAL! Minifies JS and CSS on the fly.

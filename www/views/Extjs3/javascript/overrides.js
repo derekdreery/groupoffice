@@ -481,21 +481,22 @@ Ext.override(Ext.form.Checkbox, {
  * @param {HTMLElement} node The node to remove
  * @method
  */
- Ext.removeNode = Ext.isIE && !Ext.isIE8 && !Ext.isIE9 ? function(){
-		 var d;
-		 return function(n){
-				 if(n && n.tagName != 'BODY'){
-						 (Ext.enableNestedListenerRemoval) ? Ext.EventManager.purgeElement(n, true) : Ext.EventManager.removeAll(n);
-						 d = d || DOC.createElement('div');
-						 d.appendChild(n);
-						 d.innerHTML = '';
-						 delete Ext.elCache[n.id];
-				 }
-		 };
- }() : function(n){
-		 if(n && n.parentNode && n.tagName != 'BODY'){
-				 (Ext.enableNestedListenerRemoval) ? Ext.EventManager.purgeElement(n, true) : Ext.EventManager.removeAll(n);
-				 n.parentNode.removeChild(n);
-				 delete Ext.elCache[n.id];
-		 }
- };
+ Ext.removeNode = Ext.isIE && !Ext.isIE8 && !Ext.isIE9 ? function() {
+
+	var d;
+	return function(n) {
+		if (n && n.tagName != 'BODY') {
+			(Ext.enableNestedListenerRemoval) ? Ext.EventManager.purgeElement(n, true) : Ext.EventManager.removeAll(n);
+			d = d || document.createElement('div');
+			d.appendChild(n);
+			d.innerHTML = '';
+			delete Ext.elCache[n.id];
+		}
+	};
+}() : function(n) {
+	if (n && n.parentNode && n.tagName != 'BODY') {
+		(Ext.enableNestedListenerRemoval) ? Ext.EventManager.purgeElement(n, true) : Ext.EventManager.removeAll(n);
+		n.parentNode.removeChild(n);
+		delete Ext.elCache[n.id];
+	}
+};
