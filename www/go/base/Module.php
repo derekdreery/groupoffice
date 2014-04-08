@@ -35,6 +35,8 @@ class Module extends Observable {
 	const PACKAGE_COMMUNITY = 'Community (AGPL)';
 	
 	const PACKAGE_CUSTOM = 'Custom made';
+	
+	const PACKAGE_IN_DEVELOPMENT = 'In development';
 
 	private $_id;
 	/**
