@@ -1,3 +1,6 @@
+08-04-2014 5.0.52
+- Error on save contact and company because of application/json header in response
+
 07-04-2014 5.0.51
 - Fix ticket template bug where you could not set "Ticket created for agent"
 - Database check aborted on an error. Memory optimizations were made as well.
