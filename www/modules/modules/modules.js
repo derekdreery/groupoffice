@@ -84,7 +84,7 @@ GO.modules.MainPanel = function(config) {
 						GO.modules.lang.trialLicenseText,
 						function(btn){
 							if(btn==='yes'){
-								window.open('http://test.group-office.com/30-day-trial?hostname='+document.domain,'groupoffice-shop');
+								window.open('https://www.group-office.com/30-day-trial?hostname='+document.domain,'groupoffice-shop');
 							}
 						}
 					);
