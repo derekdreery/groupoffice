@@ -1,4 +1,4 @@
-08-04-2014 5.0.52
+08-04-2014 5.0.53
 - Error on save contact and company because of application/json header in response
 
 07-04-2014 5.0.51
