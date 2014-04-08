@@ -1,6 +1,6 @@
 <?php
 if(\GO\Base\Util\Http::isAjaxRequest()){
-	echo json_encode($data);
+	echo $data;
 }elseif(PHP_SAPI=='cli'){
 	echo "ERROR: ".trim($data['feedback'])."\n\n";
 	if(\GO::config()->debug)

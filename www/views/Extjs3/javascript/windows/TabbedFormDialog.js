@@ -395,7 +395,12 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				if(action.failureType == 'client')
 				{					
 					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
-				} else {
+				} else {					
+					
+					if(this.fileUpload){
+						action.result.feedback=Ext.util.Format.nl2br(action.result.feedback);
+					}
+					
 					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
 					
 					if(action.result.validationErrors){

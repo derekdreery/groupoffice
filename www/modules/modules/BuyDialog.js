@@ -80,7 +80,7 @@ GO.modules.BuyDialog = Ext.extend(GO.Window, {
 				scope:this,
 				handler:function(){
 					
-					this.formPanel.form.getEl().dom.target='_blank';
+					this.formPanel.form.getEl().dom.target='groupoffice-shop';
 					
 					var usernames = this.usersGrid.getSelected();					
 					

@@ -28,6 +28,11 @@ abstract class AbstractCron extends \GO\Base\Model{
 	
 	
 	public static function runOnce(){
+		
+		if(!\GO::cronIsRunning()){
+			throw new \GO\Base\Exception\NoCron();
+		}
+		
 		$jobClass = get_called_class();
 		
 		$job = new $jobClass;

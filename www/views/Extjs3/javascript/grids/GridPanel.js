@@ -59,6 +59,8 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	primaryKey : 'id', //Set this value if your record has a PK of multiple columns (eg ['user_id','project_id'])
 	editDialogConfig:null,
 	
+	loadMask:true,
+	
 	initComponent : function(){
 		
 		
@@ -145,9 +147,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 			
 			
 		}, this);
-	
-		if(typeof(this.loadMask)=='undefined')
-			this.loadMask=true;
+
 	
 		if(!this.sm && !this.disableSelection)
 			this.sm=this.selModel=new Ext.grid.RowSelectionModel();

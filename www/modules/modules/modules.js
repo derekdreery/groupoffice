@@ -75,11 +75,20 @@ GO.modules.MainPanel = function(config) {
 				scope: this
 			},this.trialButton = new Ext.Button({
 				iconCls: 'btn-settings',
-				text: "Get a 30 day trial",
+				text: GO.modules.lang.trialLicense,
 				cls: 'x-btn-text-icon',
 				hidden:true,
 				handler: function() {
-					window.open('http://test.group-office.com/30-day-trial?hostname='+document.domain);
+					Ext.MessageBox.confirm(
+						GO.modules.lang.trialLicense,
+						GO.modules.lang.trialLicenseText,
+						function(btn){
+							if(btn==='yes'){
+								window.open('http://test.group-office.com/30-day-trial?hostname='+document.domain,'groupoffice-shop');
+							}
+						}
+					);
+					
 				},
 				scope: this
 			})]
