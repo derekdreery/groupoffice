@@ -63,6 +63,7 @@ GO.modules.MainPanel = function(config) {
 				iconCls: 'btn-settings',
 				text: "Install license file",
 				cls: 'x-btn-text-icon',
+				hidden: GO.settings.config.product_name!=='Group-Office',
 				handler: function() {
 					if(!this.installLicenseDialog){
 						this.installLicenseDialog = new GO.modules.InstallLicenseDialog({
