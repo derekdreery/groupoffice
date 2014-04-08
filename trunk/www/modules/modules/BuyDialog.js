@@ -1,7 +1,7 @@
 GO.modules.BuyDialog = Ext.extend(GO.Window, {
 	width: 500,
 	height: 500,
-	title: 'Buy licenses for',
+	title: 'Buy',
 	initComponent: function() {
 		
 		var store = new GO.data.JsonStore({
@@ -38,7 +38,7 @@ GO.modules.BuyDialog = Ext.extend(GO.Window, {
 		
 		this.formPanel = new Ext.FormPanel({
 			
-			url:'http://test.group-office.com/buylicense',
+			url:'https://www.group-office.com/buylicense',
 			standardSubmit:true,
 			items:[
 				this.usernamesField = new Ext.form.Hidden({

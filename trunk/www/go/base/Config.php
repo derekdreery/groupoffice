@@ -968,7 +968,7 @@ class Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '5.0.50';
+	var $version = '6.0.0';
 
 	
 	/**
