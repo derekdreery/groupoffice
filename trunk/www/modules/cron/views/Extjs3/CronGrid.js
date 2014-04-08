@@ -158,7 +158,9 @@ GO.cron.CronGrid = Ext.extend(GO.grid.GridPanel,{
 		});
 		GO.cron.CronGrid.superclass.initComponent.call(this);
 		
-		GO.cron.cronStore.load();
+		this.on('render', function(){
+			GO.cron.cronStore.load();
+		},this);
 	},
 	showSettingsDialog : function(){
 		if(!this.settingsDialog){

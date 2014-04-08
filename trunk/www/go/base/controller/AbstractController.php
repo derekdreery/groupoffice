@@ -485,7 +485,8 @@ abstract class AbstractController extends \GO\Base\Observable {
 			
 			\GO::debug("EXCEPTION: ".(string) $e);
 			
-					
+			$response = new \GO\Base\Data\JsonResponse();
+			
 			$response['success'] = false;
 			
 			$response['feedback'] = !empty($response['feedback']) ? $response['feedback']."\r\n\r\n" : '';

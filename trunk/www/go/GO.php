@@ -1226,6 +1226,16 @@ class GO{
 	public static function getLicenseFile(){
 		return new \GO\Base\Fs\File(GO::config()->root_path.'groupoffice-pro-'.GO::config()->getMajorVersion().'-license.txt');
 	}
+	
+	
+	/**
+	 * Checks if the main cron job is running for the task scheduler
+	 * 
+	 * @return boolean
+	 */
+	public static function cronIsRunning(){
+		return \GO::config()->get_setting('cron_last_run') > time()-300;
+	}
 
 }
 
