@@ -1,0 +1,6 @@
+.go-module-icon-comments, .go-menu-icon-comments{
+	background-image:url('images/comments.png') !important;
+}
+.go-tab-icon-comments {
+	background-image: none !important;
+}
