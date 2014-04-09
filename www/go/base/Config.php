@@ -938,7 +938,7 @@ class GO_Base_Config {
 	 */
 	var $folder_create_mode = '0755';
 	
-	/* The permissions mode to use when creating folders
+	/* New files and folders will be chown'd to this group.
 	 *
 	 * @var     string
 	 * @access  public
