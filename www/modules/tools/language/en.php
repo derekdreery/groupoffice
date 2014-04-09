@@ -13,3 +13,4 @@ $l['index_files']='Index all files';
 $l['buildsearchcache']='Create search index';
 $l['checkmodules']='Check modules';
 $l['resetState']='Reset state of windows, grids etc.';
+$l['systemCheck']='System check';
