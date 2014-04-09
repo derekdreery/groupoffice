@@ -951,7 +951,7 @@ class Config {
 	 */
 	var $folder_create_mode = '0755';
 	
-	/* The permissions mode to use when creating folders
+	/* New files and folders will be chown'd to this group.
 	 *
 	 * @var     string
 	 * @access  public
@@ -978,7 +978,7 @@ class Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20140327';
+	var $mtime = '20140408-1';
 
 	#group configuration
 	/**
@@ -1322,7 +1322,7 @@ class Config {
 		$this->set_full_url();
 		
 		if(!$this->support_link && $this->isProVersion()){
-			$this->support_link = "https://shop.group-office.com/support";
+			$this->support_link = "https://www.group-office.com/support";
 		}
 		
 		/* 
@@ -1363,10 +1363,10 @@ class Config {
 		}		
 		$path .= $user_id;		
 		
-		
-		$folder = new Fs\Folder($this->orig_tmpdir.$user_id);
+		$folder = new Fs\Folder($$path);
 		if($autoCreate)
 			$folder->create(0777);
+		
 		return $folder;
 	}
 	

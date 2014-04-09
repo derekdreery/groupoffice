@@ -235,7 +235,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 		{
 			header('Content-Type: application/json; charset=UTF-8');
 		}
-			
+
 		foreach(\GO::config()->extra_headers as $header){
 			header($header);
 		}

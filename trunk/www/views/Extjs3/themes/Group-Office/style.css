@@ -850,6 +850,7 @@ table.display-panel{
 
 table.display-panel td{
 	line-height: 20px;
+	padding-left:3px;
 }
 
 table.display-panel a:link,

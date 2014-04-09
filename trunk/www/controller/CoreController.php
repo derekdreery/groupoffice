@@ -738,7 +738,39 @@ class CoreController extends \GO\Base\Controller\AbstractController {
 		else
 			$response['data']['about']=str_replace('{company_name}', GO::config()->product_name, $response['data']['about']);
 		
-		$response['data']['about']=str_replace('{version}', GO::config()->version, $response['data']['about']);
+		
+		$strVersion = GO::config()->version;
+		
+//		$rssUrl = "https://sourceforge.net/api/file/index/project-id/76359/mtime/desc/limit/20/rss";
+//		
+//		$httpClient = new  \GO\Base\Util\HttpClient();
+//		
+//		$res = $httpClient->request($rssUrl);	
+//	
+//		$sXml = simplexml_load_string($res);	
+//		
+//			if($sXml){
+//
+//			$firstItem = $sXml->channel->item[0];		
+//
+//			$link = (string) $firstItem->link;
+//
+//			preg_match('/-([0-9]\.[0-9]{1,2}\.[0-9]{1,2})\./', $link, $matches);
+//
+//			$version = $matches[1];
+//
+//			$ret = version_compare(GO::config()->version, $version);
+//
+//			if($ret!== -1){
+//				$strVersion .= " <span style=\"color: red\">(v$version available)</span>";
+//			}else
+//			{
+//				$strVersion .= " (latest)";
+//			}
+//		}
+		
+		
+		$response['data']['about']=str_replace('{version}', $strVersion, $response['data']['about']);
 		$response['data']['about']=str_replace('{current_year}', date('Y'), $response['data']['about']);
 		$response['data']['about']=str_replace('{product_name}', GO::config()->product_name, $response['data']['about']);
 
