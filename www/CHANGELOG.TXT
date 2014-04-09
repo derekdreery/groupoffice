@@ -1,3 +1,4 @@
+
 - Billing: PDF Templates can have stationery paper
 - Ticket messages styled like conversation and notes display yellow.
 - Files: Users without disk quota can still upload files.
@@ -6,12 +7,21 @@
 
 
 
+
+08-04-2014 5.0.53
+- Error on save contact and company because of application/json header in response
+
+07-04-2014 5.0.51
+- Fix ticket template bug where you could not set "Ticket created for agent"
+- Database check aborted on an error. Memory optimizations were made as well.
+
 - when another agent commented on a ticket, the agent got an invalid e-mail.
 - pass through original smime source for iphones
 - Fixed automatic sort order for ticket type groups
 - Fixed problem with ticketmessage "type_id" and "has_type" properties.
 - Workflow: email and reminder for file uploader when file is disapproved.
 - Calendar: new Dutch King's Day.
+- Remove (0) from telephone numbers when parsing to the callto link
 - Fixed: Ticket messages imported from IMAP can be edited again.
 - Bring back export button for ticket users so they can export the tickets that are currently on the screen.
 - Dropbox: Added new Curl.php for NSS SSL backend and fixed bug in Database
