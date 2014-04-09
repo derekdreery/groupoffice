@@ -9,7 +9,10 @@ use ReflectionClass;
 class ConfigEditor {
 
 	public static function save(\GO\Base\Fs\File $file, array $config) {
-		$configData = "<?php\n";
+		$configData = "<?php\n/**\n".
+			" * Group-Office configuration file.\n".
+			" * Visit https://www.group-office.com/wiki/Configuration_file for available values\n".
+			" */\n\n";
 		
 		$configReflection = new ReflectionClass(GO::config());
 		
