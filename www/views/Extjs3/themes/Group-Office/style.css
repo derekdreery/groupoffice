@@ -63,7 +63,7 @@
 	width:10px;
 }
 
-.go-html-formatted, .go-html-formatted p, .go-html-formatted li, .go-html-formatted td{
+.go-html-formatted, .go-html-formatted p, .go-html-formatted li, .go-html-formatted td, .go-html-formatted div, .go-html-formatted span{
 	font: 12px Arial, Helvetica Sans-serif;
 }
 
