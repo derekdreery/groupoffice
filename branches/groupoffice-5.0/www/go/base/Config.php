@@ -1309,7 +1309,7 @@ class GO_Base_Config {
 		$this->set_full_url();
 		
 		if(!$this->support_link && $this->isProVersion()){
-			$this->support_link = "https://shop.group-office.com/support";
+			$this->support_link = "https://www.group-office.com/support";
 		}
 		
 		/* 
@@ -1346,9 +1346,10 @@ class GO_Base_Config {
 		$path .= $user_id;		
 		
 		
-		$folder = new GO_Base_Fs_Folder($this->orig_tmpdir.$user_id);
+		$folder = new GO_Base_Fs_Folder($path);
 		if($autoCreate)
 			$folder->create(0777);
+		
 		return $folder;
 	}
 	
