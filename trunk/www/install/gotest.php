@@ -277,6 +277,75 @@ function test_system(){
 	$test['fatal']=false;
 
 	$tests[]=$test;
+	
+	
+	$test['name']='JSON functions';
+	$test['pass']=function_exists('json_encode');
+	$test['feedback']='Fatal error: json_encode and json_decode functions are not available. Try apt-get install php5-json on Debian or Ubuntu.';
+	$test['fatal']=true;
+
+	$tests[]=$test;
+
+
+	$ze1compat=ini_get('zend.ze1_compatibility_mode');
+
+	$test['name']='zend.ze1_compatibility_mode';
+	$test['pass']=empty($ze1compat);
+	$test['feedback']='Fatal error: zend.ze1_compatibility_mode is enabled. '.$product_name.' can\'t run with this setting enabled';
+	$test['fatal']=true;
+
+	$tests[]=$test;	
+	
+	
+	$url = "http".(!empty($_SERVER['HTTPS'])?"s":"")."://".$_SERVER['HTTP_HOST'];
+	
+	$headers = @get_headers($url.'/caldav');	
+	$test['name']='CalDAV alias';
+	$test['pass']=$headers && strpos($headers[0], '401')!==false;
+	$test['feedback']="Note: The alias /caldav was not detected. Please create: Alias /caldav /groupoffice/modules/caldav/calendar.php.";
+	$test['fatal']=false;
+
+	$tests[]=$test;	
+	
+	
+	$headers = @get_headers($url.'/.well-known/caldav');	
+	
+	$test['name']='CalDAV autodiscovery';
+	$test['pass']=$headers && strpos($headers[0], '301')!==false;
+	$test['feedback']="Note: The redirect /.well-known/caldav was not detected. Please create a redirect: Redirect 301 /.well-known/caldav /caldav";
+	$test['fatal']=false;
+
+	$tests[]=$test;	
+	
+	
+	$headers = @get_headers($url.'/carddav');	
+	$test['name']='CardDAV alias';
+	$test['pass']=$headers && strpos($headers[0], '401')!==false;
+	$test['feedback']="Note: The alias /carddav was not detected. Please create: Alias /carddav /groupoffice/modules/carddav/addressbook.php.";
+	$test['fatal']=false;
+
+	$tests[]=$test;	
+	
+	
+	$headers = @get_headers($url.'/.well-known/carddav');	
+	$test['name']='CardDAV autodiscovery';
+	$test['pass']=$headers && strpos($headers[0], '301')!==false;
+	$test['feedback']="Note: The redirect /.well-known/carddav was not detected. Please create a redirect: Redirect 301 /.well-known/carddav /carddav";
+	$test['fatal']=false;
+
+	$tests[]=$test;	
+	
+	
+	$headers = @get_headers($url.'/Microsoft-Server-ActiveSync');	
+	
+//	var_dump($headers);
+	$test['name']='Microsoft-Server-ActiveSync alias';
+	$test['pass']=$headers && strpos($headers[0], '401')!==false;
+	$test['feedback']="Note: The alias /Microsft-Server-ActiveSync was not detected. Please create: Alias /Microsft-Server-ActiveSync /groupoffice/modules/z-push21/index.php.";
+	$test['fatal']=false;
+
+	$tests[]=$test;	
+	
 
 	if($test['pass'] && is_dir('../modules/professional') && class_exists('GO'))
 	{
@@ -304,30 +373,20 @@ function test_system(){
 	}
 
 	
-	$test['name']='JSON functions';
-	$test['pass']=function_exists('json_encode');
-	$test['feedback']='Fatal error: json_encode and json_decode functions are not available. Try apt-get install php5-json on Debian or Ubuntu.';
-	$test['fatal']=true;
-
-	$tests[]=$test;
-
-
-	$ze1compat=ini_get('zend.ze1_compatibility_mode');
-
-	$test['name']='zend.ze1_compatibility_mode';
-	$test['pass']=empty($ze1compat);
-	$test['feedback']='Fatal error: zend.ze1_compatibility_mode is enabled. '.$product_name.' can\'t run with this setting enabled';
-	$test['fatal']=true;
-
-	$tests[]=$test;	
 	
-	if(class_exists("GO") && !empty(\GO::config()->title))
+	if(class_exists("GO") && \GO::isInstalled())
 	{		
 		$test['name']='Protected files path';
 		$test['pass']=is_writable(\GO::config()->file_storage_path);
 		$test['feedback']='Fatal error: the file_storage_path setting in config.php is not writable. You must correct this or '.$product_name.' will not run.';
 		$test['fatal']=false;
-		$tests[]=$test;
+		$tests[]=$test;	
+		
+		$test['name']='Cronjob';
+		$test['pass']=GO::cronIsRunning();
+		$test['feedback']="Warning: The main cron job doesn't appear to be running. Please add a cron job: \n\n* * * * * www-data php ".\GO::config()->root_path."groupofficecli.php -c=".\GO::config()->get_config_file()." -r=core/cron/run -q > /dev/null";
+		$test['fatal']=false;
+		$tests[]=$test;	
 	}	
 	
 	return $tests;
@@ -361,7 +420,7 @@ function output_system_test(){
 	}
 	
 	
-	echo '<table><tr>
+	echo '<table style="font:12px Arial"><tr>
 	<td colspan="2">
 	<br />
 	<b>Use this information for your '.$product_name.' Professional license:</b>
@@ -647,7 +706,7 @@ function return_bytes($val) {
 //check if we are included
 if(!class_exists('GO'))
 {
-	echo '<h1 style="font-family: Arial, Helvetica;font-size: 18px;">'.$product_name.' test script</h1>';
+	echo '<h1 style="font-family: Arial, Helvetica;font-size: 18px;">'.$product_name.' test script</h1><div style="font-family: Arial, Helvetica;font-size: 12px;"> ';
 	output_system_test();
+	echo "</div>";
 }
-?>

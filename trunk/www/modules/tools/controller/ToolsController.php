@@ -20,7 +20,7 @@
 namespace GO\Tools\Controller;
 use GO;
 
-class Tools extends GO\Base\Controller\AbstractJsonController{
+class ToolsController extends GO\Base\Controller\AbstractJsonController{
 	
 	public function actionStore($params){
 	
@@ -28,6 +28,7 @@ class Tools extends GO\Base\Controller\AbstractJsonController{
 		
 		$store = new GO\Base\Data\ArrayStore($columnModel);
 
+		$store->addRecord(array('name'=>GO::t('systemCheck','tools'),'script'=>GO::url('tools/tools/systemTest')));
 		$store->addRecord(array('name'=>GO::t('dbcheck','tools'),'script'=>GO::url('maintenance/checkDatabase')));
 		$store->addRecord(array('name'=>GO::t('buildsearchcache','tools'),'script'=>GO::url('maintenance/buildSearchCache')));
 		$store->addRecord(array('name'=>GO::t('rm_duplicates','tools'),'script'=>GO::url('maintenance/removeDuplicates')));
@@ -39,6 +40,16 @@ class Tools extends GO\Base\Controller\AbstractJsonController{
 			$store->addRecord(array('name'=>'Update filesearch index','script'=>GO::url('filesearch/filesearch/sync')));
 
 		echo $this->renderStore($store);
+	}
+	
+	protected function actionSystemTest(){
+		require(GO::config()->root_path.'install/gotest.php');
+		
+		
+		$this->render('externalHeader');
+		output_system_test();
+		
+		$this->render('externalFooter');
 	}
 	
 }
