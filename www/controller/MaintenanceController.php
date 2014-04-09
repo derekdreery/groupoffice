@@ -1109,4 +1109,35 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 			
 		}
 	}
+	
+		
+		
+	protected function actionCheckVersion(){
+		$rssUrl = "https://sourceforge.net/api/file/index/project-id/76359/mtime/desc/limit/20/rss";
+		
+		$httpClient = new  \GO\Base\Util\HttpClient();
+		
+		$response = $httpClient->request($rssUrl);
+		
+	
+		$sXml = simplexml_load_string($response);	
+		
+		$firstItem = $sXml->channel->item[0];		
+		
+		$link = (string) $firstItem->link;
+		
+		preg_match('/-([0-9]\.[0-9]{1,2}\.[0-9]{1,2})\./', $link, $matches);
+		
+		$version = $matches[1];
+			
+		$ret = version_compare(GO::config()->version, $version);
+		
+		if($ret!== -1){
+			echo "A new version ($version) is available at $link";
+		}else
+		{
+			echo "Your running the latest version";
+		}
+		
+	}
 }
