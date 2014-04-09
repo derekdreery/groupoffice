@@ -117,6 +117,12 @@ class DbStore extends AbstractStore {
 	
 	
 	private $_multiSel;
+	
+	/**
+	 *
+	 * @var \GO\Base\Db\FindParams 
+	 */
+	private $_findParams;
 
 	// --- Methods ---
 
@@ -158,10 +164,14 @@ class DbStore extends AbstractStore {
 	private function _readRequestParams() {
 		if (isset($this->_requestParams['sort']))
 			$this->sort = $this->_requestParams['sort'];
+		else
+			$this->sort=$this->defaultSort;
 
 		if (isset($this->_requestParams['dir']))
 			$this->direction = $this->_requestParams['dir'];
-
+		else
+			$this->direction=$this->defaultDirection;
+		
 		if (isset($this->_requestParams['limit']))
 			$this->limit = $this->_requestParams['limit'];
 
@@ -251,9 +261,23 @@ class DbStore extends AbstractStore {
 	protected function createStatement() {
 	
 		
-		$params = $this->createFindParams();
+		$params = $this->getFindParams();
 		$modelFinder = \GO::getModel($this->_modelClass);
 		return $modelFinder->find($params);
+	}
+	
+	
+	/**
+	 * Get the findParams object used for the database query
+	 * 
+	 * @return \GO\Base\Db\FindParams
+	 */
+	public function getFindParams(){
+		if(!isset($this->_findParams)){
+			$this->_findParams=$this->createFindParams();
+		}
+		
+		return $this->_findParams;
 	}
 
 	/**
@@ -263,47 +287,41 @@ class DbStore extends AbstractStore {
 	 */
 	protected function createFindParams() {
 
-			$sort = !empty($this->_requestParams['sort']) ? $this->_requestParams['sort'] : $this->defaultSort;
-			$dir = !empty($this->_requestParams['dir']) ? $this->_requestParams['dir'] : $this->defaultDirection;
-			
-			
-			
+			if (!is_array($this->sort)){
+				if(substr($this->sort,0,2)=='[{'){ //json sent by Sencha Touch
 
-			if (!is_array($sort)){
-				if(substr($sort,0,2)=='[{'){ //json sent by Sencha Touch
+					$sorters = json_decode($this->sort);
 
-					$sorters = json_decode($sort);
-
-					$sort = $dir = array();
+					$this->sort = $this->direction = array();
 					foreach($sorters as $sorter){
-						$sort[]=$sorter->property;
-						$dir[]=$sorter->direction;
+						$this->sort[]=$sorter->property;
+						$this->direction[]=$sorter->direction;
 					}
 				}else{
-					$sort = empty($sort) ? array() : array($sort);
+					$this->sort = empty($this->sort) ? array() : array($this->sort);
 				}
 			}
 		
 		if (!empty($this->_requestParams['groupBy']))
-			array_unshift($sort, $this->_requestParams['groupBy']);
+			array_unshift($this->sort, $this->_requestParams['groupBy']);
 
-		if (!is_array($dir))
-			$dir = count($sort) ? array($dir) : array();
+		if (!is_array($this->direction))
+			$this->direction = count($this->sort) ? array($this->direction) : array();
 
 		if (isset($this->_requestParams['groupDir']))
-			array_unshift($dir, $this->_requestParams['groupDir']);
+			array_unshift($this->direction, $this->_requestParams['groupDir']);
 
-			$sort = $this->getColumnModel()->getSortColumns($sort);
+			$this->sort = $this->getColumnModel()->getSortColumns($this->sort);
 
-			$sortCount = count($sort);
-			$dirCount = count($dir);
+			$sortCount = count($this->sort);
+			$dirCount = count($this->direction);
 			for ($i = 0; $i < $sortCount - $dirCount; $i++)
-				$dir[] = $dir[$dirCount-1];
+				$this->direction[] = $this->direction[$dirCount-1];
 
 
 		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->joinCustomFields()
-						->order($sort, $dir);
+						->order($this->sort, $this->direction);
 		
 		if (empty($this->_requestParams['dont_calculate_total'])) {
 			$findParams->calcFoundRows();
@@ -324,7 +342,6 @@ class DbStore extends AbstractStore {
 		if (!empty($this->start))
 			$findParams->start($this->start);
 
-		//TODO: check if this is still used by any actionStore()
 		if (isset($this->_requestParams['permissionLevel']))
 			$findParams->permissionLevel($this->_requestParams['permissionLevel']);
 

@@ -25,7 +25,7 @@
 
 
 namespace GO\Base\Db;
-
+use GO;
 
 class FindParams{
 	
@@ -74,7 +74,11 @@ class FindParams{
 	 * @return \GO\Base\Db\FindParams
 	 */
 	public static function loadExportFindParams($name){
-		return GO::session()->values[$name]['findParams'];
+		$findParams=GO::session()->values[$name]['findParams'];
+		
+		$findParams->getCriteria()->recreateTemporaryTables();
+		
+		return $findParams;
 	}
 	
 	/**
@@ -314,8 +318,9 @@ class FindParams{
 	 * @param string $name
 	 * @return FindParams 
 	 */
-	public function export($name){
+	public function export($name, $totalizeColumns=array()){
 		$this->_params['export']=$name;
+		$this->_params['export_totalize_columns']=$totalizeColumns;
 		return $this;
 	}
 	
@@ -449,7 +454,7 @@ class FindParams{
 	 */
 	public function joinModel($params){	
 			
-		$joinModel = \GO::getModel($params['model']);
+		$joinModel = GO::getModel($params['model']);
 
 		if(!isset($params['foreignField']))
 			$params['foreignField']=$joinModel->primaryKey();

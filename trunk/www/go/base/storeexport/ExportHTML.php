@@ -34,24 +34,41 @@ class ExportHTML extends AbstractExport {
 
 	private function _renderHead() {
 		echo "<html>\n";
-		echo "<head>\n<title>".$this->title."</title>\n</head>\n";
+		echo "<head>\n<title>".$this->title."</title>\n<style>body{font:12px Arial;}</style>\n</head>\n";
 		echo "<body>\n";
 		echo "<table border='1' cellspacing='0' cellpadding='0' style='border-collapse:collapse;'>\n";
 	}
 	
 	private function _write($data) {
+		
+		
+		
 		if($this->header) {
 			echo "<tr>\n";
-			foreach($data as $column)
-				echo "<th style='padding:2px; font-weight:bold;'>$column</th>";
+			foreach($data as $column=>$header){
+				$align = in_array($column, $this->totalizeColumns) ? 'right' : 'left';
+				
+				echo "<th style='padding:4px; font-weight:bold;text-align:$align;'>$header</th>";
+			}
 			echo "</tr>\n";
 			$this->header = false;
 		} else {
 			echo "<tr>\n";
-			foreach($data as $column)
-				echo "<td style='padding:2px;'>$column</td>";
+			foreach($data as $column=>$value){
+				$align = in_array($column, $this->totalizeColumns) ? 'right' : 'left';
+				echo "<td style='padding:4px;text-align:$align;'>$value</td>";
+			}
 			echo "</tr>\n";
 		}
+	}	
+	
+	private function _writeTotals($data) {
+		
+		echo "<tr>\n";
+		foreach($data as $column)
+			echo "<td style='padding:4px;border:0;border-top:2px solid black;text-align:right'>$column</td>";
+		echo "</tr>\n";
+		
 	}	
 
 	private function _renderFooter() {
@@ -71,16 +88,18 @@ class ExportHTML extends AbstractExport {
 //		}
 		if($this->header){
 			$this->header = true;
-			if($this->humanHeaders)
-				$this->_write(array_values($this->getLabels()));
-			else
-				$this->_write(array_keys($this->getLabels()));
+			$this->_write($this->getLabels());
+
 		}
 		
 		
 		while($record = $this->store->nextRecord()){
 			$record = $this->prepareRecord($record);
 			$this->_write($record);
+		}
+		
+		if(($totals = $this->getTotals())){
+			$this->_writeTotals($totals);
 		}
 		
 		$this->_renderFooter();

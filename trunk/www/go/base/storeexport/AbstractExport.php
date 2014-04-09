@@ -2,6 +2,7 @@
 
 namespace GO\Base\Storeexport;
 
+use GO;
 
 abstract class AbstractExport {
 	
@@ -36,6 +37,16 @@ abstract class AbstractExport {
 	protected $orientation;
 	
 	/**
+	 * These columns will be totalized if possible
+	 * 
+	 * @var array 
+	 */
+	protected $totalizeColumns=array();
+	
+	public $totals=array();
+	
+	
+	/**
 	 * Display the exporter in the exportDialog?
 	 * @var Boolean 
 	 */
@@ -55,6 +66,7 @@ abstract class AbstractExport {
 	 */
 	public static $useOrientation=false;
 	
+
 	/**
 	 * The constructor for the exporter
 	 * 
@@ -71,7 +83,24 @@ abstract class AbstractExport {
 		$this->title = $title;
 		$this->orientation = $orientation;
 		$this->humanHeaders= $humanHeaders;
+		
+		if(is_a($store, "\GO\Base\Data\DbStore")){
+			$exportName = $this->store->getFindParams()->getParam('export');
+			
+			$this->totalizeColumns = isset(GO::session()->values[$exportName]['totalizeColumns']) ? GO::session()->values[$exportName]['totalizeColumns'] : array();
+			foreach($this->totalizeColumns as $column){
+				$this->totals[$column]=0;
+			}
+		}
 
+	}
+	
+	
+	protected function increaseTotals($record){
+		foreach($this->totalizeColumns as $column){
+			if(isset($record[$column]))
+				$this->totals[$column]+=\GO\Base\Util\Number::unlocalize ($record[$column]);
+		}
 	}
 
 	
@@ -84,12 +113,15 @@ abstract class AbstractExport {
 		$columns = $this->store->getColumnModel()->getColumns();
 		$labels = array();
 		foreach($columns as $column)		
-			$labels[$column->getDataIndex()]=$column->getLabel();
+			$labels[$column->getDataIndex()]=$this->humanHeaders ? $column->getLabel() : $column->getDataIndex();
 		
 		return $labels;
 	}
 	
 	protected function prepareRecord($record){
+		
+		$this->increaseTotals($record);
+		
 		$c = array_keys($this->getLabels());
 		$frecord = array();
 		
@@ -98,6 +130,27 @@ abstract class AbstractExport {
 		}
 
 		return $frecord;
+	}
+	
+	/**
+	 * Get the record of the totalized values
+	 * 
+	 * @return array
+	 */
+	public function getTotals(){
+		if(empty($this->totalizeColumns)){
+			return false;
+		}	
+			
+		$record = array();
+		
+		$columns = $this->store->getColumnModel()->getColumns();
+		
+		foreach($columns as $column){
+			$record[$column->getDataIndex()]=isset($this->totals[$column->getDataIndex()]) ? \GO\Base\Util\Number::localize($this->totals[$column->getDataIndex()]) : '';
+		}
+		
+		return $record;
 	}
 	
 	/**
