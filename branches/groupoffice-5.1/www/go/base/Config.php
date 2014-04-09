@@ -938,7 +938,7 @@ class GO_Base_Config {
 	 */
 	var $folder_create_mode = '0755';
 	
-	/* The permissions mode to use when creating folders
+	/* New files and folders will be chown'd to this group.
 	 *
 	 * @var     string
 	 * @access  public
@@ -955,7 +955,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '5.0.50';
+	var $version = '5.0.53';
 
 	
 	/**
@@ -965,7 +965,7 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20140327';
+	var $mtime = '20140408-1';
 
 	#group configuration
 	/**
@@ -1309,7 +1309,7 @@ class GO_Base_Config {
 		$this->set_full_url();
 		
 		if(!$this->support_link && $this->isProVersion()){
-			$this->support_link = "https://shop.group-office.com/support";
+			$this->support_link = "https://www.group-office.com/support";
 		}
 		
 		/* 
@@ -1346,9 +1346,10 @@ class GO_Base_Config {
 		$path .= $user_id;		
 		
 		
-		$folder = new GO_Base_Fs_Folder($this->orig_tmpdir.$user_id);
+		$folder = new GO_Base_Fs_Folder($path);
 		if($autoCreate)
 			$folder->create(0777);
+		
 		return $folder;
 	}
 	
