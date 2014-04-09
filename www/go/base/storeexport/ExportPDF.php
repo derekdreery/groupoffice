@@ -27,22 +27,62 @@ class ExportPDF extends AbstractExport {
 	public static $name = "PDF";
 	public static $useOrientation=true;
 
+//	private function _write($data) {
+//		$html = '';
+//		if($this->header) {
+//			$html .= '<tr nobr="true">';
+//			foreach($data as $column)
+//				$html .=  "<th>$column</th>";
+//			$html .=  "</tr>";
+//			$this->header = false;
+//		} else {
+//			$html .=  '<tr nobr="true">';
+//			foreach($data as $column)
+//				$html .=  "<td>$column</td>";
+//			$html .=  "</tr>";
+//		}
+//		return $html;
+//	}	
+//	
 	private function _write($data) {
 		$html = '';
 		if($this->header) {
-			$html .= '<tr nobr="true">';
-			foreach($data as $column)
-				$html .=  "<th>$column</th>";
-			$html .=  "</tr>";
+			$html .= '<tr nobr="true" style="background-color:#f1f1f1">';
+			foreach($data as $column=>$header){
+								
+				$align = in_array($column, $this->totalizeColumns) ? 'right' : 'left';
+				
+				$html .= '<th align="'.$align.'"><b>'.$header.'</b></th>';
+			}
+			$html .= "</tr>\n";
 			$this->header = false;
 		} else {
-			$html .=  '<tr nobr="true">';
-			foreach($data as $column)
-				$html .=  "<td>$column</td>";
-			$html .=  "</tr>";
+			$html .= '<tr nobr="true">';
+			foreach($data as $column=>$value){
+				$align = in_array($column, $this->totalizeColumns) ? 'right' : 'left';
+				$html .= '<td align="'.$align.'">'.$value.'</td>';
+			}
+			$html .= "</tr>\n";
 		}
+		
 		return $html;
-	}	
+	}
+	
+	private function _writeTotals($data) {
+		$html = '';
+		
+		$html .= '<tr nobr="true"><td colspan="'.count($data).'"></td>';
+		
+		$html .= "</tr>\n";
+		
+		$html .= '<tr nobr="true">';
+		foreach($data as $column)
+			$html .= '<td align="right">'.$column.'</td>';
+		$html .= "</tr>\n";
+		
+		return $html;
+		
+	}
 	
 	public function output(){
 		
@@ -50,10 +90,7 @@ class ExportPDF extends AbstractExport {
 	
 		if($this->header)
 		{
-			if($this->humanHeaders)
-				$html .= $this->_write(array_values($this->getLabels()));
-			else
-				$html .= $this->_write(array_keys($this->getLabels()));
+			$html .= $this->_write($this->getLabels());		
 		}
 		
 		
@@ -62,8 +99,12 @@ class ExportPDF extends AbstractExport {
 			$html .= $this->_write($record);
 		}
 		
-		$html .= "</table>";
+		if(($totals = $this->getTotals())){
+			$html .=$this->_writeTotals($totals);
+		}
 		
+		$html .= "</table>";
+
 		$this->_createPDF($html);
 	}
 	

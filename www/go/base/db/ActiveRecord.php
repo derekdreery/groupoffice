@@ -1141,7 +1141,11 @@ abstract class ActiveRecord extends \GO\Base\Model{
 				throw new \Exception('$params parameter for find() must be instance of FindParams');
 			
 			if($params->getParam("export")){
-				GO::session()->values[$params->getParam("export")]=array('name'=>$params->getParam("export"), 'model'=>$this->className(), 'findParams'=>$params);
+				GO::session()->values[$params->getParam("export")]=array(
+						'name'=>$params->getParam("export"), 
+						'model'=>$this->className(),
+						'findParams'=>$params,
+						'totalizeColumns'=>$params->getParam('export_totalize_columns'));
 			}
 			
 			//it must be a FindParams object
