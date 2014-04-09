@@ -1363,7 +1363,7 @@ class Config {
 		}		
 		$path .= $user_id;		
 		
-		$folder = new Fs\Folder($$path);
+		$folder = new Fs\Folder($path);
 		if($autoCreate)
 			$folder->create(0777);
 		
