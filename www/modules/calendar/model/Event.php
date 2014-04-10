@@ -1886,9 +1886,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			//Add exception dates to Event
 			foreach($vobject->select('EXDATE') as $i => $exdate) {
-				if(!empty($exdate->value)){
+				try {
 					$dt = $exdate->getDateTime();
 					$this->addException($dt->format('U'));
+				} catch (Exception $e) {
+					trigger_error($e->getMessage(),E_USER_NOTICE);
 				}
 			}
 
