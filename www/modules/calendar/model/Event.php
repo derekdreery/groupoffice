@@ -1109,8 +1109,6 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$whereCriteria = GO_Base_Db_FindCriteria::newInstance()												
 										->addCondition('uuid', $uuid);
 
-		//todo exception date
-
 		$params = GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl()
 						->single();							
@@ -1135,9 +1133,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$dayStart = GO_Base_Util_Date::clear_time($exceptionDate);
 			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);	
-			$whereCriteria 
+			
+			$dateCriteria = GO_Base_Db_FindCriteria::newInstance() 
 							->addCondition('time', $dayStart, '>=','e')
-							->addCondition('time', $dayEnd, '<','e',false);
+							->addCondition('time', $dayEnd, '<','e');
+			
+			$whereCriteria->mergeWith($dateCriteria);
 			
 //			//the code below only find exceptions on the same day which is wrong
 //			$whereCriteria->addCondition('exception_for_event_id', 0,'>');
