@@ -1187,31 +1187,34 @@ class GO{
 	 */
 	public static function scriptCanBeDecoded($path=null){
 		
-		if(!isset(self::$ioncubeWorks)){					
-			
-			if(!isset($path)){
-				$path = GO::config()->root_path.'modules/professional/License.php';
-			}
 		
-			//check data for presence of ionCube in code.
-			$data=  file_get_contents($path, false, null, -1, 100);		
-			if(strpos($data, 'ionCube')===false){				
-				return true;
-			}
-
-			if(!extension_loaded('ionCube Loader')){
-				return false;
-			}
-			
-			
-			if(!file_exists(GO::config()->root_path.'groupoffice-pro-'.GO::config()->getMajorVersion().'-license.txt')){
-				return false;
-			}
-			
-			//require(GO::config()->root_path.'modules/professional/checklicense.php');
 		
-			self::$ioncubeWorks = \GO\Professional\License::check();
+		if(!empty(self::$ioncubeWorks)){
+			return true;
 		}
+
+		if(!isset($path)){
+			$path = GO::config()->root_path.'modules/professional/License.php';
+		}
+
+		//check data for presence of ionCube in code.
+		$data=  file_get_contents($path, false, null, -1, 100);		
+		if(strpos($data, 'ionCube')===false){				
+			return true;
+		}
+
+		if(!extension_loaded('ionCube Loader')){
+			return false;
+		}
+
+
+		if(!file_exists(GO::config()->root_path.'groupoffice-pro-'.GO::config()->getMajorVersion().'-license.txt')){
+			return false;
+		}
+
+		//require(GO::config()->root_path.'modules/professional/checklicense.php');
+
+		self::$ioncubeWorks = \GO\Professional\License::check();
 		
 		return self::$ioncubeWorks;
 		
