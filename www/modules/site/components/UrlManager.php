@@ -364,6 +364,3 @@ class UrlManager
 	}
 }
 
-
-
-?>
