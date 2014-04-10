@@ -1,3 +1,4 @@
+- CalDav: Fixed synchronization of event recurrence exceptions.
 - BUG: Adding a new participant to an existing event that is an exception for a 
   recurring series could find a complete random event and it will copy the name,
   location etc to it. This happened recently when we fixed a bug where an event 
