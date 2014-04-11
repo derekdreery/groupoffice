@@ -2172,11 +2172,14 @@ box-sizing: border-box;
 }
 
 #quick-add-menu{
-	position:absolute;
+	display:inline-block;
+	float:left;
+	
+	/*position:absolute;*/
 	border:none;
 	background:none;
 	padding:3px;
-	top:-200px;
+	/*top:-200px;*/
 	width:auto;
 	/*padding-right:20px;*/
 	/*width:200px;*/

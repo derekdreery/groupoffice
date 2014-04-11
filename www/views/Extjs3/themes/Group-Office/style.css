@@ -2129,11 +2129,13 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 }
 
 #quick-add-menu{
-	position:absolute;
+	display:inline-block;
+	float:left;
+	/*position:absolute;*/
+	/*top:-200px;*/
 /*	border:1px solid #009CC5;*/
 	background:#FFF;
 	padding:3px;
-	top:-200px;
 	width:auto;
 	/*padding-right:20px;*/
 	/*width:200px;*/
