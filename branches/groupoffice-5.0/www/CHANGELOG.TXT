@@ -1,4 +1,7 @@
 14-04-2014 5.0.54
+- Changed delete permissions for ticket messages. 
+	Messages can only be deleted when the user has manage permissions on the ticket module. 
+	(So now it is the same as  deleting tickets)
 - Bug in file custom field that could cause fatal error: Call to a member 
   function getDefaultHandler() on a non-object in 
   /usr/share/groupoffice/modules/files/customfieldtype/File.php.
