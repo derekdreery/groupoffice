@@ -204,7 +204,7 @@ class ModuleController extends AbstractJsonController{
 
 		$response['results'] = array_values($modules);
 		
-		return $response;
+		echo $response;
 	}
 	
 	
