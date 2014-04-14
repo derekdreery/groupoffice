@@ -1209,7 +1209,7 @@ class GO{
 		$lf = self::getLicenseFile();
 		
 		//Empty license file is provided in download so we must check the size.
-		if($lf->exists() || $lf->size()===0){
+		if(!$lf->exists() || $lf->size()===0){
 			return false;
 		}
 
