@@ -1,3 +1,7 @@
+- In some cases old project folders could be left in the files module after 
+  renaming projects.
+- Sync filesystem ignores ACL and system folders because they don't exist anyway.
+
 14-04-2014 5.0.54
 - Changed delete permissions for ticket messages. 
 	Messages can only be deleted when the user has manage permissions on the ticket module. 
