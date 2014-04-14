@@ -2392,7 +2392,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		return true;
 		
 	}
-	
+
+
 	/**
 	 * Sends a meeting request to all participants. If the participant is not a Group-Office user
 	 * or the organizer has no permissions to schedule an event it will include an
@@ -2401,7 +2402,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return boolean
 	 * @throws Exception
 	 */
-	public function sendMeetingRequest($newParticipantsOnly=false){		
+	public function sendMeetingRequest($newParticipantsOnly=false, $update=false){		
 		
 		if(!$this->is_organizer)
 			throw new Exception("Meeting request can only be send from the organizer's event");
@@ -2431,7 +2432,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					}
 
 					//if participant status is pending then send a new inviation subject. Otherwise send it as update
-					if($participant->status == GO_Calendar_Model_Participant::STATUS_PENDING){
+					//if($participant->status == GO_Calendar_Model_Participant::STATUS_PENDING){
+					
+					if(!$update){
 						$subject = GO::t('invitation', 'calendar').': '.$this->name;
 						$bodyLine = GO::t('invited', 'calendar');
 					}else

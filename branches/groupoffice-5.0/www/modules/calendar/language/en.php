@@ -212,6 +212,7 @@ $l['notifyCancelOrganizer']='Would you like to notify the organizer that you wil
 $l['notifyParticipants']='Notify participants?';
 $l['sendNotificationTitle']='Send notification?';
 $l['sendNotification']='Would you like to notify the participants by e-mail?';
+$l['sendUpdateNotification']='Would you like to notify the participants by e-mail about the change(s)?';
 
 $l['openCalendar']='Open calendar';
 $l['createPermission']="Create permission";
