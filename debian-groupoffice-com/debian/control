@@ -16,14 +16,24 @@ Depends: libapache2-mod-php5 (>= 5.3),
 	php5-cli,
 	php5-curl,
 	php5-mcrypt,
+	php5-xsl,
+	catdoc,
+	unzip,
+	tar,
+	imagemagick,
+	tesseract-ocr,
+	tesseract-ocr-eng,
+	poppler-utils,
+	exiv2,
 	sudo,
 	${misc:Depends},
 	dbconfig-common,
 	ucf (>= 0.28)
 Recommends: zip, 
-	tnef
+	tnef,
+	ibwbxml2-utils | libwbxml2-0
 Description:
- Group-Office is a web based groupware application
+ Group-Office is a web based groupware and CRM application
  Take your office online. Share projects, calendars, files and e-mail online 
  with co-workers and clients. Easy to use and fully customizable, Group-Office 
  takes online collaboration to the next level.
