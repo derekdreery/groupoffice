@@ -1,3 +1,4 @@
+- Calendar: Improved notification flow for participants for when event has been updated.
 - In some cases old project folders could be left in the files module after 
   renaming projects.
 - Sync filesystem ignores ACL and system folders because they don't exist anyway.
