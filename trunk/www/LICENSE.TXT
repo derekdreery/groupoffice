@@ -30,9 +30,8 @@ http://www.gnu.org/licenses/agpl.html
 
 Professional License
 ------------------------------------------------------------------------------------------
-If you are using Group-Office for business purposes, we encourage you to purchase
-a professional license. By buying a professional license you'll support the project and 
-you'll get extra interesting features. Please see
+Some modules are encrypted with Ioncube and require a license.
+
 https://www.group-office.com/license-agreement.html for the terms.
 
 

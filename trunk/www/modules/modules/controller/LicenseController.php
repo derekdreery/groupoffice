@@ -57,20 +57,37 @@ class LicenseController extends AbstractJsonController{
 		}
 		
 		$licenseFile = \GO::getLicenseFile();
-		
-		
-		
+				
 		if($_FILES['license_file']['name'][0]!=$licenseFile->name()){
 			throw new Exception("File should be named ".$licenseFile->name());
 		}
 		
-		$destinationFolder = new GO\Base\Fs\Folder(GO::config()->file_storage_path.'license/');
-		$destinationFolder->create();
+		
+		if(!$licenseFile->exists() || !$licenseFile->isWritable()){
+			throw new Exception("Could not write file ".$licenseFile->name().". Please upload the file to the webserver and change the permissions so that the webserver can write to it.");
+		}
+		
+//		$destinationFolder = new GO\Base\Fs\Folder(GO::config()->file_storage_path.'license/');
+//		$destinationFolder->create();
+//		
 						
-		$success = move_uploaded_file($_FILES['license_file']['tmp_name'][0], $destinationFolder->path().'/'.$licenseFile->name());
+		$success = move_uploaded_file($_FILES['license_file']['tmp_name'][0],$licenseFile->path());
+		
+		
+		
+		if(!\GO::scriptCanBeDecoded()){
+			throw new Exception("The license file you provided didn't work. Please contant Intermesh about this error.");
+		}  else {
+			//add all users to the modules they have access too
+
+			\GO\Professional\License::autoConfigureModulePermissions();
+
+//			GO\Base\Mail\AdminNotifier::sendMail("Group-Office license installed successfully!", "Your license was installed and the new users were automatically added to the App permissions if necessary.\n\nThank you for using Group-Office!");
+
+		}
 		
 		//use cron to move the license as root.
-		GO\Modules\Cron\LicenseInstaller::runOnce();
+//		GO\Modules\Cron\LicenseInstaller::runOnce();
 
 		
 		echo json_encode(array('success'=>$success));

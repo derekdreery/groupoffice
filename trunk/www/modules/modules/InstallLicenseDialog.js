@@ -29,5 +29,7 @@ GO.modules.InstallLicenseDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 	},
 	afterSubmit: function() {
 		this.uploadFile.clearQueue();
+		
+		Ext.MessageBox.alert("Group-Office license installed successfully", "Your license was installed and the new users were automatically added to the App permissions if necessary.\n\nThank you for using Group-Office!");
 	}
 });

@@ -1187,8 +1187,6 @@ class GO{
 	 */
 	public static function scriptCanBeDecoded($path=null){
 		
-		
-		
 		if(!empty(self::$ioncubeWorks)){
 			return true;
 		}
@@ -1208,11 +1206,12 @@ class GO{
 		}
 
 
-		if(!file_exists(GO::config()->root_path.'groupoffice-pro-'.GO::config()->getMajorVersion().'-license.txt')){
+		$lf = self::getLicenseFile();
+		
+		//Empty license file is provided in download so we must check the size.
+		if($lf->exists() && $lf->size()>0){
 			return false;
 		}
-
-		//require(GO::config()->root_path.'modules/professional/checklicense.php');
 
 		self::$ioncubeWorks = \GO\Professional\License::check();
 		
@@ -1227,9 +1226,8 @@ class GO{
 	 * @return \GO\Base\Fs\File
 	 */
 	public static function getLicenseFile(){
-		return new \GO\Base\Fs\File(GO::config()->root_path.'groupoffice-pro-'.GO::config()->getMajorVersion().'-license.txt');
+		return new \GO\Base\Fs\File(GO::config()->root_path.'groupoffice-license.txt');
 	}
-	
 	
 	/**
 	 * Checks if the main cron job is running for the task scheduler
@@ -1239,11 +1237,4 @@ class GO{
 	public static function cronIsRunning(){
 		return \GO::config()->get_setting('cron_last_run') > time()-300;
 	}
-
 }
-
-
-
-
-
-require_once('compat.php');

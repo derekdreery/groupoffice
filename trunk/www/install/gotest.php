@@ -272,7 +272,7 @@ function test_system(){
 
 	$tests[]=$test;
 	$test['name']='Ioncube';
-	$test['pass']=ioncube_tester();
+	$test['pass']=$ioncubeWorks = ioncube_tester();
 	$test['feedback']='Warning: Ioncube is not installed. The professional modules will not be enabled.';
 	$test['fatal']=false;
 
@@ -346,48 +346,60 @@ function test_system(){
 
 	$tests[]=$test;	
 	
+	
+	
+	if(class_exists('GO')){
+		
+		$test['name']='Writable license file';
+		$test['pass']=GO::getLicenseFile()->exists() && GO::getLicenseFile()->isWritable();					
+		$test['feedback']="Fatal: the license file ".GO::getLicenseFile()->path()." is not writable. Please make it writable for the webserver.";
+		$test['fatal']=true;
 
-	if($test['pass'] && is_dir('../modules/professional') && class_exists('GO'))
-	{
-		
-		$test['name']='Professional license';
-		
-//		if(!file_exists(GO::config()->root_path.'groupoffice-pro-'.\GO::config()->getMajorVersion().'-license.txt')){
-//			$test['feedback']='Warning: There\'s no license file "groupoffice-pro-'.\GO::config()->getMajorVersion().'-license.txt" in the root of Group-Office. The professional modules will not be enabled.';
-//			$test['fatal']=false;
-//			$test['pass']=false;
-//		}else
-		if(file_exists(GO::config()->root_path.'groupoffice-pro-'.\GO::config()->getMajorVersion().'-license.txt') && !\GO::scriptCanBeDecoded('../modules/professional/License.php'))
+		$tests[]=$test;	
+
+
+		if($ioncubeWorks && is_dir('../modules/professional'))
 		{
-			$test['feedback']='Warning: Your professional license is invalid. The professional modules will not be enabled. Please contact Intermesh about this problem and supply the output of this page.';
+
+			$test['name']='Professional license';
+
+	//		if(!file_exists(GO::config()->root_path.'groupoffice-pro-'.\GO::config()->getMajorVersion().'-license.txt')){
+	//			$test['feedback']='Warning: There\'s no license file "groupoffice-pro-'.\GO::config()->getMajorVersion().'-license.txt" in the root of Group-Office. The professional modules will not be enabled.';
+	//			$test['fatal']=false;
+	//			$test['pass']=false;
+	//		}else
+			if(GO::getLicenseFile()->exists() && GO::getLicenseFile()->size() &&  !\GO::scriptCanBeDecoded('../modules/professional/License.php'))
+			{
+				$test['feedback']='Warning: Your professional license is invalid. The professional modules will not be enabled. Please contact Intermesh about this problem and supply the output of this page.';
+				$test['fatal']=false;
+				$test['pass']=false;
+			}else
+			{
+				$test['feedback']='';
+				$test['fatal']=false;
+				$test['pass']=true;
+			}	
+
+			$tests[]=$test;
+		}
+
+
+
+		if(\GO::isInstalled())
+		{		
+			$test['name']='Protected files path';
+			$test['pass']=is_writable(\GO::config()->file_storage_path);
+			$test['feedback']='Fatal error: the file_storage_path setting in config.php is not writable. You must correct this or '.$product_name.' will not run.';
 			$test['fatal']=false;
-			$test['pass']=false;
-		}else
-		{
-			$test['feedback']='';
+			$tests[]=$test;	
+
+			$test['name']='Cronjob';
+			$test['pass']=GO::cronIsRunning();
+			$test['feedback']="Warning: The main cron job doesn't appear to be running. Please add a cron job: \n\n* * * * * www-data php ".\GO::config()->root_path."groupofficecli.php -c=".\GO::config()->get_config_file()." -r=core/cron/run -q > /dev/null";
 			$test['fatal']=false;
-			$test['pass']=true;
+			$tests[]=$test;	
 		}	
-
-		$tests[]=$test;
 	}
-
-	
-	
-	if(class_exists("GO") && \GO::isInstalled())
-	{		
-		$test['name']='Protected files path';
-		$test['pass']=is_writable(\GO::config()->file_storage_path);
-		$test['feedback']='Fatal error: the file_storage_path setting in config.php is not writable. You must correct this or '.$product_name.' will not run.';
-		$test['fatal']=false;
-		$tests[]=$test;	
-		
-		$test['name']='Cronjob';
-		$test['pass']=GO::cronIsRunning();
-		$test['feedback']="Warning: The main cron job doesn't appear to be running. Please add a cron job: \n\n* * * * * www-data php ".\GO::config()->root_path."groupofficecli.php -c=".\GO::config()->get_config_file()." -r=core/cron/run -q > /dev/null";
-		$test['fatal']=false;
-		$tests[]=$test;	
-	}	
 	
 	return $tests;
 }
