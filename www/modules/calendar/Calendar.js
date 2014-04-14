@@ -2307,14 +2307,16 @@ GO.calendar.handleMeetingRequest=function(responseResult){
 						url:"calendar/event/sendMeetingRequest",
 						params:{
 							event_id:responseResult.id,
-							new_participants_only: true
+							new_participants_only: true,
+							is_update:responseResult.is_update
 						}
 					})
 				} else if (buttonId=='no') {
 					GO.request({
 						url:"calendar/event/sendMeetingRequest",
 						params:{
-							event_id:responseResult.id
+							event_id:responseResult.id,
+							is_update:responseResult.is_update
 						}
 					})
 				} else {
@@ -2336,7 +2338,8 @@ GO.calendar.handleMeetingRequest=function(responseResult){
 					GO.request({
 						url:"calendar/event/sendMeetingRequest",
 						params:{
-							event_id:responseResult.id
+							event_id:responseResult.id,
+							is_update:responseResult.is_update
 						}
 					})
 				} else {
