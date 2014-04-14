@@ -171,6 +171,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		GO_Base_Fs_File::setAllowDeletes(false);
 		//VERY IMPORTANT:
 		GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
+		GO_Files_Model_File::$deleteInDatabaseOnly=true;
 		
 		$this->lockAction();
 		
