@@ -1,6 +1,9 @@
 - In some cases old project folders could be left in the files module after 
   renaming projects.
 - Sync filesystem ignores ACL and system folders because they don't exist anyway.
+- Tickets: Users can only edit their own messages and not the messages from others.
+	When you have manage permissions on the ticket module, then you can edit messages from others.
+
 
 14-04-2014 5.0.54
 - Changed delete permissions for ticket messages. 
