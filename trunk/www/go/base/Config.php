@@ -1260,7 +1260,7 @@ class Config {
 			}
 
 			if(empty($config['tmpdir']) && function_exists('sys_get_temp_dir')) {
-				$this->tmpdir = str_replace('\\','/', sys_get_temp_dir());
+				$this->tmpdir = rtrim(str_replace('\\','/', sys_get_temp_dir()),'/').'/groupoffice/';
 			}
 
 			$this->default_timezone=@date_default_timezone_get(); //suppress warning if using system tz

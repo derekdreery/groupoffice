@@ -356,9 +356,10 @@ function test_system(){
 		$test['fatal']=true;
 
 		$tests[]=$test;	
+		
+		$root = dirname(dirname(__FILE__));
 
-
-		if($ioncubeWorks && is_dir('../modules/professional'))
+		if($ioncubeWorks && is_dir($root.'/modules/professional'))
 		{
 
 			$test['name']='Professional license';
@@ -368,7 +369,7 @@ function test_system(){
 	//			$test['fatal']=false;
 	//			$test['pass']=false;
 	//		}else
-			if(GO::getLicenseFile()->exists() && GO::getLicenseFile()->size() &&  !\GO::scriptCanBeDecoded('../modules/professional/License.php'))
+			if(!\GO::scriptCanBeDecoded($root.'/modules/professional/License.php'))
 			{
 				$test['feedback']='Warning: Your professional license is invalid. The professional modules will not be enabled. Please contact Intermesh about this problem and supply the output of this page.';
 				$test['fatal']=false;
