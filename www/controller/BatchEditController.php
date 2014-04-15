@@ -149,14 +149,13 @@ class BatchEditController extends \GO\Base\Controller\AbstractController {
 				}
 			}
 		
-			function sortCustomFields($a,$b) {
+			
+			usort($cfrows,function ($a,$b) {
 				if ($a['category_name']==$b['category_name'])
 					return strcmp($a['label'],$b['label']);
 				else
 					return strcmp($a['category_name'],$b['category_name']);
-			}
-			
-			usort($cfrows,'sortCustomFields');
+			});
 			
 			$rows = array_merge($rows,$cfrows);
 		}
