@@ -78,7 +78,7 @@ class Thumb implements TagInterface{
 			
 			$a .= ' class="'.$params['aclass'].'"';
 
-			if(isset($params['style'])){
+			if(isset($params['astyle'])){
 				$a .= ' style="'.$params['astyle'].'"';
 			}
 			
