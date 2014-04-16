@@ -317,6 +317,46 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
+	 * Check if this model has resource conflicts.
+	 * This only works with existing events and NOT with new events.(Will allways return: false)
+	 * 
+	 * @return mixed (false, Array with resource events)
+	 */
+	public function hasResourceConflicts(){
+		
+		$hasConflict = false;
+		$foundConflicts = array();				
+		
+		if($this->isNew){
+			// Not possible to determine this when having a new model.
+			// Because the resources are not created yet.
+			return false;
+		} else {
+		
+			$resources = $this->resources;
+
+			foreach($resources as $resource){
+				
+				$resource->start_time = $this->start_time;
+				$resource->end_time = $this->end_time;
+
+				$conflicts = $resource->getConflictingEvents();
+				
+				if(count($conflicts) > 0){
+					$foundConflicts[] = $resource;
+					$hasConflict = true;
+				}
+			}
+			
+			if($hasConflict){
+				return $foundConflicts;
+			} else {
+				return false;
+			}
+		}
+	}
+	
+	/**
 	 * Create an exception for a recurring series.
 	 * 
 	 * @param int $exceptionDate
@@ -447,6 +487,19 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}			
 		}	
 		
+		$resourceConflicts = $this->hasResourceConflicts();
+		
+		if($resourceConflicts !== false){
+			
+			$errorMessage = GO::t('moveEventResourceError','calendar');
+			
+			foreach ($resourceConflicts as $rc){
+				$errorMessage .= '<br />- '.$rc->calendar->name;
+			}
+			
+			Throw new Exception($errorMessage);
+		}
+
 		return parent::beforeSave();
 	}
 

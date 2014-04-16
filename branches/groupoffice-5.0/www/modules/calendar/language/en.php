@@ -264,3 +264,4 @@ $l['cannotHandleInvitation']='The calendar associated with the email account is 
 $l['cannotHandleInvitation2']='Could not update the event because you have too little access permission to the calendar associated with the email account (calendar: "%s"). Because the appointment is in that calendar, its status has not been changed now.';
 
 $l['tooltip'] = 'Tooltip text';
+$l['moveEventResourceError'] = 'Could not move event because the following resources are not available:';

@@ -253,3 +253,5 @@ $l['cannotHandleInvitation']='De agenda die hoort bij het email account heet "%s
 $l['cannotHandleInvitation2']='Kon de afspraak niet aanpassen, omdat u te weinig toegangsrechten heeft tot de agenda die hoort bij het email account (agenda: "%s"). Omdat de afspraak in die agenda zit, is haar status nu niet gewijzigd.';
 
 $l['tooltip'] = 'Tooltip tekst';
+
+$l['moveEventResourceError'] = 'Kan afspraak niet verzetten omdat de volgende hulpmiddelen dan niet beschikbaar zijn:';
