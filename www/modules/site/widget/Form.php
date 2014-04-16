@@ -111,7 +111,7 @@ class Form extends \GO\Site\Components\Widget {
 			$htmlAttributes['value']=1;
 		if(!isset($htmlAttributes['checked']) && $this->_resolveValue($model,$attribute)==$htmlAttributes['value'])
 			$htmlAttributes['checked']='checked';
-		$hidden = $this->_inputField('hidden',$model,$attribute,array('value'=>0));
+		$hidden = $this->_inputField('hidden',$model,$attribute,array('value'=>0,'id'=>''));
 		
 		return $hidden.$this->_inputField('checkbox',$model,$attribute,$htmlAttributes);
 	}
