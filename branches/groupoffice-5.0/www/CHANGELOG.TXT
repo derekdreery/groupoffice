@@ -1,3 +1,5 @@
+- Calendar: Moving event with resources now checks if the resources are available.
+
 16-04-2014 5.0.55
 - Updated German translation
 - BUGFIX: most smtp send errors were ignored in the mail module
