@@ -1,3 +1,6 @@
+16-04-2014 5.0.55
+- Updated German translation
+- BUGFIX: most smtp send errors were ignored in the mail module
 - Calendar: Improved notification flow for participants for when event has been updated.
 - In some cases old project folders could be left in the files module after 
   renaming projects.
