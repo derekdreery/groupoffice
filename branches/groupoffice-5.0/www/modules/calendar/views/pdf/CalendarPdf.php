@@ -22,6 +22,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 	private $_date_range_text = '';	
 	private $_calendar;
 	private $_results;
+	private $_headerTitle = '';
 	
 	private $_view=false;
 	
@@ -59,11 +60,15 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 
 		$this->SetTextColor(50, 135, 172);
 		$this->SetFont($this->font, 'B', 16);
-		$this->Write(16, $this->_calendar->name . ' ');
+		
+		//$this->Write(16,$this->_headerTitle ." ");
+		
+	//	$this->Write(16, GO::user()->name . ' ');					// Print the name of the user instead of the first calendar name.
+	//	$this->Write(16, $this->_calendar->name . ' ');
 		$this->SetTextColor(125, 162, 180);
 		$this->SetFont($this->font, '', 12);
 		$this->setY($this->getY() + 3.5, false);
-		$this->Write(12, $this->_title);
+		$this->Write(12, $this->_title);									// Print the name of the calendars that are printed in the view.
 
 		$this->setY($this->getY() + 2.5, false);
 		$this->SetFont($this->font, 'B', $this->font_size);
@@ -74,6 +79,24 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 	
 	private function _processEvents($list=true, $headers=true, $calendar_name=''){
 		
+		switch((int)$this->_days){
+			case 1:
+				$this->_headerTitle = GO::t('oneDay','calendar');
+				break;
+			case 5:
+				$this->_headerTitle = GO::t('fiveDays','calendar');
+				break;
+			case 7:
+				$this->_headerTitle = GO::t('sevenDays','calendar');
+				break;
+			case 35:
+				$this->_headerTitle = GO::t('month','calendar');
+				break;
+			default:
+				$this->_headerTitle = GO::t('list','calendar');
+				break;
+		}
+	
 		$fullDays = GO::t('full_days');
 		$calendarPrinted=false;
 		
