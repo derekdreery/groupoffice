@@ -709,16 +709,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		));
 
 		$failedRecipients=array();
-		try {
-			$success = $mailer->send($message, $failedRecipients);
-		} catch ( Exception $e ) {
-			$msg = $e->getMessage();
-			preg_match('/(554 5\.7\.1).*:(.*)\"/s', $msg, $matches);
-			if (!empty($matches))
-				throw new Exception($matches[2]);
-
-			$success=false;
-		}
+		$success = $mailer->send($message, $failedRecipients);		
 
 		// Update "last mailed" time of the emailed contacts.
 		if ($success && GO::modules()->addressbook) {

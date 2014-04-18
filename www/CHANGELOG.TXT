@@ -8,6 +8,41 @@
 
 
 
+- Calendar: Moving event with resources now checks if the resources are available.
+- SMIME: Also disable the "Encrypt with SMIME" option in the email composer when there is no certificate set for the account.
+- Addressbook/Billing: Fixed display of records in companySelect field. 
+	Fixes issue with addressbook name displayed in reciepient field of the order dialog in the billing module.
+- Added update query that sets the correct permissions for the installed modules. (Because some permissionlevels are removed.)
+
+16-04-2014 5.0.55
+- Updated German translation
+- BUGFIX: most smtp send errors were ignored in the mail module
+- Calendar: Improved notification flow for participants for when event has been updated.
+- In some cases old project folders could be left in the files module after 
+  renaming projects.
+- Sync filesystem ignores ACL and system folders because they don't exist anyway.
+- Tickets: Users can only edit their own messages and not the messages from others.
+	When you have manage permissions on the ticket module, then you can edit messages from others.
+
+
+14-04-2014 5.0.54
+- Changed delete permissions for ticket messages. 
+	Messages can only be deleted when the user has manage permissions on the ticket module. 
+	(So now it is the same as  deleting tickets)
+- Bug in file custom field that could cause fatal error: Call to a member 
+  function getDefaultHandler() on a non-object in 
+  /usr/share/groupoffice/modules/files/customfieldtype/File.php.
+- Fix for quickadd panel position after resize
+- CalDav: Fixed synchronization of event recurrence exceptions.
+- BUG: Adding a new participant to an existing event that is an exception for a 
+  recurring series could find a complete random event and it will copy the name,
+  location etc to it. This happened recently when we fixed a bug where an event 
+  was not created for a new participant in a recurring exception.
+- The temp files of admin were cleared when the cron job runs. This caused 
+  missing e-mail attachments when you were composing as admin.
+- Font size display error in some e-mail messages fixed.
+
+
 08-04-2014 5.0.53
 - Error on save contact and company because of application/json header in response
 
