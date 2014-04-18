@@ -231,6 +231,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				
 				if($isNewEvent){
 					$response['askForMeetingRequest']=true;
+					$response['is_update']=false;
 				}else
 				{
 					//only ask to send email if a relevant attribute has been altered
@@ -239,6 +240,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 						if(in_array($key, $attr)){
 
 							$response['askForMeetingRequest']=true;
+							$response['is_update']=true;
 							break;
 						}
 					}
@@ -263,12 +265,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	protected function actionSendMeetingRequest($params){
+		
+		$isUpdate = !empty($params['is_update']) && $params['is_update']!=='false';
+		
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
-		$response['success']=$event->sendMeetingRequest(!empty($params['new_participants_only']));
+		$response['success']=$event->sendMeetingRequest(!empty($params['new_participants_only']), $isUpdate);
 		
 		return $response;
 	}
 
+	
 	/**
 	 * Handles the saving of related resource bookings of an event.
 	 * 

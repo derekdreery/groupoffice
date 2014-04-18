@@ -209,7 +209,7 @@ $l['notifyCancelOrganizer']='Wilt u de organisator op de hoogte brengen over dat
 $l['notifyParticipants']='Deelnemers op de hoogte stellen?';
 $l['sendNotificationTitle']='Bericht versturen?';
 $l['sendNotification']='Wilt u de deelnemers per e-mail op de hoogte brengen?';
-
+$l['sendUpdateNotification']='Wilt u de deelnemers per e-mail op de hoogte brengen over de verandering(en)?';
 $l['months']= 'maanden';
 $l['appointment']= 'Afspraak';
 
@@ -256,3 +256,5 @@ $l['cannotHandleInvitation']='De agenda die hoort bij het email account heet "%s
 $l['cannotHandleInvitation2']='Kon de afspraak niet aanpassen, omdat u te weinig toegangsrechten heeft tot de agenda die hoort bij het email account (agenda: "%s"). Omdat de afspraak in die agenda zit, is haar status nu niet gewijzigd.';
 
 $l['tooltip'] = 'Tooltip tekst';
+
+$l['moveEventResourceError'] = 'Kan afspraak niet verzetten omdat de volgende hulpmiddelen dan niet beschikbaar zijn:';

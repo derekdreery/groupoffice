@@ -1022,7 +1022,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$folder->readonly = 1;
 		$folder->systemSave = true;
 		$folder->save(true);
-
+		
 		return $folder->id;
 	}
 
@@ -1080,6 +1080,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$model->files_folder_id=0;
 
 		 GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
+		 
+		 
+		 $this->fireEvent('checkmodelfolder', array($model, $folder));
 
 		return $model->files_folder_id;
 	}

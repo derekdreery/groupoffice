@@ -450,7 +450,9 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 //				$user_ids=array();
 			foreach($stmt as $company){
 				$record =$company->getAttributes();
-				$record['name_and_name2'] = !empty($company->name2) ? $company->name.' '.$company->name2.' ('.$company->addressbook->name.')' : $company->name.' ('.$company->addressbook->name.')';
+				
+				$record['addressbook_name'] = $company->addressbook?$company->addressbook->name:'';
+				$record['name_and_name2'] = !empty($company->name2) ? $company->name.' '.$company->name2 : $company->name;
 				//$record['name']=$contact->name;
 				$record['cf']=$company->id.":".$company->name;
 
