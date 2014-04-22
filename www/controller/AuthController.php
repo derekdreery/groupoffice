@@ -131,6 +131,11 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 
 		GO::session()->logout();
 
+		if (isset($params['ajax'])) {
+			$response['success']=true;
+			return $response;
+		}
+
 		if (isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN'] == '1') {
 			?>
 			<script type="text/javascript">
