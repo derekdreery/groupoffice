@@ -1,3 +1,4 @@
+- Address book: user permissions check for custom fields in Advanced Search
 - Address book: show company info in contact display panel.
 - Form processor: name of address book is mentioned in the "new contact" notification email.
 - Calendar: Moving event with resources now checks if the resources are available.
