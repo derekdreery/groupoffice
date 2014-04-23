@@ -1,3 +1,4 @@
+- Address book: show company info in contact display panel.
 - Form processor: name of address book is mentioned in the "new contact" notification email.
 - Calendar: Moving event with resources now checks if the resources are available.
 - SMIME: Also disable the "Encrypt with SMIME" option in the email composer when there is no certificate set for the account.
