@@ -1,3 +1,4 @@
+- Email: Composer -> The "from" combobox doesn't need to be editable.
 - Tickets: Added "ticket group" to display panel
 - Address book: user permissions check for custom fields in Advanced Search
 - Address book: show company info in contact display panel.

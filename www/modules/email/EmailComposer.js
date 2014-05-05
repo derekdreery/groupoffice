@@ -146,6 +146,7 @@ GO.email.EmailComposer = function(config) {
 	var items = [
 	this.fromCombo = new Ext.form.ComboBox({
 		store : GO.email.aliasesStore,
+		editable:false,
 		fieldLabel : GO.email.lang.from,
 		name : 'alias_name',
 		anchor : '100%',
