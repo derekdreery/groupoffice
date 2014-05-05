@@ -685,7 +685,7 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 		while($folder = $stmt->fetch()){
 			try{
 				if(!$folder->fsFolder->exists() || $folder->fsFolder->isFile())
-					$folder->delete();
+					$folder->delete(true);
 			}catch(\Exception $e){
 				echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
 			}
@@ -695,14 +695,14 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 		while($file = $stmt->fetch()){
 			try{
 				if(!$file->fsFile->exists() || $file->fsFile->isFolder())
-					$file->delete();
+					$file->delete(true);
 			}catch(\Exception $e){
 				echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
 			}
 		}
 		
 		$this->mtime=$this->fsFolder->mtime();
-		$this->save();
+		$this->save(true);
 		
 		\GO::$disableModelCache=$oldCache;
 		

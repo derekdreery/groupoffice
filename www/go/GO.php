@@ -170,7 +170,7 @@ class GO{
 	private static $_session;
 	private static $_modules;
 	private static $_router;
-
+	private static $_request;
 	/**
 	 *
 	 * @var PDO
@@ -319,6 +319,19 @@ class GO{
 		}
 		return self::$_router;
 	}
+	
+	/**
+	 * Returns the router that routes requests to controller actions.
+	 *
+	 * @return \GO\Base\Request
+	 */
+	public static function request() {
+		if (!isset(self::$_request)) {
+			self::$_request=new \GO\Base\Request();
+		}
+		return self::$_request;
+	}
+	
 
 	/**
 	 * Returns a collection of Group-Office Module objects

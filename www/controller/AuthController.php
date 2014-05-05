@@ -131,6 +131,11 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 
 		\GO::session()->logout();
 
+		if (isset($params['ajax'])) {
+			$response['success']=true;
+			return $response;
+		}
+
 		if (isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN'] == '1') {
 			?>
 			<script type="text/javascript">
@@ -218,7 +223,7 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 			
 		}
 		
-		//return $response;
+//		return $response;
 
 		if (\GO\Base\Util\Http::isAjaxRequest())
 		{

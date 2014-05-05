@@ -194,7 +194,15 @@ class Http {
 			return true;
 		}
 
-		return isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest";  
+		if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest"){
+			return true;
+		}
+		
+		if(\GO::request()->isJson()){
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**

@@ -324,6 +324,46 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	/**
+	 * Check if this model has resource conflicts.
+	 * This only works with existing events and NOT with new events.(Will allways return: false)
+	 * 
+	 * @return mixed (false, Array with resource events)
+	 */
+	public function hasResourceConflicts(){
+		
+		$hasConflict = false;
+		$foundConflicts = array();				
+		
+		if($this->isNew){
+			// Not possible to determine this when having a new model.
+			// Because the resources are not created yet.
+			return false;
+		} else {
+		
+			$resources = $this->resources;
+
+			foreach($resources as $resource){
+				
+				$resource->start_time = $this->start_time;
+				$resource->end_time = $this->end_time;
+
+				$conflicts = $resource->getConflictingEvents();
+				
+				if(count($conflicts) > 0){
+					$foundConflicts[] = $resource;
+					$hasConflict = true;
+				}
+			}
+			
+			if($hasConflict){
+				return $foundConflicts;
+			} else {
+				return false;
+			}
+		}
+	}
+	
+	/**
 	 * Create an exception for a recurring series.
 	 * 
 	 * @param int $exceptionDate
@@ -454,6 +494,19 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			}			
 		}	
 		
+		$resourceConflicts = $this->hasResourceConflicts();
+		
+		if($resourceConflicts !== false){
+			
+			$errorMessage = \GO::t('moveEventResourceError','calendar');
+			
+			foreach ($resourceConflicts as $rc){
+				$errorMessage .= '<br />- '.$rc->calendar->name;
+			}
+			
+			Throw new Exception($errorMessage);
+		}
+
 		return parent::beforeSave();
 	}
 
@@ -1114,8 +1167,6 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		$whereCriteria = \GO\Base\Db\FindCriteria::newInstance()												
 										->addCondition('uuid', $uuid);
 
-		//todo exception date
-
 		$params = \GO\Base\Db\FindParams::newInstance()
 						->ignoreAcl()
 						->single();							
@@ -1140,9 +1191,12 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			
 			$dayStart = \GO\Base\Util\Date::clear_time($exceptionDate);
 			$dayEnd = \GO\Base\Util\Date::date_add($dayStart,1);	
-			$whereCriteria 
+			
+			$dateCriteria = \GO\Base\Db\FindCriteria::newInstance() 
 							->addCondition('time', $dayStart, '>=','e')
-							->addCondition('time', $dayEnd, '<','e',false);
+							->addCondition('time', $dayEnd, '<','e');
+			
+			$whereCriteria->mergeWith($dateCriteria);
 			
 //			//the code below only find exceptions on the same day which is wrong
 //			$whereCriteria->addCondition('exception_for_event_id', 0,'>');
@@ -1894,9 +1948,11 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			
 			//Add exception dates to Event
 			foreach($vobject->select('EXDATE') as $i => $exdate) {
-				if(!empty($exdate->value)){
+				try {
 					$dt = $exdate->getDateTime();
 					$this->addException($dt->format('U'));
+				} catch (Exception $e) {
+					trigger_error($e->getMessage(),E_USER_NOTICE);
 				}
 			}
 
@@ -2395,7 +2451,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		return true;
 		
 	}
-	
+
+
 	/**
 	 * Sends a meeting request to all participants. If the participant is not a Group-Office user
 	 * or the organizer has no permissions to schedule an event it will include an
@@ -2404,7 +2461,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	 * @return boolean
 	 * @throws Exception
 	 */
-	public function sendMeetingRequest($newParticipantsOnly=false){		
+	public function sendMeetingRequest($newParticipantsOnly=false, $update=false){		
 		
 		if(!$this->is_organizer)
 			throw new \Exception("Meeting request can only be send from the organizer's event");
@@ -2433,10 +2490,11 @@ class Event extends \GO\Base\Db\ActiveRecord {
 							\GO::language()->setLanguage($user->language);
 					}
 
-					//if participant status is pending then send a new inviation subject. Otherwise send it as update
-					if($participant->status == Participant::STATUS_PENDING){
+					//if participant status is pending then send a new inviation subject. Otherwise send it as update			
+					if(!$update){
 						$subject = \GO::t('invitation', 'calendar').': '.$this->name;
 						$bodyLine = \GO::t('invited', 'calendar');
+
 					}else
 					{
 						$subject = \GO::t('invitation_update', 'calendar').': '.$this->name;

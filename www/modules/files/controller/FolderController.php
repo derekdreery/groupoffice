@@ -1027,7 +1027,7 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 		$folder->readonly = 1;
 		$folder->systemSave = true;
 		$folder->save(true);
-
+		
 		return $folder->id;
 	}
 
@@ -1085,6 +1085,9 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 			$model->files_folder_id=0;
 
 		 \GO\Base\Fs\File::setAllowDeletes($oldAllowDeletes);
+		 
+		 
+		 $this->fireEvent('checkmodelfolder', array($model, $folder));
 
 		return $model->files_folder_id;
 	}

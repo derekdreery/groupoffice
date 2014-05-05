@@ -129,7 +129,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 
 		var renderLevel = function(v){
 			var r = permissionLevelConfig.store.getById(v);
-			return r ? r.get('text') : "!";
+			return r ? r.get('text') : v;
 		}
 
 		var groupColumns = [{
