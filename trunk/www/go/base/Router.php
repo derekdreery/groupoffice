@@ -86,12 +86,7 @@ class Router{
 	public function runController($params=false){
 		
 		if(!$params){
-			if(PHP_SAPI=='cli'){
-				$params = Util\Cli::parseArgs();
-			}else
-			{
-				$params=$_REQUEST;				
-			}
+			$params = \GO::request()->getParams();
 		}
 						
 		$r = !empty($params['r']) ?  explode('/', $params['r']): array();		
