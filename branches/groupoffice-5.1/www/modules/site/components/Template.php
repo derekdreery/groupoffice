@@ -28,6 +28,7 @@ class GO_Site_Components_Template{
 		
 		$folder = new GO_Base_Fs_Folder(Site::assetManager()->getBasePath());
 		if(!is_link($folder->path().'/template')){
+//		if(!is_link($folder->path().'/template') && !is_dir($folder->path().'/template')){
 			
 			if(!symlink($this->getPath().'assets',$folder->path().'/template')){
 				throw new Exception("Could not publish template assets. Is the \$config['file_storage_path'] path writable?");

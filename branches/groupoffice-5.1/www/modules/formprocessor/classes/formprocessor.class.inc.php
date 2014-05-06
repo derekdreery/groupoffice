@@ -404,6 +404,7 @@ class formprocessor{
 						$formatted_address = str_replace('{'.$val.'}', $contactModel->$val, $formatted_address);
 
 					$body = GO::t('newContactFromSite','addressbook').':<br />';
+					$body .= GO::t('name','addressbook').': '.$contactModel->addressbook->name.'<br />';
 					$body .= "<br />".$contactModel->name;
 					$body .= "<br />".$formatted_address;
 					if (!empty($contactModel->home_phone)) $body .= "<br />".GO::t('phone').': '.$contactModel->home_phone;
