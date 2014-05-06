@@ -68,6 +68,39 @@ GO.customfields.dataTypes={
 			});
 		}
 	},
+	GO_Customfields_Customfieldtype_Php : {
+		label : 'Php',
+		onSelect: function(fieldDialog) {
+			if(!fieldDialog.code_field) {
+				fieldDialog.code_field = {
+					xtype:'textarea',
+					name:'extra_options',
+					maxLength:255,
+					fieldLabel:'PHP code',
+					value: fieldDialog.loadData.extra_options,
+					emptyText: 'eg: return $record->col_1 + $record->col_2;',
+					anchor: '-20 -20'
+				};
+				fieldDialog.extraOptions.setHeight(100);
+				fieldDialog.extraOptions.add(fieldDialog.code_field);
+				fieldDialog.extraOptions.doLayout();
+			}
+			fieldDialog.extraOptions.setVisible(true);
+		},
+		onDeselect: function(fieldDialog) {
+			fieldDialog.extraOptions.setVisible(false);
+		},
+		getFormField : function(customfield, config){
+
+			var f = GO.customfields.dataTypes.GO_Customfields_Customfieldtype_Text.getFormField(customfield, config);
+			delete f.anchor;
+			
+			return Ext.apply(f, {
+				xtype:'displayfield',
+				width:120
+			});
+		}
+	},
 	GO_Customfields_Customfieldtype_Checkbox :{
 		label: 'Checkbox',
 		getFormField : function(customfield, config){
