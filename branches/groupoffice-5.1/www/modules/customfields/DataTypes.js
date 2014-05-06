@@ -78,7 +78,7 @@ GO.customfields.dataTypes={
 					maxLength:255,
 					fieldLabel:'PHP code',
 					value: fieldDialog.loadData.extra_options,
-					emptyText: "eg: return $model->name . ' = ' . $model->customFieldsRecord->col_1;",
+					emptyText: "eg: return $model->name . ' = ' . $cf->col_1;",
 					anchor: '-20 -20'
 				};
 				fieldDialog.extraOptions.setHeight(100);
