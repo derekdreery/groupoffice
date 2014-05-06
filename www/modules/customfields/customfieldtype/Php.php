@@ -11,13 +11,13 @@ class GO_Customfields_Customfieldtype_Php extends GO_Customfields_Customfieldtyp
 			
 		$f = $this->field->extra_options;
 		$old = ini_set("display_errors", "on");
-		$method = function ($record) use($f) {
+		$method = function ($model) use($f) {
 			return @eval($f);
 		};
 		if($old!==false)
 				ini_set("display_errors", $old);
 		
-		return (string)$method($model); //cast to strign because displaypanel checks for field.length
+		return (string)$method($model->getModel()); //cast to strign because displaypanel checks for field.length
 	}
 	
 	public function formatFormOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {		

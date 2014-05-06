@@ -53,6 +53,10 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 		return call_user_func(array($this->extendsModel(),'model'));
 	}
 	
+	public function getModel() {
+		return $this->getExtendedModel()->findByPk($this->model_id);
+	}
+	
 	/**
 	 * Override this to return the model this custom fields model extends with fields.
 	 * 
