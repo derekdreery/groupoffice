@@ -370,7 +370,8 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 				
 			});
 		}else 
-		{			
+		{		
+			this.loadData = {};
 			this.formPanel.form.reset();
 			if(!this.lastCategoryId)
 				this.lastCategoryId=GO.customfields.categoriesStore.data.items[0].id;

@@ -72,19 +72,19 @@ GO.customfields.dataTypes={
 		label : 'Php',
 		onSelect: function(fieldDialog) {
 			if(!fieldDialog.code_field) {
-				fieldDialog.code_field = {
-					xtype:'textarea',
+				fieldDialog.code_field = new Ext.form.TextArea({
 					name:'extra_options',
 					maxLength:255,
 					fieldLabel:'PHP code',
 					value: fieldDialog.loadData.extra_options,
 					emptyText: "eg: return $model->name . ' = ' . $cf->col_1;",
 					anchor: '-20 -20'
-				};
+				});
 				fieldDialog.extraOptions.setHeight(100);
 				fieldDialog.extraOptions.add(fieldDialog.code_field);
 				fieldDialog.extraOptions.doLayout();
 			}
+			fieldDialog.code_field.setValue(fieldDialog.loadData.extra_options || '');
 			fieldDialog.extraOptions.setVisible(true);
 		},
 		onDeselect: function(fieldDialog) {
