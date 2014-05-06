@@ -1,3 +1,4 @@
+- Tasks: Fixed problem with the reminder of tasks when the task is recurring. (The reminder of the recurring item wasn't changed.)
 - Don't close the upload dialog when the config parameter "upload_quickselect" is set to false.
 - Email: Composer -> The "from" combobox doesn't need to be editable.
 - Tickets: Added "ticket group" to display panel
