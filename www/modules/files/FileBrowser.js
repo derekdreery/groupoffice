@@ -500,7 +500,9 @@ GO.files.FileBrowser = function(config){
 						});
 						if(!failures.length){
 							uploadpanel.onDeleteAll();
-							uploadpanel.ownerCt.hide();
+							
+							if(GO.settings.upload_quickselect !== false)
+								uploadpanel.ownerCt.hide();
 						}
 					}
 				}
