@@ -55,6 +55,13 @@ GO.email.MessagesGrid = function(config){
 				id:'from',
 				width:200
 			},{
+				header: GO.email.lang.to,
+				dataIndex: 'to',
+				renderer:this.renderNorthMessageRow,
+				id:'to',
+				width:200,
+				hidden: true
+			},{
 				header: GO.email.lang.subject,
 				dataIndex: 'subject',
 				renderer:this.renderNorthMessageRow,
