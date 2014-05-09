@@ -642,7 +642,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			while($adminUser = $groupAdminsStmt->fetch()){
 				$adminUserIds[] = $adminUser->id;
 			}
-			if (!in_array(GO::user()->id,$adminUserIds) && $this->end_time > time()) {
+			if ((!in_array(GO::user()->id,$adminUserIds) || $this->isModified('status'))&& $this->end_time > time()) {
 				$this->_sendResourceNotification($wasNew);
 			}
 		}else
@@ -788,11 +788,19 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$adminUserIds[] = $adminUser->id;
 				if($adminUser->id!=GO::user()->id){
 					if($wasNew){
-						$body = sprintf(GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
-										. $this->toHtml()
-										. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+						if ($this->status==GO_Calendar_Model_Event::STATUS_CONFIRMED) {
+							$body = sprintf(GO::t('resource_confirmed_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+											. $this->toHtml()
+											. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
 
-						$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+							$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+						} else {
+							$body = sprintf(GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+											. $this->toHtml()
+											. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+
+							$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+						}
 					}else
 					{
 						$body = sprintf(GO::t('resource_modified_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
@@ -813,7 +821,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				}
 			}
 			
-			
+
 			//send update to user that booked the resource
 			if($this->user_id!=GO::user()->id
 						&& in_array(GO::user()->id,$adminUserIds)
@@ -1607,6 +1615,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->name = (string) $vobject->summary;
 		if(empty($this->name))
 			$this->name = GO::t('unnamed');
+		
+		GO::debug('=== IMPORT VOBJECT ===');
+		GO::debug($this->name);
 		
 		$dtstart = $vobject->dtstart ? $vobject->dtstart->getDateTime() : new DateTime();
 		$dtend = $vobject->dtend ? $vobject->dtend->getDateTime() : new DateTime();
