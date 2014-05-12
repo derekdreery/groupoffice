@@ -57,6 +57,10 @@ abstract class AbstractCustomFieldsRecord extends \GO\Base\Db\ActiveRecord{
 		return call_user_func(array($this->extendsModel(),'model'));
 	}
 	
+	public function getModel() {
+		return $this->getExtendedModel()->findByPk($this->model_id);
+	}
+	
 	/**
 	 * Override this to return the model this custom fields model extends with fields.
 	 * 

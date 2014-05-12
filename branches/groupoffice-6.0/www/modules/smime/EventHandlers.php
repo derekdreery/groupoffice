@@ -61,9 +61,11 @@ class EventHandlers {
 	public static function aliasesStore(\GO\Email\Controller\AliasController $controller, &$response, \GO\Base\Data\Store $store, $params) {
 
 		foreach ($response['results'] as &$alias) {
+
+			$accountModel = \GO\Email\Model\Account::model()->findByPk($alias['account_id']);
 			$cert = Model\Certificate::model()->findByPk($alias['account_id']);
 
-			if ($cert) {
+			if ($cert && !empty($accountModel) && GO::user()->id===$accountModel->user_id) {
 				$alias['has_smime_cert'] = true;
 				$alias['always_sign'] = $cert->always_sign;
 			}

@@ -25,7 +25,7 @@ GO.email.EmailClient = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'uid',
-		fields:['uid','icon','flagged','labels','has_attachments','seen','subject','from','sender','size','date', 'x_priority','answered','forwarded','account_id','mailbox','arrival','arrival_time','date_time'],
+		fields:['uid','icon','flagged','labels','has_attachments','seen','subject','from','to','sender','size','date', 'x_priority','answered','forwarded','account_id','mailbox','arrival','arrival_time','date_time'],
 		remoteSort: true
 	});
 
@@ -147,7 +147,9 @@ GO.email.EmailClient = function(config){
 
 		var cm = this.topMessagesGrid.getColumnModel();
 		var header = this.messagesGrid.store.reader.jsonData.sent || this.messagesGrid.store.reader.jsonData.drafts ? GO.email.lang.to : GO.email.lang.from;
+		var header2 = this.messagesGrid.store.reader.jsonData.sent || this.messagesGrid.store.reader.jsonData.drafts ? GO.email.lang.from : GO.email.lang.to;
 		cm.setColumnHeader(cm.getIndexById('from'), header);
+		cm.setColumnHeader(cm.getIndexById('to'), header2);
 
 		var unseen = this.messagesGrid.store.reader.jsonData.unseen;
 		for(var mailbox in unseen)

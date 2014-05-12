@@ -269,6 +269,8 @@ GO.customfields.FieldDialog = function(config){
 
 Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 
+	loadData: {}, // will save the loaded data when form shows
+
 	typeChange : function(combo, newValue)
 	{	
 		this.addressbookIdsField.setVisible(newValue=='GO\\Addressbook\\Customfieldtype\\Contact' || newValue=='GO\\Addressbook\\Customfieldtype\\Company');
@@ -309,9 +311,20 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 
 		this.regexField.setDisabled(newValue!='GO\\Customfields\\Customfieldtype\\Text');
 
+		// Select deselect mother in Datatype to customize dialog (implementation in Php-Customfield datatype)
+		if(GO.customfields.dataTypes[this.oldValue] && GO.customfields.dataTypes[this.oldValue].onDeselect) {
+			GO.customfields.dataTypes[this.oldValue].onDeselect(this);
+		}
+		if(GO.customfields.dataTypes[newValue] && GO.customfields.dataTypes[newValue].onSelect) {
+			GO.customfields.dataTypes[newValue].onSelect(this);
+		}
+
 		this.syncShadow();
 		this.center();
+		
+		this.oldValue = newValue;
 	},
+	oldValue : 'GO_Customfields_Customfieldtype_Text',
 	
 	show : function (field_id) {
 		
@@ -337,16 +350,15 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 		if(field_id>0)
 		{
 			this.formPanel.load({
-				//				url : GO.settings.modules.customfields.url+'json.php',
-				//				params : {
-				//					task: 'field'
-				//				},
 				url:GO.url('customfields/field/load'),				
 				success:function(form, action)
 				{
-					this.typeChange(this.typeField, this.typeField.getValue());
-					GO.customfields.FieldDialog.superclass.show.call(this);
 					var response = Ext.decode(action.response.responseText);
+					this.loadData = response.data;
+					this.typeChange(this.typeField, this.typeField.getValue());
+					
+					GO.customfields.FieldDialog.superclass.show.call(this);
+					
 					this.maxLengthField.setDisabled(!response.data['hasLength']);
 					this.maxLengthField.setVisible(response.data['hasLength']);
 				},
@@ -358,7 +370,8 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 				
 			});
 		}else 
-		{			
+		{		
+			this.loadData = {};
 			this.formPanel.form.reset();
 			if(!this.lastCategoryId)
 				this.lastCategoryId=GO.customfields.categoriesStore.data.items[0].id;
@@ -425,6 +438,7 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 	submitForm : function(hide) {
 		this.formPanel.form.submit(
 		{
+			submitEmptyText: false,
 			//url:GO.settings.modules.customfields.url+'action.php',
 			url:GO.url('customfields/field/submit'),
 			params: {

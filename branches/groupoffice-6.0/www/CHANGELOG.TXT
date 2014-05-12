@@ -6,6 +6,7 @@
 
 
 
+
 - Billing: PDF Templates can have stationery paper
 - Ticket messages styled like conversation and notes display yellow.
 - Files: Users without disk quota can still upload files.
@@ -15,6 +16,16 @@
 
 
 
+- Fixed bug: Email messages on the Iphone where missing when the message contained an invalid email-address
+- SMIME: SMIME certificate only works for the owner of the email account, not when the email account is shared.
+- Billing: PDF generator, fixed bugs in the pagenumber display and fixed bug with full page images creating a blank page.
+- Tasks: Fixed problem with the reminder of tasks when the task is recurring. (The reminder of the recurring item wasn't changed.)
+- Don't close the upload dialog when the config parameter "upload_quickselect" is set to false.
+- Email: Composer -> The "from" combobox doesn't need to be editable.
+- Tickets: Added "ticket group" to display panel
+- Address book: user permissions check for custom fields in Advanced Search
+- Address book: show company info in contact display panel.
+- Form processor: name of address book is mentioned in the "new contact" notification email.
 - Calendar: Moving event with resources now checks if the resources are available.
 - SMIME: Also disable the "Encrypt with SMIME" option in the email composer when there is no certificate set for the account.
 - Addressbook/Billing: Fixed display of records in companySelect field. 

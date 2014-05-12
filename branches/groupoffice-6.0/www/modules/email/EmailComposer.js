@@ -127,13 +127,13 @@ GO.email.EmailComposer = function(config) {
 		}),
 		this.ccFieldCheck = new Ext.menu.CheckItem({
 			text : GO.email.lang.ccField,
-			checked : true,
+			checked : GO.email.showCCfield,
 			checkHandler : this.onShowFieldCheck,
 			scope : this
 		}),
 		this.bccFieldCheck = new Ext.menu.CheckItem({
 			text : GO.email.lang.bccField,
-			checked : false,
+			checked : GO.email.showBCCfield,
 			checkHandler : this.onShowFieldCheck,
 			scope : this
 		})
@@ -146,6 +146,7 @@ GO.email.EmailComposer = function(config) {
 	var items = [
 	this.fromCombo = new Ext.form.ComboBox({
 		store : GO.email.aliasesStore,
+		editable:false,
 		fieldLabel : GO.email.lang.from,
 		name : 'alias_name',
 		anchor : '100%',
@@ -587,11 +588,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.sendParams = {};
 		Ext.apply(this.sendParams, this.defaultSendParams);
 
-		GO.email.showCCfield = true;
-		GO.email.showBCCfield = false;
+//		GO.email.showCCfield = true;
+//		GO.email.showBCCfield = false;
 
-		this.showCC(GO.email.showCCfield);
-		this.showBCC(GO.email.showBCCfield);			
+		this.showCC(GO.email.showCCfield===1);
+		this.showBCC(GO.email.showBCCfield===1);			
 		this.ccFieldCheck.setChecked(GO.email.showCCfield);
 		this.bccFieldCheck.setChecked(GO.email.showBCCfield);
 
@@ -1016,7 +1017,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.startAutoSave();
 
 		this.ccFieldCheck.setChecked(GO.email.showCCfield);
-		this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
+		this.bccFieldCheck.setChecked(GO.email.showBCCfield);
 	
 		if(config.afterLoad)
 		{

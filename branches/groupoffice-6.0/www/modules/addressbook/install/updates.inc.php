@@ -438,6 +438,12 @@ $updates['201402211238'][]="ALTER TABLE  `ab_contacts` CHANGE  `photo`  `photo` 
 
 $updates['201402271100'][]="ALTER TABLE `ab_companies` CHANGE `photo` `photo` VARCHAR( 255 ) NOT NULL DEFAULT '';";
 
-$updates['201402271100'][]="ALTER TABLE  `ab_contacts` CHANGE  `photo`  `photo` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';";
+$updates['201405061600'][]="CREATE TABLE IF NOT EXISTS `ab_portlet_birthdays` (
+  `user_id` int(11) NOT NULL,
+  `addressbook_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`addressbook_id`)
+) ENGINE=InnoDB;";
 
-$updates['201402271100'][]="update `go_model_types` set model_name=replace(model_name, '_','\\');";
+$updates['201405061600'][]="ALTER TABLE  `ab_contacts` CHANGE  `photo`  `photo` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';";
+
+$updates['201405061600'][]="update `go_model_types` set model_name=replace(model_name, '_','\\');";
