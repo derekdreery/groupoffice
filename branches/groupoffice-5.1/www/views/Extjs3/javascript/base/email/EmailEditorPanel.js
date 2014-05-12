@@ -403,7 +403,9 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 									this.attachmentsView.afterUpload();
 									if(!failures.length){
 										uploadpanel.onDeleteAll();
-										uploadpanel.ownerCt.hide();
+										
+										if(GO.settings.upload_quickselect !== false)
+											uploadpanel.ownerCt.hide();
 									}
 								}
 							}

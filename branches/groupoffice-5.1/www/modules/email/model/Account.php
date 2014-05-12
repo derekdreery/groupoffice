@@ -151,10 +151,12 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 					$this->password_encrypted=2;//deprecated. remove when email is mvc style.
 				}
 			}
+			
+			unset(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
 		}
 
-		if (!empty($this->id) && !empty(GO::session()->values['emailModule']['accountPasswords'][$this->id]))
-			unset(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
+//		if (!empty($this->id) && !empty(GO::session()->values['emailModule']['accountPasswords'][$this->id]))
+//			unset(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
 		
 		if($this->isModified('smtp_password')){
 			$encrypted = GO_Base_Util_Crypt::encrypt($this->smtp_password);		
@@ -269,7 +271,9 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
 	public function decryptPassword(){
 		if (!empty(GO::session()->values['emailModule']['accountPasswords'][$this->id])) {
-			$decrypted = GO_Base_Util_Crypt::decrypt(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
+			$decrypted = GO::session()->values['emailModule']['accountPasswords'][$this->id];
+			
+			//$decrypted = GO_Base_Util_Crypt::decrypt(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
 		} else {
 			
 			//support for z-push without storing passwords
