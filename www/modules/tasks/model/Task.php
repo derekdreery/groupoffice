@@ -213,14 +213,23 @@ class Task extends \GO\Base\Db\ActiveRecord {
 			$nextDueTime = $rrule->getNextRecurrence($this->due_time+1);
 			
 			if($nextDueTime){
-			
-				$this->duplicate(array(
+				
+				$data = array(
 					'completion_time'=>0,
 					'start_time'=>$nextDueTime-$this->due_time+$this->start_time,
 					'due_time'=>$nextDueTime,
 					'status'=>Task::STATUS_NEEDS_ACTION,
 					'percentage_complete'=>0
-				));
+				);
+				
+				// If a reminder is set, then calculate the difference between the start dates of the old and the new task.
+				// Then add that difference to the reminder time for the new event. (So the reminder will also move forward)
+				if(!empty($this->reminder)){
+					$diff = $data['start_time'] - $this->start_time;
+					$data['reminder'] = $this->reminder + $diff;
+				}
+
+				$this->duplicate($data);
 			}
 		}
 	}

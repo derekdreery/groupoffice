@@ -1258,7 +1258,15 @@ class AbstractModelController extends AbstractController {
 			$customAttributes = array();
 			$columns = $model->customfieldsRecord->getColumns();
 			foreach($columns as $name=>$attr){
+				try {
+					$cfModel = GO_Customfields_Model_Field::model()->findByPk(substr($name,4));
+					$cfAllowed = $cfModel!==false;
+				} catch (GO_Base_Exception_AccessDenied $e) {
+					$cfAllowed = false;
+				}
+
 				if($name != 'model_id'
+								&& !empty($cfAllowed)
 								&& isset($attr['customfield'])
 								&& !in_array($name, $params['exclude'])
 								&& (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))

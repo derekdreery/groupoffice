@@ -649,7 +649,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			while($adminUser = $groupAdminsStmt->fetch()){
 				$adminUserIds[] = $adminUser->id;
 			}
-			if (!in_array(GO::user()->id,$adminUserIds) && $this->end_time > time()) {
+			if ((!in_array(GO::user()->id,$adminUserIds) || $this->isModified('status'))&& $this->end_time > time()) {
 				$this->_sendResourceNotification($wasNew);
 			}
 		}else
@@ -798,11 +798,20 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					
 				
 					if($wasNew){
-						$body = sprintf(\GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
-										. $this->toHtml()
-										. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
 
-						$subject = sprintf(\GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
+						if ($this->status==Event::STATUS_CONFIRMED) {
+							$body = sprintf(GO::t('resource_confirmed_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+											. $this->toHtml()
+											. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+
+							$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
+						} else {
+							$body = sprintf(GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+											. $this->toHtml()
+											. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+
+							$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+						}
 					}else
 					{
 						$body = sprintf(\GO::t('resource_modified_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
@@ -823,7 +832,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				}
 			}
 			
-			
+
 			//send update to user that booked the resource
 			if($this->user_id!=GO::user()->id
 						&& in_array(GO::user()->id,$adminUserIds)

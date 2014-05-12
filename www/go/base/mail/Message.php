@@ -14,6 +14,8 @@ namespace GO\Base\Mail;
 use GO;
 use GO\Base\Fs\Folder;
 
+use Exception;
+
 
 //make sure temp dir exists
 $cacheFolder = new Folder(GO::config()->tmpdir);
@@ -98,18 +100,33 @@ class Message extends \Swift_Message{
 	
 		$toList = new EmailRecipients($to);
 		$to =$toList->getAddresses();
-		foreach($to as $email=>$personal)
-			$this->addTo($email, $personal);
+		foreach($to as $email=>$personal){
+			try{
+				$this->addTo($email, $personal);
+			} catch (Exception $e){
+				trigger_error('Failed to add receipient address: '.$e);
+			}
+		}
 		
 		$ccList = new EmailRecipients($cc);
 		$cc =$ccList->getAddresses();
-		foreach($cc as $email=>$personal)
-			$this->addCc($email, $personal);
+		foreach($cc as $email=>$personal){
+			try{
+				$this->addCc($email, $personal);
+			} catch (Exception $e){
+				trigger_error('Failed to add CC address: '.$e);
+			}
+		}
 		
 		$bccList = new EmailRecipients($bcc);
 		$bcc =$bccList->getAddresses();
-		foreach($bcc as $email=>$personal)
-			$this->addBcc($email, $personal);
+		foreach($bcc as $email=>$personal){
+			try{
+				$this->addBcc($email, $personal);
+			} catch (Exception $e){
+				trigger_error('Failed to add BCC address: '.$e);
+			}
+		}
 
 		if(isset($structure->headers['from'])){
 			
@@ -441,7 +458,8 @@ class Message extends \Swift_Message{
 
 						//$tmpFile = new \GO\Base\Fs\File(\GO::config()->tmpdir.$ia['tmp_file']);
 						if(empty($ia->tmp_file)){
-							throw new \Exception("No temp file for inline attachment ".$ia->name);
+							continue; // Continue to the next inline attachment for processing.
+							//throw new Exception("No temp file for inline attachment ".$ia->name);
 						}
 
 						$path = empty($ia->from_file_storage) ? \GO::config()->tmpdir.$ia->tmp_file : \GO::config()->file_storage_path.$ia->tmp_file;
