@@ -6,7 +6,7 @@ set -e
 # http://www.debian-administration.org/article/Gnu_Privacy_Guard_Agent_GPG/print
 
 
-PROMODULES="sync gota caldav documenttemplates savemailas professional tickets syncml carddav zpushadmin dropbox googledrive scanbox leavedays projects2 timeregistration2 hoursapproval2";
+PROMODULES="sync gota caldav documenttemplates savemailas professional tickets syncml carddav zpushadmin dropbox googledrive scanbox leavedays projects2 timeregistration2 hoursapproval2 billing workflow filesearch";
 
 
 PRG="$0"
@@ -56,7 +56,7 @@ cd groupoffice-com-$VERSION
 if [ "$2" == "send" ]; then
 	debuild -rfakeroot
 	cd ..
-	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/poolfiveone/main/
+	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/poolsixzero/main/
 
 	#ssh mschering@imfoss.nl "dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
 else
