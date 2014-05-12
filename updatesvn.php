@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
-$root = 'svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/trunk/modules';
+$root = 'svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-6.0';
 exec('svn ls '.$root, $output, $ret);
 
 if($ret!=0)
@@ -18,7 +18,7 @@ foreach($output as $module){
 		//exec('rm -Rf '.$module);
 
 		//uncomment the following line if subversion is upgraded
-		system('svn upgrade '.$module);
+//		system('svn upgrade '.$module);
 				
 		if(is_dir($module)){
 			echo "UPDATE ".rtrim($module,'/')."\n";
