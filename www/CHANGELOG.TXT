@@ -1,3 +1,4 @@
+- Increased syncing of mail items with ActiveSync when using the "any period" option from 2 weeks to 1 month.
 - Fixed bug: Email messages on the Iphone where missing when the message contained an invalid email-address
 - SMIME: SMIME certificate only works for the owner of the email account, not when the email account is shared.
 - Billing: PDF generator, fixed bugs in the pagenumber display and fixed bug with full page images creating a blank page.
