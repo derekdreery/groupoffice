@@ -33,7 +33,7 @@ svn export https://mschering@svn.code.sf.net/p/group-office/code/branches/groupo
 
 if [ "$1" == "real" ]; then
 	cp -R /root/packages/groupoffice-com-$VERSION debian-groupoffice-com/usr/share/groupoffice
-	mv debian-groupoffice-com/usr/share/groupoffice/LICENSE.TXT debian-groupoffice-com
+	cp debian-groupoffice-com/usr/share/groupoffice/LICENSE.TXT debian-groupoffice-com
 fi
 
 mv debian-groupoffice-com groupoffice-com-$VERSION
