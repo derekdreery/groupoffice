@@ -3,6 +3,10 @@
 echo 'Configuring Group-Office'."\n";
 
 $config_file = '/etc/groupoffice/config.php';
+
+if(!isset($config['file_storage_path'])){
+	$config['file_storage_path']='/home/groupoffice/';
+}
 //if(file_exists($config_file))
 //{
 //	//don't overwrite an existing configuration. Create a file with date suffix.
