@@ -1575,12 +1575,13 @@ class GO_Base_Config {
 	/**
 	 * Gets a custom saved setting from the database
 	 *
-	 * @param  string $name Configuration key name
-     * @param integer $user_id Id of the user you want to get a setting from
-     * defaults to 0 for the default setting,
+	 * @param string $name Configuration key name
+   * @param integer $user_id Id of the user you want to get a setting from - defaults to 0 for the default setting,
+	 * @param mixed $default The default value that will be returned when the setting cannot be found
+	 * 
 	 * @return mixed Configuration value
 	 */
-	public function get_setting($name, $user_id=0) {
+	public function get_setting($name, $user_id=0,$default=null) {
 		$attributes['name']=$name;
     $attributes['user_id']=$user_id;
 
@@ -1588,7 +1589,7 @@ class GO_Base_Config {
 		if ($setting) {
 			return $setting->value;
 		}
-		return null;
+		return $default;
 	}
 	
 	/**
