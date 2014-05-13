@@ -1,3 +1,10 @@
+2014/05/13 6.0.1
+Group-Office 6.0 comes with a new App manager. In all downloads all Apps
+are included by default. You can easily extend your system with new Apps that
+you can get from our store.
+We've also added various small features like quota per user support in the files
+app and PDF stationary papers in the billing app.
+
 2013/09/10 5.0.5
 Group-Office 5.0 was completely redesigned. It was time to modernize the 
 interface. I think we succeeded in making it very pleasing to the eye and easy
