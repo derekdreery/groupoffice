@@ -18,6 +18,12 @@ $root = dirname(__FILE__).'/';
 require_once('GO.php');
 //\GO::init();
 
+
+if(!GO::isInstalled()){
+	header('Location: '.\GO::config()->host.'install/');				
+	exit();
+}
+
 if(empty($_REQUEST['r']) && PHP_SAPI!='cli'){	
 	if(\GO::config()->force_ssl && !\GO\Base\Util\Http::isHttps()){
 		 header("HTTP/1.1 301 Moved Permanently");

@@ -569,9 +569,13 @@ class GO{
 		register_shutdown_function(array('GO','shutdown'));
 
    	spl_autoload_register(array('GO', 'autoload'));	
-
+		
 		//Start session here. Important that it's called before \GO::config().
 		\GO::session();
+		
+		if(!self::isInstalled()){
+			return;
+		}
 		
 		if(\GO::config()->debug){
 			self::$_scriptStartTime = \GO\Base\Util\Date::getmicrotime();			

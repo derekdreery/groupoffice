@@ -125,7 +125,7 @@ foreach($scripts as $script){
 //				$content = $firstPart.$declaration.$lastPart;
 				
 				//Put namespace on top of file
-				$content = str_replace('<?php', "<?php\n\nnamespace ".$namespace.";\n\n", $content, 1);
+				$content = str_replace('<?php', "<?php\n\nnamespace ".$namespace.";\n\n", $content);
 				
 				//now we must remove the namespace from class usages in this file.
                 //eg. \GO\Base\Db\ActiveRecord becomes ActiveRecord.
