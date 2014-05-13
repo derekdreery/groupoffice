@@ -73,24 +73,26 @@ class LicenseController extends AbstractJsonController{
 						
 		$success = move_uploaded_file($_FILES['license_file']['tmp_name'][0],$licenseFile->path());
 		
-		
-		
-		if(!\GO::scriptCanBeDecoded()){
-			throw new Exception("The license file you provided didn't work. Please contant Intermesh about this error.");
-		}  else {
-			//add all users to the modules they have access too
-
-			\GO\Professional\License::autoConfigureModulePermissions();
-
-//			GO\Base\Mail\AdminNotifier::sendMail("Group-Office license installed successfully!", "Your license was installed and the new users were automatically added to the App permissions if necessary.\n\nThank you for using Group-Office!");
-
-		}
-		
 		//use cron to move the license as root.
 //		GO\Modules\Cron\LicenseInstaller::runOnce();
 
 		
 		echo json_encode(array('success'=>$success));
 			
+	}
+	
+	protected function actionInstall(){
+		
+		//license check done in a separate request because it can't be done in one run
+		
+		if(!\GO::scriptCanBeDecoded()){
+			throw new Exception("The license file you provided didn't work. Please contact Intermesh about this error.");
+		}  else {
+			//add all users to the modules they have access too
+
+			\GO\Professional\License::autoConfigureModulePermissions();
+			
+			echo json_encode(array('success'=>true));
+		}
 	}
 }
