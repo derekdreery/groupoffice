@@ -810,7 +810,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 											. $this->toHtml()
 											. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
 
-							$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+							$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
 						}
 					}else
 					{

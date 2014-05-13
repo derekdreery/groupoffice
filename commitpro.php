@@ -3,7 +3,7 @@
 
 $commitMsg='Licensing system';
 
-$root = 'svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/trunk/modules';
+$root = 'svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-6.0';
 exec('svn ls '.$root, $output, $ret);
 
 if($ret!=0)
