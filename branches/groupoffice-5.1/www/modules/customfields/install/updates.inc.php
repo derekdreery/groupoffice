@@ -153,4 +153,4 @@ $updates['201402111315'][]="ALTER TABLE `cf_fields` CHANGE `addressbook_ids` `ad
 
 $updates['201403251524'][]="ALTER TABLE `cf_fields` ADD COLUMN `extra_options` VARCHAR(255) NOT NULL DEFAULT '';";
 
-$updates[][]="ALTER TABLE `cf_fields` CHANGE COLUMN `extra_options` `extra_options` TEXT;";
+$updates['201405131536'][]="ALTER TABLE `cf_fields` CHANGE COLUMN `extra_options` `extra_options` TEXT;";
