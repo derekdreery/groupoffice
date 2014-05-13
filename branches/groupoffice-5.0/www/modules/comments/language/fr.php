@@ -1,6 +1,5 @@
 <?php
 
-
 $l["browseComments"]= 'Parcourir les commentaires';
 $l["recentComments"]='Commentaires récents';
 $l['name']='Commentaires';
@@ -19,3 +18,5 @@ $l['noCategory']='Pas de catégorie';
 $l['newCommentText']='Rédiger un nouveau commentaire ici ...';
 $l['readMore']="Lire la suite";
 $l['enableReadMore']="Permettre de lire plus de liens";
+
+$l['actionDate']='Date d\'action';

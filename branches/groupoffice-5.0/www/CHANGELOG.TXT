@@ -12,7 +12,7 @@
 - Calendar: Moving event with resources now checks if the resources are available.
 - SMIME: Also disable the "Encrypt with SMIME" option in the email composer when there is no certificate set for the account.
 - Addressbook/Billing: Fixed display of records in companySelect field. 
-	Fixes issue with addressbook name displayed in reciepient field of the order dialog in the billing module.
+	Fixes issue with address book name displayed in recipient field of the order dialog in the billing module.
 - Added update query that sets the correct permissions for the installed modules. (Because some permissionlevels are removed.)
 
 16-04-2014 5.0.55
