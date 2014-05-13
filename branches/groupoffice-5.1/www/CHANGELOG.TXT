@@ -1,14 +1,11 @@
-
-
+13-05-2014 5.1.6
 - Billing: PDF Templates can have stationery paper
 - Ticket messages styled like conversation and notes display yellow.
 - Files: Users without disk quota can still upload files.
 - Calendar: Able to import very large ICalendar objects.
 - Calendar: Notification to user when attempting to import an ICalendar with a recurrence containing 'Last X of month' pattern.
 
-
-
-
+13-05-2014 5.0.56
 - Fixed bug: Email messages on the Iphone where missing when the message contained an invalid email-address
 - SMIME: SMIME certificate only works for the owner of the email account, not when the email account is shared.
 - Billing: PDF generator, fixed bugs in the pagenumber display and fixed bug with full page images creating a blank page.
