@@ -115,8 +115,10 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
-		if(isset($params['name']))		
-			$params['name'].='.'.$model->fsFile->extension();		
+		if(isset($params['name'])){		
+			$params['name'] = GO_Base_Fs_File::stripInvalidChars($params['name']); // Strip invalid chars
+			$params['name'].='.'.$model->fsFile->extension();
+		}
 		
 		if(isset($params['lock'])){
 			//GOTA sends lock parameter It does not know the user ID.
