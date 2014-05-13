@@ -74,13 +74,13 @@ GO.customfields.dataTypes={
 			if(!fieldDialog.code_field) {
 				fieldDialog.code_field = new Ext.form.TextArea({
 					name:'extra_options',
-					maxLength:255,
+					height:200,
 					fieldLabel:'PHP code',
 					value: fieldDialog.loadData.extra_options,
 					emptyText: "eg: return $model->name . ' = ' . $cf->col_1;",
 					anchor: '-20 -20'
 				});
-				fieldDialog.extraOptions.setHeight(100);
+				fieldDialog.extraOptions.setHeight(245);
 				fieldDialog.extraOptions.add(fieldDialog.code_field);
 				fieldDialog.extraOptions.doLayout();
 			}
