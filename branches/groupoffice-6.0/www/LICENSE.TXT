@@ -1,6 +1,6 @@
 Group-Office groupware license
 
-Copyright (c) 2003-2012, Intermesh
+Copyright (c) 2003-2014, Intermesh
 All rights reserved.
 
 This program is protected by copyright law and the Group-Office license.
