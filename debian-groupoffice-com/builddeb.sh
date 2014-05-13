@@ -1,13 +1,7 @@
 #!/bin/bash
 
-set -e
-
 # For setting up gnupg agent:
 # http://www.debian-administration.org/article/Gnu_Privacy_Guard_Agent_GPG/print
-
-
-PROMODULES="sync gota caldav documenttemplates savemailas professional tickets syncml carddav zpushadmin dropbox googledrive scanbox leavedays projects2 timeregistration2 hoursapproval2 billing workflow filesearch";
-
 
 PRG="$0"
 OLDPWD=`pwd`
@@ -40,11 +34,6 @@ svn export https://mschering@svn.code.sf.net/p/group-office/code/branches/groupo
 if [ "$1" == "real" ]; then
 	cp -R /root/packages/groupoffice-com-$VERSION debian-groupoffice-com/usr/share/groupoffice
 	mv debian-groupoffice-com/usr/share/groupoffice/LICENSE.TXT debian-groupoffice-com
-
-	for m in $PROMODULES; do
-		cp -R /root/packages/groupoffice-pro-$VERSION/modules/$m groupoffice-pro-$VERSION/usr/share/groupoffice/modules/
-	done
-
 fi
 
 mv debian-groupoffice-com groupoffice-com-$VERSION
