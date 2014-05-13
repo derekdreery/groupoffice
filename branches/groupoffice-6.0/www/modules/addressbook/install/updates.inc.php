@@ -446,4 +446,3 @@ $updates['201405061600'][]="CREATE TABLE IF NOT EXISTS `ab_portlet_birthdays` (
 
 $updates['201405061600'][]="ALTER TABLE  `ab_contacts` CHANGE  `photo`  `photo` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';";
 
-$updates['201405061600'][]="update `go_model_types` set model_name=replace(model_name, '_','\\');";
