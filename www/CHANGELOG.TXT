@@ -1,5 +1,6 @@
 13-05-2014 5.0.57
-- IMAP authentication failed with store_password=false 
+- IMAP authentication failed with store_password=false
+- Files and Documenttemplates: Added check for invalid characters in the filename
 
 13-05-2014 5.0.56
 - Increased syncing of mail items with ActiveSync when using the "any period" option from 2 weeks to 1 month.
