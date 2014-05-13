@@ -73,6 +73,11 @@ class GO_Base_Util_Common {
 	 * @return String 
 	 */
 	public static function formatAddress($isoCountry, $address, $address_no,$zip,$city, $state) {
+		
+		if(empty($address) && empty($city) && empty($state)){
+			return "";
+		}
+		
 		require(GO::config()->root_path . 'language/addressformats.php');
 		$format = isset($af[$isoCountry]) ? $af[$isoCountry] : $af['default'];
 
