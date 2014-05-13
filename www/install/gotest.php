@@ -301,7 +301,7 @@ function test_system(){
 	
 	$headers = @get_headers($url.'/caldav');	
 	$test['name']='CalDAV alias';
-	$test['pass']=$headers && strpos($headers[0], '401')!==false;
+	$test['pass']=$headers && (strpos($headers[0], '401')!==false || strpos($headers[0], '200')!==false);
 	$test['feedback']="Note: The alias /caldav was not detected. Please create: Alias /caldav /groupoffice/modules/caldav/calendar.php.";
 	$test['fatal']=false;
 
@@ -311,7 +311,7 @@ function test_system(){
 	$headers = @get_headers($url.'/.well-known/caldav');	
 	
 	$test['name']='CalDAV autodiscovery';
-	$test['pass']=$headers && strpos($headers[0], '301')!==false;
+	$test['pass']=$headers && (strpos($headers[0], '301')!==false|| strpos($headers[0], '200')!==false);
 	$test['feedback']="Note: The redirect /.well-known/caldav was not detected. Please create a redirect: Redirect 301 /.well-known/caldav /caldav";
 	$test['fatal']=false;
 
@@ -320,7 +320,7 @@ function test_system(){
 	
 	$headers = @get_headers($url.'/carddav');	
 	$test['name']='CardDAV alias';
-	$test['pass']=$headers && strpos($headers[0], '401')!==false;
+	$test['pass']=$headers && (strpos($headers[0], '401')!==false || strpos($headers[0], '200')!==false);;
 	$test['feedback']="Note: The alias /carddav was not detected. Please create: Alias /carddav /groupoffice/modules/carddav/addressbook.php.";
 	$test['fatal']=false;
 
@@ -329,7 +329,7 @@ function test_system(){
 	
 	$headers = @get_headers($url.'/.well-known/carddav');	
 	$test['name']='CardDAV autodiscovery';
-	$test['pass']=$headers && strpos($headers[0], '301')!==false;
+	$test['pass']=$headers && (strpos($headers[0], '301')!==false || strpos($headers[0], '200')!==false);
 	$test['feedback']="Note: The redirect /.well-known/carddav was not detected. Please create a redirect: Redirect 301 /.well-known/carddav /carddav";
 	$test['fatal']=false;
 
@@ -340,7 +340,7 @@ function test_system(){
 	
 //	var_dump($headers);
 	$test['name']='Microsoft-Server-ActiveSync alias';
-	$test['pass']=$headers && strpos($headers[0], '401')!==false;
+	$test['pass']=$headers && (strpos($headers[0], '401')!==false || strpos($headers[0], '200')!==false);;
 	$test['feedback']="Note: The alias /Microsft-Server-ActiveSync was not detected. Please create: Alias /Microsft-Server-ActiveSync /groupoffice/modules/z-push21/index.php.";
 	$test['fatal']=false;
 
