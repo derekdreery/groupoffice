@@ -1277,8 +1277,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					
 
 					foreach($linkedModels as $linkedModel){
-						$linkedItems .= ', <span class="em-autolink-link" onclick="GO.linkHandlers[\''.$linkedModel->className().'\'].call(this, '.
-												$linkedModel->id.');">'.$linkedModel->name.' ('.$linkedModel->localizedName.')</span>';
+						
+						$searchModel = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$linkedModel->pk, 'model_type_id'=>$linkedModel->modelTypeId()),false,true);
+						if($searchModel){
+							$linkedItems .= ', <span class="em-autolink-link" onclick="GO.linkHandlers[\''.$linkedModel->className().'\'].call(this, '.
+												$linkedModel->id.');">'.$searchModel->name.' ('.$linkedModel->localizedName.')</span>';
+						}
 					}
 					
 					$linkedItems = trim($linkedItems,' ,');
