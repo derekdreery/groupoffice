@@ -464,7 +464,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 			},
 			isWorkFieldset : function(values)
 			{
-				if(!GO.util.empty(values['company_name']) ||
+				if(
 					!GO.util.empty(values['function']) ||
 					!GO.util.empty(values['department']))
 				{
