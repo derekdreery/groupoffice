@@ -10,7 +10,9 @@ $input_holidays['fix']['12-25'] = 'Karácsony';
 $input_holidays['fix']['12-26'] = 'Karácsony';
 
 // holidays with variable date (christian holidays computation is based on the date of easter day)
+$input_holidays['var']['0'] = 'Húsvét vasárnap';
 $input_holidays['var']['1'] = 'Húsvét hétfő';
-$input_holidays['var']['50'] = 'Pünkösd';
+$input_holidays['var']['49'] = 'Pünkösd vasárnap';
+$input_holidays['var']['50'] = 'Pünkösd hétfő';
 
 // holidays with special computation based on date 24-12
