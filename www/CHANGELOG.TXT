@@ -1,3 +1,7 @@
+- Updated Norwegian
+- Fixed auto link message in mail for invoices
+- Publish template assets with copy instead of Symlink for windows support
+
 13-05-2014 5.0.57
 - IMAP authentication failed with store_password=false
 - Files and Documenttemplates: Added check for invalid characters in the filename

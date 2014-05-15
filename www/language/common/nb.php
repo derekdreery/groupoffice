@@ -631,6 +631,6 @@ $l['namelessItem']= 'Uten navn';
 $l['importFileType']= 'Filtype import';
 $l['maybeMaxUploadExceeded']= 'Serveren mottok ikke nødvendige parametere fra nettleseren din. Det kan være at grensen for opplasting av filer på %sMb er overskredet.';
 $l['relationDeleteRestrict']="Du kan ikke slette denne %s fordi den inneholder '%s' elementer. Du må slette disse elementene først.";
-$l['pspell_lang']='en';
+$l['pspell_lang']='nb';
 $l['dependenciesCannotDelete']="Du kan ikke slette denne modulen, fordi følgende (installerte) moduler er avhengig av den: %s.";
 $l['MailboxNotFoundException']= "Kan ikke åpne mappen \"%s\". Sjekk kontoinnstillingene for e-post.";
