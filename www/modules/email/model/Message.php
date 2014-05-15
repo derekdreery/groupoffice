@@ -65,12 +65,6 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	protected $attachments=array();
 
 	protected $defaultCharset='UTF-8';
-	
-	/**
-	 * Custom labels set on IMAP server
-	 * @var array 
-	 */
-	public $labels=array();
 
 	/**
 	 * True iff the actual message's body is larger than the maximum allowed. See
