@@ -5,6 +5,19 @@
 - Calendar: Able to import very large ICalendar objects.
 - Calendar: Notification to user when attempting to import an ICalendar with a recurrence containing 'Last X of month' pattern.
 
+11-02-2014 5.1.2
+- Included LDAP setting saving feature
+
+29-01-2014 5.1.1
+- Merged fixes of 5.0.34-39
+
+22-01-2014 5.1.0
+- Calendar: Overview of participant and resource availability per day.
+- Tasks & Reminders: get reminder when another user puts a task in your task list
+- Added user quota support
+- Show ticket template per message
+- Custom IMAP flag support (Message labels)
+
 13-05-2014 5.0.56
 - Fixed bug: Email messages on the Iphone where missing when the message contained an invalid email-address
 - SMIME: SMIME certificate only works for the owner of the email account, not when the email account is shared.
