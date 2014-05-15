@@ -891,6 +891,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	private function _keepHeaders(&$response, $params) {
 		if (!empty($params['keepHeaders'])) {
 			unset(
+							$response['data']['alias_id'],
 							$response['data']['to'], 
 							$response['data']['cc'], 
 							$response['data']['bcc'], 
@@ -1017,10 +1018,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$recipients = new GO_Base_Mail_EmailRecipients();
 		$recipients->mergeWith($message->cc)->mergeWith($message->to);
 		
-		$alias = $this->_findAliasFromRecipients($account, $recipients, $params['alias_id']);	
-		
+		if(!empty($params['keepHeaders'])){
+			$alias = $this->_findAliasFromRecipients($account, $recipients, $params['alias_id']);	
 				
-		$response['data']['alias_id']=$alias->id;		
+			$response['data']['alias_id']=$alias->id;		
+		}
 
 		if (!empty($params['replyAll'])) {
 			$toList = new GO_Base_Mail_EmailRecipients();
