@@ -339,7 +339,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * @param boolean $appendNumberToNameIfDestinationExists Rename the file like "File (1)" if it already exists. 
 	 * @return boolean
 	 */
-	public function move($destinationFolder, $newFileName=false, $isUploadedFile=false,$appendNumberToNameIfDestinationExists=false){
+	public function move(Base $destinationFolder, $newFileName=false, $isUploadedFile=false,$appendNumberToNameIfDestinationExists=false){
 		
 		if(!$newFileName)
 			$newFileName=$this->name();
