@@ -36,7 +36,29 @@ class GO_Addressbook_Model_AddresslistContact extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function relations() {
-	 return array();
+	 return array(
+			 'contact' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'contact_id'),
+			 'addresslist' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Addresslist', 'field'=>'addresslist_id'),
+			 
+	 );
+	}
+	
+	protected function afterSave($wasNew) {
+		
+		if(GO::modules()->log){
+			GO_Log_Model_Log::create($wasNew?GO_Log_Model_Log::ACTION_ADD:GO_Log_Model_Log::ACTION_UPDATE,  'Added '.$this->contact->name.' to addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
+		}
+		
+		return parent::afterSave($wasNew);
+	}
+	
+	protected function afterDelete() {
+		
+		if(GO::modules()->log){
+			GO_Log_Model_Log::create(GO_Log_Model_Log::ACTION_DELETE,  'Removed '.$this->contact->name.' from addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
+		}
+		
+		return parent::afterDelete();
 	}
 	
 }
