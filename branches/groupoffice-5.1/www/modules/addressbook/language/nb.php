@@ -295,3 +295,4 @@ $l['setCurrentTemplateAsDefaultEAccount']='Bruk gjeldende mal som standard for d
 $l['callOnSkype']= 'Skype anrop';
 $l['userDefaultTemplate']= 'Bruker standardmal';
 $l['exportContactsWithCompanies']= 'Personer sammen med firmaer';
+$l['cmdFieldsetCompany']= 'Firmaopplysninger';

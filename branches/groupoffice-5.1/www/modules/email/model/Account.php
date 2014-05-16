@@ -271,9 +271,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
 	public function decryptPassword(){
 		if (!empty(GO::session()->values['emailModule']['accountPasswords'][$this->id])) {
-			$decrypted = GO::session()->values['emailModule']['accountPasswords'][$this->id];
-			
-			//$decrypted = GO_Base_Util_Crypt::decrypt(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
+			$decrypted = GO_Base_Util_Crypt::decrypt(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
 		} else {
 			
 			//support for z-push without storing passwords
