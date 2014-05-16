@@ -88,12 +88,16 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 				self::$cacheColumns[$this->extendsModel()]=$cached['columns'];
 			}else
 			{			
-				$stmt = GO_Customfields_Model_Field::model()->find(array(
-						'ignoreAcl'=>true,
-						'join'=>'INNER JOIN cf_categories c ON t.category_id=c.id',
-						'where'=>'c.extends_model=:extends_model',
-						'bindParams'=>array('extends_model'=>$this->extendsModel())
-				));
+				
+				
+				$findParams = GO_Base_Db_FindParams::newInstance()
+								->select('*')
+								->ignoreAcl()
+								->joinRelation('category');
+				
+				$findParams->getCriteria()->addCondition('extends_model', $this->extendsModel(),'=','category');
+				
+				$stmt = GO_Customfields_Model_Field::model()->find($findParams);
 				
 				self::$cacheColumns[$this->extendsModel()]=GO_Base_Db_Columns::getColumns ($this);
 				self::$attributeLabels[$this->extendsModel()]=array();
