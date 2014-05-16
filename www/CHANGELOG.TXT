@@ -1,3 +1,4 @@
+- Billing: Enabled template tags in the closing text
 - Updated Norwegian
 - Fixed auto link message in mail for invoices
 - Publish template assets with copy instead of Symlink for windows support
