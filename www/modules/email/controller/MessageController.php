@@ -906,9 +906,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	private function _keepHeaders(&$response, $params) {
 		if (!empty($params['keepHeaders'])) {
 			unset(
-							$response['data']['to'],
-							$response['data']['cc'],
-							$response['data']['bcc'],
+							$response['data']['alias_id'],
+							$response['data']['to'], 
+							$response['data']['cc'], 
+							$response['data']['bcc'], 
 							$response['data']['subject']
 //							$response['data']['attachments']
 			);
@@ -1032,6 +1033,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$recipients = new GO_Base_Mail_EmailRecipients();
 		$recipients->mergeWith($message->cc)->mergeWith($message->to);
+
+		
+		if(!empty($params['keepHeaders'])){
+			$alias = $this->_findAliasFromRecipients($account, $recipients, $params['alias_id']);	
+				
+			$response['data']['alias_id']=$alias->id;		
+		}
 
 		$alias = $this->_findAliasFromRecipients($account, $recipients, $params['alias_id']);
 
@@ -1292,8 +1300,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					
 
 					foreach($linkedModels as $linkedModel){
-						$linkedItems .= ', <span class="em-autolink-link" onclick="GO.linkHandlers[\''.$linkedModel->className().'\'].call(this, '.
-												$linkedModel->id.');">'.$linkedModel->name.' ('.$linkedModel->localizedName.')</span>';
+						
+						$searchModel = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$linkedModel->pk, 'model_type_id'=>$linkedModel->modelTypeId()),false,true);
+						if($searchModel){
+							$linkedItems .= ', <span class="em-autolink-link" onclick="GO.linkHandlers[\''.$linkedModel->className().'\'].call(this, '.
+												$linkedModel->id.');">'.$searchModel->name.' ('.$linkedModel->localizedName.')</span>';
+						}
 					}
 
 					$linkedItems = trim($linkedItems,' ,');

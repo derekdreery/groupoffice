@@ -1,3 +1,7 @@
+16-05-2014 5.1.7
+- PHP custom field
+- 5.0.57 fixes
+
 13-05-2014 5.1.6
 - Billing: PDF Templates can have stationery paper
 - Ticket messages styled like conversation and notes display yellow.
@@ -18,7 +22,21 @@
 - Show ticket template per message
 - Custom IMAP flag support (Message labels)
 
+
+
+- Billing: Enabled template tags in the closing text
+- Updated Norwegian
+- Fixed auto link message in mail for invoices
+- Publish template assets with copy instead of Symlink for windows support
+
+13-05-2014 5.0.57
+- IMAP authentication failed with store_password=false
+- Files and Documenttemplates: Added check for invalid characters in the filename
+- Updated Norwegian
+- Company address display at contact improved
+
 13-05-2014 5.0.56
+- Increased syncing of mail items with ActiveSync when using the "any period" option from 2 weeks to 1 month.
 - Fixed bug: Email messages on the Iphone where missing when the message contained an invalid email-address
 - SMIME: SMIME certificate only works for the owner of the email account, not when the email account is shared.
 - Billing: PDF generator, fixed bugs in the pagenumber display and fixed bug with full page images creating a blank page.
@@ -32,7 +50,7 @@
 - Calendar: Moving event with resources now checks if the resources are available.
 - SMIME: Also disable the "Encrypt with SMIME" option in the email composer when there is no certificate set for the account.
 - Addressbook/Billing: Fixed display of records in companySelect field. 
-	Fixes issue with addressbook name displayed in reciepient field of the order dialog in the billing module.
+	Fixes issue with address book name displayed in recipient field of the order dialog in the billing module.
 - Added update query that sets the correct permissions for the installed modules. (Because some permissionlevels are removed.)
 
 16-04-2014 5.0.55

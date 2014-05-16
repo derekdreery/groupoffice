@@ -122,4 +122,9 @@ $l['alwaysAsk']="Toujours demander";
 $l['openWith']='Ouvrir avec';
 $l['open']='Ouvrir';
  
-
+$l['dontDeleteSystemFolder']="Vous ne pouvez pas supprimer ce dossier système";
+$l['rightClickToCopy']='Faites un clic droit pour copier';
+$l['deleteExpiredLabel']='Supprimer les liens de téléchargement périmés';
+$l['deleteExpiredDescription']='Supprimer les liens de téléchargement de fichiers qui ne sont plus valides';
+$l['deleteWhenExpired']= 'Supprimer automatiquement les fichiers lorsque le lien de téléchargement expire';
+$l['automaticallyDeleted']= 'Le fichier sera automatiquement supprimé lorsque son lien de téléchargement expire';
