@@ -17,35 +17,45 @@
 $sessionInfo = \GO\Chat\ChatModule::getPrebindInfo();
 
 
-if($sessionInfo){
-
 $GO_SCRIPTS_JS .= '
 	
-Ext.DomHelper.append(Ext.getBody(),
+	var converseJs = Ext.DomHelper.append(Ext.getBody(),
 		{
 			tag: "div",
 			id: "conversejs"
 		},true);
 				
-			require(["converse"], function (converse) {
-		converse.initialize({
+	require(["converse"], function (converse) {
+	converse.initialize({
 				allow_otr: true,
 				auto_list_rooms: false,
 				auto_subscribe: false,
 				bosh_service_url: "' . \GO\Chat\ChatModule::getBoshUri() . '", // Please use this connection manager only for testing purposes
 				debug: false ,
-				hide_muc_server: false,
-				i18n: locales["en"], // Refer to ./locale/locales.js to see which locales are supported
-				prebind: true,
+				hide_muc_server: true,
+				i18n: locales["'.GO::language()->getLanguage().'"], // Refer to ./locale/locales.js to see which locales are supported
+				prebind: '.$sessionInfo['prebind'].',
 				show_controlbox_by_default: false,
 				xhr_user_search: false,
 				jid:"'.$sessionInfo['jid'].'",
 				sid:"'.$sessionInfo['sid'].'",
-				rid:"'.$sessionInfo['rid'].'"
+				rid:"'.$sessionInfo['rid'].'",
+				fullname: "'.GO::user()->name.'"
 		});
+
+		var name = converseJs.select("input.new-chatroom-name");
+		name.value="conference.' . \GO\Chat\ChatModule::getXmppHost() . '";
+			
+		var nick = converseJs.select("input.new-chatroom-nick");
+		nick.value="'.\GO\Base\Util\String::escape_javascript(GO::user()->name).'";
+
 });
 
 
-';
 
-}
+
+
+
+
+
+';

@@ -83,3 +83,56 @@ ul#controlbox-tabs a.current, ul#controlbox-tabs a.current:hover {
     cursor: default;
     height: 25px;
 }
+
+
+#toggle-controlbox {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #E3E2E2;
+    border-color: #C3C3C3 #C3C3C3 -moz-use-text-color;
+    border-image: none;
+    border-style: solid solid none;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-width: 1px 1px medium;
+    bottom: 0;
+    font-size: 70%;
+    height: 16px;
+    margin-right: 20px;
+    padding: 1px 3px;
+    position: fixed;
+    right: 0;
+}
+
+
+.chat-head {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    color: #FFFFFF;
+    font-size: 100%;
+    margin: 0;
+    padding: 3px 0 0 3px;
+}
+
+div.chat-title {
+    color: #FFFFFF;
+    display: block;
+    font-weight: normal;
+    height: 1em;
+    line-height: 15px;
+    margin-right: 20px;
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: none;
+    white-space: nowrap;
+}
+
+.chat-head-chatbox, .chat-head-chatroom {
+    height: 26px;
+    position: relative;
+		background-color: #009CC5;
+}
+
