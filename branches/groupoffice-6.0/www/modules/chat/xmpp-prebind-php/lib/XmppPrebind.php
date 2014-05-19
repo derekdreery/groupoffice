@@ -129,20 +129,26 @@ class XmppPrebind {
 		$this->sid = $body->getAttribute('sid');
 		$this->debug($this->sid, 'sid');
 
-		$mechanisms = $body->firstChild->firstChild->getElementsByTagName('mechanism');
+		if(isset($body->firstChild) && isset($body->firstChild->firstChild)){
+			$mechanisms = $body->firstChild->firstChild->getElementsByTagName('mechanism');
 
-		foreach ($mechanisms as $value) {
-			$this->mechanisms[] = $value->nodeValue;
-		}
+			foreach ($mechanisms as $value) {
+				$this->mechanisms[] = $value->nodeValue;
+			}
 
-		if (in_array(self::ENCRYPTION_DIGEST_MD5, $this->mechanisms)) {
-			$this->encryption = self::ENCRYPTION_DIGEST_MD5;
-		} elseif (in_array(self::ENCRYPTION_CRAM_MD5, $this->mechanisms)) {
-			$this->encryption = self::ENCRYPTION_CRAM_MD5;
-		} elseif (in_array(self::ENCRYPTION_PLAIN, $this->mechanisms)) {
+			if (in_array(self::ENCRYPTION_DIGEST_MD5, $this->mechanisms)) {
+				$this->encryption = self::ENCRYPTION_DIGEST_MD5;
+			} elseif (in_array(self::ENCRYPTION_CRAM_MD5, $this->mechanisms)) {
+				$this->encryption = self::ENCRYPTION_CRAM_MD5;
+			} elseif (in_array(self::ENCRYPTION_PLAIN, $this->mechanisms)) {
+				$this->encryption = self::ENCRYPTION_PLAIN;
+			} else {
+				throw new XmppPrebindConnectionException("No encryption supported by the server is supported by this library.");
+			} 
+
+		}else
+		{
 			$this->encryption = self::ENCRYPTION_PLAIN;
-		} else {
-			throw new XmppPrebindConnectionException("No encryption supported by the server is supported by this library.");
 		}
 
 		$this->debug($this->encryption, 'encryption used');
