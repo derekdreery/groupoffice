@@ -4,127 +4,144 @@ namespace GO\Chat;
 
 use GO;
 
+class ChatModule extends \GO\Base\Module {
 
-class ChatModule extends \GO\Base\Module{
-	
 	public static function initListeners() {
-		
-		
+
+
 		$c = new \GO\Core\Controller\AuthController();
 		$c->addListener('headstart', 'GO\Chat\ChatModule', 'headstart');
-		
+
 		GO::session()->addListener('login', 'GO\Chat\ChatModule', 'login');
-		
+
 		parent::initListeners();
 	}
-	
-	public static function headstart(){
-		
-		
-		if(GO::modules()->chat){
+
+	public static function headstart() {
+
+
+
+		if (GO::modules()->chat) {
 			//regenerate Prosody groups file
 			$aclMtime = GO::config()->get_setting('chat_acl_mtime');
-			if($aclMtime != GO::modules()->chat->acl->mtime || !self::getGroupsFile()->exists()){		
+			if ($aclMtime != GO::modules()->chat->acl->mtime || !self::getGroupsFile()->exists()) {
 				self::generateGroupsFile();
 
-				GO::config()->save_setting('chat_acl_mtime',GO::modules()->chat->acl->mtime);
+				GO::config()->save_setting('chat_acl_mtime', GO::modules()->chat->acl->mtime);
 			}
 
 
 
-			$url = GO::config()->host.'modules/chat/converse.js-0.7.4/';
+			$url = GO::config()->host . 'modules/chat/converse.js-0.7.4/';
 
 			$head = '
-			<link rel="stylesheet" type="text/css" media="screen" href="'.$url.'converse.css">
-			<!--<script data-main="main" src="'.$url.'components/requirejs/require.js"></script>-->
-			<script src="'.$url.'builds/converse.min.js"></script>
+			<link rel="stylesheet" type="text/css" media="screen" href="' . $url . 'converse.css">
+			<!--<script data-main="main" src="' . $url . 'components/requirejs/require.js"></script>-->
+			<script src="' . $url . 'builds/converse.min.js"></script>
 			';
 
 			echo $head;
 		}
 	}
-	
-	public static function login($username, $password, $user, $countLogin){
-		if(GO::modules()->chat && $countLogin && isset($_SERVER['HTTP_HOST'])){
-			
-			require GO::config()->root_path . 'modules/chat/xmpp-prebind-php/lib/XmppPrebind.php';
-			
-			GO::debug("CHAT: Pre binding to XMPP HOST: ".self::getXmppHost()." BOSH URI: ".self::getBoshUri()." with user $username");
-			
-			try{
-				$xmppPrebind = new \XmppPrebind(self::getXmppHost(), self::getBoshUri(), 'Work', strpos(self::getBoshUri(),'https')!==false, false);
-				if($xmppPrebind->connect($username, $password)){
 
+	public static function login($username, $password, $user, $countLogin) {
+		if (GO::modules()->chat && $countLogin && isset($_SERVER['HTTP_HOST'])) {
+			$password = \GO\Base\Util\Crypt::encrypt($password);
 
-						$xmppPrebind->auth();
-
-						GO::debug("CHAT: connect successfull");
-						// array containing sid, rid and jid			
-						GO::session()->values['chat']['prebind']= $xmppPrebind->getSessionInfo();
-
-				}else
-				{
-					GO::debug("CHAT: failed to connect");
-				}
-			
-			}catch(Exception $e){
-					GO::debug("CHAT: Authentication failed: ".$e);
-				}
+			GO::session()->values['chat']['p'] = $password;
 		}
 	}
-	
-	public static function getPrebindInfo(){
-		return isset(GO::session()->values['chat']['prebind']) ? GO::session()->values['chat']['prebind'] : false;
+
+	/**
+	 * Can only be fetched once. The XMPP Session is not valid anymore on refresh. User will have to relogin manually.
+	 * @return array
+	 */
+	public static function getPrebindInfo() {
+
+
+		require GO::config()->root_path . 'modules/chat/xmpp-prebind-php/lib/XmppPrebind.php';
+
+		GO::debug("CHAT: Pre binding to XMPP HOST: " . self::getXmppHost() . " BOSH URI: " . self::getBoshUri() . " with user $username");
+
+		try {
+			$xmppPrebind = new \XmppPrebind(
+							self::getXmppHost(), self::getBoshUri(), GO::config()->product_name, strpos(self::getBoshUri(), 'https') !== false, false);
+
+			if ($xmppPrebind->connect(GO::user()->username, \GO\Base\Util\Crypt::decrypt(GO::session()->values['chat']['p']))) {
+
+				$xmppPrebind->auth();
+
+				GO::debug("CHAT: connect successfull");
+				// array containing sid, rid and jid			
+				$ret = $xmppPrebind->getSessionInfo();
+				$ret['prebind'] = "true";
+
+				return $ret;
+			} else {
+				GO::debug("CHAT: failed to connect");
+			}
+		} catch (Exception $e) {
+			GO::debug("CHAT: Authentication failed: " . $e);
+		}
+
+
+		$ret = array(
+				'prebind' => 'false',
+				'jid' => '',
+				'sid' => '',
+				'rid' => ''
+		);
+
+
+		return $ret;
 	}
-	
-	public static function getBoshUri(){
+
+	public static function getBoshUri() {
 //		$jabberHost = 'intermesh.group-office.com';
 //		$boshUri = 'https://' . $jabberHost . ':5281/http-bind';
-		
+
 		$proto = GO::request()->isHttps() ? 'https' : 'http';
-		
-		return isset(GO::config()->chat_bosh_uri) ? GO::config()->chat_bosh_uri : $proto.'://' . self::getXmppHost() . ':5281/http-bind';
+
+		return isset(GO::config()->chat_bosh_uri) ? GO::config()->chat_bosh_uri : $proto . '://' . self::getXmppHost() . ':5281/http-bind';
 	}
-	
-	public static function getXmppHost(){
+
+	public static function getXmppHost() {
 		//$jabberHost = 'intermesh.group-office.com';
 		return isset(GO::config()->chat_xmpp_host) ? GO::config()->chat_xmpp_host : $_SERVER['HTTP_HOST'];
-		
 	}
-	
+
 	/**
 	 * Get the file with groups info for Prosody
 	 * 
 	 * @return \GO\Base\Fs\File
 	 */
-	public static function getGroupsFile(){
-		$folder = new GO\Base\Fs\Folder(GO::config()->file_storage_path.'chat');
-		
+	public static function getGroupsFile() {
+		$folder = new GO\Base\Fs\Folder(GO::config()->file_storage_path . 'chat');
+
 		$folder->create();
-		
+
 		$file = $folder->createChild('groups.txt');
-		
+
 		return $file;
 	}
-	
-	public static function generateGroupsFile(){
-		
+
+	public static function generateGroupsFile() {
+
 		$file = self::getGroupsFile();
-		
+
 		$fp = fopen($file->path(), 'w');
-		
-		fwrite($fp, "[".GO::config()->product_name." ".strtolower(GO::t('users'))."]\n");
-		
+
+		fwrite($fp, "[" . GO::config()->product_name . " " . strtolower(GO::t('users')) . "]\n");
+
 		$xmppHost = self::getXmppHost();
-				
-		\GO\Base\Model\Acl::getAuthorizedUsers(GO::modules()->chat->acl_id, \GO\Base\Model\Acl::READ_PERMISSION, function($user) use ($fp, $xmppHost){
-			
-			$line = $user->username.'@'.$xmppHost.'='.$user->name."\n";
-			fwrite($fp, $line);			
-		});	
-		
+
+		\GO\Base\Model\Acl::getAuthorizedUsers(GO::modules()->chat->acl_id, \GO\Base\Model\Acl::READ_PERMISSION, function($user) use ($fp, $xmppHost) {
+
+			$line = $user->username . '@' . $xmppHost . '=' . $user->name . "\n";
+			fwrite($fp, $line);
+		});
+
 		fclose($fp);
-		
 	}
-	
+
 }
