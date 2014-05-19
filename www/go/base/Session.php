@@ -231,7 +231,7 @@ class Session extends Observable{
 	 */
 	public function login($username, $password, $countLogin=true) {
 		
-		if(!$this->fireEvent('beforelogin', array($username, $password)))
+		if(!$this->fireEvent('beforelogin', array($username, $password, $countLogin)))
 			return false;			
 		
 		$user = Model\User::model()->findSingleByAttribute('username', $username);
@@ -276,7 +276,7 @@ class Session extends Observable{
 				$this->clearUserTempFiles();
 			}
 
-			$this->fireEvent('login', array($username, $password, $user));
+			$this->fireEvent('login', array($username, $password, $user, $countLogin));
 			
 			//A PHP variable named “session.use_only_cookies” controls the behaviour
 			//of session_start(). When this variable is enabled (true) then session_start() on-
