@@ -1,3 +1,4 @@
+- Formprocessor: Send the email message to the addressbook owner in his own language.
 - HTML editor: Fixed problem with syncing text in the html editor when changing between html and source mode.
 - Google Drive: fixed problem with authenticate and empty file_id
 - Billing: Enabled template tags in the closing text
