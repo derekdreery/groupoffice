@@ -101,8 +101,10 @@ class ChatModule extends \GO\Base\Module {
 //		$boshUri = 'https://' . $jabberHost . ':5281/http-bind';
 
 		$proto = GO::request()->isHttps() ? 'https' : 'http';
+		
+		$port = GO::request()->isHttps() ? 5281 : 5280;
 
-		return isset(GO::config()->chat_bosh_uri) ? GO::config()->chat_bosh_uri : $proto . '://' . self::getXmppHost() . ':5281/http-bind';
+		return isset(GO::config()->chat_bosh_uri) ? GO::config()->chat_bosh_uri : $proto . '://' . self::getXmppHost() . ':'.$port.'/http-bind';
 	}
 
 	public static function getXmppHost() {
