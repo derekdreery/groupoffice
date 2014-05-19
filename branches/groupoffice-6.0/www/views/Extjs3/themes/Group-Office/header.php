@@ -1,6 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
+<?php
+//$this is \GO\Core\Controller\Auth
+$this->fireEvent('headstart');
+?>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <meta name="robots" content="noindex" />
 <!--<meta http-equiv="x-ua-compatible" content="IE=8">-->
