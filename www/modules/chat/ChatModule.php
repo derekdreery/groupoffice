@@ -21,25 +21,27 @@ class ChatModule extends \GO\Base\Module{
 	public static function headstart(){
 		
 		
-		//regenerate Prosody groups file
-		$aclMtime = GO::config()->get_setting('chat_acl_mtime');
-		if($aclMtime != GO::modules()->chat->acl->mtime || !self::getGroupsFile()->exists()){		
-			self::generateGroupsFile();
-			
-			GO::config()->save_setting('chat_acl_mtime',GO::modules()->chat->acl->mtime);
-		}
-		
-		
+		if(GO::modules()->chat){
+			//regenerate Prosody groups file
+			$aclMtime = GO::config()->get_setting('chat_acl_mtime');
+			if($aclMtime != GO::modules()->chat->acl->mtime || !self::getGroupsFile()->exists()){		
+				self::generateGroupsFile();
 
-		$url = GO::config()->host.'modules/chat/converse.js-0.7.4/';
-		
-		$head = '
-    <link rel="stylesheet" type="text/css" media="screen" href="'.$url.'converse.css">
-    <!--<script data-main="main" src="'.$url.'components/requirejs/require.js"></script>-->
-    <script src="'.$url.'builds/converse.min.js"></script>
-		';
-		
-		echo $head;
+				GO::config()->save_setting('chat_acl_mtime',GO::modules()->chat->acl->mtime);
+			}
+
+
+
+			$url = GO::config()->host.'modules/chat/converse.js-0.7.4/';
+
+			$head = '
+			<link rel="stylesheet" type="text/css" media="screen" href="'.$url.'converse.css">
+			<!--<script data-main="main" src="'.$url.'components/requirejs/require.js"></script>-->
+			<script src="'.$url.'builds/converse.min.js"></script>
+			';
+
+			echo $head;
+		}
 	}
 	
 	public static function login($username, $password, $user){
