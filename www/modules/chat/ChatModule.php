@@ -109,10 +109,12 @@ class ChatModule extends \GO\Base\Module{
 		$fp = fopen($file->path(), 'w');
 		
 		fwrite($fp, "[".GO::config()->product_name." ".strtolower(GO::t('users'))."]\n");
+		
+		$xmppHost = self::getXmppHost();
 				
-		\GO\Base\Model\Acl::getAuthorizedUsers(GO::modules()->chat->acl_id, \GO\Base\Model\Acl::READ_PERMISSION, function($user) use ($fp){
+		\GO\Base\Model\Acl::getAuthorizedUsers(GO::modules()->chat->acl_id, \GO\Base\Model\Acl::READ_PERMISSION, function($user) use ($fp, $xmppHost){
 			
-			$line = $user->username.'@'.self::getXmppHost().'='.$user->name."\n";
+			$line = $user->username.'@'.$xmppHost.'='.$user->name."\n";
 			fwrite($fp, $line);			
 		});	
 		
