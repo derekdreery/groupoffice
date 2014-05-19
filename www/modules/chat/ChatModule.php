@@ -45,28 +45,31 @@ class ChatModule extends \GO\Base\Module{
 	}
 	
 	public static function login($username, $password, $user, $countLogin){
-		if(GO::modules()->chat && $countLogin){
+		if(GO::modules()->chat && $countLogin && isset($_SERVER['HTTP_HOST'])){
 			
 			require GO::config()->root_path . 'modules/chat/xmpp-prebind-php/lib/XmppPrebind.php';
 			
 			GO::debug("CHAT: Pre binding to XMPP HOST: ".self::getXmppHost()." BOSH URI: ".self::getBoshUri()." with user $username");
 			
-			$xmppPrebind = new \XmppPrebind(self::getXmppHost(), self::getBoshUri(), 'Work', strpos(self::getBoshUri(),'https')!==false, false);
-			if($xmppPrebind->connect($username, $password)){
-				
-				try{
-					$xmppPrebind->auth();
+			try{
+				$xmppPrebind = new \XmppPrebind(self::getXmppHost(), self::getBoshUri(), 'Work', strpos(self::getBoshUri(),'https')!==false, false);
+				if($xmppPrebind->connect($username, $password)){
 
-					GO::debug("CHAT: connect successfull");
-					// array containing sid, rid and jid			
-					GO::session()->values['chat']['prebind']= $xmppPrebind->getSessionInfo();
-				}catch(Exception $e){
+
+						$xmppPrebind->auth();
+
+						GO::debug("CHAT: connect successfull");
+						// array containing sid, rid and jid			
+						GO::session()->values['chat']['prebind']= $xmppPrebind->getSessionInfo();
+
+				}else
+				{
+					GO::debug("CHAT: failed to connect");
+				}
+			
+			}catch(Exception $e){
 					GO::debug("CHAT: Authentication failed: ".$e);
 				}
-			}else
-			{
-				GO::debug("CHAT: failed to connect");
-			}
 		}
 	}
 	
