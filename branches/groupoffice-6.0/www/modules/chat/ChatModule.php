@@ -44,8 +44,8 @@ class ChatModule extends \GO\Base\Module{
 		}
 	}
 	
-	public static function login($username, $password, $user){
-		if(GO::modules()->chat){
+	public static function login($username, $password, $user, $countLogin){
+		if(GO::modules()->chat && $countLogin){
 			
 			require GO::config()->root_path . 'modules/chat/xmpp-prebind-php/lib/XmppPrebind.php';
 			
