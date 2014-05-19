@@ -5,7 +5,7 @@ namespace GO\Chat;
 use GO;
 
 
-class ChatModule extends \GO\Professional\Module{
+class ChatModule extends \GO\Base\Module{
 	
 	public static function initListeners() {
 		
@@ -19,6 +19,17 @@ class ChatModule extends \GO\Professional\Module{
 	}
 	
 	public static function headstart(){
+		
+		
+		//regenerate Prosody groups file
+		$aclMtime = GO::config()->get_setting('chat_acl_mtime');
+		if($aclMtime != GO::modules()->chat->acl->mtime || !self::getGroupsFile()->exists()){		
+			self::generateGroupsFile();
+			
+			GO::config()->save_setting('chat_acl_mtime',GO::modules()->chat->acl->mtime);
+		}
+		
+		
 
 		$url = GO::config()->host.'modules/chat/converse.js-0.7.4/';
 		
@@ -73,6 +84,39 @@ class ChatModule extends \GO\Professional\Module{
 	public static function getXmppHost(){
 		//$jabberHost = 'intermesh.group-office.com';
 		return isset(GO::config()->chat_xmpp_host) ? GO::config()->chat_xmpp_host : $_SERVER['HTTP_HOST'];
+		
+	}
+	
+	/**
+	 * Get the file with groups info for Prosody
+	 * 
+	 * @return \GO\Base\Fs\File
+	 */
+	public static function getGroupsFile(){
+		$folder = new GO\Base\Fs\Folder(GO::config()->file_storage_path.'chat');
+		
+		$folder->create();
+		
+		$file = $folder->createChild('groups.txt');
+		
+		return $file;
+	}
+	
+	public static function generateGroupsFile(){
+		
+		$file = self::getGroupsFile();
+		
+		$fp = fopen($file->path(), 'w');
+		
+		fwrite($fp, "[".GO::config()->product_name." ".strtolower(GO::t('users'))."]\n");
+				
+		\GO\Base\Model\Acl::getAuthorizedUsers(GO::modules()->chat->acl_id, \GO\Base\Model\Acl::READ_PERMISSION, function($user) use ($fp){
+			
+			$line = $user->username.'@'.self::getXmppHost().'='.$user->name."\n";
+			fwrite($fp, $line);			
+		});	
+		
+		fclose($fp);
 		
 	}
 	
