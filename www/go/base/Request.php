@@ -33,5 +33,14 @@ class Request {
 
 		return $this->_params;
 	}
+	
+	/**
+	 * Check if this request SSL secured
+	 * 
+	 * @return boolean
+	 */
+	public static function isHttps(){
+		return !empty($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'],'off');
+	}
 
 }

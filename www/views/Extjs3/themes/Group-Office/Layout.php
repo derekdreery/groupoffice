@@ -36,7 +36,7 @@ if(\GO::user())
 		<div id="go-header-right">
                     
 			<div id="secondary-menu">
-				
+		
 				<div id="quick-add-menu"><span style="clear:both;"></span></div>
 				<span class="plus-sign" id="quick-add-menu-collapse"></span>
 				<span id="notification-area"></span>	
