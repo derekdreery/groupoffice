@@ -61,7 +61,7 @@ class ChatModule extends \GO\Base\Module {
 
 		require GO::config()->root_path . 'modules/chat/xmpp-prebind-php/lib/XmppPrebind.php';
 
-		GO::debug("CHAT: Pre binding to XMPP HOST: " . self::getXmppHost() . " BOSH URI: " . self::getBoshUri() . " with user $username");
+		GO::debug("CHAT: Pre binding to XMPP HOST: " . self::getXmppHost() . " BOSH URI: " . self::getBoshUri() . " with user ".GO::user()->username);
 
 		try {
 			$xmppPrebind = new \XmppPrebind(
