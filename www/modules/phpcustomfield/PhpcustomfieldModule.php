@@ -1,6 +1,10 @@
 <?php
 
-class GO_Phpcustomfield_PhpcustomfieldModule extends GO_Base_Module{
+namespace GO\Phpcustomfield;
+
+
+
+class PhpcustomfieldModule extends \GO\Base\Module{
 	
 	
 	public function autoInstall() {
