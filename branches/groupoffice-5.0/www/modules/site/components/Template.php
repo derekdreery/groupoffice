@@ -41,7 +41,8 @@ class GO_Site_Components_Template{
 			
 			$mtime = GO::config()->get_setting('site_template_publish_date_'.Site::model()->id);
 			
-			if(GO::config()->debug || $mtime != GO::config()->mtime || $templateFolder->exists()){
+			if($mtime != GO::config()->mtime || !$templateFolder->exists()){
+
 				$templateFolder->delete();
 				
 				$sourceTemplateFolder = new GO_Base_Fs_Folder($this->getPath().'assets');
