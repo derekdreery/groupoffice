@@ -481,7 +481,7 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 						store: firstWeekdayData,
 						displayField: 'first_weekday',
 						valueField: 'id',
-						hiddenName: 'first_weekday',
+						hiddenName: 'default_first_weekday',
 						mode: 'local',
 						triggerAction: 'all',
 						editable: false,
