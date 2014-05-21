@@ -5,6 +5,9 @@
 - Workflow: email and reminder for file uploader when file is disapproved.
 - Using namespaces in PHP code
 
+16-05-2014 5.1.7
+- PHP custom field
+- 5.0.57 fixes
 
 13-05-2014 5.1.6
 - Billing: PDF Templates can have stationery paper
@@ -13,7 +16,47 @@
 - Calendar: Able to import very large ICalendar objects.
 - Calendar: Notification to user when attempting to import an ICalendar with a recurrence containing 'Last X of month' pattern.
 
+11-02-2014 5.1.2
+- Included LDAP setting saving feature
+
+29-01-2014 5.1.1
+- Merged fixes of 5.0.34-39
+
+22-01-2014 5.1.0
+- Calendar: Overview of participant and resource availability per day.
+- Tasks & Reminders: get reminder when another user puts a task in your task list
+- Added user quota support
+- Show ticket template per message
+- Custom IMAP flag support (Message labels)
+
+
+21-05-2014 5.0.59
+- Sorting and page size bugs in projects2
+- Reply all in e-mail was broken in previous release
+- Last time entry chopped off in browser.
+
+19-05-2014 5.0.58
+- Fixed access denied error in GOTA because java made an extra request to the 
+  codebase url defined in the jnlp file
+- Removed mail headers that caused some spam filters to treat mail as spam.
+- BUG FIX: When using different templates for accounts a sender change needed 
+  two attempts when replying
+- Formprocessor: Send the email message to the addressbook owner in his own language.
+- HTML editor: Fixed problem with syncing text in the html editor when changing between html and source mode.
+- Google Drive: fixed problem with authenticate and empty file_id
+- Billing: Enabled template tags in the closing text
+- Updated Norwegian
+- Fixed auto link message in mail for invoices
+- Publish template assets with copy instead of Symlink for windows support
+
+13-05-2014 5.0.57
+- IMAP authentication failed with store_password=false
+- Files and Documenttemplates: Added check for invalid characters in the filename
+- Updated Norwegian
+- Company address display at contact improved
+
 13-05-2014 5.0.56
+- Increased syncing of mail items with ActiveSync when using the "any period" option from 2 weeks to 1 month.
 - Fixed bug: Email messages on the Iphone where missing when the message contained an invalid email-address
 - SMIME: SMIME certificate only works for the owner of the email account, not when the email account is shared.
 - Billing: PDF generator, fixed bugs in the pagenumber display and fixed bug with full page images creating a blank page.
@@ -27,7 +70,7 @@
 - Calendar: Moving event with resources now checks if the resources are available.
 - SMIME: Also disable the "Encrypt with SMIME" option in the email composer when there is no certificate set for the account.
 - Addressbook/Billing: Fixed display of records in companySelect field. 
-	Fixes issue with addressbook name displayed in reciepient field of the order dialog in the billing module.
+	Fixes issue with address book name displayed in recipient field of the order dialog in the billing module.
 - Added update query that sets the correct permissions for the installed modules. (Because some permissionlevels are removed.)
 
 16-04-2014 5.0.55

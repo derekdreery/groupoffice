@@ -143,6 +143,12 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 			$response['data']['company_formatted_address'] = nl2br($company->getFormattedAddress());
 			$response['data']['company_google_maps_link']=\GO\Base\Util\Common::googleMapsLink(
 						$company->address, $company->address_no,$company->city, $company->country);
+			
+			$response['data']['company_formatted_post_address'] = nl2br($company->getFormattedPostAddress());
+			$response['data']['company_google_maps_post_link']=GO_Base_Util_Common::googleMapsLink(
+						$company->post_address, $company->post_address_no,$company->post_city, $company->post_country);
+			
+			
 			$response['data']['company_email'] = $company->email;
 			$response['data']['company_phone'] = $company->phone;
 		} else {
@@ -150,6 +156,8 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 			$response['data']['company_name2'] = '';
 			$response['data']['company_formatted_address'] = '';
 			$response['data']['company_google_maps_link']='';
+			$response['data']['company_formatted_post_address'] = '';
+			$response['data']['company_google_maps_post_link']='';
 			$response['data']['company_email'] = '';
 			$response['data']['company_phone'] = '';
 		}
