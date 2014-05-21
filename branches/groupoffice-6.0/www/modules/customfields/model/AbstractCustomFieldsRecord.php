@@ -93,7 +93,7 @@ abstract class AbstractCustomFieldsRecord extends \GO\Base\Db\ActiveRecord{
 			}else
 			{			
 				$findParams = \GO\Base\Db\FindParams::newInstance()
-								->select('*')
+								->select('t.*')
 								->ignoreAcl()
 								->joinRelation('category');
 				
