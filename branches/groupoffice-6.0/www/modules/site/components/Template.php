@@ -30,6 +30,7 @@ class Template{
 	}
 	
 	private function _checkLink() {
+
 		
 		$folder = new \GO\Base\Fs\Folder(\Site::assetManager()->getBasePath());
 				
@@ -47,7 +48,7 @@ class Template{
 
 			$mtime = GO::config()->get_setting('site_template_publish_date_'.\Site::model()->id);
 			
-			if(GO::config()->debug || $mtime != GO::config()->mtime || $templateFolder->exists()){
+			if($mtime != GO::config()->mtime || !$templateFolder->exists()){
 				$templateFolder->delete();
 				
 				$sourceTemplateFolder = new \GO\Base\Fs\Folder($this->getPath().'assets');
