@@ -1,3 +1,6 @@
+21-05-2014 5.0.60
+- Template bug in site module.
+
 21-05-2014 5.0.59
 - Sorting and page size bugs in projects2
 - Reply all in e-mail was broken in previous release
