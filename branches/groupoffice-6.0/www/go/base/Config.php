@@ -968,7 +968,7 @@ class Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '6.0.1';
+	var $version = '6.0.2';
 
 
 	/**
@@ -978,7 +978,7 @@ class Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20140516';
+	var $mtime = '20140521';
 
 	#group configuration
 	/**
