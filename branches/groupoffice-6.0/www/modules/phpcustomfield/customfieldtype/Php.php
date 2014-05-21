@@ -1,11 +1,15 @@
 <?php
-class GO_Phpcustomfield_Customfieldtype_Php extends GO_Customfields_Customfieldtype_Abstract{
+
+namespace GO\Phpcustomfield\Customfieldtype;
+
+
+class Php extends \GO\Customfields\Customfieldtype\AbstractCustomfieldtype{
 	
 	public function name(){
 		return 'Php';
 	}
 	
-	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
+	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
 		
 		if (empty($this->field->extra_options))
 			return '';
@@ -29,7 +33,7 @@ class GO_Phpcustomfield_Customfieldtype_Php extends GO_Customfields_Customfieldt
 		return (string)$method($model, $model->getModel()); //cast to string because displaypanel checks for field.length
 	}
 	
-	public function formatFormOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {		
+	public function formatFormOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {		
 		return $this->formatDisplay($key, $attributes, $model);
 	}
 	

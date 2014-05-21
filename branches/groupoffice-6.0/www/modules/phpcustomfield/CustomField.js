@@ -1,7 +1,7 @@
 GO.moduleManager.onModuleReady('customfields', function(){
 	GO.customfields.nonGridTypes.push('file');
 
-	GO.customfields.dataTypes.GO_Phpcustomfield_Customfieldtype_Php = {
+	GO.customfields.dataTypes['GO\\Phpcustomfield\\Customfieldtype\\Php'] = {
 			label : 'Php',
 			onSelect: function(fieldDialog) {
 				if(!fieldDialog.code_field) {
@@ -25,7 +25,7 @@ GO.moduleManager.onModuleReady('customfields', function(){
 			},
 			getFormField : function(customfield, config){
 
-				var f = GO.customfields.dataTypes.GO_Customfields_Customfieldtype_Text.getFormField(customfield, config);
+				var f = GO.customfields.dataTypes['GO\\Customfields\\Customfieldtype\\Text'].getFormField(customfield, config);
 				delete f.anchor;
 
 				return Ext.apply(f, {
