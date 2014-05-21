@@ -46,7 +46,7 @@ class ChatModule extends \GO\Base\Module {
 
 	public static function login($username, $password, $user, $countLogin) {
 		if (GO::modules()->chat && $countLogin && isset($_SERVER['HTTP_HOST'])) {
-			GO::session()->values['chat']['p'] =  \GO\Base\Util\Crypt::encrypt($password);
+			GO::session()->values['chat']['p'] = \GO\Base\Util\Crypt::encrypt($password);
 		}
 	}
 
@@ -59,28 +59,37 @@ class ChatModule extends \GO\Base\Module {
 
 		require GO::config()->root_path . 'modules/chat/xmpp-prebind-php/lib/XmppPrebind.php';
 
-		GO::debug("CHAT: Pre binding to XMPP HOST: " . self::getXmppHost() . " BOSH URI: " . self::getBoshUri() . " with user ".GO::user()->username);
+		GO::debug("CHAT: Pre binding to XMPP HOST: " . self::getXmppHost() . " BOSH URI: " . self::getBoshUri() . " with user " . GO::user()->username);
 
-		try {
-			$xmppPrebind = new \XmppPrebind(
-							self::getXmppHost(), self::getBoshUri(), GO::config()->product_name, strpos(self::getBoshUri(), 'https') !== false, false);
+		if (isset(GO::session()->values['chat']['p'])) {
 
-			if ($xmppPrebind->connect(GO::user()->username, \GO\Base\Util\Crypt::decrypt(GO::session()->values['chat']['p']))) {
+			try {
 
-				$xmppPrebind->auth();
 
-				GO::debug("CHAT: connect successfull");
-				// array containing sid, rid and jid			
-				$ret = $xmppPrebind->getSessionInfo();
-				$ret['prebind'] = "true";
+				$xmppPrebind = new \XmppPrebind(
+								self::getXmppHost(), self::getBoshUri(), GO::config()->product_name, strpos(self::getBoshUri(), 'https') !== false, false);
 
-				return $ret;
-			} else {
-				GO::debug("CHAT: failed to connect");
+				if ($xmppPrebind->connect(GO::user()->username, \GO\Base\Util\Crypt::decrypt(GO::session()->values['chat']['p']))) {
+
+					$xmppPrebind->auth();
+
+					GO::debug("CHAT: connect successfull");
+					// array containing sid, rid and jid			
+					$ret = $xmppPrebind->getSessionInfo();
+					$ret['prebind'] = "true";
+
+					return $ret;
+				} else {
+					GO::debug("CHAT: failed to connect");
+				}
+			} catch (\Exception $e) {
+				GO::debug("CHAT: Authentication failed: " . $e);
 			}
-		} catch (Exception $e) {
-			GO::debug("CHAT: Authentication failed: " . $e);
+		}else
+		{
+			GO::debug("CHAT: Password not set");
 		}
+
 
 
 		$ret = array(
@@ -99,10 +108,10 @@ class ChatModule extends \GO\Base\Module {
 //		$boshUri = 'https://' . $jabberHost . ':5281/http-bind';
 
 		$proto = GO::request()->isHttps() ? 'https' : 'http';
-		
+
 		$port = GO::request()->isHttps() ? 5281 : 5280;
 
-		return isset(GO::config()->chat_bosh_uri) ? GO::config()->chat_bosh_uri : $proto . '://' . self::getXmppHost() . ':'.$port.'/http-bind';
+		return isset(GO::config()->chat_bosh_uri) ? GO::config()->chat_bosh_uri : $proto . '://' . self::getXmppHost() . ':' . $port . '/http-bind';
 	}
 
 	public static function getXmppHost() {
