@@ -374,6 +374,10 @@ class formprocessor{
 				 * in the form itself and to (2) the addressbook owner if so specified. 
 				 */				
 				
+				// Send the email to the admin users in the language of the addressbook owner.
+				$oldLanguage = GO::language()->getLanguage();
+				GO::language()->setLanguage($addressbookModel->user->language);
+				
 				$usersToNotify = isset($_POST['notify_users']) ? explode(',', $_POST['notify_users']) : array();
 				if(!empty($_POST['notify_addressbook_owner']))
 					$usersToNotify[]=$addressbookModel->user_id;
@@ -421,6 +425,9 @@ class formprocessor{
 						$mailMessage->addTo($v);		
 					GO_Base_Mail_Mailer::newGoInstance()->send($mailMessage);
 				}
+				
+				// Restore the language
+				GO::language()->setLanguage($oldLanguage);
 			}
 		
 //	

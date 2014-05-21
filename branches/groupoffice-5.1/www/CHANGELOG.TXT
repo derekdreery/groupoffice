@@ -23,7 +23,20 @@
 - Custom IMAP flag support (Message labels)
 
 
+21-05-2014 5.0.59
+- Sorting and page size bugs in projects2
+- Reply all in e-mail was broken in previous release
+- Last time entry chopped off in browser.
 
+19-05-2014 5.0.58
+- Fixed access denied error in GOTA because java made an extra request to the 
+  codebase url defined in the jnlp file
+- Removed mail headers that caused some spam filters to treat mail as spam.
+- BUG FIX: When using different templates for accounts a sender change needed 
+  two attempts when replying
+- Formprocessor: Send the email message to the addressbook owner in his own language.
+- HTML editor: Fixed problem with syncing text in the html editor when changing between html and source mode.
+- Google Drive: fixed problem with authenticate and empty file_id
 - Billing: Enabled template tags in the closing text
 - Updated Norwegian
 - Fixed auto link message in mail for invoices
