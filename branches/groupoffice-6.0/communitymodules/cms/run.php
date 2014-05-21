@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: text/html; charset=UTF-8');
 
-require('../../Group-Office.php');
+require('../../go3compat/Group-Office.php');
 
 $GO_MODULES->load_modules();
 
