@@ -1,3 +1,8 @@
+21-05-2014 5.0.59
+- Sorting and page size bugs in projects2
+- Reply all in e-mail was broken in previous release
+- Last time entry chopped off in browser.
+
 19-05-2014 5.0.58
 - Fixed access denied error in GOTA because java made an extra request to the 
   codebase url defined in the jnlp file
