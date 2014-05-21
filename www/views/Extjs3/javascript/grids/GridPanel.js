@@ -71,6 +71,13 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 				emptyText: GO.lang.strNoItems
 			});
 		}
+		
+		if(this.view instanceof Ext.grid.GroupingView){
+			//GroupingViews sometimes have rendering issues
+			this.addListener('show', function(){
+				this.doLayout();
+			}, this);
+		}
 
 		if(!this.keys)
 		{

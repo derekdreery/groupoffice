@@ -662,6 +662,7 @@ $l['it'] = 'Italy';
 $l['ja'] = 'Japan';
 $l['nb'] = 'Norwegian';
 $l['nl'] = 'Dutch';
+$l['hu'] = 'Hungarian';
 $l['pt'] = 'Portugal';
 $l['sv'] = 'Svenska';
 $l['th'] = 'Thailand';

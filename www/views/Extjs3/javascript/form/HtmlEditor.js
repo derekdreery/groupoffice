@@ -54,13 +54,14 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 		GO.form.HtmlEditor.superclass.setValue.call(this, value);
 	},
 	
-	syncValue: function(){
-		//In BasicForm.js this method is called by EXT
-		// When using the editor in sourceEdit then it may not call the syncValue function
-		if(!this.sourceEditMode){			
-			GO.form.HtmlEditor.superclass.syncValue.call(this);
-		}
-	},	
+//	syncValue: function(){
+//		//In BasicForm.js this method is called by EXT
+//		// When using the editor in sourceEdit then it may not call the syncValue function
+//		if(!this.sourceEditMode){			
+//			GO.form.HtmlEditor.superclass.syncValue.call(this);
+//		}
+//	},	
+
 //	correctify: function(full, prefix, letter){
 //		var regex = /([:\?]\s+)(.)/g;
 //		return prefix + letter.toUpperCase();

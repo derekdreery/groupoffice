@@ -920,9 +920,10 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 	private function _keepHeaders(&$response, $params) {
 		if (!empty($params['keepHeaders'])) {
 			unset(
-							$response['data']['to'],
-							$response['data']['cc'],
-							$response['data']['bcc'],
+							$response['data']['alias_id'],
+							$response['data']['to'], 
+							$response['data']['cc'], 
+							$response['data']['bcc'], 
 							$response['data']['subject']
 //							$response['data']['attachments']
 			);
@@ -1047,26 +1048,28 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		$recipients = new \GO\Base\Mail\EmailRecipients();
 		$recipients->mergeWith($message->cc)->mergeWith($message->to);
 
-		$alias = $this->_findAliasFromRecipients($account, $recipients, $params['alias_id']);
+		if(empty($params['keepHeaders'])){
+			$alias = $this->_findAliasFromRecipients($account, $recipients, $params['alias_id']);	
+				
+			$response['data']['alias_id']=$alias->id;				
+
+			if (!empty($params['replyAll'])) {
+				$toList = new \GO\Base\Mail\EmailRecipients();
+				$toList->mergeWith($replyTo)
+								->mergeWith($message->to);			
+
+				//remove our own alias from the recipients.		
+				if($toList->count()>1){
+					$toList->removeRecipient($alias->email);
+					$message->cc->removeRecipient($alias->email);
+				}
 
 
-		$response['data']['alias_id']=$alias->id;
-
-		if (!empty($params['replyAll'])) {
-			$toList = new \GO\Base\Mail\EmailRecipients();
-			$toList->mergeWith($replyTo)
-							->mergeWith($message->to);
-
-			//remove our own alias from the recipients.
-			if($toList->count()>1){
-				$toList->removeRecipient($alias->email);
-				$message->cc->removeRecipient($alias->email);
+				$response['data']['to'] = (string) $toList;
+				$response['data']['cc'] = (string) $message->cc;
+			} else {
+				$response['data']['to'] = (string) $replyTo;
 			}
-
-			$response['data']['to'] = (string) $toList;
-			$response['data']['cc'] = (string) $message->cc;
-		} else {
-			$response['data']['to'] = (string) $replyTo;
 		}
 
 		//for saving sent items in actionSend
@@ -1306,8 +1309,13 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 					
 
 					foreach($linkedModels as $linkedModel){
-						$linkedItems .= ', <span class="em-autolink-link" onclick="GO.linkHandlers[\''.  \GO\Base\Util\String::escape_javascript($linkedModel->className()).'\'].call(this, '.
-												$linkedModel->id.');">'.$linkedModel->name.' ('.$linkedModel->localizedName.')</span>';
+
+						
+						$searchModel = \GO\Base\Model\SearchCacheRecord::model()->findByPk(array('model_id'=>$linkedModel->pk, 'model_type_id'=>$linkedModel->modelTypeId()),false,true);
+						if($searchModel){
+							$linkedItems .= ', <span class="em-autolink-link" onclick="GO.linkHandlers[\''.\GO\Base\Util\String::escape_javascript($linkedModel->className()).'\'].call(this, '.
+												$linkedModel->id.');">'.$searchModel->name.' ('.$linkedModel->localizedName.')</span>';
+						}
 					}
 
 					$linkedItems = trim($linkedItems,' ,');

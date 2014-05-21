@@ -1,10 +1,20 @@
 <?php
 
+/*
+ * Copyright Intermesh BV.
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ */
 
-namespace GO\Base\Export;
-
-
-class ExportXLS extends AbstractExport {
+/**
+ * XLS Output stream.
+ * 
+ */
+class GO_Base_Export_ExportXLS extends GO_Base_Export_AbstractExport {
 
 	public static $showInView = true;
 	public static $name = "XLS (Excel)";
@@ -17,16 +27,16 @@ class ExportXLS extends AbstractExport {
 
 	private function _setupExcel() {
 		// Include PHPExcel
-		require_once \GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel.php';
+		require_once GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel.php';
 		// Create new PHPExcel object
 		$this->phpExcel = new PHPExcel();
 
 		// Set document properties
-		$this->phpExcel->getProperties()->setCreator(\GO::config()->product_name)
-						->setLastModifiedBy(\GO::config()->product_name)
+		$this->phpExcel->getProperties()->setCreator(GO::config()->product_name)
+						->setLastModifiedBy(GO::config()->product_name)
 						->setTitle($this->title)
 						->setSubject("Export")
-						->setDescription("An export from ".\GO::config()->product_name)
+						->setDescription("An export from ".GO::config()->product_name)
 						->setKeywords("")
 						->setCategory("export");
 
@@ -53,7 +63,7 @@ class ExportXLS extends AbstractExport {
 			$col++;
 		}
 		$this->excel_row++;
-		//fputcsv($this->_fp, $data, \GO::user()->list_separator, \GO::user()->text_separator);
+		//fputcsv($this->_fp, $data, GO::user()->list_separator, GO::user()->text_separator);
 	}
 
 	public function output() {
@@ -62,43 +72,23 @@ class ExportXLS extends AbstractExport {
 		$this->_setupExcel();
 
 
-		if($this->header){
-			if($this->humanHeaders){
-				
-				//workaround Libreoffice bug: https://bugs.freedesktop.org/show_bug.cgi?id=48347
-				$headers = array_values($this->getLabels());
-				
-				for($i=0;$i<count($headers);$i++){
-					if($headers[$i] == 'ID')
-						$headers[$i] = 'Id';
-				}
-				
-				$this->_write($headers);
-				// End of workaround
-				
-				//$this->_write(array_values($this->getLabels()));
+		if ($this->header) {
+			if ($this->humanHeaders) {
+				$this->_write(array_values($this->getLabels()));
 			}else
 				$this->_write(array_keys($this->getLabels()));
 		}
-		
-		while($record = $this->store->nextRecord()){
+
+		while ($record = $this->store->nextRecord()) {
 			$record = $this->prepareRecord($record);
 			$this->_write($record);
-		}
-		
-		// If extra lines given, then add them to the .csv file
-		if($this->_lines !== false){
-			foreach($this->_lines as $record){
-				$record = $this->prepareRecord($record);
-				$this->_write($record);
-			}
 		}
 
 		// Hack to write contents of file to string
 		$writer = PHPExcel_IOFactory::createWriter($this->phpExcel, 'Excel5');
 		//$tmpFilename = tempnam('./temp', 'tmp');
 		
-		$file = \GO\Base\Fs\File::tempFile();
+		$file = GO_Base_Fs_File::tempFile();
 		$writer->save($file->path());
 		
 		$file->output();
