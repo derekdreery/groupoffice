@@ -91,7 +91,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 				
 				
 				$findParams = GO_Base_Db_FindParams::newInstance()
-								->select('*')
+								->select('t.*')
 								->ignoreAcl()
 								->joinRelation('category');
 				
