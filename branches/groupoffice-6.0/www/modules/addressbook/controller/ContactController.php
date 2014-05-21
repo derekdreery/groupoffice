@@ -145,7 +145,7 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 						$company->address, $company->address_no,$company->city, $company->country);
 			
 			$response['data']['company_formatted_post_address'] = nl2br($company->getFormattedPostAddress());
-			$response['data']['company_google_maps_post_link']=GO_Base_Util_Common::googleMapsLink(
+			$response['data']['company_google_maps_post_link']=\GO\Base\Util\Common::googleMapsLink(
 						$company->post_address, $company->post_address_no,$company->post_city, $company->post_country);
 			
 			
