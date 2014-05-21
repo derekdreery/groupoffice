@@ -99,7 +99,7 @@ abstract class AbstractCustomFieldsRecord extends \GO\Base\Db\ActiveRecord{
 				
 				$findParams->getCriteria()->addCondition('extends_model', $this->extendsModel(),'=','category');
 				
-				$stmt = GO_Customfields_Model_Field::model()->find($findParams);
+				$stmt = \GO\Customfields\Model\Field::model()->find($findParams);
 				
 				self::$cacheColumns[$this->extendsModel()]=\GO\Base\Db\Columns::getColumns ($this);
 				self::$attributeLabels[$this->extendsModel()]=array();

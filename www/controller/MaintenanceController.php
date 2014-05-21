@@ -177,7 +177,7 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 		\GO\Base\Fs\File::setAllowDeletes(false);
 		//VERY IMPORTANT:
 		\GO\Files\Model\Folder::$deleteInDatabaseOnly=true;
-		GO_Files_Model_File::$deleteInDatabaseOnly=true;
+		\GO\Files\Model\File::$deleteInDatabaseOnly=true;
 		
 		$this->lockAction();
 		
