@@ -578,7 +578,7 @@ class InstallationController extends \GO\Base\Controller\AbstractModelController
 			$response['data']['theme'] = $c['theme'];
 
 			$response['data']['default_decimal_separator'] = $c['default_decimal_separator'];
-			$response['data']['first_weekday'] = $c['first_weekday'];
+			$response['data']['default_first_weekday'] = $c['default_first_weekday'];
 
 
 			$response['data']['allow_themes'] = !empty($c['allow_themes']);
@@ -703,7 +703,7 @@ class InstallationController extends \GO\Base\Controller\AbstractModelController
 		$config['theme'] = $params['theme'];
 
 		$config['default_decimal_separator'] = $params['default_decimal_separator'];
-		$config['first_weekday'] = $params['first_weekday'];
+		$config['default_first_weekday'] = $params['default_first_weekday'];
 
 
 		$config['allow_themes'] = !empty($params['allow_themes']);
