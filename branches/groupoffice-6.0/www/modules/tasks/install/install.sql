@@ -126,3 +126,14 @@ CREATE TABLE IF NOT EXISTS `ta_tasks` (
   KEY `rrule` (`rrule`),
   KEY `uuid` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
+-- Tabelstructuur voor tabel `su_visible_lists`
+--
+
+CREATE TABLE IF NOT EXISTS `su_visible_lists` (
+  `user_id` int(11) NOT NULL,
+  `tasklist_id` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`,`tasklist_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
