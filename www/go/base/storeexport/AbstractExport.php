@@ -87,7 +87,7 @@ abstract class AbstractExport {
 		if(is_a($store, "\GO\Base\Data\DbStore")){
 			$exportName = $this->store->getFindParams()->getParam('export');
 			
-			$this->totalizeColumns = isset(GO::session()->values[$exportName]['totalizeColumns']) ? GO::session()->values[$exportName]['totalizeColumns'] : array();
+			$this->totalizeColumns = isset(\GO::session()->values[$exportName]['totalizeColumns']) ? \GO::session()->values[$exportName]['totalizeColumns'] : array();
 			foreach($this->totalizeColumns as $column){
 				$this->totals[$column]=0;
 			}

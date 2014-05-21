@@ -41,15 +41,15 @@ class AddresslistCompany extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 	 return array(
-			 'company' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'company_id'),
-			 'addresslist' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Addresslist', 'field'=>'addresslist_id'),
+			 'company' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Addressbook\Model\Company', 'field'=>'company_id'),
+			 'addresslist' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Addressbook\Model\Addresslist', 'field'=>'addresslist_id'),
 	 );
 	}
 	
 	protected function afterSave($wasNew) {
 		
 		if(GO::modules()->log){
-			GO_Log_Model_Log::create($wasNew?GO_Log_Model_Log::ACTION_ADD:GO_Log_Model_Log::ACTION_UPDATE,  'Added '.$this->company->name.' to addresslist '.$this->addresslist->name, $this->className(),$this->company_id.':'.$this->addresslist_id);
+			\GO\Log\Model\Log::create($wasNew?\GO\Log\Model\Log::ACTION_ADD:\GO\Log\Model\Log::ACTION_UPDATE,  'Added '.$this->company->name.' to addresslist '.$this->addresslist->name, $this->className(),$this->company_id.':'.$this->addresslist_id);
 		}
 		
 		return parent::afterSave($wasNew);
@@ -58,7 +58,7 @@ class AddresslistCompany extends \GO\Base\Db\ActiveRecord {
 	protected function afterDelete() {
 		
 		if(GO::modules()->log){
-			GO_Log_Model_Log::create(GO_Log_Model_Log::ACTION_DELETE,  'Removed '.$this->company->name.' from addresslist '.$this->addresslist->name, $this->className(),$this->company_id.':'.$this->addresslist_id);
+			\GO\Log\Model\Log::create(\GO\Log\Model\Log::ACTION_DELETE,  'Removed '.$this->company->name.' from addresslist '.$this->addresslist->name, $this->className(),$this->company_id.':'.$this->addresslist_id);
 		}
 		
 		return parent::afterDelete();

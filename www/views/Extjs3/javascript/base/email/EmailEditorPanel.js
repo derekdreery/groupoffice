@@ -17,7 +17,7 @@
  * This is necessary in the corresponding controller:
  * 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
-		$message = new GO_Base_Mail_Message();
+		$message = new \GO\Base\Mail\Message();
 		$message->handleEmailFormInput($params);
 		
 		$model->content = $message->toString();

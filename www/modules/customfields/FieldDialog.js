@@ -324,7 +324,7 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 		
 		this.oldValue = newValue;
 	},
-	oldValue : 'GO_Customfields_Customfieldtype_Text',
+	oldValue : 'GO\\Customfields\\Customfieldtype\\Text',
 	
 	show : function (field_id) {
 		
