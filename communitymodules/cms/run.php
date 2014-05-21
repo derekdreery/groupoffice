@@ -3,6 +3,8 @@ header('Content-Type: text/html; charset=UTF-8');
 
 require('../../Group-Office.php');
 
+$GO_MODULES->load_modules();
+
 require_once($GO_MODULES->modules['cms']['class_path'].'cms.class.inc.php');
 require_once($GO_MODULES->modules['cms']['class_path'].'output.class.inc.php');
 require_once($GO_MODULES->modules['cms']['class_path'].'cms_smarty.class.inc.php');

@@ -255,3 +255,7 @@ $l['cannotHandleInvitation']='Der Kalender, der mit dem E-Mail-Account verbunden
 $l['cannotHandleInvitation2']='Der Termin konnte nicht aktualisiert werden, da Sie nicht die notwendigen Berechtigungen auf den Kalender haben (Kalender: "%s"), der mit dem E-Mail-Account verbunden ist. Da der Termin sich in diesem Kalender befindet, konnte der Status nicht geändert werden.';
 
 $l['tooltip']= 'Tooltip-Text';
+
+$l['resource_confirmed_mail_body']='%s hat die Ressource \'%s\' gebucht und die Buchung bestätigt. Sie sind der Verwalter der Ressource. Falls Sie die Buchung ablehnen wollen, verwenden Sie bitte den folgenden Link.';
+$l['sendUpdateNotification']='Möchten Sie alle Teilnehmer per E-Mail über die Änderung(en) benachrichtigen?';
+$l['moveEventResourceError']= 'Konnte den Termin nicht verschieben, weil die folgenden Ressourcen nicht verfügbar sind:';

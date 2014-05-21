@@ -263,3 +263,8 @@ $l['linkMustHavePermissionToWrite'] = 'Sie haben nicht die benötigten Schreibbe
 $l['sortAddressesByMailTime'] = 'Adressen der Empfänger nach der Zeit der letzten gesendeten E-Mail sortieren (benötigt das Adressbuch-Modul)';
 
 $l['permissionDelegated']= 'Stellvertreter';
+
+$l['showCcByDefault']='CC-Feld standardmäßig anzeigen';
+$l['showBccByDefault']='BCC-Feld standardmäßig anzeigen';
+$l['saveToItem']= 'Zu Element anhängen';
+$l['saveAttachmentTo']= 'Anhang zu diesen Elementen anhängen';
