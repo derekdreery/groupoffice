@@ -215,10 +215,6 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 				
 				\GO::user()->language=\GO::language()->getLanguage();
 				\GO::user()->save();
-				
-				//TODO remove when ready				
-				require_once(\GO::config()->root_path."Group-Office.php");
-				$GLOBALS["GO_LANGUAGE"]->set_language($params["login_language"]);
 			}
 			
 		}
