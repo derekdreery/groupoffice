@@ -21,6 +21,7 @@
  * @property String $date 
  * @property String $name
  * @property String $region
+ * @property boolean $free_day
  */
 
 namespace GO\Base\Model;
@@ -215,15 +216,27 @@ class Holiday extends \GO\Base\Db\ActiveRecord {
 		
 		// Set the fixed holidays from the holidays file
 		if(isset($holidays['fix'])) {
-			foreach($holidays['fix'] as $key => $name) {
-				$month_day = explode("-", $key);
-				$date = mktime(0,0,0,$month_day[0],$month_day[1],$year);
-				
-				$holiday = new Holiday();
-				$holiday->name = $name;
-				$holiday->date = date('Y-m-d',$date);
-				$holiday->region = $locale;
-				$holiday->save();
+			foreach($holidays['fix'] as $key => $record) {
+				if (is_string($record)) {
+					$month_day = explode("-", $key);
+					$date = mktime(0,0,0,$month_day[0],$month_day[1],$year);
+
+					$holiday = new Holiday();
+					$holiday->name = $record;
+					$holiday->date = date('Y-m-d',$date);
+					$holiday->region = $locale;
+					$holiday->save();
+				} else if (is_array($record)) {
+					$month_day = explode("-", $key);
+					$date = mktime(0,0,0,$month_day[0],$month_day[1],$year);
+
+					$holiday = new Holiday();
+					$holiday->name = $record['name'];
+					$holiday->date = date('Y-m-d',$date);
+					$holiday->region = $locale;
+					$holiday->free_day = $record['free'];
+					$holiday->save();
+				}
 			}
 		}
 		
@@ -234,29 +247,52 @@ class Holiday extends \GO\Base\Db\ActiveRecord {
 			$easterDT = \GO\Base\Util\Date\DateTime::getEasterDatetime($year);
 			$easter_day = $easterDT->format('U');
 			
-			foreach($holidays['var'] as $key => $name) {
-				$date = strtotime($key." days", $easter_day);
-		
-				
-				$holiday = new Holiday();
-				$holiday->name = $name;
-				$holiday->date = date('Y-m-d',$date);
-				$holiday->region = $locale;
-				$holiday->save();
+			foreach($holidays['var'] as $key => $record) {
+				if (is_string($record)) {
+					$date = strtotime($key." days", $easter_day);
+
+
+					$holiday = new Holiday();
+					$holiday->name = $record;
+					$holiday->date = date('Y-m-d',$date);
+					$holiday->region = $locale;
+					$holiday->save();
+				} else if (is_array($record)) {
+					$date = strtotime($key." days", $easter_day);
+
+					$holiday = new Holiday();
+					$holiday->name = $record['name'];
+					$holiday->date = date('Y-m-d',$date);
+					$holiday->region = $locale;
+					$holiday->free_day = $record['free'];
+					$holiday->save();
+				}
 			}
 		}
 
 		if(isset($holidays['spc'])) {
 			$weekday = $this->get_weekday("24","12",$year);
 			foreach($holidays['spc'] as $key => $name) {
-				$count = $key - $weekday;
-				$date = strtotime($count." days", mktime(0,0,0,"12","24",$year));
-				
-				$holiday = new Holiday();
-				$holiday->name = $name;
-				$holiday->date = date('Y-m-d',$date);
-				$holiday->region = $locale;
-				$holiday->save();
+				if (is_string($record)) {
+					$count = $key - $weekday;
+					$date = strtotime($count." days", mktime(0,0,0,"12","24",$year));
+
+					$holiday = new Holiday();
+					$holiday->name = $record;
+					$holiday->date = date('Y-m-d',$date);
+					$holiday->region = $locale;
+					$holiday->save();
+				} else if (is_array($record)) {
+					$count = $key - $weekday;
+					$date = strtotime($count." days", mktime(0,0,0,"12","24",$year));
+
+					$holiday = new Holiday();
+					$holiday->name = $record['name'];
+					$holiday->date = date('Y-m-d',$date);
+					$holiday->region = $locale;
+					$holiday->free_day = $record['free'];
+					$holiday->save();
+				}
 			}
 		}
 		
