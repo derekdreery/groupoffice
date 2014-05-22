@@ -41,8 +41,8 @@ class AddresslistContact extends \GO\Base\Db\ActiveRecord {
 	
 	public function relations() {
 	 return array(
-			 'contact' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'contact_id'),
-			 'addresslist' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Addresslist', 'field'=>'addresslist_id'),
+			 'contact' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Addressbook\Model\Contact', 'field'=>'contact_id'),
+			 'addresslist' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Addressbook\Model\Addresslist', 'field'=>'addresslist_id'),
 			 
 	 );
 	}
@@ -50,7 +50,7 @@ class AddresslistContact extends \GO\Base\Db\ActiveRecord {
 	protected function afterSave($wasNew) {
 		
 		if(GO::modules()->log){
-			GO_Log_Model_Log::create($wasNew?GO_Log_Model_Log::ACTION_ADD:GO_Log_Model_Log::ACTION_UPDATE,  'Added '.$this->contact->name.' to addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
+			\GO\Log\odel\Log::create($wasNew?\GO\Log\Model\Log::ACTION_ADD:\GO\Log\Model\Log::ACTION_UPDATE,  'Added '.$this->contact->name.' to addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
 		}
 		
 		return parent::afterSave($wasNew);
@@ -59,7 +59,7 @@ class AddresslistContact extends \GO\Base\Db\ActiveRecord {
 	protected function afterDelete() {
 		
 		if(GO::modules()->log){
-			GO_Log_Model_Log::create(GO_Log_Model_Log::ACTION_DELETE,  'Removed '.$this->contact->name.' from addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
+			\GO\Log\Model\Log::create(\GO\Log\Model\Log::ACTION_DELETE,  'Removed '.$this->contact->name.' from addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
 		}
 		
 		return parent::afterDelete();
