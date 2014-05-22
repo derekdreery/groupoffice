@@ -326,12 +326,14 @@ abstract class Message extends \GO\Base\Model {
 		$labels = \GO\Email\Model\Label::model()->getUserLabels();
 
 		$response['labels'] = array();
-		foreach ($this->labels as $label) {
-			if (isset($labels[$label])) {
-				$response['labels'][] = array(
-					'name' => $labels[$label]->name,
-					'color' => $labels[$label]->color
-				);
+		if(!empty($this->labels)){
+			foreach ($this->labels as $label) {
+				if (isset($labels[$label])) {
+					$response['labels'][] = array(
+						'name' => $labels[$label]->name,
+						'color' => $labels[$label]->color
+					);
+				}
 			}
 		}
 
