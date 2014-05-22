@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `go_holidays` (
    `date` DATE NOT NULL,
   `name` varchar(100) NOT NULL DEFAULT '',
   `region` varchar(10) NOT NULL DEFAULT '',
+	`free_day` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `region` (`region`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
