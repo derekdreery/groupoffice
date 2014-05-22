@@ -395,3 +395,6 @@ $updates['201404171400'][]="update `go_cron` set `job` = replace(`job`,'_','\\\\
 
 $updates['201404171400'][]="ALTER TABLE `go_cron` ADD `error` TEXT NULL ,
 ADD `autodestroy` BOOLEAN NOT NULL DEFAULT FALSE ;";
+
+$updates['201405221000'][]="ALTER TABLE `go_holidays` ADD `free_day` TINYINT( 1 ) NOT NULL DEFAULT '1';";
+$updates['201405221330'][]="script:15_update_dutch_holidays.php";
