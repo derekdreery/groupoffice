@@ -261,7 +261,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 					'tableAlias'=>'cmt',
 					'type'=>'LEFT',
 					'criteria'=>  GO_Base_Db_FindCriteria::newInstance()->addCondition('user_id', GO::user()->id, '=', 'cmt')
-				))->order('cmt.last_mail_time','DESC');
+				))->order('cmt.last_mail_time','DESC')->getCriteria()->addCondition('last_mail_time',0,'>','cmt');
 			}
 				
 			$stmt = GO_Addressbook_Model_Contact::model()->findUsers(GO::user()->id, $findParams);
