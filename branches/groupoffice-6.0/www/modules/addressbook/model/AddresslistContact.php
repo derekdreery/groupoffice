@@ -49,7 +49,7 @@ class AddresslistContact extends \GO\Base\Db\ActiveRecord {
 	
 	protected function afterSave($wasNew) {
 		
-		if(GO::modules()->log){
+		if(\GO::modules()->log){
 			\GO\Log\odel\Log::create($wasNew?\GO\Log\Model\Log::ACTION_ADD:\GO\Log\Model\Log::ACTION_UPDATE,  'Added '.$this->contact->name.' to addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
 		}
 		
