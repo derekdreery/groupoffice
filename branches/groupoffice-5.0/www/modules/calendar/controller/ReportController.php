@@ -13,9 +13,10 @@
  */
 class GO_Calendar_Controller_Report extends GO_Base_Controller_AbstractJsonController {
 	
-	public function actionWeek($date) {
+	public function actionWeek($date, $calendars) {
 		
 		$date = GO_Base_Util_Date::clear_time($date);
+		$calendarIds = json_decode($calendars);
 		
 		$weekday =date('w',$date);
 		if($weekday===0)
@@ -25,53 +26,61 @@ class GO_Calendar_Controller_Report extends GO_Base_Controller_AbstractJsonContr
 		$start = $date-3600*24*($weekday);
 		$end = $date+3600*24*(7-$weekday);
 		
-		$calendar = new GO_Calendar_Model_Calendar();
-		$calendar->id = 1;//$cal_id;
-		$events = $calendar->getEventsForPeriod($start, $end); //GO_Calendar_Model_Event::model()->findForPeriod(null, $start, $end);
-		
 		$report = new GO_Calendar_Reports_Week();
-		$report->day = $start;
-		$report->setEvents($events);
-		$report->render($start);
+		foreach($calendarIds as $id) {
+			
+			$calendar = GO_Calendar_Model_Calendar::model()->findByPk($id);
+			$events = $calendar->getEventsForPeriod($start, $end);
+
+			$report->day = $start;
+			$report->setEvents($events);
+			$report->render($date);
+			$report->calendarName = $calendar->name;
+		}
 		$report->Output('week.pdf');
 	}
 	
-	public function actionMonth($date) {
-		
+	public function actionMonth($date, $calendars) {
+		$calendarIds = json_decode($calendars);
 		$date = GO_Base_Util_Date::clear_time($date);
 		$start = strtotime(date('Y-m-01', $date));
 		$end = strtotime(date('Y-m-t', $date));
-		
-		$calendar = new GO_Calendar_Model_Calendar();
-		$calendar->id = 1;//$cal_id;
-		$events = $calendar->getEventsForPeriod($start, $end);
-		//$events = GO_Calendar_Model_Event::model()->findForPeriod(null, $start, $end);
+
 		$report = new GO_Calendar_Reports_Month();
-		$report->day = $start;
-		$report->dayEnd = $end;
-		$report->render($events);
-		header('Content-Type','UTF-8');
+		foreach($calendarIds as $id) {
+			
+			$calendar = GO_Calendar_Model_Calendar::model()->findByPk($id);
+			$events = $calendar->getEventsForPeriod($start, $end);
+
+			$report->day = $start;
+			$report->render($events);
+			$report->calendarName = $calendar->name;
+		}
 		$report->Output('month.pdf');
 	}
 	
-	public function actionDay($date) {
-		
+	public function actionDay($date, $calendars) {
+		$calendarIds = json_decode($calendars);
 		$date = GO_Base_Util_Date::clear_time($date);
 		
-		//$calendar = GO_Calendar_Model_Calendar::model()->findDefault(GO::user()->id);
-		//$pf = GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('calendar_id',$calendar->id));
-		
-		$calendar = new GO_Calendar_Model_Calendar();
-		$calendar->id = 1;//$cal_id;
-		$events = $calendar->getEventsForPeriod($date-1, $date+24*3600);
-		//$events = GO_Calendar_Model_Event::model()->findForPeriod($pf, $date-1, $date+24*3600); //findCalculatedForPeriod dont work
+		$start = $date-1;
+		$end = $date+24*3600;
+
 		$report = new GO_Calendar_Reports_Day();
-		if(!empty($calendar->tasklist)) {
-			$tasklist_id = $calendar->tasklist->id;
-			$report->tasks = GO_Tasks_Model_Task::model()->findByDate($date,$tasklist_id)->fetchAll();
+		foreach($calendarIds as $id) {
+			
+			$calendar = GO_Calendar_Model_Calendar::model()->findByPk($id);
+			$events = $calendar->getEventsForPeriod($start, $end);
+
+			if(!empty($calendar->tasklist)) {
+				$tasklist_id = $calendar->tasklist->id;
+				$report->tasks = GO_Tasks_Model_Task::model()->findByDate($date,$tasklist_id)->fetchAll();
+			}
+			
+			$report->setEvents($events);
+			$report->render($date);
+			$report->calendarName = $calendar->name;
 		}
-		$report->setEvents($events);
-		$report->render($date);
 		$report->Output('day.pdf');
 	}
 	

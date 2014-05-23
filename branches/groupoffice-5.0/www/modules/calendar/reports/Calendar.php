@@ -33,6 +33,8 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 	protected $months_short= array();
 	protected $months_long= array();
 	
+	public $calendarName;
+	
 	protected function init() {
 		parent::init();
 		$this->font_size--;
@@ -54,6 +56,18 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 		$this->SetDrawColor(0,0,0);
 		$this->SetLineStyle($this->lineStyle);
 		$this->SetAutoPageBreak(false, 10);
+	}
+
+	public function Footer() {
+		$width = $this->getPageWidth()-$this->leftMargin*2;
+		$this->SetFont(null,'',$this->fSizeMedium);
+		$this->SetY($this->getPageHeight()-$this->footerY);
+		$x=$this->GetX();
+		$this->Cell($width, 5, $this->calendarName, 0, 0, 'L');
+		$this->SetX($x);
+		$this->Cell($width, 5, $this->GetPage(), 0,0,'C');
+		$this->SetX($x);
+		$this->Cell($width, 5, GO_Base_Util_Date::format(date('Y-m-d H:i')), 0,0,'R');
 	}
 	
 	/**
@@ -93,8 +107,6 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 		
 		$day = $this->day+($w*24*3600);
 		
-		GO::debug('DAY '.$day);
-		
 		if(!isset($this->events[$day]['part']))
 			return;
 		
@@ -103,7 +115,6 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 		// place in rows per quarter
 		foreach($this->events[$day]['part'] as $key => $event) {
 			list($start, $end) = $this->_getStartEndRow($event);
-			GO::debug($start . ' ' . $end);
 			$this->eventOptions[$event->id] = array('start'=>$start, 'end'=>$end, 'span'=>1);
 			for($it=$start; $it<$end; $it++) {
 				$rows[$it][$event->id]=$event;
@@ -134,7 +145,6 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 			$pcol = $col = $position % $prevMax;
 			$ppos = $position;
 			
-			GO::debug(substr($event->name, 0,4));
 			while ($pcol != $col || $ppos==$position) {
 				$ppos++;
 				if(!isset($previousCols[$pcol])) {
@@ -298,17 +308,5 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 			return 6;
 		else 
 			return --$wd;
-	}
-	
-	public function Footer() {
-		$width = $this->getPageWidth()-$this->leftMargin*2;
-		$this->SetFont(null,'',$this->fSizeMedium);
-		$this->SetY($this->getPageHeight()-$this->footerY);
-		$x=$this->GetX();
-		$this->Cell($width, 5, GO::user()-> name, 0, 0, 'L');
-		$this->SetX($x);
-		$this->Cell($width, 5, $this->GetPage(), 0,0,'C');
-		$this->SetX($x);
-		$this->Cell($width, 5, GO_Base_Util_Date::format(date('Y-m-d H:i')), 0,0,'R');
 	}
 }
