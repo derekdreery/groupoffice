@@ -469,6 +469,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if($this->isResource()){
 			
 			// If resource is added by its admin, automatically set it to CONFIRMED.
+			$adminUserIds=array();
 			$groupAdminsStmt= $this->calendar->group->admins;
 			while($adminUser = $groupAdminsStmt->fetch()){
 				$adminUserIds[] = $adminUser->id;
@@ -593,8 +594,24 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function isRecurring(){
 		return $this->rrule!="";
 	}
-	
 
+	/**
+	 * Check if this event is a fullday event
+	 * 
+	 * @return boolean 
+	 */
+	public function isFullDay() {
+		return $this->all_day_event;
+	}
+	
+	public function hasReminders() {
+		return !empty($this->reminder);
+	}
+	
+	public function isException() {
+		return !empty($this->exception_for_event_id);
+	}
+	
 	protected function afterSave($wasNew) {
 		
 		//add exception model for the original recurring event
@@ -983,9 +1000,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * Recurring events are not calculated. If you need recurring events use
 	 * findCalculatedForPeriod.
 	 * 
-	 * @param GO_Base_Db_FindParams $findParams
-	 * @param int $periodStartTime
-	 * @param int $periodEndTime
+	 * @param GO_Base_Db_FindParams $findParams extra findparmas
+	 * @param int $periodStartTime Start time as Unix timestamp
+	 * @param int $periodEndTime Latest start time for the selected event as Unix timestamp
 	 * @param boolean $onlyBusyEvents
 	 * @return GO_Base_Db_ActiveStatement
 	 */
