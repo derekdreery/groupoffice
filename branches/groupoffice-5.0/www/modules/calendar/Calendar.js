@@ -764,7 +764,7 @@ GO.calendar.MainPanel = function(config){
 					handler: function () {
 						var urlParams = {
 							calendars: Ext.encode(this.calendars),
-							date: +this.getActivePanel().startDate/1000
+							date: +this.datePicker.getValue()/1000
 						};
 						window.open(GO.url('calendar/report/day',urlParams));
 					},
@@ -775,7 +775,7 @@ GO.calendar.MainPanel = function(config){
 					handler: function () {
 						var urlParams = {
 							calendars: Ext.encode(this.calendars),
-							date: +this.getActivePanel().startDate/1000
+							date: +this.datePicker.getValue()/1000
 						};
 						window.open(GO.url('calendar/report/week',urlParams));
 					},
@@ -786,7 +786,7 @@ GO.calendar.MainPanel = function(config){
 					handler: function () {
 						var urlParams = {
 							calendars: Ext.encode(this.calendars),
-							date: +this.getActivePanel().startDate/1000
+							date: +this.datePicker.getValue()/1000
 						};
 						window.open(GO.url('calendar/report/month',urlParams));
 					},
