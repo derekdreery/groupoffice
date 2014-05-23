@@ -18,7 +18,7 @@ use GO;
 use GO\Base\Model\Acl;
 use GO\Base\Model\User;
 use GO\Base\Module;
-use GO\Tasks\Model\Category;
+use GO\Notes\Model\Category;
 
 /**
  * 

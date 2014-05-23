@@ -18,9 +18,9 @@ namespace GO\Notes\Controller;
 
 use Exception;
 use GO;
+use GO\Base\Controller\AbstractController;
 use GO\Base\View\JsonView;
 use GO\Notes\Model\Note;
-use GO\Professional\Controller\AbstractController;
 
 /**
  * The note controller provides action for basic crud functionality for the note model
@@ -56,6 +56,8 @@ class NoteController extends AbstractController{
 			}
 
 			$model->setAttributes($note);
+			
+			$model->save();
 
 			echo $this->render('submit', array('note'=>$model));
 		}else
@@ -161,12 +163,35 @@ class NoteController extends AbstractController{
 		//Create ColumnModel from model
 		$columnModel = new \GO\Base\Data\ColumnModel(Note::model());
 		$columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
+		$columnModel->setModelFormatType('raw');
 
 		//Create store
 		$store = new \GO\Base\Data\DbStore('GO\Notes\Model\Note', $columnModel);
 		$store->multiSelect('no-multiselect', 'GO\Notes\Model\Category', 'category_id');
 
 		echo $this->render('store',array('store'=>$store));
+	}
+	
+	/**
+	 * Delete a single not. Must be a POST request
+	 * 
+	 * @param int $id
+	 * @throws Exception
+	 * @throws \GO\Base\Exception\NotFound
+	 */
+	protected function actionDelete($id){
+		
+		if(!GO::request()->isPost()){
+			throw new Exception('Delete must be a POST request');
+		}
+		
+		$model = Note::model()->findByPk($id);
+		if (!$model)
+			throw new \GO\Base\Exception\NotFound();
+		
+		$success = $model->delete();
+		
+		$this->render('delete',array('model'=>$model, 'success'=>$success));
 	}
 
 }
