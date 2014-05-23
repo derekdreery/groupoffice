@@ -727,7 +727,6 @@ GO.calendar.MainPanel = function(config){
 		menu:new Ext.menu.Menu({
 				items:[{		
 					text: GO.calendar.lang.cmdPrintView,
-					cls: 'x-btn-text',
 					handler: function(){
 
 						var sD = this.getActivePanel().startDate;
@@ -751,13 +750,42 @@ GO.calendar.MainPanel = function(config){
 					scope: this
 				},{		
 					text: GO.calendar.lang.cmdPrintCategoryCount,
-					cls: 'x-btn-text',
 					handler: function(){
 						if(!GO.calendar.printCategoryCountDialog){
 							GO.calendar.printCategoryCountDialog = new GO.calendar.PrintCategoryCountDialog();
 						}	
 
 						GO.calendar.printCategoryCountDialog.show(0,{});
+					},
+					scope: this
+				},'-',
+				{
+					text: GO.lang['strDay'],
+					handler: function () {
+						var urlParams = {
+							date: +this.getActivePanel().startDate/1000
+						};
+						window.open(GO.url('calendar/report/day',urlParams));
+					},
+					scope: this
+				},
+				{
+					text: GO.lang['strWeek'],
+					handler: function () {
+						var urlParams = {
+							date: +this.getActivePanel().startDate/1000
+						};
+						window.open(GO.url('calendar/report/week',urlParams));
+					},
+					scope: this
+				},
+				{
+					text: GO.lang['strMonth'],
+					handler: function () {
+						var urlParams = {
+							date: +this.getActivePanel().startDate/1000
+						};
+						window.open(GO.url('calendar/report/month',urlParams));
 					},
 					scope: this
 				}]
