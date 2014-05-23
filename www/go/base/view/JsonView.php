@@ -32,6 +32,10 @@ class JsonView extends AbstractView{
 		echo $data['response'];
 	}
 	
+	private function renderDelete($data){
+		echo json_encode(array('success'=>$data['success']));
+	}
+	
 	/**
 	 * Render JSON response for forms
 	 * @param \GO\Base\Db\ActiveRecord $model the AWR to renerated the JSON form data for

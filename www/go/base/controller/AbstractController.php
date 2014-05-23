@@ -509,7 +509,7 @@ abstract class AbstractController extends Observable {
 			return $this->$methodName();
 		}elseif(count($rParams)==1 && $rParams[0]->getName()=='params'){
 			//backward compatibility mode. Just call the function with all the params in an array.
-			return $this->$methodName($_REQUEST);
+			return $this->$methodName(GO::request()->isJson() ? GO::request()->post : $_REQUEST);
 		}else
 		{			
 			//call method with all parameters from the $_REQUEST object.
