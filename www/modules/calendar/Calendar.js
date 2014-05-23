@@ -763,6 +763,7 @@ GO.calendar.MainPanel = function(config){
 					text: GO.lang['strDay'],
 					handler: function () {
 						var urlParams = {
+							calendars: Ext.encode(this.calendars),
 							date: +this.getActivePanel().startDate/1000
 						};
 						window.open(GO.url('calendar/report/day',urlParams));
@@ -773,6 +774,7 @@ GO.calendar.MainPanel = function(config){
 					text: GO.lang['strWeek'],
 					handler: function () {
 						var urlParams = {
+							calendars: Ext.encode(this.calendars),
 							date: +this.getActivePanel().startDate/1000
 						};
 						window.open(GO.url('calendar/report/week',urlParams));
@@ -783,6 +785,7 @@ GO.calendar.MainPanel = function(config){
 					text: GO.lang['strMonth'],
 					handler: function () {
 						var urlParams = {
+							calendars: Ext.encode(this.calendars),
 							date: +this.getActivePanel().startDate/1000
 						};
 						window.open(GO.url('calendar/report/month',urlParams));

@@ -70,7 +70,6 @@ class GO_Calendar_Reports_Day extends GO_Calendar_Reports_Calendar {
 		$this->day = GO_Base_Util_Date::clear_time($day);
 		//$this->events = $this->orderEvents($events);
 		$this->AddPage();
-		
 		$this->calculateOverlap();
 		
 		$this->drawEventsBackground();
@@ -148,7 +147,8 @@ class GO_Calendar_Reports_Day extends GO_Calendar_Reports_Calendar {
 			$this->WriteHtml(' <b>&#x25BC;</b>'); //arrow down
 			foreach($this->events[$this->day]['late'] as $event) {
 				$this->SetXY($this->leftMargin+$this->timeCol ,$x+$this->rowHeight*$i);
-				$this->Cell($colWidth, $this->rowHeight , date('G:i ', $event->start_time).' - '.date('G:i ', $event->end_time).' '. $event->name, 1, 1, 'L', false);
+				$this->EventCell(date('G:i',$event->start_time) .' - '. date('G:i',$event->end_time) .' '. $event->name, $colWidth, $this->rowHeight);
+				//$this->Cell($colWidth, $this->rowHeight , date('G:i ', $event->start_time).' - '.date('G:i ', $event->end_time).' '. $event->name, 1, 1, 'L', false);
 				$i++;
 				if($i>1)
 					break;
@@ -168,7 +168,7 @@ class GO_Calendar_Reports_Day extends GO_Calendar_Reports_Calendar {
 		
 		foreach($this->tasks as $task) {
 			$this->SetX($x);
-			$this->Cell($w, $this->rowHeight - 3, $task->name, 1,1);
+			$this->MultiCell($w, $this->rowHeight - 3, $task->name, 1,'L',false,1);
 		}
 		
 		$this->Rect($x, $this->headerHeight, $w, 29*$this->rowHeight/2, '',$this->thickBorder);
@@ -191,7 +191,7 @@ class GO_Calendar_Reports_Day extends GO_Calendar_Reports_Calendar {
 		
 		foreach($this->events[$this->day]['fd'] as $event) {
 			$this->SetX($x);
-			$this->Cell($w, $this->rowHeight-3, $event->name, 1,1);
+			$this->MultiCell($w, $this->rowHeight - 3, $event->name, 1,'L',false,1);
 		}
 		
 		

@@ -141,7 +141,7 @@ class GO_Calendar_Reports_Week extends GO_Calendar_Reports_Calendar {
 				$x=$w*$colWidth+20; 
 				$i=0;
 				foreach($this->events[$this->day]['fd'] as $event) {
-					$this->SetXY($x+5*$i, 48);
+					$this->SetXY($x, 48+5*$i);
 					$this->EventCell($event->name, $colWidth, 5);
 					//$this->Cell($colWidth, 5 , $event->name, 1, 1, 'L', true);
 					$i++;
