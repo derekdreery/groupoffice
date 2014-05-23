@@ -18,6 +18,8 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 //	_passwordChangePermission : true,
 	_userInputPassword : false,
 	
+	jsonPost: true,
+	
 	initComponent : function(){
 		
 		Ext.apply(this, {
@@ -65,7 +67,7 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 						cls:'go-form-panel',
 						layout: 'form',
 						items: [this.unlockPasswordField = new Ext.form.TextField({
-							name: 'userInputPassword',
+							name: 'note.userInputPassword',
 							fieldLabel: GO.lang['password'],
 							inputType: 'password'
 						})],
@@ -130,7 +132,7 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			labelWidth:160,
 			items:[{
 				xtype: 'textfield',
-				name: 'name',
+				name: 'note.name',
 				width:300,
 				anchor: '100%',
 				maxLength: 100,
@@ -138,7 +140,7 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				fieldLabel: GO.lang.strName
 			},this.selectCategory = new GO.form.ComboBox({
 				fieldLabel: GO.notes.lang.category_id,
-				hiddenName:'category_id',
+				hiddenName:'note.category_id',
 				anchor:'100%',
 				emptyText:GO.lang.strPleaseSelect,
 				store: GO.notes.writableCategoriesStore,
@@ -156,7 +158,7 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			this.encryptCheckbox = new Ext.form.Checkbox({
 				boxLabel: GO.lang.encryptContent,
 				labelSeparator: '',
-				name: 'encrypted',
+				name: 'note.encrypted',
 				allowBlank: true,
 				hideLabel:true,
 				checked: false,
@@ -165,7 +167,7 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			this.uiPassword1Field = new Ext.form.TextField({
 				fieldLabel : GO.lang.password,
 				inputType: 'password',
-				name: 'userInputPassword1',
+				name: 'note.userInputPassword1',
 				value: '',
 				allowBlank: false,
 				disabled: true,
@@ -174,14 +176,14 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				fieldLabel : GO.lang.passwordConfirm,
 				xtype: 'textfield',
 				inputType: 'password',
-				name: 'userInputPassword2',
+				name: 'note.userInputPassword2',
 				value: '',
 				allowBlank: false,
 				disabled: true,
 				hidden: true
 			}),
 			this.contentField = new Ext.form.TextArea({
-				name: 'content',
+				name: 'note.content',
 				anchor: '100%',
 				height: 280,
 				hideLabel:true

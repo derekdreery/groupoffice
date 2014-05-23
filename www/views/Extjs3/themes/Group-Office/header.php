@@ -3,7 +3,7 @@
 <head>
 <?php
 //$this is \GO\Core\Controller\Auth
-$this->fireEvent('headstart');
+GO::router()->getController()->fireEvent('headstart');
 ?>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <meta name="robots" content="noindex" />
@@ -25,7 +25,7 @@ if(!empty(\GO::config()->custom_css_url))
 	echo '<link href="'.\GO::config()->custom_css_url.'" type="text/css" rel="stylesheet" />';
 
 //$this is \GO\Core\Controller\Auth
-$this->fireEvent('head');
+GO::router()->getController()->fireEvent('head');
 
 ?>
 

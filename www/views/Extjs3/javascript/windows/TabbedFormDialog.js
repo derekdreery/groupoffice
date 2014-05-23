@@ -131,6 +131,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	 */
 	loadData : false,
 	
+	
+	jsonPost : false,
+	
 	initComponent : function(){
 		
 		Ext.applyIf(this, {
@@ -143,6 +146,11 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			height:400,
 			closeAction:'hide'
 		});
+		
+		if(this.jsonPost){
+			this.createAction='create';
+			this.updateAction = 'update';
+		}
 		
 		if(this.helppage !== false){
 			if(!this.tools){
@@ -330,6 +338,111 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	  return (this.remoteModelId == 0);
 	},
 	
+	
+	createJSON : function(){
+		var values = this.formPanel.form.getValues();
+		
+		var keys, JSON={}, currentJSONlevel;
+		
+		for(var key in values){
+			
+			keys = key.split('.');
+			
+			currentJSONlevel = JSON;
+			
+			for(var i=0;i<keys.length;i++){
+				if(i===(keys.length-1)){
+					currentJSONlevel[keys[i]]= values[key];
+				}else
+				{
+					currentJSONlevel[keys[i]]=currentJSONlevel[keys[i]] || {};
+					currentJSONlevel=currentJSONlevel[keys[i]];
+				}				
+			}
+			
+			currentJSONlevel = JSON;
+			
+		}
+
+		return JSON;
+	},
+	
+	jsonSubmit: function(hide) {
+
+		GO.request({
+			method:'POST',
+			url: this.formControllerUrl + '/' + this.submitAction,
+			params:{
+				id:this.remoteModelId
+			},
+			jsonData: this.createJSON(),
+			waitMsg: GO.lang['waitMsgSave'],
+			scope: this,
+			success: function(response, options, result) {
+				this.getFooterToolbar().setDisabled(false);
+				if (result[this.remoteModelIdName])
+					this.setRemoteModelId(result[this.remoteModelIdName]);
+
+				if (result.data && result.data[this.remoteModelIdName])
+					this.setRemoteModelId(result.data[this.remoteModelIdName]);
+
+				if (this.permissionsPanel && result[this.permissionsPanel.fieldName])
+					this.permissionsPanel.setAcl(result[this.permissionsPanel.fieldName]);
+				
+						
+
+				this.afterSubmit({result: result, response: response, options:options});
+
+				if (result.summarylog) {
+
+					if (!this.summaryDialog) {
+						this.summaryDialog = new GO.dialog.SummaryDialog();
+					}
+					this.summaryDialog.setSummaryLog(result.summarylog);
+					this.summaryDialog.show();
+				}
+
+				if (hide)
+				{
+					this.hide();
+				}
+
+				this.fireEvent('submit', this, this.remoteModelId);
+				this.fireEvent('save', this, this.remoteModelId);
+
+				this.refreshActiveDisplayPanels();
+
+				if (this.link_config && this.link_config.callback)
+				{
+					if (!this.link_config.scope)
+						this.link_config.scope = this;
+
+					this.link_config.callback.call(this.link_config.scope);
+				}
+				this.updateTitle();
+			},
+			fail: function(response, options, result) {
+				this.getFooterToolbar().setDisabled(false);
+
+
+
+				Ext.MessageBox.alert(GO.lang['strError'], result.feedback);
+
+				if (result.validationErrors) {
+					for (var modelName in result.validationErrors) {
+						
+						for(var attr in result.validationErrors[modelName]){
+						
+							var fieldName = modelName+":"+attr;
+							this.form.findField(fieldName).markInvalid(result.validationErrors[modelName][attr]);
+						}
+					}
+				}
+			}
+			
+		});
+	},
+	
 	submitForm : function(hide){
 		
 		//for the fast double clickers
@@ -344,79 +457,161 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		if(!this.formPanel.form.standardSubmit)
 			this.getFooterToolbar().setDisabled(true);
 		
-		this.formPanel.form.submit(
+		
+		if(this.jsonPost){
+			this.jsonSubmit(hide);
+		}else
 		{
-			url:GO.url(this.formControllerUrl+'/'+this.submitAction),
-			params: params,
-			waitMsg:GO.lang['waitMsgSave'],
-			success:function(form, action){		
-				this.getFooterToolbar().setDisabled(false);
-				if(action.result[this.remoteModelIdName])
-					this.setRemoteModelId(action.result[this.remoteModelIdName]);
-				
-				if(action.result.data && action.result.data[this.remoteModelIdName])
-					this.setRemoteModelId(action.result.data[this.remoteModelIdName]);
-				
-				if(this.permissionsPanel && action.result[this.permissionsPanel.fieldName])
-					this.permissionsPanel.setAcl(action.result[this.permissionsPanel.fieldName]);
-								
-				this.afterSubmit(action);
-				
-				if(action.result.summarylog){
-					
-					if(!this.summaryDialog){
-						this.summaryDialog = new GO.dialog.SummaryDialog();
+
+
+			this.formPanel.form.submit(
+			{
+				url:GO.url(this.formControllerUrl+'/'+this.loadAction),
+				params: params,
+				waitMsg:GO.lang['waitMsgSave'],
+				success:function(form, action){		
+					this.getFooterToolbar().setDisabled(false);
+					if(action.result[this.remoteModelIdName])
+						this.setRemoteModelId(action.result[this.remoteModelIdName]);
+
+					if(action.result.data && action.result.data[this.remoteModelIdName])
+						this.setRemoteModelId(action.result.data[this.remoteModelIdName]);
+
+					if(this.permissionsPanel && action.result[this.permissionsPanel.fieldName])
+						this.permissionsPanel.setAcl(action.result[this.permissionsPanel.fieldName]);
+
+					this.afterSubmit(action);
+
+					if(action.result.summarylog){
+
+						if(!this.summaryDialog){
+							this.summaryDialog = new GO.dialog.SummaryDialog();
+						}
+						this.summaryDialog.setSummaryLog(action.result.summarylog);
+						this.summaryDialog.show();
 					}
-					this.summaryDialog.setSummaryLog(action.result.summarylog);
-					this.summaryDialog.show();
-				}
-				
-				if(hide)
-				{
-					this.hide();	
-				}
-				
-				this.fireEvent('submit', this, this.remoteModelId);
-				this.fireEvent('save', this, this.remoteModelId);
-				
-				this.refreshActiveDisplayPanels();
-				
-				if(this.link_config && this.link_config.callback)
-				{	
-					if(!this.link_config.scope)
-						this.link_config.scope = this;
-					
-					this.link_config.callback.call(this.link_config.scope);						
-				}
-				this.updateTitle();
-			},		
-			failure: function(form, action) {
-				this.getFooterToolbar().setDisabled(false);
-				if(action.failureType == 'client')
-				{					
-					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
-				} else {					
-					
-					if(this.fileUpload){
-						action.result.feedback=Ext.util.Format.nl2br(action.result.feedback);
+
+					if(hide)
+					{
+						this.hide();	
 					}
-					
-					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
-					
-					if(action.result.validationErrors){
-						for(var field in action.result.validationErrors){
-							form.findField(field).markInvalid(action.result.validationErrors[field]);
+
+					this.fireEvent('submit', this, this.remoteModelId);
+					this.fireEvent('save', this, this.remoteModelId);
+
+					this.refreshActiveDisplayPanels();
+
+					if(this.link_config && this.link_config.callback)
+					{	
+						if(!this.link_config.scope)
+							this.link_config.scope = this;
+
+						this.link_config.callback.call(this.link_config.scope);						
+					}
+					this.updateTitle();
+				},		
+				failure: function(form, action) {
+					this.getFooterToolbar().setDisabled(false);
+					if(action.failureType == 'client')
+					{					
+						Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
+					} else {					
+
+						if(this.fileUpload){
+							action.result.feedback=Ext.util.Format.nl2br(action.result.feedback);
+						}
+
+						Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
+
+						if(action.result.validationErrors){
+							for(var field in action.result.validationErrors){
+								form.findField(field).markInvalid(action.result.validationErrors[field]);
+							}
 						}
 					}
-				}
-			},
-			scope: this
-		});		
+				},
+				scope: this
+			});	
+		}
 	},
   
 	beforeLoad : function(remoteModelId, config){},
 	afterLoad : function(remoteModelId, config, action){},
-	afterSubmit : function(action){},
+	afterSubmit : function(action){},	
+	
+	
+	jsonLoad : function(remoteModelId, config){
+		GO.request({
+			method:'GET',
+			url: this.formControllerUrl + '/' + this.submitAction,
+			params:{
+				id:this.remoteModelId
+			},
+			jsonData: this.createJSON(),
+			waitMsg: GO.lang['waitMsgSave'],
+			scope: this,
+			success: function(response, options, result) {
+			
+				
+				
+				
+				//apply values
+				for(var modelName in result['data']){
+					if(typeof result==="object"){
+						
+						//Only one supported atm.
+						if(this.permissionsPanel)
+							this.permissionsPanel.setAcl(result['data'][modelName]['acl_id']);
+						
+						
+						for(var attr in result['data'][modelName]){
+							
+							if(attr!=='relatedLabels'){
+								var fieldName = modelName+"."+attr;
+
+								var f = this.formPanel.form.findField(fieldName);
+
+								if(f){								
+									f.setValue(result['data'][modelName][attr]);
+
+									if(result['data'][modelName]['relatedLabels'] && result['data'][modelName]['relatedLabels'][attr]){
+										f.setRemoteText(result['data'][modelName]['relatedLabels'][attr]);
+									}
+								}
+							}
+						}
+					}
+				}
+
+				if(config && config.values)
+					this.formPanel.form.setValues(config.values);
+
+				this.loadData = result.data;
+				GO.dialog.TabbedFormDialog.superclass.show.call(this);
+				this.afterLoad(remoteModelId, config, {response:response, options:options, result:result});
+
+				this.afterShowAndLoad(remoteModelId, config);
+
+				this.formPanel.form.clearInvalid();
+
+				this.updateTitle();
+
+				this.loading=false;
+			}			
+		});
+	},
+	
+	
+	setLabels : function(result){
+		if(result.remoteComboTexts){
+			var t = loadAction.result.remoteComboTexts;
+			for(var fieldName in t){
+				var f = this.formPanel.form.findField(fieldName);				
+				if(f)
+					f.setRemoteText(t[fieldName]);
+			}
+		}
+	},
 	
 	show : function (remoteModelId, config) {
 		
@@ -457,39 +652,44 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		if(remoteModelId || this.loadOnNewModel)
 		{
 			
-			this.formPanel.load({
-				params:config.loadParams,
-				url:GO.url(this.formControllerUrl+'/'+this.loadAction),
-				method: 'GET',
-				success:function(form, action)
-				{					
-					this.setRemoteComboTexts(action);
-					
-					if(this.permissionsPanel)
-						this.permissionsPanel.setAcl(action.result.data[this.permissionsPanel.fieldName]);
-					
-					if(config && config.values)
-						this.formPanel.form.setValues(config.values);
+			if(this.jsonPost){
+				this.jsonLoad(remoteModelId, config);
+			}else
+			{
+				this.formPanel.load({
+					params:config.loadParams,
+					url:GO.url(this.formControllerUrl+'/'+this.loadAction),
+					method: 'GET',
+					success:function(form, action)
+					{										
+						this.setRemoteComboTexts(action);
 
-					this.loadData = action.result.data;
-					GO.dialog.TabbedFormDialog.superclass.show.call(this);
-					this.afterLoad(remoteModelId, config, action);
-					
-					this.afterShowAndLoad(remoteModelId, config);
-					
-					this.formPanel.form.clearInvalid();
-					
-					this.updateTitle();
-					
-					this.loading=false;
-				},
-				failure:function(form, action)
-				{
-					this.loading=false;
-					GO.errorDialog.show(action.result.feedback);
-				},				
-				scope: this				
-			});
+						if(this.permissionsPanel)
+							this.permissionsPanel.setAcl(action.result.data[this.permissionsPanel.fieldName]);
+
+						if(config && config.values)
+							this.formPanel.form.setValues(config.values);
+
+						this.loadData = action.result.data;
+						GO.dialog.TabbedFormDialog.superclass.show.call(this);
+						this.afterLoad(remoteModelId, config, action);
+
+						this.afterShowAndLoad(remoteModelId, config);
+
+						this.formPanel.form.clearInvalid();
+
+						this.updateTitle();
+
+						this.loading=false;
+					},
+					failure:function(form, action)
+					{
+						this.loading=false;
+						GO.errorDialog.show(action.result.feedback);
+					},				
+					scope: this				
+				});
+			}
 		} else {
 			if(config && config.values)
 				this.formPanel.form.setValues(config.values);
@@ -516,6 +716,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				}
 			}
 		}
+	
 	},
 	
 	setRemoteComboTexts : function(loadAction){
@@ -528,6 +729,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			}
 		}
 	},
+	
 	
 	afterShowAndLoad : function (remoteModelId, config){
 		

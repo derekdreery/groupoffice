@@ -588,6 +588,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			
 			GO.request({
 				maskEl:this.body,
+				method:'GET',
 				url: this.loadUrl,
 				params:this.loadParams,
 				success: function(options, response, result)
