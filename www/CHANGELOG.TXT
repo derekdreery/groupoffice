@@ -1,4 +1,4 @@
-
+- Fixed error when unchecking the "link company" and "link contact" in the email message panel.
 - Fixed problem with smime certificate check when changing the "from" field in the email composer
 - Fixed upload button for smime PKS12 file in email account dialog
 
