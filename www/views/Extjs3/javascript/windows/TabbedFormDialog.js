@@ -466,7 +466,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 
 			this.formPanel.form.submit(
 			{
-				url:GO.url(this.formControllerUrl+'/'+this.loadAction),
+				url:GO.url(this.formControllerUrl+'/'+this.submitAction),
 				params: params,
 				waitMsg:GO.lang['waitMsgSave'],
 				success:function(form, action){		
@@ -561,10 +561,10 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 						
 						//Only one supported atm.
 						if(this.permissionsPanel)
-							this.permissionsPanel.setAcl(result['data'][modelName]['acl_id']);
+							this.permissionsPanel.setAcl(result['data'][modelName]['attributes']['acl_id']);
 						
 						
-						for(var attr in result['data'][modelName]){
+						for(var attr in result['data'][modelName]['attributes']){
 							
 							if(attr!=='relatedLabels'){
 								var fieldName = modelName+"."+attr;
@@ -572,7 +572,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 								var f = this.formPanel.form.findField(fieldName);
 
 								if(f){								
-									f.setValue(result['data'][modelName][attr]);
+									f.setValue(result['data'][modelName]['attributes'][attr]);
 
 									if(result['data'][modelName]['relatedLabels'] && result['data'][modelName]['relatedLabels'][attr]){
 										f.setRemoteText(result['data'][modelName]['relatedLabels'][attr]);

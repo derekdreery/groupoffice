@@ -13,26 +13,17 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+namespace GO\Notes\Customfields\Model;
+
+use GO\Customfields\Model\AbstractCustomFieldsRecord;
+
 /**
  * 
  * The note model custom fields model.
  * 
  */
 
-namespace GO\Notes\Customfields\Model;
-
-
-class Note extends \GO\Customfields\Model\AbstractCustomFieldsRecord{
-	/**
-	 * Returns a static model of itself
-	 * 
-	 * @param String $className
-	 * @return \GO\Notes\Model\CustomFieldsRecord 
-	 */
-	public static function model($className=__CLASS__)
-	{	
-		return parent::model($className);
-	}
+class Note extends AbstractCustomFieldsRecord{
 
 	public function extendsModel(){
 		return "GO\Notes\Model\Note";

@@ -14,11 +14,6 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-/**
- * 
- * The Category controller
- * 
- */
 
 namespace GO\Notes\Controller;
 
@@ -29,7 +24,11 @@ use GO\Base\Data\DbStore;
 use GO\Base\View\JsonView;
 use GO\Notes\Model\Category;
 
-
+/**
+ * 
+ * The Category controller
+ * 
+ */
 class CategoryController extends AbstractController {
 	
 	protected function init() {

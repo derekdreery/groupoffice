@@ -14,10 +14,6 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-/**
- * The note controller provides action for basic crud functionality for the note model
- */
-
 namespace GO\Notes\Controller;
 
 use Exception;
@@ -25,6 +21,10 @@ use GO;
 use GO\Base\View\JsonView;
 use GO\Notes\Model\Note;
 use GO\Professional\Controller\AbstractController;
+
+/**
+ * The note controller provides action for basic crud functionality for the note model
+ */
 
 class NoteController extends AbstractController{
 	
