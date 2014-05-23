@@ -231,7 +231,7 @@ class Template extends \GO\Base\Db\ActiveRecord{
 	 */
 	private function _replaceRelations($content, $model, $tagPrefix='', $leaveEmptyTags=false){
 		
-		$relations = $model->relations();
+		$relations = $model->getRelations();
 		$pattern = '/'.preg_quote($tagPrefix,'/').'([^:]+):[^\}]+\}/';
 		if(preg_match_all($pattern,$content, $matches)){
 			foreach($matches[1] as $relation){

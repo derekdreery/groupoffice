@@ -183,11 +183,18 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * 
 	 * Define the relations for the model.
 	 * 
+	 * NOTE: To get relations use getRelations() as it also includes dynamically added relations and automatic relations.
+	 * 
 	 * Example return value:
 	 * array(
 				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO\Addressbook\Model\Contact', 'field'=>'addressbook_id', 'delete'=>self::DELETE_CASCADE //with this enabled the relation will be deleted along with the model),
 				'companies' => array('type'=>self::HAS_MANY, 'model'=>'GO\Addressbook\Model\Company', 'field'=>'addressbook_id', 'delete'=>self::DELETE_CASCADE),
-				'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'GO\Addressbook\Model\Addressbook', 'field'=>'addressbook_id')
+				'addressbook' => array(
+	 *				'type'=>self::BELONGS_TO, 
+	 *				'model'=>'GO\Addressbook\Model\Addressbook', 
+	 *				'field'=>'addressbook_id',
+	 *				'labelAttribute'=>function($model){return $model->relation->name;} //this will automatically supply the label for a combobox in a JSON request.
+	 *		)
 				'users' => array('type'=>self::MANY_MANY, 'model'=>'GO\Base\Model\User', 'field'=>'group_id', 'linkModel' => 'GO\Base\Model\UserGroup'), // The "field" property is the key of the current model that is defined in the linkModel
 		);
 	 * 
@@ -1974,16 +1981,39 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		return $r!=false;		
 	}
 	
-	protected function getRelation($name){
+	/**
+	 * Get all the relations of this activerecord. Incuding the automatic user and
+	 * mUser relation and dynamically added relations.
+	 * 
+	 * @return array
+	 */
+	public function getRelations(){
 		$r= array_merge($this->relations(), self::$_addedRelations);		
 		
 		if(isset($this->columns['user_id']) && !isset($r['user'])){
-			$r['user']=array('type'=>self::BELONGS_TO, 'model'=>'GO\Base\Model\User', 'field'=>'user_id');
+			$r['user']=array(
+					'type'=>self::BELONGS_TO, 
+					'model'=>'GO\Base\Model\User', 
+					'field'=>'user_id',
+					'labelAttribute'=>function($model){return $model->user->name;}
+					);
 		}
 		
 		if(isset($this->columns['muser_id']) && !isset($r['mUser'])){
-			$r['mUser']=array('type'=>self::BELONGS_TO, 'model'=>'GO\Base\Model\User', 'field'=>'muser_id');
+			$r['mUser']=array(
+					'type'=>self::BELONGS_TO, 
+					'model'=>'GO\Base\Model\User', 
+					'field'=>'muser_id',
+					'labelAttribute'=>function($model){return $model->mUser->name;}
+					);
 		}
+		
+		return $r;
+	}
+	
+	protected function getRelation($name){
+		
+		$r = $this->getRelations();
 		
 		$this->_checkRelations($r);
 		

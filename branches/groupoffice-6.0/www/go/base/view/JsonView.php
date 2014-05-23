@@ -64,10 +64,10 @@ class JsonView extends AbstractView{
 					throw new \GO\Base\Exception\AccessDenied();
 
 
-				$response['data'][$modelName] = $model->getAttributes(); 
+				$response['data'][$modelName]['attributes'] = $model->getAttributes(); 
 				$response['data'][$modelName]['permission_level'] = $model->getPermissionLevel();
 
-				$r = $model->relations();
+				$r = $model->getRelations();
 
 				foreach($r as $relationName=>$options){
 					if(isset($options['labelAttribute'])){
@@ -80,7 +80,7 @@ class JsonView extends AbstractView{
 
 				//Add the customerfields to the data array
 				if (\GO::user()->getModulePermissionLevel('customfields') && $model->customfieldsRecord)
-					$response['data'][$modelName] = array_merge($response['data'][$modelName], $model->customfieldsRecord->getAttributes());
+					$response['data'][$modelName]['attributes'] = array_merge($response['data'][$modelName]['attributes'], $model->customfieldsRecord->getAttributes());
 			}
 
 			
