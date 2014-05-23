@@ -1247,4 +1247,12 @@ class GO{
 	public static function cronIsRunning(){
 		return \GO::config()->get_setting('cron_last_run') > time()-300;
 	}
+	
+	public static function p($name){
+		return self::request()->post($name);
+	}
+	
+	public static function g($name){
+		return self::request()->get($name);
+	}
 }

@@ -50,9 +50,9 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 		
 //		$view = \GO::view();
 		
-		$this->layout='html';
+		$this->view->layout='html';
 		
-		if(!$this->findViewFile('Login')){
+		if(!$this->view->findViewFile('Login')){
 			//for backwards theme compat
 			require(\GO::view()->getTheme()->getPath().'Layout.php');
 		}  else {

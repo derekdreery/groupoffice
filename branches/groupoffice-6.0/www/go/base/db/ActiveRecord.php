@@ -56,6 +56,15 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	public static $attributeOutputMode='raw';
 	
 	/**
+	 * Format attributes on input/output. We want to move to the situatation that
+	 * the client does all the formatting and the server doesn't do this anymore.
+	 * So on JSON payload requests this will be disabled in the controller.
+	 * 
+	 * @var boolean 
+	 */
+	public static $formatAttributesByDefault=true;
+	
+	/**
 	 * This relation is used when the remote model's primary key is stored in a 
 	 * local attribute.
 	 * 
@@ -2376,7 +2385,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * @param array $attributes attributes to set on this object
 	 */
 	
-	public function setAttributes($attributes, $format=true){		
+	public function setAttributes($attributes, $format=null){
+		
+		if(!isset($format)){
+			$format = ActiveRecord::$formatAttributesByDefault;
+		}
 		
 		//GO::debug($this->className().'::setAttributes(); '.$this->pk);
 		
@@ -2410,8 +2423,13 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * 
 	 * @return array attribute values indexed by attribute names.
 	 */
-	public function getAttributes($outputType='formatted')
+	public function getAttributes($outputType=null)
 	{	
+		
+		if(!isset($outputType)){
+			$outputType = ActiveRecord::$formatAttributesByDefault ? 'formatted' : 'raw';
+		}
+		
 		if($outputType=='raw')
 			$att=$this->_attributes;
 		else
