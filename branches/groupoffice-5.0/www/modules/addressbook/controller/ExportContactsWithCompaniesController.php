@@ -16,7 +16,10 @@ class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Cont
 	 * @param array $params
 	 */
 	public function export($params) {
-
+		
+		GO::$disableModelCache=true;		
+		GO::setMaxExecutionTime(180);
+		
 		// Load the data from the session.
 		$findParams = GO::session()->values['contact']['findParams'];
 		$findParams->getCriteria()->recreateTemporaryTables();
