@@ -86,7 +86,7 @@ class Router{
 	public function runController($params=false){
 		
 		if(!$params){
-			$params = $_REQUEST;//\GO::request()->get;
+			$params = array_merge($_REQUEST, \GO::request()->post);
 		}
 						
 		$r = !empty($params['r']) ?  explode('/', $params['r']): array();		

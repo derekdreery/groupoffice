@@ -249,6 +249,7 @@ $l['delete_success']= 'Sie haben sich erfolgreich aus der Adressliste ausgetrage
 $l['setCurrentTemplateAsDefault']='Aktuelle Vorlage als Standard verwenden';
 $l['editUser']='Nutzer bearbeiten';
 $l['templateContent']='Dokument';
+$l['addresslistIdMustBePositive']='Für dieses Feld wird eine positive Adresslisten-ID erwartet. Bitte setzen Sie sich mit dem Administrator in Verbindung.';
 $l['male']='Männlich';
 $l['female']='Weiblich';
 $l['contactUuid']='UUID';

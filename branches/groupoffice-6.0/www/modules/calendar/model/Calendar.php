@@ -258,6 +258,16 @@ class Calendar extends \GO\Base\Model\AbstractUserDefaultModel {
 			return $string;
 	}
 	
+	public function getEventsForPeriod($start, $end) {
+		return GO_Calendar_Model_Event::model()->findCalculatedForPeriod(
+			GO_Base_Db_FindParams::newInstance()->criteria(
+				GO_Base_Db_FindCriteria::newInstance()->addCondition('calendar_id', $this->id)
+			)->select(),
+			$start, 
+			$end
+		);
+	}
+	
 	/**
 	 * Get the url to the published ICS file.
 	 * @return string

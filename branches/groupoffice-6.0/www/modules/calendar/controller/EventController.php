@@ -1169,13 +1169,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 		$resultCount = 0;
 	
 		// Get all the localEvent models between the given time period
-		$events = \GO\Calendar\Model\Event::model()->findCalculatedForPeriod(
-								\GO\Base\Db\FindParams::newInstance()->criteria(
-									\GO\Base\Db\FindCriteria::newInstance()->addCondition('calendar_id', $calendar->id)
-								)->select(),
-								strtotime($startTime), 
-								strtotime($endTime)
-							);
+		$events = $calendar->getEventsForPeriod(strtotime($startTime), strtotime($endTime));
 		
 		$this->_uuidEvents = array();
 
