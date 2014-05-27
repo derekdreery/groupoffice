@@ -274,7 +274,7 @@ abstract class AbstractJsonController extends AbstractController {
 			$params['type']=str_replace('GO\Base\Export', 'GO\Base\Storeexport', $params['type']);
 			$export = new $params['type']($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation);
 		}else
-			$export = new \GO\Base\Storeexport_ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
+			$export = new \GO\Base\Storeexport\ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
 
 		if(isset($params['extraLines']))
 			$export->addLines($params['extraLines']);

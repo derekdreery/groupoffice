@@ -199,6 +199,13 @@ class JsonView extends AbstractView{
 					if (\GO\Base\Util\Http::isAjaxRequest(false)) {
 						$response['feedback'] = nl2br($response['feedback']);
 					}
+					
+					
+					$response['errors']=array(
+							sprintf(\GO::t('validationErrorsFound'), strtolower($model->localizedName)) . "\n\n" . implode("\n", $model->getValidationErrors()) . "\n"
+					);
+					
+					
 					$response['validationErrors'][$modelName] = $model->getValidationErrors();
 				}
 			}
