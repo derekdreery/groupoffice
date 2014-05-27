@@ -211,7 +211,7 @@ class CalendarController extends \GO\Base\Controller\AbstractModelController {
 					
 					$data = (string) $obj->Data;
 					
-//					GO::debug($data);
+//					\GO::debug($data);
 					
 					$vObject = \GO\Base\VObject\Reader::read($data);
 					
@@ -487,7 +487,7 @@ class CalendarController extends \GO\Base\Controller\AbstractModelController {
 	public function actionPrintCategoryCount($params){
 		
 		
-		GO::session()->closeWriting();
+		\GO::session()->closeWriting();
 		
 		// If a year is posted then determine the correct start and end date and set them here
 		if(isset($params['fullYear'])){

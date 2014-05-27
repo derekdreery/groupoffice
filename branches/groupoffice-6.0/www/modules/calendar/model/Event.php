@@ -482,7 +482,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				$adminUserIds[] = $adminUser->id;
 			}
 			
-			if (in_array(GO::user()->id,$adminUserIds) && $this->getIsNew()) {
+			if (in_array(\GO::user()->id,$adminUserIds) && $this->getIsNew()) {
 				$this->status = 'CONFIRMED';
 			}
 
@@ -666,7 +666,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			while($adminUser = $groupAdminsStmt->fetch()){
 				$adminUserIds[] = $adminUser->id;
 			}
-			if ((!in_array(GO::user()->id,$adminUserIds) || $this->isModified('status'))&& $this->end_time > time()) {
+			if ((!in_array(\GO::user()->id,$adminUserIds) || $this->isModified('status'))&& $this->end_time > time()) {
 				$this->_sendResourceNotification($wasNew);
 			}
 		}else
@@ -811,23 +811,23 @@ class Event extends \GO\Base\Db\ActiveRecord {
 
 			while($adminUser = $stmt->fetch()){
 				$adminUserIds[] = $adminUser->id;
-				if($adminUser->id!=GO::user()->id){
+				if($adminUser->id!=\GO::user()->id){
 					
 				
 					if($wasNew){
 
 						if ($this->status==Event::STATUS_CONFIRMED) {
-							$body = sprintf(GO::t('resource_confirmed_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+							$body = sprintf(\GO::t('resource_confirmed_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
 											. $this->toHtml()
-											. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+											. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
 
-							$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
+							$subject = sprintf(\GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
 						} else {
-							$body = sprintf(GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+							$body = sprintf(\GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
 											. $this->toHtml()
-											. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+											. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
 
-							$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
+							$subject = sprintf(\GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
 						}
 					}else
 					{
@@ -851,8 +851,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			
 
 			//send update to user that booked the resource
-			if($this->user_id!=GO::user()->id
-						&& in_array(GO::user()->id,$adminUserIds)
+			if($this->user_id!=\GO::user()->id
+						&& in_array(\GO::user()->id,$adminUserIds)
 				) {
 				if($this->isModified('status')){				
 					if($this->status==Event::STATUS_CONFIRMED){
@@ -871,7 +871,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					}
 				}else
 				{
-					$body = sprintf(GO::t('your_resource_modified_mail_body','calendar'),GO::user()->name,$this->calendar->name).'<br /><br />'
+					$body = sprintf(\GO::t('your_resource_modified_mail_body','calendar'),\GO::user()->name,$this->calendar->name).'<br /><br />'
 								. $this->toHtml();
 //								. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
 					$subject = sprintf(\GO::t('your_resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
@@ -1010,7 +1010,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	 * @param \GO\Base\Db\FindParams $findParams extra findparmas
 	 * @param int $periodStartTime Start time as Unix timestamp
 	 * @param int $periodEndTime Latest start time for the selected event as Unix timestamp
-	 * @param GO_Base_Db_FindParams $findParams 
+	 * @param \GO\Base\Db\FindParams $findParams 
 
 	 * @param boolean $onlyBusyEvents
 	 * @return \GO\Base\Db\ActiveStatement
@@ -2151,7 +2151,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 //			'is_organizer'=>false
 //		));
 		
-		GO::debug("Creating event copy for ".$participant->name);
+		\GO::debug("Creating event copy for ".$participant->name);
 		
 		//create event in participant's default calendar if the current user has the permission to do that
 		$calendar = $participant->getDefaultCalendar();
@@ -2175,7 +2175,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				return $participantEvent;
 			}else
 			{
-				GO::debug("Found existing event: ".$existing->id.' - '.$existing->getAttribute('start_time', 'formatted'));
+				\GO::debug("Found existing event: ".$existing->id.' - '.$existing->getAttribute('start_time', 'formatted'));
 				
 					
 				//correct errors that somehow occurred.

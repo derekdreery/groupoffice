@@ -1,4 +1,8 @@
 <?php
+
+namespace GO\Calendar\Reports;
+
+
 /**
  * Copyright Intermesh
  *
@@ -11,7 +15,7 @@
  * @version $Id$
  * @author Michael de Hart <mdhart@intermesh.nl>
  */
-class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
+class Calendar extends \GO\Base\Util\Pdf {
 	
 	protected $fSizeLarge = 24;
 	protected $fSizeMedium = 9;
@@ -39,11 +43,11 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 		parent::init();
 		$this->font_size--;
 		$this->setCellPaddings(1,1,0,1);
-		$this->days_long = GO::t('full_days', 'base');
-		$this->months_short = GO::t('short_months', 'base');
-		$this->months_long = GO::t('months', 'base');
-		$this->days_short = GO::t('short_days', 'base');
-		if(GO::user()->first_weekday==1) { // place sunday at the end
+		$this->days_long = \GO::t('full_days', 'base');
+		$this->months_short = \GO::t('short_months', 'base');
+		$this->months_long = \GO::t('months', 'base');
+		$this->days_short = \GO::t('short_days', 'base');
+		if(\GO::user()->first_weekday==1) { // place sunday at the end
 			$elm = array_shift($this->days_long);
 			array_push($this->days_long, $elm);
 			$elm = array_shift($this->days_short);
@@ -67,12 +71,12 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 		$this->SetX($x);
 		$this->Cell($width, 5, $this->GetPage(), 0,0,'C');
 		$this->SetX($x);
-		$this->Cell($width, 5, GO_Base_Util_Date::format(date('Y-m-d H:i')), 0,0,'R');
+		$this->Cell($width, 5, \GO\Base\Util\Date::format(date('Y-m-d H:i')), 0,0,'R');
 	}
 	
 	/**
 	 * Place evetn in subarray orderd by date
-	 * @param GO_Calendar_Model_LocalEvent[] $events
+	 * @param \GO\Calendar\Model\LocalEvent[] $events
 	 * @return array
 	 */
 	protected function orderEvents($events) {
@@ -81,7 +85,7 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 			$event = $evento->getEvent();
 			$event->start_time = $evento->getAlternateStartTime();
 			$event->end_time = $evento->getAlternateEndTime();
-			$day = GO_Base_Util_Date::clear_time($event->start_time);
+			$day = \GO\Base\Util\Date::clear_time($event->start_time);
 			do {
 				$type = $event->isFullDay()?'fd':'part';
 				if($type=='part' && date('G',$event->start_time) < 7)
@@ -140,7 +144,7 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 			$col = $position % $prevMax;
 			
 			if($col+1 == $prevMax)
-				$position=0; //GO::debug(' --> next row ');
+				$position=0; //\GO::debug(' --> next row ');
 			
 			$pcol = $col = $position % $prevMax;
 			$ppos = $position;
@@ -155,7 +159,7 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 
 				//collision detection
 				if($previous['end'] > $start && $pcol == $col) {
-					//GO::debug('  --> push by '.substr($previousCols[$pcol]->name, 0,4));
+					//\GO::debug('  --> push by '.substr($previousCols[$pcol]->name, 0,4));
 					$position++;
 					$col = $position % $prevMax;
 					$max = max($max,$previous['max']);
@@ -163,7 +167,7 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 					
 				}
 				else if($previous['end'] > $start) {
-					//GO::debug('  -v- shrinking '.substr($previousCols[$pcol]->name, 0,4));
+					//\GO::debug('  -v- shrinking '.substr($previousCols[$pcol]->name, 0,4));
 					$max = max($max,$previous['max']);
 				}
 				
@@ -183,7 +187,7 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 	
 	protected function _getStartEndRow($event) {
 
-		$day = GO_Base_Util_Date::clear_time($event->start_time);
+		$day = \GO\Base\Util\Date::clear_time($event->start_time);
 		$start = round(($event->start_time - $day) / 60 / 15); //= seconds in quarter
 		$end = round(($event->end_time - $day) / 60 / 15); //= seconds in quarter
 		return array($start, $end);
@@ -302,7 +306,7 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 	 * @return int 0 for monday
 	 */
 	protected function wd($wd) {
-		if(GO::user()->first_weekday==0)
+		if(\GO::user()->first_weekday==0)
 			return $wd;
 		if ($wd==0) 
 			return 6;

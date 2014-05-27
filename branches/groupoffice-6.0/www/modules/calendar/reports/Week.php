@@ -1,4 +1,8 @@
 <?php
+
+namespace GO\Calendar\Reports;
+
+
 /**
  * Copyright Intermesh
  *
@@ -11,10 +15,10 @@
  * @version $Id$
  * @author Michael de Hart <mdhart@intermesh.nl>
  */
-class GO_Calendar_Reports_Week extends GO_Calendar_Reports_Calendar {
+class Week extends Calendar {
 	
 	/**
-	 * @var GO_Calender_Model_Event[]
+	 * @var \GO\Calender\Model\Event[]
 	 */
 	protected $events = array();
 	protected $notes = array('Note1', 'Note2', 'Note3');

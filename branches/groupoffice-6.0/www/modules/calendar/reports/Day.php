@@ -1,4 +1,8 @@
 <?php
+
+namespace GO\Calendar\Reports;
+
+
 /**
  * Copyright Intermesh
  *
@@ -11,10 +15,10 @@
  * @version $Id$
  * @author Michael de Hart <mdhart@intermesh.nl>
  */
-class GO_Calendar_Reports_Day extends GO_Calendar_Reports_Calendar {
+class Day extends Calendar {
 	
 	/**
-	 * @var GO_Calender_Model_Event[]
+	 * @var \GO\Calender\Model\Event[]
 	 */
 	protected $events = array();
 	protected $notes = array(); //unused (no notes attache to calendar in groupoffice)
@@ -67,7 +71,7 @@ class GO_Calendar_Reports_Day extends GO_Calendar_Reports_Calendar {
 	 * @param integer $day unixtimestamp of day you like to render
 	 */
 	public function render($day) {
-		$this->day = GO_Base_Util_Date::clear_time($day);
+		$this->day = \GO\Base\Util\Date::clear_time($day);
 		//$this->events = $this->orderEvents($events);
 		$this->AddPage();
 		$this->calculateOverlap();
@@ -164,7 +168,7 @@ class GO_Calendar_Reports_Day extends GO_Calendar_Reports_Calendar {
 		$this->SetXY($x, $this->headerHeight);
 		
 		$this->SetFillColor(240);
-		$this->Cell($w, $this->rowHeight-3, GO::t('tasklist','tasks') .' '. GO::t('today'), 1,1,'C', true);
+		$this->Cell($w, $this->rowHeight-3, \GO::t('tasklist','tasks') .' '. \GO::t('today'), 1,1,'C', true);
 		
 		foreach($this->tasks as $task) {
 			$this->SetX($x);
@@ -183,7 +187,7 @@ class GO_Calendar_Reports_Day extends GO_Calendar_Reports_Calendar {
 		$w= $this->rightCol; //200-$this->leftCol-$margin['left']-2;
 
 		$this->SetXY($x, $y);
-		$this->Cell($w, $this->rowHeight-3, GO::t('printAllDaySingle','calendar'), 1,1,'C', true);
+		$this->Cell($w, $this->rowHeight-3, \GO::t('printAllDaySingle','calendar'), 1,1,'C', true);
 		
 		$this->Rect($x, $this->headerHeight+14.5*$this->rowHeight+2, $w, 30*$this->rowHeight/2, '',$this->thickBorder);
 		if(!isset($this->events[$this->day]['fd']))

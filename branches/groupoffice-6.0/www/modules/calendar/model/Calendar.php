@@ -259,9 +259,9 @@ class Calendar extends \GO\Base\Model\AbstractUserDefaultModel {
 	}
 	
 	public function getEventsForPeriod($start, $end) {
-		return GO_Calendar_Model_Event::model()->findCalculatedForPeriod(
-			GO_Base_Db_FindParams::newInstance()->criteria(
-				GO_Base_Db_FindCriteria::newInstance()->addCondition('calendar_id', $this->id)
+		return \GO\Calendar\Model\Event::model()->findCalculatedForPeriod(
+			\GO\Base\Db\FindParams::newInstance()->criteria(
+				\GO\Base\Db\FindCriteria::newInstance()->addCondition('calendar_id', $this->id)
 			)->select(),
 			$start, 
 			$end

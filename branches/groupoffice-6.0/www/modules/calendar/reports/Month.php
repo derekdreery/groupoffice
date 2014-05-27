@@ -1,4 +1,8 @@
 <?php
+
+namespace GO\Calendar\Reports;
+
+
 /**
  * Copyright Intermesh
  *
@@ -11,10 +15,10 @@
  * @version $Id$
  * @author Michael de Hart <mdhart@intermesh.nl>
  */
-class GO_Calendar_Reports_Month extends GO_Calendar_Reports_Calendar {
+class Month extends Calendar {
 	
 	/**
-	 * @var GO_Calender_Model_Event[]
+	 * @var \GO\Calender\Model\Event[]
 	 */
 	protected $events = array();
 	
@@ -53,7 +57,7 @@ class GO_Calendar_Reports_Month extends GO_Calendar_Reports_Calendar {
 	
 	/**
 	 * 
-	 * @param GO_Calender_Model_Event[] $events
+	 * @param \GO\Calender\Model\Event[] $events
 	 */
 	public function render($events) {
 		$this->events = $this->orderEvents($events);
@@ -146,7 +150,7 @@ class GO_Calendar_Reports_Month extends GO_Calendar_Reports_Calendar {
 				}
 				$this->SetXY($coord[0], $coord[1]+$dateh);
 				$this->SetCellHeightRatio(1.45);
-				//GO::debug($events);
+				//\GO::debug($events);
 				//$this->MultiCell($colw,$rowh-$dateh,$events, 1,'L',true,0,'','',true,0,true,true,$rowh-$dateh,'T',true);
 				$this->writeHTMLCell($colw,$rowh-$dateh,$this->GetX(),$this->GetY(),  mb_convert_encoding($events,'UTF-8'), 1,0,true);
 				$this->SetCellHeightRatio(1.2);
