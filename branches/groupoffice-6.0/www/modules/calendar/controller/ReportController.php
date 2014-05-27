@@ -15,7 +15,7 @@ namespace GO\Calendar\Controller;
  * @version $Id$
  * @author Michael de Hart <mdhart@intermesh.nl>
  */
-class Report extends \GO\Base\Controller\AbstractJsonController {
+class ReportController extends \GO\Base\Controller\AbstractJsonController {
 	
 	public function actionWeek($date, $calendars) {
 		
