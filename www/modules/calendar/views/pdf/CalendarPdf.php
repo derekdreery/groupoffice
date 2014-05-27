@@ -69,7 +69,7 @@ class CalendarPdf extends \GO\Base\Util\Pdf {
 		
 		//$this->Write(16,$this->_headerTitle ." ");
 		
-	//	$this->Write(16, GO::user()->name . ' ');					// Print the name of the user instead of the first calendar name.
+	//	$this->Write(16, \GO::user()->name . ' ');					// Print the name of the user instead of the first calendar name.
 	//	$this->Write(16, $this->_calendar->name . ' ');
 		$this->SetTextColor(125, 162, 180);
 		$this->SetFont($this->font, '', 12);
@@ -87,23 +87,23 @@ class CalendarPdf extends \GO\Base\Util\Pdf {
 		
 		switch((int)$this->_days){
 			case 1:
-				$this->_headerTitle = GO::t('oneDay','calendar');
+				$this->_headerTitle = \GO::t('oneDay','calendar');
 				break;
 			case 5:
-				$this->_headerTitle = GO::t('fiveDays','calendar');
+				$this->_headerTitle = \GO::t('fiveDays','calendar');
 				break;
 			case 7:
-				$this->_headerTitle = GO::t('sevenDays','calendar');
+				$this->_headerTitle = \GO::t('sevenDays','calendar');
 				break;
 			case 35:
-				$this->_headerTitle = GO::t('month','calendar');
+				$this->_headerTitle = \GO::t('month','calendar');
 				break;
 			default:
-				$this->_headerTitle = GO::t('list','calendar');
+				$this->_headerTitle = \GO::t('list','calendar');
 				break;
 		}
 	
-		$fullDays = GO::t('full_days');
+		$fullDays = \GO::t('full_days');
 		$calendarPrinted=false;
 		
 		for ($i = 0; $i < $this->_days; $i++) {
