@@ -151,7 +151,7 @@ class Site {
 		
 		if(isset(GO::session()->values['site_id']))
 			self::$_site=GO_Site_Model_Site::model()->findByPk(GO::session()->values['site_id'],false,true); // Find the website model from its id
-		else
+		if(!self::$_site)
 			self::$_site=GO_Site_Model_Site::model()->findSingleByAttribute('domain', $_SERVER["SERVER_NAME"]); // Find the website model from its domainname
 
 		if(!self::$_site)
