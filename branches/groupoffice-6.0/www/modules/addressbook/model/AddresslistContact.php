@@ -17,8 +17,13 @@
 
 namespace GO\Addressbook\Model;
 
+use GO;
+use GO\Base\Db\ActiveRecord;
+use GO\Base\Util\String;
+use GO\Log\Model\Log;
 
-class AddresslistContact extends \GO\Base\Db\ActiveRecord {
+
+class AddresslistContact extends ActiveRecord {
 	
 	/**
 	 * Returns a static model of itself
@@ -49,8 +54,8 @@ class AddresslistContact extends \GO\Base\Db\ActiveRecord {
 	
 	protected function afterSave($wasNew) {
 		
-		if(\GO::modules()->log){
-			\GO\Log\odel\Log::create($wasNew?\GO\Log\Model\Log::ACTION_ADD:\GO\Log\Model\Log::ACTION_UPDATE,  'Added '.$this->contact->name.' to addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
+		if(GO::modules()->log){
+			Log::create($wasNew?Log::ACTION_ADD:Log::ACTION_UPDATE,  'Added '.$this->contact->name.' to addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
 		}
 		
 		return parent::afterSave($wasNew);
@@ -59,7 +64,7 @@ class AddresslistContact extends \GO\Base\Db\ActiveRecord {
 	protected function afterDelete() {
 		
 		if(GO::modules()->log){
-			\GO\Log\Model\Log::create(\GO\Log\Model\Log::ACTION_DELETE,  'Removed '.$this->contact->name.' from addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
+			Log::create(Log::ACTION_DELETE,  'Removed '.$this->contact->name.' from addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
 		}
 		
 		return parent::afterDelete();
