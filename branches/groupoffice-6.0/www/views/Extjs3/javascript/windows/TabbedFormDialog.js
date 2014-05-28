@@ -592,9 +592,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 					this.formPanel.form.setValues(config.values);
 
 				this.loadData = result.data;
-				GO.dialog.TabbedFormDialog.superclass.show.call(this);
+				
 				this.afterLoad(remoteModelId, config, {response:response, options:options, result:result});
-
+				GO.dialog.TabbedFormDialog.superclass.show.call(this);
 				this.afterShowAndLoad(remoteModelId, config);
 
 				this.formPanel.form.clearInvalid();
@@ -676,9 +676,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 							this.formPanel.form.setValues(config.values);
 
 						this.loadData = action.result.data;
-						GO.dialog.TabbedFormDialog.superclass.show.call(this);
+						
 						this.afterLoad(remoteModelId, config, action);
-
+						GO.dialog.TabbedFormDialog.superclass.show.call(this);
 						this.afterShowAndLoad(remoteModelId, config);
 
 						this.formPanel.form.clearInvalid();
