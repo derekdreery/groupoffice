@@ -339,8 +339,13 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	},
 	
 	
-	createJSON : function(){
-		var values = this.formPanel.form.getValues();
+	createJSON : function(params){
+		
+		this.formPanel.form.baseParams = this.formPanel.form.baseParams || {};
+		
+		var p = Ext.apply(this.formPanel.form.baseParams, params);
+		
+		var values = Ext.apply(p, this.formPanel.form.getValues());
 		
 		var keys, JSON={}, currentJSONlevel;
 		
@@ -367,15 +372,15 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		return JSON;
 	},
 	
-	jsonSubmit: function(hide) {
+	jsonSubmit: function(params,hide) {
 
 		GO.request({
 			method:'POST',
 			url: this.formControllerUrl + '/' + this.submitAction,
-			params:{
+			params: Ext.apply(params,{
 				id:this.remoteModelId
-			},
-			jsonData: this.createJSON(),
+			}),
+			jsonData: this.createJSON(params),
 			waitMsg: GO.lang['waitMsgSave'],
 			scope: this,
 			success: function(response, options, result) {
@@ -459,7 +464,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		
 		
 		if(this.jsonPost){
-			this.jsonSubmit(hide);
+			this.jsonSubmit(params, hide);
 		}else
 		{
 
@@ -544,9 +549,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		GO.request({
 			method:'GET',
 			url: this.formControllerUrl + '/' + this.submitAction,
-			params:{
+			params:Ext.apply(config.loadParams,{
 				id:this.remoteModelId
-			},
+			}),
 			jsonData: this.createJSON(),
 			waitMsg: GO.lang['waitMsgSave'],
 			scope: this,
