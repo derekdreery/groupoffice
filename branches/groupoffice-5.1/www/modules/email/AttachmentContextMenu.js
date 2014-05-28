@@ -36,7 +36,7 @@ GO.email.AttachmentContextMenu = function(config)
 	{
 		this.saveButton = new Ext.menu.Item({
 					iconCls: 'btn-save',
-					text: GO.lang.cmdSave,
+					text: GO.email.lang.saveToPersonal,
 					cls: 'x-btn-text-icon',
 					handler: function(){
 						GO.email.saveAttachment(this.attachment,this.messagePanel);
