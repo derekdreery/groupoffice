@@ -131,7 +131,7 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 
 		\GO::session()->logout();
 
-		if (isset($params['ajax'])) {
+		if (\GO::request()->isAjax()) {
 			$response['success']=true;
 			return $response;
 		}
