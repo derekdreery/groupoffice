@@ -124,11 +124,14 @@ abstract class AbstractController extends Observable {
 
 		
 			
-		
+		//Handles preflight OPTIONS request
 		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 			
-//			if(!headers_sent())
-//				$this->headers();
+			header('Content-Type: text/plain');
+			
+			foreach(GO::config()->extra_headers as $header){
+				header($header);
+			}
 			
 			GO::debug("OPTIONS request");
 			exit(0);
