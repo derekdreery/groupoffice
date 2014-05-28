@@ -157,6 +157,21 @@ class Note extends ActiveRecord {
 	protected function getEncrypted(){
 		return !$this->_decrypted && !empty($this->password);
 	}
+	
+	public function getAttributes($outputType = null) {
+		$attr = parent::getAttributes($outputType);
+		
+		$attr['encrypted']=$this->getEncrypted();
+		
+		if($attr['encrypted']){
+			$attr['content']='';
+		}
+		
+		$attr['decrypted']=$this->_decrypted;
+		$attr['password']="";
+		
+		return $attr;
+	}
 
 	
 	public function decrypt($password) {
