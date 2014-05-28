@@ -39,7 +39,7 @@ class NoteController extends AbstractController{
 	 * 
 	 * @param $id Note ID
 	 */
-	protected function actionUpdate($id) {
+	protected function actionUpdate($id, $password=null) {
 
 		$model = Note::model()->findByPk($id);
 		
@@ -62,20 +62,17 @@ class NoteController extends AbstractController{
 			echo $this->render('submit', array('note'=>$model));
 		}else
 		{
-			// BEFORE LOAD: a password is entered to decrypt the content
-			if (isset($note['userInputPassword'])) {
-				if (!$model->decrypt($note['userInputPassword']))
+			//a password is entered to decrypt the content
+			if (isset($password) ){
+				if (!$model->decrypt($password))
 					throw new Exception(GO::t('badPassword'));
 			}
 		
 			echo $this->render(
 							'form',
 							array(
-									'note'=>$model, 
-									'remoteComboFields' => array(
-											'category_id' => '$model->category->name'
-											)
-									)
+									'note'=>$model
+							)
 							);
 		}		
 	}

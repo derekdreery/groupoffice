@@ -36,21 +36,36 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	beforeLoad : function(remoteModelId,config) {
 		this._userPermissionPassword = false; //
 //		this._passwordChangePermission = true; // before loading is initiated, e.g., with a new note, the user can change the encryption password
-		delete this.formPanel.form.baseParams['currentPassword'];
+		delete this.formPanel.form.baseParams['note.currentPassword'];
 	},
 	
-	afterLoad : function(remoteModelId,config,action) {
-		var responseData = Ext.decode(action.response.responseText);
+	afterShowAndLoad : function (remoteModelId, config, responseData){
+		
 		
 //		this._passwordChangePermission = responseData.data.passwordChangePermission;
 		
-		delete this.formPanel.form.baseParams['currentPassword'];
+		delete this.formPanel.form.baseParams['note.currentPassword'];
 		
-		this.contentField.setDisabled(responseData.data.encrypted);
+		this.contentField.setDisabled(responseData.data.note.attributes.encrypted);
 		this._toggleNewPasswordFields(false);
-		this.buttonOk.setDisabled(responseData.data.encrypted);
-		this.buttonApply.setDisabled(responseData.data.encrypted);
-		if (responseData.data.encrypted) {
+		this.buttonOk.setDisabled(responseData.data.note.attributes.encrypted);
+		this.buttonApply.setDisabled(responseData.data.note.attributes.encrypted);
+		
+		
+		if (responseData.data.note.attributes.decrypted) {
+				this._toggleNewPasswordFields(true);
+				this.encryptCheckbox.setValue(true);
+				this._userInputPassword = this.unlockPasswordField.getValue(); // this is the only place this should be set, it is remembered so that users are able to edit the note without re-entering the password
+				this.uiPassword1Field.allowBlank = true; this.uiPassword1Field.validate(); // hack to toggle allowBlank dynamically
+				this.uiPassword2Field.allowBlank = true; this.uiPassword2Field.validate();
+				this.contentField.setDisabled(false); // password entered correctly: allow editing
+				this.buttonOk.setDisabled(false);
+				this.buttonApply.setDisabled(false);
+				this.unlockDialog.hide();
+		}
+		
+		
+		if (responseData.data.note.attributes.encrypted) {
 			if (GO.util.empty(this.unlockDialog)) {
 				this.unlockDialog = new GO.Window({
 					modal:true,					
@@ -101,9 +116,9 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
 	beforeSubmit : function(params) {
 		if (!GO.util.empty(this._userInputPassword))
-			this.formPanel.form.baseParams['currentPassword'] = this._userInputPassword;
+			this.formPanel.form.baseParams['note.currentPassword'] = this._userInputPassword;
 		else
-			delete this.formPanel.form.baseParams['currentPassword'];
+			delete this.formPanel.form.baseParams['note.currentPassword'];
 	},
 	
 	afterSubmit : function(action) {
@@ -116,7 +131,7 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		}
 		this.contentField.setDisabled(responseData.encrypted); // disable the content field to underline the fact that editing an encrypted field is prohibited
 		
-		delete this.formPanel.form.baseParams['currentPassword'];
+		delete this.formPanel.form.baseParams['note.currentPassword'];
 	},
 	
 	buildForm : function () {
@@ -203,35 +218,42 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	},
 	
 	_loadWithPassword : function() {
-		this.formPanel.form.load({
-			url: GO.url('notes/note/load'),
-			params: {
-				'userInputPassword' : this.unlockPasswordField.getValue()
-			},
-			success: function(form, action) {
-//				this._passwordChangePermission = true;// password entered correctly: allow changing it
-				this._toggleNewPasswordFields(true);
-				this.encryptCheckbox.setValue(true);
-				this._userInputPassword = this.unlockPasswordField.getValue(); // this is the only place this should be set, it is remembered so that users are able to edit the note without re-entering the password
-				this.uiPassword1Field.allowBlank = true; this.uiPassword1Field.validate(); // hack to toggle allowBlank dynamically
-				this.uiPassword2Field.allowBlank = true; this.uiPassword2Field.validate();
-				this.contentField.setDisabled(false); // password entered correctly: allow editing
-				this.buttonOk.setDisabled(false);
-				this.buttonApply.setDisabled(false);
-				this.unlockDialog.hide();
-			},
-			failure: function(form, action) {
-				this._userInputPassword = false;
-				this.encryptCheckbox.setValue(true);
-				this._toggleNewPasswordFields(false); // user mustn't be able to change the password if he entered it incorrectly
-				if (action.failureType == 'client') {					
-					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
-				} else {
-					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
-				}
-			},
-			scope: this
-		})
+		
+		this.jsonLoad(this.remoteModelId, {
+			loadParams:{
+				'password' : this.unlockPasswordField.getValue()
+			}
+		});
+		
+//		this.formPanel.form.load({
+//			url: GO.url('notes/note/update'),
+//			params: {
+//				'userInputPassword' : this.unlockPasswordField.getValue()
+//			},
+//			success: function(form, action) {
+////				this._passwordChangePermission = true;// password entered correctly: allow changing it
+//				this._toggleNewPasswordFields(true);
+//				this.encryptCheckbox.setValue(true);
+//				this._userInputPassword = this.unlockPasswordField.getValue(); // this is the only place this should be set, it is remembered so that users are able to edit the note without re-entering the password
+//				this.uiPassword1Field.allowBlank = true; this.uiPassword1Field.validate(); // hack to toggle allowBlank dynamically
+//				this.uiPassword2Field.allowBlank = true; this.uiPassword2Field.validate();
+//				this.contentField.setDisabled(false); // password entered correctly: allow editing
+//				this.buttonOk.setDisabled(false);
+//				this.buttonApply.setDisabled(false);
+//				this.unlockDialog.hide();
+//			},
+//			failure: function(form, action) {
+//				this._userInputPassword = false;
+//				this.encryptCheckbox.setValue(true);
+//				this._toggleNewPasswordFields(false); // user mustn't be able to change the password if he entered it incorrectly
+//				if (action.failureType == 'client') {					
+//					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
+//				} else {
+//					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
+//				}
+//			},
+//			scope: this
+//		})
 	},
 	
 	_toggleNewPasswordFields : function(on) {

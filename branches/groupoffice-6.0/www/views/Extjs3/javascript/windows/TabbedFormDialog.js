@@ -595,7 +595,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				
 				this.afterLoad(remoteModelId, config, {response:response, options:options, result:result});
 				GO.dialog.TabbedFormDialog.superclass.show.call(this);
-				this.afterShowAndLoad(remoteModelId, config);
+				this.afterShowAndLoad(remoteModelId, config, result);
 
 				this.formPanel.form.clearInvalid();
 
@@ -679,7 +679,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 						
 						this.afterLoad(remoteModelId, config, action);
 						GO.dialog.TabbedFormDialog.superclass.show.call(this);
-						this.afterShowAndLoad(remoteModelId, config);
+						this.afterShowAndLoad(remoteModelId, config, action.result);
 
 						this.formPanel.form.clearInvalid();
 
@@ -736,7 +736,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	},
 	
 	
-	afterShowAndLoad : function (remoteModelId, config){
+	afterShowAndLoad : function (remoteModelId, config, result){
 		
 	},
 
