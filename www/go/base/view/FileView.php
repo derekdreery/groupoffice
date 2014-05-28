@@ -8,8 +8,8 @@ class FileView extends AbstractView{
 	public $layout='ajax';
 	
 	public function render($viewName, $data){
-		if(!headers_sent())
-			$this->headers();
+		
+		$this->headers();		
 		
 		$viewPath = GO::config()->root_path.'views/'.GO::viewName().'/';
 		

@@ -12,6 +12,10 @@ abstract class AbstractView{
 	 * Default headers to send. 
 	 */
 	protected function headers(){
+		
+		if(headers_sent())
+			return;
+		
 		//iframe hack for file uploads fails with application/json				
 		if(!GO::request()->isJson()){
 			header('Content-Type: text/html; charset=UTF-8');

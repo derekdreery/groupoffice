@@ -4,6 +4,8 @@ namespace GO\Base\View;
 class JsonView extends AbstractView{
 	public function render($viewName, $data) {
 		
+		$this->headers();
+		
 		$fn = "render".$viewName;
 		return $this->$fn($data);
 		
