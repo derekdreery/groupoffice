@@ -279,3 +279,4 @@ $l['labelsLimit'] = 'Label\'s limit reached. The maximum number of labels is %d'
 
 $l['saveToItem'] = 'Save to item';
 $l['saveAttachmentTo'] = 'Save the attachment to these items';
+$l['saveToPersonal'] = 'Save to personal folder';

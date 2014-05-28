@@ -49,7 +49,7 @@ $l["cmdFormCompanyEmptyText"]= 'Selecteer een bedrijf';
 $l["cmdFieldsetSelectAddressbook"]= 'Selecteer een adresboek';
 $l["cmdFieldsetPersonalDetails"]= 'Persoonlijke gegevens';
 $l["cmdFieldsetAddress"]= 'Adres';
-$l["cmdFieldsetContact"]= 'Contactgegevens (privé)';
+$l["cmdFieldsetContact"]= 'Contactgegevens';
 $l["cmdFieldsetCompany"]= 'Bedrijfsgegevens';
 $l["cmdFieldsetWork"]= 'Werk';
 $l["cmdPanelContact"]= 'Contact gegevens';
@@ -348,3 +348,5 @@ $l['callOnSkype'] = 'Bellen met Skype';
 
 $l['userDefaultTemplate'] = 'Standaardsjabloon van gebruiker(s)';
 $l['exportContactsWithCompanies'] = 'Contacten met bedrijven';
+
+$l['privateAddress'] = 'Privé adres';
