@@ -11,6 +11,11 @@ class Request {
 	public function __construct() {
 		if($this->isJson()){
 			$this->post = json_decode(file_get_contents('php://input'), true);
+			
+			// Check if the post is filled with an array. Otherwise make it an empty array.
+			if(!is_array($this->post))
+				$this->post = array();
+			
 		}else
 		{
 			$this->post=$_POST;
