@@ -287,3 +287,6 @@ $l['linkMustHavePermissionToWrite'] = 'U heeft niet de vereiste schrijfrechten o
 $l['sortAddressesByMailTime'] = 'Sorteer ontvanger emailadressen op tijd van laatst verzonden email (module Adresboek benodigd)';
 
 $l['permissionDelegated'] = 'Alleen lezen en gedelegeerd';
+
+$l['saveToItem'] = 'Opslaan bij item';
+$l['saveToPersonal'] = 'Opslaan in persoonlijke map';

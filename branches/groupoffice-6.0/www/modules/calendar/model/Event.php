@@ -1529,23 +1529,25 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		}
 		
 		
-		//todo alarms
-		
+				
+		$a=$calendar->createComponent('VALARM');
 		if($this->reminder>0){
 //			BEGIN:VALARM
 //ACTION:DISPLAY
 //TRIGGER;VALUE=DURATION:-PT5M
 //DESCRIPTION:Default Mozilla Description
 //END:VALARM
-			$a=$calendar->createComponent('VALARM');
+			
 			$a->action='DISPLAY';			
 			$a->add('trigger','-PT'.($this->reminder/60).'M', array('value'=>'DURATION'));			
 			$a->description="Alarm";			
-			$e->add($a);
+		
 						
 			//for funambol compatibility, the \GO\Base\VObject\Reader class use this to convert it to a vcalendar 1.0 aalarm tag.
 			$e->{"X-GO-REMINDER-TIME"}=date('Ymd\THis', $this->start_time-$this->reminder);
 		}
+		
+		$e->add($a);
 		
 		return $e;
 	}
@@ -1721,6 +1723,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$this->private = strtoupper($vobject->class)!='PUBLIC';
 		}
 		
+		$this->reminder=0;
+		
 		if($vobject->valarm && $vobject->valarm->trigger){
 			
 			$duration = \GO\Base\VObject\Reader::parseDuration($vobject->valarm->trigger);
@@ -1735,9 +1739,6 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				$this->reminder = $this->start_time-$p->format('U');
 			}
 		
-		}else
-		{
-			$this->reminder=0;
 		}
 		
 		$this->setAttributes($attributes, false);
