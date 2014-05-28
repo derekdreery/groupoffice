@@ -23,9 +23,15 @@
 - Custom IMAP flag support (Message labels)
 
 
+
+28-05-2014 5.0.61
+- Limit file search index size to 10MB
+- Send an empty reminder object in sync so reminder will be cleared on clients
+- Removed the flash upload runtime from the plupload uploader because it was causing problems in older IE browsers.(Most browsers support HTML5 anyway)
 - Fixed error when unchecking the "link company" and "link contact" in the email message panel.
 - Fixed problem with smime certificate check when changing the "from" field in the email composer
 - Fixed upload button for smime PKS12 file in email account dialog
+- cleanup links and search cache on deletion of module
 
 21-05-2014 5.0.60
 - Template bug in site module.
