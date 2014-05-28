@@ -46,6 +46,15 @@ class Request {
 	}
 	
 	/**
+	 * Check if this request is an XmlHttpRequest
+	 * 
+	 * @return boolean
+	 */
+	public function isAjax(){
+		return Util\Http::isAjaxRequest();
+	}
+	
+	/**
 	 * Return true if this is a HTTP post
 	 * 
 	 * @return boolean
