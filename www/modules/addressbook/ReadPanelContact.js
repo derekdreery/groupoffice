@@ -59,6 +59,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 											', {suffix} '+
 										'</tpl>'+
 										'<br />'+
+										'<div class="readPanelSubHeading">'+GO.addressbook.lang.privateAddress+':</div>'+
 										'<tpl if="!GO.util.empty(google_maps_link)">'+
 											'<a href="{google_maps_link}" target="_blank">'+
 										'</tpl>'+
