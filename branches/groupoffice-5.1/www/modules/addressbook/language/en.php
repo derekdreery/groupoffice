@@ -25,7 +25,7 @@ $l["cmdFormCompanyEmptyText"]= 'Please select a company';
 $l["cmdFieldsetSelectAddressbook"]= 'Select address book';
 $l["cmdFieldsetPersonalDetails"]= 'Personal details';
 $l["cmdFieldsetAddress"]= 'Address';
-$l["cmdFieldsetContact"]= 'Contact details (private)';
+$l["cmdFieldsetContact"]= 'Contact details';
 $l["cmdFieldsetCompany"]= 'Company details';
 $l["cmdFieldsetWork"]= 'Work';
 $l["cmdPanelContact"]= 'Contact details';
@@ -313,3 +313,5 @@ $l['callOnSkype'] = 'Call on Skype';
 
 $l['userDefaultTemplate'] = 'User default template';
 $l['exportContactsWithCompanies'] = 'Contacts with companies';
+
+$l['privateAddress'] = 'Private address';
