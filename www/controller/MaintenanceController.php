@@ -1100,11 +1100,15 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 		$stmt = \GO::getDbConnection()->query("SHOW TABLES");
 		$stmt->setFetchMode(PDO::FETCH_NUM);
 		
+		echo '<pre>';
+		
 		foreach($stmt as $record){
 			
 			if($record[0]!='fs_filesearch'){//filesearch requires fulltext index
 				$sql = "ALTER TABLE `".$record[0]."` ENGINE=InnoDB;";
 				echo $sql."\n";
+				
+				GO::getDbConnection()->query($sql);
 			}
 			
 			
