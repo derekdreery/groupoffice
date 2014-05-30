@@ -63,6 +63,11 @@ class JsonView extends AbstractView{
 	
 		//Init data array
 		foreach($data as $modelName=>$model){
+			
+			// $modelName cannot be the same as the reserved results
+			if($modelName == 'data' || $modelName == 'success')
+				Throw new Exception('Cannot use "'.$modelName.'" as key for your data. Please change the key.');
+			
 
 			if(is_a($model, "\GO\Base\Model")){
 				//TODO: check if this can be moved. This methode renders JSON and should not check permissions.
@@ -87,6 +92,8 @@ class JsonView extends AbstractView{
 				//Add the customerfields to the data array
 				if (\GO::user()->getModulePermissionLevel('customfields') && $model->customfieldsRecord)
 					$response['data'][$modelName]['attributes'] = array_merge($response['data'][$modelName]['attributes'], $model->customfieldsRecord->getAttributes());
+			} else {
+				$response[$modelName] = $model;
 			}
 
 			
@@ -173,6 +180,10 @@ class JsonView extends AbstractView{
 		
 		//Init data array
 		foreach($data as $modelName=>$model){
+			
+			// $modelName cannot be the same as the reserved results
+			if($modelName == 'feedback' || $modelName == 'success' ||  $modelName == 'validationErrors')
+				Throw new Exception('Cannot use "'.$modelName.'" as key for your data. Please change the key.');
 
 			if(is_a($model, "\GO\Base\Model")){
 				//$ret = $this->beforeSubmit($response, $model, $params);
@@ -210,6 +221,8 @@ class JsonView extends AbstractView{
 					
 					$response['validationErrors'][$modelName] = $model->getValidationErrors();
 				}
+			} else {
+				$response[$modelName] = $model;
 			}
 		}
 		
@@ -225,18 +238,34 @@ class JsonView extends AbstractView{
 	 */
 	private function renderStore($data){//\GO\Base\Data\AbstractStore $store, $return = false, $buttonParams=false) {
 		
-		
+		if(!isset($data['store']))
+			Throw new Exception('The "store" parameter is required.');
 
-		
-		$response=$data['store']->getData();
-		if($summary = $data['store']->getSummary())
-			$response['summary'] = $summary;
+		foreach($data as $key=>$value){
+			
+			// $modelName cannot be the same as the reserved results
+			if($key == 'summary' || $key == 'title' ||  $key == 'results')
+				Throw new Exception('Cannot use "'.$key.'" as key for your data. Please change the key.');
+			
+			if($key === 'store'){
+				$response=$data['store']->getData();
+				if($summary = $data['store']->getSummary())
+					$response['summary'] = $summary;
 
-		$title = $data['store']->getTitle();
-		if (!empty($title))
-			$response['title'] = $title;
-
-
+				$title = $data['store']->getTitle();
+				if (!empty($title))
+					$response['title'] = $title;
+				
+			} elseif(is_a($key, "\GO\Base\Model")){
+				
+				// Threath as a model
+				$response[$key] = $value->getAttributes();
+				
+			} else {
+				$response[$key] = $value;
+			}
+			
+		}
 
 		return new \GO\Base\Data\JsonResponse($response);
 	}
