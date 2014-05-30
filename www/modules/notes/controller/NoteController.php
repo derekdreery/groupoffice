@@ -156,14 +156,25 @@ class NoteController extends AbstractController{
 	 * Render JSON output that can be used by ExtJS GridPanel
 	 * @param array $params the $_REQUEST params
 	 */
-	protected function actionStore() {
+	protected function actionStore($excerpt=false) {
 		//Create ColumnModel from model
 		$columnModel = new \GO\Base\Data\ColumnModel(Note::model());
 		$columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
 		$columnModel->setModelFormatType('raw');
+		
+		
+		$findParams = \GO\Base\Db\FindParams::newInstance();
+		
+		if($excerpt){
+			$columnModel->formatColumn ('excerpt', '$model->excerpt');
+			
+			$findParams->select('t.*');
+		}
+		
+		
 
 		//Create store
-		$store = new \GO\Base\Data\DbStore('GO\Notes\Model\Note', $columnModel);
+		$store = new \GO\Base\Data\DbStore('GO\Notes\Model\Note', $columnModel, null, $findParams);
 		$store->multiSelect('no-multiselect', 'GO\Notes\Model\Category', 'category_id');
 
 		echo $this->render('store',array('store'=>$store));
