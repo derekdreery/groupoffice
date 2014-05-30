@@ -4946,19 +4946,51 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	}
 	
 	/**
+	 * Find the relation names that are using the given culumnName
 	 * 
-	 * @param string $colName
-	 * @param array $relTypes
-	 * @return array
+	 * You can also provide the types of relations as an array to filter.
+	 * Example array: 
+	 *	$relationTypes = array(
+	 *		\GO\Base\Db\ActiveRecord::BELONGS_TO,
+	 *		\GO\Base\Db\ActiveRecord::HAS_MANY,
+	 *		\GO\Base\Db\ActiveRecord::HAS_ONE,
+	 *		\GO\Base\Db\ActiveRecord::MANY_MANY
+	 *	);
+	 * 
+	 * You can also leave the $relationTypes variable empty to search for all types
+	 * 
+	 * @param string $columnName
+	 * @param array $relationTypes
+	 * @return array With names of the relations Eg. array('categories','users');
 	 */
-	public function findRelationsByColumnName($colName,$relTypes){
+	public function findRelationsByColumnName($columnName,$relationTypes = false){
 		
-		$rels = $this->getRelations();
+		$relationNames = array();
 		
+		if(!is_array($relationTypes) && $relationTypes !== false)
+			Throw new Exception('RelationTypes needs to be false or an array');
 		
+		$relations = $this->getRelations();
 		
-		
-		return array();
+		foreach($relations as $relationKey=>$relation){
+			
+			if($relationTypes !== false){
+				
+				if(in_array($relation['type'], $relationTypes) && $relation['field'] === $columnName){
+					$relationNames[] = $relationKey;
+				}
+
+			} else {
+				
+				if($relation['field'] === $columnName){
+					$relationNames[] = $relationKey;
+				}
+				
+			}
+
+		}
+
+		return $relationNames;
 	}
 	
 	
