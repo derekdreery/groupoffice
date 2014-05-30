@@ -2008,6 +2008,14 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					);
 		}
 		
+		if($this->customfieldsModel()){
+			$r['customfields']=array(
+					'type'=>self::BELONGS_TO, 
+					'model'=>$this->customfieldsModel(), 
+					'field'=>'id'
+					);
+		}
+		
 		return $r;
 	}
 	
@@ -4936,5 +4944,22 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(isset($this->_modifiedAttributes[$attribute]))
 			unset($this->_modifiedAttributes[$attribute]);
 	}
+	
+	/**
+	 * 
+	 * @param string $colName
+	 * @param array $relTypes
+	 * @return array
+	 */
+	public function findRelationsByColumnName($colName,$relTypes){
+		
+		$rels = $this->getRelations();
+		
+		
+		
+		
+		return array();
+	}
+	
 	
 }
