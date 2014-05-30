@@ -172,6 +172,10 @@ class Note extends ActiveRecord {
 		
 		return $attr;
 	}
+	
+	public function getExcerpt($maxLength=100){
+		return $this->getEncrypted() ? GO::t('encryptedContent', 'notes') : GO\Base\Util\String::cut_string($this->content, $maxLength);
+	}
 
 	
 	public function decrypt($password) {
