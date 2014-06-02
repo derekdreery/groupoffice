@@ -349,8 +349,16 @@ class Company extends \GO\Base\Db\ActiveRecord {
 			throw new \Exception(\GO::t('imageNotSupported','addressbook'));
 		}
 		
+		$aspectRatio = $img->getHeight() > $img->getWidth()
+				? $img->getHeight() / $img->getWidth()
+				: $img->getWidth() / $img->getHeight();
+		
 		//resize it to small image so we don't get in trouble with sync clients
-		$img->fitBox(240,320);
+		if ($img->getHeight() > $img->getWidth()) {
+			$img->fitBox(320/$aspectRatio,320);
+		} else {
+			$img->fitBox(320,320/$aspectRatio);
+		}
 		
 		if(!$img->save($filename, IMAGETYPE_JPEG)){
 			throw new \Exception("Could not save photo!");
@@ -393,7 +401,7 @@ class Company extends \GO\Base\Db\ActiveRecord {
 						: \GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
 	}
 	
-	public function getPhotoThumbURL($urlParams=array("w"=>90, "h"=>120, "zc"=>1)) {
+	public function getPhotoThumbURL($urlParams=array("lw"=>120,"pw"=>120,"zc"=>0)) {
 		
 		if($this->getPhotoFile()->exists()){
 			$urlParams['filemtime']=$this->getPhotoFile()->mtime();
