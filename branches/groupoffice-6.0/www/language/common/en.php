@@ -101,7 +101,7 @@ $l["cmdAdd"]= 'Add';
 $l["cmdAddPlusNew"]= 'Add + new';
 $l["cmdSavePlusNew"]='Save + new';
 $l["cmdSave"]= 'Save';
-$l["cmdSaveAs"]= 'Save as'; ;
+$l["cmdSaveAs"]= 'Save as';
 $l["cmdEdit"]= 'Edit';
 $l["cmdLink"]= 'Link';
 $l["cmdUnlink"]= 'Unlink';
@@ -528,7 +528,7 @@ $l['summarylogErrorText']="There where some errors during the import";
 $l['summarylogSuccessText']="Import successful";
 
 $l['exportIncludeHidden'] = 'Export hidden columns too';
-$l['exportHumanHeaders'] = 'Use database column names for headers';
+$l['exportHumanHeaders'] = 'Use DB column names';
 $l['exportIncludeHeaders'] = 'Export headers too';
 $l['exportOrientation'] = 'Orientation';
 
@@ -608,7 +608,7 @@ $l['repeats'] = 'Repeats every %s';
 $l['repeats_at'] = 'Repeats every %s at %s';//eg. Repeats every month at the first monday;
 $l['repeats_at_not_every'] = 'Repeats every %s %s at %s';//eg. Repeats every 2 weeks at monday;
 $l['repeats_not_every'] = 'Repeats every %s %s';
-$l['until']='until'; ;
+$l['until']='until';
 
 $l['month_times'][1]='the first';
 $l['month_times'][2]='the second';
@@ -689,3 +689,11 @@ $l['pspell_lang']='en';
 $l['dependenciesCannotDelete']="You cannot delete the current module, because the following (installed) modules depend on it: %s.";
 
 $l['MailboxNotFoundException'] = "Cannot open the folder \"%s\". Please check your email account settings.";
+
+
+$l['columns'] = 'Columns';
+$l['savedExport'] = 'Saved export';
+$l['savedExports'] = 'Saved exports';
+$l['includeColumnNames'] = 'Include column names';
+$l['manageSavedExports'] = 'Manage saved exports';
+$l['noSavedExports'] = 'No saved exports available';
