@@ -3,6 +3,8 @@
 
 namespace GO\Base\Export;
 
+use PHPExcel;
+use PHPExcel_IOFactory;
 
 class ExportXLS extends AbstractExport {
 
@@ -10,6 +12,8 @@ class ExportXLS extends AbstractExport {
 	public static $name = "XLS (Excel)";
 	public static $useOrientation = false;
 
+	private $_lines;
+	
 	private function _sendHeaders() {
 		header('Content-Disposition: attachment; filename="' . $this->title . '.xls"');
 		header('Content-Type: text/x-msexcel; charset=UTF-8');
