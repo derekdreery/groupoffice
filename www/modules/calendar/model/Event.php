@@ -468,9 +468,9 @@ class Event extends \GO\Base\Db\ActiveRecord {
 //			}			
 		}
 		
-		//Don't set reminders for the superadmin
-		if($this->calendar->user_id==1 && \GO::user()->id!=1 && !\GO::config()->debug)
-			$this->reminder=0;
+//		//Don't set reminders for the superadmin
+//		if($this->calendar->user_id==1 && \GO::user()->id!=1 && !\GO::config()->debug)
+//			$this->reminder=0;
 		
 		
 		if($this->isResource()){
