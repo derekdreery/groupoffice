@@ -322,12 +322,15 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$labels = GO_Email_Model_Label::model()->getUserLabels();
 
 		$response['labels'] = array();
-		foreach ($this->labels as $label) {
-			if (isset($labels[$label])) {
-				$response['labels'][] = array(
-					'name' => $labels[$label]->name,
-					'color' => $labels[$label]->color
-				);
+		
+		if(isset($this->labels)){
+			foreach ($this->labels as $label) {
+				if (isset($labels[$label])) {
+					$response['labels'][] = array(
+						'name' => $labels[$label]->name,
+						'color' => $labels[$label]->color
+					);
+				}
 			}
 		}
 
