@@ -216,8 +216,8 @@ td.table_header_links
 
 
 .ab-photo{
-	width:90px;
-	height: 120px;
+	width:120px;
+/*	height: 120px;*/
 	border:1px solid #d0d0d0;
 	margin:5px;
 }
