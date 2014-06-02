@@ -1780,7 +1780,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		
-		if($vobject->valarm){
+		if($vobject->valarm && $vobject->valarm->trigger){
 			$reminderTime = $vobject->valarm->getEffectiveTriggerTime();
 			//echo $reminderTime->format('c');
 			$this->reminder = $this->start_time-$reminderTime->format('U');
