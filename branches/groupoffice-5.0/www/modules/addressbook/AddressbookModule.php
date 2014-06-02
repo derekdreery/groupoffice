@@ -42,21 +42,26 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 	// Save the settings for the "Addresslists" tab in the Settings panel
 	public static function submitSettings(&$settingsController, &$params, &$response, $user) {
 		
-		$contact = $user->contact;
+		// Only do this when the setting "globalsettings_show_tab_addresslist" is enabled.
+		$tabEnabled = GO::config()->get_setting('globalsettings_show_tab_addresslist');
+		if($tabEnabled){
 		
-		if($contact){
-		
-			$addresslists = GO_Addressbook_Model_Addresslist::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION));
-			foreach($addresslists as $addresslist){
-				$linkModel = $addresslist->hasManyMany('contacts', $contact->id);
-				$mustHaveLinkModel = isset($params['addresslist_' . $addresslist->id]);
-				if ($linkModel && !$mustHaveLinkModel) {
-					$linkModel->delete();
-				}
-				if (!$linkModel && $mustHaveLinkModel) {
-					$addresslist->addManyMany('contacts',$contact->id);
-				}
-			}	
+			$contact = $user->contact;
+
+			if($contact){
+
+				$addresslists = GO_Addressbook_Model_Addresslist::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION));
+				foreach($addresslists as $addresslist){
+					$linkModel = $addresslist->hasManyMany('contacts', $contact->id);
+					$mustHaveLinkModel = isset($params['addresslist_' . $addresslist->id]);
+					if ($linkModel && !$mustHaveLinkModel) {
+						$linkModel->delete();
+					}
+					if (!$linkModel && $mustHaveLinkModel) {
+						$addresslist->addManyMany('contacts',$contact->id);
+					}
+				}	
+			}
 		}
 		
 		return parent::submitSettings($settingsController, $params, $response, $user);
