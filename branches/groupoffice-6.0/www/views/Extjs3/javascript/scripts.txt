@@ -187,3 +187,9 @@ views/Extjs3/javascript/grids/GORowEditor.js
 views/Extjs3/javascript/SortableDataView.js
 
 views/Extjs3/javascript/panels/AccordeonPanel.js
+
+views/Extjs3/javascript/base/CurrentGridExportDialog.js
+views/Extjs3/javascript/base/SavedExportDialog.js
+views/Extjs3/javascript/base/SavedExportGrid.js
+views/Extjs3/javascript/base/SavedExportGridDialog.js
+views/Extjs3/javascript/base/ExportMenu.js
