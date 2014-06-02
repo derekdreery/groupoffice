@@ -2019,7 +2019,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		return $r;
 	}
 	
-	protected function getRelation($name){
+	public function getRelation($name){
 		
 		$r = $this->getRelations();
 		
