@@ -59,6 +59,7 @@
  * @property int $popup_reminders
  * @property int $contact_id
  * @property String $holidayset
+ * @property boolean $no_reminders
  * 
  * @property $completeDateFormat
  * @property string $date_separator
