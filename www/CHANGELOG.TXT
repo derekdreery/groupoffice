@@ -1,3 +1,5 @@
+- Fixed problem with addresslist changes. Only save them when the addresslist settings panel is enabled.
+
 28-05-2014 5.0.61
 - Limit file search index size to 10MB
 - Send an empty reminder object in sync so reminder will be cleared on clients
