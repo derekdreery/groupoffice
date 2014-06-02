@@ -4641,11 +4641,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 */
 	public function addReminder($name, $time, $user_id, $vtime=null){	
 	
-		$reminder = \GO\Base\Model\Reminder::newInstance($name, $time, $this->className(), $this->pk, $vtime);
-		$reminder->setForUser($user_id);
-		
-		return $reminder;
-					
+		$userModel = \GO\Base\Model\User::model()->findByPk($user_id);
+		if (!empty($userModel) && !$userModel->no_reminders) {
+			$reminder = \GO\Base\Model\Reminder::newInstance($name, $time, $this->className(), $this->pk, $vtime);
+			$reminder->setForUser($user_id);
+
+			return $reminder;
+		} else {
+			return false;
+		}
+			
 	}
 		
 	/**
