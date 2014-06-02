@@ -139,3 +139,5 @@ $l['cmdFormLabelHolidaySet'] = 'Bank holidays';
 $l['diskSpace'] = 'Disk Space';
 $l['diskQuota'] = 'Disk Quota';
 $l['spaceUsed'] = 'Space used';
+
+$l['noReminders'] = 'Do not create reminders for me';
