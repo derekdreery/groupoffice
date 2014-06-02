@@ -398,3 +398,5 @@ ADD `autodestroy` BOOLEAN NOT NULL DEFAULT FALSE ;";
 
 $updates['201405221000'][]="ALTER TABLE `go_holidays` ADD `free_day` TINYINT( 1 ) NOT NULL DEFAULT '1';";
 $updates['201405221330'][]="script:15_update_dutch_holidays.php";
+
+$updates['201405281445'][]="ALTER TABLE `go_users` ADD COLUMN `no_reminders` TINYINT(1) NOT NULL DEFAULT '0';";
