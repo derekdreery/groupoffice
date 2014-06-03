@@ -84,71 +84,55 @@ GO.notes.MainPanel = function(config){
 	
 	config.tbar=new Ext.Toolbar({
 		cls:'go-head-tb',
-		items: [{
-	      	 	xtype:'htmlcomponent',
-			html:GO.notes.lang.name,
-			cls:'go-module-title-tbar'
-		},{
-			grid: this.centerPanel,
-			xtype:'addbutton',
-			handler: function(b){
-				this.eastPanel.reset();
+		items: [
+			{
+	      xtype:'htmlcomponent',
+				html:GO.notes.lang.name,
+				cls:'go-module-title-tbar'
+			},{
+				grid: this.centerPanel,
+				xtype:'addbutton',
+				handler: function(b){
+					this.eastPanel.reset();
 
-				GO.notes.showNoteDialog(0, {
-						loadParams:{
-							category_id: b.buttonParams.id						
-						}
-				});
+					GO.notes.showNoteDialog(0, {
+							loadParams:{
+								category_id: b.buttonParams.id						
+							}
+					});
+				},
+				scope: this
+			},{
+				xtype:'deletebutton',
+				grid:this.centerPanel,
+				handler: function(){
+					this.centerPanel.deleteSelected({
+						callback : this.eastPanel.gridDeleteCallback,
+						scope: this.eastPanel
+					});
+				},
+				scope: this
+			},{
+				iconCls: 'no-btn-categories',
+				text: GO.notes.lang.manageCategories,
+				cls: 'x-btn-text-icon',
+				handler: function(){
+					if(!this.categoriesDialog)
+					{
+						this.categoriesDialog = new GO.notes.ManageCategoriesDialog();
+						this.categoriesDialog.on('change', function(){
+							this.westPanel.store.reload();
+							GO.notes.writableCategoriesStore.reload();
+						}, this);
+					}
+					this.categoriesDialog.show();
+				},
+				scope: this
+
 			},
-			scope: this
-		},{
-			xtype:'deletebutton',
-			grid:this.centerPanel,
-			handler: function(){
-				this.centerPanel.deleteSelected({
-					callback : this.eastPanel.gridDeleteCallback,
-					scope: this.eastPanel
-				});
-			},
-			scope: this
-		},{
-			iconCls: 'no-btn-categories',
-			text: GO.notes.lang.manageCategories,
-			cls: 'x-btn-text-icon',
-			handler: function(){
-				if(!this.categoriesDialog)
-				{
-					this.categoriesDialog = new GO.notes.ManageCategoriesDialog();
-					this.categoriesDialog.on('change', function(){
-						this.westPanel.store.reload();
-						GO.notes.writableCategoriesStore.reload();
-					}, this);
-				}
-				this.categoriesDialog.show();
-			},
-			scope: this
-				
-		}
-//		,{
-//				iconCls: 'btn-export',
-//				text: GO.lang.cmdExport,
-//				cls: 'x-btn-text-icon',
-//				handler:function(){				
-//					if(!this.exportDialog)
-//					{
-//						this.exportDialog = new GO.ExportGridDialog({
-//							url: 'notes/note/export',
-//							name: 'notes',
-//							documentTitle:'ExportNote',
-//							colModel: this.centerPanel.getColumnModel()
-//						});
-//					}		
-//					this.exportDialog.show();
-//				},
-//				scope: this
-//			}
+			this.exportMenu = new GO.base.ExportMenu({className:'GO\\Notes\\Export\\CurrentGrid'})
 		]
-		});
+	});
 
 	config.items=[
 	this.westPanel,

@@ -21,6 +21,7 @@ use GO;
 use GO\Base\Controller\AbstractController;
 use GO\Base\View\JsonView;
 use GO\Notes\Model\Note;
+use GO\Base\Db\FindParams;
 
 /**
  * The note controller provides action for basic crud functionality for the note model
@@ -170,13 +171,13 @@ class NoteController extends AbstractController{
 			
 			$findParams->select('t.*');
 		}
-		
-		
-
+	
 		//Create store
-		$store = new \GO\Base\Data\DbStore('GO\Notes\Model\Note', $columnModel, null, $findParams);
+		$findParams = FindParams::newInstance()->export('notes');
+		
+		$store = new \GO\Base\Data\DbStore('GO\Notes\Model\Note', $columnModel,null,$findParams);
 		$store->multiSelect('no-multiselect', 'GO\Notes\Model\Category', 'category_id');
-
+		
 		echo $this->render('store',array('store'=>$store));
 	}
 	
