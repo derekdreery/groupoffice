@@ -290,3 +290,15 @@ $l['callOnSkype'] = 'Anrufen über Skype';
 
 $l['userDefaultTemplate'] = 'Standard-Vorlage';
 $l['exportContactsWithCompanies'] = 'Kontakte mit Firmen';
+
+$l['cmdFieldsetCompany']= 'Firmendetails';
+$l['companyEmail_allowed']= "eMail erlaubt";
+$l['contactCellular2']= "2. Mobilfunk";
+$l['contactEmail_allowed']= "eMail erlaubt";
+$l['mailingStatus'][0]="Warte auf Start";
+$l['mailingStatus'][1]="Läuft";
+$l['mailingStatus'][2]="Beendet";
+$l['mailingStatus'][3]="Pausiert";
+$l['autoDataBeginning']= 'Beginne';
+$l['autoData']= 'Autodata';
+$l['addresslistIdMustBePositive']='Dieses Panel erwartet eine positive Adresslisten-ID, hat aber keine erhalten. Bitte wenden Sie sich an den Administrator.';

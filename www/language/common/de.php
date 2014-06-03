@@ -635,6 +635,7 @@ $l['en'] = 'U.S.A.';
 $l['en_UK'] = 'United Kingdom';
 $l['fr'] = 'Frankreich';
 $l['hr'] = 'Kroatien';
+$l['hu']= 'Ungarn';
 $l['it'] = 'Italien';
 $l['ja'] = 'Japan';
 $l['nb'] = 'Norwegen';
