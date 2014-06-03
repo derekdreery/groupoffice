@@ -14,3 +14,6 @@ $l['loginTextEnabled']='Aktiviere Text für Anmeldebildschirm';
 $l['GO_Addressbook_Model_Addressbook']='Adressbuch';
 $l['GO_Tasks_Model_Tasklist']='Aufgabenliste';
 $l['GO_Calendar_Model_Calendar']='Kalender';
+
+$l['notRenamedNoUser']='kann nicht umbenannt werden, da kein Besitzer zum benennen vorhanden ist';
+$l['allRenamingSuccess']='Alle Standardmodelle des Benutzers erfolgreich umbenannt.';

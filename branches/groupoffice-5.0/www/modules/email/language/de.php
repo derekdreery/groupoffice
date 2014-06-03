@@ -263,3 +263,5 @@ $l['linkMustHavePermissionToWrite'] = 'Sie haben nicht die benötigten Schreibbe
 $l['sortAddressesByMailTime'] = 'Adressen der Empfänger nach der Zeit der letzten gesendeten E-Mail sortieren (benötigt das Adressbuch-Modul)';
 
 $l['permissionDelegated']= 'Stellvertreter';
+
+$l['untilDateError']='Habe versucht, das folgende Enddatum einzutragen, aber der Prozess stoppte mit einem Fehler';
