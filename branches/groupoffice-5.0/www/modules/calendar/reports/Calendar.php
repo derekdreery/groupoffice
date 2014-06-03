@@ -279,9 +279,14 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 			$this->Image('modules/calendar/themes/Default/images/pdf/exception.png',$this->GetX()-$icons, $iconY, 3,3, 'PNG'); //exception
 			$icons+=4;
 		}
-		if($event->hasReminders()) {
-			$this->Image('modules/calendar/themes/Default/images/pdf/paperclip.png',$this->GetX()-$icons, $iconY, 3,3, 'PNG');//paperclip
+		if($event->countLinks()>0) {
+			$this->Image('modules/calendar/themes/Default/images/pdf/paperclip.png',$this->GetX()-$icons, $iconY, 3,3, 'PNG'); //paperclip
+			$icons+=4;
 		}
+		if($event->hasReminders()) {
+			$this->Image('modules/calendar/themes/Default/images/pdf/reminder.png',$this->GetX()-$icons, $iconY, 3,3, 'PNG');//bell
+		}
+		
 	}
 	
 	protected function EventCell($text, $width, $h, $x=null, $y=null) {
