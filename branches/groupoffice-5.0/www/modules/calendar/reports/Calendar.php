@@ -86,7 +86,7 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 				$type = $event->isFullDay()?'fd':'part';
 				if($type=='part' && date('G',$event->start_time) < 7)
 					$type='early';
-				if($type=='part' && date('G',$event->end_time) > 19)
+				if($type=='part' && date('Gi',$event->end_time) > 1900)
 					$type='late';
 				$result[$day][$type][] = $event; 
 			} while($event->end_time >= $day+=24*3600);
