@@ -9,7 +9,6 @@ GO.base.ExportMenu = Ext.extend(Ext.Button,{
 		GO.base.ExportMenu.superclass.constructor.call(this);	
 	},
 	
-	
 	initComponent : function(){
 
 		Ext.apply(this, {
@@ -23,8 +22,14 @@ GO.base.ExportMenu = Ext.extend(Ext.Button,{
 		this._createDefaultMenu();
 	},
 	
+	// Add an item at the end of the menu
 	addItem : function(menuItem){
 		this.menu.addItem(menuItem);
+	},
+	
+	// Insert an item at the given position. When 0, then add it at the top.
+	insertItem : function(position,menuItem){
+		this.menu.insert(position,menuItem);
 	},
 	
 	_createDefaultMenu : function(){
