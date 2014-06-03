@@ -1,4 +1,6 @@
-- Fixed problem with addresslist changes. Only save them when the addresslist settings panel is enabled.
+03-06-2014 5.0.63
+- Fixed missing ExportXLS error when exporting.
+- Fixed problem with address list changes. Only save them when the address list settings panel is enabled.
 
 28-05-2014 5.0.61
 - Limit file search index size to 10MB
