@@ -168,6 +168,37 @@ class FindParams{
 	}
 	
 	/**
+	 * Makes sure all fields from the table/alias are selected.
+	 * 
+	 * For example it replaces all t.field, t.field2 with t.* and leaves all other parts of the select query alone.
+	 * 
+	 * @param string $table
+	 * @return \GO\Base\Db\FindParams
+	 */
+	public function selectAllFromTable($table='t'){
+
+		$parts = explode(',', $this->_params['fields']);
+
+		$new = array($table.'.*');
+
+		foreach($parts as $part){
+			if(preg_match('/\sAS\s/i',$part)){
+				//leave aliases alone
+				$new[]=$part;
+			}elseif(!preg_match('/'.preg_quote ($table,'/').'\..*/', $part) && !preg_match('/'.preg_quote ('`'.$table.'`','/').'\..*/', $part)){
+
+				//remove all t.something parts				
+				$new[]=$part;
+			}
+		}
+		
+		$this->_params['fields']=implode(', ', $new);
+		
+		return $this;
+		
+	}
+	
+	/**
 	 * Appends a string to the select fields. Prepends a comma to the string if
 	 * the FindParams's select fields are empty before calling this function.
 	 * @param String $string
