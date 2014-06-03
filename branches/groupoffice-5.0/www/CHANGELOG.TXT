@@ -1,6 +1,8 @@
-03-06-2014 5.0.63
+03-06-2014 5.0.62
 - Fixed missing ExportXLS error when exporting.
 - Fixed problem with address list changes. Only save them when the address list settings panel is enabled.
+- Updated German and Czech language
+- Added Brazilian Portugese holidays file
 
 28-05-2014 5.0.61
 - Limit file search index size to 10MB
