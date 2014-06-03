@@ -177,11 +177,16 @@ class FindParams{
 	 */
 	public function selectAllFromTable($table='t'){
 
+		// Fields can be empty, if they are empty then we fill it with 't.*'
+		if(empty($this->_params['fields']))
+			$this->_params['fields'] = 't.*';
+		
 		$parts = explode(',', $this->_params['fields']);
 
 		$new = array($table.'.*');
 
 		foreach($parts as $part){
+			
 			if(preg_match('/\sAS\s/i',$part)){
 				//leave aliases alone
 				$new[]=$part;
