@@ -210,9 +210,9 @@ class NoteController extends AbstractController{
 		if (!$model)
 			throw new \GO\Base\Exception\NotFound();
 		
-		$success = $model->delete();
+		$model->delete();
 		
-		$this->render('delete',array('model'=>$model, 'success'=>$success));
+		echo $this->render('delete',array('model'=>$model));
 	}
 
 }
