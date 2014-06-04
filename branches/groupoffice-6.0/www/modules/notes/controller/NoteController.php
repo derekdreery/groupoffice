@@ -112,13 +112,26 @@ class NoteController extends AbstractController{
 			echo $this->render(
 							'form',
 							array(
-									'note'=>$model,								
-									'remoteComboFields' => array(
-											'category_id' => '$model->category->name'
-											)
-									)
+									'note'=>$model
+							)
 							);
 		}		
+	}
+	
+	
+	protected function actionGet($id, $userInputPassword=null){
+		$model = Note::model()->findByPk($id);
+		if (!$model)
+			throw new \GO\Base\Exception\NotFound();
+		
+		
+		// decrypt model if password provided
+		if (isset($userInputPassword)) {
+			if (!$model->decrypt($userInputPassword))
+				throw new Exception(GO::t('badPassword'));
+		}	
+
+		echo $this->render('get',array('note'=>$model));
 	}
 
 	

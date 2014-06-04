@@ -30,12 +30,73 @@ class JsonView extends AbstractView{
 
 	}
 	
+	
+	private function renderJson($data){
+		echo json_encode($data);
+	}
+	
 	private function renderException($data){
 		echo $data['response'];
 	}
 	
 	private function renderDelete($data){
 		echo json_encode(array('success'=>$data['success']));
+	}
+	
+	
+	private function renderGet($data) {
+
+		$response = array('data' => array(), 'success' => true);
+
+	
+		//Init data array
+		foreach($data as $modelName=>$model){
+			
+			// $modelName cannot be the same as the reserved results
+			if($modelName == 'data' || $modelName == 'success')
+				Throw new Exception('Cannot use "'.$modelName.'" as key for your data. Please change the key.');
+			
+
+			if(is_a($model, "\GO\Base\Model")){
+				//TODO: check if this can be moved. This methode renders JSON and should not check permissions.
+				if (!$model->checkPermissionLevel($model->isNew ? \GO\Base\Model\Acl::CREATE_PERMISSION : \GO\Base\Model\Acl::WRITE_PERMISSION))
+					throw new \GO\Base\Exception\AccessDenied();
+
+
+				$response['data'][$modelName]['attributes'] = $model->getAttributes(); 
+				$response['data'][$modelName]['permission_level'] = $model->getPermissionLevel();
+
+				$r = $model->getRelations();
+
+				foreach($r as $relationName=>$options){
+					if(isset($options['labelAttribute'])){
+						$label = call_user_func($options['labelAttribute'], $model);
+
+						$response['data'][$modelName]['relatedLabels'][$options['field']]=$label;
+					}
+				}
+
+
+				//Add the customerfields to the data array
+				if (\GO::user()->getModulePermissionLevel('customfields') && $model->customfieldsRecord)
+					$response['data'][$modelName]['attributes'] = array_merge($response['data'][$modelName]['attributes'], $model->customfieldsRecord->getAttributes());
+			} else {
+				$response[$modelName] = $model;
+			}
+
+			
+		}
+			
+		
+//		$this->fireEvent('form', array(
+//				&$this,
+//				&$response,
+//				&$model,
+//				&$remoteComboFields
+//		));
+
+
+		return new \GO\Base\Data\JsonResponse($response);
 	}
 	
 	/**
