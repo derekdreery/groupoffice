@@ -303,48 +303,51 @@ this.gridPanel.store.on('load', function(store, records, options)
 					this.showAdminDialog();
 				},
 				scope: this
-			},{
-				iconCls: 'btn-export',
-				text: GO.lang.cmdExport,
-				cls: 'x-btn-text-icon',
-				handler:function(){
-//					var config = {};
-//					config.colModel = this.gridPanel.getColumnModel();
-//					config.title = GO.tasks.lang.tasks;
+			},
+//			{
+//				iconCls: 'btn-export',
+//				text: GO.lang.cmdExport,
+//				cls: 'x-btn-text-icon',
+//				handler:function(){
+////					var config = {};
+////					config.colModel = this.gridPanel.getColumnModel();
+////					config.title = GO.tasks.lang.tasks;
+////
+////					var query = this.gridPanel.searchField.getValue();
+////					if(!GO.util.empty(query))
+////					{
+////						config.subtitle= GO.lang.searchQuery+': '+query;
+////					}else
+////					{
+////						config.subtitle='';
+////					}
+////
+////					if(!this.exportDialog)
+////					{
+////						this.exportDialog = new GO.ExportQueryDialog({
+////							query:'get_tasks'
+////						});
+////					}
+////					this.exportDialog.show(config);
 //
-//					var query = this.gridPanel.searchField.getValue();
-//					if(!GO.util.empty(query))
-//					{
-//						config.subtitle= GO.lang.searchQuery+': '+query;
-//					}else
-//					{
-//						config.subtitle='';
-//					}
+//				
+//				if(!this.exportDialog)
+//				{
+//					this.exportDialog = new GO.ExportGridDialog({
+//						url: 'tasks/task/export',
+//						name: 'tasks',
+//						documentTitle:'ExportTask',
+//						colModel: this.gridPanel.getColumnModel()
+//					});
+//				}
+//				
+//				this.exportDialog.show();
 //
-//					if(!this.exportDialog)
-//					{
-//						this.exportDialog = new GO.ExportQueryDialog({
-//							query:'get_tasks'
-//						});
-//					}
-//					this.exportDialog.show(config);
-
-				
-				if(!this.exportDialog)
-				{
-					this.exportDialog = new GO.ExportGridDialog({
-						url: 'tasks/task/export',
-						name: 'tasks',
-						documentTitle:'ExportTask',
-						colModel: this.gridPanel.getColumnModel()
-					});
-				}
-				
-				this.exportDialog.show();
-
-				},
-				scope: this
-			},{
+//				},
+//				scope: this
+//			},
+			new GO.base.ExportMenu({className:'GO\\Tasks\\Export\\CurrentGrid'}),
+			{
 				iconCls: 'btn-refresh',
 				text: GO.lang['cmdRefresh'],
 				cls: 'x-btn-text-icon',
