@@ -11,6 +11,7 @@
 
 namespace GO\Addressbook\Controller;
 
+use \GO;
 
 class ExportContactsWithCompaniesController extends \GO\Base\Controller\AbstractExportController{
 	

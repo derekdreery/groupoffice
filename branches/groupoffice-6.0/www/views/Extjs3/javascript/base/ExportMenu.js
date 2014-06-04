@@ -9,6 +9,17 @@ GO.base.ExportMenu = Ext.extend(Ext.Button,{
 		GO.base.ExportMenu.superclass.constructor.call(this);	
 	},
 	
+	/**
+	 * Use this function to change the className after the menu is created.
+	 * 
+	 * @param string className
+	 */
+	setClassName : function(className){
+		this.className = className;
+		this.savedExportMenu.store.baseParams.className = className;
+		this.savedExportMenu.store.load();
+	},
+	
 	initComponent : function(){
 
 		Ext.apply(this, {
