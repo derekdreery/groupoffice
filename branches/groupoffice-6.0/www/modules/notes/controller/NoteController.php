@@ -177,16 +177,15 @@ class NoteController extends AbstractController{
 		$columnModel->setModelFormatType('raw');
 		
 		
-		$findParams = \GO\Base\Db\FindParams::newInstance();
+		$findParams = \GO\Base\Db\FindParams::newInstance()->export('notes');
 		
 		if($excerpt){
+			
 			$columnModel->formatColumn ('excerpt', '$model->excerpt');
 			
 			$findParams->select('t.*');
 		}
 	
-		//Create store
-		$findParams = FindParams::newInstance()->export('notes');
 		
 		$store = new \GO\Base\Data\DbStore('GO\Notes\Model\Note', $columnModel,null,$findParams);
 		$store->multiSelect('no-multiselect', 'GO\Notes\Model\Category', 'category_id');
