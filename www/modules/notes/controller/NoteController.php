@@ -19,8 +19,8 @@ namespace GO\Notes\Controller;
 use Exception;
 use GO;
 use GO\Base\Controller\AbstractController;
-use GO\Base\View\JsonView;
 use GO\Notes\Model\Note;
+use GO\Notes\Model\Category;
 use GO\Base\Db\FindParams;
 
 /**
@@ -29,11 +29,7 @@ use GO\Base\Db\FindParams;
 
 class NoteController extends AbstractController{
 	
-	protected function init() {
-		
-		$this->view = new JsonView();
-		parent::init();
-	}
+	protected $view = 'json';
 
 	/**
 	 * Updates a note POST for save and GET for retrieve
@@ -172,7 +168,7 @@ class NoteController extends AbstractController{
 	 */
 	protected function actionStore($excerpt=false) {
 		//Create ColumnModel from model
-		$columnModel = new \GO\Base\Data\ColumnModel(Note::model());
+		$columnModel = new \GO\Base\Data\ColumnModel();
 		$columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
 		$columnModel->setModelFormatType('raw');
 		
@@ -186,9 +182,9 @@ class NoteController extends AbstractController{
 			$findParams->select('t.*');
 		}
 	
-		
-		$store = new \GO\Base\Data\DbStore('GO\Notes\Model\Note', $columnModel,null,$findParams);
-		$store->multiSelect('no-multiselect', 'GO\Notes\Model\Category', 'category_id');
+		$nn = new Note();
+		$store = new \GO\Base\Data\DbStore($nn->className(), $columnModel,null,$findParams);
+		$store->multiSelect('no-multiselect', Category::className(), 'category_id');
 		
 		echo $this->render('store',array('store'=>$store));
 	}
