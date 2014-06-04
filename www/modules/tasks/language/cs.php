@@ -85,3 +85,9 @@ $l["taskCompletion_time"]='Dokončeno v';
 $l["taskProject_name"]='Projekt';
 
 $l['taskPercentage_complete']='Dokončeno v %';
+
+$l['phoneNr']='Telefonní číslo';
+$l['savePhoneNr']='Uložit číslo k';
+$l['scheduleCallTaskName']='Volat {name} na {number}';
+$l['overwritePhoneNumber']='Přepsat {field} ({number})';
+$l['addToPhoneNumber']='Přidat k {field}';
