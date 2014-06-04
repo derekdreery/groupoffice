@@ -100,12 +100,14 @@ abstract class AbstractController extends Observable {
 	
 	/**
 	 * The view object that renders the response
-	 * 
-	 * @var \GO\Base\View\AbstractView 
+	 * If the value is a string the object will be create when the 
+	 * render function is called.
+	 * Valid strings: 'json', 'file'
+	 * @see render()
+	 * @var AbstractView|string
 	 */
-	protected $view;
-	
-	
+	protected $view = 'file';
+
 	public function __construct() {
 		
 		if (!GO::config()->enabled) {
@@ -114,16 +116,7 @@ abstract class AbstractController extends Observable {
 		}	
 				
 		$this->init();
-			
-		if(!isset($this->view)){				
-			$this->view = new FileView();			
-		}
-		
 	
-		
-
-		
-			
 		//Handles preflight OPTIONS request
 		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 			
@@ -271,7 +264,10 @@ abstract class AbstractController extends Observable {
 	 * An associative array of which the keys become available variables in the view file.
 	 */
 	protected function render($viewName, $data=array()){
-		
+		if(is_string($this->view)) {
+			$name = '\\GO\\Base\\View\\'.ucfirst($this->view).'View';
+			$this->view = new $name();
+		}
 		return $this->view->render($viewName, $data);		
 	}
 	
