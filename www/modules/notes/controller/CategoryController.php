@@ -77,5 +77,30 @@ class CategoryController extends AbstractController {
 			echo $this->render('form',array('category'=>$model));
 		}		
 	}
+	
+	protected function actionToggle($id, $enabled){
+		
+		//TODO: Create simpler multiselect component
+		
+		$value = GO::config()->get_setting('ms_no-multiselect', GO::user()->id);
+		
+		$value = !empty($value) ? explode(',',$value) : array();
+
+		if($enabled){
+			$value[]=$id;			
+		}else
+		{
+			if(($key = array_search($id, $value)) !== false) {
+				unset($value[$key]);
+			}
+		}
+		
+		$value = array_unique($value);
+		
+		
+		GO::config()->save_setting('ms_no-multiselect', implode(',', $value), GO::user()->id);
+		
+		$this->render('json', array('success'=>true, 'value'=>$value));
+	}
 
 }
