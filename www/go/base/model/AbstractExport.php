@@ -56,7 +56,7 @@ abstract class AbstractExport {
 		$this->_model = GO::getModel(GO::session()->values[$this->queryKey]['model']);
 		
 		if(!$columns){
-			$this->_columns = $this->_model->getColumns();
+			$this->_columns = array_keys($this->_model->getColumns());
 		} else {
 			if(is_array($columns)){		
 				$this->_columns = $columns;
@@ -113,7 +113,7 @@ abstract class AbstractExport {
 		$colModel = new ColumnModel();
 		
 		if(!$columns)
-			$columns = $this->_columns;		
+			$columns = $this->_columns;
 		
 		foreach($columns as $col){
 			
