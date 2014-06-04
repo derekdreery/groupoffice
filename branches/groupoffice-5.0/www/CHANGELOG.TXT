@@ -1,4 +1,7 @@
+04-06-2014 5.0.63
+- ExportXLS error fixed
 - Added div overlay to the print function so the links in the preview should not be clickable anymore
+- Updated German
 
 03-06-2014 5.0.62
 - Fixed missing ExportXLS error when exporting.
