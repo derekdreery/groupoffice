@@ -393,3 +393,19 @@ CREATE TABLE IF NOT EXISTS `go_working_weeks` (
 	`su_work_hours` DOUBLE NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `go_saved_exports`
+--
+
+CREATE TABLE IF NOT EXISTS `go_saved_exports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `class_name` varchar(255) NOT NULL,
+  `view` varchar(255) NOT NULL,
+  `export_columns` text,
+  `orientation` enum('V','H') NOT NULL DEFAULT 'V',
+  `include_column_names` tinyint(1) NOT NULL DEFAULT '1',
+  `use_db_column_names` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

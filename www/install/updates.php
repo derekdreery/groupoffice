@@ -400,3 +400,15 @@ $updates['201405221000'][]="ALTER TABLE `go_holidays` ADD `free_day` TINYINT( 1 
 $updates['201405221330'][]="script:15_update_dutch_holidays.php";
 
 $updates['201405281445'][]="ALTER TABLE `go_users` ADD COLUMN `no_reminders` TINYINT(1) NOT NULL DEFAULT '0';";
+
+$updates['201406040910'][] = "CREATE TABLE IF NOT EXISTS `go_saved_exports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `class_name` varchar(255) NOT NULL,
+  `view` varchar(255) NOT NULL,
+  `export_columns` text,
+  `orientation` enum('V','H') NOT NULL DEFAULT 'V',
+  `include_column_names` tinyint(1) NOT NULL DEFAULT '1',
+  `use_db_column_names` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
