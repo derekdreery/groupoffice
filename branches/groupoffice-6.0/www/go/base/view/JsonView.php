@@ -40,7 +40,8 @@ class JsonView extends AbstractView{
 	}
 	
 	private function renderDelete($data){
-		echo json_encode(array('success'=>$data['success']));
+
+		return new \GO\Base\Data\JsonResponse(array('success'=>$data['model']->hasValidationErrors()));
 	}
 	
 	
