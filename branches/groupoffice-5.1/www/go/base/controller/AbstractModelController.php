@@ -592,6 +592,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		//fields for display.
 
 		$findParams = GO_Base_Db_FindParams::newInstance()
+						->joinRelation('category')
 						->order(array('category.sort_index','t.sort_index'),array('ASC','ASC'));
 		$findParams->getCriteria()
 						->addCondition('extends_model', $model->customfieldsRecord->extendsModel(),'=','category');

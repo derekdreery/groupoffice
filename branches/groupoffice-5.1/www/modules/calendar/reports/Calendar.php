@@ -86,7 +86,7 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 				$type = $event->isFullDay()?'fd':'part';
 				if($type=='part' && date('G',$event->start_time) < 7)
 					$type='early';
-				if($type=='part' && date('G',$event->end_time) > 19)
+				if($type=='part' && date('Gi',$event->end_time) > 1900)
 					$type='late';
 				$result[$day][$type][] = $event; 
 			} while($event->end_time >= $day+=24*3600);
@@ -279,9 +279,14 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 			$this->Image('modules/calendar/themes/Default/images/pdf/exception.png',$this->GetX()-$icons, $iconY, 3,3, 'PNG'); //exception
 			$icons+=4;
 		}
-		if($event->hasReminders()) {
-			$this->Image('modules/calendar/themes/Default/images/pdf/paperclip.png',$this->GetX()-$icons, $iconY, 3,3, 'PNG');//paperclip
+		if($event->countLinks()>0) {
+			$this->Image('modules/calendar/themes/Default/images/pdf/paperclip.png',$this->GetX()-$icons, $iconY, 3,3, 'PNG'); //paperclip
+			$icons+=4;
 		}
+		if($event->hasReminders()) {
+			$this->Image('modules/calendar/themes/Default/images/pdf/reminder.png',$this->GetX()-$icons, $iconY, 3,3, 'PNG');//bell
+		}
+		
 	}
 	
 	protected function EventCell($text, $width, $h, $x=null, $y=null) {

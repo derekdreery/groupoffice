@@ -45,7 +45,7 @@ class GO_Addressbook_Model_AddresslistContact extends GO_Base_Db_ActiveRecord {
 	
 	protected function afterSave($wasNew) {
 		
-		if(GO::modules()->log){
+		if(GO::modules()->isInstalled('log')){
 			GO_Log_Model_Log::create($wasNew?GO_Log_Model_Log::ACTION_ADD:GO_Log_Model_Log::ACTION_UPDATE,  'Added '.$this->contact->name.' to addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
 		}
 		
@@ -54,7 +54,7 @@ class GO_Addressbook_Model_AddresslistContact extends GO_Base_Db_ActiveRecord {
 	
 	protected function afterDelete() {
 		
-		if(GO::modules()->log){
+		if(GO::modules()->isInstalled('log')){
 			GO_Log_Model_Log::create(GO_Log_Model_Log::ACTION_DELETE,  'Removed '.$this->contact->name.' from addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
 		}
 		
