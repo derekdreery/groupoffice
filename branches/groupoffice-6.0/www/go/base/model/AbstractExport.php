@@ -183,7 +183,7 @@ abstract class AbstractExport {
 			if($relation['type'] === $model::BELONGS_TO){
 				$rKeys = $model->findRelationsByColumnName($relation['field'],array($model::BELONGS_TO));
 				
-				if(class_exists($relation['model'])){
+				if(GO::classExists($relation['model'])){
 					$relatedModel = GO::getModel($relation['model']);
 
 					foreach($rKeys as $rKey){

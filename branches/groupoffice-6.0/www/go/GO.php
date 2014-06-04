@@ -51,6 +51,27 @@ class GO{
 
 
 	private static $_view;
+	
+	/**
+	 * Check if a class can be used.
+	 * This function checks if the class exists and if the module for the class is installed (So the tables are available, when it's an active record)
+	 * 
+	 * @param string $className
+	 * @return boolean
+	 */
+	public static function classExists($className){
+			
+		if(class_exists($className)){
+			
+			$clsParts = explode('\\',$className);
+			
+			if(GO::modules()->isInstalled(strtolower($clsParts[1])))
+				return true;
+		}
+	
+		return false;
+	}
+	
 	/**
 	 * If you set this to true then all acl's will allow all actions. Useful
 	 * for maintenance scripts.
