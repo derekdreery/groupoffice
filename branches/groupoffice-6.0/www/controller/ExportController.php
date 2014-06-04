@@ -82,13 +82,12 @@ class ExportController extends AbstractController {
 		echo $this->render($view, array('savedExportModel'=>$savedExportModel));
 	}
 	
-	
-	
 	public function actionSavedExportsStore($className){
 
 		$columnModel = new ColumnModel(SavedExport::model());
 
-		$findParams = FindParams::newInstance()->select('t.*')->criteria(FindCriteria::newInstance()->addCondition('class_name', $className));
+		// "t.name as text" needs to be added because this store is also used to create the menu. (And the menu expects the "text" property for it's label)
+		$findParams = FindParams::newInstance()->select('t.*,t.name as text')->criteria(FindCriteria::newInstance()->addCondition('class_name', $className));
 		
 		$store = new DbStore('GO\Base\Model\SavedExport', $columnModel, GO::request()->post, $findParams);
 		$store->defaultSort = 'id';

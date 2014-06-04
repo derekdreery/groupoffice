@@ -16,7 +16,7 @@ GO.base.ExportMenu = Ext.extend(Ext.Button,{
 			text: GO.lang.cmdExport,
 			menu: new Ext.menu.Menu()
 		});
-		
+
 		GO.base.ExportMenu.superclass.initComponent.call(this);	
 
 		this._createDefaultMenu();
@@ -34,28 +34,36 @@ GO.base.ExportMenu = Ext.extend(Ext.Button,{
 	
 	_createDefaultMenu : function(){
 
-		this.manageExportsButton = new Ext.menu.Item({
-			text: GO.lang.manageSavedExports,
-			handler:function(){
-				
-				if(!GO.base.savedExportGridDialog){
-					GO.base.savedExportGridDialog = new GO.base.SavedExportGridDialog();
+		this.savedExportMenu = new GO.menu.JsonMenu({
+			store: new GO.data.JsonStore({
+				url: GO.url('core/export/savedExportsStore'),
+				baseParams : {
+					className : this.className
+				},
+				root: 'results',
+				id: 'id',
+				totalProperty:'total',
+				fields: ['id','name'],
+				remoteSort: true,
+				model:"GO\\Base\\Model\\SavedExport"
+			}),
+			listeners:{
+				scope:this,
+				itemclick : function(item, e ) {
+					if(!item.isManageButton && !item.isSeparator){
+						this.doExport(item);
+					}
+				},
+				load : function(menu,records){
+					this.savedExportMenu.addItem(new Ext.menu.Separator({isSeparator:true}));
+					this.savedExportMenu.addItem(this.getManageExportButton());
 				}
-				
-				GO.base.savedExportGridDialog.setClass(this.className);
-				GO.base.savedExportGridDialog.show();
-			},
-			scope: this
+			}
 		});
 
 		this.savedExportsButton = new Ext.menu.Item({
 			text: GO.lang.savedExports,
-			menu: new Ext.menu.Menu({
-				items: [
-					new Ext.menu.Separator(),
-					this.manageExportsButton
-				]
-			}),
+			menu: this.savedExportMenu,
 			scope: this
 		});
 		
@@ -80,41 +88,45 @@ GO.base.ExportMenu = Ext.extend(Ext.Button,{
 		this.menu.addItem(this.gridExportButton);
 		this.menu.addSeparator();
 		this.menu.addItem(this.savedExportsButton);
-		
-		this._insertSavedMenus();
 	},
-	
-	_insertSavedMenus : function(){
+
+	getManageExportButton : function(){
 		
-		GO.request({
-			url: "core/export/SavedExportsStore",
-			params:{
-				className : this.className
-			},
-			success: function(options, response, result)
-			{
-				if(result.total > 0){
-					Ext.each(result.results, function(data){
-						this.savedExportsButton.menu.insert(0,new Ext.menu.Item({
-							text : data.name,
-							handler:function(){
-								this.doExport(data);
-							},scope: this
-						}));
-					},this);
-				} else {
-					this.savedExportsButton.menu.insert(0,new Ext.menu.Item({
-						text : GO.lang.noSavedExports,
-						disabled: true
-					}));
+		this.manageExportsButton = new Ext.menu.Item({
+			isManageButton: true,
+			text: GO.lang.manageSavedExports,
+			handler:function(){
+
+				if(!GO.base.savedExportGridDialog){
+					GO.base.savedExportGridDialog = new GO.base.SavedExportGridDialog();
+
+					GO.base.savedExportGridDialog.on('hide', function(){
+						this.savedExportMenu.store.load();
+					}, this);
+
 				}
+
+				GO.base.savedExportGridDialog.setClass(this.className);
+				GO.base.savedExportGridDialog.show();
 			},
-			scope:this
-		});  
+			scope: this
+		});
 		
+		return this.manageExportsButton;
 	},
 	
-	doExport : function(data){
+	doExport : function(item){
+		
+		var data = {
+			class_name:item.class_name,
+			export_columns:item.export_columns,
+			include_column_names:item.include_column_names,
+			orientation:item.orientation,
+			use_db_column_names:item.use_db_column_names,
+			view:item.view,
+			id: item.id			
+		};
+
 		window.open(GO.url("core/export/export",data));
 	}
 	
