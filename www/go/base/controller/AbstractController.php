@@ -116,6 +116,11 @@ abstract class AbstractController extends Observable {
 		}	
 				
 		$this->init();
+		
+		if(is_string($this->view)) {
+			$name = '\\GO\\Base\\View\\'.ucfirst($this->view).'View';
+			$this->view = new $name();
+		}
 	
 		//Handles preflight OPTIONS request
 		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -264,10 +269,6 @@ abstract class AbstractController extends Observable {
 	 * An associative array of which the keys become available variables in the view file.
 	 */
 	protected function render($viewName, $data=array()){
-		if(is_string($this->view)) {
-			$name = '\\GO\\Base\\View\\'.ucfirst($this->view).'View';
-			$this->view = new $name();
-		}
 		return $this->view->render($viewName, $data);		
 	}
 	
