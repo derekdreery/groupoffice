@@ -97,6 +97,7 @@ GO.users.MainPanel = function(config)
 				},
 				scope:this
 			},
+			new GO.base.ExportMenu({className:'GO\\Users\\Export\\CurrentGrid'}),
 //			{
 //				enableToggle:true,
 //				text:GO.users.lang.showProUsers,
