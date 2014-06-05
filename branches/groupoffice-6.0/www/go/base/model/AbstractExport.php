@@ -43,6 +43,17 @@ abstract class AbstractExport {
 	 */
 	public $labels = array();
 	
+	/**
+	 * This are the columns that may not be exported
+	 * 
+	 * @var array 
+	 */
+	public $notExportableColumns = array(
+			'password',
+			'mUser.password',
+			'user.password'
+	);
+	
 	
 	/**
 	 * Give the columns that need to be exported to the constructor.
@@ -221,6 +232,16 @@ abstract class AbstractExport {
 		}
 		
 		$availableColumns = array_merge($availableColumns,  array_values($relatedColumns));		
+		
+		// Remove columns that are not exportable
+		foreach($this->notExportableColumns as $notExp){
+			
+			foreach($availableColumns as $key=>$ac){
+				if(isset($ac['id']) && $ac['id']===$notExp){
+					unset($availableColumns[$key]);
+				}
+			}
+		}
 		
 		sort($availableColumns);
 		
