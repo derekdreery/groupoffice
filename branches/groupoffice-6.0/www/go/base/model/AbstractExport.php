@@ -177,27 +177,27 @@ abstract class AbstractExport {
 		
 		$model = $this->getModel();
 		$relations = $model->getRelations();
-		
-		foreach($relations as $relation){
+
+		foreach($relations as $rKey=>$relation){
 			
 			if($relation['type'] === $model::BELONGS_TO){
-				$rKeys = $model->findRelationsByColumnName($relation['field'],array($model::BELONGS_TO));
-				
+				//$rKeys = $model->findRelationsByColumnName($relation['field'],array($model::BELONGS_TO));
+
 				if(GO::classExists($relation['model'])){
 					$relatedModel = GO::getModel($relation['model']);
 
-					foreach($rKeys as $rKey){
+					//foreach($rKeys as $rKey){
 
 						$rCols = $relatedModel->getColumns();
 
 						foreach($rCols as $rColName=>$rCol){
-							//$relatedColumns[] = array('id'=>$relation['field'].'.'.$rColName,'name'=>$relation['field'].'.'	.$rColName,'label'=>$relatedModel->getAttributeLabel($rColName));
 							$relatedColumns[] = array('id'=>$rKey.'.'.$rColName,'name'=>$rKey.'.'	.$rColName,'label'=>$relatedModel->getAttributeLabel($rColName), 'field_id'=>$relation['field']);
 						}
-					}
+					//}
 				}
 			}
 		}
+		
 		
 		return $relatedColumns;
 		
