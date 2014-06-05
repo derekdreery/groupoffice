@@ -65,7 +65,7 @@ class GO{
 			
 			$clsParts = explode('\\',$className);
 			
-			if(GO::modules()->isInstalled(strtolower($clsParts[1])))
+			if($clsParts[1] == 'Base' || GO::modules()->isInstalled(strtolower($clsParts[1])))
 				return true;
 		}
 	
