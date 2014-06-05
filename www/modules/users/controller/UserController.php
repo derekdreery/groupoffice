@@ -226,6 +226,7 @@ class UserController extends \GO\Base\Controller\AbstractModelController {
 			));
 		
 		$storeParams->group('t.id');
+		$storeParams->export('users');
 		
 		$groupsMultiSel = new \GO\Base\Component\MultiSelectGrid(
 			'users-groups-panel', 
