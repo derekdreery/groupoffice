@@ -66,6 +66,16 @@ GO.base.ExportMenu = Ext.extend(Ext.Button,{
 					}
 				},
 				load : function(menu,records){
+					
+					if(menu.items.length < 1){
+						this.savedExportMenu.addItem(
+							new Ext.menu.Item({
+								text : GO.lang.noSavedExports,
+								disabled: true
+							})
+						);
+					}
+					
 					this.savedExportMenu.addItem(new Ext.menu.Separator({isSeparator:true}));
 					this.savedExportMenu.addItem(this.getManageExportButton());
 				}
