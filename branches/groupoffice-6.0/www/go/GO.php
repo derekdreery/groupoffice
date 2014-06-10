@@ -1225,6 +1225,9 @@ class GO{
 		if(!isset($path)){
 			$path = GO::config()->root_path.'modules/professional/License.php';
 		}
+		
+		if(!file_exists($path))
+			return false;
 
 		//check data for presence of ionCube in code.
 		$data=  file_get_contents($path, false, null, -1, 100);		
