@@ -2,7 +2,7 @@
 class admin_plugin_authgroupoffice extends admin_plugin_acl {
 	
 	function getMenuText($language) {
-		return 'Extended ACL Management';
+		return 'Extended ACL Management with Group-Office Groups';
 	}
 	
 	 /**
@@ -48,5 +48,29 @@ class admin_plugin_authgroupoffice extends admin_plugin_acl {
 		return $allGroupNames;
 	}
 		
+  function _html_detail(){
+			global $ID;
+
+			echo '<form action="'.wl('admin','page=authgroupoffice').'" method="post" accept-charset="utf-8"><div class="no">'.NL;
+
+			echo '<div id="acl__user">';
+			echo $this->getLang('acl_perms').' ';
+			$inl =  $this->_html_select();
+			echo '<input type="text" name="acl_w" class="edit" value="'.(($inl)?'':hsc(ltrim($this->who,'@'))).'" />'.NL;
+			echo '<input type="submit" value="'.$this->getLang('btn_select').'" class="button" />'.NL;
+			echo '</div>'.NL;
+
+			echo '<div id="acl__info">';
+			$this->_html_info();
+			echo '</div>';
+
+			echo '<input type="hidden" name="ns" value="'.hsc($this->ns).'" />'.NL;
+			echo '<input type="hidden" name="id" value="'.hsc($ID).'" />'.NL;
+			echo '<input type="hidden" name="do" value="admin" />'.NL;
+			echo '<input type="hidden" name="page" value="acl" />'.NL;
+			echo '<input type="hidden" name="sectok" value="'.getSecurityToken().'" />'.NL;
+			echo '</div></form>'.NL;
+	}
+	
 }
 ?>
