@@ -1,3 +1,5 @@
+- Billing: three new optional invoice PDF columns.
+
 04-06-2014 5.0.63
 - ExportXLS error fixed
 - Added div overlay to the print function so the links in the preview should not be clickable anymore
