@@ -1,4 +1,5 @@
 - Billing: three new optional invoice PDF columns.
+- Calendar: fixed bug where an exception event is created twice.
 
 04-06-2014 5.0.63
 - ExportXLS error fixed
