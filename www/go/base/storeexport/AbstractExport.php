@@ -51,6 +51,14 @@ abstract class GO_Base_Storeexport_AbstractExport {
 	 */
 	public static $useOrientation=false;
 	
+	
+	/**
+	 * Here you can add extra data(lines) that will be parsed after the store data
+	 * 
+	 * @var array 
+	 */
+	protected $_lines = false;
+	
 	/**
 	 * The constructor for the exporter
 	 * 
@@ -102,7 +110,7 @@ abstract class GO_Base_Storeexport_AbstractExport {
 	 * @param array $lines key value array
 	 */
 	public function addLines($lines){
-		
+		$this->_lines = $lines;
 	}
 	
 	/**
