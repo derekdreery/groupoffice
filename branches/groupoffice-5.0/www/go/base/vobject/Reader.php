@@ -186,7 +186,17 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 						$rrule = new GO_Base_Util_Icalendar_Rrule();
 						$rrule->readIcalendarRruleString($child->dtstart->getDateTime()->format('U'), (string) $child->rrule);			
 						$child->rrule = str_replace('RRULE:','',$rrule->createRrule());
-					}					
+					}
+					
+					if(isset($child->exdate)){
+						
+						$exdates = explode(';', (string) $child->exdate);						
+						$child->exdate = $exdates[0];
+						
+						for($i=1;$i<count($exdates);$i++){
+							$child->add('exdate',$exdates[$i]);
+						}
+					}
 				}					
 			}
 		}
