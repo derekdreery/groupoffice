@@ -142,7 +142,7 @@ class FileController extends \GO\Base\Controller\AbstractModelController {
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
 		if(isset($params['name'])){		
-			$params['name'] = GO_Base_Fs_File::stripInvalidChars($params['name']); // Strip invalid chars
+			$params['name'] = \GO\Base\Fs\File::stripInvalidChars($params['name']); // Strip invalid chars
 			$params['name'].='.'.$model->fsFile->extension();
 		}
 		
