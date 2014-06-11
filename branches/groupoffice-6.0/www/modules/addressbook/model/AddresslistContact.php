@@ -54,7 +54,7 @@ class AddresslistContact extends ActiveRecord {
 	
 	protected function afterSave($wasNew) {
 		
-		if(GO::modules()->log){
+		if(GO::modules()->isInstalled('log')){
 			Log::create($wasNew?Log::ACTION_ADD:Log::ACTION_UPDATE,  'Added '.$this->contact->name.' to addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
 		}
 		
@@ -63,7 +63,7 @@ class AddresslistContact extends ActiveRecord {
 	
 	protected function afterDelete() {
 		
-		if(GO::modules()->log){
+		if(GO::modules()->isInstalled('log')){
 			Log::create(Log::ACTION_DELETE,  'Removed '.$this->contact->name.' from addresslist '.$this->addresslist->name, $this->className(),$this->contact_id.':'.$this->addresslist_id);
 		}
 		

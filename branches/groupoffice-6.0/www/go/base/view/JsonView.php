@@ -79,8 +79,10 @@ class JsonView extends AbstractView{
 
 
 				//Add the customerfields to the data array
-				if (\GO::user()->getModulePermissionLevel('customfields') && $model->customfieldsRecord)
+				if (\GO::user()->getModulePermissionLevel('customfields') && $model->customfieldsRecord){
 					$response['data'][$modelName]['attributes'] = array_merge($response['data'][$modelName]['attributes'], $model->customfieldsRecord->getAttributes());
+					$response['data'][$modelName]['customfields']=$this->_getCustomFieldDefinitions($model);
+				}
 			} else {
 				$response[$modelName] = $model;
 			}
@@ -98,6 +100,53 @@ class JsonView extends AbstractView{
 
 
 		return new \GO\Base\Data\JsonResponse($response);
+	}
+	
+	
+	private function _getCustomFieldDefinitions($model) {
+		
+		//Get all field models and build an array of categories with their
+		//fields for display.
+
+		$findParams = \GO\Base\Db\FindParams::newInstance()
+						->order(array('category.sort_index', 't.sort_index'), array('ASC', 'ASC'));
+		$findParams->getCriteria()
+						->addCondition('extends_model', $model->customfieldsRecord->extendsModel(), '=', 'category');
+
+		$stmt = \GO\Customfields\Model\Field::model()->find($findParams);
+
+		$categories = array();
+
+		while ($field = $stmt->fetch()) {
+			if (!isset($categories[$field->category_id])) {
+				$categories[$field->category->id]['id'] = $field->category->id;
+				$categories[$field->category->id]['name'] = $field->category->name;
+				$categories[$field->category->id]['fields'] = array();
+			}
+			
+			if ($field->datatype == "GO\Customfields\Customfieldtype\Heading") {
+				$header = array('name' => $field->name, 'value' => $customAttributes[$field->columnName()]);
+			}
+			if (!empty($header)) {
+				$categories[$field->category->id]['fields'][] = $header;
+				$header = null;
+			}
+			$categories[$field->category->id]['fields'][] = array_merge($field->getAttributes(), array('dataname'=>'col_'.$field->id));
+
+		}
+		
+		$r=array();
+
+		foreach ($categories as $category) {
+			if (count($category['fields']))
+				$r[] = $category;
+		}
+
+		
+
+		
+
+		return $r;
 	}
 	
 	/**
@@ -152,8 +201,10 @@ class JsonView extends AbstractView{
 
 
 				//Add the customerfields to the data array
-				if (\GO::user()->getModulePermissionLevel('customfields') && $model->customfieldsRecord)
+				if (\GO::user()->getModulePermissionLevel('customfields') && $model->customfieldsRecord){
 					$response['data'][$modelName]['attributes'] = array_merge($response['data'][$modelName]['attributes'], $model->customfieldsRecord->getAttributes());
+					$response['data'][$modelName]['customfields']['categories']=$this->_getCustomFieldDefinitions($model);
+				}
 			} else {
 				$response[$modelName] = $model;
 			}

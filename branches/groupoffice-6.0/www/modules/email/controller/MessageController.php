@@ -232,9 +232,6 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 
 		$response['permission_level'] = $account->getPermissionLevel();
 
-		// ADDED EXPUNGE SO THE FOLDER WILL BE UP TO DATE (When moving folders in THUNDERBIRD)
-		$imap->expunge();
-
 		$response['unseen']=array();
 
 		//special folder flags
@@ -426,13 +423,18 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 			$recipients->addString($params['bcc']);
 
 			foreach ($recipients->getAddresses() as $email => $personal) {
-				$contact = \GO\Addressbook\Model\Contact::model()->findSingleByEmail($email);
-				if ($contact)
-					continue;
+				$contacts = \GO\Addressbook\Model\Contact::model()->findByEmail($email, GO\Base\Db\FindParams::newInstance()->ignoreAcl());
+				foreach($contacts as $contact){
+					
+					if($contact->checkOldPermissionLevel(Acl::READ_PERMISSION) || $contact->goUser && $contact->goUser->checkPermission(Acl::READ_PERMISSION)){
+						continue 2;
+					}
+				}
 
 				$company = \GO\Addressbook\Model\Company::model()->findSingleByAttribute('email', $email);
 				if ($company)
 					continue;
+				
 
 				$recipient = \GO\Base\Util\String::split_name($personal);
 				if ($recipient['first_name'] == '' && $recipient['last_name'] == '') {
@@ -1339,6 +1341,18 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		$response['success'] = true;
 
 		return $response;
+	}
+	
+	
+	protected function actionGet($account_id, $mailbox, $uid, $query=""){
+		return array(
+				'success'=>true, 
+				'data'=>array(
+						'message'=>array(
+								'attributes'=>$this->actionView(array('account_id'=>$account_id, 'mailbox'=>$mailbox, 'uid'=>$uid, 'query'=>$query))
+								)
+						)
+				);
 	}
 
 	private function _getContactInfo(\GO\Email\Model\ImapMessage $imapMessage,$params, $response){

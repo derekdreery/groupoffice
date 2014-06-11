@@ -1,6 +1,4 @@
 <?php
-
-
 namespace GO\Base\Export;
 
 use PHPExcel;

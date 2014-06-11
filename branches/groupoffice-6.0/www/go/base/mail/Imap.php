@@ -1510,7 +1510,8 @@ class Imap extends ImapBodyStruct {
 					'answered'=>0,
 					'forwarded'=>0,
 					'has_attachments'=>0,
-					'labels'=>array()
+					'labels'=>array(),
+					'deleted'=>0,
 				);
 
 				$count = count($vals);

@@ -374,7 +374,7 @@ class Participant extends \GO\Base\Db\ActiveRecord {
 		if($wasNew && $this->event->is_organizer){
 			
 			//add this participant to each existing event.
-			if ($this->user_id > 0 && !$this->is_organizer) {
+			if ($this->user_id > 0 && !$this->is_organizer && !$this->event->isException()) {
 				$newEvent = $this->event->createCopyForParticipant($this);					
 			}
 			

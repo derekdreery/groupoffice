@@ -184,6 +184,7 @@ $l["manageAliases"]='Upravit přezdívky odesílatele';
 $l["addSendersTo"]='Přidat odesílatele do...';
 $l["deleteSendersFrom"]='Smazat odesílatele z...';
 $l["defaultTemplate"]='Nastavit vybranou šablonu jako výchozí';
+$l["defaultEmailTemplate"]='Výchozí e-mailová šablona';
 $l["moving"]='Přenášení...';
 $l["orderFilters"]='Pořadí filtrů můžete změnit přetažením.';
 $l["orderAccounts"]='Pořadí účtů můžete změnit přetažením.';
@@ -267,5 +268,18 @@ $l['cronEmailReminders']='E-mailové připomínky';
 $l['cronEmailRemindersDescription']='Tento cron zpracováva e-mailové připomínky';
 
 $l['appointementAlreadyProcessed']='Tato zpráva obsahuje pozvánku k události, která již proběhla.';
+$l['doNotMarkAsRead'] = 'Neoznačovat automaticky zprávy jako přečtené';
+$l["showAll"]='Zobrazit vše';
 
 $l['noname'] = 'neznámý';
+$l['searchIn'] = 'Hledat v';
+$l['searchRecursive'] = 'Hledat i v podsložkách';
+$l['currentFolder'] = 'Aktuální složka';
+$l['allFolders'] = 'Všechny složky';
+
+
+$l['useAuth']="Použít autentifikaci";
+$l['linkMustHavePermissionToWrite'] = 'Nemáte oprávnění ZÁPISU pro tento objekt, nemůžete tedy vytvořit odkaz.';
+
+$l['sortAddressesByMailTime'] = 'Řadit adresy příjemců podle času odeslání poslední zprávy (vyžaduje modul Adresář)';
+$l['permissionDelegated'] = 'Pouze pro čtení a delegování';

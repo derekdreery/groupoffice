@@ -268,3 +268,5 @@ $l['showCcByDefault']='CC-Feld standardmäßig anzeigen';
 $l['showBccByDefault']='BCC-Feld standardmäßig anzeigen';
 $l['saveToItem']= 'Zu Element anhängen';
 $l['saveAttachmentTo']= 'Anhang zu diesen Elementen anhängen';
+
+$l['untilDateError']='Habe versucht, das folgende Enddatum einzutragen, aber der Prozess stoppte mit einem Fehler';

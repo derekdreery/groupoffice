@@ -334,12 +334,15 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 	},
 
 	renderMessage : function(value, p, record){
+		
+		var deletedCls = record.data.deleted ? 'ml-deleted' : '';
+		
 		if(record.data['seen']=='0')
 		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-unseen-from">{0}</div><div class="ml-unseen-subject">{1}</div>', value, record.data['subject']);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-unseen-from '+deletedCls+'">{0}</div><div class="ml-unseen-subject '+deletedCls+'">{1}</div>', value, record.data['subject']);
 		}else
 		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-seen-from">{0}</div><div class="ml-seen-subject">{1}</div>', value, record.data['subject']);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-seen-from '+deletedCls+'">{0}</div><div class="ml-seen-subject '+deletedCls+'">{1}</div>', value, record.data['subject']);
 		}
 	},
 

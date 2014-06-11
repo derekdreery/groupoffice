@@ -1016,8 +1016,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 		this.startAutoSave();
 
-		this.ccFieldCheck.setChecked(GO.email.showCCfield);
-		this.bccFieldCheck.setChecked(GO.email.showBCCfield);
+		this.ccFieldCheck.setChecked(GO.email.showCCfield || this.ccCombo.getValue()!=='');
+		this.bccFieldCheck.setChecked(GO.email.showBCCfield || this.bccCombo.getValue()!=='');
 	
 		if(config.afterLoad)
 		{

@@ -72,9 +72,9 @@ class Month extends Calendar {
 	 * @return int UTC unixtimestamp
 	 */
 	private function getStartTime() {
-		$firstDay = strtotime(date('Y-m-01', $this->day));
-		$wd = date('w',$firstDay)-1;
-		return $firstDay-$wd*24*3600;
+		$firstDayOfMonth = strtotime(date('Y-m-01', $this->day));
+		$wd = date('N',$firstDayOfMonth)-1;
+		return $firstDayOfMonth-$wd*24*3600;
 	}
 	
 	/**
@@ -87,10 +87,17 @@ class Month extends Calendar {
 		return date('j',$firstDay).$fmonth . ' - ' . date('j ',$lastDay).$this->months_short[date('n',$lastDay)];
 	}
 	
+	private function getWeeksInMonth() {
+		$firstDayOfMonth = strtotime(date('Y-m-01', $this->day));
+		$firstWeekDay = date('N',$firstDayOfMonth)-1;
+		$daysInMonth = date('t', $this->day);
+		return ceil(($daysInMonth+$firstWeekDay)/7);
+	}
+	
 	public function drawEventCalendar() {
 		
 		$w=$this->right-7;
-		$h=$this->getPageHeight()-26;
+		$h=$this->getPageHeight()-$this->headerHeight-16;
 		
 		$this->SetY(36);
 		$this->SetFont(null,'',7.5);
@@ -101,12 +108,13 @@ class Month extends Calendar {
 		$this->Ln();
 		
 		$day='';
+		$weeks = $this->getWeeksInMonth();
 		$dateh = 5;
-		$rowh = $h/6;
+		$rowh = $h/$weeks;
 		$colw = $w/7;
 		$date = $this->getStartTime();
 		$month = date('M',$date);
-		for($r=0;$r<5;$r++){ // 5 weeks
+		for($r=0;$r<$weeks;$r++){ // 5 weeks TODO fix find weeks in month
 			//Draw vertical dates
 			$this->StartTransform();
 				$this->Rotate(90);
@@ -118,10 +126,11 @@ class Month extends Calendar {
 			$this->setCellPaddings(1,1,0,0);
 			for($c=0;$c<7;$c++){ //toggle weekday
 				$coord = array($this->GetX(), $this->GetY());
-
+				
 				$this->SetFont(null, 'B', $this->fSizeMedium-2);
 				$this->Cell($colw,5,date('j ',$date).$month, 1,0,'L',false,'',0,false,'T','T');
 				$month='';
+				$more=false;
 				$this->SetFont(null, '', $this->fSizeSmall);
 				if(date('M',$date)!=date('M',$date+24*3600))
 					$month = date('M',$date+24*3600);
@@ -130,17 +139,17 @@ class Month extends Calendar {
 					$amount = 0;
 					if(isset($this->events[$date]['fd'])) {
 						foreach($this->events[$date]['fd'] as $i => $event) { //full day
-							$events.='<br><font color="blue">'.substr($event->name,0,19).'</font>';
+							$events.='<br><font color="blue">'.substr($event->name,0,25).'</font>';
 							$amount++;
 						}
 					}
 					if(isset($this->events[$date]['part'])) {
 						foreach($this->events[$date]['part'] as $i => $event) { //part day
 							if($i+$amount>5) {
-								$events.=' <b>&#x25BC;</b>'; //arrow down
+								$more=true;
 								break;
 							}
-							$events.="<br>".substr(date('G:i',$event->start_time) .' '. date('G:i',$event->end_time) .' '. $event->name,0,19);
+							$events.="<br>".date('G:i',$event->start_time) .' '. date('G:i',$event->end_time) .' '. substr($event->name,0,25);
 						}
 					}
 						
@@ -148,12 +157,13 @@ class Month extends Calendar {
 				} else {
 					$this->SetFillColor(240);
 				}
-				$this->SetXY($coord[0], $coord[1]+$dateh);
-				$this->SetCellHeightRatio(1.45);
+				//$this->SetXY($coord[0], $coord[1]+$dateh);
+				
 				//\GO::debug($events);
 				//$this->MultiCell($colw,$rowh-$dateh,$events, 1,'L',true,0,'','',true,0,true,true,$rowh-$dateh,'T',true);
-				$this->writeHTMLCell($colw,$rowh-$dateh,$this->GetX(),$this->GetY(),  mb_convert_encoding($events,'UTF-8'), 1,0,true);
-				$this->SetCellHeightRatio(1.2);
+				//$this->writeHTMLCell($colw,$rowh-$dateh,$this->GetX(),$this->GetY(),  mb_convert_encoding($events,'UTF-8', 'UTF-8'), 1,0,true);
+				$this->DayCell($events, $colw, $rowh-$dateh, $coord[0], $coord[1]+$dateh,$more);
+				
 				$this->SetXY($coord[0]+$colw,$coord[1]);
 				$date+=24*3600;
 			}
@@ -161,8 +171,27 @@ class Month extends Calendar {
 			
 		}
 		$this->SetXY(10,36);
-		$this->Cell($colw+7, $rowh*5+6, '',1);
+		$this->Cell($colw+7, $rowh*$weeks+6, '',1);
 
+	}
+	
+	protected function DayCell($text, $width, $h, $x=null, $y=null, $more=false) {
+		if($x===null)
+			$x=$this->GetX();
+		if($y===null)
+			$y=$this->GetY();
+		$this->SetCellHeightRatio(1.45);
+		$this->Rect($x, $y, $width, $h, 'DF');
+		$this->StartTransform(); //will clip text in the Rectangle on the next line
+		$this->Rect($x, $y, $width-2, $h, 'CEO');
+		$this->writeHTMLCell($width+100,$h,$x,$y, mb_convert_encoding($text,'UTF-8', 'UTF-8'), 0,0,false,true,'L');
+		$this->StopTransform();
+		if($more) {
+			$this->SetXY($x+($width-4),$y+($h-4));
+			$this->SetCellHeightRatio(1);
+			$this->Cell(3, 2, html_entity_decode("&#x25BC;"), 0, 0, 'R', true);
+		}
+		$this->SetCellHeightRatio(1.2);
 	}
 
 }

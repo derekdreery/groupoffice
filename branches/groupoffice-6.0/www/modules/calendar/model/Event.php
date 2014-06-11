@@ -48,9 +48,15 @@
 
 namespace GO\Calendar\Model;
 
-use GO;
-use Sabre;
+use DateInterval;
 use DateTime;
+use DateTimeZone;
+use Exception;
+use GO;
+use GO\Base\Util\String;
+use Sabre;
+use Swift_Attachment;
+use Swift_Mime_ContentEncoder_PlainContentEncoder;
 
 class Event extends \GO\Base\Db\ActiveRecord {
 
@@ -270,7 +276,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	public function addException($date, $exception_event_id=0) {
 		
 		if(!$this->isRecurring())
-			throw new \Exception("Can't add exception to non recurring event ".$this->id);
+			throw new Exception("Can't add exception to non recurring event ".$this->id);
 		
 		if(!$this->hasException($date)){
 			$exception = new Exception();
@@ -334,7 +340,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		$hasConflict = false;
 		$foundConflicts = array();				
 		
-		if($this->isNew){
+		if($this->isNew || $this->isResource()){
 			// Not possible to determine this when having a new model.
 			// Because the resources are not created yet.
 			return false;
@@ -373,7 +379,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		
 		
 		if(!$this->isRecurring()){
-			throw new \Exception("Can't create exception event for non recurring event ".$this->id);
+			throw new Exception("Can't create exception event for non recurring event ".$this->id);
 		}
 		
 		$oldIgnore = \GO::setIgnoreAclPermissions();
@@ -398,7 +404,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$exceptionEvent->dontSendEmails = $dontSendEmails;
 			$exceptionEvent->setAttributes($attributes);
 			if(!$exceptionEvent->save())
-				throw new \Exception("Could not create exception: ".var_export($exceptionEvent->getValidationErrors(), true));
+				throw new Exception("Could not create exception: ".var_export($exceptionEvent->getValidationErrors(), true));
 			
 
 			$event->copyLinks($exceptionEvent);
@@ -443,6 +449,21 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
 			$this->repeat_end_time = $rrule->until;
 		}		
+		
+
+		$resourceConflicts = $this->hasResourceConflicts();
+
+		if($resourceConflicts !== false){
+
+
+			$errorMessage = GO::t('moveEventResourceError','calendar');
+
+			foreach ($resourceConflicts as $rc){
+				$errorMessage .= '<br />- '.$rc->calendar->name;
+			}
+
+			$this->setValidationError('start_time', $errorMessage);
+		}
 		return parent::validate();
 	}
 	
@@ -495,19 +516,6 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			}			
 		}	
 		
-		$resourceConflicts = $this->hasResourceConflicts();
-		
-		if($resourceConflicts !== false){
-			
-			$errorMessage = \GO::t('moveEventResourceError','calendar');
-			
-			foreach ($resourceConflicts as $rc){
-				$errorMessage .= '<br />- '.$rc->calendar->name;
-			}
-			
-			Throw new Exception($errorMessage);
-		}
-
 		return parent::beforeSave();
 	}
 
@@ -913,7 +921,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	public function findException($exceptionDate) {
 
 		if ($this->exception_for_event_id != 0)
-			throw new \Exception("This is not a master event");
+			throw new Exception("This is not a master event");
 
 		$startOfDay = \GO\Base\Util\Date::clear_time($exceptionDate);
 		$endOfDay = \GO\Base\Util\Date::date_add($startOfDay, 1);
@@ -1606,14 +1614,14 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	private function _utcToLocal(DateTime $date){
 		//DateTime from SabreDav is date without time in UTC timezone. We store it in the users timezone so we must
 		//add the timezone offset.
-		$timezone = new \DateTimeZone(\GO::user()->timezone);
+		$timezone = new DateTimeZone(\GO::user()->timezone);
 
 		$offset = $timezone->getOffset($date);		
 		$sub = $offset>0;
 		if(!$sub)
 			$offset *= -1;
 
-		$interval = new \DateInterval('PT'.$offset.'S');	
+		$interval = new DateInterval('PT'.$offset.'S');	
 		if(!$sub){
 			$date->add($interval);
 		}else{
@@ -1779,14 +1787,14 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					$this->exception_for_event_id=$recurringEvent->id;
 					
 					//will be saved later
-					$exception = new \Exception();
+					$exception = new Exception();
 					$exception->time=$recurrenceTime;
 					$exception->event_id=$recurringEvent->id;
 				}
 			}
 		}
 		
-		if($vobject->valarm){
+		if($vobject->valarm && $vobject->valarm->trigger){
 			$reminderTime = $vobject->valarm->getEffectiveTriggerTime();
 			//echo $reminderTime->format('c');
 			$seconds = $reminderTime->format('U');
@@ -2365,11 +2373,11 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			
 
 		if(!$sendingParticipant)
-			throw new \Exception("Could not find your participant model");
+			throw new Exception("Could not find your participant model");
 
 		$organizer = $this->getOrganizer();
 		if(!$organizer)
-			throw new \Exception("Could not find organizer to send message to!");
+			throw new Exception("Could not find organizer to send message to!");
 
 		$updateReponses = \GO::t('updateReponses','calendar');
 		$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $this->name);
@@ -2392,14 +2400,14 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
 		if($includeIcs){
 			$ics=$this->toICS("REPLY", $sendingParticipant, $recurrenceTime);				
-			$a = \Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REPLY"');
-			$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+			$a = Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REPLY"');
+			$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 			$a->setDisposition("inline");
 			$message->attach($a);
 			
 			//for outlook 2003 compatibility
-			$a2 = \Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
-			$a2->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+			$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
+			$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 			$message->attach($a2);
 		}
 //		}
@@ -2450,13 +2458,13 @@ class Event extends \GO\Base\Db\ActiveRecord {
 
 				$ics=$this->toICS("CANCEL");				
 				$a = \Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="CANCEL"');
-				$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$a->setDisposition("inline");
 				$message->attach($a);
 				
 				//for outlook 2003 compatibility
 				$a2 = \Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
-				$a2->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$message->attach($a2);
 				
 //			}else{
@@ -2493,7 +2501,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	public function sendMeetingRequest($newParticipantsOnly=false, $update=false){		
 		
 		if(!$this->is_organizer)
-			throw new \Exception("Meeting request can only be send from the organizer's event");
+			throw new Exception("Meeting request can only be send from the organizer's event");
 		
 		$stmt = $this->participants;
 		
@@ -2567,13 +2575,13 @@ class Event extends \GO\Base\Db\ActiveRecord {
 
 					$ics=$this->toICS("REQUEST");				
 					$a = \Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REQUEST"');
-					$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 					$a->setDisposition("inline");
 					$message->attach($a);
 
 					//for outlook 2003 compatibility
 					$a2 = \Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
-					$a2->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+					$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 					$message->attach($a2);
 
 					if($participantEvent){

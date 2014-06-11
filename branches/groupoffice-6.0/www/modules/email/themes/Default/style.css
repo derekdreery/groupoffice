@@ -420,3 +420,8 @@ div.em-messages-grid-labels-container > div {
 	margin: 0 4px 4px 0;
 	width: 16px;
 }
+
+.ml-deleted{
+	color:#777777;
+	text-decoration: line-through;
+}
