@@ -218,7 +218,14 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 					
 					if(isset($child->{"X-GO-REMINDER-TIME"})){
 						unset($child->valarm);
-						$child->aalarm=(string) $child->{"X-GO-REMINDER-TIME"}.";;0;";
+						
+						
+						$prop = new Sabre\VObject\Property\Text($vobject, 'AALARM', array((string) $child->{"X-GO-REMINDER-TIME"},'','0'));
+						$prop->delimiter=';';
+						$child->add($prop);
+						
+						
+										//$child->{"X-GO-REMINDER-TIME"}.";;0;";
 					}
 				}
 			}
