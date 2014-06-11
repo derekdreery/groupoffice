@@ -403,3 +403,8 @@ margin:5px 2px;
 	width:16px !important;
 	height:16px !important;
 }
+
+.ml-deleted{
+	color:#777777;
+	text-decoration: line-through;
+}

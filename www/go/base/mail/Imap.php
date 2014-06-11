@@ -1481,6 +1481,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 					'flagged'=>0,
 					'answered'=>0,
 					'forwarded'=>0,
+					'deleted'=>0,
 					'has_attachments'=>0
 				);
 
