@@ -24,6 +24,24 @@
 
 
 
+
+- Updated Croatian translation
+- Funambol bug with multiple exceptions in a recurring event fixed
+- Event reminder set correctly for funambol sync
+- Show expunged mail with line-through
+- Skip deleted messages in ActiveSync
+- Only update modified properties  on recurring orders when saving
+- Don't ask to add unknown recipient if the recipient is a visible user
+- CalDAV did not handle resource conflicts correctly
+- Billing: three new optional invoice PDF columns.
+- Calendar: fixed bug where an exception event is created twice.
+
+04-06-2014 5.0.63
+- ExportXLS error fixed
+- Added div overlay to the print function so the links in the preview should not be clickable anymore
+- Updated German
+
+
 03-06-2014 5.0.62
 - Fixed missing ExportXLS error when exporting.
 - Fixed problem with address list changes. Only save them when the address list settings panel is enabled.
