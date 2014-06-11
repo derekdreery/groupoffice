@@ -348,5 +348,5 @@ $l['callOnSkype'] = 'Bellen met Skype';
 
 $l['userDefaultTemplate'] = 'Standaardsjabloon van gebruiker(s)';
 $l['exportContactsWithCompanies'] = 'Persoonlijke en bedrijfsgegevens';
-$l['exportContacts'] = 'Persoonlijke gegegeven';
+$l['exportContacts'] = 'Persoonlijke gegevens';
 $l['privateAddress'] = 'Privé adres';
