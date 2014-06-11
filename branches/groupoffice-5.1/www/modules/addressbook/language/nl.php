@@ -347,6 +347,6 @@ $l['setCurrentTemplateAsDefaultEAccount']='Stel huidig sjabloon als standaard in
 $l['callOnSkype'] = 'Bellen met Skype';
 
 $l['userDefaultTemplate'] = 'Standaardsjabloon van gebruiker(s)';
-$l['exportContactsWithCompanies'] = 'Contacten met bedrijven';
-
+$l['exportContactsWithCompanies'] = 'Persoonlijke en bedrijfsgegevens';
+$l['exportContacts'] = 'Persoonlijke gegegeven';
 $l['privateAddress'] = 'Privé adres';
