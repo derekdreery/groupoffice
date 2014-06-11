@@ -218,9 +218,6 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$response['permission_level'] = $account->getPermissionLevel();
 
-		// ADDED EXPUNGE SO THE FOLDER WILL BE UP TO DATE (When moving folders in THUNDERBIRD)
-		$imap->expunge();
-
 		$response['unseen']=array();
 
 		//special folder flags
@@ -412,13 +409,18 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$recipients->addString($params['bcc']);
 
 			foreach ($recipients->getAddresses() as $email => $personal) {
-				$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($email);
-				if ($contact)
-					continue;
+				$contacts = GO_Addressbook_Model_Contact::model()->findByEmail($email, GO_Base_Db_FindParams::newInstance()->ignoreAcl());
+				foreach($contacts as $contact){
+					
+					if($contact->checkOldPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION) || $contact->goUser && $contact->goUser->checkPermission(GO_Base_Model_Acl::READ_PERMISSION)){
+						continue 2;
+					}
+				}
 
 				$company = GO_Addressbook_Model_Company::model()->findSingleByAttribute('email', $email);
 				if ($company)
 					continue;
+				
 
 				$recipient = GO_Base_Util_String::split_name($personal);
 				if ($recipient['first_name'] == '' && $recipient['last_name'] == '') {

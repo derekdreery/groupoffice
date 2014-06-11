@@ -186,7 +186,17 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 						$rrule = new GO_Base_Util_Icalendar_Rrule();
 						$rrule->readIcalendarRruleString($child->dtstart->getDateTime()->format('U'), (string) $child->rrule);			
 						$child->rrule = str_replace('RRULE:','',$rrule->createRrule());
-					}					
+					}
+					
+					if(isset($child->exdate)){
+						
+						$exdates = explode(';', (string) $child->exdate);						
+						$child->exdate = $exdates[0];
+						
+						for($i=1;$i<count($exdates);$i++){
+							$child->add('exdate',$exdates[$i]);
+						}
+					}
 				}					
 			}
 		}
@@ -218,7 +228,14 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 					
 					if(isset($child->{"X-GO-REMINDER-TIME"})){
 						unset($child->valarm);
-						$child->aalarm=(string) $child->{"X-GO-REMINDER-TIME"}.";;0;";
+						
+						
+						$prop = new Sabre\VObject\Property\Text($vobject, 'AALARM', array((string) $child->{"X-GO-REMINDER-TIME"},'','0'));
+						$prop->delimiter=';';
+						$child->add($prop);
+						
+						
+										//$child->{"X-GO-REMINDER-TIME"}.";;0;";
 					}
 				}
 			}
