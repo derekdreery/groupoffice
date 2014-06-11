@@ -1,3 +1,11 @@
+- Updated Croatian translation
+- Funambol bug with multiple exceptions in a recurring event fixed
+- Event reminder set correctly for funambol sync
+- Show expunged mail with line-through
+- Skip deleted messages in ActiveSync
+- Only update modified properties  on recurring orders when saving
+- Don't ask to add unknown recipient if the recipient is a visible user
+- CalDAV did not handle resource conflicts correctly
 - Billing: three new optional invoice PDF columns.
 - Calendar: fixed bug where an exception event is created twice.
 
