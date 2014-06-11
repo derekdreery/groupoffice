@@ -596,6 +596,7 @@ class AbstractModelController extends AbstractController {
 		//fields for display.
 
 		$findParams = \GO\Base\Db\FindParams::newInstance()
+						->joinRelation('category')
 						->order(array('category.sort_index','t.sort_index'),array('ASC','ASC'));
 		$findParams->getCriteria()
 						->addCondition('extends_model', $model->customfieldsRecord->extendsModel(),'=','category');
