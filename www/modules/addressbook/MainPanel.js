@@ -567,7 +567,7 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 		// Button to export contacts or companies (Based on the tab that is opened)
 		this.defaultExportButton = new Ext.menu.Item({
 			iconCls: 'btn-export',
-			text: GO.lang.exportScreen,
+			text: GO.addressbook.lang.exportContacts,
 			cls: 'x-btn-text-icon',
 			handler:function(){
 				var activetab = this.tabPanel.getActiveTab();

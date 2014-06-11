@@ -312,6 +312,7 @@ $l['setCurrentTemplateAsDefaultEAccount']='Set current template as default for t
 $l['callOnSkype'] = 'Call on Skype';
 
 $l['userDefaultTemplate'] = 'User default template';
-$l['exportContactsWithCompanies'] = 'Contacts with companies';
+$l['exportContacts'] = 'Personal info';
+$l['exportContactsWithCompanies'] = 'Personal and company info';
 
 $l['privateAddress'] = 'Private address';
