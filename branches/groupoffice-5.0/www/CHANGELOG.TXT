@@ -1,3 +1,4 @@
+12-06-2014 5.0.64
 - Forward messages that were attached fixed
 - Touch parent and current folder when moving files and folders so refreshing won't sync with the filesystem. This improves performance.
 - Updated Croatian translation
