@@ -367,6 +367,10 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 				
 		}
 		
+		
+		$response['contact_name']="";			
+		$response['contact_thumb_url']=GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
+		
 		$response['blocked_images']=0;
 		$response['xssDetected']=false;
 
