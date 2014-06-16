@@ -51,7 +51,7 @@ namespace GO\Calendar\Model;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
-use Exception;
+use GO\Calendar\Model\Exception;
 use GO;
 use GO\Base\Util\String;
 use Sabre;
@@ -276,10 +276,10 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	public function addException($date, $exception_event_id=0) {
 		
 		if(!$this->isRecurring())
-			throw new Exception("Can't add exception to non recurring event ".$this->id);
+			throw new \Exception("Can't add exception to non recurring event ".$this->id);
 		
 		if(!$this->hasException($date)){
-			$exception = new Exception();
+			$exception = new \Exception();
 			$exception->event_id = $this->id;
 			$exception->time = mktime(date('G',$this->start_time),date('i',$this->start_time),0,date('n',$date),date('j',$date),date('Y',$date)); // Needs to be a unix timestamp
 			$exception->exception_event_id=$exception_event_id;
@@ -379,7 +379,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		
 		
 		if(!$this->isRecurring()){
-			throw new Exception("Can't create exception event for non recurring event ".$this->id);
+			throw new \Exception("Can't create exception event for non recurring event ".$this->id);
 		}
 		
 		$oldIgnore = \GO::setIgnoreAclPermissions();
@@ -404,7 +404,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$exceptionEvent->dontSendEmails = $dontSendEmails;
 			$exceptionEvent->setAttributes($attributes);
 			if(!$exceptionEvent->save())
-				throw new Exception("Could not create exception: ".var_export($exceptionEvent->getValidationErrors(), true));
+				throw new \Exception("Could not create exception: ".var_export($exceptionEvent->getValidationErrors(), true));
 			
 
 			$event->copyLinks($exceptionEvent);
@@ -921,7 +921,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	public function findException($exceptionDate) {
 
 		if ($this->exception_for_event_id != 0)
-			throw new Exception("This is not a master event");
+			throw new \Exception("This is not a master event");
 
 		$startOfDay = \GO\Base\Util\Date::clear_time($exceptionDate);
 		$endOfDay = \GO\Base\Util\Date::date_add($startOfDay, 1);
@@ -2373,11 +2373,11 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			
 
 		if(!$sendingParticipant)
-			throw new Exception("Could not find your participant model");
+			throw new \Exception("Could not find your participant model");
 
 		$organizer = $this->getOrganizer();
 		if(!$organizer)
-			throw new Exception("Could not find organizer to send message to!");
+			throw new \Exception("Could not find organizer to send message to!");
 
 		$updateReponses = \GO::t('updateReponses','calendar');
 		$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $this->name);
@@ -2501,7 +2501,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	public function sendMeetingRequest($newParticipantsOnly=false, $update=false){		
 		
 		if(!$this->is_organizer)
-			throw new Exception("Meeting request can only be send from the organizer's event");
+			throw new \Exception("Meeting request can only be send from the organizer's event");
 		
 		$stmt = $this->participants;
 		
