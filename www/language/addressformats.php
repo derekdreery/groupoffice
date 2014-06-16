@@ -24,8 +24,8 @@ $af['FR']='{address_no} {address}
 $af['GB']='{address}
 {address_no}
 {city}
-{zip}
 {state}
+{zip}
 {country}';
 
 $af['IT']='{address_no} {address}
