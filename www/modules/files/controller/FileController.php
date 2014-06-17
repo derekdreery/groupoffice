@@ -247,6 +247,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 			$inline = false;
 
 		GO_Base_Util_Http::outputDownloadHeaders($file->fsFile, $inline, !empty($params['cache']));
+		$file->open();
 		$file->fsFile->output();
 	}
 
