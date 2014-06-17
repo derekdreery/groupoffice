@@ -457,6 +457,33 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
+	 * Just the let someone kow the file was opened
+	 */
+	public function open() {
+		$this->log('open');
+	}
+	
+	/**
+	 * Adds some extra info to the loggin of files
+	 * @param string $action the action to log
+	 * @param boolean $save unused
+	 * @return boolean if save was successful
+	 */
+	protected function log($action, $save=true) {
+		$log = parent::log($action, false);
+		if($log->action=='update') {
+			$log->action = 'propedit';
+			if($log->object->isModified('folder_id'))
+				$log->action='moved';
+			if($log->object->isModified('name')) {
+				$log->action='renamed';
+				$log->message = $log->object->getOldAttributeValue('name') . ' > ' . $log->message;
+			}
+		}
+		return $log->save();
+	}
+	
+	/**
 	 * Copy a file to another folder.
 	 * 
 	 * @param GO_Files_Model_Folder $destinationFolder
@@ -506,7 +533,8 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 //		for safety allow replace action
 //		if(!GO_Files_Model_File::checkQuota($fsFile->size()-$this->size))
 //			throw new GO_Base_Exception_InsufficientDiskSpace();
-		
+		if(!$this->isNew)
+			$this->log('edit');
 		$this->saveVersion();
 				
 		$fsFile->move($this->folder->fsFolder,$this->name, $isUploadedFile);
