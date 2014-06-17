@@ -482,6 +482,8 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 */
 	protected function log($action, $save=true) {
 		$log = parent::log($action, false);
+		if(empty($log))
+			return false;
 		if($log->action=='update') {
 			$log->action = 'propedit';
 			if($log->object->isModified('folder_id'))
