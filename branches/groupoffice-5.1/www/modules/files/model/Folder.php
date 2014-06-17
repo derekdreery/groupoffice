@@ -376,10 +376,23 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		}
 		
 		//sync parent timestamp
-		if($this->parent){
-//				$this->parent->mtime=$this->parent->fsFolder->mtime();
-//				$this->parent->save();			
-			$this->parent->touch();
+		
+		if($this->isModified('parent_id')){
+			if($this->parent){
+				
+				$oldFolderId = $this->getOldAttributeValue('parent_id');
+				$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId, false, true);				
+					
+					//so it won't sync the filesystem
+				if($oldFolder){
+					
+					GO::debug('touching old parent');
+					$oldFolder->touch();
+				}
+	
+				GO::debug('touching parent');
+				$this->parent->touch();
+			}
 		}
 
 		return parent::afterSave($wasNew);
@@ -627,7 +640,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		$oldCache = GO::$disableModelCache;
 		
-		GO::$disableModelCache=true;
+		GO::$disableModelCache=$recurseAll;
 		
 //		if(class_exists("GO_Filesearch_FilesearchModule"))
 //			GO_Filesearch_FilesearchModule::$disableIndexing=true;

@@ -1,3 +1,7 @@
+17-06-2014 5.1.8
+- ActivityLog to file function
+- 5.0 fixes
+
 16-05-2014 5.1.7
 - PHP custom field
 - 5.0.57 fixes
@@ -23,8 +27,15 @@
 - Custom IMAP flag support (Message labels)
 
 
+**-**-2014 5.0.66
+- Ticket types will always sort by group name so groups wont show up double
 
+12-06-2014 5.0.65
+- Bug in checking user permission when sending mail
 
+12-06-2014 5.0.64
+- Forward messages that were attached fixed
+- Touch parent and current folder when moving files and folders so refreshing won't sync with the filesystem. This improves performance.
 - Updated Croatian translation
 - Funambol bug with multiple exceptions in a recurring event fixed
 - Event reminder set correctly for funambol sync
