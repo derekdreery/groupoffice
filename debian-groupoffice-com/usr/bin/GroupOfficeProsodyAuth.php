@@ -170,10 +170,17 @@ class exAuth
 	
 	private function success(){
 		echo "1\n";
+		if(class_exists('\GO')){
+			\GO::unsetDbConnection();
+		}
+
 	}
 	
 	private function failure(){
 		echo "0\n";
+		if(class_exists('\GO')){
+			\GO::unsetDbConnection();
+		}
 	}
 
 
