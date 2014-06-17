@@ -41,6 +41,8 @@ class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
 	const ACTION_LOGIN='login';
 	const ACTION_LOGOUT='logout';
 	
+	public $object;
+	
 //	protected $insertDelayed=true;
 	
 	/**
@@ -82,6 +84,20 @@ class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
 		$attr['controller_route']=GO::router()->getControllerRoute();
 		$attr['username']=GO::user() ? GO::user()->username : 'notloggedin';
 		return $attr;
+	}
+
+	protected function afterSave($wasNew) {
+		if(!isset(GO::config()->file_log) || !is_array(GO::config()->file_log))
+			return true;
+		
+		foreach(GO::config()->file_log as $object => $filename) {
+			if(!empty($this->object) && $this->model===$object){
+				file_put_contents(GO::config()->file_storage_path.'log/'.$filename, 
+						"[".$this->object->className().date('Y-m-d H:i',$this->ctime)."] [".$this->username."] [".$this->action."] ".$this->message."\n",
+						FILE_APPEND);
+			}
+		}
+		return true;
 	}
 	
 	/**
