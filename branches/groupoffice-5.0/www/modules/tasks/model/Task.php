@@ -167,6 +167,28 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		}
 	}
 	
+	/**
+	 * Find all tasks that you are going to work on today
+	 * @param $date unix timestamp
+	 * @param $tasklist_id the task list to search in
+	 * @return ActiveStatement
+	 */
+	static public function findByDate($date, $tasklist_id=null) {
+		$date = GO_Base_Util_Date::clear_time($date);
+		$criteria = GO_Base_Db_FindCriteria::newInstance();
+		if(!empty($tasklist_id))
+			$criteria->addCondition('tasklist_id', $tasklist_id);
+		$criteria1 = GO_Base_Db_FindCriteria::newInstance()
+				->addCondition('start_time', $date+24*3600, '<')
+				->addCondition('start_time', $date, '>=');
+		$criteria2 = GO_Base_Db_FindCriteria::newInstance()
+				->addCondition('due_time', $date+24*3600, '<')
+				->addCondition('due_time', $date, '>=');
+		$tasks = GO_Tasks_Model_Task::model()->find(GO_Base_Db_FindParams::newInstance()->criteria(
+				$criteria->mergeWith($criteria1->mergeWith($criteria2, false), true))
+		);
+		return $tasks;
+	}
 	
 	/**
 	 * Set the task to completed or not completed.
