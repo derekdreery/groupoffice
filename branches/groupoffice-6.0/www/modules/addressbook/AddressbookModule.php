@@ -3,6 +3,7 @@
 
 namespace GO\Addressbook;
 
+use GO;
 
 class AddressbookModule extends \GO\Base\Module{
 
