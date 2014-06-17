@@ -372,8 +372,19 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		}
 		
 
-		//touch the timestamp so it won't sync with the filesystem
-		$this->folder->touch();
+		//touch the timestamp so it won't sync with the filesystem			
+		if($this->isModified('folder_id')){
+			
+			GO::debug("touching parent");
+			$this->folder->touch();
+			
+			$oldParent = GO_Files_Model_Folder::model()->findByPk($this->getOldAttributeValue('folder_id'));
+			
+			if($oldParent){
+				GO::debug("touching old parent");
+				$oldParent->touch();
+			}
+		}
 		
 
 		return parent::afterSave($wasNew);

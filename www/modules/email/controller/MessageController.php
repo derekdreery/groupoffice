@@ -412,7 +412,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$contacts = GO_Addressbook_Model_Contact::model()->findByEmail($email, GO_Base_Db_FindParams::newInstance()->ignoreAcl());
 				foreach($contacts as $contact){
 					
-					if($contact->checkOldPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION) || $contact->goUser && $contact->goUser->checkPermission(GO_Base_Model_Acl::READ_PERMISSION)){
+					if($contact->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION) || $contact->goUser && $contact->goUser->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION)){
 						continue 2;
 					}
 				}
@@ -978,7 +978,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}else
 		{
 			$account=false;
-			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path']);
+			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path'], !empty($params['is_tmp_file']));
 		}
 
 		return $this->_messageToReplyResponse($params, $message, $account);
@@ -1162,7 +1162,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 		}else
 		{
-			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path']);
+			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path'], !empty($params['is_tmp_file']));
 		}
 
 		return $this->_messageToForwardResponse($params, $message);
@@ -1583,13 +1583,21 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	public function actionMessageAttachment($params){
 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
-
-		$data = $account->openImapConnection($params['mailbox'])->get_message_part_decoded($params['uid'], $params['number'], $params['encoding']);
-
-		$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($data);
+		
+		$tmpFile = GO_Base_Fs_File::tempFile('message.eml');
+		
+		$imap = $account->openImapConnection($params['mailbox']);
+		
+		/* @var $imap GO_Base_Mail_Imap  */
+		
+		$imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
+		
+		$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($tmpFile->getContents());
 
 		$response = $message->toOutputArray();
 		$response = $this->_checkXSS($params, $response);
+		$response['path']=$tmpFile->stripTempPath();
+		$response['is_tmp_file']=true;
 		$response['success']=true;
 		return $response;
 
