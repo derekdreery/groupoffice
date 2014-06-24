@@ -560,48 +560,13 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	public function setAttributeLabel($attribute,$label) {
 			$this->columns[$attribute]['label'] = $label;
 	}
-	
-	
-	
-//	/**
-//	 * Returns the static model of the specified AR class.
-//	 * Every child of this class must override it.
-//	 * 
-//	 * @return ActiveRecord the static model class
-//	 */
-//	public static function model($className=__CLASS__)
-//	{		
-////	    if ($className=='GO\Base\Db\ActiveRecord') throw new \Exception($className);
-//		if(isset(self::$_models[$className]))
-//			return self::$_models[$className];
-//		else
-//		{
-//			$model=self::$_models[$className]=new $className();
-//			return $model;
-//		}
-//	}
-	
-	/**
-	 * Get the finder object for finding active records
-	 * @param mixed $args if array treath as configureation else threath as pk value
-	 * @return ActiveFinder the finder object
-	 */
-	public static function finder($args=null)
-	{
-		//when functions like primaryKey() and tableName() are static this shouldn't be nessasary
-		$ar = GO::getModel(get_called_class());
-		
-		$finder = new ActiveFinder($ar);
-		if(is_array($args))
-		{
-			//do something with arg
-		} else if(!empty($args)) //use arg as the pk
-		{
-			
-			$finder = $finder->where($ar->primaryKey()."=".$args);
-		}
-		
-		return $finder;
+
+	public static function load($pk=null) {
+		$self = GO::getModel(get_called_class());
+		if($pk !== null)
+			return $self->findByPk($pk);
+		$query = new Query($self);
+		return $query;
 	}
 	
 	/**
