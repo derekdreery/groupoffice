@@ -927,6 +927,8 @@ GO.email.EmailClient = function(config){
 	GO.email.searchSender = GO.email.searchSender.createDelegate(this);
 
 	GO.email.EmailClient.superclass.constructor.call(this, config);
+	
+	GO.email.emailClient = this;
 };
 
 Ext.extend(GO.email.EmailClient, Ext.Panel,{
