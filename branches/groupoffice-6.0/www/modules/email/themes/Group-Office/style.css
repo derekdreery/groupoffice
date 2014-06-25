@@ -14,6 +14,10 @@
 	text-decoration:underline;
 }
 
+.em-spam-move-block {
+	float:right;
+	color: lightgray;
+}
 
 .em-tree-node-noselect .x-tree-node-anchor span, .em-readonly a span{
 	font-style:italic;

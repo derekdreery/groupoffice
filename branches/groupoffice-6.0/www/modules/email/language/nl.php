@@ -290,3 +290,16 @@ $l['permissionDelegated'] = 'Alleen lezen en gedelegeerd';
 
 $l['saveToItem'] = 'Opslaan bij item';
 $l['saveToPersonal'] = 'Opslaan in persoonlijke map';
+
+$l['thisIsSpam1'] = 'Dit bericht is gemarkeerd als spam. Klik';
+$l['thisIsSpam2'] = 'hier';
+$l['thisIsSpam3'] = 'als u gelooft dat dit bericht GEEN spam is.';
+
+$l['thisIsNotSpam1'] = 'Klik';
+$l['thisIsNotSpam2'] = 'hier';
+$l['thisIsNotSpam3'] = 'als u denkt dat dit bericht spam is.';
+
+$l['moveToSpamTitle'] = 'Verplaatsen naar spamfolder?';
+$l['moveToSpamMsg'] = 'Weet u zeker dat u dit bericht wilt markeren als spam?';
+$l['moveToInboxTitle'] = 'Uit spamfolder verplaatsen?';
+$l['moveToInboxMsg'] = 'Weet u zeker dat u de spammarkering van dit bericht wilt verwijderen en het bericht wilt verplaatsen naar uw inbox?';

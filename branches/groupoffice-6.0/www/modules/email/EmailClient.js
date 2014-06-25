@@ -1948,3 +1948,63 @@ GO.email.showAttendanceWindow=function(event_id){
 	}
 	GO.email.attendanceWindow.show(event_id);
 }
+
+
+GO.email.moveToSpam = function(mailUid,mailboxName,fromAccountId) {
+	Ext.Msg.show({
+		title: GO.email.lang.moveToSpamTitle,
+		icon: Ext.MessageBox.QUESTION,
+		msg: GO.email.lang.moveToSpamMsg,
+		buttons: Ext.Msg.YESNO,
+		fn: function(btn) {
+			if (btn=='yes') {
+				GO.request({
+					url: 'email/message/moveToSpam',
+					params: {
+						account_id: fromAccountId,
+						from_mailbox_name: mailboxName,
+						mail_uid: mailUid
+					},
+					success: function() {
+						GO.email.emailClient.refresh();
+					},
+					failure: function(response,options,result) {
+						console.log(response);
+						console.log(options);
+						console.log(result);
+					}
+				});
+			}
+		},
+		scope : this
+	});
+}
+
+GO.email.moveToInbox = function(mailUid,fromAccountId) {
+	Ext.Msg.show({
+		title: GO.email.lang.moveToInboxTitle,
+		icon: Ext.MessageBox.QUESTION,
+		msg: GO.email.lang.moveToInboxMsg,
+		buttons: Ext.Msg.YESNO,
+		fn: function(btn) {
+			if (btn=='yes') {
+				GO.request({
+					url: 'email/message/moveToInbox',
+					params: {
+						account_id: fromAccountId,
+						mail_uid: mailUid
+					},
+					success: function() {
+						GO.email.emailClient.refresh();
+					},
+					failure: function(response,options,result) {
+						console.log(response);
+						console.log(options);
+						console.log(result);
+					}
+				});
+			}
+		},
+		scope : this
+	});
+}
