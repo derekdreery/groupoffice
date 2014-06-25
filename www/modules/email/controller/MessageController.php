@@ -1348,7 +1348,9 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 	
 	protected function _createSpamMoveLink($mailUid,$mailboxName,$accountId) {
 		
-		if (strtolower($mailboxName)=='spam') {
+		$accountModel = \GO\Email\Model\Account::model()->findByPk($accountId);
+		
+		if (strtolower($mailboxName)==$accountModel->spam) {
 			return '<div class="em-spam-move-block">'.\GO::t('thisIsSpam1','email').' <a style="color:blue;" href="javascript:GO.email.moveToInbox(\''.$mailUid.'\','.$accountId.');">'.\GO::t('thisIsSpam2','email').'</a> '.\GO::t('thisIsSpam3','email').'</div>';
 		} else {
 			return '<div class="em-spam-move-block">'.\GO::t('thisIsNotSpam1','email').' <a style="color:blue;" href="javascript:GO.email.moveToSpam(\''.$mailUid.'\',\''.$mailboxName.'\','.$accountId.');">'.\GO::t('thisIsNotSpam2','email').'</a> '.\GO::t('thisIsNotSpam3','email').'</div>';
