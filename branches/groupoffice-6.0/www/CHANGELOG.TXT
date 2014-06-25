@@ -1,4 +1,5 @@
 - Core: Distinction between holidays that are free days and holidays that are not.
+- E-mail: link to easily move emails to and from spam folder.
 
 6.0.0
 - Paste images in chrome
