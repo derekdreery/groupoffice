@@ -148,6 +148,7 @@ class DbStore extends AbstractStore {
 		}
 		
 		$this->_readRequestParams();
+				
 	}
 
 	/**
@@ -273,6 +274,9 @@ class DbStore extends AbstractStore {
 	 * @return \GO\Base\Db\FindParams
 	 */
 	public function getFindParams(){
+		
+		$this->_readRequestParams();
+				
 		if(!isset($this->_findParams)){
 			$this->_findParams=$this->createFindParams();
 		}
