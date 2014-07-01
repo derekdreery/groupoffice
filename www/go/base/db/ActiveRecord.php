@@ -3685,14 +3685,21 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					//set the foreign field to 0. Because it doesn't exist anymore.
 					$model = $this->$name;
 					if($model){
-						$model->{$attr['field']}=0;
+						
+						$columns = $model->getColumns();
+						
+						$model->{$attr['field']}=$columns[$attr['field']]['null'] ? null : 0;
 						$model->save();
 					}
 				}elseif($attr['type']==self::HAS_MANY){
-					//set the foreign field to 0 because it doesn't exist anymore.
+					//set the foreign field to 0 because it doesn't exist anymore.					
 					$stmt = $this->$name;
+				
 					while($model = $stmt->fetch()){
-						$model->{$attr['field']}=0;
+						
+						$columns = $model->getColumns();
+						
+						$model->{$attr['field']}=$columns[$attr['field']]['null'] ? null : 0;
 						$model->save();
 					}
 				}
