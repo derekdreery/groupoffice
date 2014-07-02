@@ -1,5 +1,6 @@
-**-**-2014 5.0.66
-- Moved filesearch index to separate cron job
+02-07-2014 5.0.66
+- Private events where shown in new calendar prints
+- Moved file search index to separate cron job
 - Ticket types will always sort by group name so groups wont show up double
 
 12-06-2014 5.0.65
