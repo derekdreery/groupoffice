@@ -1337,10 +1337,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					$colId = $column['customfield']->id;
 					$colId = 'col_'.$colId;
 					$recordAttributes = $cfRecord->getAttributes();
-					$colValue = $cfRecord->getAttribute($column['customfield']->name);
-					$html .= '<tr><td style="vertical-align:top">'.($column['customfield']->name).'</td>'.
-									'<td>'.$recordAttributes[$colId].'</td></tr>';
-					
+					if ($recordAttributes[$colId]!='') {
+						$colValue = $cfRecord->getAttribute($column['customfield']->name);
+						$html .= '<tr><td style="vertical-align:top">'.($column['customfield']->name).'</td>'.
+										'<td>'.$recordAttributes[$colId].'</td></tr>';
+					}
 				}
 			}
 		}
@@ -2590,7 +2591,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						GO::language()->setLanguage($language);
 
 					GO_Base_Mail_Mailer::newGoInstance()->send($message);
-				
+					
+//					$aliasModel = GO_Email_Model_Alias::model()->findSingleByAttribute('email',$this->user->email);
+//					if (!empty($aliasModel) && !empty($aliasModel->account)) {
+//						$transport = GO_Base_Mail_Transport::newInstance($aliasModel->account->smtp_host, $aliasModel->account->smtp_port, strtolower($aliasModel->account->smtp_encryption));
+//						$transport->setUsername($aliasModel->account->smtp_username)
+//											->setPassword($aliasModel->account->smtp_password);					
+//					} else {
+//						$transport = GO_Base_Mail_Transport::newGoInstance();
+//					}
+//					
+//					GO_Base_Mail_Mailer::newGoInstance($transport)->send($message);
+					
 				}
 				
 			}
