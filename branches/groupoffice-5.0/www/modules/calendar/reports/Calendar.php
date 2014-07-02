@@ -263,6 +263,13 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 		$x = $o['col'] * $colWidth / $o['max'];
 		$x+=$startx;
 		$width = $colWidth / $o['max'] * $o['span'];
+		
+		if($event->isPrivate()){
+			$event->name=GO::t('private','calendar');
+			$event->description='';
+			$event->location='';
+		}
+		
 		//$this->SetXY(25 +$x,($this->rowHeight / 2) * $start);
 		//$this->Cell($width - 0.3, ($this->rowHeight / 2) * $length, '', 1, 1, 'L', true);
 		$this->SetXY($this->leftMargin+$this->timeCol+$x,($this->rowHeight / 2) * $start + $topPadding);
