@@ -332,15 +332,18 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 	
 	private function _addQuota(){
-                if($this->isModified('size') || $this->isNew) {
-                    $sizeDiff = $this->fsFile->size()-$this->getOldAttributeValue('size');
-                    GO::debug("Adding quota: $sizeDiff");
-                    
-                    $this->user->calculatedDiskUsage ($sizeDiff)->save(); //user quota
-                    if(GO::config()->quota>0) {
-			GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')+$sizeDiff); //system quota
-                    }
-                }
+		if($this->isModified('size') || $this->isNew) {
+				$sizeDiff = $this->fsFile->size()-$this->getOldAttributeValue('size');
+				GO::debug("Adding quota: $sizeDiff");
+
+				if($this->user){
+					$this->user->calculatedDiskUsage ($sizeDiff)->save(); //user quota
+				}
+				
+				if(GO::config()->quota>0) {
+					GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')+$sizeDiff); //system quota
+				}
+		}
 	}
 	
 	private function _removeQuota(){
@@ -348,7 +351,10 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			GO::debug("Removing quota: $this->size");
 			GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')-$this->size);
 		}
-                $this->user->calculatedDiskUsage (0-$this->size)->save();
+		
+		if($this->user){
+      $this->user->calculatedDiskUsage (0-$this->size)->save();
+		}
 	}
 	
 	protected function afterSave($wasNew) {
