@@ -1791,10 +1791,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->reminder = $this->start_time-$reminderTime->format('U');
 		}
 		
-		
-		if(!empty($vobject->categories)){
+		$cats = (string) $vobject->categories;
+		if(!empty($cats)){
 			//Group-Office only supports a single category.
-			$cats = explode(',',$vobject->categories);
+			$cats = explode(',',$cats);
 			$categoryName = array_shift($cats);
 			
 			$category = GO_Calendar_Model_Category::model()->findByName($this->calendar_id, $categoryName);
@@ -1802,7 +1802,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$category = new GO_Calendar_Model_Category();
 				$category->name=$categoryName;
 				$category->calendar_id=$this->calendar_id;
-				$category->save();
+				$category->save(true);
 			}			
 			
 			if($category){
