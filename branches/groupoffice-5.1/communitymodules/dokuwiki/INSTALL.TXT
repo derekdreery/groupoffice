@@ -24,7 +24,7 @@ NOTICE: After this install procedure only users of Group-Office can login to Dok
       $conf['GO_root']  = '[path to the groupoffice dir]';      ( example: $conf['GO_root'] = '/var/www/groupoffice-4.0/'; )
       $conf['GO_php']   = '[path to the groupoffice php file]'  ( example: $conf['GO_php'] = '/var/www/groupoffice-4.0/www/GO.php'; )
 
-NOTE: To configure which user has management options and which is the superuser set the following options too:
+NOTE: To configure which user has management options and which is the superuser set the following options in [path to dokuwiki]/conf/local/php:
       $conf['superuser'] = '[superuser]';		( example: $conf['superuser'] = 'admin,testuser'; )
       $conf['manager'] = '[manager]';			( example: $conf['manager'] = 'admin,testuser'; )
 

@@ -362,7 +362,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 				$this->folder->path
 			);
 		} else {
-			if (!$this->isModified('name') && !$this->isModified('folder_id')) {
+			if ($this->isModified() && !$this->isModified('name') && !$this->isModified('folder_id')) {
 				$this->notifyUsers(
 					$this->folder_id,
 					GO_Files_Model_FolderNotificationMessage::UPDATE_FILE,
