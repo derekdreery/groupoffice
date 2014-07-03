@@ -122,13 +122,25 @@ abstract class AbstractExport {
 	 */
 	public function getColumnModel($columns=false){
 		$colModel = new ColumnModel();
-		
+
 		if(!$columns)
 			$columns = $this->_columns;
 		
 		foreach($columns as $col){
 			
-			$format = '$model->'.str_replace('.','->', $col);
+//			$format = '$model->'.str_replace('.','->', $col);
+			
+			$parts = explode('.', $col);			
+			
+			if(count($parts)>1){
+				$last = array_pop($parts);
+				$format = '$model->'.implode('->', $parts).'->getAttribute("'.$last.'","formatted");';
+				
+			}else
+			{
+				$format = '$model->getAttribute("'.$parts[0].'","formatted");';
+			}
+
 			
 			$colModel->formatColumn($col, $format, array(), '', $this->getLabel($col));
 			
