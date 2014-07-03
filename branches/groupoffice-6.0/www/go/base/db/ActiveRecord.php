@@ -903,7 +903,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * 
 	 * @param array $attributes
 	 * @param FindParams $findParams
-	 * @return ActiveStatement 
+	 * @return static ActiveStatement 
 	 */
 	public function findByAttributes($attributes, $findParams=false){
 		$newParams = FindParams::newInstance();
@@ -930,7 +930,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * @param string $attributeName
 	 * @param mixed $value
 	 * @param FindParams $findParams Extra parameters to send to the find function.
-	 * @return ActiveRecord 
+	 * @return static 
 	 */
 	public function findSingleByAttribute($attributeName, $value, $findParams=false){		
 		return $this->findSingleByAttributes(array($attributeName=>$value), $findParams);
@@ -943,7 +943,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * @param string $attributeName
 	 * @param mixed $value
 	 * @param array $findParams Extra parameters to send to the find function.
-	 * @return ActiveRecord 
+	 * @return static 
 	 */
 	public function findSingleByAttributes($attributes, $findParams=false){
 
@@ -987,7 +987,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * @param string $attributeName
 	 * @param mixed $value
 	 * @param FindParams $findParams Extra parameters to send to the find function.
-	 * @return ActiveRecord 
+	 * @return static 
 	 */
 	public function findSingle($findParams=array()){
 		
@@ -1112,7 +1112,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * 
 	 * 
 	 * @param FindParams $params
-	 * @return ActiveStatement
+	 * @return static ActiveStatement
 	 */
 	public function find($params=array()){
 	
@@ -1870,7 +1870,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * read permission for the current user.
 	 * 
 	 * @param int $primaryKey
-	 * @return ActiveRecord 
+	 * @return static 
 	 */
 	
 	public function findByPk($primaryKey, $findParams=false, $ignoreAcl=false, $noCache=false){		
