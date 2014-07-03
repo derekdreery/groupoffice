@@ -1027,6 +1027,9 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		if (!$findParams)
 			$findParams = \GO\Base\Db\FindParams::newInstance();
 
+		// Make regular events exportable.
+		$findParams->export('events');
+		
 		$findParams->order('start_time', 'ASC')->select("t.*");
 		
 //		if($periodEndTime)
