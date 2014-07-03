@@ -1,3 +1,6 @@
+03-07-2014 5.0.67
+- Broken message dialog in ticket system
+
 02-07-2014 5.0.66
 - Private events where shown in new calendar prints
 - Moved file search index to separate cron job
