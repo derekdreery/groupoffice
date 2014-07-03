@@ -41,11 +41,11 @@ class CsvFile extends File{
 	private function _setCSV($mode){
 		
 		if(!isset($this->delimiter)){
-			$this->delimiter = GO::user() ? GO::user()->list_separator : ',';
+			$this->delimiter = \GO::user() ? \GO::user()->list_separator : ',';
 		}
 		
 		if(!isset($this->enclosure)){
-			$this->enclosure = GO::user() ? GO::user()->text_separator : '"';
+			$this->enclosure = \GO::user() ? \GO::user()->text_separator : '"';
 		}
 		
 		if(!isset($this->_csv)){
