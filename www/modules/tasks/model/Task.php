@@ -112,7 +112,8 @@ class Task extends \GO\Base\Db\ActiveRecord {
 		return array(
 				'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO\Tasks\Model\Tasklist', 'field' => 'tasklist_id', 'delete' => false),
 				'category' => array('type' => self::BELONGS_TO, 'model' => 'GO\Tasks\Model\Category', 'field' => 'category_id', 'delete' => false),
-				'project' => array('type' => self::BELONGS_TO, 'model' => 'GO\Projects\Model\Project', 'field' => 'project_id', 'delete' => false)
+				'project' => array('type' => self::BELONGS_TO, 'model' => 'GO\Projects\Model\Project', 'field' => 'project_id', 'delete' => false),
+				'project2' => array('type' => self::BELONGS_TO, 'model' => 'GO\Projects2\Model\Project', 'field' => 'project_id', 'delete' => false)
 				);
 	}
 	

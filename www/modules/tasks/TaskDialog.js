@@ -73,6 +73,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		if (!config) {
 			config = {};
 		}
+		
+		this.showConfig=config;
 
 		GO.dialogListeners.apply(this);
 
@@ -416,8 +418,12 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			]
 
 		});
-		
-		if(GO.moduleManager.userHasModule("projects")){
+
+		if(GO.moduleManager.userHasModule("projects2")){
+			descAnchor-=20;
+			this.selectProject = new GO.projects2.SelectProject();
+			propertiesPanel.add(this.selectProject);
+		} else if(GO.moduleManager.userHasModule("projects")) {
 			descAnchor-=20;
 			this.selectProject = new GO.projects.SelectProject();
 			propertiesPanel.add(this.selectProject);
