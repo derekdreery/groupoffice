@@ -1,3 +1,6 @@
+03-07-2014 5.0.68
+- Size mismatch on debian repos
+
 03-07-2014 5.0.67
 - Broken message dialog in ticket system
 
