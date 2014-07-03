@@ -402,8 +402,9 @@ class CompanyController extends \GO\Base\Controller\AbstractModelController {
 	protected function actionSelectCompany($params){
 		
 				$response = array('total'=>0, 'results'=>array());
-			
-		$query = '%'.preg_replace ('/[\s*]+/','%', $params['query']).'%'; 
+			$query = !empty($params['query']) ? $params['query'] : '';
+				
+		$query = '%'.preg_replace ('/[\s*]+/','%', $query).'%'; 
 				
 		
 		$findParams = \GO\Base\Db\FindParams::newInstance()
