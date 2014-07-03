@@ -41,6 +41,10 @@ class TaskController extends \GO\Base\Controller\AbstractModelController{
 		if(\GO::modules()->projects && $model->project){
 			$response['data']['project_name']=$model->project->name;
 		}
+		if(\GO::modules()->projects2 && $model->project2){
+			$response['data']['project_name']=$model->project2->name;
+		}
+		
 		
 		return parent::afterDisplay($response, $model, $params);
 	}
@@ -134,6 +138,8 @@ class TaskController extends \GO\Base\Controller\AbstractModelController{
 		
 		if(\GO::modules()->projects)
 			$combos['project_id']='$model->project->path';
+		if(\GO::modules()->projects2)
+			$combos['project_id']='$model->project2->path';
 		
 		return $combos;
 	}
@@ -184,7 +190,11 @@ class TaskController extends \GO\Base\Controller\AbstractModelController{
 		$columnModel->formatColumn('late','$model->isLate();');
 		$columnModel->formatColumn('user_name','$model->user->name');
 		
-		//$colModel->formatColumn('project_name','$model->project->name'); TODO: Implement the project from the ID and not from the name
+		if (\GO::modules()->projects2)
+			$columnModel->formatColumn('project_name','$model->project2->name');
+		elseif (\GO::modules()->projects)
+			$columnModel->formatColumn('project_name','$model->project->name');
+		
 		return parent::formatColumns($columnModel);
 	}
 

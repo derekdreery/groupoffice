@@ -141,7 +141,14 @@ GO.tasks.TasksPanel = function(config)
 			}]
 		};
 
-		if(GO.projects){
+		if (GO.projects2){
+			fields.columns.push({
+				header: GO.projects2.lang.project,
+				dataIndex: 'project_name',
+				hidden:true,
+				width:150
+			});
+		} else if(GO.projects){
 			fields.columns.push({
 				header: GO.projects.lang.project,
 				dataIndex: 'project_name',
