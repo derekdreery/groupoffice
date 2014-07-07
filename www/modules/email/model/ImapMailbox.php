@@ -205,7 +205,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		
 	  if($this->getAccount()->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
 		  throw new GO_Base_Exception_AccessDenied();
-		
+		$name = trim($name);
 		$this->_validateName($name);
 	  
 		$parentName = $this->getParentName();
@@ -249,6 +249,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	public function createChild($name, $subscribe=true){
 	  if($this->getAccount()->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
 		  throw new GO_Base_Exception_AccessDenied();
+		$name = trim($name);
 		$newMailbox = empty($this->name) ? $name : $this->name.$this->delimiter.$name;
 		
 		$this->_validateName($name);
