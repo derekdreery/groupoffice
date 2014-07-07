@@ -1327,9 +1327,9 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 				}
 			}
 			
-			$response['htmlbody']=$this->_createSpamMoveLink($params['uid'],$params['mailbox'],$account->id).$response['htmlbody'];
 		}
-
+		
+		$response['isInSpamFolder']=$this->_getSpamMoveMailboxName($params['uid'],$params['mailbox'],$account->id);
 		$response = $this->_getContactInfo($imapMessage, $params, $response);
 
 		$this->fireEvent('view', array(
@@ -1346,14 +1346,14 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 	}
 	
 	
-	protected function _createSpamMoveLink($mailUid,$mailboxName,$accountId) {
+	protected function _getSpamMoveMailboxName($mailUid,$mailboxName,$accountId) {
 		
-		$accountModel = \GO\Email\Model\Account::model()->findByPk($accountId);
-		
-		if (strtolower($mailboxName)==$accountModel->spam) {
-			return '<div class="em-spam-move-block">'.\GO::t('thisIsSpam1','email').' <a style="color:blue;" href="javascript:GO.email.moveToInbox(\''.$mailUid.'\','.$accountId.');">'.\GO::t('thisIsSpam2','email').'</a> '.\GO::t('thisIsSpam3','email').'</div>';
+		if (strtolower($mailboxName)=='spam') {
+			//return '<div class="em-spam-move-block">'.\GO::t('thisIsSpam1','email').' <a style="color:blue;" href="javascript:GO.email.moveToInbox(\''.$mailUid.'\','.$accountId.');">'.\GO::t('thisIsSpam2','email').'</a> '.\GO::t('thisIsSpam3','email').'</div>';
+			return 1;
 		} else {
-			return '<div class="em-spam-move-block">'.\GO::t('thisIsNotSpam1','email').' <a style="color:blue;" href="javascript:GO.email.moveToSpam(\''.$mailUid.'\',\''.$mailboxName.'\','.$accountId.');">'.\GO::t('thisIsNotSpam2','email').'</a> '.\GO::t('thisIsNotSpam3','email').'</div>';
+			//return '<div class="em-spam-move-block">'.\GO::t('thisIsNotSpam1','email').' <a style="color:blue;" href="javascript:GO.email.moveToSpam(\''.$mailUid.'\',\''.$mailboxName.'\','.$accountId.');">'.\GO::t('thisIsNotSpam2','email').'</a> '.\GO::t('thisIsNotSpam3','email').'</div>';
+			return 0;
 		}
 		
 	}
@@ -1964,12 +1964,10 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 	protected function actionMoveToSpam($params) {
 		
 		$accountModel = \GO\Email\Model\Account::model()->findByPk($params['account_id']);
-		if (empty($accountModel->spam))
-			throw new Exception(\GO::t('noSpamFolderDefined','email'));
 				
 		$imap = $accountModel->openImapConnection($params['from_mailbox_name']);
 							
-		if (!$imap->move(array($params['mail_uid']), $accountModel->spam)) {
+		if (!$imap->move(array($params['mail_uid']), 'Spam')) {
 			$imap->disconnect();
 			throw new \Exception('Could not move message');
 		}
@@ -1982,10 +1980,8 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 	protected function actionMoveToInbox($params) {
 		
 		$accountModel = \GO\Email\Model\Account::model()->findByPk($params['account_id']);
-		if (empty($accountModel->spam))
-			throw new Exception(\GO::t('noSpamFolderDefined','email'));
 				
-		$imap = $accountModel->openImapConnection($accountModel->spam);
+		$imap = $accountModel->openImapConnection('Spam');
 							
 		if (!$imap->move(array($params['mail_uid']),'INBOX')) {
 			$imap->disconnect();
