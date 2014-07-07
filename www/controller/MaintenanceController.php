@@ -186,7 +186,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				//"GO_Billing_Model_Order"=>array('order_id','book_id','btime')
 			);
 		
-		
+		echo '<p style="color:red;"><font style="font-size:18px;" >Warning: This script only checks for duplicate items on the displayed columns!</font></p>';
 		
 		foreach($checkModels as $modelName=>$checkFields){
 			
