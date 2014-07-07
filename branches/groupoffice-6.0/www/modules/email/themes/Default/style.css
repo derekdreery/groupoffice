@@ -251,6 +251,14 @@ margin:5px 2px;
 	text-align:left;
 	line-height:20px;
 }
+
+.message-move {
+	color: gray;
+	padding: 0 8px 0 8px;
+	text-align: right !important;
+	line-height: 20px;
+}
+
 .message-icalendar-icon{
 	background-repeat:no-repeat;
 	background-position:0 2px;
