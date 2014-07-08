@@ -1,3 +1,5 @@
+- Fixed not working if conditions in e-mail templates
+
 03-07-2014 5.0.68
 - Size mismatch on debian repos
 
