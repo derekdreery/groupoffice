@@ -145,7 +145,7 @@ class GO_Calendar_Reports_Month extends GO_Calendar_Reports_Calendar {
 								$more=true;
 								break;
 							}
-							$events.="<br>".date('G:i',$event->start_time) .' '. date('G:i',$event->end_time) .' '. substr($event->name,0,25);
+							$events.="<br>".date('G:i',$event->start_time) .'-'. date('G:i',$event->end_time) .' '. substr($event->name,0,25);
 						}
 					}
 						

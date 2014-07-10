@@ -27,8 +27,22 @@
 - Custom IMAP flag support (Message labels)
 
 
-**-**-2014 5.0.66
-- Moved filesearch index to separate cron job
+
+10-07-2014 5.0.69
+- Updated Portugese-Brazil translation
+- Fixed not working if conditions in e-mail templates
+- Invalid calendar state that did not select own calendar on load
+- Urlencode phone numbers in callto links
+
+03-07-2014 5.0.68
+- Size mismatch on debian repos
+
+03-07-2014 5.0.67
+- Broken message dialog in ticket system
+
+02-07-2014 5.0.66
+- Private events where shown in new calendar prints
+- Moved file search index to separate cron job
 - Ticket types will always sort by group name so groups wont show up double
 
 12-06-2014 5.0.65

@@ -79,6 +79,14 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 		$result=array();
 		foreach($events as $evento) {
 			$event = $evento->getEvent();
+			
+			if($event->isPrivate()){
+				$event->name=GO::t('private','calendar');
+				$event->description='';
+				$event->location='';
+			}
+			
+			
 			$event->start_time = $evento->getAlternateStartTime();
 			$event->end_time = $evento->getAlternateEndTime();
 			$day = GO_Base_Util_Date::clear_time($event->start_time);
@@ -263,6 +271,7 @@ class GO_Calendar_Reports_Calendar extends GO_Base_Util_Pdf {
 		$x = $o['col'] * $colWidth / $o['max'];
 		$x+=$startx;
 		$width = $colWidth / $o['max'] * $o['span'];
+		
 		//$this->SetXY(25 +$x,($this->rowHeight / 2) * $start);
 		//$this->Cell($width - 0.3, ($this->rowHeight / 2) * $length, '', 1, 1, 'L', true);
 		$this->SetXY($this->leftMargin+$this->timeCol+$x,($this->rowHeight / 2) * $start + $topPadding);
