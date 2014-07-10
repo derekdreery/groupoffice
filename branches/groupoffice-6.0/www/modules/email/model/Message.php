@@ -62,7 +62,6 @@ abstract class Message extends \GO\Base\Model {
 			'flagged' => 0,
 			'answered' => 0,
 			'forwarded' => 0,
-			'account',
 			'smime_signed'=>false
 	);
 
@@ -303,6 +302,12 @@ abstract class Message extends \GO\Base\Model {
 		//$response['seen']=$this->seen;
 
 		$from = $this->from->getAddress();
+		
+		$response['seen']=$this->seen;		
+		$response['forwarded']=$this->forwarded;
+		$response['flagged']=$this->flagged;
+		$response['answered']=$this->answered;
+		
 		$response['from'] = $from['personal'];
 		$response['sender'] = $from['email'];
 		$response['to'] = $recipientsAsString ? (string) $this->to : $this->_convertRecipientArray($this->to->getAddresses());
@@ -386,6 +391,10 @@ abstract class Message extends \GO\Base\Model {
 
 		}
 
+		
+		$response['contact_name']="";			
+		$response['contact_thumb_url']=GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
+		
 		$response['blocked_images']=0;
 		$response['xssDetected']=false;
 

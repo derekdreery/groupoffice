@@ -56,8 +56,8 @@ class SharedRootFolder extends \GO\Base\Db\ActiveRecord {
 
 		$findParams->getCriteria()
 						->addModel(Folder::model())
-						->addCondition('visible', 1)
-						->addCondition('user_id', $user_id, '!=');
+						->addCondition('visible', 1);
+//						->addCondition('user_id', $user_id, '!=');
 
 		return Folder::model()->find($findParams);
 	}
@@ -81,8 +81,8 @@ class SharedRootFolder extends \GO\Base\Db\ActiveRecord {
 		
 		$findParams->getCriteria()
 						->addModel(Folder::model())
-						->addCondition('visible', 1)
-						->addCondition('user_id', $user_id, '!=');
+						->addCondition('visible', 1);
+//						->addCondition('user_id', $user_id, '!=');
 		
 		
 		$result = Folder::model()->find($findParams);
@@ -94,6 +94,11 @@ class SharedRootFolder extends \GO\Base\Db\ActiveRecord {
 		
 		$lastBuildTime = $force ? 0 : \GO::config()->get_setting('files_shared_cache_ctime', $user_id);
 		if(!$lastBuildTime || $this->_getLastMtime($user_id)>$lastBuildTime){	
+			
+			
+			$home = GO_Files_Model_Folder::model()->findHomeFolder(GO::user());
+			
+			$homeFolder  = $home->path;
 
 			\GO::debug("Rebuilding shared cache");
 			$this->deleteByAttribute('user_id', $user_id);
@@ -110,8 +115,10 @@ class SharedRootFolder extends \GO\Base\Db\ActiveRecord {
 
 			foreach ($shares as $path => $folder) {
 				$isSubDir = isset($lastPath) && strpos($path . '/', $lastPath . '/') === 0;
+				
+				$isInHome = strpos($path . '/', $homeFolder . '/') === 0;
 
-				if (!$isSubDir) {
+				if (!$isSubDir && !$isInHome) {
 
 
 					$sharedRoot = new SharedRootFolder();

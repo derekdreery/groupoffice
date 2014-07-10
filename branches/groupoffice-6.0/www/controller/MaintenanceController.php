@@ -192,7 +192,7 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 				//"GO\Billing\Model\Order"=>array('order_id','book_id','btime')
 			);
 		
-		
+		echo '<p style="color:red;"><font style="font-size:18px;" >Warning: This script only checks for duplicate items on the displayed columns!</font></p>';
 		
 		foreach($checkModels as $modelName=>$checkFields){
 			

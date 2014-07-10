@@ -457,6 +457,7 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 					$node['iconCls'] = 'email-folder-drafts';
 					$sortIndex = 2;
 					break;
+				case 'INBOX/Spam':
 				case 'INBOX.Spam':
 				case 'Spam':
 					$node['iconCls'] = 'email-folder-spam';

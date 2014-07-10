@@ -38,6 +38,12 @@ namespace GO\Email\Model;
 class ImapMessage extends ComposerMessage {
 	
 	/**
+	 *
+	 * @var \GO\Base\Mail\Imap 
+	 */
+	public $account;
+	
+	/**
 	 * By default the message will be marked as read when fetched.
 	 * Set to true to leave it as unseen.
 	 * 
@@ -185,6 +191,8 @@ class ImapMessage extends ComposerMessage {
 		{
 		
 			$imapMessage = new ImapMessage();
+			$imapMessage->account=$account;
+			
 			$imap = $account->openImapConnection($mailbox);
 
 			$attributes = $imap->get_message_header($uid, true);
@@ -193,7 +201,6 @@ class ImapMessage extends ComposerMessage {
 				return false;
 
 			$attributes['uid']=$uid;
-			$attributes['account'] = $account;
 			$attributes['mailbox'] = $mailbox;
 
 			$imapMessage->setAttributes($attributes);
@@ -222,7 +229,7 @@ class ImapMessage extends ComposerMessage {
 	public function createFromHeaders($account, $mailbox, $headers){
 		$imapMessage = new ImapMessage();
 		
-		$headers['account'] = $account;
+		$imapMessage->account = $account;
 		$headers['mailbox'] = $mailbox;
 
 		$imapMessage->setAttributes($headers);
@@ -240,11 +247,13 @@ class ImapMessage extends ComposerMessage {
 		$attributes['from']=$from["personal"];
 		$attributes['sender']=$from["email"];
 		
-		foreach($this->to->getAddresses() as $email=>$personal)
-			$attributes['to']=$personal.", ";
+		$attributes['to']=(string) $this->to;
+		$attributes['cc']=(string) $this->cc;
+		$attributes['bcc']=(string) $this->bcc;
+		$attributes['reply_to']=(string) $this->reply_to;
+
 		
-		
-		$dayStart = mktime(0,0,0);
+//		$dayStart = mktime(0,0,0);
 		//$dayEnd = mktime(0,0,0,date('m'),date('d')+1);
 		
 //		if($this->udate<$dayStart)
