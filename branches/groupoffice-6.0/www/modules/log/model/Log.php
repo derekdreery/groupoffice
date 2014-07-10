@@ -34,7 +34,7 @@
 
 
 namespace GO\Log\Model;
-
+use GO;
 
 class Log extends \GO\Base\Db\ActiveRecord {
 	
