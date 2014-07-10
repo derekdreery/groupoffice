@@ -1,5 +1,5 @@
-groupoffice-billing (5.1.8) fiveone; urgency=low
+groupoffice-billing (5.0.68) fivezero; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Tue, 17 Jun 2014 14:42:07 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Thu, 3 Jul 2014 13:53:04 +0200

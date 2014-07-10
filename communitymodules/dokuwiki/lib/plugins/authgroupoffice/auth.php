@@ -152,9 +152,10 @@ class auth_plugin_authgroupoffice extends DokuWiki_Auth_Plugin {
 		$this->_copyGroupOfficeSession();
 	
    if(!empty(GO::session()->values['user_id']))
-    {           
-      $USERINFO['name'] = GO::session()->values['name'];
-      $USERINFO['mail'] = GO::session()->values['email'];
+   {           
+		 $userModel = GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id']);
+      $USERINFO['name'] = $userModel->name; //GO::session()->values['name'];
+      $USERINFO['mail'] = $userModel->email; //GO::session()->values['email'];
       
       $USERINFO['grps'] = $this->getGroups(GO::session()->values['user_id']);
             
