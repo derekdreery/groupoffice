@@ -35,6 +35,8 @@
 
 namespace GO\Email\Model;
 
+use GO;
+
 
 abstract class Message extends \GO\Base\Model {
 
