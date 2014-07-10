@@ -321,8 +321,8 @@ class AddressbookController extends \GO\Base\Controller\AbstractModelController{
 		$addressbookIds = json_decode($params['addressbook_ids']);
 		$firstAddressbookId = !empty($addressbookIds) ? $addressbookIds[0] : -1;
 		foreach ($addressbookIds as $addressbookId) {
-			$addressbookModel = GO_Addressbook_Model_Addressbook::model()->findByPk($addressbookId);
-			if ($addressbookModel && $addressbookModel->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION)) {
+			$addressbookModel = \GO\Addressbook\Model\Addressbook::model()->findByPk($addressbookId);
+			if ($addressbookModel && $addressbookModel->checkPermissionLevel(\GO\Base\Model\Acl::CREATE_PERMISSION)) {
 				$response = array('success'=>true,'data'=>array('addressbook_id'=>$addressbookModel->id));
 				echo json_encode($response); exit();
 			}

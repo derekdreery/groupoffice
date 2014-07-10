@@ -2603,17 +2603,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 						\GO::language()->setLanguage($language);
 
 					\GO\Base\Mail\Mailer::newGoInstance()->send($message);
-					
-//					$aliasModel = GO_Email_Model_Alias::model()->findSingleByAttribute('email',$this->user->email);
-//					if (!empty($aliasModel) && !empty($aliasModel->account)) {
-//						$transport = GO_Base_Mail_Transport::newInstance($aliasModel->account->smtp_host, $aliasModel->account->smtp_port, strtolower($aliasModel->account->smtp_encryption));
-//						$transport->setUsername($aliasModel->account->smtp_username)
-//											->setPassword($aliasModel->account->smtp_password);					
-//					} else {
-//						$transport = GO_Base_Mail_Transport::newGoInstance();
-//					}
-//					
-//					GO_Base_Mail_Mailer::newGoInstance($transport)->send($message);
+
 					
 				}
 				

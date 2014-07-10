@@ -180,17 +180,17 @@ class Task extends \GO\Base\Db\ActiveRecord {
 	 * @return ActiveStatement
 	 */
 	static public function findByDate($date, $tasklist_id=null) {
-		$date = GO_Base_Util_Date::clear_time($date);
-		$criteria = GO_Base_Db_FindCriteria::newInstance();
+		$date = \GO\Base\Util\Date::clear_time($date);
+		$criteria = \GO\Base\Db\FindCriteria::newInstance();
 		if(!empty($tasklist_id))
 			$criteria->addCondition('tasklist_id', $tasklist_id);
-		$criteria1 = GO_Base_Db_FindCriteria::newInstance()
+		$criteria1 = \GO\Base\Db\FindCriteria::newInstance()
 				->addCondition('start_time', $date+24*3600, '<')
 				->addCondition('start_time', $date, '>=');
-		$criteria2 = GO_Base_Db_FindCriteria::newInstance()
+		$criteria2 = \GO\Base\Db\FindCriteria::newInstance()
 				->addCondition('due_time', $date+24*3600, '<')
 				->addCondition('due_time', $date, '>=');
-		$tasks = GO_Tasks_Model_Task::model()->find(GO_Base_Db_FindParams::newInstance()->criteria(
+		$tasks = \GO\Tasks\Model\Task::model()->find(\GO\Base\Db\FindParams::newInstance()->criteria(
 				$criteria->mergeWith($criteria1->mergeWith($criteria2, false), true))
 		);
 		return $tasks;

@@ -392,7 +392,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 			GO::debug("touching parent");
 			$this->folder->touch();
 			
-			$oldParent = GO_Files_Model_Folder::model()->findByPk($this->getOldAttributeValue('folder_id'));
+			$oldParent = \GO\Files\Model\Folder::model()->findByPk($this->getOldAttributeValue('folder_id'));
 			
 			if($oldParent){
 				GO::debug("touching old parent");

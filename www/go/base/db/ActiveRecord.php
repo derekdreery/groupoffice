@@ -3110,10 +3110,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	/**
 	 * Will all a log record in go_log
-	 * Made protected to be used in GO_Files_Model_File
+	 * Made protected to be used in \GO\Files\Model\File
 	 * @param string $action
 	 * @param boolean $save set the false to not directly save the create Log record
-	 * @return boolean|GO_Log_Model_Log returns the created log or succuss status when save is true 
+	 * @return boolean|\GO\Log\Model\Log returns the created log or succuss status when save is true 
 	 */
 	protected function log($action, $save=true){
 	
