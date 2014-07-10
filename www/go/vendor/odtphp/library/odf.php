@@ -52,6 +52,9 @@ class Odf {
 		if (!is_array($config)) {
 			throw new OdfException('Configuration data must be provided as array');
 		}
+		
+		$this->config['PATH_TO_TMP'] = GO::config()->tmpdir;
+		
 		foreach ($config as $configKey => $configValue) {
 			//if (array_key_exists($configKey, $this->config)) {
 				$this->config[$configKey] = $configValue;

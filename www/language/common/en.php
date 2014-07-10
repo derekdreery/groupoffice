@@ -680,7 +680,7 @@ $l["report"]='Report';
 $l['namelessItem'] = 'Nameless item';
 $l['importFileType'] = 'Import file type';
 
-$l['maybeMaxUploadExceeded'] = 'The server did not receive the required parameters from your browser. Probably the maximum filesize for upload of %sMb has been exceeded.';
+$l['maybeMaxUploadExceeded'] = 'The server did not receive the required parameters from your browser. Probably the maximum filesize for upload of %sMB has been exceeded.';
 
 $l['relationDeleteRestrict']="You can't delete this %s because it contains '%s' items. Please remove those first.";
 

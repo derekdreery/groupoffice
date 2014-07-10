@@ -1,3 +1,4 @@
+
 - Core: Distinction between holidays that are free days and holidays that are not.
 - E-mail: link to easily move emails to and from spam folder.
 
@@ -7,6 +8,11 @@
 - Use XCache for caching values
 - Workflow: email and reminder for file uploader when file is disapproved.
 - Using namespaces in PHP code
+
+
+17-06-2014 5.1.8
+- ActivityLog to file function
+- 5.0 fixes
 
 16-05-2014 5.1.7
 - PHP custom field
@@ -34,7 +40,29 @@
 
 
 
+10-07-2014 5.0.69
+- Updated Portugese-Brazil translation
+- Fixed not working if conditions in e-mail templates
+- Invalid calendar state that did not select own calendar on load
+- Urlencode phone numbers in callto links
 
+03-07-2014 5.0.68
+- Size mismatch on debian repos
+
+03-07-2014 5.0.67
+- Broken message dialog in ticket system
+
+02-07-2014 5.0.66
+- Private events where shown in new calendar prints
+- Moved file search index to separate cron job
+- Ticket types will always sort by group name so groups wont show up double
+
+12-06-2014 5.0.65
+- Bug in checking user permission when sending mail
+
+12-06-2014 5.0.64
+- Forward messages that were attached fixed
+- Touch parent and current folder when moving files and folders so refreshing won't sync with the filesystem. This improves performance.
 - Updated Croatian translation
 - Funambol bug with multiple exceptions in a recurring event fixed
 - Event reminder set correctly for funambol sync

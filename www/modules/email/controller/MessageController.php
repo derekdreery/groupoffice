@@ -397,8 +397,8 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 
 		$imap = $account->openImapConnection($params["mailbox"]);
 
-		if (in_array($params['flag'], Imap::$systemFlags)) {
-			$params["flag"] = "\\".$params["flag"];
+		if (in_array(ucfirst($params['flag']), Imap::$systemFlags)) {
+			$params["flag"] = "\\".ucfirst($params["flag"]);
 		}
 
 		$response['success']=$imap->set_message_flag($messages, $params["flag"], !empty($params["clear"]));
@@ -426,7 +426,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 				$contacts = \GO\Addressbook\Model\Contact::model()->findByEmail($email, GO\Base\Db\FindParams::newInstance()->ignoreAcl());
 				foreach($contacts as $contact){
 					
-					if($contact->checkOldPermissionLevel(Acl::READ_PERMISSION) || $contact->goUser && $contact->goUser->checkPermission(Acl::READ_PERMISSION)){
+					if($contact->checkPermissionLevel(Acl::READ_PERMISSION) || $contact->goUser && $contact->goUser->checkPermission(Acl::READ_PERMISSION)){
 						continue 2;
 					}
 				}
@@ -992,7 +992,8 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		}else
 		{
 			$account=false;
-			$message = \GO\Email\Model\SavedMessage::model()->createFromMimeFile($params['path']);
+			$message = \GO\Email\Model\SavedMessage::model()->createFromMimeFile($params['path'], !empty($params['is_tmp_file']));
+
 		}
 
 		return $this->_messageToReplyResponse($params, $message, $account);
@@ -1177,7 +1178,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 			$message = \GO\Email\Model\ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 		}else
 		{
-			$message = \GO\Email\Model\SavedMessage::model()->createFromMimeFile($params['path']);
+			$message = \GO\Email\Model\SavedMessage::model()->createFromMimeFile($params['path'], !empty($params['is_tmp_file']));
 		}
 
 		return $this->_messageToForwardResponse($params, $message);
@@ -1368,6 +1369,12 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 								)
 						)
 				);
+	}
+	
+	protected function actionDelete(){
+		return array(
+				'success'=>true
+		);
 	}
 
 	private function _getContactInfo(\GO\Email\Model\ImapMessage $imapMessage,$params, $response){
@@ -1624,13 +1631,21 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 	public function actionMessageAttachment($params){
 
 		$account = Account::model()->findByPk($params['account_id']);
-
-		$data = $account->openImapConnection($params['mailbox'])->get_message_part_decoded($params['uid'], $params['number'], $params['encoding']);
-
-		$message = \GO\Email\Model\SavedMessage::model()->createFromMimeData($data);
+		
+		$tmpFile = GO_Base_Fs_File::tempFile('message.eml');
+		
+		$imap = $account->openImapConnection($params['mailbox']);
+		
+		/* @var $imap GO_Base_Mail_Imap  */
+		
+		$imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
+		
+		$message = \GO\Email\Model\SavedMessage::model()->createFromMimeData($tmpFile->getContents());
 
 		$response = $message->toOutputArray();
 		$response = $this->_checkXSS($params, $response);
+		$response['path']=$tmpFile->stripTempPath();
+		$response['is_tmp_file']=true;
 		$response['success']=true;
 		return $response;
 

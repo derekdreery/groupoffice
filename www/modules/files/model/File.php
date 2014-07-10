@@ -46,6 +46,7 @@
 
 namespace GO\Files\Model;
 
+use GO;
 
 class File extends \GO\Base\Db\ActiveRecord {
 	
@@ -336,15 +337,20 @@ class File extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	private function _addQuota(){
-                if($this->isModified('size') || $this->isNew) {
-                    $sizeDiff = $this->fsFile->size()-$this->getOldAttributeValue('size');
-                    \GO::debug("Adding quota: $sizeDiff");
-                    
-                    $this->user->calculatedDiskUsage ($sizeDiff)->save(); //user quota
-                    if(\GO::config()->quota>0) {
-			\GO::config()->save_setting("file_storage_usage", \GO::config()->get_setting('file_storage_usage')+$sizeDiff); //system quota
-                    }
-                }
+
+		if($this->isModified('size') || $this->isNew) {
+				$sizeDiff = $this->fsFile->size()-$this->getOldAttributeValue('size');
+				GO::debug("Adding quota: $sizeDiff");
+
+				if($this->user){
+					$this->user->calculatedDiskUsage ($sizeDiff)->save(); //user quota
+				}
+				
+				if(GO::config()->quota>0) {
+					GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')+$sizeDiff); //system quota
+				}
+		}
+
 	}
 	
 	private function _removeQuota(){
@@ -352,9 +358,11 @@ class File extends \GO\Base\Db\ActiveRecord {
 			\GO::debug("Removing quota: $this->size");
 			\GO::config()->save_setting("file_storage_usage", \GO::config()->get_setting('file_storage_usage')-$this->size);
 		}
+		
 		if($this->user){
-			$this->user->calculatedDiskUsage (0-$this->size)->save();
+      $this->user->calculatedDiskUsage (0-$this->size)->save();
 		}
+
 	}
 	
 	protected function afterSave($wasNew) {
@@ -368,7 +376,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 				$this->folder->path
 			);
 		} else {
-			if (!$this->isModified('name') && !$this->isModified('folder_id')) {
+			if ($this->isModified() && !$this->isModified('name') && !$this->isModified('folder_id')) {
 				$this->notifyUsers(
 					$this->folder_id,
 					FolderNotificationMessage::UPDATE_FILE,
@@ -378,8 +386,19 @@ class File extends \GO\Base\Db\ActiveRecord {
 		}
 		
 
-		//touch the timestamp so it won't sync with the filesystem
-		$this->folder->touch();
+		//touch the timestamp so it won't sync with the filesystem			
+		if($this->isModified('folder_id')){
+			
+			GO::debug("touching parent");
+			$this->folder->touch();
+			
+			$oldParent = GO_Files_Model_Folder::model()->findByPk($this->getOldAttributeValue('folder_id'));
+			
+			if($oldParent){
+				GO::debug("touching old parent");
+				$oldParent->touch();
+			}
+		}
 		
 
 		return parent::afterSave($wasNew);
@@ -463,6 +482,35 @@ class File extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	/**
+	 * Just the let someone kow the file was opened
+	 */
+	public function open() {
+		$this->log('open');
+	}
+	
+	/**
+	 * Adds some extra info to the loggin of files
+	 * @param string $action the action to log
+	 * @param boolean $save unused
+	 * @return boolean if save was successful
+	 */
+	protected function log($action, $save=true) {
+		$log = parent::log($action, false);
+		if(empty($log))
+			return false;
+		if($log->action=='update') {
+			$log->action = 'propedit';
+			if($log->object->isModified('folder_id'))
+				$log->action='moved';
+			if($log->object->isModified('name')) {
+				$log->action='renamed';
+				$log->message = $log->object->getOldAttributeValue('name') . ' > ' . $log->message;
+			}
+		}
+		return $log->save();
+	}
+	
+	/**
 	 * Copy a file to another folder.
 	 * 
 	 * @param Folder $destinationFolder
@@ -512,7 +560,8 @@ class File extends \GO\Base\Db\ActiveRecord {
 //		for safety allow replace action
 //		if(!File::checkQuota($fsFile->size()-$this->size))
 //			throw new \GO\Base\Exception\InsufficientDiskSpace();
-		
+		if(!$this->isNew)
+			$this->log('edit');
 		$this->saveVersion();
 				
 		$fsFile->move($this->folder->fsFolder,$this->name, $isUploadedFile);

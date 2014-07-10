@@ -144,24 +144,26 @@ class auth_plugin_authgroupoffice extends DokuWiki_Auth_Plugin {
   {
     global $USERINFO;
 		global $AUTH_ACL;
-		
-    $sticky ? $sticky = true : $sticky = false; //sanity check
+    
+	$sticky ? $sticky = true : $sticky = false; //sanity check
 		
 		
 		$this->_includeGroupOffice();
 		$this->_copyGroupOfficeSession();
-		
+	
    if(!empty(GO::session()->values['user_id']))
-    {           
-      $USERINFO['name'] = GO::session()->values['name'];
-      $USERINFO['mail'] = GO::session()->values['email'];
+   {           
+		 $userModel = GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id']);
+      $USERINFO['name'] = $userModel->name; //GO::session()->values['name'];
+      $USERINFO['mail'] = $userModel->email; //GO::session()->values['email'];
       
       $USERINFO['grps'] = $this->getGroups(GO::session()->values['user_id']);
             
-      $_SERVER['REMOTE_USER'] = GO::session()->values['username'];
+	$_SERVER['REMOTE_USER'] = GO::session()->values['username'];
       $_SESSION[DOKU_COOKIE]['auth']['user'] = GO::session()->values['username'];
       $_SESSION[DOKU_COOKIE]['auth']['pass'] = $pass;
       $_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
+			$this->checkRights();
       return true;
     }
     else if(!empty($user))
@@ -176,47 +178,47 @@ class auth_plugin_authgroupoffice extends DokuWiki_Auth_Plugin {
     }
   }
 	
-//	/**
-//   *
-//   * Check the given username and password against the Group-Office users.
-//   * 
-//   * @global type $USERINFO
-//   * @param type $user
-//   * @param type $pass
-//   * @return type 
-//   */
-//  function checkPass($user, $pass)
-//  {
-//		global $USERINFO;
-//		
-//		define('GO_NO_SESSION', true);
-////		
-////		$this->_includeGroupOffice();
-//		
-//		$user = GO::session()->login($user, $pass);
-//		if(!$user) {
-//			msg($lang['badlogin'],-1);
-//			auth_logoff();
-//			return false;
-//		}
-//		
-//		if(!GO::modules()->dokuwiki)
-//			return false;
-//		
-//		$this->checkRights();
-//		
-//		$USERINFO['name'] = GO::user()->name;
-//		$USERINFO['mail'] = GO::user()->email;
-//		$USERINFO['grps'] = $this->getGroups(GO::user()->id);
-//		
-//		$_SERVER['REMOTE_USER'] = GO::user()->username;
-//		
-//    $_SESSION[DOKU_COOKIE]['auth']['user'] = GO::user()->username;
-//    $_SESSION[DOKU_COOKIE]['auth']['pass'] = $pass;
-//    $_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
-//			
-//    return true;
-//  }  
+	/**
+   *
+   * Check the given username and password against the Group-Office users.
+   * 
+   * @global type $USERINFO
+   * @param type $user
+   * @param type $pass
+   * @return type 
+   */
+  function checkPass($user, $pass)
+  {
+		global $USERINFO;
+		
+		define('GO_NO_SESSION', true);
+		
+		$this->_includeGroupOffice();
+		
+		$user = GO::session()->login($user, $pass);
+		if(!$user) {
+			msg($lang['badlogin'],-1);
+			auth_logoff();
+			return false;
+		}
+		
+		if(!GO::modules()->dokuwiki)
+			return false;
+		
+		$this->checkRights();
+		
+		$USERINFO['name'] = GO::user()->name;
+		$USERINFO['mail'] = GO::user()->email;
+		$USERINFO['grps'] = $this->getGroups(GO::user()->id);
+		
+		$_SERVER['REMOTE_USER'] = GO::user()->username;
+		
+    $_SESSION[DOKU_COOKIE]['auth']['user'] = GO::user()->username;
+    $_SESSION[DOKU_COOKIE]['auth']['pass'] = $pass;
+    $_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
+			
+    return true;
+  }  
      
   /**
    * Check which rights the user has.
@@ -224,16 +226,17 @@ class auth_plugin_authgroupoffice extends DokuWiki_Auth_Plugin {
    */
   function checkRights()
   {    	
-//    if(GO::modules()->dokuwiki->checkPermissionLevel(GO_Base_Model_Acl::MANAGE_PERMISSION)) {
-//      $this->cando['UserMod'] = true;
+    if(GO::modules()->dokuwiki->checkPermissionLevel(GO_Base_Model_Acl::MANAGE_PERMISSION)) {
+      $this->cando['UserMod'] = true;
+			$this->cando['Profile'] = true;
 //			$this->cando['modLogin'] = true;
 //			$this->cando['modPass'] = true;
 //			$this->cando['modName'] = true;
 //			$this->cando['modMail'] = true;
 //			$this->cando['modGroups'] = true;
-//		}
-//    else
-//      $this->cando['Profile'];
+		}
+    else
+      $this->cando['Profile'] = true;
   }	
 
   /**
@@ -395,10 +398,6 @@ class auth_plugin_authgroupoffice extends DokuWiki_Auth_Plugin {
 			
 			$list[] = $group->name;
 		}
-
-		throw new Exception('The path is clear now.');
-		
-		$list = array('RETRIEVE','GROUPS');
 		
 		return $list;
   }

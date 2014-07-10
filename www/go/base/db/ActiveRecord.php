@@ -3066,7 +3066,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //				$this->touch(); // If the customfieldsRecord is saved then set the mtime of this record.
 		}
 		
-		$this->_log($wasNew ? \GO\Log\Model\Log::ACTION_ADD : \GO\Log\Model\Log::ACTION_UPDATE);
+		$this->log($wasNew ? \GO\Log\Model\Log::ACTION_ADD : \GO\Log\Model\Log::ACTION_UPDATE);
 		
 		
 
@@ -3108,7 +3108,14 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			return false;
 	}
 	
-	private function _log($action){
+	/**
+	 * Will all a log record in go_log
+	 * Made protected to be used in GO_Files_Model_File
+	 * @param string $action
+	 * @param boolean $save set the false to not directly save the create Log record
+	 * @return boolean|GO_Log_Model_Log returns the created log or succuss status when save is true 
+	 */
+	protected function log($action, $save=true){
 	
 		$message = $this->getLogMessage($action);
 		if($message && GO::modules()->isInstalled('log')){			
@@ -3120,7 +3127,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			$log->action=$action;
 			$log->model=$this->className();			
 			$log->message = $message;
-			$log->save();
+			$log->object=$this;
+			if($save)
+				return $log->save();
+			else
+				return $log;
 		}
 	}
 	
@@ -3720,7 +3731,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(!$success)
 			throw new \Exception("Could not delete from database");
 		
-		$this->_log(\GO\Log\Model\Log::ACTION_DELETE);
+		$this->log(\GO\Log\Model\Log::ACTION_DELETE);
 		
 		$attr = $this->getCacheAttributes();
 		

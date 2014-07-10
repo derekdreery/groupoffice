@@ -158,7 +158,23 @@ GO.addressbook.MainPanel = function(config)
 
 		if(records.length)
 		{
-			GO.addressbook.defaultAddressbook = records[0];
+			var addressbookIds = [];
+			for (var i=0; i<records.length; i++) {
+				addressbookIds.push(records[i].id);
+			}
+			GO.request({
+				url: 'addressbook/addressbook/firstWritableAddressbookId',
+				params: {
+					addressbook_ids : Ext.encode(addressbookIds)
+				},
+				success: function(response,options,result) {
+					for (var i=0; i<records.length; i++) {
+						if (records[i].id==result.data.addressbook_id)
+							GO.addressbook.defaultAddressbook = records[i];
+					}
+				},
+				scope: this
+			});
 		}
 	}, this);
 

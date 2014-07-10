@@ -1352,10 +1352,11 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					$colId = $column['customfield']->id;
 					$colId = 'col_'.$colId;
 					$recordAttributes = $cfRecord->getAttributes();
-					$colValue = $cfRecord->getAttribute($column['customfield']->name);
-					$html .= '<tr><td style="vertical-align:top">'.($column['customfield']->name).'</td>'.
-									'<td>'.$recordAttributes[$colId].'</td></tr>';
-					
+					if ($recordAttributes[$colId]!='') {
+						$colValue = $cfRecord->getAttribute($column['customfield']->name);
+						$html .= '<tr><td style="vertical-align:top">'.($column['customfield']->name).'</td>'.
+										'<td>'.$recordAttributes[$colId].'</td></tr>';
+					}
 				}
 			}
 		}
@@ -1806,10 +1807,10 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				$this->reminder=0;
 		}
 		
-		
-		if(!empty($vobject->categories)){
+		$cats = (string) $vobject->categories;
+		if(!empty($cats)){
 			//Group-Office only supports a single category.
-			$cats = explode(',',$vobject->categories);
+			$cats = explode(',',$cats);
 			$categoryName = array_shift($cats);
 			
 			$category = Category::model()->findByName($this->calendar_id, $categoryName);
@@ -1817,7 +1818,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				$category = new Category();
 				$category->name=$categoryName;
 				$category->calendar_id=$this->calendar_id;
-				$category->save();
+				$category->save(true);
 			}			
 			
 			if($category){
@@ -2602,7 +2603,18 @@ class Event extends \GO\Base\Db\ActiveRecord {
 						\GO::language()->setLanguage($language);
 
 					\GO\Base\Mail\Mailer::newGoInstance()->send($message);
-				
+					
+//					$aliasModel = GO_Email_Model_Alias::model()->findSingleByAttribute('email',$this->user->email);
+//					if (!empty($aliasModel) && !empty($aliasModel->account)) {
+//						$transport = GO_Base_Mail_Transport::newInstance($aliasModel->account->smtp_host, $aliasModel->account->smtp_port, strtolower($aliasModel->account->smtp_encryption));
+//						$transport->setUsername($aliasModel->account->smtp_username)
+//											->setPassword($aliasModel->account->smtp_password);					
+//					} else {
+//						$transport = GO_Base_Mail_Transport::newGoInstance();
+//					}
+//					
+//					GO_Base_Mail_Mailer::newGoInstance($transport)->send($message);
+					
 				}
 				
 			}

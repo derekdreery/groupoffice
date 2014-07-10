@@ -1,6 +1,6 @@
 <?php
 $l['name']='Lembretes';
-$l['description']='A module to schedule popup reminders for users or user groups.';
+$l['description']='Um módulo para agendar lembretes popup para usuários e grupos de usuários.';
 
 $l['reminders']='Lembretes';
 $l['reminder']="Lembrete";
