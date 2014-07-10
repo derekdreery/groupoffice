@@ -57,7 +57,6 @@ class File extends \Sabre\DAV\FS\File {
 		
 
 		$file = \GO\Files\Model\File::model()->findByPath($this->relpath);
-		//$file = new GO_Base_Fs_File($this->path);
 		$file->putContents($data);
 
 //		file_put_contents($this->path, $data);

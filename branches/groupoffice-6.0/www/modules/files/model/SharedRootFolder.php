@@ -96,7 +96,7 @@ class SharedRootFolder extends \GO\Base\Db\ActiveRecord {
 		if(!$lastBuildTime || $this->_getLastMtime($user_id)>$lastBuildTime){	
 			
 			
-			$home = GO_Files_Model_Folder::model()->findHomeFolder(GO::user());
+			$home = \GO\Files\Model\Folder::model()->findHomeFolder(GO::user());
 			
 			$homeFolder  = $home->path;
 

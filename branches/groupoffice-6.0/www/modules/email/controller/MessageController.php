@@ -1632,11 +1632,11 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 
 		$account = Account::model()->findByPk($params['account_id']);
 		
-		$tmpFile = GO_Base_Fs_File::tempFile('message.eml');
+		$tmpFile = \GO\Base\Fs\File::tempFile('message.eml');
 		
 		$imap = $account->openImapConnection($params['mailbox']);
 		
-		/* @var $imap GO_Base_Mail_Imap  */
+		/* @var $imap \GO\Base\Mail\Imap  */
 		
 		$imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
 		
@@ -1716,11 +1716,6 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		$imap->get_message_part_decoded($params['uid'], $params['number'], $params['encoding'], false, true, false, $fp);
 		fclose($fp);
 
-//		
-//		$file = new GO_Base_Fs_MemoryFile($params['filename'], base64_decode($imap->get_message_part($params['uid'], $params['number'])));
-//		header('Content-Type: audio/x-wav');
-////		GO_Base_Util_Http::outputDownloadHeaders($file,$inline,false);
-//		$file->output();
 
 	}
 
