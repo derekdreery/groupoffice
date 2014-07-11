@@ -1,5 +1,6 @@
 - Brought back flash uploader runtime for older browsers because html4 was not working in IE8
 - Added cellular2 to the emailtemplate predefined list.
+- Billing: Changed projects support from projects to projects2
 
 10-07-2014 5.0.69
 - Updated Portugese-Brazil translation
