@@ -13,9 +13,11 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 		
 		$la = new GO_Ldapauth_Authenticator();
 		
+		
+		
 		$ldapConn = GO_Base_Ldap_Connection::getDefault();
 		
-		$result = $ldapConn->search(GO::config()->ldap_peopledn, 'uid='.$params['uid']);
+		$result = $ldapConn->search(GO::config()->ldap_peopledn, $la->getUserSearchQuery($params['uid']));
 		$record = $result->fetch();
 		$attr = $record->getAttributes();
 		
@@ -45,7 +47,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 	
 		$ldapConn = GO_Base_Ldap_Connection::getDefault();
 		
-		$result = $ldapConn->search(GO::config()->ldap_peopledn, 'uid=*');
+		$result = $ldapConn->search(GO::config()->ldap_peopledn, $la->getUserSearchQuery());
 		
 		//keep an array of users that exist in ldap. This array will be used later for deletes.
 		//admin user is not in ldap but should not be removed.
