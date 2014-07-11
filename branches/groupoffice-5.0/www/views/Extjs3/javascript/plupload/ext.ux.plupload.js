@@ -207,7 +207,7 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
 				
 				//auto start after adding files
 				this.uploader.bind('FilesAdded', function(up, files) {
-					if(GO.settings.upload_quickselect !== false){
+					if(GO.settings.upload_quickselect !== false && this.runtime=='html5'){
 						up.start();
 					}
 				});
