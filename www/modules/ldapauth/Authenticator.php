@@ -51,12 +51,24 @@ class GO_Ldapauth_Authenticator {
 
 		return $this->_mapping;
 	}
+	
+	
+	public function getUserSearchQuery($username='*'){
+		$mapping = $this->_getMapping();
+		
+		if (!empty(GO::config()->ldap_search_template))
+			$query = str_replace('{username}', $username, GO::config()->ldap_search_template);
+		else
+			$query = $mapping['username'] . '=' . $username;
+		
+		return $query;
+	}
 
 	public function authenticate($username, $password) {
 
 		
 
-		$mapping = $this->_getMapping();
+		
 
 		if (empty(GO::config()->ldap_host) || empty(GO::config()->ldap_peopledn)) {
 			GO::debug("LDAPAUTH: Aborting because one or more of the following " .
@@ -79,10 +91,7 @@ class GO_Ldapauth_Authenticator {
 //		}
 		$ldapConn = GO_Base_Ldap_Connection::getDefault();
 
-		if (!empty(GO::config()->ldap_search_template))
-			$query = str_replace('{username}', $username, GO::config()->ldap_search_template);
-		else
-			$query = $mapping['username'] . '=' . $username;
+		$query = $this->getUserSearchQuery();
 		
 		GO::debug("LDAPAUTH: Search People DN: ".GO::config()->ldap_peopledn." Query: ". $query);
 
