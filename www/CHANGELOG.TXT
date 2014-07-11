@@ -1,3 +1,5 @@
+- Brought back flash uploader runtime for older browsers because html4 was not working in IE8
+
 10-07-2014 5.0.69
 - Updated Portugese-Brazil translation
 - Fixed not working if conditions in e-mail templates
