@@ -666,6 +666,7 @@ $l['hu'] = 'Hungarian';
 $l['pt'] = 'Portugal';
 $l['sv'] = 'Svenska';
 $l['th'] = 'Thailand';
+$l['pt_BR']='Português - Brasil';
 
 $l['removeDuplicatesAreYouSure']='Are you sure you want to remove duplicates?';
 
