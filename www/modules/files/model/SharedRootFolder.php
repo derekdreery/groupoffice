@@ -23,6 +23,8 @@
 
 namespace GO\Files\Model;
 
+use GO;
+
 
 class SharedRootFolder extends \GO\Base\Db\ActiveRecord {
 
