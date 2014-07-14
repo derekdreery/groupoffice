@@ -91,7 +91,7 @@ class GO_Ldapauth_Authenticator {
 //		}
 		$ldapConn = GO_Base_Ldap_Connection::getDefault();
 
-		$query = $this->getUserSearchQuery();
+		$query = $this->getUserSearchQuery($username);
 		
 		GO::debug("LDAPAUTH: Search People DN: ".GO::config()->ldap_peopledn." Query: ". $query);
 
