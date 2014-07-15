@@ -1,3 +1,4 @@
+- Addressbook: Changed maximum length of mailing subject from 100 chars to 255 chars.
 - CardDav: 'comments' field of newly imported contact also shown in CardDav VCard.
 - Brought back flash uploader runtime for older browsers because html4 was not working in IE8
 - Added cellular2 to the emailtemplate predefined list.
