@@ -328,6 +328,13 @@ class GO_Base_Config {
 	 * @var string 
 	 */
 	public $tcpdf_font = "freesans";
+	
+	/**
+	 * Disable filesystem syncing from the web interface
+	 * 
+	 * @var boolean 
+	 */
+	public $files_disable_filesystem_sync=false;
 
 //	/**
 //	 * Grant read permissions for these modules to new self-registered users.

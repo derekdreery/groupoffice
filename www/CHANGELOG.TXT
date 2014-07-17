@@ -1,3 +1,7 @@
+- Added new config option $config['files_disable_filesystem_sync']=true;
+  The automatic sync can cause timeouts on large installations and should not be 
+  required if you don't modify the filesystem externally.
+
 16-07-2014 5.0.70
 - 5MB limit on thumbnailer
 - Addressbook: Changed maximum length of mailing subject from 100 chars to 255 chars.
