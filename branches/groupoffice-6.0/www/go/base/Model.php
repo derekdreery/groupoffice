@@ -39,6 +39,10 @@ abstract class Model extends Object{
 	
 	private static $_models=array();			// class name => model
 	
+	public function __construct() {
+		//just to prevent "model" to be called as constructor by PHP.
+	}
+	
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Every child of this class must override it.
