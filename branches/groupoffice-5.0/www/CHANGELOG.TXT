@@ -1,3 +1,4 @@
+- Prevent timeout on module permission window
 - Added new config option $config['files_disable_filesystem_sync']=true;
   The automatic sync can cause timeouts on large installations and should not be 
   required if you don't modify the filesystem externally.
