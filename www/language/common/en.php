@@ -690,3 +690,5 @@ $l['pspell_lang']='en';
 $l['dependenciesCannotDelete']="You cannot delete the current module, because the following (installed) modules depend on it: %s.";
 
 $l['MailboxNotFoundException'] = "Cannot open the folder \"%s\". Please check your email account settings.";
+
+$l['cantDeleteDefault'] = "Can't delete the default item.";
