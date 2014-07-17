@@ -1,3 +1,4 @@
+17-07-2014 5.0.71
 - Billing: Fixed sql problems with order when a project is attached and then projects2 isn't installed.
 - Prevent timeout on module permission window
 - Added new config option $config['files_disable_filesystem_sync']=true;
