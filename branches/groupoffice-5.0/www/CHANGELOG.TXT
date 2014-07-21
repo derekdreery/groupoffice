@@ -1,4 +1,4 @@
-- Fixed problem with using the import dialog for the 2nd time.
+- Addressbook: Fixed problem with using the import dialog for the 2nd time.
 
 18-07-2014 5.0.72
 - Project in billing selectable for v1 and v2.
