@@ -1,3 +1,4 @@
+- Calendar: Fix for not displaying a multiday event on the last day when the endtime is set to 0:00
 - Addressbook: Fixed problem with using the import dialog for the 2nd time.
 
 18-07-2014 5.0.72
