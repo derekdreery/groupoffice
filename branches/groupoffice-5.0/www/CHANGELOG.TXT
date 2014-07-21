@@ -1,3 +1,5 @@
+- Fixed problem with using the import dialog for the 2nd time.
+
 18-07-2014 5.0.72
 - Project in billing selectable for v1 and v2.
 - Removed the ability to delete the items that are marked as default in the settings->synchronization tab.
