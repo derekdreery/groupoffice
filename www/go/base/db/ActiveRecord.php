@@ -3857,6 +3857,28 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		return $outputType=='raw' ?  $this->_attributes[$attributeName] : $this->formatAttribute($attributeName, $this->_attributes[$attributeName],$outputType=='html');
 	}
 	
+	public function resolveAttribute($path, $outputType='raw'){
+		$parts = explode('.', $path);			
+
+		$model = $this;
+		if(count($parts)>1){
+			$last = array_pop($parts);
+
+			while($part = array_shift($parts)){
+				$model = $model->$part;
+				if(!$model){
+					return null;
+				}
+			}
+
+			return $model->getAttribute($last, $outputType);
+
+		}else
+		{
+			return $this->getAttribute($parts[0], $outputType);
+		}
+	}
+	
 	
 	/**
 	 * Calls the named method which is not a class method.
