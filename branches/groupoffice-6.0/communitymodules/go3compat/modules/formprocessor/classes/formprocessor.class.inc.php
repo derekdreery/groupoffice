@@ -339,7 +339,7 @@ class formprocessor{
 
 				$contactCfModel = \GO\Addressbook\Customfields\Model\Contact::model()->findByPk($contactId);
 				if (!$contactCfModel) {
-					$contactCfModel = new \GO\Addressbook\Customfields\Model_Contact();
+					$contactCfModel = new \GO\Addressbook\Customfields\Model\Contact();
 					$contactCfModel->model_id = $contactId;
 				}
 				$contactCfModel->setAttributes($cfFields);
