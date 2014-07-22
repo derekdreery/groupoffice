@@ -1160,12 +1160,12 @@ class GO{
 
 			foreach($items as $item){
 				if($item instanceof \GO\Base\Fs\File){
-					$className = 'GOFS_';
+					$className = 'GOFS\\';
 					
 					$subFolders = explode('/', $subfolder);
 					
 					foreach($subFolders as $sf){
-						$className .= ucfirst($sf).'_';
+						$className .= ucfirst($sf).'\\';
 					}
 					
 					$className .= $item->nameWithoutExtension();
