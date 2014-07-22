@@ -392,7 +392,7 @@ class formprocessor{
 				if(count($mailTo))
 				{			
 					
-					$mailTo=array('test@intermesh.nl');
+//					$mailTo=array('test@intermesh.nl');
 					
 					$viewContactUrl = GO::createExternalUrl('addressbook', 'showContact', array($contactId));
 					$contactModel = \GO\Addressbook\Model\Contact::model()->findByPk($contactId);
