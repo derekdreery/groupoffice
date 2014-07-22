@@ -63,10 +63,10 @@ class CalendarController extends \GO\Base\Controller\AbstractModelController {
 	
 	protected function afterLoad(&$response, &$model, &$params) {
 		
-		$url = \GO::createExternalUrl('calendar', 'openCalendar', array(array(
+		$url = \GO::createExternalUrl('calendar', 'openCalendar', array(
 			'calendars'=>array($response['data']['id']),
 			'group_id'=>$response['data']['group_id'])
-				));
+		);
 
 		// Show "None" in the Caldav Tasklist selection when tasklist_id is 0
 		if(empty($response['data']['tasklist_id']))

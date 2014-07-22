@@ -1312,10 +1312,25 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		config.title = '';
 		var record;
 		if(config.view_id){
-			record = this.viewsStore.getById(config.view_id);
+			
+			this.state.displayType="view";
+			this.state.view_id=config.view_id;
+			
+			if(!this.viewsStore.loaded){
+				this.viewsStore.load({
+					callback:function(){
+						this.setDisplay(config);
+					},
+					scope:this
+				});
+				return;
+			} else {
+			
+				record = this.viewsStore.getById(config.view_id);
 
-			config.merge=record.get('merge');
-			config.owncolor=record.get('owncolor');
+				config.merge=record.get('merge');
+				config.owncolor=record.get('owncolor');
+			}
 		}
 
 		if(config.displayType)
@@ -1493,7 +1508,13 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			selectGrid.expand();
 
 			this.resourcesList.getSelectionModel().clearSelections();
+			
+			var sr = selectGrid.getStore().getById(config.view_id);
+			var sr_index = selectGrid.getStore().indexOf(sr);
 
+			selectGrid.getSelectionModel().selectRow(sr_index);
+//			selectGrid.getSelectionModel().selectRecords(rr);
+			
 			clearGrids.push(this.calendarList);
 			if(this.projectCalendarsList)
 				clearGrids.push(this.projectCalendarsList);
