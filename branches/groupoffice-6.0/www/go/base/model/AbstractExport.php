@@ -130,16 +130,9 @@ abstract class AbstractExport {
 			
 //			$format = '$model->'.str_replace('.','->', $col);
 			
-			$parts = explode('.', $col);			
 			
-			if(count($parts)>1){
-				$last = array_pop($parts);
-				$format = '$model->'.implode('->', $parts).'->getAttribute("'.$last.'","formatted");';
-				
-			}else
-			{
-				$format = '$model->getAttribute("'.$parts[0].'","formatted");';
-			}
+			
+			$format = '$model->resolveAttribute("'.$col.'","formatted");';
 
 			
 			$colModel->formatColumn($col, $format, array(), '', $this->getLabel($col));
