@@ -458,7 +458,7 @@ class customfields extends db {
 	}
 
 	function get_category_by_sort_order($type, $sort_index) {
-		$sql = "SELECT * FROM cf_categories WHERE extends_model='".$this->escape(addslashes($this->CF_MODEL_TYPES[$type]))."' AND sort_index=".$this->escape($sort_index);
+		$sql = "SELECT * FROM cf_categories WHERE extends_model='".$this->escape(($this->CF_MODEL_TYPES[$type]))."' AND sort_index=".$this->escape($sort_index);
 		$this->query($sql);
 		if($this->next_record(DB_ASSOC)) {
 			return $this->record;
@@ -467,7 +467,7 @@ class customfields extends db {
 	}
 
 	function get_category_by_name($type, $name) {
-		$sql = "SELECT * FROM cf_categories WHERE extends_model='".$this->escape(addslashes($this->CF_MODEL_TYPES[$type]))."' AND name='".$this->escape($name)."'";
+		$sql = "SELECT * FROM cf_categories WHERE extends_model='".$this->escape(($this->CF_MODEL_TYPES[$type]))."' AND name='".$this->escape($name)."'";
 		$this->query($sql);
 		if($this->next_record(DB_ASSOC)) {
 			return $this->record;
@@ -508,7 +508,7 @@ class customfields extends db {
 	}
 
 	function get_categories($type) {
-		$sql = "SELECT * FROM cf_categories WHERE extends_model='".$this->escape(addslashes($this->CF_MODEL_TYPES[$type]))."' ORDER BY sort_index ASC";
+		$sql = "SELECT * FROM cf_categories WHERE extends_model='".$this->escape(($this->CF_MODEL_TYPES[$type]))."' ORDER BY sort_index ASC";
 		$this->query($sql);
 		return $this->num_rows();
 	}
@@ -522,7 +522,7 @@ class customfields extends db {
 				"FROM cf_categories c ".
 				"INNER JOIN go_acl a ON c.acl_id=a.acl_id ".
 				"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
-				"WHERE extends_model='".$this->escape(addslashes($model->className()))."' AND (a.user_id=".intval($user_id)." ".
+				"WHERE extends_model='".$this->escape(($model->className()))."' AND (a.user_id=".intval($user_id)." ".
 				"OR ug.user_id=".intval($user_id).") ".
 				" ORDER BY c.sort_index ASC";
 		$this->query($sql);
@@ -693,7 +693,7 @@ class customfields extends db {
 	function find_first_field_by_name($link_type, $name, $category_name='') {
 		$sql = "SELECT f.* FROM cf_fields f ".
 				"INNER JOIN cf_categories c ON f.category_id=c.id ".
-				"WHERE f.name='".$this->escape($name)."' AND c.extends_model=".$this->escape(addslashes($link_type));
+				"WHERE f.name='".$this->escape($name)."' AND c.extends_model=".$this->escape(($link_type));
 
 		if(!empty($category_name)){
 			$sql .= " AND c.name = '".$this->escape($category_name)."'";
@@ -710,7 +710,7 @@ class customfields extends db {
 		$sql = "SELECT f.*, c.name AS category_name ".
 				"FROM cf_fields f ".
 				"INNER JOIN cf_categories c ON f.category_id=c.id ".
-				"WHERE c.extends_model=".$this->escape(addslashes($link_type))." ORDER BY c.sort_index ASC, f.sort_index ASC";
+				"WHERE c.extends_model=".$this->escape(($link_type))." ORDER BY c.sort_index ASC, f.sort_index ASC";
 		$this->query($sql);
 		return $this->num_rows();
 	}
@@ -1335,7 +1335,7 @@ class customfields extends db {
 			}
 		}
 
-		return $this->query("DELETE FROM cf_categories WHERE extends_model=".$this->escape(addslashes($link_type)));
+		return $this->query("DELETE FROM cf_categories WHERE extends_model=".$this->escape(($link_type)));
 	}
 
 
