@@ -6,7 +6,59 @@ GO.base.ExportMenu = Ext.extend(Ext.Button,{
 		
 		this.className = config.className;
 		
+//		this.hiddenExportWindow = new GO.Window({
+//			width: 1,
+//			height: 1,
+//			items: [
+				this.hiddenExportForm = new Ext.FormPanel({
+					url:GO.url("core/export/export"),
+					standardSubmit: true,
+					baseParams: {},
+					items: [
+						{
+							xtype: 'hidden',
+							name: 'class_name'
+						},
+						{
+							xtype: 'hidden',
+							name: 'export_columns'
+						},
+						{
+							xtype: 'hidden',
+							name: 'include_column_names'
+						},
+						{
+							xtype: 'hidden',
+							name: 'orientation'
+						},
+						{
+							xtype: 'hidden',
+							name: 'use_db_column_names'
+						},
+						{
+							xtype: 'hidden',
+							name: 'view'
+						},
+						{
+							xtype: 'hidden',
+							name: 'id'
+						}
+					]
+				});
+//			]
+//		});
+				
 		GO.base.ExportMenu.superclass.constructor.call(this);	
+		
+		Ext.onReady(function(){
+			this.hiddenExportForm.render(Ext.getBody());
+			this.hiddenExportForm.form.getEl().dom.target='_blank';
+		},this);	
+		
+	},
+	
+	render: function(container, position) {
+		GO.base.ExportMenu.superclass.render.call(this,container,position);
 	},
 	
 	/**
@@ -147,8 +199,16 @@ GO.base.ExportMenu = Ext.extend(Ext.Button,{
 			view:item.view,
 			id: item.id			
 		};
-
-		window.open(GO.url("core/export/export",data));
+		
+//		this.hiddenExportWindow.show();
+		
+		this.hiddenExportForm.form.setValues(data);
+		this.hiddenExportForm.form.submit({
+			scope:this
+		});
+//		this.hiddenExportWindow.hide();
+//
+//		window.open(GO.url("core/export/export",data));
 	}
 	
 });
