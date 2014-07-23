@@ -153,7 +153,23 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * @var \GO\Base\Model\Acl 
 	 */
 	private $_acl=false;
-		
+	
+	/**
+	 * If this property is set the ACL of the model will be changed
+	 * Possible values:
+	 * - null: will not make any changes to the ACL
+	 * - true: will create a new ACL and attach it to this model on save()
+	 * - false: will remove the overwritten ACL if it is differend from its parent on save()
+	 * and use the ACL from the parent
+	 * @see setAcl_overwritten()
+	 * @var boolean
+	 */
+	protected $overwriteAcl;
+	
+	public function setAcl_overwritten($v) {
+		$this->overwriteAcl = $v;
+	}
+
 	/**
 	 *
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
@@ -258,6 +274,17 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	public function aclField(){
 		return false; //return isset($this->columns['acl_id']) ? 'acl_id' : false;
 	}
+	
+	/**
+	 * If the ACL is joined but the table has it's own acl_id column it is
+	 * possible to overwrite the ACL
+	 * @return boolean|string the acl_id column name or false if not overwritable
+	 */
+	public function aclOverwrite() {
+		if(!$this->getIsJoinedAclField()) // is there is no dot in aclField()
+			return false;
+		return isset($this->columns['acl_id']) ? 'acl_id' : false;
+	}
 		
 	/**
 	 * Returns the fieldname that contains primary key of the database table of this model
@@ -342,9 +369,9 @@ abstract class ActiveRecord extends \GO\Base\Model{
 
 	/**
 	 *
-	 * @return <type> Call $model->joinAclField to check if the aclfield is joined.
+	 * @return boolean Call $model->joinAclField to check if the aclfield is joined.
 	 */
-	protected function getJoinAclField (){
+	protected function getIsJoinedAclField (){
 		return strpos($this->aclField(),'.')!==false;
 	}
 	
@@ -2438,6 +2465,9 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		else
 			$att=$this->formatOutputValues($outputType=='html');		
 
+		if($this->aclOverwrite()) {
+			$att['acl_overwritten']=$this->isAclOverwritten();
+		}
 		foreach($this->_getMagicAttributeNames() as $attName){
 			$att[$attName]=$this->$attName;
 		}
@@ -2565,23 +2595,48 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$aclFKfield = $r['field'];
 		
 		$oldValue = $this->getOldAttributeValue($aclFKfield);
-		
 		if(empty($oldValue))
 			return true;
+		//TODO: check if above code is needed (test by moving contact to differend addresbook)
+		
+		$acl_id = $this->_getOldParentAclId();
+		$result = \GO\Base\Model\Acl::getUserPermissionLevel($acl_id)>=$level;
+		
+		return $result;
+	}
+	
+	/**
+	 * If the related object the contains the ACL is changed this function will
+	 * retrun the ACL of the relational object before it was changed (old ACL)
+	 * @return integer The ACL id
+	 * @throws \Exception
+	 */
+	private function _getOldParentAclId() {
+		$arr = explode('.', $this->aclField());
+		$relation = array_shift($arr);
+		$r = $this->getRelation($relation);
+		$aclFKfield = $r['field'];
+		
+		$oldValue = $this->getOldAttributeValue($aclFKfield);
+		
+		if(empty($oldValue))
+			return $this->findAclId();
 		
 		$newValue = $this->{$aclFKfield};
 		$this->{$aclFKfield} = $oldValue;
-		
-		//$result = $this->checkPermissionLevel($level);
 		$acl_id = $this->findAclId();
-		if(!$acl_id)
-			throw new \Exception("Could not find ACL for ".$this->className()." with pk: ".$this->pk);
-		$result = \GO\Base\Model\Acl::getUserPermissionLevel($acl_id)>=$level;
-		//end checkpermission level
-		
 		$this->{$aclFKfield} = $newValue;
 		
-		return $result;
+		if(!$acl_id)
+			throw new \Exception("Could not find ACL for ".$this->className()." with pk: ".$this->pk);
+
+		return $acl_id;
+	}
+	
+	public function isAclOverwritten() {
+		if(!$this->aclField() || !$this->aclOverwrite() || $this->getIsNew() || !$this->getIsJoinedAclField())
+			return false;
+		return $this->findRelatedAclModel()->findAclId() !== $this->{$this->aclOverwrite()};
 	}
 	
 	/**
@@ -2985,6 +3040,27 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 		$fileColumns = $this->_getModifiedFileColumns();
 		
+		if($this->aclOverwrite()) {
+
+			if($this->overwriteAcl !== null) {
+				if($this->overwriteAcl && !$this->isAclOverwritten()) { //Overwrite
+					$user_id = !empty($this->user_id) ? $this->user_id : 0;
+					$acl = new \GO\Base\Model\Acl();
+					$acl->description=$this->tableName().'.'.$this->aclOverwrite();
+					$acl->user_id=$user_id;
+					$acl->save();
+					// Attach new ACL id to this object
+					$this->{$this->aclOverwrite()} = $acl->id;
+				} elseif(!$this->overwriteAcl && $this->isAclOverwritten()) { // Disoverwrite
+					$acl = \GO\Base\Model\Acl::model()->findByPk($this->{$this->aclOverwrite()});
+					$acl->delete();
+					$this->{$this->aclOverwrite()} = $this->findRelatedAclModel()->findAclId();
+				}
+			}
+			if(!$this->isAclOverwritten() && $this->getIsJoinedAclField())
+				$this->{$this->aclOverwrite()} = $this->findRelatedAclModel()->findAclId();
+		}
+		
 		if($this->isNew){		
 			
 			//automatically set sort order column
@@ -2993,13 +3069,13 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 			$wasNew=true;
 
-			if($this->aclField() && !$this->joinAclField && empty($this->{$this->aclField()})){
+			if($this->aclField() && !$this->getIsJoinedAclField() && empty($this->{$this->aclField()})){
 				//generate acl id				
 				if(!empty($this->user_id))
 					$this->setNewAcl($this->user_id);
 				else
 					$this->setNewAcl(GO::user() ? GO::user()->id : 1);
-			}				
+			}
 			
 			if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
 				//ACL must be generated here.

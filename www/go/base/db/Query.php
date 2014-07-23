@@ -86,7 +86,7 @@ class Query {
 			array_unshift($args, $this);
 			return call_user_func_array(array($this->model, $name), $args);
 		} else {
-			return parent::__call($name, $args);
+			throw new Exception('Scope function not found in Query or ActiveRecord: '.$name.'()');
 		}
 	}
 	
@@ -158,12 +158,12 @@ class Query {
 	 * - `[''(ctime > :time || mtime < :time) AND delete=1', 'time'=>time()]`
 	 * 
      * @param string|array $condition the conditions that should be put in the WHERE part.
-     * @param string $merge 'AND'|'OR' add condition to previously added criteria
+     * @param string|boolean $merge 'AND'|'OR'|true add condition to previously added criteria
      * @return static the query object itself
      * @see andWhere()
      * @see orWhere()
      */
-    public function where($condition, $merge=null) {
+    public function where($condition, $merge = null) {
 		$criteria = FindCriteria::newInstance();
 		if (!isset($condition[0])) { // key value pairs
 			foreach ($condition as $field => $value) {
@@ -194,12 +194,12 @@ class Query {
                 throw new \Exception('Found unknown operator in query: ' . $operator);
             }
 		}
-		if($merge===true)
+		if($merge === true)
 			return $criteria;
 		if($merge !== null && $this->criteria !== null) {
-			if($merge==='AND')
+			if($merge === 'AND')
 				$this->criteria->mergeWith($criteria, true);
-			if($merge==='OR')
+			if($merge === 'OR')
 				$this->criteria->mergeWith($criteria, false);
 		} else {
 			$this->criteria = $criteria;

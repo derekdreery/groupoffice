@@ -157,6 +157,8 @@ abstract class AbstractJsonController extends AbstractController {
 			//The model automatically creates it.
 			if ($model->aclField() && !$model->joinAclField)
 				$response[$model->aclField()] = $model->{$model->aclField()};
+			if($model->aclOverwrite())
+				$response[$model->aclOverwrite()] = $model->{$model->aclOverwrite()};
 
 			//TODO: move the link saving to the model someday
 			if (!empty($_POST['link']) && $model->hasLinks()) {
