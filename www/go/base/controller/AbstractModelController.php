@@ -78,7 +78,7 @@ class AbstractModelController extends AbstractController {
 
 				//If the model has it's own ACL id then we return the newly created ACL id.
 				//The model automatically creates it.
-				if ($model->aclField() && !$model->joinAclField) {
+				if ($model->aclField() && !$model->isJoinedAclField) {
 					$response[$model->aclField()] = $model->{$model->aclField()};
 				}
 
