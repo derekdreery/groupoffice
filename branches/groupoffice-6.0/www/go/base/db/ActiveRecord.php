@@ -27,7 +27,7 @@
  * 
  * @property \GO\Base\Model\User $user If this model has a user_id field it will automatically create this property
  * @property \GO\Base\Model\Acl $acl If this model has an acl ID configured. See ActiveRecord::aclId it will automatically create this property.
- * @property bool $joinAclField
+ * @property bool $isJoinedAclField
  * @property int/array $pk Primary key value(s) for the model
  * @property string $module Name of the module this model belongs to
  * @property boolean $isNew Is the model new and not inserted in the database yet.
@@ -872,7 +872,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 			return false;
 		
 		//if($this->isNew && !$this->joinAclField){
-		if(empty($this->{$this->aclField()}) && !$this->joinAclField){
+		if(empty($this->{$this->aclField()}) && !$this->getIsJoinedAclField()){
 			return $this->getPermissionLevelForNewModel();
 		}else
 		{		
@@ -3823,7 +3823,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				$folder->delete(true);
 		}		
 		
-		if($this->aclField() && !$this->joinAclField){			
+		if($this->aclField() && !$this->getIsJoinedAclField()){			
 			//echo 'Deleting acl '.$this->{$this->aclField()}.' '.$this->aclField().'<br />';
 			
 			$acl = \GO\Base\Model\Acl::model()->findByPk($this->{$this->aclField()});			
@@ -4462,7 +4462,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		echo "Checking ".(is_array($this->pk)?implode(',',$this->pk):$this->pk)." ".$this->className()."\n";
 		flush();
 
-		if($this->aclField() && !$this->joinAclField){
+		if($this->aclField() && !$this->getIsJoinedAclField()){
 
 			$acl = $this->acl;
 			if(!$acl)
@@ -4552,7 +4552,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		}
 		
 		//Generate new acl for this model
-		if($this->aclField() && !$this->joinAclField){
+		if($this->aclField() && !$this->getIsJoinedAclField()){
 			
 			$user_id = isset($this->user_id) ? $this->user_id : GO::user()->id;
 			$copy->setNewAcl($user_id);
