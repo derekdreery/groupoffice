@@ -130,7 +130,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 			return false;
 		
 		//if($this->isNew && !$this->joinAclField){
-		if(empty($this->{$this->aclField()}) && !$this->joinAclField){
+		if(empty($this->{$this->aclField()}) && !$this->getIsJoinedAclField()){
 			//the new model has it's own ACL but it's not created yet.
 			//In this case we will check the module permissions.
 			$module = $this->getModule();

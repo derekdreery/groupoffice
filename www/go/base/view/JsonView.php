@@ -306,7 +306,7 @@ class JsonView extends AbstractView{
 
 					//If the model has it's own ACL id then we return the newly created ACL id.
 					//The model automatically creates it.
-					if ($model->aclField() && !$model->joinAclField)
+					if ($model->aclField() && !$model->isJoinedAclField)
 						$response[$model->aclField()] = $model->{$model->aclField()};
 
 					//TODO: move the link saving to the model someday
