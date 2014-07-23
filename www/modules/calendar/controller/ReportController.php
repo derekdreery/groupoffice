@@ -40,6 +40,32 @@ class GO_Calendar_Controller_Report extends GO_Base_Controller_AbstractJsonContr
 		$report->Output('week.pdf');
 	}
 	
+	public function actionWorkWeek($date, $calendars) {
+		$date = GO_Base_Util_Date::clear_time($date);
+		$calendarIds = json_decode($calendars);
+		
+		$weekday =date('w',$date);
+		if($weekday===0)
+			$weekday=7;
+		$weekday--;
+		
+		$start = $date-3600*24*($weekday);
+		$end = $date+3600*24*(5-$weekday);
+		
+		$report = new GO_Calendar_Reports_WorkWeek();
+		foreach($calendarIds as $id) {
+			
+			$calendar = GO_Calendar_Model_Calendar::model()->findByPk($id);
+			$events = $calendar->getEventsForPeriod($start, $end);
+
+			$report->day = $start;
+			$report->setEvents($events);
+			$report->render($date);
+			$report->calendarName = $calendar->name;
+		}
+		$report->Output('week.pdf');
+	}
+	
 	public function actionMonth($date, $calendars) {
 		$calendarIds = json_decode($calendars);
 		$date = GO_Base_Util_Date::clear_time($date);
