@@ -3823,7 +3823,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				$folder->delete(true);
 		}		
 		
-		if($this->aclField() && !$this->getIsJoinedAclField()){			
+		if($this->aclField() && !$this->isJoinedAclField){			
 			//echo 'Deleting acl '.$this->{$this->aclField()}.' '.$this->aclField().'<br />';
 			
 			$acl = \GO\Base\Model\Acl::model()->findByPk($this->{$this->aclField()});			
