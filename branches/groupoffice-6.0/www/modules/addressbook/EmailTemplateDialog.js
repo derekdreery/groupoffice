@@ -248,7 +248,8 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 		['{usercompany:country}',GO.lang['strWorkCountry']+' ('+GO.lang.strUser+')'],
 		['{user:homepage}',GO.lang.strHomepage+' ('+GO.lang.strUser+')'],
 		['{unsubscribe_link}',GO.addressbook.lang.unsubscribeLink],
-		['%unsubscribe_href%',GO.addressbook.lang.unsubscribeHref]
+		['%unsubscribe_href%',GO.addressbook.lang.unsubscribeHref],
+		['{link}',GO.lang.cmdLink]
 		];
    	
 		var items = [new Ext.Panel({
