@@ -3823,10 +3823,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				$folder->delete(true);
 		}		
 		
-		if($this->aclField() && !$this->isJoinedAclField){			
+		if($this->aclField() && (!$this->isJoinedAclField || $this->isAclOverwritten())){			
 			//echo 'Deleting acl '.$this->{$this->aclField()}.' '.$this->aclField().'<br />';
-			
-			$acl = \GO\Base\Model\Acl::model()->findByPk($this->{$this->aclField()});			
+			$aclField = $this->isAclOverwritten() ? $this->aclOverwrite() : $this->aclField();
+	
+			$acl = \GO\Base\Model\Acl::model()->findByPk($this->{$aclField});			
 			$acl->delete();
 		}	
 		
