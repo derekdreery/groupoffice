@@ -51,7 +51,7 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 	private $_path;
 	
 	//prevents acl id's to be generated automatically by the activerecord.
-	public $joinAclField=true;
+	public $isJoinedAclField=true;
 	
 	/**
 	 *
