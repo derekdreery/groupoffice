@@ -94,6 +94,8 @@ $settings['config']['checker_interval'] = (int)GO::config()->checker_interval;
 
 $settings['show_contact_cf_tabs'] = array();
 
+$settings['config']['encode_callto_link']=GO::config()->encode_callto_link;
+
 if(GO::modules()->addressbook){
 	// Add the addresslist tab to the global settings panel
 	$settings['show_addresslist_tab'] = GO::config()->get_setting('globalsettings_show_tab_addresslist');
