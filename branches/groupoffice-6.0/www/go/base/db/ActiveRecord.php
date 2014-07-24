@@ -369,7 +369,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 
 	/**
 	 *
-	 * @return boolean Call $model->joinAclField to check if the aclfield is joined.
+	 * @return boolean Call $model->isJoinedAclField to check if the aclfield is joined.
 	 */
 	protected function getIsJoinedAclField (){
 		return strpos($this->aclField(),'.')!==false;
