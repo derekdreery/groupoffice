@@ -1196,6 +1196,14 @@ class GO_Base_Config {
 	public $minify = false;
 	
 	/**
+	 * Enable encoding of the special characters in the phone number of the callto links
+	 * Defaults to false.
+	 * 
+	 * @var boolean 
+	 */
+	public $encode_callto_link = true;
+	
+	/**
 	 * Constructor. Initialises all public variables.
 	 *
 	 * @access public
