@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `suffix` varchar(50) NOT NULL DEFAULT '',
   `sex` enum('M','F') NOT NULL DEFAULT 'M',
   `birthday` date DEFAULT NULL,
-  `email` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL DEFAULT '',
   `email2` varchar(100) NOT NULL DEFAULT '',
   `email3` varchar(100) NOT NULL DEFAULT '',
   `company_id` int(11) NOT NULL DEFAULT '0',
