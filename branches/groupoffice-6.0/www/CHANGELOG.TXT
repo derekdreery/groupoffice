@@ -1,3 +1,4 @@
+- Added {link} property to email templates. This will display the text of the linkfield in the email content.
 - Calendar: Added direct_url property for calendar views
 - Core: Distinction between holidays that are free days and holidays that are not.
 - E-mail: link to easily move emails to and from spam folder.

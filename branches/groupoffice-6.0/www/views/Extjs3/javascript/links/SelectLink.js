@@ -68,15 +68,17 @@ Ext.extend(GO.form.SelectLink, GO.form.ComboBoxReset,{
 	onTriggerClick : function(){
 
 		if(!GO.selectLinkDialog){
-			GO.selectLinkDialog = new GO.dialog.LinksDialog({
+			GO.selectLinkDialog = new GO.dialog.LinksDialog({				
 				singleSelect:true,
 				selectLinkField:this,
 				linkItems : function()	{
 					var selectionModel = this.grid.searchGrid.getSelectionModel();
 					var record = selectionModel.getSelected();
-
+					var oldValue = this.selectLinkField.getValue();
 					this.selectLinkField.setValue(record.get('model_name_and_id'));
 					this.selectLinkField.setRemoteText(record.get('name_and_type'));
+					this.selectLinkField.fireEvent('change',this.selectLinkField, this.selectLinkField.getValue(),oldValue);
+					
 					this.hide();
 				}
 			});

@@ -862,6 +862,10 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 			$defaultTags = array(
 					'contact:salutation'=>GO::t('default_salutation_unknown')
 			);
+			
+			// Parse the link tag
+			$response['data']['htmlbody'] = \GO\Addressbook\Model\Template::model()->replaceLinkTag($response['data']['htmlbody'], $message);
+			
 			//keep template tags for mailings to addresslists
 			if (empty($params['addresslist_id'])) {
 				//if contact_id is not set but email is check if there's contact info available
