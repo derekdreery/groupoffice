@@ -220,13 +220,17 @@ GO.email.EmailComposer = function(config) {
 	var anchor = -113;
 						
 	if(GO.settings.modules.savemailas && GO.settings.modules.savemailas.read_permission)
-	{
+	{		
 		if (!this.selectLinkField) {
 			this.selectLinkField = new GO.form.SelectLink({
 				anchor : '100%'
-			});					
+			});
 			anchor+=26;
 			items.push(this.selectLinkField);
+			
+			this.selectLinkField.on('change',function(){
+				this.replaceTemplateLinkTag();
+			},this);	
 		}
 	}
 
@@ -239,6 +243,10 @@ GO.email.EmailComposer = function(config) {
 				});
 				anchor+=26;
 				items.push(this.selectLinkField);
+				
+				this.selectLinkField.on('change',function(){
+					this.replaceTemplateLinkTag();
+				},this);
 			}
 		}
 	} catch(e) {}
@@ -1037,6 +1045,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		}
 		
 		this.fireEvent('afterShowAndLoad',this);
+		
+		this.replaceTemplateLinkTag();
 	},
 	
 
@@ -1181,7 +1191,24 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				this.showBCC(checked);
 				break;
 		}
+	},
+	
+	replaceTemplateLinkTag: function() {
+
+		var editorValue = this.emailEditor.getActiveEditor().getValue();
+		var linkValue = '';
+
+		if (!GO.util.empty(this.selectLinkField.getValue())) {
+			var linkValue = this.selectLinkField.getRawValue();
+		}
+
+		var newValue = editorValue.replace(/<span class="go-composer-link">(.*?)<\/span>/g, function(match, contents, offset, s) {
+			return '<span class="go-composer-link">' + linkValue + '</span>';
+		});
+
+		this.emailEditor.getActiveEditor().setValue(newValue);
 	}
+
 });
 
 //GO.email.TemplatesList = function(config) {

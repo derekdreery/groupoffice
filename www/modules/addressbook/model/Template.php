@@ -325,4 +325,19 @@ class Template extends \GO\Base\Db\ActiveRecord{
 //		return $this->_getMessage()->getHtmlBody();
 //	}
 	
+	
+	/**
+	 * Replace the {link} tag with a div
+	 * 
+	 * @param string $content
+	 * @param \GO\Email\Model\SavedMessage $message
+	 * @return string
+	 */
+	public function replaceLinkTag($content, $message){
+		
+		$content = str_replace('{link}', '<span class="go-composer-link"></span>', $content);
+
+		return $content;
+	}
+	
 }
