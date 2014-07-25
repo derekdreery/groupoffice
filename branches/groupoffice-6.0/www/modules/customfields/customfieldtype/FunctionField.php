@@ -10,29 +10,29 @@ class FunctionField extends AbstractCustomfieldtype {
 		return 'Function';
 	}
 
-//	public function formatFormOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
-//		$result_string = '';
-//
-//		if (!empty($this->field->function)) {
-//			$f = $this->field->function;
-//			foreach ($attributes as $key=>$value) {
-//				
-//					$f = str_replace('{' . $key . '}', \GO\Base\Util\Number::unlocalize($value), $f);
-//				
-//			}
-//			$f = preg_replace('/\{[^}]*\}/', '0',$f);
-//			//go_debug($fields[$i]['function']);
-//			@eval("\$result_string=" . $f . ";");
-//		}
-//
-//		$attributes[$key] = \GO\Base\Util\Number::localize($result_string);
-//		return $attributes[$key];
-//	}
-//	
-//	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
-//		return $this->formatFormOutput($key, $attributes, $model);
-//	}
-//	
+	public function formatFormOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
+		$result_string = '';
+
+		if (!empty($this->field->function)) {
+			$f = $this->field->function;
+			foreach ($attributes as $key=>$value) {
+				
+					$f = str_replace('{' . $key . '}', \GO\Base\Util\Number::unlocalize($value), $f);
+				
+			}
+			$f = preg_replace('/\{[^}]*\}/', '0',$f);
+			//go_debug($fields[$i]['function']);
+			@eval("\$result_string=" . $f . ";");
+		}
+
+		$attributes[$key] = \GO\Base\Util\Number::localize($result_string);
+		return $attributes[$key];
+	}
+	
+	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
+		return $this->formatFormOutput($key, $attributes, $model);
+	}
+	
 	public function formatFormInput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model){
 		$result_string = '';
 
