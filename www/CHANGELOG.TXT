@@ -1,3 +1,5 @@
+- Projects 2: able to turn off Project Income using Project Template settings.
+- Projects 2: able to filter Invoice:Income Grid on Project Type & "Already Invoiced".
 - Files: Fixed namespace problem in Jupload controller (uploading folders)
 - Added {link} property to email templates. This will display the text of the linkfield in the email content.
 - Calendar: Added direct_url property for calendar views
