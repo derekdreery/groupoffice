@@ -131,7 +131,7 @@ class JuploadController extends \GO\Base\Controller\AbstractController {
 						
 					$parent = $this->_findHighestParent($dir);
 					
-					go::debug($parent);
+					\GO::debug($parent);
 					if (!in_array($parent->path(), \GO::session()->values['files']['uploadqueue']))
 						\GO::session()->values['files']['uploadqueue'][] = $parent->path();
 				} else {
