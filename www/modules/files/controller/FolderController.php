@@ -1207,8 +1207,8 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 					
 					$folder = \GO\Base\Fs\Folder::tempFolder(uniqid());
 					
-					if(class_exists("ZipArchive")){
-						$zip = new ZipArchive;
+					if(class_exists("\ZipArchive")){
+						$zip = new \ZipArchive;
 						$zip->open($file->path());
 						$zip->extractTo($folder->path());									
 						$this->_convertZipEncoding($folder);
