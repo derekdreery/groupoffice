@@ -578,7 +578,7 @@ class DbStore extends AbstractStore {
 	 * 
 	 * @return \GO\Base\Component\MultiSelectGrid
 	 */
-	public function multiSelect($requestParamName, $selectClassName, $foreignKey, $checkPermissions = null,$prefix="",$extraPks=array()) {
+	public function multiSelect($requestParamName, $selectClassName, $foreignKey, $checkPermissions = null,$prefix="",$extraPks=array(), $keyTableAlias='t') {
 		$this->_multiSel = new \GO\Base\Component\MultiSelectGrid(
 										$requestParamName,
 										$selectClassName,
@@ -588,7 +588,7 @@ class DbStore extends AbstractStore {
 										$prefix,
 										$extraPks
 		);
-		$this->_multiSel->addSelectedToFindCriteria($this->_extraFindParams, $foreignKey);
+		$this->_multiSel->addSelectedToFindCriteria($this->_extraFindParams, $foreignKey, $keyTableAlias);
 		$this->_multiSel->setStoreTitle();
 		
 		
