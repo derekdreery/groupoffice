@@ -15,7 +15,7 @@
 
 /**
  * The File model
- * 
+ *
  * @property int $id
  * @property int $folder_id
  * @property String $name
@@ -31,16 +31,16 @@
  * @property String $extension
  * @property int $expire_time
  * @property String $random_code
- * 
+ *
  * @property String $thumbURL
- * 
+ *
  * @property String $downloadUrl
- * 
+ *
  * @property String $path
  * @property \GO\Base\Fs\File $fsFile
  * @property Folder $folder
  * @property \GO\Base\Model\User $lockedByUser
- * 
+ *
  * @property boolean $delete_when_expired
  */
 
@@ -49,15 +49,15 @@ namespace GO\Files\Model;
 use GO;
 
 class File extends \GO\Base\Db\ActiveRecord {
-	
-	
+
+
 	public static $deleteInDatabaseOnly=false;
-	
+
 	private $_permissionLevel;
 
 	/**
 	 * Returns a static model of itself
-	 * 
+	 *
 	 * @param String $className
 	 * @return File
 	 */
@@ -82,7 +82,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 	protected function getLocalizedName() {
 		return \GO::t('file', 'files');
 	}
-	
+
 	public function customfieldsModel() {
 		return "GO\Files\Customfields\Model\File";
 	}
@@ -90,19 +90,19 @@ class File extends \GO\Base\Db\ActiveRecord {
 	public function hasLinks() {
 		return true;
 	}
-	
+
 	protected function getCacheAttributes() {
-		
+
 		$path = $this->path;
-		
+
 		//Don't cache tickets files because there are permissions issues. Everyone has read access to the types but may not see other peoples files.
 		if(strpos($path, 'tickets/')===0){
 			return false;
 		}
-		
+
 		return array('name'=>$this->name, 'description'=>$path);
 	}
-	
+
 	public function getLogMessage($action){
 		return $this->path;
 	}
@@ -117,18 +117,18 @@ class File extends \GO\Base\Db\ActiveRecord {
 				'versions' => array('type'=>self::HAS_MANY, 'model'=>'GO\Files\Model\Version', 'field'=>'file_id', 'delete'=>true),
 		);
 	}
-	
+
 	public function getPermissionLevel(){
-		
+
 		if(\GO::$ignoreAclPermissions)
 			return \GO\Base\Model\Acl::MANAGE_PERMISSION;
-		
+
 		if(!$this->aclField())
-			return -1;	
-		
+			return -1;
+
 		if(!\GO::user())
 			return false;
-		
+
 		//if($this->isNew && !$this->joinAclField){
 		if(empty($this->{$this->aclField()}) && !$this->getIsJoinedAclField()){
 			//the new model has it's own ACL but it's not created yet.
@@ -138,9 +138,9 @@ class File extends \GO\Base\Db\ActiveRecord {
 				return \GO::user()->isAdmin() ? \GO\Base\Model\Acl::MANAGE_PERMISSION : false;
 			}else
 				return \GO::modules()->$module->permissionLevel;
-			 
+
 		}else
-		{		
+		{
 			if(!isset($this->_permissionLevel)){
 
 				$acl_id = $this->findAclId();
@@ -152,7 +152,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 			}
 			return $this->_permissionLevel;
 		}
-		
+
 	}
 
 	protected function init() {
@@ -160,20 +160,20 @@ class File extends \GO\Base\Db\ActiveRecord {
 		$this->columns['name']['required']=true;
 		parent::init();
 	}
-	
+
 	/**
 	 * Check if a file is locked by another user.
-	 * 
-	 * @return boolean 
+	 *
+	 * @return boolean
 	 */
 	public function isLocked(){
 		return !empty($this->locked_user_id) && (!\GO::user() || $this->locked_user_id!=\GO::user()->id);
 	}
-	
+
 	public function unlockAllowed(){
 		return ($this->locked_user_id==\GO::user()->id || \GO::user()->isAdmin()) && $this->checkPermissionLevel(\GO\Base\Model\Acl::WRITE_PERMISSION);
 	}
-	
+
 	public function getJsonData() {
 			$data =  array(
 					'id' => $this->model_id,
@@ -194,27 +194,27 @@ class File extends \GO\Base\Db\ActiveRecord {
 					'thumbs' => 0,
 					'thumb_url' => $this->getThumbURL()
 				);
-			
+
 			if($this->customfieldsRecord)
 				$data = array_merge($data, $this->customfieldsRecord->getAttributes('html'));
 			return $data;
-	}        
+	}
 
 	/**
-	 * 
+	 *
 	 * @return \GO\Base\Fs\File
 	 */
 	private function _getOldFsFile(){
-		
+
 		if($this->isNew)
 			return $this->fsFile;
-		
+
 		$filename = $this->isModified('name') ? $this->getOldAttributeValue('name') : $this->name;
 		if($this->isModified('folder_id')){
 			//file will be moved so we need the old folder path.
 			$oldFolderId = $this->getOldAttributeValue('folder_id');
-			$oldFolder = Folder::model()->findByPk($oldFolderId);				
-			$oldRelPath = $oldFolder->path;				
+			$oldFolder = Folder::model()->findByPk($oldFolderId);
+			$oldRelPath = $oldFolder->path;
 			$oldPath = \GO::config()->file_storage_path . $oldRelPath . '/' . $filename;
 
 		}else{
@@ -222,16 +222,16 @@ class File extends \GO\Base\Db\ActiveRecord {
 		}
 		return new \GO\Base\Fs\File($oldPath);
 	}
-	
+
 	protected function beforeDelete() {
-		
+
 		//blocked database check. We check this in the controller now.
 		if($this->isLocked() && !\GO::user()->isAdmin())
 			throw new \Exception(\GO::t("fileIsLocked","files").': '.$this->path);
-		
+
 		return parent::beforeDelete();
 	}
-	
+
 	/**
 	 * Check the disk and user quota
 	 * @param integer $newBytes amount of bytes that are added when check succeeds
@@ -250,9 +250,9 @@ class File extends \GO\Base\Db\ActiveRecord {
 		return $enoughQuota;
 	}
 
-	
-	protected function beforeSave() {		
-		
+
+	protected function beforeSave() {
+
 		//check permissions on the filesystem
 		if($this->isNew){
 			if(!$this->folder->fsFolder->isWritable()){
@@ -265,16 +265,16 @@ class File extends \GO\Base\Db\ActiveRecord {
 					throw new \Exception("File ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}
-		
+
 		if(!$this->isNew){
-			
-			if($this->isModified('name')){				
+
+			if($this->isModified('name')){
 				//rename filesystem file.
 				//throw new \Exception($this->getOldAttributeValue('name'));
-				$oldFsFile = $this->_getOldFsFile();		
+				$oldFsFile = $this->_getOldFsFile();
 				if($oldFsFile->exists())
 					$oldFsFile->rename($this->name);
-				
+
 				$this->notifyUsers(
 					$this->folder_id,
 					FolderNotificationMessage::RENAME_FILE,
@@ -283,13 +283,13 @@ class File extends \GO\Base\Db\ActiveRecord {
 				);
 			}
 
-			if($this->isModified('folder_id')){				
+			if($this->isModified('folder_id')){
 				if(!isset($oldFsFile))
 					$oldFsFile = $this->_getOldFsFile();
 
 				if (!$oldFsFile->move(new \GO\Base\Fs\Folder(\GO::config()->file_storage_path . dirname($this->path))))
 					throw new \Exception("Could not rename folder on the filesystem");
-				
+
 				//get old folder objekt
                                 $oldFolderId = $this->getOldAttributeValue('folder_id');
 				$oldFolder = Folder::model()->findByPk($oldFolderId);
@@ -305,26 +305,26 @@ class File extends \GO\Base\Db\ActiveRecord {
 				);
 			}
 		}
-			
+
 		if($this->isModified('locked_user_id')){
 			$old_locked_user_id = $this->getOldAttributeValue('locked_user_id');
 			if(!empty($old_locked_user_id) && $old_locked_user_id != \GO::user()->id && !\GO::user()->isAdmin())
 				throw new \GO\Files\Exception\FileLocked();
 		}
-			
+
 
 		$this->extension = $this->fsFile->extension();
 		//make sure extension is not too long
 		$this->cutAttributeLength("extension");
-		
+
 		$this->size = $this->fsFile->size();
 		//$this->ctime = $this->fsFile->ctime();
 		$this->mtime = $this->fsFile->mtime();
-		
+
 		$existingFile = $this->folder->hasFile($this->name);
 		if($existingFile && $existingFile->id!=$this->id)
 			throw new \Exception(sprintf(\GO::t('filenameExists','files'), $this->path));
-		
+
 		return parent::beforeSave();
 	}
 
@@ -335,7 +335,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 	protected function getFsFile() {
 		return new \GO\Base\Fs\File(\GO::config()->file_storage_path . $this->path);
 	}
-	
+
 	private function _addQuota(){
 
 		if($this->isModified('size') || $this->isNew) {
@@ -345,26 +345,26 @@ class File extends \GO\Base\Db\ActiveRecord {
 				if($this->user){
 					$this->user->calculatedDiskUsage ($sizeDiff)->save(); //user quota
 				}
-				
+
 				if(GO::config()->quota>0) {
 					GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')+$sizeDiff); //system quota
 				}
 		}
 
 	}
-	
+
 	private function _removeQuota(){
 		if(\GO::config()->quota>0){
 			\GO::debug("Removing quota: $this->size");
 			\GO::config()->save_setting("file_storage_usage", \GO::config()->get_setting('file_storage_usage')-$this->size);
 		}
-		
+
 		if($this->user){
       $this->user->calculatedDiskUsage (0-$this->size)->save();
 		}
 
 	}
-	
+
 	protected function afterSave($wasNew) {
 		$this->_addQuota();
 
@@ -384,39 +384,39 @@ class File extends \GO\Base\Db\ActiveRecord {
 				);
 			}
 		}
-		
 
-		//touch the timestamp so it won't sync with the filesystem			
+
+		//touch the timestamp so it won't sync with the filesystem
 		if($this->isModified('folder_id')){
-			
+
 			GO::debug("touching parent");
 			$this->folder->touch();
-			
+
 			$oldParent = \GO\Files\Model\Folder::model()->findByPk($this->getOldAttributeValue('folder_id'));
-			
+
 			if($oldParent){
 				GO::debug("touching old parent");
 				$oldParent->touch();
 			}
 		}
-		
+
 
 		return parent::afterSave($wasNew);
 	}
 
 	protected function afterDelete() {
-		
+
 		$this->_removeQuota();
-		
-		if(!File::$deleteInDatabaseOnly)			
+
+		if(!File::$deleteInDatabaseOnly)
 			$this->fsFile->delete();
-		
+
 		$versioningFolder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'versioning/'.$this->id);
 		$versioningFolder->delete();
-		
+
 		$this->notifyUsers(
             $this->folder_id,
-			FolderNotificationMessage::DELETE_FILE, 
+			FolderNotificationMessage::DELETE_FILE,
 			$this->path
 		);
 
@@ -425,69 +425,69 @@ class File extends \GO\Base\Db\ActiveRecord {
 
 	/**
 	 * The link that can be send in an e-mail as download link.
-	 * 
-	 * @return string 
+	 *
+	 * @return string
 	 */
 	public function getEmailDownloadURL($html=true, $newExpireTime=false, $deleteWhenExpired=false) {
-		
+
 		if($newExpireTime){
 			$this->random_code=\GO\Base\Util\String::randomPassword(11,'a-z,A-Z,0-9');
 			$this->expire_time = $newExpireTime;
 			$this->delete_when_expired = $deleteWhenExpired;
 			$this->save();
 		}
-		
+
 		if (!empty($this->expire_time) && !empty($this->random_code)) {
 			return \GO::url('files/file/download', array('id'=>$this->id,'random_code'=>$this->random_code,'inline'=>'false'), false, $html);
 		}
 	}
-	
-	
+
+
 	/**
 	 * The link to download the file.
 	 * This function does not check the file download expire time and the random code
-	 * 
-	 * @return string 
+	 *
+	 * @return string
 	 */
 	public function getDownloadURL($downloadAttachment=true, $relative=false) {
-		return \GO::url('files/file/download', array('id'=>$this->id, 'inline'=>$downloadAttachment?'false':'true'), $relative);		
+		return \GO::url('files/file/download', array('id'=>$this->id, 'inline'=>$downloadAttachment?'false':'true'), $relative);
 	}
 
-	
+
 	public function getThumbURL($urlParams=array("lw"=>100, "ph"=>100, "zc"=>1)) {
-		
+
 		$urlParams['filemtime']=$this->mtime;
 		$urlParams['src']=$this->path;
-		
+
 		if($this->extension=='svg'){
 			return $this->getDownloadURL(false, true);
 		}else
-		{		
+		{
 			return \GO::url('core/thumb', $urlParams);
 		}
 	}
-	
+
 	/**
 	 * Move a file to another folder
-	 * 
+	 *
 	 * @param Folder $destinationFolder
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function move($destinationFolder,$appendNumberToNameIfExists=false){
-		
-		$this->folder_id=$destinationFolder->id;		
+
+		$this->folder_id=$destinationFolder->id;
 		if($appendNumberToNameIfExists)
 			$this->appendNumberToNameIfExists();
 		return $this->save();
 	}
-	
+
 	/**
 	 * Just the let someone kow the file was opened
 	 */
 	public function open() {
 		$this->log('open');
 	}
-	
+
 	/**
 	 * Adds some extra info to the loggin of files
 	 * @param string $action the action to log
@@ -509,52 +509,52 @@ class File extends \GO\Base\Db\ActiveRecord {
 		}
 		return $log->save();
 	}
-	
+
 	/**
 	 * Copy a file to another folder.
-	 * 
+	 *
 	 * @param Folder $destinationFolder
 	 * @param string $newFileName. Leave blank to use the same name.
-	 * @return File 
+	 * @return File
 	 */
 	public function copy($destinationFolder, $newFileName=false, $appendNumberToNameIfExists=false){
-		
-		$copy = $this->duplicate(array('folder_id'=>$destinationFolder->id), false);
-		
+
+		$copy = $this->duplicate(array('folder_id'=>$destinationFolder->id), false, true);
+
 		if($newFileName)
 			$copy->name=$newFileName;
-		
+
 		if($appendNumberToNameIfExists)
 			$copy->appendNumberToNameIfExists();
-			
+
 		$this->fsFile->copy($copy->fsFile->parent(), $copy->name);
-		
-		$copy->save();
-		
+
+		$copy->save(true);
+
 		return $copy;
 	}
-	
+
 	/**
 	 * Import a filesystem file into the database.
-	 * 
+	 *
 	 * @param \GO\Base\Fs\File $fsFile
-	 * @return File 
+	 * @return File
 	 */
 	public static function importFromFilesystem(\GO\Base\Fs\File $fsFile){
-		
+
 		$folderPath = str_replace(\GO::config()->file_storage_path,"",$fsFile->parent()->path());
-		
+
 		$folder = Folder::model()->findByPath($folderPath, true);
-		return $folder->hasFile($fsFile->name()) || $folder->addFile($fsFile->name());	
+		return $folder->hasFile($fsFile->name()) || $folder->addFile($fsFile->name());
 	}
-	
+
 	/**
 	 * Replace filesystem file with given file.
-	 * 
-	 * @param \GO\Base\Fs\File $fsFile 
+	 *
+	 * @param \GO\Base\Fs\File $fsFile
 	 */
 	public function replace(\GO\Base\Fs\File $fsFile, $isUploadedFile=false){
-		
+
 		if($this->isLocked())
 			throw new \GO\Files\Exception\FileLocked();
 //		for safety allow replace action
@@ -563,40 +563,40 @@ class File extends \GO\Base\Db\ActiveRecord {
 		if(!$this->isNew)
 			$this->log('edit');
 		$this->saveVersion();
-				
+
 		$fsFile->move($this->folder->fsFolder,$this->name, $isUploadedFile);
 		$fsFile->setDefaultPermissions();
-		
-		$this->mtime=$fsFile->mtime();	
+
+		$this->mtime=$fsFile->mtime();
 		$this->save();
 	}
-	
+
 	public function putContents($data){
 //		for safety allow replace actions
 //		if(!File::checkQuota(strlen($data)))
 //			throw new \GO\Base\Exception\InsufficientDiskSpace();
-		
-		$this->fsFile->putContents($data);		
-		$this->mtime=$this->fsFile->mtime();	
+
+		$this->fsFile->putContents($data);
+		$this->mtime=$this->fsFile->mtime();
 		$this->save();
 	}
-	
+
 	/**
-	 * Copy current file to the versioning system. 
+	 * Copy current file to the versioning system.
 	 */
-	public function saveVersion(){		
+	public function saveVersion(){
 		if(\GO::config()->max_file_versions>-1){
 			$version = new Version();
 			$version->file_id=$this->id;
 			$version->save();
 		}
 	}
-	
+
 	/**
 	 * Find the file model by relative path.
-	 * 
+	 *
 	 * @param string $relpath Relative path from \GO::config()->file_storage_path
-	 * @return File 
+	 * @return File
 	 */
 	public function findByPath($relpath,$caseSensitive=true){
 		$folder = Folder::model()->findByPath(dirname($relpath),false,array(),$caseSensitive);
@@ -606,13 +606,13 @@ class File extends \GO\Base\Db\ActiveRecord {
 		{
 			return $folder->hasFile(\GO\Base\Fs\File::utf8Basename($relpath),$caseSensitive);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Check if the file is an image.
-	 * 
-	 * @return boolean 
+	 *
+	 * @return boolean
 	 */
 	public function isImage(){
 		switch(strtolower($this->extension)){
@@ -630,9 +630,9 @@ class File extends \GO\Base\Db\ActiveRecord {
 				return false;
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Checks if a filename exists and renames it.
 	 *
@@ -642,47 +642,47 @@ class File extends \GO\Base\Db\ActiveRecord {
 	 */
 	public function appendNumberToNameIfExists()
 	{
-		$dir = $this->folder->path;		
+		$dir = $this->folder->path;
 		$origName = $this->fsFile->nameWithoutExtension();
 		$extension = $this->fsFile->extension();
 		$x=1;
 		$newName=$this->name;
 		while($this->folder->hasFile($newName))
-		{			
+		{
 			$newName=$origName.' ('.$x.').'.$extension;
 			$x++;
 		}
 		$this->name=$newName;
 		return $this->name;
 	}
-	
+
 	/**
 	 *
 	 * @param type $folder_id
 	 * @param type $type
 	 * @param type $arg1
-	 * @param type $arg2 
+	 * @param type $arg2
 	 */
 	public function notifyUsers($folder_id, $type, $arg1, $arg2 = '') {
 		FolderNotification::model()->storeNotification($folder_id, $type, $arg1, $arg2);
 	}
-	
-	
-	
-	public function findRecent($start=false,$limit=false){
-		$storeParams = \GO\Base\Db\FindParams::newInstance()->ignoreAcl();	
 
-		
+
+
+	public function findRecent($start=false,$limit=false){
+		$storeParams = \GO\Base\Db\FindParams::newInstance()->ignoreAcl();
+
+
 		$joinSearchCacheCriteria = \GO\Base\Db\FindCriteria::newInstance()
 					->addRawCondition('`t`.`id`', '`sc`.`model_id`')
 					->addCondition('model_type_id', $this->modelTypeId(),'=','sc');
-		
+
 		$storeParams->join(\GO\Base\Model\SearchCacheRecord::model()->tableName(), $joinSearchCacheCriteria, 'sc', 'INNER');
-		
-		
+
+
 		$aclJoinCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addRawCondition('a.acl_id', 'sc.acl_id','=', false);
-			
+
 		$aclWhereCriteria = \GO\Base\Db\FindCriteria::newInstance()
 						->addCondition('user_id', \GO::user()->id,'=','a', false)
 						->addInCondition("group_id", \GO\Base\Model\User::getGroupIds(\GO::user()->id),"a", false);
@@ -690,21 +690,21 @@ class File extends \GO\Base\Db\ActiveRecord {
 		$storeParams->join(\GO\Base\Model\AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'INNER');
 
 		$storeParams->criteria(\GO\Base\Db\FindCriteria::newInstance()
-								->addModel(Folder::model())									
+								->addModel(Folder::model())
 								->mergeWith($aclWhereCriteria));
-	
+
 		$storeParams->group(array('t.id'))->order('mtime','DESC');
-		
+
 		$storeParams->getCriteria()->addCondition('mtime', \GO\Base\Util\Date::date_add(\GO\Base\Util\Date::clear_time(time()),-7),'>');
-		
+
 		if ($start!==false)
 			$storeParams->start($start);
 		if ($limit!==false)
 			$storeParams->limit($limit);
-				
+
 		return $this->find($storeParams);
 	}
-	
+
 	public function getHandlers(){
 		$handlers=array();
 		$classes = \GO\Files\FilesModule::getAllFileHandlers();
@@ -716,24 +716,24 @@ class File extends \GO\Base\Db\ActiveRecord {
 				$handlers[]= $fileHandler;
 			}
 		}
-		
+
 		return $handlers;
 	}
-	
-	
+
+
 	public static $defaultHandlers;
 	/**
-	 * 
+	 *
 	 * @return \GO\Files\Filehandler\FilehandlerInterface
 	 */
 	public function getDefaultHandler(){
-		
+
 		$ex = strtolower($this->extension);
-		
+
 		if(!isset(self::$defaultHandlers[$ex])){
 			$fh = FileHandler::model()->findByPk(
 						array('extension'=>$ex, 'user_id'=>\GO::user()->id));
-			
+
 			if($fh && class_exists($fh->cls)){
 				self::$defaultHandlers[$ex]=new $fh->cls;
 			}else{
@@ -747,14 +747,14 @@ class File extends \GO\Base\Db\ActiveRecord {
 						break;
 					}
 				}
-				
+
 				if(!isset(self::$defaultHandlers[$ex]))
 					self::$defaultHandlers[$ex]=new \GO\Files\Filehandler\Download();
 			}
 		}
-		
+
 		return self::$defaultHandlers[$ex];
-		
-		
+
+
 	}
 }
