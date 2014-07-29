@@ -1,3 +1,4 @@
+- Calendar: Fixed problem in IE10 when loading the 1day, 5days and 7days grid.
 - Added configuration variable to enable/disable encoding of the callto link.($config['encode_callto_link'] = false;)
 - Sieve & E-mail: More specific 'sieve not used' note in email account: filter tab.
 - Calendar: Fix for not displaying a multiday event on the last day when the endtime is set to 0:00
