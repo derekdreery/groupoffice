@@ -283,6 +283,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$this->company_id=$company->id;			
 		}
 				
+		if ($this->company->addressbook_id != $this->addressbook_id)
+			throw new Exception(GO::t('mustBeSameAddressbook','addressbook'));
+		
 		$this->_prefixSocialMediaLinks();
 		
 		return parent::beforeSave();
