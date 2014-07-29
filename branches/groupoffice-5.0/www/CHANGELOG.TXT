@@ -1,3 +1,5 @@
+- Address book: Added sanity check: Contact's company must be in same address book as the contact.
+
 29-07-2014 5.0.73
 - Calendar: Fixed problem in IE10 when loading the 1day, 5days and 7days grid.
 - Added configuration variable to enable/disable encoding of the callto link.($config['encode_callto_link'] = false;)
