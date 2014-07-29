@@ -469,7 +469,7 @@ Ext.override(Ext.form.Checkbox, {
  * @param {HTMLElement} node The node to remove
  * @method
  */
- Ext.removeNode = Ext.isIE && !Ext.isIE8 && !Ext.isIE9 ? function() {
+ Ext.removeNode = Ext.isIE && !Ext.isIE8 && !Ext.isIE9 && !Ext.isIE10 ? function() {
 
 	var d;
 	return function(n) {
