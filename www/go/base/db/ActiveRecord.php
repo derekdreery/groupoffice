@@ -281,7 +281,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * @return boolean|string the acl_id column name or false if not overwritable
 	 */
 	public function aclOverwrite() {
-		if(!$this->getIsJoinedAclField()) // is there is no dot in aclField()
+		if($this->isJoinedAclField) // is there is no dot in aclField()
 			return false;
 		return isset($this->columns['acl_id']) ? 'acl_id' : false;
 	}
@@ -872,7 +872,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 			return false;
 
 		//if($this->isNew && !$this->joinAclField){
-		if(empty($this->{$this->aclField()}) && !$this->getIsJoinedAclField()){
+		if(empty($this->{$this->aclField()}) && !$this->isJoinedAclField){
 			return $this->getPermissionLevelForNewModel();
 		}else
 		{
@@ -2634,7 +2634,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	}
 
 	public function isAclOverwritten() {
-		if(!$this->aclField() || !$this->aclOverwrite() || $this->getIsNew() || !$this->getIsJoinedAclField())
+		if(!$this->aclField() || !$this->aclOverwrite() || $this->getIsNew() || !$this->isJoinedAclField)
 			return false;
 		return $this->findRelatedAclModel()->findAclId() != $this->{$this->aclOverwrite()};
 	}
@@ -3057,7 +3057,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					$this->{$this->aclOverwrite()} = $this->findRelatedAclModel()->findAclId();
 				}
 			}
-			if(!$this->isAclOverwritten() && $this->getIsJoinedAclField())
+			if(!$this->isAclOverwritten() && $this->isJoinedAclField)
 				$this->{$this->aclOverwrite()} = $this->findRelatedAclModel()->findAclId();
 		}
 
@@ -3069,7 +3069,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 			$wasNew=true;
 
-			if($this->aclField() && !$this->getIsJoinedAclField() && empty($this->{$this->aclField()})){
+			if($this->aclField() && !$this->isJoinedAclField && empty($this->{$this->aclField()})){
 				//generate acl id
 				if(!empty($this->user_id))
 					$this->setNewAcl($this->user_id);
@@ -4463,7 +4463,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		echo "Checking ".(is_array($this->pk)?implode(',',$this->pk):$this->pk)." ".$this->className()."\n";
 		flush();
 
-		if($this->aclField() && !$this->getIsJoinedAclField()){
+		if($this->aclField() && !$this->isJoinedAclField){
 
 			$acl = $this->acl;
 			if(!$acl)
@@ -4553,7 +4553,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		}
 
 		//Generate new acl for this model
-		if($this->aclField() && !$this->getIsJoinedAclField()){
+		if($this->aclField() && !$this->isJoinedAclField){
 
 			$user_id = isset($this->user_id) ? $this->user_id : GO::user()->id;
 			$copy->setNewAcl($user_id);
