@@ -1196,6 +1196,13 @@ class GO_Base_Config {
 	public $minify = false;
 
 	/**
+	 * Allow creation of tickets without the need of specify an email-address
+	 * 
+	 * @var boolean 
+	 */
+	public $tickets_no_email_required = false;
+	
+	/**
 	 * Enable encoding of the special characters in the phone number of the callto links
 	 * Defaults to false.
 	 *
