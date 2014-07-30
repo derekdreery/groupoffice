@@ -962,7 +962,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '5.0.73';
+	var $version = '5.0.74';
 
 
 	/**
@@ -972,7 +972,7 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20140729';
+	var $mtime = '20140730';
 
 	#group configuration
 	/**
@@ -1198,11 +1198,17 @@ class GO_Base_Config {
 	/**
 	 * Enable encoding of the special characters in the phone number of the callto links
 	 * Defaults to false.
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	public $encode_callto_link = true;
-	
+
+	/**
+	 * Disable requirement of email address in tickets
+	 * @var bool
+	 */
+	public $tickets_no_email_required=false;
+
 	/**
 	 * Constructor. Initialises all public variables.
 	 *
