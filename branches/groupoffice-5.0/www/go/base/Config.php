@@ -1211,12 +1211,6 @@ class GO_Base_Config {
 	public $encode_callto_link = true;
 
 	/**
-	 * Disable requirement of email address in tickets
-	 * @var bool
-	 */
-	public $tickets_no_email_required=false;
-
-	/**
 	 * Constructor. Initialises all public variables.
 	 *
 	 * @access public
