@@ -1,3 +1,4 @@
+- Holidays: National holiday hours displayed in holiday manager's main grid.
 - Holidays: Warn holiday manager if a month's credit becomes negative.
 - Holidays: Improved way of displaying available credits.
 - Projects 2: Import Projects CSV window is now able to create an example CSV file.
