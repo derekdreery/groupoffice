@@ -1,4 +1,6 @@
+31-07-2014 5.0.75
 - Fixed wrong language problem on the login page error messages.
+- Error when saving contact without a company
 
 30-07-2014 5.0.74
 - Fixed notice
