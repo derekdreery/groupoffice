@@ -196,8 +196,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 			
 			if(!empty($params["login_language"]))
 			{
-			// Moved to beginning of function because otherwise the error messages are in the wrong language
-			// GO::language()->setLanguage($params["login_language"]); 
+				GO::language()->setLanguage($params["login_language"]); 
 				
 				GO::user()->language=GO::language()->getLanguage();
 				GO::user()->save();
