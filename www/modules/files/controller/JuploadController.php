@@ -148,7 +148,6 @@ class JuploadController extends \GO\Base\Controller\AbstractController {
 		$parent = $dir;
 
 		while($parent->parent()->name()!="juploadqueue"){
-			go::debug($parent->name());
 			$parent=$parent->parent();
 		}
 
