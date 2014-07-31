@@ -697,3 +697,5 @@ $l['savedExports'] = 'Saved exports';
 $l['includeColumnNames'] = 'Include column names';
 $l['manageSavedExports'] = 'Manage saved exports';
 $l['noSavedExports'] = 'No saved exports available';
+
+$l['overwriteAcl'] = 'Overwrite default permissions for this item (click apply to activate)';

@@ -281,7 +281,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * @return boolean|string the acl_id column name or false if not overwritable
 	 */
 	public function aclOverwrite() {
-		if($this->isJoinedAclField) // is there is no dot in aclField()
+		if(!$this->getIsJoinedAclField()) // is there is no dot in aclField()
 			return false;
 		return isset($this->columns['acl_id']) ? 'acl_id' : false;
 	}
@@ -676,13 +676,13 @@ abstract class ActiveRecord extends \GO\Base\Model{
 
 	private function _getAclJoinProps(){
 		$arr = explode('.',$this->aclField());
-		if(count($arr)==2){
+		if(count($arr)==2 && !$this->aclOverwrite()){
 			$r= $this->getRelation($arr[0]);
 
 			return array('table'=>$r['name'], 'relation'=>$r, 'model'=>GO::getModel($r['model']), 'attribute'=>$arr[1]);
 		}else
 		{
-			return array('attribute'=>$this->aclField(), 'table'=>'t');
+			return array('attribute'=>$this->aclOverwrite() ? $this->aclOverwrite() : $this->aclField(), 'table'=>'t');
 		}
 	}
 
@@ -774,10 +774,11 @@ abstract class ActiveRecord extends \GO\Base\Model{
 			$modelWithAcl=$this;
 
 			while($relation = array_shift($arr)){
-				if(!$modelWithAcl->$relation)
+				if(!$modelWithAcl->$relation){					
 					throw new \Exception("Could not find relational ACL: ".$this->aclField()." ($relation) in ".$this->className()." with pk: ".$this->pk);
-				else
+				}else{
 					$modelWithAcl=$modelWithAcl->$relation;
+				}
 			}
 			return $modelWithAcl;
 		}else
@@ -824,11 +825,16 @@ abstract class ActiveRecord extends \GO\Base\Model{
 		////this happened when moving contacts from one acl to another.
 		//if(!isset($this->_acl_id)){
 			//ACL is mapped to a relation. eg. $contact->addressbook->acl_id is defined as "addressbook.acl_id" in the contact model.
-			$modelWithAcl = $this->findRelatedAclModel();
-			if($modelWithAcl){
-				$this->_acl_id = $modelWithAcl->findAclId();
-			} else {
-				$this->_acl_id = $this->{$this->aclField()};
+			if(!$this->isAclOverwritten()){
+				$modelWithAcl = $this->findRelatedAclModel();
+				if($modelWithAcl){
+					$this->_acl_id = $modelWithAcl->findAclId();
+				} else {
+					$this->_acl_id = $this->{$this->aclField()};
+				}
+			}else
+			{
+				$this->_acl_id = $this->{$this->aclOverwrite()};
 			}
 		//}
 
@@ -2634,9 +2640,17 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	}
 
 	public function isAclOverwritten() {
-		if(!$this->aclField() || !$this->aclOverwrite() || $this->getIsNew() || !$this->isJoinedAclField)
+		if(!$this->aclField() || !$this->aclOverwrite() || $this->getIsNew() || !$this->isJoinedAclField){
 			return false;
-		return $this->findRelatedAclModel()->findAclId() != $this->{$this->aclOverwrite()};
+		}
+		
+		$relatedAclModel = $this->findRelatedAclModel();
+				
+				
+//		if(!$relatedAclModel)
+//			throw new \Exception(var_export($relatedAclModel, true));
+		
+		return $relatedAclModel && $relatedAclModel->findAclId() != $this->{$this->aclOverwrite()};
 	}
 
 	/**
