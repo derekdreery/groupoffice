@@ -75,7 +75,7 @@ class Directory extends \Sabre\DAV\FS\Directory{
 		
 
 		
-		$tmpFile = \GO\Files\Model\File::tempFile();
+		$tmpFile = \GO\Base\Fs\File::tempFile();
 		$tmpFile->putContents($data);
 		
 		if(!\GO\Files\Model\File::checkQuota($tmpFile->size())){
