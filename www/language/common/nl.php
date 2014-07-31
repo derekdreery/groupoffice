@@ -652,3 +652,6 @@ $l['savedExports'] = 'Opgeslagen exports';
 $l['includeColumnNames'] = 'Gebruik kolomnamen';
 $l['manageSavedExports'] = 'Beheer opgeslagen exports';
 $l['noSavedExports'] = 'Geen opgeslagen exports beschikbaar';
+
+
+$l['overwriteAcl'] = 'Overschrijf standaard toegangsrechten voor dit item (Klik op toepassen om te activeren)';
