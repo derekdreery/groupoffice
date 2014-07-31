@@ -1,3 +1,5 @@
+- Fixed wrong language problem on the login page error messages.
+
 30-07-2014 5.0.74
 - Fixed notice
 - Address book: Added sanity check: Contact's company must be in same address book as the contact.
