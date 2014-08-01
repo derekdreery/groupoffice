@@ -1,3 +1,5 @@
+- Billing: PDF: if entire summary block at the end does not fit on one page, it is put at the beginning of the next page.
+
 01-08-2014 6.0.9
 - Holidays: National holiday hours displayed in holiday manager's main grid.
 - Holidays: Warn holiday manager if a month's credit becomes negative.
