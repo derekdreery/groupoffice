@@ -1,3 +1,4 @@
+01-08-2014 6.0.9
 - Holidays: National holiday hours displayed in holiday manager's main grid.
 - Holidays: Warn holiday manager if a month's credit becomes negative.
 - Holidays: Improved way of displaying available credits.
