@@ -3058,11 +3058,17 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 			if($this->overwriteAcl !== null) {
 				if($this->overwriteAcl && !$this->isAclOverwritten()) { //Overwrite
+					
+					$oldAcl = $this->findRelatedAclModel()->acl;
 					$user_id = !empty($this->user_id) ? $this->user_id : 0;
 					$acl = new \GO\Base\Model\Acl();
 					$acl->description=$this->tableName().'.'.$this->aclOverwrite();
 					$acl->user_id=$user_id;
 					$acl->save();
+					
+					$oldAcl->copyPermissions($acl);
+					
+					
 					// Attach new ACL id to this object
 					$this->{$this->aclOverwrite()} = $acl->id;
 				} elseif(!$this->overwriteAcl && $this->isAclOverwritten()) { // Disoverwrite
