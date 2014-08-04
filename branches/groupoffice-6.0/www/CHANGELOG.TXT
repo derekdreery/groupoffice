@@ -1,3 +1,4 @@
+- Projects2: Tags like {project:name} and {project:path} now available for the Name field of Project Template Jobs.
 - Timeregistration 2: Cannot add/edit time entries in closed week.
 - Billing: PDF: if entire summary block at the end does not fit on one page, it is put at the beginning of the next page.
 
