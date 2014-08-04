@@ -1208,7 +1208,7 @@ class GO_Base_Config {
 	 *
 	 * @var boolean
 	 */
-	public $encode_callto_link = true;
+	public $encode_callto_link = false;
 
 	/**
 	 * Constructor. Initialises all public variables.
