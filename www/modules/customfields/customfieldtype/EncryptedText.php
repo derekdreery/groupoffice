@@ -5,6 +5,10 @@ class GO_Customfields_Customfieldtype_EncryptedText extends GO_Customfields_Cust
 		return 'Encrypted text';
 	}
 	
+	public function fieldSql(){
+		return "TEXT NULL";
+	}
+	
 	public function includeInSearches() {
 		return false;
 	}
