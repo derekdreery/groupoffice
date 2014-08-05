@@ -192,13 +192,16 @@ class GO_LANGUAGE extends db {
 		if(!isset($language))
 			$language = $this->language;
 
-		$module_path = $GLOBALS['GO_CONFIG']->module_path.$module_id;
+		$module_path3 = $GLOBALS['GO_CONFIG']->root_path.'go3compat/modules/'.$module_id;
+		$module_path_new = $GLOBALS['GO_CONFIG']->module_path.$module_id;
+		$file3 = $module_path3.'/language/'.$language.'.inc.php';
+		$file_new = $module_path_new.'/language/'.$language.'.inc.php';
 
-		$file = $module_path.'/language/'.$language.'.inc.php';
-
-		if (file_exists($file)) {
-			return $file;
-		} else {
+		if (file_exists($file3)) {
+			return $file3;
+		} else if (file_exists($file_new)) {
+			return $file_new;
+		} else{
 			return $this->get_fallback_language_file($module_id);
 		}
 	}
@@ -227,11 +230,15 @@ class GO_LANGUAGE extends db {
 	function get_fallback_language_file($module_id) {
 		global $GO_CONFIG;
 
-		$module_path = $GLOBALS['GO_CONFIG']->module_path.'/'.$module_id;
-		$file = $module_path.'/language/en.inc.php';
+		$module_path3 = $GLOBALS['GO_CONFIG']->root_path.'go3compat/modules/'.$module_id;
+		$module_path_new = $GLOBALS['GO_CONFIG']->module_path.$module_id;
+		$file3 = $module_path3.'/language/en.inc.php';
+		$file_new = $module_path_new.'/language/en.inc.php';
 
-		if (file_exists($file)) {
-			return $file;
+		if (file_exists($file3)) {
+			return $file3;
+		} else if (file_exists($file_new)) {
+			return $file_new;
 		} else {
 			return false;
 		}
