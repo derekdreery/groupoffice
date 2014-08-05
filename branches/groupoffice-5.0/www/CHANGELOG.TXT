@@ -1,3 +1,4 @@
+- Users: Admin's Users Grid: sort order of name now according to current user's settings.
 - Bookmarks: URL validation in Bookmark URLs extended to also allow URLs like https://wiki:username@wiki.mydomain.org
 - Custom fields: Future encrypted Custom Fields become TEXT fields in database.
 - Projects: Tags like {project:name} and {project:path} now available for the Name and Description fields of Project Template Actions.
