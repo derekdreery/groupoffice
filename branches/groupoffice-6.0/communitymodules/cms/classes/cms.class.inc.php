@@ -326,9 +326,11 @@ class cms extends db {
 		 }
 		 }
 		 }*/
-
+		
 		$html = strip_tags($html);
+		
 		$html = $this->strip_unwanted_chars($html);
+		
 		return String::cut_string($html, 240);
 	}
 
@@ -367,7 +369,7 @@ class cms extends db {
 		$word = str_replace(':','', $word);
 		$word = str_replace(',','', $word);
 
-		$word = str_replace(chr(194), '', $word);
+//		$word = str_replace(chr(194), '', $word);
 
 		$word = trim($word);
 
