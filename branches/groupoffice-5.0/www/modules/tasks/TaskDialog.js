@@ -375,6 +375,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			defaults : {
 				anchor : '-20'
 			},
+			labelWidth:120,
 			// cls:'go-form-panel',waitMsgTarget:true,
 			bodyStyle : 'padding:5px',
 			layout : 'form',
