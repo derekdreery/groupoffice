@@ -23,3 +23,5 @@ $l['default_rss_url']='http://newsrss.bbc.co.uk/rss/newsonline_world_edition/fro
 $l['default_rss_title']='News';
 $l['announcement']='Announcement';
 $l['announcements']='Announcements';
+
+$l['latestReadAnnouncementRecord'] = 'Record of latest read announcement';

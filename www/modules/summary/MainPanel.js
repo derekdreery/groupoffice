@@ -280,3 +280,18 @@ GO.moduleManager.addModule('summary', GO.summary.MainPanel, {
 	title : GO.summary.lang.summary,
 	iconCls : 'go-tab-icon-summary'
 });
+
+
+
+GO.mainLayout.onReady(function(){
+	
+	GO.request({
+		url: 'summary/announcement/checkLatestRead',
+		success: function(response,options,result) {
+			if (result.has_unread) {
+				GO.mainLayout.openModule('summary');
+			}
+		}
+	});
+	
+});
