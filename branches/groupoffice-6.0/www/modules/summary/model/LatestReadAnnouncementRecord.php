@@ -50,8 +50,13 @@ class LatestReadAnnouncementRecord extends \GO\Base\Db\ActiveRecord {
 			$latestReadAnnouncementRecord->user_id = $userId;
 		}
 		$latestAnnouncementModel = self::_getLatestAnnouncement($userId);
-		$latestReadAnnouncementRecord->announcement_id = $latestAnnouncementModel->id;
-		$latestReadAnnouncementRecord->announcement_ctime = $latestAnnouncementModel->ctime;
+		if (!empty($latestAnnouncementModel)) {
+			$latestReadAnnouncementRecord->announcement_id = $latestAnnouncementModel->id;
+			$latestReadAnnouncementRecord->announcement_ctime = $latestAnnouncementModel->ctime;
+		} else {
+			$latestReadAnnouncementRecord->announcement_id = 0;
+			$latestReadAnnouncementRecord->announcement_ctime = 0;
+		}
 		$latestReadAnnouncementRecord->save();
 		return $latestReadAnnouncementRecord;
 	}
