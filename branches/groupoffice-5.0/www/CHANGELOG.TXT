@@ -1,3 +1,4 @@
+- Reminders can be removed from a task
 - Calendar: Fixed problem with strtotime and the YYYY.MM.DD date format in the recurrence pattern calculation
 - When renaming a mailbox folder the current name will display in the dialog
 - Expunged email will be removed just before store load again

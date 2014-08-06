@@ -582,7 +582,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			hideMode : 'offsets',
 			autoScroll : true,
 			items : [{
-				xtype : 'checkbox',
+				xtype : 'xcheckbox',
 				boxLabel : GO.tasks.lang.remindMe,
 				hideLabel : true,
 				name : 'remind',
