@@ -64,7 +64,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		$parameters['freq'] = strtoupper($json['freq']);
 		if($parameters['freq']=='MONTHLY_DATE')
 			$parameters['freq']='MONTHLY';
-		$parameters['eventstarttime'] = isset($json['eventstarttime'])?strtotime($json['eventstarttime']):strtotime($json['start_time']);
+		$parameters['eventstarttime'] = isset($json['eventstarttime'])?GO_Base_Util_Date::to_unixtime($json['eventstarttime']):GO_Base_Util_Date::to_unixtime($json['start_time']);
 		$parameters['until'] = empty($json['repeat_forever']) && isset($json['until']) ? GO_Base_Util_Date::to_unixtime($json['until'].' 23:59') : 0; //date('G', $parameters['eventstarttime']).':'.date('i', $parameters['eventstarttime'])) : 0;
 		$parameters['bymonth'] = isset($json['bymonth'])?$json['bymonth']:'';
 		$parameters['bymonthday'] = isset($json['bymonthday'])?$json['bymonthday']:'';
