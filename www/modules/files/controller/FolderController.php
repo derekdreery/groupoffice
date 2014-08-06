@@ -755,6 +755,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 			$store->resetResults();
 
+			$store->getColumnModel()->formatColumn('size', '"-"',array(),'size');
 			$store->getColumnModel()->formatColumn('type', '',array(),'extension');
 			$store->getColumnModel()->formatColumn('locked', '$model->isLocked()');
 			$store->getColumnModel()->formatColumn('locked_user_id', '$model->locked_user_id');
