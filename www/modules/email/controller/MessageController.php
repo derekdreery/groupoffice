@@ -218,6 +218,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$response['permission_level'] = $account->getPermissionLevel();
 		
+		// ADDED EXPUNGE SO THE FOLDER WILL BE UP TO DATE (When moving folders in THUNDERBIRD)
+		$imap->expunge();
 		$response['unseen']=array();
 		
 		//special folder flags
