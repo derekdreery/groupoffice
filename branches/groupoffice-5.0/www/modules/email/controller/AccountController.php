@@ -392,6 +392,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			$node = array(
 					'text' => $text,
 					'mailbox' => $mailbox->name,
+					'name' => $mailbox->getDisplayName(), // default value when renaming folder
 					'account_id' => $mailbox->getAccount()->id,
 					'iconCls' => 'folder-default',
 					'id' => $nodeId,
