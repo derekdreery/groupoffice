@@ -343,7 +343,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 				GO::debug("Adding quota: $sizeDiff");
 
 				if($this->user){
-					$this->user->calculatedDiskUsage ($sizeDiff)->save(); //user quota
+					$this->user->calculatedDiskUsage ($sizeDiff)->save(true); //user quota
 				}
 
 				if(GO::config()->quota>0) {
