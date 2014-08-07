@@ -149,7 +149,7 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 
 	protected function getCacheAttributes() {
 		
-		$name =$this->name;
+		$name = !empty($this->name2) ? $this->name.' '.$this->name2 : $this->name;
 		
 		if($this->addressbook)
 			$name .= ' ('.$this->addressbook->name.')';
