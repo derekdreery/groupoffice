@@ -580,8 +580,13 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			  throw new GO_Base_Exception_AccessDenied();
 			
 			$targetImapConnection = $targetAccountModel->openImapConnection($params["targetMailboxPath"]);
+			
+			$flags = '';
+			
+			if($srcMessageInfo->seen)
+				$flags = '\SEEN';
 
-			$targetImapConnection->append_message($params['targetMailboxPath'], $srcImapMessage->getSource(), '\SEEN');
+			$targetImapConnection->append_message($params['targetMailboxPath'], $srcImapMessage->getSource(), $flags);
 		}
 		
 		return array('success'=>true);
