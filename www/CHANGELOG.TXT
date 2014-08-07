@@ -1,3 +1,6 @@
+- Lists: Saving dialog state of listrecord dialog and added scroll option to this dialog
+- Lists: Added pagination to listrecord grid
+- Lists: Fixed ordering of listrecord items in list
 - Lists: Added dutch translation
 - Lists: Fixed bug with the browse button and namespaces
 - Summary: Automatically open the Summary module if the logged in user has an unread announcement.
