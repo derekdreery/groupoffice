@@ -1,3 +1,4 @@
+- Timeregistration2: Fixed editing of existing time entries (showEditDialog call)
 - Lists: Saving dialog state of listrecord dialog and added scroll option to this dialog
 - Lists: Added pagination to listrecord grid
 - Lists: Fixed ordering of listrecord items in list
