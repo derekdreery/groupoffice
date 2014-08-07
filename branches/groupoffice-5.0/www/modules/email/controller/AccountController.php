@@ -581,7 +581,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			
 			$targetImapConnection = $targetAccountModel->openImapConnection($params["targetMailboxPath"]);
 
-			$targetImapConnection->append_message($params['targetMailboxPath'], $srcImapMessage->getSource());
+			$targetImapConnection->append_message($params['targetMailboxPath'], $srcImapMessage->getSource(), '\SEEN');
 		}
 		
 		return array('success'=>true);
