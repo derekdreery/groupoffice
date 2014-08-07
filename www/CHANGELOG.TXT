@@ -1,3 +1,4 @@
+- Address book / Search : The "Name 2" field now used in the search cache for all future companies, or, if you recreate the search cache, for all companies with Name 2.
 - Email: Fixed copying of multiple messages. Also set the "SEEN" flag on the copied messages
 - Files will be sorted by filesize correctly
 - Reminders can be removed from a task
