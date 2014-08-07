@@ -127,11 +127,12 @@ GO.email.CopyMailToDialog = Ext.extend(GO.Window, {
 //				fn: function(btn) {
 //					if (btn=='yes') {
 				var srcMessages = [];
-				for (var i=0; i<this._selectedEmailMessages.length;i++) {
+				for (var i=0; i<this._selectedEmailMessages.length;i++) {				
 					srcMessages.push({
 						accountId : this._selectedEmailMessages[i].data.account_id,
 						mailboxPath : this._selectedEmailMessages[i].data.mailbox,
-						mailUid : this._selectedEmailMessages[i].data.uid
+						mailUid : this._selectedEmailMessages[i].data.uid,
+						seen : this._selectedEmailMessages[i].data.seen
 					});
 				}
 				GO.request({
