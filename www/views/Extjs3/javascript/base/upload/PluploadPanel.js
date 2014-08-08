@@ -10,7 +10,7 @@ GO.base.upload.PluploadPanel = function(config){
 		url: GO.url('core/plupload'),
 		//the only required parameter
 
-		runtimes: 'html5,gears,html4',
+		runtimes: 'html5,gears,flash,html4',
 		// first available runtime will be used
 
 		multipart: true,
@@ -31,7 +31,7 @@ GO.base.upload.PluploadPanel = function(config){
 //			quality: 60
 //		},
 
-//		flash_swf_url: BaseHref+'views/Extjs3/javascript/plupload/plupload/js/plupload.flash.swf',
+		flash_swf_url: BaseHref+'views/Extjs3/javascript/plupload/plupload/js/plupload.flash.swf',
 //		silverlight_xap_url: BaseHref+'views/Extjs3/javascript/plupload/plupload/js/plupload.silverlight.xap',
 		// urls must be set properly or absent, otherwise uploader fail to initialize
 

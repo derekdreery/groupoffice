@@ -10,7 +10,7 @@
  */
 
 namespace GO\Core\Controller;
-
+use GO;
 
 class AuthController extends \GO\Base\Controller\AbstractController {
 
@@ -158,6 +158,10 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 
 	protected function actionLogin($params) {
 		
+		if(!empty($params["login_language"])){
+			GO::language()->setLanguage($params["login_language"]);
+		}
+		
 		if(!empty($params['domain']))
 			$params['username'].=$params['domain'];	
 		
@@ -211,7 +215,8 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 			
 			if(!empty($params["login_language"]))
 			{
-				\GO::language()->setLanguage($params["login_language"]);
+				GO::language()->setLanguage($params["login_language"]); 
+
 				
 				\GO::user()->language=\GO::language()->getLanguage();
 				\GO::user()->save();

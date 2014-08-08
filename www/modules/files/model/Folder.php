@@ -737,7 +737,7 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 			\GO::debug("Filesystem folder ".$this->path." is not in sync with database. Will sync now.");
 			$this->syncFilesystem ();
 			$this->mtime=$this->fsFolder->mtime();
-			$this->save();
+			$this->save(true);
 		}
 	}
 
