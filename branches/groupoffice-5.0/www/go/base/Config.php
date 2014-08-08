@@ -1209,6 +1209,23 @@ class GO_Base_Config {
 	 * @var boolean
 	 */
 	public $encode_callto_link = false;
+	
+	/**
+	 * Show the addressbook property in the files tree
+	 * Defaults to true
+	 * 
+	 * @var boolean 
+	 */
+	public $files_show_addressbooks = true;
+	
+	/**
+	 * Show the projects property in the files tree
+	 * Defaults to true
+	 * 
+	 * @var boolean 
+	 */
+	public $files_show_projects = true;
+	
 
 	/**
 	 * Constructor. Initialises all public variables.

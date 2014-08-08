@@ -254,7 +254,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					
 					$response[] = $node;
 
-					if (GO::modules()->addressbook) {
+					if (GO::config()->files_show_addressbooks && GO::modules()->addressbook) {
 						$contactsFolder = GO_Files_Model_Folder::model()->findByPath('addressbook');
 
 						if ($contactsFolder) {
@@ -264,7 +264,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 						}
 					}
 
-					if (GO::modules()->projects) {
+					if (GO::config()->files_show_projects && GO::modules()->projects) {
 						$projectsFolder = GO_Files_Model_Folder::model()->findByPath('projects');
 
 						if ($projectsFolder) {
@@ -274,7 +274,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 						}
 					}
 					
-					if (GO::modules()->projects2) {
+					if (GO::config()->files_show_projects && GO::modules()->projects2) {
 						$projectsFolder = GO_Files_Model_Folder::model()->findByPath('projects2');
 
 						if ($projectsFolder) {
