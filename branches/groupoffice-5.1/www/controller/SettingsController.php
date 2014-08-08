@@ -10,7 +10,8 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 			$params['date_format'] = $dateparts[1];
 		}
 		
-		$user = GO_Base_Model_User::model()->findByPk($params['id']);
+//		$user = GO_Base_Model_User::model()->findByPk($params['id']);
+		$user = GO::user();
 		
 					
 		if (!empty($params["password"]) || !empty($params["passwordConfirm"])) {

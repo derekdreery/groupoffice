@@ -375,6 +375,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			defaults : {
 				anchor : '-20'
 			},
+			labelWidth:120,
 			// cls:'go-form-panel',waitMsgTarget:true,
 			bodyStyle : 'padding:5px',
 			layout : 'form',
@@ -581,7 +582,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			hideMode : 'offsets',
 			autoScroll : true,
 			items : [{
-				xtype : 'checkbox',
+				xtype : 'xcheckbox',
 				boxLabel : GO.tasks.lang.remindMe,
 				hideLabel : true,
 				name : 'remind',

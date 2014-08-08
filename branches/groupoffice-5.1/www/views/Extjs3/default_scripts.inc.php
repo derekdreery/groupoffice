@@ -89,10 +89,14 @@ $settings['config']['support_link']=GO::config()->support_link;
 $settings['config']['nav_page_size']=intval(GO::config()->nav_page_size);
 $settings['config']['session_inactivity_timeout']=intval(GO::config()->session_inactivity_timeout);
 
+$settings['config']['tickets_no_email_required']=GO::config()->tickets_no_email_required;
+
 $settings['config']['default_country'] = GO::config()->default_country;
 $settings['config']['checker_interval'] = (int)GO::config()->checker_interval;
 
 $settings['show_contact_cf_tabs'] = array();
+
+$settings['config']['encode_callto_link']=GO::config()->encode_callto_link;
 
 if(GO::modules()->addressbook){
 	// Add the addresslist tab to the global settings panel

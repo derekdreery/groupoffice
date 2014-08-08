@@ -79,7 +79,8 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 					$certData = $pubCertFile->getContents();
 
 					$arr = openssl_x509_parse($certData);
-					$email = GO_Base_Util_String::get_email_from_string($arr['extensions']['subjectAltName']);
+					$senderEmail = !empty($arr['extensions']['subjectAltName']) ? $arr['extensions']['subjectAltName'] : $arr['subject']['emailAddress'];
+					$email = GO_Base_Util_String::get_email_from_string($senderEmail);
 
 					$pubCertFile->delete();
 
@@ -96,7 +97,8 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 		
 		if(!isset($arr) && isset($certData)){
 			$arr = openssl_x509_parse($certData);
-			$email = GO_Base_Util_String::get_email_from_string($arr['extensions']['subjectAltName']);
+			$senderEmail = !empty($arr['extensions']['subjectAltName']) ? $arr['extensions']['subjectAltName'] : $arr['subject']['emailAddress'];
+			$email = GO_Base_Util_String::get_email_from_string($senderEmail);
 		}else if(empty($email)){
 			$email = 'unknown';
 		}

@@ -645,9 +645,14 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		//ceil required because of DST changes!
 		var daySpan = Math.round((eventEndTime-eventStartTime)/86400)+1;
 		//var daySpan = Math.round((eventEndTime-eventStartTime)/86400);
-
+		
+		
+		// Fix for not displaying a multiday event on the last day when the endtime is set to 0:00
+		if(daySpan > 1 && eventData.endDate.format(GO.settings.time_format) === '0:00'){
+			daySpan--; // decrease the daySpan with one day.
+		}
+		
 		var domIds = [];
-
 
 		for(var i=0;i<daySpan;i++)
 		{

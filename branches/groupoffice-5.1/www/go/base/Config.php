@@ -27,9 +27,9 @@
  * To edit these options use install.php.
  *
  * All options can also be found at:
- * 
+ *
  * http://wiki4.group-office.com/wiki/Configuration_file
- * 
+ *
  *
  * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
  * @link http://www.group-office.com
@@ -53,20 +53,20 @@ class GO_Base_Config {
 	/**
 	 * Enable sending system emails with an email account from the email module
 	 * Needs to be the id of the wanted mail account
-	 * 
-	 * @var int 
+	 *
+	 * @var int
 	 */
 	var $smtp_account_id = false;
-	
+
 	/**
 	 * Enable Smime for outgoing system emails.
 	 * Note: this only works when a mailaccount is used to send the system emails
 	 *			 (Please see: $smtp_account_id)
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	var $smtp_account_smime_sign = false;
-	
+
 	/**
 	 * The password that is needed to sign the Smime certificate for outgoing system emails
 	 * Note: this is only needed when a mailaccount is used to send the system emails
@@ -76,8 +76,8 @@ class GO_Base_Config {
 	 * @var string
 	 */
 	var $smtp_account_smime_password = "";
-	
-	
+
+
 	/**
 	 * The Group-Office server ID
 	 *
@@ -87,24 +87,24 @@ class GO_Base_Config {
 	var $id = 'groupoffice';
 
 	/**
-	 * Enable debugging mode. This will log much info to 
-	 * /home/groupoffice/log/debug.log and will use uncompressed javascripts. 
+	 * Enable debugging mode. This will log much info to
+	 * /home/groupoffice/log/debug.log and will use uncompressed javascripts.
 	 * You can also enable this as admin in Group-Office by pressing CTRL+F7.
 	 *
 	 * @var     bool
 	 * @access  public
 	 */
 	var $debug = false;
-	
-	
+
+
 	/**
 	 * Enable display_errors = on for php
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	public $debug_display_errors=false;
-	
-	
+
+
 //	/**
 //	 * Only log debug messages for this remote IP address.
 //	 *
@@ -118,12 +118,12 @@ class GO_Base_Config {
 	 * @var bool
 	 */
 	var $debug_log = false;
-	
-	
+
+
 	/**
 	 * Set the number of days the database log will contain until it will be dumped to a CSV file on disk.
 	 * The log module must be installed.
-	 * 
+	 *
 	 * @var int
 	 */
 	var $log_max_days=14;
@@ -138,7 +138,7 @@ class GO_Base_Config {
 
 	/**
 	 * Info log location. Disabled when left empty.
-	 * 
+	 *
 	 * @var bool
 	 */
 	var $info_log = "";
@@ -175,8 +175,8 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $default_country = "NL";
-	
-	
+
+
 	/**
 	 * Default VAT percentage
 	 *
@@ -315,19 +315,26 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $allow_duplicate_email = false;
-	
+
 	/**
 	 * The font used in all HTML editor including the E-mail editor
-	 * 
-	 * @var string 
+	 *
+	 * @var string
 	 */
 	public $html_editor_font = "font-size:13px; font-family:Arial, Helvetica, sans-serif;";
 
 	/**
 	 * The default font to be used in the generated PDF files.
-	 * @var string 
+	 * @var string
 	 */
 	public $tcpdf_font = "freesans";
+
+	/**
+	 * Disable filesystem syncing from the web interface
+	 *
+	 * @var boolean
+	 */
+	public $files_disable_filesystem_sync=false;
 
 //	/**
 //	 * Grant read permissions for these modules to new self-registered users.
@@ -381,11 +388,11 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $host = '/groupoffice/';
-	
+
 	/**
 	 * Set Access-Control-Allow-Origin: * header for example.
-	 * 
-	 * @var string 
+	 *
+	 * @var string
 	 */
 	var $extra_headers=array();
 
@@ -397,15 +404,15 @@ class GO_Base_Config {
 //	 */
 //
 //	var $force_login_url = false;
-	
+
 	/**
 	 * Force an HTTPS connection in the main /index.php
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	var $force_ssl=false;
 
-	
+
 
 	/**
 	 * Title of Group-Office
@@ -454,12 +461,12 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $max_users = 0;
-	
+
 	/**
 	 * If set, user queries will only return this maximum number of users.
 	 * Useful in large environments where you don't want users to scroll through all,
-	 * 
-	 * @var int 
+	 *
+	 * @var int
 	 */
 	var $limit_usersearch=0;
 
@@ -561,13 +568,13 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $file_storage_path = '/home/groupoffice/';
-	
-	
+
+
 	/**
 	 * Convert non ASCII characters to ASCII codes when uploaded to Group-Office.
 	 * Useful for Windows servers that don't support UTF8.
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	public $convert_utf8_filenames_to_ascii=false;
 
@@ -579,13 +586,13 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $max_file_size = '10000000';
-	
-	
+
+
 	/**
 	 * Maximum number of old file versions to keep
 	 * -1 will disable versioning. 0 will keep an infinite number of versions (Be careful!).
-	 * 
-	 * @var int 
+	 *
+	 * @var int
 	 */
 	public $max_file_versions = 3;
 
@@ -647,30 +654,30 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $smtp_local_domain = '';
-	
-	
+
+
 	/**
 	 * A special Swift preference to escape dots. For some buggy SMTP servers this
 	 * is necessary.
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	var $swift_qp_dot_escape=false;
-	
-	
+
+
 	/**
 	 * Set to true to prevent users from changing their e-mail aliases in the email module.
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	var $email_disable_aliases=false;
-	
-	
+
+
 	/**
-	 * We stumbled upon a dovecot server that crashed when sending a command 
+	 * We stumbled upon a dovecot server that crashed when sending a command
 	 * using LIST-EXTENDED. With this option we can workaround that issue.
-	 * 
-	 * @var string 
+	 *
+	 * @var string
 	 */
 	var $disable_imap_capabilities="";
 
@@ -688,14 +695,14 @@ class GO_Base_Config {
 	var $restrict_smtp_hosts = '';
 
 	/**
-	 * The maximum summed size of e-mail attachments in a message in bytes 
-	 * Group-Office will accept. 
-	 * 
+	 * The maximum summed size of e-mail attachments in a message in bytes
+	 * Group-Office will accept.
+	 *
 	 * @var     int
 	 * @access  public
 	 */
 	var $max_attachment_size = 20971520;
-	
+
 
 	//External programs
 
@@ -775,53 +782,53 @@ class GO_Base_Config {
 	 * @var int
 	 */
 	var $default_password_length=6;
-	
+
 	/**
 	 * Required length of passwords.
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	var $password_validate=true;
-	
+
 	/**
 	 * Required length of passwords.
-	 * 
-	 * @var int 
+	 *
+	 * @var int
 	 */
 	var $password_min_length=6;
-	
+
 	/**
 	 * Require an uppercase char
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	var $password_require_uc=true;
-	
+
 	/**
 	 * Require a lowercase char
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	var $password_require_lc=true;
-	
+
 	/**
 	 * Require numbers
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	var $password_require_num=true;
-	
+
 	/**
 	 * Require a special char
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	var $password_require_sc=true;
-	
+
 	/**
 	 * Required unique chars
-	 * 
-	 * @var int 
+	 *
+	 * @var int
 	 */
 	var $password_require_uniq=3;
 
@@ -854,43 +861,43 @@ class GO_Base_Config {
 	 */
 
 	var $nav_page_size=50;
-	
-	
+
+
 	/**
 	 * If you are behind a proxy you can set it here for all CURL operations Group-Office performs.
-	 * 
+	 *
 	 * This curl function will be used:
 	 * curl_setopt($ch, CURLOPT_PROXY, "http://proxy.com:8080");
-	 * 
-	 * @var string 
+	 *
+	 * @var string
 	 */
 	var $curl_proxy="";
-	
+
 //	/**
 //	 * Enable logging of slow requests
-//	 * 
-//	 * @var boolean 
+//	 *
+//	 * @var boolean
 //	 */
 //	public $log_slow_requests=false;
-//	
+//
 //	/**
 //	 * Slow request time in seconds
-//	 * 
-//	 * @var float 
+//	 *
+//	 * @var float
 //	 */
 //	public $log_slow_requests_trigger=1;
-//	
+//
 //	/**
 //	 * Path of the log file
-//	 * 
-//	 * @var string 
+//	 *
+//	 * @var string
 //	 */
 //	public $log_slow_requests_file="/home/groupoffice/slow-requests.log";
 
 	/*//////////////////////////////////////////////////////////////////////////////
 	 //////////      Variables that are not touched by the installer   /////////////
 	 //////////////////////////////////////////////////////////////////////////////*/
-	
+
 	/**
 	 * Full URL to reach Group-Office with trailing slash. This value is determined
 	 * automatically if not set in config.php
@@ -899,8 +906,8 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $full_url = '';
-	
-	
+
+
 	/**
 	 * Enable zlib compression for faster downloading of scripts and css
 	 *
@@ -911,19 +918,19 @@ class GO_Base_Config {
 
 	/**
 	 * Default list page size
-	 * 
-	 * @var int 
+	 *
+	 * @var int
 	 */
 	var $default_max_rows_list = 30;
-	
+
 	/**
 	 * Product name. If changed all Group-Office references will disappear.
-	 * @var string 
+	 * @var string
 	 */
 
 	var $product_name='Group-Office';
-	
-	
+
+
 		/* The permissions mode to use when creating files
 	 *
 	 * @var     string
@@ -937,17 +944,17 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $folder_create_mode = '0755';
-	
+
 	/* New files and folders will be chown'd to this group.
 	 *
 	 * @var     string
 	 * @access  public
 	 */
 	var $file_change_group = '';
-	
+
 	/*////////////////////////////////////////////////
 	 * Variables below this should not be changed
-	 *////////////////////////////////////////////////	
+	 *////////////////////////////////////////////////
 
 	/**
 	 * The Group-Office version number
@@ -957,7 +964,7 @@ class GO_Base_Config {
 	 */
 	var $version = '5.1.8';
 
-	
+
 	/**
 	 * Modification date
 	 *
@@ -965,7 +972,7 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20140710';
+	var $mtime = '20140808';
 
 	#group configuration
 	/**
@@ -1041,8 +1048,8 @@ class GO_Base_Config {
 	 */
 
 	var $configuration_url = 'configuration';
-	
-	
+
+
 	/**
 	 * The link in menu help -> contents
 	 *
@@ -1050,17 +1057,17 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $help_link = 'https://www.group-office.com/wiki/';
-	
+
 	/**
 	 * The link or e-mail address in menu help -> support.
-	 * 
+	 *
 	 * No menu item is generated if left empty.
 	 *
 	 * @var     string
 	 * @access  public
 	 */
 	var $support_link = false;
-	
+
 	/**
 	 * Relative path to the classes directory with no slash at start and end
 	 *
@@ -1114,12 +1121,12 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $orig_tmpdir = '';
-	
+
 	/**
 	 * Path with trailing slash where cached scripts are generated.
 	 * Defaults to $this->tmpdir/cache/
-	 * 
-	 * @var string 
+	 *
+	 * @var string
 	 */
 	var $cachefolder='';
 
@@ -1132,10 +1139,10 @@ class GO_Base_Config {
 	var $db;
 
 	/**
-	 * The amount of seconds before Group-Office will check for new mail or 
+	 * The amount of seconds before Group-Office will check for new mail or
 	 * other notifications.
-	 * 
-	 * @var int  
+	 *
+	 * @var int
 	 */
 	var $checker_interval=120;
 
@@ -1154,7 +1161,7 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $assets_url = '';
-	
+
 	/**
 	 * Full Path to the Group-Office assets folder with trailing slash
 	 *
@@ -1162,32 +1169,47 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $assets_path = '';
-	
+
 	/**
 	 * Enables the quicklink option in the message panel of an email message.
 	 * [] Link email conversation to contact
-	 * [] Link email conversation to company 
-	 * 
-	 * @var Boolean 
+	 * [] Link email conversation to company
+	 *
+	 * @var Boolean
 	 */
-	var $allow_quicklink = true;	
-	
-	
+	var $allow_quicklink = true;
+
+
 	/**
 	 * Automatically opens the file select dialog when opening the upload dialog.
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	public $upload_quickselect = true;
-	
+
 	/**
 	 * EXPERIMENTAL! Minifies JS and CSS on the fly.
 	 * Doesn't seem to make much difference when gzip is used.
+	 *
+	 * @var boolean
+	 */
+	public $minify = false;
+
+	/**
+	 * Allow creation of tickets without the need of specify an email-address
 	 * 
 	 * @var boolean 
 	 */
-	public $minify = false;
+	public $tickets_no_email_required = false;
 	
+	/**
+	 * Enable encoding of the special characters in the phone number of the callto links
+	 * Defaults to false.
+	 *
+	 * @var boolean
+	 */
+	public $encode_callto_link = false;
+
 	/**
 	 * Constructor. Initialises all public variables.
 	 *
@@ -1242,7 +1264,7 @@ class GO_Base_Config {
 				$this->cmd_unzip=$this->root_path.'controls/win32/unzip.exe';
 				$this->cmd_xml2wbxml=$this->root_path.'controls/win32/libwbxml/xml2wbxml.exe';
 				$this->cmd_wbxml2xml=$this->root_path.'controls/win32/libwbxml/wbxml2xml.exe';
-				
+
 				$this->convert_utf8_filenames_to_ascii=true;
 			}
 
@@ -1284,11 +1306,11 @@ class GO_Base_Config {
 		if($this->debug)
 			$this->debug_log=true;
 
-//		if($this->debug_log){// || $this->log_slow_requests) {			
+//		if($this->debug_log){// || $this->log_slow_requests) {
 //
 //			list ($usec, $sec) = explode(" ", microtime());
 //			$this->loadstart = ((float) $usec + (float) $sec);
-//			
+//
 ////			$dat = getrusage();
 ////			define('PHP_TUSAGE', microtime(true));
 ////			define('PHP_RUSAGE', $dat["ru_utime.tv_sec"]*1e6+$dat["ru_utime.tv_usec"]);
@@ -1307,26 +1329,26 @@ class GO_Base_Config {
 		}
 
 		$this->set_full_url();
-		
+
 		if(!$this->support_link && $this->isProVersion()){
 			$this->support_link = "https://www.group-office.com/support";
 		}
-		
-		/* 
+
+		/*
 		 * Check if the noreply_email variable is set in the config.php file.
 		 * If it is not set, then use noreply@ {webmaster_email domain name}
 		 * When the webmaster email is not set, then this will be noreply@example.com
 		 */
 		if(empty($this->noreply_email)){
-			
+
 			$wmdomain = 'example.com';
-			
+
 			if(!empty($this->webmaster_email)){
 				$extractedEmail = explode('@',$this->webmaster_email);
 				if(isset($extractedEmail[1]))
 					$wmdomain = $extractedEmail[1];
 			}
-			
+
 			$this->noreply_email = 'noreply@'.$wmdomain;
 		}
 	}
@@ -1338,47 +1360,47 @@ class GO_Base_Config {
 	 */
 	public function getTempFolder($autoCreate=true){
 		$user_id = GO::user() ? GO::user()->id : 0;
-		
-		$path = $this->orig_tmpdir;		
+
+		$path = $this->orig_tmpdir;
 		if(PHP_SAPI=='cli'){
 			$path .= 'cli/';
-		}		
-		$path .= $user_id;		
-		
-		
+		}
+		$path .= $user_id;
+
+
 		$folder = new GO_Base_Fs_Folder($path);
 		if($autoCreate)
 			$folder->create(0777);
-		
+
 		return $folder;
 	}
-	
+
 	/**
 	 * Get the cache folder for cached scripts.
-	 * 
+	 *
 	 * @return \GO_Base_Fs_Folder
 	 */
 	public function getCacheFolder($autoCreate=true){
-		
+
 		if(empty($this->cachefolder)){
 			$this->cachefolder=$this->orig_tmpdir.'cache/';
 		}
-		
+
 		$folder = new GO_Base_Fs_Folder($this->cachefolder);
 		if($autoCreate)
 			$folder->create(0777);
 		return $folder;
 	}
-	
+
 	/**
 	 * Check if the pro package is available.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function isProVersion(){
 		return is_dir($this->root_path.'modules/professional');
 	}
-	
+
 
 
 //	function __destruct() {
@@ -1387,11 +1409,11 @@ class GO_Base_Config {
 //
 //			GO::debug('Page load took: '.(GO_Base_Util_Date::getmicrotime()-$this->loadstart).'ms', $this);
 //			GO::debug('Peak memory usage:'.round(memory_get_peak_usage()/1048576,2).'MB', $this);
-//			
-//		}		
+//
+//		}
 ////		$this->_logSlowRequest();
 //	}
-	
+
 //	private function _logSlowRequest(){
 //		if($this->log_slow_requests){
 //			$time = GO_Base_Util_Date::getmicrotime()-$this->loadstart;
@@ -1412,8 +1434,8 @@ class GO_Base_Config {
 //				$logStr .= 'time: '.$time.';'."\n";
 //
 //
-//				file_put_contents($this->log_slow_requests_file, $logStr,FILE_APPEND);			
-//			}		
+//				file_put_contents($this->log_slow_requests_file, $logStr,FILE_APPEND);
+//			}
 //		}
 //	}
 
@@ -1450,8 +1472,8 @@ class GO_Base_Config {
 	public function get_config_file() {
 		if(defined('GO_CONFIG_FILE'))
 			return GO_CONFIG_FILE;
-		
-		
+
+
 		if(!empty($_SERVER['GO_CONFIG']))
 			return $_SERVER['GO_CONFIG'];
 
@@ -1478,7 +1500,7 @@ class GO_Base_Config {
 			$script = php_sapi_name()=='cli' ? __FILE__ : $_SERVER['SCRIPT_FILENAME'];
 
 			$config_dir = dirname($script).'/';
-			
+
 			if($config_dir==$this->root_path.'install/'){
 				$config_dir = $this->root_path;
 			}
@@ -1556,7 +1578,7 @@ class GO_Base_Config {
 						$_SESSION['GO_SESSION']['full_url'] .= "s";
 					}
 					$_SESSION['GO_SESSION']['full_url'] .= "://".$_SERVER["SERVER_NAME"];
-					if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) 
+					if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443"))
 						$_SESSION['GO_SESSION']['full_url'] .= ":".$_SERVER["SERVER_PORT"];
 
 					$_SESSION['GO_SESSION']['full_url'] .= $this->host;
@@ -1591,35 +1613,35 @@ class GO_Base_Config {
 		}
 		return $default;
 	}
-	
+
 	/**
 	 * Get multiple settings at once
 	 * @param array $keys
 	 * @param int $user_id Optional leave empty for global settings
-	 * 
+	 *
 	 * @return array Key value array('setting name'=>'value');
 	 */
 	public function getSettings($keys, $user_id=0){
 		$findParams = GO_Base_Db_FindParams::newInstance()->select();
-		
+
 		$findParams->getCriteria()
 						->addCondition('user_id', $user_id)
 						->addInCondition('name', $keys);
-		
+
 		$stmt = GO_Base_Model_Setting::model()->find($findParams);
-		
+
 		$return = array();
 		foreach($keys as $key){
 			$return[$key]=null;
 		}
-		
-		foreach($stmt as $setting){			
+
+		foreach($stmt as $setting){
 			$return[$setting->name]=$setting->value;
 		}
-		
+
 		return $return;
 	}
-    
+
     /**
      * Get all settings with the same key for the settings table
      * @param string $name the key of the setting
@@ -1630,7 +1652,7 @@ class GO_Base_Config {
       $params->getCriteria()->addCondition('name',$name);
       return GO_Base_Model_Setting::model()->find($params)->fetchAll();
     }
-     * 
+     *
      */
 
 	/**
@@ -1662,7 +1684,7 @@ class GO_Base_Config {
 	 *
 	 * @param 	string $name Configuration key name
      * @params integer $user_id The is of the user you want to delete a setting from
-     * defaults to 0 for the default setting, 
+     * defaults to 0 for the default setting,
      * if set to false settings for every user inclusing default will be deleted
 	 * @access public
 	 * @return bool Returns true on succes

@@ -147,7 +147,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 						
 					this.hide();
 					if (!GO.util.empty(this._fieldsDialog))
-						this._fieldsDialog.close();
+						this._fieldsDialog.hide();
 				}
 				this._loadMask.hide();
 			},
@@ -397,7 +397,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 				},{
 					text: GO.lang['cmdCancel'],
 					handler: function(){
-						this._fieldsDialog.close();
+						this._fieldsDialog.hide();
 						this.hide();
 						this.el.unmask();
 					},

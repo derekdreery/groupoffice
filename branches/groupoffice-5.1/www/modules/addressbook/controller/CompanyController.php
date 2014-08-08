@@ -416,7 +416,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 				'type'=>'INNER' //defaults to INNER,
 
 			))			
-			->limit(10);
+			->limit(10)->order('t.name');
 
 //		}
 

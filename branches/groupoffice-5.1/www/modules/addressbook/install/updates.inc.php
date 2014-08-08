@@ -442,3 +442,7 @@ $updates['201405061600'][]="CREATE TABLE IF NOT EXISTS `ab_portlet_birthdays` (
   `addressbook_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`addressbook_id`)
 ) ENGINE=InnoDB;";
+
+$updates['201407151015'][]="ALTER TABLE `ab_sent_mailings` CHANGE `subject` `subject` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;";
+
+$updates['201407241350'][]="ALTER TABLE `ab_contacts` CHANGE `email` `email` varchar(100) NOT NULL DEFAULT '';";
