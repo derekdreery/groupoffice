@@ -24,6 +24,11 @@ if [ -e /usr/share/groupoffice/modules/z-push21/backend/go ]; then
 	cp -R /usr/share/groupoffice/modules/sync/z-push21/backend/go /usr/share/groupoffice/modules/z-push21/backend/
 fi
 
+if [ ! -e /usr/share/groupoffice/groupoffice-license.txt ]; then
+	touch /usr/share/groupoffice/groupoffice-license.txt
+	chmod www-data:www-data /usr/share/groupoffice/groupoffice-license.txt
+fi
+
 php /usr/share/groupoffice-install-scripts/configure.php
 
 invoke-rc.d apache2 reload > /dev/null || true
