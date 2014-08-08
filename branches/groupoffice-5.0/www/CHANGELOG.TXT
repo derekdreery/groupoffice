@@ -1,3 +1,7 @@
+- Added config 2 options for the files module to remove the addressbooks/projects folders from the files tree:
+	$config['files_show_addressbooks'] = true;
+	$config['files_show_projects'] = true;
+
 08-08-2014 5.0.76
 - Add xss prevention headers
 - Secured maintenance tools
