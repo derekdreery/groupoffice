@@ -220,6 +220,9 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		//iframe hack for file uploads fails with application/json
 //		if(!empty($_FILES)){
 			header('Content-Type: text/html; charset=UTF-8');
+			header('X-XSS-Protection: 1; mode=block');
+			header('X-Content-Type-Options: nosniff');
+
 //		}else
 //		{
 //			header('Content-Type: application/json; charset=UTF-8');
