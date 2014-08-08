@@ -102,7 +102,7 @@ class TaskController extends \GO\Base\Controller\AbstractModelController{
 		if(!empty($params['remind'])) // Check for a setted reminder
 			$model->reminder= \GO\Base\Util\Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
 		else
-			$model->reminder = 0; //$model->getDefaultReminder(GO_Base_Util_Date::to_unixtime ($params['start_time']));
+			$model->reminder = 0; 
 		
 		if($model->isNew && empty($params['remind']) && !isset($params['priority'])) //This checks if it is called from the quickadd bar
 		  $model->reminder = $model->getDefaultReminder(\GO\Base\Util\Date::to_unixtime ($params['start_time']));
