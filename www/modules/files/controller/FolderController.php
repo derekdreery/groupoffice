@@ -199,10 +199,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			}else
 			{
 				
-			
-				$syncFolder = GO_Files_Model_Folder::model()->findByPk($params['sync_folder_id']);
-				if($syncFolder)
-					$syncFolder->syncFilesystem();
+				if(empty(GO::config()->files_disable_filesystem_sync)){
+					$syncFolder = GO_Files_Model_Folder::model()->findByPk($params['sync_folder_id']);
+					if($syncFolder)
+						$syncFolder->syncFilesystem();
+				}
 			}
 		}
 
@@ -662,7 +663,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$response['permission_level']=$folder->permissionLevel;//$folder->readonly ? GO_Base_Model_Acl::READ_PERMISSION : $folder->permissionLevel;
 
-		if(empty($params['skip_fs_sync']))
+		if(empty($params['skip_fs_sync']) && empty(GO::config()->files_disable_filesystem_sync))
 			$folder->checkFsSync();
 
 		//useful information for the view.
@@ -755,6 +756,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 			$store->resetResults();
 
+			$store->getColumnModel()->formatColumn('size', '"-"',array(),'size');
 			$store->getColumnModel()->formatColumn('type', '',array(),'extension');
 			$store->getColumnModel()->formatColumn('locked', '$model->isLocked()');
 			$store->getColumnModel()->formatColumn('locked_user_id', '$model->locked_user_id');

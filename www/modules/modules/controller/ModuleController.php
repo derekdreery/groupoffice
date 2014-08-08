@@ -181,25 +181,29 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		
 		GO::session()->closeWriting();
 		
+		GO::setMaxExecutionTime(120);
+		
 //		GO::$disableModelCache=true;
 		$response = array('success' => true);
 		$module = GO_Base_Model_Module::model()->findByPk($params['moduleId']);
-		
-		
-		$models = array();
-		$modMan = $module->moduleManager;
-		if ($modMan) {
-			$classes = $modMan->findClasses('model');
-			foreach ($classes as $class) {
-				if ($class->isSubclassOf('GO_Base_Model_AbstractUserDefaultModel')) {
-					$models[] = GO::getModel($class->getName());
+
+		//only do when modified
+		if($module->acl->mtime>time()-120){
+
+			$models = array();
+			$modMan = $module->moduleManager;
+			if ($modMan) {
+				$classes = $modMan->findClasses('model');
+				foreach ($classes as $class) {
+					if ($class->isSubclassOf('GO_Base_Model_AbstractUserDefaultModel')) {
+						$models[] = GO::getModel($class->getName());
+					}
 				}
 			}
+	//		GO::debug(count($users));
+
+			$module->acl->getAuthorizedUsers($module->acl_id, GO_Base_Model_Acl::READ_PERMISSION, array("GO_Modules_Controller_Module","checkDefaultModelCallback"), array($models));
 		}
-//		GO::debug(count($users));
-		
-		$module->acl->getAuthorizedUsers($module->acl_id, GO_Base_Model_Acl::READ_PERMISSION, array("GO_Modules_Controller_Module","checkDefaultModelCallback"), array($models));
-		
 		
 //		if(class_exists("GO_Professional_LicenseCheck")){
 //			$lc = new GO_Professional_LicenseCheck();

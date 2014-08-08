@@ -645,3 +645,5 @@ $l['relationDeleteRestrict']="U kunt dit %s niet verwijderen omdat het '%s' item
 $l['dependenciesCannotDelete']="Deze module kan niet verwijderd worden, omdat de volgende (geïnstalleerde) modules het nodig hebben: %s.";
 
 $l['MailboxNotFoundException'] = "De map \"%s\" kan niet worden geopend. Controller de email account instellingen.";
+
+$l['cantDeleteDefault'] = "Standaard item kan niet worden verwijderd.";

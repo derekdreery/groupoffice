@@ -347,6 +347,10 @@ $l['setCurrentTemplateAsDefaultEAccount']='Stel huidig sjabloon als standaard in
 $l['callOnSkype'] = 'Bellen met Skype';
 
 $l['userDefaultTemplate'] = 'Standaardsjabloon van gebruiker(s)';
+
 $l['exportContactsWithCompanies'] = 'Persoonlijke en bedrijfsgegevens';
 $l['exportContacts'] = 'Persoonlijke gegevens';
 $l['privateAddress'] = 'Privé adres';
+$l['exportContactsWithCompanies'] = 'Contacten met bedrijven';
+
+$l['mustBeSameAddressbook'] = 'Het bedrijf van het contact moet in hetzelfde adresboek zijn als het contact. Contact niet opgeslagen.';

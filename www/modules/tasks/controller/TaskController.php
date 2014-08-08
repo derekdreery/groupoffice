@@ -91,10 +91,12 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 			}
 		}
 		
-		if(isset($params['remind'])) // Check for a setted reminder
+		if(!empty($params['remind'])) // Check for a setted reminder
 			$model->reminder= GO_Base_Util_Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
+		else
+			$model->reminder = 0; //$model->getDefaultReminder(GO_Base_Util_Date::to_unixtime ($params['start_time']));
 		
-		if($model->isNew && !isset($params['remind']) && !isset($params['priority'])) //This checks if it is called from the quickadd bar
+		if($model->isNew && empty($params['remind']) && !isset($params['priority'])) //This checks if it is called from the quickadd bar
 		  $model->reminder = $model->getDefaultReminder(GO_Base_Util_Date::to_unixtime ($params['start_time']));
 	  
 		return parent::beforeSubmit($response, $model, $params);

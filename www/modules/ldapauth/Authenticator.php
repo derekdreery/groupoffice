@@ -51,6 +51,18 @@ class GO_Ldapauth_Authenticator {
 
 		return self::$_mapping;
 	}
+	
+	
+	public function getUserSearchQuery($username='*'){
+		$mapping = $this->getMapping();
+		
+		if (!empty(GO::config()->ldap_search_template))
+			$query = str_replace('{username}', $username, GO::config()->ldap_search_template);
+		else
+			$query = $mapping['username'] . '=' . $username;
+		
+		return $query;
+	}
 
 	public function authenticate($username, $password) {
 
@@ -75,6 +87,7 @@ class GO_Ldapauth_Authenticator {
 		GO::debug("LDAPAUTH: LDAP authentication SUCCESS for " . $username);
 
 		$oldIgnoreAcl = GO::setIgnoreAclPermissions(true);
+
 
 		if(!empty(GO::config()->ldap_create_mailbox_domains)){
 

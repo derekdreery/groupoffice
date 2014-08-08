@@ -666,6 +666,7 @@ $l['hu'] = 'Hungarian';
 $l['pt'] = 'Portugal';
 $l['sv'] = 'Svenska';
 $l['th'] = 'Thailand';
+$l['pt_BR']='Português - Brasil';
 
 $l['removeDuplicatesAreYouSure']='Are you sure you want to remove duplicates?';
 
@@ -689,3 +690,5 @@ $l['pspell_lang']='en';
 $l['dependenciesCannotDelete']="You cannot delete the current module, because the following (installed) modules depend on it: %s.";
 
 $l['MailboxNotFoundException'] = "Cannot open the folder \"%s\". Please check your email account settings.";
+
+$l['cantDeleteDefault'] = "Can't delete the default item.";

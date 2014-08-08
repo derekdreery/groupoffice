@@ -771,6 +771,17 @@ GO.calendar.MainPanel = function(config){
 					scope: this
 				},
 				{
+					text: GO.calendar.lang['fiveDays'],
+					handler: function () {
+						var urlParams = {
+							calendars: Ext.encode(this.calendars),
+							date: +this.datePicker.getValue()/1000
+						};
+						window.open(GO.url('calendar/report/workweek',urlParams));
+					},
+					scope: this
+				},
+				{
 					text: GO.lang['strWeek'],
 					handler: function () {
 						var urlParams = {
