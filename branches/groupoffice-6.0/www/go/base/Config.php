@@ -1211,13 +1211,6 @@ class Config {
 
 	/**
 	 * Allow creation of tickets without the need of specify an email-address
-	 * 
-	 * @var boolean 
-	 */
-	public $tickets_no_email_required = false;
-
-	/**
-	 * Allow creation of tickets without the need of specify an email-address
 	 *
 	 * @var boolean
 	 */
