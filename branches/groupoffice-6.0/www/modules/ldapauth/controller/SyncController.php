@@ -18,8 +18,9 @@ class SyncController extends \GO\Base\Controller\AbstractController{
 		$la = new \GO\Ldapauth\Authenticator();
 		
 		$ldapConn = \GO\Base\Ldap\Connection::getDefault();
-		
-		$result = $ldapConn->search(\GO\Ldapauth\LdapauthModule::getPeopleDn($params['uid']), 'uid='.$params['uid']);
+
+		$result = $ldapConn->search(\GO\Ldapauth\LdapauthModule::getPeopleDn($params['uid']), $la->getUserSearchQuery($params['uid']));
+
 		$record = $result->fetch();
 		$attr = $record->getAttributes();
 		
@@ -45,9 +46,9 @@ class SyncController extends \GO\Base\Controller\AbstractController{
 		
 		$la = new \GO\Ldapauth\Authenticator();
 	
-		$ldapConn = \GO\Base\Ldap\Connection::getDefault();
-		
-		$result = $ldapConn->search(\GO\Ldapauth\LdapauthModule::getPeopleDn(), 'uid=*');
+		$ldapConn = \GO\Base\Ldap\Connection::getDefault();		
+
+		$result = $ldapConn->search(\GO\Ldapauth\LdapauthModule::getPeopleDn(), $la->getUserSearchQuery());
 		
 		//keep an array of users that exist in ldap. This array will be used later for deletes.
 		//admin user is not in ldap but should not be removed.

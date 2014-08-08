@@ -342,6 +342,13 @@ class Config {
 	 */
 	public $tcpdf_font = "freesans";
 
+	/**
+	 * Disable filesystem syncing from the web interface
+	 *
+	 * @var boolean
+	 */
+	public $files_disable_filesystem_sync=false;
+
 //	/**
 //	 * Grant read permissions for these modules to new self-registered users.
 //	 * Module names are separated by a comma.
@@ -968,7 +975,7 @@ class Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '6.0.10';
+	var $version = '6.0.11';
 
 
 	/**
@@ -978,7 +985,8 @@ class Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20140806';
+	var $mtime = '20140808';
+
 
 	#group configuration
 	/**
@@ -1203,10 +1211,25 @@ class Config {
 
 	/**
 	 * Allow creation of tickets without the need of specify an email-address
+	 * 
+	 * @var boolean 
+	 */
+	public $tickets_no_email_required = false;
+
+	/**
+	 * Allow creation of tickets without the need of specify an email-address
 	 *
 	 * @var boolean
 	 */
 	public $tickets_no_email_required = false;
+
+	/**
+	 * Enable encoding of the special characters in the phone number of the callto links
+	 * Defaults to false.
+	 *
+	 * @var boolean
+	 */
+	public $encode_callto_link = false;
 
 	/**
 	 * Constructor. Initialises all public variables.
@@ -1365,12 +1388,14 @@ class Config {
 		$user_id = \GO::user() ? \GO::user()->id : 0;
 
 		$path = $this->orig_tmpdir;
+
 		if(PHP_SAPI=='cli'){
 			$path .= 'cli/';
 		}
 		$path .= $user_id;
 
 		$folder = new Fs\Folder($path);
+
 		if($autoCreate)
 			$folder->create(0777);
 
@@ -1389,6 +1414,7 @@ class Config {
 		}
 
 		$folder = new Fs\Folder($this->cachefolder);
+
 		if($autoCreate)
 			$folder->create(0777);
 		return $folder;

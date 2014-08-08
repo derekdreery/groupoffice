@@ -62,7 +62,14 @@ function test_system(){
 	global $product_name;
 	
 	$tests=array();
-
+	
+	
+	$test['name']='Expose PHP';
+	$test['pass']=!ini_is_enabled('expose_php');
+	$test['feedback']='Warning. You should set expose php to off to prevent version information to be public';
+	$test['fatal']=false;
+	$tests[]=$test;
+	
 	
 	$test['name']='PHP version';
 	$test['pass']=function_exists('version_compare') && version_compare( phpversion(), "5.3", ">=");

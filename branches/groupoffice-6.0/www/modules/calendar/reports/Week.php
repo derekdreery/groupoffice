@@ -30,6 +30,8 @@ class Week extends Calendar {
 	 */
 	public $day;
 	
+	protected $dayCount = 7; //the amount of days to render in week view
+	
 	public function Header() {
 		//A4 = 21 x 29.7
 		$this->setXY(12,12);
@@ -44,7 +46,7 @@ class Week extends Calendar {
 		
 		$this->setX(12);
 		$this->SetFont(null, 'B', $this->fSizeLarge);
-		$end = $this->day+6*24*3600;
+		$end = $this->day+($this->dayCount-1)*24*3600;
 		$this->Cell(100, 12, date('d. ',$end).$this->months_long[date('n',$end)].date(' Y',$end), 0, 1);
 		
 		$this->drawCalendar($this->day, 110, 12);
@@ -77,7 +79,7 @@ class Week extends Calendar {
 		$this->AddPage();
 		$this->SetFont(null,'',$this->fSizeSmall);
 		
-		for($w=0;$w<7;$w++) {
+		for($w=0;$w<$this->dayCount;$w++) {
 			$this->calculateOverlap($w);
 		}
 		
@@ -89,12 +91,12 @@ class Week extends Calendar {
 
 		$left = $this->timeCol; // width of cell with time
 		$width = $this->getPageWidth()-(2*$this->leftMargin)-$this->timeCol;
-		$width = $width/7;
+		$width = $width/$this->dayCount;
 		$minus = 2;
 		
 		//Render top items
 		$this->Cell($left, ($this->rowHeight*3)-$minus, '', 1, 0, '', true);
-		for($w=0;$w<7;$w++) {
+		for($w=0;$w<$this->dayCount;$w++) {
 			$x=$this->GetX();
 			$this->SetFont(null, 'B');
 			$this->Cell($width, $this->rowHeight-$minus, date('d',$this->day+3600*24*$w), 1, 0);
@@ -115,7 +117,7 @@ class Week extends Calendar {
 			} else
 				$this->SetX($this->leftMargin+$this->timeCol);
 			
-			for($w=0;$w<7;$w++) {
+			for($w=0;$w<$this->dayCount;$w++) {
 				$this->Cell($width, $this->rowHeight, '', 1, 0);
 			}
 			
@@ -125,7 +127,7 @@ class Week extends Calendar {
 		//Render bottom 3 rows
 		for($i=0;$i<3;$i++) {
 			$this->Cell($left, $this->rowHeight, '', 1, 0, '', true);
-			for($w=0;$w<7;$w++)
+			for($w=0;$w<$this->dayCount;$w++)
 				$this->Cell($width, $this->rowHeight, '', 1, 0);
 			$this->Ln();
 		}
@@ -136,9 +138,9 @@ class Week extends Calendar {
 
 		$offsetLeft = $this->leftMargin+$this->timeCol;
 		$width = $this->getPageWidth()-(2*$this->leftMargin)-$this->timeCol;
-		$width = $width/7;
+		$width = $width/$this->dayCount;
 		$colWidth = $width;
-		for($w=0;$w<7;$w++) {
+		for($w=0;$w<$this->dayCount;$w++) {
 			
 			$this->SetDrawColorArray($this->eventLineColor);
 			if(isset($this->events[$this->day]['fd'])) {

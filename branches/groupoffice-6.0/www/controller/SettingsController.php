@@ -14,7 +14,8 @@ class SettingsController extends \GO\Base\Controller\AbstractController {
 			$params['date_format'] = $dateparts[1];
 		}
 		
-		$user = \GO\Base\Model\User::model()->findByPk($params['id']);
+//		$user = \GO\Base\Model\User::model()->findByPk($params['id']);
+		$user = GO::user();
 		
 					
 		if (!empty($params["password"]) || !empty($params["passwordConfirm"])) {

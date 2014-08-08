@@ -255,7 +255,6 @@ abstract class AbstractController extends Observable {
 		return $this->_action;
 	}
 	
-	
 	/**
 	 * Includes the file from the views folder
 	 * 

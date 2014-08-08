@@ -217,10 +217,35 @@ class ModuleController extends AbstractJsonController{
 		
 		GO::session()->closeWriting();
 		
-		$response = new JsonResponse(array('success' => true));
-		$module = Module::model()->findByPk($params['moduleId']);
-		$module->checkDefaultModels();
 
+		GO::setMaxExecutionTime(120);
+		
+//		GO::$disableModelCache=true;
+		$response = array('success' => true);
+		$module = Module::model()->findByPk($params['moduleId']);
+
+		//only do when modified
+		if($module->acl->mtime>time()-120){
+
+			$models = array();
+			$modMan = $module->moduleManager;
+			if ($modMan) {
+				$classes = $modMan->findClasses('model');
+				foreach ($classes as $class) {
+					if ($class->isSubclassOf('GO_Base_Model_AbstractUserDefaultModel')) {
+						$models[] = GO::getModel($class->getName());
+					}
+				}
+			}
+	//		GO::debug(count($users));
+
+			$module->acl->getAuthorizedUsers($module->acl_id, GO_Base_Model_Acl::READ_PERMISSION, array("GO_Modules_Controller_Module","checkDefaultModelCallback"), array($models));
+		}
+		
+//		if(class_exists("GO_Professional_LicenseCheck")){
+//			$lc = new GO_Professional_LicenseCheck();
+//			$lc->checkProModules(true);
+//		}
 		echo $response;
 	}
 	

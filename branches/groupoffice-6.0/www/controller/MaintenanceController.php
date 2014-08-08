@@ -154,9 +154,9 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 		
 	}
 	
-	protected function ignoreAclPermissions() {
-		return array('*');
-	}
+//	protected function ignoreAclPermissions() {
+//		return array('*');
+//	}
 	
 	protected function actionGetNewAcl($params){
 		$acl = new \GO\Base\Model\Acl();
@@ -173,6 +173,7 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 			throw new \GO\Base\Exception\AccessDenied();
 		
 		\GO::session()->runAsRoot();
+
 		
 		\GO\Base\Fs\File::setAllowDeletes(false);
 		//VERY IMPORTANT:
@@ -296,6 +297,8 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 		if(!$this->isCli() && !\GO::modules()->tools && \GO::router()->getControllerAction()!='upgrade')
 			throw new \GO\Base\Exception\AccessDenied();
 		
+		GO::setIgnoreAclPermissions(true);
+		
 		$this->lockAction();
 		
 		if(!$this->isCli()){
@@ -347,6 +350,8 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 
 		if(!$this->isCli() && !\GO::modules()->tools)
 			throw new \GO\Base\Exception\AccessDenied();
+		
+		GO::setIgnoreAclPermissions(true);
 		
 		$this->run("upgrade",$params);		
 		
@@ -891,6 +896,9 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 	
 	protected function actionRemoveOldLangKeys($params){
 		
+		if(!$this->isCli() && !GO::modules()->tools)
+			throw new \GO\Base\Exception\AccessDenied();
+		
 		$files = $this->_getAllLanguageFiles();
 		
 		foreach($files as $file){
@@ -998,7 +1006,12 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 	
 	protected function actionCheckDefaultModels(){
 		
-		\GO::session()->closeWriting();
+		if(!$this->isCli() && !GO::modules()->tools)
+			throw new \GO\Base\Exception\AccessDenied();
+		
+		GO::session()->closeWriting();
+		
+		GO::setIgnoreAclPermissions(true);
 		
 		if(!$this->isCli())			
 			echo '<pre>';
@@ -1023,7 +1036,12 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 	
 	protected function actionRemoveEmptyStuff($params){
 		
-		\GO::session()->closeWriting();
+		if(!$this->isCli() && !GO::modules()->tools)
+			throw new \GO\Base\Exception\AccessDenied();
+		
+		GO::session()->closeWriting();
+
+		GO::setIgnoreAclPermissions(true);
 		
 		if(!$this->isCli())			
 			echo '<pre>';

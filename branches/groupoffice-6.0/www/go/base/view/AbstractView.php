@@ -22,7 +22,11 @@ abstract class AbstractView{
 		}else
 		{
 			header('Content-Type: application/json; charset=UTF-8');
-		}
+		}		
+
+		header('Content-Type: text/html; charset=UTF-8');
+		header('X-XSS-Protection: 1; mode=block');
+		header('X-Content-Type-Options: nosniff');
 
 		foreach(GO::config()->extra_headers as $header){
 			header($header);

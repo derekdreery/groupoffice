@@ -225,7 +225,7 @@ $l['useAccount']='Account gebruiken';
 $l['mailbox']='Mailbox';
 $l['checkUnseen']='Controleer deze map automatisch op nieuwe berichten';
 
-$l['sieveNote']='Niet alle functies worden ondersteund. Raadpleeg de handleiding.';
+$l['sieveNote']='Niet alle functies worden ondersteund. Sieve niet in gebruik. Raadpleeg de handleiding.';
 
 $l["forwardTo"]='Mail doorsturen aan';
 $l["markFolderReadConfirm"]='Weet u zeker dat u alle berichten in map \'{name}\' als gelezen wilt markeren?';

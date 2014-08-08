@@ -398,6 +398,7 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 			$node = array(
 					'text' => $text,
 					'mailbox' => $mailbox->name,
+					'name' => $mailbox->getDisplayName(), // default value when renaming folder
 					'account_id' => $mailbox->getAccount()->id,
 					'iconCls' => 'folder-default',
 					'id' => $nodeId,
@@ -586,8 +587,13 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 			  throw new \GO\Base\Exception\AccessDenied();
 
 			$targetImapConnection = $targetAccountModel->openImapConnection($params["targetMailboxPath"]);
+			
+			$flags = '';
+			
+			if($srcMessageInfo->seen)
+				$flags = '\SEEN';
 
-			$targetImapConnection->append_message($params['targetMailboxPath'], $srcImapMessage->getSource());
+			$targetImapConnection->append_message($params['targetMailboxPath'], $srcImapMessage->getSource(), $flags);
 		}
 
 		return array('success'=>true);

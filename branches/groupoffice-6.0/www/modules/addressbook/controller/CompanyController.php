@@ -423,7 +423,7 @@ class CompanyController extends \GO\Base\Controller\AbstractModelController {
 				'type'=>'INNER' //defaults to INNER,
 
 			))			
-			->limit(10);
+			->limit(10)->order('t.name');
 
 //		}
 

@@ -130,11 +130,13 @@ class Task extends \GO\Base\Db\ActiveRecord {
 	
 	public function afterSave($wasNew) {
 		
-		if($this->reminder>0){
+		if($this->isModified('reminder')) {
 			$this->deleteReminders();
-			if($this->reminder>time() && $this->status!='COMPLETED')
-				$this->addReminder($this->name, $this->reminder, $this->tasklist->user_id);
-		}	
+			if($this->reminder>0) {
+				if($this->reminder>time() && $this->status!='COMPLETED')
+					$this->addReminder($this->name, $this->reminder, $this->tasklist->user_id);
+			}	
+		}
 		
 		if($this->isModified('project_id') && $this->project)
 			$this->link($this->project);

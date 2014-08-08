@@ -83,7 +83,9 @@ class CertificateController extends \GO\Base\Controller\AbstractController {
 					$certData = $pubCertFile->getContents();
 
 					$arr = openssl_x509_parse($certData);
-					$email = \GO\Base\Util\String::get_email_from_string($arr['extensions']['subjectAltName']);
+
+					$senderEmail = !empty($arr['extensions']['subjectAltName']) ? $arr['extensions']['subjectAltName'] : $arr['subject']['emailAddress'];
+					$email = \GO\Base\Util\String::get_email_from_string($senderEmail);
 
 					$pubCertFile->delete();
 
@@ -100,7 +102,9 @@ class CertificateController extends \GO\Base\Controller\AbstractController {
 		
 		if(!isset($arr) && isset($certData)){
 			$arr = openssl_x509_parse($certData);
-			$email = \GO\Base\Util\String::get_email_from_string($arr['extensions']['subjectAltName']);
+
+			$senderEmail = !empty($arr['extensions']['subjectAltName']) ? $arr['extensions']['subjectAltName'] : $arr['subject']['emailAddress'];
+			$email = \GO\Base\Util\String::get_email_from_string($senderEmail);
 		}else if(empty($email)){
 			$email = 'unknown';
 		}
