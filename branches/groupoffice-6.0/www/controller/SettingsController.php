@@ -3,6 +3,8 @@
 
 namespace GO\Core\Controller;
 
+use GO;
+
 
 class SettingsController extends \GO\Base\Controller\AbstractController {
 	
