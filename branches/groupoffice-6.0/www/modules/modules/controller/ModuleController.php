@@ -221,7 +221,6 @@ class ModuleController extends AbstractJsonController{
 		GO::setMaxExecutionTime(120);
 		
 //		GO::$disableModelCache=true;
-		$response = array('success' => true);
 		$module = Module::model()->findByPk($params['moduleId']);
 
 		//only do when modified
@@ -239,14 +238,14 @@ class ModuleController extends AbstractJsonController{
 			}
 	//		GO::debug(count($users));
 
-			$module->acl->getAuthorizedUsers($module->acl_id, GO_Base_Model_Acl::READ_PERMISSION, array("GO_Modules_Controller_Module","checkDefaultModelCallback"), array($models));
+			$module->acl->getAuthorizedUsers($module->acl_id, Acl::READ_PERMISSION, array("\\GO\\Modules\\Controller\\Module","checkDefaultModelCallback"), array($models));
 		}
 		
 //		if(class_exists("GO_Professional_LicenseCheck")){
 //			$lc = new GO_Professional_LicenseCheck();
 //			$lc->checkProModules(true);
 //		}
-		echo $response;
+		echo new JsonResponse(array('success'=>true));
 	}
 	
 	public function actionSaveSortOrder($params){
