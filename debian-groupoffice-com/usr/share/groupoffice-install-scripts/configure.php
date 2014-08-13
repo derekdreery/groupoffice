@@ -111,8 +111,8 @@ if(file_exists($config['file_storage_path'].'key.txt'))
 
 system('chown www-data /etc/groupoffice/config.php');
 
-system('su www-data -c "/usr/bin/php '.$config['root_path'].'install/autoinstall.php -c=/etc/groupoffice/config.php --adminpassword=admin --adminusername=admin --adminemail=admin@example.com"');
-system('su www-data -c "/usr/bin/php '.$config['root_path'].'groupofficecli.php -r=maintenance/upgrade -c=/etc/groupoffice/config.php"');
+system('sudo -u www-data /usr/bin/php '.$config['root_path'].'install/autoinstall.php -c=/etc/groupoffice/config.php --adminpassword=admin --adminusername=admin --adminemail=admin@example.com');
+system('sudo -u www-data  /usr/bin/php '.$config['root_path'].'groupofficecli.php -r=maintenance/upgrade -c=/etc/groupoffice/config.php');
 
 system('chown root /etc/groupoffice/config.php');
 
