@@ -26,7 +26,7 @@ fi
 
 if [ ! -e /usr/share/groupoffice/groupoffice-license.txt ]; then
 	touch /usr/share/groupoffice/groupoffice-license.txt
-	chmod www-data:www-data /usr/share/groupoffice/groupoffice-license.txt
+	chown www-data:www-data /usr/share/groupoffice/groupoffice-license.txt
 fi
 
 php /usr/share/groupoffice-install-scripts/configure.php
