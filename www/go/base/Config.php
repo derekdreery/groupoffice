@@ -964,7 +964,6 @@ class GO_Base_Config {
 	 */
 	var $version = '5.1.8';
 
-
 	/**
 	 * Modification date
 	 *
@@ -972,7 +971,7 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20140808';
+	var $mtime = '20140813';
 
 	#group configuration
 	/**
@@ -1209,6 +1208,23 @@ class GO_Base_Config {
 	 * @var boolean
 	 */
 	public $encode_callto_link = false;
+	
+	/**
+	 * Show the addressbook property in the files tree
+	 * Defaults to true
+	 * 
+	 * @var boolean 
+	 */
+	public $files_show_addressbooks = true;
+	
+	/**
+	 * Show the projects property in the files tree
+	 * Defaults to true
+	 * 
+	 * @var boolean 
+	 */
+	public $files_show_projects = true;
+	
 
 	/**
 	 * Constructor. Initialises all public variables.

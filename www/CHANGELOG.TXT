@@ -1,4 +1,3 @@
-
 17-06-2014 5.1.8
 - ActivityLog to file function
 - 5.0 fixes
@@ -28,6 +27,11 @@
 - Custom IMAP flag support (Message labels)
 
 
+13-08-2014 5.0.77
+- Addressbook/Email templates: Fixed problem with template parsing and offset for "IF" statements.
+- Added config 2 options for the files module to remove the addressbooks/projects folders from the files tree:
+	$config['files_show_addressbooks'] = true;
+	$config['files_show_projects'] = true;
 
 08-08-2014 5.0.76
 - Add xss prevention headers
