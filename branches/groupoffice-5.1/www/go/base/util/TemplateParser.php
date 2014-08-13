@@ -201,44 +201,48 @@ class GO_Base_Util_TemplateParser
 										}, $content);
 	}
 
-	private function _parseTags($content)
-	{
-			
-		$offset=0;
-		
-		foreach($this->_tags as $tagname)
-		{
-			while ($tagProps = $this->_getTag($tagname, $content, $offset)) {
+	private function _parseTags($content) {
+
 	
-				
+		$replacements = array();
+
+		foreach ($this->_tags as $tagname) {
+			
+			$offset = 0;
+			
+			while ($tagProps = $this->_getTag($tagname, $content, $offset)) {
+
+
 				$offset = $tagProps['offset'];
-				
+
 				$attributes = $this->_getAttributes($tagProps['tag']);
-						
+
 				$print = !empty($this->_attributes[$attributes['if']]);
 
-				if($print)
-				{
-					$start_pos = strpos($tagProps['tag'], $this->closeTagSymbol);					
-					$tagcontent = substr($tagProps['tag'], $start_pos+strlen($this->closeTagSymbol));					
-					$tagcontent = substr($tagcontent,0, strlen($tagcontent)-strlen($this->openTagSymbol.'/'.$tagname.$this->closeTagSymbol));	
-					$this->_parseTags($tagcontent);					
-				}else
-				{
+				if ($print) {
+					$start_pos = strpos($tagProps['tag'], $this->closeTagSymbol);
+					$tagcontent = substr($tagProps['tag'], $start_pos + strlen($this->closeTagSymbol));
+					$tagcontent = substr($tagcontent, 0, strlen($tagcontent) - strlen($this->openTagSymbol . '/' . $tagname . $this->closeTagSymbol));
+					$this->_parseTags($tagcontent);
+				} else {
 					$tagcontent = '';
 				}
-				
-				if($print || !$this->_leaveEmptyTags){
-					$content = str_replace('<br>'.$tagProps['tag'], $tagcontent, $content);
-					$content = str_replace('<br/>'.$tagProps['tag'], $tagcontent, $content);
-					$content = str_replace('<br />'.$tagProps['tag'], $tagcontent, $content);
-					$content = str_replace($tagProps['tag'], $tagcontent, $content);
+
+				if ($print || !$this->_leaveEmptyTags) {
+
+					$replacements[] = array($tagProps['tag'], $tagcontent);
 				}
 			}
 		}
 		
+		foreach ($replacements as $replacement) {
+			$content = str_replace('<br>' . $replacement[0], $replacement[1], $content);
+			$content = str_replace('<br/>' . $replacement[0], $replacement[1], $content);
+			$content = str_replace('<br />' . $replacement[0], $replacement[1], $content);
+			$content = str_replace($replacement[0], $replacement[1], $content);
+		}
+
 		return $content;
-		
 	}
-	
+
 }
