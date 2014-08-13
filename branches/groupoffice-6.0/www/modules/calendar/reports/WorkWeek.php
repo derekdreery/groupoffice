@@ -1,4 +1,5 @@
 <?php
+namespace \GO\Calendar\Reports;
 /**
  * Copyright Intermesh
  *
@@ -11,7 +12,7 @@
  * @version $Id$
  * @author Michael de Hart <mdhart@intermesh.nl>
  */
-class GO_Calendar_Reports_WorkWeek extends GO_Calendar_Reports_Week {
+class WorkWeek extends \GO\Calendar\Reports\Week {
 	
 	protected $dayCount = 5;
 
