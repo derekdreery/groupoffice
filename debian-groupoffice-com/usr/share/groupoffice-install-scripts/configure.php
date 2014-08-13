@@ -119,8 +119,12 @@ system('chown root /etc/groupoffice/config.php');
 system('chown www-data /usr/share/groupoffice/groupoffice-license.txt');
 
 //create symlink for site module public files
-if(!file_exists('/var/www/public'))
-	system('ln -s '.$config['file_storage_path'].'public /var/www/public');
+
+$publicLink = is_dir('/var/www/html') ? "/var/www/html/public" : "/var/www/public";
+
+if(!file_exists($publicLink)){
+	system('ln -s '.$config['file_storage_path'].'public '.$publicLink);
+}
 
 
 if(is_dir('/etc/apache2/conf-enabled') && file_exists('/etc/apache2/conf.d/groupoffice.conf')){
@@ -129,4 +133,3 @@ if(is_dir('/etc/apache2/conf-enabled') && file_exists('/etc/apache2/conf.d/group
 }
 
 echo "Done!\n\n";
-?>
