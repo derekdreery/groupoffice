@@ -1,3 +1,4 @@
+- Addressbook/Email templates: Fixed problem with template parsing and offset for "IF" statements.
 - Added config 2 options for the files module to remove the addressbooks/projects folders from the files tree:
 	$config['files_show_addressbooks'] = true;
 	$config['files_show_projects'] = true;
