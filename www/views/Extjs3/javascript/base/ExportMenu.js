@@ -11,6 +11,7 @@ GO.base.ExportMenu = Ext.extend(Ext.Button,{
 //			height: 1,
 //			items: [
 				this.hiddenExportForm = new Ext.FormPanel({
+					hidden: true,
 					url:GO.url("core/export/export"),
 					standardSubmit: true,
 					baseParams: {},
