@@ -259,7 +259,7 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 					
 					$response[] = $node;
 
-					if (\GO::modules()->addressbook) {
+					if (GO::config()->files_show_addressbooks && GO::modules()->addressbook) {
 						$contactsFolder = \GO\Files\Model\Folder::model()->findByPath('addressbook');
 
 						if ($contactsFolder) {
@@ -269,8 +269,9 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 						}
 					}
 
-					if (\GO::modules()->projects) {
-						$projectsFolder = \GO\Files\Model\Folder::model()->findByPath('projects');
+
+					if (GO::config()->files_show_projects && GO::modules()->projects) {
+						$projectsFolder =  \GO\Files\Model\Folder::model()->findByPath('projects');
 
 						if ($projectsFolder) {
 							$node = $this->_folderToNode($projectsFolder, $expandFolderIds, false, $showFiles);
@@ -279,7 +280,8 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 						}
 					}
 					
-					if (\GO::modules()->projects2) {
+
+					if (GO::config()->files_show_projects && GO::modules()->projects2) {
 						$projectsFolder = \GO\Files\Model\Folder::model()->findByPath('projects2');
 
 						if ($projectsFolder) {
