@@ -231,7 +231,7 @@ class ModuleController extends AbstractJsonController{
 			if ($modMan) {
 				$classes = $modMan->findClasses('model');
 				foreach ($classes as $class) {
-					if ($class->isSubclassOf('GO_Base_Model_AbstractUserDefaultModel')) {
+					if ($class->isSubclassOf('\GO\Base\Model\AbstractUserDefaultModel')) {
 						$models[] = GO::getModel($class->getName());
 					}
 				}
