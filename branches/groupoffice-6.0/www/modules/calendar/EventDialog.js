@@ -279,6 +279,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				success : function(form, action) {
 					//this.win.show();
 					
+					this.setData(action);
+					
 					// If this is a recurrence and the following is true (action.result.data.exception_for_event_id and action.result.data.exception_date are set and not empty)
 					if(action.result.data.exception_date){
 						this.setEventId(0);
@@ -342,6 +344,18 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		this.fireEvent('show', this);
 	},
+	
+	
+	/**
+	 * Dummy funtion that is used to create a sequence in other modules.
+	 * 
+	 * @param array data
+	 * @returns {undefined}
+	 */
+	setData : function(data){
+		
+	},
+	
 	setPermissionLevel : function(permissionLevel){
 		// Disable the eventStatus select box and set it to the default "NEEDS-ACTION" value
 		if(this.event_id == 0 && permissionLevel == GO.permissionLevels.create){
