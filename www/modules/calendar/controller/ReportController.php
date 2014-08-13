@@ -45,7 +45,7 @@ class ReportController extends \GO\Base\Controller\AbstractJsonController {
 	}
 	
 	public function actionWorkWeek($date, $calendars) {
-		$date = GO_Base_Util_Date::clear_time($date);
+		$date = \GO\Base\Util\Date::clear_time($date);
 		$calendarIds = json_decode($calendars);
 		
 		$weekday =date('w',$date);
@@ -56,10 +56,10 @@ class ReportController extends \GO\Base\Controller\AbstractJsonController {
 		$start = $date-3600*24*($weekday);
 		$end = $date+3600*24*(5-$weekday);
 		
-		$report = new GO_Calendar_Reports_WorkWeek();
+		$report = new \GO\Calendar\Reports_WorkWeek();
 		foreach($calendarIds as $id) {
 			
-			$calendar = GO_Calendar_Model_Calendar::model()->findByPk($id);
+			$calendar = \GO\Calendar\Model\Calendar::model()->findByPk($id);
 			$events = $calendar->getEventsForPeriod($start, $end);
 
 			$report->day = $start;
