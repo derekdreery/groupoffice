@@ -1,5 +1,10 @@
+12-08-2014 6.0.15
+- Fixed public symlink
+- Fixed dovecot auth for postfix
+
 12-08-2014 6.0.14
 - Fixed install bug
+- Removed spamassassin, amavis and clamav integration. Manual installation works better.
 
 12-08-2014 6.0.13
 - Namespace bugs
