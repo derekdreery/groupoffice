@@ -36,7 +36,7 @@ class UserController extends \GO\Base\Controller\AbstractModelController {
 	}
 
 	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
-		$columnModel->formatColumn('name', '$model->getName()', array(), GO::user()->sort_name);
+		$columnModel->formatColumn('name', '$model->getName()', array(), \GO::user()->sort_name);
 		$columnModel->formatColumn('enabled', "!empty(\$model->enabled) ? \GO::t('yes') : \GO::t('no')");
 		return parent::formatColumns($columnModel);
 	}
