@@ -1,3 +1,7 @@
+12-08-2014 6.0.13
+- Namespace bugs
+- Fixes of 5.0.77
+
 12-08-2014 6.0.12
 - Lists: Increased timeout for importing lists so the javascript doesn't throw an error after 30 seconds.
 - Lists: Make deleting of records more efficient by setting cascade on the database table.
@@ -9,6 +13,7 @@
 - Lists: Added dutch translation
 - Lists: Fixed bug with the browse button and namespaces
 - Summary: Automatically open the Summary module if the logged in user has an unread announcement.
+
 
 06-08-2014 6.0.10
 - Projects2: Tags like {project:name} and {project:path} now available for the Name field of Project Template Jobs.
@@ -65,6 +70,11 @@
 - Custom IMAP flag support (Message labels)
 
 
+13-08-2014 5.0.77
+- Addressbook/Email templates: Fixed problem with template parsing and offset for "IF" statements.
+- Added config 2 options for the files module to remove the addressbooks/projects folders from the files tree:
+	$config['files_show_addressbooks'] = true;
+	$config['files_show_projects'] = true;
 
 08-08-2014 5.0.76
 - Add xss prevention headers

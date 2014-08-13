@@ -975,8 +975,7 @@ class Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '6.0.12';
-
+	var $version = '6.0.13';
 
 	/**
 	 * Modification date
@@ -985,7 +984,7 @@ class Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20140812';
+	var $mtime = '20140813';
 
 
 	#group configuration
@@ -1223,6 +1222,23 @@ class Config {
 	 * @var boolean
 	 */
 	public $encode_callto_link = false;
+	
+	/**
+	 * Show the addressbook property in the files tree
+	 * Defaults to true
+	 * 
+	 * @var boolean 
+	 */
+	public $files_show_addressbooks = true;
+	
+	/**
+	 * Show the projects property in the files tree
+	 * Defaults to true
+	 * 
+	 * @var boolean 
+	 */
+	public $files_show_projects = true;
+	
 
 	/**
 	 * Constructor. Initialises all public variables.
