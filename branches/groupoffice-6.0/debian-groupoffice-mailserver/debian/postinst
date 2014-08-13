@@ -68,7 +68,7 @@ else
 
 	# dovecot handles delivery
 	postconf -e virtual_transport=dovecot
-	postconf -e dovecot_destination_recipient_limit=1
+	#postconf -e dovecot_destination_recipient_limit=1
 
 	postconf -e 'message_size_limit = 20480000'
 
@@ -134,15 +134,15 @@ chown vmail:mail /var/lib/dovecot/shared-mailboxes.db
 #cp /usr/share/groupoffice-mailserver/tpl/etc/spamassassin/local.cf $FILE
 
 
-#FILE=/etc/postfix/master.cf
-#if (  grep -q 'Group-Office' $FILE ); then
-#	echo Postfix master.cf was already configured
-#	FILE=$FILE.$2
-#else
-#	echo Postfix master.cf configured by Group-Office
-#	cp /etc/postfix/master.cf /etc/postfix/master.cf.beforegroupoffice.$2
-#fi
-#cp /usr/share/groupoffice-mailserver/tpl/etc/postfix/master.cf $FILE
+FILE=/etc/postfix/master.cf
+if (  grep -q 'Group-Office' $FILE ); then
+	echo Postfix master.cf was already configured
+	FILE=$FILE.$2
+else
+	echo Postfix master.cf configured by Group-Office
+	cp /etc/postfix/master.cf /etc/postfix/master.cf.beforegroupoffice.$2
+fi
+cp /usr/share/groupoffice-mailserver/tpl/etc/postfix/master.cf $FILE
 
 
 php /usr/share/groupoffice-mailserver/configure.php
