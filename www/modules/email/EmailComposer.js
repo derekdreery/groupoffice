@@ -1046,7 +1046,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		
 		this.fireEvent('afterShowAndLoad',this);
 		
-		this.replaceTemplateLinkTag();
+		if(this.selectLinkField){
+			this.replaceTemplateLinkTag();
+		}
 	},
 	
 
