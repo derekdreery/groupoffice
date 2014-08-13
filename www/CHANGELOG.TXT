@@ -1,3 +1,6 @@
+12-08-2014 6.0.14
+- Fixed install bug
+
 12-08-2014 6.0.13
 - Namespace bugs
 - Fixes of 5.0.77
