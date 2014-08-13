@@ -17,10 +17,10 @@ $input_holidays['var']['39'] = 'Hemelvaartsdag';
 $input_holidays['var']['49'] = '1e pinksterdag';
 $input_holidays['var']['50'] = '2e pinksterdag';
 
-$input_holidays['fn'][3] = array('Koningsdag',array('GO_Holidays_Nl', 'koningsdag'));
+$input_holidays['fn'][3] = array('Koningsdag',array('GOHolidaysNl', 'koningsdag'));
 
-if (!class_exists('GO_Holidays_Nl')) {
-	class GO_Holidays_Nl {
+if (!class_exists('GOHolidaysNl')) {
+	class GOHolidaysNl {
 		public static function koningsdag($year) {
 			$defaultDay = '27';
 			$defaultMonth = '4';
