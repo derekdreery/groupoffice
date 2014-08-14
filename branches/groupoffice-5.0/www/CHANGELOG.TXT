@@ -1,3 +1,5 @@
+- Billing: Fixed problem with linking orders that don't have a status yet.
+
 13-08-2014 5.0.77
 - Addressbook/Email templates: Fixed problem with template parsing and offset for "IF" statements.
 - Added config 2 options for the files module to remove the addressbooks/projects folders from the files tree:
