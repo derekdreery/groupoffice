@@ -594,7 +594,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				if(!GO.util.empty(action.result.is_organizer))
 					newEvent.is_organizer = action.result.is_organizer;
 					
-				this.fireEvent('save', newEvent, this.oldDomId);
+				this.fireEvent('save', newEvent, this.oldDomId, action);
 				
 				GO.dialog.TabbedFormDialog.prototype.refreshActiveDisplayPanels.call(this);
 
