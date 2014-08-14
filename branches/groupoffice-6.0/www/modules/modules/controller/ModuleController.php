@@ -238,7 +238,7 @@ class ModuleController extends AbstractJsonController{
 			}
 	//		GO::debug(count($users));
 
-			$module->acl->getAuthorizedUsers($module->acl_id, Acl::READ_PERMISSION, array("\\GO\\Modules\\Controller\\Module","checkDefaultModelCallback"), array($models));
+			$module->acl->getAuthorizedUsers($module->acl_id, Acl::READ_PERMISSION, array("\\GO\\Modules\\Controller\\ModuleController","checkDefaultModelCallback"), array($models));
 		}
 		
 //		if(class_exists("GO_Professional_LicenseCheck")){
@@ -247,6 +247,13 @@ class ModuleController extends AbstractJsonController{
 //		}
 		echo new JsonResponse(array('success'=>true));
 	}
+	
+	public static function checkDefaultModelCallback($user, $models){		
+		foreach ($models as $model){
+			$model->getDefault($user);		
+		}
+	}
+	
 	
 	public function actionSaveSortOrder($params){
 		$modules = json_decode($params['modules']);
