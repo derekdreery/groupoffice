@@ -176,7 +176,7 @@ class GO{
 		'GO\Base\Data\Store' => 'go/base/data/Store.php',
 		'GO\Base\Data\ColumnModel' => 'go/base/data/ColumnModel.php',
 		'GO\Base\Module' => 'go/base/Module.php',
-		'GO\Base\Model_AbstractUserDefaultModel' => 'go/base/model/AbstractUserDefaultModel.php',
+		'GO\Base\Model\AbstractUserDefaultModel' => 'go/base/model/AbstractUserDefaultModel.php',
 		'GO\Base\Db\FindParams' => 'go/base/db/FindParams.php',
 		'GO\Base\Db\FindCriteria' => 'go/base/db/FindCriteria.php',
 		'GO\Base\Util\Date' => 'go/base/util/Date.php',
