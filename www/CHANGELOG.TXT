@@ -1,3 +1,7 @@
+14-08-2014 6.0.16
+- Fixes for customer module.
+- Default theme fixed.
+
 12-08-2014 6.0.15
 - Fixed public symlink
 - Fixed dovecot auth for postfix
