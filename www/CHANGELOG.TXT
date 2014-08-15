@@ -1,3 +1,4 @@
+- GOTA: Changed moveuploadedfile flag in replace function
 - Billing: Fixed problem with linking orders that don't have a status yet.
 
 13-08-2014 5.0.77
