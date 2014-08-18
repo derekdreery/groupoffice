@@ -14,6 +14,9 @@ Depends: groupoffice-com,
 	postfix,
 	postfix-mysql,
 	dovecot-imapd,
+	dovecot-mysql,
+	dovecot-sieve,
+	dovecot-managesieved,
 	openssl,
 	${misc:Depends}
 Description: 
