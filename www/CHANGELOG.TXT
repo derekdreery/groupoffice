@@ -1,3 +1,6 @@
+18-08-2014 6.0.17
+- Integrated WebODF editor for online odt documents.
+
 14-08-2014 6.0.16
 - Fixes for customer module.
 - Default theme fixed.
