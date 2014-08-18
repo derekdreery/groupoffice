@@ -286,6 +286,8 @@ class Sieve {
 		$active = $this->sieve->getActive();
 		if (!$active) {
 
+			if(!$this->sieve->getScript('default')){
+
 			$content = "require [\"vacation\",\"fileinto\"];
 # rule:[".\GO::t('standardvacation','sieve')."]
 if false # anyof (true)
@@ -299,6 +301,7 @@ if anyof (header :contains \"X-Spam-Flag\" \"YES\")
 	fileinto \"Spam\";
 }";
 			$this->save_script('default', $content);
+			}
 			$this->activate('default');
 			$active = 'default';
 		}
