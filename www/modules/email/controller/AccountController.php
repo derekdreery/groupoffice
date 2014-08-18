@@ -4,6 +4,10 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 	protected $model = "GO_Email_Model_Account";
 	
+	protected function allowGuests() {
+		return array('setsieve');
+	}
+	
 	
 //	protected function actionTest($params){
 //		
@@ -38,6 +42,12 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 						));
 
 		return $findParams;
+	}
+	
+	protected function actionSetSieve(){
+		if($this->isCli()){
+			GO::getDbConnection()->query("UPDATE em_accounts set sieve_port=4190 where host='localhost'");
+		}
 	}
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
