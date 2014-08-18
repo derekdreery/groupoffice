@@ -6,7 +6,7 @@ namespace GO\Webodf\Filehandler;
 class Webodf implements \GO\Files\Filehandler\FilehandlerInterface{
 
 	public function isDefault(\GO\Files\Model\File $file){		
-		return !in_array(strtolower($file->extension), array('odt'));
+		return in_array(strtolower($file->extension), array('odt'));
 	}
 	
 	public function getName(){
@@ -14,7 +14,7 @@ class Webodf implements \GO\Files\Filehandler\FilehandlerInterface{
 	}
 	
 	public function fileIsSupported(\GO\Files\Model\File $file){
-		return true;//$this->isDefault($file);
+		return $this->isDefault($file);
 	}
 	
 	public function getIconCls(){
