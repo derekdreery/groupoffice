@@ -80,7 +80,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	// 'excludedCustomFieldDataTypes', 'importBaseParams', 'controllerName' and 'fileType'
 	_initDialog : function(config) {
 		this._importBaseParams = config.importBaseParams;
-		var controllerNameArr = config['controllerName'].split('_');
+		var controllerNameArr = config['controllerName'].split('\\');
 		this._moduleName = controllerNameArr[1].toLowerCase();
 		this._modelName = controllerNameArr[3].toLowerCase();
 		this._modelContainerIdName = config['modelContainerIdName'];
