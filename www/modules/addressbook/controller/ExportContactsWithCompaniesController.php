@@ -18,7 +18,7 @@ class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Cont
 	public function export($params) {
 		
 		GO::$disableModelCache=true;		
-		GO::setMaxExecutionTime(180);
+		GO::setMaxExecutionTime(300);
 		
 		// Load the data from the session.
 		$findParams = GO::session()->values['contact']['findParams'];
@@ -43,29 +43,37 @@ class GO_Addressbook_Controller_ExportContactsWithCompanies extends GO_Base_Cont
 		$csvWriter = new GO_Base_Csv_Writer('php://output');
 		
 		$headerPrinted = false; 
-		
+		$attrs = array();
+		$compAttrs = array();
+			
 		foreach($stmt as $m){
 			
-			$attrs = $m->getAttributes();
-			$compAttrs = $m->company->getAttributes();
-
+			$iterationStartUnix = time();
+			
+			if (!$headerPrinted) {
+				$attrs = $m->getAttributes();
+				$compAttrs = $m->company->getAttributes();
+			}
+			
 			$header = array();
 			$record = array();
 			foreach($attrs as $attr=>$val){
-				$header[$attr] = $m->getAttributeLabel($attr);
+				if (!$headerPrinted)
+					$header[$attr] = $m->getAttributeLabel($attr);
 				$record[$attr] = $m->{$attr};
 			}
-			
+
 			foreach($compAttrs as $cattr=>$cval){
-				$header[GO::t('company','addressbook').$cattr] = GO::t('company','addressbook').':'.$m->company->getAttributeLabel($cattr);
+				if (!$headerPrinted)
+					$header[GO::t('company','addressbook').$cattr] = GO::t('company','addressbook').':'.$m->company->getAttributeLabel($cattr);
 				$record[GO::t('company','addressbook').$cattr] = $m->company->{$cattr};
 			}
-			
+
 			if(!$headerPrinted){
 				$csvWriter->putRecord($header);
 				$headerPrinted = true;
 			}
-			
+
 			$csvWriter->putRecord($record);
 		}
 	}
