@@ -964,7 +964,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}else
 		{
 			$account=false;
-			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path'], !empty($params['is_tmp_file']));
+			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path'], !empty($params['is_tmp_file']) && $params['is_tmp_file']!='false');
 		}
 
 		return $this->_messageToReplyResponse($params, $message, $account);
@@ -1150,7 +1150,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 		}else
 		{
-			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path'], !empty($params['is_tmp_file']));
+			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path'], !empty($params['is_tmp_file']) && $params['is_tmp_file']!='false');
 		}
 		
 		return $this->_messageToForwardResponse($params, $message);
