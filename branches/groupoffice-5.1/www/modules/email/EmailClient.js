@@ -719,14 +719,14 @@ GO.email.EmailClient = function(config){
 				GO.email.showComposer({
 					uid: this.messagePanel.uid,
 					task: 'reply',
-					mailbox: this.mailbox,
+					mailbox: this.messagePanel.mailbox,
 					account_id: this.account_id
 				});
 			} else {
 				GO.email.showComposer({
 					uid: this.messagePanel.uid,
 					task: 'reply',
-					mailbox: this.mailbox,
+					mailbox: this.messagePanel.mailbox,
 					account_id: this.account_id,
 					delegated_cc_enabled: true
 				});
@@ -742,7 +742,7 @@ GO.email.EmailClient = function(config){
 			GO.email.showComposer({
 				uid: this.messagePanel.uid,
 				task: 'reply_all',
-				mailbox: this.mailbox,
+				mailbox: this.messagePanel.mailbox,
 				account_id: this.account_id
 			});
 		},
@@ -757,14 +757,14 @@ GO.email.EmailClient = function(config){
 				GO.email.showComposer({
 					uid: this.messagePanel.uid,
 					task: 'forward',
-					mailbox: this.mailbox,
+					mailbox: this.messagePanel.mailbox,
 					account_id: this.account_id
 				});
 			} else {
 				GO.email.showComposer({
 					uid: this.messagePanel.uid,
 					task: 'forward',
-					mailbox: this.mailbox,
+					mailbox: this.messagePanel.mailbox,
 					account_id: this.account_id,
 					delegated_cc_enabled: true
 				});
