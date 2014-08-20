@@ -496,7 +496,15 @@ class AbstractModelController extends AbstractController {
 		$response['data']['workflow']=array();
 			
 		if($model->hasLinks()){
-			$workflowModelstmnt = \GO\Workflow\Model\Model::model()->findByAttributes(array("model_id"=>$model->id,"model_type_id"=>$model->modelTypeId()));
+
+			$workflowModelstmnt = \GO\Workflow\Model\Model::model()->find(
+				\GO\Base\Db\FindParams::newInstance()
+					->criteria(\GO\Base\Db\FindCriteria::newInstance()
+						->addCondition('model_id',$model->id)
+						->addCondition('model_type_id',$model->modelTypeId())
+					)
+					->order('ctime','DESC')
+			);
 
 			while($workflowModel = $workflowModelstmnt->fetch()){
 
