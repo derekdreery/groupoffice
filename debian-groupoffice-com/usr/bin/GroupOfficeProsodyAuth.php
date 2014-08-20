@@ -15,6 +15,10 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base
+ * 
+ * test:
+ * 
+ * auth:username:groupoffice.domain.com:password
  */
 
 // the logfile to which to write, should be writeable by the user which is running the server
