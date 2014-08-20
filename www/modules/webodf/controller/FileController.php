@@ -2,10 +2,13 @@
 
 
 namespace GO\Webodf\Controller;
+
+use Exception;
 use GO;
+use GO\Base\Controller\AbstractController;
 
 
-class FileController extends \GO\Professional\Controller\AbstractController {
+class FileController extends AbstractController {
 
 	protected function actionEdit($id) {
 		
@@ -107,13 +110,13 @@ class FileController extends \GO\Professional\Controller\AbstractController {
 		}
 		
 		if(empty($_FILES)){
-			throw new \Exception("Server did not recieve a file. Perhaps the file was too large?");
+			throw new Exception("Server did not recieve a file. Perhaps the file was too large?");
 		}
 		
 		$upfile = array_shift($_FILES);
 		
 		if(empty($upfile['tmp_name'])){			
-			throw new \Exception("Server did not recieve a file. Perhaps the file was too large?");
+			throw new Exception("Server did not recieve a file. Perhaps the file was too large?");
 		}
 
 		
