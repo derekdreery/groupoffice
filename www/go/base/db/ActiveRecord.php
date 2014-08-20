@@ -2002,7 +2002,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					'type'=>self::BELONGS_TO,
 					'model'=>'GO\Base\Model\User',
 					'field'=>'muser_id',
-					'labelAttribute'=>function($model){return $model->mUser->name;}
+					'labelAttribute'=>function($model){return !empty($model->mUser) ? $model->mUser->name : '';}
 					);
 		}
 
