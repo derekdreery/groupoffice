@@ -15,6 +15,8 @@
 
 namespace GO\Sieve\Util;
 
+use GO;
+
 // make sure path_separator is defined
 if (!defined('PATH_SEPARATOR')) {
 	define('PATH_SEPARATOR', (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') ? ';' : ':');
@@ -285,23 +287,25 @@ class Sieve {
 
 		$active = $this->sieve->getActive();
 		if (!$active) {
-
+			
 			if(!$this->sieve->getScript('default')){
 
-			$content = "require [\"vacation\",\"fileinto\"];
-# rule:[".\GO::t('standardvacation','sieve')."]
-if false # anyof (true)
-{
-\tvacation :days 3 :addresses [\"".implode('","',$aliasEmails)."\"] \"".\GO::t('standardvacationmessage','sieve')."\";
-\tstop;
-}
-# rule:[Spam]
-if anyof (header :contains \"X-Spam-Flag\" \"YES\")
-{
-	fileinto \"Spam\";
-}";
-			$this->save_script('default', $content);
+
+				$content = "require [\"vacation\",\"fileinto\"];
+	# rule:[".GO::t('standardvacation','sieve')."]
+	if false # anyof (true)
+	{
+	\tvacation :days 3 :addresses [\"".implode('","',$aliasEmails)."\"] \"".GO::t('standardvacationmessage','sieve')."\";
+	\tstop;
+	}
+	# rule:[Spam]
+	if anyof (header :contains \"X-Spam-Flag\" \"YES\")
+	{
+		fileinto \"Spam\";
+	}";
+				$this->save_script('default', $content);
 			}
+			
 			$this->activate('default');
 			$active = 'default';
 		}

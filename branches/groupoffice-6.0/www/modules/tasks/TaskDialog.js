@@ -127,9 +127,10 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 				//	this.selectTaskList.setRemoteText(action.result.data.tasklist_name);
 				this.selectTaskList.setRemoteText(action.result.remoteComboTexts.tasklist_id);
-				
+
 				if(this.selectProject){
-					if(config.link_config && config.link_config.model_name=="GO\\Projects\\Model\\Project"){					
+					if(config.link_config && config.link_config.model_name=="GO\\Projects2\\Model\\Project"){			
+
 						this.selectProject.setValue(config.link_config.model_id);
 						this.selectProject.setRemoteText(config.link_config.text);
 					}else

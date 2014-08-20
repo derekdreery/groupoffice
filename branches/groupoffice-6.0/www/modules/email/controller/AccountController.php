@@ -3,11 +3,17 @@
 
 namespace GO\Email\Controller;
 use GO;
-
-
+	
+	
+	
+	
 class AccountController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = "GO\Email\Model\Account";
+	
+	protected function allowGuests() {
+		return array('setsieve');
+	}
 
 
 //	protected function actionTest($params){
@@ -45,6 +51,12 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 		return $findParams;
 	}
 
+	protected function actionSetSieve(){
+		if($this->isCli()){
+			GO::getDbConnection()->query("UPDATE em_accounts set sieve_port=4190 where host='localhost'");
+		}
+	}
+	
 	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name', '$model->user->name');
 		return parent::formatColumns($columnModel);
