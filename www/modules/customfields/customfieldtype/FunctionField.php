@@ -15,8 +15,15 @@ class FunctionField extends AbstractCustomfieldtype {
 
 		if (!empty($this->field->function)) {
 			$f = $this->field->function;
-			foreach ($attributes as $k=>$value) {				
-					$f = str_replace('{' . $k . '}', floatval($value), $f);				
+			preg_match_all('/\{([^}]*)\}/',$f,$matches);
+			if (!empty($matches[1])) {
+				foreach ($matches[1] as $key) {		
+					if(!isset($attributes[$key])||$attributes[$key]==='')
+						return \GO\Base\Util\Number::localize(0);
+					else
+						$value = $attributes[$key];
+					$f = str_replace('{' . $key . '}', floatval($value), $f);				
+				}
 			}
 			$f = preg_replace('/\{[^}]*\}/', '0',$f);
 			//go_debug($fields[$i]['function']);
