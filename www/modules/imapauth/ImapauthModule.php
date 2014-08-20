@@ -49,7 +49,7 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 						$response['needCompleteProfile'] = true;
 						$response['success'] = false;
 
-						$response['feedback'] = "Please fill in some additional information to complete your user account.";
+						$response['feedback'] = GO::t('pleaseCompleteProfile', 'imapauth');
 						return false;
 					} else {
 						//user doesn't exist. create it now

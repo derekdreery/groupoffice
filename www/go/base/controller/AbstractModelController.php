@@ -492,7 +492,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['data']['workflow']=array();
 			
 		if($model->hasLinks()){
-			$workflowModelstmnt = GO_Workflow_Model_Model::model()->findByAttributes(array("model_id"=>$model->id,"model_type_id"=>$model->modelTypeId()));
+			$workflowModelstmnt = GO_Workflow_Model_Model::model()->find(
+				GO_Base_Db_FindParams::newInstance()
+					->criteria(GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('model_id',$model->id)
+						->addCondition('model_type_id',$model->modelTypeId())
+					)
+					->order('ctime','DESC')
+			);
 
 			while($workflowModel = $workflowModelstmnt->fetch()){
 

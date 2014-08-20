@@ -469,6 +469,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		$this->lockAction();
 		
+		GO::setIgnoreAclPermissions(true);
 		GO::session()->runAsRoot();
 		
 		GO::clearCache();
