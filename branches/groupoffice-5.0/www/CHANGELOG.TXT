@@ -1,3 +1,7 @@
+20-08-2014 5.0.78
+- Upgrade broken because of to strict permissions
+- Translation errors fixed
+- Bangladesh translation added.
 - GOTA: Changed moveuploadedfile flag in replace function
 - Billing: Fixed problem with linking orders that don't have a status yet.
 

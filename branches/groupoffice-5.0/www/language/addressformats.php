@@ -4,6 +4,13 @@ $af['default']='{address} {address_no}
 {state}
 {country}';
 
+$af['bn_BD']='{address}
+{address_no}
+{city}
+{zip}
+{dist}
+{country}';
+
 $af['US']='{address}
 {address_no}
 {city}, {state} {zip}
@@ -24,8 +31,8 @@ $af['FR']='{address_no} {address}
 $af['GB']='{address}
 {address_no}
 {city}
-{state}
 {zip}
+{state}
 {country}';
 
 $af['IT']='{address_no} {address}

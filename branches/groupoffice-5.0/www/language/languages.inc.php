@@ -5,6 +5,7 @@ $languages['cn']='Chinese Simplified';
 $languages['zh-tw']='Chinese Traditional';
 $languages['cs']='Čeština';
 $languages['da']='Dansk';
+$languages['bn_BD']='বাংলা (Bangladesh)';
 $languages['de']='Deutsch';
 $languages['en']='English/American';
 $languages['en_UK']='English/British';
