@@ -449,3 +449,7 @@ $updates['201407151015'][]="ALTER TABLE `ab_sent_mailings` CHANGE `subject` `sub
 $updates['201407241350'][]="ALTER TABLE `ab_contacts` CHANGE `email` `email` varchar(100) NOT NULL DEFAULT '';";
 		
 $updates['201407241350'][]="ALTER TABLE  `ab_contacts` CHANGE  `photo`  `photo` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';";
+
+$updates['201408211030'][]="ALTER TABLE `ab_contacts` ADD `color` CHAR( 6 ) NOT NULL DEFAULT '';";
+$updates['201408211030'][]="ALTER TABLE `ab_companies` ADD `color` CHAR( 6 ) NOT NULL DEFAULT '';";
+
