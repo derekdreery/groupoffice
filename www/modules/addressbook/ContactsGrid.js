@@ -67,9 +67,7 @@ GO.addressbook.ContactsGrid = function(config){
 			dataIndex: 'sex',
 			hidden:true,
 			renderer: function(value,meta){
-				
-				console.log(meta);
-				
+
 				if (value === 'M') { 
 					meta.css += ' male-cell'; 
 					return GO.addressbook.lang.male; 
