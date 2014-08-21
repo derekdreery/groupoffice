@@ -65,7 +65,23 @@ GO.addressbook.ContactsGrid = function(config){
 		{
 			header: GO.lang['strSex'],
 			dataIndex: 'sex',
-			hidden:true
+			hidden:true,
+			renderer: function(value,meta){
+				
+				console.log(meta);
+				
+				if (value === 'M') { 
+					meta.css += ' male-cell'; 
+					return GO.addressbook.lang.male; 
+				} 
+
+				if (value === 'F') {	
+					meta.css += 'female-cell'; 
+					return GO.addressbook.lang.female;
+				}
+
+				return value;
+			}
 		},
 		{
 			header: GO.lang['strBirthday'],
