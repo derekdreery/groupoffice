@@ -10,6 +10,12 @@
     height: 100%;    
 }
 
+#conversejs .group-toggle {
+    display: block;
+    width: 100%;
+	font: 12px Helvetica;
+}
+
 #conversejs .chatbox, #conversejs .chatroom {
     border-radius: 0px;
     box-shadow: none;
