@@ -1,3 +1,7 @@
+#conversjs{
+	font: 12px arial;
+}
+
 #conversejs .chatbox, #conversejs .chatroom {
     border-radius: 0px;
     box-shadow: none;
