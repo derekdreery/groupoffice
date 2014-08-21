@@ -1,4 +1,5 @@
-- Added icosn for male and female
+21-08-2014 6.0.18
+- Added icons for male and female
 - Added colorpicker to contacts and companies. With this colorpicker you can set the text color of the contacts and companies in the Grid.
 
 18-08-2014 6.0.17
