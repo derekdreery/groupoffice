@@ -1,3 +1,5 @@
+- Added colorpicker to contacts and companies. With this colorpicker you can set the text color of the contacts and companies in the Grid.
+
 18-08-2014 6.0.17
 - Integrated WebODF editor for online odt documents.
 
