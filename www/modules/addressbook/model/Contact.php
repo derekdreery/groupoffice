@@ -67,6 +67,7 @@
  * @property string $url_twitter
  * @property string $skype_name
  * @property int $last_email_time
+ * @property string $color
  */
 
 namespace GO\Addressbook\Model;

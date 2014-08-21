@@ -48,6 +48,7 @@
  * 
  * @property String $photo Full path to photo
  * @property String $photoURL URL to photo
+ * @property string $color
  */
 
 
