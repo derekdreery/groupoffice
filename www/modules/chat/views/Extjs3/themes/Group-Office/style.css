@@ -1,4 +1,4 @@
-.chatbox, .chatroom {
+#conversejs .chatbox, #conversejs .chatroom {
     border-radius: 0px;
     box-shadow: none;
     float: right;
@@ -8,7 +8,7 @@
 }
 
 
-.oc-chat-head {
+#conversejs .chat-head {
     background-color: #009CC5;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
@@ -19,7 +19,7 @@
     padding: 3px 0 0;
 }
 
-.chat-head #controlbox-tabs li a {
+#conversejs .chat-head #controlbox-tabs li a {
     background-color: #FFFFFF;
     border-bottom: 1px solid #CCCCCC;
     box-shadow: none;
@@ -28,7 +28,7 @@
 }
 
 
-a.configure-chatroom-button, a.minimize-chatbox-button, a.close-chatbox-button {
+#conversejs a.configure-chatroom-button, #conversejs a.minimize-chatbox-button, #conversejs a.close-chatbox-button {
     background: none;
     border: 0;
     border-radius: 0px;
@@ -44,7 +44,7 @@ a.configure-chatroom-button, a.minimize-chatbox-button, a.close-chatbox-button {
     text-shadow: none;
 }
 
-.icon-close{
+#conversejs .icon-close{
 	font-family: verdana;
 }
 
@@ -53,7 +53,7 @@ a.configure-chatroom-button, a.minimize-chatbox-button, a.close-chatbox-button {
 	text-decoration:none;
 }
 
-ul#controlbox-tabs li a {
+#conversejs ul#controlbox-tabs li a {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     display: block;
@@ -66,16 +66,16 @@ ul#controlbox-tabs li a {
 		margin-left:2px;
 }
 
-ul#controlbox-tabs li a {
+#conversejs ul#controlbox-tabs li a {
     height: 24px;
 }
 
-ul#controlbox-tabs li  {
+#conversejs ul#controlbox-tabs li  {
     padding-left:2px;
 }
 
 
-ul#controlbox-tabs a.current, ul#controlbox-tabs a.current:hover {
+#conversejs ul#controlbox-tabs a.current,#conversejs ul#controlbox-tabs a.current:hover {
     border-bottom: 0 none;
     box-shadow: none;
     color: black;
@@ -85,7 +85,7 @@ ul#controlbox-tabs a.current, ul#controlbox-tabs a.current:hover {
 }
 
 
-#toggle-controlbox {
+#conversejs .toggle-controlbox{
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
@@ -107,7 +107,7 @@ ul#controlbox-tabs a.current, ul#controlbox-tabs a.current:hover {
 }
 
 
-.chat-head {
+#conversejs .chat-head {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     color: #FFFFFF;
@@ -116,7 +116,7 @@ ul#controlbox-tabs a.current, ul#controlbox-tabs a.current:hover {
     padding: 3px 0 0 3px;
 }
 
-div.chat-title {
+#conversejs div.chat-title {
     color: #FFFFFF;
     display: block;
     font-weight: normal;
@@ -130,7 +130,7 @@ div.chat-title {
     white-space: nowrap;
 }
 
-.chat-head-chatbox, .chat-head-chatroom {
+#conversejs .chat-head-chatbox, #conversejs .chat-head-chatroom {
     height: 26px;
     position: relative;
 		background-color: #009CC5;
