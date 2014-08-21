@@ -1,5 +1,13 @@
-#conversjs{
-	font: 12px arial;
+
+#conversejs .minimized-chats-flyout, #conversejs .box-flyout {
+    border-radius: 0px;
+}
+
+#conversejs div#users, #conversejs div#chatrooms, #conversejs div#login-dialog, #conversejs div#settings {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    font-size: 12px;
+    height: 100%;    
 }
 
 #conversejs .chatbox, #conversejs .chatroom {
