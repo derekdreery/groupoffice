@@ -96,7 +96,7 @@ class AccountController extends \GO\Site\Components\Controller {
 			$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $_POST['email']);
 			
 			if($user == null){
-				\Site::notifier()->setMessage('error', \GO::t("invaliduser","sites"));
+				\Site::notifier()->setMessage('error', \GO::t("invaliduser","site"));
 			}else{
 				$siteTitle = \Site::model()->name;
 				$url = \Site::request()->getHostInfo(). \Site::urlManager()->createUrl('/site/account/resetpassword', array(), false);
@@ -115,12 +115,12 @@ class AccountController extends \GO\Site\Components\Controller {
 	public function actionResetPassword()
 	{
 		if(empty($_GET['email']))
-			throw new \Exception(\GO::t("noemail","sites"));
+			throw new \Exception(\GO::t("noemail","site"));
 
 		$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $_GET['email']);
 
 		if(!$user)
-			throw new \Exception(\GO::t("invaliduser","sites"));
+			throw new \Exception(\GO::t("invaliduser","site"));
 
 		if(isset($_GET['usertoken']) && $_GET['usertoken'] == $user->getSecurityToken())
 		{
@@ -132,11 +132,11 @@ class AccountController extends \GO\Site\Components\Controller {
 				\GO::$ignoreAclPermissions = true; 
 				
 				if($user->validate() && $user->save())
-					\Site::notifier()->setMessage('success',\GO::t('resetPasswordSuccess', 'sites'));
+					\Site::notifier()->setMessage('success',\GO::t('resetPasswordSuccess', 'site'));
 			}
 		}
 		else
-			\Site::notifier()->setMessage('error',\GO::t("invalidusertoken","sites"));
+			\Site::notifier()->setMessage('error',\GO::t("invalidusertoken","site"));
 				
 		$user->password = null;
 		echo $this->render('resetPassword', array('user'=>$user));
