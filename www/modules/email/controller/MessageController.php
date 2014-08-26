@@ -1575,11 +1575,16 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 
 			while($tag = array_shift($tags)){
 //				if($imapMessage->account->id == $tag['account_id']){
-					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id'],false, true);
-					if($linkModel && !$linkModel->equals($linkedModels) && $linkModel->checkPermissionLevel(Acl::WRITE_PERMISSION)){
-						\GO\Savemailas\Model\LinkedEmail::model()->createFromImapMessage($imapMessage, $linkModel);
-						
-						$linkedModels[]=$linkModel;
+					try{
+						$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id'],false, true);
+						if($linkModel && !$linkModel->equals($linkedModels) && $linkModel->checkPermissionLevel(Acl::WRITE_PERMISSION)){
+							\GO\Savemailas\Model\LinkedEmail::model()->createFromImapMessage($imapMessage, $linkModel);
+
+							$linkedModels[]=$linkModel;
+						}
+					}
+					catch(\Exception $e){
+						trigger_error($e->getMessage(), E_USER_NOTICE);
 					}
 			}
 		}
