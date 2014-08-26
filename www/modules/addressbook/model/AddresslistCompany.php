@@ -17,6 +17,8 @@
 
 namespace GO\Addressbook\Model;
 
+use GO;
+
 
 class AddresslistCompany extends \GO\Base\Db\ActiveRecord {
 	
