@@ -7,10 +7,13 @@
 
 namespace GO\Core\Controller;
 
+use Exception;
 use GO;
 use GO\Base\Db\PDO;
+use PDOException;
+use GO\Base\Controller\AbstractController;
 
-class MaintenanceController extends \GO\Base\Controller\AbstractController {
+class MaintenanceController extends AbstractController {
 	
 	protected function allowGuests() {
 		return array('upgrade','checkdatabase','servermanagerreport','test','downloadfromshop', 'removeduplicates','buildsearchcache');
@@ -605,7 +608,7 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 								try {
 									if(!empty($query))
 										\GO::getDbConnection()->query($query);
-								} catch (\PDOException $e) {
+								} catch (PDOException $e) {
 									//var_dump($e);
 									
 									
@@ -943,7 +946,7 @@ class MaintenanceController extends \GO\Base\Controller\AbstractController {
 //			echo $newData;
 			
 			if(eval(str_replace('<?php', '', $newData))===false)
-				throw new \Exception("Parse error in generated data for ".$file->path());
+				throw new Exception("Parse error in generated data for ".$file->path());
 			
 			$file->putContents($newData);
 		}
