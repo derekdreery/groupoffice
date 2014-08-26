@@ -19,7 +19,7 @@ class FunctionField extends AbstractCustomfieldtype {
 			if (!empty($matches[1])) {
 				foreach ($matches[1] as $key) {		
 					if(!isset($attributes[$key])||$attributes[$key]==='')
-						return \GO\Base\Util\Number::localize(0);
+						return null;
 					else
 						$value = $attributes[$key];
 					$f = str_replace('{' . $key . '}', floatval($value), $f);				
