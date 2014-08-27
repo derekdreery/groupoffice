@@ -1986,10 +1986,14 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		$accountModel = \GO\Email\Model\Account::model()->findByPk($params['account_id']);
 				
 		$imap = $accountModel->openImapConnection($params['from_mailbox_name']);
+		
+		if(!$imap->get_status('Spam')){
+			$imap->create_folder('Spam');
+		}
 							
 		if (!$imap->move(array($params['mail_uid']), 'Spam')) {
 			$imap->disconnect();
-			throw new \Exception('Could not move message');
+			throw new \Exception('Could not move message to "Spam" folder. Does it exist?');
 		}
 		
 		$response = array('success'=>true);
