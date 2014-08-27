@@ -289,8 +289,10 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 			$this->company_id=$company->id;			
 		}
 				
-		if (!empty($this->company) && $this->company->addressbook_id != $this->addressbook_id)
-			throw new Exception(GO::t('mustBeSameAddressbook','addressbook'));
+		if($this->isModified('addressbook_id')){
+			if (!empty($this->company) && $this->company->addressbook_id != $this->addressbook_id)
+				throw new \Exception(GO::t('mustBeSameAddressbook','addressbook'));
+		}
 		
 		$this->_prefixSocialMediaLinks();
 		
