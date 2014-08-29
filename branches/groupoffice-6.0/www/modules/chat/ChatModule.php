@@ -147,9 +147,10 @@ class ChatModule extends \GO\Base\Module {
 		$xmppHost = self::getXmppHost();
 
 		\GO\Base\Model\Acl::getAuthorizedUsers(GO::modules()->chat->acl_id, \GO\Base\Model\Acl::READ_PERMISSION, function($user) use ($fp, $xmppHost) {
-
-			$line = $user->username . '@' . $xmppHost . '=' . $user->name . "\n";
-			fwrite($fp, $line);
+			if($user->enabled){
+				$line = $user->username . '@' . $xmppHost . '=' . $user->name . "\n";
+				fwrite($fp, $line);
+			}
 		});
 
 		fclose($fp);
