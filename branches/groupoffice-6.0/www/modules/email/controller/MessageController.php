@@ -428,7 +428,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 				$contacts = \GO\Addressbook\Model\Contact::model()->findByEmail($email, GO\Base\Db\FindParams::newInstance()->ignoreAcl());
 				foreach($contacts as $contact){
 					
-					if($contact->checkPermissionLevel(Acl::READ_PERMISSION) || $contact->goUser && $contact->goUser->checkPermission(Acl::READ_PERMISSION)){
+					if($contact->checkPermissionLevel(Acl::READ_PERMISSION) || $contact->goUser && $contact->goUser->checkPermissionLevel(Acl::READ_PERMISSION)){
 						continue 2;
 					}
 				}
