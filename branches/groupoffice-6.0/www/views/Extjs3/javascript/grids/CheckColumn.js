@@ -33,7 +33,7 @@ GO.grid.CheckColumn = Ext.extend(Ext.grid.Column, {
             
             if (!disabled)
             {
-           		var newValue = !record.data[this.dataIndex];
+           		var newValue = GO.util.empty(record.data[this.dataIndex])?true:false;
            		record.set(this.dataIndex, newValue);
            		
            		this.fireEvent('change', record, newValue);
@@ -53,12 +53,8 @@ GO.grid.CheckColumn = Ext.extend(Ext.grid.Column, {
         var disabledCls='';
         if(disabled)
 					disabledCls =' x-item-disabled';
-				
-				if(v=='0'){
-					v=false;
-				}
-				
-				return String.format('<div class="x-grid3-check-col{0}'+disabledCls+'">&#160;</div>', v ? '-on' : '');
+		
+				return String.format('<div class="x-grid3-check-col{0}'+disabledCls+'">&#160;</div>', !GO.util.empty(v) ? '-on' : '');
     },
 
     // Deprecate use as a plugin. Remove in 4.0
