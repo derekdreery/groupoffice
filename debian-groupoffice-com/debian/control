@@ -32,6 +32,10 @@ Depends: libapache2-mod-php5 (>= 5.3),
 Recommends: zip, 
 	tnef,
 	libwbxml2-utils | libwbxml2-0
+Conflicts:
+	groupoffice-pro
+	groupoffice-billing
+	groupoffice-documents
 Description:
  Group-Office is a web based groupware and CRM application
  Take your office online. Share projects, calendars, files and e-mail online 
