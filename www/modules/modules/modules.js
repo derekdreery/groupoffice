@@ -367,15 +367,6 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 });
 
 
-GO.modules.clickBuy = function(e){
-	
-	e.preventDefault();
-	
-	var el = Ext.get(this);
-	
-	console.log(el);
-}
-
 GO.moduleManager.addModule('modules', GO.modules.MainPanel, {
 	title: GO.modules.lang.modules,
 	iconCls: 'go-tab-icon-modules',
