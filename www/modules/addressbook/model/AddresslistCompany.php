@@ -50,7 +50,7 @@ class AddresslistCompany extends \GO\Base\Db\ActiveRecord {
 	
 	protected function afterSave($wasNew) {
 		
-		if(GO::modules()->isInstalled('log')){
+		if(\GO::modules()->isInstalled('log')){
 			\GO\Log\Model\Log::create($wasNew?\GO\Log\Model\Log::ACTION_ADD:\GO\Log\Model\Log::ACTION_UPDATE,  'Added '.$this->company->name.' to addresslist '.$this->addresslist->name, $this->className(),$this->company_id.':'.$this->addresslist_id);
 		}
 		
@@ -59,7 +59,7 @@ class AddresslistCompany extends \GO\Base\Db\ActiveRecord {
 	
 	protected function afterDelete() {
 		
-		if(GO::modules()->isInstalled('log')){
+		if(\GO::modules()->isInstalled('log')){
 			\GO\Log\Model\Log::create(\GO\Log\Model\Log::ACTION_DELETE,  'Removed '.$this->company->name.' from addresslist '.$this->addresslist->name, $this->className(),$this->company_id.':'.$this->addresslist_id);
 		}
 		
