@@ -1,5 +1,8 @@
+04-09-2014 6.0.21
+- Bug in invoicing from projects
+
 03-09-2014 6.0.20
-- Invoicing fixed.
+- Bug in invoicing from projects
 
 29-08-2014 6.0.19
 - Invoicing for projects2.
