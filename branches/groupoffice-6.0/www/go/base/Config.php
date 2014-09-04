@@ -984,7 +984,7 @@ class Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20140903';
+	var $mtime = '20140904';
 
 
 	#group configuration
