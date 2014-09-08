@@ -1,3 +1,5 @@
+- Calendar: Month view: no need to left-click an event before right-clicking it anymore.
+
 20-08-2014 5.0.78
 - Upgrade broken because of to strict permissions
 - Translation errors fixed
