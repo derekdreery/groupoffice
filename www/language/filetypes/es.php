@@ -65,3 +65,7 @@ $l['xlsx']= 'Hoja de cálculo Microsoft Excel';
 $l['pptx']= 'Presentacón Microsoft Powerpoint';
 $l['ppsx']= 'Presentacón Microsoft Powerpoint';
 $l['csv']= 'Valores separados por coma';
+
+$l['js']= 'Javascript';
+$l['sql']= 'Exportacióe base de datos SQL';
+$l['xmind']='Fichero XMind';
