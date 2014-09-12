@@ -14,6 +14,7 @@ $l['description'] = 'Admin module; Managing Modules.';
 $l['deleteModule'] = 'The module "Modules" cannot be deleted!';
 
 $l['enabled']='Enabled';
+$l['sort_order']='Sort order';
 
 $l['buyLicenses']='Buy licenses';
 

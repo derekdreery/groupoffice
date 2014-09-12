@@ -1,3 +1,4 @@
+- Added sort order field in the modules grid
 - customcss: Make public uploaded files accessible without logging in to GO.
 
 04-09-2014 6.0.21
