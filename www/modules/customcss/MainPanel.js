@@ -46,7 +46,8 @@ GO.customcss.MainPanel = function(config){
 				GO.files.createSelectFileBrowser();
 
 				GO.selectFileBrowser.setFileClickHandler(function(r){
-					this.form.findField('css').insertAtCursor(GO.settings.modules.files.url+'download.php?id='+r.data.id);
+					this.form.findField('css').insertAtCursor(GO.settings.config.full_url+'index.php?r=files/file/download&id='+r.data.id);
+//					this.form.findField('css').insertAtCursor(GO.settings.modules.files.url+'download.php?id='+r.data.id);
 					GO.selectFileBrowserWindow.hide();
 				}, this);
 
