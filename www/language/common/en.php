@@ -558,9 +558,9 @@ $l["attributeGreater"]="Field '%s' must be greater than '%s'";
 $l["attributeGreaterOrEqual"]="Field '%s' must be greater or equal than '%s'";
 
 
-$l['userFirst_name']='Firstname';
-$l['userMiddle_name']='Middlename';
-$l['userLast_name']='Lastname';
+$l['userFirst_name']='First name';
+$l['userMiddle_name']='Middle name';
+$l['userLast_name']='Last name';
 $l['userPassword']='Password';
 $l['passwordConfirm']='Repeat password';
 $l['userEmail']='Email address';
