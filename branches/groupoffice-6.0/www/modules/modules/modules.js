@@ -127,20 +127,31 @@ GO.modules.MainPanel = function(config) {
 		}
 	});
 
-	config.cm = new Ext.grid.ColumnModel([{
+	config.cm = new Ext.grid.ColumnModel([
+		{
 			header: GO.lang['strName'],
 			dataIndex: 'name',
 			id: 'name',
 			renderer: this.iconRenderer
 		}, 
-		checkColumn,{
+		checkColumn,
+		{
+			header: GO.modules.lang.sort_order,
+			dataIndex: 'sort_order',
+			id: 'sort_order',
+			editor: new GO.form.NumberField({
+				allowBlank: false,
+				decimals:0
+			})
+		},
+		{
 			header: "Package",
 			dataIndex: 'package',
 			id: 'package'
 			
 		}
 	]);
-	
+	config.clicksToEdit = 1;
 	config.loadMask=true;
 	
 	var store = this.store;
@@ -218,6 +229,15 @@ GO.modules.MainPanel = function(config) {
 
 	GO.modules.MainPanel.superclass.constructor.call(this, config);
 
+	this.on('afteredit', function(e){
+		this.submitRecord(e.record);
+	}, this);
+	
+	this.on('beforeedit', function(e){
+		return e.record.data.enabled;
+	}, this);
+	
+
 	this.on("rowdblclick", function(grid, rowIndex, event) {
 		var moduleRecord = grid.store.getAt(rowIndex);
 
@@ -228,7 +248,7 @@ GO.modules.MainPanel = function(config) {
 
 };
 
-Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
+Ext.extend(GO.modules.MainPanel,Ext.grid.EditorGridPanel, {
 	
 
 	afterRender: function() {
@@ -360,9 +380,77 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 	},
 	buyRenderer: function(name, cell, record) {
 		return record.data.buyEnabled ? '<a href="#" class="normal-link" onclick="GO.modules.showBuyDialog(\'' + record.data.id + '\');">'+GO.modules.lang.buyLicenses+'</a>' : '';
+	},
+
+	/**
+	 * Submit the record
+	 * 
+	 * @param array record
+	 * @returns {undefined}
+	 */
+	submitRecord : function(record){
+		var url = GO.url('modules/module/updateModuleModel');
+
+		Ext.Ajax.request({
+			method:'POST',
+			url: url,
+			params : {
+				id:record.data.id
+			},
+			jsonData: {module:this.createJSON(record.data)},
+			scope : this,
+			callback : function (options, success,response) {
+				var responseParams = Ext.decode(response.responseText);
+
+				if (!responseParams.success) {
+					GO.errorDialog.show(responseParams.feedback);
+				}else{
+					if(responseParams.id){
+						record.set('id', responseParams.id);
+					}
+					record.commit();
+				}
+			}
+		});
+	},
+/**
+ * Create Json string for posting to the controller
+ * 
+ * @param array params
+ * @returns JSON String
+ */
+	createJSON : function(params){
+
+		var keys, JSON={}, currentJSONlevel;
+		
+		for(var key in params){
+			
+			keys = key.split('.');
+			
+			currentJSONlevel = JSON;
+			
+			for(var i=0;i<keys.length;i++){
+				if(i===(keys.length-1)){
+					
+					// Change true to 1 for customfields checkboxes
+					if(params[key] == true){
+						params[key] = '1';
+					}
+					
+					currentJSONlevel[keys[i]]= params[key];
+				}else
+				{
+					currentJSONlevel[keys[i]]=currentJSONlevel[keys[i]] || {};
+					currentJSONlevel=currentJSONlevel[keys[i]];
+				}				
+			}
+			
+			currentJSONlevel = JSON;
+			
+		}
+
+		return JSON;
 	}
-
-
 
 });
 

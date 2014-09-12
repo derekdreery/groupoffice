@@ -69,7 +69,8 @@ class ModuleController extends AbstractJsonController{
 							($module->appCenter() && (\GO\Professional\License::isTrial() || \GO\Professional\License::moduleIsRestricted($module->id())!==false)),
 					'package'=>$module->package(),
 					'enabled'=>$model && $model->enabled,
-					'not_installable'=> $module->appCenter() && !GO::scriptCanBeDecoded()
+					'not_installable'=> $module->appCenter() && !GO::scriptCanBeDecoded(),
+					'sort_order' => ($model && $model->sort_order)?$model->sort_order:''
 			);
 		}
 		
@@ -255,18 +256,51 @@ class ModuleController extends AbstractJsonController{
 	}
 	
 	
-	public function actionSaveSortOrder($params){
-		$modules = json_decode($params['modules']);
+	public function actionUpdateModuleModel($id=false){
 		
-		$i=0;
-		foreach($modules as $module){
-			$moduleModel = Module::model()->findByPk($module->id);
-			$moduleModel->sort_order=$i++;
-			$moduleModel->save();
+		$response = array();
+		
+		if($id && GO::request()->isPost()){
+			
+			$postData = GO::request()->post['module'];
+			
+			$module = Module::model()->findByPk($postData['id']);
+			
+			if($module){
+				
+				// For now only set the sort_order, other attributes can be added later.
+				$module->sort_order = $postData['sort_order'];
+				
+				if($module->save()){
+					$response['success'] = true;
+				} else {
+					$response['success'] = false;
+					$response['feedback'] = sprintf(\GO::t('validationErrorsFound'), strtolower($module->localizedName)) . "\n\n" . implode("\n", $module->getValidationErrors()) . "\n";
+					$response['validationErrors'] = $module->getValidationErrors();
+				}
+			}
+		} else {
+			$response['success'] = false;
+			$response['feedback'] = 'NO MODULE FOUND';
 		}
 		
-		echo new JsonResponse(array('success'=>true));
+		echo new \GO\Base\Data\JsonResponse($response);
 	}
+	
+	
+	
+//	public function actionSaveSortOrder($params){
+//		$modules = json_decode($params['modules']);
+//		
+//		$i=0;
+//		foreach($modules as $module){
+//			$moduleModel = Module::model()->findByPk($module->id);
+//			$moduleModel->sort_order=$i++;
+//			$moduleModel->save();
+//		}
+//		
+//		echo new JsonResponse(array('success'=>true));
+//	}
 
 }
 
