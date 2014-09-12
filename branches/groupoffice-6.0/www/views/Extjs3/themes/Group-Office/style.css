@@ -501,6 +501,10 @@ a.normal-link:hover{
 	background-image:url('images/16x16/print.png') !important;
 }
 
+.btn-read{
+	background-image:url('images/16x16/read.png') !important;
+}
+
 .btn-link {
 	background-image:url('images/16x16/connect_established.png') !important;
 }
