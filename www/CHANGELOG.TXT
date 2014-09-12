@@ -1,5 +1,6 @@
 - Changed email toplevel domain name validation so new toplevel domains are also accepted
 - Calendar: Month view: no need to left-click an event before right-clicking it anymore.
+- Fixed max length problem in customfields.
 
 20-08-2014 5.0.78
 - Upgrade broken because of to strict permissions
