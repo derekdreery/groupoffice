@@ -87,7 +87,7 @@ if(!file_exists($config_file))
 
 
 chgrp('/etc/groupoffice/config.php', 'www-data');
-chmod('/etc/groupoffice/config.php', 0640);
+chmod('/etc/groupoffice/config.php', 0644);
 
 require_once('/etc/groupoffice/config.php');
 
