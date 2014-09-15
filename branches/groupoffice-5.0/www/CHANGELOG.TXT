@@ -1,3 +1,4 @@
+- Added a littlebit more height to the passworddialog.
 - Changed email toplevel domain name validation so new toplevel domains are also accepted
 - Calendar: Month view: no need to left-click an event before right-clicking it anymore.
 - Fixed max length problem in customfields.
