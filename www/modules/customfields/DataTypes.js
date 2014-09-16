@@ -61,11 +61,34 @@ GO.customfields.dataTypes={
 			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
 			delete f.anchor;
 
-			return Ext.apply(f, {
-				xtype:'numberfield',
-				decimals: customfield.number_decimals,
-				width:120
-			});
+			if (!GO.util.empty(customfield.prefix) || !GO.util.empty(customfield.postfix)) {				
+				return {
+					anchor:'-20',
+					xtype: 'compositefield',
+					fieldLabel: f.fieldLabel,
+					items: [
+						Ext.apply({
+							xtype:'numberfield',
+							decimals: customfield.number_decimals,
+							width:120,
+							name: customfield.dataname,
+							allowBlank: GO.util.empty(customfield.required)
+						}, config),
+						{
+							xtype: 'plainfield',
+							value: customfield.postfix,
+							hideLabel: true,
+							columnWidth: '.1'
+						}
+					]
+				}
+			} else {
+				return Ext.apply(f, {
+					xtype:'numberfield',
+					decimals: customfield.number_decimals,
+					width:120
+				});
+			}
 		}
 	},
 	"GO\\Customfields\\Customfieldtype\\Checkbox" :{
@@ -416,13 +439,43 @@ GO.customfields.dataTypes={
 				config.maxLength=customfield.max_length;
 			}
 
-			return Ext.apply({
-				xtype:'textfield',
-				name: customfield.dataname,
-				fieldLabel: fieldLabel,
-				anchor:'-20',
-				allowBlank: GO.util.empty(customfield.required)
-			}, config);
+			if (!GO.util.empty(customfield.prefix) || !GO.util.empty(customfield.postfix)) {
+				
+				if (!GO.util.empty(customfield.prefix))
+					fieldLabel = fieldLabel+' ('+customfield.prefix+')';
+				
+				var compositeItems = [
+						Ext.apply({
+							xtype:'textfield',
+							name: customfield.dataname,
+							anchor:'-20',
+							allowBlank: GO.util.empty(customfield.required)
+						}, config)]
+				
+				if (!GO.util.empty(customfield.postfix))
+					compositeItems.push(						{
+							xtype: 'plainfield',
+							value: customfield.postfix,
+							hideLabel: true,
+							columnWidth: '.1'
+						});
+				
+				return {
+					anchor:'-20',
+					xtype: 'compositefield',
+					fieldLabel: fieldLabel,
+					items: compositeItems
+				}
+			} else {
+				return Ext.apply({
+					xtype:'textfield',
+					name: customfield.dataname,
+					fieldLabel: fieldLabel,
+					anchor:'-20',
+					allowBlank: GO.util.empty(customfield.required)
+				}, config);
+			}
+
 		}
 	},
 	"GO\\Customfields\\Customfieldtype\\EncryptedText": {
