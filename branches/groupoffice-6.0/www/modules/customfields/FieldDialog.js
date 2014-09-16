@@ -89,6 +89,22 @@ GO.customfields.FieldDialog = function(config){
 		this.maxLengthField.setVisible(record.data['hasLength']);
 	}, this);
 
+	this.prefixField = new Ext.form.TextField({
+		name: 'prefix',
+		anchor:'-20',
+		allowBlank:true,
+		maxLength: 32,
+		fieldLabel: GO.customfields.lang.prefix
+	});
+	
+	this.postfixField = new Ext.form.TextField({
+		name: 'postfix',
+		anchor:'-20',
+		allowBlank:true,
+		maxLength: 32,
+		fieldLabel: GO.customfields.lang.postfix
+	});
+
 	this.functionField = new Ext.form.TextField({
 		name: 'function',
 		anchor:'-20',
@@ -133,6 +149,8 @@ GO.customfields.FieldDialog = function(config){
 		this.typeField,
 		this.extraOptions,
 		this.maxLengthField,
+		this.prefixField,
+		this.postfixField,
 		this.multiSelectCB = new Ext.ux.form.XCheckbox({
 			name:'multiselect',
 			fieldLabel:GO.customfields.lang.multiselect,
@@ -275,6 +293,12 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 	{
 		this.addressbookIdsField.setVisible(newValue=='GO\\Addressbook\\Customfieldtype\\Contact' || newValue=='GO\\Addressbook\\Customfieldtype\\Company');
 		this.addressbookIdsField.setDisabled(newValue!='GO\\Addressbook\\Customfieldtype\\Contact' && newValue!='GO\\Addressbook\\Customfieldtype\\Company');
+
+		var usePostFixPrefix = newValue=='GO\\Customfields\\Customfieldtype\\Text' || newValue=='GO\\Customfields\\Customfieldtype\\Number' || newValue=='GO\\Customfields\\Customfieldtype\\FunctionField';
+		this.prefixField.setVisible(usePostFixPrefix);
+		this.prefixField.setDisabled(!usePostFixPrefix);
+		this.postfixField.setVisible(usePostFixPrefix);
+		this.postfixField.setDisabled(!usePostFixPrefix);
 
 		this.helptextField.setDisabled(newValue=='GO\\Customfields\\Customfieldtype\\Infotext');
 		this.requiredCB.setDisabled(newValue=='GO\\Customfields\\Customfieldtype\\Infotext');

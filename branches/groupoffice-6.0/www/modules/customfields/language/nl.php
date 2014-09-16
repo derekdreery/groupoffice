@@ -69,3 +69,6 @@ $l['GO\Billing\Model\Order'] = 'Factuur/Offerte';
 $l['GO\Site\Model\Site'] = 'Site';
 $l['GO\Site\Model\Content'] = 'Content';
 $l['addressbookIds'] = 'Alleen uit deze adresboeken (IDs)';
+
+$l['prefix'] = 'Voorvoegsel';
+$l['postfix'] = 'Achtervoegsel';

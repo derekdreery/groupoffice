@@ -10,7 +10,13 @@ class Number extends AbstractCustomfieldtype{
 	}
 	
 	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
-		return \GO\Base\Util\Number::localize($attributes[$key],$this->field->number_decimals);
+		if (isset($attributes[$key])) {
+			$prefix = !empty($this->field->prefix) ? $this->field->prefix.' ' : '';
+			$postfix = !empty($this->field->postfix) ? ' '.$this->field->postfix : '';
+			return $prefix.\GO\Base\Util\Number::localize($attributes[$key],$this->field->number_decimals).$postfix;
+		} else {
+			return null;
+		}
 	}
 	
 	public function formatFormOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {		
@@ -26,7 +32,7 @@ class Number extends AbstractCustomfieldtype{
 			return null;
 		else
 			return \GO\Base\Util\Number::unlocalize($attributes[$key]);
-	}
+		}
 	
 	public function fieldSql() {
 		return 'DOUBLE NULL';

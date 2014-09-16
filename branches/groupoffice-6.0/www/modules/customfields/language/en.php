@@ -84,3 +84,6 @@ $l['GO\Site\Model\Site'] = 'Site';
 $l['GO\Site\Model\Content'] = 'Content';
 
 $l['addressbookIds'] = 'Only from these addressbooks (IDs)';
+
+$l['prefix'] = 'Prefix';
+$l['postfix'] = 'Postfix';

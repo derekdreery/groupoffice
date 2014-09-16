@@ -35,7 +35,14 @@ class FunctionField extends AbstractCustomfieldtype {
 	}
 	
 	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
-		return $this->formatFormOutput($key, $attributes, $model);
+		$value = $this->formatFormOutput($key, $attributes, $model);
+		if (isset($value)) {
+			$prefix = !empty($this->field->prefix) ? $this->field->prefix.' ' : '';
+			$postfix = !empty($this->field->postfix) ? ' '.$this->field->postfix : '';
+			return $prefix.$value.$postfix;
+		} else {
+			return null;
+		}
 	}
 	
 	public function formatFormInput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model){

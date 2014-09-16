@@ -22,6 +22,8 @@
  * @property int $max_length
  * @property string $addressbook_ids
  * @property string $extra_options Some types of data fields can have some extra options (use json format for multiple options)
+ * @property string $prefix
+ * @property string $postfix
  */
 
 namespace GO\Customfields\Model;

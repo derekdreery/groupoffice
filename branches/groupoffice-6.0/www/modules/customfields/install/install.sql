@@ -68,6 +68,8 @@ CREATE TABLE IF NOT EXISTS `cf_fields` (
 	`max_length` INT( 5 ) NOT NULL DEFAULT '50',
 	`addressbook_ids` VARCHAR(255) NOT NULL DEFAULT '',
 	`extra_options` TEXT NOT NULL DEFAULT '',
+	`prefix` VARCHAR(32) NOT NULL DEFAULT '',
+	`postfix` VARCHAR(32) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `type` (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
