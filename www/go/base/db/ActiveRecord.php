@@ -798,6 +798,19 @@ abstract class ActiveRecord extends \GO\Base\Model{
 	 * @return boolean
 	 */
 	private function _aclModified(){
+		$aclFk = $this->_getAclFk();
+		if($aclFk===false)
+			return false;
+		
+		return $this->isModified($aclFk);
+	}
+	
+	/**
+	 * Get the FK field that link to the model containing the ACL
+	 * eg. adressbook_id
+	 * @return boolean|string field name or false if not an related ACL
+	 */
+	private function _getAclFk() {
 		if (!$this->aclField())
 			return false;
 
@@ -808,7 +821,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 
 		$relation = array_shift($arr);
 		$r = $this->getRelation($relation);
-		return $this->isModified($r['field']);
+		return $r['field'];
 	}
 
 
@@ -3077,8 +3090,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					$this->{$this->aclOverwrite()} = $this->findRelatedAclModel()->findAclId();
 				}
 			}
-			if(!$this->isAclOverwritten() && $this->isJoinedAclField)
-				$this->{$this->aclOverwrite()} = $this->findRelatedAclModel()->findAclId();
+//			if(!$this->isAclOverwritten() && $this->isJoinedAclField)
+//				$this->{$this->aclOverwrite()} = $this->findRelatedAclModel()->findAclId();
 		}
 
 		if($this->isNew){
@@ -4100,16 +4113,18 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			$this->_attributes[$name]=$value;
 			return true;
 		}
-
+		
 		if($format)
 			$value = $this->formatInput($name, $value);
 
 		if(isset($this->columns[$name])){
-
+			
 			if(GO::config()->debug){
 				if($this->columns[$name]['gotype']!='file' && is_object($value) || is_array($value))
 					throw new \Exception($this->className()."::setAttribute : Invalid attribute value for ".$name.". Type was: ".gettype($value));
 			}
+			
+			$aclWasOverwritten = $this->isAclOverwritten();
 
 			//normalize CRLF to prevent issues with exporting to vcard etc.
 			if(isset($this->columns[$name]['gotype']) && ($this->columns[$name]['gotype']=='textfield' || $this->columns[$name]['gotype']=='textarea'))
@@ -4120,8 +4135,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //				GO::debug("Setting modified attribute $name to ".$this->_modifiedAttributes[$name]);
 //				GO::debugCalledFrom(5);
 			}
-
+			
 			$this->_attributes[$name]=$value;
+			
+			// Set the ACL_ID if the relation acl FK changed and ACL is overwritten
+			if($this->aclOverwrite() && $name === $this->_getAclFk() && $this->isModified($name) && !$aclWasOverwritten) {
+				$modelWithAcl = $this->findRelatedAclModel();
+				if($modelWithAcl){
+					$this->{$this->aclOverwrite()} = $modelWithAcl->findAclId();
+				}
+			}
 
 		}else{
 
