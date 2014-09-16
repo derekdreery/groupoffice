@@ -1,3 +1,4 @@
+- Fixed table cal_events "files_folder_id"
 - Added sort order field in the modules grid
 - customcss: Make public uploaded files accessible without logging in to GO.
 

@@ -232,4 +232,7 @@ $updates["201404011700"][]="script:4_nl_koningsdag.php";
 
 $updates['201404011700'][]="ALTER TABLE `cal_categories` ADD `acl_id` int(11) NOT NULL DEFAULT '0';";
 $updates['201404011700'][]="script:3_preset_category_acls.php";
+
+$updates['201409161300'][]="ALTER TABLE `cal_events` CHANGE `files_folder_id` `files_folder_id` INT( 11 ) NOT NULL DEFAULT '0';";
+
 				
