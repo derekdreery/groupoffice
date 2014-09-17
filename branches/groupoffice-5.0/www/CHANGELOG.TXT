@@ -1,3 +1,6 @@
+17-09-2014 5.0.80
+- Build error
+
 17-09-2014 5.0.79
 - Calendar: Disable context menu item "Create email for participants" when it's a private event and it's not yours.
 - Added a little bit more height to the password dialog.
