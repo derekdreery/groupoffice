@@ -1,10 +1,4 @@
 <?php
-$languages['ko']='한국어';
-$languages['ca']='Català';
-$languages['cn']='Chinese Simplified';
-$languages['zh-tw']='Chinese Traditional';
-$languages['cs']='Čeština';
-$languages['da']='Dansk';
 $languages['bn_BD']='বাংলা (Bangladesh)';
 $languages['de']='Deutsch';
 $languages['en']='English/American';
