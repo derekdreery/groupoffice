@@ -12,8 +12,8 @@ class Number extends AbstractCustomfieldtype{
 	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
 		if (isset($attributes[$key])) {
 			$prefix = !empty($this->field->prefix) ? $this->field->prefix.' ' : '';
-			$postfix = !empty($this->field->postfix) ? ' '.$this->field->postfix : '';
-			return $prefix.\GO\Base\Util\Number::localize($attributes[$key],$this->field->number_decimals).$postfix;
+			$suffix = !empty($this->field->suffix) ? ' '.$this->field->suffix : '';
+			return $prefix.\GO\Base\Util\Number::localize($attributes[$key],$this->field->number_decimals).$suffix;
 		} else {
 			return null;
 		}

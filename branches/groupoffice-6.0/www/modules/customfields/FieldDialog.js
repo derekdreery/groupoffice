@@ -97,12 +97,12 @@ GO.customfields.FieldDialog = function(config){
 		fieldLabel: GO.customfields.lang.prefix
 	});
 	
-	this.postfixField = new Ext.form.TextField({
-		name: 'postfix',
+	this.suffixField = new Ext.form.TextField({
+		name: 'suffix',
 		anchor:'-20',
 		allowBlank:true,
 		maxLength: 32,
-		fieldLabel: GO.customfields.lang.postfix
+		fieldLabel: GO.customfields.lang.suffix
 	});
 
 	this.functionField = new Ext.form.TextField({
@@ -150,7 +150,7 @@ GO.customfields.FieldDialog = function(config){
 		this.extraOptions,
 		this.maxLengthField,
 		this.prefixField,
-		this.postfixField,
+		this.suffixField,
 		this.multiSelectCB = new Ext.ux.form.XCheckbox({
 			name:'multiselect',
 			fieldLabel:GO.customfields.lang.multiselect,
@@ -294,11 +294,11 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 		this.addressbookIdsField.setVisible(newValue=='GO\\Addressbook\\Customfieldtype\\Contact' || newValue=='GO\\Addressbook\\Customfieldtype\\Company');
 		this.addressbookIdsField.setDisabled(newValue!='GO\\Addressbook\\Customfieldtype\\Contact' && newValue!='GO\\Addressbook\\Customfieldtype\\Company');
 
-		var usePostFixPrefix = newValue=='GO\\Customfields\\Customfieldtype\\Text' || newValue=='GO\\Customfields\\Customfieldtype\\Number' || newValue=='GO\\Customfields\\Customfieldtype\\FunctionField';
-		this.prefixField.setVisible(usePostFixPrefix);
-		this.prefixField.setDisabled(!usePostFixPrefix);
-		this.postfixField.setVisible(usePostFixPrefix);
-		this.postfixField.setDisabled(!usePostFixPrefix);
+		var useSuffixPrefix = newValue=='GO\\Customfields\\Customfieldtype\\Text' || newValue=='GO\\Customfields\\Customfieldtype\\Number' || newValue=='GO\\Customfields\\Customfieldtype\\FunctionField';
+		this.prefixField.setVisible(useSuffixPrefix);
+		this.prefixField.setDisabled(!useSuffixPrefix);
+		this.suffixField.setVisible(useSuffixPrefix);
+		this.suffixField.setDisabled(!useSuffixPrefix);
 
 		this.helptextField.setDisabled(newValue=='GO\\Customfields\\Customfieldtype\\Infotext');
 		this.requiredCB.setDisabled(newValue=='GO\\Customfields\\Customfieldtype\\Infotext');

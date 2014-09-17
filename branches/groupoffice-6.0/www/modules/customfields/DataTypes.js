@@ -61,7 +61,7 @@ GO.customfields.dataTypes={
 			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
 			delete f.anchor;
 
-			if (!GO.util.empty(customfield.prefix) || !GO.util.empty(customfield.postfix)) {				
+			if (!GO.util.empty(customfield.prefix) || !GO.util.empty(customfield.suffix)) {				
 				return {
 					anchor:'-20',
 					xtype: 'compositefield',
@@ -76,7 +76,7 @@ GO.customfields.dataTypes={
 						}, config),
 						{
 							xtype: 'plainfield',
-							value: customfield.postfix,
+							value: customfield.suffix,
 							hideLabel: true,
 							columnWidth: '.1'
 						}
@@ -439,7 +439,7 @@ GO.customfields.dataTypes={
 				config.maxLength=customfield.max_length;
 			}
 
-			if (!GO.util.empty(customfield.prefix) || !GO.util.empty(customfield.postfix)) {
+			if (!GO.util.empty(customfield.prefix) || !GO.util.empty(customfield.suffix)) {
 				
 				if (!GO.util.empty(customfield.prefix))
 					fieldLabel = fieldLabel+' ('+customfield.prefix+')';
@@ -452,10 +452,10 @@ GO.customfields.dataTypes={
 							allowBlank: GO.util.empty(customfield.required)
 						}, config)]
 				
-				if (!GO.util.empty(customfield.postfix))
+				if (!GO.util.empty(customfield.suffix))
 					compositeItems.push(						{
 							xtype: 'plainfield',
-							value: customfield.postfix,
+							value: customfield.suffix,
 							hideLabel: true,
 							columnWidth: '.1'
 						});

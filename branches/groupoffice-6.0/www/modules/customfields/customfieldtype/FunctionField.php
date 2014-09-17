@@ -38,8 +38,8 @@ class FunctionField extends AbstractCustomfieldtype {
 		$value = $this->formatFormOutput($key, $attributes, $model);
 		if (isset($value)) {
 			$prefix = !empty($this->field->prefix) ? $this->field->prefix.' ' : '';
-			$postfix = !empty($this->field->postfix) ? ' '.$this->field->postfix : '';
-			return $prefix.$value.$postfix;
+			$suffix = !empty($this->field->suffix) ? ' '.$this->field->suffix : '';
+			return $prefix.$value.$suffix;
 		} else {
 			return null;
 		}
