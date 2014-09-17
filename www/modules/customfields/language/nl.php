@@ -71,4 +71,4 @@ $l['GO\Site\Model\Content'] = 'Content';
 $l['addressbookIds'] = 'Alleen uit deze adresboeken (IDs)';
 
 $l['prefix'] = 'Voorvoegsel';
-$l['postfix'] = 'Achtervoegsel';
+$l['suffix'] = 'Achtervoegsel';

@@ -164,4 +164,4 @@ $updates['201405131536'][]="update `cf_fields` set `datatype` = replace(`datatyp
 
 
 $updates['201409161000'][]="ALTER TABLE `cf_fields` ADD `prefix` VARCHAR( 32 ) NOT NULL DEFAULT '',
-ADD `postfix` VARCHAR( 32 ) NOT NULL DEFAULT '';";
+ADD `suffix` VARCHAR( 32 ) NOT NULL DEFAULT '';";
