@@ -1,3 +1,5 @@
+- Document Templates: It is now possible to use custom field tags in Document Templates for Contacts. (e.g., {contact:col_25} and {contact:col_84})
+
 17-09-2014 5.0.80
 - Build error
 
