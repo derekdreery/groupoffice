@@ -1,6 +1,9 @@
+17-09-2014 6.0.22
 - Fixed table cal_events "files_folder_id"
 - Added sort order field in the modules grid
 - customcss: Make public uploaded files accessible without logging in to GO.
+- Improved invoicing in projects2 module.
+- Prefix and Suffix in custom field.
 
 04-09-2014 6.0.21
 - Bug in invoicing from projects
