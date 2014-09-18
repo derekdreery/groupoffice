@@ -1,3 +1,4 @@
+- Remove focus from windows/dialogs that are closed (hide)
 - Special strings "GROUP_EVERYONE", "GROUP_ADMIN" and "GROUP_INTERNAL" for $config['register_user_groups'] and $config['register_visible_user_groups']
 - Document Templates: It is now possible to use custom field tags in Document Templates for Contacts. (e.g., {contact:col_25} and {contact:col_84})
 
