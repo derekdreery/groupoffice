@@ -1,3 +1,5 @@
+- added selectRecord function in the multiSelectGrid component.
+
 17-09-2014 6.0.22
 - Fixed table cal_events "files_folder_id"
 - Added sort order field in the modules grid
