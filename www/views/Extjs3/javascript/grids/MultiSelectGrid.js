@@ -160,6 +160,16 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 		}
 	},
 
+	/**
+	 * Select a record in the multiSelectGrid
+	 * 
+	 * @param Ext.data.Record record
+	 * @returns {undefined}
+	 */
+	selectRecord : function(record){
+		this.applyFilter([record.id]);
+	},
+
 	getSelected : function(){
 		var ids = [];
 		for (var i = 0; i < this.store.data.items.length;  i++)
