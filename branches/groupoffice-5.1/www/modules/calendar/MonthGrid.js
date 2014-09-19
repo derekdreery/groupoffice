@@ -45,6 +45,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	//The remote database ID's can be stored in this array. Useful for database updates
 	remoteEvents : Array(),
 
+	remoteEventsById : Array(),
+
 	//domids that need to be moved along with another. When an event spans multiple days
 	domIds : Array(),
 
@@ -432,7 +434,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 					dragDate: data.dragDate
 					};
 
-				var remoteEvent = this.elementToEvent(data.item.id);
+				var remoteEvent = this._elementIdToEvent(data.item.id);
 
 				if(!remoteEvent.read_only)
 				{
@@ -507,7 +509,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	{
 		if(this.selected && this.selected.length > 0)
 		{
-			return this.elementToEvent(this.selected[0].id);
+			return this._elementIdToEvent(this.selected[0].id);
 		}
 	},
 	isSelected : function(eventEl)
@@ -730,6 +732,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 					html: text,
 					"ext:qtip": GO.calendar.formatQtip(eventData),
 					"ext:qtitle":eventData.name,
+					"event_id" : eventData.id,
 					tabindex:0//tabindex is needed for focussing and events
 				};
 				
@@ -778,10 +781,10 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
 					eventEl = Ext.get(eventEl).findParent('div.x-calGrid-month-event-container', 2, true);
 
-					this.clickedEventId=eventEl.id;
+//					this.clickedEventId=eventEl.id;
 
 					//this.eventDoubleClicked=true;
-					var event = this.elementToEvent(this.clickedEventId);
+					var event = this._elementToEvent(eventEl);
 
 					if(event['repeats'] && this.writePermission)
 					{
@@ -800,8 +803,9 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
 				event.on('contextmenu', function(e, eventEl)
 				{
-					var event = this.elementToEvent(this.clickedEventId);
-					this.showContextMenu(e, event);
+					var eventData = this._elementToEvent(eventEl);
+//					var event = this._elementIdToEvent(this.clickedEventId);
+					this.showContextMenu(e, eventData);
 				}, this);
 			}
 		}
@@ -1041,7 +1045,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	registerEvent : function(domId, eventData)
 	{
 		this.remoteEvents[domId]=eventData;
-
+		this.remoteEventsById[eventData.id]=eventData;
 	/*if(!this.eventIdToDomId[eventData.event_id])
 		{
 			this.eventIdToDomId[eventData.event_id]=[];
@@ -1072,11 +1076,18 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		return domElements;
 	},
 
-	elementToEvent : function(elementId, allDay)
+	_elementIdToEvent : function(elementId)
 	{
 		this.remoteEvents[elementId]['domId']=elementId;
 		return this.remoteEvents[elementId];
+	},
+	
+	_elementToEvent : function(eventEl) {
+		var eventElement = new Ext.Element(eventEl);
+		var eventIdString = eventElement.getAttribute('event_id');
+		return this.remoteEventsById[eventIdString];
 	}
+	
 });
 
 
@@ -1208,7 +1219,7 @@ GO.calendar.dd.MonthDropTarget = function(el, config) {
 };
 Ext.extend(GO.calendar.dd.MonthDropTarget, Ext.dd.DropTarget, {
 	notifyDrop: function(dd, e, data) {
-		var remoteEvent = this.scope.elementToEvent(data.item.id);
+		var remoteEvent = this.scope._elementIdToEvent(data.item.id);
 		if(!this.scope.writePermission || remoteEvent.read_only)
 		{
 			return false;

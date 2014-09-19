@@ -117,6 +117,13 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 		this.actionCopy.setDisabled(this.event.read_only);
 		this.actionCut.setDisabled(this.event.read_only);
 		
+		// Disable "Create email for participants" when it's a private event and it's not yours
+		if(this.event.private && this.event.user_id != GO.settings.user_id){
+			this.actionCreateMail.setDisabled(true);
+		}	else {
+			this.actionCreateMail.setDisabled(false);
+		}
+		
 		var deleteEnabled=false;
 		if(typeof(this.event.is_organizer)!='undefined' && !this.event.is_organizer)
 			deleteEnabled=true;

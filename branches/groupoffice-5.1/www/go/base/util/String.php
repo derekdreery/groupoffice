@@ -638,7 +638,7 @@ END;
 	 * @return	string
 	 */
 	public static function get_email_validation_regex() {
-		return "/^[a-z0-9\._\-+\&]+@[a-z0-9\.\-_]+\.[a-z]{2,6}$/i";
+		return "/^[a-z0-9\._\-+\&]+@[a-z0-9\.\-_]+\.[a-z]{2,100}$/i";
 	}
 
 
