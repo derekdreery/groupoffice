@@ -29,6 +29,10 @@
  */
 class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
 
+	const GROUP_EVERYONE = 'GROUP_EVERYONE';
+	const GROUP_ADMINS = 'GROUP_ADMINS';
+	const GROUP_INTERNAL = 'GROUP_INTERNAL';
+	
 	/**
 	 * Returns a static model of itself
 	 * 

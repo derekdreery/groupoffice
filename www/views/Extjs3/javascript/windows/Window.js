@@ -84,6 +84,9 @@ GO.Window = Ext.extend(Ext.Window,{
 			this.un(this.temporaryListeners[i].eventName, this.temporaryListeners[i].fn, this.temporaryListeners[i].scope);
 		}
 		this.temporaryListeners=[];		
+		
+		document.activeElement.blur();
+		
 		GO.Window.superclass.hide.call(this);
 	}		
 });

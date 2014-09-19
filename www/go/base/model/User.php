@@ -358,7 +358,21 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			if(!empty(GO::config()->register_user_groups)){
 				$groups = explode(',',GO::config()->register_user_groups);
 				foreach($groups as $groupName){
-					$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', trim($groupName));
+					switch ($groupName) {
+						case GO_Base_Model_Group::GROUP_EVERYONE:
+							$group = GO_Base_Model_Group::model()->findByPk(GO::config()->group_everyone);
+							break;
+						case GO_Base_Model_Group::GROUP_ADMINS:
+							$group = GO_Base_Model_Group::model()->findByPk(GO::config()->group_root);
+							break;
+						case GO_Base_Model_Group::GROUP_INTERNAL:
+							$group = GO_Base_Model_Group::model()->findByPk(GO::config()->group_internal);
+							break;
+						default:
+							$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', trim($groupName));
+							break;
+					}
+					
 					if($group)
 						$group->addUser($this->id);
 				}
@@ -384,7 +398,20 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		if(!empty(GO::config()->register_visible_user_groups)){
 			$groups = explode(',',GO::config()->register_visible_user_groups);
 			foreach($groups as $groupName){
-				$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', trim($groupName));
+					switch ($groupName) {
+						case GO_Base_Model_Group::GROUP_EVERYONE:
+							$group = GO_Base_Model_Group::model()->findByPk(GO::config()->group_everyone);
+							break;
+						case GO_Base_Model_Group::GROUP_ADMINS:
+							$group = GO_Base_Model_Group::model()->findByPk(GO::config()->group_root);
+							break;
+						case GO_Base_Model_Group::GROUP_INTERNAL:
+							$group = GO_Base_Model_Group::model()->findByPk(GO::config()->group_internal);
+							break;
+						default:
+							$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', trim($groupName));
+							break;
+					}
 				if($group)
 					$this->acl->addGroup($group->id, GO_Base_Model_Acl::MANAGE_PERMISSION);
 			}

@@ -12,3 +12,5 @@ $l['backupdb']='Copia de seguridad de base de datos';
 $l['index_files']='Indexar todos los archivos';
 $l['buildsearchcache']='Crear indice de búsqueda';
 $l['checkmodules']='Verificar módulos';
+
+$l['resetState']='Reiniciar el estado de ventanas, grids, etc.';
