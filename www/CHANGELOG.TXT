@@ -1,3 +1,6 @@
+19-09-2014 6.0.24
+- Forgot to commit one fix
+
 19-09-2014 6.0.23
 - Billing template logo bug fixed
 - Merged v5 fixes.
