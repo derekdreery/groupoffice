@@ -367,7 +367,22 @@ class User extends \GO\Base\Db\ActiveRecord {
 			if(!empty(GO::config()->register_user_groups)){
 				$groups = explode(',',GO::config()->register_user_groups);
 				foreach($groups as $groupName){
-					$group = Group::model()->findSingleByAttribute('name', trim($groupName));
+
+					switch ($groupName) {
+						case Group::GROUP_EVERYONE:
+							$group = Group::model()->findByPk(GO::config()->group_everyone);
+							break;
+						case Group::GROUP_ADMINS:
+							$group = Group::model()->findByPk(GO::config()->group_root);
+							break;
+						case Group::GROUP_INTERNAL:
+							$group = Group::model()->findByPk(GO::config()->group_internal);
+							break;
+						default:
+							$group = Group::model()->findSingleByAttribute('name', trim($groupName));
+							break;
+					}
+
 					if($group)
 						$group->addUser($this->id);
 				}
@@ -386,7 +401,21 @@ class User extends \GO\Base\Db\ActiveRecord {
 		if(!empty(GO::config()->register_visible_user_groups)){
 			$groups = explode(',',GO::config()->register_visible_user_groups);
 			foreach($groups as $groupName){
-				$group = Group::model()->findSingleByAttribute('name', trim($groupName));
+
+				switch ($groupName) {
+					case Group::GROUP_EVERYONE:
+						$group = GO_Base_Model_Group::model()->findByPk(GO::config()->group_everyone);
+						break;
+					case Group::GROUP_ADMINS:
+						$group = GO_Base_Model_Group::model()->findByPk(GO::config()->group_root);
+						break;
+					case Group::GROUP_INTERNAL:
+						$group = GO_Base_Model_Group::model()->findByPk(GO::config()->group_internal);
+						break;
+					default:
+						$group = Group::model()->findSingleByAttribute('name', trim($groupName));
+						break;
+				}
 				if($group)
 					$this->acl->addGroup($group->id, Acl::MANAGE_PERMISSION);
 			}

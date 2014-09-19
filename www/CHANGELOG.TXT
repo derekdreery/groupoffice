@@ -106,6 +106,20 @@
 - Show ticket template per message
 - Custom IMAP flag support (Message labels)
 
+- Remove focus from windows/dialogs that are closed (hide)
+- Special strings "GROUP_EVERYONE", "GROUP_ADMIN" and "GROUP_INTERNAL" for $config['register_user_groups'] and $config['register_visible_user_groups']
+- Document Templates: It is now possible to use custom field tags in Document Templates for Contacts. (e.g., {contact:col_25} and {contact:col_84})
+
+17-09-2014 5.0.80
+- Build error
+
+17-09-2014 5.0.79
+- Calendar: Disable context menu item "Create email for participants" when it's a private event and it's not yours.
+- Added a little bit more height to the password dialog.
+- Changed email toplevel domain name validation so new toplevel domains are also accepted
+- Calendar: Month view: no need to left-click an event before right-clicking it anymore.
+- Fixed max length problem in customfields.
+
 20-08-2014 5.0.78
 - Upgrade broken because of to strict permissions
 - Translation errors fixed

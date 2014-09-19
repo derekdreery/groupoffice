@@ -1102,7 +1102,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			if(this.sendParams.save_to_path)
 				sendUrl = GO.url("email/message/saveToFile");
 			else if(draft || autoSave)
-				sendUrl = GO.url("email/message/save")
+				sendUrl = GO.url("email/message/save");
 
 			this.formPanel.form.submit({
 				url : sendUrl,

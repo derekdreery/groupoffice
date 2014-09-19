@@ -23,7 +23,7 @@ class ExportContactsWithCompaniesController extends \GO\Base\Controller\Abstract
 	public function export($params) {
 		
 		GO::$disableModelCache=true;		
-		GO::setMaxExecutionTime(300);
+		GO::setMaxExecutionTime(420);
 		
 		// Load the data from the session.
 		$findParams = \GO::session()->values['contact']['findParams'];

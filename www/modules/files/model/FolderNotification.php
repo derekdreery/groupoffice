@@ -125,10 +125,6 @@ class FolderNotification extends \GO\Base\Db\ActiveRecord {
 					$users[$notification->modified_user_id] = \GO::t('deletedUser', 'files');
 			}
 
-			//switch status of notification to sent
-			$notification->status = 1;
-			$notification->save();
-
 			switch ($notification->type) {
 				case FolderNotificationMessage::ADD_FOLDER:
 					$messages[$notification->type][] = sprintf(
@@ -200,6 +196,11 @@ class FolderNotification extends \GO\Base\Db\ActiveRecord {
 					);
 					break;
 			}
+			
+			//switch status of notification to sent
+			//$notification->status = 1;
+			//$notification->save();
+			$notification->delete();
 		}
 
 		//TODO: create emailBody

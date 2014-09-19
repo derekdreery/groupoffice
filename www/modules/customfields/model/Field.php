@@ -119,7 +119,7 @@ class Field extends \GO\Base\Db\ActiveRecord{
 	}
 		
 	public function alterDatabase($wasNew){
-			$table=$this->category->customfieldsTableName();
+		$table=$this->category->customfieldsTableName();
 					
 		if($wasNew){			
 			$sql = "ALTER TABLE `".$table."` ADD `".$this->columnName()."` ".str_replace('%MAX_LENGTH',$this->max_length,$this->customfieldtype->fieldSql()).";";
@@ -231,6 +231,12 @@ class Field extends \GO\Base\Db\ActiveRecord{
 	}
 	
 	protected function beforeSave() {
+		
+		if(!$this->customfieldtype->hasLength()){
+			//user may not set length so take the default
+			$this->max_length = $this->customfieldtype->getMaxLength();
+		}
+		
 		if($this->isNew)
 			$this->sort_index=$this->count();		
 		
