@@ -1,3 +1,6 @@
+19-09-2014 6.0.23
+- Billing template logo bug fixed
+- Merged v5 fixes.
 - added selectRecord function in the multiSelectGrid component.
 
 17-09-2014 6.0.22

@@ -42,6 +42,8 @@
 
 namespace GO\Base;
 
+use GO\Base\Model\Group;
+
 
 class Config {
 #FRAMEWORK VARIABLES
@@ -392,7 +394,7 @@ class Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $register_visible_user_groups = GO_Base_Model_Group::GROUP_EVERYONE;
+	var $register_visible_user_groups = Group::GROUP_EVERYONE;
 
 	/**
 	 * Relative hostname with slash on both start and end
@@ -975,7 +977,7 @@ class Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '6.0.22';
+	var $version = '6.0.23';
 
 	/**
 	 * Modification date
@@ -984,7 +986,7 @@ class Config {
 	 * @access  public
 	 */
 
-	var $mtime = '20140917';
+	var $mtime = '20140919';
 
 
 	#group configuration
