@@ -392,7 +392,7 @@ class Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $register_visible_user_groups = 'Everyone';
+	var $register_visible_user_groups = GO_Base_Model_Group::GROUP_EVERYONE;
 
 	/**
 	 * Relative hostname with slash on both start and end
