@@ -404,13 +404,13 @@ class User extends \GO\Base\Db\ActiveRecord {
 
 				switch ($groupName) {
 					case Group::GROUP_EVERYONE:
-						$group = GO_Base_Model_Group::model()->findByPk(GO::config()->group_everyone);
+						$group = Group::model()->findByPk(GO::config()->group_everyone);
 						break;
 					case Group::GROUP_ADMINS:
-						$group = GO_Base_Model_Group::model()->findByPk(GO::config()->group_root);
+						$group = Group::model()->findByPk(GO::config()->group_root);
 						break;
 					case Group::GROUP_INTERNAL:
-						$group = GO_Base_Model_Group::model()->findByPk(GO::config()->group_internal);
+						$group = Group::model()->findByPk(GO::config()->group_internal);
 						break;
 					default:
 						$group = Group::model()->findSingleByAttribute('name', trim($groupName));
