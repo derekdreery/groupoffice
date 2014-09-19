@@ -1,3 +1,5 @@
+- Fixed problem with creating new sieve filterset.
+
 19-09-2014 6.0.24
 - Forgot to commit one fix
 
