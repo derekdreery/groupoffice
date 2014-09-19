@@ -4124,7 +4124,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					throw new \Exception($this->className()."::setAttribute : Invalid attribute value for ".$name.". Type was: ".gettype($value));
 			}
 			
-			$aclWasOverwritten = $this->isAclOverwritten();
+			$relationFieldName = $this->_getAclFk();
+			
+			if($name === $relationFieldName){
+				$aclWasOverwritten = $this->isAclOverwritten();
+			}
 
 			//normalize CRLF to prevent issues with exporting to vcard etc.
 			if(isset($this->columns[$name]['gotype']) && ($this->columns[$name]['gotype']=='textfield' || $this->columns[$name]['gotype']=='textarea'))
@@ -4139,10 +4143,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			$this->_attributes[$name]=$value;
 			
 			// Set the ACL_ID if the relation acl FK changed and ACL is overwritten
-			if($this->aclOverwrite() && $name === $this->_getAclFk() && $this->isModified($name) && !$aclWasOverwritten) {
-				$modelWithAcl = $this->findRelatedAclModel();
-				if($modelWithAcl){
-					$this->{$this->aclOverwrite()} = $modelWithAcl->findAclId();
+			if($name === $relationFieldName && !$aclWasOverwritten && $this->aclOverwrite() && $this->isModified($name)) {
+				if(!empty($this->{$name})){
+					$modelWithAcl = $this->findRelatedAclModel();
+					if($modelWithAcl){
+						$this->{$this->aclOverwrite()} = $modelWithAcl->findAclId();
+					}
 				}
 			}
 
