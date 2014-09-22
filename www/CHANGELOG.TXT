@@ -1,3 +1,4 @@
+22-09-2014 5.0.81
 - Calendar & Tasks: Fixed updating of Tab "Visible tasklists" when loading, showing, creating CalendarDialog.
 - Remove focus from windows/dialogs that are closed (hide)
 - Special strings "GROUP_EVERYONE", "GROUP_ADMIN" and "GROUP_INTERNAL" for $config['register_user_groups'] and $config['register_visible_user_groups']
