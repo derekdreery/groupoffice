@@ -242,23 +242,21 @@ GO.addressbook.ContactsGrid = function(config){
 	config.view=new Ext.grid.GridView({
 		emptyText: GO.lang.strNoItems,
 		getRowClass: function(record, rowIndex, rp, ds){
-			
-				if(!rp.tstyle)
-						rp.tstyle = '';
-					
-        if(record.data.color){
-					
-					if(!rp.initialstyle)
-						rp.initialstyle = rp.tstyle;
-					
-//					rp.tstyle += "background-color:#"+record.data.color+";";
-					rp.tstyle += "color:#"+record.data.color+";";
-				} else {
-					rp.tstyle= rp.initialstyle;
-				}
-				
-				return;
-    }
+
+			if(!rp.tstyle)
+				rp.tstyle = '';
+
+			if(!rp.initialstyle)
+				rp.initialstyle = rp.tstyle;
+
+			if(record.data.color){				
+				rp.tstyle += "color:#"+record.data.color+";";
+			} else {
+				rp.tstyle= rp.initialstyle;
+			}
+
+			return;
+		}
 	}),
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
