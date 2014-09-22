@@ -1,9 +1,12 @@
-2014/05/13 6.0.1
-Group-Office 6.0 comes with a new App manager. In all downloads all Apps
-are included by default. You can easily extend your system with new Apps that
+2014/09/22 6.0.1
+Group-Office 6.0 comes with a new module manager. In all downloads all modules
+are included by default. You can easily extend your system with new modules that
 you can get from our store.
-We've also added various small features like quota per user support in the files
-app and PDF stationary papers in the billing app.
+We've also added various new features like quota per user support in the files
+module and PDF stationary papers in the billing module. We've also included a
+beta webODF module that lets you edit ODF documents online.
+It's also possible to set Group-Office up with the prosody chat server!
+
 
 2013/09/10 5.0.5
 Group-Office 5.0 was completely redesigned. It was time to modernize the 
