@@ -7,6 +7,10 @@ module and PDF stationary papers in the billing module. We've also included a
 beta webODF module that lets you edit ODF documents online.
 It's also possible to set Group-Office up with the prosody chat server!
 
+IMPORTANT: When upgrading please note that the projects module has been replaced by the new
+projectsv2. It has been changed a lot so you should migrate to v2 in version 5 first and test
+it.
+
 
 2013/09/10 5.0.5
 Group-Office 5.0 was completely redesigned. It was time to modernize the 
