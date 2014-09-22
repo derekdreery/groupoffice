@@ -702,7 +702,11 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			var eT = Date.parseDate(edWithTime, 'Y-m-d '+GO.settings.time_format);
 
 			if(sT>=eT){
-				this.endTime.setValue(sT.add(Date.HOUR, 1).format(GO.settings.time_format))
+				
+				var ed = sT.add(Date.HOUR, 1);
+				
+				this.endTime.setValue(ed.format(GO.settings.time_format));
+				this.endDate.setValue(ed);
 			}
 		}
 		
