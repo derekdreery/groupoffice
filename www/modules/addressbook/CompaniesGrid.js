@@ -221,22 +221,20 @@ GO.addressbook.CompaniesGrid = function(config){
 		emptyText: GO.lang.strNoItems,
 		getRowClass: function(record, rowIndex, rp, ds){
 
-				if(!rp.tstyle)
-					rp.tstyle = '';
+			if(!rp.tstyle)
+				rp.tstyle = '';
 
-        if(record.data.color){
+			if(!rp.initialstyle)
+				rp.initialstyle = rp.tstyle;
 
-					if(!rp.initialstyle)
-						rp.initialstyle = rp.tstyle;
+			if(record.data.color){				
+				rp.tstyle += "color:#"+record.data.color+";";
+			} else {
+				rp.tstyle= rp.initialstyle;
+			}
 
-//					rp.tstyle += "background-color:#"+record.data.color+";";
-					rp.tstyle += " color:#"+record.data.color+";";
-				} else {
-					rp.tstyle= rp.initialstyle;
-				}
-
-				return;
-    }
+			return;
+		}
 	}),
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
