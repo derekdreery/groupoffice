@@ -340,6 +340,11 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 		if(!this.rendered)
 			this.render(Ext.getBody());
 			
+		if(GO.tasks)
+		{
+			this.tasklistsTab.setModelId(calendar_id);
+		}
+			
 		this.propertiesTab.show();       
 
 		if(resource && !this.selectGroup.store.loaded)
@@ -464,6 +469,7 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 
 					if(GO.tasks)
 					{
+						this.tasklistsTab.setModelId(action.result.id);
 						this.tasklistsTab.store.commitChanges();
 					}
 
