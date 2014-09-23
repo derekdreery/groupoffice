@@ -1163,6 +1163,8 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 
 	protected function actionCompress($params) {
 
+		ini_set('max_execution_time', 600);
+		ini_set('memory_limit', '512M');
 		$sources = json_decode($params['compress_sources'], true);
 
 
