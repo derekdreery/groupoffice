@@ -95,6 +95,24 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	 */
 	customFieldType : 0,
 	
+	/**
+	 * The modelname that is used to search for customfields and comments
+	 * 
+	 * Example: "GO\\Notes\\Model\\Note"
+	 * 
+	 */
+	modelName : false,
+	
+	/**
+	 * Enable the comments tab when the comments is installed.
+	 * Note: You also need to set the correct modelName to enable this.
+	 */
+	enableComments: false,
+	
+	/**
+	 * Enable the customfields tab when the customfieldsmodule is installed
+	 */
+//	enableCustomfields : false,	 // NOT YET USED BUT NEEDS TO REPLACE THE customFieldType FIELD
 	
 	/**
 	 * If set this panel will automatically listen to an acl_id field in the model.
@@ -209,6 +227,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		
 
 		this.addCustomFields();
+		this.addComments();
 		
 		this.formPanelConfig=this.formPanelConfig || {};
 		this.formPanelConfig = Ext.apply(this.formPanelConfig, {
@@ -316,6 +335,42 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				}
 				
 				this.addPanel(GO.customfields.types[this.customFieldType].panels[i]);
+			}
+		}
+	},
+	
+	/**
+	 * Add the comments tab
+	 * 
+	 * @returns {undefined}
+	 */
+	addComments : function(){
+		if(GO.comments && this.enableComments && this.modelName){
+			this.commentsGrid = new GO.comments.CommentsGrid({title:GO.comments.lang.comments});
+			this.addPanel(this.commentsGrid);
+		}
+	},
+	
+	/**
+	 * Add the comments tab functionality
+	 * 
+	 * @param int remoteModelId
+	 * @returns {undefined}
+	 */
+	handleComments : function(remoteModelId){
+		if(GO.comments && this.enableComments && this.modelName){
+			
+			if(remoteModelId > 0){
+//						if (!GO.util.empty(action.result.data['action_date'])) {
+//							this.commentsGrid.actionDate = action.result.data['action_date'];
+//						} else {
+//							this.commentsGrid.actionDate = false;
+//						}
+				this.commentsGrid.setLinkId(remoteModelId, this.modelName);
+				this.commentsGrid.store.load();
+				this.commentsGrid.setDisabled(false);
+			}else {
+				this.commentsGrid.setDisabled(true);
 			}
 		}
 	},
@@ -604,6 +659,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				this.loadData = result.data;
 				
 				this.afterLoad(remoteModelId, config, {response:response, options:options, result:result});
+				
+				this.handleComments(remoteModelId);
+								
 				GO.dialog.TabbedFormDialog.superclass.show.call(this);
 				this.afterShowAndLoad(remoteModelId, config, result);
 
@@ -688,6 +746,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 						this.loadData = action.result.data;
 						
 						this.afterLoad(remoteModelId, config, action);
+						
+						this.handleComments(remoteModelId);
+						
 						GO.dialog.TabbedFormDialog.superclass.show.call(this);
 						this.afterShowAndLoad(remoteModelId, config, action.result);
 
