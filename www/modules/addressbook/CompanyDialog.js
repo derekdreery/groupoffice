@@ -151,7 +151,12 @@ GO.addressbook.CompanyDialog = function(config)
 		{
 			items.push(GO.customfields.types["GO\\Addressbook\\Model\\Company"].panels[i]);
 		}
-	}	
+	}
+	
+	if(GO.comments){
+		this.commentsGrid = new GO.comments.CommentsGrid({title:GO.comments.lang.comments});
+		items.push(this.commentsGrid);
+	}
 	
 	this.companyForm = new Ext.FormPanel({
 		fileUpload : true,
@@ -435,8 +440,22 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				
 				
 				this.personalPanel.formAddressBooks.setRemoteText(action.result.remoteComboTexts.addressbook_id);
-				
-				
+	
+				if(GO.comments){	
+					if(action.result.data['id'] > 0){
+						if (!GO.util.empty(action.result.data['action_date'])) {
+							this.commentsGrid.actionDate = action.result.data['action_date'];
+						} else {
+							this.commentsGrid.actionDate = false;
+						}
+						this.commentsGrid.setLinkId(action.result.data['id'], 'GO\\Addressbook\\Model\\Company');
+						this.commentsGrid.store.load();
+						this.commentsGrid.setDisabled(false);
+					}else {
+						this.commentsGrid.setDisabled(true);
+					}
+				}
+
 				this.afterLoad(action);
 
 				GO.addressbook.CompanyDialog.superclass.show.call(this);

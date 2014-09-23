@@ -46,7 +46,12 @@ GO.calendar.EventDialog = function(calendar) {
 			items.push(GO.customfields.types["GO\\Calendar\\Model\\Event"].panels[i]);
 		}
 	}
-
+	
+	if(GO.comments){
+		this.commentsGrid = new GO.comments.CommentsGrid({title:GO.comments.lang.comments});
+		items.push(this.commentsGrid);
+	}
+	
 	this.tabPanel = new Ext.TabPanel({
 		activeTab : 0,
 		deferredRender : false,
@@ -286,6 +291,21 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						this.setEventId(0);
 						this.formPanel.form.baseParams['exception_for_event_id'] = action.result.data.exception_for_event_id;
 						this.formPanel.form.baseParams['exception_date'] = action.result.data.exception_date;
+					}
+					
+					if(GO.comments){
+						if(action.result.data['id'] > 0){
+							if (!GO.util.empty(action.result.data['action_date'])) {
+								this.commentsGrid.actionDate = action.result.data['action_date'];
+							} else {
+								this.commentsGrid.actionDate = false;
+							}
+							this.commentsGrid.setLinkId(action.result.data['id'], 'GO\\Calendar\\Model\\Event');
+							this.commentsGrid.store.load();
+							this.commentsGrid.setDisabled(false);
+						} else {
+							this.commentsGrid.setDisabled(true);
+						}
 					}
 					
 					this.changeRepeat(action.result.data.freq);

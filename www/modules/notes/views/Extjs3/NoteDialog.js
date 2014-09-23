@@ -15,6 +15,10 @@
 GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
 	customFieldType : "GO\\Notes\\Model\\Note",
+	
+	modelName : "GO\\Notes\\Model\\Note",
+	enableComments: true,
+	
 //	_passwordChangePermission : true,
 	_userInputPassword : false,
 	

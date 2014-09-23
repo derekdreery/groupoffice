@@ -139,6 +139,21 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 					}
 				}
 				
+				if(GO.comments){	
+					if(action.result.data['id'] > 0){
+						if (!GO.util.empty(action.result.data['action_date'])) {
+							this.commentsGrid.actionDate = action.result.data['action_date'];
+						} else {
+							this.commentsGrid.actionDate = false;
+						}
+						this.commentsGrid.setLinkId(action.result.data['id'], 'GO\\Tasks\\Model\\Task');
+						this.commentsGrid.store.load();
+						this.commentsGrid.setDisabled(false);
+					}else {
+						this.commentsGrid.setDisabled(true);
+					}
+				}
+				
 				if(action.result.data.category_id == 0)
 				{
 					//this.selectCategory.setRemoteText();
@@ -629,6 +644,12 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				items.push(GO.customfields.types["GO\\Tasks\\Model\\Task"].panels[i]);
 			}
 		}
+		
+		if(GO.comments){
+			this.commentsGrid = new GO.comments.CommentsGrid({title:GO.comments.lang.comments});
+			items.push(this.commentsGrid);
+		}
+		
 		this.tabPanel = new Ext.TabPanel({
 			activeTab : 0,
 			deferredRender : false,

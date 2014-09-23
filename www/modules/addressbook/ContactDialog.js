@@ -190,6 +190,11 @@ GO.addressbook.ContactDialog = function(config)
 		}
 	}
 
+	if(GO.comments){
+		this.commentsGrid = new GO.comments.CommentsGrid({title:GO.comments.lang.comments});
+		items.push(this.commentsGrid);
+	}
+
 	this.formPanel = new Ext.FormPanel({
 		waitMsgTarget:true,
 		baseParams: {},
@@ -441,6 +446,21 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 //						this.personalPanel.formCompany.setValue(config.contactData['company_id']);
 						this.personalPanel.formDepartment.setValue(config.contactData['department']);
 						this.personalPanel.formFunction.setValue(config.contactData['function']);
+					}
+					
+					if(GO.comments){
+						if(action.result.data['id'] > 0){
+							if (!GO.util.empty(action.result.data['action_date'])) {
+								this.commentsGrid.actionDate = action.result.data['action_date'];
+							} else {
+								this.commentsGrid.actionDate = false;
+							}
+							this.commentsGrid.setLinkId(action.result.data['id'], 'GO\\Addressbook\\Model\\Contact');
+							this.commentsGrid.store.load();
+							this.commentsGrid.setDisabled(false);
+						} else {
+							this.commentsGrid.setDisabled(true);
+						}
 					}
 					
 					this.afterLoad(action);
