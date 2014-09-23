@@ -517,8 +517,13 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$inline = !isset($params['inline']) || !empty($params['inline']);
 		
 		$file = new GO_Base_Fs_File(GO::config()->tmpdir.$params['path']);
-		GO_Base_Util_Http::outputDownloadHeaders($file, $inline, !empty($params['cache']));
-		$file->output();		
+		if($file->exists()){
+			GO_Base_Util_Http::outputDownloadHeaders($file, $inline, !empty($params['cache']));
+			$file->output();
+		}else
+		{
+			echo "File not found!";
+		}
 	}
 	
 	/**
