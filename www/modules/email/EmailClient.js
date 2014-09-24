@@ -1966,7 +1966,8 @@ GO.email.moveToSpam = function(mailUid,mailboxName,fromAccountId) {
 						mail_uid: mailUid
 					},
 					success: function() {
-						GO.email.emailClient.refresh();
+						GO.email.emailClient.topMessagesGrid.store.load();
+						GO.email.emailClient.leftMessagesGrid.store.load();
 					},
 					failure: function(response,options,result) {
 						console.log(response);
@@ -1995,7 +1996,8 @@ GO.email.moveToInbox = function(mailUid,fromAccountId) {
 						mail_uid: mailUid
 					},
 					success: function() {
-						GO.email.emailClient.refresh();
+						GO.email.emailClient.topMessagesGrid.store.load();
+						GO.email.emailClient.leftMessagesGrid.store.load();
 					},
 					failure: function(response,options,result) {
 						console.log(response);
