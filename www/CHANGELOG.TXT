@@ -1,3 +1,4 @@
+- Calendar: list view now also respects the read_only property of the event
 - the value in the go_settings table can save more data (LONGTEXT)
 - Proper "File not found" message when a temporary file can no longer be found.
 
