@@ -43,6 +43,7 @@ GO.calendar.ListGrid = function(config)
 			'has_reminder',
 			'calendar_id',
 			'calendar_name',
+			'read_only',
 //			'has_other_participants',
 			'participant_ids',
 			'ctime',
@@ -191,6 +192,9 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
     
 		this.on("rowdblclick", function(grid, rowIndex, e){
 			var record = grid.getStore().getAt(rowIndex);
+
+			if(record.data.read_only)
+					return false;
 
 			if(record.data.event_id)
 			{
