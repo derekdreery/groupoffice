@@ -138,6 +138,7 @@ GO.modules.MainPanel = function(config) {
 		{
 			header: GO.modules.lang.sort_order,
 			dataIndex: 'sort_order',
+			sortable:true,
 			id: 'sort_order',
 			editor: new GO.form.NumberField({
 				allowBlank: false,
