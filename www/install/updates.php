@@ -386,3 +386,6 @@ $updates['201404171400'][]="UPDATE `go_acl` set `level`=50 WHERE `level` > 10 AN
 
 $updates['201404171400'][]="ALTER TABLE `go_users` ADD COLUMN `disk_quota` INT NULL AFTER `files_folder_id`;";
 $updates['201404171400'][]="ALTER TABLE `go_users` ADD COLUMN `disk_usage` INT NOT NULL DEFAULT '0' AFTER `files_folder_id`;";
+
+$updates["201409251000"][]="ALTER TABLE  `go_users` CHANGE  `disk_quota`  `disk_quota` BIGINT NULL";
+$updates["201409251000"][]="ALTER TABLE  `go_users` CHANGE  `disk_usage`  `disk_usage` BIGINT NOT NULL DEFAULT '0'";
