@@ -48,7 +48,12 @@ class ChatModule extends \GO\Base\Module {
 
 	public static function login($username, $password, $user, $countLogin) {
 		if (GO::modules()->chat && $countLogin && isset($_SERVER['HTTP_HOST'])) {
-			GO::session()->values['chat']['p'] = \GO\Base\Util\Crypt::encrypt($password);
+			
+			$enc = \GO\Base\Util\Crypt::encrypt($password);
+			if(!$enc){
+				throw new Exception("Chat password encryption failed!");
+			}
+			GO::session()->values['chat']['p'] = $enc;
 		}
 	}
 
