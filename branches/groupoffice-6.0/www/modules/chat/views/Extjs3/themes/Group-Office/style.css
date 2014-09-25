@@ -3,11 +3,25 @@
     border-radius: 0px;
 }
 
-#conversejs div#users, #conversejs div#chatrooms, #conversejs div#login-dialog, #conversejs div#settings {
+#conversejs div#users, #conversejs div#chatrooms, #conversejs div#login-dialog, #conversejs div#settings,
+#conversejs .chat-body {
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
-    font-size: 12px;
-    height: 100%;    
+    font-size: 12px; 
+	height: calc(100% - 26px);
+}
+#conversejs * {
+	border-radius: 0 !important;
+}
+#conversejs .chat-head-chatbox a.restore-chat {
+	color: white;
+	line-height: 18px;
+}
+#conversejs .minimized-chats-flyout, #conversejs .box-flyout {
+	bottom:0;
+}
+#conversejs ul, #conversejs ol, #conversejs dl {
+	margin: 0;
 }
 
 #conversejs .group-toggle {
