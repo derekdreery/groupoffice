@@ -306,6 +306,7 @@ class Sieve {
 		fileinto \"Spam\";
 	}";
 				$this->save_script('default', $content);
+				$this->activate('default');
 				$active = 'default';
 			}else
 			{
