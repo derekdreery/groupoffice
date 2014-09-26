@@ -3,10 +3,12 @@ GO.addressbook.CompanyProfilePanel = function(config)
 	Ext.apply(config);
 	
 	
-	this.formAddress = new Ext.form.TextField(
+	this.formAddress = new Ext.form.TextArea(
 	{
 		fieldLabel: GO.lang['strAddress'], 
 		name: 'address',
+		height: 50,
+		maxLength: 255,
 		listeners: {
 			change:function(field, v)
 			{
