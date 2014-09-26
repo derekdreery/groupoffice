@@ -1,3 +1,4 @@
+- Fixed problem with &$this variable that is passed to the listener functions (Changed to &$self) (Only breaks in Ioncube encoded files)
 - Modules: Make sort order field sortable in the grid
 - Added comments panel in the dialogs of the following items: company, contact, event, note, task
 
