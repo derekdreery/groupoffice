@@ -1,3 +1,4 @@
+- Calendar: Now possible to copy events from a read-only calendar to a writable calendar using right-click menu.
 - Fixed problem with opening document templates in the addressbook
 - Calendar: list view now also respects the read_only property of the event
 - the value in the go_settings table can save more data (LONGTEXT)
