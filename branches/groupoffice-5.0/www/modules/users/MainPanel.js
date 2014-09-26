@@ -60,9 +60,7 @@ GO.users.MainPanel = function(config)
 		  		text: GO.lang['cmdDelete'], 
 		  		cls: 'x-btn-text-icon', 
 		  		handler: function(){
-						Ext.Ajax.timeout = 180000; //3 minutes
 						this.usersGridPanel.deleteSelected();
-						Ext.Ajax.timeout = 30000; //30 seconds
 					},
 		  		scope: this
 		  	},{
