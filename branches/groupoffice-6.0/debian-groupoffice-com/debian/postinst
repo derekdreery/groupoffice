@@ -15,11 +15,6 @@ dbc_go groupoffice-com $@
 #fi
 
 
-if [ -e /usr/share/groupoffice/modules/z-push/backend/GObackend.php ]; then
-	cp /usr/share/groupoffice/modules/sync/z-push/backend/GObackend.php /usr/share/groupoffice/modules/z-push/backend/GObackend.php
-fi
-
-
 if [ -e /usr/share/groupoffice/modules/z-push21/backend/go ]; then
 	cp -R /usr/share/groupoffice/modules/sync/z-push21/backend/go /usr/share/groupoffice/modules/z-push21/backend/
 fi
