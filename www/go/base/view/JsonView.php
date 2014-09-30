@@ -288,11 +288,13 @@ class JsonView extends AbstractView{
 	 */
 	public function renderSubmit($data) {
 
-		$response = array('feedback' => '', 'success' => true, 'validationErrors'=>array());
+		$response = array('feedback' => '', 'success' => true, 'validationErrors'=>array(),'data'=>array());
 		
 		
 		//Init data array
 		foreach($data as $modelName=>$model){
+			
+			$response['data'][$modelName] = $model->getAttributes();
 			
 			// $modelName cannot be the same as the reserved results
 			if($modelName == 'feedback' || $modelName == 'success' ||  $modelName == 'validationErrors')
