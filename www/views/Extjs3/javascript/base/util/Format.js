@@ -40,5 +40,9 @@ GO.util.format = {
 	
 	date : function(timestamp) {
 		return Ext.util.Format.date(new Date(timestamp*1000), GO.settings.date_format);
+	},
+	fileSize: function(bytes) {
+		var i = Math.floor( Math.log(bytes) / Math.log(1024) );
+		return ( bytes / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 	}
 };
