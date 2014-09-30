@@ -203,14 +203,6 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
                  function (v) { this.uploader.bind(v, eval("this." + v), this); }, this
                 );
         this.uploader.init();
-				
-				
-				//auto start after adding files
-				this.uploader.bind('FilesAdded', function(up, files) {
-					if(GO.settings.upload_quickselect !== false && this.runtime=='html5'){
-						up.start();
-					}
-				});
     },
     remove_file: function (id) {
         var fileObj = this.uploader.getFile( id );
@@ -318,11 +310,21 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
     FilesAdded: function(uploader, files) {
         this.getTopToolbar().getComponent('delete').setDisabled(false);
         this.getTopToolbar().getComponent('start').setDisabled(false);
-        Ext.each(files, 
-            function (v) {
-                this.update_store( v );
-            }, this
-        );
+		
+        Ext.each(files, function (v) {
+            this.update_store( v );
+        }, this);
+			
+		var fileSize = 0;
+		for(var i=0; i<files.length; i++)
+			fileSize += files[i].size;
+		var max = uploader.settings.max_file_size;
+		// auto start after uploading files
+		setTimeout(function(){
+			if(fileSize < max) {
+				uploader.start();
+			}
+		},10);
     },
     FilesRemoved: function(uploader, files) {
         Ext.each(files, 
@@ -350,6 +352,7 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
 
     },
     QueueChanged: function(uploader) {
+		
     },
     Refresh: function(uploader) {
         Ext.each(uploader.files, 
