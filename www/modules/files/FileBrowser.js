@@ -907,7 +907,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			GO.settings.disk_quota = store.reader.jsonData.disk_quota;
 			
 			//Tell plupload the maximun filesize is the disk quota
-			var remainingDiskSpace = Math.floor(GO.settings.disk_quota-GO.settings.disk_usage);
+			var remainingDiskSpace = Math.ceil((GO.settings.disk_quota-GO.settings.disk_usage)*1024*1024);
 			this.uploadItem.lowerMaxFileSize(remainingDiskSpace);
 			
 			var quotaPercentage = (GO.settings.disk_quota && GO.settings.disk_quota>0) ? GO.settings.disk_usage/GO.settings.disk_quota : 0;
