@@ -28,3 +28,4 @@ modules/calendar/SelectCalendarDialog.js
 modules/calendar/GlobalSettings.js
 modules/calendar/ColorPickerDialog.js
 modules/calendar/AttendanceWindow.js
+modules/calendar/TaskContextMenu.js
