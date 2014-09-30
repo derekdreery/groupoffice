@@ -1,5 +1,5 @@
 <?php
-namespace \GO\Calendar\Reports;
+namespace GO\Calendar\Reports;
 /**
  * Copyright Intermesh
  *

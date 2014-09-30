@@ -75,7 +75,8 @@ class Calendar extends \GO\Base\Util\Pdf {
 	}
 	
 	/**
-	 * Place evetn in subarray orderd by date
+	 * Place events in a subarray orderd by date
+	 * Renames private event to Private
 	 * @param \GO\Calendar\Model\LocalEvent[] $events
 	 * @return array
 	 */
@@ -85,9 +86,9 @@ class Calendar extends \GO\Base\Util\Pdf {
 			$event = $evento->getEvent();
 			
 			if($event->isPrivate()){
-				$event->name=GO::t('private','calendar');
-				$event->description='';
-				$event->location='';
+				$event->name = \GO::t('private','calendar');
+				$event->description = '';
+				$event->location = '';
 			}
 			
 			
@@ -298,6 +299,9 @@ class Calendar extends \GO\Base\Util\Pdf {
 		}
 		if($event->hasReminders()) {
 			$this->Image('modules/calendar/themes/Default/images/pdf/reminder.png',$this->GetX()-$icons, $iconY, 3,3, 'PNG');//bell
+		}
+		if($event->isPrivate()) {
+			$this->Image('modules/calendar/themes/Default/images/16x16/private.png',$this->GetX()-$icons, $iconY, 3,3, 'PNG'); //lock
 		}
 		
 	}
