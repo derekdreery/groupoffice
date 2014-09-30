@@ -56,7 +56,7 @@ class ReportController extends \GO\Base\Controller\AbstractJsonController {
 		$start = $date-3600*24*($weekday);
 		$end = $date+3600*24*(5-$weekday);
 		
-		$report = new \GO\Calendar\Reports_WorkWeek();
+		$report = new \GO\Calendar\Reports\WorkWeek();
 		foreach($calendarIds as $id) {
 			
 			$calendar = \GO\Calendar\Model\Calendar::model()->findByPk($id);
@@ -103,8 +103,8 @@ class ReportController extends \GO\Base\Controller\AbstractJsonController {
 			$events = $calendar->getEventsForPeriod($start, $end);
 
 			if(!empty($calendar->tasklist)) {
-				$tasklist_id = $calendar->tasklist->id;
-				$report->tasks = \GO\Tasks\Model\Task::model()->findByDate($date,$tasklist_id)->fetchAll();
+				$tasklistId = $calendar->tasklist->id;
+				$report->tasks = \GO\Tasks\Model\Task::model()->findByDate($date,$tasklistId)->fetchAll();
 			}
 			
 			$report->setEvents($events);
