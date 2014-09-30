@@ -51,7 +51,7 @@ class ChatModule extends \GO\Base\Module {
 			
 			$enc = \GO\Base\Util\Crypt::encrypt($password);
 			if(!$enc){
-				throw new Exception("Chat password encryption failed!");
+				trigger_error("Chat password encryption failed!", E_USER_NOTICE);
 			}
 			GO::session()->values['chat']['p'] = $enc;
 		}
