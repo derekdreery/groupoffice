@@ -315,10 +315,12 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
             this.update_store( v );
         }, this);
 			
-		var fileSize = 0;
-		for(var i=0; i<files.length; i++)
+		var fileSize = 0,
+			max = uploader.settings.max_file_size;
+		for(var i=0; i<files.length; i++) {
 			fileSize += files[i].size;
-		var max = uploader.settings.max_file_size;
+		}
+		
 		// auto start after uploading files
 		setTimeout(function(){
 			if(fileSize < max) {
@@ -352,6 +354,14 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
 
     },
     QueueChanged: function(uploader) {
+		uploader.max_file_size = this.max_file_size;
+		var fileSize = 0;
+		for(var i=0; i<uploader.files.length; i++) {
+			
+			fileSize += uploader.files[i].size;
+			if(fileSize > this.max_file_size)
+				uploader.files[i].status=4; //4 = "Too Big"
+		}
 		
     },
     Refresh: function(uploader) {
