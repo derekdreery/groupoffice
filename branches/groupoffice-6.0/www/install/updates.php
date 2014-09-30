@@ -412,3 +412,6 @@ $updates['201406040910'][] = "CREATE TABLE IF NOT EXISTS `go_saved_exports` (
   `use_db_column_names` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
+
+$updates["201409261000"][]="ALTER TABLE `go_users` CHANGE  `disk_quota`  `disk_quota` BIGINT NULL";
+$updates["201409261000"][]="ALTER TABLE `go_users` CHANGE  `disk_usage`  `disk_usage` BIGINT NOT NULL DEFAULT '0'";
