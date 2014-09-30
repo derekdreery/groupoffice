@@ -339,7 +339,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 	private function _addQuota(){
 
 		if($this->isModified('size') || $this->isNew) {
-				$sizeDiff = $this->fsFile->size()-$this->getOldAttributeValue('size');
+				$sizeDiff = $this->fsFile->size() - $this->getOldAttributeValue('size');
 				GO::debug("Adding quota: $sizeDiff");
 
 				if($this->user){
