@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `cf_fields` (
 	`unique_values` tinyint(1) NOT NULL DEFAULT '0',
 	`max_length` INT( 5 ) NOT NULL DEFAULT '50',
 	`addressbook_ids` VARCHAR(255) NOT NULL DEFAULT '',
-	`extra_options` TEXT NOT NULL DEFAULT '',
+	`extra_options` TEXT,
 	`prefix` VARCHAR(32) NOT NULL DEFAULT '',
 	`suffix` VARCHAR(32) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
