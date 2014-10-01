@@ -312,8 +312,8 @@ class UserController extends \GO\Base\Controller\AbstractModelController {
 		
 		\GO::setMaxExecutionTime(0);
 		
-		if($params['controller']=='GO\Users\Controller\User')
-			$controller = new User();
+		if($params['controller']=='GO\Users\Controller\UserController')
+			$controller = new UserController();
 		else
 			throw new \Exception("No or wrong controller given");
 
