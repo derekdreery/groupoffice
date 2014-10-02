@@ -19,6 +19,7 @@ GO.grid.CheckColumn = Ext.extend(Ext.grid.Column, {
 		initComponent : function(){
 			this.groupable=false;
 			this.menuDisabled=true;
+			this.checkboxClickOnly = false;
 			
 			GO.grid.CheckColumn.superclass.initComponent.call(this);
 		},
@@ -28,6 +29,16 @@ GO.grid.CheckColumn = Ext.extend(Ext.grid.Column, {
      */
     processEvent : function(name, e, grid, rowIndex, colIndex){
         if (name == 'click') {
+					
+						if(this.checkboxClickOnly){
+							
+							var clickedEl = e.getTarget();
+							
+							if(clickedEl.className != 'x-grid3-check-col-on' && clickedEl.className != 'x-grid3-check-col'){
+								return Ext.grid.ActionColumn.superclass.processEvent.apply(this, arguments);
+							}
+						}
+					
             var record = grid.store.getAt(rowIndex);
 						var disabled = record.get(this.disabled_field);
             
