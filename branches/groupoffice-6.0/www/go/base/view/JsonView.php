@@ -290,12 +290,15 @@ class JsonView extends AbstractView{
 
 		$response = array('feedback' => '', 'success' => true, 'validationErrors'=>array(),'data'=>array());
 		
-		
 		//Init data array
 		foreach($data as $modelName=>$model){
 			
-			$response['data'][$modelName] = $model->getAttributes();
-			
+			if(is_array($model)){
+				$response['data'][$modelName] = $model;
+			} else {
+				$response['data'][$modelName] = $model->getAttributes();
+			}
+
 			// $modelName cannot be the same as the reserved results
 			if($modelName == 'feedback' || $modelName == 'success' ||  $modelName == 'validationErrors')
 				Throw new Exception('Cannot use "'.$modelName.'" as key for your data. Please change the key.');
