@@ -279,7 +279,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			throw new \Exception("Can't add exception to non recurring event ".$this->id);
 		
 		if(!$this->hasException($date)){
-			$exception = new \Exception();
+			$exception = new \GO\Calendar\Model\Exception();
 			$exception->event_id = $this->id;
 			$exception->time = mktime(date('G',$this->start_time),date('i',$this->start_time),0,date('n',$date),date('j',$date),date('Y',$date)); // Needs to be a unix timestamp
 			$exception->exception_event_id=$exception_event_id;
