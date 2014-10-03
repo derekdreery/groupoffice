@@ -63,6 +63,7 @@ class ColumnModel {
 	 * 
 	 * @param string $modelName The models where to get the columns from.
 	 * @param Array $excludeColumns 
+	 * @param Array $includeColumns
 	 */
 	public function __construct($modelName=false, $excludeColumns=array(), $includeColumns=array()) {
 		if ($modelName){
