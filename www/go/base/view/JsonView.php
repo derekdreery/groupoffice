@@ -55,7 +55,7 @@ class JsonView extends AbstractView{
 			
 			// $modelName cannot be the same as the reserved results
 			if($modelName == 'data' || $modelName == 'success')
-				Throw new Exception('Cannot use "'.$modelName.'" as key for your data. Please change the key.');
+				Throw new \Exception('Cannot use "'.$modelName.'" as key for your data. Please change the key.');
 			
 
 			if(is_a($model, "\GO\Base\Model")){
@@ -177,7 +177,7 @@ class JsonView extends AbstractView{
 			
 			// $modelName cannot be the same as the reserved results
 			if($modelName == 'data' || $modelName == 'success')
-				Throw new Exception('Cannot use "'.$modelName.'" as key for your data. Please change the key.');
+				Throw new \Exception('Cannot use "'.$modelName.'" as key for your data. Please change the key.');
 			
 
 			if(is_a($model, "\GO\Base\Model")){
@@ -301,7 +301,7 @@ class JsonView extends AbstractView{
 
 			// $modelName cannot be the same as the reserved results
 			if($modelName == 'feedback' || $modelName == 'success' ||  $modelName == 'validationErrors')
-				Throw new Exception('Cannot use "'.$modelName.'" as key for your data. Please change the key.');
+				Throw new \Exception('Cannot use "'.$modelName.'" as key for your data. Please change the key.');
 
 			if(is_a($model, "\GO\Base\Model")){
 				//$ret = $this->beforeSubmit($response, $model, $params);
@@ -357,13 +357,13 @@ class JsonView extends AbstractView{
 	private function renderStore($data){//\GO\Base\Data\AbstractStore $store, $return = false, $buttonParams=false) {
 		
 		if(!isset($data['store']))
-			Throw new Exception('The "store" parameter is required.');
+			Throw new \Exception('The "store" parameter is required.');
 
 		foreach($data as $key=>$value){
 			
 			// $modelName cannot be the same as the reserved results
 			if($key == 'summary' || $key == 'title' ||  $key == 'results')
-				Throw new Exception('Cannot use "'.$key.'" as key for your data. Please change the key.');
+				Throw new \Exception('Cannot use "'.$key.'" as key for your data. Please change the key.');
 			
 			if($key === 'store'){
 				$response=$data['store']->getData();
