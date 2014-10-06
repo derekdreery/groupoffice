@@ -68,6 +68,7 @@ GO.email.LinkAttachmentDialog = Ext.extend(GO.dialog.LinksDialog,{
 						filename: filename,
 						charset:this.attachmentItem.charset,
 						sender:this.messagePanel.data.sender,
+						tmp_file: this.attachmentItem.tmp_file,
 						filepath:this.messagePanel.data.path//smime message are cached on disk
 					},
 					success: function(options, response, result)

@@ -1776,14 +1776,20 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 			throw new \GO\Base\Exception\NotFound("Specified folder not found");
 		}
 
-		$params['filename'] = \GO\Base\Fs\File::stripInvalidChars($params['filename']);
+		$params['filename'] = \GO\Base\Fs\File::stripInvalidChars($params['filename']);		
 		$file = new \GO\Base\Fs\File(GO::config()->file_storage_path.$folder->path.'/'.$params['filename']);
+
+		if(empty($params['tmp_file'])){
+			$account = Account::model()->findByPk($params['account_id']);
+			$imap = $account->openImapConnection($params['mailbox']);
+			$response['success'] = $imap->save_to_file($params['uid'], $file->path(), $params['number'], $params['encoding'], true);
+		}else
+		{
+			$tmpfile = new \GO\Base\Fs\File(GO::config()->tmpdir.$params['tmp_file']);
+			$file = $tmpfile->copy($file->parent(), $params['filename']);
+			$response['success'] = $file != false;
+		}
 		
-		$account = Account::model()->findByPk($params['account_id']);
-		$imap = $account->openImapConnection($params['mailbox']);
-
-		$response['success'] = $imap->save_to_file($params['uid'], $file->path(), $params['number'], $params['encoding'], true);
-
 		if(!$folder->hasFile($file->name()))
 			$folder->addFile($file->name());
 
