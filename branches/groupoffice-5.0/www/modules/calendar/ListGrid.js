@@ -44,6 +44,8 @@ GO.calendar.ListGrid = function(config)
 			'calendar_id',
 			'calendar_name',
 			'read_only',
+			'is_organizer',
+			'model_name',
 //			'has_other_participants',
 			'participant_ids',
 			'ctime',
@@ -190,6 +192,10 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
     	}    	
     }, this);*/
     
+		this.store.on('load',function(store,records,options){
+			this.writePermission = store.reader.jsonData.write_permission;
+		}, this);
+		
 		this.on("rowdblclick", function(grid, rowIndex, e){
 			var record = grid.getStore().getAt(rowIndex);
 
@@ -198,9 +204,16 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 
 			if(record.data.event_id)
 			{
-				GO.calendar.showEventDialog({
-					event_id: record.data.event_id
-				});
+
+				if(record.data['repeats'] && this.writePermission)
+				{
+						this.handleRecurringEvent("eventDblClick", record.data, {});
+				}else
+				{
+					GO.calendar.showEventDialog({
+						event_id: record.data.event_id
+					});
+				}
 				
 			}else if(record.data.task_id)
 			{
@@ -352,6 +365,48 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 		this.contextMenu.setEvent(event);
 		//this.contextMenu.setParticipants(event.participant_ids);
 		this.contextMenu.showAt(e.getXY());
+	},
+	
+	handleRecurringEvent : function(fireEvent, event, actionData){
+
+		//store them here so the already created window can use these values
+		this.currentRecurringEvent = event;
+		this.currentFireEvent=fireEvent;
+		this.currentActionData = actionData;
+
+		if(!this.recurrenceDialog)
+		{
+			this.recurrenceDialog = new GO.calendar.RecurrenceDialog();
+
+			this.recurrenceDialog.on('single', function()
+			{
+				
+				this.currentActionData.singleInstance=true;
+
+				var remoteEvent = this.currentRecurringEvent;
+				var domIds=[];
+
+				this.fireEvent(this.currentFireEvent, this, remoteEvent , this.currentActionData, domIds);
+
+				this.recurrenceDialog.hide();
+			},this)
+
+			this.recurrenceDialog.on('entire', function()
+			{
+				
+				this.currentActionData.singleInstance=false;
+
+				this.fireEvent(this.currentFireEvent, this, this.currentRecurringEvent, this.currentActionData);
+				this.recurrenceDialog.hide();
+			},this)
+
+			this.recurrenceDialog.on('cancel', function()
+			{
+				this.recurrenceDialog.hide();
+			},this)
+		}
+
+		this.recurrenceDialog.show();
 	}
 	
 });
