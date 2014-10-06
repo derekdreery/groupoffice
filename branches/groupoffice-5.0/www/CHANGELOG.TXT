@@ -1,3 +1,4 @@
+06-10-2014 5.0.82
 - Email: Fixed problem with saving attachments of linked emails.
 - Check if fopen succeeded to prevent infinite loop
 - Calendar: recurring event dialog now also works in List Grid.
