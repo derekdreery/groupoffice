@@ -1,3 +1,4 @@
+- Check if fopen succeeded to prevent infinite loop
 - Calendar: recurring event dialog now also works in List Grid.
 - Workflow: Fixed: When disapproved: email and reminder for workflow starter and for workflow owner.
 - Ajax timeout increased to 3 minutes for all of Group-Office.
