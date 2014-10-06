@@ -1,7 +1,9 @@
+- Fixed syncml namespacing bugs
 - Fixed problem with file uploader when no user quota was set.
 - Dropbox: Fixed problem with finding dropbox api files (namespaces)
 - Google drive: Fixed problem with finding Googledrive_service class file
 - Fixed problem with timeentry status that was automatically appoved even when the hoursapproval2 module was installed.
+- Project display bug
 
 01-10-2014 6.0.27
 - Quota fixed
