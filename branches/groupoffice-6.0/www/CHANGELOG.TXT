@@ -1,3 +1,4 @@
+- Google drive: Fixed problem with finding Googledrive_service class file
 - Fixed problem with timeentry status that was automatically appoved even when the hoursapproval2 module was installed.
 
 01-10-2014 6.0.27
