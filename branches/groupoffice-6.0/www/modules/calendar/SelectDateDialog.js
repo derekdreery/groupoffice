@@ -68,8 +68,10 @@ Ext.extend(GO.calendar.SelectDateDialog, Ext.Window, {
 
 		this.datePicker.setValue(this.event.startDate.add(Date.DAY, 1));
 		
-		this.selectCalendar.setValue(this.event.calendar_id);
-		this.selectCalendar.setRemoteText(this.event.calendar_name);
+		if (!this.event.read_only) {
+			this.selectCalendar.setValue(this.event.calendar_id);
+			this.selectCalendar.setRemoteText(this.event.calendar_name);
+		}
 
 		GO.calendar.SelectDateDialog.superclass.show.call(this);
 	},

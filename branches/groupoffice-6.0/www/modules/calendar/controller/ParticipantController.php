@@ -42,6 +42,7 @@ class ParticipantController extends \GO\Base\Controller\AbstractModelController 
 	}
 	
 	public function formatParticipantRecord($record, $model, $store){
+		
 		$record['available']=$model->isAvailable();
 		
 		return $record;

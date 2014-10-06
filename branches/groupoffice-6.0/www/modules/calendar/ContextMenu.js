@@ -21,7 +21,7 @@ GO.calendar.ContextMenu = function(config){
 		text: GO.lang.copy,
 		cls: 'x-btn-text-icon',
 		scope:this,		
-		disabled:true,
+		disabled:false,
 		handler: function()
 		{
 			this.showSelectDateDialog(true, false);
@@ -114,14 +114,16 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 
 		this.view_id = (view_id) ? view_id : 0;
 
-		this.actionCopy.setDisabled(this.event.read_only);
+//		this.actionCopy.setDisabled(this.event.read_only);
 		this.actionCut.setDisabled(this.event.read_only);
 		
+		if (GO.email) {
 		// Disable "Create email for participants" when it's a private event and it's not yours
-		if(this.event.private && this.event.user_id != GO.settings.user_id){
-			this.actionCreateMail.setDisabled(true);
-		}	else {
-			this.actionCreateMail.setDisabled(false);
+			if(this.event.private && this.event.user_id != GO.settings.user_id){
+				this.actionCreateMail.setDisabled(true);
+			}	else {
+				this.actionCreateMail.setDisabled(false);
+			}
 		}
 		
 		var deleteEnabled=false;

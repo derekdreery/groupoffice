@@ -384,10 +384,12 @@ $updates['201401071347'][]="ALTER TABLE `go_users` ADD COLUMN `auto_punctuation`
 
 $updates['201404171400'][]="UPDATE `go_acl` set `level`=50 WHERE `level` > 10 AND `acl_id` IN (SELECT `acl_id` FROM `go_modules`);";
 
+$updates['201409231341'][]="ALTER TABLE `go_settings` CHANGE COLUMN `value` `value` LONGTEXT NULL DEFAULT NULL;";
 
 $updates['201404171400'][]="ALTER TABLE `go_users` ADD COLUMN `disk_quota` INT NULL AFTER `files_folder_id`;";
 $updates['201404171400'][]="ALTER TABLE `go_users` ADD COLUMN `disk_usage` INT NOT NULL DEFAULT '0' AFTER `files_folder_id`;";
 
+$updates['201409251000'][]="ALTER TABLE `go_settings` CHANGE COLUMN `value` `value` LONGTEXT NULL DEFAULT NULL;";
 
 $updates['201404171400'][]="update `go_model_types` set `model_name` = replace(`model_name`,'_','\\\\');";
 $updates['201404171400'][]="update `go_search_cache` set `model_name` = replace(`model_name`,'_','\\\\');";
@@ -415,3 +417,5 @@ $updates['201406040910'][] = "CREATE TABLE IF NOT EXISTS `go_saved_exports` (
 
 $updates["201409261000"][]="ALTER TABLE `go_users` CHANGE  `disk_quota`  `disk_quota` BIGINT NULL";
 $updates["201409261000"][]="ALTER TABLE `go_users` CHANGE  `disk_usage`  `disk_usage` BIGINT NOT NULL DEFAULT '0'";
+
+$updates['201409261000'][]="ALTER TABLE `go_settings` CHANGE COLUMN `value` `value` LONGTEXT NULL DEFAULT NULL;";
