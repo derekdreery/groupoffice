@@ -397,12 +397,12 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	margin-right: 5px;
 }
 
-.go-multiselect-grid  .x-panel-bbar .x-btn, .go-white-bg  .x-panel-bbar .x-btn, .go-moduletabs-body .go-display-panel .x-btn, .x-window .x-panel-bbar .x-btn{
+.go-multiselect-grid  .x-panel-bbar .x-btn, .go-white-bg  .x-panel-bbar .x-btn, .x-window .x-panel-bbar .x-btn{
 	border: 1px solid #009bcb;	
 	margin-right: 5px;
 }
 
-.go-multiselect-grid  .x-panel-bbar .x-toolbar, .go-white-bg  .x-panel-bbar .x-toolbar, .go-moduletabs-body .go-display-panel .x-toolbar, .x-window .x-panel-bbar .x-toolbar{
+.go-multiselect-grid  .x-panel-bbar .x-toolbar, .go-white-bg  .x-panel-bbar .x-toolbar, .x-window .x-panel-bbar .x-toolbar{
     padding: 0 5px 10px !important;
 }
 
