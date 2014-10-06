@@ -1711,11 +1711,16 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$params['filename'] = GO_Base_Fs_File::stripInvalidChars($params['filename']);
 		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$folder->path.'/'.$params['filename']);
 		
-		
-		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
-		$imap = $account->openImapConnection($params['mailbox']);
-		
-		$response['success'] = $imap->save_to_file($params['uid'], $file->path(), $params['number'], $params['encoding'], true);
+		if(empty($params['tmp_file'])){
+			$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
+			$imap = $account->openImapConnection($params['mailbox']);
+			$response['success'] = $imap->save_to_file($params['uid'], $file->path(), $params['number'], $params['encoding'], true);
+		}else
+		{
+			$tmpfile = new GO_Base_Fs_File(GO::config()->tmpdir.$params['tmp_file']);
+			$file = $tmpfile->copy($file->parent(), $params['filename']);
+			$response['success'] = $file != false;
+		}
 		
 		if(!$folder->hasFile($file->name()))
 			$folder->addFile($file->name());
