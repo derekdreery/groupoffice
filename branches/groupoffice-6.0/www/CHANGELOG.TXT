@@ -1,3 +1,4 @@
+06-10-2014 6.0.28
 - Email: Fixed problem with saving attachments of linked emails.
 - Fixed syncml namespacing bugs
 - Fixed problem with file uploader when no user quota was set.
