@@ -962,7 +962,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '5.0.81';
+	var $version = '5.0.82';
 
 
 	/**
