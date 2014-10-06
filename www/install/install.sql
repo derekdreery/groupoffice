@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `go_search_sync` (
 CREATE TABLE IF NOT EXISTS `go_settings` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(50) NOT NULL DEFAULT '',
-  `value` text,
+  `value` LONGTEXT,
   PRIMARY KEY (`user_id`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

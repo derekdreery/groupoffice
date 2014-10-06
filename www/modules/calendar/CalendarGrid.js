@@ -1073,9 +1073,12 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	},
 
 	addAllDayEvent : function (eventData, startDay, endDay)
-	{
+	{		
 		eventData.allDay=true;
 		eventData.daySpan = endDay-startDay+1;
+
+		if (eventData.model_name=='GO_Tasks_Model_Task' && !GO.util.empty(eventData.task_id) && eventData.task_id>0)
+			eventData.id = "task:"+eventData.task_id;
 
 		//allday event
 		//var daySpan = endDay-startDay+1;
@@ -1161,6 +1164,12 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					}
 
 				}, this);
+			} else if (eventData.model_name=='GO_Tasks_Model_Task') {
+					event.on('mousedown', function(e, eventEl){
+					eventEl = Ext.get(eventEl).findParent('div.x-calGrid-all-day-event-container', 2, true);
+					this.selectEventElement(eventEl);
+					this.clickedEventId=eventEl.id;
+				}, this);
 			}
 
 			event.on('dblclick', function(e, eventEl){
@@ -1198,7 +1207,20 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			
 			
 
-			if(!eventData.read_only)
+			if (eventData.model_name=='GO_Tasks_Model_Task') {
+				event.on('contextmenu', function(e, eventEl)
+				{
+					if (GO.tasks) {
+						var task = this.elementToEvent(this.clickedEventId);
+						if (!this.taskContextMenu)
+							this.taskContextMenu = new GO.calendar.TaskContextMenu();
+						
+						e.stopEvent();
+						this.taskContextMenu.setTask(task);
+						this.taskContextMenu.showAt(e.getXY());
+					}
+				}, this);
+			} else if(!eventData.read_only)
 			{
 				event.on('contextmenu', function(e, eventEl)
 				{
