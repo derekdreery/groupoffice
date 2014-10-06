@@ -384,17 +384,17 @@ class Participant extends \GO\Base\Db\ActiveRecord {
 			foreach($stmt as $event){
 				if(empty($newEvent) || $event->id!=$newEvent->id){
 					
-//					$p = Participant::model()->findSingleByAttributes(array(
-//							'event_id'=>$event->id,
-//							'email'=>$this->email
-//					));
-//					if(!$p){
+					$p = Participant::model()->findSingleByAttributes(array(
+							'event_id'=>$event->id,
+							'email'=>$this->email
+					));
+					if(!$p){
 						$p = new Participant();
 						$p->setAttributes($this->getAttributes('raw'), false);
 						$p->event_id=$event->id;
 						$p->id=null;
 						$p->save();
-//					}
+					}
 				}
 			}
 			
