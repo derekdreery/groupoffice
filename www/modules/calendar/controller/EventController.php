@@ -95,6 +95,8 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 
 		//when duplicating in the calendar with right click
 		if(!empty($params['duplicate'])){
+			if (!empty($params['calendar_id']) && $params['calendar_id']>0)
+				$model->calendar_id = $params['calendar_id'];
 			$model = $model->duplicate(array('uuid'=>null));
 			$params['id']=$model->id;
 		}
@@ -917,7 +919,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 	/**
 	 * Get the best writable calendar for the current user/view
 	 * @param array $calendarModels
-	 * @return Go_Calendar_Model_Calendar
+	 * @return \GO\Calendar\Model\Calendar
 	 */
 	private function _getDefaultWritableCalendar(array $calendarModels){
 		

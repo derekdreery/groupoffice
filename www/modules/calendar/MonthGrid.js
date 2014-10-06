@@ -803,10 +803,22 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
 				event.on('contextmenu', function(e, eventEl)
 				{
-					var eventData = this._elementToEvent(eventEl);
-//					var event = this._elementIdToEvent(this.clickedEventId);
-					this.showContextMenu(e, eventData);
-				}, this);
+					var theEventData = this._elementToEvent(eventEl);
+					console.log(theEventData);
+					if (theEventData.model_name=='GO_Tasks_Model_Task') {
+						if (GO.tasks) {
+							if (!this.taskContextMenu)
+								this.taskContextMenu = new GO.calendar.TaskContextMenu();
+
+							e.stopEvent();
+							this.taskContextMenu.setTask(theEventData);
+							this.taskContextMenu.showAt(e.getXY());
+						}
+					} else {
+	//					var event = this._elementIdToEvent(this.clickedEventId);
+						this.showContextMenu(e, theEventData);
+					}
+				},this);
 			}
 		}
 
