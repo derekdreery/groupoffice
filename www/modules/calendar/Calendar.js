@@ -1654,6 +1654,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		this.daysGrid.on("eventDblClick", this.onDblClick, this);
 		this.monthGrid.on("eventDblClick", this.onDblClick, this);
 		this.viewGrid.on("eventDblClick", this.onDblClick, this);
+		this.listGrid.on("eventDblClick", this.onDblClick, this);
 		
 		
 		this.monthGrid.on("move", this.onEventMove,this);
@@ -1749,7 +1750,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
 	  
 	onDblClick : function(grid, event, actionData){
-		
+	
 	
 		switch(event.model_name){
 			case "GO_Tasks_Model_Task":
