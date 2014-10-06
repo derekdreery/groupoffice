@@ -282,7 +282,10 @@ class GO_Sieve_Util_Sieve {
 		$active = $this->sieve->getActive();
 		if (!$active) {
 			
-			if(!$this->sieve->getScript('default')){
+			$all_scripts = $this->get_scripts();
+			
+			if(empty($all_scripts)){
+
 
 				$content = "require [\"vacation\",\"fileinto\"];
 	# rule:[".GO::t('standardvacation','sieve')."]
@@ -297,9 +300,14 @@ class GO_Sieve_Util_Sieve {
 		fileinto \"Spam\";
 	}";
 				$this->save_script('default', $content);
+				$this->activate('default');
+				$active = 'default';
+			}else
+			{
+				$this->activate($all_scripts[0]);
+				$active = $all_scripts[0];
 			}
-			$this->activate('default');
-			$active = 'default';
+			
 		}
 		return $active;
 	}

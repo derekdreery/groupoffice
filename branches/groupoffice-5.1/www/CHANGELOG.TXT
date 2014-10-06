@@ -1,3 +1,4 @@
+
 17-06-2014 5.1.8
 - ActivityLog to file function
 - 5.0 fixes
@@ -26,6 +27,16 @@
 - Show ticket template per message
 - Custom IMAP flag support (Message labels)
 
+- Workflow: Fixed: When disapproved: email and reminder for workflow starter and for workflow owner.
+- Ajax timeout increased to 3 minutes for all of Group-Office.
+- Calendar: Now possible to copy events from a read-only calendar to a writable calendar using right-click menu.
+- Fixed problem with opening document templates in the addressbook
+- Calendar: list view now also respects the read_only property of the event
+- the value in the go_settings table can save more data (LONGTEXT)
+- Proper "File not found" message when a temporary file can no longer be found.
+
+22-09-2014 5.0.81
+- Calendar & Tasks: Fixed updating of Tab "Visible tasklists" when loading, showing, creating CalendarDialog.
 - Remove focus from windows/dialogs that are closed (hide)
 - Special strings "GROUP_EVERYONE", "GROUP_ADMIN" and "GROUP_INTERNAL" for $config['register_user_groups'] and $config['register_visible_user_groups']
 - Document Templates: It is now possible to use custom field tags in Document Templates for Contacts. (e.g., {contact:col_25} and {contact:col_84})

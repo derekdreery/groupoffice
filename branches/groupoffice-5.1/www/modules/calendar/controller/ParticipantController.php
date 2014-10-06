@@ -23,10 +23,10 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 	
 	protected function getStoreParams($params) {
 		$c = GO_Base_Db_FindParams::newInstance()
-						->criteria(GO_Base_Db_FindCriteria::newInstance()
-										->addModel(GO_Calendar_Model_Participant::model())
-										->addCondition('event_id', $params['event_id'])
-										);
+			->criteria(GO_Base_Db_FindCriteria::newInstance()
+				->addModel(GO_Calendar_Model_Participant::model())
+				->addCondition('event_id', $params['event_id'])
+			);
 		return $c;
 	}
 	
@@ -38,6 +38,7 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 	}
 	
 	public function formatParticipantRecord($record, $model, $store){
+		
 		$record['available']=$model->isAvailable();
 		
 		return $record;

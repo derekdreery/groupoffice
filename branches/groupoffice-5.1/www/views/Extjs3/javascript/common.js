@@ -13,6 +13,8 @@
  
 Ext.namespace('GO.util');
 
+Ext.Ajax.timeout = 180000; // 3 minutes
+
 /**
  * Strpos function for js 
  */
@@ -88,7 +90,7 @@ GO.url = function(relativeUrl, params){
  */
 GO.request = function(config){
 	
-//	Ext.Ajax.timeout=5000;
+//	Ext.Ajax.timeout=180000;
 
 	var url = GO.url(config.url);
 	delete config.url;
