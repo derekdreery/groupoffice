@@ -380,17 +380,17 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 			foreach($stmt as $event){
 				if(empty($newEvent) || $event->id!=$newEvent->id){
 					
-//					$p = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
-//							'event_id'=>$event->id,
-//							'email'=>$this->email
-//					));
-//					if(!$p){
+					$p = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
+							'event_id'=>$event->id,
+							'email'=>$this->email
+					));
+					if(!$p){
 						$p = new GO_Calendar_Model_Participant();
 						$p->setAttributes($this->getAttributes('raw'), false);
 						$p->event_id=$event->id;
 						$p->id=null;
 						$p->save();
-//					}
+					}
 				}
 			}
 			
