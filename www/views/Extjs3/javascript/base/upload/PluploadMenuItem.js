@@ -53,8 +53,8 @@ GO.base.upload.PluploadMenuItem = Ext.extend(Ext.menu.Item, {
 		GO.base.upload.PluploadMenuItem.superclass.constructor.apply(this, arguments);
 	},
 	lowerMaxFileSize: function(new_max_filesize) {
-		if(new_max_filesize < 0)
-			new_max_filesize=0;
+		if(new_max_filesize <= 0)
+			new_max_filesize=GO.settings.config.max_file_size;
 		
 		this.uploadpanel.max_file_size = Math.min(new_max_filesize, GO.settings.config.max_file_size);
 		
