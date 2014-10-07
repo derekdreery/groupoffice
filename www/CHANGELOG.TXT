@@ -1,3 +1,4 @@
+- Calendar month print will now show events between before 08:00 and after 17:59
 - Fixed summer- / wintertime issue in the calendar's month print
 
 07-10-2014 5.0.83
