@@ -140,8 +140,9 @@ class GO_Calendar_Reports_Month extends GO_Calendar_Reports_Calendar {
 							$amount++;
 						}
 					}
-					if(isset($this->events[$date]['part'])) {
-						foreach($this->events[$date]['part'] as $i => $event) { //part day
+					$eventsMerge = $this->allEvents($date);
+					if(!empty($eventsMerge)) {
+						foreach($eventsMerge as $i => $event) { //part day
 							if($i+$amount>5) {
 								$more=true;
 								break;
@@ -170,6 +171,17 @@ class GO_Calendar_Reports_Month extends GO_Calendar_Reports_Calendar {
 		$this->SetXY(10,36);
 		$this->Cell($colw+7, $rowh*$weeks+6, '',1);
 
+	}
+	
+	private function allEvents($date) {
+		$allEvents = array();
+		if(isset($this->events[$date]['early']))
+			$allEvents = array_merge($allEvents, $this->events[$date]['early']);
+		if(isset($this->events[$date]['part']))
+			$allEvents = array_merge($allEvents, $this->events[$date]['part']);
+		if(isset($this->events[$date]['late']))
+			$allEvents = array_merge($allEvents, $this->events[$date]['late']);
+		return $allEvents;
 	}
 	
 	protected function DayCell($text, $width, $h, $x=null, $y=null, $more=false) {
