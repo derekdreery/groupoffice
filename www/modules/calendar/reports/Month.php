@@ -2,6 +2,7 @@
 
 namespace GO\Calendar\Reports;
 
+use GO\Base\Util\Date;
 
 /**
  * Copyright Intermesh
@@ -132,8 +133,8 @@ class Month extends Calendar {
 				$month='';
 				$more=false;
 				$this->SetFont(null, '', $this->fSizeSmall);
-				if(date('M',$date)!=date('M',$date+24*3600))
-					$month = date('M',$date+24*3600);
+				if(date('M',$date)!=date('M',Date::date_add($date, 1)))
+					$month = date('M',Date::date_add($date, 1));
 				$events = '';
 				if(date('M',$this->day)==date('M',$date)) {
 					$amount = 0;
@@ -165,7 +166,7 @@ class Month extends Calendar {
 				$this->DayCell($events, $colw, $rowh-$dateh, $coord[0], $coord[1]+$dateh,$more);
 				
 				$this->SetXY($coord[0]+$colw,$coord[1]);
-				$date+=24*3600;
+				$date = Date::date_add($date, 1);
 			}
 			$this->SetXY($this->leftMargin,$this->GetY()+$rowh);
 			
