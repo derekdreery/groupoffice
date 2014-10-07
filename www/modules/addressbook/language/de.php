@@ -302,3 +302,5 @@ $l['mailingStatus'][3]="Pausiert";
 $l['autoDataBeginning']= 'Beginne';
 $l['autoData']= 'Autodata';
 $l['addresslistIdMustBePositive']='Dieses Panel erwartet eine positive Adresslisten-ID, hat aber keine erhalten. Bitte wenden Sie sich an den Administrator.';
+
+$l['mustBeSameAddressbook']= 'Die Firma des Kontakts muss sich in dem gleichen Adressbuch wie der Kontakt befinden. Der Kontakt wurde nicht gespeichert.';
