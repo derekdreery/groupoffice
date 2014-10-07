@@ -68,7 +68,7 @@ class GO_Calendar_Reports_Month extends GO_Calendar_Reports_Calendar {
 	 * @return int UTC unixtimestamp
 	 */
 	private function getStartTime() {
-		$firstDayOfMonth = strtotime(date('Y-m-01', $this->day));
+		$firstDayOfMonth = strtotime(date('Y-m-01 ', $this->day));
 		$wd = date('N',$firstDayOfMonth)-1;
 		return $firstDayOfMonth-$wd*24*3600;
 	}
@@ -110,6 +110,7 @@ class GO_Calendar_Reports_Month extends GO_Calendar_Reports_Calendar {
 		$colw = $w/7;
 		$date = $this->getStartTime();
 		$month = date('M',$date);
+
 		for($r=0;$r<$weeks;$r++){ // 5 weeks TODO fix find weeks in month
 			//Draw vertical dates
 			$this->StartTransform();
@@ -128,8 +129,8 @@ class GO_Calendar_Reports_Month extends GO_Calendar_Reports_Calendar {
 				$month='';
 				$more=false;
 				$this->SetFont(null, '', $this->fSizeSmall);
-				if(date('M',$date)!=date('M',$date+24*3600))
-					$month = date('M',$date+24*3600);
+				if(date('M',$date)!=date('M',GO_Base_Util_Date::date_add($date, 1)))
+					$month = date('M',GO_Base_Util_Date::date_add($date, 1));
 				$events = '';
 				if(date('M',$this->day)==date('M',$date)) {
 					$amount = 0;
@@ -161,7 +162,7 @@ class GO_Calendar_Reports_Month extends GO_Calendar_Reports_Calendar {
 				$this->DayCell($events, $colw, $rowh-$dateh, $coord[0], $coord[1]+$dateh,$more);
 				
 				$this->SetXY($coord[0]+$colw,$coord[1]);
-				$date+=24*3600;
+				$date = GO_Base_Util_Date::date_add($date, 1);
 			}
 			$this->SetXY($this->leftMargin,$this->GetY()+$rowh);
 			
