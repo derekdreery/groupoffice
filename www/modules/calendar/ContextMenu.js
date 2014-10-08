@@ -126,6 +126,14 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 			}
 		}
 		
+		if(this.event.private && this.event.user_id != GO.settings.user_id){
+			this.actionCopy.setDisabled(true);
+			this.actionInfo.setDisabled(true);
+		} else {
+			this.actionCopy.setDisabled(false);
+			this.actionInfo.setDisabled(false);
+		}
+		
 		var deleteEnabled=false;
 		if(typeof(this.event.is_organizer)!='undefined' && !this.event.is_organizer)
 			deleteEnabled=true;
@@ -134,7 +142,8 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 		
 		this.actionDelete.setDisabled(!deleteEnabled);
 		
-		this.actionInfo.setDisabled(!event.event_id);
+//		this.actionInfo.setDisabled(!event.event_id);
+		
 		if(this.actionAddTimeRegistration)
 			this.actionAddTimeRegistration.setDisabled(!event.event_id);
 		
