@@ -610,7 +610,7 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 		$file->convertToUtf8();
 		
 		$options = \Sabre\VObject\Reader::OPTION_FORGIVING + \Sabre\VObject\Reader::OPTION_IGNORE_INVALID_LINES;
-		$vcards = new Sabre\VObject\Splitter\VCard(fopen($file->path(),'r+'), $options);
+		$vcards = new \Sabre\VObject\Splitter\VCard(fopen($file->path(),'r+'), $options);
 
 
 		unset($params['file']);
