@@ -169,6 +169,7 @@ class CalendarPdf extends \GO\Base\Util\Pdf {
 			if (!empty($calendar_name)) {
 				//$this->SetTextColor(125,165, 65);
 				$this->SetTextColor(0, 0, 0);
+				$this->SetX($this->lMargin);
 				$this->MultiCell($nameColWidth, $this->cell_height, $calendar_name, 0, 'L');
 				$tableLeftMargin+=$nameColWidth;
 				$this->setDefaultTextColor();
