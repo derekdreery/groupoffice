@@ -1529,6 +1529,7 @@ GO.email.saveAttachment = function(attachment,panel)
 						uuencoded_partnumber: attachment.uuencoded_partnumber,
 						folder_id: folder_id,
 						filename: filename,
+						tmp_file: attachment.tmp_file ? attachment.tmp_file : 0,
 						charset:attachment.charset,
 						sender:panel.data.sender,
 						filepath:panel.data.path//smime message are cached on disk

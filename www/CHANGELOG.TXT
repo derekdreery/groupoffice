@@ -1,3 +1,5 @@
+08-10-2014 6.0.30
+- save attachment bug
 - Calendar month print will now show events between before 08:00 and after 17:59
 - Fixed summer- / wintertime issue in the calendar's month print
 - Calendar: Event context menu, disabled copy of private events
