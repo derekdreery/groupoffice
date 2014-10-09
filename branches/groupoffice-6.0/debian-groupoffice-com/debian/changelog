@@ -1,5 +1,5 @@
-groupoffice-com (6.0.29) sixzero; urgency=low
+groupoffice-com (6.0.30) sixzero; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Tue, 7 Oct 2014 13:48:18 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Thu, 9 Oct 2014 09:57:14 +0200
