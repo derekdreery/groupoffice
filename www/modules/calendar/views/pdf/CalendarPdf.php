@@ -163,6 +163,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 			if (!empty($calendar_name)) {
 				//$this->SetTextColor(125,165, 65);
 				$this->SetTextColor(0, 0, 0);
+				$this->setX($this->lMargin);
 				$this->MultiCell($nameColWidth, $this->cell_height, $calendar_name, 0, 'L');
 				$tableLeftMargin+=$nameColWidth;
 				$this->setDefaultTextColor();
