@@ -49,7 +49,7 @@ class CalendarPdf extends \GO\Base\Util\Pdf {
 			$this->_view=$view;
 			$this->_start_time = $r['start_time'];
 			$this->_end_time = $r['end_time'];
-			$this->_title = \GO\Base\Fs\File::stripInvalidChars($r['title']);
+			$this->_title = !empty($this->_view) ? \GO\Base\Fs\File::stripInvalidChars($this->_view->name).': '.\GO\Base\Fs\File::stripInvalidChars($r['title']) : \GO\Base\Fs\File::stripInvalidChars($r['title']);
 			$this->_days = ceil(($this->_end_time - $this->_start_time) / 86400);
 			$this->_date_range_text = $this->_days > 1 ? date(\GO::user()->completeDateFormat,$this->_start_time) . ' - ' . date(\GO::user()->completeDateFormat,$this->_end_time) : date(\GO::user()->completeDateFormat,$this->_start_time);
 

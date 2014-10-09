@@ -733,7 +733,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 		
 		// If you have clicked on the "print" button
 		if($print)
-			$this->_createPdf($response, true);
+			$this->_createPdf($response, $view);
 
 		return $response;
 	}
