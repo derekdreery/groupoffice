@@ -1,3 +1,4 @@
+- Z-Push 2.1: Fixed timezone bug in iPhone task sync.
 - Tickets: Fixed report: count also tickets in status Open.
 - Calendar: Fixed calendar name positioning in month view Print.
 
