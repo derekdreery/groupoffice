@@ -1,3 +1,4 @@
+- System test: fixed checking of max upload size
 - Calendar: Name the exception event if calendar import is from Outlook.
 - Calendar & Email: Fixed bug for creating emails from calendar events.
 - Z-Push 2.1: Fixed timezone bug in iPhone task sync.
