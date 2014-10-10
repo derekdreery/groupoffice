@@ -188,7 +188,7 @@ function test_system(){
 	$tests[]=$test;
 	
 	$test['name']='File upload size';
-	$test['pass']= ini_return_bytes('upload_max_filesize') >= 20 * 1024 * 1024;
+	$test['pass']= ini_return_bytes(ini_get('upload_max_filesize')) >= 20 * 1024 * 1024;
 	$test['feedback']='Warning: The upload_max_filesize php.ini value is lower than 20MB ('.ini_get('upload_max_filesize').').  We recommend to settings this to at least 20MB';
 	$test['fatal']=false;
 
