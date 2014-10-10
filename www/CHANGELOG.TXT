@@ -1,3 +1,5 @@
+- Calendar: Name the exception event if calendar import is from Outlook.
+
 10-10-2014 5.0.84
 - Tracking code in billing items
 - Calendar & Email: Fixed bug for creating emails from calendar events.
