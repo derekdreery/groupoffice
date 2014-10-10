@@ -1782,6 +1782,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$exception = Exception::model()->find($findParams);
 			if($exception){
 				$this->exception_for_event_id=$exception->event_id;
+				if (empty($this->name) || $this->name==\GO::t('unnamed'))
+					$this->name = $exception->mainevent->name;
 			}else
 			{				
 				//exception was not found for this recurrence. Find the recurring series and add the exception.
@@ -1794,6 +1796,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					$exception = new Exception();
 					$exception->time=$recurrenceTime;
 					$exception->event_id=$recurringEvent->id;
+					if (empty($this->name) || $this->name==\GO::t('unnamed'))
+						$this->name = $exception->mainevent->name;
 				}
 			}
 		}
