@@ -40,7 +40,7 @@
     float: right;
     margin-right: 15px;
     z-index: 20;
-		border:1px solid #ddd;
+	border:1px solid #ddd;
 }
 
 
@@ -59,8 +59,8 @@
     background-color: #FFFFFF;
     border-bottom: 1px solid #CCCCCC;
     box-shadow: none;
-		border-right: 1px solid #CCCCCC;
-		border-top: 1px solid #CCCCCC;
+	border-right: 1px solid #CCCCCC;
+	border-top: 1px solid #CCCCCC;
 }
 
 
@@ -89,6 +89,11 @@
 	text-decoration:none;
 }
 
+#conversejs .chat-head-chatbox, #conversejs .chat-head-chatroom {
+	height: 37px;
+	overflow:hidden;
+}
+
 #conversejs ul#controlbox-tabs li a {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
@@ -99,7 +104,7 @@
     text-align: center;
     text-decoration: none;
     text-shadow: none;
-		margin-left:2px;
+	margin-left:2px;
 }
 
 #conversejs ul#controlbox-tabs li a {
@@ -115,7 +120,7 @@
     border-bottom: 0 none;
     box-shadow: none;
     color: black;
-		font-weight:bold;
+	font-weight:bold;
     cursor: default;
     height: 25px;
 }
@@ -169,6 +174,6 @@
 #conversejs .chat-head-chatbox, #conversejs .chat-head-chatroom {
     height: 26px;
     position: relative;
-		background-color: #009CC5;
+	background-color: #009CC5;
 }
 
