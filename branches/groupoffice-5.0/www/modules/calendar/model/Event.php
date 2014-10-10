@@ -1769,6 +1769,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$exception = GO_Calendar_Model_Exception::model()->find($findParams);
 			if($exception){
 				$this->exception_for_event_id=$exception->event_id;
+				if (empty($this->name) || $this->name==\GO::t('unnamed'))
+					$this->name = $exception->mainevent->name;
 			}else
 			{				
 				//exception was not found for this recurrence. Find the recurring series and add the exception.
@@ -1781,6 +1783,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					$exception = new GO_Calendar_Model_Exception();
 					$exception->time=$recurrenceTime;
 					$exception->event_id=$recurringEvent->id;
+					if (empty($this->name) || $this->name==\GO::t('unnamed'))
+						$this->name = $exception->mainevent->name;
 				}
 			}
 		}
@@ -1992,7 +1996,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				);
 				foreach ($exceptionEventsStmt as $exceptionEventModel) {
 					$exceptionEventModel->exception_for_event_id=$this->id;
-					
+									
 					$exceptionEventModel->save();
 					//TODO: This method only works when an exception takes place on the same day as the original occurence.
 					//We should store the RECURRENCE-ID value so we can find it later.
