@@ -261,6 +261,13 @@ class FileController extends \GO\Base\Controller\AbstractModelController {
 
 		\GO\Base\Util\Http::outputDownloadHeaders($file->fsFile, $inline, !empty($params['cache']));
 		$file->open();
+		
+		$this->fireEvent('beforedownload', array(
+				&$this,
+				&$params,
+				&$file
+		));
+		
 		$file->fsFile->output();
 	}
 
