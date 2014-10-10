@@ -1696,7 +1696,7 @@ GO.email.getTaskShowConfig = function(item) {
 
 	if (Ext.isDefined(item)) {
 		
-		if(item.itemId && item.parentMenu.showConfigs[item.itemId]){
+		if(item.itemId && item.parentMenu.showConfigs && item.parentMenu.showConfigs[item.itemId]){
 			taskShowConfig = item.parentMenu.showConfigs[item.itemId];
 		}else{		
 			taskShowConfig = item.parentMenu.taskShowConfig || {};
