@@ -1,3 +1,5 @@
+10-10-2014 5.0.84
+- Tracking code in billing items
 - Calendar & Email: Fixed bug for creating emails from calendar events.
 - Z-Push 2.1: Fixed timezone bug in iPhone task sync.
 - Tickets: Fixed report: count also tickets in status Open.
