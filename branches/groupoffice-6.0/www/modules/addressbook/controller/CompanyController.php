@@ -310,7 +310,7 @@ class CompanyController extends \GO\Base\Controller\AbstractModelController {
 	protected function actionMoveEmployees($params) {
 		$to_company = \GO\Addressbook\Model\Company::model()->findByPk($params['to_company_id']);
 
-		$contacts = \GO\Addressbook\Model\Contacts::model()->find(
+		$contacts = \GO\Addressbook\Model\Contact::model()->find(
 						\GO\Base\Db\FindCriteria::newInstance()
 										->addCondition('company_id', $params['from_company_id'])
 		);
