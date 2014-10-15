@@ -1,3 +1,4 @@
+- Remove quotes from SINCE and BEFORE queries to IMAP server as in RFC1730
 - Calendar: Name the exception event if calendar import is from Outlook.
 
 10-10-2014 5.0.84
