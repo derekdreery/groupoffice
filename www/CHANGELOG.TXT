@@ -1,3 +1,4 @@
+- Company does not have to be in the same address book when creating user from contact. (company will move to selected address book instead)
 - System test: fixed checking of max upload size
 - Calendar: Name the exception event if calendar import is from Outlook.
 - Calendar & Email: Fixed bug for creating emails from calendar events.
