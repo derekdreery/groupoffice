@@ -4,7 +4,6 @@
 namespace GO\Base\Util;
 
 use GO;
-use ReflectionClass;
 
 class ConfigEditor {
 
