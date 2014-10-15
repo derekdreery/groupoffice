@@ -1,3 +1,5 @@
+- Renamed Mwst to Ust. in German language file.
+- Install bug in servermanager due to namespaces
 - Remove quotes from SINCE and BEFORE queries to IMAP server as in RFC1730
 - Company does not have to be in the same address book when creating user from contact. (company will move to selected address book instead)
 - System test: fixed checking of max upload size
