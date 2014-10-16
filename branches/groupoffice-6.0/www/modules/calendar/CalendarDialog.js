@@ -426,7 +426,7 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 				this.exportButton.setDisabled(false);
 				this.importTab.setDisabled(false);
 
-				if(action.result.remoteComboTexts.tasklist_id)
+				if(GO.tasks && action.result.remoteComboTexts.tasklist_id)
 					this.selectTasklist.setRemoteText(action.result.remoteComboTexts.tasklist_id);
 
 				this.showGroups(action.result.data.group_id > 1);
