@@ -3063,7 +3063,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		/**
 		 * Useful event for modules. For example custom fields can be loaded or a files folder.
 		 */
-		$this->fireEvent('beforesave',array(&$this));
+		if($this->fireEvent('beforesave',array(&$this))===false)
+				return false;
 
 		$fileColumns = $this->_getModifiedFileColumns();
 
