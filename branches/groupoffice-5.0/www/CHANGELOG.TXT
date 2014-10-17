@@ -1,3 +1,4 @@
+- Billing: Added global cost codes and their attached tracking codes
 - Billing: Added due date for orders. Also added 2 template variables that can be used in the templates: {due_date} {due_days}
 - Remove quotes from SINCE and BEFORE queries to IMAP server as in RFC1730
 - Calendar: Name the exception event if calendar import is from Outlook.
