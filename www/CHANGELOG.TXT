@@ -1,9 +1,10 @@
+17-10-2014 5.0.86
 - Billing: Added global cost codes and their attached tracking codes
 - Billing: Added due date for orders. Also added 2 template variables that can be used in the templates: {due_date} {due_days}
 - Remove quotes from SINCE and BEFORE queries to IMAP server as in RFC1730
 - Calendar: Name the exception event if calendar import is from Outlook.
 
-10-10-2014 5.0.84
+10-10-2014 5.0.85
 - Tracking code in billing items
 - Calendar & Email: Fixed bug for creating emails from calendar events.
 - Z-Push 2.1: Fixed timezone bug in iPhone task sync.
