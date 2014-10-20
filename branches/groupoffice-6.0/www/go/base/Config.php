@@ -394,7 +394,7 @@ class Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $register_visible_user_groups = Group::GROUP_EVERYONE;
+	var $register_visible_user_groups = "GROUP_EVERYONE";
 
 	/**
 	 * Relative hostname with slash on both start and end
