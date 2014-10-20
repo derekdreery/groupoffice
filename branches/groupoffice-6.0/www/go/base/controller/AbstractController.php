@@ -123,17 +123,25 @@ abstract class AbstractController extends Observable {
 		}
 	
 		//Handles preflight OPTIONS request
-		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+		if (isset($_SERVER['REQUEST_METHOD'])){
+			switch(strtoupper($_SERVER['REQUEST_METHOD'])){
+				
+				case 'OPTIONS':
+					header('Content-Type: text/plain');
 			
-			header('Content-Type: text/plain');
-			
-			foreach(GO::config()->extra_headers as $header){
-				header($header);
+					foreach(GO::config()->extra_headers as $header){
+						header($header);
+					}
+					GO::debug("OPTIONS request");
+					exit(0);
+					
+				case 'HEAD':
+					header('X-PHP-Response-Code: 501', true, 501);
+					exit(0);
+					
 			}
-			
-			GO::debug("OPTIONS request");
-			exit(0);
 		}
+			
 	}
 	
 	protected function init(){
