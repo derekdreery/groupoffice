@@ -88,9 +88,19 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			$this->headers();
 			
 		
-		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-			GO::debug("OPTIONS request");
-			exit(0);
+		if (isset($_SERVER['REQUEST_METHOD'])){
+			switch(strtoupper($_SERVER['REQUEST_METHOD'])){
+				
+				
+				case 'OPTIONS':
+					GO::debug("OPTIONS request");
+					exit(0);
+					
+				case 'HEAD':
+					header('X-PHP-Response-Code: 501', true, 501);
+					exit(0);
+					
+			}
 		}
 	}
 	
