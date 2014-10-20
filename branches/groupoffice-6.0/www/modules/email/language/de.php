@@ -270,3 +270,18 @@ $l['saveToItem']= 'Zu Element anhängen';
 $l['saveAttachmentTo']= 'Anhang zu diesen Elementen anhängen';
 
 $l['untilDateError']='Habe versucht, das folgende Enddatum einzutragen, aber der Prozess stoppte mit einem Fehler';
+
+$l['label']= 'Schlagwort';
+$l['labels']= 'Schlagwörter';
+$l['labelsLimit']= 'Es können maximal %d Schlagwörter angelegt werden';
+$l['saveToPersonal']= 'Im persönlichen Order speichern';
+$l['thisIsSpam1']= 'Diese Nachricht wurde als Spam identifiziert. Klicken Sie';
+$l['thisIsSpam2']= 'hier';
+$l['thisIsSpam3']= 'wenn Sie glauben, dass es sich bei dieser Nachricht NICHT um Spam handelt.';
+$l['thisIsNotSpam1']= 'Klicken Sie';
+$l['thisIsNotSpam2']= 'hier';
+$l['thisIsNotSpam3']= 'wenn Sie glauben, dass es sich bei dieser Nachricht um Spam handelt.';
+$l['moveToSpamTitle']= 'In den Spam-Ordner verschieben?';
+$l['moveToSpamMsg']= 'Sind Sie sicher, dass Sie diese Nachricht als Spam markieren möchten?';
+$l['moveToInboxTitle']= 'Aus dem Spam-Order verschieben?';
+$l['moveToInboxMsg']= 'Sind Sie sicher, dass Sie die Spam-Markierung entfernen und diese Nachricht in den Posteingang verschieben wollen?';

@@ -643,6 +643,7 @@ $l['nl'] = 'Niederlande';
 $l['pt'] = 'Portugal';
 $l['sv'] = 'Schweden';
 $l['th'] = 'Thailand';
+$l['pt_BR']='Brasilien';
 
 $l["report"]='Report';
 
@@ -658,3 +659,12 @@ $l['pspell_lang']='DE_de';
 $l['dependenciesCannotDelete']="Das ausgewählte Modul kann nicht gelöscht werden, da die folgenden (installierten) Module davon abhängen: %s.";
 
 $l['MailboxNotFoundException'] = "Der Ordner \"%s\" kann nicht geöffnet werden. Bitte überprüfen Sie die Einstellungen Ihres E-Mail-Accounts.";
+
+$l['columns']= 'Spalten';
+$l['savedExport']= 'Gespeicherter Export';
+$l['savedExports']= 'Gespeicherte Exports';
+$l['includeColumnNames']= 'Spaltennamen mit einbeziehen';
+$l['manageSavedExports']= 'Gespeicherte Exporte verwalten';
+$l['noSavedExports']= 'Keine gespeicherten Exporte vorhanden';
+$l['overwriteAcl']= 'Standardberechtigungen für dieses Objekt überschreiben (Zum Aktivieren auf Übernehmen klicken)';
+$l['cantDeleteDefault']= "Das Standardobjekt kann nicht gelöscht werden.";
