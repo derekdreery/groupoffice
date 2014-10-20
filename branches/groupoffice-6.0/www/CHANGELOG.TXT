@@ -1,3 +1,5 @@
+- Projects2: Template Events of type "job", "task" and "project".
+
 20-10-2014 6.0.31
 - Fixed quota calculcation for mailserver
 - Fix for self referencing constant
