@@ -1,3 +1,4 @@
+20-10-2014 5.0.87
 - Billing: Fixed problem with Ioncube and the billing cost codes request.
 - Fix for Excel HEAD request "Microsoft Office Existence Discovery": respond with 501 Not Implemented.
 
