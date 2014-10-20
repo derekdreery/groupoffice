@@ -1,3 +1,4 @@
+- Fix for Excel HEAD request "Microsoft Office Existence Discovery": respond with 501 Not Implemented.
 - Improved ProjectsV2 tasks grid load and save speed when there are many tasks
 - Billing: Added due date for orders. Also added 2 template variables that can be used in the templates: {due_date} {due_days}
 - Renamed Mwst to Ust. in German language file.
