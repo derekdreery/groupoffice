@@ -1,4 +1,5 @@
 - Billing: Fixed problem with Ioncube and the billing cost codes request.
+- Fix for Excel HEAD request "Microsoft Office Existence Discovery": respond with 501 Not Implemented.
 
 17-10-2014 5.0.86
 - Billing: Added global cost codes and their attached tracking codes
