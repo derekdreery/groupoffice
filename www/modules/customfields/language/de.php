@@ -43,18 +43,18 @@ $l['blocks']= 'Blöcke';
 
 $l['cfDatatype']= 'Datentyp des benutzerdefinierten Feldes';
 
-$l['GO_Addressbook_Model_Contact']= 'Kontakt';
-$l['GO_Addressbook_Model_Company']= 'Firma';
-$l['GO_Base_Model_User']= 'Benutzer';
-$l['GO_Projects_Model_Project']= 'Projekt';
-$l['GO_Addressbook_Customfieldtype_Contact']= 'Kontakt';
-$l['GO_Addressbook_Customfieldtype_Company']= 'Firma';
+$l['GO\Addressbook\Model\Contact']= 'Kontakt';
+$l['GO\Addressbook\Model\Company']= 'Firma';
+$l['GO\Base\Model\User']= 'Benutzer';
+$l['GO\Projects\Model\Project']= 'Projekt';
+$l['GO\Addressbook\Customfieldtype\Contact']= 'Kontakt';
+$l['GO\Addressbook\Customfieldtype\Company']= 'Firma';
 
 $l['manageBlocks']= 'Blöcke verwalten';
 
-$l['GO_Tickets_Model_Ticket']= 'Ticket';
-$l['GO_Files_Model_Folder']= 'Ordner';
-$l['GO_Files_Model_File']= 'Datei';
+$l['GO\Tickets\Model\Ticket']= 'Ticket';
+$l['GO\Files\Model\Folder']= 'Ordner';
+$l['GO\Files\Model\File']= 'Datei';
 
 $l['cfName']= 'Benutzerdefinierter Feldname';
 $l['customfield']= 'Benutzerdefiniertes Feld';
@@ -67,10 +67,10 @@ $l['makeUnique']= 'Benutzerdefinierte Felder mit eindeutigen Werten versehen';
 $l['duplicateExistsFeedback']= 'Der eingegebene Wert "%val" für das Feld "%cf" ist in der Datenbank schon vorhanden. Der Wert muss eindeutig sein. Bitte geben Sie für das Feld einen anderen Wert ein.';
 $l['maxLength']= 'Maximale Anzahl von Zeichen';
 
-$l['GO_Tasks_Model_Task']= 'Aufgabe';
-$l['GO_Notes_Model_Note']= 'Notiz';
-$l['GO_Billing_Model_Product']= 'Produkt';
-$l['GO_Site_Model_Site']= 'Seite';
+$l['GO\Tasks\Model\Task']= 'Aufgabe';
+$l['GO\Notes\Model\Note']= 'Notiz';
+$l['GO\Billing\Model\Product']= 'Produkt';
+$l['GO\Site\Model\Site']= 'Seite';
 
 $l['validationRegexp']='Regulären Ausdruck überprüfen';
 $l['multiselectForLastSlaveOnly']='Nur der letzte TreeSelect kann ein Multiselect-Combo Feld sein';
@@ -82,8 +82,11 @@ $l['listedUnder']= 'Gelistet unter';
 //$l['makeUniqueRUSure']= 'This makes this custom field\'s values unique. If there are any duplicate values already set with this custom field, they will be deleted. Continue?';
 $l['tooManyCustomfields']= 'Die Gesamtmenge der Daten für Ihre benutzerdefinierten Felder (zum Objekttyp %s gehörend) haben den Speichergrenzwert überschritten. Sie können dies ändern durch eine Senkung der maximalen Anzahl der Zeichen einiger benutzerdefinierter Felder. Das aktuelle benutzerdefinierte Feld wurde nicht gespeichert.';
 $l['customfieldTooLarge']= 'Das benutzerdefinierte Feld das Sie versuchen zu speichern, hat mehr als die erlaubte Anzahl Zeichen (% s). Bitte reduzieren Sie die maximale Anzahl der Zeichen dieses Feldes und versuchen Sie erneut zu speichern.';
-$l['GO_Projects_Model_Hour']= 'Zeiteintrag';
-$l['GO_Calendar_Model_Event']= 'Ereignis';
-$l['GO_Billing_Model_Order']= 'Rechnung/Angebot';
-$l['GO_Site_Model_Content']= 'Inhalt';
+$l['GO\Projects\Model\Hour']= 'Zeiteintrag';
+$l['GO\Calendar\Model\Event']= 'Ereignis';
+$l['GO\Billing\Model\Order']= 'Rechnung/Angebot';
+$l['GO\Site\Model\Content']= 'Inhalt';
 $l['addressbookIds']= 'Nur von diesen Adressbüchern (IDs)';
+
+$l['prefix']= 'Prefix';
+$l['suffix']= 'Suffix';

@@ -19,7 +19,7 @@ GO.DisplayPanel=function(config){
 
 	GO.DisplayPanel.superclass.constructor.call(this, config);
 
-	this.addEvents({bodyclick:true,afterbodyclick:true,afterload:true});
+	this.addEvents({bodyclick:true,afterbodyclick:true,afterload:true, 'reset':true});
 }
 
 Ext.extend(GO.DisplayPanel, Ext.Panel,{
@@ -257,6 +257,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		var tbar = this.getTopToolbar();
 		if(tbar)
 			tbar.setDisabled(true);
+		
+		this.fireEvent('reset', this);
 	},
 
 	getState : function(){
