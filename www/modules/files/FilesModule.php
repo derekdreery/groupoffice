@@ -46,6 +46,8 @@ class GO_Files_FilesModule extends GO_Base_Module{
 				$folder->readonly=1;
 				$folder->save();
 			}
+			
+			$folder->fsFolder->create();
 			//$folder->syncFilesystem();		
 			
 		}
