@@ -303,3 +303,5 @@ $l['moveToSpamTitle'] = 'Verplaatsen naar spamfolder?';
 $l['moveToSpamMsg'] = 'Weet u zeker dat u dit bericht wilt markeren als spam?';
 $l['moveToInboxTitle'] = 'Uit spamfolder verplaatsen?';
 $l['moveToInboxMsg'] = 'Weet u zeker dat u de spammarkering van dit bericht wilt verwijderen en het bericht wilt verplaatsen naar uw inbox?';
+
+$l['fts'] = 'Volledig bericht';

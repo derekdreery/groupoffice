@@ -199,6 +199,7 @@ GO.email.MessagesGrid = function(config){
 			fields: ['value', 'text'],
 			data : [
 			['any', GO.email.lang.anyField],
+			['fts', GO.email.lang.fts],
 			['from', GO.email.lang.searchFrom],
 			['subject', GO.email.lang.subject],
 			['to', GO.email.lang.searchTo],
@@ -256,6 +257,10 @@ GO.email.MessagesGrid = function(config){
 	this.searchType.on('select', function(combo, record)
 	{
 		GO.email.search_type = record.data.value;
+		
+		if(localStorage){
+			localStorage.email_search_type = GO.email.search_type;
+		}
 
 		if(this.searchField.getValue())
 		{
