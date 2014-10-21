@@ -38,6 +38,10 @@ try {
 				}
 			}
 			
+			if(!isset($config['file_storage_path'])){
+				$config['file_storage_path'] = '/home/groupoffice/';
+			}
+			
 			
 			if(file_exists($config['file_storage_path'].'key.txt'))
 				system('chown www-data:www-data '.$config['file_storage_path'].'key.txt');
