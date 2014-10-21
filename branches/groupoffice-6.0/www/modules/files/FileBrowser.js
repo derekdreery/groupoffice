@@ -851,13 +851,15 @@ GO.files.FileBrowser = function(config){
 
 }
 
+GO.files.pasteSelections = Array();
+
 Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	ready:false,
 	cls: 'fs-filebrowser',
 
 	fileClickHandler : false,
 	scope : this,
-	pasteSelections : Array(),
+//	pasteSelections : Array(),
 	/*
 	 * cut or copy
 	 */
@@ -1320,9 +1322,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	},
 
 	onCutCopy : function(pasteMode, records){
-		this.pasteSelections=records;
+		GO.files.pasteSelections=records;
 		this.pasteMode=pasteMode;
-		if(this.pasteSelections.length)
+		if(GO.files.pasteSelections.length)
 		{
 			this.pasteButton.setDisabled(false);
 		}
@@ -1330,9 +1332,11 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	onPaste : function(){
             if (GO.util.empty(this.gridStore.baseParams['query']))
-		this.paste(this.pasteMode, this.folder_id, this.pasteSelections);
+		this.paste(this.pasteMode, this.folder_id, GO.files.pasteSelections);
             else
                 Ext.MessageBox.alert('', GO.files.lang['notInSearchMode']);
+							
+		GO.files.pasteSelections = Array();
 	},
 
 	onDelete : function(clickedAt){
@@ -1851,7 +1855,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
                 
                 this.copyButton.setDisabled(permissionLevel<=0);
                 
-		this.pasteButton.setDisabled(!writePermission || !this.pasteSelections.length);
+		this.pasteButton.setDisabled(!writePermission || !GO.files.pasteSelections.length);
 
 	//this.filesContextMenu.deleteButton.setDisabled(!writePermission);
 	},
