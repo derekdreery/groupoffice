@@ -1,3 +1,5 @@
+- permissions of key.txt invalid after fresh install
+- Added full text search option to quick search
 - Billing: Fixed menu item New > Invoice/Quote.
 - Projects2: Template Events of type "job", "task" and "project".
 
