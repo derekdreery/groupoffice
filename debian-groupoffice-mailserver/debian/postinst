@@ -60,7 +60,7 @@ else
 
 
 	#address mapping is done after spamassassin
-	#postconf -e 'receive_override_options = no_address_mappings'
+	postconf -e 'receive_override_options = no_address_mappings'
 
 	#transport map for autoreply or vacation (old)
 	#postconf -e 'transport_maps = hash:/etc/postfix/transport';
@@ -72,7 +72,7 @@ else
 
 	postconf -e 'message_size_limit = 20480000'
 
-	#postconf -e 'content_filter=smtp-amavis:[127.0.0.1]:10024'
+	postconf -e 'content_filter=smtp-amavis:[127.0.0.1]:10024'
 
 fi
 
@@ -82,7 +82,7 @@ if  ! id vmail 1>/dev/null 2>&1 ; then
 	useradd -r -u 150 -g mail -d /home/vmail -s /sbin/nologin -c "Virtual Mailbox" vmail
 fi
 
-#adduser clamav amavis
+adduser clamav amavis
 
 if [ ! -x /home/vmail ]; then
 	mkdir /home/vmail	
@@ -104,34 +104,34 @@ chown vmail:mail /var/lib/dovecot/shared-mailboxes.db
 
 
 #check if user spamd exists. Exit code 0 means it exists
-#if  ! id spamd 1>/dev/null 2>&1 ; then
-#	groupadd -g 5001 spamd
-#	useradd -u 5001 -g spamd -s /sbin/nologin -d /var/lib/spamassassin spamd
-#	mkdir -p /var/lib/spamassassin	
-#fi
+if  ! id spamd 1>/dev/null 2>&1 ; then
+	groupadd -g 5001 spamd
+	useradd -u 5001 -g spamd -s /sbin/nologin -d /var/lib/spamassassin spamd
+	mkdir -p /var/lib/spamassassin	
+fi
 
-#chown spamd:spamd /var/lib/spamassassin
+chown spamd:spamd /var/lib/spamassassin
 
-#FILE=/etc/default/spamassassin
-#if (  grep -q 'Group-Office' $FILE ); then
-#	echo Spamassassin was already configured
-#	FILE=$FILE.$2
-#else
-#	echo Spamassassin configured by Group-Office
-#	cp /etc/default/spamassassin /etc/spamassassin/spamassassin.beforegroupoffice.$2
-#fi
-#cp /usr/share/groupoffice-mailserver/tpl/etc/default/spamassassin $FILE
+FILE=/etc/default/spamassassin
+if (  grep -q 'Group-Office' $FILE ); then
+	echo Spamassassin was already configured
+	FILE=$FILE.$2
+else
+	echo Spamassassin configured by Group-Office
+	cp /etc/default/spamassassin /etc/spamassassin/spamassassin.beforegroupoffice.$2
+fi
+cp /usr/share/groupoffice-mailserver/tpl/etc/default/spamassassin $FILE
 
 
-#FILE=/etc/spamassassin/local.cf
-#if (  grep -q 'Group-Office' $FILE ); then
-#	echo Spamassassin local.cf was already configured
-#	FILE=$FILE.$2
-#else
-#	echo Spamassassin local.cf configured by Group-Office
-#	cp /etc/spamassassin/local.cf /etc/spamassassin/local.cf.beforegroupoffice.$2
-#fi
-#cp /usr/share/groupoffice-mailserver/tpl/etc/spamassassin/local.cf $FILE
+FILE=/etc/spamassassin/local.cf
+if (  grep -q 'Group-Office' $FILE ); then
+	echo Spamassassin local.cf was already configured
+	FILE=$FILE.$2
+else
+	echo Spamassassin local.cf configured by Group-Office
+	cp /etc/spamassassin/local.cf /etc/spamassassin/local.cf.beforegroupoffice.$2
+fi
+cp /usr/share/groupoffice-mailserver/tpl/etc/spamassassin/local.cf $FILE
 
 
 FILE=/etc/postfix/master.cf
@@ -148,11 +148,11 @@ cp /usr/share/groupoffice-mailserver/tpl/etc/postfix/master.cf $FILE
 php /usr/share/groupoffice-mailserver/configure.php
 php /usr/share/groupoffice-mailserver/installpostfixadmin.php
 
-#invoke-rc.d spamassassin restart 3> /dev/null || true
+invoke-rc.d spamassassin restart 3> /dev/null || true
 invoke-rc.d postfix restart 3> /dev/null || true
 invoke-rc.d dovecot restart 3> /dev/null || true
-#invoke-rc.d clamav-daemon restart 3> /dev/null || true
-#invoke-rc.d clamav-freshclam restart 3> /dev/null || true
+invoke-rc.d clamav-daemon restart 3> /dev/null || true
+invoke-rc.d clamav-freshclam restart 3> /dev/null || true
 
 php /usr/share/groupoffice-mailserver/addadminaccount.php
 
