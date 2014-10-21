@@ -2,6 +2,7 @@
 - Added full text search option to quick search
 - Billing: Fixed menu item New > Invoice/Quote.
 - Projects2: Template Events of type "job", "task" and "project".
+- Brought back amavis anti spam and anti virus solution for mailserver.
 
 20-10-2014 6.0.31
 - Fixed quota calculcation for mailserver

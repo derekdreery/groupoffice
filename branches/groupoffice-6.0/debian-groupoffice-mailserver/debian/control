@@ -10,6 +10,11 @@ Homepage: http://www.group-office.com
 Package: groupoffice-mailserver
 Architecture: all
 Depends: groupoffice-com,
+	amavisd-new,	
+	clamav,
+	clamav-base,
+	clamav-daemon,
+	clamav-freshclam,
 	php5-cli,
 	postfix,
 	postfix-mysql,
@@ -17,8 +22,21 @@ Depends: groupoffice-com,
 	dovecot-mysql,
 	dovecot-sieve,
 	dovecot-managesieved,
+	spamassassin,
+	spamc,
 	openssl,
 	${misc:Depends}
+Recommends:	pyzor,
+	razor,
+	arj,
+	zip,
+	unzip,
+	bzip2,
+	gzip,
+	cpio,
+	file,
+	lzop,
+	nomarch
 Description: 
  The complete mailserver solution for Group-Office.
  It configures Group-Office with postfix, dovecot and spamassasin

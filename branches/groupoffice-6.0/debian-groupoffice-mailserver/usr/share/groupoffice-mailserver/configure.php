@@ -214,10 +214,10 @@ if(version_compare(2, $version)>0){
 		set_value('/etc/groupoffice/config.php', '$config[\'sieve_port\']="4190";');
 }
 
-//echo "Configuring amavis\n";
-//$filename =  '/etc/amavis/conf.d/60-groupoffice_defaults';
-//if(!file_contains($filename, 'Group-Office'))
-//	create_file($filename,'tpl/etc/amavis/conf.d/60-groupoffice_defaults', $replacements);
+echo "Configuring amavis\n";
+$filename =  '/etc/amavis/conf.d/60-groupoffice_defaults';
+if(!file_contains($filename, 'Group-Office'))
+	create_file($filename,'tpl/etc/amavis/conf.d/60-groupoffice_defaults', $replacements);
 
 
 echo "Configuring groupoffice\n";
