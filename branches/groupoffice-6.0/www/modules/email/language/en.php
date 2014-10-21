@@ -293,3 +293,5 @@ $l['moveToSpamTitle'] = 'Move to Spam folder?';
 $l['moveToSpamMsg'] = 'Are you sure you want to classify this message as spam?';
 $l['moveToInboxTitle'] = 'Move out of Spam folder?';
 $l['moveToInboxMsg'] = 'Are you sure you want to remove the spam mark and move this message into your inbox?';
+
+$l['fts'] = 'Full message';
