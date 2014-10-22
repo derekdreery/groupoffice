@@ -978,7 +978,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 
 			while($task = $tasks->fetch()){
 
-				$startTime = date('Y-m-d',$task->due_time).' 00:00';
+				$startTime = date('Y-m-d',$task->start_time).' 00:00';
 				$endTime = date('Y-m-d',$task->due_time).' 23:59';
 
 				$resultCount++;
