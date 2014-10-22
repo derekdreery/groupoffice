@@ -419,3 +419,7 @@ $updates["201409261000"][]="ALTER TABLE `go_users` CHANGE  `disk_quota`  `disk_q
 $updates["201409261000"][]="ALTER TABLE `go_users` CHANGE  `disk_usage`  `disk_usage` BIGINT NOT NULL DEFAULT '0'";
 
 $updates['201409261000'][]="ALTER TABLE `go_settings` CHANGE COLUMN `value` `value` LONGTEXT NULL DEFAULT NULL;";
+
+//Somehow these were missing on some installs so we just attempt to add them again.
+$updates["201410220900"][]="ALTER TABLE `go_users` CHANGE  `disk_quota`  `disk_quota` BIGINT NULL";
+$updates["201410220900"][]="ALTER TABLE `go_users` CHANGE  `disk_usage`  `disk_usage` BIGINT NOT NULL DEFAULT '0'";
