@@ -587,72 +587,72 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 			scope: this
 		});
 		
-		// Button to export contacts or companies (Based on the tab that is opened)
-		this.defaultExportButton = new Ext.menu.Item({
-			iconCls: 'btn-export',
-			text: GO.addressbook.lang.exportContacts,
-			cls: 'x-btn-text-icon',
-			handler:function(){
-				var activetab = this.tabPanel.getActiveTab();
-				var url;
-				var name;
-				var title;
-				var colmodel;
-				var documentTitle;
-				switch(activetab.id)
-				{
-					case 'ab-contacts-grid':
-						url = 'addressbook/contact/export';
-						name = 'contact';
-						documentTitle = 'ExportContact';
-						colmodel = this.contactsGrid.getColumnModel();
-
-						if(!this.exportDialogContacts) {
-							this.exportDialogContacts = new GO.ExportGridDialog({
-								url: url,
-								name: name,
-								exportClassPath:'modules/addressbook/export',
-								documentTitle: title,
-								colModel: colmodel
-							});
-						} else {
-							this.exportDialogContacts.documentTitle=documentTitle;
-							this.exportDialogContacts.documentTitle=name;
-							this.exportDialogContacts.documentTitle=url;
-							this.exportDialogContacts.colmodel=colmodel;
-						}
-						this.exportDialogContacts.show();
-						break;
-					case 'ab-company-grid':
-						url = 'addressbook/company/export';
-						name = 'company';
-						documentTitle = 'ExportCompany';
-						colmodel = this.companiesGrid.getColumnModel();
-
-						if(!this.exportDialogCompanies) {
-							this.exportDialogCompanies = new GO.ExportGridDialog({
-								url: url,
-								name: name,
-								documentTitle: title,
-								colModel: colmodel
-							});
-						} else {
-							this.exportDialogCompanies.documentTitle=documentTitle;
-							this.exportDialogCompanies.documentTitle=name;
-							this.exportDialogCompanies.documentTitle=url;
-							this.exportDialogCompanies.colmodel=colmodel;
-						}
-						this.exportDialogCompanies.show();
-						break;
-				}
-			},
-			scope: this
-		});
-
-		this.exportMenuItems = [
-				this.defaultExportButton,
-				this.contactsWithCompaniesExportButton
-			];
+//		// Button to export contacts or companies (Based on the tab that is opened)
+//		this.defaultExportButton = new Ext.menu.Item({
+//			iconCls: 'btn-export',
+//			text: GO.addressbook.lang.exportContacts+'ddd',
+//			cls: 'x-btn-text-icon',
+//			handler:function(){
+//				var activetab = this.tabPanel.getActiveTab();
+//				var url;
+//				var name;
+//				var title;
+//				var colmodel;
+//				var documentTitle;
+//				switch(activetab.id)
+//				{
+//					case 'ab-contacts-grid':
+//						url = 'addressbook/contact/export';
+//						name = 'contact';
+//						documentTitle = 'ExportContact';
+//						colmodel = this.contactsGrid.getColumnModel();
+//
+//						if(!this.exportDialogContacts) {
+//							this.exportDialogContacts = new GO.ExportGridDialog({
+//								url: url,
+//								name: name,
+//								exportClassPath:'modules/addressbook/export',
+//								documentTitle: title,
+//								colModel: colmodel
+//							});
+//						} else {
+//							this.exportDialogContacts.documentTitle=documentTitle;
+//							this.exportDialogContacts.name=name;
+//							this.exportDialogContacts.url=url;
+//							this.exportDialogContacts.colModel=colmodel;
+//						}
+//						this.exportDialogContacts.show();
+//						break;
+//					case 'ab-company-grid':
+//						url = 'addressbook/company/export';
+//						name = 'company';
+//						documentTitle = 'ExportCompany';
+//						colmodel = this.companiesGrid.getColumnModel();
+//
+//						if(!this.exportDialogCompanies) {
+//							this.exportDialogCompanies = new GO.ExportGridDialog({
+//								url: url,
+//								name: name,
+//								documentTitle: title,
+//								colModel: colmodel
+//							});
+//						} else {
+//							this.exportDialogCompanies.documentTitle=documentTitle;
+//							this.exportDialogCompanies.documentTitle=name;
+//							this.exportDialogCompanies.documentTitle=url;
+//							this.exportDialogCompanies.colmodel=colmodel;
+//						}
+//						this.exportDialogCompanies.show();
+//						break;
+//				}
+//			},
+//			scope: this
+//		});
+//
+//		this.exportMenuItems = [
+//				this.defaultExportButton,
+//				this.contactsWithCompaniesExportButton
+//			];
 							
 	}
 });
