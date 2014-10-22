@@ -1,3 +1,4 @@
+22-10-2014 5.0.88
 - Files: Can now globally copy-paste/cut-paste files and folders using the File Browser window and the Files module.
 - Billing: Fixed menu item New > Invoice/Quote.
 
