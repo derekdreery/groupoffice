@@ -107,6 +107,7 @@ foreach($moduleObjects as $moduleObject)
 								'sortable:true,'.
 								'id: "'.$field['dataname'].'",'.
 								'customfield_id: "'.$field['id'].'",'.
+								'nesting_level: "'.$field['nesting_level'].'",'.
 								//'multiselect: "'.$field['multiselect'].'",'.
                 'exclude_from_grid: "'.$exclude_from_grid.'",'.
 								'hidden:true});'."\n".
