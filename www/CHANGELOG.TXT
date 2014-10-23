@@ -1,3 +1,4 @@
+23-10-2014 6.0.32
 - Address Book & Custom Fields: fixed advanced searching Treeselect custom fields in Address Book.
 - The tasks shown in the calendar will use the start time of the task
 - permissions of key.txt invalid after fresh install
