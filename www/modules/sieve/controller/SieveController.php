@@ -288,7 +288,7 @@ class SieveController extends \GO\Base\Controller\AbstractModelController{
 						$action['text'] = \GO::t('setRead','sieve');
 						break;
 					case 'fileinto':
-						if(!$action['copy']){
+						if(empty($action['copy'])){
 							$action['text'] = \GO::t('fileinto','sieve').' "'.$action['target'].'"';
 						}else{
 							$action['text']=\GO::t('copyto','sieve').' "'.$action['target'].'"';
