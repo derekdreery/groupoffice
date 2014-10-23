@@ -1,4 +1,5 @@
 23-10-2014 6.0.32
+- Nexus sends no search folder. We default to inbox search now.
 - Sieve rules parser updated
 - Address Book & Custom Fields: fixed advanced searching Treeselect custom fields in Address Book.
 - The tasks shown in the calendar will use the start time of the task
