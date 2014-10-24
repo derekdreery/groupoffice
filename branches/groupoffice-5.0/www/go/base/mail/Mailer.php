@@ -73,7 +73,20 @@ class GO_Base_Mail_Mailer extends Swift_Mailer{
 //		debug_print_backtrace();
 //		exit("NO MAIL");
 		
-		return parent::send($message, $failedRecipients);
+		$count = parent::send($message, $failedRecipients);
+		
+		// Check if a tmp dir is created to store attachments.
+		// If so, then remove the tmp dir if the mail is send successfully.
+		$tmpDir = $message->getTmpDir();
+		if(!empty($tmpDir)){
+			$folder = new GO_Base_Fs_Folder($tmpDir);
+			// Check if folder is deleted successfully
+			if($folder->delete())
+				GO::debug('Clear attachments tmp directory: '.$tmpDir);
+			else
+				GO::debug('Failed to clear attachments tmp directory: '.$tmpDir);
+		}
+		
+		return $count;
 	}
-	
 }

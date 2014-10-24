@@ -25,6 +25,13 @@ class GO_Base_Mail_Message extends Swift_Message{
 	
 	private $_loadedBody;
 	
+	/**
+	 * The path in where the temporary attachments are stored
+	 * 
+	 * @var boolean/string 
+	 */
+	private $_tmpDir = false;
+	
 	public function __construct($subject = null, $body = null, $contentType = null, $charset = null) {
 		parent::__construct($subject, $body, $contentType, $charset);
 		
@@ -37,6 +44,15 @@ class GO_Base_Mail_Message extends Swift_Message{
 //		$headers->addTextHeader("X-Remote-Addr", "[".$remoteAddr."]");
 	}
 	
+	/**
+	 * Get the tmp directory in where the temporary attachments are stored
+	 * 
+	 * @return string The path to the tmp directory
+	 */
+	public function getTmpDir(){
+		return $this->_tmpDir;
+	}
+		
 	/**
    * Create a new Message.
    * @param string $subject
@@ -252,10 +268,10 @@ class GO_Base_Mail_Message extends Swift_Message{
 				{
 					//attachment
 
-					$dir=GO::config()->tmpdir.'attachments/';
+					$this->_tmpDir = GO::config()->tmpdir.'attachments/'.  uniqid().'/';
 
-					if(!is_dir($dir))
-						mkdir($dir, 0755, true);
+					if(!is_dir($this->_tmpDir))
+						mkdir($this->_tmpDir, 0755, true);
 
 					//unset($part->body);
 					//var_dump($part);
@@ -275,7 +291,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 						$filename=uniqid(time());
 					}
 
-					$tmp_file = $dir.$filename;
+					$tmp_file = $this->_tmpDir .$filename;
 					file_put_contents($tmp_file, $part->body);
 
 					$mime_type = $part->ctype_primary.'/'.$part->ctype_secondary;
