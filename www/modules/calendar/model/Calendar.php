@@ -1,5 +1,7 @@
 <?php
 
+namespace GO\Calendar\Model;
+
 /**
  * Copyright Intermesh
  *
@@ -31,11 +33,6 @@
  * @property boolean $enable_ics_import
  * @property string $ics_import_url
  */
-
-
-namespace GO\Calendar\Model;
-
-
 class Calendar extends \GO\Base\Model\AbstractUserDefaultModel {
 	
 	/**
