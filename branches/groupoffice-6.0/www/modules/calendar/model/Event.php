@@ -192,7 +192,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		return array(
 				'_exceptionEvent'=>array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Event', 'field' => 'exception_for_event_id'),
 				'recurringEventException'=>array('type' => self::HAS_ONE, 'model' => 'GO\Calendar\Model\Exception', 'field' => 'exception_event_id'),//If this event is an exception for a recurring series. This relation points to the exception of the recurring series.
-				'calendar' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Calendar', 'field' => 'calendar_id'),
+				'calendar' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Calendar', 'field' => 'calendar_id','labelAttribute'=>function($model){return $model->calendar->name;}),
 				'category' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Category', 'field' => 'category_id'),
 				'participants' => array('type' => self::HAS_MANY, 'model' => 'GO\Calendar\Model\Participant', 'field' => 'event_id', 'delete' => true),
 				'exceptions' => array('type' => self::HAS_MANY, 'model' => 'GO\Calendar\Model\Exception', 'field' => 'event_id', 'delete' => true),
