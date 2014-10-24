@@ -259,7 +259,10 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 			}
 
 		}else{
-			$oldPath = \GO::config()->file_storage_path . $this->parent->path.'/'.$filename;
+			
+			$parentPath = $this->parent ? $this->parent->path.'/' : '';
+			
+			$oldPath = \GO::config()->file_storage_path . $parentPath.$filename;
 		}
 		return new \GO\Base\Fs\Folder($oldPath);
 	}
@@ -269,13 +272,14 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 
 		//check permissions on the filesystem
 		if($this->isNew){
+			
 			if(!$this->fsFolder->firstExistingParent()->isWritable()){
 				throw new \Exception("Folder ".$this->fsFolder->firstExistingParent()->stripFileStoragePath()." (Creating ".$this->name.") is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}else
 		{
-			if($this->isModified('name') || $this->isModified('parent_id')){
-				if($this->_getOldFsFolder() && !$this->_getOldFsFolder()->isWritable())
+			if($this->isModified('name') || $this->isModified('parent_id')){			
+				if($this->_getOldFsFolder() && $this->_getOldFsFolder()->exists() && !$this->_getOldFsFolder()->isWritable())
 					throw new \Exception("Folder ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}
