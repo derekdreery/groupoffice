@@ -3,6 +3,7 @@
 
 namespace GO\Customfields;
 
+use GO;
 
 class CustomfieldsModule extends \GO\Base\Module {
 
