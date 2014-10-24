@@ -1,3 +1,4 @@
+- Fixed problem with attachments in the \tmp\attachments\ folder that didn't get removed after sending an email from a mime source
 - Address Book & Custom Fields: fixed advanced searching Tree Select custom fields in Address Book module.
 
 22-10-2014 5.0.88
