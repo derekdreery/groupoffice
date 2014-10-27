@@ -176,8 +176,12 @@ class CoreController extends \GO\Base\Controller\AbstractController {
 		
 		$store = \GO\Base\Data\Store::newInstance(\GO\Base\Model\User::model());
 		$store->setDefaultSortOrder('name', 'ASC');
+		
+		
+		$sortAlias = GO::user()->sort_name=="first_name" ? array('first_name','last_name') : array('last_name','first_name');
+		
 
-		$store->getColumnModel()->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
+		$store->getColumnModel()->formatColumn('name', '$model->name', array(), $sortAlias);
 		$store->getColumnModel()->formatColumn('cf', '$model->id.":".$model->name'); //special field used by custom fields. They need an id an value in one.
 		
 		//only get users that are enabled
