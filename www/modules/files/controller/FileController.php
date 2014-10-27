@@ -89,7 +89,7 @@ class FileController extends \GO\Base\Controller\AbstractModelController {
 						$qp = json_decode($params['query_params'], true);
 						if (isset($qp['content_all'])){
 
-							$c = new \GO\Filesearch\Controller\Filesearch();
+							$c = new \GO\Filesearch\Controller\FilesearchController();
 
 							$response['data']['text'] = $c->highlightSearchParams($qp, $response['data']['text']);
 						}
