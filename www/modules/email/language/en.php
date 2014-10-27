@@ -262,7 +262,7 @@ $l["showAll"]='Show all';
 
 $l['noname'] = 'no name';
 $l['searchIn'] = 'Search in';
-$l['searchRecursive'] = 'Search recursive';
+$l['searchRecursive'] = 'Include subfolders';
 $l['currentFolder'] = 'Current folder';
 $l['allFolders'] = 'All folders';
 
