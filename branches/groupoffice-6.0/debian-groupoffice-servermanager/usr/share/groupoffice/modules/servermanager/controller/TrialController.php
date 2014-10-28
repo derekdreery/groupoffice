@@ -3,6 +3,8 @@
 
 namespace GO\Servermanager\Controller;
 
+use Exception;
+
 
 class TrialController extends \GO\Site\Components\Controller {
 
