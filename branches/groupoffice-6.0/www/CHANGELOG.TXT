@@ -1,3 +1,5 @@
+28-10-2014 6.0.33
+- Sorting users respects sort of name order
 - Billing, added functionality for multiple payments per order. This update will also convert existing payed orders to the new method.
 - Billing: Fixed display problem of costcode combos: Changed displaying "code" instead of "name" in the combo
 - Fixed problem with attachments in the \tmp\attachments\ folder that didn't get removed after sending an email from a mime source
