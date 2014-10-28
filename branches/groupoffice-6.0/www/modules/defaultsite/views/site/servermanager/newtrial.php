@@ -1,47 +1,41 @@
 
-
-<?php
-//if (GOS::site()->notifier->hasMessage('error')) {
-//	echo '<div class="notification notice-error">' . GOS::site()->notifier->getMessage('error') . '</div>';
-//}
-?>
-
-<?php echo \GO\Site\Components\Html::beginForm(); ?>	
+<?php $form = new \GO\Site\Widget\Form(); 
+			echo $form->beginForm(); ?>
 
 <div class="row formrow">					
-	<?php echo \GO\Site\Components\Html::activeLabelEx($model, 'name'); ?>
-	<?php echo \GO\Site\Components\Html::activeTextField($model, 'name'); ?>
+	<?php echo $form->label($model, 'name'); ?>
+	<?php echo $form->textField($model, 'name'); ?>
 	<span ><?php echo '.'.\GO::config()->servermanager_wildcard_domain; ?></span>
-	<?php echo \GO\Site\Components\Html::error($model, 'name'); ?>
+	<?php echo $form->error($model, 'name'); ?>
 </div>
 <div class="row formrow">
-	<?php echo \GO\Site\Components\Html::activeLabelEx($model, 'title'); ?>
-	<?php echo \GO\Site\Components\Html::activeTextField($model, 'title'); ?>
-	<?php echo \GO\Site\Components\Html::error($model, 'title'); ?>
+	<?php echo $form->label($model, 'title'); ?>
+	<?php echo $form->textField($model, 'title'); ?>
+	<?php echo $form->error($model, 'title'); ?>
 </div>		
 
 <div class="row formrow">
-	<?php echo \GO\Site\Components\Html::activeLabelEx($model, 'first_name'); ?>
-	<?php echo \GO\Site\Components\Html::activeTextField($model, 'first_name'); ?>
-	<?php echo \GO\Site\Components\Html::error($model, 'first_name'); ?>
+	<?php echo $form->label($model, 'first_name'); ?>
+	<?php echo $form->textField($model, 'first_name'); ?>
+	<?php echo $form->error($model, 'first_name'); ?>
 </div>	
 
 <div class="row formrow">
-	<?php echo \GO\Site\Components\Html::activeLabelEx($model, 'last_name'); ?>
-	<?php echo \GO\Site\Components\Html::activeTextField($model, 'last_name'); ?>
-	<?php echo \GO\Site\Components\Html::error($model, 'last_name'); ?>
+	<?php echo $form->label($model, 'last_name'); ?>
+	<?php echo $form->textField($model, 'last_name'); ?>
+	<?php echo $form->error($model, 'last_name'); ?>
 </div>	
 
 <div class="row formrow">
-	<?php echo \GO\Site\Components\Html::activeLabelEx($model, 'email'); ?>
-	<?php echo \GO\Site\Components\Html::activeTextField($model, 'email'); ?>
-	<?php echo \GO\Site\Components\Html::error($model, 'email'); ?>
+	<?php echo $form->label($model, 'email'); ?>
+	<?php echo $form->textField($model, 'email'); ?>
+	<?php echo $form->error($model, 'email'); ?>
 </div>	
 
 <div class="row buttons">
-	<?php echo \GO\Site\Components\Html::submitButton('Create trial!'); ?>
-	<?php echo \GO\Site\Components\Html::resetButton('Reset'); ?>
+	<?php echo $form->submitButton('Create trial!'); ?>
+	<?php echo $form->resetButton('Reset'); ?>
 </div>
 
 <div style="clear:both"></div>
-<?php echo \GO\Site\Components\Html::endForm(); ?>
+<?php echo $form->endForm(); ?>
