@@ -968,7 +968,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$rocketProject->due_time=\GO\Base\Util\Date::date_add(time(),0,1);
 				$rocketProject->company_id=$acme->id;
 				$rocketProject->contact_id=$wile->id;
-				$rocketProject->budget=20000;
+//				$rocketProject->budget=20000;
 				$rocketProject->save();
 				
 				$resource = new \GO\Projects2\Model\Resource();
