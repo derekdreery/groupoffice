@@ -569,6 +569,8 @@ class File extends \GO\Base\Db\ActiveRecord {
 
 		$this->mtime=$fsFile->mtime();
 		$this->save();
+		
+		$this->fireEvent('replace', array($this, $isUploadedFile));
 	}
 
 	public function putContents($data){
