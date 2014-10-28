@@ -2220,8 +2220,14 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				$r['findParams']=FindParams::newInstance();
 
 			$params =$r['findParams']->relation($name);
-			//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.
-			return empty($this->pk) ? false : GO::getModel($model)->findSingleByAttribute($r['field'], $this->pk, $params);
+			if(is_array($r['field'])) {
+				$local_key = array_keys($r['field'])[0];
+				$foreign_key = array_values($r['field'])[0];
+				return empty($this->pk) ? false : GO::getModel($model)->findSingleByAttribute($foreign_key, $this->{$local_key}, $params);
+			} else {
+				//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.
+				return empty($this->pk) ? false : GO::getModel($model)->findSingleByAttribute($r['field'], $this->pk, $params);
+			}
 		}else{
 			$findParams = $this->getRelationFindParams($name,$extraFindParams);
 
