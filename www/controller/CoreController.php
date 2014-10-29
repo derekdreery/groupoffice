@@ -258,7 +258,7 @@ class CoreController extends \GO\Base\Controller\AbstractController {
 
 		$ext = $file->extension();
 
-		$type = $ext =='js' ? 'text/javascript' : 'text/css';
+		$type = $ext =='js' ? 'application/javascript' : 'text/css';
 
 		$use_compression = GO::config()->use_zlib_compression();
 
@@ -267,7 +267,7 @@ class CoreController extends \GO\Base\Controller\AbstractController {
 			ob_start('ob_gzhandler');
 		}
 		$offset = 30*24*60*60;
-		header ("Content-Type: $type; charset: UTF-8");
+		header ("Content-Type: $type");
 		header("Expires: " . date("D, j M Y G:i:s ", time()+$offset) . 'GMT');
 		header('Cache-Control: cache');
 		header('Pragma: cache');
