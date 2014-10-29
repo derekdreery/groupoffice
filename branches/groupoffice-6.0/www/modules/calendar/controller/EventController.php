@@ -961,8 +961,8 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 			
 		  
 			$taskFindCriteria = \GO\Base\Db\FindCriteria::newInstance()
-							->addCondition('start_time', strtotime($startTime),'>=')
-							->addCondition('due_time', strtotime($endTime), '<=');
+							->addCondition('due_time', strtotime($startTime),'>=')
+							->addCondition('start_time', strtotime($endTime), '<=');
 			
 			// Remove tasks that are completed
 			if(!$calendar->show_completed_tasks)
