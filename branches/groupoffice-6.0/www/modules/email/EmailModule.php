@@ -55,7 +55,6 @@ class EmailModule extends \GO\Base\Module{
 
 	public static function deleteUser($user) {
 		Model\Account::model()->deleteByAttribute('user_id', $user->id);
-		Model\Label::model()->deleteUserLabels($user->id);
 	}
 
 
@@ -75,11 +74,5 @@ class EmailModule extends \GO\Base\Module{
 	public static function reminderDisplay($controller, &$html, $params){
 		if(!empty($params['unseenEmails']))
 			$html .= '<p>'.str_replace('{new}', $params['unseenEmails'], GO::t('youHaveNewMails','email')).'</p>';
-	}
-
-	public static function firstRun()
-	{
-		parent::firstRun();
-		Model\Label::model()->createDefaultLabels(GO::user()->id);
 	}
 }

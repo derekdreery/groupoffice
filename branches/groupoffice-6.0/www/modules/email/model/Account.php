@@ -217,7 +217,17 @@ class Account extends \GO\Base\Db\ActiveRecord {
 			}
 			\GO::session()->values['emailModule']['smtpPasswords'][$this->id] = $this->_session_smtp_password;
 		}
+
+		if ($wasNew) {
+			Label::model()->createDefaultLabels($this->id);
+		}
+
 		return parent::afterSave($wasNew);
+	}
+
+	protected function afterDelete() {
+		Label::model()->deleteAccountLabels($this->id);
+		return true;
 	}
 		
 	private $_mailboxes;

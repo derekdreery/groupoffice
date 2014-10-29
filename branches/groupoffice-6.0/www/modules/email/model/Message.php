@@ -330,7 +330,10 @@ abstract class Message extends \GO\Base\Model {
 		$response['date'] = \GO\Base\Util\Date::get_timestamp($this->udate);
 		$response['size'] = $this->size;
 
-		$labels = \GO\Email\Model\Label::model()->getUserLabels();
+		$labels = array();
+		if (property_exists($this, 'account')) {
+			$labels = \GO\Email\Model\Label::model()->getAccountLabels($this->account->id);
+		}
 
 		$response['labels'] = array();
 		if(!empty($this->labels)){
