@@ -466,6 +466,10 @@ class GO{
 		
 		//for namespaces
 //		$className = str_replace('\\', '_', $className);
+		
+		//Sometimes there's a leading \ in the $className and sometimes not.
+		//Might not be true for all php versions.		
+		$className = ltrim($className, '\\');
 			
 		if(isset(self::$_classes[$className])){
 			//don't use \GO::config()->root_path here because it might not be autoloaded yet causing an infite loop.
