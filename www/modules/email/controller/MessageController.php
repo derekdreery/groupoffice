@@ -316,7 +316,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 						$query,
 						$searchIn);
 
-		$labels = Label::model()->getUserLabels();
+		$labels = Label::model()->getAccountLabels($account->id);
 
 		$response["results"]=array();
 		foreach($messages as $message){

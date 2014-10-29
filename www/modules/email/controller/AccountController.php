@@ -64,7 +64,7 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 
 	protected function afterLoad(&$response, &$model, &$params) {
 
-
+		$response['data']['email_enable_labels'] = !empty(GO::config()->email_enable_labels); 
 
 		$response['data']['smtp_auth']=!empty($model->smtp_username);
 

@@ -411,10 +411,11 @@ GO.email.EmailClient = function(config){
 				store: new GO.data.JsonStore({
 					url: GO.url("email/label/store"),
 					baseParams: {
+						account_id: 0,
 						forContextMenu: true
 					},
 					fields: ['flag', 'text'],
-					remoteSort: true
+					remoteSort: true			
 				}),
 				listeners:{
 					scope:this,
@@ -422,7 +423,17 @@ GO.email.EmailClient = function(config){
 						this.setCheckStateOnLabelsMenu();
 					},
 
-					show: function() {
+					beforeshow: function() {
+						var isDefined = Ext.isDefined(this.labelsContextMenu.store.baseParams.account_id);
+
+						if (!isDefined || (isDefined && this.labelsContextMenu.store.baseParams.account_id != this.messagesStore.baseParams.account_id)) {
+							this.labelsContextMenu.store.loaded = true; //hack - ignore initial store load
+							this.labelsContextMenu.store.baseParams.account_id = this.messagesStore.baseParams.account_id
+							this.labelsContextMenu.store.load();
+						}
+					},
+
+					show: function() {						
 						this.setCheckStateOnLabelsMenu();
 					},
 
@@ -569,8 +580,7 @@ GO.email.EmailClient = function(config){
 				var labelsColumnIndex = this.messagesGrid.getColumnModel().getIndexById('labels');
 				if (!this.messagesGrid.getColumnModel().isHidden(labelsColumnIndex) && !node.attributes.permittedFlags) {
 					this.messagesGrid.getColumnModel().setHidden(labelsColumnIndex, true);
-				}
-				this.settingsMenuItemLabels.setVisible(node.attributes.permittedFlags);
+				}				
 			}
 //		}
 	}, this);
@@ -614,16 +624,7 @@ GO.email.EmailClient = function(config){
 				this.moveGrid();
 			},
 			scope: this
-		},
-		this.settingsMenuItemLabels = new Ext.menu.Item({
-			iconCls:'btn-labels',
-			text: GO.email.lang.labels,
-			cls: 'x-btn-text-icon',
-			handler: function(){
-				this.showLabelsDialog();
-			},
-			scope: this
-		})
+		}
 		]
 	});
 
@@ -1186,18 +1187,6 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 
 		if(refresh)
 			delete this.treePanel.loader.baseParams.refresh;
-	},
-
-	showLabelsDialog: function()
-	{
-		if(!this.labelsDialog)
-		{
-			this.labelsDialog = new GO.email.ManageLabelsDialog();
-			this.labelsDialog.on('change', function(){
-				this.labelsContextMenu.store.reload();
-			}, this);
-		}
-		this.labelsDialog.show();
 	},
 
 	showAccountsDialog : function()

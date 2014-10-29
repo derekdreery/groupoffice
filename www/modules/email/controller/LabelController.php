@@ -22,7 +22,7 @@ class LabelController extends AbstractModelController
      */
     protected function getStoreParams($params)
     {
-        $criteria = FindCriteria::newInstance()->addCondition('user_id', GO::user()->id);
+        $criteria = FindCriteria::newInstance()->addCondition('account_id', (isset($params['account_id'])?$params['account_id']:0));
         return FindParams::newInstance()->criteria($criteria);
     }
 

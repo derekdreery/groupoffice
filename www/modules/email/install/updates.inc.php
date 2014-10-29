@@ -99,3 +99,5 @@ $updates['201403100000'][]="CREATE TABLE IF NOT EXISTS `em_labels` (
   `default` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201410280000"][]="ALTER TABLE `em_labels` CHANGE `user_id` `account_id` INT( 11 ) NOT NULL";

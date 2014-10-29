@@ -453,6 +453,10 @@ GO.email.AccountDialog = function(config) {
 
 	this.foldersTab, this.permissionsTab,this.filterGrid];
 
+	this.labelsTab = new GO.email.LabelsGrid();
+
+	items.push(this.labelsTab);
+
 	if (GO.settings.modules.email.write_permission) {
 		items.splice(1, 0, incomingTab, outgoingTab);
 	}
@@ -660,6 +664,8 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 
 				this.foldersTab.setDisabled(false);
 
+				this.labelsTab.setDisabled(!action.result.data.email_enable_labels);
+
 				this.permissionsTab.setAcl(action.result.data.acl_id);
 				
 				if (this.templatesCombo) {
@@ -674,5 +680,6 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 	setAccountId : function(account_id){
 		this.account_id = account_id;
 		this.filterGrid.setAccountId(account_id);
+		this.labelsTab.setAccountId(account_id);
 	}
 });
