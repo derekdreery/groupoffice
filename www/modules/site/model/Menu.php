@@ -77,7 +77,7 @@ class Menu extends \GO\Base\Db\ActiveRecord{
 				'iconCls' => 'go-model-icon-Menu',
 				'text' => $menu->label,
 				'hasChildren' => $hasChildren,
-				'expanded' => !$hasChildren || \Site::isExpandedNode($menu->site_id.'_menu_'.$menu->id),	 
+				'expanded' => !$hasChildren || \GO\Site\Model\Site::isExpandedNode($menu->site_id.'_menu_'.$menu->id),	 
 				'children'=> $hasChildren ? $menu->getMenuChildrenTree():null,
 			 );
 			 $tree[] = $node;
@@ -110,7 +110,7 @@ class Menu extends \GO\Base\Db\ActiveRecord{
 				'iconCls' => 'go-model-icon-Menuitem', 
 				'text' => $child->label,
 				'hasChildren' => $hasChildren,
-				'expanded' => !$hasChildren || \Site::isExpandedNode($this->site_id.'_menu_'.$child->id),	 
+				'expanded' => !$hasChildren || \GO\Site\Model\Site::isExpandedNode($this->site_id.'_menu_'.$child->id),	 
 				'children'=> $hasChildren ? null : $child->getChildrenTree(),
 			);
 			 
