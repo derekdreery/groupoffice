@@ -1,3 +1,5 @@
+- Saving ProjectV2 TaskGrid will submit all grid data else the grouping functionality will break
+
 28-10-2014 6.0.33
 - Sorting users respects sort of name order
 - Billing, added functionality for multiple payments per order. This update will also convert existing payed orders to the new method.
