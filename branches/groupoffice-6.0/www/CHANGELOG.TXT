@@ -1,3 +1,4 @@
+- Site module: Fixed some namespace problems that broke the site treepanel
 - Saving ProjectV2 TaskGrid will submit all grid data else the grouping functionality will break
 
 28-10-2014 6.0.33
