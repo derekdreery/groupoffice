@@ -225,6 +225,10 @@ class UrlManager
 		
 		$domain = \Site::model()->domain == '*' ? $_SERVER['SERVER_NAME'] : \Site::model()->domain;
 		
+		if(\Site::model()->ssl && $_SERVER['SERVER_PORT'] !== 443 || !\Site::model()->ssl && $_SERVER['SERVER_PORT'] !== 80) {
+			$domain = rtrim($domain, '/') . ':' . $_SERVER['SERVER_PORT'] . '/';
+		}
+
 		$url .= $domain.rtrim($this->getBaseUrl(),'/');
 		return $url;
 	}
