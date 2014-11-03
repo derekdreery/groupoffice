@@ -7,7 +7,7 @@ class FileView extends AbstractView{
 	
 	public $layout='ajax';
 	
-	public function render($viewName, $data){
+	public function render($viewName, $data=array()){
 		
 		$this->headers();		
 		
