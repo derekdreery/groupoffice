@@ -1,3 +1,4 @@
+- Added clarification for CalDAV tasklist sync to the settings->synchronization panel
 - Calendar: fixed warning message for the event accept external page
 - Site module: Fixed some namespace problems that broke the site treepanel
 - Saving ProjectV2 TaskGrid will submit all grid data else the grouping functionality will break
