@@ -1,3 +1,5 @@
+- Added clarification for CalDAV tasklist sync to the settings->synchronization panel
+
 28-10-2014 5.0.89
 - Sorting users respects sort of name order
 - Billing: Fixed display problem of costcode combos: Changed displaying "code" instead of "name" in the combo
