@@ -902,9 +902,10 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 
 			$destinationFsFolder = $copy->fsFolder->parent();
 //			$copy->fsFolder->delete();
-			try{
-				if(!$this->fsFolder->copy($destinationFsFolder, $newName))
+			try{ // $copy directory already made but copy() might throw an exception when coping in the source folder
+				if(!$this->fsFolder->copy($destinationFsFolder, $newName)) {
 					return false;
+				}
 			} catch(\Exception $e) {
 				$copy->delete();
 				throw $e;
