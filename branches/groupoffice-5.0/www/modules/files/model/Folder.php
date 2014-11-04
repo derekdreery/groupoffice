@@ -889,8 +889,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$destinationFsFolder = $copy->fsFolder->parent();
 //			$copy->fsFolder->delete();
 
-			if(!$this->fsFolder->copy($destinationFsFolder, $newName))
-				return false;
+			try{ // $copy directory already made but copy() might throw an exception when coping in the source folder
+				if(!$this->fsFolder->copy($destinationFsFolder, $newName)) {
+					return false;
+				}
+			} catch(\Exception $e) {
+				$copy->delete();
+				throw $e;
+			}
 		}else
 		{
 			$copy = $existing;
