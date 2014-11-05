@@ -148,6 +148,11 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 					'<tr>'+
 						'<td colspan="2" class="display-panel-heading">'+GO.files.lang.file+': {path}</td>'+
 					'</tr>'+
+					
+					'<tr>'+
+						'<td>ID</td><td>{id}</td>'+
+					'</tr>'+
+					
 					'<tr>'+
 						'<td>'+GO.lang.strType+':</td>'+
 						'<td colspan=><div class="go-grid-icon filetype filetype-{extension}">{type}</div></td>'+						
@@ -156,7 +161,6 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 					'<tr>'+
 						'<td>'+GO.lang.strSize+':</td>'+
 						'<td>{size}</td>'+
-						
 					'</tr>'+
 
 					'<tr>'+
