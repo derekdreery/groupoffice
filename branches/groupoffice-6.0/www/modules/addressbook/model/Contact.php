@@ -521,7 +521,7 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 	/**
 	 * Import a contact (with or without company) from a VObject 
 	 * 
-	 * @param Sabre_VObject_Component $vobject
+	 * @param Sabre\VObject\Component $vobject
 	 * @param array $attributes Extra attributes to apply to the contact. Raw values should be past. No input formatting is applied.
 	 * @return Contact
 	 */
@@ -692,8 +692,11 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 					$attributes['function'] = $vobjProp->getValue();
 					break;
 				case 'BDAY':
-					if($vobjProp->getValue())
-						$attributes['birthday'] = substr($vobjProp->getValue(),0,4).'-'.substr($vobjProp->getValue(),5,2).'-'.substr($vobjProp->getValue(),8,2);
+					if($vobjProp->getValue()) {
+						// is already formatted in GO\Base\VObject\Reader::convertVCard21ToVCard30
+						// $attributes['birthday'] = substr($vobjProp->getValue(),0,4).'-'.substr($vobjProp->getValue(),5,2).'-'.substr($vobjProp->getValue(),8,2);
+						$attributes['birthday'] = $vobjProp->getValue();
+					}
 					break;				
 				case 'NOTE':
 					$attributes['comment'] = $vobjProp->getValue();
