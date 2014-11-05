@@ -551,6 +551,9 @@ abstract class AbstractController extends Observable {
 	 */
 	public function getRoute($action=''){
 		$arr = explode('\\',get_class($this));
+		
+		if(isset($arr[3]) && strpos($arr[3], 'Controller')!==false)
+			$arr[3] = substr($arr[3],0,0-strlen('Controller')); //cut off Controller from className
 
 		if($arr[1]!='Core')
 			$route=lcfirst($arr[1]).'/'.lcfirst($arr[3]);				
@@ -561,16 +564,6 @@ abstract class AbstractController extends Observable {
 			$route .= '/'.lcfirst($action);
 		
 		return $route;
-		
-//		if($arr[1]!='Core')
-//			$route=$arr[1].'/'.$arr[3];				
-//		else 
-//			$route=$arr[3];				
-//		
-//		if($action!='')
-//			$route .= '/'.$action;
-//		
-//		return strtolower($route);
 	}	
 	
 	/**
