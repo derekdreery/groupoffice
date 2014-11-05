@@ -1,3 +1,4 @@
+- Fixed AbstractController::getRoute() function with namespaces.
 - Accept YYYYMMDD format when importing vCard with birthdays
 - If fs/Folder fails to copy (because destination might be inside source folder) the already created folder record will be deleted 
 - Added clarification for CalDAV tasklist sync to the settings->synchronization panel
