@@ -708,8 +708,11 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					$attributes['function'] = $vobjProp->getValue();
 					break;
 				case 'BDAY':
-					if($vobjProp->getValue())
-						$attributes['birthday'] = substr($vobjProp->getValue(),0,4).'-'.substr($vobjProp->getValue(),5,2).'-'.substr($vobjProp->getValue(),8,2);
+					if($vobjProp->getValue()){
+						// is already formatted in GO\Base\VObject\Reader::convertVCard21ToVCard30
+						// $attributes['birthday'] = substr($vobjProp->getValue(),0,4).'-'.substr($vobjProp->getValue(),5,2).'-'.substr($vobjProp->getValue(),8,2);
+						$attributes['birthday'] = $vobjProp->getValue();
+					}
 					break;				
 				case 'NOTE':
 					$attributes['comment'] = $vobjProp->getValue();
