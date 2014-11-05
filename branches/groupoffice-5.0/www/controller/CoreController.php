@@ -247,7 +247,10 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$file = GO::config()->getCacheFolder()->child(basename($params['file']));
 
 //		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'cache/'.basename($params['file']));
-
+		if(!$file){
+			throw new GO_Base_Exception_NotFound();
+		}
+		
 		$ext = $file->extension();
 
 		$type = $ext =='js' ? 'application/javascript' : 'text/css';
