@@ -1,3 +1,5 @@
+- Files: Fixed global copy-paste/cut-paste.
+
 06-11-2014 5.0.90
 - Units ran off screen in billing pdf
 - Email: added new config property to the emailcomposer to disable the template button (config.disableTemplates)
