@@ -1,3 +1,4 @@
+- Units ran off screen in billing pdf
 - Email: added new config property to the emailcomposer to disable the template button (config.disableTemplates)
 - Tasks: Added pagination to the category select combobox
 - Accept YYYYMMDD format when importing vCard with birthdays
