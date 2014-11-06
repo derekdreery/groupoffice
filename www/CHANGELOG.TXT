@@ -1,3 +1,4 @@
+06-11-2014 6.0.34
 - Fixed broken email viewer in files module
 - Fixed ODF generation in billing
 - Trim leading backslashes in autoloader
