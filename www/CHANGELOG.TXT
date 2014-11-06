@@ -1,3 +1,4 @@
+- Email: added new config property to the emailcomposer to disable the template button (config.disableTemplates)
 - Tasks: Added pagination to the category select combobox
 - Fixed AbstractController::getRoute() function with namespaces.
 - Accept YYYYMMDD format when importing vCard with birthdays

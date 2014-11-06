@@ -672,6 +672,13 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				item.setChecked(true);
 			}
 		}
+		
+		if(config.disableTemplates){
+			this.templatesBtn.setDisabled(config.disableTemplates);
+		} else {
+			this.templatesBtn.setDisabled(false);
+		}
+		
 	},
 					
 					
