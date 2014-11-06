@@ -1,3 +1,7 @@
+- Fixed broken email viewer in files module
+- Fixed ODF generation in billing
+- Trim leading backslashes in autoloader
+- Script compression sent wrong headers which broke script loading in some rare cases
 - Email: added new config property to the emailcomposer to disable the template button (config.disableTemplates)
 - Tasks: Added pagination to the category select combobox
 - Fixed AbstractController::getRoute() function with namespaces.
@@ -7,6 +11,7 @@
 - Calendar: fixed warning message for the event accept external page
 - Site module: Fixed some namespace problems that broke the site treepanel
 - Saving ProjectV2 TaskGrid will submit all grid data else the grouping functionality will break
+
 
 28-10-2014 6.0.33
 - Sorting users respects sort of name order
