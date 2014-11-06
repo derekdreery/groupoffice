@@ -1220,6 +1220,11 @@ class AbstractModelController extends AbstractController {
 		return $field->columnName();
 	}
 	
+	protected static function sortByLabel($attrA,$attrB) {
+		if ($attrA['label'] == $attrB['label'])
+			return 0;		
+		return $attrA['label']>$attrB['label'] ? 1 : -1;
+	}
 	
 	protected function actionAttributes($params){
 		if(!isset($params['exclude']))
@@ -1250,10 +1255,10 @@ class AbstractModelController extends AbstractController {
 							&& (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))
 							&& !in_array($name,$params['exclude_attributes'])
 				)
-				$unsorted[$model->getAttributeLabel($name)]=array('name'=>'t.'.$name,'label'=>$model->getAttributeLabel($name),'gotype'=>$attr['gotype']);				
+				$unsorted[$name]=array('name'=>'t.'.$name,'label'=>$model->getAttributeLabel($name),'gotype'=>$attr['gotype']);				
 		}
-		
-		ksort($unsorted);
+				
+		usort($unsorted,array('\\GO\\Base\\Controller\\AbstractModelController','sortByLabel'));
 		foreach($unsorted as $a){
 			$attributes[$a['name']]=$a;
 		}
