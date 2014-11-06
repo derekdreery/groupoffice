@@ -357,7 +357,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			emptyText:GO.tasks.lang.selectCategory,
 			editable:false,
 			selectOnFocus:true,
-			forceSelection:true
+			forceSelection:true,
+			pageSize: parseInt(GO.settings['max_rows_list'])
 		});
 
 		this.selectPriority = new GO.form.SelectPriority();
