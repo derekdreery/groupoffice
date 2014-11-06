@@ -851,8 +851,6 @@ GO.files.FileBrowser = function(config){
 
 }
 
-GO.files.pasteSelections = Array();
-
 Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	ready:false,
 	cls: 'fs-filebrowser',
@@ -1889,7 +1887,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			},
 			scope:this
 		});
-
+		
 	},
 	
 	updateLocation : function(){
@@ -2186,3 +2184,5 @@ GO.moduleManager.addModule('files', GO.files.FileBrowser, {
 	title : GO.files.lang.files,
 	iconCls : 'go-tab-icon-files'
 });
+
+GO.files.pasteSelections = new Array();
