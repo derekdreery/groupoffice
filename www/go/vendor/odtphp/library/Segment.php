@@ -89,7 +89,8 @@ class Segment implements IteratorAggregate, Countable
 				return '';
 			}
         //$this->xmlParsed .= str_replace(array_keys($this->vars), array_values($this->vars), $this->xml);
-			$this->xmlParsed.=preg_replace('/{([^}]*)}/Ue', "odf::replacetag('$1', \$this->vars)", $this->xml);
+		$this->xmlParsed.=preg_replace_callback('/{([^}]*)}/U', array($this, "replacetag"), $this->xml);
+		
         if ($this->hasChildren()) {
             foreach ($this->children as $child) {
                 $this->xmlParsed = str_replace($child->xml, ($child->xmlParsed=="")?$child->merge():$child->xmlParsed, $this->xmlParsed);
@@ -111,6 +112,63 @@ class Segment implements IteratorAggregate, Countable
 				$this->vars=array();
 		    return $this->xmlParsed;
     }
+	
+	public function replacetag($tag) {
+		
+		$tag = stripslashes($tag[1]);
+		$orig_tag = $tag;
+
+		//Sometimes people change styles within a {autodata} tag.
+		//Then there are XML tags inside the GO template tag.
+		//We place them outside the tag.
+		//go_debug($tag);
+		preg_match_all('/<[^>]*>/', $tag, $matches);
+		$garbage_tags = implode('', $matches[0]);
+
+		$tag = strip_tags($tag);
+		$arr = explode('|', $tag);
+
+		$math = false;
+		$ops = array('/', '*', '+', '-');
+		foreach ($ops as $op) {
+			if (strpos($arr[0], $op)) {
+				$math = true;
+				break;
+			}
+		}
+
+		if (!$math) {
+			if (!isset($this->vars[$arr[0]])) {
+				return '{' . $orig_tag . '}';
+			} else {
+				$v = $this->vars[$arr[0]];
+			}
+		} else {
+			$v = $arr[0];
+			foreach ($this->vars as $key => $value) {
+				$v = str_replace($key, $value, $v);
+			}
+
+			\GO::config()->debug_display_errors = false;
+			@eval("\$result_string=" . $v . ";");
+			\GO::config()->debug_display_errors = true;
+
+			$v = isset($result_string) ? $result_string : 'invalid math expression!';
+		}
+
+//		if (isset($arr[1])) {
+//			$args = explode(':', $arr[1]);
+//
+//			//first value = function name
+//			$func = array_shift($args);
+//
+//			//add value as first argument
+//			array_unshift($args, $v);
+//
+//			$v = call_user_func_array(array('odf_renderers', $func), $args);
+//		}
+		return $garbage_tags . $v;
+	}
     /**
      * Analyse the XML code in order to find children
      *
