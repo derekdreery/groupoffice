@@ -2221,8 +2221,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 			$params =$r['findParams']->relation($name);
 			if(is_array($r['field'])) {
-				$local_key = array_keys($r['field'])[0];
-				$foreign_key = array_values($r['field'])[0];
+				$fieldKeys = array_keys($r['field']);
+				$local_key = $fieldKeys[0];
+				$fieldValues = array_values($r['field']);
+				$foreign_key = $fieldValues[0];
 				return empty($this->pk) ? false : GO::getModel($model)->findSingleByAttribute($foreign_key, $this->{$local_key}, $params);
 			} else {
 				//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.
