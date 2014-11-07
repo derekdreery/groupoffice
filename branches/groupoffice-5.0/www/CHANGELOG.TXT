@@ -1,3 +1,4 @@
+- Documenttemplates - Fixed Exception that was throwed when no customfieldrecord could be found
 - Files: Fixed global copy-paste/cut-paste.
 
 06-11-2014 5.0.90
