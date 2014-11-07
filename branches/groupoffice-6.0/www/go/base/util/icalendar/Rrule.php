@@ -345,7 +345,7 @@ class Rrule extends \GO\Base\Util\Date\RecurrencePattern
 		$this->_bysetpos = !empty($rrule_arr['BYSETPOS']) ? intval($rrule_arr['BYSETPOS']) : 0;
 		
 		if($this->_bysetpos<0)
-			throw new Exception("'Last X of month' recurrence pattern currently not supported by Group-Office.");
+			throw new \Exception("'Last X of month' recurrence pattern currently not supported by Group-Office.");
 		
 		
 		$this->_splitDaysAndSetPos();
