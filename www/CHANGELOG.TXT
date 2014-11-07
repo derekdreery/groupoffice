@@ -1,3 +1,4 @@
+- Calendar: When importing an ICS file with an appointment that has a recurrence pattern 'last X of month', an error message is given but the import continues.
 - Documenttemplates - Fixed Exception that was throwed when no customfieldrecord could be found
 - CalDAV will except slashed in imported events
 
