@@ -454,3 +454,4 @@ $updates['201408211030'][]="ALTER TABLE `ab_contacts` ADD `color` CHAR( 6 ) NOT 
 $updates['201408211030'][]="ALTER TABLE `ab_companies` ADD `color` CHAR( 6 ) NOT NULL DEFAULT '';";
 
 $updates['201411101445'][]="UPDATE ab_contacts SET color='000000' WHERE color IS NULL OR color='';";
+$updates['201411101500'][]="ALTER TABLE `ab_contacts` CHANGE `color` `color` CHAR( 6 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '000000';";
