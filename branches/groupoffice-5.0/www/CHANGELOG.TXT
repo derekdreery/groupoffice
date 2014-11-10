@@ -1,3 +1,4 @@
+- File Search: fixed searching for file types
 - Email: Fixed problem with enable/disable templates button when the user has no permissions to use the addressbook module
 - Documenttemplates - Fixed Exception that was throwed when no customfieldrecord could be found
 - Files: Fixed global copy-paste/cut-paste.
