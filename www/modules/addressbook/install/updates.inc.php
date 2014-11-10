@@ -453,3 +453,4 @@ $updates['201407241350'][]="ALTER TABLE  `ab_contacts` CHANGE  `photo`  `photo` 
 $updates['201408211030'][]="ALTER TABLE `ab_contacts` ADD `color` CHAR( 6 ) NOT NULL DEFAULT '';";
 $updates['201408211030'][]="ALTER TABLE `ab_companies` ADD `color` CHAR( 6 ) NOT NULL DEFAULT '';";
 
+$updates['201411101445'][]="UPDATE ab_contacts SET color='000000' WHERE color IS NULL OR color='';";

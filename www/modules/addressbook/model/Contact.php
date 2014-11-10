@@ -292,6 +292,9 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 		
 		$this->_prefixSocialMediaLinks();
 		
+		if (empty($this->color))
+			$this->color = "000000";
+		
 		return parent::beforeSave();
 	}
 	
