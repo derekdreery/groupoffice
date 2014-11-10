@@ -1,3 +1,4 @@
+- Filesearch: Fixed namespace issue in the filesearch cronjob
 - Address Book: Fix for IE11 color picker bug in Contact Dialog.
 - File Search: Fixed searching for file types.
 - Email: Fixed problem with enable/disable templates button when the user has no permissions to use the addressbook module
