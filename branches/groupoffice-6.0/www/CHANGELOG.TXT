@@ -1,3 +1,4 @@
+- Email: Fixed problem with enable/disable templates button when the user has no permissions to use the addressbook module
 - Billing: When duplicationg orders from one book to another, check if one of the two books is a purchase order book. When one of the 2 is a purchase order book then swap the unit_price with the unit_cost parameter for every order item.
 - Billing: Added contextmenu to order grid that adds the functionality to change the order status of the selected orders.
 - Calendar: When importing an ICS file with an appointment that has a recurrence pattern 'last X of month', an error message is given but the import continues.
