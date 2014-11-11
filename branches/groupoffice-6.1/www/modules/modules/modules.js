@@ -59,21 +59,35 @@ GO.modules.MainPanel = function(config) {
 					this.store.load();
 				},
 				scope: this
-			},{
+			},
+//			{
+//				iconCls: 'btn-settings',
+//				text: "Install license file",
+//				cls: 'x-btn-text-icon',
+//				hidden: GO.settings.config.product_name!=='Group-Office',
+//				handler: function() {
+//					if(!this.installLicenseDialog){
+//						this.installLicenseDialog = new GO.modules.InstallLicenseDialog({
+//							
+//						});						
+//					}					
+//					this.installLicenseDialog.show();
+//				},
+//				scope: this
+//			},
+			{
 				iconCls: 'btn-settings',
-				text: "Install license file",
+				text: GO.modules.lang.buyLicenses,
 				cls: 'x-btn-text-icon',
-				hidden: GO.settings.config.product_name!=='Group-Office',
-				handler: function() {
-					if(!this.installLicenseDialog){
-						this.installLicenseDialog = new GO.modules.InstallLicenseDialog({
-							
-						});						
-					}					
-					this.installLicenseDialog.show();
+				hidden: GO.settings.config.product_name != 'Group-Office',
+				handler: function() {				
+					window.open('https://www.group-office.com/shop/');					
 				},
 				scope: this
-			},this.trialButton = new Ext.Button({
+			},
+
+
+			this.trialButton = new Ext.Button({
 				iconCls: 'btn-settings',
 				text: GO.modules.lang.trialLicense,
 				cls: 'x-btn-text-icon',
@@ -165,48 +179,48 @@ GO.modules.MainPanel = function(config) {
 //		autoFill: true,
 		startCollapsed:true,
 		emptyText: GO.lang.strNoItems,
-		groupTextTpl: '{text}<tpl if="values.rs[0].data.buyEnabled"><div class="mo-buy">Buy licenses</div></tpl>',
-		processEvent: function(name, e){
-			
-			
-        Ext.grid.GroupingView.superclass.processEvent.call(this, name, e);
-				
-				var buyLink = Ext.get(e.getTarget('.mo-buy', this.mainBody));
-				if(buyLink){
-					
-					if(name == 'mousedown' && e.button == 0){
-						var group = buyLink.parent('.x-grid-group');
-						var row = group.query('.x-grid3-row');					
-						var rowIndex = this.findRowIndex(row[0]);
-						var record = store.getAt(rowIndex);
-
-						GO.modules.showBuyDialog(record);
-					}
-				}else
-				{
-				
-					var hd = e.getTarget('.x-grid-group-hd', this.mainBody);
-					if(hd){
-							// group value is at the end of the string
-							var field = this.getGroupField(),
-									prefix = this.getPrefix(field),
-									groupValue = hd.id.substring(prefix.length),
-									emptyRe = new RegExp('gp-' + Ext.escapeRe(field) + '--hd');
-
-							// remove trailing '-hd'
-							groupValue = groupValue.substr(0, groupValue.length - 3);
-
-							// also need to check for empty groups
-							if(groupValue || emptyRe.test(hd.id)){
-									this.grid.fireEvent('group' + name, this.grid, field, groupValue, e);
-							}
-							if(name == 'mousedown' && e.button == 0){
-									this.toggleGroup(hd.parentNode);
-							}
-					}
-				}
-
-    },
+//		groupTextTpl: '{text}<tpl if="values.rs[0].data.buyEnabled"><div class="mo-buy">Buy licenses</div></tpl>',
+//		processEvent: function(name, e){
+//			
+//			
+//        Ext.grid.GroupingView.superclass.processEvent.call(this, name, e);
+//				
+//				var buyLink = Ext.get(e.getTarget('.mo-buy', this.mainBody));
+//				if(buyLink){
+//					
+//					if(name == 'mousedown' && e.button == 0){
+//						var group = buyLink.parent('.x-grid-group');
+//						var row = group.query('.x-grid3-row');					
+//						var rowIndex = this.findRowIndex(row[0]);
+//						var record = store.getAt(rowIndex);
+//
+//						GO.modules.showBuyDialog(record);
+//					}
+//				}else
+//				{
+//				
+//					var hd = e.getTarget('.x-grid-group-hd', this.mainBody);
+//					if(hd){
+//							// group value is at the end of the string
+//							var field = this.getGroupField(),
+//									prefix = this.getPrefix(field),
+//									groupValue = hd.id.substring(prefix.length),
+//									emptyRe = new RegExp('gp-' + Ext.escapeRe(field) + '--hd');
+//
+//							// remove trailing '-hd'
+//							groupValue = groupValue.substr(0, groupValue.length - 3);
+//
+//							// also need to check for empty groups
+//							if(groupValue || emptyRe.test(hd.id)){
+//									this.grid.fireEvent('group' + name, this.grid, field, groupValue, e);
+//							}
+//							if(name == 'mousedown' && e.button == 0){
+//									this.toggleGroup(hd.parentNode);
+//							}
+//					}
+//				}
+//
+//    },
 		getRowClass: function(record, rowIndex, p, store) {
 			if (this.showPreview && record.data.description.length) {
 				p.body = '<div class="mo-description">' + record.data.description + '</div>';
