@@ -40,8 +40,8 @@ class TemplateParser
 	private $_leaveEmptyTags=false;
 
 	
-	private function _getTag($tag, $content) {
-		$start_pos = strpos($content, $this->openTagSymbol.$tag);
+	private function _getTag($tag, $content, $offset=0) {
+		$start_pos = strpos($content, $this->openTagSymbol.$tag, $offset);
 		if ($start_pos !== false) {
 			$end_pos = $this->_getEndPos($tag, $content, $start_pos);
 			$sub_start_pos = 	strpos($content, $this->openTagSymbol.$tag, $start_pos+strlen($this->openTagSymbol.$tag));
@@ -66,7 +66,7 @@ class TemplateParser
 				return false;
 			}
 			$tag_length = $end_pos-$start_pos;
-			return substr($content, $start_pos, $tag_length);
+			return array('tag'=>substr($content, $start_pos, $tag_length),'offset'=>$start_pos+$tag_length);
 		}
 		return false;
 	}
@@ -205,36 +205,48 @@ class TemplateParser
 										}, $content);
 	}
 
-	private function _parseTags($content)
-	{
-			
-		foreach($this->_tags as $tagname)
-		{
-			while ($tag = $this->_getTag($tagname, $content)) {
+	private function _parseTags($content) {
+
 	
-				$attributes = $this->_getAttributes($tag);
-						
+		$replacements = array();
+
+		foreach ($this->_tags as $tagname) {
+			
+			$offset = 0;
+			
+			while ($tagProps = $this->_getTag($tagname, $content, $offset)) {
+
+
+				$offset = $tagProps['offset'];
+
+				$attributes = $this->_getAttributes($tagProps['tag']);
+
 				$print = !empty($this->_attributes[$attributes['if']]);
 
-				if($print)
-				{
-					$start_pos = strpos($tag, $this->closeTagSymbol);					
-					$tagcontent = substr($tag, $start_pos+strlen($this->closeTagSymbol));					
-					$tagcontent = substr($tagcontent,0, strlen($tagcontent)-strlen($this->openTagSymbol.'/'.$tagname.$this->closeTagSymbol));	
-					$this->_parseTags($tagcontent);					
-				}else
-				{
+				if ($print) {
+					$start_pos = strpos($tagProps['tag'], $this->closeTagSymbol);
+					$tagcontent = substr($tagProps['tag'], $start_pos + strlen($this->closeTagSymbol));
+					$tagcontent = substr($tagcontent, 0, strlen($tagcontent) - strlen($this->openTagSymbol . '/' . $tagname . $this->closeTagSymbol));
+					$this->_parseTags($tagcontent);
+				} else {
 					$tagcontent = '';
 				}
-				$content = str_replace('<br>'.$tag, $tagcontent, $content);
-				$content = str_replace('<br/>'.$tag, $tagcontent, $content);
-				$content = str_replace('<br />'.$tag, $tagcontent, $content);
-				$content = str_replace($tag, $tagcontent, $content);
+
+				if ($print || !$this->_leaveEmptyTags) {
+
+					$replacements[] = array($tagProps['tag'], $tagcontent);
+				}
 			}
 		}
 		
+		foreach ($replacements as $replacement) {
+			$content = str_replace('<br>' . $replacement[0], $replacement[1], $content);
+			$content = str_replace('<br/>' . $replacement[0], $replacement[1], $content);
+			$content = str_replace('<br />' . $replacement[0], $replacement[1], $content);
+			$content = str_replace($replacement[0], $replacement[1], $content);
+		}
+
 		return $content;
-		
 	}
-	
+
 }

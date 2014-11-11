@@ -44,7 +44,7 @@ GO.email.AccountsTree = function(config){
 			node.setText(node.text+' ('+GO.lang.strError+')');
 			node.setTooltip(result.feedback, GO.lang.strError);
 			
-			if(result.exceptionClass && result.exceptionClass=='GO_Base_Mail_ImapAuthenticationFailedException'){
+			if(result.exceptionClass && result.exceptionClass=='GO\\Base\\Mail\\ImapAuthenticationFailedException'){
 				this._errorNodes.push(node.attributes);
 			}
 		}

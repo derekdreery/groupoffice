@@ -25,9 +25,13 @@ require('../../GO.php');
 // Authentication backend
 $authBackend = new \GO\Dav\Auth\Backend();
 
-if(!\GO::modules()->isInstalled("dav"))
-	trigger_error('DAV module not installed. Install it at Start menu -> Modules', E_USER_ERROR);
-
+if (!\GO::modules()->isInstalled('dav')){
+	$msg = 'DAV module not installed. Install it at Start menu -> Apps.';
+	
+	trigger_error($msg, E_USER_WARNING);
+	
+	exit($msg);
+}
 
 $root = new \GO\Dav\Fs\RootDirectory();
 

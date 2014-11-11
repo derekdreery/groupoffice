@@ -12,16 +12,20 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+namespace GO\Notes;
+
+use GO;
+use GO\Base\Model\Acl;
+use GO\Base\Model\User;
+use GO\Base\Module;
+use GO\Notes\Model\Category;
+
 /**
  * 
  * The Notes module maintenance class
  * 
  */
-
-namespace GO\Notes;
-
-
-class NotesModule extends \GO\Base\Module{
+class NotesModule extends Module{
 	
 	public function autoInstall() {
 		return true;
@@ -44,7 +48,7 @@ class NotesModule extends \GO\Base\Module{
 	 */
 	public static function firstRun(){
 		parent::firstRun();
-		$category = self::getDefaultNoteCategory(\GO::user()->id);
+		$category = self::getDefaultNoteCategory(GO::user()->id);
 		
 		return array('exportVariables'=>array(
 				'GO'=>array(
@@ -60,10 +64,10 @@ class NotesModule extends \GO\Base\Module{
 
 	
 	public static function getDefaultNoteCategory($userId){
-		$user = \GO\Base\Model\User::model()->findByPk($userId);
+		$user = User::model()->findByPk($userId);
 		if(!$user)
 			return false;
-		$category = Model\Category::model()->getDefault($user);
+		$category = Category::model()->getDefault($user);
 		
 		return $category;
 	}
@@ -71,9 +75,9 @@ class NotesModule extends \GO\Base\Module{
 	public function install() {
 		parent::install();
 		
-		$category = new Model\Category();
-		$category->name=\GO::t('general','notes');
+		$category = new Category();
+		$category->name=GO::t('general','notes');
 		$category->save();
-		$category->acl->addGroup(\GO::config()->group_everyone, \GO\Base\Model\Acl::READ_PERMISSION);
+		$category->acl->addGroup(GO::config()->group_everyone, Acl::READ_PERMISSION);
 	}
 }

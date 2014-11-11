@@ -109,6 +109,18 @@ $l['months'][9]='Září';
 $l['months'][10]='Říjen';
 $l['months'][11]='Listopad';
 $l['months'][12]='Prosinec';
+$l['short_months'][1]='Led';
+$l['short_months'][2]='Úno';
+$l['short_months'][3]='Bře';
+$l['short_months'][4]='Dub';
+$l['short_months'][5]='Kvě';
+$l['short_months'][6]='Čer';
+$l['short_months'][7]='Čvc';
+$l['short_months'][8]='Srp';
+$l['short_months'][9]='Zář';
+$l['short_months'][10]='Říj';
+$l['short_months'][11]='Lis';
+$l['short_months'][12]='Pro';
 $l['short_days'][0]="Ne";
 $l['short_days'][1]="Po";
 $l['short_days'][2]="Ut";
@@ -273,6 +285,7 @@ $l["url"]= 'URL';
 $l["strMale"]= 'Muž';
 $l["strFemale"]= 'Žena';
 $l["strMtime"]= 'Změněno';
+$l['mUser']= 'Změnil(a)';
 $l["strCtime"]= 'Vytvořeno';
 $l["Atime"]= 'Otevřeno';
 $l["strText"]= 'Text';
@@ -339,6 +352,7 @@ $l["strSelected"]= 'Vybrané';
 $l["noItemSelected"]= 'Nevybrali jste žádnou položku.';
 $l["strDeleteSelectedItems"]= 'Opravdu chcete smazat tyto položky ({count})?';
 $l["strDeleteSelectedItem"]= 'Opravdu chcete smazat vybrané položky?';
+$l["areYouSureDeleteItem"]= 'Opravdu chcete smazat tuto položku \'{item}\'?';
 $l["strNoWritePermissions"]= 'Nemáte oprávnění k úpravě této položky.';
 $l["strUnauthorized"]= 'Neoprávněný';
 $l["strUnauthorizedText"]= 'Nemáte oprávnění k provedení této akce';
@@ -442,11 +456,13 @@ $l["firebugWarning"]='Firebug Add-on může spomalit tuto aplikaci. Prosím nepo
 $l["indent"]='Odsazení textu';
 $l["outdent"]='Předsazení textu';
 $l["removeFormatting"]='Odstranit formátování';
+$l["pasteFromWord"]='Vyčistí text vložený z Wordu nebo jiné textové aplikace';
 $l["insertHorizontalRule"]='Vložit vodorovnou čáru';
 $l["insertHRtext"]='Vložte šířku čáry v procentech<br/> poté následuje znak % na konci, nebo<br/> zadejte pevnou šířku a vynechtejte znak %.';
 $l["width"]='Šířka';
 $l["thankyou"]='Děkujeme';
 $l["applyMultiselect"]='Použít vícenásobný výběr';
+$l['createModify'] = 'Vytvoření a změna';
 $l["createdBy"]='Vytvořil';
 $l["debugModeDetected"]="Upozornění! Debug mód je povolený";
 $l["debugModeWarning"]="Použijte \$config['debug']=true; pouze pro vývoj a řešení problémů. Debug mód spomaluje práci v {product_name}.";
@@ -643,6 +659,23 @@ $l['multiselectSelected']='označené';
 $l['selectMonthlyDay'] = 'Prosím vyberte den v týdnu pro měsíční opakování.';
 $l['selectWeekOfMonth'] = 'Prosím vyberte číslo dne v týdnu pro měsíční opakování.';
 
+$l['cs']    = 'Čeština';
+$l['de-at'] = 'Němčina (Rakousko)';
+$l['de-ch'] = 'Němčina (Švýcarsko)';
+$l['de']    = 'Němčina';
+$l['en-au'] = 'Angličtina (Austrálie)';
+$l['en']    = 'Angličtina';
+$l['en_UK'] = 'Angličtina (Spojené království)';
+$l['fr']    = 'Francouzština';
+$l['hr']    = 'Chorvatština';
+$l['it']    = 'Italština';
+$l['ja']    = 'Japonština';
+$l['nb']    = 'Norština';
+$l['nl']    = 'Holandština';
+$l['pt']    = 'Portugalština';
+$l['sv']    = 'Švédština';
+$l['th']    = 'Thajština';
+
 $l['removeDuplicates']='Smazat duplicity';
 $l['removeDuplicatesAreYouSure']='Opravdu chcete smazat duplicity?';
 
@@ -651,3 +684,18 @@ $l['skippedDeleteHasFiles']='Přeskočeno smazání protože model obsahuje slo�
 $l['foundDuplicates']='Nalezeno %s duplicit.';
 $l['clickToDeleteDuplicates']='Klikněte zde pro smazání nejnovější duplicit, které jsou označeny červeně.';
 $l['folderUpload']='Složky (potřebná Java)';
+
+$l["report"]='Report';
+
+$l['namelessItem'] = 'Bezejmená položka';
+$l['importFileType'] = 'Typ importovacího souboru';
+
+$l['maybeMaxUploadExceeded'] = 'Server neobdrželi požadované parametry z vašeho prohlížeče. Pravděpodobně byl překročen maximální velikost souboru pro upload %sMb.';
+
+$l['relationDeleteRestrict']="Není možné smazat %s, protože obsahuje '%s' položky. Nejdříve odstraňte tyto položky.";
+
+$l['pspell_lang']='cs';
+
+$l['dependenciesCannotDelete']="Není možné smazat tento modul, protože jsou na něm závislý jiné (nainstalované) moduly: %s.";
+
+$l['MailboxNotFoundException'] = "Nelze otevřít složku \"%s\". Zkontrolujte nastavení Vašeho e-mailové účtu.";

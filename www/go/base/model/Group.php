@@ -33,6 +33,11 @@ namespace GO\Base\Model;
 
 class Group extends \GO\Base\Db\ActiveRecord {
 
+
+	const GROUP_EVERYONE = 'GROUP_EVERYONE';
+	const GROUP_ADMINS = 'GROUP_ADMINS';
+	const GROUP_INTERNAL = 'GROUP_INTERNAL';
+	
 	/**
 	 * Returns a static model of itself
 	 * 

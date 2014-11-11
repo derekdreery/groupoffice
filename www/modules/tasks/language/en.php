@@ -71,7 +71,7 @@ $l['dueAtdate']='Due at %s';
 $l['list']='Tasklist';
 $l['tasklistChanged']="* Tasklist changed from '%s' to '%s'";
 $l['statusChanged']="* Status changed from '%s' to '%s'";
-$l['multipleSelected']='Multiple tasklists selected';
+$l['multipleSelected']='Multiple task lists selected';
 $l['incomplete_delete']='You don\'t have permission to delete all selected tasks';
 
 $l["taskName"]='Name';

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright Intermesh
  *
@@ -13,6 +12,10 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+namespace GO\Notes\Model;
+
+use GO\Base\Model\AbstractUserDefaultModel;
+
 /**
  * 
  * The Category model
@@ -21,23 +24,15 @@
  * @property int $files_folder_id
  * @property int $acl_id
  * @property int $user_id
+ * 
+ * @method Category model Returns a static model of itself
  */
 
-namespace GO\Notes\Model;
 
 
-class Category extends \GO\Base\Model\AbstractUserDefaultModel {
 
-	/**
-	 * Returns a static model of itself
-	 * 
-	 * @param String $className
-	 * @return Category 
-	 */
-	public static function model($className=__CLASS__)
-	{	
-		return parent::model($className);
-	}
+class Category extends AbstractUserDefaultModel {
+
 	
 	public function aclField() {
 		return 'acl_id';

@@ -10,7 +10,7 @@
  */
 
 namespace GO\Core\Controller;
-
+use GO;
 
 class AuthController extends \GO\Base\Controller\AbstractController {
 
@@ -50,9 +50,9 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 		
 //		$view = \GO::view();
 		
-		$this->layout='html';
+		$this->view->layout='html';
 		
-		if(!$this->findViewFile('Login')){
+		if(!$this->view->findViewFile('Login')){
 			//for backwards theme compat
 			require(\GO::view()->getTheme()->getPath().'Layout.php');
 		}  else {
@@ -131,7 +131,7 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 
 		\GO::session()->logout();
 
-		if (isset($params['ajax'])) {
+		if (\GO::request()->isAjax()) {
 			$response['success']=true;
 			return $response;
 		}
@@ -157,6 +157,10 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 	}
 
 	protected function actionLogin($params) {
+		
+		if(!empty($params["login_language"])){
+			GO::language()->setLanguage($params["login_language"]);
+		}
 		
 		if(!empty($params['domain']))
 			$params['username'].=$params['domain'];	
@@ -211,14 +215,11 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 			
 			if(!empty($params["login_language"]))
 			{
-				\GO::language()->setLanguage($params["login_language"]);
+				GO::language()->setLanguage($params["login_language"]); 
+
 				
 				\GO::user()->language=\GO::language()->getLanguage();
 				\GO::user()->save();
-				
-				//TODO remove when ready				
-				require_once(\GO::config()->root_path."Group-Office.php");
-				$GLOBALS["GO_LANGUAGE"]->set_language($params["login_language"]);
 			}
 			
 		}

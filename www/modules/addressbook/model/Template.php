@@ -231,7 +231,7 @@ class Template extends \GO\Base\Db\ActiveRecord{
 	 */
 	private function _replaceRelations($content, $model, $tagPrefix='', $leaveEmptyTags=false){
 		
-		$relations = $model->relations();
+		$relations = $model->getRelations();
 		$pattern = '/'.preg_quote($tagPrefix,'/').'([^:]+):[^\}]+\}/';
 		if(preg_match_all($pattern,$content, $matches)){
 			foreach($matches[1] as $relation){
@@ -324,5 +324,20 @@ class Template extends \GO\Base\Db\ActiveRecord{
 //	protected function getBody(){
 //		return $this->_getMessage()->getHtmlBody();
 //	}
+	
+	
+	/**
+	 * Replace the {link} tag with a div
+	 * 
+	 * @param string $content
+	 * @param \GO\Email\Model\SavedMessage $message
+	 * @return string
+	 */
+	public function replaceLinkTag($content, $message){
+		
+		$content = str_replace('{link}', '<span class="go-composer-link"></span>', $content);
+
+		return $content;
+	}
 	
 }

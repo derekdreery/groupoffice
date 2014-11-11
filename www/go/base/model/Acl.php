@@ -55,6 +55,22 @@ class Acl extends \GO\Base\Db\ActiveRecord {
 	{	
 		return parent::model($className);
 	}
+	
+	public function getLogMessage($action) {
+		
+//		if($action == 'delete'){
+//			$old = \GO::config()->debug;
+//			
+//			\GO::config()->debug = true;
+//			\GO::debug('ACL '.$this->id.' '.$this->description.' removed');
+//			\GO::debug($_POST);
+//			\GO::debugCalledFrom(10);
+//			
+//			\GO::config()->debug = $old;
+//		}
+		
+		return 'ACL '.$this->description;
+	}
 
 	protected function init() {
 		

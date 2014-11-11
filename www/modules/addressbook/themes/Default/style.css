@@ -213,8 +213,8 @@ td.table_header_links
 
 
 .ab-photo{
-	width:90px;
-	height: 120px;
+	width:120px;
+/*	height: 120px;*/
 	border:1px solid #d0d0d0;
 	margin:5px;
 }
@@ -271,4 +271,14 @@ td.table_header_links
 	background:url('images/16x16/contact-quickadd.png') no-repeat top right !important;
 	width:16px !important;
 	height:16px !important;
+}
+
+.male-cell { 
+    background: url(images/male.png) no-repeat 2px 1px; 
+    padding-left: 18px !important; 
+} 
+ 
+.female-cell { 
+    background: url(images/female.png) no-repeat 2px 1px; 
+    padding-left: 18px !important; 
 }

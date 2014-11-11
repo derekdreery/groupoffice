@@ -52,4 +52,22 @@ class UserGroup extends \GO\Base\Db\ActiveRecord {
   public function primaryKey() {
     return array('user_id','group_id');
   }
+	
+	private function updateAclMtime(){
+		$sql = "UPDATE go_acl_items SET mtime=unix_timestamp() WHERE id IN (SELECT acl_id FROM go_acl WHERE group_id=".$this->group_id.")";		
+		\GO::getDbConnection()->query($sql);
+	}
+	
+	protected function afterSave($wasNew) {
+		
+		$this->updateAclMtime();
+		
+		parent::afterSave($wasNew);
+	}
+	
+	protected function afterDelete() {
+		$this->updateAclMtime();
+		
+		parent::afterDelete();
+	}
 }

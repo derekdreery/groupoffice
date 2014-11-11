@@ -11,75 +11,126 @@
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Michael de Hart <mdhart@intermesh.nl>
+ * @author Merijn Schering <mschering@intermesh.nl>
  */
+
+namespace GO\Notes\Controller;
+
+use Exception;
+use GO;
+use GO\Base\Controller\AbstractController;
+use GO\Notes\Model\Note;
+use GO\Notes\Model\Category;
+use GO\Base\Db\FindParams;
 
 /**
  * The note controller provides action for basic crud functionality for the note model
  */
 
-namespace GO\Notes\Controller;
-
-use GO;
-use GO\Notes\Model\Note;
-
-class NoteController extends \GO\Base\Controller\AbstractJsonController {
+class NoteController extends AbstractController{
+	
+	protected $view = 'json';
 
 	/**
-	 * Load data for the display panel on the right of the screen
-	 * @param $_REQUEST $params
+	 * Updates a note POST for save and GET for retrieve
+	 * 
+	 * @param $id Note ID
 	 */
-	protected function actionSubmit($params) {
+	protected function actionUpdate($id, $password=null) {
 
-		$model = Note::model()->createOrFindByParams($params);
-
-		if(isset($params['currentPassword'])){
-			//if the note was encrypted and no new password was supplied the current
-			//pasword is sent.
-			$params['userInputPassword1']=$params['userInputPassword2']=$params['currentPassword'];
-		}
+		$model = Note::model()->findByPk($id);
 		
-		$model->setAttributes($params);
+		if (!$model)
+			throw new \GO\Base\Exception\NotFound();
+		
+		if(GO::request()->isPost()){
+			$note = GO::request()->post['note'];
 
-		if ($model->save()) {
-			if (GO::modules()->files) {
-				$f = new \GO\Files\Controller\FolderController();
-				$response = array(); //never used in processAttachements?
-				$f->processAttachments($response, $model, $params);
+			if(isset($note['currentPassword'])){
+				//if the note was encrypted and no new password was supplied the current
+				//pasword is sent.
+				$note['userInputPassword1']=$note['userInputPassword2']=$note['currentPassword'];
 			}
-		}
 
-		echo $this->renderSubmit($model);
-	}
+			$model->setAttributes($note);
+			
+			$model->save();
 
-	/**
-	 * Action for fetchin a JSON array to be loaded into a ExtJS form
-	 * @param array $params the $_REQUEST data
-	 * @throws \GO\Base\Exception\AccessDenied When no create or write permissions for the loaded model
-	 * @throws Exception when the notes decriptiopn password is incorrect
-	 */
-	protected function actionLoad($params) {
-
-		//Load or create model
-		$model = Note::model()->createOrFindByParams($params);
-
-		// BEFORE LOAD: a password is entered to decrypt the content
-		if (isset($params['userInputPassword'])) {
-			if (!$model->decrypt($params['userInputPassword']))
-				throw new \Exception(GO::t('badPassword'));
-		}
-
-		// Build remote combo field array
-		$remoteComboFields = array('category_id' => '$model->category->name');
-
-		//add extra fields to 'data' array of jsonresponse
-		$extraFields = array('encrypted' => $model->encrypted);
+			echo $this->render('submit', array('note'=>$model));
+		}else
+		{
+			//a password is entered to decrypt the content
+			if (isset($password) ){
+				if (!$model->decrypt($password))
+					throw new Exception(GO::t('badPassword'));
+			}
 		
-		if ($model->encrypted){
-			$extraFields['content'] = GO::t('contentEncrypted');
-		}
-
-		echo $this->renderForm($model, $remoteComboFields, $extraFields);
+			echo $this->render(
+							'form',
+							array(
+									'note'=>$model
+							)
+							);
+		}		
 	}
+	
+	
+	/**
+	 * Creates a note
+	 */
+	protected function actionCreate() {
+
+		$model = new Note();
+		
+		if(GO::request()->isPost()){
+			$note = GO::request()->post['note'];
+
+			if(isset($note['currentPassword'])){
+				//if the note was encrypted and no new password was supplied the current
+				//pasword is sent.
+				$note['userInputPassword1']=$note['userInputPassword2']=$note['currentPassword'];
+			}
+
+			$model->setAttributes($note);
+
+			if ($model->save()) {
+				if (GO::modules()->files) {
+					$f = new \GO\Files\Controller\FolderController();
+					$response = array(); //never used in processAttachements?
+					$f->processAttachments($response, $model, $note);
+				}
+			}
+			
+			echo $this->render('submit',array('note'=>$model));
+		}else
+		{
+
+			echo $this->render(
+							'form',
+							array(
+									'note'=>$model
+							)
+							);
+		}		
+	}
+	
+	
+	protected function actionGet($id, $userInputPassword=null){
+		$model = Note::model()->findByPk($id);
+		if (!$model)
+			throw new \GO\Base\Exception\NotFound();
+		
+		
+		// decrypt model if password provided
+		if (isset($userInputPassword)) {
+			if (!$model->decrypt($userInputPassword))
+				throw new Exception(GO::t('badPassword'));
+		}	
+
+		echo $this->render('get',array('note'=>$model));
+	}
+
+	
 
 	/**
 	 * Load a note model from the database and call the renderDisplay function to render the JSON
@@ -88,39 +139,76 @@ class NoteController extends \GO\Base\Controller\AbstractJsonController {
 	 * @throws \GO\Base\Exception\NotFound when the note model cant be found in database
 	 * @throws Exception When the encryption password provided is incorrect
 	 */
-	protected function actionDisplay($params) {
+	protected function actionDisplay($id, $userInputPassword=null) {
 
-		$model = Note::model()->findByPk($params['id']);
+		$model = Note::model()->findByPk($id);
 		if (!$model)
 			throw new \GO\Base\Exception\NotFound();
-
+		
+		
 		// decrypt model if password provided
-		if (isset($params['userInputPassword'])) {
-			if (!$model->decrypt($params['userInputPassword']))
-				throw new \Exception(GO::t('badPassword'));
-		}
-		$extraFields = array();
-		if ($model->encrypted)
-			$extraFields['content'] = GO::t('clickHereToDecrypt');
-		$extraFields['encrypted'] = $model->encrypted;
+		if (isset($userInputPassword)) {
+			if (!$model->decrypt($userInputPassword))
+				throw new Exception(GO::t('badPassword'));
+		}	
 
-		echo $this->renderDisplay($model, $extraFields);
+		$response =  $this->render('display',array('model'=>$model));
+		
+		if ($model->encrypted)
+			$response->data['data']['content'] = GO::t('clickHereToDecrypt');
+		
+		$response->data['data']['encrypted'] = $model->encrypted;
+		
+		echo $response;
 	}
 
 	/**
 	 * Render JSON output that can be used by ExtJS GridPanel
 	 * @param array $params the $_REQUEST params
 	 */
-	protected function actionStore($params) {
+	protected function actionStore($excerpt=false) {
 		//Create ColumnModel from model
-		$columnModel = new \GO\Base\Data\ColumnModel(Note::model());
+		$columnModel = new \GO\Base\Data\ColumnModel();
 		$columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
-
-		//Create store
-		$store = new \GO\Base\Data\DbStore('GO\Notes\Model\Note', $columnModel, $params);
-		$store->multiSelect('no-multiselect', 'GO\Notes\Model\Category', 'category_id');
-
-		echo $this->renderStore($store);
+		$columnModel->setModelFormatType('raw');
+		
+		
+		$findParams = \GO\Base\Db\FindParams::newInstance()->export('notes');
+		
+		if($excerpt){
+			
+			$columnModel->formatColumn ('excerpt', '$model->excerpt');
+			
+			$findParams->select('t.*');
+		}
+	
+		$nn = new Note();
+		$store = new \GO\Base\Data\DbStore($nn->className(), $columnModel,null,$findParams);
+		$store->multiSelect('no-multiselect', Category::className(), 'category_id');
+		
+		echo $this->render('store',array('store'=>$store));
+	}
+	
+	/**
+	 * Delete a single not. Must be a POST request
+	 * 
+	 * @param int $id
+	 * @throws Exception
+	 * @throws \GO\Base\Exception\NotFound
+	 */
+	protected function actionDelete($id){
+		
+		if(!GO::request()->isPost()){
+			throw new Exception('Delete must be a POST request');
+		}
+		
+		$model = Note::model()->findByPk($id);
+		if (!$model)
+			throw new \GO\Base\Exception\NotFound();
+		
+		$model->delete();
+		
+		echo $this->render('delete',array('model'=>$model));
 	}
 
 }

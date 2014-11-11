@@ -40,6 +40,8 @@ abstract class MultilingualActiveRecord extends ActiveRecord {
 	 */
 	private $_multiLingualAttributesLoaded;	
 	
+	private $_mlAttr;
+	
 	/**
 	 * Get an activestatement with the available languages
 	 * 
@@ -139,7 +141,9 @@ abstract class MultilingualActiveRecord extends ActiveRecord {
 		
 		$attr = explode('_', $name);
 		
-		return is_array($attr) && count($attr) > 1;
+//		var_dump($attr);
+		
+		return count($attr) > 1 && in_array($attr[0], $this->multilingualAttributes);
 	}
 	
 	/**
@@ -170,8 +174,26 @@ abstract class MultilingualActiveRecord extends ActiveRecord {
 		
 		//hack to force save
 		$this->forceSave();
-						
-		return parent::setAttribute($name, $value, $format);
+		
+		if ($this->_isMultilingualAttribute($name)) {
+			$this->_mlAttr[$name] = $value;
+		}else
+		{						
+			return parent::setAttribute($name, $value, $format);
+		}
+	}
+	
+	
+	public function setAttributes($attributes, $format = null) {
+		
+		foreach($attributes as $key => $value){
+			if($this->_isMultilingualAttribute($key)){
+				$this->_mlAttr[$key] = $value;
+				unset($attributes[$key]);
+			}
+		}
+		
+		return parent::setAttributes($attributes, $format);
 	}
 
 	/**
@@ -231,11 +253,12 @@ abstract class MultilingualActiveRecord extends ActiveRecord {
 		$languageRelationArray = $this->_getRelationArray();
 		$activeLanguages = $this->activeLanguages();
 
+
 		while ($lang = $activeLanguages->fetch()) {
 			foreach ($this->multilingualAttributes as $mLAttribute) {
 
 				$completeAttributeName = $mLAttribute . '_' . $lang->id;
-				if (!empty($this->$completeAttributeName)) {
+				if (!empty($this->_mlAttr[$completeAttributeName])) {
 
 						$l = $relationModelInstance->findByPk(array($languageRelationArray['field'] => $this->id, $lColName => $lang->id));
 
@@ -245,7 +268,7 @@ abstract class MultilingualActiveRecord extends ActiveRecord {
 							$l->$lColName = $lang->id;
 						}
 
-						$l->$lColValue = $this->$completeAttributeName;
+						$l->$lColValue = $this->_mlAttr[$completeAttributeName];
 						$l->save();
 				}
 			}

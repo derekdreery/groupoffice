@@ -36,7 +36,7 @@ class ImapMailbox extends \GO\Base\Model {
 	public function __construct(Account $account, $attributes) {
 		$this->_account = $account;
 
-		\GO::debug("GO\Email\Model\ImapMailbox:".$attributes['name']);
+		\GO::debug("GO\Email\Model\ImapMailbox:".var_export($attributes,true));
 
 		$this->_attributes = $attributes;
 
@@ -224,6 +224,7 @@ class ImapMailbox extends \GO\Base\Model {
 	  if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
 		  throw new \GO\Base\Exception\AccessDenied();
 
+		$name = trim($name);
 		$this->_validateName($name);
 
 		$parentName = $this->getParentName();
@@ -267,6 +268,7 @@ class ImapMailbox extends \GO\Base\Model {
 	public function createChild($name, $subscribe=true){
 	  if($this->getAccount()->getPermissionLevel() <= \GO\Base\Model\Acl::READ_PERMISSION)
 		  throw new \GO\Base\Exception\AccessDenied();
+		$name = trim($name);
 		$newMailbox = empty($this->name) ? $name : $this->name.$this->delimiter.$name;
 
 		$this->_validateName($name);

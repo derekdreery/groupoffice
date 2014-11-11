@@ -13,6 +13,10 @@
  * @package GO.base.util 
  */
 
+namespace GO\Base\Util;
+
+use GO;
+	
 /**
  * Common utilities
  * 
@@ -21,8 +25,6 @@
  * @copyright Copyright Intermesh BV.
  * @package GO.base.util 
  */
-
-namespace GO\Base\Util;
 
 
 class Common {
@@ -77,7 +79,13 @@ class Common {
 	 * @return String 
 	 */
 	public static function formatAddress($isoCountry, $address, $address_no,$zip,$city, $state) {
-		require(\GO::config()->root_path . 'language/addressformats.php');
+		
+		if(empty($address) && empty($city) && empty($state)){
+			return "";
+		}
+		
+		require(GO::config()->root_path . 'language/addressformats.php');
+
 		$format = isset($af[$isoCountry]) ? $af[$isoCountry] : $af['default'];
 
 		$format= str_replace('{address}', $address, $format);

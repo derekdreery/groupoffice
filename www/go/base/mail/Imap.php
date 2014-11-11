@@ -1510,7 +1510,8 @@ class Imap extends ImapBodyStruct {
 					'answered'=>0,
 					'forwarded'=>0,
 					'has_attachments'=>0,
-					'labels'=>array()
+					'labels'=>array(),
+					'deleted'=>0,
 				);
 
 				$count = count($vals);
@@ -2688,7 +2689,11 @@ class Imap extends ImapBodyStruct {
 	public function get_status($mailbox){
 		$command = 'STATUS "'.$this->addslashes($this->utf7_encode($mailbox)).'" (MESSAGES UNSEEN)'."\r\n";
 		$this->send_command($command);
-		$result = $this->get_response(false, true);
+		$result = $this->get_response(false, true);		
+		
+		if($result[0][1] === 'NO'){
+			return false;
+		}
 
 		$vals = array_shift($result);
 

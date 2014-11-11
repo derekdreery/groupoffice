@@ -95,6 +95,8 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 
 		//when duplicating in the calendar with right click
 		if(!empty($params['duplicate'])){
+			if (!empty($params['calendar_id']) && $params['calendar_id']>0)
+				$model->calendar_id = $params['calendar_id'];
 			$model = $model->duplicate(array('uuid'=>null));
 			$params['id']=$model->id;
 		}
@@ -731,7 +733,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 		
 		// If you have clicked on the "print" button
 		if($print)
-			$this->_createPdf($response, true);
+			$this->_createPdf($response, $view);
 
 		return $response;
 	}
@@ -917,7 +919,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 	/**
 	 * Get the best writable calendar for the current user/view
 	 * @param array $calendarModels
-	 * @return Go_Calendar_Model_Calendar
+	 * @return \GO\Calendar\Model\Calendar
 	 */
 	private function _getDefaultWritableCalendar(array $calendarModels){
 		
@@ -960,7 +962,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 		  
 			$taskFindCriteria = \GO\Base\Db\FindCriteria::newInstance()
 							->addCondition('due_time', strtotime($startTime),'>=')
-							->addCondition('due_time', strtotime($endTime), '<=');
+							->addCondition('start_time', strtotime($endTime), '<=');
 			
 			// Remove tasks that are completed
 			if(!$calendar->show_completed_tasks)
@@ -976,7 +978,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 
 			while($task = $tasks->fetch()){
 
-				$startTime = date('Y-m-d',$task->due_time).' 00:00';
+				$startTime = date('Y-m-d',$task->start_time).' 00:00';
 				$endTime = date('Y-m-d',$task->due_time).' 23:59';
 
 				$resultCount++;
@@ -1169,13 +1171,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 		$resultCount = 0;
 	
 		// Get all the localEvent models between the given time period
-		$events = \GO\Calendar\Model\Event::model()->findCalculatedForPeriod(
-								\GO\Base\Db\FindParams::newInstance()->criteria(
-									\GO\Base\Db\FindCriteria::newInstance()->addCondition('calendar_id', $calendar->id)
-								)->select(),
-								strtotime($startTime), 
-								strtotime($endTime)
-							);
+		$events = $calendar->getEventsForPeriod(strtotime($startTime), strtotime($endTime));
 		
 		$this->_uuidEvents = array();
 

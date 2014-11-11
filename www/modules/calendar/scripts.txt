@@ -1,13 +1,10 @@
 modules/calendar/views/Extjs3/PrintCategoryCountDialog.js
 
 modules/calendar/Settings.js
-modules/calendar/Calendar.js
 modules/calendar/EventTemplate.js
 modules/calendar/EventDialog.js
 modules/calendar/CalendarGrid.js
-modules/calendar/MonthGrid.js
 modules/calendar/ListGrid.js
-modules/calendar/ViewGrid.js
 modules/calendar/CalendarDialog.js
 modules/calendar/ViewDialog.js
 modules/calendar/Portlet.js
@@ -28,3 +25,7 @@ modules/calendar/SelectCalendarDialog.js
 modules/calendar/GlobalSettings.js
 modules/calendar/ColorPickerDialog.js
 modules/calendar/AttendanceWindow.js
+modules/calendar/Calendar.js
+modules/calendar/MonthGrid.js
+modules/calendar/ViewGrid.js
+modules/calendar/TaskContextMenu.js

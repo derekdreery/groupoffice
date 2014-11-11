@@ -54,7 +54,7 @@ GO.moduleManager.onModuleReady('email',function(){
 			}, this);
 
 			
-			this.fromCombo.on('change',function(){
+			this.fromCombo.on('select',function(){
 				this.checkSmimeSupport();
 			}, this);
 			
@@ -117,14 +117,20 @@ GO.moduleManager.onModuleReady('email',function(){
 		checkSmimeSupport : function(){
 			var current_id = this.fromCombo.getValue();			
 			var record = this.fromCombo.store.getById(current_id);
-			
+
 			this.signCheck.setDisabled(!record.json.has_smime_cert);
 			this.encryptCheck.setDisabled(!record.json.has_smime_cert);
 			
 			if(record.json.has_smime_cert && record.json.always_sign=="1"){
+				// Record has an smime cert and always sign is set to true
 				this.signCheck.setChecked(true);
 				this.sendParams['sign_smime'] ="1";	
 			} else if(!record.json.has_smime_cert){
+				// Record does not have an smime cert
+				this.signCheck.setChecked(false);
+				this.sendParams['sign_smime'] ="0";
+			} else {
+				// Record has an smime cert and always sign is set to false
 				this.signCheck.setChecked(false);
 				this.sendParams['sign_smime'] ="0";	
 			}

@@ -14,6 +14,10 @@
 	text-decoration:underline;
 }
 
+.em-spam-move-block {
+	float:right;
+	color: lightgray;
+}
 
 .em-tree-node-noselect .x-tree-node-anchor span, .em-readonly a span{
 	font-style:italic;
@@ -247,6 +251,14 @@ margin:5px 2px;
 	text-align:left;
 	line-height:20px;
 }
+
+.message-move {
+	color: gray;
+	padding: 0 8px 0 8px;
+	text-align: right !important;
+	line-height: 20px;
+}
+
 .message-icalendar-icon{
 	background-repeat:no-repeat;
 	background-position:0 2px;
@@ -419,4 +431,9 @@ div.em-messages-grid-labels-container > div {
 	height: 16px;
 	margin: 0 4px 4px 0;
 	width: 16px;
+}
+
+.ml-deleted{
+	color:#777777;
+	text-decoration: line-through;
 }

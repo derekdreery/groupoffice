@@ -155,8 +155,10 @@ abstract class AbstractJsonController extends AbstractController {
 
 			//If the model has it's own ACL id then we return the newly created ACL id.
 			//The model automatically creates it.
-			if ($model->aclField() && !$model->joinAclField)
+			if ($model->aclField() && !$model->isJoinedAclField)
 				$response[$model->aclField()] = $model->{$model->aclField()};
+			if($model->aclOverwrite())
+				$response[$model->aclOverwrite()] = $model->{$model->aclOverwrite()};
 
 			//TODO: move the link saving to the model someday
 			if (!empty($_POST['link']) && $model->hasLinks()) {
@@ -274,7 +276,7 @@ abstract class AbstractJsonController extends AbstractController {
 			$params['type']=str_replace('GO\Base\Export', 'GO\Base\Storeexport', $params['type']);
 			$export = new $params['type']($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation);
 		}else
-			$export = new \GO\Base\Storeexport_ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
+			$export = new \GO\Base\Storeexport\ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
 
 		if(isset($params['extraLines']))
 			$export->addLines($params['extraLines']);
@@ -490,7 +492,7 @@ abstract class AbstractJsonController extends AbstractController {
 		if (isset(\GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id'] > 0) {
 
 			$fc = new \GO\Files\Controller\FolderController();
-			$listResponse = $fc->run("list", array('skip_fs_sync'=>true, 'folder_id' => $response['data']['files_folder_id'], "limit" => 20, "sort" => 'mtime', "dir" => 'DESC'), false);
+			$listResponse = $fc->run("list", array('skip_fs_sync'=>true, 'folder_id' => $response['data']['files_folder_id'], "limit" => 20, "sort" => 'name', "dir" => 'ASC'), false);
 			$response['data']['files'] = $listResponse['results'];
 		} else {
 			$response['data']['files'] = array();

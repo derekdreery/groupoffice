@@ -127,13 +127,13 @@ GO.email.EmailComposer = function(config) {
 		}),
 		this.ccFieldCheck = new Ext.menu.CheckItem({
 			text : GO.email.lang.ccField,
-			checked : true,
+			checked : GO.email.showCCfield,
 			checkHandler : this.onShowFieldCheck,
 			scope : this
 		}),
 		this.bccFieldCheck = new Ext.menu.CheckItem({
 			text : GO.email.lang.bccField,
-			checked : false,
+			checked : GO.email.showBCCfield,
 			checkHandler : this.onShowFieldCheck,
 			scope : this
 		})
@@ -146,6 +146,7 @@ GO.email.EmailComposer = function(config) {
 	var items = [
 	this.fromCombo = new Ext.form.ComboBox({
 		store : GO.email.aliasesStore,
+		editable:false,
 		fieldLabel : GO.email.lang.from,
 		name : 'alias_name',
 		anchor : '100%',
@@ -219,13 +220,17 @@ GO.email.EmailComposer = function(config) {
 	var anchor = -113;
 						
 	if(GO.settings.modules.savemailas && GO.settings.modules.savemailas.read_permission)
-	{
+	{		
 		if (!this.selectLinkField) {
 			this.selectLinkField = new GO.form.SelectLink({
 				anchor : '100%'
-			});					
+			});
 			anchor+=26;
 			items.push(this.selectLinkField);
+			
+			this.selectLinkField.on('change',function(){
+				this.replaceTemplateLinkTag();
+			},this);	
 		}
 	}
 
@@ -238,6 +243,10 @@ GO.email.EmailComposer = function(config) {
 				});
 				anchor+=26;
 				items.push(this.selectLinkField);
+				
+				this.selectLinkField.on('change',function(){
+					this.replaceTemplateLinkTag();
+				},this);
 			}
 		}
 	} catch(e) {}
@@ -587,11 +596,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.sendParams = {};
 		Ext.apply(this.sendParams, this.defaultSendParams);
 
-		GO.email.showCCfield = true;
-		GO.email.showBCCfield = false;
+//		GO.email.showCCfield = true;
+//		GO.email.showBCCfield = false;
 
-		this.showCC(GO.email.showCCfield);
-		this.showBCC(GO.email.showBCCfield);			
+		this.showCC(GO.email.showCCfield===1);
+		this.showBCC(GO.email.showBCCfield===1);			
 		this.ccFieldCheck.setChecked(GO.email.showCCfield);
 		this.bccFieldCheck.setChecked(GO.email.showBCCfield);
 
@@ -663,6 +672,14 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				item.setChecked(true);
 			}
 		}
+		if(GO.addressbook){
+			if(config.disableTemplates){
+				this.templatesBtn.setDisabled(config.disableTemplates);
+			} else {
+				this.templatesBtn.setDisabled(false);
+			}
+		}
+		
 	},
 					
 					
@@ -1015,8 +1032,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 		this.startAutoSave();
 
-		this.ccFieldCheck.setChecked(GO.email.showCCfield);
-		this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
+		this.ccFieldCheck.setChecked(GO.email.showCCfield || this.ccCombo.getValue()!=='');
+		this.bccFieldCheck.setChecked(GO.email.showBCCfield || this.bccCombo.getValue()!=='');
 	
 		if(config.afterLoad)
 		{
@@ -1036,6 +1053,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		}
 		
 		this.fireEvent('afterShowAndLoad',this);
+		
+		if(this.selectLinkField){
+			this.replaceTemplateLinkTag();
+		}
 	},
 	
 
@@ -1089,7 +1110,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			if(this.sendParams.save_to_path)
 				sendUrl = GO.url("email/message/saveToFile");
 			else if(draft || autoSave)
-				sendUrl = GO.url("email/message/save")
+				sendUrl = GO.url("email/message/save");
 
 			this.formPanel.form.submit({
 				url : sendUrl,
@@ -1180,7 +1201,24 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				this.showBCC(checked);
 				break;
 		}
+	},
+	
+	replaceTemplateLinkTag: function() {
+
+		var editorValue = this.emailEditor.getActiveEditor().getValue();
+		var linkValue = '';
+
+		if (!GO.util.empty(this.selectLinkField.getValue())) {
+			var linkValue = this.selectLinkField.getRawValue();
+		}
+
+		var newValue = editorValue.replace(/<span class="go-composer-link">(.*?)<\/span>/g, function(match, contents, offset, s) {
+			return '<span class="go-composer-link">' + linkValue + '</span>';
+		});
+
+		this.emailEditor.getActiveEditor().setValue(newValue);
 	}
+
 });
 
 //GO.email.TemplatesList = function(config) {

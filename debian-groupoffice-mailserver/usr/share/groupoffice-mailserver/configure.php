@@ -237,6 +237,7 @@ if(!file_contains('/etc/groupoffice/globalconfig.inc.php', 'serverclient_token')
 
 require('/etc/groupoffice/config.php');
 
-if(file_exists($config['file_storage_path'].'key.txt'))
-	system('chown www-data:www-data '.$config['file_storage_path'].'key.txt');
-?>
+$fsPath = isset($config['file_storage_path']) ? $config['file_storage_path'] : '/home/groupoffice/';
+
+if(file_exists($fsPath.'key.txt'))
+	system('chown www-data:www-data '.$fsPath.'key.txt');

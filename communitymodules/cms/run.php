@@ -1,7 +1,18 @@
 <?php
 header('Content-Type: text/html; charset=UTF-8');
 
-require('../../Group-Office.php');
+
+require('../../GO.php');
+
+require('../../go3compat/Group-Office.php');
+
+$GO_MODULES->load_modules();
+
+if(!isset($GO_MODULES->modules['cms'])){
+        header("HTTP/1.0 404 Not Found");
+        header("Status: 404 Not Found");
+        exit();
+}
 
 require_once($GO_MODULES->modules['cms']['class_path'].'cms.class.inc.php');
 require_once($GO_MODULES->modules['cms']['class_path'].'output.class.inc.php');

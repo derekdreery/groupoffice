@@ -57,6 +57,10 @@ abstract class AbstractCustomFieldsRecord extends \GO\Base\Db\ActiveRecord{
 		return call_user_func(array($this->extendsModel(),'model'));
 	}
 	
+	public function getModel() {
+		return $this->getExtendedModel()->findByPk($this->model_id);
+	}
+	
 	/**
 	 * Override this to return the model this custom fields model extends with fields.
 	 * 
@@ -88,12 +92,14 @@ abstract class AbstractCustomFieldsRecord extends \GO\Base\Db\ActiveRecord{
 				self::$cacheColumns[$this->extendsModel()]=$cached['columns'];
 			}else
 			{			
-				$stmt = Field::model()->find(array(
-						'ignoreAcl'=>true,
-						'join'=>'INNER JOIN cf_categories c ON t.category_id=c.id',
-						'where'=>'c.extends_model=:extends_model',
-						'bindParams'=>array('extends_model'=>$this->extendsModel())
-				));
+				$findParams = \GO\Base\Db\FindParams::newInstance()
+								->select('t.*')
+								->ignoreAcl()
+								->joinRelation('category');
+				
+				$findParams->getCriteria()->addCondition('extends_model', $this->extendsModel(),'=','category');
+				
+				$stmt = \GO\Customfields\Model\Field::model()->find($findParams);
 				
 				self::$cacheColumns[$this->extendsModel()]=\GO\Base\Db\Columns::getColumns ($this);
 				self::$attributeLabels[$this->extendsModel()]=array();

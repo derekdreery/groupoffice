@@ -112,7 +112,8 @@ class Task extends \GO\Base\Db\ActiveRecord {
 		return array(
 				'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO\Tasks\Model\Tasklist', 'field' => 'tasklist_id', 'delete' => false),
 				'category' => array('type' => self::BELONGS_TO, 'model' => 'GO\Tasks\Model\Category', 'field' => 'category_id', 'delete' => false),
-				'project' => array('type' => self::BELONGS_TO, 'model' => 'GO\Projects\Model\Project', 'field' => 'project_id', 'delete' => false)
+				'project' => array('type' => self::BELONGS_TO, 'model' => 'GO\Projects\Model\Project', 'field' => 'project_id', 'delete' => false),
+				'project2' => array('type' => self::BELONGS_TO, 'model' => 'GO\Projects2\Model\Project', 'field' => 'project_id', 'delete' => false)
 				);
 	}
 	
@@ -129,11 +130,13 @@ class Task extends \GO\Base\Db\ActiveRecord {
 	
 	public function afterSave($wasNew) {
 		
-		if($this->reminder>0){
+		if($this->isModified('reminder')) {
 			$this->deleteReminders();
-			if($this->reminder>time() && $this->status!='COMPLETED')
-				$this->addReminder($this->name, $this->reminder, $this->tasklist->user_id);
-		}	
+			if($this->reminder>0) {
+				if($this->reminder>time() && $this->status!='COMPLETED')
+					$this->addReminder($this->name, $this->reminder, $this->tasklist->user_id);
+			}	
+		}
 		
 		if($this->isModified('project_id') && $this->project)
 			$this->link($this->project);
@@ -172,6 +175,28 @@ class Task extends \GO\Base\Db\ActiveRecord {
 		}
 	}
 	
+	/**
+	 * Find all tasks that you are going to work on today
+	 * @param $date unix timestamp
+	 * @param $tasklist_id the task list to search in
+	 * @return ActiveStatement
+	 */
+	static public function findByDate($date, $tasklist_id=null) {
+		$date = \GO\Base\Util\Date::clear_time($date);
+		$criteria = \GO\Base\Db\FindCriteria::newInstance();
+		if(!empty($tasklist_id))
+			$criteria->addCondition('tasklist_id', $tasklist_id);
+		$criteria1 = \GO\Base\Db\FindCriteria::newInstance()
+				->addCondition('start_time', $date+24*3600, '<')
+				->addCondition('start_time', $date, '>=');
+		$criteria2 = \GO\Base\Db\FindCriteria::newInstance()
+				->addCondition('due_time', $date+24*3600, '<')
+				->addCondition('due_time', $date, '>=');
+		$tasks = \GO\Tasks\Model\Task::model()->find(\GO\Base\Db\FindParams::newInstance()->criteria(
+				$criteria->mergeWith($criteria1->mergeWith($criteria2, false), true))
+		);
+		return $tasks;
+	}
 	
 	/**
 	 * Set the task to completed or not completed.
@@ -213,14 +238,23 @@ class Task extends \GO\Base\Db\ActiveRecord {
 			$nextDueTime = $rrule->getNextRecurrence($this->due_time+1);
 			
 			if($nextDueTime){
-			
-				$this->duplicate(array(
+				
+				$data = array(
 					'completion_time'=>0,
 					'start_time'=>$nextDueTime-$this->due_time+$this->start_time,
 					'due_time'=>$nextDueTime,
 					'status'=>Task::STATUS_NEEDS_ACTION,
 					'percentage_complete'=>0
-				));
+				);
+				
+				// If a reminder is set, then calculate the difference between the start dates of the old and the new task.
+				// Then add that difference to the reminder time for the new event. (So the reminder will also move forward)
+				if(!empty($this->reminder)){
+					$diff = $data['start_time'] - $this->start_time;
+					$data['reminder'] = $this->reminder + $diff;
+				}
+
+				$this->duplicate($data);
 			}
 		}
 	}

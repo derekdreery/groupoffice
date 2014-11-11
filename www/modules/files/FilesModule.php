@@ -50,6 +50,8 @@ class FilesModule extends \GO\Base\Module{
 				$folder->readonly=1;
 				$folder->save();
 			}
+			
+			$folder->fsFolder->create();
 			//$folder->syncFilesystem();		
 			
 		}

@@ -47,7 +47,7 @@ class MemoryFile extends File{
 		return true;
 	}
 	
-	public function move($destinationFolder, $newFileName = false, $isUploadedFile = false, $appendNumberToNameIfDestinationExists = false) {
+	public function move(Base $destinationFolder, $newFileName = false, $isUploadedFile = false, $appendNumberToNameIfDestinationExists = false) {
 		throw Exception("move not implemented for memory file");
 	}
 	

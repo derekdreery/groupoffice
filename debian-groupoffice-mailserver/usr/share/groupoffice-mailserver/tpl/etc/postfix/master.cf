@@ -155,6 +155,3 @@ scalemail-backend unix	-	n	n	-	2	pipe
 tlsmgr    unix  -       -       -       1000?   1       tlsmgr
 #scache    unix  -       -       -       -       1       scache
 #discard   unix  -       -       -       -       -       discard
-vacation    unix  -       n       n       -       -       pipe
-  flags=Rq user=vacation argv=/usr/bin/groupoffice-vacation -f ${sender} -- ${recipient}
-

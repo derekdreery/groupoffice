@@ -1,22 +1,8 @@
 <?php
-
-/*
- * Copyright Intermesh BV.
- *
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- *
- * If you have questions write an e-mail to info@intermesh.nl
- *
- */
-
-/**
- * XLS Output stream.
- * 
- */
-
 namespace GO\Base\Export;
 
+use PHPExcel;
+use PHPExcel_IOFactory;
 
 class ExportXLS extends AbstractExport {
 
@@ -24,6 +10,8 @@ class ExportXLS extends AbstractExport {
 	public static $name = "XLS (Excel)";
 	public static $useOrientation = false;
 
+	private $_lines;
+	
 	private function _sendHeaders() {
 		header('Content-Disposition: attachment; filename="' . $this->title . '.xls"');
 		header('Content-Type: text/x-msexcel; charset=UTF-8');
@@ -76,16 +64,36 @@ class ExportXLS extends AbstractExport {
 		$this->_setupExcel();
 
 
-		if ($this->header) {
-			if ($this->humanHeaders) {
-				$this->_write(array_values($this->getLabels()));
+		if($this->header){
+			if($this->humanHeaders){
+				
+				//workaround Libreoffice bug: https://bugs.freedesktop.org/show_bug.cgi?id=48347
+				$headers = array_values($this->getLabels());
+				
+				for($i=0;$i<count($headers);$i++){
+					if($headers[$i] == 'ID')
+						$headers[$i] = 'Id';
+				}
+				
+				$this->_write($headers);
+				// End of workaround
+				
+				//$this->_write(array_values($this->getLabels()));
 			}else
 				$this->_write(array_keys($this->getLabels()));
 		}
-
-		while ($record = $this->store->nextRecord()) {
+		
+		while($record = $this->store->nextRecord()){
 			$record = $this->prepareRecord($record);
 			$this->_write($record);
+		}
+		
+		// If extra lines given, then add them to the .csv file
+		if($this->_lines !== false){
+			foreach($this->_lines as $record){
+				$record = $this->prepareRecord($record);
+				$this->_write($record);
+			}
 		}
 
 		// Hack to write contents of file to string

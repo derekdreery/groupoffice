@@ -55,8 +55,8 @@ class File extends \Sabre\DAV\FS\File {
 //		$file->saveVersion();
 //		$file->putContents($data);
 		
-		
-		$file = new \GO\Base\Fs\File($this->path);
+
+		$file = \GO\Files\Model\File::model()->findByPath($this->relpath);
 		$file->putContents($data);
 
 //		file_put_contents($this->path, $data);
@@ -119,7 +119,8 @@ class File extends \Sabre\DAV\FS\File {
 	 * @return string
 	 */
 	public function get() {
-
+		$file = \GO\Files\Model\File::model()->findByPath($this->relpath);
+		$file->open();
 		return fopen($this->path, 'r');
 	}
 

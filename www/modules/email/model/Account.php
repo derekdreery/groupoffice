@@ -1,5 +1,7 @@
 <?php
+namespace GO\Email\Model;
 
+use GO;
 /**
  * Copyright Intermesh
  *
@@ -46,7 +48,6 @@
  * @property boolean $sieve_usetls
  */
 
-namespace GO\Email\Model;
 
 
 class Account extends \GO\Base\Db\ActiveRecord {
@@ -155,10 +156,12 @@ class Account extends \GO\Base\Db\ActiveRecord {
 					$this->password_encrypted=2;//deprecated. remove when email is mvc style.
 				}
 			}
+			
+			unset(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
 		}
 
-		if (!empty($this->id) && !empty(\GO::session()->values['emailModule']['accountPasswords'][$this->id]))
-			unset(\GO::session()->values['emailModule']['accountPasswords'][$this->id]);
+//		if (!empty($this->id) && !empty(GO::session()->values['emailModule']['accountPasswords'][$this->id]))
+//			unset(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
 		
 		if($this->isModified('smtp_password')){
 			$encrypted = \GO\Base\Util\Crypt::encrypt($this->smtp_password);		
@@ -214,7 +217,17 @@ class Account extends \GO\Base\Db\ActiveRecord {
 			}
 			\GO::session()->values['emailModule']['smtpPasswords'][$this->id] = $this->_session_smtp_password;
 		}
+
+		if ($wasNew) {
+			Label::model()->createDefaultLabels($this->id);
+		}
+
 		return parent::afterSave($wasNew);
+	}
+
+	protected function afterDelete() {
+		Label::model()->deleteAccountLabels($this->id);
+		return true;
 	}
 		
 	private $_mailboxes;
@@ -272,8 +285,9 @@ class Account extends \GO\Base\Db\ActiveRecord {
 	
 
 	public function decryptPassword(){
-		if (!empty(\GO::session()->values['emailModule']['accountPasswords'][$this->id])) {
-			$decrypted = \GO\Base\Util\Crypt::decrypt(\GO::session()->values['emailModule']['accountPasswords'][$this->id]);
+
+		if (!empty(GO::session()->values['emailModule']['accountPasswords'][$this->id])) {
+			$decrypted = \GO\Base\Util\Crypt::decrypt(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
 		} else {
 			
 			//support for z-push without storing passwords

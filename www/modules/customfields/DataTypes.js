@@ -22,13 +22,13 @@ GO.customfields.dataTypes={
     },
 	"GO\\Customfields\\Customfieldtype\\Datetime":{
 		label:'Date time',
-		getFormField : function(customfield, config){			
-			
+		getFormField : function(customfield, config){
+
 			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
 
 			delete f.anchor;
 
-			return Ext.apply(f, {				
+			return Ext.apply(f, {
 				xtype:'datetime',
 				width : 300
 //				timeFormat: GO.settings['time_format'],
@@ -46,7 +46,7 @@ GO.customfields.dataTypes={
 
 			delete f.anchor;
 
-			return Ext.apply(f, {				
+			return Ext.apply(f, {
 				xtype:'datefield',
 				format: GO.settings['date_format'],
 				width : 120
@@ -60,12 +60,35 @@ GO.customfields.dataTypes={
 
 			var f = GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Text"].getFormField(customfield, config);
 			delete f.anchor;
-			
-			return Ext.apply(f, {
-				xtype:'numberfield',
-				decimals: customfield.number_decimals,
-				width:120
-			});
+
+			if (!GO.util.empty(customfield.prefix) || !GO.util.empty(customfield.suffix)) {				
+				return {
+					anchor:'-20',
+					xtype: 'compositefield',
+					fieldLabel: f.fieldLabel,
+					items: [
+						Ext.apply({
+							xtype:'numberfield',
+							decimals: customfield.number_decimals,
+							width:120,
+							name: customfield.dataname,
+							allowBlank: GO.util.empty(customfield.required)
+						}, config),
+						{
+							xtype: 'plainfield',
+							value: customfield.suffix,
+							hideLabel: true,
+							columnWidth: '.1'
+						}
+					]
+				}
+			} else {
+				return Ext.apply(f, {
+					xtype:'numberfield',
+					decimals: customfield.number_decimals,
+					width:120
+				});
+			}
 		}
 	},
 	"GO\\Customfields\\Customfieldtype\\Checkbox" :{
@@ -121,7 +144,7 @@ GO.customfields.dataTypes={
                         {
                                customfield.height = 40;
                         }
-												
+
 			return Ext.apply(f, {
 				xtype:'textarea',
 				height:parseInt(customfield.height),
@@ -254,8 +277,8 @@ GO.customfields.dataTypes={
 						select:function(combo, record, index){
 							var nextNestingLevel=combo.nesting_level+1;
 							var formPanel = combo.findParentByType('form');
-							while(GO.customfields.slaves[combo.treemaster_field_id][nextNestingLevel]){								
-								
+							while(GO.customfields.slaves[combo.treemaster_field_id][nextNestingLevel]){
+
 								var field = formPanel.form.findField(GO.customfields.slaves[combo.treemaster_field_id][nextNestingLevel]);
 								if(!field)
 									field = formPanel.form.findField(GO.customfields.slaves[combo.treemaster_field_id][nextNestingLevel]+'[]');
@@ -266,9 +289,9 @@ GO.customfields.dataTypes={
 									field.store.baseParams.parent_id = -1;
 								field.lastQuery = null;
 								field.clearValue();
-								
+
 								nextNestingLevel++;
-							}							
+							}
 						},
 						render:function(combo){
 							//var formPanel = combo.findParentByType("form");
@@ -306,7 +329,7 @@ GO.customfields.dataTypes={
 
 															if(nextField)
 																nextField.store.baseParams.parent_id=v[0];
-															
+
 															// Check if the value has colons in it, then put them back
 															var vl = v[1];
 															if(v.length>2){
@@ -314,23 +337,23 @@ GO.customfields.dataTypes={
 																	vl = vl+':'+v[i];
 																}
 															}
-															
+
 															field.setRawValue(vl);
 														}
 													}
 												}else
 												{
 													//empty value
-													if(field.nesting_level==0) // is master												
+													if(field.nesting_level==0) // is master
 														field.store.baseParams.parent_id=0;
 													else
 														field.store.baseParams.parent_id= -1;
 													field.clearValue();
 												}
 												field.lastQuery = null;
-												
+
 											}
-											
+
 										});
 									}
 								});
@@ -382,7 +405,7 @@ GO.customfields.dataTypes={
 			}, config));
 		}
 	},
-	"GO\\Customfields\\Customfieldtype\\Function" : {
+	"GO\\Customfields\\Customfieldtype\\FunctionField" : {
 		label : 'Function',
 		getFormField : function(customfield, config){
 			return new Ext.form.Hidden(Ext.apply({
@@ -398,7 +421,7 @@ GO.customfields.dataTypes={
 			config = config || {};
 
 			if(!GO.util.empty(customfield.validation_regex)){
-				
+
 				if(!GO.util.empty(customfield.validation_modifiers))
 					config.regex=new RegExp(customfield.validation_regex, customfield.validation_modifiers);
 				else
@@ -411,18 +434,48 @@ GO.customfields.dataTypes={
 			var fieldLabel = customfield.name;
 			if(!GO.util.empty(customfield.required))
 				fieldLabel+='*';
-			
+
 			if(customfield.max_length){
 				config.maxLength=customfield.max_length;
 			}
-			
-			return Ext.apply({
-				xtype:'textfield',
-				name: customfield.dataname,				
-				fieldLabel: fieldLabel,
-				anchor:'-20',
-				allowBlank: GO.util.empty(customfield.required)
-			}, config);
+
+			if (!GO.util.empty(customfield.prefix) || !GO.util.empty(customfield.suffix)) {
+				
+				if (!GO.util.empty(customfield.prefix))
+					fieldLabel = fieldLabel+' ('+customfield.prefix+')';
+				
+				var compositeItems = [
+						Ext.apply({
+							xtype:'textfield',
+							name: customfield.dataname,
+							anchor:'-20',
+							allowBlank: GO.util.empty(customfield.required)
+						}, config)]
+				
+				if (!GO.util.empty(customfield.suffix))
+					compositeItems.push(						{
+							xtype: 'plainfield',
+							value: customfield.suffix,
+							hideLabel: true,
+							columnWidth: '.1'
+						});
+				
+				return {
+					anchor:'-20',
+					xtype: 'compositefield',
+					fieldLabel: fieldLabel,
+					items: compositeItems
+				}
+			} else {
+				return Ext.apply({
+					xtype:'textfield',
+					name: customfield.dataname,
+					fieldLabel: fieldLabel,
+					anchor:'-20',
+					allowBlank: GO.util.empty(customfield.required)
+				}, config);
+			}
+
 		}
 	},
 	"GO\\Customfields\\Customfieldtype\\EncryptedText": {

@@ -73,10 +73,19 @@ class Directory extends \Sabre\DAV\FS\Directory{
 		if($newFile->exists())
 			throw new \Exception("File already exists!");
 		
-		if(!\GO\Files\Model\File::checkQuota(strlen($data)))
-			throw new Sabre\DAV\Exception\InsufficientStorage();
+
 		
-		$newFile->putContents($data);
+		$tmpFile = \GO\Base\Fs\File::tempFile();
+		$tmpFile->putContents($data);
+		
+		if(!\GO\Files\Model\File::checkQuota($tmpFile->size())){
+			$tmpFile->delete();
+			throw new Sabre\DAV\Exception\InsufficientStorage();
+		}
+		
+//		$newFile->putContents($data);
+		
+		$tmpFile->move($folder->fsFolder, $name);
 		
 
 		$folder->addFile($name);

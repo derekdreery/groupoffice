@@ -52,6 +52,9 @@ class Odf {
 		if (!is_array($config)) {
 			throw new OdfException('Configuration data must be provided as array');
 		}
+		
+		$this->config['PATH_TO_TMP'] = GO::config()->tmpdir;
+		
 		foreach ($config as $configKey => $configValue) {
 			//if (array_key_exists($configKey, $this->config)) {
 				$this->config[$configKey] = $configValue;
@@ -171,8 +174,8 @@ IMG;
 	 */
 	private function _parse() {
 		//  $this->contentXml = str_replace(array_keys($this->vars), array_values($this->vars), $this->contentXml);
-		$this->contentXml = preg_replace('/{([^}]*)}/Ue', "odf::replacetag('$1', \$this->vars)", $this->contentXml);
-		$this->stylesXml = preg_replace('/{([^}]*)}/Ue', "odf::replacetag('$1', \$this->vars)", $this->stylesXml);
+		$this->contentXml = preg_replace_callback('/{([^}]*)}/U', array($this, "replacetag"), $this->contentXml);
+		$this->stylesXml = preg_replace_callback('/{([^}]*)}/U', array($this, "replacetag"), $this->stylesXml);
 
 		//clean up unprocessed tags
 		$this->stylesXml=preg_replace('/{([^}]*)}/U',"",$this->stylesXml);
@@ -200,8 +203,9 @@ IMG;
 		return $tag . $garbage_tags;
 	}
 
-	public static function replacetag($tag, $record) {
-		$tag = stripslashes($tag);
+	public function replacetag($tag) {
+		
+		$tag = stripslashes($tag[1]);
 		$orig_tag = $tag;
 
 		//Sometimes people change styles within a {autodata} tag.
@@ -224,14 +228,14 @@ IMG;
 		}
 
 		if (!$math) {
-			if (!isset($record[$arr[0]])) {
+			if (!isset($this->vars[$arr[0]])) {
 				return '{' . $orig_tag . '}';
 			} else {
-				$v = $record[$arr[0]];
+				$v = $this->vars[$arr[0]];
 			}
 		} else {
 			$v = $arr[0];
-			foreach ($record as $key => $value) {
+			foreach ($this->vars as $key => $value) {
 				$v = str_replace($key, $value, $v);
 			}
 

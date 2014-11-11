@@ -36,7 +36,7 @@ class UserController extends \GO\Base\Controller\AbstractModelController {
 	}
 
 	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
-		$columnModel->formatColumn('name', '$model->name', array(), 'first_name');
+		$columnModel->formatColumn('name', '$model->getName()', array(), \GO::user()->sort_name);
 		$columnModel->formatColumn('enabled', "!empty(\$model->enabled) ? \GO::t('yes') : \GO::t('no')");
 		return parent::formatColumns($columnModel);
 	}
@@ -226,6 +226,7 @@ class UserController extends \GO\Base\Controller\AbstractModelController {
 			));
 		
 		$storeParams->group('t.id');
+		$storeParams->export('users');
 		
 		$groupsMultiSel = new \GO\Base\Component\MultiSelectGrid(
 			'users-groups-panel', 
@@ -311,8 +312,8 @@ class UserController extends \GO\Base\Controller\AbstractModelController {
 		
 		\GO::setMaxExecutionTime(0);
 		
-		if($params['controller']=='GO\Users\Controller\User')
-			$controller = new User();
+		if($params['controller']=='GO\Users\Controller\UserController')
+			$controller = new UserController();
 		else
 			throw new \Exception("No or wrong controller given");
 

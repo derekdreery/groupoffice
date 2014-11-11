@@ -225,7 +225,7 @@ $l['useAccount']='Account gebruiken';
 $l['mailbox']='Mailbox';
 $l['checkUnseen']='Controleer deze map automatisch op nieuwe berichten';
 
-$l['sieveNote']='Niet alle functies worden ondersteund. Raadpleeg de handleiding.';
+$l['sieveNote']='Niet alle functies worden ondersteund. Sieve niet in gebruik. Raadpleeg de handleiding.';
 
 $l["forwardTo"]='Mail doorsturen aan';
 $l["markFolderReadConfirm"]='Weet u zeker dat u alle berichten in map \'{name}\' als gelezen wilt markeren?';
@@ -287,3 +287,21 @@ $l['linkMustHavePermissionToWrite'] = 'U heeft niet de vereiste schrijfrechten o
 $l['sortAddressesByMailTime'] = 'Sorteer ontvanger emailadressen op tijd van laatst verzonden email (module Adresboek benodigd)';
 
 $l['permissionDelegated'] = 'Alleen lezen en gedelegeerd';
+
+$l['saveToItem'] = 'Opslaan bij item';
+$l['saveToPersonal'] = 'Opslaan in persoonlijke map';
+
+$l['thisIsSpam1'] = 'Dit bericht is gemarkeerd als spam. Klik';
+$l['thisIsSpam2'] = 'hier';
+$l['thisIsSpam3'] = 'als u gelooft dat dit bericht GEEN spam is.';
+
+$l['thisIsNotSpam1'] = 'Klik';
+$l['thisIsNotSpam2'] = 'hier';
+$l['thisIsNotSpam3'] = 'als u denkt dat dit bericht spam is.';
+
+$l['moveToSpamTitle'] = 'Verplaatsen naar spamfolder?';
+$l['moveToSpamMsg'] = 'Weet u zeker dat u dit bericht wilt markeren als spam?';
+$l['moveToInboxTitle'] = 'Uit spamfolder verplaatsen?';
+$l['moveToInboxMsg'] = 'Weet u zeker dat u de spammarkering van dit bericht wilt verwijderen en het bericht wilt verplaatsen naar uw inbox?';
+
+$l['fts'] = 'Volledig bericht';

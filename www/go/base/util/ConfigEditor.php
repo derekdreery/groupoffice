@@ -4,7 +4,6 @@
 namespace GO\Base\Util;
 
 use GO;
-use ReflectionClass;
 
 class ConfigEditor {
 
@@ -21,7 +20,7 @@ class ConfigEditor {
 	
 		
 		foreach ($config as $key => $value) {
-			if($defaults[$key]!==$value){
+			if(!isset($defaults[$key]) || $defaults[$key]!==$value){
 				$configData .= '$config["' . $key . '"]=' . var_export($value,true).';' . "\n";
 			}
 		}

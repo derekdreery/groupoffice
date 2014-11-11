@@ -140,9 +140,26 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 		if($company){					
 			$response['data']['company_name'] = $company->name;
 			$response['data']['company_name2'] = $company->name2;
+			$response['data']['company_formatted_address'] = nl2br($company->getFormattedAddress());
+			$response['data']['company_google_maps_link']=\GO\Base\Util\Common::googleMapsLink(
+						$company->address, $company->address_no,$company->city, $company->country);
+			
+			$response['data']['company_formatted_post_address'] = nl2br($company->getFormattedPostAddress());
+			$response['data']['company_google_maps_post_link']=\GO\Base\Util\Common::googleMapsLink(
+						$company->post_address, $company->post_address_no,$company->post_city, $company->post_country);
+			
+			
+			$response['data']['company_email'] = $company->email;
+			$response['data']['company_phone'] = $company->phone;
 		} else {
 			$response['data']['company_name'] = '';
 			$response['data']['company_name2'] = '';
+			$response['data']['company_formatted_address'] = '';
+			$response['data']['company_google_maps_link']='';
+			$response['data']['company_formatted_post_address'] = '';
+			$response['data']['company_google_maps_post_link']='';
+			$response['data']['company_email'] = '';
+			$response['data']['company_phone'] = '';
 		}
 		
 		$response['data']['google_maps_link']=\GO\Base\Util\Common::googleMapsLink(
@@ -593,7 +610,7 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 		$file->convertToUtf8();
 		
 		$options = \Sabre\VObject\Reader::OPTION_FORGIVING + \Sabre\VObject\Reader::OPTION_IGNORE_INVALID_LINES;
-		$vcards = new Sabre\VObject\Splitter\VCard(fopen($file->path(),'r+'), $options);
+		$vcards = new \Sabre\VObject\Splitter\VCard(fopen($file->path(),'r+'), $options);
 
 
 		unset($params['file']);

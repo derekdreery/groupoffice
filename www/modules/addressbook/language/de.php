@@ -249,6 +249,7 @@ $l['delete_success']= 'Sie haben sich erfolgreich aus der Adressliste ausgetrage
 $l['setCurrentTemplateAsDefault']='Aktuelle Vorlage als Standard verwenden';
 $l['editUser']='Nutzer bearbeiten';
 $l['templateContent']='Dokument';
+$l['addresslistIdMustBePositive']='Für dieses Feld wird eine positive Adresslisten-ID erwartet. Bitte setzen Sie sich mit dem Administrator in Verbindung.';
 $l['male']='Männlich';
 $l['female']='Weiblich';
 $l['contactUuid']='UUID';
@@ -290,3 +291,18 @@ $l['callOnSkype'] = 'Anrufen über Skype';
 
 $l['userDefaultTemplate'] = 'Standard-Vorlage';
 $l['exportContactsWithCompanies'] = 'Kontakte mit Firmen';
+
+$l['cmdFieldsetCompany']= 'Firmendetails';
+$l['companyEmail_allowed']= "eMail erlaubt";
+$l['contactCellular2']= "2. Mobilfunk";
+$l['contactEmail_allowed']= "eMail erlaubt";
+$l['mailingStatus'][0]="Warte auf Start";
+$l['mailingStatus'][1]="Läuft";
+$l['mailingStatus'][2]="Beendet";
+$l['mailingStatus'][3]="Pausiert";
+$l['autoDataBeginning']= 'Beginne';
+$l['autoData']= 'Autodata';
+$l['addresslistIdMustBePositive']='Dieses Panel erwartet eine positive Adresslisten-ID, hat aber keine erhalten. Bitte wenden Sie sich an den Administrator.';
+
+$l['privateAddress']= 'Privatadresse';
+$l['mustBeSameAddressbook']= 'Die Firma des Kontakts muss sich in dem gleichen Adressbuch befinden wie der Kontakt. Der Kontakt wurde nicht gespeichert.';

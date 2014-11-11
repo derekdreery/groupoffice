@@ -14,6 +14,10 @@
 	text-decoration:underline;
 }
 
+.em-spam-move-block {
+	float:right;
+	color: lightgray;
+}
 
 .em-tree-node-noselect .x-tree-node-anchor span, .em-readonly a span{
 	font-style:italic;
@@ -237,13 +241,21 @@ margin:5px 2px;
 	margin-bottom: 5px;
 }
 
-.message-icalendar{
+.message-icalendar {
 	background-color:#EBF0F2;
 	border-bottom:1px solid #d0d0d0;
 	padding: 0 8px 0 8px;
 	text-align:left;
 	line-height:20px;
 }
+
+.message-move {
+	color: gray;
+	padding: 0 8px 0 8px;
+	text-align: right !important;
+	line-height: 20px;
+}
+
 .message-icalendar-icon{
 	background-repeat:no-repeat;
 	background-position:0 2px;

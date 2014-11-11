@@ -176,8 +176,12 @@ class CoreController extends \GO\Base\Controller\AbstractController {
 		
 		$store = \GO\Base\Data\Store::newInstance(\GO\Base\Model\User::model());
 		$store->setDefaultSortOrder('name', 'ASC');
+		
+		
+		$sortAlias = GO::user()->sort_name=="first_name" ? array('first_name','last_name') : array('last_name','first_name');
+		
 
-		$store->getColumnModel()->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
+		$store->getColumnModel()->formatColumn('name', '$model->name', array(), $sortAlias);
 		$store->getColumnModel()->formatColumn('cf', '$model->id.":".$model->name'); //special field used by custom fields. They need an id an value in one.
 		
 		//only get users that are enabled
@@ -252,9 +256,13 @@ class CoreController extends \GO\Base\Controller\AbstractController {
 
 //		$file = new \GO\Base\Fs\File(GO::config()->file_storage_path.'cache/'.basename($params['file']));
 
+		if(!$file){
+			throw new \GO\Base\Exception\NotFound();
+		}
+		
 		$ext = $file->extension();
 
-		$type = $ext =='js' ? 'text/javascript' : 'text/css';
+		$type = $ext =='js' ? 'application/javascript' : 'text/css';
 
 		$use_compression = GO::config()->use_zlib_compression();
 
@@ -263,7 +271,7 @@ class CoreController extends \GO\Base\Controller\AbstractController {
 			ob_start('ob_gzhandler');
 		}
 		$offset = 30*24*60*60;
-		header ("Content-Type: $type; charset: UTF-8");
+		header ("Content-Type: $type");
 		header("Expires: " . date("D, j M Y G:i:s ", time()+$offset) . 'GMT');
 		header('Cache-Control: cache');
 		header('Pragma: cache');
@@ -354,6 +362,10 @@ class CoreController extends \GO\Base\Controller\AbstractController {
 		}
 
 		$file = new \GO\Base\Fs\File($src);
+		
+		if($file->size()>5*1024*1024){
+			throw new Exception("Image may not be larger than 5MB.");
+		}
 		
 
 		$w = isset($params['w']) ? intval($params['w']) : 0;

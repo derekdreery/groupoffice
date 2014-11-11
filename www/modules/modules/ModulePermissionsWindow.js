@@ -23,6 +23,7 @@ GO.modules.ModulePermissionsWindow = Ext.extend(GO.Window,{
 				text : GO.lang['cmdOk'],
 				handler : function() {
 					GO.request({
+						timeout : 2 * 60 * 1000,
 						url : 'modules/module/checkDefaultModels',
 						params : {
 							moduleId : this.module_id

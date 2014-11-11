@@ -44,6 +44,8 @@ $l["draftsFolder"]='Drafts folder';
 $l["sender"]='From field';
 $l["toField"]='To field';
 $l["ccField"]='CC field';
+$l['showCcByDefault']='Show CC field by default';
+$l['showBccByDefault']='Show BCC field by default';
 $l["bccField"]='BCC field';
 $l["keyword"]='Keyword';
 $l["notification"]='Request read notification';
@@ -260,7 +262,7 @@ $l["showAll"]='Show all';
 
 $l['noname'] = 'no name';
 $l['searchIn'] = 'Search in';
-$l['searchRecursive'] = 'Search recursive';
+$l['searchRecursive'] = 'Include subfolders';
 $l['currentFolder'] = 'Current folder';
 $l['allFolders'] = 'All folders';
 
@@ -277,3 +279,19 @@ $l['labelsLimit'] = 'Label\'s limit reached. The maximum number of labels is %d'
 
 $l['saveToItem'] = 'Save to item';
 $l['saveAttachmentTo'] = 'Save the attachment to these items';
+$l['saveToPersonal'] = 'Save to personal folder';
+
+$l['thisIsSpam1'] = 'This message has been identified as spam. Click';
+$l['thisIsSpam2'] = 'here';
+$l['thisIsSpam3'] = 'if you think this message is NOT spam.';
+
+$l['thisIsNotSpam1'] = 'Click';
+$l['thisIsNotSpam2'] = 'here';
+$l['thisIsNotSpam3'] = 'if you think this message is spam.';
+
+$l['moveToSpamTitle'] = 'Move to Spam folder?';
+$l['moveToSpamMsg'] = 'Are you sure you want to classify this message as spam?';
+$l['moveToInboxTitle'] = 'Move out of Spam folder?';
+$l['moveToInboxMsg'] = 'Are you sure you want to remove the spam mark and move this message into your inbox?';
+
+$l['fts'] = 'Full message';

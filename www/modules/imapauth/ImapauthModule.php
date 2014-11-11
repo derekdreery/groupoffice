@@ -3,6 +3,7 @@
 
 namespace GO\Imapauth;
 
+use GO;
 
 class ImapauthModule extends \GO\Base\Module {
 
@@ -53,7 +54,7 @@ class ImapauthModule extends \GO\Base\Module {
 						$response['needCompleteProfile'] = true;
 						$response['success'] = false;
 
-						$response['feedback'] = "Please fill in some additional information to complete your user account.";
+						$response['feedback'] = \GO::t('pleaseCompleteProfile', 'imapauth');
 						return false;
 					} else {
 						//user doesn't exist. create it now

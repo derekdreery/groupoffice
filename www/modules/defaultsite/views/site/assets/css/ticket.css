@@ -12,21 +12,21 @@
 #new-ticket-button {background-color: #99FF99;}
 #new-ticket-button:hover {background-color: #88FF88;}*/
 
-/*.external-ticket-page .table-ticketlist tr td {padding:5px;}*/
-/*.external-ticket-page .table-ticketlist tr td a{text-decoration: underline; color:#000; cursor:pointer;}*/
-/*.external-ticket-page .table-ticketlist tr td a:hover{}*/
-/*.external-ticket-page .table-ticketlist tr.odd{background-color: #E4E8EA;}
+.external-ticket-page .table-ticketlist tr td {padding:5px;}
+.external-ticket-page .table-ticketlist tr td a{text-decoration: underline; color:#000; cursor:pointer;}
+.external-ticket-page .table-ticketlist tr td a:hover{}
+.external-ticket-page .table-ticketlist tr.odd{background-color: #ddd;}
 .external-ticket-page .table-ticketlist tr.even{}
 
-.external-ticket-page .table-ticketmessages tr td {padding:5px;}*/
-/*.external-ticket-page .table-ticketmessages tr td a{text-decoration: underline; color:#000; cursor:pointer;}*/
-/*.external-ticket-page .table-ticketmessages tr td a:hover{}*/
-/*.external-ticket-page .table-ticketmessages tr td .ticketmessage-name {font-weight: bold;}
+.external-ticket-page .table-ticketmessages tr td {padding:5px;}
+.external-ticket-page .table-ticketmessages tr td a{text-decoration: underline; color:#000; cursor:pointer;}
+.external-ticket-page .table-ticketmessages tr td a:hover{}
+.external-ticket-page .table-ticketmessages tr td .ticketmessage-name {font-weight: bold;}
 .external-ticket-page .table-ticketmessages tr td .ticketmessage-time {margin: 0px 5px;}
 .external-ticket-page .table-ticketmessages tr td .ticketmessage-message {}
 .external-ticket-page .table-ticketmessages tr td .ticketmessage-files {font-weight: bold;}
 .external-ticket-page .table-ticketmessages tr.odd{background-color: #ddd;}
-.external-ticket-page .table-ticketmessages tr.even{}*/
+.external-ticket-page .table-ticketmessages tr.even{}
 
 
 #close-ticket-button { font-family: arial; font-size: 12px; background-color: inherit; display: inline; border:0px; cursor: pointer; color:blue;text-decoration: underline; padding:0px; margin: 0px;}
@@ -35,150 +35,3 @@
 #submit-ticket-button { width:auto !important;}
 
 #back-to-overview-button {}
-
-/* Support Section */
-
-#support .content{
-	float: left;
-	width: 60%;
-}
-
-#support #office-availabilty{
-	float: left;
-	width: 35%;
-}
-
-#support article{
-	padding: 0 5% 5% 5%;
-}
-
-#support .content{
-	margin-right: 5%;
-}
-
-.pagination-arrow-left, .pagination-arrow-right{
-	display: inline-block;
-	*display: inline;
-	height: 10px;
-	margin: 0 1em;
-	vertical-align: middle;
-	width: 6px;
-	text-indent: -9999px;
-	zoom: 1;
-}
-
-.pagination-arrow-left{
-	background: url(images/pagination-arrow-left.png);
-}
-
-.pagination-arrow-right{
-	background: url(images/pagination-arrow-right.png);
-}
-
-#ticket-filter{
-	font-size: 0.675em;
-	font-weight: normal;
-	float: right;
-}
-
-#ticket-filter .active{
-	font-weight:bold;
-}
-
-.create-ticket-button{
-	font-size: 0.825em;
-	margin: 2em 0;
-}
-
-/* Ticket Section */
-
-#ticket article{
-	padding: 2.5% 5% 5% 5%;
-}
-
-#ticket article article{
-	margin: 1.25% 0;
-	padding: 1.25% 0;
-}
-
-#ticket h2{
-	padding-bottom: 1.5%;
-}
-
-#ticket-agent-name{
-	font-weight: bold;
-}
-
-.ticket-info-column-2{
-	width: 55%;
-}
-
-#ticket-agent-picture{
-	padding: 0 !important;
-	text-align: right;
-	width:90px;
-	height:120px;
-}
-
-.ticket-new-message{
-	background: url(images/newmsg.png) no-repeat top left;
-	width:16px;
-	height:16px;
-}
-
-#ticket-discussion{
-	border-bottom: 	1px #000 solid;
-	border-top: 2px #000 solid;
-	margin: 2em 0 1em 0;
-	padding-top: 1em;
-}
-
-.discussion-name{
-	display: inline-block;
-	*display: inline;
-	font-size: 1.075em;
-	font-weight: bold;
-	margin-bottom: 0.25em;
-	zoom: 1;
-}
-
-.discussion-time{
-	float: right; 
-	font-size: 1.025em;
-}
-
-#add-comment-field{
-	border: 0;
-	height: 10em;
-	margin: 0 0 1em 0;
-	width: 100%;
-}
-
-#add-comment-button{
-	border: none;
-	float: right;
-	font-size: 0.825em;
-}
-
-#ticket-info td, #ticket-info th{
-	padding: 0.125em 1em 0.125em 0;
-	vertical-align: top;
-}
-
-#close-ticket-button{
-	float: right;
-	font-size: 0.825em;
-	margin-top: 0.375em;
-}
-
-#back-to-overview{
-	background: url(images/arrow-left-blue.png) no-repeat;
-	background-position: 0 3px;
-	margin: 5%;
-	padding: 0 0 0 1em;
-}
-
-
-#ticket-created {
-	height: 300px;
-}

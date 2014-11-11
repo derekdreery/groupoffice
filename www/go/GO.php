@@ -51,6 +51,27 @@ class GO{
 
 
 	private static $_view;
+	
+	/**
+	 * Check if a class can be used.
+	 * This function checks if the class exists and if the module for the class is installed (So the tables are available, when it's an active record)
+	 * 
+	 * @param string $className
+	 * @return boolean
+	 */
+	public static function classExists($className){
+			
+		if(class_exists($className)){
+			
+			$clsParts = explode('\\',$className);
+			
+			if($clsParts[1] == 'Base' || GO::modules()->isInstalled(strtolower($clsParts[1])))
+				return true;
+		}
+	
+		return false;
+	}
+	
 	/**
 	 * If you set this to true then all acl's will allow all actions. Useful
 	 * for maintenance scripts.
@@ -155,7 +176,7 @@ class GO{
 		'GO\Base\Data\Store' => 'go/base/data/Store.php',
 		'GO\Base\Data\ColumnModel' => 'go/base/data/ColumnModel.php',
 		'GO\Base\Module' => 'go/base/Module.php',
-		'GO\Base\Model_AbstractUserDefaultModel' => 'go/base/model/AbstractUserDefaultModel.php',
+		'GO\Base\Model\AbstractUserDefaultModel' => 'go/base/model/AbstractUserDefaultModel.php',
 		'GO\Base\Db\FindParams' => 'go/base/db/FindParams.php',
 		'GO\Base\Db\FindCriteria' => 'go/base/db/FindCriteria.php',
 		'GO\Base\Util\Date' => 'go/base/util/Date.php',
@@ -382,13 +403,6 @@ class GO{
 	 * 
 	 * @return \GO\Base\Cache\CacheInterface
 	 */
-	/**
-	 * Returns cache driver. Cached items will persist between connections and are
-	 * available to all users. When debug is enabled a dummy cache driver is used
-	 * that caches nothing.
-	 * 
-	 * @return GO_Base_Cache_Interface
-	 */
 	public static function cache(){
 
         if (!isset(self::$_cache)) {
@@ -452,6 +466,10 @@ class GO{
 		
 		//for namespaces
 //		$className = str_replace('\\', '_', $className);
+		
+		//Sometimes there's a leading \ in the $className and sometimes not.
+		//Might not be true for all php versions.		
+		$className = ltrim($className, '\\');
 			
 		if(isset(self::$_classes[$className])){
 			//don't use \GO::config()->root_path here because it might not be autoloaded yet causing an infite loop.
@@ -569,9 +587,13 @@ class GO{
 		register_shutdown_function(array('GO','shutdown'));
 
    	spl_autoload_register(array('GO', 'autoload'));	
-
+		
 		//Start session here. Important that it's called before \GO::config().
 		\GO::session();
+		
+		if(!self::isInstalled()){
+			return;
+		}
 		
 		if(\GO::config()->debug){
 			self::$_scriptStartTime = \GO\Base\Util\Date::getmicrotime();			
@@ -1142,12 +1164,12 @@ class GO{
 
 			foreach($items as $item){
 				if($item instanceof \GO\Base\Fs\File){
-					$className = 'GOFS_';
+					$className = 'GOFS\\';
 					
 					$subFolders = explode('/', $subfolder);
 					
 					foreach($subFolders as $sf){
-						$className .= ucfirst($sf).'_';
+						$className .= ucfirst($sf).'\\';
 					}
 					
 					$className .= $item->nameWithoutExtension();
@@ -1207,6 +1229,9 @@ class GO{
 		if(!isset($path)){
 			$path = GO::config()->root_path.'modules/professional/License.php';
 		}
+		
+		if(!file_exists($path))
+			return false;
 
 		//check data for presence of ionCube in code.
 		$data=  file_get_contents($path, false, null, -1, 100);		
@@ -1249,5 +1274,13 @@ class GO{
 	 */
 	public static function cronIsRunning(){
 		return \GO::config()->get_setting('cron_last_run') > time()-300;
+	}
+	
+	public static function p($name){
+		return self::request()->post($name);
+	}
+	
+	public static function g($name){
+		return self::request()->get($name);
 	}
 }

@@ -173,9 +173,12 @@ class FindCriteria {
 	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true. 
 	 * @return FindCriteria The complete FindCriteria object is given as a return value.
 	 */
-	public function addRawCondition($value1, $value2, $comparator='=', $useAnd=true) {
+	public function addRawCondition($value1, $value2=null, $comparator='=', $useAnd=true) {
 		$this->_appendOperator($useAnd);
-		$this->_appendRawConditionString($value1, $value2, $comparator);		
+		if($value2===null)
+			$this->_condition .= ' '.$value1;
+		else
+			$this->_appendRawConditionString($value1, $value2, $comparator);		
 		return $this;
 	}
 	

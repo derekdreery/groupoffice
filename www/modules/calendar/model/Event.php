@@ -48,9 +48,15 @@
 
 namespace GO\Calendar\Model;
 
-use GO;
-use Sabre;
+use DateInterval;
 use DateTime;
+use DateTimeZone;
+use GO\Calendar\Model\Exception;
+use GO;
+use GO\Base\Util\String;
+use Sabre;
+use Swift_Attachment;
+use Swift_Mime_ContentEncoder_PlainContentEncoder;
 
 class Event extends \GO\Base\Db\ActiveRecord {
 
@@ -186,7 +192,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		return array(
 				'_exceptionEvent'=>array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Event', 'field' => 'exception_for_event_id'),
 				'recurringEventException'=>array('type' => self::HAS_ONE, 'model' => 'GO\Calendar\Model\Exception', 'field' => 'exception_event_id'),//If this event is an exception for a recurring series. This relation points to the exception of the recurring series.
-				'calendar' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Calendar', 'field' => 'calendar_id'),
+				'calendar' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Calendar', 'field' => 'calendar_id','labelAttribute'=>function($model){return $model->calendar->name;}),
 				'category' => array('type' => self::BELONGS_TO, 'model' => 'GO\Calendar\Model\Category', 'field' => 'category_id'),
 				'participants' => array('type' => self::HAS_MANY, 'model' => 'GO\Calendar\Model\Participant', 'field' => 'event_id', 'delete' => true),
 				'exceptions' => array('type' => self::HAS_MANY, 'model' => 'GO\Calendar\Model\Exception', 'field' => 'event_id', 'delete' => true),
@@ -273,7 +279,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			throw new \Exception("Can't add exception to non recurring event ".$this->id);
 		
 		if(!$this->hasException($date)){
-			$exception = new Exception();
+			$exception = new \GO\Calendar\Model\Exception();
 			$exception->event_id = $this->id;
 			$exception->time = mktime(date('G',$this->start_time),date('i',$this->start_time),0,date('n',$date),date('j',$date),date('Y',$date)); // Needs to be a unix timestamp
 			$exception->exception_event_id=$exception_event_id;
@@ -334,7 +340,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		$hasConflict = false;
 		$foundConflicts = array();				
 		
-		if($this->isNew){
+		if($this->isNew || $this->isResource()){
 			// Not possible to determine this when having a new model.
 			// Because the resources are not created yet.
 			return false;
@@ -443,6 +449,21 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
 			$this->repeat_end_time = $rrule->until;
 		}		
+		
+
+		$resourceConflicts = $this->hasResourceConflicts();
+
+		if($resourceConflicts !== false){
+
+
+			$errorMessage = GO::t('moveEventResourceError','calendar');
+
+			foreach ($resourceConflicts as $rc){
+				$errorMessage .= '<br />- '.$rc->calendar->name;
+			}
+
+			$this->setValidationError('start_time', $errorMessage);
+		}
 		return parent::validate();
 	}
 	
@@ -468,20 +489,21 @@ class Event extends \GO\Base\Db\ActiveRecord {
 //			}			
 		}
 		
-		//Don't set reminders for the superadmin
-		if($this->calendar->user_id==1 && \GO::user()->id!=1 && !\GO::config()->debug)
-			$this->reminder=0;
+//		//Don't set reminders for the superadmin
+//		if($this->calendar->user_id==1 && \GO::user()->id!=1 && !\GO::config()->debug)
+//			$this->reminder=0;
 		
 		
 		if($this->isResource()){
 			
 			// If resource is added by its admin, automatically set it to CONFIRMED.
+			$adminUserIds=array();
 			$groupAdminsStmt= $this->calendar->group->admins;
 			while($adminUser = $groupAdminsStmt->fetch()){
 				$adminUserIds[] = $adminUser->id;
 			}
 			
-			if (in_array(GO::user()->id,$adminUserIds) && $this->getIsNew()) {
+			if (in_array(\GO::user()->id,$adminUserIds) && $this->getIsNew()) {
 				$this->status = 'CONFIRMED';
 			}
 
@@ -494,19 +516,6 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			}			
 		}	
 		
-		$resourceConflicts = $this->hasResourceConflicts();
-		
-		if($resourceConflicts !== false){
-			
-			$errorMessage = \GO::t('moveEventResourceError','calendar');
-			
-			foreach ($resourceConflicts as $rc){
-				$errorMessage .= '<br />- '.$rc->calendar->name;
-			}
-			
-			Throw new Exception($errorMessage);
-		}
-
 		return parent::beforeSave();
 	}
 
@@ -600,8 +609,24 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	public function isRecurring(){
 		return $this->rrule!="";
 	}
-	
 
+	/**
+	 * Check if this event is a fullday event
+	 * 
+	 * @return boolean 
+	 */
+	public function isFullDay() {
+		return $this->all_day_event;
+	}
+	
+	public function hasReminders() {
+		return !empty($this->reminder);
+	}
+	
+	public function isException() {
+		return !empty($this->exception_for_event_id);
+	}
+	
 	protected function afterSave($wasNew) {
 		
 		//add exception model for the original recurring event
@@ -649,7 +674,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			while($adminUser = $groupAdminsStmt->fetch()){
 				$adminUserIds[] = $adminUser->id;
 			}
-			if (!in_array(GO::user()->id,$adminUserIds) && $this->end_time > time()) {
+			if ((!in_array(\GO::user()->id,$adminUserIds) || $this->isModified('status'))&& $this->end_time > time()) {
 				$this->_sendResourceNotification($wasNew);
 			}
 		}else
@@ -794,15 +819,24 @@ class Event extends \GO\Base\Db\ActiveRecord {
 
 			while($adminUser = $stmt->fetch()){
 				$adminUserIds[] = $adminUser->id;
-				if($adminUser->id!=GO::user()->id){
+				if($adminUser->id!=\GO::user()->id){
 					
 				
 					if($wasNew){
-						$body = sprintf(\GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
-										. $this->toHtml()
-										. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
 
-						$subject = sprintf(\GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
+						if ($this->status==Event::STATUS_CONFIRMED) {
+							$body = sprintf(\GO::t('resource_confirmed_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+											. $this->toHtml()
+											. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
+
+							$subject = sprintf(\GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
+						} else {
+							$body = sprintf(\GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+											. $this->toHtml()
+											. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
+
+							$subject = sprintf(\GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
+						}
 					}else
 					{
 						$body = sprintf(\GO::t('resource_modified_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
@@ -823,10 +857,10 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				}
 			}
 			
-			
+
 			//send update to user that booked the resource
-			if($this->user_id!=GO::user()->id
-						&& in_array(GO::user()->id,$adminUserIds)
+			if($this->user_id!=\GO::user()->id
+						&& in_array(\GO::user()->id,$adminUserIds)
 				) {
 				if($this->isModified('status')){				
 					if($this->status==Event::STATUS_CONFIRMED){
@@ -845,7 +879,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					}
 				}else
 				{
-					$body = sprintf(GO::t('your_resource_modified_mail_body','calendar'),GO::user()->name,$this->calendar->name).'<br /><br />'
+					$body = sprintf(\GO::t('your_resource_modified_mail_body','calendar'),\GO::user()->name,$this->calendar->name).'<br /><br />'
 								. $this->toHtml();
 //								. '<br /><a href="'.$url.'">'.\GO::t('open_resource','calendar').'</a>';
 					$subject = sprintf(\GO::t('your_resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, \GO\Base\Util\Date::get_timestamp($this->start_time,false));
@@ -981,9 +1015,11 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	 * Recurring events are not calculated. If you need recurring events use
 	 * findCalculatedForPeriod.
 	 * 
-	 * @param \GO\Base\Db\FindParams $findParams
-	 * @param int $periodStartTime
-	 * @param int $periodEndTime
+	 * @param \GO\Base\Db\FindParams $findParams extra findparmas
+	 * @param int $periodStartTime Start time as Unix timestamp
+	 * @param int $periodEndTime Latest start time for the selected event as Unix timestamp
+	 * @param \GO\Base\Db\FindParams $findParams 
+
 	 * @param boolean $onlyBusyEvents
 	 * @return \GO\Base\Db\ActiveStatement
 	 */
@@ -991,6 +1027,9 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		if (!$findParams)
 			$findParams = \GO\Base\Db\FindParams::newInstance();
 
+		// Make regular events exportable.
+		$findParams->export('events');
+		
 		$findParams->order('start_time', 'ASC')->select("t.*");
 		
 //		if($periodEndTime)
@@ -1313,10 +1352,11 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					$colId = $column['customfield']->id;
 					$colId = 'col_'.$colId;
 					$recordAttributes = $cfRecord->getAttributes();
-					$colValue = $cfRecord->getAttribute($column['customfield']->name);
-					$html .= '<tr><td style="vertical-align:top">'.($column['customfield']->name).'</td>'.
-									'<td>'.$recordAttributes[$colId].'</td></tr>';
-					
+					if ($recordAttributes[$colId]!='') {
+						$colValue = $cfRecord->getAttribute($column['customfield']->name);
+						$html .= '<tr><td style="vertical-align:top">'.($column['customfield']->name).'</td>'.
+										'<td>'.$recordAttributes[$colId].'</td></tr>';
+					}
 				}
 			}
 		}
@@ -1501,23 +1541,25 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		}
 		
 		
-		//todo alarms
-		
+				
+		$a=$calendar->createComponent('VALARM');
 		if($this->reminder>0){
 //			BEGIN:VALARM
 //ACTION:DISPLAY
 //TRIGGER;VALUE=DURATION:-PT5M
 //DESCRIPTION:Default Mozilla Description
 //END:VALARM
-			$a=$calendar->createComponent('VALARM');
+			
 			$a->action='DISPLAY';			
 			$a->add('trigger','-PT'.($this->reminder/60).'M', array('value'=>'DURATION'));			
 			$a->description="Alarm";			
-			$e->add($a);
+		
 						
 			//for funambol compatibility, the \GO\Base\VObject\Reader class use this to convert it to a vcalendar 1.0 aalarm tag.
 			$e->{"X-GO-REMINDER-TIME"}=date('Ymd\THis', $this->start_time-$this->reminder);
 		}
+		
+		$e->add($a);
 		
 		return $e;
 	}
@@ -1576,14 +1618,14 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	private function _utcToLocal(DateTime $date){
 		//DateTime from SabreDav is date without time in UTC timezone. We store it in the users timezone so we must
 		//add the timezone offset.
-		$timezone = new \DateTimeZone(\GO::user()->timezone);
+		$timezone = new DateTimeZone(\GO::user()->timezone);
 
 		$offset = $timezone->getOffset($date);		
 		$sub = $offset>0;
 		if(!$sub)
 			$offset *= -1;
 
-		$interval = new \DateInterval('PT'.$offset.'S');	
+		$interval = new DateInterval('PT'.$offset.'S');	
 		if(!$sub){
 			$date->add($interval);
 		}else{
@@ -1693,6 +1735,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$this->private = strtoupper($vobject->class)!='PUBLIC';
 		}
 		
+		$this->reminder=0;
+		
 		if($vobject->valarm && $vobject->valarm->trigger){
 			
 			$duration = \GO\Base\VObject\Reader::parseDuration($vobject->valarm->trigger);
@@ -1707,9 +1751,6 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				$this->reminder = $this->start_time-$p->format('U');
 			}
 		
-		}else
-		{
-			$this->reminder=0;
 		}
 		
 		$this->setAttributes($attributes, false);
@@ -1741,6 +1782,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$exception = Exception::model()->find($findParams);
 			if($exception){
 				$this->exception_for_event_id=$exception->event_id;
+				if (empty($this->name) || $this->name==\GO::t('unnamed'))
+					$this->name = $exception->mainevent->name;
 			}else
 			{				
 				//exception was not found for this recurrence. Find the recurring series and add the exception.
@@ -1750,14 +1793,16 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					$this->exception_for_event_id=$recurringEvent->id;
 					
 					//will be saved later
-					$exception = new \Exception();
+					$exception = new Exception();
 					$exception->time=$recurrenceTime;
 					$exception->event_id=$recurringEvent->id;
+					if (empty($this->name) || $this->name==\GO::t('unnamed'))
+						$this->name = $exception->mainevent->name;
 				}
 			}
 		}
 		
-		if($vobject->valarm){
+		if($vobject->valarm && $vobject->valarm->trigger){
 			$reminderTime = $vobject->valarm->getEffectiveTriggerTime();
 			//echo $reminderTime->format('c');
 			$seconds = $reminderTime->format('U');
@@ -1766,10 +1811,10 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				$this->reminder=0;
 		}
 		
-		
-		if(!empty($vobject->categories)){
+		$cats = (string) $vobject->categories;
+		if(!empty($cats)){
 			//Group-Office only supports a single category.
-			$cats = explode(',',$vobject->categories);
+			$cats = explode(',',$cats);
 			$categoryName = array_shift($cats);
 			
 			$category = Category::model()->findByName($this->calendar_id, $categoryName);
@@ -1777,7 +1822,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				$category = new Category();
 				$category->name=$categoryName;
 				$category->calendar_id=$this->calendar_id;
-				$category->save();
+				$category->save(true);
 			}			
 			
 			if($category){
@@ -2123,7 +2168,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 //			'is_organizer'=>false
 //		));
 		
-		GO::debug("Creating event copy for ".$participant->name);
+		\GO::debug("Creating event copy for ".$participant->name);
 		
 		//create event in participant's default calendar if the current user has the permission to do that
 		$calendar = $participant->getDefaultCalendar();
@@ -2147,7 +2192,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				return $participantEvent;
 			}else
 			{
-				GO::debug("Found existing event: ".$existing->id.' - '.$existing->getAttribute('start_time', 'formatted'));
+				\GO::debug("Found existing event: ".$existing->id.' - '.$existing->getAttribute('start_time', 'formatted'));
 				
 					
 				//correct errors that somehow occurred.
@@ -2363,14 +2408,14 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
 		if($includeIcs){
 			$ics=$this->toICS("REPLY", $sendingParticipant, $recurrenceTime);				
-			$a = \Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REPLY"');
-			$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+			$a = Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REPLY"');
+			$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 			$a->setDisposition("inline");
 			$message->attach($a);
 			
 			//for outlook 2003 compatibility
-			$a2 = \Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
-			$a2->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+			$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
+			$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 			$message->attach($a2);
 		}
 //		}
@@ -2421,13 +2466,13 @@ class Event extends \GO\Base\Db\ActiveRecord {
 
 				$ics=$this->toICS("CANCEL");				
 				$a = \Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="CANCEL"');
-				$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$a->setDisposition("inline");
 				$message->attach($a);
 				
 				//for outlook 2003 compatibility
 				$a2 = \Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
-				$a2->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$message->attach($a2);
 				
 //			}else{
@@ -2538,13 +2583,13 @@ class Event extends \GO\Base\Db\ActiveRecord {
 
 					$ics=$this->toICS("REQUEST");				
 					$a = \Swift_Attachment::newInstance($ics, \GO\Base\Fs\File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REQUEST"');
-					$a->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 					$a->setDisposition("inline");
 					$message->attach($a);
 
 					//for outlook 2003 compatibility
 					$a2 = \Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
-					$a2->setEncoder(new \Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+					$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 					$message->attach($a2);
 
 					if($participantEvent){
@@ -2562,7 +2607,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 						\GO::language()->setLanguage($language);
 
 					\GO\Base\Mail\Mailer::newGoInstance()->send($message);
-				
+
+					
 				}
 				
 			}

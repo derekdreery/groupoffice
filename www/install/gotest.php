@@ -57,12 +57,55 @@ function ini_is_enabled($name){
 	return $v==1 || strtolower($v)=='on';
 }
 
+function ini_return_bytes($val) {
+    $val = trim($val);
+    $last = strtolower($val[strlen($val)-1]);
+    switch($last) {
+        // The 'G' modifier is available since PHP 5.1.0
+        case 'g':
+            $val *= 1024*1024*1024;
+        case 'm':
+            $val *= 1024*1024;
+        case 'k':
+            $val *= 1024;
+    }
+
+    return $val;
+}
+
 function test_system(){
 
 	global $product_name;
 	
 	$tests=array();
-
+	
+	$test['name']='Operating System';
+	$test['pass']=strtolower(PHP_OS) === 'linux';
+	$test['feedback']='Warning Your OS is "'.PHP_OS.'" The recommended OS is Linux. Other systems may work but are not officially supported';
+	$test['fatal']=false;
+	$tests[]=$test;
+	
+	
+	$test['name']='Web server';
+	$test['pass']=stripos($_SERVER["SERVER_SOFTWARE"], 'apache') !== false;
+	$test['feedback']="Warning, your web server ".$_SERVER["SERVER_SOFTWARE"]." is not officially supported";
+	$test['fatal']=false;
+	$tests[]=$test;
+	
+	
+	$test['name']='PHP SAPI mode';
+	$test['pass']=php_sapi_name() != 'apache';
+	$test['feedback']="Warning: PHP running in '".php_sapi_name()."' mode. This works fine but you need some additional rewrite rules for setting up activesync and CalDAV. See https://www.group-office.com/wiki/Z-push_2";
+	$test['fatal']=false;
+	$tests[]=$test;	
+	
+	
+	$test['name']='Expose PHP';
+	$test['pass']=!ini_is_enabled('expose_php');
+	$test['feedback']='Warning. You should set expose php to off to prevent version information to be public';
+	$test['fatal']=false;
+	$tests[]=$test;
+	
 	
 	$test['name']='PHP version';
 	$test['pass']=function_exists('version_compare') && version_compare( phpversion(), "5.3", ">=");
@@ -143,6 +186,14 @@ function test_system(){
 	$test['fatal']=false;
 
 	$tests[]=$test;
+	
+	$test['name']='File upload size';
+	$test['pass']= ini_return_bytes(ini_get('upload_max_filesize')) >= 20 * 1024 * 1024;
+	$test['feedback']='Warning: The upload_max_filesize php.ini value is lower than 20MB ('.ini_get('upload_max_filesize').').  We recommend to settings this to at least 20MB';
+	$test['fatal']=false;
+
+	$tests[]=$test;
+	
 
 	$test['name']='Safe mode';
 	$test['pass']=!ini_is_enabled('safe_mode');
@@ -301,7 +352,7 @@ function test_system(){
 	
 	$headers = @get_headers($url.'/caldav');	
 	$test['name']='CalDAV alias';
-	$test['pass']=$headers && strpos($headers[0], '401')!==false;
+	$test['pass']=$headers && (strpos($headers[0], '401')!==false || strpos($headers[0], '200')!==false);
 	$test['feedback']="Note: The alias /caldav was not detected. Please create: Alias /caldav /groupoffice/modules/caldav/calendar.php.";
 	$test['fatal']=false;
 
@@ -311,7 +362,7 @@ function test_system(){
 	$headers = @get_headers($url.'/.well-known/caldav');	
 	
 	$test['name']='CalDAV autodiscovery';
-	$test['pass']=$headers && strpos($headers[0], '301')!==false;
+	$test['pass']=$headers && (strpos($headers[0], '301')!==false|| strpos($headers[0], '200')!==false);
 	$test['feedback']="Note: The redirect /.well-known/caldav was not detected. Please create a redirect: Redirect 301 /.well-known/caldav /caldav";
 	$test['fatal']=false;
 
@@ -320,7 +371,7 @@ function test_system(){
 	
 	$headers = @get_headers($url.'/carddav');	
 	$test['name']='CardDAV alias';
-	$test['pass']=$headers && strpos($headers[0], '401')!==false;
+	$test['pass']=$headers && (strpos($headers[0], '401')!==false || strpos($headers[0], '200')!==false);;
 	$test['feedback']="Note: The alias /carddav was not detected. Please create: Alias /carddav /groupoffice/modules/carddav/addressbook.php.";
 	$test['fatal']=false;
 
@@ -329,7 +380,7 @@ function test_system(){
 	
 	$headers = @get_headers($url.'/.well-known/carddav');	
 	$test['name']='CardDAV autodiscovery';
-	$test['pass']=$headers && strpos($headers[0], '301')!==false;
+	$test['pass']=$headers && (strpos($headers[0], '301')!==false || strpos($headers[0], '200')!==false);
 	$test['feedback']="Note: The redirect /.well-known/carddav was not detected. Please create a redirect: Redirect 301 /.well-known/carddav /carddav";
 	$test['fatal']=false;
 
@@ -340,11 +391,29 @@ function test_system(){
 	
 //	var_dump($headers);
 	$test['name']='Microsoft-Server-ActiveSync alias';
-	$test['pass']=$headers && strpos($headers[0], '401')!==false;
-	$test['feedback']="Note: The alias /Microsft-Server-ActiveSync was not detected. Please create: Alias /Microsft-Server-ActiveSync /groupoffice/modules/z-push21/index.php.";
+	$test['pass']=$headers && (strpos($headers[0], '401')!==false || strpos($headers[0], '200')!==false);
+	$test['feedback']="Note: The alias /Microsoft-Server-ActiveSync was not detected. Please create: Alias /Microsoft-Server-ActiveSync /groupoffice/modules/z-push21/index.php.";
 	$test['fatal']=false;
 
 	$tests[]=$test;	
+	
+	
+	
+	$test['name']='Shared Memory Functions';
+	$test['pass']= function_exists('sem_get') && function_exists('shm_attach') && function_exists('sem_acquire') && function_exists('shm_get_var');
+	$test['feedback']= "InterProcessData::InitSharedMem(): PHP libraries for the use shared memory are not available. Z-push will work unreliably!";
+	$test['fatal']=false;
+
+	$tests[]=$test;
+	
+	
+	$test['name']='Process Control Extensions';
+	$test['pass']= function_exists('posix_getuid');
+	$test['feedback']= "Process Control Extensions PHP library not avaialble. Z-push will work unreliably!";
+	$test['fatal']=false;
+
+	$tests[]=$test;
+	
 	
 	
 	
@@ -412,16 +481,21 @@ function output_system_test(){
 	
 	$fatal = false;
 	
-	
 	foreach($tests as $test)
 	{
+		echo '<p>'.$test['name'].': ';
 		if(!$test['pass'])
 		{
-			echo '<p style="color:red">'.$test['feedback'].'</p>';
+			echo '<span style="color:red">'.$test['feedback'].'</span>';
 			
 			if($test['fatal'])
 				$fatal=true;
+		}else
+		{
+			echo '<span style="color:green">OK</span>';
 		}
+		
+		echo '</p>';
 	}	
 
 	if($fatal)

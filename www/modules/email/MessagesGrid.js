@@ -55,6 +55,13 @@ GO.email.MessagesGrid = function(config){
 				id:'from',
 				width:200
 			},{
+				header: GO.email.lang.to,
+				dataIndex: 'to',
+				renderer:this.renderNorthMessageRow,
+				id:'to',
+				width:200,
+				hidden: true
+			},{
 				header: GO.email.lang.subject,
 				dataIndex: 'subject',
 				renderer:this.renderNorthMessageRow,
@@ -192,6 +199,7 @@ GO.email.MessagesGrid = function(config){
 			fields: ['value', 'text'],
 			data : [
 			['any', GO.email.lang.anyField],
+			['fts', GO.email.lang.fts],
 			['from', GO.email.lang.searchFrom],
 			['subject', GO.email.lang.subject],
 			['to', GO.email.lang.searchTo],
@@ -249,6 +257,10 @@ GO.email.MessagesGrid = function(config){
 	this.searchType.on('select', function(combo, record)
 	{
 		GO.email.search_type = record.data.value;
+		
+		if(localStorage){
+			localStorage.email_search_type = GO.email.search_type;
+		}
 
 		if(this.searchField.getValue())
 		{
@@ -327,12 +339,15 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 	},
 
 	renderMessage : function(value, p, record){
+		
+		var deletedCls = record.data.deleted ? 'ml-deleted' : '';
+		
 		if(record.data['seen']=='0')
 		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-unseen-from">{0}</div><div class="ml-unseen-subject">{1}</div>', value, record.data['subject']);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-unseen-from '+deletedCls+'">{0}</div><div class="ml-unseen-subject '+deletedCls+'">{1}</div>', value, record.data['subject']);
 		}else
 		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-seen-from">{0}</div><div class="ml-seen-subject">{1}</div>', value, record.data['subject']);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-seen-from '+deletedCls+'">{0}</div><div class="ml-seen-subject '+deletedCls+'">{1}</div>', value, record.data['subject']);
 		}
 	},
 

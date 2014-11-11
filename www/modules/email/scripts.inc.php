@@ -83,11 +83,13 @@ if(isset($_GET['mail_to']))
 	<?php
 }
 
-$email_show_cc = \GO::config()->get_setting('email_show_cc', \GO::user()->id);
-$email_show_bcc = \GO::config()->get_setting('email_show_bcc', \GO::user()->id);
 
-$GO_SCRIPTS_JS .='GO.email.showCCfield="'.$email_show_cc.'";'
-		. 'GO.email.showBCCfield="'.$email_show_bcc.'";';
+$email_show_cc = GO::config()->get_setting('email_show_cc', GO::user()->id,1);
+$email_show_bcc = GO::config()->get_setting('email_show_bcc', GO::user()->id,0);
+
+
+$GO_SCRIPTS_JS .='GO.email.showCCfield='.$email_show_cc.';'
+		. 'GO.email.showBCCfield='.$email_show_bcc.';';
 
 $GO_SCRIPTS_JS .= "GO.email.disableAliases=";
 
@@ -95,6 +97,3 @@ if(\GO::config()->email_disable_aliases)
 	$GO_SCRIPTS_JS .= 'true;';
 else
 	$GO_SCRIPTS_JS .= 'false;';
-
-
-?>

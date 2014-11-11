@@ -78,7 +78,7 @@ class AbstractModelController extends AbstractController {
 
 				//If the model has it's own ACL id then we return the newly created ACL id.
 				//The model automatically creates it.
-				if ($model->aclField() && !$model->joinAclField) {
+				if ($model->aclField() && !$model->isJoinedAclField) {
 					$response[$model->aclField()] = $model->{$model->aclField()};
 				}
 
@@ -496,7 +496,15 @@ class AbstractModelController extends AbstractController {
 		$response['data']['workflow']=array();
 			
 		if($model->hasLinks()){
-			$workflowModelstmnt = \GO\Workflow\Model\Model::model()->findByAttributes(array("model_id"=>$model->id,"model_type_id"=>$model->modelTypeId()));
+
+			$workflowModelstmnt = \GO\Workflow\Model\Model::model()->find(
+				\GO\Base\Db\FindParams::newInstance()
+					->criteria(\GO\Base\Db\FindCriteria::newInstance()
+						->addCondition('model_id',$model->id)
+						->addCondition('model_type_id',$model->modelTypeId())
+					)
+					->order('ctime','DESC')
+			);
 
 			while($workflowModel = $workflowModelstmnt->fetch()){
 
@@ -596,6 +604,7 @@ class AbstractModelController extends AbstractController {
 		//fields for display.
 
 		$findParams = \GO\Base\Db\FindParams::newInstance()
+						->joinRelation('category')
 						->order(array('category.sort_index','t.sort_index'),array('ASC','ASC'));
 		$findParams->getCriteria()
 						->addCondition('extends_model', $model->customfieldsRecord->extendsModel(),'=','category');
@@ -640,7 +649,7 @@ class AbstractModelController extends AbstractController {
 		if (!empty(\GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
 
 			$fc = new \GO\Files\Controller\FolderController();
-			$listResponse = $fc->run("list",array('skip_fs_sync'=>true, 'folder_id'=>$response['data']['files_folder_id'], "limit"=>20,"sort"=>'mtime',"dir"=>'DESC'),false. false);
+			$listResponse = $fc->run("list",array('skip_fs_sync'=>true, 'folder_id'=>$response['data']['files_folder_id'], "limit"=>20,"sort"=>'name',"dir"=>'ASC'),false. false);
 			$response['data']['files'] = $listResponse['results'];
 		} else {
 			$response['data']['files'] = array();
@@ -1211,6 +1220,11 @@ class AbstractModelController extends AbstractController {
 		return $field->columnName();
 	}
 	
+	protected static function sortByLabel($attrA,$attrB) {
+		if ($attrA['label'] == $attrB['label'])
+			return 0;		
+		return $attrA['label']>$attrB['label'] ? 1 : -1;
+	}
 	
 	protected function actionAttributes($params){
 		if(!isset($params['exclude']))
@@ -1241,10 +1255,10 @@ class AbstractModelController extends AbstractController {
 							&& (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))
 							&& !in_array($name,$params['exclude_attributes'])
 				)
-				$unsorted[$model->getAttributeLabel($name)]=array('name'=>'t.'.$name,'label'=>$model->getAttributeLabel($name),'gotype'=>$attr['gotype']);				
+				$unsorted[$name]=array('name'=>'t.'.$name,'label'=>$model->getAttributeLabel($name),'gotype'=>$attr['gotype']);				
 		}
-		
-		ksort($unsorted);
+				
+		usort($unsorted,array('\\GO\\Base\\Controller\\AbstractModelController','sortByLabel'));
 		foreach($unsorted as $a){
 			$attributes[$a['name']]=$a;
 		}
@@ -1258,7 +1272,15 @@ class AbstractModelController extends AbstractController {
 			$customAttributes = array();
 			$columns = $model->customfieldsRecord->getColumns();
 			foreach($columns as $name=>$attr){
+				try {
+					$cfModel = \GO\Customfields\Model\Field::model()->findByPk(substr($name,4));
+					$cfAllowed = $cfModel!==false;
+				} catch (\GO\Base\Exception\AccessDenied $e) {
+					$cfAllowed = false;
+				}
+
 				if($name != 'model_id'
+								&& !empty($cfAllowed)
 								&& isset($attr['customfield'])
 								&& !in_array($name, $params['exclude'])
 								&& (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))

@@ -203,12 +203,6 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
                  function (v) { this.uploader.bind(v, eval("this." + v), this); }, this
                 );
         this.uploader.init();
-				
-				
-				//auto start after adding files
-				this.uploader.bind('FilesAdded', function(up, files) {
-						up.start();
-				});
     },
     remove_file: function (id) {
         var fileObj = this.uploader.getFile( id );
@@ -316,11 +310,23 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
     FilesAdded: function(uploader, files) {
         this.getTopToolbar().getComponent('delete').setDisabled(false);
         this.getTopToolbar().getComponent('start').setDisabled(false);
-        Ext.each(files, 
-            function (v) {
-                this.update_store( v );
-            }, this
-        );
+		
+        Ext.each(files, function (v) {
+            this.update_store( v );
+        }, this);
+			
+		var fileSize = 0,
+			max = uploader.settings.max_file_size;
+		for(var i=0; i<files.length; i++) {
+			fileSize += files[i].size;
+		}
+		
+		// auto start after uploading files
+		setTimeout(function(){
+			if(fileSize < max) {
+				uploader.start();
+			}
+		},10);
     },
     FilesRemoved: function(uploader, files) {
         Ext.each(files, 
@@ -348,6 +354,15 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
 
     },
     QueueChanged: function(uploader) {
+		uploader.max_file_size = this.max_file_size;
+		var fileSize = 0;
+		for(var i=0; i<uploader.files.length; i++) {
+			
+			fileSize += uploader.files[i].size;
+			if(fileSize > this.max_file_size)
+				uploader.files[i].status=4; //4 = "Too Big"
+		}
+		
     },
     Refresh: function(uploader) {
         Ext.each(uploader.files, 

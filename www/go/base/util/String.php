@@ -642,7 +642,7 @@ END;
 	 * @return	string
 	 */
 	public static function get_email_validation_regex() {
-		return "/^[a-z0-9\._\-+\&]+@[a-z0-9\.\-_]+\.[a-z]{2,6}$/i";
+		return "/^[a-z0-9\._\-+\&]+@[a-z0-9\.\-_]+\.[a-z]{2,100}$/i";
 	}
 
 
@@ -1180,6 +1180,7 @@ END;
 	 */
 	public static function filterXSS($data)
 	{
+		//echo $data; exit();
 		// Fix &entity\n;
 		$data = str_replace(array('&amp;','&lt;','&gt;'), array('&amp;amp;','&amp;lt;','&amp;gt;'), $data);
 		$data = preg_replace('/(&#*\w+)[\x00-\x20]+;/u', '$1;', $data);
@@ -1195,8 +1196,8 @@ END;
 				
 //
 //		// Only works in IE: <span style="width: expression(alert('Ping!'));"></span>
-		$data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?expression[\x00-\x20]*\([^>]*+>#i', '$1>', $data);
-		$data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?behaviour[\x00-\x20]*\([^>]*+>#i', '$1>', $data);
+//	$data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?expression[\x00-\x20]*\([^>]*+>#i', '', $data);
+//	$data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?behaviour[\x00-\x20]*\([^>]*+>#i', '', $data);
 
 		//the next line removed valid stuff from the body
 		//$data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*+>#iu', '$1>', $data);

@@ -133,3 +133,5 @@ $l['show_addresslists_panel']= 'Toon addresslijsten paneel';
 $l['enabled_cf_tabs']= 'Ingeschakelde extra velden';
 
 $l['cmdFormLabelHolidaySet'] = 'Vakantiedagen';
+
+$l['noReminders'] = 'Maak geen herinneringen voor mij aan';

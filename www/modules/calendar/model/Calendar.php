@@ -1,5 +1,7 @@
 <?php
 
+namespace GO\Calendar\Model;
+
 /**
  * Copyright Intermesh
  *
@@ -31,11 +33,6 @@
  * @property boolean $enable_ics_import
  * @property string $ics_import_url
  */
-
-
-namespace GO\Calendar\Model;
-
-
 class Calendar extends \GO\Base\Model\AbstractUserDefaultModel {
 	
 	/**
@@ -256,6 +253,16 @@ class Calendar extends \GO\Base\Model\AbstractUserDefaultModel {
 			$string .= "END:VCALENDAR\r\n";
 			
 			return $string;
+	}
+	
+	public function getEventsForPeriod($start, $end) {
+		return \GO\Calendar\Model\Event::model()->findCalculatedForPeriod(
+			\GO\Base\Db\FindParams::newInstance()->criteria(
+				\GO\Base\Db\FindCriteria::newInstance()->addCondition('calendar_id', $this->id)
+			)->select(),
+			$start, 
+			$end
+		);
 	}
 	
 	/**

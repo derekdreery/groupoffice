@@ -1,6 +1,6 @@
 GO.customfields.nonGridTypes = ['GO\\Customfields\\Customfieldtype\\Textarea','GO\\Customfields\\Customfieldtype\\Html', 'GO\\Customfields\\Customfieldtype\\Header', 'GO\\Customfields\\Customfieldtype\\Infotext'];
 
-GO.customfields.addColumns=function(link_type, fields){	
+GO.customfields.addColumns=function(link_type, fields){
 	if(GO.customfields.columns[link_type])
 	{
 		for(var i=0;i<GO.customfields.columns[link_type].length;i++)
@@ -12,11 +12,11 @@ GO.customfields.addColumns=function(link_type, fields){
                                         fields.columns.push(GO.customfields.columns[link_type][i]);
                                 }
 			}
-		}		
-	}	
+		}
+	}
 }
 
-GO.customfields.getMatchingFieldNamesMap = function(sourceLinkId, targetLinkId){	
+GO.customfields.getMatchingFieldNamesMap = function(sourceLinkId, targetLinkId){
 
 	var sourceFields={};
 	for(var i=0;i<GO.customfields.types[sourceLinkId].panels.length;i++)
@@ -43,7 +43,7 @@ GO.customfields.getMatchingFieldNamesMap = function(sourceLinkId, targetLinkId){
 GO.customfields.getFormField = function(customfield, config){
 
 	config = config || {};
-	
+
 	if(!GO.customfields.dataTypes[customfield.datatype])
 		return false;
 
@@ -53,12 +53,12 @@ GO.customfields.getFormField = function(customfield, config){
 
 
 GO.customfields.MainPanel = function(config){
-	
+
 	if(!config)
 	{
 		config = {};
 	}
-	
+
 	var northPanel = new Ext.Panel({
 		region: 'north',
 		cls:'go-form-panel',
@@ -68,39 +68,39 @@ GO.customfields.MainPanel = function(config){
 		split: true,
 		height:55,
 		resizable:false
-		
+
 	});
-	
+
 	this.typePanel = new GO.customfields.TypePanel({
 		region:'center',
 		border: true
 	});
 
 	var navData = [];
-	
+
 	for(var link_type in GO.customfields.types)
 	{
 		navData.push([link_type, GO.customfields.types[link_type].name]);
 	}
-    
+
 	var navStore = new Ext.data.SimpleStore({
 		fields: ['link_type', 'name'],
 		data : navData
 	});
-	
+
 	this.navMenu= new GO.grid.SimpleSelectList({
-		store: navStore		
+		store: navStore
 	});
-	
-	
-	this.navMenu.on('click', function(dataview, index){	
-		
+
+
+	this.navMenu.on('click', function(dataview, index){
+
 		var link_type = dataview.store.data.items[index].data.link_type;
 		this.typePanel.setLinkType(link_type);
 		this.typePanel.store.load();
-			
+
 	}, this);
-	
+
 	this.navPanel = new Ext.Panel({
 		region:'west',
 		title:GO.lang.menu,
@@ -117,7 +117,7 @@ GO.customfields.MainPanel = function(config){
 	northPanel,
 	this.navPanel,
 	this.typePanel
-	];	
+	];
 
 	config.tbar=new Ext.Toolbar({
 		cls:'go-head-tb',
@@ -147,10 +147,10 @@ GO.customfields.MainPanel = function(config){
 			scope: this
 		})]
 	});
-	
+
 	config.layout='border';
 	GO.customfields.MainPanel.superclass.constructor.call(this, config);
-	
+
 };
 
 
@@ -177,7 +177,7 @@ GO.customfields.categoriesStore = new GO.data.JsonStore({
 });
 
 
-GO.customfields.displayPanelTemplate = 
+GO.customfields.displayPanelTemplate =
 	'<tpl if="customfields.length">'+
 	'<tpl for="customfields">'+
 '{[this.collapsibleSectionHeader(values.name, "cf-"+parent.panelId+"-"+values.id, "cf-"+values.id)]}'+
@@ -202,6 +202,7 @@ GO.customfields.displayPanelTemplate =
 
 GO.customfields.renderType = function(data) {
 	switch(data.datatype) {
+		case 'GO\\Customfields\\Customfieldtype\\FunctionField':
 		case 'GO\\Customfields\\Customfieldtype\\Number':
 			return '<td style="text-align: right;">'+data.value+'</td>';
 		case 'GO\\Files\\Customfieldtype\\File':
@@ -237,7 +238,7 @@ GO.customfields.displayPanelBlocksTemplate =
 /*
  * This will add the module to the main tabpanel filled with all the modules
  */
- 
+
 if(GO.settings.modules.customfields.write_permission)
 {
 	GO.moduleManager.addModule('customfields', GO.customfields.MainPanel, {

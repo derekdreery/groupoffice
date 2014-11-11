@@ -40,4 +40,4 @@ if (empty($args['r'])) {
 	unset($args['u']);
 }
 
-\GO::router()->runController();
+\GO::router()->runController($args);

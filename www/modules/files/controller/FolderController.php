@@ -204,11 +204,11 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 				\GO\Files\Model\SharedRootFolder::model()->rebuildCache(\GO::user()->id, true);
 			}else
 			{
-				
-			
-				$syncFolder = \GO\Files\Model\Folder::model()->findByPk($params['sync_folder_id']);
-				if($syncFolder)
-					$syncFolder->syncFilesystem();
+				if(empty(GO::config()->files_disable_filesystem_sync)){
+					$syncFolder = \GO\Files\Model\Folder::model()->findByPk($params['sync_folder_id']);
+					if($syncFolder)
+						$syncFolder->syncFilesystem();
+				}
 			}
 		}
 
@@ -259,7 +259,7 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 					
 					$response[] = $node;
 
-					if (\GO::modules()->addressbook) {
+					if (GO::config()->files_show_addressbooks && GO::modules()->addressbook) {
 						$contactsFolder = \GO\Files\Model\Folder::model()->findByPath('addressbook');
 
 						if ($contactsFolder) {
@@ -269,8 +269,9 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 						}
 					}
 
-					if (\GO::modules()->projects) {
-						$projectsFolder = \GO\Files\Model\Folder::model()->findByPath('projects');
+
+					if (GO::config()->files_show_projects && GO::modules()->projects) {
+						$projectsFolder =  \GO\Files\Model\Folder::model()->findByPath('projects');
 
 						if ($projectsFolder) {
 							$node = $this->_folderToNode($projectsFolder, $expandFolderIds, false, $showFiles);
@@ -279,7 +280,8 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 						}
 					}
 					
-					if (\GO::modules()->projects2) {
+
+					if (GO::config()->files_show_projects && GO::modules()->projects2) {
 						$projectsFolder = \GO\Files\Model\Folder::model()->findByPath('projects2');
 
 						if ($projectsFolder) {
@@ -667,7 +669,7 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 
 		$response['permission_level']=$folder->permissionLevel;//$folder->readonly ? \GO\Base\Model\Acl::READ_PERMISSION : $folder->permissionLevel;
 
-		if(empty($params['skip_fs_sync']))
+		if(empty($params['skip_fs_sync']) && empty(GO::config()->files_disable_filesystem_sync))
 			$folder->checkFsSync();
 
 		//useful information for the view.
@@ -681,8 +683,6 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 			$response['thumbs']=0;
 
 		$response['parent_id'] = $folder->parent_id;
-		$response['disk_usage']=round(\GO::user()->disk_usage/1024/1024,2);
-		$response['disk_quota']=\GO::user()->disk_quota;
 
 		//locked state
 		$response['lock_state']=!empty($folder->apply_state);
@@ -761,6 +761,7 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 
 			$store->resetResults();
 
+			$store->getColumnModel()->formatColumn('size', '"-"',array(),'size');
 			$store->getColumnModel()->formatColumn('type', '',array(),'extension');
 			$store->getColumnModel()->formatColumn('locked', '$model->isLocked()');
 			$store->getColumnModel()->formatColumn('locked_user_id', '$model->locked_user_id');
@@ -787,6 +788,10 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 			$record = $folder->files(\GO\Base\Db\FindParams::newInstance()->single()->select('count(*) as total'));
 			$response['total']+=$record->total;
 		}
+		
+		
+		$response['disk_usage']=round(\GO::user()->disk_usage/1024/1024,2);
+		$response['disk_quota']=\GO::user()->disk_quota;
 
 		return $response;
 	}
@@ -1158,6 +1163,8 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 
 	protected function actionCompress($params) {
 
+		ini_set('max_execution_time', 600);
+		ini_set('memory_limit', '512M');
 		$sources = json_decode($params['compress_sources'], true);
 
 
@@ -1205,8 +1212,8 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 					
 					$folder = \GO\Base\Fs\Folder::tempFolder(uniqid());
 					
-					if(class_exists("ZipArchive")){
-						$zip = new ZipArchive;
+					if(class_exists("\ZipArchive")){
+						$zip = new \ZipArchive;
 						$zip->open($file->path());
 						$zip->extractTo($folder->path());									
 						$this->_convertZipEncoding($folder);

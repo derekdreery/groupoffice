@@ -173,9 +173,14 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 				xtype: 'textfield',
 				fieldLabel: 'URL',
 				anchor: '100%',
-				vtype: 'url',
+//				vtype: 'url',
 				value:'http://',
 				allowBlank: false,
+				validator: function(value) {
+					// The following allows also URLs like 'https://wiki:username@wiki.mydomain.org'
+					var urlRegexp = /(((^https?)|(^ftp)):\/\/(([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)|([\-\w]+\:)+([\-\w]+\@)+([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)/i;
+					return urlRegexp.test(value);
+				},
 				listeners:{
 					change:function(combo){
 						this.el.mask(GO.lang.waitMsgLoad);

@@ -26,6 +26,7 @@ $l["cmdFieldsetSelectAddressbook"]= 'Select address book';
 $l["cmdFieldsetPersonalDetails"]= 'Personal details';
 $l["cmdFieldsetAddress"]= 'Address';
 $l["cmdFieldsetContact"]= 'Contact details';
+$l["cmdFieldsetCompany"]= 'Company details';
 $l["cmdFieldsetWork"]= 'Work';
 $l["cmdPanelContact"]= 'Contact details';
 $l["cmdPanelComments"]= 'Comments';
@@ -138,17 +139,17 @@ $l["companyAddressbook_id"] = "Addressbook";
 $l["companyName"] = "Name";
 $l["companyName2"] = "Name 2";
 $l["companyAddress"] = "Address";
-$l["companyAddress_no"] = "Address Number";
-$l["companyZip"] = "Zipcode";
+$l["companyAddress_no"] = "Address 2";
+$l["companyZip"] = "ZIP/Postal";
 $l["companyCity"] = "City";
 $l["companyState"] = "State";
 $l["companyCountry"] = "Country";
 $l["companyPost_address"] = "Post Address";
-$l["companyPost_address_no"] = "Post Address Number";
-$l["companyPost_city"] = "Post City";
+$l["companyPost_address_no"] = "Post Address 2";
+$l["companyPost_city"] = " Post City";
 $l["companyPost_state"] = "Post State";
 $l["companyPost_country"] = "Post Country";
-$l["companyPost_zip"] = "Post Zipcode";
+$l["companyPost_zip"] = "Post ZIP/Postal";
 $l["companyPhone"] = "Phone";
 $l["companyFax"] = "Fax";
 $l["companyEmail"] = "E-mail";
@@ -311,4 +312,11 @@ $l['setCurrentTemplateAsDefaultEAccount']='Set current template as default for t
 $l['callOnSkype'] = 'Call on Skype';
 
 $l['userDefaultTemplate'] = 'User default template';
+
+$l['exportContacts'] = 'Personal info';
+$l['exportContactsWithCompanies'] = 'Personal and company info';
+
+$l['privateAddress'] = 'Private address';
 $l['exportContactsWithCompanies'] = 'Contacts with companies';
+
+$l['mustBeSameAddressbook'] = 'The company of the contact must be in the same address book as the contact. Contact not saved.';

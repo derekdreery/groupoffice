@@ -12,3 +12,7 @@ $l['categories']='Categorías';
 $lang['link_type'][4]=$l['note']='Nota';
 $l['notes']='Notas';
 $l['general'] = 'General';
+
+$l['incomplete_delete']='No tienes permisos para eliminar todas las notas seleccionadas';
+$l['multipleCategoriesSelected']='Varios libros de notas seleccionados';
+$l["category_id"]="Categoría";

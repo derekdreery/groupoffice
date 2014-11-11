@@ -13,7 +13,7 @@
 GO.summary.portlets=[];
 
 GO.mainLayout.onReady(function(){
-	var rssTabPanel = new Ext.TabPanel({});
+	var rssTabPanel = new Ext.TabPanel({doLayoutOnTabChange:true});
 	
 	GO.summary.portlets['portlet-rss-reader']=new GO.summary.Portlet({
 		id: 'portlet-rss-reader',

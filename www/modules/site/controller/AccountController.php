@@ -7,7 +7,34 @@ namespace GO\Site\Controller;
 class AccountController extends \GO\Site\Components\Controller {
 	
 	protected function allowGuests() {
-		return array('register','login','lostpassword','recoverpassword','resetpassword');
+		return array('register','login','lostpassword','recoverpassword','resetpassword','captcha');
+	}
+	
+	public function actionCaptcha() {
+		require_once dirname(__FILE__) . '/../widget/secureimage/assets/securimage.php';
+
+		$img = new \Securimage();
+
+		// You can customize the image by making changes below, some examples are included - remove the "//" to uncomment
+
+		//$img->ttf_file        = dirname(__FILE__) . '/../widget/secureimage/assets/AHGBold.ttf';
+		//$img->captcha_type    = \Securimage::SI_CAPTCHA_WORDS; // show a simple math problem instead of text
+		//$img->case_sensitive  = true;                              // true to use case sensitve codes - not recommended
+		//$img->image_height    = 90;                                // height in pixels of the image
+		//$img->image_width     = $img->image_height * M_E *1.5;          // a good formula for image size based on the height
+		//$img->perturbation    = .75;                               // 1.0 = high distortion, higher numbers = more distortion
+		$img->image_bg_color  = new \Securimage_Color("#f1f3f4");   // image background color
+		//$img->text_color      = new \Securimage_Color("#000");   // captcha text color
+		//$img->num_lines       = 8;                                 // how many lines to draw over the image
+		//$img->line_color      = new Securimage_Color("#0000CC");   // color of lines over the image
+		//$img->image_type      = SI_IMAGE_JPEG;                     // render as a jpeg image
+		//$img->signature_color = new Securimage_Color(rand(0, 64),
+		//                                             rand(64, 128),
+		//                                             rand(128, 255));  // random signature color
+		if (!empty($_GET['namespace']))
+			$img->setNamespace($_GET['namespace']);
+
+		$img->show();
 	}
 	
 	/**
@@ -22,16 +49,19 @@ class AccountController extends \GO\Site\Components\Controller {
 		$contact = new \GO\Addressbook\Model\Contact();
 				
 //		$user->setValidationRule('passwordConfirm', 'required', true);
-		$company = new \GO\Addressbook\Model\Company();		
+		//$company = new \GO\Addressbook\Model\Company();		
 		
 		//set additional required fields
-		$company->setValidationRule('address', 'required', true);
-		$company->setValidationRule('zip', 'required', true);
-		$company->setValidationRule('city', 'required', true);
-		$company->setValidationRule('country', 'required', true);
+//		$company->setValidationRule('address', 'required', true);
+//		$company->setValidationRule('zip', 'required', true);
+//		$company->setValidationRule('city', 'required', true);
+//		$company->setValidationRule('country', 'required', true);
+		
+		$correctCaptcha=true;
 		
 		if(\GO\Base\Util\Http::isPostRequest())
 		{
+			$correctCaptcha = \GO\Site\Widget\Secureimage\Secure::instance()->check($_POST['captcha_code']);
 			//if username is deleted from form then use the e-mail adres as username
 			if(!isset($_POST['User']['username']))
 				$_POST['User']['username']=$_POST['User']['email'];
@@ -41,14 +71,14 @@ class AccountController extends \GO\Site\Components\Controller {
 			
 			$contact->setAttributes($_POST['Contact']);
 			
-			$company->setAttributes($_POST['Company']);
+			//$company->setAttributes($_POST['Company']);
 		
-			if(!empty($_POST['Company']['postAddressIsEqual']))
-				$company->setPostAddressFromVisitAddress();
+//			if(!empty($_POST['Company']['postAddressIsEqual']))
+//				$company->setPostAddressFromVisitAddress();
 			
-			$contact->addressbook_id=$company->addressbook_id=1;//just for validating
+			$contact->addressbook_id=1;//just for validating
 			
-			if($user->validate() && $contact->validate() && $company->validate())
+			if($user->validate() && $contact->validate() && $correctCaptcha)
 			{				
 				
 				\GO::setIgnoreAclPermissions(); //allow guest to create user
@@ -56,10 +86,10 @@ class AccountController extends \GO\Site\Components\Controller {
 				if($user->save())
 				{
 					$contact = $user->createContact();
-					$company->addressbook_id=$contact->addressbook_id;
-					$company->save();
+//					$company->addressbook_id=$contact->addressbook_id;
+//					$company->save();
 					
-					$contact->company_id=$company->id;
+					//$contact->company_id=$company->id;
 					$contact->setAttributes($_POST['Contact']);					
 					$contact->save();
 
@@ -82,7 +112,7 @@ class AccountController extends \GO\Site\Components\Controller {
 		}
 		
 		
-		echo $this->render('register', array('user'=>$user,'contact'=>$contact,'company'=>$company));
+		echo $this->render('register', array('user'=>$user,'contact'=>$contact,'correctCaptcha'=>$correctCaptcha));
 	}
 	
 	/**
@@ -96,7 +126,7 @@ class AccountController extends \GO\Site\Components\Controller {
 			$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $_POST['email']);
 			
 			if($user == null){
-				\Site::notifier()->setMessage('error', \GO::t("invaliduser","sites"));
+				\Site::notifier()->setMessage('error', \GO::t("invaliduser","site"));
 			}else{
 				$siteTitle = \Site::model()->name;
 				$url = \Site::request()->getHostInfo(). \Site::urlManager()->createUrl('/site/account/resetpassword', array(), false);
@@ -115,12 +145,12 @@ class AccountController extends \GO\Site\Components\Controller {
 	public function actionResetPassword()
 	{
 		if(empty($_GET['email']))
-			throw new \Exception(\GO::t("noemail","sites"));
+			throw new \Exception(\GO::t("noemail","site"));
 
 		$user = \GO\Base\Model\User::model()->findSingleByAttribute('email', $_GET['email']);
 
 		if(!$user)
-			throw new \Exception(\GO::t("invaliduser","sites"));
+			throw new \Exception(\GO::t("invaliduser","site"));
 
 		if(isset($_GET['usertoken']) && $_GET['usertoken'] == $user->getSecurityToken())
 		{
@@ -132,11 +162,11 @@ class AccountController extends \GO\Site\Components\Controller {
 				\GO::$ignoreAclPermissions = true; 
 				
 				if($user->validate() && $user->save())
-					\Site::notifier()->setMessage('success',\GO::t('resetPasswordSuccess', 'sites'));
+					\Site::notifier()->setMessage('success',\GO::t('resetPasswordSuccess', 'site'));
 			}
 		}
 		else
-			\Site::notifier()->setMessage('error',\GO::t("invalidusertoken","sites"));
+			\Site::notifier()->setMessage('error',\GO::t("invalidusertoken","site"));
 				
 		$user->password = null;
 		echo $this->render('resetPassword', array('user'=>$user));

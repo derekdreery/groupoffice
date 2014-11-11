@@ -153,8 +153,8 @@ class Site {
 			self::$_site=\GO\Site\Model\Site::model()->findByPk($site_id,false,true); // Find the website model from its id
 		}else{
 		
-			if(isset($_GET['site_id']))
-				GO::session()->values['site_id'] = $_GET['site_id'];
+		if(isset($_GET['site_id']))
+			GO::session()->values['site_id'] = $_GET['site_id'];
 
 			if(isset(GO::session()->values['site_id']))
 				self::$_site=\GO\Site\Model\Site::model()->findByPk(GO::session()->values['site_id'],false,true); // Find the website model from its id

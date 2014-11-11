@@ -255,3 +255,6 @@ $l['allFolders']= 'Alle mapper';
 $l['defaultEmailTemplate']='Standard e-postmal';
 $l['useAuth']="Bruk autentisering";
 $l['linkMustHavePermissionToWrite']= 'Du har ikke SKRIVE-rettigheter til dette objektet, derfor kan du ikke lenke ut denne e-posten dit.';
+
+$l['sortAddressesByMailTime']= 'Når du søker etter e-postmottagere: Vis adressene etter dato for når du sist sendte e-post til dem. (Modulen Addressbok påkrevet)';
+$l['permissionDelegated']= 'Kun lese og delegert';

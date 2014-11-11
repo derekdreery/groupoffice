@@ -45,7 +45,7 @@ GO.dialog.PasswordDialog = function(config){
 	GO.dialog.PasswordDialog.superclass.constructor.call(this, {
 		layout: 'fit',				
 		width:400,
-		height:120,
+		height:140,
 		resizable: false,
 		modal:true,
 		closeAction:'hide',

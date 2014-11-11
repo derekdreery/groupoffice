@@ -384,10 +384,12 @@ $updates['201401071347'][]="ALTER TABLE `go_users` ADD COLUMN `auto_punctuation`
 
 $updates['201404171400'][]="UPDATE `go_acl` set `level`=50 WHERE `level` > 10 AND `acl_id` IN (SELECT `acl_id` FROM `go_modules`);";
 
+$updates['201409231341'][]="ALTER TABLE `go_settings` CHANGE COLUMN `value` `value` LONGTEXT NULL DEFAULT NULL;";
 
 $updates['201404171400'][]="ALTER TABLE `go_users` ADD COLUMN `disk_quota` INT NULL AFTER `files_folder_id`;";
 $updates['201404171400'][]="ALTER TABLE `go_users` ADD COLUMN `disk_usage` INT NOT NULL DEFAULT '0' AFTER `files_folder_id`;";
 
+$updates['201409251000'][]="ALTER TABLE `go_settings` CHANGE COLUMN `value` `value` LONGTEXT NULL DEFAULT NULL;";
 
 $updates['201404171400'][]="update `go_model_types` set `model_name` = replace(`model_name`,'_','\\\\');";
 $updates['201404171400'][]="update `go_search_cache` set `model_name` = replace(`model_name`,'_','\\\\');";
@@ -395,3 +397,32 @@ $updates['201404171400'][]="update `go_cron` set `job` = replace(`job`,'_','\\\\
 
 $updates['201404171400'][]="ALTER TABLE `go_cron` ADD `error` TEXT NULL ,
 ADD `autodestroy` BOOLEAN NOT NULL DEFAULT FALSE ;";
+
+$updates['201405221000'][]="ALTER TABLE `go_holidays` ADD `free_day` TINYINT( 1 ) NOT NULL DEFAULT '1';";
+$updates['201405221330'][]="script:15_update_dutch_holidays.php";
+
+$updates['201405281445'][]="ALTER TABLE `go_users` ADD COLUMN `no_reminders` TINYINT(1) NOT NULL DEFAULT '0';";
+
+$updates['201406040910'][] = "CREATE TABLE IF NOT EXISTS `go_saved_exports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `class_name` varchar(255) NOT NULL,
+  `view` varchar(255) NOT NULL,
+  `export_columns` text,
+  `orientation` enum('V','H') NOT NULL DEFAULT 'V',
+  `include_column_names` tinyint(1) NOT NULL DEFAULT '1',
+  `use_db_column_names` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
+
+$updates["201409261000"][]="ALTER TABLE `go_users` CHANGE  `disk_quota`  `disk_quota` BIGINT NULL";
+$updates["201409261000"][]="ALTER TABLE `go_users` CHANGE  `disk_usage`  `disk_usage` BIGINT NOT NULL DEFAULT '0'";
+
+$updates['201409261000'][]="ALTER TABLE `go_settings` CHANGE COLUMN `value` `value` LONGTEXT NULL DEFAULT NULL;";
+
+//Somehow these were missing on some installs so we just attempt to add them again.
+$updates["201410220900"][]="ALTER TABLE `go_users` CHANGE  `disk_quota`  `disk_quota` BIGINT NULL";
+$updates["201410220900"][]="ALTER TABLE `go_users` CHANGE  `disk_usage`  `disk_usage` BIGINT NOT NULL DEFAULT '0'";
+
+$updates['201410220900'][]="ALTER TABLE `go_users` ADD COLUMN `disk_quota` BIGINT NULL";
+$updates['201410220900'][]="ALTER TABLE `go_users` ADD COLUMN `disk_usage` BIGINT NOT NULL DEFAULT '0'";

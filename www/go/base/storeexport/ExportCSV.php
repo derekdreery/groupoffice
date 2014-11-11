@@ -27,12 +27,7 @@ class ExportCSV extends AbstractExport {
 	public static $name = "CSV";
 	public static $useOrientation=false;
 	
-	/**
-	 * Here you can add extra data(lines) that will be parsed after the store data
-	 * 
-	 * @var array 
-	 */
-	private $_lines = false;
+	
 	
 	private function _sendHeaders(){		
 		$file = new \GO\Base\Fs\File($this->title.'.csv');
@@ -84,12 +79,5 @@ class ExportCSV extends AbstractExport {
 		}
 	}
 	
-	/**
-	 * Add extra lines to the end of the document
-	 * 
-	 * @param array $lines key value array
-	 */
-	public function addLines($lines){
-		$this->_lines = $lines;
-	}
+	
 }

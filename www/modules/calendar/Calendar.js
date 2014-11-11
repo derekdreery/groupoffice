@@ -727,7 +727,6 @@ GO.calendar.MainPanel = function(config){
 		menu:new Ext.menu.Menu({
 				items:[{		
 					text: GO.calendar.lang.cmdPrintView,
-					cls: 'x-btn-text',
 					handler: function(){
 
 						var sD = this.getActivePanel().startDate;
@@ -751,13 +750,56 @@ GO.calendar.MainPanel = function(config){
 					scope: this
 				},{		
 					text: GO.calendar.lang.cmdPrintCategoryCount,
-					cls: 'x-btn-text',
 					handler: function(){
 						if(!GO.calendar.printCategoryCountDialog){
 							GO.calendar.printCategoryCountDialog = new GO.calendar.PrintCategoryCountDialog();
 						}	
 
 						GO.calendar.printCategoryCountDialog.show(0,{});
+					},
+					scope: this
+				},'-',
+				{
+					text: GO.lang['strDay'],
+					handler: function () {
+						var urlParams = {
+							calendars: Ext.encode(this.calendars),
+							date: +this.datePicker.getValue()/1000
+						};
+						window.open(GO.url('calendar/report/day',urlParams));
+					},
+					scope: this
+				},
+				{
+					text: GO.calendar.lang['fiveDays'],
+					handler: function () {
+						var urlParams = {
+							calendars: Ext.encode(this.calendars),
+							date: +this.datePicker.getValue()/1000
+						};
+						window.open(GO.url('calendar/report/workweek',urlParams));
+					},
+					scope: this
+				},
+				{
+					text: GO.lang['strWeek'],
+					handler: function () {
+						var urlParams = {
+							calendars: Ext.encode(this.calendars),
+							date: +this.datePicker.getValue()/1000
+						};
+						window.open(GO.url('calendar/report/week',urlParams));
+					},
+					scope: this
+				},
+				{
+					text: GO.lang['strMonth'],
+					handler: function () {
+						var urlParams = {
+							calendars: Ext.encode(this.calendars),
+							date: +this.datePicker.getValue()/1000
+						};
+						window.open(GO.url('calendar/report/month',urlParams));
 					},
 					scope: this
 				}]
@@ -972,12 +1014,15 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			{
 				this.state = Ext.decode(this.state);
 			}
+			
+			
+//			console.log(this.state);
 
 			if(this.state.displayType=='view')
 				this.state.displayType='days';
 
-			if(!this.state.calendars)
-				this.state.calendars=[GO.calendar.defaultCalendar.id];
+//			if(!this.state.calendars)
+			this.state.calendars=[GO.calendar.defaultCalendar.id];
 			
 			this.state.view_id=0;
 			this.state.group_id=1;
@@ -1278,10 +1323,25 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		config.title = '';
 		var record;
 		if(config.view_id){
-			record = this.viewsStore.getById(config.view_id);
+			
+			this.state.displayType="view";
+			this.state.view_id=config.view_id;
+			
+			if(!this.viewsStore.loaded){
+				this.viewsStore.load({
+					callback:function(){
+						this.setDisplay(config);
+					},
+					scope:this
+				});
+				return;
+			} else {
+			
+				record = this.viewsStore.getById(config.view_id);
 
-			config.merge=record.get('merge');
-			config.owncolor=record.get('owncolor');
+				config.merge=record.get('merge');
+				config.owncolor=record.get('owncolor');
+			}
 		}
 
 		if(config.displayType)
@@ -1459,7 +1519,13 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			selectGrid.expand();
 
 			this.resourcesList.getSelectionModel().clearSelections();
+			
+			var sr = selectGrid.getStore().getById(config.view_id);
+			var sr_index = selectGrid.getStore().indexOf(sr);
 
+			selectGrid.getSelectionModel().selectRow(sr_index);
+//			selectGrid.getSelectionModel().selectRecords(rr);
+			
 			clearGrids.push(this.calendarList);
 			if(this.projectCalendarsList)
 				clearGrids.push(this.projectCalendarsList);
@@ -1501,9 +1567,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	{
 		var state = {
 			displayType: this.displayType,
-			days: this.days,
-			calendars:this.calendars
-		}
+			days: this.days
+//			calendars:this.calendars
+		};
+		
+//		console.log(state);
 
 		Ext.state.Manager.set('calendar-state', Ext.encode(state));
 	},

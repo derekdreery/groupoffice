@@ -234,7 +234,6 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 
 		// ADDED EXPUNGE SO THE FOLDER WILL BE UP TO DATE (When moving folders in THUNDERBIRD)
 		$imap->expunge();
-
 		$response['unseen']=array();
 
 		//special folder flags
@@ -317,7 +316,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 						$query,
 						$searchIn);
 
-		$labels = Label::model()->getUserLabels();
+		$labels = Label::model()->getAccountLabels($account->id);
 
 		$response["results"]=array();
 		foreach($messages as $message){
@@ -400,8 +399,8 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 
 		$imap = $account->openImapConnection($params["mailbox"]);
 
-		if (in_array($params['flag'], Imap::$systemFlags)) {
-			$params["flag"] = "\\".$params["flag"];
+		if (in_array(ucfirst($params['flag']), Imap::$systemFlags)) {
+			$params["flag"] = "\\".ucfirst($params["flag"]);
 		}
 
 		$response['success']=$imap->set_message_flag($messages, $params["flag"], !empty($params["clear"]));
@@ -426,13 +425,18 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 			$recipients->addString($params['bcc']);
 
 			foreach ($recipients->getAddresses() as $email => $personal) {
-				$contact = \GO\Addressbook\Model\Contact::model()->findSingleByEmail($email);
-				if ($contact)
-					continue;
+				$contacts = \GO\Addressbook\Model\Contact::model()->findByEmail($email, GO\Base\Db\FindParams::newInstance()->ignoreAcl());
+				foreach($contacts as $contact){
+					
+					if($contact->checkPermissionLevel(Acl::READ_PERMISSION) || $contact->goUser && $contact->goUser->checkPermissionLevel(Acl::READ_PERMISSION)){
+						continue 2;
+					}
+				}
 
 				$company = \GO\Addressbook\Model\Company::model()->findSingleByAttribute('email', $email);
 				if ($company)
 					continue;
+				
 
 				$recipient = \GO\Base\Util\String::split_name($personal);
 				if ($recipient['first_name'] == '' && $recipient['last_name'] == '') {
@@ -860,6 +864,10 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 			$defaultTags = array(
 					'contact:salutation'=>GO::t('default_salutation_unknown')
 			);
+			
+			// Parse the link tag
+			$response['data']['htmlbody'] = \GO\Addressbook\Model\Template::model()->replaceLinkTag($response['data']['htmlbody'], $message);
+			
 			//keep template tags for mailings to addresslists
 			if (empty($params['addresslist_id'])) {
 				//if contact_id is not set but email is check if there's contact info available
@@ -920,9 +928,10 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 	private function _keepHeaders(&$response, $params) {
 		if (!empty($params['keepHeaders'])) {
 			unset(
-							$response['data']['to'],
-							$response['data']['cc'],
-							$response['data']['bcc'],
+							$response['data']['alias_id'],
+							$response['data']['to'], 
+							$response['data']['cc'], 
+							$response['data']['bcc'], 
 							$response['data']['subject']
 //							$response['data']['attachments']
 			);
@@ -989,7 +998,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		}else
 		{
 			$account=false;
-			$message = \GO\Email\Model\SavedMessage::model()->createFromMimeFile($params['path']);
+			$message =  \GO\Email\Model\SavedMessage::model()->createFromMimeFile($params['path'], !empty($params['is_tmp_file']) && $params['is_tmp_file']!='false');
 		}
 
 		return $this->_messageToReplyResponse($params, $message, $account);
@@ -1047,26 +1056,28 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		$recipients = new \GO\Base\Mail\EmailRecipients();
 		$recipients->mergeWith($message->cc)->mergeWith($message->to);
 
-		$alias = $this->_findAliasFromRecipients($account, $recipients, $params['alias_id']);
+		if(empty($params['keepHeaders'])){
+			$alias = $this->_findAliasFromRecipients($account, $recipients, $params['alias_id']);	
+				
+			$response['data']['alias_id']=$alias->id;				
+
+			if (!empty($params['replyAll'])) {
+				$toList = new \GO\Base\Mail\EmailRecipients();
+				$toList->mergeWith($replyTo)
+								->mergeWith($message->to);			
+
+				//remove our own alias from the recipients.		
+				if($toList->count()>1){
+					$toList->removeRecipient($alias->email);
+					$message->cc->removeRecipient($alias->email);
+				}
 
 
-		$response['data']['alias_id']=$alias->id;
-
-		if (!empty($params['replyAll'])) {
-			$toList = new \GO\Base\Mail\EmailRecipients();
-			$toList->mergeWith($replyTo)
-							->mergeWith($message->to);
-
-			//remove our own alias from the recipients.
-			if($toList->count()>1){
-				$toList->removeRecipient($alias->email);
-				$message->cc->removeRecipient($alias->email);
+				$response['data']['to'] = (string) $toList;
+				$response['data']['cc'] = (string) $message->cc;
+			} else {
+				$response['data']['to'] = (string) $replyTo;
 			}
-
-			$response['data']['to'] = (string) $toList;
-			$response['data']['cc'] = (string) $message->cc;
-		} else {
-			$response['data']['to'] = (string) $replyTo;
 		}
 
 		//for saving sent items in actionSend
@@ -1172,7 +1183,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 			$message = \GO\Email\Model\ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 		}else
 		{
-			$message = \GO\Email\Model\SavedMessage::model()->createFromMimeFile($params['path']);
+			$message = \GO\Email\Model\SavedMessage::model()->createFromMimeFile($params['path'], !empty($params['is_tmp_file']) && $params['is_tmp_file']!='false');
 		}
 
 		return $this->_messageToForwardResponse($params, $message);
@@ -1306,8 +1317,13 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 					
 
 					foreach($linkedModels as $linkedModel){
-						$linkedItems .= ', <span class="em-autolink-link" onclick="GO.linkHandlers[\''.  \GO\Base\Util\String::escape_javascript($linkedModel->className()).'\'].call(this, '.
-												$linkedModel->id.');">'.$linkedModel->name.' ('.$linkedModel->localizedName.')</span>';
+
+						
+						$searchModel = \GO\Base\Model\SearchCacheRecord::model()->findByPk(array('model_id'=>$linkedModel->pk, 'model_type_id'=>$linkedModel->modelTypeId()),false,true);
+						if($searchModel){
+							$linkedItems .= ', <span class="em-autolink-link" onclick="GO.linkHandlers[\''.\GO\Base\Util\String::escape_javascript($linkedModel->className()).'\'].call(this, '.
+												$linkedModel->id.');">'.$searchModel->name.' ('.$linkedModel->localizedName.')</span>';
+						}
 					}
 
 					$linkedItems = trim($linkedItems,' ,');
@@ -1316,8 +1332,10 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 										$response['htmlbody'];
 				}
 			}
+			
 		}
-
+		
+		$response['isInSpamFolder']=$this->_getSpamMoveMailboxName($params['uid'],$params['mailbox'],$account->id);
 		$response = $this->_getContactInfo($imapMessage, $params, $response);
 
 		$this->fireEvent('view', array(
@@ -1331,6 +1349,37 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		$response['success'] = true;
 
 		return $response;
+	}
+	
+	
+	protected function _getSpamMoveMailboxName($mailUid,$mailboxName,$accountId) {
+		
+		if (strtolower($mailboxName)=='spam') {
+			//return '<div class="em-spam-move-block">'.\GO::t('thisIsSpam1','email').' <a style="color:blue;" href="javascript:GO.email.moveToInbox(\''.$mailUid.'\','.$accountId.');">'.\GO::t('thisIsSpam2','email').'</a> '.\GO::t('thisIsSpam3','email').'</div>';
+			return 1;
+		} else {
+			//return '<div class="em-spam-move-block">'.\GO::t('thisIsNotSpam1','email').' <a style="color:blue;" href="javascript:GO.email.moveToSpam(\''.$mailUid.'\',\''.$mailboxName.'\','.$accountId.');">'.\GO::t('thisIsNotSpam2','email').'</a> '.\GO::t('thisIsNotSpam3','email').'</div>';
+			return 0;
+		}
+		
+	}
+	
+	
+	protected function actionGet($account_id, $mailbox, $uid, $query=""){
+		return array(
+				'success'=>true, 
+				'data'=>array(
+						'message'=>array(
+								'attributes'=>$this->actionView(array('account_id'=>$account_id, 'mailbox'=>$mailbox, 'uid'=>$uid, 'query'=>$query))
+								)
+						)
+				);
+	}
+	
+	protected function actionDelete(){
+		return array(
+				'success'=>true
+		);
 	}
 
 	private function _getContactInfo(\GO\Email\Model\ImapMessage $imapMessage,$params, $response){
@@ -1526,11 +1575,16 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 
 			while($tag = array_shift($tags)){
 //				if($imapMessage->account->id == $tag['account_id']){
-					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id'],false, true);
-					if($linkModel && !$linkModel->equals($linkedModels) && $linkModel->checkPermissionLevel(Acl::WRITE_PERMISSION)){
-						\GO\Savemailas\Model\LinkedEmail::model()->createFromImapMessage($imapMessage, $linkModel);
-						
-						$linkedModels[]=$linkModel;
+					try{
+						$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id'],false, true);
+						if($linkModel && !$linkModel->equals($linkedModels) && $linkModel->checkPermissionLevel(Acl::WRITE_PERMISSION)){
+							\GO\Savemailas\Model\LinkedEmail::model()->createFromImapMessage($imapMessage, $linkModel);
+
+							$linkedModels[]=$linkModel;
+						}
+					}
+					catch(\Exception $e){
+						trigger_error($e->getMessage(), E_USER_NOTICE);
 					}
 			}
 		}
@@ -1587,13 +1641,21 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 	public function actionMessageAttachment($params){
 
 		$account = Account::model()->findByPk($params['account_id']);
-
-		$data = $account->openImapConnection($params['mailbox'])->get_message_part_decoded($params['uid'], $params['number'], $params['encoding']);
-
-		$message = \GO\Email\Model\SavedMessage::model()->createFromMimeData($data);
+		
+		$tmpFile = \GO\Base\Fs\File::tempFile('message.eml');
+		
+		$imap = $account->openImapConnection($params['mailbox']);
+		
+		/* @var $imap \GO\Base\Mail\Imap  */
+		
+		$imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
+		
+		$message = \GO\Email\Model\SavedMessage::model()->createFromMimeData($tmpFile->getContents());
 
 		$response = $message->toOutputArray();
 		$response = $this->_checkXSS($params, $response);
+		$response['path']=$tmpFile->stripTempPath();
+		$response['is_tmp_file']=true;
 		$response['success']=true;
 		return $response;
 
@@ -1664,11 +1726,6 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		$imap->get_message_part_decoded($params['uid'], $params['number'], $params['encoding'], false, true, false, $fp);
 		fclose($fp);
 
-//		
-//		$file = new GO_Base_Fs_MemoryFile($params['filename'], base64_decode($imap->get_message_part($params['uid'], $params['number'])));
-//		header('Content-Type: audio/x-wav');
-////		GO_Base_Util_Http::outputDownloadHeaders($file,$inline,false);
-//		$file->output();
 
 	}
 
@@ -1719,14 +1776,20 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 			throw new \GO\Base\Exception\NotFound("Specified folder not found");
 		}
 
-		$params['filename'] = \GO\Base\Fs\File::stripInvalidChars($params['filename']);
+		$params['filename'] = \GO\Base\Fs\File::stripInvalidChars($params['filename']);		
 		$file = new \GO\Base\Fs\File(GO::config()->file_storage_path.$folder->path.'/'.$params['filename']);
+
+		if(empty($params['tmp_file'])){
+			$account = Account::model()->findByPk($params['account_id']);
+			$imap = $account->openImapConnection($params['mailbox']);
+			$response['success'] = $imap->save_to_file($params['uid'], $file->path(), $params['number'], $params['encoding'], true);
+		}else
+		{
+			$tmpfile = new \GO\Base\Fs\File(GO::config()->tmpdir.$params['tmp_file']);
+			$file = $tmpfile->copy($file->parent(), $params['filename']);
+			$response['success'] = $file != false;
+		}
 		
-		$account = Account::model()->findByPk($params['account_id']);
-		$imap = $account->openImapConnection($params['mailbox']);
-
-		$response['success'] = $imap->save_to_file($params['uid'], $file->path(), $params['number'], $params['encoding'], true);
-
 		if(!$folder->hasFile($file->name()))
 			$folder->addFile($file->name());
 
@@ -1924,4 +1987,40 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 
 	}
 
+	protected function actionMoveToSpam($params) {
+		
+		$accountModel = \GO\Email\Model\Account::model()->findByPk($params['account_id']);
+				
+		$imap = $accountModel->openImapConnection($params['from_mailbox_name']);
+		
+		if(!$imap->get_status('Spam')){
+			$imap->create_folder('Spam');
+		}
+							
+		if (!$imap->move(array($params['mail_uid']), 'Spam')) {
+			$imap->disconnect();
+			throw new \Exception('Could not move message to "Spam" folder. Does it exist?');
+		}
+		
+		$response = array('success'=>true);
+		echo json_encode($response);
+		
+	}
+	
+	protected function actionMoveToInbox($params) {
+		
+		$accountModel = \GO\Email\Model\Account::model()->findByPk($params['account_id']);
+				
+		$imap = $accountModel->openImapConnection('Spam');
+							
+		if (!$imap->move(array($params['mail_uid']),'INBOX')) {
+			$imap->disconnect();
+			throw new \Exception('Could not move message');
+		}
+		
+		$response = array('success'=>true);
+		echo json_encode($response);
+		
+	}
+	
 }

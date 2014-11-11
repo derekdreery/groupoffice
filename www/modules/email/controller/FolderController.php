@@ -132,7 +132,7 @@ class FolderController extends \GO\Base\Controller\AbstractController {
 		$account = \GO\Email\Model\Account::model()->findByPk($params['account_id']);
 		$mailboxes = $account->getAllMailboxes(false, false);
 		foreach($mailboxes as $mailbox){
-			$response['results'][]=array('name'=>$mailbox->name);
+			$response['results'][]=array('name'=>$mailbox->name, 'account_id'=>$params['account_id']);
 		}
 		
 		$response['trash'] = $account->trash;

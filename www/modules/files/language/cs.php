@@ -132,4 +132,13 @@ $l['rememberFileHandler']="Zapamatovat nastavení pro tento typ souboru";
 $l['alwaysAsk']="Vždy se zeptat";
 $l['openWith']='Otevřít pomocí...';
 
+$l['dontDeleteSystemFolder']="Nelze smazat systémovou složku";
 $l['open']='Otevřít';
+
+$l['rightClickToCopy']='Klikněte pravým tlačítkem pro zkopírování';
+
+$l['deleteExpiredLabel']='Vymazat vyexpirované odkazy pro stažení souborů';
+$l['deleteExpiredDescription']='Smazat odkazy pro stažení souborů, které již nejsou aktivní';
+
+$l['deleteWhenExpired'] = 'Automaticky smazat soubor po expiraci odkazu pro stažení';
+$l['automaticallyDeleted'] = 'Soubor bude automaticky smazán po expiraci odkazu pro stažení';

@@ -26,9 +26,140 @@ use GO;
 use GO\Base\Controller\AbstractController;
 use GO\Base\Fs\Folder;
 use GO\Base\Export\Settings;
+use GO\Base\View\JsonView;
+use GO\Base\View\ExportView;
+use GO\Base\Model\SavedExport;
+use GO\Base\Db\FindParams;
+use GO\Base\Db\FindCriteria;
+use GO\Base\Data\ColumnModel;
+use GO\Base\Data\DbStore;
 
 class ExportController extends AbstractController { 
 
+	protected function init() {
+		
+		$this->view = new JsonView();
+		parent::init();
+	}
+	
+	/**
+	 * 
+	 * @param string $class_name
+	 * @param string $export_columns
+	 * @param boolean $include_column_names
+	 * @param string $orientation
+	 * @param boolean $use_db_column_names
+	 * @param string $view
+	 * @param int $id
+	 * @throws Exception
+	 */
+	protected function actionExport($class_name,$export_columns,$include_column_names,$orientation,$use_db_column_names,$view,$id=null) {
+		
+		$currentGrid = new $class_name();
+		
+		if(!in_array($view, $currentGrid->getSupportedViews())){
+			Throw new Exception('No supported view');
+		}
+
+		$this->view = new ExportView();
+		
+		// If the id is set then search the savedExportModel
+		if(isset($id)){
+			$savedExportModel = SavedExport::model()->findByPk($id);
+		}
+		
+		// If there is no savedExportModel found then create a temporary one for this export
+		if(!$savedExportModel){
+			$savedExportModel = new SavedExport();
+			$savedExportModel->class_name = $class_name;
+			$savedExportModel->export_columns = $export_columns;
+			$savedExportModel->include_column_names = $include_column_names;
+			$savedExportModel->orientation = $orientation;
+			$savedExportModel->use_db_column_names = $use_db_column_names;
+			$savedExportModel->view = $view;
+		}
+
+		echo $this->render($view, array('savedExportModel'=>$savedExportModel));
+	}
+	
+	public function actionSavedExportsStore($className){
+
+		$columnModel = new ColumnModel(SavedExport::model());
+
+		// "t.name as text" needs to be added because this store is also used to create the menu. (And the menu expects the "text" property for it's label)
+		$findParams = FindParams::newInstance()->select('t.*,t.name as text')->criteria(FindCriteria::newInstance()->addCondition('class_name', $className));
+		
+		$store = new DbStore('GO\Base\Model\SavedExport', $columnModel, GO::request()->post, $findParams);
+		$store->defaultSort = 'id';
+
+		echo $this->render('store', array('store'=>$store));
+	}
+	
+	/**
+	 * Updates a SavedExport POST for save and GET for retrieve
+	 * 
+	 * @param $id SavedExport ID
+	 */
+	protected function actionUpdate($id,$className) {
+
+		$model = SavedExport::model()->findByPk($id);
+		
+		$currentGrid = new $className;
+		
+		$sViews = $currentGrid->getSupportedViews();
+		$supportedViews = array();
+		foreach($sViews as $view){
+			$supportedViews[] = array('view'=>$view);
+		}
+	
+		$availableColumns = $currentGrid->getColumns();
+	
+		if (!$model)
+			throw new \GO\Base\Exception\NotFound();
+		
+		if(GO::request()->isPost()){
+			$savedExport = GO::request()->post['savedExport'];
+
+			$model->setAttributes($savedExport);
+			$model->save();
+
+			echo $this->render('submit', array('savedExport'=>$model,'supportedViews'=>$supportedViews,'columns'=>$availableColumns));
+		}else{
+			echo $this->render('form',array('savedExport'=>$model,'supportedViews'=>$supportedViews,'columns'=>$availableColumns));
+		}		
+	}
+	
+	
+	/**
+	 * Creates a SavedExport
+	 */
+	protected function actionCreate($className) {
+
+		$model = new SavedExport();
+		
+		$currentGrid = new $className;
+		
+		$sViews = $currentGrid->getSupportedViews();
+		$supportedViews = array();
+		foreach($sViews as $view){
+			$supportedViews[] = array('view'=>$view);
+		}
+		
+		$availableColumns = $currentGrid->getColumns();
+
+		if(GO::request()->isPost()){
+			$savedExport = GO::request()->post['savedExport'];
+
+			$model->setAttributes($savedExport);
+			$model->save();
+
+			echo $this->render('submit',array('savedExport'=>$model,'supportedViews'=>$supportedViews,'columns'=>$availableColumns));
+		}else{
+			echo $this->render('form',array('savedExport'=>$model,'supportedViews'=>$supportedViews,'columns'=>$availableColumns));
+		}		
+	}
+
+	
 	/**
 	 * Get the exporttypes that can be used and get the data for the checkboxes
 	 * 

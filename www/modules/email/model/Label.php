@@ -12,7 +12,7 @@ use GO\Base\Db\ActiveRecord;
  * @property string name
  * @property string flag
  * @property string color
- * @property int user_id
+ * @property int account_id
  * @property boolean default
  */
 class Label extends ActiveRecord
@@ -39,58 +39,62 @@ class Label extends ActiveRecord
     }
 
     /**
-     * Get count of user labels
+     * Get count of account labels
      *
-     * @param int $user_id User ID
+     * @param int $account_id Account ID
      *
      * @return int
      */
-    public function getLabelsCount($user_id)
+    public function getLabelsCount($account_id)
     {
-        if ($user_id == 0) {
-            $user_id = GO::user()->user_id;
+        $account_id = (int)$account_id;
+
+        if (!$account_id) {
+            return 0;
         }
 
-        $sql = "SELECT count(*) FROM `{$this->tableName()}` WHERE user_id = " . intval($user_id);
+        $sql = "SELECT count(*) FROM `{$this->tableName()}` WHERE account_id = " . $account_id;
         $stmt = $this->getDbConnection()->query($sql);
         return intval($stmt->fetchColumn(0));
     }
 
     /**
-     * Delete user labels
+     * Delete account labels
      *
-     * @param int $user_id User ID
+     * @param int $account_id Account ID
      *
      * @return bool
      */
-    public function deleteUserLabels($user_id)
+    public function deleteAccountLabels($account_id)
     {
-        if ($user_id == 0) {
-            $user_id = GO::user()->user_id;
+        $account_id = (int)$account_id;
+
+        if (!$account_id) {
+            return 0;
         }
 
-        $sql = "DELETE FROM `{$this->tableName()}` WHERE user_id = " . intval($user_id);
+        $sql = "DELETE FROM `{$this->tableName()}` WHERE account_id = " . $account_id;
         $stmt = $this->getDbConnection()->query($sql);
         return $stmt->execute();
     }
 
     /**
-     * Create default user labels
+     * Create default account labels
      *
-     * @param int $user_id User ID
+     * @param int $account_id Account ID
      *
      * @return bool
      */
-    public function createDefaultLabels($user_id)
+    public function createDefaultLabels($account_id)
     {
-        $labelsCount = $this->getLabelsCount($user_id);
+        $labelsCount = $this->getLabelsCount($account_id);
 
         if ($labelsCount >= 5) {
             return false;
         }
 
         if ($labelsCount > 0 && $labelsCount < 5) {
-            $this->deleteUserLabels($user_id);
+            $this->deleteAccountLabels($account_id);
         }
 
         $colors = array(
@@ -103,7 +107,7 @@ class Label extends ActiveRecord
 
         for ($i = 1; $i < 6; $i++) {
             $label = new Label;
-            $label->user_id = $user_id;
+            $label->account_id = $account_id;
             $label->name = 'Label ' . $i;
             $label->flag = '$label' . $i;
             $label->color = $colors[$i];
@@ -116,14 +120,14 @@ class Label extends ActiveRecord
 
     protected function init()
     {
-        $this->columns['name']['unique'] = true;
+        //$this->columns['name']['unique'] = true;
         parent::init();
     }
 
     protected function beforeSave()
     {
-        if ($this->isNew && $this->getLabelsCount(GO::user()->id) == 10) {
-            throw new Exception(sprintf(GO::t('labelsLimit', 'email'), 10));
+        if ($this->isNew && $this->getLabelsCount($this->account_id) == 10) {
+            throw new \Exception(sprintf(GO::t('labelsLimit', 'email'), 10));
         }
 
         if (!$this->default) {
@@ -136,11 +140,11 @@ class Label extends ActiveRecord
         return true;
     }
 
-    public function getUserLabels()
+    public function getAccountLabels($account_id)
     {
         $labels = array();
 
-        $stmt = Label::model()->findByAttribute('user_id', GO::user()->id);
+        $stmt = Label::model()->findByAttribute('account_id', (int)$account_id);
         while ($label = $stmt->fetch()) {
             $labels[$label->flag] = $label;
         }

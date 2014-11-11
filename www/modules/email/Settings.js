@@ -30,6 +30,16 @@ GO.email.SettingsPanel = function(config) {
 		hideLabel:true,
 		checked:GO.email.useHtmlMarkup,
 		name:'use_html_markup'
+	}),this.showCC = new Ext.form.Checkbox({
+		boxLabel:GO.email.lang.showCcByDefault,
+		hideLabel:true,
+		checked:GO.email.showCCfield,
+		name:'email_show_cc'
+	}),this.showBCC = new Ext.form.Checkbox({
+		boxLabel:GO.email.lang.showBccByDefault,
+		hideLabel:true,
+		checked:GO.email.showBCCfield,
+		name:'email_show_bcc'
 	}),this.skipUnknownRecipients = new Ext.form.Checkbox({
 		boxLabel:GO.email.lang.skipUnknownRecipients,
 		hideLabel:true,
@@ -91,6 +101,8 @@ Ext.extend(GO.email.SettingsPanel, Ext.Panel, {
 
 	onSaveSettings : function() {
 		GO.email.useHtmlMarkup=this.useHtml.getValue();
+		GO.email.showCCfield=this.showCcByDefault.getValue();
+		GO.email.showBCCfield=this.showBccByDefault.getValue();
 		GO.email.skipUnknownRecipients=this.skipUnknownRecipients.getValue();
 		GO.email.alwaysRequestNotification=this.alwaysRequestNotification.getValue();
 		GO.email.alwaysRespondToNotifications=this.alwaysRespondToNotifications.getValue();

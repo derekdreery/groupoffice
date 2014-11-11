@@ -13,3 +13,5 @@ $l['index_files']='Alle Daten neu indizieren';
 $l['buildsearchcache']='Suchindex neu aufbauen';
 $l['checkmodules']='Module überprüfen';
 $l['resetState']='Anpassungen von Fenstern, Rastern, etc. zurücksetzen';
+
+$l['systemCheck']='Systemüberprüfung';

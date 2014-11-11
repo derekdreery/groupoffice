@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `go_holidays` (
    `date` DATE NOT NULL,
   `name` varchar(100) NOT NULL DEFAULT '',
   `region` varchar(10) NOT NULL DEFAULT '',
+	`free_day` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `region` (`region`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -246,7 +247,7 @@ CREATE TABLE IF NOT EXISTS `go_search_sync` (
 CREATE TABLE IF NOT EXISTS `go_settings` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(50) NOT NULL DEFAULT '',
-  `value` text,
+  `value` LONGTEXT,
   PRIMARY KEY (`user_id`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -300,13 +301,14 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `list_separator` char(3) NOT NULL DEFAULT ';',
   `text_separator` char(3) NOT NULL DEFAULT '"',
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
-  `disk_quota` INT NULL,
-  `disk_usage` INT NOT NULL DEFAULT '0',
+  `disk_quota` BIGINT NULL,
+  `disk_usage` BIGINT NOT NULL DEFAULT '0',
   `mail_reminders` tinyint(1) NOT NULL DEFAULT '0',
   `popup_reminders` tinyint(1) NOT NULL DEFAULT '0',
   `password_type` varchar(20) NOT NULL DEFAULT 'crypt',
 	`holidayset` VARCHAR( 10 ) NULL,
 	`sort_email_addresses_by_time` TINYINT(1) NOT NULL DEFAULT '0',
+	`no_reminders` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- --------------------------------------------------------
@@ -391,3 +393,19 @@ CREATE TABLE IF NOT EXISTS `go_working_weeks` (
 	`su_work_hours` DOUBLE NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `go_saved_exports`
+--
+
+CREATE TABLE IF NOT EXISTS `go_saved_exports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `class_name` varchar(255) NOT NULL,
+  `view` varchar(255) NOT NULL,
+  `export_columns` text,
+  `orientation` enum('V','H') NOT NULL DEFAULT 'V',
+  `include_column_names` tinyint(1) NOT NULL DEFAULT '1',
+  `use_db_column_names` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

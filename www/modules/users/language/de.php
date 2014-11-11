@@ -132,3 +132,9 @@ $l['show_addresslists_panel']= 'Adresslistenelement anzeigen';
 $l['enabled_cf_tabs']= 'Aktivierte Zusatzfelder Tabs';
 
 $l['cmdFormLabelHolidaySet'] = 'Feiertage';
+
+$l['diskSpace'] = 'Festplattenspeicher';
+$l['diskQuota'] = 'Festplatten-Kontingent';
+$l['spaceUsed'] = 'Davon verwendet';
+
+$l['noReminders']= 'Keine Erinnerungen für mich erstellen';

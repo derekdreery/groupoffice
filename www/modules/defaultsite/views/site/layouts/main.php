@@ -15,37 +15,6 @@
 	</head>
 
 	<body>
-		<span itemscope itemtype="http://www.schema.org/Organization">
-			
-			<header id="page-header">
-				<div class="wrapper">
-					<h1 id="logo-holder">
-						<a href="/">
-							<img id="logo" src="<?php echo \Site::file('images/logo-244.png'); ?>" alt="Group-Office logo" />
-	<!--						<img id="logo-retina" src="<?php echo \Site::file('images/logo-244.png'); ?>" alt="Group-Office logo" />-->
-						</a>
-					</h1>				
-				</div>
-			</header>
-
-			<?php echo $content; ?>
-				
-			<footer id="contact">
-				<div class="wrapper">
-
-					<div class="contact-info">
-						<?php
-						$addressHtml = 'a';
-
-						echo $addressHtml;
-						?>
-					</div>
-
-					<div class="contact-form">
-					</div>
-				</div>
-			</footer>
-			
-		</span>
+		<?php echo $content; ?>
 	</body> 
 </html>

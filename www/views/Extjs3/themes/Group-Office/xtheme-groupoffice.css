@@ -388,8 +388,6 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	font-weight: bold;
 }
 
-
-
 .go-display-panel .x-panel-body .x-panel-body{
 	padding: 0;
 }
@@ -397,6 +395,15 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 .go-multiselect-grid  .x-panel-tbar .x-btn, .go-white-bg  .x-panel-tbar .x-btn, .go-moduletabs-body .go-display-panel .x-btn, .x-window .x-panel-tbar .x-btn{
 	border: 1px solid #009bcb;	
 	margin-right: 5px;
+}
+
+.go-multiselect-grid  .x-panel-bbar .x-btn, .go-white-bg  .x-panel-bbar .x-btn, .x-window .x-panel-bbar .x-btn{
+	border: 1px solid #009bcb;	
+	margin-right: 5px;
+}
+
+.go-multiselect-grid  .x-panel-bbar .x-toolbar, .go-white-bg  .x-panel-bbar .x-toolbar, .x-window .x-panel-bbar .x-toolbar{
+    padding: 0 5px 10px !important;
 }
 
 .go-multiselect-grid .x-btn-text {
@@ -607,7 +614,7 @@ border-color: #fff;
 }
 
 .x-window .x-item-disabled *{
-	color: #000 !important;
+	color: gray !important;
 }
 
 /*.x-html-editor-wrap {
@@ -652,9 +659,10 @@ border-color: #fff;
 	background-image: url(/images/extjs/grid/sort_desc.gif);
 }
 
-textarea.x-item-disabled{
+textarea.x-item-disabled, input.x-item-disabled, .x-item-disabled input{
 	background: #eee !important;
-	border: 1px solid #999 !important;
+	border: 1px solid #66C3DF !important;
+	color: gray !important;
 }
 
 .x-panel-tl, .x-panel-tc, .x-panel-tr, .x-panel-ml, .x-panel-mr, .x-panel-bl, .x-panel-br, .x-panel-bc {

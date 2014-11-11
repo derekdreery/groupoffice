@@ -34,7 +34,7 @@
 
 
 namespace GO\Log\Model;
-
+use GO;
 
 class Log extends \GO\Base\Db\ActiveRecord {
 	
@@ -44,6 +44,8 @@ class Log extends \GO\Base\Db\ActiveRecord {
 	const ACTION_UPDATE='update';
 	const ACTION_LOGIN='login';
 	const ACTION_LOGOUT='logout';
+	
+	public $object;
 	
 //	protected $insertDelayed=true;
 	
@@ -86,6 +88,20 @@ class Log extends \GO\Base\Db\ActiveRecord {
 		$attr['controller_route']=\GO::router()->getControllerRoute();
 		$attr['username']=\GO::user() ? \GO::user()->username : 'notloggedin';
 		return $attr;
+	}
+
+	protected function afterSave($wasNew) {
+		if(!isset(GO::config()->file_log) || !is_array(GO::config()->file_log))
+			return true;
+		
+		foreach(GO::config()->file_log as $object => $filename) {
+			if(!empty($this->object) && $this->model===$object){
+				file_put_contents(GO::config()->file_storage_path.'log/'.$filename, 
+						"[".$this->object->className().date('Y-m-d H:i',$this->ctime)."] [".$this->username."] [".$this->action."] ".$this->message."\n",
+						FILE_APPEND);
+			}
+		}
+		return true;
 	}
 	
 	/**

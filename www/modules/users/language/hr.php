@@ -130,3 +130,5 @@ $l['slashymd']='Godina-Mjesec-Dan';
 $l['dotymd']='Godina.Mjesec.Dan';
 
 $l['cmdFormLabelHolidaySet']= 'Bankovni praznici';
+
+$l['autoPunctuation']='Veliko slovo nakon interpunkcije';

@@ -34,4 +34,15 @@ class ViewController extends \GO\Base\Controller\AbstractModelController {
 		$store->setDefaultSortOrder('name','ASC');
 	}
 	
+	protected function afterLoad(&$response, &$model, &$params) {
+		
+		$url = \GO::createExternalUrl('calendar', 'openCalendar', array(	
+			'view_id'=>$response['data']['id']
+		));
+		
+		$response['data']['url']='<a class="normal-link" target="_blank" href="'.$url.'">'.\GO::t('rightClickToCopy','calendar').'</a>';
+		
+		return parent::afterLoad($response, $model, $params);
+	}
+	
 }

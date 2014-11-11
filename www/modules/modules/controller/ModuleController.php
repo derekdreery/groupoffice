@@ -69,7 +69,8 @@ class ModuleController extends AbstractJsonController{
 							($module->appCenter() && (\GO\Professional\License::isTrial() || \GO\Professional\License::moduleIsRestricted($module->id())!==false)),
 					'package'=>$module->package(),
 					'enabled'=>$model && $model->enabled,
-					'not_installable'=> $module->appCenter() && !GO::scriptCanBeDecoded()
+					'not_installable'=> $module->appCenter() && !GO::scriptCanBeDecoded(),
+					'sort_order' => ($model && $model->sort_order)?$model->sort_order:''
 			);
 		}
 		
@@ -217,25 +218,89 @@ class ModuleController extends AbstractJsonController{
 		
 		GO::session()->closeWriting();
 		
-		$response = new JsonResponse(array('success' => true));
-		$module = Module::model()->findByPk($params['moduleId']);
-		$module->checkDefaultModels();
 
-		echo $response;
-	}
-	
-	public function actionSaveSortOrder($params){
-		$modules = json_decode($params['modules']);
+		GO::setMaxExecutionTime(120);
 		
-		$i=0;
-		foreach($modules as $module){
-			$moduleModel = Module::model()->findByPk($module->id);
-			$moduleModel->sort_order=$i++;
-			$moduleModel->save();
+//		GO::$disableModelCache=true;
+		$module = Module::model()->findByPk($params['moduleId']);
+
+		//only do when modified
+		if($module->acl->mtime>time()-120){
+
+			$models = array();
+			$modMan = $module->moduleManager;
+			if ($modMan) {
+				$classes = $modMan->findClasses('model');
+				foreach ($classes as $class) {
+					if ($class->isSubclassOf('\GO\Base\Model\AbstractUserDefaultModel')) {
+						$models[] = GO::getModel($class->getName());
+					}
+				}
+			}
+	//		GO::debug(count($users));
+
+			$module->acl->getAuthorizedUsers($module->acl_id, Acl::READ_PERMISSION, array("\\GO\\Modules\\Controller\\ModuleController","checkDefaultModelCallback"), array($models));
 		}
 		
+//		if(class_exists("GO_Professional_LicenseCheck")){
+//			$lc = new GO_Professional_LicenseCheck();
+//			$lc->checkProModules(true);
+//		}
 		echo new JsonResponse(array('success'=>true));
 	}
+	
+	public static function checkDefaultModelCallback($user, $models){		
+		foreach ($models as $model){
+			$model->getDefault($user);		
+		}
+	}
+	
+	
+	public function actionUpdateModuleModel($id=false){
+		
+		$response = array();
+		
+		if($id && GO::request()->isPost()){
+			
+			$postData = GO::request()->post['module'];
+			
+			$module = Module::model()->findByPk($postData['id']);
+			
+			if($module){
+				
+				// For now only set the sort_order, other attributes can be added later.
+				$module->sort_order = $postData['sort_order'];
+				
+				if($module->save()){
+					$response['success'] = true;
+				} else {
+					$response['success'] = false;
+					$response['feedback'] = sprintf(\GO::t('validationErrorsFound'), strtolower($module->localizedName)) . "\n\n" . implode("\n", $module->getValidationErrors()) . "\n";
+					$response['validationErrors'] = $module->getValidationErrors();
+				}
+			}
+		} else {
+			$response['success'] = false;
+			$response['feedback'] = 'NO MODULE FOUND';
+		}
+		
+		echo new \GO\Base\Data\JsonResponse($response);
+	}
+	
+	
+	
+//	public function actionSaveSortOrder($params){
+//		$modules = json_decode($params['modules']);
+//		
+//		$i=0;
+//		foreach($modules as $module){
+//			$moduleModel = Module::model()->findByPk($module->id);
+//			$moduleModel->sort_order=$i++;
+//			$moduleModel->save();
+//		}
+//		
+//		echo new JsonResponse(array('success'=>true));
+//	}
 
 }
 

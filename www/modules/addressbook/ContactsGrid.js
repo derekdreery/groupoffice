@@ -9,7 +9,7 @@ GO.addressbook.ContactsGrid = function(config){
 	config.border=false;
 	
 	var fields ={
-		fields : ['id','uuid','name','company_name','first_name','middle_name','last_name','title','initials','sex','birthday','age','email','email2','email3','home_phone','work_phone','work_fax','cellular','cellular2','fax','address','address_no','zip','city','state','country','function','department','salutation','ab_name','ctime','mtime','action_date','suffix'],
+		fields : ['id','uuid','name','company_name','first_name','middle_name','last_name','title','initials','sex','birthday','age','email','email2','email3','home_phone','work_phone','work_fax','cellular','cellular2','fax','address','address_no','zip','city','state','country','function','department','salutation','ab_name','ctime','mtime','action_date','suffix','color'],
 		columns : [
 		{
 			header: GO.addressbook.lang.id,
@@ -29,8 +29,8 @@ GO.addressbook.ContactsGrid = function(config){
 		{
 			header: GO.lang['strCompany'],
 			dataIndex: 'company_name',
-			width:200,
-			sortable:false
+			width:200
+			//sortable:false
 		},
 		{
 			header: GO.lang['strFirstName'],
@@ -65,7 +65,21 @@ GO.addressbook.ContactsGrid = function(config){
 		{
 			header: GO.lang['strSex'],
 			dataIndex: 'sex',
-			hidden:true
+			hidden:true,
+			renderer: function(value,meta){
+
+				if (value === 'M') { 
+					meta.css += ' male-cell'; 
+					return GO.addressbook.lang.male; 
+				} 
+
+				if (value === 'F') {	
+					meta.css += 'female-cell'; 
+					return GO.addressbook.lang.female;
+				}
+
+				return value;
+			}
 		},
 		{
 			header: GO.lang['strBirthday'],
@@ -216,7 +230,7 @@ GO.addressbook.ContactsGrid = function(config){
 		{
 			alert(config.store.reader.jsonData.feedback);
 		}
-	},this)
+	},this);
 	
 	config.cm=new Ext.grid.ColumnModel({
 		defaults:{
@@ -226,7 +240,23 @@ GO.addressbook.ContactsGrid = function(config){
 	});
 	
 	config.view=new Ext.grid.GridView({
-		emptyText: GO.lang.strNoItems		
+		emptyText: GO.lang.strNoItems,
+		getRowClass: function(record, rowIndex, rp, ds){
+
+			if(!rp.tstyle)
+				rp.tstyle = '';
+
+			if(!rp.initialstyle)
+				rp.initialstyle = rp.tstyle;
+
+			if(record.data.color){				
+				rp.tstyle += "color:#"+record.data.color+";";
+			} else {
+				rp.tstyle= rp.initialstyle;
+			}
+
+			return;
+		}
 	}),
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;

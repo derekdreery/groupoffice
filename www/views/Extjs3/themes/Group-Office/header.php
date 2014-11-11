@@ -1,6 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
+<?php
+//$this is \GO\Core\Controller\Auth
+GO::router()->getController()->fireEvent('headstart');
+?>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <meta name="robots" content="noindex" />
 <!--<meta http-equiv="x-ua-compatible" content="IE=8">-->
@@ -21,7 +25,7 @@ if(!empty(\GO::config()->custom_css_url))
 	echo '<link href="'.\GO::config()->custom_css_url.'" type="text/css" rel="stylesheet" />';
 
 //$this is \GO\Core\Controller\Auth
-$this->fireEvent('head');
+GO::router()->getController()->fireEvent('head');
 
 ?>
 

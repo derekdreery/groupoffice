@@ -68,7 +68,7 @@ class Rrule extends \GO\Base\Util\Date\RecurrencePattern
 		$parameters['freq'] = strtoupper($json['freq']);
 		if($parameters['freq']=='MONTHLY_DATE')
 			$parameters['freq']='MONTHLY';
-		$parameters['eventstarttime'] = isset($json['eventstarttime'])?strtotime($json['eventstarttime']):strtotime($json['start_time']);
+		$parameters['eventstarttime'] = isset($json['eventstarttime'])?\GO\Base\Util\Date::to_unixtime($json['eventstarttime']):\GO\Base\Util\Date::to_unixtime($json['start_time']);
 		$parameters['until'] = empty($json['repeat_forever']) && isset($json['until']) ? \GO\Base\Util\Date::to_unixtime($json['until'].' 23:59') : 0; //date('G', $parameters['eventstarttime']).':'.date('i', $parameters['eventstarttime'])) : 0;
 		$parameters['bymonth'] = isset($json['bymonth'])?$json['bymonth']:'';
 		$parameters['bymonthday'] = isset($json['bymonthday'])?$json['bymonthday']:'';
@@ -345,7 +345,7 @@ class Rrule extends \GO\Base\Util\Date\RecurrencePattern
 		$this->_bysetpos = !empty($rrule_arr['BYSETPOS']) ? intval($rrule_arr['BYSETPOS']) : 0;
 		
 		if($this->_bysetpos<0)
-			throw new Exception("'Last X of month' recurrence pattern currently not supported by Group-Office.");
+			throw new \Exception("'Last X of month' recurrence pattern currently not supported by Group-Office.");
 		
 		
 		$this->_splitDaysAndSetPos();

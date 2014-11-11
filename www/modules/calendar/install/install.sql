@@ -311,3 +311,14 @@ CREATE  TABLE IF NOT EXISTS `cal_views_groups` (
   `group_id` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`view_id`, `group_id`) )
 ENGINE = InnoDB;
+
+
+--
+-- Tabelstructuur voor tabel `su_visible_calendars`
+--
+
+CREATE TABLE IF NOT EXISTS `su_visible_calendars` (
+  `user_id` int(11) NOT NULL,
+  `calendar_id` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`,`calendar_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

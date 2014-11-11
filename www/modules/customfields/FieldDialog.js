@@ -1,32 +1,32 @@
 /**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @copyright Copyright Intermesh
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
- 
-GO.customfields.FieldDialog = function(config){	
-	
+
+GO.customfields.FieldDialog = function(config){
+
 	if(!config)
 		config={};
-	
+
 	this.extendModel = false;
-	
+
 	this.nameField = new Ext.form.TextField({
 		name: 'name',
 		anchor:'-20',
 		allowBlank:false,
 		fieldLabel: GO.lang['strName']
 	});
-	
-	
+
+
 	this.categoryField = new GO.form.ComboBox({
 		fieldLabel: GO.customfields.lang.category,
 		hiddenName:'category_id',
@@ -41,13 +41,13 @@ GO.customfields.FieldDialog = function(config){
 		selectOnFocus:true,
 		forceSelection: true
 	});
-	
+
 	this.typeField = new GO.form.ComboBox({
 		fieldLabel: GO.lang.strType,
 		hiddenName:'datatype',
 		anchor:'-20',
 		store: new GO.data.JsonStore({
-			fields: ['className', 'type','hasLength'],			
+			fields: ['className', 'type','hasLength'],
 			sortInfo : {
 				field:'text',
 				direction:'ASC'
@@ -66,14 +66,14 @@ GO.customfields.FieldDialog = function(config){
 		selectOnFocus:true,
 		forceSelection: true
 	});
-    		
+
 	this.typeField.on('GO\\Customfields\\Customfieldtype\\Select', function(combo, record, index){
 		this.typeChange(combo, record.data.value);
 	}, this);
-   
+
 	this.typeField.on('change', this.typeChange, this);
-	
-	
+
+
 	this.maxLengthField = new GO.form.NumberField({
 		name: 'max_length',
 		value: 50,
@@ -83,44 +83,60 @@ GO.customfields.FieldDialog = function(config){
 		decimals: 0,
 		disabled: true
 	});
-	
+
 	this.typeField.on('select', function(combo,record,index){
 		this.maxLengthField.setDisabled(!record.data['hasLength']);
 		this.maxLengthField.setVisible(record.data['hasLength']);
 	}, this);
+
+	this.prefixField = new Ext.form.TextField({
+		name: 'prefix',
+		anchor:'-20',
+		allowBlank:true,
+		maxLength: 32,
+		fieldLabel: GO.customfields.lang.prefix
+	});
 	
+	this.suffixField = new Ext.form.TextField({
+		name: 'suffix',
+		anchor:'-20',
+		allowBlank:true,
+		maxLength: 32,
+		fieldLabel: GO.customfields.lang.suffix
+	});
+
 	this.functionField = new Ext.form.TextField({
 		name: 'function',
 		anchor:'-20',
 		allowBlank:true,
 		fieldLabel: GO.lang.strFunction
 	});
-	
+
 	var textComponent = new GO.form.HtmlComponent({
 		html: GO.customfields.lang.numberField+GO.customfields.lang.usableOperators
-	});	
-	
-	
-	this.optionsGrid = new GO.customfields.SelectOptionsGrid();	
+	});
+
+
+	this.optionsGrid = new GO.customfields.SelectOptionsGrid();
 	this.optionsGrid.setVisible(false);
 
 
 	this.treeSelectOptions = new GO.customfields.TreeSelectOptions();
 	this.treeSelectOptions.setVisible(false);
-	
-  
+
+
 	this.functionPanel = new Ext.form.FieldSet({
 		title: GO.customfields.lang.functionProperties,
 		autoHeight: true,
 		border: true,
 		items: [textComponent, this.functionField]
 	});
-  
+
 	this.functionPanel.setVisible(false);
-	
+
 	//See Elite/views/extjs3/Customfield.js
 	this.extraOptions = new Ext.Panel({layout:'form'});
-	
+
 	this.formPanel = new Ext.FormPanel({
 		labelWidth:140,
 		//	autoHeight:true,
@@ -133,6 +149,8 @@ GO.customfields.FieldDialog = function(config){
 		this.typeField,
 		this.extraOptions,
 		this.maxLengthField,
+		this.prefixField,
+		this.suffixField,
 		this.multiSelectCB = new Ext.ux.form.XCheckbox({
 			name:'multiselect',
 			fieldLabel:GO.customfields.lang.multiselect,
@@ -212,11 +230,11 @@ GO.customfields.FieldDialog = function(config){
 		baseParams:{
 			field_id:0
 		}
-	});	
+	});
 
 
 	var focusName = function(){
-		this.nameField.focus();		
+		this.nameField.focus();
 	};
 
 	config.maximizable=true;
@@ -224,10 +242,10 @@ GO.customfields.FieldDialog = function(config){
 	config.modal=false;
 	config.resizable=true;
 	config.width=500;
-	config.height=420;
+	config.height=520;
 	//config.autoHeight=true;
 	config.closeAction='hide';
-	config.title= GO.lang.field;					
+	config.title= GO.lang.field;
 	config.items= this.formPanel;
 	config.focus= focusName.createDelegate(this);
 	config.buttons=[{
@@ -250,7 +268,7 @@ GO.customfields.FieldDialog = function(config){
 		scope:this
 	}
 	];
-	
+
 	config.listeners={
 		render:function(){
 			this.typeField.store.load();
@@ -258,10 +276,10 @@ GO.customfields.FieldDialog = function(config){
 		scope:this
 	}
 
-	
+
 	GO.customfields.FieldDialog.superclass.constructor.call(this, config);
-	
-	
+
+
 	this.addEvents({
 		'save' : true
 	});
@@ -269,11 +287,19 @@ GO.customfields.FieldDialog = function(config){
 
 Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 
+	loadData: {}, // will save the loaded data when form shows
+
 	typeChange : function(combo, newValue)
-	{	
+	{
 		this.addressbookIdsField.setVisible(newValue=='GO\\Addressbook\\Customfieldtype\\Contact' || newValue=='GO\\Addressbook\\Customfieldtype\\Company');
 		this.addressbookIdsField.setDisabled(newValue!='GO\\Addressbook\\Customfieldtype\\Contact' && newValue!='GO\\Addressbook\\Customfieldtype\\Company');
-		
+
+		var useSuffixPrefix = newValue=='GO\\Customfields\\Customfieldtype\\Text' || newValue=='GO\\Customfields\\Customfieldtype\\Number' || newValue=='GO\\Customfields\\Customfieldtype\\FunctionField';
+		this.prefixField.setVisible(useSuffixPrefix);
+		this.prefixField.setDisabled(!useSuffixPrefix);
+		this.suffixField.setVisible(useSuffixPrefix);
+		this.suffixField.setDisabled(!useSuffixPrefix);
+
 		this.helptextField.setDisabled(newValue=='GO\\Customfields\\Customfieldtype\\Infotext');
 		this.requiredCB.setDisabled(newValue=='GO\\Customfields\\Customfieldtype\\Infotext');
 		this.decimalsField.setDisabled(newValue!='GO\\Customfields\\Customfieldtype\\Number');
@@ -289,8 +315,8 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 
 		this.masterTree.container.up('div.x-form-item').setDisplayed(newValue=='GO\\Customfields\\Customfieldtype\\TreeselectSlave');
 
-		this.functionPanel.setVisible(newValue=='GO\\Customfields\\Customfieldtype\\Function');
-		if(newValue=='GO\\Customfields\\Customfieldtype\\Function')
+		this.functionPanel.setVisible(newValue=='GO\\Customfields\\Customfieldtype\\FunctionField');
+		if(newValue=='GO\\Customfields\\Customfieldtype\\FunctionField')
 		{
 			this.functionPanel.doLayout();
 		}
@@ -309,44 +335,54 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 
 		this.regexField.setDisabled(newValue!='GO\\Customfields\\Customfieldtype\\Text');
 
+		// Select deselect mother in Datatype to customize dialog (implementation in Php-Customfield datatype)
+		if(GO.customfields.dataTypes[this.oldValue] && GO.customfields.dataTypes[this.oldValue].onDeselect) {
+			GO.customfields.dataTypes[this.oldValue].onDeselect(this);
+		}
+		if(GO.customfields.dataTypes[newValue] && GO.customfields.dataTypes[newValue].onSelect) {
+			GO.customfields.dataTypes[newValue].onSelect(this);
+		}
+
 		this.syncShadow();
 		this.center();
+
+		this.oldValue = newValue;
 	},
-	
+	oldValue : 'GO\\Customfields\\Customfieldtype\\Text',
+
 	show : function (field_id) {
-		
+
 		if(!this.typeField.store.loaded){
 			this.typeField.store.load({
 				callback:function(){
 					this.typeField.setValue("GO\\Customfields\\Customfieldtype\\Text");
-					this.show(field_id);					
+					this.show(field_id);
 				},
 				scope:this
 			});
 			return;
 		}
-		
+
 		if(!this.rendered){
 			this.render(Ext.getBody());
 			this.max.getEl().up('.x-form-item').setDisplayed(false);
 		}
 		//this.formPanel.form.reset();
-			
+
 		this.setFieldId(field_id);
-		
+
 		if(field_id>0)
 		{
 			this.formPanel.load({
-				//				url : GO.settings.modules.customfields.url+'json.php',
-				//				params : {
-				//					task: 'field'
-				//				},
-				url:GO.url('customfields/field/load'),				
+				url:GO.url('customfields/field/load'),
 				success:function(form, action)
 				{
-					this.typeChange(this.typeField, this.typeField.getValue());
-					GO.customfields.FieldDialog.superclass.show.call(this);
 					var response = Ext.decode(action.response.responseText);
+					this.loadData = response.data;
+					this.typeChange(this.typeField, this.typeField.getValue());
+
+					GO.customfields.FieldDialog.superclass.show.call(this);
+
 					this.maxLengthField.setDisabled(!response.data['hasLength']);
 					this.maxLengthField.setVisible(response.data['hasLength']);
 				},
@@ -355,10 +391,11 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 					GO.errorDialog.show(action.result.feedback)
 				},
 				scope: this
-				
+
 			});
-		}else 
-		{			
+		}else
+		{
+			this.loadData = {};
 			this.formPanel.form.reset();
 			if(!this.lastCategoryId)
 				this.lastCategoryId=GO.customfields.categoriesStore.data.items[0].id;
@@ -367,31 +404,31 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 				this.categoryField.setValue(this.lastCategoryId);
 			else
 				this.categoryField.selectFirst();
-			
+
 			this.typeChange(this.typeField, 'GO\\Customfields\\Customfieldtype\\Text');
 			this.maxLengthField.setDisabled(false);
 			this.maxLengthField.setVisible(true);
 			GO.customfields.FieldDialog.superclass.show.call(this);
 		}
 	},
-	
+
 	setCategoryId : function(category_id)
 	{
 		this.formPanel.baseParams['category_id']=category_id;
-		
+
 	},
-	
+
 	setExtendModel : function(extend_model){
-		
+
 		if(extend_model!=this.extendModel){
 			this.typeField.store.loaded=false;
 			this.extendModel = extend_model;
 			this.typeField.store.baseParams.extend_model = this.extendModel;
 		}
 	},
-					
+
 	setFieldId : function(field_id)
-	{		
+	{
 		this.formPanel.form.baseParams['id']=field_id;
 		this.field_id=field_id;
 		if(this.typeField.getValue()=='GO\\Customfields\\Customfieldtype\\Select')
@@ -400,7 +437,7 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 		if(this.typeField.getValue()=='GO\\Customfields\\Customfieldtype\\Treeselect')
 			this.treeSelectOptions.setFieldId(field_id);
 	},
-	
+
 //	submitForm : function(hide){
 //
 //		if (this.uniqueCB.getValue()==true) {
@@ -421,10 +458,11 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 //		}
 //
 //	},
-	
+
 	submitForm : function(hide) {
 		this.formPanel.form.submit(
 		{
+			submitEmptyText: false,
 			//url:GO.settings.modules.customfields.url+'action.php',
 			url:GO.url('customfields/field/submit'),
 			params: {
@@ -454,12 +492,12 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 			failure: function(form, action) {
 				if(action.failureType == 'client')
 				{
-					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
+					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);
 				} else {
 					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
 				}
 			},
 			scope: this
-		});		
+		});
 	}
 });

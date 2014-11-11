@@ -33,6 +33,9 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 	managePermission : false,
 	levelLabels : null,
 	
+	isOverwritable: false,
+	isOverwritten: false,
+	
 	cls:'go-permissions-panel',
 
 	// private
@@ -43,26 +46,6 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 		}
 		
 		var levelData = [];
-		
-//		if(!this.levels || this.levels.indexOf(GO.permissionLevels.read)!=-1)
-//			levelData.push([GO.permissionLevels.read, this.levelLabels[GO.permissionLevels.read] ? this.levelLabels[GO.permissionLevels.read] : GO.lang.permissionRead]);
-//		
-//		if(!this.levels || this.levels.indexOf(GO.permissionLevels.delegated)!=-1)
-//			levelData.push([GO.permissionLevels.delegated, this.levelLabels[GO.permissionLevels.delegated] ? this.levelLabels[GO.permissionLevels.delegated] : 'delegated']);		
-//		
-//		
-//		if(!this.levels || this.levels.indexOf(GO.permissionLevels.create)!=-1)
-//			levelData.push([GO.permissionLevels.create, this.levelLabels[GO.permissionLevels.create] ? this.levelLabels[GO.permissionLevels.create] : GO.lang.permissionCreate]);
-//		
-//		if(!this.levels || this.levels.indexOf(GO.permissionLevels.write)!=-1)
-//			levelData.push([GO.permissionLevels.write, this.levelLabels[GO.permissionLevels.write] ? this.levelLabels[GO.permissionLevels.write] : GO.lang.permissionWrite]);		
-//		
-//		
-//		if(!this.levels || this.levels.indexOf(GO.permissionLevels.writeAndDelete)!=-1)
-//			levelData.push([GO.permissionLevels.writeAndDelete, this.levelLabels[GO.permissionLevels.writeAndDelete] ? this.levelLabels[GO.permissionLevels.writeAndDelete] : GO.lang.permissionDelete]);
-//		
-//		if(!this.levels || this.levels.indexOf(GO.permissionLevels.manage)!=-1)
-//			levelData.push([GO.permissionLevels.manage, this.levelLabels[GO.permissionLevels.manage] ? this.levelLabels[GO.permissionLevels.manage] : GO.lang.permissionManage]);
 
 		this.levelLabels = this.levelLabels || {};
 		
@@ -167,27 +150,27 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 			title:GO.lang.strAuthorizedGroups,
 			plain:true,
 			style:'margin:4px',
-				anchor: '100% 50%',
-				forceLayout:true,
-				autoExpandColumn:'name',
-				url:'aclGroup',
-				columns: groupColumns,
-				plugins: action,
-				addAttributes:{level:this.addLevel},
-				selectColumns:[{
-					header : GO.lang['strName'],
-					dataIndex : 'name',
-					menuDisabled:true,
-					sortable: true
-				}],
-				fields:['id','name','level'],
-				model_id: this.acl_id//GO.settings.user_id
-			});
+			anchor: '100% 50%',
+			forceLayout:true,
+			autoExpandColumn:'name',
+			url:'aclGroup',
+			columns: groupColumns,
+			plugins: action,
+			addAttributes:{level:this.addLevel},
+			selectColumns:[{
+				header : GO.lang['strName'],
+				dataIndex : 'name',
+				menuDisabled:true,
+				sortable: true
+			}],
+			fields:['id','name','level'],
+			model_id: this.acl_id//GO.settings.user_id
+		});
 
 		this.aclGroupsGrid.store.on("load", function(){
 			this.managePermission = this.aclGroupsGrid.store.reader.jsonData.manage_permission;
-			this.aclGroupsGrid.getTopToolbar().setDisabled(!this.managePermission);
-			this.aclUsersGrid.getTopToolbar().setDisabled(!this.managePermission);
+			this.aclGroupsGrid.getTopToolbar().setDisabled(!this.isEditable());
+			this.aclUsersGrid.getTopToolbar().setDisabled(!this.isEditable());
 		}, this);
 
 		action.on({
@@ -205,7 +188,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 		}, this);
 
 		this.aclGroupsGrid.on('beforeedit', function(e) {
-			return this.managePermission;
+			return this.isEditable();
 		},this);
 
 		var userColumns = [{
@@ -235,62 +218,48 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 			title:GO.lang.strAuthorizedUsers,
 			plain:true,
 			style:'margin:4px',
-				anchor: '100% 50%',
-				forceLayout:true,
-				autoExpandColumn:'name',
-				url:'aclUser',
-				columns: userColumns,
-				addAttributes:{level:this.addLevel},
-				selectColumns:[{
-					header : GO.lang['strName'],
-					dataIndex : 'name',
-					menuDisabled:true,
-					sortable: true
-				},{
-					header: GO.lang.username,
-					dataIndex:'username',
-					menuDisabled:true,
-					sortable: true
-				}],
-				fields:['id','name','username','level'],
-				model_id: this.acl_id//GO.settings.user_id
-			});
+			anchor: '100% 50%',
+			forceLayout:true,
+			autoExpandColumn:'name',
+			url:'aclUser',
+			columns: userColumns,
+			addAttributes:{level:this.addLevel},
+			selectColumns:[{
+				header : GO.lang['strName'],
+				dataIndex : 'name',
+				menuDisabled:true,
+				sortable: true
+			},{
+				header: GO.lang.username,
+				dataIndex:'username',
+				menuDisabled:true,
+				sortable: true
+			}],
+			fields:['id','name','username','level'],
+			model_id: this.acl_id//GO.settings.user_id
+		});
 			
 		this.aclUsersGrid.on('beforeedit', function(e) {
-			return this.managePermission;
+			return this.isEditable();
 		},this);
 		
-//		this.aclUsersGrid.on('afteredit', function(e) {
-//
-//			Ext.Ajax.request({
-//				url:GO.settings.config.host+'action.php',
-//				params:{
-//					task:'update_level',
-//					acl_id: this.store.baseParams.acl_id,
-//					user_id: e.record.get("id"),
-//					level:e.record.get("level")
-//				},
-//				success: function(response, options)
-//				{
-//					var responseParams = Ext.decode(response.responseText);
-//					if(!responseParams.success)
-//					{
-//						alert(responseParams.feedback);
-//						this.store.rejectChanges();
-//					}else
-//					{
-//						this.store.commitChanges();
-//					}
-//				},
-//				scope:this
-//			})
-//
-//		}, this.aclUsersGrid);
-
-
-		this.items = [this.aclGroupsGrid, this.aclUsersGrid];
-
+		this.items =[];
+		this.overWriteCheckBox = new Ext.ux.form.XCheckbox({
+			style:'margin:4px 0 0 10px',
+			name: 'acl_overwritten',
+			boxLabel: GO.lang.overwriteAcl
+		});
+		if(this.isOverwritable) {
+			this.items.push(this.overWriteCheckBox);
+		}
+		this.items.push(this.aclGroupsGrid);
+		this.items.push(this.aclUsersGrid);
+		
 		GO.grid.PermissionsPanel.superclass.initComponent.call(this);
+	},
+	
+	isEditable : function() {
+		return this.managePermission && (!this.isOverwritable || this.isOverwritten);
 	},
 
 	/**
@@ -300,8 +269,9 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 	 *            The Group-Office acl ID.
 	 */
 	setAcl : function(acl_id) {
-
-		this.acl_id = acl_id ? acl_id : 0;
+		if(this.isOverwritable)
+			this.isOverwritten = this.overWriteCheckBox.getValue();
+		this.acl_id = acl_id || 0;
 		this.aclGroupsGrid.setModelId(acl_id, this.isVisible());
 		this.aclUsersGrid.setModelId(acl_id, this.isVisible());
 		this.setDisabled(GO.util.empty(acl_id));	
@@ -310,6 +280,9 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 	onShow : function() {
 
 		GO.grid.PermissionsPanel.superclass.onShow.call(this);
+
+		if(this.isOverwritable)
+			this.isOverwritten = this.overWriteCheckBox.getValue();
 
 		if (!this.aclGroupsGrid.loaded) {
 			this.loadAcl();
@@ -343,54 +316,5 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 		this.usersInGroupDialog.setGroupId(groupId);
 		this.usersInGroupDialog.show();
 	}
-
-	// private
-//	showAddGroupsDialog : function() {
-//		if (!this.addGroupsDialog) {
-//			this.addGroupsDialog = new GO.dialog.SelectGroups({
-//				handler : function(groupsGrid) {
-//					if (groupsGrid.selModel.selections.keys.length > 0) {
-//						this.aclGroupsStore.baseParams['add_groups'] = Ext
-//						.encode(groupsGrid.selModel.selections.keys);
-//						this.aclGroupsStore.load({
-//							callback : function() {
-//								if (!this.reader.jsonData.addSuccess) {
-//									alert(this.reader.jsonData.addFeedback);
-//								}
-//							}
-//						});
-//						delete this.aclGroupsStore.baseParams['add_groups'];
-//					// this.aclGroupsStore.add(groupsGrid.selModel.getSelections());
-//					// this.changed=true;
-//					}
-//				},
-//				scope : this
-//			});
-//		}
-//		this.addGroupsDialog.show();
-//	},
-
-	// private
-//	showAddUsersDialog : function() {
-//		if (!this.addUsersDialog) {
-//			this.addUsersDialog = new GO.dialog.SelectUsers({
-//				handler : function(usersGrid) {
-//					if (usersGrid.selModel.selections.keys.length > 0) {
-//						this.aclUsersStore.baseParams['add_users'] = Ext.encode(usersGrid.selModel.selections.keys);
-//						this.aclUsersStore.load({
-//							callback : function() {
-//								if (!this.reader.jsonData.addSuccess) {
-//									alert(this.reader.jsonData.addFeedback);
-//								}
-//							}
-//						});
-//						delete this.aclUsersStore.baseParams['add_users'];
-//					}
-//				},
-//				scope : this
-//			});
-//		}
-//		this.addUsersDialog.show();
-//	}
 
 });

@@ -56,6 +56,18 @@ class Authenticator {
 
 		return self::$_mapping;
 	}
+	
+	
+	public function getUserSearchQuery($username='*'){
+		$mapping = $this->getMapping();
+		
+		if (!empty(GO::config()->ldap_search_template))
+			$query = str_replace('{username}', $username, GO::config()->ldap_search_template);
+		else
+			$query = $mapping['username'] . '=' . $username;
+		
+		return $query;
+	}
 
 	public function authenticate($username, $password) {
 

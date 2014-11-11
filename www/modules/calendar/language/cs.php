@@ -92,7 +92,7 @@ $l["singleOccurence"]= 'Událost';
 $l["entireSeries"]= 'Celá série';
 $l["calendar"]= 'Kalendář';
 $l["calendars"]= 'Kalendáře';
-$l["views"]= 'Zobrazení';
+$l["views"]= 'Pohledy';
 $l["administration"]= 'Administrace';
 $l["needsAction"]= 'Vyžaduje akci';
 $l["accepted"]= 'Přijatý';
@@ -152,10 +152,10 @@ $l["myCalendar"]='Můj kalendář';
 $l["merge"]='Sloučit';
 $l["ownColor"]= 'Pro každý kalendář použít vlastní barvu';
 $l["ignoreConflictsTitle"]= 'Ignorovat konflikty?';
-$l["ignoreConflictsMsg"]= 'Tato událost koliduje s jinou údálostí ve Vašem kalendáři. Chcete tuto událost uložit kamkoliv?';
+$l["ignoreConflictsMsg"]= 'Tato událost koliduje s jinou událostí ve Vašem kalendáři. Chcete tuto událost i přesto uložit?';
 $l["resourceConflictTitle"]= 'Zdroj konfliktu';
-$l["resourceConflictMsg"]= 'Jeden nebo více zdrojů v této události používá ve stejný čas:</br>';
-$l["view"]= 'Zobrazení';
+$l["resourceConflictMsg"]= 'Jeden nebo více zdrojů v této události používá stejný čas:</br>';
+$l["view"]= 'Pohled';
 $l["calendarsPermissions"]='Oprávnění kalendářů';
 $l["resourcesPermissions"]='Oprávnění prostředků';
 $l["categories"]='Kategorie';
@@ -194,6 +194,7 @@ $l['eventUpdatedIn']='Událost v kalendáři %s byla změněna se stavem %s';
 $l['updateReponses']["ACCEPTED"]='%s přijal událost %s';
 $l['updateReponses']["DECLINED"]='%s odmítnul událost %s';
 $l['updateReponses']["TENTATIVE"]='%s označil událost %s jako předběžnou';
+$l['updateReponses']["NEEDS-ACTION"]='%s označil událost %s jako vyžaduje akci';
 
 $l['directUrl']='Přímá URL';
 
@@ -237,3 +238,36 @@ $l['cronEventAndTaskReportMailerDescription']='Každému uživateli v cronu se o
 $l['cronEventAndTaskReportMailerPdfSubtitle']='Dnešní události a úkoly';
 $l['cronEventAndTaskReportMailerSubject']='Dnešní události a úkoly';
 $l['cronEventAndTaskReportMailerContent']='V přiloženém PDF soubory naleznete seznam dnešních událostí a úkolů.';
+$l['eventPrivateChecked'] = 'Všimněte si, že v případě, že událost je označena jako soukromá, soubory z této události jsou stále přístupné uživatelům, kteří mají oprávnění ke kalendáři této události.';
+
+$l['show_completed_tasks'] = "Zobrazit dokončené úkoly";
+$l['showStatuses']='Zobrazovat stavy v pohledech';
+$l['cantMoveRecurringByDay']="Bohužel, nelze přesunou události, které se opakují všední, do ostatní dnů jako je tento. Vytvořte novou událost a nastavte opakování.";
+
+$l['eventNotSavedSubject'] = 'Událost nebyla uložena v %event kalendáři "%cal"';
+$l['eventNotSavedBody'] = 'This message is from your %goname calendar. %goname attempted to import an event called "%event" with start time %starttime from an external calendar into calendar "%cal", but that could not be done because the event contained errors. The event may still be in the external calendar.'.
+								"\r\n\r\n".'The following is the error message:'."\r\n".'%errormessage';
+
+$l['usedResources'] = 'Použité prostředky';
+
+$l['shareCalendarsCron'] = 'Aktualizace souborů sdílených kalendářů';
+$l['shareCalendarsCronDescription'] = 'Aktualizuje soubory sdílených kalendářů, které jsou publikované';
+
+$l['cmdPrintView'] = 'Vytisknout aktuální pohled';
+$l['cmdPrintCategoryCount'] = 'Vytisknout počet pro každou kategorii';
+$l['startDate'] = 'Začátek';
+$l['endDate'] = 'Konec';
+$l['eventsPerCategoryCount'] = 'Počet událostí pro každou kategorii';
+$l['nextMonth'] = 'Následující měsíc';
+$l['previousMonth'] = 'Předchozí měsíc';
+$l['till'] = 'až do';
+$l['total'] = 'Celkem';
+
+$l['sendNotificationToNewParticipants']='Chcete informovat e-mailem pouze účastníkům, které jste právě přidali?';
+$l['newParticipants']='Nový účastníci';
+$l['allParticipants']='Všichni účastníci';
+$l['noParticipants']='Žádní účastníci';
+$l['cannotHandleInvitation']='Kalendář je propojený s tímto e-mailovým účtem "%s" a do něj nemáte oprávnění zápisu. Protože událost se nachází právě v tomto kalendáři, stav nebyl změněn.';
+$l['cannotHandleInvitation2']='Nelze aktualizovat stav události, protože nemáte dostatečná práva ke kalendáři, který je propojen s e-mailovým účtem (kalendář: "%s"). Protože událost se nachází právě v tomto kalendáři, stav nebyl změněn.';
+
+$l['tooltip'] = 'Text popisku';

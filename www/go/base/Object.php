@@ -36,13 +36,13 @@ namespace GO\Base;
 abstract class Object extends Observable{
 
 	/**
-	 * Returns the name of this object
-	 * 
-	 * @return string Name
-	 */
-	public function className(){
-		return get_class($this);
-	}
+     * Returns the name of this class.
+     * @return string the name of this class.
+     */
+    public static function className()
+    {
+        return get_called_class();
+    }
 	
 	/**
 	 * Magic getter that calls get<NAME> functions in objects

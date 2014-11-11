@@ -89,12 +89,17 @@ $settings['config']['support_link']=\GO::config()->support_link;
 $settings['config']['nav_page_size']=intval(\GO::config()->nav_page_size);
 $settings['config']['session_inactivity_timeout']=intval(\GO::config()->session_inactivity_timeout);
 
+$settings['config']['tickets_no_email_required']=GO::config()->tickets_no_email_required;
+
 $settings['config']['default_country'] = \GO::config()->default_country;
 $settings['config']['checker_interval'] = (int)\GO::config()->checker_interval;
 
 $settings['show_contact_cf_tabs'] = array();
 
-if(\GO::modules()->addressbook){
+
+$settings['config']['encode_callto_link']=\GO::config()->encode_callto_link;
+
+if(GO::modules()->addressbook){
 	// Add the addresslist tab to the global settings panel
 	$settings['show_addresslist_tab'] = \GO::config()->get_setting('globalsettings_show_tab_addresslist');
 	
@@ -450,7 +455,7 @@ Ext.state.Manager.setProvider(new GO.state.HttpProvider());
 if(isset(\GO::session()->values['security_token']))		
 	echo 'Ext.Ajax.extraParams={security_token:"'.\GO::session()->values['security_token'].'"};';
 
-$this->fireEvent('inlinescripts');
+GO::router()->getController()->fireEvent('inlinescripts');
 ?>
 </script>
 <?php

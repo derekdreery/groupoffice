@@ -292,7 +292,7 @@ class Content extends \GO\Base\Db\ActiveRecord{
 					'cls' => 'site-node-content',
 					'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
 					//'expanded' => !$hasChildren,
-					'expanded' => !$hasChildren || SiteModel::isExpandedNode($this->site_id.'_content_'.$this->id),
+					'expanded' => !$hasChildren || \GO\Site\Model\Site::isExpandedNode($this->site_id.'_content_'.$this->id),
 					'hasChildren' => $hasChildren,
 					'children'=> $hasChildren ? $this->getChildrenTree() : array(),
 					'text' => $this->title,

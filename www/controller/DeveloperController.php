@@ -23,11 +23,17 @@ class DeveloperController extends \GO\Base\Controller\AbstractController {
 		if(!\GO::user()->isAdmin())
 			throw new \Exception("You must be logged in as admin");
 		
-		$amount = 1000;
+		\GO::config()->password_validate = false;
+		
+		\GO::session()->closeWriting();
+		
+		$amount = 50;
 		$prefix = 'user';
 		$domain = 'intermesh.dev';
+		
+		echo '<pre>';
 
-		for ($i = 0; $i < $amount; $i++) {		
+		for ($i = 1; $i <= $amount; $i++) {		
 
 			echo "Creating $prefix$i\n";
 			

@@ -59,6 +59,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 											', {suffix} '+
 										'</tpl>'+
 										'<br />'+
+										'<div class="readPanelSubHeading">'+GO.addressbook.lang.privateAddress+':</div>'+
 										'<tpl if="!GO.util.empty(google_maps_link)">'+
 											'<a href="{google_maps_link}" target="_blank">'+
 										'</tpl>'+
@@ -178,6 +179,27 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 								'</table>'+
 							'</td>'+
 							
+								// SOCIAL MEDIA URLs
+							'<tpl if="this.isSocialMediaFieldset(values)">'+
+									'<tr>'+
+										'<td>'+
+												'<tpl if="!GO.util.empty(url_linkedin)">'+
+													'<a href="{url_linkedin}" target="_blank"><div class="linkedin-icon"></div></a>'+
+												'</tpl>'+
+												'<tpl if="!GO.util.empty(url_facebook)">'+
+													'<a href="{url_facebook}" target="_blank"><div class="facebook-icon"></div></a>'+
+												'</tpl>'+
+												'<tpl if="!GO.util.empty(url_twitter)">'+
+													'<a href="{url_twitter}" target="_blank"><div class="twitter-icon"></div></a>'+
+												'</tpl>'+
+												'<tpl if="!GO.util.empty(skype_name)">'+
+													'<a href="skype:{skype_name}?call"><div class="skype-icon" title="'+GO.addressbook.lang['callOnSkype']+'"></div></a>'+
+												'</tpl>'+
+										'</td>'+
+									'</tr>'+
+							'</tpl>'+
+							
+							
 							'<tpl if="this.isWorkPhoneFieldset(values)">'+
 							
 								// CONTACT DETAILS+ 2e KOLOM
@@ -213,25 +235,88 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 
 				'</tpl>'+
 									
-				// SOCIAL MEDIA URLs
-				'<tpl if="this.isSocialMediaFieldset(values)">'+
+									
+
+				// COMPANY DETAILS
+				'<tpl if="this.isCompanyFieldset(values)">'+
+					
 						'<tr>'+
-							'<td>'+
-									'<tpl if="!GO.util.empty(url_linkedin)">'+
-										'<a href="{url_linkedin}" target="_blank"><div class="linkedin-icon"></div></a>'+
-									'</tpl>'+
-									'<tpl if="!GO.util.empty(url_facebook)">'+
-										'<a href="{url_facebook}" target="_blank"><div class="facebook-icon"></div></a>'+
-									'</tpl>'+
-									'<tpl if="!GO.util.empty(url_twitter)">'+
-										'<a href="{url_twitter}" target="_blank"><div class="twitter-icon"></div></a>'+
-									'</tpl>'+
-									'<tpl if="!GO.util.empty(skype_name)">'+
-										'<a href="skype:{skype_name}?call"><div class="skype-icon" title="'+GO.addressbook.lang['callOnSkype']+'"></div></a>'+
-									'</tpl>'+
-							'</td>'+
+							'<td colspan="2" class="display-panel-heading">' + GO.addressbook.lang['cmdFieldsetCompany'] + '</td>'+
 						'</tr>'+
+						
+						'<tr>'+
+							
+							'<td valign="top" colspan="2">'+
+								'<table cellpadding="0" cellspacing="0" border="0" width="100%">'+
+									
+									//COMPANY NAME
+									'<tpl if="!GO.util.empty(company_name)">'+
+										'<tr>'+
+											'<td class="contactCompanyLabelWidth" colspan="2"><a href="#" onclick="GO.linkHandlers[\'GO\\\\\\\\Addressbook\\\\\\\\Model\\\\\\\\Company\'].call(this,{company_id});">{company_name}</a></td>'+
+										'</tr>'+						
+									'</tpl>'+
+									'<tpl if="!GO.util.empty(company_name2)">'+
+										'<tr>'+
+											'<td colspan="2">{company_name2}</td>'+
+										'</tr>'+						
+									'</tpl>'+
+									
+									//COMPANY ADDRESS						
+									'<tpl if="!GO.util.empty(company_formatted_address) || !GO.util.empty(company_formatted_post_address)">'+
+										'<tr>'+
+											'<tpl if="!GO.util.empty(company_formatted_address)">'+
+												'<td style="width: 50%;vertical-align:top;padding:10px 0;">'+
+												
+													'<div class="readPanelSubHeading">'+GO.addressbook.lang['cmdFieldsetVisitAddress'] + '</div>'+
+													'<tpl if="!GO.util.empty(company_google_maps_link)">'+
+														'<a href="{company_google_maps_link}" target="_blank">'+
+													'</tpl>'+
+													'{company_formatted_address}'+
+													'<tpl if="!GO.util.empty(company_google_maps_link)">'+
+														'</a>'+
+													'</tpl>'+												
+												'</td>'+
+											'</tpl>'+
+											
+											'<tpl if="!GO.util.empty(company_formatted_post_address)">'+
+												'<td style="width: 50%;vertical-align:top;padding:10px 0;">'+												
+													'<div class="readPanelSubHeading">'+GO.addressbook.lang['cmdFieldsetPostAddress'] + '</div>'+
+													'<tpl if="!GO.util.empty(company_google_maps_post_link)">'+
+														'<a href="{company_google_maps_link}" target="_blank">'+
+													'</tpl>'+
+													'{company_formatted_post_address}'+
+													'<tpl if="!GO.util.empty(company_google_maps_post_link)">'+
+														'</a>'+
+													'</tpl>'+
+												'</td>'+
+											'</tpl>'+
+											
+										'</tr>'+						
+									'</tpl>'+
+									
+									//COMPANY PHONE
+									'<tpl if="!GO.util.empty(company_phone)">'+
+										'<tr>'+
+											'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td>{[GO.util.callToLink(values.company_phone)]}</td>'+
+										'</tr>'+						
+									'</tpl>'+
+									
+									//COMPANY EMAIL			
+									'<tpl if="!GO.util.empty(company_email)">'+
+										'<tr>'+
+											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ':</td><td>{[this.mailTo(values.company_email, values.company_name)]}</td>'+
+										'</tr>'+						
+									'</tpl>'+
+
+								'</table>'+
+							'</td>'+
+														
+						'</tr>'+
+
 				'</tpl>'+
+									
+									
+			
 					
 					
 					
@@ -249,13 +334,6 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 							'<td colspan="2" valign="top" class="contactCompanyDetailsPanelKolom60">'+
 								'<table cellpadding="0" cellspacing="0" border="0">'+
 								
-									//COMPANY							
-									'<tpl if="!GO.util.empty(company_name)">'+
-										'<tr>'+
-											'<td class="contactCompanyLabelWidth">' + GO.lang['strCompany'] + ':</td><td><a href="#" onclick="GO.linkHandlers[\'GO\\\\\\\\Addressbook\\\\\\\\Model\\\\\\\\Company\'].call(this,{company_id});">{company_name}</a></td>'+
-										'</tr>'+						
-									'</tpl>'+
-
 									//FUNCTION							
 									'<tpl if="!GO.util.empty(values[\'function\'])">'+
 										'<tr>'+
@@ -347,7 +425,20 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 				} else {
 					return false;
 				}
-			},			
+			},	
+							
+		isCompanyFieldset: function(values){
+			if(!GO.util.empty(values['company_name']) ||
+				!GO.util.empty(values['company_formatted_address']) ||
+				!GO.util.empty(values['company_email']) ||
+				!GO.util.empty(values['company_phone'])			)
+			{
+				return true;
+			} else {
+				return false;
+			}
+		},			
+							
 		isPhoneFieldset : function(values)
 			{
 				if(!GO.util.empty(values['home_phone']) ||
@@ -373,7 +464,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 			},
 			isWorkFieldset : function(values)
 			{
-				if(!GO.util.empty(values['company_name']) ||
+				if(
 					!GO.util.empty(values['function']) ||
 					!GO.util.empty(values['department']))
 				{

@@ -3,6 +3,10 @@
 echo 'Configuring Group-Office'."\n";
 
 $config_file = '/etc/groupoffice/config.php';
+
+if(!isset($config['file_storage_path'])){
+	$config['file_storage_path']='/home/groupoffice/';
+}
 //if(file_exists($config_file))
 //{
 //	//don't overwrite an existing configuration. Create a file with date suffix.
@@ -83,7 +87,7 @@ if(!file_exists($config_file))
 
 
 chgrp('/etc/groupoffice/config.php', 'www-data');
-chmod('/etc/groupoffice/config.php', 0640);
+chmod('/etc/groupoffice/config.php', 0644);
 
 require_once('/etc/groupoffice/config.php');
 
@@ -107,14 +111,20 @@ if(file_exists($config['file_storage_path'].'key.txt'))
 
 system('chown www-data /etc/groupoffice/config.php');
 
-system('su www-data -c "/usr/bin/php '.$config['root_path'].'install/autoinstall.php -c=/etc/groupoffice/config.php --adminpassword=admin --adminusername=admin --adminemail=admin@example.com"');
-system('su www-data -c "/usr/bin/php '.$config['root_path'].'groupofficecli.php -r=maintenance/upgrade -c=/etc/groupoffice/config.php"');
+system('sudo -u www-data /usr/bin/php '.$config['root_path'].'install/autoinstall.php -c=/etc/groupoffice/config.php --adminpassword=admin --adminusername=admin --adminemail=admin@example.com');
+system('sudo -u www-data  /usr/bin/php '.$config['root_path'].'groupofficecli.php -r=maintenance/upgrade -c=/etc/groupoffice/config.php');
 
 system('chown root /etc/groupoffice/config.php');
 
+system('chown www-data /usr/share/groupoffice/groupoffice-license.txt');
+
 //create symlink for site module public files
-if(!file_exists('/var/www/public'))
-	system('ln -s '.$config['file_storage_path'].'public /var/www/public');
+
+$publicLink = is_dir('/var/www/html') ? "/var/www/html/public" : "/var/www/public";
+
+if(!file_exists($publicLink)){
+	system('ln -s '.$config['file_storage_path'].'public '.$publicLink);
+}
 
 
 if(is_dir('/etc/apache2/conf-enabled') && file_exists('/etc/apache2/conf.d/groupoffice.conf')){
@@ -123,4 +133,3 @@ if(is_dir('/etc/apache2/conf-enabled') && file_exists('/etc/apache2/conf.d/group
 }
 
 echo "Done!\n\n";
-?>

@@ -11,6 +11,10 @@ $l['loginScreenText']='Text für Anmeldebildschirm';
 $l['text']='Text';
 $l['title']='Titel';
 $l['loginTextEnabled']='Aktiviere Text für Anmeldebildschirm';
+
 $l['GO\Addressbook\Model\Addressbook']='Adressbuch';
 $l['GO\Tasks\Model\Tasklist']='Aufgabenliste';
 $l['GO\Calendar\Model\Calendar']='Kalender';
+
+$l['notRenamedNoUser']='kann nicht umbenannt werden, da kein Besitzer zum benennen vorhanden ist';
+$l['allRenamingSuccess']='Alle Standardmodelle des Benutzers erfolgreich umbenannt.';

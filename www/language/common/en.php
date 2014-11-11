@@ -101,7 +101,7 @@ $l["cmdAdd"]= 'Add';
 $l["cmdAddPlusNew"]= 'Add + new';
 $l["cmdSavePlusNew"]='Save + new';
 $l["cmdSave"]= 'Save';
-$l["cmdSaveAs"]= 'Save as'; ;
+$l["cmdSaveAs"]= 'Save as';
 $l["cmdEdit"]= 'Edit';
 $l["cmdLink"]= 'Link';
 $l["cmdUnlink"]= 'Unlink';
@@ -319,7 +319,7 @@ $l['selectError']='Error trying to read the data';
 $l['missingField'] = 'You didn\'t fill in all the required fields.';
 $l['invalidEmailError']='The e-mail address was invalid';
 $l['invalidDateError']='You entered an invalid date';
-$l['noFileUploaded']='No file was recieved';
+$l['noFileUploaded']='No file was received';
 $l['error']='Error';
 $l['fileCreateError']='Could not create the file';
 $l['illegalCharsError']='The name contained one of the following illegal characters %s';
@@ -528,7 +528,7 @@ $l['summarylogErrorText']="There where some errors during the import";
 $l['summarylogSuccessText']="Import successful";
 
 $l['exportIncludeHidden'] = 'Export hidden columns too';
-$l['exportHumanHeaders'] = 'Use database column names for headers';
+$l['exportHumanHeaders'] = 'Use DB column names';
 $l['exportIncludeHeaders'] = 'Export headers too';
 $l['exportOrientation'] = 'Orientation';
 
@@ -558,9 +558,9 @@ $l["attributeGreater"]="Field '%s' must be greater than '%s'";
 $l["attributeGreaterOrEqual"]="Field '%s' must be greater or equal than '%s'";
 
 
-$l['userFirst_name']='Firstname';
-$l['userMiddle_name']='Middlename';
-$l['userLast_name']='Lastname';
+$l['userFirst_name']='First name';
+$l['userMiddle_name']='Middle name';
+$l['userLast_name']='Last name';
 $l['userPassword']='Password';
 $l['passwordConfirm']='Repeat password';
 $l['userEmail']='Email address';
@@ -608,7 +608,7 @@ $l['repeats'] = 'Repeats every %s';
 $l['repeats_at'] = 'Repeats every %s at %s';//eg. Repeats every month at the first monday;
 $l['repeats_at_not_every'] = 'Repeats every %s %s at %s';//eg. Repeats every 2 weeks at monday;
 $l['repeats_not_every'] = 'Repeats every %s %s';
-$l['until']='until'; ;
+$l['until']='until';
 
 $l['month_times'][1]='the first';
 $l['month_times'][2]='the second';
@@ -662,9 +662,11 @@ $l['it'] = 'Italy';
 $l['ja'] = 'Japan';
 $l['nb'] = 'Norwegian';
 $l['nl'] = 'Dutch';
+$l['hu'] = 'Hungarian';
 $l['pt'] = 'Portugal';
 $l['sv'] = 'Svenska';
 $l['th'] = 'Thailand';
+$l['pt_BR']='Português - Brasil';
 
 $l['removeDuplicatesAreYouSure']='Are you sure you want to remove duplicates?';
 
@@ -679,7 +681,7 @@ $l["report"]='Report';
 $l['namelessItem'] = 'Nameless item';
 $l['importFileType'] = 'Import file type';
 
-$l['maybeMaxUploadExceeded'] = 'The server did not receive the required parameters from your browser. Probably the maximum filesize for upload of %sMb has been exceeded.';
+$l['maybeMaxUploadExceeded'] = 'The server did not receive the required parameters from your browser. Probably the maximum filesize for upload of %sMB has been exceeded.';
 
 $l['relationDeleteRestrict']="You can't delete this %s because it contains '%s' items. Please remove those first.";
 
@@ -687,4 +689,17 @@ $l['pspell_lang']='en';
 
 $l['dependenciesCannotDelete']="You cannot delete the current module, because the following (installed) modules depend on it: %s.";
 
+
 $l['MailboxNotFoundException'] = "Cannot open the folder \"%s\". Please check your email account settings.";
+
+
+$l['columns'] = 'Columns';
+$l['savedExport'] = 'Saved export';
+$l['savedExports'] = 'Saved exports';
+$l['includeColumnNames'] = 'Include column names';
+$l['manageSavedExports'] = 'Manage saved exports';
+$l['noSavedExports'] = 'No saved exports available';
+
+$l['overwriteAcl'] = 'Overwrite default permissions for this item (click apply to activate)';
+
+$l['cantDeleteDefault'] = "Can't delete the default item.";

@@ -7,6 +7,6 @@ $l["logAction"]="Ação";
 $l["logMessage"]="Mensagem";
 $l["logModel"]="Modelo";
 $l["logModel_id"]="ID";
-$l["logUser_agent"]="User agent";
+$l["logUser_agent"]="Agente de usuário";
 $l["logIp"]="Endereço IP";
 $l["logController_route"]="Controlador";

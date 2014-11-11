@@ -37,10 +37,10 @@ class XlsFile extends File{
 	protected $filetype;
 	
 	/**
-	 * Excel worksheet object to read from.
-	 * @var PHPExcel_Worksheet
+	 * PHPExcel object.
+	 * @var \PHPExcel
 	 */
-	protected $phpExcelSheet;
+	protected $phpExcelObj;
 
 	/**
 	 * @var Boolean
@@ -73,7 +73,7 @@ class XlsFile extends File{
 	protected $nextRowNr;
 	
 	/**
-	 * The largest column size encountered in createRowsBuffer(). Used to store
+	 * The largest column size encountered in resetDimensions(). Used to store
 	 * the bottom of the XLS file.
 	 * @var Int
 	 */
@@ -87,23 +87,37 @@ class XlsFile extends File{
 	protected $nAllowedEmptyCells;
 	
 	/**
+	 * Nr of the sheet to use. Nr 0 = first sheet.
+	 * @var Int $readSheetNr
+	 */
+	protected $sheetNr;
+	
+	/**
+	 * Array of column width integers.
+	 * @var Array $columnWidths
+	 */
+	protected $columnWidths;
+	
+	/**
 	 * Constructor.
 	 * @param String $path The full path to the XLS file.
 	 * @param Int $maxColNr The highest column number to read from.
 	 * @param Int $maxRows The highest row number to read from.
 	 * @param Int $readSheetNr The sheet number to read from
 	 */
-	public function __construct($path,$maxColNr=false,$maxRows=false,$readSheetNr=0) {
+	public function __construct($path=false,$maxColNr=false,$maxRows=false) {
 		
 		$this->path=$path;
 		$this->readOnly=true;		
+		$this->sheetNr=0;
 	
-		$this->init($readSheetNr);
+		$this->init();
 				
 		$this->maxRows = $maxRows!==false ? $maxRows : 1048576;
 		$this->maxColNr = $maxColNr!==false ? $maxColNr : 26*26*2;
 		$this->nAllowedEmptyCells = 1000;
-		$this->createRowsBuffer();
+		if (is_file($this->path))
+			$this->resetDimensions();
 
 		$this->nextRowNr = 1;
 		
@@ -111,13 +125,23 @@ class XlsFile extends File{
 	
 	protected function init($readSheetNr=0) {
 		require_once \GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/IOFactory.php';
-		$this->filetype = PHPExcel_IOFactory::identify($this->path);
-		$xlsReader = PHPExcel_IOFactory::createReader($this->filetype);
-		$xlsReader->setReadDataOnly($this->readOnly);
-		$this->phpExcelSheet = $xlsReader->load($this->path)->getSheet($readSheetNr);
+		if (is_file($this->path)) {
+			$this->filetype = \PHPExcel_IOFactory::identify($this->path);
+			$xlsReader = \PHPExcel_IOFactory::createReader($this->filetype);
+			$xlsReader->setReadDataOnly($this->readOnly);
+			$this->phpExcelObj = $xlsReader->load($this->path);
+//			$this->phpExcelSheet = $xlsReader->load($this->path)->getSheet($readSheetNr);
+		} else {
+			$this->phpExcelObj = new \PHPExcel();
+			$this->phpExcelObj->getProperties()->setCreator(\GO::config()->product_name);
+			$this->phpExcelObj->getProperties()->setLastModifiedBy(\GO::config()->product_name);
+			$this->phpExcelObj->getProperties()->setTitle("Office 2007 XLSX Document");
+			$this->phpExcelObj->getProperties()->setSubject("Office 2007 XLSX Document");
+//			$this->phpExcelObj->getProperties()->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.");
+		}
 	}
 	
-	protected function createRowsBuffer() {
+	protected function resetDimensions() {
 		
 		$this->rowsBuffer = array();
 		$HIGHEST_ROW_WITH_VALUE = -1;
@@ -127,7 +151,7 @@ class XlsFile extends File{
 		for ($row=1;$row<=$this->maxRows && $this->_maxEmptyCellsNotExceeded($row,$HIGHEST_ROW_WITH_VALUE);$row++) {		
 			for ($col=0;$col<=$this->maxColNr && $this->_maxEmptyCellsNotExceeded($col,$HIGHEST_COLUMN_WITH_VALUE);$col++) {
 								
-				$value = $this->phpExcelSheet->getCellByColumnAndRow($col,$row)->getCalculatedValue();
+				$value = $this->phpExcelObj->getSheet($this->sheetNr)->getCellByColumnAndRow($col,$row)->getCalculatedValue();
 				
 				if ( isset($value) && $value!==NULL && $value!==false ) {
 					
@@ -143,15 +167,16 @@ class XlsFile extends File{
 		}
 
 		// Create rows buffer
-		for ($row=1;$row<=$HIGHEST_ROW_WITH_VALUE;$row++) {
-			$rowRecord = array();
-			for ($col=0;$col<=$HIGHEST_COLUMN_WITH_VALUE;$col++) {
-				$rowRecord[] = $this->phpExcelSheet->getCellByColumnAndRow($col,$row)->getCalculatedValue();
-				\GO::debug($this->phpExcelSheet->getCellByColumnAndRow($col,$row)->getCalculatedValue());
-			}
-			$this->rowsBuffer[$row] = $rowRecord;
-		}
+//		for ($row=1;$row<=$HIGHEST_ROW_WITH_VALUE;$row++) {
+//			$rowRecord = array();
+//			for ($col=0;$col<=$HIGHEST_COLUMN_WITH_VALUE;$col++) {
+//				$rowRecord[] = $this->phpExcelSheet->getCellByColumnAndRow($col,$row)->getCalculatedValue();
+//				\GO::debug($this->phpExcelSheet->getCellByColumnAndRow($col,$row)->getCalculatedValue());
+//			}
+//			$this->rowsBuffer[$row] = $rowRecord;
+//		}
 		
+		$this->rightEndOfFileColNr = $HIGHEST_COLUMN_WITH_VALUE;
 		$this->bottomOfFileRowNr = $HIGHEST_ROW_WITH_VALUE;
 		
 	}
@@ -173,7 +198,11 @@ class XlsFile extends File{
 		if ($this->nextRowNr>$this->bottomOfFileRowNr)
 			return false;
 				
-		$rowRecord = $this->rowsBuffer[$this->nextRowNr];
+//		$rowRecord = $this->rowsBuffer[$this->nextRowNr];
+		$rowRecord = array();
+		for ($col=0;$col<=$this->rightEndOfFileColNr;$col++) {
+			$rowRecord[] = $this->phpExcelObj->getSheet($this->sheetNr)->getCellByColumnAndRow($col,$this->nextRowNr)->getCalculatedValue();
+		}
 		$this->nextRowNr++;
 		
 		return $rowRecord;
@@ -183,11 +212,25 @@ class XlsFile extends File{
 	 * TODO: Write record to XLS.
 	 * @param Array $fields The elements of this array will be written into a line
 	 * of the current XLS file.
-	 * @return int The length of the written string, or false on failure.
 	 */
-	public function putRecord($fields){
-		throw new \Exception('TODO: Write record to XLS.');
-		return false;
+	public function putRecord($fields){		
+		
+		foreach ($fields as $colNr=>$field) {
+			if (empty($this->columnWidths[$colNr]) || $this->columnWidths[$colNr]<strlen($field)) {
+				$this->columnWidths[$colNr] = strlen($field);
+				$this->phpExcelObj->getSheet($this->sheetNr)->getColumnDimensionByColumn($colNr)->setWidth($this->columnWidths[$colNr]);
+			}
+			$this->phpExcelObj->getSheet($this->sheetNr)->setCellValueByColumnAndRow($colNr,$this->nextRowNr, $field);
+			
+		}
+		$this->nextRowNr++;
+	}
+
+	public function writeToFile() {
+		
+		$objWriter = new \PHPExcel_Writer_Excel2007($this->phpExcelObj);
+		$objWriter->save($this->path);
+				
 	}
 	
 }

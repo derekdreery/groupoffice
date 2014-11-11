@@ -504,7 +504,7 @@ $l['groupofficeDisabled']="<p>Deze {product_name} account is uitgeschakeld.</p><
 
 
 $l['exportIncludeHidden'] = 'Exporteer ook verborgen kolommen';
-$l['exportHumanHeaders'] = 'Gebruik kolomnamen uit database';
+$l['exportHumanHeaders'] = 'Gebruik DB kolomnamen';
 $l['exportIncludeHeaders'] = 'Exporteer kolomnamen ook';
 $l['exportOrientation'] = 'Orientatie';
 
@@ -638,10 +638,22 @@ $l['namelessItem'] = 'Naamloze item';
 
 $l['importFileType'] = 'Bestandtype voor import';
 
-$l['maybeMaxUploadExceeded'] = 'De server ontving niet de vereiste parameters van uw browser. Mogelijk is de maximale uploadgrootte van %sMb overschreden.';
+$l['maybeMaxUploadExceeded'] = 'De server ontving niet de vereiste parameters van uw browser. Mogelijk is de maximale uploadgrootte van %sMB overschreden.';
 
 $l['relationDeleteRestrict']="U kunt dit %s niet verwijderen omdat het '%s' items bevat. Verwijder deze eerst aub.";
 
 $l['dependenciesCannotDelete']="Deze module kan niet verwijderd worden, omdat de volgende (geïnstalleerde) modules het nodig hebben: %s.";
 
 $l['MailboxNotFoundException'] = "De map \"%s\" kan niet worden geopend. Controller de email account instellingen.";
+
+$l['columns'] = 'Kolommen';
+$l['savedExport'] = 'Opgeslagen export';
+$l['savedExports'] = 'Opgeslagen exports';
+$l['includeColumnNames'] = 'Gebruik kolomnamen';
+$l['manageSavedExports'] = 'Beheer opgeslagen exports';
+$l['noSavedExports'] = 'Geen opgeslagen exports beschikbaar';
+
+
+$l['overwriteAcl'] = 'Overschrijf standaard toegangsrechten voor dit item (Klik op toepassen om te activeren)';
+
+$l['cantDeleteDefault'] = "Standaard item kan niet worden verwijderd.";

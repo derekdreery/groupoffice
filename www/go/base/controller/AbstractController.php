@@ -37,8 +37,26 @@
 
 namespace GO\Base\Controller;
 
+use Exception;
+use GO;
+use GO\Base\Data\JsonResponse;
+use GO\Base\Exception\AccessDenied;
+use GO\Base\Exception\CliOnly;
+use GO\Base\Exception\MissingParameter;
+use GO\Base\Exception\NotFound;
+use GO\Base\Exception\SecurityTokenMismatch;
+use GO\Base\Model\Acl;
+use GO\Base\Model\Module;
+use GO\Base\Observable;
+use GO\Base\Util\Http;
+use GO\Base\Util\Number;
+use GO\Base\View\AbstractView;
+use GO\Base\View\FileView;
+use GO\Base\View\JsonView;
+use ReflectionMethod;
 
-abstract class AbstractController extends \GO\Base\Observable {
+
+abstract class AbstractController extends Observable {
 	
 	
 	
@@ -78,31 +96,52 @@ abstract class AbstractController extends \GO\Base\Observable {
 	
 	
 	
-	protected $layout='ajax';
 	
 	
+	/**
+	 * The view object that renders the response
+	 * If the value is a string the object will be create when the 
+	 * render function is called.
+	 * Valid strings: 'json', 'file'
+	 * @see render()
+	 * @var AbstractView|string
+	 */
+	protected $view = 'file';
+
 	public function __construct() {
 		
-		if (!\GO::config()->enabled) {
+		if (!GO::config()->enabled) {
 			$this->render('Disabled');
 			exit();
 		}	
-		
+				
 		$this->init();
 		
-		
-
-		
-			
-		
-		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-			
-			if(!headers_sent())
-				$this->headers();
-			
-			\GO::debug("OPTIONS request");
-			exit(0);
+		if(is_string($this->view)) {
+			$name = '\\GO\\Base\\View\\'.ucfirst($this->view).'View';
+			$this->view = new $name();
 		}
+	
+		//Handles preflight OPTIONS request
+		if (isset($_SERVER['REQUEST_METHOD'])){
+			switch(strtoupper($_SERVER['REQUEST_METHOD'])){
+				
+				case 'OPTIONS':
+					header('Content-Type: text/plain');
+			
+					foreach(GO::config()->extra_headers as $header){
+						header($header);
+					}
+					GO::debug("OPTIONS request");
+					exit(0);
+					
+				case 'HEAD':
+					header('X-PHP-Response-Code: 501', true, 501);
+					exit(0);
+					
+			}
+		}
+			
 	}
 	
 	protected function init(){
@@ -134,7 +173,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 	private function _unlockAction(){
 		foreach($this->_lockedActions as $a){
 			$lockedConfig = 'locked_action_'.$a;
-			\GO::config()->delete_setting($lockedConfig);
+			GO::config()->delete_setting($lockedConfig);
 		}
 	}
 	
@@ -186,14 +225,14 @@ abstract class AbstractController extends \GO\Base\Observable {
 		// 3. A route to a controller has been given. Because we don't want to block the default page when entered manually.
 		
 		if(
-						!\GO::config()->debug && 
-						!\GO::config()->disable_security_token_check && 
+						!GO::config()->debug && 
+						!GO::config()->disable_security_token_check && 
 //						\GO::user() && No longer needed. We only check token when action requires a logged in user
 						!empty($_REQUEST['r']) && 
-						(!isset($_REQUEST['security_token']) || $_REQUEST['security_token']!=\GO::session()->values['security_token'])
+						(!isset($_REQUEST['security_token']) || $_REQUEST['security_token']!=GO::session()->values['security_token'])
 			){
 			//\GO::session()->logout();			
-			throw new \GO\Base\Exception\SecurityTokenMismatch();
+			throw new SecurityTokenMismatch();
 
 		}
 	}	
@@ -202,7 +241,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 	 * Get the module object to which this controller belongs.
 	 * Returns false if it's a core controller.
 	 * 
-	 * @return \GO\Base\Model\Module 
+	 * @return Module 
 	 */
 	public function getModule(){
 		if(!isset($this->_module)){
@@ -210,7 +249,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 			
 			$moduleId = strtolower($classParts[1]);
 			
-			$this->_module = $moduleId=='core' ? false : \GO\Base\Model\Module::model()->findByPk($moduleId, false, true);			
+			$this->_module = $moduleId=='core' ? false : Module::model()->findByPk($moduleId, false, true);			
 		}
 		
 		return $this->_module;
@@ -225,24 +264,6 @@ abstract class AbstractController extends \GO\Base\Observable {
 	}
 	
 	/**
-	 * Default headers to send. 
-	 */
-	protected function headers(){
-		//iframe hack for file uploads fails with application/json				
-		if(!\GO\Base\Util\Http::isAjaxRequest(false)){
-			header('Content-Type: text/html; charset=UTF-8');
-		}else
-		{
-			header('Content-Type: application/json; charset=UTF-8');
-		}
-
-		foreach(\GO::config()->extra_headers as $header){
-			header($header);
-		}
-	}
-	
-	
-	/**
 	 * Includes the file from the views folder
 	 * 
 	 * @param string $viewName 
@@ -255,71 +276,11 @@ abstract class AbstractController extends \GO\Base\Observable {
 	 * An associative array of which the keys become available variables in the view file.
 	 */
 	protected function render($viewName, $data=array()){
-		
-		if(!headers_sent())
-			$this->headers();
-		
-		$viewPath = \GO::config()->root_path.'views/'.\GO::viewName().'/';
-		
-		if(!($file = $this->findViewFile($viewName))){
-			$file = $viewPath.'/Default.php';						
-		}
-		
-		
-		
-		$layoutFile = $viewPath.'layout/'.$this->layout.'.php';
-		$masterPage = file_exists($layoutFile);
-		
-		if($masterPage){
-			ob_start();
-			ob_implicit_flush(false);
-			
-			extract($data);
-			
-			require($file);
-			
-			$content = ob_get_clean();			
-			
-			ob_start();
-			ob_implicit_flush(false);
-			require($layoutFile);
-			
-			$fullPage = ob_get_clean();
-			
-			\GO::scripts()->render($fullPage);
-			
-			echo $fullPage;
-		}else
-		{
-			require($file);
-		}
+		return $this->view->render($viewName, $data);		
 	}
 	
 	
-	public function findViewFile($viewName){
-		
-		$viewPath = \GO::config()->root_path.'views/'.\GO::viewName().'/';
-		
-		$module = $this->getModule();
-		
-		if(!$module){
-			$file = $viewPath.$viewName.'.php';
-		}else
-		{
-			$file = $module->path.'views/'.\GO::viewName().'/'.$viewName.'.php';
-		}
-		
-		if(file_exists($file)){
-			return $file;
-		}elseif(($file = $viewPath.$viewName.'.php') && file_exists($file))
-		{
-			return $file;
-		}else
-		{			
-			return false;
-		}
-		
-	}
+	
 	
 //	protected function renderPartial($data=array()) {
 //		
@@ -359,7 +320,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 		
 		if(!in_array($action, $allowGuests) && !in_array('*', $allowGuests)){			
 			//check for logged in user
-			if(!\GO::user()){
+			if(!GO::user()){
 				\GO\Base\Util\Http::basicAuth();
 				
 				return false;	
@@ -390,8 +351,8 @@ abstract class AbstractController extends \GO\Base\Observable {
 	private function _checkRequiredPermissionLevels($action){
 		//check action permission
 		if(isset($this->requiredPermissionLevels[$action])){
-			$permLevel = \GO\Base\Model\Acl::getUserPermissionLevel($this->requiredPermissionLevels[$action]['aclId']);
-			return \GO\Base\Model\Acl::getUserPermissionLevel($permLevel,$this->requiredPermissionLevels[$action]['requiredPermissionLevel']);
+			$permLevel = Acl::getUserPermissionLevel($this->requiredPermissionLevels[$action]['aclId']);
+			return Acl::getUserPermissionLevel($permLevel,$this->requiredPermissionLevels[$action]['requiredPermissionLevel']);
 		}elseif($action!='*'){
 			return $this->_checkRequiredPermissionLevels('*');
 		}else
@@ -429,16 +390,16 @@ abstract class AbstractController extends \GO\Base\Observable {
 		$methodName='action'.$action;
 
 		if(!method_exists($this, $methodName))
-			throw new \GO\Base\Exception\NotFound();
+			throw new NotFound();
 		
 		try {	
 			if($checkPermissions && !$this->_checkPermission($action)){
-				throw new \GO\Base\Exception\AccessDenied();
+				throw new AccessDenied();
 			}
 			
 			$ignoreAcl = in_array($action, $this->ignoreAclPermissions()) || in_array('*', $this->ignoreAclPermissions());
 			if($ignoreAcl){		
-				$oldIgnore = \GO::setIgnoreAclPermissions(true);				
+				$oldIgnore = GO::setIgnoreAclPermissions(true);				
 			}
 			
 			$module = $this->getModule();
@@ -448,13 +409,13 @@ abstract class AbstractController extends \GO\Base\Observable {
 			 * a module we run the {Module}Module.php class firstRun function
 			 * The response is added to the controller's action parameters.
 			 */
-			if($module && !isset(\GO::session()->values['firstRunDone'][$module->id])){
+			if($module && !isset(GO::session()->values['firstRunDone'][$module->id])){
 				$moduleClass = "GO\\".ucfirst($module->id)."\\".ucfirst($module->id)."Module";
 
 				if(class_exists($moduleClass)){
 
 					$_REQUEST['firstRun']=call_user_func(array($moduleClass,'firstRun'));
-					\GO::session()->values['firstRunDone'][$module->id]=true;
+					GO::session()->values['firstRunDone'][$module->id]=true;
 				}
 			}
 			
@@ -474,18 +435,18 @@ abstract class AbstractController extends \GO\Base\Observable {
 			
 			//restore old value for acl permissions if this method was allowed for guests.
 			if(isset($oldIgnore))
-				\GO::setIgnoreAclPermissions($oldIgnore);
+				GO::setIgnoreAclPermissions($oldIgnore);
 
 			return $response;
 			
-		} catch (\Exception $e) {
+		} catch (Exception$e) {
 			
 			
 			$this->_unlockAction();
 			
-			\GO::debug("EXCEPTION: ".(string) $e);
+			GO::debug("EXCEPTION: ".(string) $e);
 			
-			$response = new \GO\Base\Data\JsonResponse();
+			$response = new JsonResponse();
 			
 			$response['success'] = false;
 			
@@ -494,7 +455,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 			
 			$response['exceptionClass'] = get_class($e);
 			
-			if($e instanceof \GO\Base\Exception\AccessDenied){
+			if($e instanceof AccessDenied){
 				
 				//doesn't work well with extjs
 //				header("HTTP/1.1 403 Forbidden");
@@ -507,26 +468,26 @@ abstract class AbstractController extends \GO\Base\Observable {
 //				if(!\GO::config()->debug)
 //					trigger_error($report, E_USER_WARNING);
 
-				$response['redirectToLogin']=empty(\GO::session()->values['user_id']);
+				$response['redirectToLogin']=empty(GO::session()->values['user_id']);
 			}
 			
-			if($e instanceof \GO\Base\Exception\SecurityTokenMismatch)
+			if($e instanceof SecurityTokenMismatch)
 				$response['redirectToLogin']=true;
 
-			if(\GO::config()->debug){
+			if(GO::config()->debug){
 				//$response['trace']=$e->getTraceAsString();
 				$response['exception']=(string) $e;
 			}
 			
 			if($this->isCli()){
 				echo "Error: ".$response['feedback']."\n\n";
-				if(\GO::config()->debug){
+				if(GO::config()->debug){
 					echo $e->getTraceAsString()."\n\n";
 				}
 				exit(1);
 			}
 
-			$this->render('Exception', $response);
+			$this->view->render('Exception', array('response'=>$response));
 		}
 	}
 	
@@ -546,7 +507,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 	 */
 	protected function callActionMethod($methodName, $params){
 		
-		$method = new \ReflectionMethod($this, $methodName);
+		$method = new ReflectionMethod($this, $methodName);
 		
 		$rParams = $method->getParameters();
 		
@@ -562,7 +523,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 			$methodArgs = array();
 			foreach($rParams as $param){
 				if(!isset($params[$param->getName()]) && !$param->isOptional())
-					throw new \GO\Base\Exception\MissingParameter("Missing argument '".$param->getName()."' for action method '".get_class ($this)."->".$methodName."'");
+					throw new MissingParameter("Missing argument '".$param->getName()."' for action method '".get_class ($this)."->".$methodName."'");
 				
 				$methodArgs[]=isset($params[$param->getName()]) ? $params[$param->getName()] : $param->getDefaultValue();
 				
@@ -577,7 +538,7 @@ abstract class AbstractController extends \GO\Base\Observable {
 	 * @param string $path 
 	 */
 	protected function redirect($path='', $params=array()){		
-		header('Location: ' .\GO::url($path, $params));
+		header('Location: ' .GO::url($path, $params));
 		exit();
 	}
 	
@@ -590,6 +551,9 @@ abstract class AbstractController extends \GO\Base\Observable {
 	 */
 	public function getRoute($action=''){
 		$arr = explode('\\',get_class($this));
+		
+		if(isset($arr[3]) && strpos($arr[3], 'Controller')!==false)
+			$arr[3] = substr($arr[3],0,0-strlen('Controller')); //cut off Controller from className
 
 		if($arr[1]!='Core')
 			$route=lcfirst($arr[1]).'/'.lcfirst($arr[3]);				
@@ -600,16 +564,6 @@ abstract class AbstractController extends \GO\Base\Observable {
 			$route .= '/'.lcfirst($action);
 		
 		return $route;
-		
-//		if($arr[1]!='Core')
-//			$route=$arr[1].'/'.$arr[3];				
-//		else 
-//			$route=$arr[3];				
-//		
-//		if($action!='')
-//			$route .= '/'.$action;
-//		
-//		return strtolower($route);
 	}	
 	
 	/**
@@ -628,11 +582,11 @@ abstract class AbstractController extends \GO\Base\Observable {
 	/**
 	 * Check if action is ran on the Command Line Interface
 	 * 
-	 * @throws \GO\Base\Exception\CliOnly
+	 * @throws CliOnly
 	 */
 	public function requireCli(){
 		if(!$this->isCli())
-			throw new \GO\Base\Exception\CliOnly();
+			throw new CliOnly();
 	}
 	
 	/**
@@ -652,20 +606,20 @@ abstract class AbstractController extends \GO\Base\Observable {
 		}
 		
 		if(count($missingParams))
-			throw new \Exception("The following required controller action params are missing: ".implode(",", $missingParams));
+			throw new Exception("The following required controller action params are missing: ".implode(",", $missingParams));
 				
 	}
 
 	protected function checkMaxPostSizeExceeded() {
 		if (empty($_POST) && empty($_FILES)) {
-			$postMaxSize = \GO\Base\Util\Number::configSizeToMB(ini_get('post_max_size'));
-			$uploadMaxFileSize = \GO\Base\Util\Number::configSizeToMB(ini_get('upload_max_filesize'));
+			$postMaxSize = Number::configSizeToMB(ini_get('post_max_size'));
+			$uploadMaxFileSize = Number::configSizeToMB(ini_get('upload_max_filesize'));
 
 			
 			
 			$maxFileSize = $postMaxSize > $uploadMaxFileSize ? $uploadMaxFileSize : $postMaxSize;
 			
-			throw new \Exception(sprintf(\GO::t('maybeMaxUploadExceeded'),$maxFileSize));
+			throw new Exception(sprintf(GO::t('maybeMaxUploadExceeded'),$maxFileSize));
 		}
 	}
 	

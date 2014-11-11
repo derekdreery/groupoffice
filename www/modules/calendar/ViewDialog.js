@@ -80,7 +80,12 @@ GO.calendar.ViewDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 						hideLabel : true,
 						disabled : true,
 						checked : true
-					})
+					}),{
+						xtype:'plainfield',
+						fieldLabel:GO.calendar.lang.directUrl,
+						name:'url',
+						anchor:'100%'
+					}
 					]
 				}),
 				this.calendarsGrid

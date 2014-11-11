@@ -21,7 +21,7 @@ GO.calendar.ContextMenu = function(config){
 		text: GO.lang.copy,
 		cls: 'x-btn-text-icon',
 		scope:this,		
-		disabled:true,
+		disabled:false,
 		handler: function()
 		{
 			this.showSelectDateDialog(true, false);
@@ -114,8 +114,25 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 
 		this.view_id = (view_id) ? view_id : 0;
 
-		this.actionCopy.setDisabled(this.event.read_only);
+//		this.actionCopy.setDisabled(this.event.read_only);
 		this.actionCut.setDisabled(this.event.read_only);
+		
+		if (GO.email) {
+		// Disable "Create email for participants" when it's a private event and it's not yours
+			if(this.event.private && this.event.user_id != GO.settings.user_id){
+				this.actionCreateMail.setDisabled(true);
+			}	else {
+				this.actionCreateMail.setDisabled(false);
+			}
+		}
+		
+		if(this.event.private && this.event.user_id != GO.settings.user_id){
+			this.actionCopy.setDisabled(true);
+			this.actionInfo.setDisabled(true);
+		} else {
+			this.actionCopy.setDisabled(false);
+			this.actionInfo.setDisabled(false);
+		}
 		
 		var deleteEnabled=false;
 		if(typeof(this.event.is_organizer)!='undefined' && !this.event.is_organizer)
@@ -125,7 +142,8 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 		
 		this.actionDelete.setDisabled(!deleteEnabled);
 		
-		this.actionInfo.setDisabled(!event.event_id);
+//		this.actionInfo.setDisabled(!event.event_id);
+		
 		if(this.actionAddTimeRegistration)
 			this.actionAddTimeRegistration.setDisabled(!event.event_id);
 		

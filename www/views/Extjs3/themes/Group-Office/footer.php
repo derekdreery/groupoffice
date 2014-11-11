@@ -1,5 +1,5 @@
 <?php
-		$this->fireEvent('footer');
+		GO::router()->getController()->fireEvent('footer');
 ?>	
 
 </body>

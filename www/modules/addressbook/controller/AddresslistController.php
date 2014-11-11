@@ -86,6 +86,7 @@ class AddresslistController extends \GO\Base\Controller\AbstractModelController 
 				$model->addManyMany('contacts', $add_key);
 		}elseif(!empty($params['add_search_result'])){
 			$findParams = \GO::session()->values["contact"]['findParams'];
+			$findParams->getCriteria()->recreateTemporaryTables();
 			$findParams->limit(0)->select('t.id');
 			
 			$model = \GO\Addressbook\Model\Addresslist::model()->findByPk($params['addresslist_id']);
@@ -128,6 +129,7 @@ class AddresslistController extends \GO\Base\Controller\AbstractModelController 
 				$model->addManyMany('companies', $add_key);
 		}elseif(!empty($params['add_search_result'])){
 			$findParams = \GO::session()->values["company"]['findParams'];
+			$findParams->getCriteria()->recreateTemporaryTables();
 			$findParams->limit(0)->select('t.id');
 			
 			$model = \GO\Addressbook\Model\Addresslist::model()->findByPk($params['addresslist_id']);

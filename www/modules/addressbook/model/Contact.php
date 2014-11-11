@@ -67,6 +67,7 @@
  * @property string $url_twitter
  * @property string $skype_name
  * @property int $last_email_time
+ * @property string $color
  */
 
 namespace GO\Addressbook\Model;
@@ -288,7 +289,11 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 			$this->company_id=$company->id;			
 		}
 				
+		
 		$this->_prefixSocialMediaLinks();
+		
+		if (empty($this->color))
+			$this->color = "000000";
 		
 		return parent::beforeSave();
 	}
@@ -519,7 +524,7 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 	/**
 	 * Import a contact (with or without company) from a VObject 
 	 * 
-	 * @param Sabre_VObject_Component $vobject
+	 * @param Sabre\VObject\Component $vobject
 	 * @param array $attributes Extra attributes to apply to the contact. Raw values should be past. No input formatting is applied.
 	 * @return Contact
 	 */
@@ -535,27 +540,7 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 			$attributes['uuid'] = $uid;
 		
 		$emails = array();
-//		$remainingVcardProps = array(); // format: $remainingVcardProps[$integer] = array('name'=>$vobjName, 'parameters'=>$vobjParams, 'value'=>$vobjValue)
-//		$deletedPropertiesPrefixes_nonGO = array(); // This is to keep track of the prefixes occurring in the current VCard.
-																	// Every time a new prefix is encountered during the current sync,
-																	// all of this contact's properties starting with this prefix will
-																	// be removed to make place for the ones in the imported VCard.
 
-		// Remove this contact's non-GO VCard properties.
-		// (We assume they will be updated by the client during the current sync process).
-//		if (!empty($this->id)) {
-//			$nonGO_PropModels_toDelete = ContactVcardProperty::model()
-//				->find(
-//					\GO\Base\Db\FindParams::newInstance()
-//						->criteria(
-//							\GO\Base\Db\FindCriteria::newInstance()
-//								->addCondition('contact_id',$this->id)
-//								->addCondition('name','X-%','NOT LIKE')
-//						)
-//				);
-//			while ($contactVcardProp = $nonGO_PropModels_toDelete->fetch())
-//				$contactVcardProp->delete();
-//		}
 		
 		foreach ($vobject->children as $vobjProp) {
 			switch ($vobjProp->name) {
@@ -710,8 +695,11 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 					$attributes['function'] = $vobjProp->getValue();
 					break;
 				case 'BDAY':
-					if($vobjProp->getValue())
-						$attributes['birthday'] = substr($vobjProp->getValue(),0,4).'-'.substr($vobjProp->getValue(),5,2).'-'.substr($vobjProp->getValue(),8,2);
+					if($vobjProp->getValue()) {
+						// is already formatted in GO\Base\VObject\Reader::convertVCard21ToVCard30
+						// $attributes['birthday'] = substr($vobjProp->getValue(),0,4).'-'.substr($vobjProp->getValue(),5,2).'-'.substr($vobjProp->getValue(),8,2);
+						$attributes['birthday'] = $vobjProp->getValue();
+					}
 					break;				
 				case 'NOTE':
 					$attributes['comment'] = $vobjProp->getValue();

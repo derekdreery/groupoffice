@@ -73,6 +73,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		if (!config) {
 			config = {};
 		}
+		
+		this.showConfig=config;
 
 		GO.dialogListeners.apply(this);
 
@@ -125,14 +127,30 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 				//	this.selectTaskList.setRemoteText(action.result.data.tasklist_name);
 				this.selectTaskList.setRemoteText(action.result.remoteComboTexts.tasklist_id);
-				
+
 				if(this.selectProject){
-					if(config.link_config && config.link_config.model_name=="GO\\Projects\\Model\\Project"){					
+					if(config.link_config && config.link_config.model_name=="GO\\Projects2\\Model\\Project"){			
+
 						this.selectProject.setValue(config.link_config.model_id);
 						this.selectProject.setRemoteText(config.link_config.text);
 					}else
 					{
 						this.selectProject.setRemoteText(action.result.remoteComboTexts.project_id);
+					}
+				}
+				
+				if(GO.comments){	
+					if(action.result.data['id'] > 0){
+						if (!GO.util.empty(action.result.data['action_date'])) {
+							this.commentsGrid.actionDate = action.result.data['action_date'];
+						} else {
+							this.commentsGrid.actionDate = false;
+						}
+						this.commentsGrid.setLinkId(action.result.data['id'], 'GO\\Tasks\\Model\\Task');
+						this.commentsGrid.store.load();
+						this.commentsGrid.setDisabled(false);
+					}else {
+						this.commentsGrid.setDisabled(true);
 					}
 				}
 				
@@ -357,7 +375,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			emptyText:GO.tasks.lang.selectCategory,
 			editable:false,
 			selectOnFocus:true,
-			forceSelection:true
+			forceSelection:true,
+			pageSize: parseInt(GO.settings['max_rows_list'])
 		});
 
 		this.selectPriority = new GO.form.SelectPriority();
@@ -375,6 +394,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			defaults : {
 				anchor : '-20'
 			},
+			labelWidth:120,
 			// cls:'go-form-panel',waitMsgTarget:true,
 			bodyStyle : 'padding:5px',
 			layout : 'form',
@@ -416,8 +436,12 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			]
 
 		});
-		
-		if(GO.moduleManager.userHasModule("projects")){
+
+		if(GO.moduleManager.userHasModule("projects2")){
+			descAnchor-=20;
+			this.selectProject = new GO.projects2.SelectProject();
+			propertiesPanel.add(this.selectProject);
+		} else if(GO.moduleManager.userHasModule("projects")) {
 			descAnchor-=20;
 			this.selectProject = new GO.projects.SelectProject();
 			propertiesPanel.add(this.selectProject);
@@ -581,7 +605,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			hideMode : 'offsets',
 			autoScroll : true,
 			items : [{
-				xtype : 'checkbox',
+				xtype : 'xcheckbox',
 				boxLabel : GO.tasks.lang.remindMe,
 				hideLabel : true,
 				name : 'remind',
@@ -621,6 +645,12 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				items.push(GO.customfields.types["GO\\Tasks\\Model\\Task"].panels[i]);
 			}
 		}
+		
+		if(GO.comments){
+			this.commentsGrid = new GO.comments.CommentsGrid({title:GO.comments.lang.comments});
+			items.push(this.commentsGrid);
+		}
+		
 		this.tabPanel = new Ext.TabPanel({
 			activeTab : 0,
 			deferredRender : false,

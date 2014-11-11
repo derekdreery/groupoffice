@@ -166,7 +166,7 @@ $l["moving"]='Premještanje...';
 $l["orderFilters"]='Možete promjeniti redoslijed filtera sa povlačenjem.';
 $l["orderAccounts"]='Možete promjeniti redoslijed računa sa povlačenjem.';
 $l["groups"]='Grupe';
-$l["showUnread"]='Pokaži nepročitane';
+$l["showUnread"]='Prikaži nepročitane';
 $l["searchFrom"]='Pošiljatelj';
 $l["searchTo"]='Primatelj';
 $l["searchCC"]='Primatelj (CC)';
@@ -251,3 +251,13 @@ $l['noname']= 'bezimena';
 
 $l['doNotMarkAsRead']= 'Ne označavaj automatski poruke e-pošte kao pročitane';
 $l['showAll']='Prikaži sve';
+
+$l['defaultEmailTemplate']='Zadani predložak e-pošte';
+$l['searchIn']= 'Traži u';
+$l['searchRecursive']= 'Traži rekurzivno';
+$l['currentFolder']= 'Trenutna mapa';
+$l['allFolders']= 'Sve mape';
+$l['useAuth']="Koristi autentifikaciju";
+$l['linkMustHavePermissionToWrite']= 'Nemate tražene ovlasti PISANJA na taj objekt, tako da vam nije dozvoljeno povezivanje e-pošte sa njime.';
+$l['sortAddressesByMailTime']= 'Razvrstaj adrese primatelja prema vremenu zadnje poslane e-pošte (zahtjeva modul adresara)';
+$l['permissionDelegated']= 'Samo za čitanje i delegiranje';

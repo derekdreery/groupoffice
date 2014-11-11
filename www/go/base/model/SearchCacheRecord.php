@@ -96,7 +96,7 @@ class SearchCacheRecord extends \GO\Base\Db\ActiveRecord {
 	 * Set this to true so it won't be deleted.
 	 * @var type 
 	 */
-	public $joinAclField = true;
+	public $isJoinedAclField = true;
 	
 	
 	public function countLinks($model_id = 0) {

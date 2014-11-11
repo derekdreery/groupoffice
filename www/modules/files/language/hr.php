@@ -120,3 +120,10 @@ $l['rememberFileHandler']="Zapamti moju odluku za ovu vrstu datoteke";
 $l['alwaysAsk']="Uvijek pitaj";
 $l['openWith']='Otvori sa';
 $l['open']='Otvori';
+
+$l['dontDeleteSystemFolder']="Ne možete obrisati sistemski direktorij";
+$l['rightClickToCopy']='Desni klik za kopiranje';
+$l['deleteExpiredLabel']='Obriši datoteke sa isteklim poveznicama za preuzimanje';
+$l['deleteExpiredDescription']='Obriši datoteke čije poveznice više nisu ispravne';
+$l['deleteWhenExpired']= 'Automatski obriši datoteke kada poveznica za preuzimanje istekne';
+$l['automaticallyDeleted']= 'Datoteke će biti automatski obrisane kada poveznica za preuzimanje istekne';

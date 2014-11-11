@@ -227,8 +227,32 @@ $l['cronEventAndTaskReportMailerDescription']='Envoyer quotidiennement par courr
 $l['cronEventAndTaskReportMailerPdfSubtitle']='Les évènements et tâches d\'aujourd\'hui';
 $l['cronEventAndTaskReportMailerSubject']='Les évènements et tâches d\'aujourd\'hui';
 $l['cronEventAndTaskReportMailerContent']='Veuillez trouver en attachement de ce courriel le PDF contenant la liste des évènements et tâches.';
-
 $l['eventPrivateChecked']="L\'événement est marqué comme privé, les fichiers de cet événement sont toujours accessibles par les utilisateurs qui disposent d\'autorisations à l\'agenda pour cet événement.";
 $l['show_completed_tasks']= "Afficher les tâches terminées";
 $l['showStatuses']="Afficher statuts d'événements en vue";
 $l['cantMoveRecurringByDay']="Désolé, vous ne pouvez pas déplacer des événements qui reviennent en semaine à d\'autres jours comme ça. S\'il vous plaît ouvrez l\'événement et ajuster les propriétés de récurrence.";
+
+ 
+$l['updateReponses']['NEEDS-ACTION']='%s est marqué comme évènement %s n\'nest pas encore validé';
+$l['sendUpdateNotification']='Voulez-vous d\'informer les participants par e-mail sur le ou les  changement(s)?';
+$l['eventNotSavedSubject']= 'L\'événement n\'est pas enregistré dans %event du calendrier "%cal"';
+$l['eventNotSavedBody']= 'Ce message vient de votre calendrier %goname. %goname tenté d\'importer un événement appelé "%event" avec un démarrage à %starttime à partir d\'un calendrier externe dans le calendrier "%cal", mais qui ne pouvait se faire parce que l\'événement comportait des erreurs. L\'événement peut-être encore dans le calendrier externe.';
+$l['usedResources']= 'Ressources utilisées';
+$l['shareCalendarsCron']= 'Mise à jour des calendriers partagés';
+$l['shareCalendarsCronDescription']= 'Mettre à jour les fichiers du calendrier partagé dans les calendriers qui sont publiés.';
+$l['cmdPrintView']= 'Imprimer la vue courante';
+$l['cmdPrintCategoryCount']= 'Imprimer par catégorie';
+$l['startDate']= 'Date de début';
+$l['endDate']= 'Date de fin';
+$l['eventsPerCategoryCount']= 'Nombre d\'événements par catégorie';
+$l['nextMonth']= 'Mois suivant';
+$l['previousMonth']= 'Mois précédent';
+$l['till']= 'Jusqu\'à';
+$l['total']= 'Total';
+$l['sendNotificationToNewParticipants']='Voulez vous notifier par courriel uniquement les participants que vous venez d\'ajouter?';
+$l['newParticipants']='Nouveaux participants';
+$l['allParticipants']='Tous les participants';
+$l['noParticipants']='Pas de notification';
+$l['cannotHandleInvitation']='Le calendrier associé au compte  est "%s" et vous n\'avez pas la permission d\'écrire dans celui-ci. Comme l\'évènement est dans ce calendrier, sont statut ne sera pas changé.';
+$l['cannotHandleInvitation2']='Mise à jour de l\'évènement impossible car vous ne disposez pas de droits suffisants (calendrier: "%s"). Comme l\'évènement est dans ce calendrier, sont statut ne sera pas changé.';
+$l['tooltip']= 'Texte d\'info';

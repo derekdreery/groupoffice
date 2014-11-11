@@ -119,3 +119,5 @@ $l['sieveWarning']="Pokud Váš poštovní server podporuje sieve filtry, doporu
 $l['setRead']='Označit jako přečtené';
 
 $l['stopEndError'] = 'Pro ukončení je potřebná akce Konec!';
+
+$l['body']='Tělo zprávy';

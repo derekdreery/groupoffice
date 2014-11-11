@@ -121,9 +121,6 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 
 		if(GO.calendar){
 
-
-
-
 			templateStr += '<tpl if="!GO.util.empty(values.iCalendar)">'+
 				'<tpl if="iCalendar.feedback">'+
 				'<div class="message-icalendar">'+
@@ -163,6 +160,17 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				'</tpl>'+
 				'</tpl>';
 		}
+
+		templateStr += '<tpl if="values.isInSpamFolder==\'1\';">'+
+				'<div class="message-move">'+
+					GO.email.lang['thisIsSpam1']+' <a id="em-move-mail-link-'+this.bodyId+'" class="go-model-icon-GO\\Email\\Model\\Message normal-link" style="background-repeat:no-repeat;" href="javascript:GO.email.moveToInbox(\'{values.uid}\',\'{values.account_id}\');" >'+GO.email.lang['thisIsSpam2']+'</a> '+GO.email.lang['thisIsSpam3']+
+				'</div>'+
+			'</tpl>'+
+			'<tpl if="values.isInSpamFolder==\'0\';">'+
+				'<div class="message-move">'+
+					GO.email.lang['thisIsNotSpam1']+' <a id="em-move-mail-link-'+this.bodyId+'" class="go-model-icon-GO\\Email\\Model\\Message normal-link" style="background-repeat:no-repeat;" href="javascript:GO.email.moveToSpam(\'{values.uid}\',\'{values.mailbox}\',\'{values.account_id}\');" >'+GO.email.lang['thisIsNotSpam2']+'</a> '+GO.email.lang['thisIsNotSpam3']+
+				'</div>'+
+			'</tpl>';
 
 		templateStr += '<div id="'+this.bodyId+'" class="message-body go-html-formatted">{htmlbody}'+
 			'<tpl if="body_truncated">'+
@@ -496,7 +504,14 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 									uid:this.uid,
 									contact_id:this.data.sender_contact_id
 								},
-								maskEl:Ext.getBody()
+								maskEl:Ext.getBody(),
+								success: function(options, response, result) {
+									if (result.success) {
+										this.data.contact_linked_message_id = result.linked_email_id;
+									}
+									this.getEl().unmask();
+								},
+								scope:this
 							});
 						}else{
 							GO.request({
@@ -507,7 +522,14 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 									model_name2:'GO\\Savemailas\\Model\\LinkedEmail',
 									id2:this.data.contact_linked_message_id
 								},
-								maskEl:Ext.getBody()
+								maskEl:Ext.getBody(),
+								success: function(options, response, result) {
+									if (result.success) {
+										this.data.company_linked_message_id = result.linked_email_id;
+									}
+									this.getEl().unmask();
+								},
+								scope:this
 							});
 						}
 					}

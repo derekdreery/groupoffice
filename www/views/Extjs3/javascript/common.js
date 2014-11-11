@@ -13,6 +13,8 @@
  
 Ext.namespace('GO.util');
 
+Ext.Ajax.timeout = 180000; // 3 minutes
+
 /**
  * Strpos function for js 
  */
@@ -56,7 +58,12 @@ GO.openHelp = function(page){
 
 
 GO.util.callToLink = function(phone){
-	return '<a onclick="GO.mainLayout.fireEvent(\'callto\', \''+phone+'\');" href="'+GO.calltoTemplate.replace('{phone}', phone.replace('(0)','').replace(/[^0-9+]/g,''))+'">'+phone+'</a>';
+
+	if(GO.util.empty(GO.settings.config.encode_callto_link)){
+		return '<a onclick="GO.mainLayout.fireEvent(\'callto\', \''+phone+'\');" href="'+GO.calltoTemplate.replace('{phone}', phone.replace('(0)','').replace(/[^0-9+]/g,''))+'">'+phone+'</a>';
+	} else {
+		return '<a onclick="GO.mainLayout.fireEvent(\'callto\', \''+phone+'\');" href="'+GO.calltoTemplate.replace('{phone}', encodeURIComponent(phone.replace('(0)','').replace(/[^0-9+]/g,'')))+'">'+phone+'</a>';		
+	}
 }
 
 GO.url = function(relativeUrl, params){
@@ -83,7 +90,7 @@ GO.url = function(relativeUrl, params){
  */
 GO.request = function(config){
 	
-//	Ext.Ajax.timeout=5000;
+//	Ext.Ajax.timeout=180000;
 
 	var url = GO.url(config.url);
 	delete config.url;

@@ -3,11 +3,17 @@
 
 namespace GO\Email\Controller;
 use GO;
-
-
+	
+	
+	
+	
 class AccountController extends \GO\Base\Controller\AbstractModelController {
 
 	protected $model = "GO\Email\Model\Account";
+	
+	protected function allowGuests() {
+		return array('setsieve');
+	}
 
 
 //	protected function actionTest($params){
@@ -45,6 +51,12 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 		return $findParams;
 	}
 
+	protected function actionSetSieve(){
+		if($this->isCli()){
+			GO::getDbConnection()->query("UPDATE em_accounts set sieve_port=4190 where host='localhost'");
+		}
+	}
+	
 	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name', '$model->user->name');
 		return parent::formatColumns($columnModel);
@@ -52,7 +64,7 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 
 	protected function afterLoad(&$response, &$model, &$params) {
 
-
+		$response['data']['email_enable_labels'] = !empty(GO::config()->email_enable_labels); 
 
 		$response['data']['smtp_auth']=!empty($model->smtp_username);
 
@@ -398,6 +410,7 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 			$node = array(
 					'text' => $text,
 					'mailbox' => $mailbox->name,
+					'name' => $mailbox->getDisplayName(), // default value when renaming folder
 					'account_id' => $mailbox->getAccount()->id,
 					'iconCls' => 'folder-default',
 					'id' => $nodeId,
@@ -457,6 +470,7 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 					$node['iconCls'] = 'email-folder-drafts';
 					$sortIndex = 2;
 					break;
+				case 'INBOX/Spam':
 				case 'INBOX.Spam':
 				case 'Spam':
 					$node['iconCls'] = 'email-folder-spam';
@@ -585,8 +599,13 @@ class AccountController extends \GO\Base\Controller\AbstractModelController {
 			  throw new \GO\Base\Exception\AccessDenied();
 
 			$targetImapConnection = $targetAccountModel->openImapConnection($params["targetMailboxPath"]);
+			
+			$flags = '';
+			
+			if($srcMessageInfo->seen)
+				$flags = '\SEEN';
 
-			$targetImapConnection->append_message($params['targetMailboxPath'], $srcImapMessage->getSource());
+			$targetImapConnection->append_message($params['targetMailboxPath'], $srcImapMessage->getSource(), $flags);
 		}
 
 		return array('success'=>true);

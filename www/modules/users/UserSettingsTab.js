@@ -2,6 +2,14 @@ GO.users.UserSettingsTab = function(config)
 	{
 		config = config || {};
 
+		this.settingNoReminders = new Ext.ux.form.XCheckbox({
+			boxLabel: GO.users.lang['noReminders'],
+			name: 'no_reminders',
+			checked: false,
+			hideLabel:true
+		});
+
+
 		this.formFirstName = new Ext.form.TextField(
 		{
 			fieldLabel: GO.lang.strFirstName,
@@ -211,6 +219,17 @@ GO.users.UserSettingsTab = function(config)
 		config.items=[{
 			columnWidth:.5, 
 			items: [{
+				xtype:'fieldset',		
+				defaults: {
+					border: true,
+					anchor:'100%'
+				},
+				autoHeight:true,
+				title:GO.lang.cmdSettings,
+				items:[
+					this.settingNoReminders
+				]
+			},{
 				xtype:'fieldset',		
 				defaults: {
 					border: true,

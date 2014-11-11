@@ -72,6 +72,7 @@ GO.email.MessageDialog = function(config){
 	config.title=GO.email.lang.message;
 	config.stateId='email-message-dialog';
 	config.maximizable=true;
+	config.collapsible=true;
 	config.modal=false;
 	config.width=600;
 	config.height=500;

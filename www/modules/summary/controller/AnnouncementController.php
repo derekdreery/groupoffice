@@ -30,11 +30,28 @@ class AnnouncementController extends \GO\Base\Controller\AbstractModelController
 			return \GO\Base\Db\FindParams::newInstance()->select('t.*');
 	}
 	
+	protected function afterStore(&$response, &$params, &$store, $storeParams) {
+		\GO\Summary\Model\LatestReadAnnouncementRecord::updateLatestRecord(\GO::user()->id);
+		return parent::afterStore($response, $params, $store, $storeParams);
+	}
+	
 	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		
 		$columnModel->formatColumn('user_name', '$model->user->name');
 		
 		return parent::formatColumns($columnModel);
 	}
+	
+	protected function actionCheckLatestRead($params) {
+		
+		$response = array(
+			'has_unread' => \GO\Summary\Model\LatestReadAnnouncementRecord::userHasUnreadAnnouncement(\GO::user()->id),
+			'success' => true
+		);
+		
+		echo json_encode($response);
+		
+	}
+	
 }
 

@@ -1,11 +1,10 @@
 <?php
+namespace GO\Base\Util;
+
 require(\GO::config()->root_path.'go/vendor/odtphp/library/odf.php');
 
 
-namespace GO\Base\Util;
-
-
-class Odf extends Odf{
+class Odf extends \Odf{
 	
 	public function __construct($filename, $config = array()) {
 		

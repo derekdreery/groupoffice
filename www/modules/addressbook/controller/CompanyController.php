@@ -310,7 +310,7 @@ class CompanyController extends \GO\Base\Controller\AbstractModelController {
 	protected function actionMoveEmployees($params) {
 		$to_company = \GO\Addressbook\Model\Company::model()->findByPk($params['to_company_id']);
 
-		$contacts = \GO\Addressbook\Model\Contacts::model()->find(
+		$contacts = \GO\Addressbook\Model\Contact::model()->find(
 						\GO\Base\Db\FindCriteria::newInstance()
 										->addCondition('company_id', $params['from_company_id'])
 		);
@@ -402,8 +402,9 @@ class CompanyController extends \GO\Base\Controller\AbstractModelController {
 	protected function actionSelectCompany($params){
 		
 				$response = array('total'=>0, 'results'=>array());
-			
-		$query = '%'.preg_replace ('/[\s*]+/','%', $params['query']).'%'; 
+			$query = !empty($params['query']) ? $params['query'] : '';
+				
+		$query = '%'.preg_replace ('/[\s*]+/','%', $query).'%'; 
 				
 		
 		$findParams = \GO\Base\Db\FindParams::newInstance()
@@ -422,7 +423,7 @@ class CompanyController extends \GO\Base\Controller\AbstractModelController {
 				'type'=>'INNER' //defaults to INNER,
 
 			))			
-			->limit(10);
+			->limit(10)->order('t.name');
 
 //		}
 

@@ -66,7 +66,13 @@ abstract class AbstractExport {
 	 */
 	public static $useOrientation=false;
 	
-
+	/**
+	 * Here you can add extra data(lines) that will be parsed after the store data
+	 * 
+	 * @var array 
+	 */
+	protected $_lines = false;
+	
 	/**
 	 * The constructor for the exporter
 	 * 
@@ -87,7 +93,7 @@ abstract class AbstractExport {
 		if(is_a($store, "\GO\Base\Data\DbStore")){
 			$exportName = $this->store->getFindParams()->getParam('export');
 			
-			$this->totalizeColumns = isset(GO::session()->values[$exportName]['totalizeColumns']) ? GO::session()->values[$exportName]['totalizeColumns'] : array();
+			$this->totalizeColumns = isset(\GO::session()->values[$exportName]['totalizeColumns']) ? \GO::session()->values[$exportName]['totalizeColumns'] : array();
 			foreach($this->totalizeColumns as $column){
 				$this->totals[$column]=0;
 			}
@@ -159,7 +165,7 @@ abstract class AbstractExport {
 	 * @param array $lines key value array
 	 */
 	public function addLines($lines){
-		
+		$this->_lines = $lines;
 	}
 	
 	/**

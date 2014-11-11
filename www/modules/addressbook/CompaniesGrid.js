@@ -8,7 +8,7 @@ GO.addressbook.CompaniesGrid = function(config){
 	config.paging=true;
 	
 	var fields ={
-		fields:['id','name','name2','homepage','email','phone','fax','address','address_no','zip','city','state','country','post_address','post_address_no','post_city','post_state','post_country','post_zip','bank_no','vat_no','invoice_email','ctime','mtime','iban','crn','ab_name'],
+		fields:['id','name','name2','homepage','email','phone','fax','address','address_no','zip','city','state','country','post_address','post_address_no','post_city','post_state','post_country','post_zip','bank_no','vat_no','invoice_email','ctime','mtime','iban','crn','ab_name','color'],
 		columns:[
 		{
 			header: GO.addressbook.lang.id,
@@ -206,7 +206,7 @@ GO.addressbook.CompaniesGrid = function(config){
 		{
 			alert(config.store.reader.jsonData.feedback);
 		}
-	},this)
+	},this);
 
 	var companiesColumnModel =  new Ext.grid.ColumnModel({
 		defaults:{
@@ -218,7 +218,23 @@ GO.addressbook.CompaniesGrid = function(config){
 	config.cm=companiesColumnModel;
 	
 	config.view=new Ext.grid.GridView({
-		emptyText: GO.lang.strNoItems	
+		emptyText: GO.lang.strNoItems,
+		getRowClass: function(record, rowIndex, rp, ds){
+
+			if(!rp.tstyle)
+				rp.tstyle = '';
+
+			if(!rp.initialstyle)
+				rp.initialstyle = rp.tstyle;
+
+			if(record.data.color){				
+				rp.tstyle += "color:#"+record.data.color+";";
+			} else {
+				rp.tstyle= rp.initialstyle;
+			}
+
+			return;
+		}
 	}),
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;

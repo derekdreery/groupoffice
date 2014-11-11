@@ -10,9 +10,7 @@ GO.base.upload.PluploadPanel = function(config){
 		url: GO.url('core/plupload'),
 		//the only required parameter
 
-		//runtimes: 'html5,gears,flash,silverlight,browserplus,html4',
 		runtimes: 'html5,gears,flash,html4',
-		//runtimes: 'html4',
 		// first available runtime will be used
 
 		multipart: true,

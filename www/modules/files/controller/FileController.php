@@ -89,7 +89,7 @@ class FileController extends \GO\Base\Controller\AbstractModelController {
 						$qp = json_decode($params['query_params'], true);
 						if (isset($qp['content_all'])){
 
-							$c = new \GO\Filesearch\Controller\Filesearch();
+							$c = new \GO\Filesearch\Controller\FilesearchController();
 
 							$response['data']['text'] = $c->highlightSearchParams($qp, $response['data']['text']);
 						}
@@ -141,8 +141,10 @@ class FileController extends \GO\Base\Controller\AbstractModelController {
 	
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
-		if(isset($params['name']))		
-			$params['name'].='.'.$model->fsFile->extension();		
+		if(isset($params['name'])){		
+			$params['name'] = \GO\Base\Fs\File::stripInvalidChars($params['name']); // Strip invalid chars
+			$params['name'].='.'.$model->fsFile->extension();
+		}
 		
 		if(isset($params['lock'])){
 			//GOTA sends lock parameter It does not know the user ID.
@@ -238,11 +240,17 @@ class FileController extends \GO\Base\Controller\AbstractModelController {
 				throw new \Exception(\GO::t('downloadLinkExpired', 'files'));				
 		}else
 		{
-			if(!\GO::user())
-				\GO\Base\Util\Http::basicAuth();
-				
-			if(!$file->checkPermissionLevel(\GO\Base\Model\Acl::READ_PERMISSION))
-				throw new \GO\Base\Exception\AccessDenied();
+			
+			$public = substr($file->path,0,6)=='public';
+			
+			if(!$public){
+			
+				if(!\GO::user())
+					\GO\Base\Util\Http::basicAuth();
+
+				if(!$file->checkPermissionLevel(\GO\Base\Model\Acl::READ_PERMISSION))
+					throw new \GO\Base\Exception\AccessDenied();
+			}
 		}
 
 		
@@ -252,6 +260,14 @@ class FileController extends \GO\Base\Controller\AbstractModelController {
 			$inline = false;
 
 		\GO\Base\Util\Http::outputDownloadHeaders($file->fsFile, $inline, !empty($params['cache']));
+		$file->open();
+		
+		$this->fireEvent('beforedownload', array(
+				&$this,
+				&$params,
+				&$file
+		));
+		
 		$file->fsFile->output();
 	}
 

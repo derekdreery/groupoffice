@@ -107,6 +107,7 @@ $l["popupNotification"]='Zobrazit vyskakovací okno, když se připomínka stane
 $l["muteNewMailSound"]='Zakázat zvuky při novém e-mailu';
 $l["muteReminderSound"]='Zakázat zvuky při připomínce';
 $l["showSmilies"]='Zobrazit smajlíky';
+$l["autoPunctuation"]='Velké písmeno po ukončení věty';
 
 $l['dashdmy']='Den-Měsíc-Rok';
 $l['slashmdy']='Měsíc/Den/Rok';
@@ -133,3 +134,4 @@ $l['addresslist_panel'] = 'Seznam adresářů';
 $l['show_addresslists_panel'] = 'Zobrazit seznam adresářů';
 $l['enabled_cf_tabs'] = 'Povolit záložky vlastních oblastí';
 
+$l['cmdFormLabelHolidaySet'] = 'Svátky';

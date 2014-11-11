@@ -128,3 +128,4 @@ $l['addresslist_panel']= 'Addresslistepanel';
 $l['show_addresslists_panel']= 'Vis adresselistepanelet';
 $l['enabled_cf_tabs']= 'Aktiverte faner for egendefinerte felt';
 $l['cmdFormLabelHolidaySet']= 'Helligdager';
+$l['autoPunctuation']='Stor bokstav etter punktum';

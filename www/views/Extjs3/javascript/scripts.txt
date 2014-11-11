@@ -174,6 +174,7 @@ views/Extjs3/javascript/query/QueryContextMenu.js
 
 
 views/Extjs3/javascript/base/util/MD5.js
+views/Extjs3/javascript/base/util/Format.js
 views/Extjs3/javascript/grids/RowEditor.js
 views/Extjs3/javascript/base/QuickEditDialog.js
 views/Extjs3/javascript/base/model/ImportDialog.js
@@ -187,3 +188,9 @@ views/Extjs3/javascript/grids/GORowEditor.js
 views/Extjs3/javascript/SortableDataView.js
 
 views/Extjs3/javascript/panels/AccordeonPanel.js
+
+views/Extjs3/javascript/base/CurrentGridExportDialog.js
+views/Extjs3/javascript/base/SavedExportDialog.js
+views/Extjs3/javascript/base/SavedExportGrid.js
+views/Extjs3/javascript/base/SavedExportGridDialog.js
+views/Extjs3/javascript/base/ExportMenu.js

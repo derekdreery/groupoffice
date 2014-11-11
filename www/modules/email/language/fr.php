@@ -249,3 +249,13 @@ $l['noname']= 'Pas de nom';
 $l['doNotMarkAsRead']='Ne pas marquer automatiquement les e-mails comme lus';
 $l['showAll']='Afficher tout';
 
+$l['defaultEmailTemplate']='Modèle de courriel par défaut';
+$l['searchIn']= 'Rechercher dans';
+$l['searchRecursive']= 'Recherche récursive';
+$l['currentFolder']= 'Dossier actuel';
+$l['allFolders']= 'Tous les dossiers';
+$l['useAuth']="Authentication nécessaire";
+$l['linkMustHavePermissionToWrite']= 'Vous n\'avez pas l\'autorisation d\'écriture nécessaire à cet objet, donc pas le droit de lier à ce courrier.';
+$l['sortAddressesByMailTime']= 'Trier les adresses des bénéficiaires par heure du dernière envoi d\'emails (Necéssite le module Carnet d\'adresse)';
+$l['permissionDelegated']= 'Lecture seule et déléguation de lecture';
+

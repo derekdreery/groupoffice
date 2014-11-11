@@ -30,11 +30,9 @@ modules/email/AccountContextMenu.js
 modules/email/FolderDialog.js
 modules/email/FilterDialog.js
 modules/email/FilterGrid.js
+modules/email/LabelsGrid.js
 modules/email/PortletPanel.js
 modules/email/PortletSettingsDialog.js
 modules/email/Portlet.js
 modules/email/CopyMailToDialog.js
-modules/email/views/Extjs3/Stores.js
-modules/email/views/Extjs3/ManageLabelsDialog.js
-modules/email/views/Extjs3/ManageLabelsGrid.js
 modules/email/views/Extjs3/LabelDialog.js

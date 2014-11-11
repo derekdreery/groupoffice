@@ -46,7 +46,12 @@ GO.calendar.EventDialog = function(calendar) {
 			items.push(GO.customfields.types["GO\\Calendar\\Model\\Event"].panels[i]);
 		}
 	}
-
+	
+	if(GO.comments){
+		this.commentsGrid = new GO.comments.CommentsGrid({title:GO.comments.lang.comments});
+		items.push(this.commentsGrid);
+	}
+	
 	this.tabPanel = new Ext.TabPanel({
 		activeTab : 0,
 		deferredRender : false,
@@ -279,11 +284,28 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				success : function(form, action) {
 					//this.win.show();
 					
+					this.setData(action);
+					
 					// If this is a recurrence and the following is true (action.result.data.exception_for_event_id and action.result.data.exception_date are set and not empty)
 					if(action.result.data.exception_date){
 						this.setEventId(0);
 						this.formPanel.form.baseParams['exception_for_event_id'] = action.result.data.exception_for_event_id;
 						this.formPanel.form.baseParams['exception_date'] = action.result.data.exception_date;
+					}
+					
+					if(GO.comments){
+						if(action.result.data['id'] > 0){
+							if (!GO.util.empty(action.result.data['action_date'])) {
+								this.commentsGrid.actionDate = action.result.data['action_date'];
+							} else {
+								this.commentsGrid.actionDate = false;
+							}
+							this.commentsGrid.setLinkId(action.result.data['id'], 'GO\\Calendar\\Model\\Event');
+							this.commentsGrid.store.load();
+							this.commentsGrid.setDisabled(false);
+						} else {
+							this.commentsGrid.setDisabled(true);
+						}
 					}
 					
 					this.changeRepeat(action.result.data.freq);
@@ -342,6 +364,18 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		this.fireEvent('show', this);
 	},
+	
+	
+	/**
+	 * Dummy funtion that is used to create a sequence in other modules.
+	 * 
+	 * @param array data
+	 * @returns {undefined}
+	 */
+	setData : function(data){
+		
+	},
+	
 	setPermissionLevel : function(permissionLevel){
 		// Disable the eventStatus select box and set it to the default "NEEDS-ACTION" value
 		if(this.event_id == 0 && permissionLevel == GO.permissionLevels.create){
@@ -580,7 +614,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				if(!GO.util.empty(action.result.is_organizer))
 					newEvent.is_organizer = action.result.is_organizer;
 					
-				this.fireEvent('save', newEvent, this.oldDomId);
+				this.fireEvent('save', newEvent, this.oldDomId, action);
 				
 				GO.dialog.TabbedFormDialog.prototype.refreshActiveDisplayPanels.call(this);
 
@@ -688,7 +722,11 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			var eT = Date.parseDate(edWithTime, 'Y-m-d '+GO.settings.time_format);
 
 			if(sT>=eT){
-				this.endTime.setValue(sT.add(Date.HOUR, 1).format(GO.settings.time_format))
+				
+				var ed = sT.add(Date.HOUR, 1);
+				
+				this.endTime.setValue(ed.format(GO.settings.time_format));
+				this.endDate.setValue(ed);
 			}
 		}
 		

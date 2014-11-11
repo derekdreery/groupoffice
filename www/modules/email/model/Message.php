@@ -35,6 +35,8 @@
 
 namespace GO\Email\Model;
 
+use GO;
+
 
 abstract class Message extends \GO\Base\Model {
 
@@ -62,19 +64,12 @@ abstract class Message extends \GO\Base\Model {
 			'flagged' => 0,
 			'answered' => 0,
 			'forwarded' => 0,
-			'account',
 			'smime_signed'=>false
 	);
 
 	protected $attachments=array();
 
 	protected $defaultCharset='UTF-8';
-	
-	/**
-	 * Custom labels set on IMAP server
-	 * @var array 
-	 */
-	public $labels=array();
 
 	/**
 	 * True iff the actual message's body is larger than the maximum allowed. See
@@ -309,6 +304,12 @@ abstract class Message extends \GO\Base\Model {
 		//$response['seen']=$this->seen;
 
 		$from = $this->from->getAddress();
+		
+		$response['seen']=$this->seen;		
+		$response['forwarded']=$this->forwarded;
+		$response['flagged']=$this->flagged;
+		$response['answered']=$this->answered;
+		
 		$response['from'] = $from['personal'];
 		$response['sender'] = $from['email'];
 		$response['to'] = $recipientsAsString ? (string) $this->to : $this->_convertRecipientArray($this->to->getAddresses());
@@ -329,15 +330,20 @@ abstract class Message extends \GO\Base\Model {
 		$response['date'] = \GO\Base\Util\Date::get_timestamp($this->udate);
 		$response['size'] = $this->size;
 
-		$labels = \GO\Email\Model\Label::model()->getUserLabels();
+		$labels = array();
+		if (property_exists($this, 'account')) {
+			$labels = \GO\Email\Model\Label::model()->getAccountLabels($this->account->id);
+		}
 
 		$response['labels'] = array();
-		foreach ($this->labels as $label) {
-			if (isset($labels[$label])) {
-				$response['labels'][] = array(
-					'name' => $labels[$label]->name,
-					'color' => $labels[$label]->color
-				);
+		if(!empty($this->labels)){
+			foreach ($this->labels as $label) {
+				if (isset($labels[$label])) {
+					$response['labels'][] = array(
+						'name' => $labels[$label]->name,
+						'color' => $labels[$label]->color
+					);
+				}
 			}
 		}
 
@@ -390,6 +396,10 @@ abstract class Message extends \GO\Base\Model {
 
 		}
 
+		
+		$response['contact_name']="";			
+		$response['contact_thumb_url']=GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
+		
 		$response['blocked_images']=0;
 		$response['xssDetected']=false;
 

@@ -57,6 +57,6 @@ $l['submit'] = 'Submit';
 $l['rememberme'] = 'Remember me';
 $l['lostPassword'] = 'Lost password?';
 $l['alreadySignedupText']='If you already have a username and password use this form to login.';
-$l['forgotPasswordText']='Fill in your email address in the form below, and you\'ll recieve a link to recover your password within minuts.';
+$l['forgotPasswordText']='Fill in your email address in the form below, and you\'ll receive a link to recover your password within minuts.';
 $l['registerformText']="Fill out this form and click on 'Ok' to register. The fields marked with a * are required.";
 

@@ -32,6 +32,10 @@ class LdapauthModule extends \GO\Base\Module{
 	 */
 	public static function submitSettings(&$settingsController, &$params, &$response, $user) {
 		//save what is loaded
+		
+		if(empty(GO::config()->ldap_peopledn))
+			return true;
+		
 		try{
 			$person = \GO\Ldapauth\Model\Person::findByUsername($user->username);
 			
@@ -55,6 +59,10 @@ class LdapauthModule extends \GO\Base\Module{
 	 * Load the Person attributes from LDAP with the given username
 	 */
 	public static function loadSettings(&$settingsController, &$params, &$response, $user){	
+		
+		if(empty(GO::config()->ldap_peopledn))
+			return true;
+		
 		try{
 			$person = \GO\Ldapauth\Model\Person::findByUsername($user->username);
 			if($person) {
@@ -70,9 +78,9 @@ class LdapauthModule extends \GO\Base\Module{
 	public static function getPeopleDn($username=null){
 		
 		if(empty(GO::config()->ldap_peopledn)){
-			return "";
-		}
-		
+			return null;
+		}		
+
 		$hasVDomain = strpos(GO::config()->ldap_peopledn, '{VDOMAIN}');
 		
 		if($hasVDomain && !isset($username)){

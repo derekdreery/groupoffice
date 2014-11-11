@@ -9,6 +9,10 @@ class EncryptedText extends AbstractCustomfieldtype{
 		return 'Encrypted text';
 	}
 	
+	public function fieldSql(){
+		return "TEXT NULL";
+	}
+	
 	public function includeInSearches() {
 		return false;
 	}

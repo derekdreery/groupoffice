@@ -8,7 +8,7 @@ class Router{
 	/**
 	 * @return string the route of the default controller, action or module. Defaults to 'sites/site'.
 	 */
-	public $defaultController = 'sites/site';
+	public $defaultController = 'site/site';
 	
 	/**
 	 *

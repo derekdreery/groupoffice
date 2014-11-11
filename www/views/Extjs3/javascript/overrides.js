@@ -272,7 +272,7 @@ Ext.override(Ext.Element, {
 		var c = document.getElementById('printcontainer');
 		var iFrame = document.getElementById('printframe');
         
-		var strTemplate = '<HTML><HEAD>{0}<TITLE>{1}</TITLE></HEAD><BODY onload="{2}" style="background-color:white;">{3}</BODY></HTML>';
+		var strTemplate = '<HTML><HEAD>{0}<TITLE>{1}</TITLE></HEAD><BODY onload="{2}" style="background-color:white;"><div style="position:fixed; top:0; left:0; right:0; bottom:0; z-index:99;"></div>{3}</BODY></HTML>';
 		var strAttr = '';
 		var strFormat;
 		var strHTML;
@@ -481,7 +481,7 @@ Ext.override(Ext.form.Checkbox, {
  * @param {HTMLElement} node The node to remove
  * @method
  */
- Ext.removeNode = Ext.isIE && !Ext.isIE8 && !Ext.isIE9 ? function() {
+ Ext.removeNode = Ext.isIE && !Ext.isIE8 && !Ext.isIE9 && !Ext.isIE10 ? function() {
 
 	var d;
 	return function(n) {

@@ -134,7 +134,7 @@ class Observable{
 	 * @return boolean If one listerner returned false it will stop execution of 
 	 *  other listeners and will return false.
 	 */
-	protected function fireEvent($eventName, $params=array()){
+	public function fireEvent($eventName, $params=array()){
 		
 		$className = get_class($this);		
 		
