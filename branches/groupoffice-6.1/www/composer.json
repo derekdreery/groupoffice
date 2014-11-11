@@ -1,0 +1,15 @@
+{
+    "name": "intermesh/grouPoffice",
+    "description": "Group-Office",
+    "require": {
+        "fkooman/php-oauth-client": "*",
+        "fkooman/guzzle-bearer-auth-plugin": "*"
+    },
+    "license": "AGPL",
+    "authors": [
+        {
+            "name": "Merijn Schering",
+            "email": "mschering@intermesh.nl"
+        }
+    ]
+}
