@@ -1220,18 +1220,34 @@ class GO{
 	 * @param string $path
 	 * @return boolean
 	 */
-	public static function scriptCanBeDecoded($path=null){
+	public static function scriptCanBeDecoded($packagename="Professional"){
 		
-		if(!empty(self::$ioncubeWorks)){
-			return true;
+//		if(!empty(self::$ioncubeWorks)){
+//			return true;
+//		}
+
+	
+		switch($packagename){
+			case 'Billing':
+				$className = 'LicenseBilling';
+				break;
+
+			case 'Documents':
+				$className = 'LicenseDocuments';
+				break;
+
+			default:
+
+				$className = 'License';
+			break;
 		}
 
-		if(!isset($path)){
-			$path = GO::config()->root_path.'modules/professional/License.php';
-		}
+		$path = GO::config()->root_path.'modules/professional/'.$className.'.php';
 		
-		if(!file_exists($path))
+		
+		if(!file_exists($path)){
 			return false;
+		}
 
 		//check data for presence of ionCube in code.
 		$data=  file_get_contents($path, false, null, -1, 100);		
@@ -1244,16 +1260,20 @@ class GO{
 		}
 
 
-		$lf = self::getLicenseFile();
+//		$lf = self::getLicenseFile();
 		
 		//Empty license file is provided in download so we must check the size.
-		if(!$lf->exists() || $lf->size()===0){
-			return false;
-		}
-
-		self::$ioncubeWorks = \GO\Professional\License::check();
+//		if(!$lf->exists() || $lf->size()===0){
+//			return false;
+//		}
 		
-		return self::$ioncubeWorks;
+		$fullClassName = "\\GO\\Professional\\".$className;
+
+		return $fullClassName::check();
+		
+//		self::$ioncubeWorks = true;
+		
+//		return self::$ioncubeWorks;
 		
 	}
 	

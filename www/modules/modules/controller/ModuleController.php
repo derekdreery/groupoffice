@@ -65,11 +65,12 @@ class ModuleController extends AbstractJsonController{
 					'description'=>$module->description(),
 					'icon'=>$module->icon(),
 					'acl_id'=>$model ? $model->acl_id : 0,
-					'buyEnabled'=>!GO::scriptCanBeDecoded() || 
-							($module->appCenter() && (\GO\Professional\License::isTrial() || \GO\Professional\License::moduleIsRestricted($module->id())!==false)),
+//					'buyEnabled'=>!GO::scriptCanBeDecoded() || 
+//							($module->appCenter() && (\GO\Professional\License::isTrial() || \GO\Professional\License::moduleIsRestricted($module->id())!==false)),
+				
 					'package'=>$module->package(),
 					'enabled'=>$model && $model->enabled,
-					'not_installable'=> $module->appCenter() && !GO::scriptCanBeDecoded(),
+					'not_installable'=> $module->appCenter() && !GO::scriptCanBeDecoded($module->package()),
 					'sort_order' => ($model && $model->sort_order)?$model->sort_order:''
 			);
 		}
