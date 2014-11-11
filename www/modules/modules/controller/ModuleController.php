@@ -78,7 +78,7 @@ class ModuleController extends AbstractJsonController{
 		ksort($availableModules);		
 		
 		
-		$response['has_license']=(GO::getLicenseFile()->exists() && GO::getLicenseFile()->size()) || GO::config()->product_name!='Group-Office';
+//		$response['has_license']=(GO::getLicenseFile()->exists() && GO::getLicenseFile()->size()) || GO::config()->product_name!='Group-Office';
 						
 		$response['results']=array_values($availableModules);		
 		$response['total']=count($response['results']);
