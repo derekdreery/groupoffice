@@ -1226,20 +1226,29 @@ class GO{
 //			return true;
 //		}
 
+		$majorVersion = GO::config()->getMajorVersion();
 	
 		switch($packagename){
 			case 'Billing':
 				$className = 'LicenseBilling';
+				$licenseFile = 'billing-'.$majorVersion.'-license.txt';
 				break;
 
 			case 'Documents':
 				$className = 'LicenseDocuments';
+				$licenseFile = 'documents-'.$majorVersion.'-license.txt';
 				break;
 
 			default:
 
 				$className = 'License';
+				$licenseFile = 'groupoffice-pro-'.$majorVersion.'-license.txt';
+				
+				
 			break;
+		
+//			default:
+//				throw new Exception("Unkonwn package ".$packagename);
 		}
 
 		$path = GO::config()->root_path.'modules/professional/'.$className.'.php';
@@ -1262,14 +1271,20 @@ class GO{
 
 //		$lf = self::getLicenseFile();
 		
+		$file = new \GO\Base\Fs\File(GO::config()->root_path.$licenseFile);
+		
 		//Empty license file is provided in download so we must check the size.
-//		if(!$lf->exists() || $lf->size()===0){
-//			return false;
-//		}
+		if(!$file->exists()){
+			return false;
+		}
 		
 		$fullClassName = "\\GO\\Professional\\".$className;
 
-		return $fullClassName::check();
+		$check =  $fullClassName::check();
+		
+//		var_dump($check);
+		
+		return $check;
 		
 //		self::$ioncubeWorks = true;
 		
@@ -1283,10 +1298,8 @@ class GO{
 	 * 
 	 * @return \GO\Base\Fs\File
 	 */
-	public static function getLicenseFile(){
-		return new \GO\Base\Fs\File(GO::config()->root_path.'groupoffice-license.txt');
-	}
-	
+//	pnew \GO\Base\Fs\File(GO::config()->root_path.'groupoffice-license.txt');
+
 	/**
 	 * Checks if the main cron job is running for the task scheduler
 	 * 

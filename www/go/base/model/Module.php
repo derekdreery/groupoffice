@@ -228,7 +228,7 @@ class Module extends \GO\Base\Db\ActiveRecord {
 		$ucfirst = ucfirst($this->id);
 		$moduleClassPath = $this->path.'/'.$ucfirst.'Module.php';
 		
-		if(!file_exists($moduleClassPath) || !\GO::scriptCanBeDecoded($moduleClassPath)){
+		if(!file_exists($moduleClassPath)){
 			return false;
 		}
 
