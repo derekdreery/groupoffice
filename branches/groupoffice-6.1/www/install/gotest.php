@@ -419,12 +419,12 @@ function test_system(){
 	
 	if(class_exists('GO')){
 		
-		$test['name']='Writable license file';
-		$test['pass']=GO::getLicenseFile()->exists() && GO::getLicenseFile()->isWritable();					
-		$test['feedback']="Fatal: the license file ".GO::getLicenseFile()->path()." is not writable. Please make it writable for the webserver.";
-		$test['fatal']=true;
-
-		$tests[]=$test;	
+//		$test['name']='Writable license file';
+//		$test['pass']=GO::getLicenseFile()->exists() && GO::getLicenseFile()->isWritable();					
+//		$test['feedback']="Fatal: the license file ".GO::getLicenseFile()->path()." is not writable. Please make it writable for the webserver.";
+//		$test['fatal']=true;
+//
+//		$tests[]=$test;	
 		
 		$root = dirname(dirname(__FILE__));
 
