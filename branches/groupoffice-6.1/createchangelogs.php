@@ -1,7 +1,7 @@
 <?php
 require('www/GO.php');
 
-$tpl = '{package} ({version}) sixzero; urgency=low
+$tpl = '{package} ({version}) sixone; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
