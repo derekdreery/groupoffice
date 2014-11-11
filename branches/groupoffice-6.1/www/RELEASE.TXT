@@ -1,3 +1,7 @@
+2014/11/11 6.1.1
+This release has no new features but we changed back to the old license file
+method because the new way was confusing people.
+
 2014/09/22 6.0.1
 Group-Office 6.0 comes with a new module manager. In all downloads all modules
 are included by default. You can easily extend your system with new modules that

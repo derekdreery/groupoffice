@@ -977,7 +977,7 @@ class Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '6.1.0';
+	var $version = '6.1.1';
 
 	/**
 	 * Modification date
