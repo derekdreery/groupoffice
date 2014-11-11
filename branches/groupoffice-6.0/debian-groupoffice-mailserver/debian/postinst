@@ -68,7 +68,7 @@ else
 
 	# dovecot handles delivery
 	postconf -e virtual_transport=dovecot
-	#postconf -e dovecot_destination_recipient_limit=1
+	postconf -e dovecot_destination_recipient_limit=1
 
 	postconf -e 'message_size_limit = 20480000'
 
