@@ -116,7 +116,7 @@ system('sudo -u www-data  /usr/bin/php '.$config['root_path'].'groupofficecli.ph
 
 system('chown root /etc/groupoffice/config.php');
 
-system('chown www-data /usr/share/groupoffice/groupoffice-license.txt');
+//system('chown www-data /usr/share/groupoffice/groupoffice-license.txt');
 
 //create symlink for site module public files
 
