@@ -1,4 +1,12 @@
+ -11-2014 6.0.36
+- Added overtime rates with ability the enable them for each resource to Projects.
+- Separated the "filterable" and "show in tree" checkboxes in the project status
+- A project container has status "None" on new installations that is created when Projects is installed.
+
+
 11-11-2014 6.0.35
+- Possible to add Human Resources to the Project Templates
+- Files in the East Panel will open in click and show properties when clicking on the info icon.
 - Filesearch: Fixed namespace issue in the filesearch cronjob
 - Address Book: Fix for IE11 color picker bug in Contact Dialog.
 - File Search: Fixed searching for file types.
