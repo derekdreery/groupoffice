@@ -195,7 +195,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	protected function actionDownload($params) {
 		GO::session()->closeWriting();
 		
-		\GO::setMaxExecutionTime(0);
+		GO::setMaxExecutionTime(0);
 		
 		if(isset($params['path'])){
 			$folder = GO_Files_Model_Folder::model()->findByPath(dirname($params['path']));
