@@ -579,10 +579,7 @@ class GO{
 		}
 		self::$initialized=true;
 		
-	
-		
 		//register our custom error handler here
-		error_reporting(E_ALL | E_STRICT);
 		set_error_handler(array('GO','errorHandler'));
 		register_shutdown_function(array('GO','shutdown'));
 
@@ -590,6 +587,10 @@ class GO{
 		
 		//Start session here. Important that it's called before \GO::config().
 		\GO::session();
+		
+		if(\GO::config()->debug){
+			error_reporting(E_ALL | E_STRICT);
+		}
 		
 		if(!self::isInstalled()){
 			return;
