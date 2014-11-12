@@ -221,6 +221,8 @@ class FileController extends \GO\Base\Controller\AbstractModelController {
 	protected function actionDownload($params) {
 		\GO::session()->closeWriting();
 		
+		\GO::setMaxExecutionTime(0);
+		
 		if(isset($params['path'])){
 			$folder = \GO\Files\Model\Folder::model()->findByPath(dirname($params['path']));
 			$file = $folder->hasFile(\GO\Base\Fs\File::utf8Basename($params['path']));
