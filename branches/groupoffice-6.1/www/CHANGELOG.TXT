@@ -1,3 +1,6 @@
+12-11-2014 6.1.2
+- Set max_execution_time to 0 in download action
+
 11-11-2014 6.1.1
 - Initial 6.1 release
 - Changed back to the old licensing system because the new system was confusing people.
