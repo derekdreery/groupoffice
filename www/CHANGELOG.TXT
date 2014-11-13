@@ -1,4 +1,5 @@
  -11-2014 6.0.36
+- Weekly recurring events without an BYDAY directive will recur on the correct day when the event start between 00:00 and 01:00
 - Added sales agents to orders
 - Added overtime rates with ability the enable them for each resource to Projects.
 - Separated the "filterable" and "show in tree" checkboxes in the project status
