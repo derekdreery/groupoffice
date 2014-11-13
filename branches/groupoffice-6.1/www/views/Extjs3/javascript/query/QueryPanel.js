@@ -33,6 +33,11 @@ GO.query.QueryPanel = function(config){
 		remoteSort: true
 	});
 	
+	var idRecord = new Ext.data.Record({'name':'t.id','label':'ID','gotype':'numberfield'},'id');
+	this.typesStore.on('load',function(){
+		this.typesStore.insert(0,[idRecord]);
+	},this);
+	
 	config.layout='fit';
 	config.autoScroll=true;
 	config.split=true;
