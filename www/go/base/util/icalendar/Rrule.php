@@ -349,7 +349,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		//if rrule is passed like this: RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=
 		//then assume days should be the event start time day.
 		if(isset($rrule_arr['BYDAY']) && empty($this->_byday))
-			$this->_byday=array($this->_days[date('w', $this->_eventstarttime)]);
+			$this->_byday=array($this->_days[gmdate('w', $this->_eventstarttime)]);
 		
 		
 		
