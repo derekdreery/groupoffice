@@ -285,3 +285,5 @@ $l['moveToSpamTitle']= 'In den Spam-Ordner verschieben?';
 $l['moveToSpamMsg']= 'Sind Sie sicher, dass Sie diese Nachricht als Spam markieren möchten?';
 $l['moveToInboxTitle']= 'Aus dem Spam-Order verschieben?';
 $l['moveToInboxMsg']= 'Sind Sie sicher, dass Sie die Spam-Markierung entfernen und diese Nachricht in den Posteingang verschieben wollen?';
+
+$l['fts']= 'Ganze Nachricht';

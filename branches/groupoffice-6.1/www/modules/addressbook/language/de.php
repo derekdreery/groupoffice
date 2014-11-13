@@ -306,3 +306,5 @@ $l['addresslistIdMustBePositive']='Dieses Panel erwartet eine positive Adresslis
 
 $l['privateAddress']= 'Privatadresse';
 $l['mustBeSameAddressbook']= 'Die Firma des Kontakts muss sich in dem gleichen Adressbuch befinden wie der Kontakt. Der Kontakt wurde nicht gespeichert.';
+
+$l['exportContacts']= 'Ihre Info';

@@ -24,3 +24,4 @@ $l['default_rss_url']='http://rss.sueddeutsche.de/rss/Topthemen/topthemen.xml';
 $l['default_rss_title']='Nachrichten';
 $l['announcement']='Ankündigung';
 $l['announcements']='Ankündigungen';
+$l['latestReadAnnouncementRecord']= 'Datensatz zuletzt gelesener Ankündigung';
