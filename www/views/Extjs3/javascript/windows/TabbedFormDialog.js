@@ -406,6 +406,13 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	
 	createJSON : function(params){
 		
+		//call htmleditor syncValue
+		this.formPanel.form.items.each(function(f){
+            if(f.isFormField && f.syncValue){
+                f.syncValue();
+            }
+        });
+		
 		this.formPanel.form.baseParams = this.formPanel.form.baseParams || {};
 		
 		var p = Ext.apply(this.formPanel.form.baseParams, params);
@@ -438,6 +445,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	},
 	
 	jsonSubmit: function(params,hide) {
+		
+		
 
 		GO.request({
 			method:'POST',
