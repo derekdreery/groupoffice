@@ -148,9 +148,15 @@ class CertificateController extends \GO\Base\Controller\AbstractController {
 			$response['html'] .= '<tr><td>'.\GO::t('issuer','smime').':</td><td>';
 
 			foreach ($arr['issuer'] as $skey => $svalue) {
-				$response['html'] .= $skey . ':' . $svalue . '; ';
+				if (is_array($svalue)) {
+					foreach ($svalue as $sv) {
+						$response['html'] .= $skey . ':' . $sv . '; ';
+					}
+				} else {
+					$response['html'] .= $skey . ':' . $svalue . '; ';
+				}
 			}
-
+			
 			$response['html'] .= '</td></tr>';
 			$response['html'] .= '<tr><td>'.\GO::t('valid_from','smime').':</td><td>' . \GO\Base\Util\Date::get_timestamp($arr['validFrom_time_t']) . '</td></tr>';
 			$response['html'] .= '<tr><td>'.\GO::t('valid_to','smime').':</td><td>' . \GO\Base\Util\Date::get_timestamp($arr['validTo_time_t']) . '</td></tr>';
