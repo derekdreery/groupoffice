@@ -440,6 +440,8 @@ class MaintenanceController extends AbstractController {
 			
 			echo "Older version of ".\GO::config()->product_name." detected. Preparing database for 4.0 upgrade\n";
 		
+			$queries[]="ALTER TABLE `go_modules` ADD `enabled` BOOLEAN NOT NULL DEFAULT '1'";
+			
 			$queries[]="TRUNCATE TABLE `go_state`";
 			$queries[]="delete from go_settings where name='version'";
 
