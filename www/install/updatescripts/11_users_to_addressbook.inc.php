@@ -3,6 +3,7 @@
 if(\GO::modules()->addressbook){
 	try{
       \GO::getDbConnection()->query("ALTER TABLE `fs_folders` DROP `path`");
+	  \GO::getDbConnection()->query("ALTER TABLE `ab_addressbooks` ADD `users` BOOLEAN NOT NULL ");
     } catch(PDOException $e) {
       //NOP: if column doesn't exists we don't want to hold
     }
