@@ -1,3 +1,4 @@
+- Projects2: Added finance permissions tab to the settings dialog so that the users who can see the financial data of projects can be managed.
 - Address Book Advanced Search: now possible to search by ID.
 
 13-11-2014 6.1.3
