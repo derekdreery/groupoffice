@@ -219,6 +219,9 @@ class Company extends \GO\Base\Db\ActiveRecord {
 		if(!empty($this->homepage))
 			$this->homepage = \GO\Base\Util\Http::checkUrlForHttp($this->homepage);
 		
+		if (empty($this->color))
+			$this->color = "000000";
+		
 		return parent::beforeSave();
 	}
 	

@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   `crn` varchar(50) DEFAULT '',
   `iban` varchar(100) DEFAULT '',
   `photo` varchar(255) NOT NULL DEFAULT '',
-  `color` char(6) NOT NULL DEFAULT '',
+  `color` char(6) NOT NULL DEFAULT '000000',
   PRIMARY KEY (`id`),
   KEY `addressbook_id` (`addressbook_id`),
   KEY `addressbook_id_2` (`addressbook_id`),
