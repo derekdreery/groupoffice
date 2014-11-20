@@ -1,3 +1,5 @@
+- Calendar: Fixed double deletion of events when removing a calendar.
+
 20-11-2014 6.1.4
 - A project container has status "None" on new installations that is created when Projects is installed.
 - Possible to add Human Resources to the Project Templates
