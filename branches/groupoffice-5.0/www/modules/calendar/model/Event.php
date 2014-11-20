@@ -524,13 +524,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->deleteReminders();		
 		
 		if($this->is_organizer){
-			$stmt = $this->getRelatedParticipantEvents();
-			
-			foreach($stmt as $event){
-				//prevent loop for invalid is_organizer flag
-				$event->is_organizer=false;
-				$event->delete(true);
-			}
+//
+//	This is dangerous: when you first import the same ICS into two different calendars,
+//	and the delete one of the calendars, all the imported events in the other calendars
+//	would be deleted also.
+//	
+//			$stmt = $this->getRelatedParticipantEvents();
+//			
+//			foreach($stmt as $event){
+//				//prevent loop for invalid is_organizer flag
+//				$event->is_organizer=false;
+//				$event->delete(true);
+//			}
 		}else
 		{
 			$participants = $this->getParticipantsForUser();
