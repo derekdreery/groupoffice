@@ -77,7 +77,12 @@ class Mailer extends \Swift_Mailer{
 //		debug_print_backtrace();
 //		exit("NO MAIL");
 		
+		//workaround https://github.com/swiftmailer/swiftmailer/issues/335
+		$messageId = $message->getId();
+		
 		$count = parent::send($message, $failedRecipients);
+		
+		$message->setId($messageId);
 		
 		// Check if a tmp dir is created to store attachments.
 		// If so, then remove the tmp dir if the mail is send successfully.
