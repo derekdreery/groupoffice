@@ -1,3 +1,8 @@
+- A project container has status "None" on new installations that is created when Projects is installed.
+- Possible to add Human Resources to the Project Templates
+- Files in the Display panel will open in click and show properties when clicking on the info icon.
+- Separated the "filterable" and "show in tree" checkboxes in the project status
+- Added overtime rates with ability the enable them for each resource to Projects.
 - Incorrect message-id in sent folder of email
 - Fixed error when moving projects
 - Fixed template limit of 30 in select for new template action
