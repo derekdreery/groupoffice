@@ -1,3 +1,6 @@
+- Incorrect message-id in sent folder of email
+- Fixed error when moving projects
+- Fixed template limit of 30 in select for new template action
 - Projects2: Added finance permissions tab to the settings dialog so that the users who can see the financial data of projects can be managed.
 - Address Book Advanced Search: now possible to search by ID.
 

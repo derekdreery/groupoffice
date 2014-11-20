@@ -726,8 +726,9 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 				$params
 		));
 
-		$failedRecipients=array();
-		$success = $mailer->send($message, $failedRecipients);
+		$failedRecipients=array();	
+		
+		$success = $mailer->send($message, $failedRecipients);		
 
 		// Update "last mailed" time of the emailed contacts.
 		if ($success && GO::modules()->addressbook) {
