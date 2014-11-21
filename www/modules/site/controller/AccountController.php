@@ -57,11 +57,8 @@ class AccountController extends \GO\Site\Components\Controller {
 //		$company->setValidationRule('city', 'required', true);
 //		$company->setValidationRule('country', 'required', true);
 		
-		$correctCaptcha=true;
-		
 		if(\GO\Base\Util\Http::isPostRequest())
 		{
-			$correctCaptcha = \GO\Site\Widget\Secureimage\Secure::instance()->check($_POST['captcha_code']);
 			//if username is deleted from form then use the e-mail adres as username
 			if(!isset($_POST['User']['username']))
 				$_POST['User']['username']=$_POST['User']['email'];
@@ -78,7 +75,7 @@ class AccountController extends \GO\Site\Components\Controller {
 			
 			$contact->addressbook_id=1;//just for validating
 			
-			if($user->validate() && $contact->validate() && $correctCaptcha)
+			if($user->validate() && $contact->validate())
 			{				
 				
 				\GO::setIgnoreAclPermissions(); //allow guest to create user
@@ -112,7 +109,7 @@ class AccountController extends \GO\Site\Components\Controller {
 		}
 		
 		
-		echo $this->render('register', array('user'=>$user,'contact'=>$contact,'correctCaptcha'=>$correctCaptcha));
+		echo $this->render('register', array('user'=>$user,'contact'=>$contact));
 	}
 	
 	/**
