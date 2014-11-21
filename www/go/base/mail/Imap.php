@@ -1089,7 +1089,8 @@ class Imap extends ImapBodyStruct {
 
 		$charset = $forceAscii || !\GO\Base\Util\String::isUtf8($filter) ? 'US-ASCII' : 'UTF-8';
 
-		$command = 'UID SORT ('.$sort.') '.$charset.' '.$filter."\r\n";
+		$command = 'UID SORT ('.$sort.') '.$charset.' '.trim($filter)."\r\n";
+		
 		$this->send_command($command);
 		/*if ($this->disable_sort_speedup) {
 			$speedup = false;
