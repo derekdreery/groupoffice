@@ -7,7 +7,10 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  */
- 
+
+namespace GO\Tasks\Model;
+use Sabre;
+
 /**
  * The Task model
  *
@@ -38,12 +41,6 @@
  * @property int $project_id
  * @property int $percentage_complete
  */
-
-
-namespace GO\Tasks\Model;
-use Sabre;
-
-
 class Task extends \GO\Base\Db\ActiveRecord {
 	
 	const STATUS_NEEDS_ACTION = "NEEDS-ACTION";
@@ -375,6 +372,9 @@ class Task extends \GO\Base\Db\ActiveRecord {
 		
 		}
 		
+		if(!empty($this->percentage_complete))
+			$e->add('percent-complete',$this->percentage_complete);
+		
 		if(!empty($this->description))
 			$e->description=$this->description;
 		
@@ -383,18 +383,12 @@ class Task extends \GO\Base\Db\ActiveRecord {
 			$e->rrule=str_replace('RRULE:','',$this->rrule);					
 		}
 		
-		switch($this->priority){
-			case self::PRIORITY_HIGH:
-				$e->priority=1;
-				break;
-			
+		switch($this->priority) {
 			case self::PRIORITY_LOW:
-				$e->priority=10;
-				break;
-			
-			default:
-				$e->priority=3;
-				break;
+				$e->priority = 9; break;
+			case self::PRIORITY_HIGH:
+				$e->priority = 1; break;
+			default: $e->priority = 5;
 		}
 		
 		return $e;
