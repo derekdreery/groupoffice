@@ -1,3 +1,4 @@
+26-11-2014 6.1.6
 - Projects2 - Fixed wrong check for internal and external rates with project resources
 - TimeEntry Dialog used the http POST method for submitting tasks 
 - Calendar: When adding participants, check if participant already can be found, if so then update the existing one, otherwise create a new one.
