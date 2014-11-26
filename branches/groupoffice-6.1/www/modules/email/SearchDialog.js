@@ -11,7 +11,7 @@ GO.email.SearchDialog = function(config){
 				
 				this.formPanel = new Ext.FormPanel({
 					defaults: {
-						anchor: '100%'
+						anchor: '96%'
 					},
 					defaultType: 'textfield',
 					autoHeight:true,
