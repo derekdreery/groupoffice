@@ -1966,12 +1966,19 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			if(!$calendarParticipantFound){
 				
 				if($makeSureUserParticipantExists){
-					//this is a bad situation. The import thould have detected a user for one of the participants.
-					//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
-					$participant = new GO_Calendar_Model_Participant();
-					$participant->event_id=$this->id;
-					$participant->user_id=$this->calendar->user_id;
-					$participant->email=$this->calendar->user->email;	
+					$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array('event_id'=>$this->id,'email'=>$this->calendar->user->email));
+					
+					if(!$participant){
+						//this is a bad situation. The import thould have detected a user for one of the participants.
+						//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
+						$participant = new GO_Calendar_Model_Participant();
+						$participant->event_id=$this->id;
+						$participant->user_id=$this->calendar->user_id;
+						$participant->email=$this->calendar->user->email;	
+					} else {
+						$participant->user_id=$this->calendar->user_id;
+					}
+					
 					$participant->save();
 				}else
 				{
