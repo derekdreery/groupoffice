@@ -1,4 +1,5 @@
  -11-2014 6.0.36
+- Calendar: When adding participants, check if participant already can be found, if so then update the existing one, otherwise create a new one.
 - Tasks can be shown in the calendar at start date, end date or entirely depending on the "calendar_tasklist_show" config option
 - Weekly recurring events without an BYDAY directive will recur on the correct day when the event start between 00:00 and 01:00
 - Added sales agents to orders
