@@ -61,7 +61,7 @@ class GO{
 	 */
 	public static function setIgnoreAclPermissions($ignore=true){
 		
-		GO::debug("setIgnoreAclPermissions");
+		GO::debug("setIgnoreAclPermissions(".var_export($ignore, true).')');
 		
 		$oldValue = GO::$ignoreAclPermissions;
 		GO::$ignoreAclPermissions=$ignore;
