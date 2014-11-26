@@ -1,3 +1,4 @@
+- TimeEntry Dialog used the http POST method for submitting tasks 
 - Calendar: When adding participants, check if participant already can be found, if so then update the existing one, otherwise create a new one.
 - CalDAV tasks have support for "% complete" and "Priority"
 - CalDAV calanders will resync when tasks linked to the calendar are updated
