@@ -135,7 +135,13 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 			$this->_modules[$name]=$model;
 		}
 		
-		return $this->_modules[$name];
+		$module = $this->_modules[$name];
+		
+		if(GO::$ignoreAclPermissions){
+			unset($this->_modules[$name]);
+		}
+		
+		return $module;
 	}
 	
 	/**
