@@ -166,7 +166,7 @@ class ModuleCollection extends Model\ModelCollection{
 		
 		$module = $this->_modules[$name];
 		
-		if(GO::$ignoreAclPermissions){
+		if(\GO::$ignoreAclPermissions){
 			unset($this->_modules[$name]);
 		}
 		
