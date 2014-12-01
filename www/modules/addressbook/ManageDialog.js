@@ -50,6 +50,7 @@ GO.addressbook.ManageDialog = function(config)
 		xtype: 'tabpanel',
 		activeTab: 0,
 		border: true,
+		deferredRender: false,
 		items: items
 	}];
 	config.buttons=[{ 
