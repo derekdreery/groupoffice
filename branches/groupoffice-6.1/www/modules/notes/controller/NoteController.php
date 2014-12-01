@@ -46,11 +46,12 @@ class NoteController extends AbstractController{
 		if(GO::request()->isPost()){
 			$note = GO::request()->post['note'];
 
-			if(isset($note['currentPassword'])){
+			if(isset($note['currentPassword']) && empty($note['userInputPassword1'])){
 				//if the note was encrypted and no new password was supplied the current
 				//pasword is sent.
 				$note['userInputPassword1']=$note['userInputPassword2']=$note['currentPassword'];
 			}
+			
 
 			$model->setAttributes($note);
 			
