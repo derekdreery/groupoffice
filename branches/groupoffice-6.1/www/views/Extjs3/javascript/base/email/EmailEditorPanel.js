@@ -188,44 +188,39 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 							this);
 					}
 					
-					this.setOriginalValue();
+					this.setOriginalValue();					
 					
 					
-					
-					
-					
-					var pasteEl = this.htmlEditor.getDoc();
+					var pasteEl = doc;
 
-					if(Ext.isChrome){
-						var paster = new GO.base.upload.Paster({
-							pasteEl: pasteEl,
-							temporaryFile:true,
-							callback:function(paster, result, xhr){
-//								this.attachmentsView.addTempFile(result.data);
-
-									var token = GO.base.util.MD5(result.data.tmp_file);
-
-									var url = GO.url("core/downloadTempFile", {path:result.data.tmp_file, token: token});
-
-									var html = '<img src="'+url+'" border="0" />';
-									
-									this.htmlEditor.focus();
-									this.htmlEditor.insertAtCursor(html);	
-									
-									
-									this.inlineAttachments.push({
-										tmp_file : result.data.tmp_file,
-										from_file_storage : false,
-										token:token
-									});				
-									this.setInlineAttachments(this.inlineAttachments);	
-							},
-							scope:this
-						});
-						
-						console.log('ja2');
-
-					}					
+//					if(Ext.isChrome){
+//						var paster = new GO.base.upload.Paster({
+//							pasteEl: pasteEl,
+//							temporaryFile:true,
+//							callback:function(paster, result, xhr){
+////								this.attachmentsView.addTempFile(result.data);
+//
+//									var token = GO.base.util.MD5(result.data.tmp_file);
+//
+//									var url = GO.url("core/downloadTempFile", {path:result.data.tmp_file, token: token});
+//
+//									var html = '<img src="'+url+'" border="0" />';
+//									
+//									this.htmlEditor.focus();
+//									this.htmlEditor.insertAtCursor(html);	
+//									
+//									
+//									this.inlineAttachments.push({
+//										tmp_file : result.data.tmp_file,
+//										from_file_storage : false,
+//										token:token
+//									});				
+//									this.setInlineAttachments(this.inlineAttachments);	
+//							},
+//							scope:this
+//						});
+//
+//					}					
 				},
 				scope:this
 			}
