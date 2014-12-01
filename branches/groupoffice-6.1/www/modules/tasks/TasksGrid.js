@@ -138,6 +138,12 @@ GO.tasks.TasksPanel = function(config)
 				dataIndex: 'mtime',
 				hidden:true,
 				width:110
+			},{
+				id:'id',
+				width:200,
+				header: 'ID',
+				dataIndex: 'id',
+				hidden: true
 			}]
 		};
 
