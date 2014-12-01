@@ -54,7 +54,8 @@ GO.users.PermissionsPanel = function(config)
     this.groupMemberStore = new GO.data.JsonStore({
         url:GO.url('users/user/groupStore'),
         baseParams: {
-            user_id: 0
+            user_id: 0,
+			limit: 0
         },
         fields: ['id', 'disabled', 'name', 'selected'],
         root: 'results'

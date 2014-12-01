@@ -14,7 +14,7 @@ GO.users.GroupsGrid = function(config){
 			url: GO.url('users/group/store'),
 			baseParams: {
 				'permissionLevel' : GO.permissionLevels.read,
-				limit:parseInt(GO.settings['max_rows_list'])
+				limit:parseInt(GO.settings.config.nav_page_size)
 			},
 			root: 'results', 
 			totalProperty: 'total', 
