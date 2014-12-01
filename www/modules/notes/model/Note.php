@@ -143,7 +143,15 @@ class Note extends ActiveRecord {
 		
 		if(!empty($this->userInputPassword1)){
 			$this->password = crypt($this->userInputPassword1);
-			$this->content = Crypt::encrypt($this->content, $this->userInputPassword1);
+			
+			$encrypted = Crypt::encrypt($this->content, $this->userInputPassword1);
+			
+			if($encrypted === false) {
+				throw new \Exception("Could not encrypt note. Is mcrypt for php installed?");
+			}
+			
+			
+			$this->content = $encrypted;
 		}else
 		{
 			$this->password="";
