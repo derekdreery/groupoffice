@@ -271,7 +271,14 @@ class Field extends \GO\Base\Db\ActiveRecord{
 	
 	public function checkDatabase() {
 		
-		$this->alterDatabase(false);
+		try{
+			$this->alterDatabase(false);
+		} catch (Exception $ex) {
+			//class doesn't exist?
+			
+			echo "ERROR: ".$ex->getMessage()."\n";
+		}
+		
 		
 		return parent::checkDatabase();
 	}
