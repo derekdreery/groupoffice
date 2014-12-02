@@ -1,3 +1,6 @@
+- Hour approval: Managers do not need to be member of the projects to approve entries. When they are manager of Hour Approval
+- Hour approval: When hour approval is installed. Closed entries may be change by mangers of the Hour approval module as well
+
 28-11-2014 6.1.7
 - Billing: Improved Costcode and trackingcode selection in the order items grid
 - Dropbox: Implemented new api for dropbox 
