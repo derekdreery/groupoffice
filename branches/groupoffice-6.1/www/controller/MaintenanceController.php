@@ -453,6 +453,7 @@ class MaintenanceController extends AbstractController {
 
 			foreach($queries as $query){
 				try {
+					echo 'Excuting query: ' . $query . "\n";
 					\GO::getDbConnection()->query($query);
 				} catch (PDOException $e) {
 					echo $e->getMessage() . "\n";
