@@ -1,3 +1,5 @@
+03-12-2014 5.0.92
+- Set max_execution_time to 0 in download action
 - Time Tracking: No overwriting travel distance with default distance.
 - Calendar: When adding participants, check if participant already can be found, if so then update the existing one, otherwise create a new one.
 - Calendar: Fixed double deletion of events when removing a calendar.
