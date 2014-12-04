@@ -118,7 +118,9 @@ Ext.extend(GO.comments.CommentsGrid, GO.grid.GridPanel,{
 		
 		GO.comments.commentDialogListeners={
 			save:function(){
-				this.store.reload();
+				if(this.store.baseParams.model_id && this.store.baseParams.model_name){
+					this.store.reload();
+				}
 			},
 			scope:this
 		};

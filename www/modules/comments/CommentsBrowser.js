@@ -41,6 +41,10 @@ GO.comments.CommentsBrowser = function(config){
     });
     
    this.addEvents({'link' : true});
+	 
+	 this.on('hide', function(){
+		GO.dialog.TabbedFormDialog.prototype.refreshActiveDisplayPanels.call(this);
+	}, this);
 };
 
 Ext.extend(GO.comments.CommentsBrowser, GO.Window, {
