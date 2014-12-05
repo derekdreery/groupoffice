@@ -40,7 +40,28 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	beforeLoad : function(remoteModelId,config) {
 		this._userPermissionPassword = false; //
 //		this._passwordChangePermission = true; // before loading is initiated, e.g., with a new note, the user can change the encryption password
+		delete this.formPanel.form.baseParams['note.encrypted'];
+		delete this.formPanel.form.baseParams['note.userInputPassword1'];
+		delete this.formPanel.form.baseParams['note.userInputPassword2'];
+		this._userInputPassword = '';
+		this.uiPassword1Field.setValue('');
+		this.uiPassword2Field.setValue('');
+		this.encryptCheckbox.setValue(false);
+	},
+	
+	jsonLoad : function(remoteModelId, config) {
+				
 		delete this.formPanel.form.baseParams['note.currentPassword'];
+		delete this.formPanel.form.baseParams['note.encrypted'];
+		delete this.formPanel.form.baseParams['note.userInputPassword1'];
+		delete this.formPanel.form.baseParams['note.userInputPassword2'];
+		this._userInputPassword = '';
+		this.uiPassword1Field.setValue('');
+		this.uiPassword2Field.setValue('');
+		this.encryptCheckbox.setValue(false);
+		
+		GO.notes.NoteDialog.superclass.jsonLoad.call(this,remoteModelId,config);
+		
 	},
 	
 	afterShowAndLoad : function (remoteModelId, config, responseData){
