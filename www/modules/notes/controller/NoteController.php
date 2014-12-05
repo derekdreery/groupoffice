@@ -49,7 +49,7 @@ class NoteController extends AbstractController{
 			if(!empty($note['encrypted']) && $note['encrypted']=='on'){
 				//if the note was encrypted and no new password was supplied the current
 				//pasword is sent.
-				if (isset($note['currentPassword'])) {
+				if (isset($note['currentPassword']) && empty($note['userInputPassword1'])) {
 					$note['userInputPassword1']=$note['userInputPassword2']=$note['currentPassword'];
 				} else if (empty($note['userInputPassword1']) || empty($note['userInputPassword2'])) {
 					throw new \Exception('Missing input password.');
