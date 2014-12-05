@@ -53,6 +53,7 @@ GO.files.SaveAsDialog = Ext.extend(GO.Window, {
 			];
 		
 		this.fb = new GO.files.FileBrowser({
+			id: 'saveas-filebrowser',
 			region:'center',
 			border:false,
 			loadDelayed:true,
