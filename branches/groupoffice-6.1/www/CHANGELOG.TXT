@@ -1,3 +1,4 @@
+- Projects2: Project names cannot contain slashes.
 - Core: fixed timezone setting for Z-Push sync.
 - Workflow: namespace fix.
 - Addressbook: Added vcard export option to the addressbook export menu. The contacts of the current contacts grid are exported.
