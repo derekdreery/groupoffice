@@ -1,3 +1,4 @@
+- Workflow: namespace fix.
 - Addressbook: Added vcard export option to the addressbook export menu. The contacts of the current contacts grid are exported.
 - Hour approval: if an entry get disapproved the user will receive an email about this.
 - Hour approval: Week list will remember the week you are working in when approving entries
