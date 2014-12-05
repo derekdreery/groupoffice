@@ -413,13 +413,24 @@ GO.addressbook.MainPanel = function(config)
 			text: GO.addressbook.lang.exportContactsWithCompanies,
 			cls: 'x-btn-text-icon',
 			handler:function(){
-				window.open(GO.url("addressbook/exportContactsWithCompanies/export"))
+				window.open(GO.url("addressbook/exportContactsWithCompanies/export"));
 			},
 			scope: this
 		});
 		
+		this.vcardExportButton = new Ext.menu.Item({
+			iconCls: 'btn-export',
+			text: GO.addressbook.lang.exportContactsAsVcard,
+			cls: 'x-btn-text-icon',
+			handler:function(){
+				window.open(GO.url("addressbook/addressbook/exportVCard"));
+			},
+			scope: this
+		});
+				
 		this.exportMenu = new GO.base.ExportMenu({className:'GO\\Addressbook\\Export\\CurrentGridContact'});
 		
+		this.exportMenu.insertItem(0,this.vcardExportButton);
 		this.exportMenu.insertItem(0,this.contactsWithCompaniesExportButton);
 		
 		this.exportMenu.on('click',function(btn,e){
