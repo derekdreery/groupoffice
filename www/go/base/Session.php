@@ -297,7 +297,7 @@ class GO_Base_Session extends GO_Base_Observable{
 			
 			GO::session()->values['countLogin']=$countLogin;
 			
-			
+			date_default_timezone_set($user->timezone);
 			
 			return $user;
 		}		
