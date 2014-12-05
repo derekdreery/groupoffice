@@ -1120,8 +1120,9 @@ abstract class ActiveRecord extends \GO\Base\Model{
 			$pk = isset($params[$this->primaryKey()]) ? $params[$this->primaryKey()] : null;
 			if (empty($pk)) {
 				$model = new static();
-				if ($model->isNew)
+				if ($model->isNew){
 					$model->setAttributes($params);
+				}
 			}else {
 				$model = $this->findByPk($pk);
 				if (!$model)
