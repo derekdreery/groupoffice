@@ -354,3 +354,4 @@ $l['privateAddress'] = 'Privé adres';
 $l['exportContactsWithCompanies'] = 'Contacten met bedrijven';
 
 $l['mustBeSameAddressbook'] = 'Het bedrijf van het contact moet in hetzelfde adresboek zijn als het contact. Contact niet opgeslagen.';
+$l['exportContactsAsVcard'] = 'Exporteer contacten als VCard';
