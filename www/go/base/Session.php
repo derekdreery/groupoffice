@@ -301,6 +301,7 @@ class Session extends Observable{
 			\GO::session()->values['countLogin']=$countLogin;
 			
 			
+			date_default_timezone_set($user->timezone);
 			
 			return $user;
 		}		
