@@ -704,8 +704,10 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		}
 
 		$message->handleEmailFormInput($params);
+		
+		$recipientCount = $message->countRecipients();
 
-		if(!$message->hasRecipients())
+		if(!$recipientCount)
 			throw new \Exception(GO::t('feedbackNoReciepent','email'));
 
 		$message->setFrom($alias->email, $alias->name);
@@ -799,7 +801,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 			$account->sent = $params['reply_mailbox'];
 
 
-		if ($account->sent) {
+		if ($account->sent && $recipientCount > count($failedRecipients)) {
 
 			GO::debug("Sent");
 			//if a sent items folder is set in the account then save it to the imap folder
