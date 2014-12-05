@@ -1,3 +1,4 @@
+- Core: fixed timezone setting for Z-Push sync.
 - Workflow: namespace fix.
 - Addressbook: Added vcard export option to the addressbook export menu. The contacts of the current contacts grid are exported.
 - Hour approval: if an entry get disapproved the user will receive an email about this.
