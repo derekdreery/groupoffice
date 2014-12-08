@@ -1,3 +1,4 @@
+- Billing: Changed template for the Contact select field, contacts are grouped by addressbook and the company is displayed behind the contact.
 - Tickets: Changed button url for external ticket page to "newTicket" instead of "ticketList"
 - Projects2: Project names cannot contain slashes.
 - Core: fixed timezone setting for Z-Push sync.
