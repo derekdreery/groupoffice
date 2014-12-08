@@ -3745,7 +3745,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$r= $this->relations();
 
 		foreach($r as $name => $attr){
-
+			
+			if (!class_exists($attr['model']) || !GO::modules()->isInstalled($attr['model']::getModule()))
+				continue;
+			
 			if(!empty($attr['delete']) && $attr['type']!=self::BELONGS_TO){
 
 				//for backwards compatibility
@@ -5138,6 +5141,5 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 		return $relationNames;
 	}
-
-
+	
 }
