@@ -1,3 +1,4 @@
+- Tickets: Changed button url for external ticket page to "newTicket" instead of "ticketList"
 - Projects2: Project names cannot contain slashes.
 - Core: fixed timezone setting for Z-Push sync.
 - Workflow: namespace fix.
