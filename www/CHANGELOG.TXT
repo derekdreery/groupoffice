@@ -1,3 +1,4 @@
+- Projects2: Added option to attach a new project to items in GO from the  "new" button. In case of creating a project from an order, the customer and company will automatically be filled.
 - Billing: Changed template for the Contact select field, contacts are grouped by addressbook and the company is displayed behind the contact.
 - Tickets: Changed button url for external ticket page to "newTicket" instead of "ticketList"
 - Projects2: Project names cannot contain slashes.
