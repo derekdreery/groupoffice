@@ -69,8 +69,8 @@ abstract class Model extends Object{
 	 * 
 	 * @return string 
 	 */
-	public function getModule(){
-		$arr = explode('\\', $this->className());
+	public static function getModule(){
+		$arr = explode('\\', static::className());
 		
 		return strtolower($arr[1]);
 	}
