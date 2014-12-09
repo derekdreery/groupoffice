@@ -1,3 +1,8 @@
+- permissions panel not set after save of note book
+- Move event via context menu back in time failed
+- Copy customer and contact from parent project if set.
+- Only save to email to sent folder when at least one recipient succeeded.
+- Select project was rendered to small in some cases
 - Overtime hours columns in projects2 will be added with default value 0. if you already have the columns the values will not be changed
 - Canceled calendar items will be semi-transparent in IE7 and IE8 as well
 - Projects2: Added option to attach a new project to items in GO from the  "new" button. In case of creating a project from an order, the customer and company will automatically be filled.
