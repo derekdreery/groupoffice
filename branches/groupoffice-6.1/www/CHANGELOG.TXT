@@ -1,3 +1,4 @@
+- Filesearch has a limit of 3 minutes to read a file for indexing.
 - permissions panel not set after save of note book
 - Move event via context menu back in time failed
 - Copy customer and contact from parent project if set.
