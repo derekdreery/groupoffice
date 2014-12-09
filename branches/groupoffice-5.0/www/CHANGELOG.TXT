@@ -1,3 +1,4 @@
+- Move event via context menu back in time failed
 - Core: fixed timezone setting for Z-Push sync.
 
 03-12-2014 5.0.92
