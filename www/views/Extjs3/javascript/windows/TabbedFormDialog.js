@@ -437,6 +437,25 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		return JSON;
 	},
 	
+	//find value in json object with dotted path. eg. category.acl_id
+	findJsonValue : function(field, data){
+		var keys = field.split('.');
+		
+		var currentJSONlevel = data;
+
+		for(var i=0, c=keys.length-1;i<c;i++){
+			currentJSONlevel=currentJSONlevel[keys[i]];
+
+			
+			if(!currentJSONlevel){
+				return null;
+			}
+		}
+		
+		
+		return currentJSONlevel[keys[i]];
+	},
+	
 	jsonSubmit: function(params,hide) {
 
 		GO.request({
@@ -456,10 +475,11 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				if (result.data && result.data[this.remoteModelIdName])
 					this.setRemoteModelId(result.data[this.remoteModelIdName]);
 
-				if (this.permissionsPanel && result[this.permissionsPanel.fieldName])
-					this.permissionsPanel.setAcl(result[this.permissionsPanel.fieldName]);
 				
-						
+				if (this.permissionsPanel){						
+					var acl_id = this.findJsonValue(this.permissionsPanel.fieldName, result.data);
+					this.permissionsPanel.setAcl(acl_id);
+				}						
 
 				this.afterSubmit({result: result, response: response, options:options});
 
