@@ -1,3 +1,4 @@
+03-12-2014 6.1.9
 - Shared files tree regenerated cache when item on ACL is delete
 - Fixed when Editing a time entry dialog or added a time entry from the project's task list the task-field was empty
 - Active not category was not selected on new note
