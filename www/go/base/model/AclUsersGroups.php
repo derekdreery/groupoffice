@@ -70,6 +70,13 @@ class AclUsersGroups extends \GO\Base\Db\ActiveRecord {
 		));
 	}
 	
+	protected function afterDelete() {
+		
+		$this->aclItem->touch();
+		
+		return parent::afterDelete();
+	}
+	
 	protected function afterSave($wasNew) {
 		
 		//Add log message for activitylog here
