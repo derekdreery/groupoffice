@@ -171,6 +171,9 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 			this.managePermission = this.aclGroupsGrid.store.reader.jsonData.manage_permission;
 			this.aclGroupsGrid.getTopToolbar().setDisabled(!this.isEditable());
 			this.aclUsersGrid.getTopToolbar().setDisabled(!this.isEditable());
+			
+			
+			this.overWriteCheckBox.setDisabled(!this.managePermission);
 		}, this);
 
 		action.on({
