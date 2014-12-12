@@ -66,6 +66,13 @@ class GO_Base_Model_AclUsersGroups extends GO_Base_Db_ActiveRecord {
 		));
 	}
 	
+	protected function afterDelete() {
+		
+		$this->aclItem->touch();
+		
+		return parent::afterDelete();
+	}
+	
 	protected function afterSave($wasNew) {
 		
 		//Add log message for activitylog here
