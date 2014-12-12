@@ -44,12 +44,13 @@ class FilesModule extends \GO\Base\Module{
 			
 			//In some cases the acl id of the home folder was copied from the user. We will correct that here.
 			if(!$folder->acl || $folder->acl_id==$user->acl_id){
-				$folder->setNewAcl($user->id);
-				$folder->user_id=$user->id;
-				$folder->visible=0;
-				$folder->readonly=1;
-				$folder->save();
+				$folder->setNewAcl($user->id);				
 			}
+			
+			$folder->user_id=$user->id;
+			$folder->visible=0;
+			$folder->readonly=1;			
+			$folder->save();
 			
 			$folder->fsFolder->create();
 			//$folder->syncFilesystem();		
