@@ -1,3 +1,6 @@
+- Active not category was not selected on new note
+- Save email as note was broken
+- Copy links when task recurs
 - Disabled acl overwrite checkbox if you don't have manage permission
 - Fixed disappearing event from month grid after second edit
 - Billing: Added tracking codes also to the order book cost codes
