@@ -83,7 +83,7 @@ class NoteController extends AbstractController{
 	/**
 	 * Creates a note
 	 */
-	protected function actionCreate() {
+	protected function actionCreate($category_id=0) {
 
 		$model = new Note();
 		
@@ -109,6 +109,8 @@ class NoteController extends AbstractController{
 			echo $this->render('submit',array('note'=>$model));
 		}else
 		{
+			
+			$model->category_id = $category_id;
 
 			echo $this->render(
 							'form',
