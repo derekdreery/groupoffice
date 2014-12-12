@@ -1,3 +1,5 @@
+- Shared files tree regenerated cache when item on ACL is delete
+- Fixed when Editing a time entry dialog or added a time entry from the project's task list the task-field was empty
 - Active not category was not selected on new note
 - Save email as note was broken
 - Copy links when task recurs
@@ -27,7 +29,7 @@
 03-12-2014 6.1.8
 - Disable paste upload as it doesn't work with current chrome anymore
 - Change note password fixed
-- Ignore class not found in database check whenn custom field categories of old modules exist.
+- Ignore class not found in database check when custom field categories of old modules exist.
 - Added task ID to grid
 - Groups were limited to user pref in user dialog
 - Time Tracking: No overwriting travel distance with default distance.
