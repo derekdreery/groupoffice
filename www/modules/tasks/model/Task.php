@@ -251,7 +251,9 @@ class Task extends \GO\Base\Db\ActiveRecord {
 					$data['reminder'] = $this->reminder + $diff;
 				}
 
-				$this->duplicate($data);
+				$dup = $this->duplicate($data);
+				
+				$this->copyLinks($dup);
 			}
 		}
 	}
