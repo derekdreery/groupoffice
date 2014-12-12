@@ -1,3 +1,5 @@
+- Disabled acl overwrite checkbox if you don't have manage permission
+- Fixed disappearing event from month grid after second edit
 - Billing: Added tracking codes also to the order book cost codes
 - Filesearch has a limit of 3 minutes to read a file for indexing.
 - permissions panel not set after save of note book
