@@ -1,0 +1,20 @@
+#toggle-controlbox{
+	font: 11px Arial;
+	color: black;
+}
+
+.oc-chat-head {
+    background-color: #2e80a9; 
+}
+
+#conversejs {
+    bottom: 0;
+    box-sizing: border-box;
+    direction: ltr;
+    display: block;
+    height: 25px;
+    left: auto;
+    position: fixed;
+    right: 0;
+    z-index: 9999;
+}
