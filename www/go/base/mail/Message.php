@@ -400,7 +400,7 @@ class Message extends \Swift_Message{
 	 * @return boolean 
 	 */
 	public function hasRecipients(){
-		return !empty($this->getTo()) || !empty($this->getCc()) || !empty($this->getBcc());
+		return $this->countRecipients() > 0;
 	}
 	
 	public function countRecipients(){
