@@ -1,5 +1,7 @@
+- Correct week number in disapproval email of time entry
+
 15-12-2014 6.1.11
-- Fixed mail send error that occured with php < 5.4
+- Fixed mail send error that occurred with php < 5.4
 
 13-12-2014 6.1.10
 - Invalid build 6.1.9
