@@ -293,20 +293,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						this.formPanel.form.baseParams['exception_date'] = action.result.data.exception_date;
 					}
 					
-					if(GO.comments){
-						if(action.result.data['id'] > 0){
-							if (!GO.util.empty(action.result.data['action_date'])) {
-								this.commentsGrid.actionDate = action.result.data['action_date'];
-							} else {
-								this.commentsGrid.actionDate = false;
-							}
-							this.commentsGrid.setLinkId(action.result.data['id'], 'GO\\Calendar\\Model\\Event');
-							this.commentsGrid.store.load();
-							this.commentsGrid.setDisabled(false);
-						} else {
-							this.commentsGrid.setDisabled(true);
-						}
-					}
+					this.setCommentsGrid(action.result.data['id'],action.result.data['action_date']);
 					
 					this.changeRepeat(action.result.data.freq);
 					this.setValues(config.values);
@@ -365,6 +352,22 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.fireEvent('show', this);
 	},
 	
+	setCommentsGrid : function(modelId,actionDate){
+		if(GO.comments){
+			if(modelId > 0){
+				if (!GO.util.empty(actionDate)) {
+					this.commentsGrid.actionDate = actionDate;
+				} else {
+					this.commentsGrid.actionDate = false;
+				}
+				this.commentsGrid.setLinkId(modelId, 'GO\\Calendar\\Model\\Event');
+				this.commentsGrid.store.load();
+				this.commentsGrid.setDisabled(false);
+			} else {
+				this.commentsGrid.setDisabled(true);
+			}
+		}
+	},
 	
 	/**
 	 * Dummy funtion that is used to create a sequence in other modules.
@@ -568,6 +571,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				if (action.result.id) {
 					this.files_folder_id = action.result.files_folder_id;
 					this.setEventId(action.result.id);
+					this.setCommentsGrid(action.result.id,false); //TODO: replace false for the action_date property
 				}
 
 				var startDate = this.getStartDate();
