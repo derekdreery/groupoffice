@@ -57,7 +57,7 @@ class GO_Base_Util_Common {
 
 			return 'http://maps.google.com/maps?q=' . urlencode($l);
 		} else {
-			return false;
+			return '';
 		}
 	}
 
