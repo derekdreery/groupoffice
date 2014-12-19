@@ -397,7 +397,7 @@ GO.customfields.dataTypes={
 			return GO.customfields.dataTypes["GO\\Customfields\\Customfieldtype\\Treeselect"].getFormField(customfield, config);
 		}
 	},
-	"GO\Customfields\Customfieldtype\Heading": {
+	"GO\\Customfields\\Customfieldtype\\Heading": {
 		label : 'Heading',
 		getFormField : function(customfield, config){
 			return new GO.form.HtmlComponent(Ext.apply({
