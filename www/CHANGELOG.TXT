@@ -1,3 +1,4 @@
+- Notes: Fixed problem with creating notes from the "New" menu in other modules
 - Correct week number in disapproval email of time entry
 - Custom fields: fix to display custom fields of type Heading.
 
