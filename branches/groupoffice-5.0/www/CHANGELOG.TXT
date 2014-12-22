@@ -1,3 +1,4 @@
+22-12-2014 5.0.93
 - Shared files tree regenerated cache when item on ACL is delete
 - Move event via context menu back in time failed
 - Core: fixed timezone setting for Z-Push sync.
