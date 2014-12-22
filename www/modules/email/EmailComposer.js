@@ -1210,15 +1210,25 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 		if (!GO.util.empty(this.selectLinkField.getValue())) {
 			var linkValue = this.selectLinkField.getRawValue();
+			var nValue = this.selectLinkField.getValue();
+			
+			GO.request({
+				url: 'core/createModelUrl',
+				params: {
+					modelTypeAndKey: nValue
+				},
+				success: function(response,options,result) {
+					var newValue = editorValue.replace(/<span class="go-composer-link">(.*?)<\/span>/g, function(match, contents, offset, s) {
+						// onclick="GO.linkHandlers[\''+nParts[0]+'\'].call(this, '+nParts[1]+');"
+						return '<span class="go-composer-link"><a href="' + result.url + '">' + linkValue + '</a></span>';
+					});
+
+					this.emailEditor.getActiveEditor().setValue(newValue);
+				},
+				scope: this
+			});
 		}
-
-		var newValue = editorValue.replace(/<span class="go-composer-link">(.*?)<\/span>/g, function(match, contents, offset, s) {
-			return '<span class="go-composer-link">' + linkValue + '</span>';
-		});
-
-		this.emailEditor.getActiveEditor().setValue(newValue);
 	}
-
 });
 
 //GO.email.TemplatesList = function(config) {

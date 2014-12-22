@@ -106,7 +106,7 @@ views/Extjs3/javascript/links/LinkBrowser.js
 views/Extjs3/javascript/links/LinkViewWindow.js
 views/Extjs3/javascript/links/LinkTypeFilterPanel.js
 views/Extjs3/javascript/links/LinkDescriptionField.js
-
+views/Extjs3/javascript/links/ExternalLinkHandler.js
 
 views/Extjs3/javascript/panels/SearchPanel.js
 views/Extjs3/javascript/checker.js
