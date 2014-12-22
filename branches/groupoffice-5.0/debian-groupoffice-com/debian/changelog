@@ -1,5 +1,5 @@
-groupoffice-com (5.0.91) fivezero; urgency=low
+groupoffice-com (5.0.93) fivezero; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Tue, 11 Nov 2014 10:24:08 +0100
+ -- Merijn Schering <mschering@intermesh.nl>  Mon, 22 Dec 2014 10:04:00 +0100
