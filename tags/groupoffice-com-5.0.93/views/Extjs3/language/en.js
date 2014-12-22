@@ -1,0 +1,31 @@
+GO.lang.swfUploadPanelStrings = {
+		text_add: 'Add File(s)',
+		text_upload: 'Upload File(s)',
+		text_cancel: 'Cancel Upload',
+		text_clear: 'Clear Queue',
+		text_progressbar: 'Progress Bar',
+		text_remove: 'Remove File',
+		text_remove_sure: 'Are you sure you wish to remove this file from queue?',
+		text_error: 'Error',
+		text_uploading: 'Uploading file: {0} ({1} of {2})',
+		header_filename: 'Filename',
+		header_size: 'Size',
+		header_status: 'Status',
+		header_progress: "Progress",
+		status: {
+			0: 'Queued',
+			1: 'Uploading...',
+			2: 'Completed',
+			3: 'Error',
+			4: 'Cancelled'
+		},
+		error_queue_exceeded: 'The selected file(s) exceed(s) the maximum number of {0} queued files.',
+		error_queue_slots_0: 'There is no slot left',
+		error_queue_slots_1: 'There is only one slot left',
+		error_queue_slots_2: 'There are only {0} slots left',
+		error_size_exceeded: 'The selected files size exceeds the allowed limit of 1 MB.',
+		error_zero_byte_file: 'Zero byte file selected.',
+		error_invalid_filetype: 'Invalid filetype selected.',
+		error_file_not_found: 'File not found 404.',
+		error_security_error: 'Security Error. Not allowed to post to different url.'
+	};
