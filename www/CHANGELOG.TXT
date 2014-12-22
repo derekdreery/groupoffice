@@ -1,6 +1,7 @@
 - Notes: Fixed problem with creating notes from the "New" menu in other modules
 - Correct week number in disapproval email of time entry
 - Custom fields: fix to display custom fields of type Heading.
+- Custom fields: fixed on-click event of Contact/Company custom fields.
 
 15-12-2014 6.1.11
 - Fixed mail send error that occurred with php < 5.4
