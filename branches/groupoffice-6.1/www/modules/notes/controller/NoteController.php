@@ -110,8 +110,13 @@ class NoteController extends AbstractController{
 		}else
 		{
 			
-			$model->category_id = $category_id;
-
+			if(empty($category_id)){
+				$defaultCategory = GO\Notes\NotesModule::getDefaultNoteCategory(GO::user()->id);
+				$model->category_id = $defaultCategory->id;
+			} else {
+				$model->category_id = $category_id;
+			}
+			
 			echo $this->render(
 							'form',
 							array(
