@@ -803,9 +803,13 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
 				event.on('contextmenu', function(e, eventEl)
 				{
+					var container = Ext.get(eventEl).findParent('div.x-calGrid-month-event-container', 2, true);
+
+					this.selectEventElement(container);
+						
 					var theEventData = this._elementToEvent(eventEl);
-					console.log(theEventData);
-					if (theEventData.model_name=='GO_Tasks_Model_Task') {
+					
+					if (theEventData.model_name=='GO\\Tasks\\Model\\Task') {
 						if (GO.tasks) {
 							if (!this.taskContextMenu)
 								this.taskContextMenu = new GO.calendar.TaskContextMenu();
