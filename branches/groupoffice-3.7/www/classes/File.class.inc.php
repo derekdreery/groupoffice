@@ -119,7 +119,7 @@ class File
 	}
 
 	public static function path_leads_to_parent($path){
-		return strpos($path, '../') !== false || strpos($path, '..\\')!==false;
+		return strpos($path, '../')==0 || strpos($path, '..\\')==0;
 	}
 
 	/*public static function get_filetype_image($extension=null) {
