@@ -1,3 +1,6 @@
+- Cut attribute lengths when importing tickets
+- Deleting task category deleted tasks too.
+- Permission error when creating a project in the root and template inherits type from parent
 - Notes: Fixed problem with creating notes from the "New" menu in other modules
 - Correct week number in disapproval email of time entry
 - Custom fields: fix to display custom fields of type Heading.
