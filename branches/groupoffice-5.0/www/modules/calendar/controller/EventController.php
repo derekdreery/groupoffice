@@ -955,10 +955,23 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 		if(!empty($lists)){
 			
-		  
+			// If the calendar_tasklist_show is set to 1 task will display only on the due date in the calendar
+			switch(\GO::config()->calendar_tasklist_show) {
+				case 2:  //start date only
+					$dueQ = 'due_time';
+					$startQ = 'due_time';
+					break;
+				case 1: // due date only
+					$dueQ = 'start_time';
+					$startQ = 'start_time';
+					break;
+				default: // entirely
+					$dueQ = 'due_time';
+					$startQ = 'start_time';
+			}
 			$taskFindCriteria = GO_Base_Db_FindCriteria::newInstance()
-							->addCondition('due_time', strtotime($startTime),'>=')
-							->addCondition('start_time', strtotime($endTime), '<=');
+							->addCondition($dueQ, strtotime($startTime),'>=')
+							->addCondition($startQ, strtotime($endTime), '<=');
 			
 			// Remove tasks that are completed
 			if(!$calendar->show_completed_tasks)
@@ -977,6 +990,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$startTime = date('Y-m-d',$task->start_time).' 00:00';
 				$endTime = date('Y-m-d',$task->due_time).' 23:59';
 
+				if(\GO::config()->calendar_tasklist_show==1) {
+					$startTime = $endTime;
+				} elseif(\GO::config()->calendar_tasklist_show==2) {
+					$endTime = $startTime;
+				}
+				
 				$resultCount++;
 
 				

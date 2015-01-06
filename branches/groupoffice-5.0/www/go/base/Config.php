@@ -412,7 +412,11 @@ class GO_Base_Config {
 	 */
 	var $force_ssl=false;
 
-
+	/**
+	 * Display the tasks in the calendar on due date or entirely [0=entirely, 1=due date, 2=start date] 
+	 * @var integer 
+	 */
+	var $calendar_tasklist_show = 0;
 
 	/**
 	 * Title of Group-Office
