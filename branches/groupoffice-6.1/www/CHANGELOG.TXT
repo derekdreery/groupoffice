@@ -1,3 +1,4 @@
+- Timeregistration: If time is next day was checked the field will be checked when editing the time entry
 - Billing: fixed due date for new created recurring events
 - Cut attribute lengths when importing tickets
 - Deleting task category deleted tasks too.
