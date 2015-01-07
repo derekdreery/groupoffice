@@ -337,15 +337,20 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 					);
 				}
 			}
-
+			
+			$addresses = $message->to->getAddresses();
+			$to=array();
+			foreach($addresses as $email=>$personal)
+			{
+				$to[]=empty($personal) ? $email : $personal;
+			}
+			$record['to']=  htmlspecialchars(implode(',', $to), ENT_COMPAT, 'UTF-8');
+			
 			if($response['sent'] || $response['drafts']){
-				$addresses = $message->to->getAddresses();
-				$from=array();
-				foreach($addresses as $email=>$personal)
-				{
-					$from[]=empty($personal) ? $email : $personal;
-				}
-				$record['from']=  htmlspecialchars(implode(',', $from), ENT_COMPAT, 'UTF-8');
+
+				$to = $record['to'];
+				$record['to'] = $record['from'];
+				$record['from'] = $to;
 			}
 
 			if(empty($record['subject']))
