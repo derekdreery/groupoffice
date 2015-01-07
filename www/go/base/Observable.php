@@ -73,7 +73,7 @@ class Observable{
 		$line = '$listeners["'.$eventName.'"][]=array("'.$listenerClass.'", "'.$staticListenerFunction.'");'."\n";
 		
 		$dir = \GO::config()->orig_tmpdir.'cache/listeners/';
-		$file = $dir.get_class($this).'.php';
+		$file = $dir.str_replace('\\','-', get_class($this)).'.php';
 		
 		if(!file_exists($file))
 			file_put_contents($file, "<?php\n", FILE_APPEND);	
@@ -136,7 +136,7 @@ class Observable{
 	 */
 	public function fireEvent($eventName, $params=array()){
 		
-		$className = get_class($this);		
+		$className = str_replace('\\','-', get_class($this));		
 		
 //		do{
 		
@@ -145,7 +145,7 @@ class Observable{
 			//listeners array will be loaded from a file. Because addListener is only called once when there is no cache.
 			$listeners=array();
 			
-			$cacheFile = \GO::config()->orig_tmpdir.'cache/listeners/'.get_class($this).'.php';
+			$cacheFile = \GO::config()->orig_tmpdir.'cache/listeners/'.$className.'.php';
 //			$cacheFile = \GO::config()->orig_tmpdir.'cache/listeners/'.$className.'.php';
 			if(file_exists($cacheFile))
 				require($cacheFile);
