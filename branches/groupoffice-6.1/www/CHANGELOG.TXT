@@ -1,3 +1,7 @@
+- Removed project time entry overlapping check
+- Replace namespace delimiter with dash in listeners cache
+- Fixed to field in email sent folder in wide view.
+- Restored windows binaries for zip and libwbxml
 - Automatically delete file when download link expires is available again
 - Projects2: added column 'customer' for sub projects.
 - Timeregistration: If time is next day was checked the field will be checked when editing the time entry
