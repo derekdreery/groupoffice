@@ -1,3 +1,4 @@
+07-01-2015 5.0.94
 - Tasks can be shown in the calendar at start date, end date or entirely depending on the "calendar_tasklist_show" config option
 
 22-12-2014 5.0.93
