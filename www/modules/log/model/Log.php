@@ -94,12 +94,12 @@ class Log extends \GO\Base\Db\ActiveRecord {
 		if(!isset(GO::config()->file_log) || !is_array(GO::config()->file_log))
 			return true;
 		
-		foreach(GO::config()->file_log as $object => $filename) {
-			if(!empty($this->object) && $this->model===$object){
-				file_put_contents(GO::config()->file_storage_path.'log/'.$filename, 
-						"[".$this->object->className().date('Y-m-d H:i',$this->ctime)."] [".$this->username."] [".$this->action."] ".$this->message."\n",
-						FILE_APPEND);
-			}
+		if(isset(GO::config()->file_log[$this->model])) {
+			
+			file_put_contents(GO::config()->file_storage_path.'log/'.GO::config()->file_log[$this->model], 
+					"[".$this->object->className().' '.date('Y-m-d H:i',$this->ctime)."] [".$this->username."] [".$this->action."] ".$this->message."\n",
+					FILE_APPEND);
+
 		}
 		return true;
 	}
