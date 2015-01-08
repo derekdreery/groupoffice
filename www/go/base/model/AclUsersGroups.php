@@ -84,7 +84,9 @@ class AclUsersGroups extends \GO\Base\Db\ActiveRecord {
 			\GO\Log\Model\Log::create("acl", $this->aclItem->description,$this->aclItem->className(),$this->aclItem->id);
 		}
 
-		$this->aclItem->touch();
+		if($this->aclItem){
+			$this->aclItem->touch();
+		}
 		
 		return parent::afterSave($wasNew);
 	}
