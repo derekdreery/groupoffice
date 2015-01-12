@@ -357,6 +357,12 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 							'email'=> $p['email'],
 							'event_id'=>$event->id
 					));
+					
+					if(!empty($p['contact_id']) && $p['contact_id'] != $participant->contact_id){
+						$participant->delete();
+						$participant = false;
+					}
+					
 					if (!$participant){
 						$participant = new \GO\Calendar\Model\Participant();
 						
