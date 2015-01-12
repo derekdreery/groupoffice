@@ -2813,6 +2813,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 						$modified=true;
 				}
 
+				
+				$where = array();
 				if($modified){
 					$criteria = FindCriteria::newInstance()
 								->addModel(GO::getModel($this->className()))
@@ -2820,13 +2822,17 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 					if(is_array($attributes['unique'])){
 						foreach($attributes['unique'] as $f){
-							if(isset($this->_attributes[$f]))
+							if(isset($this->_attributes[$f])){
 								$criteria->addCondition($f, $this->_attributes[$f]);
+								$where[$f] = $this->_attributes[$f];
+							}
 						}
 					}
 
-					if(!$this->isNew)
+					if(!$this->isNew){
+						$where[$this->primaryKey()] = $this->pk;
 						$criteria->addCondition($this->primaryKey(), $this->pk, '!=');
+					}
 
 					$existing = $this->findSingle(FindParams::newInstance()
 									->ignoreAcl()
@@ -2836,6 +2842,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					if($existing) {
 
 						$msg = str_replace(array('%cf','%val'),array($this->getAttributeLabel($field), $this->_attributes[$field]),GO::t('duplicateExistsFeedback','customfields'));
+						
+						if(\GO::config()->debug){
+							$msg .= var_export($where, true);
+						}
+						
 						$this->setValidationError($field, $msg);
 //						$this->setValidationError($field, sprintf(GO::t('alreadyExists'),$this->localizedName, $this->_attributes[$field]));
 					}
