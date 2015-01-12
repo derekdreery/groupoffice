@@ -275,16 +275,25 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	 */
 	public function addException($date, $exception_event_id=0) {
 		
+		\GO::debug('Add exception '.$this->id.' '.date('c', $date));
+		
 		if(!$this->isRecurring())
 			throw new \Exception("Can't add exception to non recurring event ".$this->id);
 		
-		if(!$this->hasException($date)){
-			$exception = new \GO\Calendar\Model\Exception();
-			$exception->event_id = $this->id;
-			$exception->time = mktime(date('G',$this->start_time),date('i',$this->start_time),0,date('n',$date),date('j',$date),date('Y',$date)); // Needs to be a unix timestamp
-			$exception->exception_event_id=$exception_event_id;
-			$exception->save();
+		if(!($exception = $this->hasException($date))){
+			$exception = new \GO\Calendar\Model\Exception();						
 		}
+		
+		$exception->event_id = $this->id;
+		$exception->time = mktime(date('G',$this->start_time),date('i',$this->start_time),0,date('n',$date),date('j',$date),date('Y',$date)); // Needs to be a unix timestamp		
+		$exception->exception_event_id=$exception_event_id;
+
+	
+		if(!$exception->save()){
+			throw new Exception("Event exception not saved: ".var_export($exception->getValidationErrors(), true));
+		}
+			
+		
 	}
 
 	/**
@@ -398,7 +407,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			if(!$event->isRecurring())
 				continue;
 			
-			\GO::debug("Creating exception for related participant event ".$event->name." (".$event->id.")");
+			\GO::debug("Creating exception for related participant event ".$event->name." (".$event->id.") ".date('c', $exceptionDate));
 			
 			$exceptionEvent = $event->getExceptionEvent($exceptionDate);
 			$exceptionEvent->dontSendEmails = $dontSendEmails;
