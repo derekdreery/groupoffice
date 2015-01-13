@@ -1,3 +1,7 @@
+- Replace recurring series completely with caldav to avoid problems of buggy clients
+- Repeating event with caldav that started on 0:00 hours repeated on wrong weekday
+- Replace contact with user in calendar event adds appointment to calendar now.
+- Fixed open task from context menu in calendar
 - Projects2: button to duplicate incomes and expenses.
 
 12-01-2015 6.1.14
