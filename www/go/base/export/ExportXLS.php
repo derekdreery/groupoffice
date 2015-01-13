@@ -10,7 +10,7 @@ class ExportXLS extends AbstractExport {
 	public static $name = "XLS (Excel)";
 	public static $useOrientation = false;
 
-	private $_lines;
+	private $_lines = array();
 	
 	private function _sendHeaders() {
 		header('Content-Disposition: attachment; filename="' . $this->title . '.xls"');
@@ -89,7 +89,7 @@ class ExportXLS extends AbstractExport {
 		}
 		
 		// If extra lines given, then add them to the .csv file
-		if($this->_lines !== false){
+		if(is_array($this->_lines)){
 			foreach($this->_lines as $record){
 				$record = $this->prepareRecord($record);
 				$this->_write($record);
