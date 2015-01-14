@@ -459,6 +459,12 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$this->repeat_end_time = $rrule->until;
 		}		
 		
+		
+		
+		if($this->exception_for_event_id > 0 && $this->exception_for_event_id == $this->id){
+			throw new \Exception("Exception event ID can't be set to ID");
+		}
+		
 
 		$resourceConflicts = $this->hasResourceConflicts();
 
@@ -1795,6 +1801,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			
 			$exception = Exception::model()->find($findParams);
 			if($exception){
+				
+				
 				$this->exception_for_event_id=$exception->event_id;
 				if (empty($this->name) || $this->name==\GO::t('unnamed'))
 					$this->name = $exception->mainevent->name;
