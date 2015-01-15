@@ -168,7 +168,7 @@ $l["alsoChildren"]= 'Also apply this to the emails in the subfolders.';
 
 $l['name'] = 'Email';
 $l['description'] = 'Full featured e-mail client. Every user will be able to send and receive emails';
-$l['feedbackNoReciepent'] = 'You didn\'t enter a reciepent';
+$l['feedbackNoReciepent'] = 'You didn\'t enter a recipient';
 $l['feedbackSMTPProblem'] = 'There was a problem communicating with SMTP: ';
 $l['feedbackUnexpectedError'] = 'There was an unexpected problem building the email: ';
 $l['feedbackCreateFolderFailed'] = 'Failed to create folder';
