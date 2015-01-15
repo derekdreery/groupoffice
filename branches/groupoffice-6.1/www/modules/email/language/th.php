@@ -3,7 +3,7 @@
 
 $l['name'] = 'อีเมล์';
 $l['description'] = 'บริการอีเมล ผู้ใช้งานสามารถส่งอีเมลและรับอีเมล';//Small webbased e-mail client.Every user will be able to sent.receive and forward emais;
-$l['feedbackNoReciepent'] = 'ยังไม่ได้กรอกรายการที่ได้รับ';//You didn\'t enter a reciepent;
+$l['feedbackNoReciepent'] = 'ยังไม่ได้กรอกรายการที่ได้รับ';//You didn\'t enter a recipient;
 $l['feedbackSMTPProblem'] = ' เกิดปัญหาในการเชื่อมโยงกับ SMTP: ';//There was a problem communicating with;
 $l['feedbackUnexpectedError'] = 'เกิดข้อผิดพลาดในการสร้างอีเมล: ';//There was an unexpected problem building the email;
 $l['feedbackCreateFolderFailed'] = 'เกิดข้อผิดพลาดในการสร้างโฟลเดอร์';//Failed to create folder;
