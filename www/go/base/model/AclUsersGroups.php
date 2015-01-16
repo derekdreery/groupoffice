@@ -72,7 +72,9 @@ class AclUsersGroups extends \GO\Base\Db\ActiveRecord {
 	
 	protected function afterDelete() {
 		
-		$this->aclItem->touch();
+		if($this->aclItem){
+			$this->aclItem->touch();
+		}
 		
 		return parent::afterDelete();
 	}
