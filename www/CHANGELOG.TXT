@@ -1,3 +1,4 @@
+- $config['calendar_tasklist_show'] option is merge from 6.0
 - $config['debug_usernames'] for turning on debug mode for specific users.
 - Replace recurring series completely with caldav to avoid problems of buggy clients
 - Repeating event with caldav that started on 0:00 hours repeated on wrong weekday
