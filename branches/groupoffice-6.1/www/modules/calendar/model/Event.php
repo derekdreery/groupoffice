@@ -2646,4 +2646,17 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			
 			return true;
 	}
+	
+	public function resourceGetEventCalendarName() {
+		
+		if ($this->isResource()) {
+			$resourcedEventModel = Event::model()->findByPk($this->resource_event_id);
+			$calendarModel = $resourcedEventModel->calendar;
+			return !empty($calendarModel) ? $calendarModel->name : '';
+		} else {
+			return '';
+		}
+		
+	}
+	
 }

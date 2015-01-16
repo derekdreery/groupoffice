@@ -89,6 +89,9 @@ GO.calendar.formatQtip = function(data,verbose)
 			str += '<br /> - '+data.resources[i];
 	}
 	
+	if (!GO.util.empty(data.resourced_calendar_name))
+		str += '<br />'+GO.calendar.lang['resourceUsedIn']+': '+data.resourced_calendar_name;
+	
 	return str;
 }
 
@@ -381,7 +384,7 @@ GO.calendar.MainPanel = function(config){
 	this.calendarListPanel.add(this.viewsList);
 	this.calendarListPanel.add(this.resourcesList);
 	
-	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','private_enabled','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count','has_reminder', 'has_other_participants','participant_ids','ctime','mtime','musername', 'is_organizer', 'partstatus','model_name','permission_level','resources'];
+	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','private_enabled','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count','has_reminder', 'has_other_participants','participant_ids','ctime','mtime','musername', 'is_organizer', 'partstatus','model_name','permission_level','resources','resourced_calendar_name'];
 
 	this.daysGridStore = new GO.data.JsonStore({
 		url:GO.url('calendar/event/store'),
