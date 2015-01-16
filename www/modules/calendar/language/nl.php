@@ -259,3 +259,5 @@ $l['cannotHandleInvitation2']='Kon de afspraak niet aanpassen, omdat u te weinig
 $l['tooltip'] = 'Tooltip tekst';
 
 $l['moveEventResourceError'] = 'Kan afspraak niet verzetten omdat de volgende hulpmiddelen dan niet beschikbaar zijn:';
+
+$l['resourceUsedIn'] = 'Hulpmiddel gebruikt in';

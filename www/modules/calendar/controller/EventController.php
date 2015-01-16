@@ -1199,7 +1199,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 		$events = $calendar->getEventsForPeriod(strtotime($startTime), strtotime($endTime));
 		
 		$this->_uuidEvents = array();
-
+		
 		// Loop through each event and prepare the view for it.
 		foreach($events as $event){
 			
@@ -1239,9 +1239,13 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 			$resultCount++; // Add one to the global result count;
 		}
 		
-		foreach($this->_uuidEvents as $uuidEvent) // Add the event to the results array
-			$response['results'][$this->_getIndex($response['results'],$uuidEvent->getAlternateStartTime(),$uuidEvent->getName())]=$uuidEvent->getResponseData();
-		
+		foreach($this->_uuidEvents as $uuidEvent) { // Add the event to the results array
+			$index = $this->_getIndex($response['results'],$uuidEvent->getAlternateStartTime(),$uuidEvent->getName());
+			$response['results'][$index]=$uuidEvent->getResponseData();
+			if ($uuidEvent->getEvent()->isResource())
+				$response['results'][$index]['resourced_calendar_name'] = $uuidEvent->getEvent()->resourceGetEventCalendarName();
+		}
+			
 		$response['count_events_only'] = $resultCount; // Set the count of the events
 
 		return $response;

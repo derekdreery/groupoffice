@@ -270,3 +270,5 @@ $l['cannotHandleInvitation2']='Could not update the event because you have too l
 
 $l['tooltip'] = 'Tooltip text';
 $l['moveEventResourceError'] = 'Could not move event because the following resources are not available:';
+
+$l['resourceUsedIn'] = 'Resource used in';

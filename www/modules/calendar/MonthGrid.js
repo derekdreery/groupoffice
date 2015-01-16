@@ -635,7 +635,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		{
 			eventData.id = this.nextId++;
 		}
-
+console.log(eventData);
 		//the start of the day the event starts
 		var eventStartDay = Date.parseDate(eventData.startDate.format('Ymd'),'Ymd');
 		var eventEndDay = Date.parseDate(eventData.endDate.format('Ymd'),'Ymd');
