@@ -158,7 +158,7 @@ class ModuleCollection extends Model\ModelCollection{
 
 			$model = parent::__get($name);
 
-			if(!$model)
+			if(!$model || !$model->enabled)
 				$model=false;
 
 			$this->_modules[$name]=$model;
@@ -182,7 +182,7 @@ class ModuleCollection extends Model\ModelCollection{
 	public function isInstalled($moduleId){
 		$model = $this->model->findByPk($moduleId, false, true);
 		
-		if(!$model || !$this->_isAllowed($model->id))
+		if(!$model || !$model->enabled || !$this->_isAllowed($model->id))
 				return false;
 		
 		return $model;
