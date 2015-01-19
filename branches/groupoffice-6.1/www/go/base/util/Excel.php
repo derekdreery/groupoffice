@@ -1,17 +1,16 @@
 <?php
+namespace GO\Base\Util;
 require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel.php');
 
-namespace GO\Base\Util;
 
-
-class Excel extends PHPExcel {
+class Excel extends \PHPExcel {
 	
 	private $_writer;
 	
 	private function _getWriter() {
 		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Writer/Excel2007.php');
 		if (empty($this->_writer))
-			$this->_writer = new PHPExcel_Writer_Excel2007($this);
+			$this->_writer = new \PHPExcel_Writer_Excel2007($this);
 		
 		return $this->_writer;
 	}
@@ -26,9 +25,9 @@ class Excel extends PHPExcel {
 		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style.php');
 		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Font.php');
 		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Color.php');
-		$colorObj = new PHPExcel_Style_Color();
+		$colorObj = new \PHPExcel_Style_Color();
 		$colorObj->setRGB($colorRGB);
-		$fontObj = new PHPExcel_Style_Font();
+		$fontObj = new \PHPExcel_Style_Font();
 		$fontObj->setName($fontFamily);
 		$fontObj->setSize($fontSize);
 		$fontObj->setColor($colorObj);
@@ -36,7 +35,7 @@ class Excel extends PHPExcel {
 		$fontObj->setItalic($italic);
 		$fontObj->setUnderline($underline);
 		
-		$styleObj = new PHPExcel_Style();
+		$styleObj = new \PHPExcel_Style();
 		$styleObj->setFont($fontObj);
 		$this->getActiveSheet()->setDefaultStyle($styleObj);
 	}
@@ -45,9 +44,9 @@ class Excel extends PHPExcel {
 		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style.php');
 		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Font.php');
 		require_once(\GO::config()->root_path.'go/vendor/PHPExcel/PHPExcel/Style/Color.php');
-		$colorObj = new PHPExcel_Style_Color();
+		$colorObj = new \PHPExcel_Style_Color();
 		$colorObj->setRGB($colorRGB);
-		$fontObj = new PHPExcel_Style_Font();
+		$fontObj = new \PHPExcel_Style_Font();
 		$fontObj->setName($fontFamily);
 		$fontObj->setSize($fontSize);
 		$fontObj->setColor($colorObj);
@@ -55,7 +54,7 @@ class Excel extends PHPExcel {
 		$fontObj->setItalic($italic);
 		$fontObj->setUnderline($underline);
 		
-		$styleObj = new PHPExcel_Style();
+		$styleObj = new \PHPExcel_Style();
 		$styleObj->setFont($fontObj);
 		$this->getActiveSheet()->setSharedStyle($styleObj, $cellRange);
 		
