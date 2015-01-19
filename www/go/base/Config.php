@@ -887,6 +887,9 @@ class Config {
 	 * @var string
 	 */
 	var $curl_proxy="";
+	
+	
+	var $calendar_tasklist_show = 0;
 
 //	/**
 //	 * Enable logging of slow requests
