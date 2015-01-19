@@ -358,7 +358,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 							'event_id'=>$event->id
 					));
 					
-					if(!empty($p['contact_id']) && $p['contact_id'] != $participant->contact_id){
+					if($participant && !empty($p['contact_id']) && $p['contact_id'] != $participant->contact_id){
 						$participant->delete();
 						$participant = false;
 					}
