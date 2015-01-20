@@ -312,7 +312,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 					$resourceEvent->end_time = $model->end_time;
 					$resourceEvent->rrule = $model->rrule;
 					$resourceEvent->repeat_end_time = $model->repeat_end_time;
-					$resourceEvent->status = "NEEDS-ACTION";
+					$resourceEvent->status = $model->status;
 					$resourceEvent->user_id = $model->user_id;
 
 					$resourceEvent->busy = !$resourceEvent->calendar->group->show_not_as_busy;
