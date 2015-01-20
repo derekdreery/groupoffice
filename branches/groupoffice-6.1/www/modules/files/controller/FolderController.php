@@ -51,7 +51,7 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 			$folders = array($params['path']);
 		}else
 		{
-			$folders = array('users','projects','addressbook','notes','tickets');
+			$folders = array('users','projects2','addressbook','notes','tickets');
 
 
 			$billingFolder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'billing');
