@@ -67,7 +67,7 @@ class LatestReadAnnouncementRecord extends \GO\Base\Db\ActiveRecord {
 	
 	/**
 	 * Returns the latest Announcement model that user $userId has at least read
-	 * permission to, and is still active.
+	 * permission to.
 	 * @param Integer $userId
 	 * @return \GO\Summary\Model\Announcement or false
 	 */
@@ -76,10 +76,10 @@ class LatestReadAnnouncementRecord extends \GO\Base\Db\ActiveRecord {
 		$announcementsStmt = Announcement::model()->find(
 			\GO\Base\Db\FindParams::newInstance()
 				->permissionLevel(\GO\Base\Model\Acl::READ_PERMISSION,$userId)
-				->criteria(
-					\GO\Base\Db\FindCriteria::newInstance()
-						->addCondition('due_time',time(),'<')
-				)
+//				->criteria(
+//					\GO\Base\Db\FindCriteria::newInstance()
+//						->addCondition('due_time',time(),'<')
+//				)
 				->order('ctime','DESC')
 		);
 		
