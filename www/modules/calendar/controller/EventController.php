@@ -812,6 +812,9 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 		$bdaysAdded=false;
 		
 		$calendarModels=array();
+		
+		$this->_uuidEvents = array();
+		
 		foreach($calendars as $calendarId){
 			// Get the calendar model that $calendarIdis used for these events
 			try{
@@ -877,6 +880,15 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 				}
 
 				$response = $this->_getEventResponseForPeriod($response,$calendar,$startTime,$endTime);
+				
+				foreach($this->_uuidEvents as $uuidEvent) { // Add the event to the results array
+					$index = $this->_getIndex($response['results'],$uuidEvent->getAlternateStartTime(),$uuidEvent->getName());
+					$response['results'][$index]=$uuidEvent->getResponseData();
+					if ($uuidEvent->getEvent()->isResource()){
+						$response['results'][$index]['resourced_calendar_name'] = $uuidEvent->getEvent()->resourceGetEventCalendarName();
+					}
+				}
+
 			}	catch(\GO\Base\Exception\AccessDenied $e){
 				//skip calendars without permission
 			}
@@ -1198,14 +1210,14 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 		// Get all the localEvent models between the given time period
 		$events = $calendar->getEventsForPeriod(strtotime($startTime), strtotime($endTime));
 		
-		$this->_uuidEvents = array();
+//		$this->_uuidEvents = array();
 		
 		// Loop through each event and prepare the view for it.
 		foreach($events as $event){
 			
 			// Check for a double event, and merge them if they are double
 			$key = $event->getUuid().$event->getAlternateStartTime();
-		
+			
 			if(isset($this->_uuidEvents[$key]))
 			{
 				if($event->getEvent()->calendar_id==$this->_uuidEvents[$key]->getEvent()->calendar_id){
@@ -1214,10 +1226,10 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 					$key+=$event->getEvent()->id;
 					$this->_uuidEvents[$key] = $event;
 				}else
-				{
+				{					
 					$this->_uuidEvents[$key]->mergeWithEvent($event);
 				}
-			}else{
+			}else{				
 				$this->_uuidEvents[$key] = $event;
 			}
 			
@@ -1239,12 +1251,12 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 			$resultCount++; // Add one to the global result count;
 		}
 		
-		foreach($this->_uuidEvents as $uuidEvent) { // Add the event to the results array
-			$index = $this->_getIndex($response['results'],$uuidEvent->getAlternateStartTime(),$uuidEvent->getName());
-			$response['results'][$index]=$uuidEvent->getResponseData();
-			if ($uuidEvent->getEvent()->isResource())
-				$response['results'][$index]['resourced_calendar_name'] = $uuidEvent->getEvent()->resourceGetEventCalendarName();
-		}
+//		foreach($this->_uuidEvents as $uuidEvent) { // Add the event to the results array
+//			$index = $this->_getIndex($response['results'],$uuidEvent->getAlternateStartTime(),$uuidEvent->getName());
+//			$response['results'][$index]=$uuidEvent->getResponseData();
+//			if ($uuidEvent->getEvent()->isResource())
+//				$response['results'][$index]['resourced_calendar_name'] = $uuidEvent->getEvent()->resourceGetEventCalendarName();
+//		}
 			
 		$response['count_events_only'] = $resultCount; // Set the count of the events
 
