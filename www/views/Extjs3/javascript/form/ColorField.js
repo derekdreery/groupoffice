@@ -104,7 +104,7 @@ GO.form.ColorField =  Ext.extend(function(config){
 			}
 			return true;
 		}
-		if(value.length!=3 && value.length!=6 ) {
+		if(!this.checkHex(value)) {
 			this.markInvalid(String.format(this.lengthText, value));
 			return false;
 		}
@@ -152,6 +152,11 @@ GO.form.ColorField =  Ext.extend(function(config){
 	setColor : function(hex) {
 		if(this.rendered)
 		{
+			
+			if(!this.checkHex(hex)){
+				hex = 'FFFFFF';
+			}
+			
 			this.curColor = hex;
 
 			this.el.setStyle( {
@@ -173,6 +178,15 @@ GO.form.ColorField =  Ext.extend(function(config){
 			if(this.menu && !GO.util.empty(this.curColor) && Ext.isDefined(this.colors) && this.colors.indexOf(this.curColor)>-1)
 				this.menu.palette.select(this.curColor);
 		}
+	},
+	
+	checkHex : function(hex) {
+		
+		if(!hex){
+			return false;
+		}
+		
+		return hex.match(/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
 	},
 
 	// private
