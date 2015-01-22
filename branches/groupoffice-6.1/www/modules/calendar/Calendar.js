@@ -179,7 +179,8 @@ GO.calendar.MainPanel = function(config){
 		
 		if(this.state.displayType=='view' && this.viewsStore.data.length)
 		{
-			this.setDisplay(this.state);
+			var displayConfig = {'view_id':this.state.view_id};
+			this.setDisplay(displayConfig);
 		}
 	}, this);
 
