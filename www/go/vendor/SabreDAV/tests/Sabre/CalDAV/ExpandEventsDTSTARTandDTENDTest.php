@@ -8,9 +8,9 @@ use Sabre\VObject;
  * This unittests is created to find out why recurring events have wrong DTSTART value
  *
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2007-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class ExpandEventsDTSTARTandDTENDTest extends \Sabre\DAVServerTest {
 
