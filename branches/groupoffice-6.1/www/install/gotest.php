@@ -487,7 +487,7 @@ function test_system(){
 	//			$test['fatal']=false;
 	//			$test['pass']=false;
 	//		}else
-			if(!\GO::scriptCanBeDecoded($root.'/modules/professional/License.php'))
+			if(!\GO::scriptCanBeDecoded('Professional'))
 			{
 				$test['feedback']='Warning: Your professional license is invalid. The professional modules will not be enabled. Please contact Intermesh about this problem and supply the output of this page.';
 				$test['fatal']=false;
