@@ -14,9 +14,9 @@ use Sabre\DAV;
  * $lockPlugin = new Sabre\DAV\Locks\Plugin($lockBackend);
  * $server->addPlugin($lockPlugin);
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2007-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class Plugin extends DAV\ServerPlugin {
 
@@ -503,7 +503,7 @@ class Plugin extends DAV\ServerPlugin {
 
                         $uri = $conditionUri?$conditionUri:$this->server->getRequestUri();
                         $node = $this->server->tree->getNodeForPath($uri);
-                        $etagValid = $node->getETag()==$conditionToken[2];
+                        $etagValid = $node instanceof DAV\IFile && $node->getETag()==$conditionToken[2];
 
                     }
 
