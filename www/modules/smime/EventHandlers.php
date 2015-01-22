@@ -104,6 +104,10 @@ class EventHandlers {
 			$verifyOutfile->delete();
 
 			$newResponse = $message->toOutputArray(true);
+			
+			unset($newResponse['to']);					
+			unset($newResponse['cc']);
+					
 			foreach ($newResponse as $key => $value) {
 				if (!empty($value) || $key == 'attachments')
 					$response[$key] = $value;
@@ -200,15 +204,28 @@ class EventHandlers {
 					return false;
 				}else
 				{
+					
+					//check if also signed
+					$data = $outfile->getContents();
+					if(strpos($data, 'signed-data')){
+						$verifyOutfile = \GO\Base\Fs\File::tempFile();					
+						openssl_pkcs7_verify($outfile->path(), null, "/dev/null", array(), GO::config()->root_path."modules/smime/dummycert.pem", $verifyOutfile->path());
+						
+						$outfile = $verifyOutfile;
+					}					
+					
 					$message = \GO\Email\Model\SavedMessage::model()->createFromMimeData($outfile->getContents());
 					$newResponse = $message->toOutputArray(true);
+					unset($newResponse['to']);					
+					unset($newResponse['cc']);
+					
 					foreach($newResponse as $key=>$value){
 						if(!empty($value) || $key=='attachments')
 							$response[$key]=$value;
 					}
 					$response['smime_encrypted']=true;
-//					$response['path']=$outfile->stripTempPath();
-					
+					//$response['path']=$outfile->stripTempPath();
+
 					$outfile->delete();
 				}
 			}else
