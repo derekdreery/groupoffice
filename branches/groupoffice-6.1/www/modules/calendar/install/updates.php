@@ -235,4 +235,4 @@ $updates['201404011700'][]="script:3_preset_category_acls.php";
 
 $updates['201409161300'][]="ALTER TABLE `cal_events` CHANGE `files_folder_id` `files_folder_id` INT( 11 ) NOT NULL DEFAULT '0';";
 
-				
+$updates['201501221443'][]="ALTER TABLE `cal_events` CHANGE `uuid` `uuid` VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '';";

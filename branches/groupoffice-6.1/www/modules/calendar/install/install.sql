@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `cal_categories` (
 DROP TABLE IF EXISTS `cal_events`;
 CREATE TABLE IF NOT EXISTS `cal_events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(200) NOT NULL DEFAULT '',
+  `uuid` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '',
   `calendar_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `start_time` int(11) NOT NULL DEFAULT '0',
