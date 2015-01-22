@@ -1759,9 +1759,25 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		
 		if($vobject->valarm && $vobject->valarm->trigger){
 			
-			$duration = \GO\Base\VObject\Reader::parseDuration($vobject->valarm->trigger);
-			if($duration>0){
-				$this->reminder = $duration*-1;
+			$type = (string) $vobject->valarm->trigger["value"];
+			
+			
+			if($type == "DURATION") {
+				$duration = \GO\Base\VObject\Reader::parseDuration($vobject->valarm->trigger);
+				if($duration>0){
+					$this->reminder = $duration*-1;
+				}
+				
+				//ignore reminders longer than 90 days.
+				if($this->reminder < 86400 * 90){
+					
+					\GO::debug("WARNING: Ignoring reminder that is longer than 90 days before event start");
+					$this->reminder = 0;
+				}
+				
+			}else
+			{
+				\GO::debug("WARNING: Ignoring unsupported reminder value of type: ".$type);			
 			}
 			
 		}elseif($vobject->aalarm){ //funambol sends old vcalendar 1.0 format
