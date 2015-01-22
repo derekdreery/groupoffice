@@ -2180,7 +2180,9 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			if($duplicate->isRecurring() && $this->isRecurring())
 				$this->duplicateRelation('exceptions', $duplicate);	
 			
-			$this->duplicateRelation('resources', $duplicate, array('status'=>self::STATUS_NEEDS_ACTION));
+			if($duplicate->is_organizer) {
+				$this->duplicateRelation('resources', $duplicate, array('status'=>self::STATUS_NEEDS_ACTION));
+			}
 		}
 		
 		return parent::afterDuplicate($duplicate);
