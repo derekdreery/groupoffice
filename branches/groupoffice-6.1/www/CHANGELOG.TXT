@@ -1,3 +1,6 @@
+- Fixed SMIME decryption of outlook messages
+- Fixed IE bug with colorfield in company dialog
+- Support repeat on workdays of thunderbird in caldav
 - Fixed caldav bug related to case sensitity in the UID database fields
 - Document templates failed with special characters in the name on some servers.
 - Merge events in calendar was broken
