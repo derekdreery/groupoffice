@@ -1690,7 +1690,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			//DTEND;TZID=Europe/Amsterdam:20140121T000000
 			//DTSTART;TZID=Europe/Amsterdam:20140120T000000
 			
-			if($dtstart->format('Hi') == $dtstart->format('Hi') && $dtstart->format('Hi') == "0000" ){
+			if($dtstart->format('Hi') == "0000" && $dtend->format('Hi') == "0000" ){
 				$this->all_day_event=true;
 				$substractOnEnd=60;
 			}
