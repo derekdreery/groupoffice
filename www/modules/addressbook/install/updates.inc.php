@@ -458,3 +458,6 @@ $updates['201411101500'][]="ALTER TABLE `ab_contacts` CHANGE `color` `color` CHA
 
 $updates['201411191645'][]="UPDATE ab_companies SET color='000000' WHERE color IS NULL OR color='';";
 $updates['201411191645'][]="ALTER TABLE `ab_companies` CHANGE `color` `color` CHAR( 6 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '000000';";
+
+$updates['201501221443'][]="ALTER TABLE `ab_contacts` CHANGE `uuid` `uuid` VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '';";
+		

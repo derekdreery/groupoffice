@@ -1,3 +1,8 @@
+- Fixed caldav bug related to case sensitity in the UID database fields
+- Document templates failed with special characters in the name on some servers.
+- Merge events in calendar was broken
+- Ignore unsupported reminder values in icalendar
+- Delete task bug in community version
 - Uninstall of module did not work completely. Some installed checks still returned true.
 - Wrong parent ID in z-push mail folders which prevented sub/sub/sub folders from syncing 
 

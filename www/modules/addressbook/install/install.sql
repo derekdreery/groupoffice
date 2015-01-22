@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
 DROP TABLE IF EXISTS `ab_contacts`;
 CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) NOT NULL DEFAULT '',
+  `uuid` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '',
   `user_id` int(11) NOT NULL DEFAULT '0',
   `addressbook_id` int(11) NOT NULL DEFAULT '0',
   `first_name` varchar(50) NOT NULL DEFAULT '',

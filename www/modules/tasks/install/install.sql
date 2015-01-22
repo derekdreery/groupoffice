@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `ta_tasklists` (
 DROP TABLE IF EXISTS `ta_tasks`;
 CREATE TABLE IF NOT EXISTS `ta_tasks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(100) NOT NULL DEFAULT '',
+  `uuid` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '',
   `tasklist_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `ctime` int(11) NOT NULL,

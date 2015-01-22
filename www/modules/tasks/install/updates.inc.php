@@ -73,3 +73,5 @@ $updates["201204231436"][]="ALTER TABLE `ta_tasks` DROP `project_name`;";
 $updates["201305141646"][]="update ta_tasks set mtime=unix_timestamp(), due_time=start_time where due_time<start_time;";
 
 $updates['201305151646'][]="ALTER TABLE `ta_tasks` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
+
+$updates['201501221443'][]="ALTER TABLE `ta_tasks` CHANGE `uuid` `uuid` VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '';";
