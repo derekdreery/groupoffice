@@ -3757,8 +3757,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 		foreach($r as $name => $attr){
 			
-			if (!class_exists($attr['model']) || !GO::modules()->isInstalled($attr['model']::getModule()))
+			
+			
+			//throw new \Exception($module);
+						
+			if (!GO::classExists($attr['model'])){
+				unset($r[$name]);
 				continue;
+			}
+			
+			
 			
 			if(!empty($attr['delete']) && $attr['type']!=self::BELONGS_TO){
 
@@ -3849,7 +3857,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				}
 			}
 		}
-
+	
 		$sql = "DELETE FROM `".$this->tableName()."` WHERE ";
 		$sql = $this->_appendPkSQL($sql);
 
@@ -3873,12 +3881,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			if($model)
 				$model->delete(true);
 		}
+		
+		
+		
 
 		if($this->hasFiles() && $this->files_folder_id > 0 && GO::modules()->isInstalled('files')){
 			$folder = \GO\Files\Model\Folder::model()->findByPk($this->files_folder_id,false,true);
 			if($folder)
 				$folder->delete(true);
 		}
+		
 
 		if($this->aclField() && (!$this->isJoinedAclField || $this->isAclOverwritten())){
 			//echo 'Deleting acl '.$this->{$this->aclField()}.' '.$this->aclField().'<br />';
@@ -3889,10 +3901,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		}
 
 		if ($this->customfieldsRecord)
-			$this->customfieldsRecord->delete();
-
-		$this->_deleteLinks();
-
+			$this->customfieldsRecord->delete();		
+		
+		$this->_deleteLinks();	
+		
+		
 		if(!$this->afterDelete())
 			return false;
 
@@ -3900,6 +3913,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 		return true;
 	}
+	
+	
 
 
 	private function _deleteLinks(){
@@ -3907,7 +3922,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if($this->hasLinks()){
 			$stmt = \GO\Base\Model\ModelType::model()->find();
 			while($modelType = $stmt->fetch()){
-				if(class_exists($modelType->model_name)){
+				if(\GO::classExists($modelType->model_name)){
 					$model = GO::getModel($modelType->model_name);
 					if($model->hasLinks()){
 

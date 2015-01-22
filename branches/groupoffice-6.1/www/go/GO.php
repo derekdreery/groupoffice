@@ -60,16 +60,27 @@ class GO{
 	 * @return boolean
 	 */
 	public static function classExists($className){
+		
+		$parts = explode('\\', $className);
+		$module = strtolower($parts[1]);
+		
 			
-		if(class_exists($className)){
-			
-			$clsParts = explode('\\',$className);
-			
-			if($clsParts[1] == 'Base' || GO::modules()->isInstalled(strtolower($clsParts[1])))
-				return true;
+		if (($module != 'Base' && (!GO::modules()->isInstalled($module) || !GO::modules()->isAvailable($module))) || !class_exists($className)){
+			return false;
+		}else
+		{
+			return true;
 		}
-	
-		return false;
+//			
+//		if(class_exists($className)){
+//			
+//			$clsParts = explode('\\',$className);
+//			
+//			if($clsParts[1] == 'Base' || GO::modules()->isInstalled(strtolower($clsParts[1])))
+//				return true;
+//		}
+//	
+//		return false;
 	}
 	
 	/**
@@ -1265,10 +1276,12 @@ class GO{
 		if(!file_exists($path)){
 			return false;
 		}
+		
+		//echo $path;
 
 		//check data for presence of ionCube in code.
 		$data=  file_get_contents($path, false, null, -1, 100);		
-		if(strpos($data, 'ionCube')===false){				
+		if(strpos($data, 'ionCube')===false){							
 			return true;
 		}
 
@@ -1299,7 +1312,6 @@ class GO{
 //		return self::$ioncubeWorks;
 		
 	}
-	
 	
 	/**
 	 * Get the license file object
