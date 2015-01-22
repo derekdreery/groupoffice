@@ -344,8 +344,17 @@ class Rrule extends \GO\Base\Util\Date\RecurrencePattern
 		$this->_interval = !empty($rrule_arr['INTERVAL']) ? intval($rrule_arr['INTERVAL']) : 1;
 		$this->_bysetpos = !empty($rrule_arr['BYSETPOS']) ? intval($rrule_arr['BYSETPOS']) : 0;
 		
-		if($this->_bysetpos<0)
+		
+		//fix for thundebird sending: RRULE:FREQ=DAILY;UNTIL=20150326T080000Z;BYDAY=MO,TU,WE,TH,FR
+		//it should work as RRULE:FREQ=WEEKLY;UNTIL=20150326T080000Z;BYDAY=MO,TU,WE,TH,FR
+		
+		if(!empty($this->_byday) && $this->_freq == 'DAILY'){
+			$this->_freq = 'WEEKLY';
+		}
+		
+		if($this->_bysetpos<0) {
 			throw new \Exception("'Last X of month' recurrence pattern currently not supported by Group-Office.");
+		}
 		
 		
 		$this->_splitDaysAndSetPos();
