@@ -231,10 +231,12 @@ abstract class AbstractExport {
 			
 		$availableColumns = array();
 		foreach($aColumns as $name=>$column){
-			if(!$this->_checkRelatedColumn($name,$relatedColumns)){
+			//if(!$this->_checkRelatedColumn($name,$relatedColumns)){
 				$availableColumns[] = array('id'=>$name,'name'=>$name,'label'=>$this->_model->getAttributeLabel($name));
-			}
+			//}
 		}
+		
+		//var_dump($availableColumns);
 		
 		$availableColumns = array_merge($availableColumns,  array_values($relatedColumns));		
 		
