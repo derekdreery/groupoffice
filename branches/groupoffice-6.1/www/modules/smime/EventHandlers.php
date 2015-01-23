@@ -217,6 +217,7 @@ class EventHandlers {
 					$message = \GO\Email\Model\SavedMessage::model()->createFromMimeData($outfile->getContents());
 					$newResponse = $message->toOutputArray(true);
 					unset($newResponse['to']);					
+					unset($newResponse['to_string']);
 					unset($newResponse['cc']);
 					
 					foreach($newResponse as $key=>$value){
