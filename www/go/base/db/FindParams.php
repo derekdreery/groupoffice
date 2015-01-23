@@ -176,10 +176,15 @@ class FindParams{
 	 * @return \GO\Base\Db\FindParams
 	 */
 	public function selectAllFromTable($table='t'){
+		
+		
 
 		// Fields can be empty, if they are empty then we fill it with 't.*'
 		if(empty($this->_params['fields']))
 			$this->_params['fields'] = 't.*';
+		
+		if(preg_match('/[^\.`]*\s*\*/', $this->_params['fields']))
+			return $this;
 		
 		$parts = explode(',', $this->_params['fields']);
 
