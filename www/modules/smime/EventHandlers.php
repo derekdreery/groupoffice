@@ -99,6 +99,7 @@ class GO_Smime_EventHandlers {
 			$newResponse = $message->toOutputArray(true);
 			
 			unset($newResponse['to']);					
+			unset($newResponse['to_string']);
 			unset($newResponse['cc']);
 			
 			foreach ($newResponse as $key => $value) {
@@ -207,12 +208,14 @@ class GO_Smime_EventHandlers {
 					}			
 					
 					$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($outfile->getContents());
+															
+					$newResponse = $message->toOutputArray(true);
 					
 					unset($newResponse['to']);					
+					unset($newResponse['to_string']);
 					unset($newResponse['cc']);
 					
 					
-					$newResponse = $message->toOutputArray(true);
 					foreach($newResponse as $key=>$value){
 						if(!empty($value) || $key=='attachments')
 							$response[$key]=$value;
