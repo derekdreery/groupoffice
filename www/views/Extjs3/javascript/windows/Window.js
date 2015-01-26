@@ -12,16 +12,22 @@ GO.Window = function(config)
 		});
 	
 		GO.Window.superclass.constructor.call(this, config);
-	/*
-	this.on("show",function(window){
-		console.log(window);
-	});
-*/
-	}
+	
+	};
 
 GO.Window = Ext.extend(Ext.Window,{
 
 	temporaryListeners : [],
+	
+	afterRender : function(){
+		
+		GO.Window.superclass.afterRender.call(this);
+		
+		this.on('move', function(){			
+			//to fix combobox autocomplete failure after move or hide window			
+			document.activeElement.blur();
+		});
+	},
 	
 	addListenerTillHide : function(eventName, fn, scope){
 		this.on(eventName, fn, scope);		
