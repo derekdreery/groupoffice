@@ -63,8 +63,12 @@
 	width:10px;
 }
 
-.go-html-formatted, .go-html-formatted p, .go-html-formatted li, .go-html-formatted td, .go-html-formatted div, .go-html-formatted span{
+.go-html-formatted{
 	font: 12px Arial, Helvetica Sans-serif;
+}
+
+.go-html-formatted * {
+    font: inherit;
 }
 
 .go-html-formatted  blockquote {  
