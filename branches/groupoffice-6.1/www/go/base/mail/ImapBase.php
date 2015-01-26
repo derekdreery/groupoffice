@@ -125,7 +125,7 @@ abstract class ImapBase {
 				case '(':
 				case ')':
 					$chunk = $line{0};
-					$line = substr($line, 1);
+					$line = strlen($line) > 1 ? substr($line, 1) : '';
 					break;
 				case '"':
 					if (preg_match("/^(\"[^\"\\\]*(?:\\\.[^\"\\\]*)*\")/", $line, $matches)) {
@@ -404,7 +404,7 @@ abstract class ImapBase {
 			if ($u7 == '&') {
 				$i++;
 				$u7len--;
-				$u7 = $str[$i];
+				$u7 = isset($str[$i]) ? $str[$i] : '';
 
 				if ($u7len && $u7 == '-') {
 					$p .= '&';
