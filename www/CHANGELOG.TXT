@@ -1,3 +1,6 @@
+26-01-2015 6.1.18
+- Autocomplete failing after moving email composer fixed
+- Search with utf8 characters in address book was broken
 - Fixed font-style display in some emails
 
 23-01-2015 6.1.17
