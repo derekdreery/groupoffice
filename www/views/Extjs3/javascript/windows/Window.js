@@ -12,16 +12,21 @@ GO.Window = function(config)
 		});
 	
 		GO.Window.superclass.constructor.call(this, config);
-	/*
-	this.on("show",function(window){
-		console.log(window);
-	});
-*/
-	}
+	};
 
 GO.Window = Ext.extend(Ext.Window,{
 
 	temporaryListeners : [],
+	
+	afterRender : function(){
+		
+		GO.Window.superclass.afterRender.call(this);
+		
+		this.on('move', function(){			
+			//to fix combobox autocomplete failure after move or hide window			
+			document.activeElement.blur();
+		});
+	},
 	
 	addListenerTillHide : function(eventName, fn, scope){
 		this.on(eventName, fn, scope);		
@@ -35,7 +40,7 @@ GO.Window = Ext.extend(Ext.Window,{
 	beforeShow : function() {
 		GO.Window.superclass.beforeShow.call(this);
 
-		this.autoSize();
+		this.autoSize();	
 	},
 
 	// private, we don't want to store the window position remote because
