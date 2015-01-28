@@ -59,7 +59,8 @@ class Connection{
 			if(!$this->_link)
 				throw new \Exception ("LDAP connection to ".$this->_host." on ".$this->_port." failed");
 			
-			ldap_set_option($this->_link,LDAP_OPT_PROTOCOL_VERSION,3);
+			ldap_set_option($this->_link, LDAP_OPT_PROTOCOL_VERSION, 3);
+			ldap_set_option($this->_link, LDAP_OPT_REFERRALS, 0);
 			
 			if($this->_tls){
 				\GO::debug('LDAP: Starting LDAP TLS');
