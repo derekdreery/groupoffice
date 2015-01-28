@@ -1,3 +1,4 @@
+- Leaveday module manager may change the YearCredit and approve registered leave days
 - Active Directory auth fix: LDAP_OPT_REFERRALS is default set to 0
 
 26-01-2015 6.1.18
