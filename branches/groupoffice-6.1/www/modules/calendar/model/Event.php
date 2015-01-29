@@ -457,8 +457,13 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			$rrule = new \GO\Base\Util\Icalendar\Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
 			$this->repeat_end_time = $rrule->until;
-		}		
+		}
 		
+		//ignore reminders longer than 90 days.
+		if($this->reminder < 86400 * 90){
+			\GO::debug("WARNING: Ignoring reminder that is longer than 90 days before event start");
+			$this->reminder = 0;
+		}	
 		
 		
 		if($this->exception_for_event_id > 0 && $this->exception_for_event_id == $this->id){
@@ -1767,14 +1772,6 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				if($duration>0){
 					$this->reminder = $duration*-1;
 				}
-				
-				//ignore reminders longer than 90 days.
-				if($this->reminder < 86400 * 90){
-					
-					\GO::debug("WARNING: Ignoring reminder that is longer than 90 days before event start");
-					$this->reminder = 0;
-				}
-				
 			}else
 			{
 				\GO::debug("WARNING: Ignoring unsupported reminder value of type: ".$type);			
@@ -1785,8 +1782,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			if(!empty($aalarm[0])) {				
 				$p = Sabre\VObject\DateTimeParser::parse($aalarm[0]);
 				$this->reminder = $this->start_time-$p->format('U');
-			}
-		
+			}		
 		}
 		
 		$this->setAttributes($attributes, false);
