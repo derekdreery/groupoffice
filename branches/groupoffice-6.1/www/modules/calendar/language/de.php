@@ -261,3 +261,5 @@ $l['sendUpdateNotification']='Möchten Sie alle Teilnehmer per E-Mail über die 
 $l['moveEventResourceError']= 'Konnte den Termin nicht verschieben, weil die folgenden Ressourcen nicht verfügbar sind:';
 $l['allTogetherForParticipants']= 'Alle Teilnehmer';
 $l['allTogetherForResources']= 'Alle Ressourcen';
+
+$l['exportAsIcs'] = 'Exportieren als ICS';

@@ -261,3 +261,5 @@ $l['tooltip'] = 'Tooltip tekst';
 $l['moveEventResourceError'] = 'Kan afspraak niet verzetten omdat de volgende hulpmiddelen dan niet beschikbaar zijn:';
 
 $l['resourceUsedIn'] = 'Hulpmiddel gebruikt in';
+
+$l['exportAsIcs'] = 'Exporteren als ICS';
