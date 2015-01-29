@@ -460,7 +460,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		}
 		
 		//ignore reminders longer than 90 days.
-		if($this->reminder < 86400 * 90){
+		if($this->reminder > 86400 * 90){
 			\GO::debug("WARNING: Ignoring reminder that is longer than 90 days before event start");
 			$this->reminder = 0;
 		}	
