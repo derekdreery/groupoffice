@@ -55,7 +55,19 @@ GO.calendar.ContextMenu = function(config){
 			this.fireEvent("deleteEvent", this);
 		}
 	}),'-',
-	this.newMenuItem = new GO.NewMenuItem()
+	this.newMenuItem = new GO.NewMenuItem(),
+	'-',
+	this.actionExportAsIcs = new Ext.menu.Item({
+		iconCls: 'btn-export',
+		text: GO.calendar.lang['exportAsIcs'],
+		cls: 'x-btn-text-icon',
+		scope:this,
+		handler: function()
+		{
+			if (!GO.util.empty(this.event) && this.event.event_id>0)
+			window.open(GO.url('calendar/event/exportEventAsIcs')+'&event_id='+this.event.event_id);
+		}
+	})
 	]
 
 	if (GO.email) {
