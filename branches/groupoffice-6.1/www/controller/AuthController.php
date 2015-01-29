@@ -60,7 +60,7 @@ class AuthController extends \GO\Base\Controller\AbstractController {
 				$this->render('Init');
 			}else
 			{
-				$this->render('Login');
+				$this->render('LoginHtml');
 			}
 		}		
 	}
