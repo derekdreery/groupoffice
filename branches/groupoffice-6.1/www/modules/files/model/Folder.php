@@ -182,6 +182,29 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 		return $this->_path;
 	}
 
+	public function getFullPath() {
+		$currentFolder = $this;
+		
+		$ids=array();
+		if(!empty($this->id))
+			$ids[]=$this->id;
+			
+		$fullPath = $this->name;
+		while ($currentFolder = $currentFolder->parent) {
+
+			if(in_array($currentFolder->id, $ids))
+				throw new \Exception("Infinite folder loop detected in ".$this->_path." ".implode(",", $ids));
+			else
+				$ids[]=$currentFolder->id;
+
+			$fullPath = $currentFolder->name . '/' . $fullPath;
+
+		}
+
+		
+		return $fullPath;
+	}
+	
 	/**
 	 * Get a URL to show the folder directy in the files module.
 	 *
