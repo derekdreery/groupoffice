@@ -43,7 +43,7 @@ class Record extends Model{
 			for($i=0;$i<$attributes['count'];$i++){
 				//echo $attributes[$i]." : ".$attributes[$attributes[$i]]."\n";
 				$key = $keyToLowerCase ? strtolower($attributes[$i]) : $attributes[$i];
-				$this->_attributes[$key]=$attributes[$attributes[$i]];
+				$this->_attributes[$key] = $this->_convertUTF8($attributes[$attributes[$i]]);
 				unset($this->_attributes[$key]['count']);
 			}
 			unset($this->_attributes['objectclass']);
@@ -51,6 +51,17 @@ class Record extends Model{
 		
 		return $this->_attributes;
 	}
+	
+	private function _convertUTF8($attr) {
+		if(is_array($attr)) {
+			$new = array();
+			foreach($attr as $key => $val) {
+				$new[$key] = $this->_convertUTF8($val);
+			}
+		}
+		else $new = @iconv("cp1252", "UTF-8//IGNORE",$attr);
+		return $new;
+    }
 	
 	public function getAttribute($name) {
 		$mapping = static::getMapping();
