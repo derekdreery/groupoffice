@@ -1,3 +1,5 @@
+- UTF-8 conversion is done for ActiveDictory LDAP servers
+- LDAP_OPT_REFERRALS is set to 0 by default for LDAP connections
 - Leaveday module manager may change the YearCredit and approve registered leave days
 - Active Directory auth fix: LDAP_OPT_REFERRALS is default set to 0
 
