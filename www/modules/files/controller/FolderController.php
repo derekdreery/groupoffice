@@ -1052,7 +1052,7 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 
 	public function checkModelFolder(\GO\Base\Db\ActiveRecord $model, $saveModel=false, $mustExist=false) {
 		$oldAllowDeletes = \GO\Base\Fs\File::setAllowDeletes(false);
-
+	
 		$folder = false;
 		if ($model->files_folder_id > 0){
 			
@@ -1072,7 +1072,7 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 
 			if ($saveModel && $model->isModified())
 				$model->save(true);
-		}elseif (isset($model->acl_id) || $mustExist) {
+		}elseif ((isset($model->acl_id) && !$model->aclOverwrite()) || $mustExist) {
 			
 			GO::debug('Folder does not exist in database. Will create it.');
 		
