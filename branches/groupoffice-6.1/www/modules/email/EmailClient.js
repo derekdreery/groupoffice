@@ -672,6 +672,21 @@ GO.email.EmailClient = function(config){
 		scope: this
 	}),new Ext.Toolbar.Separator(),
 	{
+		// This button goes to the settings of the account that is selected in the tree
+		iconCls: 'btn-edit',
+		text: GO.lang['strProperties'],
+		handler:function(a,b){
+			if(!this.accountDialog){
+				this.accountDialog = new GO.email.AccountDialog();
+				this.accountDialog.on('save', function(){
+					GO.mainLayout.getModulePanel("email").refresh();
+				}, this);
+			}
+			this.accountDialog.show(this.account_id);
+		},
+		scope:this
+	},new Ext.Toolbar.Separator(),
+	{
 		iconCls: 'btn-settings',
 		text:GO.lang.administration,
 		menu: this.settingsMenu
