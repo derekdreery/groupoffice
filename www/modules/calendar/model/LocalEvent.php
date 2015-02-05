@@ -237,10 +237,17 @@ class LocalEvent extends \GO\Base\Model {
 	
 	public function mergeWithEvent($event){
 		
+		//echo $this->_event->user->getShortName().' : '. $event->getEvent()->user->getShortName().', ';
+		
+			
 		$this->_isMerged = true;
 		$this->_initials[] = $event->getEvent()->user->getShortName();
 		$this->_calendarNames[] = $event->getCalendar()->name;
 		$this->_backgroundColor = 'FFFFFF';
+		
+		if($event->getEvent()->is_organizer){
+			$this->_event = $event->getEvent();
+		}
 		
 	}
 
@@ -418,7 +425,7 @@ class LocalEvent extends \GO\Base\Model {
 	 */
 	public function isReadOnly(){
 		return 
-						$this->_isMerged ||
+						//$this->_isMerged ||
 						$this->_event->read_only || 
 						!$this->_event->is_organizer || 
 						$this->isPrivate() && \GO::user()->id != $this->_event->user_id || 

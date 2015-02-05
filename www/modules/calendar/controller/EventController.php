@@ -877,23 +877,24 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 					
 				if(\GO::modules()->tasks && empty($params['events_only'])){
 					$response = $this->_getTaskResponseForPeriod($response,$calendar,$startTime,$endTime);
-				}
-
-				$response = $this->_getEventResponseForPeriod($response,$calendar,$startTime,$endTime);
+				}				
 				
-				foreach($this->_uuidEvents as $uuidEvent) { // Add the event to the results array
-					$index = $this->_getIndex($response['results'],$uuidEvent->getAlternateStartTime(),$uuidEvent->getName());
-					$response['results'][$index]=$uuidEvent->getResponseData();
-					if ($uuidEvent->getEvent()->isResource()){
-						$response['results'][$index]['resourced_calendar_name'] = $uuidEvent->getEvent()->resourceGetEventCalendarName();
-					}
-				}
 
 			}	catch(\GO\Base\Exception\AccessDenied $e){
 				//skip calendars without permission
 			}
+			
+			$response = $this->_getEventResponseForPeriod($response,$calendar,$startTime,$endTime);
 		}
-		
+
+		foreach($this->_uuidEvents as $uuidEvent) { // Add the event to the results array
+			$index = $this->_getIndex($response['results'],$uuidEvent->getAlternateStartTime(),$uuidEvent->getName());
+			$response['results'][$index]=$uuidEvent->getResponseData();
+			if ($uuidEvent->getEvent()->isResource()){
+				$response['results'][$index]['resourced_calendar_name'] = $uuidEvent->getEvent()->resourceGetEventCalendarName();
+			}
+		}
+
 		// Get the best default calendar to add new events
 		$defaultWritableCalendar = $this->_getDefaultWritableCalendar($calendarModels);
 		if($defaultWritableCalendar){
@@ -1218,20 +1219,25 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 			// Check for a double event, and merge them if they are double
 			$key = $event->getUuid().$event->getAlternateStartTime();
 			
+			//$event->getEvent()->location = $key;
+			
 			if(isset($this->_uuidEvents[$key]))
 			{
 				if($event->getEvent()->calendar_id==$this->_uuidEvents[$key]->getEvent()->calendar_id){
 					//this is an erroneous situation. events with the same start time and the same uuid may not appear in the same calendar.
 					//if we merge it then the user can't edit the events anymore.
-					$key+=$event->getEvent()->id;
+					$key .= $event->getEvent()->id;
 					$this->_uuidEvents[$key] = $event;
 				}else
 				{					
 					$this->_uuidEvents[$key]->mergeWithEvent($event);
 				}
-			}else{				
+			}else{		
+				//echo $event->getEvent()->name.' '.$key.', ';
+				
 				$this->_uuidEvents[$key] = $event;
 			}
+		
 			
 //			$this->_uuidEvents[]=$event;
 			
