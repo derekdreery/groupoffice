@@ -1,7 +1,7 @@
 <?php
 
 
-$l['unknown']='Unkown filetype';
+$l['unknown']='Unknown filetype';
 $l['txt']='Textfile';
 $l['sxw']='OpenOffice.Org text';
 $l['ott']='OpenOffice.Org template';

@@ -2,7 +2,7 @@
 //Uncomment this line in new translations!
 //require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('filetypes'));
 
-$lang['filetypes']['unknown'] = 'Unkown filetype';
+$lang['filetypes']['unknown'] = 'Unknown filetype';
 $lang['filetypes']['txt'] = 'Textfile';
 $lang['filetypes']['sxw'] = 'OpenOffice.Org text';
 $lang['filetypes']['ott'] = 'OpenOffice.Org template';
