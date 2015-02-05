@@ -1,3 +1,4 @@
+- Email: Added properties button to the email client which will give the user direct access to the account settings window.
 - Files folders were always created for projects
 - project template create error
 - Login bug on windows servers
