@@ -1,3 +1,4 @@
+09-02-2015 5.0.95
 - Fixed font-style display in some emails
 - Autocomplete failing after moving email composer fixed
 - Fixed SMIME decryption of outlook messages
