@@ -1,3 +1,4 @@
+09-02-2015 6.1.19
 - Brazilian language Saturday is UTF-8 encoded
 - Comments: Changed order column of comments from ID to Ctime
 - Email: Added properties button to the email client which will give the user direct access to the account settings window.
