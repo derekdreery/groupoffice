@@ -96,7 +96,7 @@ Date.dayNames = [
    "Quarta",
    "Quinta",
    "Sexta",
-   "S&aacute;bado"
+   "Sábado"
 ];
 
 if(Ext.MessageBox){
