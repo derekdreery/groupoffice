@@ -735,7 +735,7 @@ class AbstractModelController extends AbstractController {
 			$stmt = \GO\Comments\Model\Comment::model()->find(\GO\Base\Db\FindParams::newInstance()
 								->limit(5)
 								->select('t.*,cat.name AS categoryName')
-								->order('id','DESC')
+								->order('ctime','DESC')
 								->joinModel(array(
 									'model' => 'GO\Comments\Model\Category',
 									'localTableAlias' => 't',

@@ -13,7 +13,7 @@ class CommentController extends \GO\Base\Controller\AbstractModelController{
 		return \GO\Base\Db\FindParams::newInstance()
 						->ignoreAcl()	
 						->select('t.*')
-						->order('id','DESC')
+						->order('ctime','DESC')
 						->criteria(
 										\GO\Base\Db\FindCriteria::newInstance()
 											->addCondition('model_id', $params['model_id'])
