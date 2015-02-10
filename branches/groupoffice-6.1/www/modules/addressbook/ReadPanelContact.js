@@ -282,7 +282,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 												'<td style="width: 50%;vertical-align:top;padding:10px 0;">'+												
 													'<div class="readPanelSubHeading">'+GO.addressbook.lang['cmdFieldsetPostAddress'] + '</div>'+
 													'<tpl if="!GO.util.empty(company_google_maps_post_link)">'+
-														'<a href="{company_google_maps_link}" target="_blank">'+
+														'<a href="{company_google_maps_post_link}" target="_blank">'+
 													'</tpl>'+
 													'{company_formatted_post_address}'+
 													'<tpl if="!GO.util.empty(company_google_maps_post_link)">'+
