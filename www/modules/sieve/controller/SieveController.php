@@ -110,7 +110,8 @@ class SieveController extends \GO\Base\Controller\AbstractModelController{
 			$index=0;
 			foreach($this->_sieve->script->content as $item)
 			{
-				//if ($item['name']!='Autoreply')
+				// Hide the "Out of office" script because it need to be loaded in a separate dialog
+				if ($item['name']!='Out of office')
 				{
 					$i['name']=$item['name'];
 					$i['index']=$index;
@@ -142,7 +143,7 @@ class SieveController extends \GO\Base\Controller\AbstractModelController{
 			$rule['name'] = $params['rule_name'];
 			$rule['tests'] = json_decode($params['criteria'], true);
 			$rule['actions'] = json_decode($params['actions'], true);
-			
+						
 			for($i=0,$c=count($rule['tests']);$i<$c;$i++)
 			{
 				//\GO::debug("TEST: ".$rule['tests'][$i]['arg1']);
@@ -180,7 +181,7 @@ class SieveController extends \GO\Base\Controller\AbstractModelController{
 					Throw new \GO\Base\Exception\Save(\GO::t('stopEndError','sieve'));
 				}
 			}
-
+			
 			if($params['join'] == 'allof') {
 				$rule['join'] = 1;
 			}
@@ -284,8 +285,13 @@ class SieveController extends \GO\Base\Controller\AbstractModelController{
 		{
 				switch($action['type'])
 				{
+					case 'addflag':
+						if($action['target'] == '\\Seen'){
+							$action['text'] = \GO::t('setRead','sieve');
+						}
+						break;
 					case 'set_read':
-						$action['text'] = \GO::t('setRead','sieve');
+							$action['text'] = \GO::t('setRead','sieve');
 						break;
 					case 'fileinto':
 						if(empty($action['copy'])){
@@ -403,6 +409,92 @@ class SieveController extends \GO\Base\Controller\AbstractModelController{
 //		$response['success'] = true;
 //		return $response;
 //	}
+	
+	protected function actionLoadOutOfOffice($params) {
+		
+		$response = array();
+		
+		$this->_sieveConnect($params['account_id']);
+		
+		$scriptName =$this->_sieve->get_active($params['account_id']);
+
+		$this->_sieve->load($scriptName);
+		
+		$rule =false;
+		
+		if(!empty($this->_sieve->script->content)) {
+			$index=0;
+			foreach($this->_sieve->script->content as $item){
+				// Get the "Out of office" script because it need to be loaded here
+				if ($item['name']=='Out of office')
+				{
+					$rule = array();
+					
+					$rule['script_name']=$scriptName;
+					$rule['rule_name']=$item['name'];
+					$rule['active']=!$item['disabled'];
+					$rule['index']=$index;
+					
+					// Load the Rule that is set for this script
+					$outOfOfficeRule = $this->_sieve->script->content[$index];
+					
+					// Loop through the tests of this rule, the first test should be the "Activate" test
+					// The second test is the "Deactivate" date
+					// If there are more tests set, then they will be added to the response too (by index)
+					for($i=0; $i < count($outOfOfficeRule['tests']); $i++){
+						
+						$date = date(\GO::user()->completeDateFormat, strtotime($outOfOfficeRule['tests'][$i]['arg']));
+						
+						switch($i){
+							case 0:
+								$rule['activate'] = $date;
+								break;
+							case 1:
+								$rule['deactivate'] = $date;
+								break;
+							default:
+								$rule[$i] = $date;
+								break;
+						}
+					}
+					
+					// Loop through the actions and search for the "vacation" action
+					foreach($outOfOfficeRule['actions'] as $action){
+						if($action['type'] === "vacation"){
+							$rule['message'] = $action['reason'];
+							$rule['aliasses'] = $action['addresses'];
+						}
+					}
+					
+					// Add the found rule to the response
+					$response['data'] = $rule;
+						
+					// Add the complete rule to the response
+					$response['complete_rule']=$outOfOfficeRule;
+					
+				}
+				$index++;
+			}
+		}
+		
+		// If no rule with the name "Out of office" is found, then create a new one and add it to the response.
+		if(empty($rule)){
+			$response['data'] = array(
+				'script_name'=>'default',
+				'rule_name'=>'Out of office',
+				'active'=>false,
+				'index'=>-1,
+				'activate'=>date(\GO::user()->completeDateFormat),
+				'deactivate'=>date(\GO::user()->completeDateFormat),
+				'message'=>"I'm on vacation. So I'm not available.",
+				'aliasses'=>'',
+			);
+		}
+		
+		$response['success'] = true;
+
+		return $response;
+	}
 	
 }
 ?>

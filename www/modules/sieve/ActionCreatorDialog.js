@@ -134,6 +134,11 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 					this.txtDays.setValue(record.get('days'));
 					this.txtMessage.setValue(record.get('reason'));
 					break;
+				case 'addflag':
+					if(record.get('target') == '\\Seen'){
+						this.cmbAction.setValue('set_read');
+					}
+					break;
 				default:
 					break;
 			}
@@ -153,8 +158,8 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 		switch(this.cmbAction.getValue())
 		{
 			case 'set_read':
-				_type		= 'set_read';
-				_target = '';
+				_type		= 'addflag';
+				_target = '\\Seen';
 				_text		= GO.sieve.lang.setRead;
 				break;
 			case 'fileinto':

@@ -1,5 +1,6 @@
 modules/sieve/Overrides.js
 modules/sieve/SieveDialog.js
+modules/sieve/OutOfOfficePanel.js
 modules/sieve/SieveGrid.js
 modules/sieve/CriteriumGrid.js
 modules/sieve/CriteriumCreatorDialog.js
