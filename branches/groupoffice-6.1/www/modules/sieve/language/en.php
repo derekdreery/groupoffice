@@ -122,3 +122,14 @@ $l['setRead']='Mark message as read';
 $l['stopEndError'] = 'Stop needs to be on the end!';
 
 $l['body']='Body';
+$l['outOfOffice']='Out of office';
+$l['message']='Message';
+$l['aliasses']='Aliasses';
+$l['schedule']='Schedule';
+
+$l['activateAt']='Activate at';
+$l['deactivateAt']='Deactivate at';
+
+$l['scheduleText']='In here you can schedule when the "Out of office" message needs to be activated.';
+$l['messageText']='Fill in your message in the field below.';
+$l['aliassesText']='Fill in the aliasses on which this message also needs to apply to. If you have multiple aliasses, then separate each alias with a comma (,).';

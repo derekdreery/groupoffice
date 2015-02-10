@@ -16,33 +16,23 @@ GO.moduleManager.onModuleReady('email',function(){
 		initComponent : GO.email.AccountDialog.prototype.initComponent.createSequence(function(){
 
 			this.sieveGrid = new GO.sieve.SieveGrid();
+			this.outOfOfficePanel = new GO.sieve.OutOfOfficePanel();
 
-//			this.tabPanel.add(this.sieveGrid);
-			
 			var inPos = this.tabPanel.items.indexOf(this.filterGrid);
+			this.tabPanel.insert(inPos,this.outOfOfficePanel);
 			this.tabPanel.insert(inPos,this.sieveGrid);
 
-			this.tabPanel.on('beforetabchange', function(tabPanel, newPanel, oldPanel){
-				if(newPanel==this.sieveGrid && this.sieveCheckedAccountId!=this.account_id){
-					this.sieveCheck();
-					return false;
-				}
-			}, this)
-
-			this.on('show', function(){
-				this.tabPanel.hideTabStripItem(this.filterGrid);
-				this.tabPanel.unhideTabStripItem(this.sieveGrid.getId());
-				this.sieveCheckedAccountId=0;
-			}, this);
-
 			this.tabPanel.hideTabStripItem(this.filterGrid);
-
 		}),
+		
+		sieveCheck :function(account_id){
+			
+			if(!GO.util.empty(account_id)){
+				this.account_id = account_id;
+			}
 
-		sieveCheck :function(){
-			if(this.account_id > 0)// && this.sieveCheckedAccountId!=this.account_id)
+			if(this.account_id > 0)
 			{
-				
 				GO.request({
 					maskEl:this.getEl(),
 					url: "sieve/sieve/isSupported",
@@ -52,15 +42,19 @@ GO.moduleManager.onModuleReady('email',function(){
 						{
 							// Hide the 'normal' panel and show this panel
 							this.tabPanel.hideTabStripItem(this.filterGrid);
+							
 							this.tabPanel.unhideTabStripItem(this.sieveGrid);
-							this.sieveGrid.show();							
+							this.tabPanel.unhideTabStripItem(this.outOfOfficePanel);
+							this.outOfOfficePanel.disableFields(false);			
 						}
 						else
 						{
 							// Hide this panel and show the 'normal' panel
 							this.tabPanel.hideTabStripItem(this.sieveGrid);
+							this.tabPanel.hideTabStripItem(this.outOfOfficePanel);
+							this.outOfOfficePanel.disableFields(true);
+							
 							this.tabPanel.unhideTabStripItem(this.filterGrid);
-							this.filterGrid.show();
 						}						
 					},
 					fail: function(response){
@@ -72,15 +66,14 @@ GO.moduleManager.onModuleReady('email',function(){
 					scope:this
 				});
 			}
-			this.sieveCheckedAccountId=this.account_id;
 		},
 		setAccountId : GO.email.AccountDialog.prototype.setAccountId.createSequence(function(account_id){
-			this.tabPanel.unhideTabStripItem(this.sieveGrid);
-			this.tabPanel.hideTabStripItem(this.filterGrid);
 			
-			this.sieveCheckedAccountId=0;
+			// Check if sieve is supported with the account settings of this account id
+			this.sieveCheck(account_id);
 			
 			this.sieveGrid.setAccountId(account_id);
+			this.outOfOfficePanel.setAccountId(account_id);
 		})
-	})
+	});
 });

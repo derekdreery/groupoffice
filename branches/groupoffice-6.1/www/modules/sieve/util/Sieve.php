@@ -852,8 +852,7 @@ class go_sieve_script
                     case 'setflag':
                     case 'removeflag':
                         array_push($exts, $imapflags);
-                        $action_script .= $action['type'].' '
-                            . self::escape_string($action['target']);
+												$action_script .= $action['type'].' '.self::escape_string($action['target']);
                         break;
 
                     case 'keep':
