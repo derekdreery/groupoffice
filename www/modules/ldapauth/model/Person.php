@@ -97,7 +97,7 @@ class Person extends GO\Base\Ldap\Record {
 		if($this->_ldapConn->bind($this->getDn(), $password))
 			return true;
 		
-		GO::debug("LDAP: authentication FAILED for " . $this->username);
+		GO::debug("LDAP: authentication FAILED for " . $this->getDn());
 		GO::session()->logout();
 		return false;
 	}
