@@ -518,8 +518,9 @@ class go_sieve_script
         'subaddress',               // RFC5233
         'vacation',                 // RFC5230
         'vacation-seconds',         // RFC6131
-        'variables',                // RFC5229
-        // @TODO: spamtest+virustest, mailbox
+        'variables',								// RFC5229
+				'mailbox'										// RFC5490
+        // @TODO: spamtest+virustest
     );
 
     /**
