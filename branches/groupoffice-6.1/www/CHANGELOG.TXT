@@ -1,3 +1,6 @@
+- Email: Added $config['email_autolink_companies'] so email will also be linked to 
+         the company when a contact has a company relation.
+         ($config['email_autolink_contacts'] also need to be set to true)
 - Sieve: Added :create after the fileinto action. This will autocreate the folder if it doesnt exist.
 - Sieve: Fixed "Mark as read" sieve rule.
 - Sieve: Added new out of office tab in the email settings dialog.
