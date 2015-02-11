@@ -33,6 +33,8 @@ GO.ldapauth.SettingsTab = Ext.extend(Ext.Panel, {
 		//when settings are loaded
 		if(!action.result.data.ldap_fields || action.result.data.ldap_fields.length===0 ){
 			this.setDisabled(true);
+			
+			this.ownerCt.hideTabStripItem(this);
 		}
 		else if(action.result.data.ldap_fields) {
 			this.setDisabled(false);
