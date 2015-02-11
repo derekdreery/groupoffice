@@ -48,11 +48,16 @@ class LdapauthModule extends \GO\Base\Module{
 				return true;
 			}
 			
-			$person->setAttributes($params);
-
-			$response['success'] = $response['success'] && $person->save();	
-			if(!empty($_POST["current_password"]) || !empty($_POST["password"]) )
+			$extraVars = $person->getExtraVars();
+			if(!empty($extraVars)) {
+				$person->setAttributes($params);
+				$response['success'] = $response['success'] && $person->save();	
+			}
+			
+			if(!empty($_POST["current_password"]) || !empty($_POST["password"]) ){
 				$response['success'] = $response['success'] && $person->changePassword($_POST["current_password"],$_POST["password"]);
+			}
+			
 			$response['feedback'] = 'Save failed: LDAP '. $person->getError();
 		} catch(Exception $e) {
 			$response['success'] = false;
