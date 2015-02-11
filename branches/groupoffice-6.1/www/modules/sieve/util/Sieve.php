@@ -303,7 +303,7 @@ class Sieve {
 	# rule:[Spam]
 	if anyof (header :contains \"X-Spam-Flag\" \"YES\")
 	{
-		fileinto \"Spam\";
+		fileinto :create \"Spam\";
 	}";
 				$this->save_script('default', $content);
 				$this->activate('default');
@@ -824,7 +824,8 @@ class go_sieve_script
 
                     case 'fileinto':
                         array_push($exts, 'fileinto');
-                        $action_script .= 'fileinto ';
+												array_push($exts, 'mailbox');
+                        $action_script .= 'fileinto :create ';
                         if (!empty($action['copy'])) {
                             $action_script .= ':copy ';
                             array_push($exts, 'copy');
