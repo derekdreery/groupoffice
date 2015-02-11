@@ -14,8 +14,13 @@ class LdapauthModule extends \GO\Base\Module{
 	public static function beforeLogin($username, $password){
 		
 
-		if(empty(GO::config()->ldap_peopledn))
+		$ldapPeopleDN = self::getPeopleDn($username);
+		if(empty($ldapPeopleDN)){
+			
+			GO::debug("LDAPAUTH: Inactive because ldap_peopledn is not set");
+			
 			return true;
+		}
 		GO::debug("LDAPAUTH: Active");
 
 		try{
@@ -92,7 +97,11 @@ class LdapauthModule extends \GO\Base\Module{
 			$parts = explode('@', $username);
 			
 			if(!isset($parts[1])){
-				throw new Exception("You can only use {VDOMAIN} when you login with an e-mail address");
+				//throw new \Exception("You can only use {VDOMAIN} when you login with an e-mail address");
+				
+				GO::debug("Not using LDAP Auth because we can't determine {VDOMAIN} because the given username is not an email address");
+				
+				return null;
 			}
 			
 			return str_replace('{VDOMAIN}', $parts[1],GO::config()->ldap_peopledn);

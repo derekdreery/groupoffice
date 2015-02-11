@@ -115,10 +115,7 @@ class Authenticator {
 			GO::setIgnoreAclPermissions($oldIgnoreAcl);
 
 			return false;
-
 		}
-
-
 
 		try{
 			$this->_checkEmailAccounts($user, $password);
