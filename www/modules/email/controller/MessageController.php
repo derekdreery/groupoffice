@@ -599,7 +599,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 							if(!empty(GO::config()->email_autolink_companies) && !empty($contact->company_id)){
 								$company = $contact->company;
 								if($company && !$company->equals($linkedModels)){
-									$linkedEmail->link($contact->company);
+									$linkedEmail->link($company);
 								}
 							}
 						}
@@ -1630,6 +1630,16 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 				\GO\Savemailas\Model\LinkedEmail::model()->createFromImapMessage($imapMessage, $contact);
 
 				$linkedModels[]=$contact;
+				
+				// Also link the company to the email if the contact has a company attached to it.
+				if(!empty(GO::config()->email_autolink_companies) && !empty($contact->company_id)){
+					$company = $contact->company;
+					if($company && !$company->equals($linkedModels)){
+						\GO\Savemailas\Model\LinkedEmail::model()->createFromImapMessage($imapMessage, $company);
+						$linkedModels[] = $company;
+					}
+				}
+				
 			}
 		}
 
