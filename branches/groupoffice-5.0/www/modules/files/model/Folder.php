@@ -543,14 +543,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * Add a file to this folder. The file must already be present on the filesystem.
 	 * 
 	 * @param String $name
+	 * @param array $extraAttributes Attribute to set on the new file model
 	 * @return GO_Files_Model_File 
 	 */
-	public function addFile($name) {
+	public function addFile($name, $extraAttributes = array()) {
 		$file = new GO_Files_Model_File();
 	
 		$file->folder_id = $this->id;
 		$file->name = $name;
-		
+		$file->setAttributes($extraAttributes);
 		
 		if($file->save())
 			return $file;
@@ -563,16 +564,17 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * and added to the database.
 	 * 
 	 * @param GO_Base_Fs_File $file
+	 * @param array $extraAttributes Attribute to set on the new file model
 	 * @return GO_Files_Model_File 
 	 */
-	public function addFilesystemFile(GO_Base_Fs_File $file){
+	public function addFilesystemFile(GO_Base_Fs_File $file, $extraAttributes = array()){
 		
 		if(!GO_Files_Model_File::checkQuota($file->size()))
 			throw new GO_Base_Exception_InsufficientDiskspace();
 		
 		$file->move($this->fsFolder);
 		$file->setDefaultPermissions();
-		return $this->addFile($file->name());
+		return $this->addFile($file->name(), $extraAttributes);
 	}
 	
 	/**
