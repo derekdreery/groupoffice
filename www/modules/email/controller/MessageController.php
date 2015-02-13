@@ -1472,10 +1472,10 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 			if($event){
 
 				//import to check if there are relevant updates
-				$event->importVObject($vevent, array(), true);
-				$alreadyProcessed=!$event->isModified($event->getRelevantMeetingAttributes());
+				//$event->importVObject($vevent, array(), true);
+				//$alreadyProcessed=!$event->isModified($event->getRelevantMeetingAttributes());
 //				throw new \Exception(\GO\Base\Util\Date::get_timestamp($vevent->{"last-modified"}->getDateTime()->format('U')).' < '.\GO\Base\Util\Date::get_timestamp($event->mtime));
-//				$alreadyProcessed=$vevent->{"last-modified"}->getDateTime()->format('U')<$event->mtime;
+				$alreadyProcessed=$vevent->{"last-modified"}->getDateTime()->format('U')<=$event->mtime && $event->is_organizer;
 			}
 
 //			if(!$event || $event->is_organizer){
