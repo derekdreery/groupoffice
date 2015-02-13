@@ -59,7 +59,10 @@ class Record extends Model{
 				$new[$key] = $this->_convertUTF8($val);
 			}
 		}
-		else $new = @iconv("cp1252", "UTF-8//IGNORE",$attr);
+		else {
+			$new = GO\Base\Util\String::clean_utf8($attr);
+		}
+		
 		return $new;
     }
 	
