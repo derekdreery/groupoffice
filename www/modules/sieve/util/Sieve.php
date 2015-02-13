@@ -286,6 +286,8 @@ class Sieve {
 			return $this->_set_error(SIEVE_ERROR_INTERNAL);
 
 		$active = $this->sieve->getActive();
+		
+		
 		if (!$active) {
 			
 			$all_scripts = $this->get_scripts();
@@ -293,7 +295,7 @@ class Sieve {
 			if(empty($all_scripts)){
 
 
-				$content = "require [\"vacation\",\"fileinto\"];
+				$content = "require [\"vacation\",\"fileinto\",\"mailbox\"];
 	# rule:[".GO::t('standardvacation','sieve')."]
 	if false # anyof (true)
 	{
@@ -305,7 +307,11 @@ class Sieve {
 	{
 		fileinto :create \"Spam\";
 	}";
-				$this->save_script('default', $content);
+			
+				
+				if(!$this->save_script('default', $content)) {
+					throw new \Exception("Could not create default sieve script: ".$this->error());
+				}
 				$this->activate('default');
 				$active = 'default';
 			}else
