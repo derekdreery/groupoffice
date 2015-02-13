@@ -1,3 +1,5 @@
+- Fixed updating calendar event from external email client
+- To utf8 bug in active directory
 - Email: Added $config['email_autolink_companies'] so email will also be linked to 
          the company when a contact has a company relation.
          ($config['email_autolink_contacts'] also need to be set to true)
