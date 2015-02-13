@@ -38,7 +38,7 @@ class LdapauthModule extends \GO\Base\Module{
 	public static function submitSettings(&$settingsController, &$params, &$response, $user) {
 		//save what is loaded
 		
-		if(empty(GO::config()->ldap_peopledn))
+		if(empty(GO::config()->ldap_peopledn) || empty(GO::config()->ldap_person_fields))
 			return true;
 		
 		try{
@@ -70,7 +70,7 @@ class LdapauthModule extends \GO\Base\Module{
 	 */
 	public static function loadSettings(&$settingsController, &$params, &$response, $user){	
 		
-		if(empty(GO::config()->ldap_peopledn))
+		if(empty(GO::config()->ldap_peopledn) || empty(GO::config()->ldap_person_fields))
 			return true;
 		
 		try{
