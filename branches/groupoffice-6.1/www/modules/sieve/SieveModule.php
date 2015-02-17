@@ -209,7 +209,7 @@ class SieveModule extends Module{
 					)
 				),
 				"join"=>true,
-				"disabled"=>false, //!$params['ooo_script_active'],
+				"disabled"=>!$params['ooo_script_active'],
 				"name"=>$params['ooo_rule_name']				
 			);
 			
