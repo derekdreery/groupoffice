@@ -1,3 +1,4 @@
+- Billing: Fixed and optimized the trackingcode and costcode selects in the items grid. Added autocomplete to the select fields
 - Fixed updating calendar event from external email client
 - To utf8 bug in active directory
 - Email: Added $config['email_autolink_companies'] so email will also be linked to 
