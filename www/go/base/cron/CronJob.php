@@ -305,7 +305,9 @@ class CronJob extends \GO\Base\Db\ActiveRecord {
 				GO::debug("EXCEPTION: ".(string) $e);
 				$failed=true;
 				
-				GO\Base\Mail\AdminNotifier::sendMail("CronJob ".$this->name." is disabled because of a failure", "EXCEPTION: ".(string) $e);
+				//GO\Base\Mail\AdminNotifier::sendMail("CronJob ".$this->name." failed", "EXCEPTION: ".(string) $e);
+				
+				trigger_error("CronJob ".$this->name." failed. EXCEPTION: ".(string) $e, E_USER_WARNING);
 				
 				$this->error=(string)$e;
 			}
@@ -434,11 +436,9 @@ class CronJob extends \GO\Base\Db\ActiveRecord {
 		}
 		
 		if(!$this->runonce){
-			$this->active = !$failed;
+			$this->active = true; // !$failed;
 			if($failed){
-				GO::debug('CRONJOB ('.$this->name.') FAILED AND NOW DISABLED');
-			}else{
-				GO::debug('CRONJOB ('.$this->name.') IS REACTIVATED NOW');
+				GO::debug('CRONJOB ('.$this->name.') FAILED');
 			}
 		} else {
 			GO::debug('CRONJOB ('.$this->name.') HAS RUNONCE OPTION, DISABLING NOW');

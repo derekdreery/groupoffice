@@ -7,6 +7,8 @@
 - Sieve: Added :create after the fileinto action. This will autocreate the folder if it doesnt exist.
 - Sieve: Fixed "Mark as read" sieve rule.
 - Sieve: Added new out of office tab in the email settings dialog.
+- Projects: don't focus project field on editing
+- Cron job doesn't send mail but logs warnings
 
 09-02-2015 6.1.19
 - Brazilian language Saturday is UTF-8 encoded
