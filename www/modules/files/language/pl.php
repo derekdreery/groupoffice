@@ -56,6 +56,6 @@ $l['files']='Pliki';
 $lang['link_type'][17]='Folder';
 $l['emptyFile']='Pusty plik';
 $l['downloadLink']= 'Pobierz link';
-$l['clickHereToDownload']= 'Kliknij tutaj, aby pobrać bezpieczy link do pliku';
+$l['clickHereToDownload']= 'Kliknij tutaj, aby pobrać bezpieczny link do pliku';
 $l['copyPasteToDownload']= 'Aby pobrać plik, kliknij poniższy bezpieczny link lub skopuj go do przeglądarki.';
 $l['possibleUntil']= 'możliwe do';
