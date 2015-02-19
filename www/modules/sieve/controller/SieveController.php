@@ -111,7 +111,7 @@ class SieveController extends \GO\Base\Controller\AbstractModelController{
 			foreach($this->_sieve->script->content as $item)
 			{
 				// Hide the "Out of office" script because it need to be loaded in a separate dialog
-				if ($item['name']!='Out of office')
+				if (isset($item['name']) && $item['name']!='Out of office')
 				{
 					$i['name']=$item['name'];
 					$i['index']=$index;
