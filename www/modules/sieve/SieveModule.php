@@ -62,7 +62,7 @@ class SieveModule extends Module{
 			$index=0;
 			foreach($sieve->script->content as $item){
 				// Get the "Out of office" script because it need to be loaded here
-				if ($item['name']=='Out of office')
+				if(isset($item['name']) && $item['name']=='Out of office')
 				{
 					$rule = array();
 					
