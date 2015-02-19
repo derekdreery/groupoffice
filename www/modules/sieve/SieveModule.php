@@ -125,7 +125,7 @@ class SieveModule extends Module{
 				'ooo_script_index'=>-1,
 				'ooo_activate'=>date(\GO::user()->completeDateFormat),
 				'ooo_deactivate'=>date(\GO::user()->completeDateFormat),
-				'ooo_message'=>GO::t('standardvacationmessage','sieve'),
+				'ooo_message'=> \GO::t('standardvacationmessage','sieve'),
 				'ooo_aliasses'=>'',
 			));
 		} else {
