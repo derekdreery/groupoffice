@@ -647,3 +647,5 @@ $l['dependenciesCannotDelete']="Deze module kan niet verwijderd worden, omdat de
 $l['MailboxNotFoundException'] = "De map \"%s\" kan niet worden geopend. Controller de email account instellingen.";
 
 $l['cantDeleteDefault'] = "Standaard item kan niet worden verwijderd.";
+
+$l['updateWithMatchingAttributes'] = 'Update items (i.p.v. nieuwe items creëren) op basis van de volgende matchende attributen';

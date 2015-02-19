@@ -692,3 +692,5 @@ $l['dependenciesCannotDelete']="You cannot delete the current module, because th
 $l['MailboxNotFoundException'] = "Cannot open the folder \"%s\". Please check your email account settings.";
 
 $l['cantDeleteDefault'] = "Can't delete the default item.";
+
+$l['updateWithMatchingAttributes'] = 'Update items (instead of create new items) with the following matching attributes';
