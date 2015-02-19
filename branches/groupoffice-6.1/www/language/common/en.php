@@ -703,3 +703,5 @@ $l['noSavedExports'] = 'No saved exports available';
 $l['overwriteAcl'] = 'Overwrite default permissions for this item (click apply to activate)';
 
 $l['cantDeleteDefault'] = "Can't delete the default item.";
+
+$l['updateWithMatchingAttributes'] = 'Update items (instead of create new items) with the following matching attributes';

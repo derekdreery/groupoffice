@@ -657,3 +657,5 @@ $l['noSavedExports'] = 'Geen opgeslagen exports beschikbaar';
 $l['overwriteAcl'] = 'Overschrijf standaard toegangsrechten voor dit item (Klik op toepassen om te activeren)';
 
 $l['cantDeleteDefault'] = "Standaard item kan niet worden verwijderd.";
+
+$l['updateWithMatchingAttributes'] = 'Update items (i.p.v. nieuwe items creëren) op basis van de volgende matchende attributen';
