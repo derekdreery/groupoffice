@@ -1,3 +1,4 @@
+- Leavedays: display used holiday hours in the leave days in the calendar module.
 - Leave days / holidays: Year credit export button for admins and holiday managers.
 - Fixed linked items when using document templates.
 - Better font display in email client.
