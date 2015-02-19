@@ -58,7 +58,7 @@ abstract class AbstractCustomFieldsRecord extends \GO\Base\Db\ActiveRecord{
 	}
 	
 	public function getModel() {
-		return $this->getExtendedModel()->findByPk($this->model_id);
+		return $this->getExtendedModel()->findByPk($this->model_id,false,true);
 	}
 	
 	/**
