@@ -1,3 +1,4 @@
+- Address book: able to match imported records to existing records during import.
 - Leavedays: display used holiday hours in the leave days in the calendar module.
 - Better font handling in mail client.
 
