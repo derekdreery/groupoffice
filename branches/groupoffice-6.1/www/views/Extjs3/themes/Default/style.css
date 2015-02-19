@@ -69,9 +69,8 @@
 	font: 12px Arial, Helvetica Sans-serif;
 }
 
-.go-html-formatted * > span {
-    font-family: inherit;
-		font-size: inherit;
+.go-html-formatted div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, th, td, span {
+    font: inherit;
 }
 
 .go-html-formatted  blockquote {  
