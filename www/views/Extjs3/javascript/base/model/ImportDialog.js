@@ -86,6 +86,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 		this._modelContainerIdName = config['modelContainerIdName'];
 		this._fileType = config['fileType'];
 		this._excludedAttributes = config['excludedAttributes'] || new Array();
+		this._possibleUpdateFindAttributes = config['possibleUpdateFindAttributes'] || new Array();
 		for (var attrName in this._importBaseParams) {
 			this._excludedAttributes.push(attrName);
 		}
@@ -100,12 +101,24 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 		if (this._fieldsDialog)
 			this._fieldsDialog.hide();
 
+		var updateExisting = false;
+		var updateFindAttributes = new Array();
+		for (var i=0; i<this._possibleUpdateFindAttributes.length; i++) {
+			if (this.formPanel.getForm().findField('updateFindAttributes_'+this._possibleUpdateFindAttributes[i]).getValue()) {
+				updateExisting = true;
+				updateFindAttributes.push(this._possibleUpdateFindAttributes[i]);
+			}
+		}
+
+
 		this.formPanel.form.submit({
 			url : GO.url(this._moduleName + '/' + this._modelName + '/import' + this._fileType),
 			params : {
 				attributeIndexMap : Ext.encode(this._userSelectFieldMappings),
 				importBaseParams : Ext.encode(this._importBaseParams),
-				maxColumnNr : this._nColumns
+				maxColumnNr : this._nColumns,
+				updateExisting: updateExisting,
+				updateFindAttributes: updateFindAttributes
 			},
 			success : function( success, response, result ) {
 				var errorsText = '';
@@ -169,6 +182,33 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	// Build form in constructor.
 	_buildForm : function() {
 
+		var formItems = new Array();
+		
+		if (!GO.util.empty(this._possibleUpdateFindAttributes)) {
+			formItems.push({
+				xtype: 'plainfield',
+				value: GO.lang['updateWithMatchingAttributes']+':',
+				hideLabel: true
+			});
+						
+			for (var i=0; i<this._possibleUpdateFindAttributes.length;i++) {
+				formItems.push(new Ext.form.Checkbox({
+					boxLabel: this._possibleUpdateFindAttributes[i],
+					name: 'updateFindAttributes_'+this._possibleUpdateFindAttributes[i],
+					id: 'updateFindAttributes_'+this._possibleUpdateFindAttributes[i],
+					checked: false,
+					hideLabel: true
+				}));
+			}
+			
+			formItems.push({
+				xtype: 'plainfield',
+				value: '<hr />',
+				hideLabel: true
+			});
+			
+		}
+
 		this.txtDelimiter = new Ext.form.TextField({
 			name: 'delimiter',
 			fieldLabel: GO.addressbook.lang.cmdFormLabelValueSeperated,
@@ -216,15 +256,15 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 			name: this._modelContainerIdName
 		});
 		
+		formItems.push(this.txtDelimiter);
+		formItems.push(this.txtEnclosure);
+		formItems.push(this.fileSelector);
+		formItems.push(this.fileTypeField);
+		formItems.push(this.modelContainerIdField);
+		
 		this.formPanel = new Ext.form.FormPanel({
 			fileUpload : true,
-			items: [
-				this.txtDelimiter,
-				this.txtEnclosure,
-				this.fileSelector,
-				this.fileTypeField,
-				this.modelContainerIdField
-			],
+			items: formItems,
 			buttons: [{
 				text: GO.lang.cmdImport,
 				width: '20%',
