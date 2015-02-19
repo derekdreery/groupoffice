@@ -67,8 +67,9 @@
 	font: 12px Arial, Helvetica Sans-serif;
 }
 
-.go-html-formatted * {
-    font: inherit;
+.go-html-formatted * > span {
+    font-family: inherit;
+		font-size: inherit;
 }
 
 .go-html-formatted  blockquote {  
