@@ -1,3 +1,4 @@
+- Leavedays: fixed display of estimated leave hours (sometimes it was not shown).
 - Leavedays: display used holiday hours in the leave days in the calendar module.
 - Leave days / holidays: Year credit export button for admins and holiday managers.
 - Fixed linked items when using document templates.
