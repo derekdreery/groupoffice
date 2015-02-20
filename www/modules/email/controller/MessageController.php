@@ -1829,7 +1829,12 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		$account = Account::model()->findByPk($params['account_id']);
 		$imap  = $account->openImapConnection($params['mailbox']);
 
-		$filename = empty($params['download']) ? "message.txt" :"message.eml";
+		//$filename = empty($params['download']) ? "message.txt" :"message.eml";
+		
+		$message = \GO\Email\Model\ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
+		
+		$filename = GO\Base\Fs\File::stripInvalidChars($message->subject.' - '.\GO\Base\Util\Date::get_timestamp($message->udate));
+		$filename .= empty($params['download']) ? ".txt" :".eml";
 		
 		\GO\Base\Util\Http::outputDownloadHeaders(new \GO\Base\Fs\File($filename), empty($params['download']));
 
