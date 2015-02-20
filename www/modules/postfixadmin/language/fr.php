@@ -1,6 +1,7 @@
 <?php
 
 
+$l["postfixadmin"]='Domaines E-mail';
 $l["address"]="Addresse";
 $l["goto_address"]="Envoyé à";
 $l["maxquota"]="Quota Max";
@@ -36,7 +37,7 @@ $l["cache"]="Cache";
 $l["defaultQuota"]='Quota par défaut (MB)';
 
 $l['name']='PostfixAdmin';
-$l['description']='Module de gestion du serveur Postfix';
+$l['description']='<i style="color: green">*** Module Admin *** </i>Gestion du serveur Postfix.';
 $l['alias']='Alias';
 $l['aliases']='Aliases';
 $l['domain']='Domaine';
@@ -47,3 +48,5 @@ $l['mailbox']='Boite aux lettres';
 $l['mailboxes']='Boites aux lettres';
 $l['vacation_config']='Gestionnaire d\'absence';
 $l['vacation_configs']='Gestionnaires d\'absence';
+$l['aliasHelp']="Pour des destinataires multiples utilisez une virgule comme séparateur (ex : alias1@domain.com,alias2@domain.com)";
+$l['usedQuota']='Quota utilisé';

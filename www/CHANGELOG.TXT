@@ -1,3 +1,5 @@
+- Namespace bug in sieve module
+- Restrict deletion of project templates that are in use.
 - Tickets: Fixed wrong ticketcount
 - Tickets: Sort agents for "change responsible agents" on their names
 - Leavedays: fixed display of estimated leave hours (sometimes it was not shown).
@@ -5,6 +7,8 @@
 - Leave days / holidays: Year credit export button for admins and holiday managers.
 - Fixed linked items when using document templates.
 - Better font display in email client.
+- Tickets billing bug fixed
+- Better filename when saving mail to PC
 
 18-02-2015 6.1.20
 - Billing: Fixed and optimized the trackingcode and costcode selects in the items grid. Added autocomplete to the select fields

@@ -10,3 +10,5 @@ $input_holidays['fix']['11-11'] = 'Armistice 1918';
 $input_holidays['fix']['12-25'] = 'Noël';
 
 // holidays with variable date (christian holidays computation is based on the date of easter day)
+$input_holidays['var']['1'] = 'Lundi de Pâque';
+$input_holidays['var']['39'] = 'Jeudi de l\'Ascension';

@@ -1,6 +1,4 @@
 <?php
-
-
 $l["noTask"]= 'Aucune tâche à afficher';
 $l["tasks"]= 'Tâches';
 $l["addTask"]= 'Ajouter une tâche...';
@@ -50,7 +48,7 @@ $l["futureTasks"]='Tâches futures';
 $l["all"]='Toutes';
 $l["active"]='Actives';
 $l['name']='Tâches';
-$l['description']='Module de gestion des tâches';
+$l['description']='Gestion des tâches.';
 $lang['link_type'][12]=$l['task']='Tâche';
 $l['status']='Statut';
 $l['scheduled_call']='Appel téléphonique programmé le  %s';

@@ -1,5 +1,6 @@
 <?php
 
+
 $l["cmdCheckColumnRead"]= 'Lecture';
 $l["cmdCheckColumnWrite"]= 'Ecriture';
 $l["cmdHeaderColumnName"]= 'Nom du module';
@@ -44,6 +45,7 @@ $l["cmdFormLabelFirstWeekday"]= 'Premier jour de la semaine';
 $l["cmdFormLabelThousandSeperator"]= 'Séparateur de millier';
 $l["cmdFormLabelDecimalSeperator"]= 'Séparateur décimal';
 $l["cmdFormLabelCurrency"]= 'Monnaie';
+$l['cmdFormLabelHolidaySet'] = 'Vacances - Jours fériés';
 $l["account"]= 'Compte';
 $l["companyProfile"]= 'Profil société';
 $l["loginInfo"]= 'Informations de connexion';
@@ -64,10 +66,11 @@ $l["sunday"]= 'Dimanche';
 $l["monday"]= 'Lundi';
 $l["regionalSettings"]= 'Paramètres régionaux';
 $l["userSettings"]= 'Paramètres utilisateur';
+$l["profile"]='Profil';
 $l["maxUsersReached"]='Le nombre maximum d\'utilisateur a été atteint. Allez dans l\'onglet service afin d\'augmenter le nombre d\'utilisateur maximum.';
 $l["group"]='Groupe';
 $l["muteSound"]='Mode muet (pas de son d\'alerte)';
-$l["mailReminders"]='Rappels par email';
+$l["mailReminders"]='Rappels par e-mail';
 $l["downloadSampleCSV"]='Télécharger un exemple de CSV';
 $l["importText"]='Vous pouvez importer des utilisateurs en utilisant un fichier CSV. Pour savoir comment le CSV doit être formaté, télécharger le fichier exemple.<br />La première ligne DOIT contenir les noms de colonnes. Les champs suivants sont obligatoires pour chaque utilisateur :<br /><br />username, password, first_name, last_name, email';
 $l["useModule"]= 'Utiliser';
@@ -82,12 +85,14 @@ $l["firstName"]= 'Prénom';
 $l["sendInvitation"]='Envoyer une invitation';
 $l["contactInfo"]='Informations de contact';
 $l["popupNotification"]='Afficher une fenêtre popup quand un rappel est actif ou quand un email est reçu';
-$l["profile"]='Profil';
+$l["muteNewMailSound"]='Pas de son lors de l\'arrivée d\'un nouveau message';
+$l["muteReminderSound"]='Pas de son lors d\'un rappel';
+$l["showSmilies"]='Afficher les emoticones';
+$l["autoPunctuation"]='Majuscule après un point';
 $l['name'] = 'Utilisateurs';
-$l['description'] = 'Module Admin. Gérer les utilisateurs de {product_name}.';
+$l['description'] = '<i style="color: green">*** Module Admin *** </i>Gérer les utilisateurs de {product_name}.';
 $l['deletePrimaryAdmin'] = 'Vous ne pouvez pas supprimer l\'administrateur principal';
 $l['deleteYourself'] = 'Vous ne pouvez pas vous supprimer !';
-$lang['link_type'][8]=$us_user = 'Utilisateur';
 $l['error_username']='Il y a des caractères non supportés dans votre nom d\'utilisateur';
 $l['error_username_exists']='Désolé, ce nom d\'utilisateur existe déjà';
 $l['error_email_exists']='Désolé, cette adresse e-mail est déjà utilisée.';
@@ -103,27 +108,34 @@ Vos identifiants sont :
 Nom d\'utilisateur : {username};
 Mot de passe : {password}';
 $l['max_users_reached']='Le nombre maximun d\'utilisateurs a été atteint sur votre système.';
-$l['muteNewMailSound']='Couper le son pour les nouveaux courriels';
-$l['muteReminderSound']='Couper le son pour les rappels';
-$l['showSmilies']='Voir les smilies';
+
 $l['dashdmy']='Jour-Mois-Année';
 $l['slashmdy']='Mois/Jour/Année';
 $l['dotdmy']='Jour.Mois.Année';
 $l['slashdmy']='Jour/Mois/Année';
-$l['generatePassword']='Générer mot de passe';
+$l['slashymd']='Année-Mois-Jour';
+$l['dotymd']='Année.Mois.Jour';
+
+$l['generatePassword']='Générer un mot de passe';
 $l['generatedPasswordIs']='Le mot de passe généré est';
+
 $l['openContact']='Ouvrir contact';
 $l['showProUsers']='Montrer aux utilisateurs pro';
+
 $l['updateExistingOnImport']='Mettre à jour les utilisateurs existants par nom d\'utilisateur';
 $l['resetState']="Réinitialiser les fenêtres et les grilles";
 $l['resetStateConfirm']='Êtes-vous sûr de vouloir utiliser les paramètres par défauts (les colonnes,les fenêtres, taille des panneaux, ...) ?';
 
-$l['slashymd']='Année-Mois-Jour';
-$l['dotymd']='Année.Mois.Jour';
 $l['registrationEmail']='Enregistrement Courriel';
 $l['enabledSettingtabs']='Onglets paramètre sont activés';
+
+
 $l['explanation_cf_settingspanels']='Pour afficher les onglets "Champs personnsalisés" dans le panneau de configuration, vous devez être sûr que l\'utilisateur dispose d\'au moins un accès "lecture" pour le module "Champs personnsalisés"';
 $l['addresslist_panel']= 'Panneau de la liste d\'adresses';
 $l['show_addresslists_panel']= 'Afficher le panneau de liste d\'adresses';
 $l['enabled_cf_tabs']= 'Activer l\'onglet "Champs personnalisés"'; 
 
+$l['noReminders'] = 'Ne pas me créer de rappel';
+
+
+$lang['link_type'][8]=$us_user = 'Utilisateur';

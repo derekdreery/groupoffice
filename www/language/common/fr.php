@@ -634,3 +634,13 @@ $l['relationDeleteRestrict']="Vous ne pouvez pas supprimer %s parce qu\'il conti
 $l['pspell_lang']='fr';
 $l['dependenciesCannotDelete']="Vous ne pouvez pas supprimer le module actuel, parce que les modules suivants (installés) sont nécessaires: %s.";
 $l['MailboxNotFoundException']= "Vous ne pouvez pas ouvrir le dossier \"%s\". S\'il vous plaît vérifier vos paramètres de compte de messagerie.";
+
+$l['columns'] = 'Colonnes';
+$l['savedExport'] = 'Export sauvegardé';
+$l['savedExports'] = 'Exports sauvegardés';
+$l['includeColumnNames'] = 'Inclure les noms de colonnes';
+$l['manageSavedExports'] = 'Gérer les exports sauvegardés';
+$l['noSavedExports'] = 'Aucun export sauvegardé';
+
+$l['overwriteAcl'] = 'Ecraser les permissions par défaut pour cet élément ? (Cliquezsur \'Appliquer\' pour activer le changement)';
+$l['cantDeleteDefault'] = "L\'élément par défaut ne peut pas être supprimé.";

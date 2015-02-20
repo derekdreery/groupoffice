@@ -38,7 +38,6 @@ $l['defaultValidationError']='La valeur n\'a pas été correctement formatée';
 $l['numberValidationError']='La valeur doit être un nombre';
 $l['invalidRegex']="L\'expression régulière est invalide.";
 $l['nDecimals']= 'Nombre de décimales';
-
  
 $l['block']= 'Bloc';
 $l['blocks']= 'Blocs';
@@ -65,15 +64,23 @@ $l['duplicateExistsFeedback']= 'La valeur "%val" est saisie dans le champ "%cf" 
 $l['maxLength']= 'Max. nombre de caractères';
 $l['tooManyCustomfields']= 'La quantité totale de données réservée à vos champs personnalisés (appartenant au type d\'objet %s) dépasse la limite. Vous pouvez corriger ce problème en réduisant le nombre maximal de caractères de certains champs personnalisés. Le champ personnalisé actuel n\'a pas été enregistré.';
 $l['customfieldTooLarge']= 'Le champ personnalisé que vous avez essayé de sauver, a plus que le nombre autorisé de caractères (%s). S\'il vous plaît diminuer le nombre maximal de caractères de ce champ supplémentaire et essayer de sauver à nouveau.';
-$l['GO_Tasks_Model_Task']= 'Tâche';
-$l['GO_Notes_Model_Note']= 'Note';
-$l['GO_Projects_Model_Hour']= 'Entrée de temps';
-$l['GO_Tickets_Model_Ticket']= 'Ticket';
-$l['GO_Files_Model_Folder']= 'Dossier';
-$l['GO_Files_Model_File']= 'Fichier';
-$l['GO_Calendar_Model_Event']= 'Evènement';
-$l['GO_Billing_Model_Product']= 'Produit';
-$l['GO_Billing_Model_Order']= 'Facture/Devis';
-$l['GO_Site_Model_Site']= 'Site';
-$l['GO_Site_Model_Content']= 'Contenu';
+
+$l['GO\Tasks\Model\Task'] = 'Tâche';
+$l['GO\Notes\Model\Note'] = 'Note';
+$l['GO\Addressbook\Model\Company'] = 'Société';
+$l['GO\Addressbook\Model\Contact'] = 'Contact';
+$l['GO\Base\Model\User'] = 'Utilisateur';
+$l['GO\Projects\Model\Project'] = 'Projet';
+$l['GO\Projects\Model\Hour'] = 'Saisie de temps';
+$l['GO\Tickets\Model\Ticket'] = 'Ticket';
+$l['GO\Files\Model\Folder'] = 'Dossier';
+$l['GO\Files\Model\File'] = 'Fichier';
+$l['GO\Calendar\Model\Event'] = 'Evénement';
+$l['GO\Billing\Model\Product'] = 'Produit';
+$l['GO\Billing\Model\Order'] = 'Facture/Quotation';
+$l['GO\Site\Model\Site'] = 'Site';
+$l['GO\Site\Model\Content'] = 'Contenu';
+
 $l['addressbookIds']= 'Seulement à partir de ces carnets d\'adresses (IDs)';
+$l['prefix'] = 'Préfixe';
+$l['suffix'] = 'Suffixe';
