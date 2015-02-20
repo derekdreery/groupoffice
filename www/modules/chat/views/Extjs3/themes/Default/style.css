@@ -20,7 +20,7 @@
 }
 
 /* Chat module fix for old theme [thnx to Radek Růžička]  */
-#conversejs .toggle-controlbox, #conversejs .toggle-minimized-chats {
+/*#conversejs .toggle-controlbox, #conversejs .toggle-minimized-chats {
     background: none repeat scroll 0 0 #e3e2e2;
     border-image: none;
 	border-color: black;
@@ -44,4 +44,4 @@
     transform-origin: left top 0;
 	-ms-transform: rotate(270deg);
     -ms-transform-origin: left top 0;
-}
+}*/
