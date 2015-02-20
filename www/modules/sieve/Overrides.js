@@ -74,6 +74,16 @@ GO.moduleManager.onModuleReady('email',function(){
 			
 			this.sieveGrid.setAccountId(account_id);
 			this.outOfOfficePanel.setAccountId(account_id);
+		}),
+		
+		show : GO.email.AccountDialog.prototype.show.createSequence(function(accountId){
+			if(GO.util.empty(accountId)){
+				this.tabPanel.hideTabStripItem(this.sieveGrid);
+				this.tabPanel.hideTabStripItem(this.outOfOfficePanel);
+				this.outOfOfficePanel.disableFields(true);
+
+				this.tabPanel.unhideTabStripItem(this.filterGrid);
+			}
 		})
 	});
 });
