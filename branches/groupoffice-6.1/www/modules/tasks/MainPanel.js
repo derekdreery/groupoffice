@@ -170,27 +170,6 @@ this.gridPanel.store.on('load', function(store, records, options)
 			
 	}, this);
 			
-	this.gridPanel.store.on('load', function(store){
-		//this.deleteButton.setDisabled(!store.reader.jsonData.data.write_permission);
-		//this.addButton.setDisabled(!store.reader.jsonData.data.write_permission);
-
-		//this.gridPanel.ownerCt.setTitle(store.reader.jsonData.grid_title);
-
-		var found = false
-		for(var i=0; i<this.tasklist_ids.length; i++)
-		{
-			if(this.tasklist_ids[i] == this.taskPanel.data.tasklist_id)
-			{
-				found = true;
-			}
-		}
-		if(!found)
-		{
-			this.taskPanel.reset();
-		}
-		
-	}, this);
-	
 	this.taskPanel = new GO.tasks.TaskPanel({
 		//title:GO.tasks.lang.task,
 		region:'east',
