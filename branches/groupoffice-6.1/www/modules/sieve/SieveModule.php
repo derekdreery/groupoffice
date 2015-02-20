@@ -213,6 +213,9 @@ class SieveModule extends Module{
 				"name"=>$params['ooo_rule_name']				
 			);
 			
+			if (!empty(\GO::config()->sieve_vacation_subject))
+				$rule['actions'][0]['subject']=\GO::config()->sieve_vacation_subject;
+				
 			$response['sieve_after'] = $rule;
 			
 			// Het script ophalen en terugzetten
