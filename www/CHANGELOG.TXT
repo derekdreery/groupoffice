@@ -1,3 +1,5 @@
+- Tickets: Email to agent is now of content-type "text/html"
+
 20-02-2015 6.1.21
 - Updated French translation
 - Tasks: Fixed loading of displaypanel after closing the "Continue task" dialog.
