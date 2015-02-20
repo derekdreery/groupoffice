@@ -1,3 +1,5 @@
+- Tasks: Fixed loading of displaypanel after closing the "Continue task" dialog.
+- Sieve: Fixed form validation of "Out of office" tab when creating a new account.
 - Namespace bug in sieve module
 - Restrict deletion of project templates that are in use.
 - Tickets: Fixed wrong ticketcount
