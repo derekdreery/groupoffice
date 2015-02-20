@@ -32,7 +32,7 @@ class ChatModule extends \GO\Base\Module {
 
 
 
-			$url = GO::config()->host . 'modules/chat/converse.js-0.8.0/';
+			$url = GO::config()->host . 'modules/chat/converse.js-0.8.6/';
 
 			$head = '
 
