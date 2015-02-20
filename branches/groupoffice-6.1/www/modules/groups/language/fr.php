@@ -8,7 +8,7 @@ $l["newGroupName"]= 'Saisissez le nom du nouveau groupe';
 $l["searchAllUsers"]= 'Rechercher tous les utilisateurs';
 $l["group"]= 'Groupe';
 $l['name'] = 'Groupes';
-$l['description'] = 'Module Admin. Gérer les groupes d\'utilisateurs de Group-Office.';
+$l['description'] = '<i style="color: green">*** Module Admin *** </i>Gérer les groupes d\'utilisateurs de {product_name}.';
 $l['noDeleteAdmins'] = 'Vous ne pouvez pas supprimer le groupe Admins';
 $l['noDeleteEveryone'] = 'Vous ne pouvez pas supprimer le groupe Tout le monde (Everyone)';
 $l['groupNameAlreadyExists'] = 'Le groupe que vous êtes en train de créer existe déjà';

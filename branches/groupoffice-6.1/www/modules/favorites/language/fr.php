@@ -1,6 +1,6 @@
 <?php
 $l['name'] = 'Favoris';
-$l['description'] = 'Module des Favoris, ce module ajoute une section Favoris aux calendriers, aux tâches...';
+$l['description'] = 'Ajout d\'une section favoris aux calendriers, tâches, modules.';
 $l['favorites'] = 'Favoris';
 $l['favorite'] = 'Favoris';
 $l['addToFavorites'] = 'Ajouter aux favoris';

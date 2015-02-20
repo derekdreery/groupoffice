@@ -1,62 +1,80 @@
 <?php
+$l["name"]="Site par defaut";
+$l["description"]="Modèle pour les sites par défaut.";
+
+$l["installdefaultsiteerror"] = 'Impossible d\'installer le module "Site par défaut"';
+$l["installsiteerror"] = 'Impossible d\'installer le module "Site"';
+
 $l["ticketFirstname"] = 'Prénom';
-$l["ticketMiddlename"] = 'Deuxième prénom';
+$l["ticketMiddlename"] = 'Surnom';
 $l["ticketLastname"] = 'Nom';
-$l["ticketEmail"] = 'Email';
-$l["ticketPhone"] = 'Téléphone';
+$l["ticketEmail"] = 'E-mail';
+$l["ticketPhone"] = 'Téléhone';
 $l["ticketCompany"] = 'Société';
 
-$l["ticketSubject"] = 'Objet';
+$l["ticketSubject"] = 'Sujet';
+$l["ticketCreated"] = 'Créé';
+$l["ticketDate"] = 'Date';
+$l["ticketType"] = 'Type';
+$l["ticketStatus"] = 'Statut';
+$l["ticketNumber"] = 'Ticket no.';
+$l["ticketAgent"] = 'Technicien';
+$l["ticketStatusOpen"] = 'Ouvert';
 
-$l['submit'] = 'Envoyer le message';
+$l["ticketFilterAll"] = 'Tout';
+$l["ticketFilterOpenInProgress"] = 'Ouvert et en cours';
+$l["ticketFilterOpen"] = 'Ouvert';
+$l["ticketFilterInProgress"] = 'En cours';
+$l["ticketFilterClose"] = 'Fermé';
 
-$l['ticketCreatedTitle']="Nous avons reçu votre message";
-$l['ticketCreatedText']="Merci, nous avons reçu votre message et nous vous tiendrons informé de l'état par e-mail.";
+$l["ticketDiscussion"] = 'Discussion';
+$l["ticketFiles"] = 'Fichiers';
+$l["ticketNoneFound"] = 'Aucun ticket trouvé';
+$l["ticketYourTickets"] = 'Vos tickets';
+$l["ticketFilter"] = 'Filtre';
+
+$l["ticketList"] = 'Liste des tickets';
+$l["ticketPriority"] = 'Priorité';
+
+$l["ticketAddComment"] = 'Ajouter un commentaire';
+
+$l["ticket"] = 'Ticket';
+$l["ticketYourMessage"] = 'Votre message';
+$l["ticketCloseTicket"] = 'Fermé';
+$l["ticketCloseTicketTooltip"] = 'Fermer ce ticket. Vous ne pourrez plus répondre à ce ticket une fois fermé.';
+$l["ticketNewTicket"] = 'Nouveau ticket';
+$l["ticketContactInfo"] = 'Information du contact';
+$l["ticketInfo"] = 'Information du ticket';
+$l["ticketBackToList"] = 'Retour à la vue générale';
+
+$l["contactDetails"] = 'Détails du contact';
+$l["companyDetails"] = 'Détails de la société';
+$l["address"] = 'Addresse';
+$l["usernameandpassword"] = 'Utilisateurs et mot de passe';
+
+$l["changePassword"] = 'Changer le mot de passe';
+$l["passwordChanged"] = 'Mot de passe changé';
+$l["login"] = 'Identifiant';
+$l['changePasswordText']='Utilisez le formulaire ci-dessous pour changer votre mot de passe';
+$l['forgotPassword']='Mot de passe oublié ?';
+$l['signup'] = 'S\'enregistrer';
+$l['register'] = 'Enregistrer';
+$l['submit'] = 'Soumettre';
+$l['rememberme'] = 'Se souvenir de moi';
+$l['lostPassword'] = 'Mot de passe perdu ?';
+$l['alreadySignedupText']='Si vous avez déjà un identifiant et un mot de passe utilisez ce formulaire pour vous connecter.';
+$l['forgotPasswordText']='Veuillez saisir votre e-mail dans le formulaire ci-dessous, et vous recevrez un lien pour retrouver votre mot de passe.';
+$l['registerformText']="Remplissez ce formulaire et cliquez sur OK pour vous enregistrer. Les champs marqué avec un * sont obligatoire.";
+
+$l['ticketCreatedTitle']="Nous avons reçu votre ticket";
+$l['ticketCreatedText']="Merci, nous avons reçu votre ticket et vous tiendrons informé de son statut par e-mail.";
 
 $l['gotoTicket']="Aller au ticket";
 
-$l["ticketFilterAll"] = 'All';
-$l["ticketFilterOpenInProgress"] = 'Open and in progress';
-$l["ticketFilterOpen"] = 'Open';
-$l["ticketFilterInProgress"] = 'In progress';
-$l["ticketFilterClose"] = 'Closed';
+$l['selectOne']="Sélectionner un";
 
-$l["ticketDiscussion"] = 'Discussion';
-$l["ticketFiles"] = 'Files';
-$l["ticketNoneFound"] = 'No tickets found';
-$l["ticketYourTickets"] = 'Your tickets';
-$l["ticketFilter"] = 'Filter';
+$l['contactformTitle']="Formulaire de contact";
+$l['contactformText']="Remplissez ce formulaire et cliquez sur OK pour vous enregistrer. Les champs marqué avec un * sont obligatoire.";
 
-$l["ticketList"] = 'Ticketlist';
-$l["ticketPriority"] = 'Priority';
-
-$l["ticketAddComment"] = 'Envoyer le message';
-
-$l["ticket"] = 'Ticket';
-$l["ticketYourMessage"] = 'Message';
-$l["ticketCloseTicket"] = 'Close';
-$l["ticketCloseTicketTooltip"] = 'Close this ticket. You cannot respond to this ticket anymore when you have closed it.';
-$l["ticketNewTicket"] = 'Nouveau message';
-$l["ticketContactInfo"] = 'Informations de contact';
-$l["ticketInfo"] = 'Ticket informations';
-$l["ticketBackToList"] = 'Back to Overview';
-
-$l["contactDetails"] = 'Contact Details';
-$l["companyDetails"] = 'Company Details';
-$l["address"] = 'Address';
-$l["usernameandpassword"] = 'Username and Password';
-
-$l["changePassword"] = 'Change password';
-$l["passwordChanged"] = 'Password changed';
-$l["login"] = 'Login';
-$l['changePasswordText']='Use the below form to change your password';
-$l['forgotPassword']='Forgot password?';
-$l['signup'] = 'Sign up';
-$l['register'] = 'Register';
-$l['submit'] = 'Submit';
-$l['rememberme'] = 'Remember me';
-$l['lostPassword'] = 'Lost password?';
-$l['alreadySignedupText']='If you already have a username and password use this form to login.';
-$l['forgotPasswordText']='Fill in your email address in the form below, and you\'ll receive a link to recover your password within minuts.';
-$l['registerformText']="Fill out this form and click on 'Ok' to register. The fields marked with a * are required.";
-
+$l['addressbookNotFound']="Aucun carnet d\'adresses n\'a été trouvé avec le nom '%s'.";
+$l['contactformDoneText']="Nous avons bien reçu votre demande d\'enregistrement.";

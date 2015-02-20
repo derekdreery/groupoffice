@@ -20,8 +20,10 @@ $l["rssFeeds"]='Flux RSS';
 $l["noRssFeeds"]='Aucun flux RSS ajouté !<br />Cliquez sur le bouton de configuration (dans le coin en haut à droite de cette fenêtre) pour ajouter des flux.';
 
 $l['name']='Sommaire';
-$l['description']='Module de démarrage. Organisation de la page de démarrage';
+$l['description']='Module de démarrage. Organisation de la page de démarrage.';
 $l['default_rss_url']='http://news.google.fr/nwshp?hl=fr&tab=wn&output=rss';
 $l['announcement']='Annonce';
 $l['announcements']='Annonces';
 $l['default_rss_title']='Actualités';
+
+$l['latestReadAnnouncementRecord'] = 'Enregistrement de la dernière annonce lue';

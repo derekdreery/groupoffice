@@ -1,6 +1,6 @@
 <?php
-$l['name']="Activity log";
-$l['description']="Traçabilité des actions : suppression, mises à jours, ajout d\'actions.";
+$l['name']="Log d'activité";
+$l['description']="<i style=\"color: green\">*** Module Admin *** </i>Traçage des actions : suppressions, mises à jours, et ajouts dans les différents modules";
 
 $l["logCtime"]="Date & Heure";
 $l["logAction"]="Action";
