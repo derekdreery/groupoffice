@@ -63,6 +63,16 @@ GO.base.email.EmailEditorPanel = function(config){
 			}
 		}, this);		
 		
+		formPanel.form.on('beforeaction', function(form, action){
+			if(action.type=='submit'){
+				// When the editor is in sourceEditMode then the valie needs to be pushed to the HTML editor before it is saved.
+				if(this.htmlEditor.sourceEditMode){
+//					this.emailEditor.htmlEditor.syncValue(); // From HTML to SOURCE
+					this.htmlEditor.pushValue(); // From SOURCE to HTML
+				}
+			}
+		},this);
+		
 // EXT ALREADY DOES THIS IN BasicForm.js
 //		formPanel.form.on('beforeaction', function(form, action){
 //			if(action.type=='submit'){
