@@ -235,8 +235,20 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 				sm.selectRow(rowIndex);
 			}
 
-			var event = grid.getStore().getAt(rowIndex).data;
-			this.showContextMenu(e, event);
+			var theEventData = grid.getStore().getAt(rowIndex).data;
+//			var theEventData = this._elementToEvent(eventEl);
+			if (theEventData.model_name=='GO_Tasks_Model_Task') {
+				if (GO.tasks) {
+					if (!this.taskContextMenu)
+						this.taskContextMenu = new GO.calendar.TaskContextMenu();
+
+					e.stopEvent();
+					this.taskContextMenu.setTask(theEventData);
+					this.taskContextMenu.showAt(e.getXY());
+				}
+			} else {
+				this.showContextMenu(e, theEventData);
+			}
 		}, this);
 		
 	},
