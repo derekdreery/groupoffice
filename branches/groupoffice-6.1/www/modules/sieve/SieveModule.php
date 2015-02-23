@@ -174,9 +174,9 @@ class SieveModule extends Module{
 //			$params['ooo_message']				I am on vacation
 //			$params['ooo_rule_name']			Out of office
 //			$params['ooo_script_name']		default
-			
-			$activateDate = date('Y-m-d',strtotime($params['ooo_activate']));
-			$deactivateDate = date('Y-m-d',strtotime($params['ooo_deactivate']));
+						
+			$activateDate = date('Y-m-d',\GO\Base\Util\Date::to_unixtime($params['ooo_activate']));
+			$deactivateDate = date('Y-m-d',\GO\Base\Util\Date::to_unixtime($params['ooo_deactivate']));
 			
 			// Convert posted data to the correct rule object			
 			$rule = array(
