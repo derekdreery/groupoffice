@@ -50,7 +50,8 @@ GO.calendar.ListGrid = function(config)
 			'mtime',
 			'username',
 			'musername',
-			'resources'
+			'resources',
+			'model_name'
 			]
 		}),
 		proxy: new Ext.data.HttpProxy({
@@ -222,8 +223,20 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 				sm.selectRow(rowIndex);
 			}
 
-			var event = grid.getStore().getAt(rowIndex).data;
-			this.showContextMenu(e, event);
+			var theEventData = grid.getStore().getAt(rowIndex).data;
+			console.log(theEventData);
+			if (theEventData.model_name=='GO\\Tasks\\Model\\Task') {
+				if (GO.tasks) {
+					if (!this.taskContextMenu)
+						this.taskContextMenu = new GO.calendar.TaskContextMenu();
+
+					e.stopEvent();
+					this.taskContextMenu.setTask(theEventData);
+					this.taskContextMenu.showAt(e.getXY());
+				}
+			} else {
+				this.showContextMenu(e, theEventData);
+			}
 		}, this);
 		
 	},
