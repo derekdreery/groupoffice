@@ -1607,6 +1607,11 @@ class Imap extends ImapBodyStruct {
 					$message['to']=$this->mime_header_decode($message['to']);
 					$message['reply_to']=$this->mime_header_decode($message['reply_to']);
 					$message['disposition_notification_to']=$this->mime_header_decode($message['disposition_notification_to']);
+					
+					//remove non ascii stuff. Incredimail likes iso encoded chars too :(
+					if(isset($message['message_id'])) {
+						$message['message_id']= preg_replace('/[[:^print:]]/', '', $message['message_id']);
+					}
 
 					if(isset($message['cc']))
 						$message['cc']=$this->mime_header_decode($message['cc']);

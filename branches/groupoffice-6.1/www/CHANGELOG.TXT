@@ -1,3 +1,4 @@
+- Strip non ascii chars from message-id in mail to workaround Incredimail bug
 - Billing: optimized autocomplete in trackingcode combobox of the itemsgrid  
 - Email/Sieve: Out of office saving dates conversion bug fixed.
 - Tickets: Email to agent is now of content-type "text/html"
