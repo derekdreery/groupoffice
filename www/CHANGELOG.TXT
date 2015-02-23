@@ -1,3 +1,4 @@
+- Email: Fixed bug in emailcomposer that didn't apply the changes made in the "Source editor" when saving/sending while the composer is in source edit mode.
 - Strip non ascii chars from message-id in mail to workaround Incredimail bug
 - Billing: optimized autocomplete in trackingcode combobox of the itemsgrid  
 - Email/Sieve: Out of office saving dates conversion bug fixed.
