@@ -1,3 +1,4 @@
+- Billing: sales agent names optional in order grid.
 - Address book: pagination for addresslist select when setting up a new newsletter.
 - Calendar & Tasks: fixed displaying task details in calendar list view.
 - Email: Fixed bug in emailcomposer that didn't apply the changes made in the "Source editor" when saving/sending while the composer is in source edit mode.
