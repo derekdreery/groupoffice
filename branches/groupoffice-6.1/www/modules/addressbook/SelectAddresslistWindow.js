@@ -5,16 +5,36 @@ GO.addressbook.SelectAddresslistWindow = Ext.extend(Ext.Window, {
 		
 		this.title=GO.addressbook.lang.selectMailingGroup;
 		
-		this.list = new GO.grid.SimpleSelectList({
-				store: GO.addressbook.readableAddresslistsStore
+		this.grid = new GO.grid.GridPanel({
+				layout: 'fit',
+				border: false,
+				height: 300,
+				store: GO.addressbook.readableAddresslistsStore,
+				paging: true,
+				view: new Ext.grid.GridView({
+					autoFill: true,
+					forceFit: true,
+					emptyText: GO.lang.strNoItems
+				}),
+				cm: new Ext.grid.ColumnModel([
+					{
+						header: GO.lang['strName'],
+						dataIndex: 'name'
+					}
+				]),
+				sm: new Ext.grid.RowSelectionModel({
+					singleSelect: false
+				})
 			});
 		
-		this.list.on('click', function(dataview, index){			
+		this.grid.on('rowdblclick', function(grid, rowIndex){			
 				
-				var addresslist_id = dataview.store.data.items[index].id;
+				var record = grid.store.getAt(rowIndex);
+				
+				var addresslist_id = record.data.id;
 			
 				this.fireEvent("select", this, addresslist_id);
-				this.list.clearSelections();
+//				this.grid.clearSelections();
 				this.hide();
 				
 		}, this);
@@ -29,7 +49,7 @@ GO.addressbook.SelectAddresslistWindow = Ext.extend(Ext.Window, {
 		this.closeAction='hide';	
 		this.items= this.panel = new Ext.Panel({
 			autoScroll:true,
-			items: this.list,
+			items: this.grid,
 			cls: 'go-form-panel'
 		});
 		this.buttons=[{
@@ -46,9 +66,9 @@ GO.addressbook.SelectAddresslistWindow = Ext.extend(Ext.Window, {
 	},
 	
 	show : function(){		
-		if(!this.list.store.loaded)
+		if(!this.grid.store.loaded)
 		{
-			this.list.store.load({
+			this.grid.store.load({
 				callback:function(){
 					this.show();
 				},
@@ -59,7 +79,7 @@ GO.addressbook.SelectAddresslistWindow = Ext.extend(Ext.Window, {
 		
 		GO.addressbook.SelectAddresslistWindow.superclass.show.call(this);
 		
-		if(this.list.store.getCount()==0)
+		if(this.grid.store.getCount()==0)
 		{
 			this.panel.body.update(GO.addressbook.lang.noMailingGroups);
 		}
