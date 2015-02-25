@@ -549,7 +549,11 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		
 		
 		if(this.jsonPost){
-			this.jsonSubmit(params, hide);
+			if(this.formPanel.form.isValid()) {
+				this.jsonSubmit(params, hide);
+			} else {
+				this.getFooterToolbar().setDisabled(false);
+			}
 		}else
 		{
 
