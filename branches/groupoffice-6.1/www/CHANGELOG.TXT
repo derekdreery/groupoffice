@@ -1,4 +1,4 @@
-- Tickets: Converted email templates for tickets to HTML.
+- Tickets: Fixed enters in email templates for mails that are send to the ticketagent.
 
 26-02-2015 6.1.22
 - Billing: sales agent names optional in order grid.
