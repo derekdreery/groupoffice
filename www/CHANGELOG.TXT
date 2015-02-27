@@ -1,3 +1,5 @@
+- Tickets: Converted email templates for tickets to HTML.
+
 26-02-2015 6.1.22
 - Billing: sales agent names optional in order grid.
 - Address book: pagination for addresslist select when setting up a new newsletter.
