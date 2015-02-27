@@ -176,7 +176,7 @@ class SmimeMessage extends Message
 				unlink($this->tempout);
 			}
 
-			openssl_pkcs7_encrypt($this->tempin, $this->tempout,$this->recipcerts, $this->saved_headers);	
+			openssl_pkcs7_encrypt($this->tempin, $this->tempout,$this->recipcerts, $this->saved_headers, 0, OPENSSL_CIPHER_3DES);	
 			$this->encrypted=true;
 		}
 	}
