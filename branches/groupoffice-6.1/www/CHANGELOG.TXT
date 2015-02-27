@@ -1,3 +1,4 @@
+- Billing: Fixed display of 0 in the pdf_template and odf_template fields of the order status when they are not set
 - Tickets: Fixed enters in email templates for mails that are send to the ticketagent.
 
 26-02-2015 6.1.22
