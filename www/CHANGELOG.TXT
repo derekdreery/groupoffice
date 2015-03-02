@@ -1,3 +1,4 @@
+- JsonPost validation and fixes for the TabbedFormDialogs
 - Event store will not try to search for events when calendar is not found
 - Use OPENSSL_CIPHER_3DES for smime encryption
 - Billing: Fixed problem that the trackingcodes or costcodes are not saved when only editing one of those fields in the items grid.
