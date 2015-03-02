@@ -564,13 +564,17 @@ class File extends \GO\Base\Db\ActiveRecord {
 			$this->log('edit');
 		$this->saveVersion();
 
-		$fsFile->move($this->folder->fsFolder,$this->name, $isUploadedFile);
+		if(!$fsFile->move($this->folder->fsFolder,$this->name, $isUploadedFile)){		
+			return false;
+		}
 		$fsFile->setDefaultPermissions();
 
 		$this->mtime=$fsFile->mtime();
 		$this->save();
 		
 		$this->fireEvent('replace', array($this, $isUploadedFile));
+		
+		return true;
 	}
 
 	public function putContents($data){
