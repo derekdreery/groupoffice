@@ -3901,7 +3901,9 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			$aclField = $this->isAclOverwritten() ? $this->aclOverwrite() : $this->aclField();
 
 			$acl = \GO\Base\Model\Acl::model()->findByPk($this->{$aclField});
-			$acl->delete();
+			if($acl) {
+				$acl->delete();
+			}
 		}
 
 		if ($this->customfieldsRecord)
