@@ -1,3 +1,5 @@
+02-03-2015 6.1.23
+- Fixed GOTA on windows servers
 - JsonPost validation and fixes for the TabbedFormDialogs
 - Event store will not try to search for events when calendar is not found
 - Use OPENSSL_CIPHER_3DES for smime encryption
