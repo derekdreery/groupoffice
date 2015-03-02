@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 
-$commitMsg='namespaces';
+$commitMsg='translate update';
 
 $root = 'svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-6.0';
 exec('svn ls '.$root, $output, $ret);
