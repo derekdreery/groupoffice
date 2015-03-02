@@ -1,4 +1,4 @@
-- Evetn store will not try to search for events when calendar is not found
+- Event store will not try to search for events when calendar is not found
 - Use OPENSSL_CIPHER_3DES for smime encryption
 - Billing: Fixed problem that the trackingcodes or costcodes are not saved when only editing one of those fields in the items grid.
 - Billing: Fixed display of 0 in the pdf_template and odf_template fields of the order status when they are not set
