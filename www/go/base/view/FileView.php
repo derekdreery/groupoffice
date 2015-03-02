@@ -51,7 +51,9 @@ class FileView extends AbstractView{
 		
 		$viewPath = GO::config()->root_path.'views/'.GO::viewName().'/';
 		
-		$module = GO::router()->getController()->getModule();
+		$controller = GO::router()->getController();		
+		
+		$module = $controller && $controller->getModule();
 		
 		if(!$module){
 			$file = $viewPath.$viewName.'.php';
