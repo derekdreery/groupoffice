@@ -36,7 +36,7 @@ $l["deleteContentHasChildren"] = "Nemůžete smazat tuto položku protože obsah
 $l["deleteSite"] = "Smazat webovou stránku";
 $l["deleteSiteConfirm"] = "Opravdu chcete smazat tuto webovou stránku";
 
-// Language for model: \GO\Site\Model\Content
+// Language for model: GO_Site_Model_Content
 $l["contentId"] = "ID";
 $l["contentUser_id"] = "Uživatel";
 $l["contentCtime"] = "Vytvořeno";
@@ -52,7 +52,7 @@ $l["contentParent_id"] = "Předchůzce";
 $l["contentSite_id"] = "Webová stránka";
 $l["contentSort_order"] = "Řazení";
 
-// Language for model: \GO\Site\Model\Site
+// Language for model: GO_Site_Model_Site
 $l["siteId"] = "ID";
 $l["siteName"] = "Název";
 $l["siteUser_id"] = "Uživatel";

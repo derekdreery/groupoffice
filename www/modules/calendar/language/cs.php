@@ -49,6 +49,7 @@ $l['printAllDaySingle']='Celý den';
 $l['printAllDayMultiple']='Celý den od %s do %s';
 $l['calendars']='Kalendáře';
 $l['resource_mail_subject']='Prostředek \'%s\' byl zamluven'; //%s is resource name;
+$l['resource_confirmed_mail_body']='%s vytvořil rezervaci pro prostředek \'%s\' a potvrdil rezervaci. Vy jste správcem tohoto prostředku. Použijte odkaz níže, pokud chcete zrušit rezervaci.';
 $l['resource_mail_body']='%s vytvořil rezervaci pro prostředek \'%s\'. Vy jste správcem tohoto prostředku. Prosím, otevřete, zakažte nebo schvalte rezervace.'; //First %s is the name of the person who created the event. Second is the calendar name;
 $l['open_resource']='Otevřená rezervace';
 $l['resource_modified_mail_subject']='Rezervace prostředku \'%s\' byla změněna';//%s is resource name;
@@ -220,6 +221,7 @@ $l['notifyCancelOrganizer']='Odeslat organizátorovi oznámení o Vaší neúča
 $l['notifyParticipants']='Informovat účastníky?';
 $l['sendNotificationTitle']='Odeslaz oznámení?';
 $l['sendNotification']='Odeslat oznámení účastníkům pomocí e-mailové zprávy?';
+$l['sendUpdateNotification']='Odeslat informaci o změnách účastníkům pomocí e-mailové zprávy?';
 
 $l['openCalendar']='Otevřít kalendář';
 $l['createPermission']="Právo zápisu";
@@ -271,3 +273,4 @@ $l['cannotHandleInvitation']='Kalendář je propojený s tímto e-mailovým úč
 $l['cannotHandleInvitation2']='Nelze aktualizovat stav události, protože nemáte dostatečná práva ke kalendáři, který je propojen s e-mailovým účtem (kalendář: "%s"). Protože událost se nachází právě v tomto kalendáři, stav nebyl změněn.';
 
 $l['tooltip'] = 'Text popisku';
+$l['moveEventResourceError'] = 'Událost nemohla být přesunuta, protože následující prostředky nejsou dostupné:';

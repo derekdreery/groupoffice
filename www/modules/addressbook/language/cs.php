@@ -62,6 +62,7 @@ $l["cmdFieldsetSelectAddressbook"]= 'Adresář';
 $l["cmdFieldsetPersonalDetails"]= 'Profil kontaktu';
 $l["cmdFieldsetAddress"]= 'Adresa';
 $l["cmdFieldsetContact"]= 'Kontakt';
+$l["cmdFieldsetCompany"]= 'Detail společnosti';
 $l["cmdFieldsetWork"]= 'Práce';
 $l["cmdPanelContact"]= 'Detail kontaktu';
 $l["cmdPanelComments"]= 'Komentář';
@@ -333,5 +334,5 @@ $l['callOnSkype'] = 'Volání na Skype';
 $l['userDefaultTemplate'] = 'Výchozí šablona uživatele';
 $l['exportContactsWithCompanies'] = 'Kontakty se společnostmi';
 
-
+$l['mustBeSameAddressbook'] = 'Kontakt nemůže být uložen, protože společnost se musí nacházet ve stejném adresáři jako kontakt.';
 
