@@ -672,9 +672,11 @@ $l['it']    = 'Italština';
 $l['ja']    = 'Japonština';
 $l['nb']    = 'Norština';
 $l['nl']    = 'Holandština';
+$l['hu']    = 'Maďarština';
 $l['pt']    = 'Portugalština';
 $l['sv']    = 'Švédština';
 $l['th']    = 'Thajština';
+$l['pt_BR'] = 'Portugalština - Brazílie';
 
 $l['removeDuplicates']='Smazat duplicity';
 $l['removeDuplicatesAreYouSure']='Opravdu chcete smazat duplicity?';
@@ -699,3 +701,5 @@ $l['pspell_lang']='cs';
 $l['dependenciesCannotDelete']="Není možné smazat tento modul, protože jsou na něm závislý jiné (nainstalované) moduly: %s.";
 
 $l['MailboxNotFoundException'] = "Nelze otevřít složku \"%s\". Zkontrolujte nastavení Vašeho e-mailové účtu.";
+
+$l['cantDeleteDefault'] = "Výchozí položka nemůže být smazána.";
