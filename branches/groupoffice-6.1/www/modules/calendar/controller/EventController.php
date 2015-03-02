@@ -879,12 +879,14 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 					$response = $this->_getTaskResponseForPeriod($response,$calendar,$startTime,$endTime);
 				}				
 				
-
-			}	catch(\GO\Base\Exception\AccessDenied $e){
+				$response = $this->_getEventResponseForPeriod($response,$calendar,$startTime,$endTime);
+				
+			} catch(\GO\Base\Exception\AccessDenied $e){
 				//skip calendars without permission
+			} catch(\GO\Base\Exception\NotFound $e) {
+				GO::debug('Calendar with ID: '. $calendarId . ' was not found');
 			}
 			
-			$response = $this->_getEventResponseForPeriod($response,$calendar,$startTime,$endTime);
 		}
 
 		foreach($this->_uuidEvents as $uuidEvent) { // Add the event to the results array
