@@ -1,4 +1,5 @@
 - Use OPENSSL_CIPHER_3DES for smime encryption
+- Billing: Fixed problem that the trackingcodes or costcodes are not saved when only editing one of those fields in the items grid.
 - Billing: Fixed display of 0 in the pdf_template and odf_template fields of the order status when they are not set
 - Tickets: Fixed enters in email templates for mails that are send to the ticketagent.
 
