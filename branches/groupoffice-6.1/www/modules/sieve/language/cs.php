@@ -121,3 +121,15 @@ $l['setRead']='Označit jako přečtené';
 $l['stopEndError'] = 'Pro ukončení je potřebná akce Konec!';
 
 $l['body']='Tělo zprávy';
+$l['outOfOffice']='Mimo kancelář';
+$l['message']='Zpráva';
+$l['aliasses']='Aliasy';
+$l['schedule']='Plánování';
+
+$l['activateAt']='Aktivovat';
+$l['deactivateAt']='Deaktivovat';
+
+$l['scheduleText']='Zde můžete naplánovat kdy má být zpráva "Mimo Kancelář" aktivní';
+$l['messageText']='Vyplňte svoji zprávu do následujícího pole';
+$l['aliassesText']='Vyplňte aliasy pro které má být zpráva také aktivní. Více adres oddělte čárkou (,).';
+$l['activateText']='Aktivujte zprávu zatržítkem';
