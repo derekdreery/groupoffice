@@ -105,7 +105,7 @@ class Sieve {
 			return $this->_set_error(SIEVE_ERROR_LOGIN);
 		}
 		$this->disabled = $disabled;
-
+	
 		return true;
 	}
 
@@ -363,12 +363,12 @@ class Sieve {
 	 */
 	private function _parse($txt) {
 		// try to parse from Roundcube format
-		$script = new go_sieve_script($txt, $this->disabled);
+		$script = new go_sieve_script($txt, $this->disabled, $this, true);
 
 		// ... else try to import from different formats
 		if (empty($script->content)) {
 			$script = $this->_import_rules($txt);
-			$script = new go_sieve_script($script, $this->disabled);
+			$script = new go_sieve_script($script, $this->disabled, $this, true);
 		}
 
 		// replace all elsif with if+stop, we support only ifs
@@ -503,6 +503,8 @@ class go_sieve_script
 {
     public $content = array();      // script rules array
 
+		public $sieve = false;
+		
     private $vars = array();        // "global" variables
     private $prefix = '';           // script header (comments)
     private $supported = array(     // Sieve extensions supported by class
@@ -535,21 +537,34 @@ class go_sieve_script
      * @param  string  Script's text content
      * @param  array   List of capabilities supported by server
      */
-    public function __construct($script, $capabilities=array())
+    public function __construct($script, $capabilities=array(), GO\Sieve\Util\Sieve $sieve, $getCapabilitiesFromServer=false)
     {
-        $capabilities = array_map('strtolower', (array) $capabilities);
+			
+			$this->sieve = $sieve;
+			
+			if($getCapabilitiesFromServer){
+				
+				\GO::debug("===== SIEVE GET CAPABILITIES FROM SERVER =====");
+				$capabilities = $this->sieve->get_extensions();
+			}
 
-        // disable features by server capabilities
-        if (!empty($capabilities)) {
-            foreach ($this->supported as $idx => $ext) {
-                if (!in_array($ext, $capabilities)) {
-                    unset($this->supported[$idx]);
-                }
-            }
-        }
+			$capabilities = array_map('strtolower', (array) $capabilities);
 
-        // Parse text content of the script
-        $this->_parse_text($script);
+			\GO::debug("====== SIEVE SUPPORTED FUNCTIONS BY SERVER =====");
+			\GO::debug(var_export($capabilities,true));
+			\GO::debug("== END OF SIEVE SUPPORTED FUNCTIONS BY SERVER ==");
+
+			// disable features by server capabilities
+			if (!empty($capabilities)) {
+					foreach ($this->supported as $idx => $ext) {
+							if (!in_array($ext, $capabilities)) {
+									unset($this->supported[$idx]);
+							}
+					}
+			}
+
+			// Parse text content of the script
+			$this->_parse_text($script);
     }
 
     /**
@@ -683,6 +698,10 @@ class go_sieve_script
             }
         }
 
+				\GO::debug("====== SIEVE SUPPORTED FUNCTIONS BY GO =====");
+				\GO::debug(var_export($this->supported,true));
+				\GO::debug("== END OF SIEVE SUPPORTED FUNCTIONS BY GO ==");
+				
         $imapflags = in_array('imap4flags', $this->supported) ? 'imap4flags' : 'imapflags';
         $notify    = in_array('enotify', $this->supported) ? 'enotify' : 'notify';
 
