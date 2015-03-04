@@ -137,6 +137,7 @@ class TrialController extends \GO\Site\Components\Controller {
 		$config['default_thousands_separator'] = $params['default_thousands_separator'];
 		$config['default_decimal_separator'] = $params['default_decimal_separator'];
 		$config['first_weekday'] = $params['first_weekday'];
+		$config['disable_mail'] = true;
 		
 
 		if (intval($config['max_users']) < 1)
