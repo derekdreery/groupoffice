@@ -2795,6 +2795,7 @@ class Imap extends ImapBodyStruct {
 			$data->toByteStream($is);
 
 			unset($data);
+			unset($is);
 
 
 			if(!$this->append_start($mailbox, $tmpfile->size(), $flags))
