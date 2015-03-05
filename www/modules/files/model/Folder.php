@@ -722,6 +722,9 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 
 
 		//make sure no filesystem items are deleted. Sometimes folders are stored as files somehow.
+		$oldFileDeleteInDatabaseOnly = File::$deleteInDatabaseOnly;
+		$oldFolderDeleteInDatabaseOnly = Folder::$deleteInDatabaseOnly;
+		
 		File::$deleteInDatabaseOnly=true;
 		Folder::$deleteInDatabaseOnly=true;
 
@@ -751,6 +754,9 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 		\GO::$disableModelCache=$oldCache;
 
 		\GO::setIgnoreAclPermissions($oldIgnoreAcl);
+		
+		File::$deleteInDatabaseOnly=$oldFileDeleteInDatabaseOnly;
+		Folder::$deleteInDatabaseOnly=$oldFolderDeleteInDatabaseOnly;
 	}
 
 	/**
