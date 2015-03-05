@@ -879,6 +879,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		});
 
 		this.selectCategory = new GO.form.ComboBoxReset({
+			pageSize: parseInt(GO.settings.max_rows_list),
 			hiddenName:'category_id',
 			fieldLabel:GO.calendar.lang.category,
 			value:'',

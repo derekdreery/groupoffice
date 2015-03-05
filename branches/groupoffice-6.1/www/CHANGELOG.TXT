@@ -1,3 +1,4 @@
+- Calendar: Added pager to categories selection in the event dialog
 - Email/Sieve: Added possibility to check for sieve capabilities on the server.
 - Billing: Fixed problem with duedate calculation if the bTime field is empty
 
