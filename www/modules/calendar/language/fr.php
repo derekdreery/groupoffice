@@ -200,7 +200,7 @@ $l['calendarColor']= 'Couleur du calendrier';
 $l['eventDeleted']='L\'événement a été supprimé de votre calendrier';
 $l['attendance']='Attendu';
 $l['organizer']='Organisateur';
-$l['notifyOrganizer']="Notifier ma décision à l\'organisateur par e-mail";
+$l['notifyOrganizer']="Notifier ma décision par email à l'organisateur";
 $l['iWillAttend']='Je serai présent';
 $l['iMightAttend']='Je pourrais assister';
 $l['iWillNotAttend']='Je ne participerai pas';
@@ -230,6 +230,8 @@ $l['show_completed_tasks']= "Afficher les tâches terminées";
 $l['showStatuses']="Afficher les statuts d'événements en vue";
 $l['cantMoveRecurringByDay']="Désolé, vous ne pouvez pas déplacer des événements récurrents de cette manière. Ouvrez l\'événement et ajustez les propriétés de récurrence.";
 
+$l['allTogetherForParticipants'] = 'Tous les participants';
+$l['allTogetherForResources'] = 'Toutes les ressources';
  
 $l['updateReponses']['NEEDS-ACTION']='%s est marqué comme évènement %s n\'est pas encore validé';
 $l['sendUpdateNotification']='Voulez-vous informer les participants par e-mail du ou des changement(s)?';
