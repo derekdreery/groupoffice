@@ -24,7 +24,7 @@ $l["ruletext"]= 'Pour les e-mails reçus';
 $l["actiontext"]= '...executer les actions suivantes';
 $l["clear"]= 'Effacer';
 $l["active"]= 'Active';
-$l["activate"]= 'Activer le groupe de filtres';
+$l["activate"]= 'Activer';
 $l["filterset"]= 'Groupe de filtres :';
 $l["days"]= 'Répondre tous les X jours';
 $l["sendToAddresses"]='Envoyer l\'e-mail à ces adresses';
@@ -121,3 +121,17 @@ $l['setRead']='Marque le message comme lu';
 $l['stopEndError'] = 'L\'action \'Stop\' doit être à la fin !';
 
 $l['body']='Corps du message';
+
+$l['outOfOffice']='Absence du bureau';
+$l['message']='Message';
+$l['aliasses']='Alias';
+$l['schedule']='Planification';
+
+$l['activateAt']='Activer le ';
+$l['deactivateAt']='Arrêter le ';
+
+$l['scheduleText']='Vous pouvez définir, ici,  quand votre répondeur automatique doit être activé et désactivé.';
+$l['messageText']='Contenu de la réponse automatique.';
+$l['aliassesText']='Veuillez saisir les alias de messagerie également concernés par la réponse automatique. Chaque alias doit être séparé par une virgule.<br>Laissez vide si vous n\'utilisez pas d\'alias de messagerie.';
+$l['activateText']='Activez le répondeur automatique en cochant la case ci-dessous.';
+
