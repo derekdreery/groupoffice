@@ -1,3 +1,4 @@
+06-03-2015 6.1.25
 - Email: Fixed namespace problem with sending email.
 - Files: Fixed problem with deletion of files when deleting them one at a time. (Sometimes the file was not deleted from disk after that.)
 
