@@ -45,7 +45,7 @@ class Mailer extends \Swift_Mailer{
 	public function send(\Swift_Mime_Message $message, &$failedRecipients = null) {
 		
 		
-		if(!empty(GO::config()->disable_mail)){
+		if(!empty(\GO::config()->disable_mail)){
 			throw new \Exception("E-mail sending is disabled!");
 		}
 		
