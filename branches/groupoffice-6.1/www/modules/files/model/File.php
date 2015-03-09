@@ -360,7 +360,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 		}
 
 		if($this->user){
-      $this->user->calculatedDiskUsage (0-$this->size)->save();
+      $this->user->calculatedDiskUsage (0-$this->size)->save(true);
 		}
 
 	}
