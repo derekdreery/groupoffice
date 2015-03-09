@@ -121,6 +121,16 @@ class Sieve {
 	}
 
 	/**
+	 * Check if an extension is available on the server
+	 * 
+	 * @param string $extension
+	 * @return boolean
+	 */
+	public function hasExtension($extension){
+		return $this->sieve->hasExtension($extension);
+	}
+	
+	/**
 	 * Saves current script into server
 	 */
 	public function save($name = null) {
@@ -294,8 +304,18 @@ class Sieve {
 			
 			if(empty($all_scripts)){
 
+				$createFlag = '';
+				$require = array("vacation","fileinto");
+				
+				// Check if the "mailbox" extension is supported
+				if($this->sieve->hasExtension('mailbox')){
+					$require[] = 'mailbox';
+					$createFlag = ':create ';
+				}
+				
+				$requireString = 'require ["'.implode('","', $require).'"];';
 
-				$content = "require [\"vacation\",\"fileinto\",\"mailbox\"];
+				$content = $requireString."
 	# rule:[".GO::t('standardvacation','sieve')."]
 	if false # anyof (true)
 	{
@@ -305,7 +325,7 @@ class Sieve {
 	# rule:[Spam]
 	if anyof (header :contains \"X-Spam-Flag\" \"YES\")
 	{
-		fileinto :create \"Spam\";
+		fileinto ".$createFlag."\"Spam\";
 	}";
 			
 				
@@ -850,8 +870,14 @@ class go_sieve_script
 
                     case 'fileinto':
                         array_push($exts, 'fileinto');
-												array_push($exts, 'mailbox');
-                        $action_script .= 'fileinto :create ';
+											
+												if($this->sieve->hasExtension('mailbox')){
+													array_push($exts, 'mailbox');
+													$action_script .= 'fileinto :create ';
+												} else {
+													$action_script .= 'fileinto ';
+												}
+												
                         if (!empty($action['copy'])) {
                             $action_script .= ':copy ';
                             array_push($exts, 'copy');

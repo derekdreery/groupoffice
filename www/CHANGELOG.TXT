@@ -1,4 +1,5 @@
-- FIles: Removed acl check for diskquota when deleting a file
+- Mail/Sieve: Added check if the mailbox extension for sieve is available on the mailserver
+- Files: Removed acl check for diskquota when deleting a file
 - Files: Added check for file already exist in addFileSystemFile
 
 06-03-2015 6.1.25
