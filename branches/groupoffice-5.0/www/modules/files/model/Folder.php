@@ -544,19 +544,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param String $name
 	 * @param array $extraAttributes Attribute to set on the new file model
-	 * @param boolean $appendNumberToNameIfExists Set if a number needs to be added to the name if the file already exists.
 	 * @return GO_Files_Model_File 
 	 */
-	public function addFile($name, $extraAttributes = array(),$appendNumberToNameIfExists=false) {
+	public function addFile($name, $extraAttributes = array()) {
 		$file = new GO_Files_Model_File();
 	
 		$file->folder_id = $this->id;
 		$file->name = $name;
 		$file->setAttributes($extraAttributes);
-		
-		if($appendNumberToNameIfExists){
-			$file->appendNumberToNameIfExists();
-		}
 		
 		if($file->save())
 			return $file;
@@ -578,9 +573,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if(!GO_Files_Model_File::checkQuota($file->size()))
 			throw new GO_Base_Exception_InsufficientDiskspace();
 		
-		$file->move($this->fsFolder);
+		$file->move($this->fsFolder, false, false, $appendNumberToNameIfExists);
 		$file->setDefaultPermissions();
-		return $this->addFile($file->name(), $extraAttributes, $appendNumberToNameIfExists);
+		return $this->addFile($file->name(), $extraAttributes);
 	}
 	
 	/**
