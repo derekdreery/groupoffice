@@ -1,4 +1,4 @@
-- Holidays: Added 5th of may as a holiday every 5 year (2015, 2020 etc. )
+- Holidays: Added 5th of may as a holiday every 5 year (2015, 2020 etc. ) (Only in Dutch holidays)
 - Bookmarks: Added extra column view to bookmarks
 - Addressbook: Fixed measurements of contact Photo thumb
 - Billing: Removed faulty costcode controller file
