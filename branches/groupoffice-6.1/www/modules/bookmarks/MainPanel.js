@@ -60,55 +60,80 @@ GO.bookmarks.MainPanel = function(config){
 		width:220
 	});
 
-
-
 	// Dataview & Grid
 
 	/*this.bmGrid=new GO.bookmarks.BookmarksGrid({
 		store:GO.bookmarks.groupingStore
 	});*/
+//	GO.bookmarks.groupingStore.on("load",function(){
+//		this.bookmarkColumnView.refresh();
+//	},this);
+//	
+	this.bookmarkColumnView = new GO.bookmarks.BookmarkColumnView({
+		store:GO.bookmarks.groupingStore
+	});
+	
+	this.bmColumn = new Ext.Panel({
+		autoScroll: true,
+		region:'center',
+		id:'bookmarks-center-column-panel',
+		border:false,
+    items:this.bookmarkColumnView
+	});
 
 	this.bmView=new GO.bookmarks.BookmarksView({
 		store:GO.bookmarks.groupingStore,
 		tbar: [GO.bookmarks.lang.category+':',this.selectCategory,'-',GO.lang.strSearch+':',this.searchField]
 	});
 
-
+	this.cardPanel = new Ext.Panel({
+		region : 'center',
+		layout:'card',
+		border:false,
+		activeItem: 0,
+		layoutConfig: {
+			deferredRender: true
+		},
+		items: [
+			this.bmView,
+			this.bmColumn
+		]
+	});
 
 	config.tbar=new Ext.Toolbar({
 		cls:'go-head-tb',
 		items: [{
-                xtype:'htmlcomponent',
-                html:GO.bookmarks.lang.name,
-                cls:'go-module-title-tbar'
-        },
-
-		{  //  bookmark toevoegen
+			xtype:'htmlcomponent',
+			html:GO.bookmarks.lang.name,
+			cls:'go-module-title-tbar'
+		},{
 			iconCls: 'btn-add',
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
 			handler: function(){
-				GO.bookmarks.showBookmarksDialog({
-					edit:0
-				});
+				GO.bookmarks.showBookmarksDialog({edit:0});
 			},
 			scope:this
-		},/*,
-			{ //  bookmark verwijderen (alleen in grid)
-				iconCls: 'btn-delete',
-				text: GO.lang['cmdDelete'],
-				cls: 'x-btn-text-icon',
-				handler: function(){
-					if (this.centerPanel.items.items[0].selModel.selections.length) // geselecteerde rij ;)
-					{  // items.items :(
-						GO.bookmarks.removeBookmark(this.centerPanel.items.items[0].selModel.selections.items[0]);
-					}
-				},
-				scope:this
-			},*/
-
-		// categorieen beheren
-		{
+//		},{
+//			itemId:'refresh',
+//			iconCls: 'btn-refresh',
+//			text: GO.lang['cmdRefresh'],
+//			cls: 'x-btn-text-icon',
+//			handler: function(){
+//				GO.bookmarks.groupingStore.reload();
+//				this.bookmarkColumnView.refresh();
+//				this.bmView.DV.refresh();
+//			},
+//			scope: this
+		},{ 
+			text: GO.bookmarks.lang.toggle,
+			iconCls: 'btn-refresh',
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.nextLayout();
+			},
+			scope:this
+		},{
 			iconCls: 'no-btn-categories',
 			text: GO.bookmarks.lang.administrateCategories,
 			cls: 'x-btn-text-icon',
@@ -129,22 +154,11 @@ GO.bookmarks.MainPanel = function(config){
 				this.categoriesDialog.show();
 			},
 			scope: this
-		}/*,
-			{ // schakelen tussen dataview en grid
-				text: GO.bookmarks.lang.thumbnails,
-				iconCls: 'btn-thumbnails',
-				enableToggle: true,
-				cls: 'x-btn-text-icon',
-				handler: function(){
-					this.toggleLayout();
-				},
-				scope:this
-			}*/
-		]
+		}]
 	});
  
 	config.layout='fit';
-	config.items=this.bmView;
+	config.items=this.cardPanel;
 
 	GO.bookmarks.MainPanel.superclass.constructor.call(this, config);
 }
@@ -154,21 +168,19 @@ GO.bookmarks.MainPanel = function(config){
 
 Ext.extend(GO.bookmarks.MainPanel, Ext.Panel, {
 
-	// wisselen van dataview naar grid of andersom
-
-	toggleLayout : function()
+	// Walk through the available layouts
+	nextLayout : function()
 	{
-		this.centerPanel.tab = !this.centerPanel.tab
-		var t = (this.centerPanel.tab)?1:0;
-		this.centerPanel.getLayout().setActiveItem(t); // switch naar andere card
+		var itemCount = this.cardPanel.items.length; // Get the total number of items in the cardPanel
+		var currentItemIndex = this.cardPanel.items.indexOf(this.cardPanel.getLayout().activeItem); // Get current index
 		
-		if (t==0) {
-			this.northPanel.topToolbar.items.items[1].enable(); // verwijder knop aan
+		var nextItemIndex = 0;
+		// If currentIndex is smaller then the total itemcount minus 1 (array indexes start at 0) then add +1 else go to 0
+		if(currentItemIndex < (itemCount-1)){
+			nextItemIndex = currentItemIndex+1;
 		}
-		if (t==1) {
-			this.northPanel.topToolbar.items.items[1].disable(); //verwijder knop uit
-		}
-		
+
+		this.cardPanel.layout.setActiveItem(nextItemIndex);
 	}
 });
 

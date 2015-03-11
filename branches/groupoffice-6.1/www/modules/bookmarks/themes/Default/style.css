@@ -84,3 +84,47 @@ cursor:pointer;
 	background: transparent;
 	font: normal 12px tahoma,arial,helvetica,sans-serif;color:#000;white-space:nowrap;cursor:pointer;
 }
+
+
+
+.bookmark-column {
+    float:left;
+    width:200px;
+    padding:0px;
+    border-right: 1px solid #2A9AC9;
+    margin: 10px 0 0 0;
+}
+
+.bookmark-column span{
+    display: block;
+}
+
+.bookmark-column span.link{
+    box-sizing: border-box;
+    text-decoration: none;
+    color:inherit;
+    width:100%;
+    padding:5px 10px;
+}
+
+.bookmark-column span.title{
+    /*font-weight: bold;*/
+    color: #333333;
+    letter-spacing:1px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.2em;
+    width:100%;
+    text-align:left;
+    padding:10px;
+}
+
+.bookmark-column span.thumb{
+    background-repeat: no-repeat;
+    padding-left:20px;
+}
+
+.bookmark-column span.link.x-view-over{
+    border:none;
+    margin:0;
+    cursor:pointer;
+}
