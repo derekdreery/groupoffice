@@ -28,6 +28,17 @@ namespace GO\Calendar\Model;
 
 
 class Category extends \GO\Base\Db\ActiveRecord{
+    
+      protected function getPermissionLevelForNewModel() {
+  
+            
+            if(empty($this->calendar_id)) {
+                parent::getPermissionLevelForNewModel();
+            }else
+            {
+                return $this->calendar->getPermissionLevel();
+            }
+        }
 
 	/**
 	 * Returns a static model of itself
