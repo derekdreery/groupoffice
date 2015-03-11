@@ -1,3 +1,4 @@
+- Addressbook: Fixed measurements of contact Photo thumb
 - Billing: Removed faulty costcode controller file
 - Mail/Sieve: Added check if the mailbox extension for sieve is available on the mailserver
 - Files: Removed acl check for diskquota when deleting a file
