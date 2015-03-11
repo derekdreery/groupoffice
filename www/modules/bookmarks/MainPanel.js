@@ -60,37 +60,24 @@ GO.bookmarks.MainPanel = function(config){
 		width:220
 	});
 
-	// Dataview & Grid
-
-	/*this.bmGrid=new GO.bookmarks.BookmarksGrid({
-		store:GO.bookmarks.groupingStore
-	});*/
-//	GO.bookmarks.groupingStore.on("load",function(){
-//		this.bookmarkColumnView.refresh();
-//	},this);
-//	
-	this.bookmarkColumnView = new GO.bookmarks.BookmarkColumnView({
-		store:GO.bookmarks.groupingStore
-	});
+	this.bookmarkColumnView = new GO.bookmarks.BookmarkColumnView({store:GO.bookmarks.groupingStore});
 	
 	this.bmColumn = new Ext.Panel({
 		autoScroll: true,
 		region:'center',
 		id:'bookmarks-center-column-panel',
 		border:false,
-    items:this.bookmarkColumnView
+    items:this.bookmarkColumnView,
 	});
 
-	this.bmView=new GO.bookmarks.BookmarksView({
-		store:GO.bookmarks.groupingStore,
-		tbar: [GO.bookmarks.lang.category+':',this.selectCategory,'-',GO.lang.strSearch+':',this.searchField]
-	});
+	this.bmView=new GO.bookmarks.BookmarksView({store:GO.bookmarks.groupingStore});
 
 	this.cardPanel = new Ext.Panel({
 		region : 'center',
 		layout:'card',
 		border:false,
 		activeItem: 0,
+		tbar: [GO.bookmarks.lang.category+':',this.selectCategory,'-',GO.lang.strSearch+':',this.searchField],
 		layoutConfig: {
 			deferredRender: true
 		},
@@ -161,12 +148,19 @@ GO.bookmarks.MainPanel = function(config){
 	config.items=this.cardPanel;
 
 	GO.bookmarks.MainPanel.superclass.constructor.call(this, config);
+	
+	this.init();
 }
 
 //-----------------------------------------------------------------------------
 
 
 Ext.extend(GO.bookmarks.MainPanel, Ext.Panel, {
+		
+	init : function(){
+		this.activeItemIndex = Ext.state.Manager.get('bookmark-active-panel');
+		this.cardPanel.activeItem = this.activeItemIndex;
+	},
 
 	// Walk through the available layouts
 	nextLayout : function()
@@ -181,6 +175,11 @@ Ext.extend(GO.bookmarks.MainPanel, Ext.Panel, {
 		}
 
 		this.cardPanel.layout.setActiveItem(nextItemIndex);
+		this.activeItemIndex = nextItemIndex;
+		this.saveState();
+	},
+	saveState : function(){
+		Ext.state.Manager.getProvider().set('bookmark-active-panel', this.activeItemIndex);
 	}
 });
 
