@@ -14,7 +14,6 @@
 GO.bookmarks.BookmarkColumnView = Ext.extend(Ext.DataView,{
 
 	initComponent : function(){
-		Ext.QuickTips.init();
 		
 		Ext.applyIf(this,{
 			autoScroll: true,
@@ -34,6 +33,7 @@ GO.bookmarks.BookmarkColumnView = Ext.extend(Ext.DataView,{
 				'<br/><br/></div>',
 				{
 					is_new_category : function(category_name){
+
 						if(!this.lastcategory || category_name!=this.lastcategory){
 							this.lastcategory=category_name;
 							return true;
@@ -71,6 +71,7 @@ GO.bookmarks.BookmarkColumnView = Ext.extend(Ext.DataView,{
 				},
 				render:function(){
 					this.store.load();
+					this.refresh();
 				},
 				click: function( DdvV, index, node, e) {
 					var record = this.getRecord(node); // waar hebben we op geklikt?
