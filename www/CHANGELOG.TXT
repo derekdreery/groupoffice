@@ -1,3 +1,4 @@
+- Bookmarks: Added extra column view to bookmarks
 - Addressbook: Fixed measurements of contact Photo thumb
 - Billing: Removed faulty costcode controller file
 - Mail/Sieve: Added check if the mailbox extension for sieve is available on the mailserver
