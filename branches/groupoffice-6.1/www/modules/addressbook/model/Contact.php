@@ -436,7 +436,7 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 						: \GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
 	}
 	
-	public function getPhotoThumbURL($urlParams=array("w"=>90, "h"=>120, "zc"=>1)) {
+	public function getPhotoThumbURL($urlParams=array("w"=>120, "h"=>160, "zc"=>1)) {
 		
 		if($this->getPhotoFile()->exists()){
 			$urlParams['filemtime']=$this->getPhotoFile()->mtime();
