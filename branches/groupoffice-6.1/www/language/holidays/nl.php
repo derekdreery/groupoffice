@@ -2,7 +2,6 @@
 // holidays with fixed date
 $input_holidays['fix']['01-01'] = 'Nieuwjaar';
 $input_holidays['fix']['02-14'] = array('name' => 'Valentijnsdag','free'=>false);
-$input_holidays['fix']['05-05'] = array('name' => 'Bevrijdingsdag','free'=>false);
 $input_holidays['fix']['10-04'] = array('name' => 'Wereld dierendag','free'=>false);
 $input_holidays['fix']['11-11'] = array('name' => 'Sint Maarten','free'=>false);
 $input_holidays['fix']['12-25'] = '1e kerstdag';
@@ -17,7 +16,9 @@ $input_holidays['var']['39'] = 'Hemelvaartsdag';
 $input_holidays['var']['49'] = '1e pinksterdag';
 $input_holidays['var']['50'] = '2e pinksterdag';
 
-$input_holidays['fn'][3] = array('Koningsdag',array('GOHolidaysNl', 'koningsdag'));
+$input_holidays['fn'][] = array('Koningsdag',array('GOHolidaysNl', 'koningsdag'));
+
+$input_holidays['fn'][] = array('Bevrijdingsdag',array('GOHolidaysNl', 'bevrijdingsdag'));
 
 if (!class_exists('GOHolidaysNl')) {
 	class GOHolidaysNl {
@@ -28,6 +29,14 @@ if (!class_exists('GOHolidaysNl')) {
 			if (date('w',$theDate)==0)
 				$theDate = \GO\Base\Util\Date::date_add($theDate,-1);
 			return date('Y-m-d',$theDate);
+		}
+		
+		public static function bevrijdingsdag($year){
+			// Iedere 5 hele jaren
+			if($year % 5 ==0){
+				return date('Y-m-d',mktime(0,0,0,5,5,$year));
+			}
+			return ;
 		}
 	}
 }

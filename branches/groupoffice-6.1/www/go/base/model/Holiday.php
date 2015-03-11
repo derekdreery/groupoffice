@@ -300,11 +300,14 @@ class Holiday extends \GO\Base\Db\ActiveRecord {
 	
 			foreach($holidays['fn'] as $def) {
 			
-				$holiday = new Holiday();
-				$holiday->name = $def[0];
-				$holiday->date = call_user_func($def[1], $year);
-				$holiday->region = $locale;
-				$holiday->save();
+				$d = call_user_func($def[1], $year);
+				if(!empty($d)){
+					$holiday = new Holiday();
+					$holiday->name = $def[0];
+					$holiday->date = $d;
+					$holiday->region = $locale;
+					$holiday->save();
+				}
 			}
 		}
 	}
