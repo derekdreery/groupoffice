@@ -276,7 +276,15 @@ class CronJob extends \GO\Base\Db\ActiveRecord {
 				}
 
 				if ($moduleId != 'base' && !GO::modules()->isAvailable($moduleId)) {
-					throw new Exception('Aborted because module ' . $moduleId . ' is not available');
+					$msg = 'Aborted because module ' . $moduleId . ' is not available';
+					
+					$ioncubeInstalled = extension_loaded('ionCube Loader');
+					
+					if(!$ioncubeInstalled) {
+						$msg .= 'Ioncube is NOT installed on the CLI interface. This might be a problem if this is a professional module.';
+					}
+					
+					throw new Exception($msg);
 				}
 
 				if (!class_exists($this->job)) {
