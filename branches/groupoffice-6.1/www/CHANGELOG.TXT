@@ -1,3 +1,5 @@
+- Improved error message of cron when ioncube is not installed
+- Fixed duplicate key error when creating projects
 - Holidays: Added 5th of may as a holiday every 5 year (2015, 2020 etc. ) (Only in Dutch holidays)
 - Bookmarks: Added extra column view to bookmarks
 - Addressbook: Fixed measurements of contact Photo thumb

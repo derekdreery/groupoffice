@@ -23,6 +23,10 @@ namespace GO\Phpbb3;
 
 class Phpbb3Module extends \GO\Base\Module{
 	
+	public function package() {
+		return self::PACKAGE_UNSUPPORTED;
+	}
+	
 	public function autoInstall() {
 		return false;
 	}

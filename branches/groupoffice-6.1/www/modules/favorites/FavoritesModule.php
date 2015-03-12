@@ -6,6 +6,10 @@ namespace GO\Favorites;
 
 class FavoritesModule extends \GO\Base\Module{
 	
+	public function package() {
+		return self::PACKAGE_UNSUPPORTED;
+	}
+	
 	public function autoInstall() {
 		return false;
 	}

@@ -5,6 +5,10 @@ namespace GO\Chat;
 use GO;
 
 class ChatModule extends \GO\Base\Module {
+	
+	public function package() {
+		return self::PACKAGE_UNSUPPORTED;
+	}
 
 	public static function initListeners() {
 

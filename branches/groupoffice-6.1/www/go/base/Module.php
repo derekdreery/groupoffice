@@ -32,6 +32,8 @@ namespace GO\Base;
 
 class Module extends Observable {
 	
+	const PACKAGE_UNSUPPORTED = '3rd party (Not supported by Intermesh)';
+	
 	const PACKAGE_COMMUNITY = 'Community (AGPL)';
 	
 	const PACKAGE_CUSTOM = 'Custom made';
@@ -100,7 +102,7 @@ class Module extends Observable {
 	}
 	
 	public function package(){
-		return 'Community (AGPL)';
+		return self::PACKAGE_COMMUNITY;
 	}
 	
 	private function _findIconByTheme($theme){
