@@ -428,3 +428,5 @@ $updates['201410220900'][]="ALTER TABLE `go_users` ADD COLUMN `disk_quota` BIGIN
 $updates['201410220900'][]="ALTER TABLE `go_users` ADD COLUMN `disk_usage` BIGINT NOT NULL DEFAULT '0'";
 
 $updates['201411171630'][]="UPDATE `go_users` SET `timezone` = 'Europe/Amsterdam' WHERE `go_users`.`timezone` = 'localtime';";
+
+$updates['201503121000'][] ="TRUNCATE TABLE `go_holidays`;";
