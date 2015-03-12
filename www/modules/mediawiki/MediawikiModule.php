@@ -27,8 +27,12 @@ use GO\Notes\Model\Category;
  */
 class MediawikiModule extends Module{
 	
+	public function package() {
+		return self::PACKAGE_UNSUPPORTED;
+	}
+	
 	public function autoInstall() {
-		return true;
+		return false;
 	}
 	
 	
