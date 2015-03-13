@@ -1,3 +1,4 @@
+- Projects2: Controller action that takes over closed weeks from Projects v1, also during Projects2 install.
 - Files: Added check for file already exist in addFileSystemFile
 
 05-03-2015 5.0.98
