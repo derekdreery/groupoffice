@@ -1,3 +1,4 @@
+- Projects2: Controller action that takes over closed weeks from Projects v1, also during Projects2 install.
 - Improved error message of cron when ioncube is not installed
 - Fixed duplicate key error when creating projects
 - Holidays: Added 5th of may as a holiday every 5 year (2015, 2020 etc. ) (Only in Dutch holidays)
