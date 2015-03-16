@@ -287,8 +287,8 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		this.uiPassword2Field.setDisabled(!on);
 		this.uiPassword2Field.setVisible(on);
 		
-		this.uiPassword1Field.allowBlank = false; this.uiPassword1Field.validate();
-		this.uiPassword2Field.allowBlank = false; this.uiPassword2Field.validate();
+		this.uiPassword1Field.allowBlank = !on; this.uiPassword1Field.validate();
+		this.uiPassword2Field.allowBlank = !on; this.uiPassword2Field.validate();
 		
 		if (on) {
 			this.uiPassword1Field.setValue('');
