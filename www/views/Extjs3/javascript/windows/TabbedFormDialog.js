@@ -511,7 +511,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				}
 				this.updateTitle();
 			},
-			failure: function(response, options, result) {
+			fail: function(response, options, result) {
 				this.getFooterToolbar().setDisabled(false);
 
 				Ext.MessageBox.alert(GO.lang['strError'], result.feedback);
@@ -521,7 +521,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 						
 						for(var attr in result.validationErrors[modelName]){
 						
-							var fieldName = modelName+":"+attr;
+							var fieldName = modelName+"."+attr;
 							this.formPanel.form.findField(fieldName).markInvalid(result.validationErrors[modelName][attr]);
 						}
 					}
