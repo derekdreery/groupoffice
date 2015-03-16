@@ -1,3 +1,4 @@
+- Calendar portlet: Don't display the events in the appointments widget that are not shared anymore to the user.
 - Notes: Fixed reset of dialog when getting an encryption password error message.
 - Documenttemplates: Added button "Email from template" to the "New" menu in the displaypanels for items.
 - Summary(Start page): Fixed problem with removing group "Everyone" from announcements.
