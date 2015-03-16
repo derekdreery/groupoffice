@@ -143,7 +143,9 @@ class Store extends AbstractStore {
 
           $model = $staticModel->findByPk($modelPk);
 					if (!empty($model))
-						$model->delete();
+						if(!$model->delete()){
+							Throw new Exception('Failed to run delete from model!');
+						}
         }
         $this->response['deleteSuccess'] = true;
       } catch (\Exception $e) {
