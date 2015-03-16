@@ -71,7 +71,7 @@ class GO_Calendar_Controller_Portlet extends GO_Base_Controller_AbstractMultiSel
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->select('t.*, tl.name AS calendar_name')
-						->ignoreAcl()
+//						->ignoreAcl()
 						->join(GO_Calendar_Model_PortletCalendar::model()->tableName(),$joinCriteria,'pt')
 						->join(GO_Calendar_Model_Calendar::model()->tableName(), $calendarJoinCriteria,'tl');
 		
