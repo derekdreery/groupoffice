@@ -75,7 +75,7 @@ class PortletController extends \GO\Base\Controller\AbstractMultiSelectModelCont
 		
 		$findParams = \GO\Base\Db\FindParams::newInstance()
 						->select('t.*, tl.name AS calendar_name')
-						->ignoreAcl()
+//						->ignoreAcl()
 						->join(\GO\Calendar\Model\PortletCalendar::model()->tableName(),$joinCriteria,'pt')
 						->join(\GO\Calendar\Model\Calendar::model()->tableName(), $calendarJoinCriteria,'tl');
 		
