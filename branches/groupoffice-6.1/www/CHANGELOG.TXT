@@ -1,3 +1,5 @@
+- Summary(Start page): Fixed problem with removing group "Everyone" from announcements.
+
 13-03-2015 6.1.26
 - Projects2: Controller action that takes over closed weeks from Projects v1, also during Projects2 install.
 - Improved error message of cron when ioncube is not installed
