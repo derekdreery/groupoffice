@@ -132,7 +132,7 @@ class Note extends ActiveRecord {
 		
 		if (!empty($this->userInputPassword1) || !empty($this->userInputPassword2)) {
 			if ($this->userInputPassword1 != $this->userInputPassword2){
-				$this->setValidationError('password', GO::t('passwordMatchError'));
+				$this->setValidationError('userInputPassword1', GO::t('passwordMatchError'));
 			}				
 		}
 				
