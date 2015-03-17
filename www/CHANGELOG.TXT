@@ -1,3 +1,4 @@
+- Task linking with projects is now compatible with Projects2
 - External fee of a time entry will be recalculated if the activity type changes
 - Calendar portlet: Don't display the events in the appointments widget that are not shared anymore to the user.
 - Notes: Fixed reset of dialog when getting an encryption password error message.
