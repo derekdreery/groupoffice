@@ -137,6 +137,8 @@ class Task extends \GO\Base\Db\ActiveRecord {
 		
 		if($this->isModified('project_id') && $this->project)
 			$this->link($this->project);
+		if($this->isModified('project_id') && !empty($this->project2))
+			$this->link($this->project2);
 		
 		return parent::afterSave($wasNew);
 	}
