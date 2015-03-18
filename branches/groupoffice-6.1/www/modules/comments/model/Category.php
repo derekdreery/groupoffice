@@ -36,6 +36,6 @@ class Category extends \GO\Base\Db\ActiveRecord{
 	
 	public function relations() {
 		return array(
-				'comments' => array('type' => self::HAS_MANY, 'model' => 'GO\Comments\Model\Comment', 'field' => 'category_id', 'delete' => true)		);
+				'comments' => array('type' => self::HAS_MANY, 'model' => 'GO\Comments\Model\Comment', 'field' => 'category_id', 'delete' => false)		);
 	}
 }
