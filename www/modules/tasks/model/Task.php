@@ -496,6 +496,8 @@ class Task extends \GO\Base\Db\ActiveRecord {
 		
 		$this->setAttributes($attributes, false);
 		$this->cutAttributeLengths();
+		if($this->due_time < $this->start_time)
+			$this->due_time = $this->start_time;
 		$this->save();
 		
 		return $this;
