@@ -1,3 +1,5 @@
+18-03-2015 6.1.27
+- Fix missing manage permissions for calendar category owners
 - Creating a task from email in Thunderbird works
 - Task linking with projects is now compatible with Projects2
 - External fee of a time entry will be recalculated if the activity type changes
