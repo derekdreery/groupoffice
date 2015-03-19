@@ -103,7 +103,7 @@ class CronCollection extends \GO\Base\Model {
 			$reflectionClasses = array();
 			foreach($items as $item){
 				if(is_file($item)){
-					$className = 'GOFS_Cron_'.$item->nameWithoutExtension();
+					$className = 'GOFS\\Cron\\'.$item->nameWithoutExtension();
 					$reflectionClasses[] = new \ReflectionClass($className);
 				}
 			}
