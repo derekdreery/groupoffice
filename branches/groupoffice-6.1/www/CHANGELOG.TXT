@@ -1,3 +1,4 @@
+Cron: Fixed namespace problem with GOFS Cronjobs
 Tickets: Changed the ticketNumber to a static value for the email subject. So removed the ticket number prefix from the subject property of the ticket settings.
 Tickets: Added a fix to check if a cc email address is set that is also used as a import mailbox for tickets
 
