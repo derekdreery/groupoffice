@@ -159,6 +159,10 @@ Ext.extend(GO.bookmarks.MainPanel, Ext.Panel, {
 		
 	init : function(){
 		this.activeItemIndex = Ext.state.Manager.get('bookmark-active-panel');
+		
+		if(GO.util.empty(this.activeItemIndex))
+			this.activeItemIndex = 0;
+		
 		this.cardPanel.activeItem = this.activeItemIndex;
 	},
 
