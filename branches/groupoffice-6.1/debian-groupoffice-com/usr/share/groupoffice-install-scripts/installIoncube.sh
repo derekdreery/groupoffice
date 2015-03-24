@@ -22,7 +22,10 @@ PHP_VERSION=${PHP_V:4:3}
 echo "zend_extension=/usr/local/ioncube/ioncube_loader_lin_${PHP_VERSION}.so" \
     > '/etc/php5/conf.d/00-ioncube_loader.ini'
 
- 
+# Add the IonCube loader to the PHP CLI configuration
+echo "zend_extension=/usr/local/ioncube/ioncube_loader_lin_${PHP_VERSION}.so" \
+    > '/etc/php5/cli/conf.d/00-ioncube_loader.ini' 
+
 # Restart services
 for i in php5-fpm nginx apache2;do
     test -x /etc/init.d/$i && /etc/init.d/$i restart
