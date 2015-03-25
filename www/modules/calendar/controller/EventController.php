@@ -1225,7 +1225,7 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 			
 			if(isset($this->_uuidEvents[$key]))
 			{
-				if($event->getEvent()->calendar_id==$this->_uuidEvents[$key]->getEvent()->calendar_id){
+				if(!empty(\GO::config()->calendar_disable_merge) || $event->getEvent()->calendar_id==$this->_uuidEvents[$key]->getEvent()->calendar_id){
 					//this is an erroneous situation. events with the same start time and the same uuid may not appear in the same calendar.
 					//if we merge it then the user can't edit the events anymore.
 					$key .= $event->getEvent()->id;
