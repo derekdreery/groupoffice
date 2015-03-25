@@ -33,7 +33,7 @@ class Category extends \GO\Base\Db\ActiveRecord{
   
             
             if(empty($this->calendar_id)) {
-                parent::getPermissionLevelForNewModel();
+                return parent::getPermissionLevelForNewModel();
             }else
             {
                 return $this->calendar->getPermissionLevel();
