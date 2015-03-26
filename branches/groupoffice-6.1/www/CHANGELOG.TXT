@@ -1,3 +1,4 @@
+- Leavedays: only users with write permission to the leavedays module can delete booked leave days
 - Added $config['calendar_disable_merge'] = true; to disable merge of events in calendar view
 Bookmarks: Fixed problem with showing bookmarks without having a grid state set in the database.
 Cron: Fixed namespace problem with GOFS Cronjobs
