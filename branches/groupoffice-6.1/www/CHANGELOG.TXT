@@ -1,3 +1,4 @@
+- Added $config['calendar_disable_merge'] = true; to disable merge of events in calendar view
 Bookmarks: Fixed problem with showing bookmarks without having a grid state set in the database.
 Cron: Fixed namespace problem with GOFS Cronjobs
 Tickets: Changed the ticketNumber to a static value for the email subject. So removed the ticket number prefix from the subject property of the ticket settings.
