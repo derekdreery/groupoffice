@@ -44,10 +44,13 @@ echo "Done creating new categories\n\n";
 echo "Remove old categories\n\n";
 
 foreach($oldCategories as $oldCat){
-	$cat = \GO\Calendar\Model\Category::model()->findByPk($oldCat);
+//	$cat = \GO\Calendar\Model\Category::model()->findByPk($oldCat);
 	
-	if($cat)
-		$cat->delete();
+//	if($cat)
+//		$cat->delete();
+	
+	\GO::getDbConnection()->query("DELETE FROM cal_categories WHERE id=".$oldCat);
+	
 }
 
 echo "Done\n\n";
