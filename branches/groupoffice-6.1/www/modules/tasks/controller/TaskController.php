@@ -235,22 +235,22 @@ class TaskController extends \GO\Base\Controller\AbstractModelController{
 			->joinCustomFields()
 			->criteria(\GO\Base\Db\FindCriteria::newInstance()
 				->addModel(\GO\Tasks\Model\Task::model(),'t')
-					)										
+			)										
 			//->select('t.*, tl.name AS tasklist_name')
 			->select($fields.', tl.name AS tasklist_name, cat.name AS category_name, completion_time=0 AS incomplete')
 			->joinModel(array(
-					'model'=>'GO\Tasks\Model\Tasklist',
-					'localField'=>'tasklist_id',
-					'tableAlias'=>'tl', //Optional table alias
+				'model'=>'GO\Tasks\Model\Tasklist',
+				'localField'=>'tasklist_id',
+				'tableAlias'=>'tl', //Optional table alias
 			));
 		
 		
 		$storeParams->joinModel(array(
-					'type'=>'LEFT',
-					'model'=>'GO\Tasks\Model\Category',
-					'localField'=>'category_id',
-					'tableAlias'=>'cat', //Optional table alias
-			));
+			'type'=>'LEFT',
+			'model'=>'GO\Tasks\Model\Category',
+			'localField'=>'category_id',
+			'tableAlias'=>'cat', //Optional table alias
+		));
 		
 		$storeParams = $this->checkFilterParams($params['show'],$storeParams);
 		
@@ -258,6 +258,9 @@ class TaskController extends \GO\Base\Controller\AbstractModelController{
 		//	$storeParams->select("t.*, tl.name AS tasklist_name,p.name AS project_name");
 			$storeParams->select("t.*, tl.name AS tasklist_name,p.name AS project_name, cat.name AS category_name");
 			$storeParams->joinModel(array('model'=>'GO\Projects\Model\Project', 'foreignField'=>'id', 'localField'=>'project_id', 'tableAlias'=>'p',  'type'=>'LEFT' ));
+		} elseif(\GO::modules()->projects2) {
+			$storeParams->select("t.*, tl.name AS tasklist_name,p.name AS project_name, cat.name AS category_name");
+			$storeParams->joinModel(array('model'=>'GO\Projects2\Model\Project', 'foreignField'=>'id', 'localField'=>'project_id', 'tableAlias'=>'p',  'type'=>'LEFT' ));
 		}
 		
 		return $storeParams;
