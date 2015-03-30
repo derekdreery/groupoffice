@@ -605,10 +605,12 @@ class MaintenanceController extends AbstractController {
 							
 							//if(!$quiet)
 							echo 'Running ' . $updateScript . "\n";
+							flush();
 							if (empty($params['test']))
 								require_once($updateScript);
 						}else {
 							echo 'Excuting query: ' . $query . "\n";
+							flush();
 							if (empty($params['test'])) {
 								try {
 									if(!empty($query))
