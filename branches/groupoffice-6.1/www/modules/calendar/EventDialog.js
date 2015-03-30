@@ -291,6 +291,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						this.setEventId(0);
 						this.formPanel.form.baseParams['exception_for_event_id'] = action.result.data.exception_for_event_id;
 						this.formPanel.form.baseParams['exception_date'] = action.result.data.exception_date;
+					} 
+					
+					// Disable the recurrence panel when an event is an exception of an other event or if it is a recurrence item itself.
+					if(action.result.data.exception_date || action.result.data.exception_for_event_id > 0){
+						this.recurrencePanel.setDisabled(true);
+					} else {
+						this.recurrencePanel.setDisabled(false);
 					}
 					
 					if(GO.comments){
