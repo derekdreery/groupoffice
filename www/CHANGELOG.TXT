@@ -1,11 +1,12 @@
+- Calendar: Disable the recurrence tab when editing a recurrence "child" event.
 - Projects2: Task will use default working week to calculate due date when user is not set
 - Tasks: sorting tasks by project works with Projects2 now
 - Leavedays: only users with write permission to the leavedays module can delete booked leave days
 - Added $config['calendar_disable_merge'] = true; to disable merge of events in calendar view
-Bookmarks: Fixed problem with showing bookmarks without having a grid state set in the database.
-Cron: Fixed namespace problem with GOFS Cronjobs
-Tickets: Changed the ticketNumber to a static value for the email subject. So removed the ticket number prefix from the subject property of the ticket settings.
-Tickets: Added a fix to check if a cc email address is set that is also used as a import mailbox for tickets
+- Bookmarks: Fixed problem with showing bookmarks without having a grid state set in the database.
+- Cron: Fixed namespace problem with GOFS Cronjobs
+- Tickets: Changed the ticketNumber to a static value for the email subject. So removed the ticket number prefix from the subject property of the ticket settings.
+- Tickets: Added a fix to check if a cc email address is set that is also used as a import mailbox for tickets
 
 18-03-2015 6.1.27
 - Fix missing manage permissions for calendar category owners
