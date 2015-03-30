@@ -1,3 +1,4 @@
+- Projects2: Task will use default working week to calculate due date when user is not set
 - Tasks: sorting tasks by project works with Projects2 now
 - Leavedays: only users with write permission to the leavedays module can delete booked leave days
 - Added $config['calendar_disable_merge'] = true; to disable merge of events in calendar view
