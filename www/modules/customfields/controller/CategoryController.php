@@ -24,7 +24,8 @@ class CategoryController extends \GO\Base\Controller\AbstractModelController{
 	protected function getStoreParams($params) {
 		
 		$findParams = \GO\Base\Db\FindParams::newInstance()
-						->order('sort_index');
+				->order('sort_index')
+				->limit(0);
 		
 		$findParams->getCriteria()->addCondition('extends_model', $params['extends_model']);						
 		
