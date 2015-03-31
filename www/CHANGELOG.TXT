@@ -1,3 +1,5 @@
+- Customfields: its now possible to create more then 127 categories, field was tinyint(4)
+
 30-03-2015 6.1.28
 - Community with just billing license didn't work
 - Calendar: Disable the recurrence tab when editing a recurrence "child" event.
