@@ -165,3 +165,5 @@ $updates['201405131536'][]="update `cf_fields` set `datatype` = replace(`datatyp
 
 $updates['201409161000'][]="ALTER TABLE `cf_fields` ADD `prefix` VARCHAR( 32 ) NOT NULL DEFAULT '',
 ADD `suffix` VARCHAR( 32 ) NOT NULL DEFAULT '';";
+
+$updates['201503311128'][]="ALTER TABLE `cf_fields` CHANGE `category_id` `category_id` INT(11) NOT NULL DEFAULT '0';";
