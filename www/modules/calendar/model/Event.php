@@ -1762,21 +1762,26 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		
 		$this->reminder=0;
 		
-		if($vobject->valarm && $vobject->valarm->trigger){
-			
-			$type = (string) $vobject->valarm->trigger["value"];
-			
-			
-			if($type == "DURATION") {
-				$duration = \GO\Base\VObject\Reader::parseDuration($vobject->valarm->trigger);
-				if($duration>0){
-					$this->reminder = $duration*-1;
-				}
-			}else
-			{
-				\GO::debug("WARNING: Ignoring unsupported reminder value of type: ".$type);			
+//		if($vobject->valarm && $vobject->valarm->trigger){
+//			
+//			$type = (string) $vobject->valarm->trigger["value"];
+//			
+//			
+//			if($type == "DURATION") {
+//				$duration = \GO\Base\VObject\Reader::parseDuration($vobject->valarm->trigger);
+//				if($duration>0){
+//					$this->reminder = $duration*-1;
+//				}
+//			}else
+//			{
+//				\GO::debug("WARNING: Ignoring unsupported reminder value of type: ".$type);			
+//			}
+//	
+		if($vobject->valarm) {
+			$date = $vobject->valarm->getEffectiveTriggerTime();
+			if($date) {
+				$this->reminder = $this->start_time-$date->format('U');
 			}
-			
 		}elseif($vobject->aalarm){ //funambol sends old vcalendar 1.0 format
 			$aalarm = explode(';', (string) $vobject->aalarm);
 			if(!empty($aalarm[0])) {				
