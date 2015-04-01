@@ -48,8 +48,10 @@ class Iterator implements \Iterator {
 				}
 			}
 			
-			if($count==5000)
-				break;
+			if($count==50000){
+				//var_dump($buffer);
+				throw new \Exception("Reached 50000 lines for one event. Aborting!");
+			}
 		}		
 		
 		
