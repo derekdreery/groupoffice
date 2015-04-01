@@ -71,7 +71,9 @@ class AddressbookModule extends \GO\Base\Module{
 			}
 		}
 		if($contact){
+			GO::$ignoreAclPermissions = true;
 			self::_savePhoto($response, $contact, $params);
+			GO::$ignoreAclPermissions = false;
 		}
 		
 		return parent::submitSettings($settingsController, $params, $response, $user);
