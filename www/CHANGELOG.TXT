@@ -1,3 +1,4 @@
+- Email: fix: an attachment would not show in an exceptional case needed to check in_array strict
 - Calendar portlet: Don't display the events in the appointments widget that are not shared anymore to the user.
 - Projects2: Controller action that takes over closed weeks from Projects v1, also during Projects2 install.
 - Files: Added check for file already exist in addFileSystemFile
