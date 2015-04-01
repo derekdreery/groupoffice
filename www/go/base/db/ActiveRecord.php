@@ -2024,7 +2024,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					);
 		}
 
-		if($this->customfieldsModel()){
+		if($this->customfieldsModel() && \GO::modules()->customfields){
 			$r['customfields']=array(
 					'type'=>self::BELONGS_TO,
 					'model'=>$this->customfieldsModel(),
