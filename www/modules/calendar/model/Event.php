@@ -1588,6 +1588,10 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		}
 		
 		
+		if($this->private) {
+			$e->class='PRIVATE';
+		}
+		
 		
 		return $e;
 	}
@@ -1636,7 +1640,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 	 * @return boolean
 	 */
 	public function isResource(){
-		return $this->calendar->group_id>1;
+		return $this->calendar && $this->calendar->group_id>1;
 	}
 	
 	
