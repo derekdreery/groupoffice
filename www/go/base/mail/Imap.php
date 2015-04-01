@@ -2060,7 +2060,8 @@ class Imap extends ImapBodyStruct {
 			if(!is_array($vals))
 				continue;
 
-			if(isset($vals['type']) && !in_array($id, $skip_ids)){
+			// Strict must be true as 2.1 == 2.10 if false
+			if(isset($vals['type']) && !in_array($id, $skip_ids, true)){
 				$vals['number'] = $id;
 
 				//sometimes NIL is returned from Dovecot?!?
