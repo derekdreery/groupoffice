@@ -125,6 +125,8 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 		this.event = event;
 
 		this.view_id = (view_id) ? view_id : 0;
+		
+		var isOrganizer = typeof(this.event.is_organizer)!='undefined' && this.event.is_organizer;
 
 //		this.actionCopy.setDisabled(this.event.read_only);
 		this.actionCut.setDisabled(this.event.read_only);
@@ -142,12 +144,12 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 			this.actionCopy.setDisabled(true);
 			this.actionInfo.setDisabled(true);
 		} else {
-			this.actionCopy.setDisabled(false);
+			this.actionCopy.setDisabled(!isOrganizer);
 			this.actionInfo.setDisabled(false);
 		}
 		
 		var deleteEnabled=false;
-		if(typeof(this.event.is_organizer)!='undefined' && !this.event.is_organizer)
+		if(isOrganizer)
 			deleteEnabled=true;
 		else
 			deleteEnabled=!this.event.read_only;
