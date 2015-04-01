@@ -153,13 +153,15 @@ class ModuleCollection extends Model\ModelCollection{
 	public function __get($name) {
 		
 		if(!isset($this->_modules[$name])){		
-			if(!$this->isAvailable($name))
+			if(!$this->isAvailable($name)){			
 				return false;
+			}
 
 			$model = parent::__get($name);
-
-			if(!$model || !$model->enabled)
+			
+			if(!$model || !$model->enabled){
 				$model=false;
+			}
 
 			$this->_modules[$name]=$model;
 		}

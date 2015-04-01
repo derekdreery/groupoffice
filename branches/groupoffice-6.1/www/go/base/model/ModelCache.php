@@ -44,7 +44,7 @@ class ModelCache{
 			return;
 		
 		if(!$cacheKey)
-			$cacheKey=$model->pk;
+			$cacheKey=$model->getPk();
 		
 		$cacheKey = $this->_formatCacheKey($cacheKey);		
 		

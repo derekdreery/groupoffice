@@ -448,7 +448,7 @@ abstract class ActiveRecord extends \GO\Base\Model{
 
 		$this->init();
 
-		if($this->isNew){
+		if($this->getIsNew()){
 			$this->setAttributes($this->getDefaultAttributes(),false);
 			$this->loadingFromDatabase=false;
 			$this->afterCreate();
@@ -2023,8 +2023,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					'labelAttribute'=>function($model){return !empty($model->mUser) ? $model->mUser->name : '';}
 					);
 		}
-
-		if($this->customfieldsModel() && \GO::modules()->customfields){
+		
+		$cfMod = \GO::modules()->customfields;
+//\GO::debug($cfMod);
+		if($this->customfieldsModel() && $cfMod){
 			$r['customfields']=array(
 					'type'=>self::BELONGS_TO,
 					'model'=>$this->customfieldsModel(),
