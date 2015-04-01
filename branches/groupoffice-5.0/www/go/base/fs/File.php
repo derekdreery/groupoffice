@@ -309,7 +309,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * Output the contents of this file to standard out (browser).
 	 */
 	public function output() {
-		@ob_clean();
+		@ob_end_clean();
 		@ob_end_flush();
 
 		//readfile somehow caused a memory exhausted error. This stopped when I added 
