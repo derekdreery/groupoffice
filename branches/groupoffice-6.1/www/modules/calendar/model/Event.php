@@ -1539,10 +1539,12 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			
 			$stmt = $this->exceptions($findParams);
 			while($exception = $stmt->fetch()){
-//				$exdate = new Sabre\VObject\Property\DateTime('exdate',Sabre\VObject\Property\DateTime::DATE);
-				$dt = \GO\Base\Util\Date\DateTime::fromUnixtime($exception->getStartTime());				
-//				$exdate->setDateTime($dt);		
+				$dt = \GO\Base\Util\Date\DateTime::fromUnixtime($exception->getStartTime());	
 				$exdate = $e->add('exdate',$dt);
+				if($this->all_day_event){
+					$exdate['VALUE'] = 'DATE';
+				}
+				
 			}
 		}
 		
