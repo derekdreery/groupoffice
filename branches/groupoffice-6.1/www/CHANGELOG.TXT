@@ -1,3 +1,4 @@
+- SaveMailAs: Added the plain email body to the tasks description field.
 - Email: Some email attachments would not show in exceptional cases
 - Tickets: Fixed store call to billing/costcodes for "administration->rates" costcode combo.
 - Customfields: its now possible to create more then 127 categories, field was tinyint(4)
