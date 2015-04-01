@@ -1,4 +1,5 @@
 - Email: Some email attachments would not show in exceptional cases
+- Tickets: Fixed store call to billing/costcodes for "administration->rates" costcode combo.
 - Customfields: its now possible to create more then 127 categories, field was tinyint(4)
 
 30-03-2015 6.1.28
