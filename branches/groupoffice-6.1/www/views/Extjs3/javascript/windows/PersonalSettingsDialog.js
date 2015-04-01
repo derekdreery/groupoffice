@@ -20,6 +20,7 @@ GO.PersonalSettingsDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			title:GO.lang.settings,
 			formControllerUrl: 'settings',
 			width:900,
+			fileUpload : true,
 			height:550,
 			enableApplyButton:false
 		});
