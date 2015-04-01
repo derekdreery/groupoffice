@@ -40,18 +40,20 @@ class AddressbookModule extends \GO\Base\Module{
 				$response['data']['addresslist_'.$addresslist->id]=1;
 			}
 		}
+		
+		self::_loadPhoto($response, $contact, $params);
 			
 		return parent::loadSettings($settingsController, $params, $response, $user);
 	}
 	
 	// Save the settings for the "Addresslists" tab in the Settings panel
 	public static function submitSettings(&$settingsController, &$params, &$response, $user) {
-		
+		$contact = $user->contact;
 		// Only do this when the setting "globalsettings_show_tab_addresslist" is enabled.
 		$tabEnabled = GO::config()->get_setting('globalsettings_show_tab_addresslist');
 		if($tabEnabled){
 		
-			$contact = $user->contact;
+			
 
 			if($contact){
 
@@ -68,8 +70,47 @@ class AddressbookModule extends \GO\Base\Module{
 				}	
 			}
 		}
+		if($contact){
+			self::_savePhoto($response, $contact, $params);
+		}
 		
 		return parent::submitSettings($settingsController, $params, $response, $user);
+	}
+	
+	private static function _loadPhoto(&$response, &$model, &$params) {
+		$response['data']['photo_url']=$model->photoThumbURL;		
+		$response['data']['original_photo_url']=$model->photoURL;
+	}
+	
+	private static function _savePhoto(&$response, &$model, &$params) {
+		if(!empty($params['delete_photo'])){
+			$model->removePhoto();
+			$model->save();
+		}
+		if (isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
+		
+			
+			$destinationFile = new \GO\Base\Fs\File(\GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
+			
+			move_uploaded_file($_FILES['image']['tmp_name'][0], $destinationFile->path());
+			
+			$model->setPhoto($destinationFile);
+			$model->save();
+			$response['photo_url'] = $model->photoThumbURL;
+			$response['original_photo_url'] = $model->photoURL;
+		}elseif(!empty($params['download_photo_url'])){
+			
+			$file = \GO\Base\Fs\File::tempFile();	
+			$c = new \GO\Base\Util\HttpClient();
+			
+			if(!$c->downloadFile($params['download_photo_url'], $file))
+				throw new \Exception("Could not download photo from: '".$params['download_photo_url']."'");
+						
+			$model->setPhoto($file);
+			$model->save();					
+			$response['photo_url'] = $model->photoThumbURL;
+			$response['original_photo_url'] = $model->photoURL;
+		}
 	}
 	
 	/**
