@@ -325,7 +325,7 @@ class CalendarController extends \GO\Base\Controller\AbstractModelController {
 		
 		$months_in_past = isset($params['months_in_past']) ? intval($params['months_in_past']) : 0;
 		
-		$findParams = \GO\Base\Db\FindParams::newInstance()->select("t.*");
+		$findParams = \GO\Base\Db\FindParams::newInstance()->select("t.*")->order('start_time','ASC');
 		$findParams->getCriteria()->addCondition("calendar_id", $params["calendar_id"]);
 		
 		if(!empty($params['months_in_past']))		
