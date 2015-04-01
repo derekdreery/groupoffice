@@ -4817,7 +4817,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 */
 	public function addReminder($name, $time, $user_id, $vtime=null){
 
-		$userModel = \GO\Base\Model\User::model()->findByPk($user_id, true);
+		$userModel = \GO\Base\Model\User::model()->findByPk($user_id, false, true);
 		if (!empty($userModel) && !$userModel->no_reminders) {
 			$reminder = \GO\Base\Model\Reminder::newInstance($name, $time, $this->className(), $this->pk, $vtime);
 			$reminder->setForUser($user_id);
