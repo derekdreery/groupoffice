@@ -487,11 +487,12 @@ class Task extends \GO\Base\Db\ActiveRecord {
 		if($this->status=='COMPLETED' && empty($this->completion_time))
 			$this->completion_time=time();
 		
+		$this->reminder=0;
 		if($vobject->valarm){
-			
-		}else
-		{
-			$this->reminder=0;
+			$date = $vobject->valarm->getEffectiveTriggerTime();
+			if($date) {
+				$this->reminder = $date->format('U');
+			}
 		}		
 		
 		$this->setAttributes($attributes, false);
