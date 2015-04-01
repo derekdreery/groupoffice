@@ -395,6 +395,26 @@ class Task extends \GO\Base\Db\ActiveRecord {
 			default: $e->priority = 5;
 		}
 		
+		if($this->reminder>0){
+			
+			$a=$calendar->createComponent('VALARM');
+			
+//			BEGIN:VALARM
+//ACTION:DISPLAY
+//TRIGGER;VALUE=DURATION:-PT5M
+//DESCRIPTION:Default Mozilla Description
+//END:VALARM
+			
+			$a->action='DISPLAY';			
+			$a->add('trigger',date('Ymd\THis', $this->reminder), array('value'=>'DATE-TIME'));			
+			$a->description="Alarm";			
+		
+						
+			//for funambol compatibility, the \GO\Base\VObject\Reader class use this to convert it to a vcalendar 1.0 aalarm tag.
+			$e->{"X-GO-REMINDER-TIME"}=date('Ymd\THis', $this->reminder);
+			$e->add($a);
+		}
+		
 		return $e;
 	}
 	
@@ -488,7 +508,7 @@ class Task extends \GO\Base\Db\ActiveRecord {
 			$this->completion_time=time();
 		
 		$this->reminder=0;
-		if($vobject->valarm){
+		if($vobject->valarm && $vobject->valarm->trigger){
 			$date = $vobject->valarm->getEffectiveTriggerTime();
 			if($date) {
 				$this->reminder = $date->format('U');
