@@ -452,6 +452,8 @@ class MaintenanceController extends AbstractController {
 			$queries[]="ALTER TABLE `go_users` CHANGE `password` `password` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
 			
 			$queries[] = "delete from go_modules where id='log';";
+			
+			$queries[] = "ALTER TABLE `em_accounts` ADD INDEX(`acl_id`);";
 
 			foreach($queries as $query){
 				try {
