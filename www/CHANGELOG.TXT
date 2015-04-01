@@ -1,3 +1,10 @@
+- Smarter reminder import for events and tasks
+- Don't stop importing on large vevent objects
+- Export error in tasks when custom fields module is not installed
+- private flag synced with caldav
+- Icalendar export ordered by start time to avoid recurring event problems.
+- Disable copy on calendar invites
+- delete exception on all day event not working for caldav
 - SaveMailAs: Added the plain email body to the tasks description field.
 - Email: Some email attachments would not show in exceptional cases
 - Tickets: Fixed store call to billing/costcodes for "administration->rates" costcode combo.
