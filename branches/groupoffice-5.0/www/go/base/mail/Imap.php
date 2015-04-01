@@ -2023,7 +2023,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			if(!is_array($vals))
 				continue;
 
-			if(isset($vals['type']) && !in_array($id, $skip_ids)){
+			if(isset($vals['type']) && !in_array($id, $skip_ids, true)){
 				$vals['number'] = $id;
 				
 				//sometimes NIL is returned from Dovecot?!?
