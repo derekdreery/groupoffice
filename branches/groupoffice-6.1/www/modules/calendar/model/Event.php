@@ -1567,8 +1567,10 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		
 		
 				
-		$a=$calendar->createComponent('VALARM');
+		
 		if($this->reminder>0){
+			
+			$a=$calendar->createComponent('VALARM');
 //			BEGIN:VALARM
 //ACTION:DISPLAY
 //TRIGGER;VALUE=DURATION:-PT5M
@@ -1582,9 +1584,10 @@ class Event extends \GO\Base\Db\ActiveRecord {
 						
 			//for funambol compatibility, the \GO\Base\VObject\Reader class use this to convert it to a vcalendar 1.0 aalarm tag.
 			$e->{"X-GO-REMINDER-TIME"}=date('Ymd\THis', $this->start_time-$this->reminder);
+			$e->add($a);
 		}
 		
-		$e->add($a);
+		
 		
 		return $e;
 	}
@@ -1777,7 +1780,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 //				\GO::debug("WARNING: Ignoring unsupported reminder value of type: ".$type);			
 //			}
 //	
-		if($vobject->valarm) {
+		if($vobject->valarm && $vobject->valarm->trigger) {
 			$date = $vobject->valarm->getEffectiveTriggerTime();
 			if($date) {
 				$this->reminder = $this->start_time-$date->format('U');
