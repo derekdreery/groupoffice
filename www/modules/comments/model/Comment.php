@@ -55,7 +55,6 @@ class Comment extends \GO\Base\Db\ActiveRecord{
 		return parent::init();
 	}
 
-
 	public function tableName(){
 		return 'co_comments';
 	}

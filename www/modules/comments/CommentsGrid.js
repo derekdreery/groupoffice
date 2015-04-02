@@ -17,6 +17,7 @@ GO.comments.CommentsGrid = function(config){
 	}
 	config.layout='fit';
 	config.autoScroll=true;
+	config.stateI='comments-Grid';
 	config.split=true;
 	config.border=false;
 	config.store = new GO.data.JsonStore({
@@ -24,7 +25,7 @@ GO.comments.CommentsGrid = function(config){
 	    baseParams: {
 	    	task: 'comments'
 	    	},
-	    fields: ['id','model_id','model_name','user_name','ctime','mtime','comments'],
+	    fields: ['id','model_id','category_id','category_name','model_name','user_name','ctime','mtime','comments'],
 	    remoteSort: true
 	});
 	
@@ -48,9 +49,13 @@ GO.comments.CommentsGrid = function(config){
 		  	return '<i>'+v+'</i>';
 		  }
 		},{
+			header: GO.comments.lang['category'], 
+			dataIndex: 'category_name',
+			width:50
+		 },{
 			header: GO.lang.strCtime, 
 			dataIndex: 'ctime',
-			width:110,
+			width:50,
 			align:'right',
 		  renderer: function(v){
 		  	return '<b>'+v+'</b>';
