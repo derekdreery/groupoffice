@@ -1,3 +1,4 @@
+- Tickets: fixed issue when creating invoices from tickets
 - Smarter reminder import for events and tasks
 - Don't stop importing on large vevent objects
 - Export error in tasks when custom fields module is not installed
