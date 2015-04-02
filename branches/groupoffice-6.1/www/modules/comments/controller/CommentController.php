@@ -10,10 +10,18 @@ class CommentController extends \GO\Base\Controller\AbstractModelController{
 
 	protected function getStoreParams($params){
 
+		$sort = 'ctime';
+		$dir = 'DESC';
+		if(!empty($params['sort'])) {
+			$sort = $params['sort'];
+			$dir = $params['dir'];
+		}
+		
 		return \GO\Base\Db\FindParams::newInstance()
 						->ignoreAcl()	
-						->select('t.*')
-						->order('ctime','DESC')
+						->select('t.*, category.name as category_name')
+						->order($sort,$dir)
+						->joinRelation('category', 'LEFT')
 						->criteria(
 										\GO\Base\Db\FindCriteria::newInstance()
 											->addCondition('model_id', $params['model_id'])
@@ -23,6 +31,7 @@ class CommentController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name','$model->user->name');
+		$columnModel->formatColumn('category_name','$model->category->name', array(), 'category_name');
 		return parent::formatColumns($columnModel);
 	}
 	
