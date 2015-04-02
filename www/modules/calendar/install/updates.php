@@ -229,3 +229,5 @@ $updates["201311261700"][]="script:3_install_cron.php";
 $updates["201402171130"][]="ALTER TABLE `cal_calendars` ADD `tooltip` varchar(127) NOT NULL DEFAULT '';";
 
 $updates["201404011700"][]="script:4_nl_koningsdag.php";
+
+$updates["201504021100"][]="UPDATE `cal_events` SET `reminder` = 0 WHERE `reminder` > 7776000;";

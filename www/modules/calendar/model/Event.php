@@ -437,6 +437,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->repeat_end_time = $rrule->until;
 		}		
 		
+		//ignore reminders longer than 90 days.
+		if($this->reminder > 86400 * 90){
+			\GO::debug("WARNING: Ignoring reminder that is longer than 90 days before event start");
+			$this->reminder = 0;
+		}	
+		
+		if($this->exception_for_event_id > 0 && $this->exception_for_event_id == $this->id){
+			throw new \Exception("Exception event ID can't be set to ID");
+		}
 
 		$resourceConflicts = $this->hasResourceConflicts();
 
