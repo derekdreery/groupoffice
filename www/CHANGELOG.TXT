@@ -1,3 +1,4 @@
+- Comments: added category column in grid
 - Tickets: fixed issue when creating invoices from tickets
 - Smarter reminder import for events and tasks
 - Don't stop importing on large vevent objects
