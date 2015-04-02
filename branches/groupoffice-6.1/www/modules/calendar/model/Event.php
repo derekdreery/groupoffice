@@ -1834,6 +1834,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					$this->name = $exception->mainevent->name;
 			}else
 			{				
+				
+				\GO::debug("Creating MISSING exception for ".date('c', $recurrenceTime));
 				//exception was not found for this recurrence. Find the recurring series and add the exception.
 				$recurringEvent = Event::model()->findByUuid($this->uuid, 0, $this->calendar_id);
 				if($recurringEvent){
@@ -1846,6 +1848,9 @@ class Event extends \GO\Base\Db\ActiveRecord {
 					$exception->event_id=$recurringEvent->id;
 					if (empty($this->name) || $this->name==\GO::t('unnamed'))
 						$this->name = $exception->mainevent->name;
+				}else
+				{
+					throw new \Exception("Could not find master event!");
 				}
 			}
 		}
@@ -1996,6 +2001,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				//save the exception we found by recurrence-id
 				$exception->exception_event_id=$this->id;
 				$exception->save();
+				
+				\GO::debug("saved exception");
 			}		
 			
 			
