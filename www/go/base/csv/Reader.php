@@ -137,10 +137,10 @@ class Reader{
 		$flippedHeaders = array_flip(array_map('trim',$headers));
 
 		//we need: ['contact' => ['name'=> 1, 'address'=>3] etc/
-		$this->_mapping = [];
+		$this->_mapping = array();
 		foreach($mapping as $model => $modelMapping) {
 		
-			$this->_mapping[$model] = [];
+			$this->_mapping[$model] = array();
 			
 			//STRAAT => address
 			foreach($modelMapping as $csvHeaderName => $goName) {
@@ -196,10 +196,10 @@ class Reader{
 	 * @return type
 	 */
 	private function _convertRecord($record) {
-		$converted = [];
+		$converted = array();
 		
 		foreach($this->_mapping as $model => $mapping) {
-			$converted[$model] = [];
+			$converted[$model] = array();
 			
 			foreach($mapping as $goName => $index) {
 				$converted[$model][$goName] = $record[$index];
