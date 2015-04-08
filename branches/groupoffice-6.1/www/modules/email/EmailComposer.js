@@ -533,6 +533,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	addSignature : function(accountRecord){
 		accountRecord = accountRecord || this.fromCombo.store.getById(this.fromCombo.getValue());
 			
+		if(!accountRecord) {
+			return false;
+		}
+		
 		var sig = accountRecord.get(this.emailEditor.getContentType()+"_signature");
 		
 		if(!GO.util.empty(sig))
