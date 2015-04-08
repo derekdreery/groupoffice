@@ -1897,7 +1897,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				$this->_isImport=true;
 				
 				if (!$importExternal)
-					$this->setValidationRule('uuid', 'unique', array('calendar_id','start_time'));
+					$this->setValidationRule('uuid', 'unique', array('calendar_id','start_time', 'exception_for_event_id'));
 				
 //				//make sure no duplicates are imported
 //				if(!is_array($previouslyImportedEventsArray)){
