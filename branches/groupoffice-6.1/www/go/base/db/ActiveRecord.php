@@ -1970,7 +1970,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		}
 
 		if($model && !$ignoreAcl && !$model->checkPermissionLevel(\GO\Base\Model\Acl::READ_PERMISSION)){
-			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
+			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->getPk(), true) : '';
 			throw new \GO\Base\Exception\AccessDenied($msg);
 		}
 
