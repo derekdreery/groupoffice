@@ -477,7 +477,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 				return false;
 		}
 
-		if ($model || $autoLinkContacts) {
+		if ($model || $autoLinkContacts || count($tags)) {
 
 			$path = 'email/' . date('mY') . '/sent_' . time() . '.eml';
 
@@ -487,7 +487,9 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 			$fbs = new \Swift_ByteStream_FileByteStream($file->path(), true);
 			$message->toByteStream($fbs);
 
-			if ($file->exists()) {
+			if (!$file->exists()) {
+				throw new \Exception("Failed to save email to file!");
+			}
 
 				$attributes = array();
 
@@ -605,7 +607,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 						}
 					}
 				}
-			}
+			
 		}
 	}
 
@@ -848,7 +850,7 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 		
 		//if there's an autolink tag in the message we want to link outgoing messages too.
 		$tags = $this->_findAutoLinkTags($params['content_type']=='html' ? $params['htmlbody'] : $params['plainbody'], $account->id);
-
+		
 		$this->_link($params, $message, false, $tags);
 
 		$response['unknown_recipients'] = $this->_findUnknownRecipients($params);
