@@ -1,3 +1,4 @@
+- Tickets: Fixed html encoding problem for type combobox in the ticket dialog
 - Projects: Added contracts functionality for income.
 - Comments: added category column in grid
 - Tickets: fixed issue when creating invoices from tickets
