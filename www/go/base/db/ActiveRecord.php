@@ -1926,6 +1926,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 	public function findByPk($primaryKey, $findParams=false, $ignoreAcl=false, $noCache=false){
 
+		if(GO::config()->debug && $findParams != false){
+			throw new \Exception('Adding findparams to findByPk is not yet available');
+		}
+		
 //		GO::debug($this->className()."::findByPk($primaryKey)");
 		if(empty($primaryKey))
 			return false;
