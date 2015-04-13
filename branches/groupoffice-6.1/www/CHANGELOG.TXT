@@ -1,3 +1,4 @@
+- Sending Newsletters will not remove spaces in encoded characters
 - Projects/Start page: Fixed status filter problem in the projects startpage widget.
 - Set session cookie to secure on SSL connections
 - Calendar: Exception on the first day of the recurrence didn't work
