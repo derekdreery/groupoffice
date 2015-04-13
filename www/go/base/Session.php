@@ -60,11 +60,17 @@ class Session extends Observable{
 				
 				//Avoid session id in url's to prevent session hijacking.
 				ini_set('session.use_only_cookies',1);
+				
+				if(Util\Http::isHttps()) {
+					ini_set('session.cookie_secure',1);
+				}
+								
 								
 				if(isset($_REQUEST['GOSID'])){
 					session_id($_REQUEST['GOSID']);				
 				}
-								
+				
+			
 				session_name('groupoffice');
 				session_start();				
 			
