@@ -1,3 +1,4 @@
+- Billing generated invoice numbers can have the year prefixed with 2 digits as well using lowercase %y
 - Sending Newsletters will not remove spaces in encoded characters
 - Projects/Start page: Fixed status filter problem in the projects startpage widget.
 - Set session cookie to secure on SSL connections
