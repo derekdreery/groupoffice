@@ -1,3 +1,6 @@
+- Set session cookie to secure on SSL connections
+- Calendar: Exception on the first day of the recurrence didn't work
+- Link of second email reply not automatically linked
 - Tickets: Fixed html encoding problem for type combobox in the ticket dialog
 - Projects: Added contracts functionality for income.
 - Comments: added category column in grid
