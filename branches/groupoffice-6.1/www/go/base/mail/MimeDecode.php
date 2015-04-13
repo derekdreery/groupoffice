@@ -435,7 +435,7 @@ class MimeDecode
             //#7065 - wrapping.. with encoded stuff.. - probably not needed,
             // wrapping space should only get removed if the trailing item on previous line is a 
             // encoded character
-            $input   = preg_replace("/=\r\n(\t| )+/", '=', $input);
+            //$input   = preg_replace("/=\r\n(\t| )+/", '=', $input);
             $input   = preg_replace("/\r\n(\t| )+/", ' ', $input);
             
             $headers = explode("\r\n", trim($input));
