@@ -1,3 +1,5 @@
+- Tickets: Added total ticket count to ticket statusses
+
 13-04-2015 6.1.29
 - Billing generated invoice numbers can have the year prefixed with 2 digits as well using lowercase %y
 - Sending Newsletters will not remove spaces in encoded characters
