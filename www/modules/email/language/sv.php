@@ -268,3 +268,26 @@ $l['allFolders']= 'Alla mappar';
 $l['defaultEmailTemplate']='Standardmailmall';
 $l['useAuth']="Använd autentisering";
 $l['linkMustHavePermissionToWrite']= 'Du har inte skrivbehörighet till det objektet så du tillåts inte att länka ett meddelande till det.';
+
+
+$l['showCcByDefault']='Visa CC (Kopia) fältet som standard';
+$l['showBccByDefault']='Visa BCC (Hemlig kopia) fältet som standard';
+$l['sortAddressesByMailTime']= 'Sortera mottagaradresser efter senaste gången ett mail skickats (kräver Adressbok modulen)';
+$l['permissionDelegated']= 'Endast läsa och delegerad';
+$l['label']= 'Etikett';
+$l['labels']= 'Etiketter';
+$l['labelsLimit']= 'Etikett gräns nådd. Max antal etiketter är %d';
+$l['saveToItem']= 'Spara till objekt';
+$l['saveAttachmentTo']= 'Spara bilagan till dessa objekt';
+$l['saveToPersonal']= 'Spara till personliga filer';
+$l['thisIsSpam1']= 'Detta meddelande har identifierats som skräppost. Klicka';
+$l['thisIsSpam2']= 'här';
+$l['thisIsSpam3']= 'om du INTE tycker att det är skräppost.';
+$l['thisIsNotSpam1']= 'Klicka';
+$l['thisIsNotSpam2']= 'här';
+$l['thisIsNotSpam3']= 'om du tycker detta meddelande är skärppost.';
+$l['moveToSpamTitle']= 'Flytta till skräppost mapp?';
+$l['moveToSpamMsg']= 'Är du säker på att detta meddelande är skräppost?';
+$l['moveToInboxTitle']= 'Flytta bort från skräppost mapp?';
+$l['moveToInboxMsg']= 'Är du säker på att du vill ta bort skräppostmarkeringen och flytta meddelandet till inkorgen?';
+$l['fts']= 'Fullt meddelande';
