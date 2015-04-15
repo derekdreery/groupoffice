@@ -321,3 +321,9 @@ $l['callOnSkype']= 'Ring med Skype';
 $l['contactCellular2']= "Andra mobil";
 $l['userDefaultTemplate']= 'Användarens standardmall';
 $l['exportContactsWithCompanies']= 'Kontakter med företag';
+
+$l['cmdFieldsetCompany']= 'Företags detaljer';
+$l['exportContacts']= 'Personlig information';
+$l['privateAddress']= 'Privat adress';
+$l['mustBeSameAddressbook']= 'Företaget som kontakten tillhör måste finnas i samma adressbok som kontakten. Kontakten sparades inte.';
+$l['exportContactsAsVcard']= 'Exportera kontakter som vcard';
