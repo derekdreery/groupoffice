@@ -1,7 +1,7 @@
 <?php
 
 
-$l["addressbook"]= 'Adressbok';
+$l["addressbook"]= 'Adress';
 $l["appointments"]= 'Möten';
 $l["recurrence"]= 'Återkommande';
 $l["options"]= 'Alternativ';
@@ -244,3 +244,19 @@ $l['till']= 'till';
 $l['total']= 'Total';
 $l['cmdPrintCategoryCount'] = 'Skriv ut antal per kategori';
 $l['eventsPerCategoryCount'] = 'Antal händelser per kategori';
+
+
+$l['resource_confirmed_mail_body']='%s har gjort en bokning med resursen \'%s\' och konfirmerat händelsen. Du administrerar denna resurs. Använd länken nedan och du vill neka bokningen.';
+$l['sendUpdateNotification']='Vill du meddela deltagarna via e-post om ändringen(arna)?';
+$l['allTogetherForParticipants']= 'Alla deltagare tillsammans';
+$l['allTogetherForResources']= 'Alla resurser tillsammans';
+$l['sendNotificationToNewParticipants']='Vill du meddela deltagarna som du just la till via e-post?';
+$l['newParticipants']='Nya deltagare';
+$l['allParticipants']='Alla deltagare';
+$l['noParticipants']='Inga deltagare';
+$l['cannotHandleInvitation']='Kalendern kopplad till detta e-post konto är "%s" och du har inte skrivrättigheter dit. Eftersom händelsen är i den kalendern, har inte statusen uppdaterats.';
+$l['cannotHandleInvitation2']='Kunde inte uppdatera händelsen eftersom du inte har rättigheter i den aktuella kalendern med e-post kontot (kalender: "%s"). Eftersom händelsen är i den kalendern, har inte statusen uppdaterats.';
+$l['tooltip']= 'Tooltip text';
+$l['moveEventResourceError']= 'Kunde inte flytta händelse eftersom följande resurser inte är tillgängliga:';
+$l['resourceUsedIn']= 'Resurser används i';
+$l['exportAsIcs']= 'Exportera som ICS';

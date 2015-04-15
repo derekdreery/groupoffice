@@ -133,3 +133,8 @@ $l['open']='Öppna';
 
 $l['rightClickToCopy']='Högerklicka för att kopiera';
 $l['dontDeleteSystemFolder']="Du kan inte radera denna system-mapp";
+
+$l['deleteExpiredLabel']='Ta bort filer där gilltighetstiden för nedladdningslänken har slutat gälla';
+$l['deleteExpiredDescription']='Ta bort nedladdningslänk filer som inte är gilltiga';
+$l['deleteWhenExpired']= 'Ta bort fil automatiskt när nedladdningslänken slutar gälla';
+$l['automaticallyDeleted']= 'Filen kommer automatiskt att raderas när nedladdningslänken slutar gälla';
