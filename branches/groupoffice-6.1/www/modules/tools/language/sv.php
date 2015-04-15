@@ -14,3 +14,5 @@ $l["tools"]= 'Adminverktyg';
 $l['description']= 'Klicka på ett av skripten för att köra det.';
 $l["scripts"]= 'Skript';
 $l["scriptOutput"]= 'Skript-utdata';
+
+$l['systemCheck']='System kontroll';

@@ -24,3 +24,4 @@ $l["type"]='Typ';
 $l["summaryType"]='Översikt';
 $l["rssFeeds"]='Rss-flöden';
 $l["noRssFeeds"]='Inget RSS-flöde har lagts till.<br />Klicka på knappen för inställningar i övre högra hörnet på den här rutan för att lägga till flöden.';
+$l['latestReadAnnouncementRecord']= 'Logg på senast lästa meddelanden';
