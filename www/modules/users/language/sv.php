@@ -133,3 +133,9 @@ $l['enabled_cf_tabs']= 'Aktivera fliken egna fält';
 $l['slashymd']='År-Månad-Dag';
 $l['dotymd']='År.Månad.Dag';
 $l['cmdFormLabelHolidaySet']= 'Helgdagar';
+
+$l['autoPunctuation']='Stor bokstav efter punkt';
+$l['diskSpace']= 'Disk Utrymme';
+$l['diskQuota']= 'Disk Gräns';
+$l['spaceUsed']= 'Utrymme använt';
+$l['noReminders']= 'Skapa inte påminnelser åt mig';
