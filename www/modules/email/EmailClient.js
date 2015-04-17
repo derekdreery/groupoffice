@@ -577,10 +577,11 @@ GO.email.EmailClient = function(config){
 					usage
 					);
 
-				var labelsColumnIndex = this.messagesGrid.getColumnModel().getIndexById('labels');
-				if (!this.messagesGrid.getColumnModel().isHidden(labelsColumnIndex) && !node.attributes.permittedFlags) {
-					this.messagesGrid.getColumnModel().setHidden(labelsColumnIndex, true);
-				}				
+		// Commented out the lines below because this sometimes hides the label tag
+//				var labelsColumnIndex = this.messagesGrid.getColumnModel().getIndexById('labels');
+//				if (!this.messagesGrid.getColumnModel().isHidden(labelsColumnIndex) && !node.attributes.permittedFlags) {
+//					this.messagesGrid.getColumnModel().setHidden(labelsColumnIndex, true);
+//				}				
 			}
 //		}
 	}, this);
