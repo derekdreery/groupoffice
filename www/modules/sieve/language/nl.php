@@ -116,3 +116,19 @@ $l['activateFilter']='Activeer deze filter';
 $l['active']='Actief';
 $l['setRead']='Markeer bericht als gelezen';
 $l['sieveWarning']="Als uw IMAP server sieve ondersteunt, dan word aanbevolen om de sieve filters te gebruiken. Probeer het tablad 'Sieve filters' eerst aub.";
+
+$l['stopEndError'] = 'Stop dient op de laatste positie te staan!';
+
+$l['body']='Body';
+$l['outOfOffice']='Out of office';
+$l['message']='Bericht';
+$l['aliasses']='Aliassen';
+$l['schedule']='Plannen';
+
+$l['activateAt']='Activeer op';
+$l['deactivateAt']='Tot en met';
+
+$l['scheduleText']='Hier kunt u instellen wanneer de "Out of office" melding geactiveerd moet worden.';
+$l['messageText']='Geef hieronder uw bericht in';
+$l['aliassesText']='Geef hieronder de aliassen in waarvoor u deze melding ook weer wilt geven. Als u meerdere aliassen heeft, scheid ze dan met een komma (,).';
+$l['activateText']='Activeer de melding door onderstaande checkbox aan te zetten.';
