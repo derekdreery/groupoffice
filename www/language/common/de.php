@@ -668,3 +668,5 @@ $l['manageSavedExports']= 'Gespeicherte Exporte verwalten';
 $l['noSavedExports']= 'Keine gespeicherten Exporte vorhanden';
 $l['overwriteAcl']= 'Standardberechtigungen für dieses Objekt überschreiben (Zum Aktivieren auf Übernehmen klicken)';
 $l['cantDeleteDefault']= "Das Standardobjekt kann nicht gelöscht werden.";
+
+$l['updateWithMatchingAttributes'] = 'Aktualisieren Sie die Objekte (statt neue anzulegen) mit den folgenden passenden Eigenschaften';
