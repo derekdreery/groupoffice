@@ -128,7 +128,7 @@ $l['aliasses']='Aliasses';
 $l['schedule']='Schedule';
 
 $l['activateAt']='Activate at';
-$l['deactivateAt']='Deactivate at';
+$l['deactivateAt']='Deactivate after';
 
 $l['scheduleText']='In here you can schedule when the "Out of office" message needs to be activated.';
 $l['messageText']='Fill in your message in the field below.';
