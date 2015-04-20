@@ -3025,7 +3025,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 */
 	public function getFileColumnUrl($column){
 
-		$value= $this->_attributes[$column];
+		$value= isset($this->_attributes[$column]) ? $this->_attributes[$column] : null;
 		if(empty($value))
 			return false;
 
