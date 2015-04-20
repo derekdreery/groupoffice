@@ -19,7 +19,7 @@ extract($data);
 $this->render('externalHeader');
 ?>
 <p><?php echo \GO::t('r_u_sure','addressbook'); ?></p>
-<form action="<?php echo \GO::url($this->getRoute('unsubscribe'),array(),false, true); ?>" method="POST">
+<form method="POST">
 	<input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />
 	<input type="hidden" name="token" value="<?php echo $token; ?>" />
 	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
