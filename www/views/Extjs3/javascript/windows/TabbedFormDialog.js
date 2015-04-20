@@ -633,6 +633,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	
 	
 	jsonLoad : function(remoteModelId, config){
+		
+		Ext.applyIf(config.loadParams,this.loadParams);
+		
 		GO.request({
 			method:'GET',
 			url: this.formControllerUrl + '/' + this.submitAction,
