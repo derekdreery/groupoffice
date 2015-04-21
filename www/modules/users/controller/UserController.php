@@ -4,6 +4,7 @@
 namespace GO\Users\Controller;
 
 use GO\Base\Model\User;
+use GO\Users\Model\Transporter;
 
 
 class UserController extends \GO\Base\Controller\AbstractModelController {
@@ -14,6 +15,17 @@ class UserController extends \GO\Base\Controller\AbstractModelController {
 		//ignore acl on submit so normal users can use the users module. 
 		//otherwise they are not allowed to save users.
 		return array('store','load','submit');
+	}
+	
+	/**
+	 * Transfer data from 1 user account to antoher
+	 * @param $tranfer has two item: 'id_from', 'id_to'
+	 */
+	protected function actionTransfer($transfer) {
+		
+		$transporter = new Transporter($transfer['id_from'], $transfer['id_to']);
+		
+		return array('success' => $transporter->sync());
 	}
 	
 	protected function afterDisplay(&$response, &$model, &$params) {

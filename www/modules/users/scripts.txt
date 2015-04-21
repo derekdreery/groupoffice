@@ -15,3 +15,4 @@ modules/users/MainPanel.js
 modules/users/UserPanel.js
 
 modules/users/GroupsGrid.js
+modules/users/TransferDialog.js

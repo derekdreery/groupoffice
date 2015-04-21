@@ -54,6 +54,17 @@ GO.sieve.CriteriumGrid = function(config){
 
 				switch(record.data.test)
 				{
+					case 'body':
+						if(record.data.type == 'contains')
+						{
+							if(record.data.not)
+							{
+								txtToDisplay = GO.sieve.lang.bodycontainsnot+' '+record.data.arg;
+							} else {
+								txtToDisplay = GO.sieve.lang.bodycontains+' '+record.data.arg;
+							}
+						}
+						break;
 					case 'header':
 						if(record.data.type == 'contains')
 						{

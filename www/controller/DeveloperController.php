@@ -17,6 +17,18 @@ class DeveloperController extends \GO\Base\Controller\AbstractController {
 		
 		return parent::init();
 	}
+	
+	public function actionManyGroups($params) {
+		
+		if(!\GO::user()->isAdmin())
+			throw new \Exception("You must be logged in as admin");
+		
+		for ($i = 1; $i <= 600; $i++) {	
+			$group = new \GO\Base\Model\Group();
+			$group->name = 'group'.$i;
+			$group->save();
+		}
+	}
 
 	public function actionCreateManyUsers($params) {
 		

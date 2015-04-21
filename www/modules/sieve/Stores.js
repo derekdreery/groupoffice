@@ -19,7 +19,7 @@ GO.sieve.cmbFieldStore = new Ext.data.ArrayStore({
 	[GO.sieve.lang.from, 'From'],
 	[GO.sieve.lang.to, 'To'],
 	[GO.sieve.lang.size, 'size'],
-//	[GO.sieve.lang.body, 'body'],
+	[GO.sieve.lang.body, 'body'],
 	[GO.sieve.lang.spamflag, 'X-Spam-Flag'],
 	[GO.sieve.lang.custom, 'custom']
 	]
@@ -35,6 +35,15 @@ GO.sieve.cmbOperatorStore = new Ext.data.ArrayStore({
 	[GO.sieve.lang.notis, 'notis'],
 	[GO.sieve.lang.exists, 'exists'],
 	[GO.sieve.lang.notexists, 'notexists']
+	]
+});
+
+GO.sieve.cmbBodyOperatorStore = new Ext.data.ArrayStore({
+	idIndex: 1,
+	fields: ['field', 'value'],
+	data:[
+	[GO.sieve.lang.contains, 'contains'],
+	[GO.sieve.lang.notcontains, 'notcontains']
 	]
 });
 
