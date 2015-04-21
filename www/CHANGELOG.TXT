@@ -1,4 +1,5 @@
-- Fix sort order by name in addreslist contacts
+- Tickets: fixed problem with comments "browse" button in the display panel
+- Fix sort order by name in addresslist contacts
 - Email: Fixed problem with "label" column when changing account.
 - Tickets: Added total ticket count to ticket statusses
 
