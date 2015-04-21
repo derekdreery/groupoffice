@@ -101,7 +101,7 @@ GO.users.PermissionsPanel = function(config)
         url:GO.url('users/user/visibleGroupStore'),
         baseParams: {
             user_id: -1,
-            task: 'visible'
+			limit: 0
         },
         fields: ['id', 'disabled', 'name', 'selected'],
         root: 'results'
