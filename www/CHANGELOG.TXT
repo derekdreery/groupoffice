@@ -1,3 +1,4 @@
+- Removed row limit from visible groups in the User dialog's permissions tab
 - Tickets: Fixed display problem with  the status combo in the message dialog
 - Tickets: fixed problem with comments "browse" button in the display panel
 - Fix sort order by name in addresslist contacts
