@@ -1,3 +1,4 @@
+- Tickets: Fixed display problem with  the status combo in the message dialog
 - Tickets: fixed problem with comments "browse" button in the display panel
 - Fix sort order by name in addresslist contacts
 - Email: Fixed problem with "label" column when changing account.
