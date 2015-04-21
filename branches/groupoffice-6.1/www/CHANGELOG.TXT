@@ -1,3 +1,4 @@
+- Fix sort order by name in addreslist contacts
 - Email: Fixed problem with "label" column when changing account.
 - Tickets: Added total ticket count to ticket statusses
 
