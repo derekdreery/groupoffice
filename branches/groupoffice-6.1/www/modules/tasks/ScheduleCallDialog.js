@@ -111,6 +111,28 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				remoteSort: true
 			})
 		});
+		//copied from GO.addressbook.SelectContact
+		this.selectContact.selectContactById = function(contact_id, callback, scope){
+			this.getStore().load({
+				params:{
+					contact_id:contact_id
+				},
+				callback:function(){
+					this.setValue(contact_id);
+
+					if(callback){
+
+						var record = this.store.getAt(0);
+
+						if(!scope)
+							scope=this;
+						callback.call(scope, this, record);
+					}
+				},
+				scope:this
+			});
+
+		};
 		
 				
 		this.contactIdField = new Ext.form.Hidden({

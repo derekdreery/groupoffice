@@ -28,10 +28,11 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 		this.loadUrl = ("addressbook/company/display");
  
 			this.template = ''+
-				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
-				'<tr>'+
-						'<td colspan="3" class="display-panel-heading">'+GO.addressbook.lang.company+': {name}</td>'+
-				'</tr>'+
+				'{[this.collapsibleSectionHeader(GO.addressbook.lang.company+": "+ values.name, "companypane2-"+values.panelId, "name")]}'+
+				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="companypane2-{panelId}">'+
+//				'<tr>'+
+//						'<td colspan="3" class="display-panel-heading">'+GO.addressbook.lang.company+': {name}</td>'+
+//				'</tr>'+
 					/*'<tr>'+
 						'<tpl if="this.isCompanySecondColumn(values)">'+
 							'<td colspan="2" valign="top" class="display-panel-heading">'+
@@ -76,18 +77,11 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 					'</tpl>'+
 					
 				'</tr>'+
-				'<tr>'+
-					'<tpl if="this.isCompanySecondColumn(values)">'+
-						'<td colspan="3" valign="top" class="display-panel-heading">'+
-					'</tpl>'+
-
-					'<tpl if="this.isCompanySecondColumn(values) == false">'+
-						'<td colspan="2" valign="top" class="display-panel-heading">'+
-					'</tpl>'+
-
-					GO.addressbook.lang['cmdFieldsetContact']+
-					'</td>'+
-				'</tr>'+
+				'</table>'+
+				
+				'{[this.collapsibleSectionHeader(GO.addressbook.lang.cmdFieldsetContact, "contactpane2-"+values.panelId, "name")]}'+
+				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="contactpane2-{panelId}">'+
+				
 
 				'<tr>'+
 
@@ -162,8 +156,8 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 						'</td>'+
 					'</tpl>'+
 				'</tr>'+
-
-
+				
+				
 					'<tr>'+	
 						// COMPANY DETAILS+ 1e KOLOM
 						'<tpl if="this.isCompanySecondColumn(values)">'+

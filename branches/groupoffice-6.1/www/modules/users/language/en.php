@@ -141,3 +141,4 @@ $l['diskQuota'] = 'Disk Quota';
 $l['spaceUsed'] = 'Space used';
 
 $l['noReminders'] = 'Do not create reminders for me';
+$l['transferData'] = 'Transfer data';

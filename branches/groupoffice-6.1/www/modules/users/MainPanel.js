@@ -96,6 +96,18 @@ GO.users.MainPanel = function(config)
 				scope:this
 			},
 			new GO.base.ExportMenu({className:'GO\\Users\\Export\\CurrentGrid'}),
+			{
+				iconCls: 'bsync-btn-sync',
+				text: GO.users.lang['transferData'],
+				handler:function(){
+					if(!this.transferDialog)
+					{
+						this.transferDialog = new GO.users.TransferDialog();
+					}
+					this.transferDialog.show();
+				},
+				scope:this
+			},
 //			{
 //				enableToggle:true,
 //				text:GO.users.lang.showProUsers,

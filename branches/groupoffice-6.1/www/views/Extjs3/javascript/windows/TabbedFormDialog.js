@@ -166,8 +166,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		});
 		
 		if(this.jsonPost){
-			this.createAction='create';
-			this.updateAction = 'update';
+			this.createAction = this.createAction || 'create';
+			this.updateAction = this.updateAction || 'update';
 		}
 		
 		if(this.helppage !== false){
