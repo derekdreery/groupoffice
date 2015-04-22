@@ -1,7 +1,9 @@
 GO.createModifyTemplate =
-	'<div class="display-panel-heading ">'+GO.lang['createModify']+'</div>'+
+	
+		'{[this.collapsibleSectionHeader(GO.lang.createModify, "createmodifypane-"+values.panelId, "name")]}'+
+		'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="createmodifypane-{panelId}">'+
+
 //	'{[this.collapsibleSectionHeader(GO.lang.createModify, "createModify-"+values.panelId, "createModify")]}'+
-	'<table>'+
 		'<tr>'+
 			'<td width="120">'+GO.lang['strCtime']+':</td>'+'<td style="padding-right:2px">{ctime}</td>'+
 			'<td width="80">'+GO.lang['strMtime']+':</td>'+'<td>{mtime}</td>'+
