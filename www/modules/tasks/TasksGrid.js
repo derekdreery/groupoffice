@@ -34,7 +34,7 @@ GO.tasks.TasksPanel = function(config)
 		}, this);
 
 		var fields ={
-			fields:['id', 'icon', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name','priority','project_name','percentage_complete','user_name'],
+			fields:['id', 'icon', 'name','completed','due_time','is_active', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name','priority','project_name','percentage_complete','user_name'],
 			columns:[this.checkColumn,{
 				id:'icon',
 				header:"&nbsp;",
@@ -218,6 +218,10 @@ GO.tasks.TasksPanel = function(config)
 				}
 				if(record.data.completed){
 					return 'tasks-completed';
+				}
+				if(record.data.is_active) {
+					
+					return 'tasks-active';
 				}
 			}
 		}),

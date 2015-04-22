@@ -530,6 +530,12 @@ class Task extends \GO\Base\Db\ActiveRecord {
 	 * @return boolean 
 	 */
 	public function isLate(){
-		return $this->status!='COMPLETED' && $this->due_time<time();
+		$today = date("Ymd");
+		return $this->status!='COMPLETED' && date("Ymd",$this->due_time) < $today;
+	}
+	
+	public function isActive() {
+		$today = date("Ymd");
+		return (date("Ymd",$this->start_time) <= $today && date("Ymd",$this->due_time) >= $today);
 	}
 }

@@ -51,6 +51,9 @@
 .tasks-late td, a.tasks-late, td.tasks-late{
 	color: red !important;
 }
+.tasks-active td, a.tasks-active, td.tasks-active{
+	color: green !important;
+}
 
 .tasks-call{
 	background-image: url('images/call.png') !important;
