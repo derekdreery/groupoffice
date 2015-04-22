@@ -112,9 +112,10 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 				'<tpl if="this.isContactFieldset(values)">'+
 					
 						//CONTACT DETAILS
-						'<tr>'+
-							'<td colspan="2" class="display-panel-heading">' + GO.addressbook.lang['cmdFieldsetContact'] + '</td>'+
-						'</tr>'+
+				'</table>'+
+				
+				'{[this.collapsibleSectionHeader(GO.addressbook.lang.cmdFieldsetContact, "contactpane2-"+values.panelId, "name")]}'+
+				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="contactpane2-{panelId}">'+
 						
 						'<tr>'+
 							// CONTACT DETAILS+ 1e KOLOM

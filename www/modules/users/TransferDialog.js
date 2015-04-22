@@ -19,11 +19,6 @@ GO.users.TransferDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		
 		GO.users.TransferDialog.superclass.initComponent.call(this);	
 	},
-	
-	show : function () {
-		this.userStore.load();
-		GO.users.TransferDialog.superclass.show.call(this);
-	},
 	  
 	buildForm : function () {
 		this.transferPanel = this.buildTransferPanel();
@@ -31,14 +26,6 @@ GO.users.TransferDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	},
 	
 	buildTransferPanel : function() {
-		this.userStore = new GO.data.JsonStore({
-			url: GO.url('users/user/store'),
-			id: 'id',
-			totalProperty: 'total',
-			root: 'results',
-			fields: ['id', 'username', 'name'],
-			remoteSort: true
-		});
 		
 		return new Ext.Panel({
 			title:'Select users',			
@@ -50,27 +37,12 @@ GO.users.TransferDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					xtype:'displayfield',
 					html: 'Select 2 user accounts to transfer data from one account to the other'
 				},
-				{
-					xtype: 'combo',
-					editable:false,
-					hiddenName: 'transfer.id_from',
-					fieldLabel: 'From',
-					mode: 'remote',
-					triggerAction: 'all',
-					store: this.userStore,
-					displayField:'name',
-					valueField: 'id'
-				},{
-					xtype: 'combo',
-					editable:false,
-					hiddenName: 'transfer.id_to',
-					fieldLabel: 'To',
-					mode: 'remote',
-					triggerAction: 'all',
-					store: this.userStore,
-					displayField:'name',
-					valueField: 'id'
-				}
+				new GO.form.SelectUser({
+					hiddenName: 'transfer.id_from'
+				}),
+				new GO.form.SelectUser({
+					hiddenName: 'transfer.id_to'
+				})
 			]				
 		});
 	}
