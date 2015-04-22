@@ -206,6 +206,8 @@ class AccountController extends \GO\Site\Components\Controller {
 				}
 				$this->redirect($this->getReturnUrl());
 			}
+		} elseif(isset($_GET['ref'])) { // url to go to after login
+			\GO::session()->values['sites']['returnUrl'] = $_GET['ref'];
 		}
 
 		echo $this->render('login',array('model'=>$model));
