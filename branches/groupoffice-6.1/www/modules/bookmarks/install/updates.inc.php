@@ -13,3 +13,5 @@ $updates["201305161323"][]="ALTER TABLE  `bm_bookmarks` CHANGE  `public_icon`  `
 
 
 $updates["201312061136"][]="ALTER TABLE bm_bookmarks DROP INDEX content;";
+
+$updates["201504221336"][]="ALTER TABLE `bm_categories` ADD `show_in_startmenu` BOOLEAN NOT NULL DEFAULT FALSE ;";

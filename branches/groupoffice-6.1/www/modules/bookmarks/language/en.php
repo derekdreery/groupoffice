@@ -22,3 +22,4 @@ $l['description']='Website description.';
 $l['general']='General';
 $l['googleDescription']="Search the web";
 $l['toggle']='Toggle view';
+$l['showCategoryInStartMenu'] = 'Group bookmarks in main start menu (Browser reload required)';

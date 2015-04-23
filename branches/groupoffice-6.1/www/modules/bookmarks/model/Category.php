@@ -55,6 +55,13 @@ class Category extends \GO\Base\Db\ActiveRecord {
 		return 'id';
 	}
 	
+	public function relations() {
+		return array(
+			'bookmarks' => array('type' => self::HAS_MANY, 'model' => 'GO\Bookmarks\Model\Bookmark', 'field' => 'category_id')
+		);
+	}
+	
+	
 	protected function init() {
 		$this->columns['name']['unique']=array('user_id');
 		return parent::init();
