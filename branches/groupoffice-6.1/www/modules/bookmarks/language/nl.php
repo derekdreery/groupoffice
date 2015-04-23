@@ -23,3 +23,4 @@ $l["confirmDelete"]='Weet je zeker dat je deze bladwijzer wilt verwijderen?';
 
 $l["bookmarks"]='Favorieten';
 $l['toggle']='Andere weergave';
+$l['showCategoryInStartMenu'] = 'Groepeer bladwijzers in het start menu (Browser herladen vereist)';
