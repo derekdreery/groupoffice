@@ -74,9 +74,9 @@ class Transporter {
 	}
 	
 	private function projects() {
-		if(GO::modules()->projects2->isInstalled) {
+		if(GO::modules()->isInstalled('projects2')) {
 			$class=Project2::className();
-		} elseif(GO::modules()->projects->isInstalled) {
+		} elseif(GO::modules()->isInstalled('projects')) {
 			$class=Project2::className();
 		} else {
 			return true;
