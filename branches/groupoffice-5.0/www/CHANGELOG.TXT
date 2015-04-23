@@ -1,3 +1,4 @@
+- Zpushadmin: Fixed notice error with defining version file multiple times
 - Calendar: Fixed reminder problem
 - Email: fix: an attachment would not show in an exceptional case needed to check in_array strict
 - Calendar portlet: Don't display the events in the appointments widget that are not shared anymore to the user.
