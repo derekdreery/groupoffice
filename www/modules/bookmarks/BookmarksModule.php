@@ -16,7 +16,12 @@ class BookmarksModule extends \GO\Base\Module{
 	public static function head(){
 		echo '<style>';
 
-		$findParams = \GO\Base\Db\FindParams::newInstance()->criteria(\GO\Base\Db\FindCriteria::newInstance()->addCondition('behave_as_module', 1));
+		$findParams = \GO\Base\Db\FindParams::newInstance()
+			->joinRelation('category')
+			->criteria(\GO\Base\Db\FindCriteria::newInstance()
+				->addCondition('behave_as_module', 1)
+				->addCondition('show_in_startmenu', 1,'=','category',false)
+			);
 
 		$stmt = Model\Bookmark::model()->find($findParams);
 		while ($bookmark = $stmt->fetch()) {			
