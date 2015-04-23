@@ -321,33 +321,72 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		var menuItemConfig;
 
 		this.state = Ext.state.Manager.get('open-modules');
-
-
+		
 		for(var i=0;i<allPanels.length;i++){
 
 			if(this.state && this.state.indexOf(allPanels[i].moduleName)>-1)
 				items.push(GO.moduleManager.getPanel(allPanels[i].moduleName));
 			
 			menuItemConfig = {
-					id:'go-start-menu-'+allPanels[i].moduleName,
-					moduleName:allPanels[i].moduleName,
-					text:allPanels[i].title,
-					iconCls: 'go-menu-icon-'+allPanels[i].moduleName,
-					handler: function(item, e){
-						this.openModule(item.moduleName);
-					},
-					scope: this
-				};
-
+				id:'go-start-menu-'+allPanels[i].moduleName,
+				moduleName:allPanels[i].moduleName,
+				text:allPanels[i].title,
+				iconCls: 'go-menu-icon-'+allPanels[i].moduleName,
+				handler: function(item, e){
+					this.openModule(item.moduleName);
+				},
+				scope: this
+			};
+			
 			if(!allPanels[i].admin){
 				if(!this.state)
 					items.push(GO.moduleManager.getPanel(allPanels[i].moduleName));
 				
-				this.startMenu.add(menuItemConfig);
+				// Check the subMenu property, if it is a submenu then don't add this item to the start menu
+				if(!allPanels[i].inSubmenu){
+					this.startMenu.add(menuItemConfig);
+				}
 			}else
 			{
 				adminMenuItems.push(menuItemConfig);
 			}
+		}
+		
+		var subMenus = GO.moduleManager.getAllSubmenus();
+
+		for(var key in subMenus){
+			
+			var subMenuItems = [];			
+			var subItems = subMenus[key].items;
+			
+			for(var i=0;i<subItems.length;i++){
+				if(!GO.util.empty(subItems[i])){
+					subMenuItems.push({
+						id:'go-start-menu-'+subItems[i].moduleName,
+						moduleName:subItems[i].moduleName,
+						text:subItems[i].title,
+						iconCls: 'go-menu-icon-'+subItems[i].moduleName,
+						handler: function(item, e){
+							this.openModule(item.moduleName);
+						},
+						scope: this
+					});
+				}
+			}
+			
+			var subMenu = new Ext.menu.Menu({
+				items : subMenuItems,
+				cls: 'startmenu-submenu'
+			});
+
+			var subitemConfig = {
+				text : key,
+				menu : subMenu
+			};
+			
+			Ext.apply(subitemConfig,subMenus[key].subMenuConfig);
+
+			this.startMenu.add(new Ext.menu.Item(subitemConfig));
 		}
 		
 		if(adminMenuItems.length){
@@ -358,7 +397,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				this.startMenu.add(adminMenuItems[i]);
 			}
 		}
-    
+		    
     this.createTabPanel(items);
 
 		this.beforeRender();

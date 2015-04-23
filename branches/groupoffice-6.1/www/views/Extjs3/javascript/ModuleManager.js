@@ -40,6 +40,8 @@ GO.ModuleManager = Ext.extend(function(){
 	
 	readyFunctions : {},
 	
+	subMenus : {},
+	
 	
 	addSettingsPanel : function(panelID, panelClass, panelConfig, sortPriority)
 	{		
@@ -74,11 +76,20 @@ GO.ModuleManager = Ext.extend(function(){
 		return panels;
 	},
 	
-	addModule : function(moduleName, panelClass, panelConfig)
+	/**
+	 * 
+	 * @param {type} moduleName
+	 * @param {type} panelClass
+	 * @param {type} panelConfig
+	 * @param Object subMenuConfig {title:'title',iconCls:'classname'} // title is a required property
+	 * @returns {undefined}
+	 */
+	addModule : function(moduleName, panelClass, panelConfig, subMenuConfig)
 	{		
 		//this.modules[moduleName]=true;
 		if(panelClass)
 		{
+			panelConfig.inSubmenu = false;
 			panelConfig.moduleName = moduleName;
 			panelConfig.id='go-module-panel-'+panelConfig.moduleName;
 
@@ -86,8 +97,23 @@ GO.ModuleManager = Ext.extend(function(){
 				panelConfig.cls = 'go-module-panel';
 			
 			this.modulePanels[moduleName] = panelClass;
+			
+			// If this item needs to be inside a  submenu
+			if(subMenuConfig){
+				if(!this.subMenus[subMenuConfig.title]){
+					this.subMenus[subMenuConfig.title] = {
+						subMenuConfig:subMenuConfig,
+						items:[]
+					};
+				}
+
+				this.subMenus[subMenuConfig.title].items.push(panelConfig);
+				panelConfig.inSubmenu = true;
+			}
+			
 			this.panelConfigs[moduleName] = panelConfig;
 			this.sortOrder.push(moduleName);
+			
 		}
 		this.onAddModule(moduleName);
 		
@@ -156,8 +182,11 @@ GO.ModuleManager = Ext.extend(function(){
 	
 	userHasModule : function(module){
 		return module in this.modules;
-	}
-				
+	},
+	
+	getAllSubmenus : function(){
+		return this.subMenus;
+	}	
 });
 
 
