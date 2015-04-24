@@ -118,6 +118,12 @@ class FileController extends \GO\Base\Controller\AbstractModelController {
 		
 		$response['data']['name']=$model->fsFile->nameWithoutExtension();
 		
+		if (!empty($model->user))
+			$response['data']['username']=$model->user->name;
+		if (!empty($model->mUser))
+			$response['data']['musername'] = $model->mUser->name;
+		$response['data']['locked_user_name']=$model->lockedByUser ? $model->lockedByUser->name : '';
+		
 		if (\GO::modules()->customfields)
 			$response['customfields'] = \GO\Customfields\Controller\CategoryController::getEnabledCategoryData("GO\Files\Model\File", $model->folder_id);
 		
