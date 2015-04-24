@@ -51,6 +51,20 @@ GO.files.FilePropertiesDialog = function(config){
 			fieldLabel: GO.lang.strMtime,
 			name: 'mtime'
 		},
+		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.strUser,
+			name: 'username'
+		},
+		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.mUser,
+			name: 'musername'
+		},{
+			xtype: 'plainfield',
+			fieldLabel: GO.files.lang.lockedBy,
+			name: 'locked_user_name'
+		},
 		new GO.form.HtmlComponent({
 			html:'<hr />'
 		}),
