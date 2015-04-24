@@ -1,3 +1,4 @@
+- Files: Added username, musername ans locked by to file properties dialog
 - Zpushadmin: Fixed notice error with defining version file multiple times
 - Removed row limit from visible groups in the User dialog's permissions tab
 - Tickets: Fixed display problem with  the status combo in the message dialog
