@@ -228,8 +228,13 @@ GO.calendar.CalendarDialog = function(config)
 					{
 						uploadFile.clearQueue();
 
-
-						GO.errorDialog.show("<pre>"+action.result.feedback+"</pre>", GO.lang.strSuccess);
+						Ext.Msg.show({
+							title: GO.lang.strSuccess,
+							width : 600,
+							height : 220,
+							icon: Ext.MessageBox.INFO,
+							msg: "<pre>"+action.result.feedback+"</pre>"
+						});
 						this.fireEvent('calendarimport', this);
 						
 					},
