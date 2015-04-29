@@ -1,0 +1,8 @@
+
+.go-module-icon-backupmanager , .go-menu-icon-backupmanager{
+	background:url('images/backupmanager.png');
+}
+
+.go-tab-icon-backupmanager {
+	background-image: none !important;
+}
