@@ -1,3 +1,5 @@
+29-04-2015 5.0.99
+- Don't stop importing on large vevent objects
 - Zpushadmin: Fixed notice error with defining version file multiple times
 - Calendar: Fixed reminder problem
 - Email: fix: an attachment would not show in an exceptional case needed to check in_array strict
