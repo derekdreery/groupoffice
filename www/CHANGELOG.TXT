@@ -1,4 +1,5 @@
 29-04-2015 6.1.30
+- Task start time is now optional
 - IMPORTANT: z-push 2.2.1 support. Upgrade z-push too after this upgrade!
 - Wrong custom field function result in rare cases
 - Permissions for calendar categories on upgrade are set to owner now
