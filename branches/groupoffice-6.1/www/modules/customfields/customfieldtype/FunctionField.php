@@ -10,7 +10,7 @@ class FunctionField extends AbstractCustomfieldtype {
 		return 'Function';
 	}
 
-	public function formatFormOutput($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
+	public function formatFormOutput($column, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
 		$result_string = '';
 
 		if (!empty($this->field->function)) {
@@ -26,12 +26,13 @@ class FunctionField extends AbstractCustomfieldtype {
 				}
 			}
 			$f = preg_replace('/\{[^}]*\}/', '0',$f);
-			//go_debug($fields[$i]['function']);
+
 			eval("\$result_string=" . $f . ";");
 		}
+		\GO::debug("Function ($column): ".$this->field->function.' => '.$f.' = '.$result_string);
 
-		$attributes[$key] = \GO\Base\Util\Number::localize($result_string);
-		return $attributes[$key];
+		$attributes[$column] = \GO\Base\Util\Number::localize($result_string);
+		return $attributes[$column];
 	}
 	
 	public function formatDisplay($key, &$attributes, \GO\Customfields\Model\AbstractCustomFieldsRecord $model) {
