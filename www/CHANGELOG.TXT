@@ -1,3 +1,6 @@
+- IMPORTANT: z-push 2.2.1 support. Upgrade z-push too after this upgrade!
+- Wrong custom field function result in rare cases
+- Permissions for calendar categories on upgrade are set to owner now
 - Changed the calendar import success message to an info dialog instead of warning.
 - Files: Added username, musername ans locked by to file properties dialog
 - Zpushadmin: Fixed notice error with defining version file multiple times
