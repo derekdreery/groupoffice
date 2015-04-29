@@ -1,7 +1,0 @@
-After installation a Cronjob is created that will sync the Dropbox files with GroupOffice
-
-GroupOffice user will get a Dropbox Tab in the Settings dialog where they can connect to there Dropbox account
-
-When The user Clicks the connect button on this tap the Dropbox login window will be opened to fetch an access token.
-
-After this process there is a "dropbox" folder created in the users home directory
