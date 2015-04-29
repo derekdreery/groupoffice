@@ -345,35 +345,22 @@ class Task extends \GO\Base\Db\ActiveRecord {
 		$ctimeDateTime->setTimezone(new \DateTimeZone('UTC'));
 		$e->add('created', $ctimeDateTime);
 		
-    $e->summary = $this->name;
+		$e->summary = $this->name;
 		
 		$e->status = $this->status;
 		
 		$dateType = "DATE";
 		
-//		$dtstart = new Sabre\VObject\Property\DateTime('dtstart',$dateType);
-//		$dtstart->setDateTime(\GO\Base\Util\Date\DateTime::fromUnixtime($this->start_time));		
-//		$e->add($dtstart);
-//		
-		$e->add('dtstart', \GO\Base\Util\Date\DateTime::fromUnixtime($this->start_time), array('VALUE'=>$dateType));
-		
-		
-		
-//		$due = new Sabre\VObject\Property\DateTime('due',$dateType);
-//		$due->setDateTime(\GO\Base\Util\Date\DateTime::fromUnixtime($this->due_time));		
-//		$e->add($due);
+		if(!empty($this->start_time)) {
+			$e->add('dtstart', \GO\Base\Util\Date\DateTime::fromUnixtime($this->start_time), array('VALUE'=>$dateType));
+		}
 		
 		$e->add('due', \GO\Base\Util\Date\DateTime::fromUnixtime($this->due_time), array('VALUE'=>$dateType));
 		
 		
 		
 		if($this->completion_time>0){
-//			$completed = new Sabre\VObject\Property\DateTime('completed',Sabre\VObject\Property\DateTime::LOCALTZ);
-//			$completed->setDateTime(\GO\Base\Util\Date\DateTime::fromUnixtime($this->completion_time));		
-//			$e->add($completed);
-			
 			$e->add('completed', \GO\Base\Util\Date\DateTime::fromUnixtime($this->completion_time), array('VALUE'=>$dateType));
-		
 		}
 		
 		if(!empty($this->percentage_complete))
@@ -445,9 +432,9 @@ class Task extends \GO\Base\Db\ActiveRecord {
 		
 		if(!empty($vobject->due)){
 			$this->due_time = $vobject->due->getDateTime()->format('U');
-			
-			if(empty($vobject->dtstart))
-				$this->start_time=$this->due_time;
+		}
+		if(empty($vobject->dtstart)){
+			$this->start_time = 0;
 		}
 				
 		if($vobject->dtstamp)
@@ -455,9 +442,6 @@ class Task extends \GO\Base\Db\ActiveRecord {
 		
 		if(empty($this->due_time))
 			$this->due_time=time();
-		
-		if(empty($this->start_time))
-			$this->start_time=$this->due_time;
 		
 		if($vobject->rrule){			
 			$rrule = new \GO\Base\Util\Icalendar\Rrule();

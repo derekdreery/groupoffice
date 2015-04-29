@@ -323,7 +323,6 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		var startDate = new Ext.form.DateField({
 			name : 'start_time',
 			format : GO.settings['date_format'],
-			allowBlank : false,
 			fieldLabel : GO.tasks.lang.startsAt,
 			value : now.format(GO.settings.date_format),
 			listeners : {
