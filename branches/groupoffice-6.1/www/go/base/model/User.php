@@ -335,7 +335,13 @@ class User extends \GO\Base\Db\ActiveRecord {
 				
 		if($this->isModified('password') && !empty($this->password)){
 			$this->_unencryptedPassword=$this->password;
-			$this->password=crypt($this->password);
+			
+			$salt = uniqid();
+			if(function_exists("mcrypt_create_iv")) {
+				$salt = base64_encode(mcrypt_create_iv(24, MCRYPT_DEV_URANDOM));
+			}
+			
+			$this->password=crypt($this->password, $salt);
 			$this->password_type='crypt';
 			
 			$this->digest = md5($this->username.":".GO::config()->product_name.":".$this->_unencryptedPassword);

@@ -1,3 +1,9 @@
+- Email invites: events can always be updated from an email and a link was added to open the event
+- Sieve is working without SSL domein check in PHP 5.6
+- Add random $salt to user password for PHP 5.6
+- Leaveday: would give an error when trying to delete a Year Credit
+- Multiselect group will not select first item on reload when nothing was selected (see groups in user module)
+
 29-04-2015 6.1.30
 - Task start time is now optional
 - IMPORTANT: z-push 2.2.1 support. Upgrade z-push too after this upgrade!
