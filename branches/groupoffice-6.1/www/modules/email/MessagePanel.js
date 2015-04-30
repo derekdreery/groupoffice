@@ -129,8 +129,8 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 
 				'<tpl if="iCalendar.invitation">'+
 
-				'<tpl if="!GO.util.empty(iCalendar.invitation.is_processed)">'+
-					'<a id="em-icalendar-open-'+this.bodyId+'" class="go-model-icon-GO_Calendar_Model_Event normal-link" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO\\Calendar\\Model\\Event message-icalendar-icon">'+GO.email.lang.appointementAlreadyProcessed+'</a>'+
+					'<tpl if="!GO.util.empty(iCalendar.invitation.is_processed)">'+
+						'<a id="em-icalendar-open-'+this.bodyId+'" class="go-model-icon-GO_Calendar_Model_Event normal-link" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO\\Calendar\\Model\\Event message-icalendar-icon">'+GO.email.lang.appointementAlreadyProcessed+'</a>'+
 					'</tpl>'+
 					'<tpl if="iCalendar.invitation.is_invitation">'+
 
@@ -150,6 +150,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 						'<div class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon ">'+
 						'{[values.iCalendar.feedback]}</div>'+
 						'<div class="message-icalendar-actions">'+
+						'<a id="em-icalendar-open-'+this.bodyId+'" class="normal-link" style="padding-right:20px;" href="#">'+GO.email.lang.icalendarOpenEvent+'</a>'+
 							'<a class="normal-link" id="em-icalendar-update-event-'+this.bodyId+'" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
 							'</div>'+
 					'</tpl>'+
