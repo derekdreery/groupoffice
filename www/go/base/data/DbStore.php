@@ -603,12 +603,13 @@ class DbStore extends AbstractStore {
 	 * @param boolean $checkPermissions check Permission for item defaults to true
 	 * @param string $prefix a prefix for the request param that can change every store load
 	 * @param array $extraPks valid pks of models not in the database
-	 * 
+	 * @param boolean $defaultSelect Set  to false if you do not when to select the first item when nothing is selected
 	 * @return \GO\Base\Component\MultiSelectGrid
 	 */
-	public function multiSelectable($requestParamName,$checkPermissions = null,$prefix="",$extraPks=array()) {
+	public function multiSelectable($requestParamName,$checkPermissions = null,$prefix="",$extraPks=array(),$defaultSelect=true) {
 		$this->_multiSel = new \GO\Base\Component\MultiSelectGrid($requestParamName, $this->_modelClass, $this, $this->_requestParams, $checkPermissions,$prefix,$extraPks);
-		$this->_multiSel->setFindParamsForDefaultSelection($this->_extraFindParams);
+		if($defaultSelect)
+			$this->_multiSel->setFindParamsForDefaultSelection($this->_extraFindParams);
 		$this->_multiSel->formatCheckedColumn();
 		
 		return $this->_multiSel;
