@@ -13,7 +13,6 @@ $l['notes']= 'Anteckningar';
 $l["category_id"]= 'Kategori-ID';
 $l["content"]= 'Innehåll';
 $l["manageCategories"]= 'Hantera kategorier';
-$l
 
 $l['note']='Anteckning';
 $l['encryptedContent']='Innehållet är krypterat';
