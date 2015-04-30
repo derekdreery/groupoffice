@@ -136,6 +136,7 @@ $l["skipUnknownRecipientsAction"]='Don\'t show this window next time';
 $l["skipUnknownRecipients"]='Don\'t show unknown recipients dialog';
 $l["alwaysRequestNotification"]='Always request a read notification';
 $l["icalendarUpdateEvent"]='Update Event';
+$l["icalendarOpenEvent"]='Open Event';
 $l["icalendarDeleteEvent"]='Delete Event';
 $l["icalendarAcceptInvitation"]='Accept';
 $l["icalendarDeclineInvitation"]='Decline';

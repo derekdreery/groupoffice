@@ -181,6 +181,7 @@ $l["skipUnknownRecipientsAction"]='Dit scherm in het vervolg niet tonen';
 $l["skipUnknownRecipients"]='Toon onbekende ontvanger dialoog niet';
 $l["alwaysRequestNotification"]='Altijd om een leesbevestiging vragen';
 $l["icalendarUpdateEvent"]='Afspraak bijwerken';
+$l["icalendarOpenEvent"]='Afspraak openen';
 $l["icalendarDeleteEvent"]='Afspraak verwijderen';
 $l["icalendarAcceptInvitation"]='Accepteren';
 $l["icalendarDeclineInvitation"]='Weigeren';
