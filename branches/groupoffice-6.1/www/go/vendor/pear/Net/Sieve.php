@@ -1176,7 +1176,12 @@ class Net_Sieve
         if (PEAR::isError($res = $this->_doCmd('STARTTLS'))) {
             return $res;
         }
-
+		stream_context_set_option($this->_sock->fp, array( //since PHP 5.6 (strict CA checking)
+			'ssl' => array(
+				'verify_peer' => false,
+				'verify_peer_name' => false,
+			),
+		));
         if (!stream_socket_enable_crypto($this->_sock->fp, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
             return PEAR::raiseError('Failed to establish TLS connection', 2);
         }
