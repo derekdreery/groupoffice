@@ -198,9 +198,13 @@ class InstallationController extends \GO\Base\Controller\AbstractModelController
 		
 		$config = $installation->getConfig();
 		
-		echo "Disabling installation\n";
-		
-		$installation->setConfigVariable('enabled','0');
+		if(!empty($params['disable'])) {
+			echo "WARNING: Disabling installation\n";		
+			$installation->setConfigVariable('enabled','0');
+		}else
+		{
+			echo "WARNING: NOT disabling installation\n";		
+		}
 		
 		$fsFolder = new \GO\Base\Fs\Folder($config['file_storage_path']);
 		
