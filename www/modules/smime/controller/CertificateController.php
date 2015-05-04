@@ -44,6 +44,8 @@ class CertificateController extends \GO\Base\Controller\AbstractController {
 	public function actionVerify($params) {
 
 		$response['success'] = true;
+		
+		$params['email']= strtolower($params['email']);
 
 		//if file was already stored somewhere after decryption
 		if(!empty($params['cert_id'])){
@@ -83,13 +85,23 @@ class CertificateController extends \GO\Base\Controller\AbstractController {
 					$certData = $pubCertFile->getContents();
 
 					$arr = openssl_x509_parse($certData);
-
-					$senderEmail = !empty($arr['extensions']['subjectAltName']) ? $arr['extensions']['subjectAltName'] : $arr['subject']['emailAddress'];
-					$email = \GO\Base\Util\String::get_email_from_string($senderEmail);
+				
+					$senderEmailStr = !empty($arr['extensions']['subjectAltName']) ? $arr['extensions']['subjectAltName'] : $arr['subject']['emailAddress'];
+					
+					$senderEmails = explode(',', $senderEmailStr);
+					$emails = [];
+					
+					foreach($senderEmails as $emailRaw) {
+						$email = strtolower(\GO\Base\Util\String::get_email_from_string($emailRaw));
+						
+						if($email) {
+							$emails[] = $email;
+						}
+					}
 
 					$pubCertFile->delete();
 
-					$this->_savePublicCertificate($certData, $email);
+					$this->_savePublicCertificate($certData, $emails);
 				} else {					
 					throw new \Exception('Certificate appears to be valid but could not get certificate from signature. SSL Error: '.openssl_error_string());
 				}
@@ -101,12 +113,20 @@ class CertificateController extends \GO\Base\Controller\AbstractController {
 	
 		
 		if(!isset($arr) && isset($certData)){
-			$arr = openssl_x509_parse($certData);
+			$arr = openssl_x509_parse($certData);			
 
-			$senderEmail = !empty($arr['extensions']['subjectAltName']) ? $arr['extensions']['subjectAltName'] : $arr['subject']['emailAddress'];
-			$email = \GO\Base\Util\String::get_email_from_string($senderEmail);
-		}else if(empty($email)){
-			$email = 'unknown';
+			$senderEmailStr = !empty($arr['extensions']['subjectAltName']) ? $arr['extensions']['subjectAltName'] : $arr['subject']['emailAddress'];
+			$emails = [];
+
+				foreach($senderEmails as $emailRaw) {
+					$email = strtolower(\GO\Base\Util\String::get_email_from_string($emailRaw));
+
+					if($email) {
+						$emails[] = $email;
+					}
+				}
+		}else if(empty($emails)){
+			$emails = ['unknown'];
 		}
 
 		$response['html'] = '';
@@ -124,7 +144,7 @@ class CertificateController extends \GO\Base\Controller\AbstractController {
 				while ($msg = openssl_error_string())
 					$response['html'] .= $msg . "<br />\n";
 				$response['html'] .= '</p>';
-			} else if (strtolower($email) != strtolower($params['email'])) {
+			} else if (!in_array($params['email'], $emails)) {
 
 				$response['cls'] = 'smi-certemailmismatch';
 				$response['text'] = \GO::t('certEmailMismatch', 'smime');
@@ -141,7 +161,7 @@ class CertificateController extends \GO\Base\Controller\AbstractController {
 		if (!isset($params['account_id']) || $valid) {
 			$response['html'] .= '<table>';
 			$response['html'] .= '<tr><td width="100">' . \GO::t('name') . ':</td><td>' . $arr['name'] . '</td></tr>';
-			$response['html'] .= '<tr><td width="100">'.\GO::t('email','smime').':</td><td>' . $email . '</td></tr>';
+			$response['html'] .= '<tr><td width="100">'.\GO::t('email','smime').':</td><td>' . implode(', ', $emails) . '</td></tr>';
 			$response['html'] .= '<tr><td>'.\GO::t('hash','smime').':</td><td>' . $arr['hash'] . '</td></tr>';
 			$response['html'] .= '<tr><td>'.\GO::t('serial_number','smime').':</td><td>' . $arr['serialNumber'] . '</td></tr>';
 			$response['html'] .= '<tr><td>'.\GO::t('version','smime').':</td><td>' . $arr['version'] . '</td></tr>';
@@ -167,13 +187,17 @@ class CertificateController extends \GO\Base\Controller\AbstractController {
 		return $response;
 	}
 
-	private function _savePublicCertificate($certData, $email) {
+	private function _savePublicCertificate($certData, $emails) {
 
+		$findParams = \GO\Base\Db\FindParams::newInstance()->single();
+		$findParams->getCriteria()
+						->addInCondition('email', $emails)
+						->addCondition('user_id', \GO::user()->id);
 
-		$cert = \GO\Smime\Model\PublicCertificate::model()->findSingleByAttributes(array('email' => $email, 'user_id' => \GO::user()->id));
+		$cert = \GO\Smime\Model\PublicCertificate::model()->find($findParams);
 		if (!$cert) {
 			$cert = new \GO\Smime\Model\PublicCertificate();
-			$cert->email = $email;
+			$cert->email = $emails[0];
 			$cert->user_id = \GO::user()->id;
 		}
 		$cert->cert = $certData;
