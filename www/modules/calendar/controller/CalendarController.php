@@ -161,7 +161,7 @@ class CalendarController extends \GO\Base\Controller\AbstractModelController {
 		$response = array( 'success' => true );
 		$count = 0;
 		$failed=array();
-		if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
+		if (!isset($_FILES['ical_file']) || !file_exists($_FILES['ical_file']['tmp_name'][0])) {
 			throw new \Exception(\GO::t('noFileUploaded'));
 		}else {
 			$file = new File($_FILES['ical_file']['tmp_name'][0]);
