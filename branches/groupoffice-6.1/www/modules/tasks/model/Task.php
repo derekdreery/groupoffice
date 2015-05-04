@@ -270,13 +270,25 @@ class Task extends \GO\Base\Db\ActiveRecord {
 	
 	public function defaultAttributes() {
 		$settings = Settings::model()->getDefault(\GO::user());
+		$defaultTasklist = Tasklist::model()->findByPk($settings->default_tasklist_id);
+		if(empty($defaultTasklist)) {
+			$oldPermissions = \GO::setIgnoreAclPermissions(true);
+			$defaultTasklist = new Tasklist();
+			$defaultTasklist->name = \GO::user()->name;
+			$defaultTasklist->user_id = \GO::user()->id;
+			if($defaultTasklist->save()) {
+				$settings->default_tasklist_id=$defaultTasklist->id;
+				$settings->save();
+			}
+			\GO::setIgnoreAclPermissions($oldPermissions);
+		}
 		
 		$defaults = array(
 				'status' => Task::STATUS_NEEDS_ACTION,
 				//'remind' => $settings->remind,
 				'start_time'=> time(),
 				'due_time'=> time(),
-				'tasklist_id'=>$settings->default_tasklist_id,
+				'tasklist_id'=>$defaultTasklist->id,
 				//'reminder' =>$this->getDefaultReminder(time())
 		);
 		if($settings->remind)
