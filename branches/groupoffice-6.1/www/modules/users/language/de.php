@@ -138,3 +138,4 @@ $l['diskQuota'] = 'Festplatten-Kontingent';
 $l['spaceUsed'] = 'Davon verwendet';
 
 $l['noReminders']= 'Keine Erinnerungen für mich erstellen';
+$l['transferData'] = 'Übertragen';

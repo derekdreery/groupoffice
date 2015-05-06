@@ -196,7 +196,7 @@ $l["searchCC"]='Příjemce (CC)';
 $l["youHaveNewMails"]= 'Máte {new} e-mail(y/ů)';
 $l["replaceEmailText"]='Tento kontakt má již 3 e-mailové adresy ve svém profilu. Můžete nahradit jednu z nich kliknutím na níže uvedené e-mailové adresy.';
 $l["skipUnknownRecipientsAction"]='Přístě nezobrazovat toto okno';
-$l["skipUnknownRecipients"]='Nezobrazovat okno o neznámém příjemci po odeslání';
+$l["skipUnknownRecipients"]='Nezobrazovat okno pro přidání neznámého příjemce do adresáře po odeslání e-mailu';
 $l["alwaysRequestNotification"]='Vždy posílat výzvu o přečtení';
 $l["alwaysRespondToNotifications"]='Vždy odpovídat na výzvu o přečtení';
 $l["icalendarUpdateEvent"]='Upravit událost';
@@ -283,3 +283,23 @@ $l['linkMustHavePermissionToWrite'] = 'Nemáte oprávnění ZÁPISU pro tento ob
 
 $l['sortAddressesByMailTime'] = 'Řadit adresy příjemců podle času odeslání poslední zprávy (vyžaduje modul Adresář)';
 $l['permissionDelegated'] = 'Pouze pro čtení a delegování';
+
+$l['label'] = 'Štítek';
+$l['labels'] = 'Štítky';
+$l['labelsLimit'] = 'Dosažen limit pro štítky. Maximální počet štítků je %d';
+
+$l['thisIsSpam1'] = 'Tato zpráva byla označena jako spam. Klikněte';
+$l['thisIsSpam2'] = 'zde';
+$l['thisIsSpam3'] = 'pokud si myslíte, že tato zpráva není spam.';
+
+$l['thisIsNotSpam1'] = 'Klikněte';
+$l['thisIsNotSpam2'] = 'zde';
+$l['thisIsNotSpam3'] = 'pokud si myslíte, že tato zpráva je spam.';
+
+$l['moveToSpamTitle'] = 'Přesunout do složky Nevyžádaná pošta ?';
+$l['moveToSpamMsg'] = 'Jste si jisti, že chcete označit tuto zprávu jako spam ?';
+$l['moveToInboxTitle'] = 'Přesunout ze složky Nevyžádaná pošta ?';
+$l['moveToInboxMsg'] = 'Jste si jisti, že chcete odstranit spam značku a přesunout tuto zprávu do vaší e-mailové schránky ?';
+
+$l['showCcByDefault']='Zobrazit CC pole (kopie) ve výchozím nastavení';
+$l['showBccByDefault']='Zobrazit BCC pole (skrytá kopie) ve výchozím nastavení';
