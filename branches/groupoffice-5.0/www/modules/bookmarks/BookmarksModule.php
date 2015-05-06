@@ -12,7 +12,12 @@ class GO_Bookmarks_BookmarksModule extends GO_Base_Module{
 	public static function head(){
 		echo '<style>';
 
-		$findParams = GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('behave_as_module', 1));
+		$findParams = GO_Base_Db_FindParams::newInstance()
+			->joinRelation('category')
+			->criteria(GO_Base_Db_FindCriteria::newInstance()
+				->addCondition('behave_as_module', 1)
+				->addCondition('show_in_startmenu', 1,'=','category',false)
+			);
 
 		$stmt = GO_Bookmarks_Model_Bookmark::model()->find($findParams);
 		while ($bookmark = $stmt->fetch()) {			

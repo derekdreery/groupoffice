@@ -21,3 +21,4 @@ $l['name']='Bookmarks';
 $l['description']='Website description.';
 $l['general']='General';
 $l['googleDescription']="Search the web";
+$l['showCategoryInStartMenu'] = 'Group bookmarks in main start menu (Browser reload required)';
