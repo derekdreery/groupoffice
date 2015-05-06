@@ -902,10 +902,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		{
 			state = Ext.state.Manager.get(this.gridPanel.id);
 		}
-		if (store.reader.jsonData.disk_usage!=='undifined' && store.reader.jsonData.disk_quota!=='undifined') {
+
+		if (store.reader.jsonData.disk_usage!==null && store.reader.jsonData.disk_quota!==null) {
 			GO.settings.disk_usage = store.reader.jsonData.disk_usage;
 			GO.settings.disk_quota = store.reader.jsonData.disk_quota;
-			
+		}
+		if(typeof GO.settings.disk_usage!='undefined' && typeof GO.settings.disk_quota!='undefined') {
+
 			//Tell plupload the maximun filesize is the disk quota
 			var remainingDiskSpace = Math.ceil((GO.settings.disk_quota-GO.settings.disk_usage)*1024*1024);
 			this.uploadItem.lowerMaxFileSize(remainingDiskSpace);
@@ -925,8 +928,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			else if(quotaPercentage*100 > 75)
 				this.quotaBar.addClass('warning');
 
-		}
-
+			}
+		
 		//state.sort=store.sortInfo;
 
 		if(state){

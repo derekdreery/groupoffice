@@ -321,7 +321,7 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
 			fileSize += files[i].size;
 		}
 		
-		// auto start after uploading files
+		// auto start after adding files
 		setTimeout(function(){
 			if(fileSize < max) {
 				uploader.start();
@@ -355,7 +355,7 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
     },
     QueueChanged: function(uploader) {
 		uploader.max_file_size = this.max_file_size;
-		var fileSize = 0;
+		var fileSize = 0;	
 		for(var i=0; i<uploader.files.length; i++) {
 			
 			fileSize += uploader.files[i].size;

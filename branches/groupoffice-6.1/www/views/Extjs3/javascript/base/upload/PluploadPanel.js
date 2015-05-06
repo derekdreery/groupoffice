@@ -4,8 +4,7 @@ GO.base.upload.PluploadPanel = function(config){
 	
 	config = config || {};
 	
-	var maxFileSize = Math.floor(GO.settings.config.max_file_size/1048576)+'mb';
-	
+	var maxFileSize = Math.floor(GO.settings.config.max_file_size/1024/1024)+'mb';
 	Ext.applyIf(config, {
 		url: GO.url('core/plupload'),
 		//the only required parameter
