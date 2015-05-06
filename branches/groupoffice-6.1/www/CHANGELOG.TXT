@@ -1,3 +1,4 @@
+- Added default color set to GO.form.ColorField, removed custom colors from calendar ColorPickerDialog
 - Email invites: events can always be updated from an email and a link was added to open the event
 - Sieve is working without SSL domein check in PHP 5.6
 - Add random $salt to user password for PHP 5.6
