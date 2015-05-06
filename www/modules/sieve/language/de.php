@@ -129,3 +129,6 @@ $l['scheduleText']='Hier können Sie festlegen, in welchem Zeitraum die Abwesenh
 $l['messageText']='Tragen Sie hier Ihre Nachricht ein.';
 $l['aliassesText']='Tragen Sie alle E-Mail-Aliase ein, für die diese Nachricht gültig ist. Sollten Sie mehrere Aliase besitzen, bitte mit Komma (,) getrennt eintragen.';
 $l['activateText']='Aktivieren Sie diese Filterregel durch Auswahl der Checkbox.';
+
+$l['bodycontainsnot']= 'Body enthält nicht';
+$l['bodycontains']= 'Body enthält';

@@ -200,7 +200,7 @@ $l['iCalendar_update_old']='Diese Nachricht enthält einen Termin, der bereits v
 $l['iCalendar_event_cancelled']='Diese Nachricht enthält die Absage eines Termins.';
 $l['iCalendar_event_invitation_declined']='Diese Nachricht enthält einen Termin den sie abgelehnt haben.';
 $l["addUnknownSenders"]='Unbekannte Absender hinzufügen';
-$l["addUnknownSendersText"]='Sie fügen die ausgewählten Absenderadressen einer Adressliste hinzu. Zuvor müssen die gewählten Absender einem Group-Office-Adressbuch hinzugefügt werden. Klicken Sie auf einen Namen, wenn Sie die Person hinzufügen möchten oder schließen Sie dieses Fenster.';
+$l["addUnknownSendersText"]='Sie fügen die ausgewählten Absenderadressen einer Adressliste hinzu. Zuvor müssen die gewählten Absender einem RuhrMAIL-Adressbuch hinzugefügt werden. Klicken Sie auf einen Namen, wenn Sie die Person hinzufügen möchten oder schließen Sie dieses Fenster.';
 $l["emailFiles"]='Dateien versenden';
 $l["moveOldMails"]= 'Alte E-Mails verschieben';
 $l["moveOldMailsInstructions"]= 'Wählen Sie ein Datum. Wenn Sie anschließend OK klicken, werden alle E-Mails im gewählten Ordner vor diesem Datum in den gewählten Zielordner verschoben.';
@@ -211,7 +211,7 @@ $l["deletingEmails"]= 'Lösche E-Mails...';
 $l["everythingBefore"]= 'Alle E-Mails vor';
 $l["alsoChildren"]= 'Wende dies auch auf die E-Mails in den Unterordnern an.';
 $l['autolinked']='Diese Nachricht wurde automatisch nach %s verlinkt';
-$l['defaultProgramInstructions']='<p>Um {product_name} als Ihr Standard E-Mail-Programm zu wählen, lesen Sie bitte <a class="normal-link" href="http://www.{product_name}.com/wiki/E-mail#Set_{product_name}_as_your_default_e-mail_client" target="_blank">diese Anleitung</a>.</p><p>Wenn Sie Windows verwenden, müssen Sie dann noch <a class="normal-link" href="{url}">diese Regdatei</a> herunterladen und ausführen/importieren.</p>';
+$l['defaultProgramInstructions']='<p>Um {product_name} als Ihr Standard E-Mail-Programm zu wählen, lesen Sie bitte <a class="normal-link" href="https://gw.ruhrmail.de/default_e-mail_client.html" target="_blank">diese Anleitung</a>.</p><p>Wenn Sie Windows verwenden, müssen Sie dann noch <a class="normal-link" href="{url}">diese Regdatei</a> herunterladen und ausführen/importieren.</p>';
 $l['xssDetected']="Diese Nachricht könnte bösartigen Inhalt enthalten. Klicken Sie hier, um dennoch die gefilterte Nachricht anzusehen.";
 $l['xssMessageHidden']='Aus Sicherheitsgründen wurde die Nachricht verborgen';
 $l['failedRecipients']='Fehler beim Senden an';
