@@ -1,3 +1,7 @@
+- Use putenv to fix charset issues in documents module
+- Add config.php option "zpush_always_send_attachments" for testing: http://talk.sonymobile.com/t5/Xperia-Z1-Compact/Z1-Compact-Problem-With-EAS/m-p/866755#11220
+- Support multiple email aliases in SMIME verification
+- Sort on manager in leave days module
 - Added default color set to GO.form.ColorField, removed custom colors from calendar ColorPickerDialog
 - Email invites: events can always be updated from an email and a link was added to open the event
 - Sieve is working without SSL domein check in PHP 5.6
