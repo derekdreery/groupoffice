@@ -1,3 +1,6 @@
+
+- Bookmarks: Categories can now become start menu items
+
 29-04-2015 5.0.99
 - Don't stop importing on large vevent objects
 - Zpushadmin: Fixed notice error with defining version file multiple times
