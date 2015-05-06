@@ -973,6 +973,16 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 
 		this.parentID = store.reader.jsonData.parent_id;
+		var folderId = store.baseParams.folder_id;
+		
+		if(this.parentID && !this.treePanel.getNodeById(folderId)) {
+			this.treePanel.getLoader().on('load', function(){
+				this.upButton.setDisabled((!this.parentID || !this.treePanel.getNodeById(this.parentID)));
+			}, this);
+			this.treePanel.setExpandFolderId(folderId);
+			this.treePanel.getRootNode().reload();
+		}
+		
 		if(!this.parentID || !this.treePanel.getNodeById(this.parentID))
 		{
 			this.upButton.setDisabled(true);
