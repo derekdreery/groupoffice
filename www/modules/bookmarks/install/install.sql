@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `bm_categories` (
   `user_id` int(11) NOT NULL,
   `acl_id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
+	`show_in_startmenu` BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
