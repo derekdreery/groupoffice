@@ -35,16 +35,7 @@ GO.email.LabelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
                     fieldLabel: GO.lang.color,
                     width: 100,
                     value: "7A7AFF",
-                    name: 'color',
-                    colors: [
-                        '7A7AFF',
-                        '59BD59',
-                        'FFBD59',
-                        'FF5959',
-                        'BD7ABD',
-                        'FF0000',
-                        'FFFFFF'
-                    ]
+                    name: 'color'
                 })
             ]
         });
