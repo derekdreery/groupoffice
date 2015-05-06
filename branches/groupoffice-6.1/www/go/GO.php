@@ -623,6 +623,7 @@ class GO{
 		//set local to utf-8 so functions will behave consistently
 		if ( !empty(\GO::config()->locale_all) ){
 			setlocale(LC_CTYPE, \GO::config()->locale_all);
+			putenv('LC_ALL='.\GO::config()->locale_all);
 		}else{
 			//for escape shell arg
 			if(!isset(\GO::session()->values['locale_all'])){
@@ -647,7 +648,7 @@ class GO{
 			}
 //			exit(\GO::session()->values['locale_all']);
 			setlocale(LC_CTYPE, \GO::session()->values['locale_all']);
-
+			putenv('LC_ALL='.\GO::session()->values['locale_all']);
 		}
 		
 		
