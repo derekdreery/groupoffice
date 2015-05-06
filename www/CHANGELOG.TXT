@@ -1,3 +1,4 @@
+- Files tree will expend when a favorite folder item is selected to enersable Up button
 - Updated Czech and German translations
 - Use putenv to fix charset issues in documents module
 - Add config.php option "zpush_always_send_attachments" for testing: http://talk.sonymobile.com/t5/Xperia-Z1-Compact/Z1-Compact-Problem-With-EAS/m-p/866755#11220
