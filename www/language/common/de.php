@@ -75,7 +75,7 @@ $l["attributeGreater"]="Feld '%s' muß größer als '%s' sein";
 $l["attributeGreaterOrEqual"]="Feld '%s' muß größer oder gleich '%s' sein";
 $l["failedImportItems"]="Import der Einträge fehlgeschlagen";
 $l["birthdayFormatMustBe"]="Das Geburtstagsfeld muß im folgenden Format sein";
-
+$l["updateWithMatchingAttributes"]='Update Artikel mit den folgenden Attributen';
 
 $l["exportHiddenColumns"]='Auch versteckte Spalten exportieren';
 $l["searchQuery"]='Suchbegriff';
@@ -563,7 +563,7 @@ $l['queued']="Anstehend";
 $l['uploadQueueEmpty']="Warteschlange für Uploads ist leer";
 $l['logFiles']='Logdateien';
 $l['exportDialog']='Export Dialog';
-$l['cliOnly']= "Das Skript kann nur durch das Group-Office Command Line Interface (CLI) ausgeführt werden.";
+$l['cliOnly']= "Das Skript kann nur durch das RuhrMAIL Command Line Interface (CLI) ausgeführt werden.";
 $l['unnamed']='Unbenannt';
 
 $l['month_times'][1]='am Ersten';
@@ -668,5 +668,3 @@ $l['manageSavedExports']= 'Gespeicherte Exporte verwalten';
 $l['noSavedExports']= 'Keine gespeicherten Exporte vorhanden';
 $l['overwriteAcl']= 'Standardberechtigungen für dieses Objekt überschreiben (Zum Aktivieren auf Übernehmen klicken)';
 $l['cantDeleteDefault']= "Das Standardobjekt kann nicht gelöscht werden.";
-
-$l['updateWithMatchingAttributes'] = 'Aktualisieren Sie die Objekte (statt neue anzulegen) mit den folgenden passenden Eigenschaften';
