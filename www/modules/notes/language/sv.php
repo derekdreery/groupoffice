@@ -1,6 +1,5 @@
 <?php
 
-
 $l['name']= 'Anteckningar';
 $l['description']= 'Modul för enklare anteckningar.';
 $l['general'] = 'Allmänt';
