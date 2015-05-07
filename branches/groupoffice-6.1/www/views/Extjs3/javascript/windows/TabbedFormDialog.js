@@ -63,7 +63,10 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	loadAction : 'load',
 	
 	forceTabs : false,
-
+	/**
+	 * When set to false the emptyText value will not be posted to the server
+	 */
+	submitEmptyText: true,
 	/**
 	 * This option can be set to create a helplink in the toolbar of this dialog.
 	 * When you want to enable this then pass a string of the correct helplink id.
@@ -560,6 +563,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			{
 				url:GO.url(this.formControllerUrl+'/'+this.submitAction),
 				params: params,
+				submitEmptyText: this.submitEmptyText,
 				waitMsg:GO.lang['waitMsgSave'],
 				success:function(form, action){		
 					this.getFooterToolbar().setDisabled(false);
