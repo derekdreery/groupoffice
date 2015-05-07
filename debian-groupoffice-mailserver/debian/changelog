@@ -2,4 +2,4 @@ groupoffice-mailserver (6.1.32) sixone; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Thu, 7 May 2015 16:49:49 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Thu, 7 May 2015 16:53:17 +0200
