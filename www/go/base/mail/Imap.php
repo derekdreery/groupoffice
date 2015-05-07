@@ -105,14 +105,28 @@ class Imap extends ImapBodyStruct {
 		$this->username=$username;
 		$this->password=$password;
 
-		$server = $this->ssl ? 'ssl://'.$this->server : $this->server;
+//		$server = $this->ssl ? 'ssl://'.$this->server : $this->server;
 
 
-		$this->handle = fsockopen($server, $this->port, $errorno, $errorstr, 10);
+//		$this->handle = fsockopen($server, $this->port, $errorno, $errorstr, 10);
+//		if (!is_resource($this->handle)) {
+//			throw new \Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
+//		}
+		
+		$streamContext = stream_context_create(['ssl' => [
+				"verify_peer"=>false,
+				"verify_peer_name"=>false
+		]]);
+
+		$errorno = null;
+		$errorstr = null;
+		$remote = $this->ssl ? 'ssl://' : '';			
+		$remote .=  $this->server.":".$this->port;
+
+		$this->handle = @stream_socket_client($remote, $errorno, $errorstr, 10, STREAM_CLIENT_CONNECT, $streamContext);
 		if (!is_resource($this->handle)) {
 			throw new \Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
 		}
-
 
 		$authed = $this->authenticate($username, $password);
 
