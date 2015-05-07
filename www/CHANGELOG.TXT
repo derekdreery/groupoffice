@@ -1,3 +1,5 @@
+- Fixed short array syntax problem.
+
 07-05-2015 6.1.31
 - Added z-push config constant for modules/z-push/config.php define("BACKEND_GO_DEFAULT_BODY_PREFENCE", SYNC_BODYPREFERENCE_PLAIN); to solve blackbertt password problem:
 	https://forums.zarafa.com/showthread.php?10884-BlackBerry-Passport-does-not-get-HTML-email

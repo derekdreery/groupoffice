@@ -113,10 +113,10 @@ class Imap extends ImapBodyStruct {
 //			throw new \Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
 //		}
 		
-		$streamContext = stream_context_create(['ssl' => [
+		$streamContext = stream_context_create(array('ssl' => array(
 				"verify_peer"=>false,
 				"verify_peer_name"=>false
-		]]);
+		)));
 
 		$errorno = null;
 		$errorstr = null;
