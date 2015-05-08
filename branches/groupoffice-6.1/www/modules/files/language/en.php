@@ -140,3 +140,5 @@ $l['deleteExpiredDescription']='Delete download link files that are no longer va
 
 $l['deleteWhenExpired'] = 'Automatically delete file when download link expires';
 $l['automaticallyDeleted'] = 'File will be automatically deleted when its download link expires';
+
+$l['downloadSelected'] = 'Download selected';

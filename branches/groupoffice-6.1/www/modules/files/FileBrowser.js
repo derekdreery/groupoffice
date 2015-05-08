@@ -345,6 +345,10 @@ GO.files.FileBrowser = function(config){
 		this.bookmarksGrid.store.load();
 	}, this);
 
+	this.filesContextMenu.on('download_selected', function(menu, records, clickedAt){
+		this.onDownloadSelected(records);
+	}, this);
+
 	this.gridPanel.on('rowcontextmenu', this.onGridRowContextMenu, this);
 
 
@@ -880,6 +884,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
             
             if (!GO.util.empty(this.filesContextMenu.emailFilesButton))
                 this.filesContextMenu.emailFilesButton.setDisabled(!enable);
+							
+						this.filesContextMenu.downloadSelectedFilesButton.setDisabled(!enable);
         },
 
 	saveCMState: function(state) {
@@ -1295,6 +1301,55 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				Ext.MessageBox.alert('', GO.files.lang['notInSearchMode']);
 		}
 
+	},
+	
+	onDownloadSelected : function(records, filename, utf8)	{
+
+		var params = {
+			sources: []
+		};
+
+		for(var i=0;i<records.length;i++){
+			params.sources.push(records[i].data.path);
+		}
+
+		if(!filename || filename == ''){
+			
+			this.compressRecords = records;
+
+			if(!this.compressDialog){
+				this.compressDialog = new GO.files.CompressDialog ({
+					scope:this,
+					handler:function(win, filename, utf8){
+						this.onDownloadSelected(this.compressRecords, filename, utf8);
+					}
+				});
+			}
+
+			this.compressDialog.show();
+			
+		} else {
+			
+			params.archive_name=filename;
+			params.utf8=utf8 ? '1' : '0';
+			params.sources=Ext.encode(params.sources);
+			
+			GO.request({
+				timeout:300000,
+				maskEl:this.getEl(),
+				url:'files/folder/compressAndDownload',
+				params:params,
+				success:function(response, options, result){
+					
+					if(!GO.util.empty(result.archive)){
+						window.open(GO.url("core/downloadTempFile",{path:result.archive}));
+					} else {
+						GO.message.alert('No archive build','error');
+					}
+
+				}
+			});
+		}
 	},
 
 	getSelectedTreeRecords : function(){
