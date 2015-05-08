@@ -141,3 +141,5 @@ $l['deleteExpiredDescription']='Verwijder downloadlinkbestanden die niet meer ge
 
 $l['deleteWhenExpired'] = 'Bestand automatisch verwijderen wanneer de downloadlink verloopt';
 $l['automaticallyDeleted'] = 'Bestand wordt automatisch verwijderd wanneer zijn downloadlink verloopt';
+
+$l['downloadSelected'] = 'Download selectie';

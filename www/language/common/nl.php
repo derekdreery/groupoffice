@@ -659,3 +659,5 @@ $l['overwriteAcl'] = 'Overschrijf standaard toegangsrechten voor dit item (Klik 
 $l['cantDeleteDefault'] = "Standaard item kan niet worden verwijderd.";
 
 $l['updateWithMatchingAttributes'] = 'Update items (i.p.v. nieuwe items creëren) op basis van de volgende matchende attributen';
+
+$l['zipFilesizeTooBig'] = 'De totale grootte van de bestanden is te hoog. (Het maximum dat is toegestaan is: %s)';
