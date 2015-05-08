@@ -1190,6 +1190,77 @@ class FolderController extends \GO\Base\Controller\AbstractModelController {
 
 		return $response;
 	}
+	
+	/**
+	 * Compress the selected files and return as download
+	 * 
+	 * @param array $params
+	 * @return boolean
+	 * @throws \Exception
+	 */
+	protected function actionCompressAndDownload($params) {
+
+		if(!isset($params['archive_name']))
+			Throw new \Exception('No name for the archive given');
+		
+		ini_set('max_execution_time', 600);
+		ini_set('memory_limit', '512M');
+		
+		$sources = json_decode($params['sources'], true);
+		
+		$workingFolder = false;
+		
+		// Read the sources and create objects from them
+		$sourceObjects = array();
+		
+		// The total filesize in bytes
+		$totalFileSize = 0;
+		
+		// The maximum filesize that is allowed to zip (Default is 256MB)
+		$maxFilesize = GO::config()->zip_max_file_size;
+		
+		for($i=0;$i<count($sources);$i++){
+			$path = \GO::config()->file_storage_path.$sources[$i];
+			
+			$sourceFile = \GO\Base\Fs\Base::createFromPath($path);
+			
+			// Increase the total filesize
+			$totalFileSize += $sourceFile->size();
+			
+			if($totalFileSize >= $maxFilesize){
+				throw new \Exception(sprintf(
+					\GO::t('zipFilesizeTooBig','base'), 
+					\GO\Base\Util\Number::formatSize($maxFilesize,2)
+				));
+			}
+			
+			// Set the workingFolder
+			if(!$workingFolder){
+				$workingFolder = $sourceFile->parent();
+			}
+			
+			$sourceObjects[]= $sourceFile;
+		}
+		
+		// Create the zipped temp file object
+		$archiveFile = \GO\Base\Fs\File::tempFile($params['archive_name'],'zip');
+		if($archiveFile->exists())
+			throw new \Exception(sprintf(\GO::t('filenameExists','files'), $archiveFile->stripFileStoragePath()));
+		
+		// Create the zipfile
+		if(\GO\Base\Fs\Zip::create($archiveFile, $workingFolder, $sourceObjects)){
+			
+			// Output download headers
+//			\GO\Base\Util\Http::outputDownloadHeaders($archiveFile,false,true);
+//			$archiveFile->output();
+			$response['archive'] = $archiveFile->stripTempPath();
+			$response['success'] = true;
+		} else {
+			throw new \Exception("ZIP creation failed");
+		}
+		
+		return $response;
+	}
 
 
 	protected function actionDecompress($params){

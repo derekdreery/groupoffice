@@ -261,6 +261,19 @@ GO.files.FilesContextMenu = function(config)
 		});
 		config['items'].push(this.emailFilesButton);
 	}
+	
+	// Download selected (As Zip)
+	this.downloadSelectedFilesButton = new Ext.menu.Item({
+			iconCls: 'filetype-zip',
+			text: GO.files.lang.downloadSelected,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.fireEvent('download_selected', this, this.records, this.clickedAt);
+			},
+			scope: this
+		});
+		config['items'].push(this.downloadSelectedFilesButton);
+	
 
 	GO.files.FilesContextMenu.superclass.constructor.call(this, config);
 
@@ -275,7 +288,8 @@ GO.files.FilesContextMenu = function(config)
 		'decompress' : true,
 		'download_link' : true,
 		'email_files' : true,
-		'addBookmark' : true
+		'addBookmark' : true,
+		'download_selected': true
 
 	});
 

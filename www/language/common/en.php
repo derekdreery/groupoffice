@@ -705,3 +705,5 @@ $l['overwriteAcl'] = 'Overwrite default permissions for this item (click apply t
 $l['cantDeleteDefault'] = "Can't delete the default item.";
 
 $l['updateWithMatchingAttributes'] = 'Update items (instead of create new items) with the following matching attributes';
+
+$l['zipFilesizeTooBig'] = 'The total size of the files that are selected to be zipped is too big. (Only %s is allowed.)';

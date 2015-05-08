@@ -1244,7 +1244,14 @@ class Config {
 	 */
 	public $files_show_projects = true;
 	
-
+	/**
+	 * The maximum filesize of files that may be zipped.
+	 * Defaults to 256MB
+	 * 
+	 * @var int 
+	 */
+	public $zip_max_file_size = 256000000;
+	
 	/**
 	 * Constructor. Initialises all public variables.
 	 *
