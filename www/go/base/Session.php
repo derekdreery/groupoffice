@@ -272,7 +272,7 @@ class Session extends Observable{
 			$this->_user=$user;
 			$this->setCurrentUser($user->id);
 			
-			\GO::language()->setLanguage($user->language);
+			
 
 			if($countLogin){
 				$user->lastlogin=time();
@@ -306,8 +306,7 @@ class Session extends Observable{
 			
 			\GO::session()->values['countLogin']=$countLogin;
 			
-			
-			date_default_timezone_set($user->timezone);
+
 			
 			return $user;
 		}		
@@ -380,6 +379,10 @@ class Session extends Observable{
 		
 		if(!\GO::user())
 			throw new \Exception("Could not set user with id ".$user_id." in Session::setCurrentUser()!");
+		
+		date_default_timezone_set(\GO::user()->timezone);
+		
+		\GO::language()->setLanguage(\GO::user()->language);
 		
 		//for logging
 		\GO::session()->values['username']=\GO::user()->username;
