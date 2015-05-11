@@ -1,3 +1,6 @@
+- Updated German translation
+- Set language and timezone when user logs in with dav
+- Various caldav related fixes
 - Billing: Fixed problem with "Enter" in the billing items description field to start a new line.
 - Added "Download selected" option in the context menu of the file manager. (Creates a zip of the selected files and presents the download dialog.)
 - Added a "Limit"(Maximum size) option for the zipped files file size. ($config['zip_max_file_size']  = 256000000;)
