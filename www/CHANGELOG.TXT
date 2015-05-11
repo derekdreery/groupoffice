@@ -1,3 +1,5 @@
+- Email em_labels table engine was changed to InnoDB
+- Projects2 Expense budget has more field and dialog is updated
 - Projects2: unset invoice_number when contract is duplicated
 - Process SMIME handlers on reply too but hide encrypted body.
 - Updated German translation
