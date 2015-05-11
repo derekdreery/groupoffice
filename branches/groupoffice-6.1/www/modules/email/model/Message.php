@@ -402,6 +402,9 @@ abstract class Message extends \GO\Base\Model {
 		
 		$response['blocked_images']=0;
 		$response['xssDetected']=false;
+		
+		
+		$this->fireEvent('tooutputarray', array(&$response, $this));
 
 		return $response;
 	}

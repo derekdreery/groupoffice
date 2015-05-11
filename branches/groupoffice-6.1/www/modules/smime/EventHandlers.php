@@ -74,7 +74,7 @@ class EventHandlers {
 		}
 	}
 
-	public static function viewMessage(\GO\Email\Controller\MessageController $controller, array &$response, \GO\Email\Model\ImapMessage $imapMessage, \GO\Email\Model\Account $account, $params) {
+	public static function toOutputArray(array &$response, \GO\Email\Model\ImapMessage $imapMessage) {
 		
 		if($imapMessage->content_type == 'application/x-pkcs7-mime')
 			$imapMessage->content_type = 'application/pkcs7-mime';
@@ -123,7 +123,7 @@ class EventHandlers {
 
 				GO::debug("Message is encrypted");
 
-				$cert = Model\Certificate::model()->findByPk($account->id);
+				$cert = Model\Certificate::model()->findByPk($imapMessage->account->id);
 
 				if (!$cert || empty($cert->cert)) {					
 					GO::debug('SMIME: No private key at all found for this account');
@@ -131,10 +131,10 @@ class EventHandlers {
 					return false;
 				}
 
-				if (isset($params['password']))
-					GO::session()->values['smime']['passwords'][$account->id] = $params['password'];
+				if (isset($_REQUEST['password']))
+					GO::session()->values['smime']['passwords'][$imapMessage->account->id] = $_REQUEST['password'];
 
-				if (!isset(GO::session()->values['smime']['passwords'][$account->id])) {
+				if (!isset(GO::session()->values['smime']['passwords'][$imapMessage->account->id])) {
 					$response['askPassword'] = true;
 					GO::debug("Need to ask for password");
 					return false;
@@ -181,7 +181,7 @@ class EventHandlers {
 				if(!$imapMessage->saveToFile($infile->path()))
 					throw new \Exception("Could not save IMAP message to file for decryption");
 				
-				$password = GO::session()->values['smime']['passwords'][$account->id];
+				$password = GO::session()->values['smime']['passwords'][$imapMessage->account->id];
 				openssl_pkcs12_read($cert->cert, $certs, $password);
 
 				if (empty($certs)) {

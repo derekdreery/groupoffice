@@ -1,3 +1,4 @@
+- Process SMIME handlers on reply too but hide encrypted body.
 - Updated German translation
 - Set language and timezone when user logs in with dav
 - Various caldav related fixes
