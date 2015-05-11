@@ -263,4 +263,4 @@ $l['allTogetherForParticipants']= 'Alle Teilnehmer';
 $l['allTogetherForResources']= 'Alle Ressourcen';
 
 $l['resourceUsedIn']= 'Benutzte Ressourcen in';
-$l['tooltip']= 'Als ICS exportieren';
+$l['exportAsIcs'] ='Als ICS exportieren';

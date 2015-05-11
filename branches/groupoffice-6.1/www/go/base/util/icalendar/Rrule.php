@@ -365,6 +365,11 @@ class Rrule extends \GO\Base\Util\Date\RecurrencePattern
 			$this->_byday=array($this->_days[gmdate('w', $this->_eventstarttime)]);
 		
 		
+		if($this->_freq == 'YEARLY' && (!empty($this->_bymonth) || !empty($this->_bymonth))) {
+			throw new \Exception("Sorry, this recurrence pattern is not supported by Group-Office");
+		}
+		
+		
 		
 		//figure out end time of event
 		if($this->_count>0 && empty($this->_until)){
