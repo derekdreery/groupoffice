@@ -1,3 +1,4 @@
+- Projects2: unset invoice_number when contract is duplicated
 - Process SMIME handlers on reply too but hide encrypted body.
 - Updated German translation
 - Set language and timezone when user logs in with dav
