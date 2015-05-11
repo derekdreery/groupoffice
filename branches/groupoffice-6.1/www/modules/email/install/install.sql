@@ -255,4 +255,4 @@ CREATE TABLE IF NOT EXISTS `em_labels` (
   `account_id` int(11) NOT NULL,
   `default` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

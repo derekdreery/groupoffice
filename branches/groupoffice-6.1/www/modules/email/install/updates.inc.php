@@ -102,3 +102,5 @@ $updates['201403100000'][]="CREATE TABLE IF NOT EXISTS `em_labels` (
 
 $updates["201410280000"][]="ALTER TABLE `em_labels` CHANGE `user_id` `account_id` INT( 11 ) NOT NULL";
 $updates['201504010834'][]="ALTER TABLE `em_accounts` ADD INDEX(`acl_id`);";
+
+$updates['201505111534'][]="ALTER TABLE `em_labels` ENGINE = InnoDB;";
