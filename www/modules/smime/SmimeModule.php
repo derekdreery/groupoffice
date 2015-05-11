@@ -11,7 +11,8 @@ class SmimeModule extends \GO\Base\Module{
 		
 		$messageController = new \GO\Email\Controller\MessageController();
 		$messageController->addListener('beforesend', "GO\Smime\EventHandlers", "beforeSend");
-		$messageController->addListener('view', "GO\Smime\EventHandlers", "viewMessage");
+		
+		\GO\Email\Model\ImapMessage::model()->addListener('tooutputarray', "GO\Smime\EventHandlers", "toOutputArray");
 		
 		$aliasController = new \GO\Email\Controller\AliasController();
 		$aliasController->addListener('store', "GO\Smime\EventHandlers", "aliasesStore");

@@ -1045,6 +1045,10 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 				$message->createTempFilesForAttachments(true);
 
 			$oldMessage = $message->toOutputArray(true,false,true);
+			
+			if(!empty($oldMessage['smime_encrypted'])) {
+				$oldMessage['htmlbody'] = '***';
+			}
 
 			$response['data']['htmlbody'] .= '<br /><br />' .
 							htmlspecialchars($replyText, ENT_QUOTES, 'UTF-8') .
@@ -1056,7 +1060,14 @@ class MessageController extends \GO\Base\Controller\AbstractController {
 
 			$response['data']['inlineAttachments'] = array_merge($response['data']['inlineAttachments'], $oldMessage['inlineAttachments']);
 		} else {
-			$response['data']['plainbody'] .= "\n\n" . $replyText . "\n" . $this->_quoteText($message->getPlainBody());
+			
+			$oldMessage = $message->toOutputArray(false,false,true);
+			
+			if(!empty($oldMessage['smime_encrypted'])) {
+				$oldMessage['plainbody'] = '***';
+			}
+			
+			$response['data']['plainbody'] .= "\n\n" . $replyText . "\n" . $this->_quoteText($oldMessage['plainbody']);
 		}
 
 		//will be set at send action
