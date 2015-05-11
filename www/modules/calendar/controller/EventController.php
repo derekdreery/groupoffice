@@ -1011,8 +1011,15 @@ class EventController extends \GO\Base\Controller\AbstractModelController {
 			$tasks = \GO\Tasks\Model\Task::model()->find($taskFindParams);
 
 			while($task = $tasks->fetch()){
-
-				$startTime = date('Y-m-d',$task->start_time).' 00:00';
+				
+				// If the start_time is empty, then get the due_time as start time.
+				// This displays the task only on the due_date
+				if(empty($task->start_time)){
+					$startTime = date('Y-m-d',$task->due_time).' 00:00';
+				} else {
+					$startTime = date('Y-m-d',$task->start_time).' 00:00';
+				}
+					
 				$endTime = date('Y-m-d',$task->due_time).' 23:59';
 				
 				if(\GO::config()->calendar_tasklist_show==1) {
