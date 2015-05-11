@@ -28,8 +28,10 @@ class FunctionField extends AbstractCustomfieldtype {
 			$f = preg_replace('/\{[^}]*\}/', '0',$f);
 
 			eval("\$result_string=" . $f . ";");
+			
+//			\GO::debug("Function ($column): ".$this->field->function.' => '.$f.' = '.$result_string);
 		}
-		\GO::debug("Function ($column): ".$this->field->function.' => '.$f.' = '.$result_string);
+		
 
 		$attributes[$column] = \GO\Base\Util\Number::localize($result_string);
 		return $attributes[$column];
