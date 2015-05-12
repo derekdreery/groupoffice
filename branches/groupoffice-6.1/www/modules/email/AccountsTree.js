@@ -598,7 +598,8 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 			srcMessages.push({
 				accountId :e.data.selections[i].data.account_id,
 				mailboxPath : e.data.selections[i].data.mailbox,
-				mailUid : e.data.selections[i].data.uid
+				mailUid : e.data.selections[i].data.uid,
+				seen : e.data.selections[i].data.seen
 			});
 		}
 		
