@@ -354,8 +354,8 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 		$file = new GO_Base_Fs_File($src);
 		
-		if($file->size()>5*1024*1024){
-			throw new Exception("Image may not be larger than 5MB.");
+		if($file->size()>12*1024*1024){
+			throw new Exception("Image may not be larger than 12MB.");
 		}
 		
 
