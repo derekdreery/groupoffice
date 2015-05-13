@@ -1,3 +1,4 @@
+- Added config option for max thumbnail-able image file size (set default to 10MB)
 - Calendar: Fixed display of tasks without start_date in the calendar
 - Email em_labels table engine was changed to InnoDB
 - Projects2 Expense budget has more field and dialog is updated
