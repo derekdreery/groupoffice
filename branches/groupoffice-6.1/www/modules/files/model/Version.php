@@ -76,7 +76,7 @@ class Version extends \GO\Base\Db\ActiveRecord {
 	protected function beforeSave() {
 		
 		$this->mtime=$this->file->fsFile->mtime();
-		$this->path = 'versioning/'.$this->file_id.'/'.date('Ymd_Gis', $this->file->fsFile->mtime()).'_'.$this->file->name;
+		$this->path = $this->file->getVersionStoragePath().'/'.date('Ymd_Gis', $this->file->fsFile->mtime()).'_'.$this->file->name;
 		
 		$lastVersion = $this->_findLastVersion();
 		if($lastVersion)

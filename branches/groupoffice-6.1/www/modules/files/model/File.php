@@ -403,6 +403,14 @@ class File extends \GO\Base\Db\ActiveRecord {
 
 		return parent::afterSave($wasNew);
 	}
+	
+	public $customVersionPath = null;
+	public function getVersionStoragePath() {
+		if($this->customVersionPath!==null) {
+			return $this->customVersionPath;
+		}
+		return 'versioning/'.$this->id;
+	}
 
 	protected function afterDelete() {
 
@@ -411,7 +419,7 @@ class File extends \GO\Base\Db\ActiveRecord {
 		if(!File::$deleteInDatabaseOnly)
 			$this->fsFile->delete();
 
-		$versioningFolder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.'versioning/'.$this->id);
+		$versioningFolder = new \GO\Base\Fs\Folder(\GO::config()->file_storage_path.$this->getVersionStoragePath());
 		$versioningFolder->delete();
 
 		$this->notifyUsers(
@@ -591,6 +599,9 @@ class File extends \GO\Base\Db\ActiveRecord {
 	 * Copy current file to the versioning system.
 	 */
 	public function saveVersion(){
+		
+		$this->fireEvent('saveversion', array($this));
+		
 		if(\GO::config()->max_file_versions>-1){
 			$version = new Version();
 			$version->file_id=$this->id;
