@@ -36,7 +36,7 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 		$this->checkMaxPostSizeExceeded();
 		
 		//if user typed in a new company name manually we set this attribute so a new company will be autocreated.
-		if(!is_numeric($params['company_id'])){
+		if(isset($params['company_id']) && !is_numeric($params['company_id'])){
 			$model->company_name = $params['company_id'];
 		}
 		
