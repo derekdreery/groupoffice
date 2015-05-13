@@ -602,6 +602,13 @@ class Config {
 	 */
 	var $max_file_size = '10000000';
 
+	/**
+	 * The maximum file size of an image to be allowed for thumbnailing in MBs
+	 *
+	 * @var     integer
+	 * @access  public
+	 */
+	var $max_thumbnail_size = 10;
 
 	/**
 	 * Maximum number of old file versions to keep
