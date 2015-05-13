@@ -439,7 +439,7 @@ function test_system(){
 	$test['name']='Microsoft-Server-ActiveSync alias';
 	$test['showSuccessFeedback'] = false;
 	$test['pass']=$headers && (strpos($headers[0], '401')!==false || strpos($headers[0], '200')!==false);
-	$test['feedback']="Note: The alias /Microsoft-Server-ActiveSync was not detected. Please create: Alias /Microsoft-Server-ActiveSync /groupoffice/modules/z-push21/index.php.";
+	$test['feedback']="Note: The alias /Microsoft-Server-ActiveSync was not detected. Please create: Alias /Microsoft-Server-ActiveSync /groupoffice/modules/z-push/index.php.";
 	$test['fatal']=false;
 
 	$tests[]=$test;	
