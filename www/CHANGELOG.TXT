@@ -1,3 +1,4 @@
+13-05-2015 6.1.33
 - Added config option for max thumbnail-able image file size (set default to 10MB)
 - Calendar: Fixed display of tasks without start_date in the calendar
 - Email em_labels table engine was changed to InnoDB
