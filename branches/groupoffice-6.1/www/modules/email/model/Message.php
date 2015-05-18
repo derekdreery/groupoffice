@@ -372,6 +372,28 @@ abstract class Message extends \GO\Base\Model {
 		$attachments = $this->getAttachments();
 
 		foreach($attachments as $att){
+			
+			if($html) {
+				//echo $att->mime;
+				if($att->mime == 'text/html') {
+					$htmlPartStr = $att->getData();
+					$htmlPartStr = \GO\Base\Util\String::convertLinks($htmlPartStr);
+					$htmlPartStr = \GO\Base\Util\String::sanitizeHtml($htmlPartStr);
+
+					$response['htmlbody'] .= '<hr />'.$htmlPartStr;
+					continue;
+
+				}else if($att->mime == 'text/plain') {
+					$htmlPartStr = $att->getData();
+					$htmlPartStr = \GO\Base\Util\String::text_to_html($htmlPartStr);
+
+					$response['htmlbody'] .= '<hr />'.$htmlPartStr;
+					continue;
+				}
+			}
+				
+			
+			
 			$replaceCount = 0;
 
 			$a = $att->getAttributes();

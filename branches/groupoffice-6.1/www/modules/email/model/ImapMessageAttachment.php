@@ -30,6 +30,8 @@ class ImapMessageAttachment extends MessageAttachment{
 	public $mailbox;
 	public $uid;
 	
+	public $charset;
+	
 	private $_tmpDir;
 	
 	/**
@@ -79,6 +81,11 @@ class ImapMessageAttachment extends MessageAttachment{
 		}
 		
 		return $this->getTempFile();
+	}
+	
+	public function getData() {		
+		$imap = $this->account->openImapConnection($this->mailbox);
+		return $imap->get_message_part_decoded($this->uid, $this->number,$this->encoding, $this->charset,true,false);
 	}
 	
 	public function getUrl(){
