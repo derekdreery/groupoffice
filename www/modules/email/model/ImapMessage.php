@@ -467,7 +467,7 @@ class ImapMessage extends ComposerMessage {
 		}else
 		{
 //			$this->_setSeen();
-		}
+		}		
 		
 		if($asText){
 			$htmlToText = new  \GO\Base\Util\Html2Text($this->_htmlBody);
@@ -511,7 +511,7 @@ class ImapMessage extends ComposerMessage {
 							}
 						}
 					}
-				}			
+				}
 			}
 		}else
 		{
@@ -567,7 +567,7 @@ class ImapMessage extends ComposerMessage {
 	
 	/**
 	 *
-	 * @return \ImapMessageAttachment [] 
+	 * @return ImapMessageAttachment [] 
 	 */
 	public function &getAttachments() {
 		if(!$this->_imapAttachmentsLoaded){			
@@ -643,6 +643,7 @@ class ImapMessage extends ComposerMessage {
 				$a->index=count($this->attachments);
 				$a->size=intval($part['size']);
 				$a->encoding = $part['encoding'];
+				$a->charset = !empty($part['charset']) ? $part['charset'] : $this->charset;
 				
 				$this->addAttachment($a);
 			}			

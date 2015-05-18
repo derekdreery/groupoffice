@@ -103,6 +103,14 @@ class MessageAttachment extends \GO\Base\Model{
 		}
 	}
 	
+	public function getData() {		
+		if(empty($this->_tmp_file))
+			return null;
+		else {
+			return file_get_contents(\GO::config()->tmpdir.$this->_tmp_file);
+		}
+	}
+	
 	
 	/**
 	 * Get the download URL
