@@ -2139,89 +2139,89 @@ class Imap extends ImapBodyStruct {
 		\GO::debug("get_message_part_decoded($uid, $part_no, $encoding, $charset)");
 
 		$str = '';
-		if($this->get_message_part_start($uid, $part_no, $peek)){
+		$this->get_message_part_start($uid, $part_no, $peek);
 
 
-			$leftOver='';
+		$leftOver='';
 
-			while ($line = $this->get_message_part_line()) {
+		while ($line = $this->get_message_part_line()) {
 
-				switch (strtolower($encoding)) {
-					case 'base64':
-						$line = trim($leftOver.$line);
-						$leftOver = "";
+			switch (strtolower($encoding)) {
+				case 'base64':
+					$line = trim($leftOver.$line);
+					$leftOver = "";
 
-						if(strlen($line) % 4 == 0){
+					if(strlen($line) % 4 == 0){
 
-							if(!$fp){
-								$str .= base64_decode($line);
-							}  else {
-								fputs($fp, base64_decode($line));
-							}
-						}else{
-
-							$buffer = "";
-							while(strlen($line)>4){
-								$buffer .= substr($line, 0, 4);
-								$line = substr($line, 4);
-							}
-
-							if(!$fp){
-								$str .= base64_decode($buffer);
-							}  else {
-								fputs($fp, base64_decode($buffer));
-							}
-
-							if(strlen($line)){
-								$leftOver = $line;
-							}
-						}
-						break;
-					case 'quoted-printable':
 						if(!$fp){
-							$str .= quoted_printable_decode($line);
-						}else{
-							fputs($fp, quoted_printable_decode($line));
+							$str .= base64_decode($line);
+						}  else {
+							fputs($fp, base64_decode($line));
 						}
-						break;
-					default:
-						if(!$fp){
-							$str .= $line;
-						}else{
-							fputs($fp, $line);
-						}
-						break;
-				}
+					}else{
 
-				if($cutofflength && strlen($line)>$cutofflength){
+						$buffer = "";
+						while(strlen($line)>4){
+							$buffer .= substr($line, 0, 4);
+							$line = substr($line, 4);
+						}
+
+						if(!$fp){
+							$str .= base64_decode($buffer);
+						}  else {
+							fputs($fp, base64_decode($buffer));
+						}
+
+						if(strlen($line)){
+							$leftOver = $line;
+						}
+					}
 					break;
-				}
+				case 'quoted-printable':
+					if(!$fp){
+						$str .= quoted_printable_decode($line);
+					}else{
+						fputs($fp, quoted_printable_decode($line));
+					}
+					break;
+				default:
+					if(!$fp){
+						$str .= $line;
+					}else{
+						fputs($fp, $line);
+					}
+					break;
 			}
 
-			if(!empty($leftOver))
-			{
-				\GO::debug($leftOver);
-
-				if(!$fp){
-					$str .= base64_decode($leftOver);
-				}  else {
-					fputs($fp, base64_decode($leftOver));
-				}
-			}
-
-
-			if($charset){
-
-				//some clients don't send the charset.
-				if($charset=='us-ascii')
-					$charset = 'windows-1252';
-
-				$str = \GO\Base\Util\String::clean_utf8($str, $charset);
-				if($charset != 'utf-8') {
-					$str = str_replace($charset, 'utf-8', $str);
-				}
+			if($cutofflength && strlen($line)>$cutofflength){
+				break;
 			}
 		}
+
+		if(!empty($leftOver))
+		{
+			\GO::debug($leftOver);
+
+			if(!$fp){
+				$str .= base64_decode($leftOver);
+			}  else {
+				fputs($fp, base64_decode($leftOver));
+			}
+		}
+
+
+		if($charset){
+
+			//some clients don't send the charset.
+			if($charset=='us-ascii')
+				$charset = 'windows-1252';
+
+			$str = \GO\Base\Util\String::clean_utf8($str, $charset);
+			if($charset != 'utf-8') {
+				$str = str_replace($charset, 'utf-8', $str);
+			}
+		}
+		
 
 		return $fp ? true : $str;
 
@@ -2308,14 +2308,14 @@ class Imap extends ImapBodyStruct {
 		}
 		$this->send_command($command);
 		$result = fgets($this->handle);
-
+		
 		$size = false;
 		if (preg_match("/\{(\d+)\}\r\n/", $result, $matches)) {
 			$size = $matches[1];
 		}
 
-		if(!$size)
-			return false;
+//		if(!$size)
+//			return false;
 
 		$this->message_part_size=$size;
 		$this->message_part_read=0;
