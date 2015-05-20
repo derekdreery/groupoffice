@@ -1,5 +1,5 @@
-groupoffice-com (6.1.33) sixone; urgency=low
+groupoffice-com (6.1.34) sixone; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Wed, 13 May 2015 11:26:12 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Wed, 20 May 2015 13:16:22 +0200
