@@ -1109,7 +1109,11 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		} else {
 			
 			$rrule = new \GO\Base\Util\Icalendar\Rrule();
-			$rrule->readIcalendarRruleString($localEvent->getEvent()->start_time, $localEvent->getEvent()->rrule, true);
+			try{
+				$rrule->readIcalendarRruleString($localEvent->getEvent()->start_time, $localEvent->getEvent()->rrule, true);
+			}catch(\Exception $e) {
+				trigger_error($e->getMessage()." Event ID:".$event->id);
+			}
 			
 			//we need to start searching for the next occurrence at the period start
 			//time minus the duration of the event in days rounded up. Because an 
@@ -1496,7 +1500,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		if($recurrenceTime){
 			$dt = \GO\Base\Util\Date\DateTime::fromUnixtime($recurrenceTime);			
 			$rId = $e->add('recurrence-id', $dt);
-			if($this->all_day_event){
+			if($this->_exceptionEvent->all_day_event){
 				$rId['VALUE']='DATE';
 			}
 		}
