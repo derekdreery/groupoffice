@@ -130,7 +130,7 @@ class Label extends ActiveRecord
             throw new \Exception(sprintf(GO::t('labelsLimit', 'email'), 10));
         }
 
-        if (!$this->default) {
+        if (!$this->default && $this->isNew) {
             $flag = preg_replace('~[^\\pL0-9_]+~u', '-', $this->name);
             $flag = trim($flag, "-");
             $flag = iconv("utf-8", "us-ascii//TRANSLIT", $flag);
