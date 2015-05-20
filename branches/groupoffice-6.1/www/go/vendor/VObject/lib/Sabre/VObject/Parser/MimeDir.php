@@ -13,13 +13,15 @@ use
 /**
  * MimeDir parser.
  *
- * This class parses iCalendar/vCard files and returns an array.
+ * This class parses iCalendar 2.0 and vCard 2.1, 3.0 and 4.0 files. This
+ * parser will return one of the following two objects from the parse method:
  *
- * The array is identical to the format jCard/jCal use.
+ * Sabre\VObject\Component\VCalendar
+ * Sabre\VObject\Component\VCard
  *
- * @copyright Copyright (C) 2007-2013 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class MimeDir extends Parser {
 
@@ -82,8 +84,10 @@ class MimeDir extends Parser {
             fwrite($stream, $input);
             rewind($stream);
             $this->input = $stream;
-        } else {
+        } elseif (is_resource($input)) {
             $this->input = $input;
+        } else {
+            throw new \InvalidArgumentException('This parser can only read from strings or streams.');
         }
 
     }
@@ -96,6 +100,16 @@ class MimeDir extends Parser {
     protected function parseDocument() {
 
         $line = $this->readLine();
+
+        // BOM is ZERO WIDTH NO-BREAK SPACE (U+FEFF).
+        // It's 0xEF 0xBB 0xBF in UTF-8 hex.
+        if (   3 <= strlen($line)
+            && ord($line[0]) === 0xef
+            && ord($line[1]) === 0xbb
+            && ord($line[2]) === 0xbf) {
+            $line = substr($line, 3);
+        }
+
         switch(strtoupper($line)) {
             case 'BEGIN:VCALENDAR' :
                 $class = isset(VCalendar::$componentMap['VCALENDAR'])
@@ -228,9 +242,15 @@ class MimeDir extends Parser {
             $this->lineBuffer = null;
         } else {
             do {
+                $eof = feof($this->input);
+
                 $rawLine = fgets($this->input);
-                if ($rawLine === false && feof($this->input)) {
+
+                if ($eof || (feof($this->input) && $rawLine===false)) {
                     throw new EofException('End of document reached prematurely');
+                }
+                if ($rawLine === false) {
+                    throw new ParseException('Error reading from input stream');
                 }
                 $rawLine = rtrim($rawLine, "\r\n");
             } while ($rawLine === ''); // Skipping empty lines
@@ -282,7 +302,7 @@ class MimeDir extends Parser {
         $regex = "/
             ^(?P<name> [$propNameToken]+ ) (?=[;:])        # property name
             |
-            (?<=:)(?P<propValue> .*)$                      # property value
+            (?<=:)(?P<propValue> .+)$                      # property value
             |
             ;(?P<paramName> [$paramNameToken]+) (?=[=;:])  # parameter name
             |
@@ -293,7 +313,7 @@ class MimeDir extends Parser {
             /xi";
 
         //echo $regex, "\n"; die();
-        preg_match_all($regex, $line, $matches,  PREG_SET_ORDER );
+        preg_match_all($regex, $line, $matches,  PREG_SET_ORDER);
 
         $property = array(
             'name' => null,
@@ -355,7 +375,10 @@ class MimeDir extends Parser {
 
         }
 
-        if (is_null($property['value']) || !$property['name']) {
+        if (is_null($property['value'])) {
+            $property['value'] = '';
+        }
+        if (!$property['name']) {
             if ($this->options & self::OPTION_IGNORE_INVALID_LINES) {
                 return false;
             }
@@ -463,7 +486,7 @@ class MimeDir extends Parser {
         }
         $regex .= ') #x';
 
-        $matches = preg_split($regex, $input, -1, PREG_SPLIT_DELIM_CAPTURE  |  PREG_SPLIT_NO_EMPTY );
+        $matches = preg_split($regex, $input, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 
         $resultArray = array();
         $result = '';
@@ -537,20 +560,23 @@ class MimeDir extends Parser {
     private function unescapeParam($input) {
 
         return
-            preg_replace_callback('#(\^(\^|n|\'))#',function($matches) {
-                switch($matches[2]) {
-                    case 'n' :
-                        return "\n";
-                    case '^' :
-                        return '^';
-                    case '\'' :
-                        return '"';
+            preg_replace_callback(
+                '#(\^(\^|n|\'))#',
+                function($matches) {
+                    switch($matches[2]) {
+                        case 'n' :
+                            return "\n";
+                        case '^' :
+                            return '^';
+                        case '\'' :
+                            return '"';
 
-                // @codeCoverageIgnoreStart
-                }
-                // @codeCoverageIgnoreEnd
-            }, $input);
-
+                    // @codeCoverageIgnoreStart
+                    }
+                    // @codeCoverageIgnoreEnd
+                },
+                $input
+            );
     }
 
     /**

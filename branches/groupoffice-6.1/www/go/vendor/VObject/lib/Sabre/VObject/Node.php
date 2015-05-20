@@ -5,16 +5,37 @@ namespace Sabre\VObject;
 /**
  * A node is the root class for every element in an iCalendar of vCard object.
  *
- * @copyright Copyright (C) 2007-2013 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 abstract class Node implements \IteratorAggregate, \ArrayAccess, \Countable {
 
     /**
      * The following constants are used by the validate() method.
+     *
+     * If REPAIR is set, the validator will attempt to repair any broken data
+     * (if possible).
      */
     const REPAIR = 1;
+
+    /**
+     * If this option is set, the validator will operate on the vcards on the
+     * assumption that the vcards need to be valid for CardDAV.
+     *
+     * This means for example that the UID is required, whereas it is not for
+     * regular vcards.
+     */
+    const PROFILE_CARDDAV = 2;
+
+    /**
+     * If this option is set, the validator will operate on iCalendar objects
+     * on the assumption that the vcards need to be valid for CalDAV.
+     *
+     * This means for example that calendars can only contain objects with
+     * identical component types and UIDs.
+     */
+    const PROFILE_CALDAV = 4;
 
     /**
      * Reference to the parent object, if this is not the top object.
@@ -42,7 +63,7 @@ abstract class Node implements \IteratorAggregate, \ArrayAccess, \Countable {
      *
      * @return string
      */
-    abstract function serialize();
+    abstract public function serialize();
 
     /**
      * This method returns an array, with the representation as it should be
@@ -50,7 +71,7 @@ abstract class Node implements \IteratorAggregate, \ArrayAccess, \Countable {
      *
      * @return array
      */
-    abstract function jsonSerialize();
+    abstract public function jsonSerialize();
 
     /* {{{ IteratorAggregator interface */
 
@@ -86,15 +107,19 @@ abstract class Node implements \IteratorAggregate, \ArrayAccess, \Countable {
      * Validates the node for correctness.
      *
      * The following options are supported:
-     *   - Node::REPAIR - If something is broken, and automatic repair may
-     *                    be attempted.
+     *   Node::REPAIR - May attempt to automatically repair the problem.
      *
-     * An array is returned with warnings.
+     * This method returns an array with detected problems.
+     * Every element has the following properties:
      *
-     * Every item in the array has the following properties:
-     *    * level - (number between 1 and 3 with severity information)
-     *    * message - (human readable message)
-     *    * node - (reference to the offending node)
+     *  * level - problem level.
+     *  * message - A human-readable string describing the issue.
+     *  * node - A reference to the problematic node.
+     *
+     * The level means:
+     *   1 - The issue was repaired (only happens if REPAIR was turned on)
+     *   2 - An inconsequential issue
+     *   3 - A severe issue.
      *
      * @param int $options
      * @return array
@@ -165,7 +190,7 @@ abstract class Node implements \IteratorAggregate, \ArrayAccess, \Countable {
      * @param mixed $value
      * @return void
      */
-    public function offsetSet($offset,$value) {
+    public function offsetSet($offset, $value) {
 
         $iterator = $this->getIterator();
         $iterator->offsetSet($offset,$value);

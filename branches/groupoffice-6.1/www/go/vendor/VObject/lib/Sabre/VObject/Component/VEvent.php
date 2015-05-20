@@ -1,16 +1,18 @@
 <?php
 
 namespace Sabre\VObject\Component;
+
 use Sabre\VObject;
+use Sabre\VObject\Recur\EventIterator;
 
 /**
  * VEvent component
  *
  * This component contains some additional functionality specific for VEVENT's.
  *
- * @copyright Copyright (C) 2007-2013 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class VEvent extends VObject\Component {
 
@@ -28,7 +30,7 @@ class VEvent extends VObject\Component {
     public function isInTimeRange(\DateTime $start, \DateTime $end) {
 
         if ($this->RRULE) {
-            $it = new VObject\RecurrenceIterator($this);
+            $it = new EventIterator($this);
             $it->fastForward($start);
 
             // We fast-forwarded to a spot where the end-time of the
@@ -54,7 +56,7 @@ class VEvent extends VObject\Component {
 
         } elseif (isset($this->DURATION)) {
             $effectiveEnd = clone $effectiveStart;
-            $effectiveEnd->add( VObject\DateTimeParser::parseDuration($this->DURATION) );
+            $effectiveEnd->add(VObject\DateTimeParser::parseDuration($this->DURATION));
         } elseif (!$this->DTSTART->hasTime()) {
             $effectiveEnd = clone $effectiveStart;
             $effectiveEnd->modify('+1 day');
@@ -63,6 +65,74 @@ class VEvent extends VObject\Component {
         }
         return (
             ($start <= $effectiveEnd) && ($end > $effectiveStart)
+        );
+
+    }
+
+    /**
+     * This method should return a list of default property values.
+     *
+     * @return array
+     */
+    protected function getDefaults() {
+
+        return array(
+            'UID'     => 'sabre-vobject-' . VObject\UUIDUtil::getUUID(),
+            'DTSTAMP' => date('Ymd\\THis\\Z'),
+        );
+
+    }
+
+    /**
+     * A simple list of validation rules.
+     *
+     * This is simply a list of properties, and how many times they either
+     * must or must not appear.
+     *
+     * Possible values per property:
+     *   * 0 - Must not appear.
+     *   * 1 - Must appear exactly once.
+     *   * + - Must appear at least once.
+     *   * * - Can appear any number of times.
+     *   * ? - May appear, but not more than once.
+     *
+     * @var array
+     */
+    public function getValidationRules() {
+
+        $hasMethod = isset($this->parent->METHOD);
+        return array(
+            'UID' => 1,
+            'DTSTAMP' => 1,
+            'DTSTART' => $hasMethod?'?':'1',
+            'CLASS' => '?',
+            'CREATED' => '?',
+            'DESCRIPTION' => '?',
+            'GEO' => '?',
+            'LAST-MODIFIED' => '?',
+            'LOCATION' => '?',
+            'ORGANIZER' => '?',
+            'PRIORITY' => '?',
+            'SEQUENCE' => '?',
+            'STATUS' => '?',
+            'SUMMARY' => '?',
+            'TRANSP' => '?',
+            'URL' => '?',
+            'RECURRENCE-ID' => '?',
+            'RRULE' => '?',
+            'DTEND' => '?',
+            'DURATION' => '?',
+
+            'ATTACH' => '*',
+            'ATTENDEE' => '*',
+            'CATEGORIES' => '*',
+            'COMMENT' => '*',
+            'CONTACT' => '*',
+            'EXDATE' => '*',
+            'REQUEST-STATUS' => '*',
+            'RELATED-TO' => '*',
+            'RESOURCES' => '*',
+            'RDATE' => '*',
         );
 
     }

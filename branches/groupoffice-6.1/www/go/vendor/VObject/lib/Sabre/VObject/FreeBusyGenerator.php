@@ -2,8 +2,10 @@
 
 namespace Sabre\VObject;
 
-use
-    Sabre\VObject\Component\VCalendar;
+use DateTimeZone;
+use Sabre\VObject\Component\VCalendar;
+use Sabre\VObject\Recur\EventIterator;
+use Sabre\VObject\Recur\NoInstancesException;
 
 /**
  * This class helps with generating FREEBUSY reports based on existing sets of
@@ -15,9 +17,9 @@ use
  * VFREEBUSY components are described in RFC5545, The rules for what should
  * go in a single freebusy report is taken from RFC4791, section 7.10.
  *
- * @copyright Copyright (C) 2007-2013 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class FreeBusyGenerator {
 
@@ -50,6 +52,21 @@ class FreeBusyGenerator {
     protected $baseObject;
 
     /**
+     * Reference timezone.
+     *
+     * When we are calculating busy times, and we come across so-called
+     * floating times (times without a timezone), we use the reference timezone
+     * instead.
+     *
+     * This is also used for all-day events.
+     *
+     * This defaults to UTC.
+     *
+     * @var DateTimeZone
+     */
+    protected $timeZone;
+
+    /**
      * Creates the generator.
      *
      * Check the setTimeRange and setObjects methods for details about the
@@ -58,9 +75,10 @@ class FreeBusyGenerator {
      * @param DateTime $start
      * @param DateTime $end
      * @param mixed $objects
+     * @param DateTimeZone $timeZone
      * @return void
      */
-    public function __construct(\DateTime $start = null, \DateTime $end = null, $objects = null) {
+    public function __construct(\DateTime $start = null, \DateTime $end = null, $objects = null, DateTimeZone $timeZone = null) {
 
         if ($start && $end) {
             $this->setTimeRange($start, $end);
@@ -69,6 +87,10 @@ class FreeBusyGenerator {
         if ($objects) {
             $this->setObjects($objects);
         }
+        if (is_null($timeZone)) {
+            $timeZone = new DateTimeZone('UTC');
+        }
+        $this->setTimeZone($timeZone);
 
     }
 
@@ -137,6 +159,18 @@ class FreeBusyGenerator {
     }
 
     /**
+     * Sets the reference timezone for floating times.
+     *
+     * @param DateTimeZone $timeZone
+     * @return void
+     */
+    public function setTimeZone(DateTimeZone $timeZone) {
+
+        $this->timeZone = $timeZone;
+
+    }
+
+    /**
      * Parses the input data and returns a correct VFREEBUSY object, wrapped in
      * a VCALENDAR.
      *
@@ -146,7 +180,7 @@ class FreeBusyGenerator {
 
         $busyTimes = array();
 
-        foreach($this->objects as $object) {
+        foreach($this->objects as $key=>$object) {
 
             foreach($object->getBaseComponents() as $component) {
 
@@ -171,8 +205,16 @@ class FreeBusyGenerator {
                         $times = array();
 
                         if ($component->RRULE) {
+                            try {
+                                $iterator = new EventIterator($object, (string)$component->uid, $this->timeZone);
+                            } catch (NoInstancesException $e) {
+                                // This event is recurring, but it doesn't have a single
+                                // instance. We are skipping this event from the output
+                                // entirely.
+                                unset($this->objects[$key]);
+                                continue;
+                            }
 
-                            $iterator = new RecurrenceIterator($object, (string)$component->uid);
                             if ($this->start) {
                                 $iterator->fastForward($this->start);
                             }
@@ -196,13 +238,13 @@ class FreeBusyGenerator {
 
                         } else {
 
-                            $startTime = $component->DTSTART->getDateTime();
+                            $startTime = $component->DTSTART->getDateTime($this->timeZone);
                             if ($this->end && $startTime > $this->end) {
                                 break;
                             }
                             $endTime = null;
                             if (isset($component->DTEND)) {
-                                $endTime = $component->DTEND->getDateTime();
+                                $endTime = $component->DTEND->getDateTime($this->timeZone);
                             } elseif (isset($component->DURATION)) {
                                 $duration = DateTimeParser::parseDuration((string)$component->DURATION);
                                 $endTime = clone $startTime;
@@ -319,4 +361,3 @@ class FreeBusyGenerator {
     }
 
 }
-

@@ -8,9 +8,9 @@ namespace Sabre\VObject;
  * This object provides a few (static) convenience methods to quickly access
  * the parsers.
  *
- * @copyright Copyright (C) 2007-2013 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class Reader {
 
@@ -38,7 +38,7 @@ class Reader {
      * @param int $options
      * @return Document
      */
-    static function read($data, $options = 0) {
+    static public function read($data, $options = 0) {
 
         $parser = new Parser\MimeDir();
         $result = $parser->parse($data, $options);
@@ -61,7 +61,7 @@ class Reader {
      * @param int $options
      * @return Node
      */
-    static function readJson($data, $options = 0) {
+    static public function readJson($data, $options = 0) {
 
         $parser = new Parser\Json();
         $result = $parser->parse($data, $options);

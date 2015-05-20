@@ -5,9 +5,9 @@ namespace Sabre\VObject;
 /**
  * This utility converts vcards from one version to another.
  *
- * @copyright Copyright (C) 2007-2013 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class VCardConverter {
 
@@ -76,7 +76,6 @@ class VCardConverter {
         }
 
         $parameters = $property->parameters();
-
         $valueType = null;
         if (isset($parameters['VALUE'])) {
             $valueType = $parameters['VALUE']->getValue();
@@ -85,24 +84,64 @@ class VCardConverter {
         if (!$valueType) {
             $valueType = $property->getValueType();
         }
+        $newProperty = $output->createProperty(
+            $property->name,
+            $property->getParts(),
+            array(), // parameters will get added a bit later.
+            $valueType
+        );
 
-        $newProperty = null;
 
         if ($targetVersion===Document::VCARD30) {
 
             if ($property instanceof Property\Uri && in_array($property->name, array('PHOTO','LOGO','SOUND'))) {
 
-                $newProperty = $this->convertUriToBinary($output, $property, $parameters);
+                $newProperty = $this->convertUriToBinary($output, $newProperty);
+
+            } elseif ($property instanceof Property\VCard\DateAndOrTime) {
+
+                // In vCard 4, the birth year may be optional. This is not the
+                // case for vCard 3. Apple has a workaround for this that
+                // allows applications that support Apple's extension still
+                // omit birthyears in vCard 3, but applications that do not
+                // support this, will just use a random birthyear. We're
+                // choosing 1604 for the birthyear, because that's what apple
+                // uses.
+                $parts = DateTimeParser::parseVCardDateTime($property->getValue());
+                if (is_null($parts['year'])) {
+                    $newValue = '1604-' . $parts['month'] . '-' . $parts['date'];
+                    $newProperty->setValue($newValue);
+                    $newProperty['X-APPLE-OMIT-YEAR'] = '1604';
+                }
+
+                if ($newProperty->name == 'ANNIVERSARY') {
+                    // Microsoft non-standard anniversary
+                    $newProperty->name = 'X-ANNIVERSARY';
+
+                    // We also need to add a new apple property for the same
+                    // purpose. This apple property needs a 'label' in the same
+                    // group, so we first need to find a groupname that doesn't
+                    // exist yet.
+                    $x = 1;
+                    while($output->select('ITEM' . $x . '.')) {
+                        $x++;
+                    }
+                    $output->add('ITEM' . $x . '.X-ABDATE', $newProperty->getValue(), array('VALUE' => 'DATE-AND-OR-TIME'));
+                    $output->add('ITEM' . $x . '.X-ABLABEL', '_$!<Anniversary>!$_');
+                }
 
             } elseif ($property->name === 'KIND') {
 
                 switch(strtolower($property->getValue())) {
                     case 'org' :
-                        // OS X addressbook property.
+                        // vCard 3.0 does not have an equivalent to KIND:ORG,
+                        // but apple has an extension that means the same
+                        // thing.
                         $newProperty = $output->createProperty('X-ABSHOWAS','COMPANY');
                         break;
+
                     case 'individual' :
-                        // Individual is implied, so we can just skip it.
+                        // Individual is implicit, so we skip it.
                         return;
 
                     case 'group' :
@@ -121,37 +160,77 @@ class VCardConverter {
                 return;
             }
 
-            if ($property instanceOf Property\Binary) {
+            if ($property instanceof Property\Binary) {
 
-                $newProperty = $this->convertBinaryToUri($output, $property, $parameters);
+                $newProperty = $this->convertBinaryToUri($output, $newProperty, $parameters);
 
-            } else {
-                switch($property->name) {
-                    case 'X-ABSHOWAS' :
-                        if (strtoupper($property->getValue()) === 'COMPANY') {
-                            $newProperty = $output->createProperty('KIND','org');
-                        }
-                        break;
-                    case 'X-ADDRESSBOOKSERVER-KIND' :
-                        if (strtoupper($property->getValue()) === 'GROUP') {
-                            $newProperty = $output->createProperty('KIND','group');
-                        }
-                        break;
+            } elseif ($property instanceof Property\VCard\DateAndOrTime && isset($parameters['X-APPLE-OMIT-YEAR'])) {
+
+                // If a property such as BDAY contained 'X-APPLE-OMIT-YEAR',
+                // then we're stripping the year from the vcard 4 value.
+                $parts = DateTimeParser::parseVCardDateTime($property->getValue());
+                if ($parts['year']===$property['X-APPLE-OMIT-YEAR']->getValue()) {
+                    $newValue = '--' . $parts['month'] . '-' . $parts['date'];
+                    $newProperty->setValue($newValue);
                 }
 
+                // Regardless if the year matched or not, we do need to strip
+                // X-APPLE-OMIT-YEAR.
+                unset($parameters['X-APPLE-OMIT-YEAR']);
+
             }
+            switch($property->name) {
+                case 'X-ABSHOWAS' :
+                    if (strtoupper($property->getValue()) === 'COMPANY') {
+                        $newProperty = $output->createProperty('KIND','ORG');
+                    }
+                    break;
+                case 'X-ADDRESSBOOKSERVER-KIND' :
+                    if (strtoupper($property->getValue()) === 'GROUP') {
+                        $newProperty = $output->createProperty('KIND','GROUP');
+                    }
+                    break;
+                case 'X-ANNIVERSARY' :
+                    $newProperty->name = 'ANNIVERSARY';
+                    // If we already have an anniversary property with the same
+                    // value, ignore.
+                    foreach ($output->select('ANNIVERSARY') as $anniversary) {
+                        if ($anniversary->getValue() === $newProperty->getValue()) {
+                            return;
+                        }
+                    }
+                    break;
+                case 'X-ABDATE' :
+                    // Find out what the label was, if it exists.
+                    if (!$property->group) {
+                        break;
+                    }
+                    $label = $input->{$property->group . '.X-ABLABEL'};
 
-        }
+                    // We only support converting anniversaries.
+                    if (!$label || $label->getValue()!=='_$!<Anniversary>!$_') {
+                        break;
+                    }
 
+                    // If we already have an anniversary property with the same
+                    // value, ignore.
+                    foreach ($output->select('ANNIVERSARY') as $anniversary) {
+                        if ($anniversary->getValue() === $newProperty->getValue()) {
+                            return;
+                        }
+                    }
+                    $newProperty->name = 'ANNIVERSARY';
+                    break;
+                // Apple's per-property label system.
+                case 'X-ABLABEL' :
+                    if($newProperty->getValue() === '_$!<Anniversary>!$_') {
+                        // We can safely remove these, as they are converted to
+                        // ANNIVERSARY properties.
+                        return;
+                    }
+                    break;
 
-        if (is_null($newProperty)) {
-
-            $newProperty = $output->createProperty(
-                $property->name,
-                $property->getParts(),
-                array(), // no parameters yet
-                $valueType
-            );
+            }
 
         }
 
@@ -189,10 +268,11 @@ class VCardConverter {
      *                    the new property.
      * @return Property\Uri
      */
-    protected function convertBinaryToUri(Component\VCard $output, Property\Binary $property, array &$parameters) {
+    protected function convertBinaryToUri(Component\VCard $output, Property\Binary $newProperty, array &$parameters) {
 
+        $value = $newProperty->getValue();
         $newProperty = $output->createProperty(
-            $property->name,
+            $newProperty->name,
             null, // no value
             array(), // no parameters yet
             'URI' // Forcing the BINARY type
@@ -225,8 +305,7 @@ class VCardConverter {
 
         }
 
-        $newProperty->setValue('data:' . $mimeType . ';base64,' . base64_encode($property->getValue()));
-
+        $newProperty->setValue('data:' . $mimeType . ';base64,' . base64_encode($value));
         return $newProperty;
 
     }
@@ -240,21 +319,19 @@ class VCardConverter {
      *
      * @param Component\VCard $output
      * @param Property\Uri $property The input property.
-     * @param $parameters List of parameters that will eventually be added to
-     *                    the new property.
      * @return Property\Binary|null
      */
-    protected function convertUriToBinary(Component\VCard $output, Property\Uri $property, array &$parameters) {
+    protected function convertUriToBinary(Component\VCard $output, Property\Uri $newProperty) {
 
-        $value = $property->getValue();
+        $value = $newProperty->getValue();
 
         // Only converting data: uris
         if (substr($value, 0, 5)!=='data:') {
-            return;
+            return $newProperty;
         }
 
         $newProperty = $output->createProperty(
-            $property->name,
+            $newProperty->name,
             null, // no value
             array(), // no parameters yet
             'BINARY'

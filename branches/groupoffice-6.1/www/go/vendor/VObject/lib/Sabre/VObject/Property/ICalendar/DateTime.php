@@ -2,11 +2,10 @@
 
 namespace Sabre\VObject\Property\ICalendar;
 
-use
-    Sabre\VObject\Property,
-    Sabre\VObject\Parser\MimeDir,
-    Sabre\VObject\DateTimeParser,
-    Sabre\VObject\TimeZoneUtil;
+use DateTimeZone;
+use Sabre\VObject\Property;
+use Sabre\VObject\DateTimeParser;
+use Sabre\VObject\TimeZoneUtil;
 
 /**
  * DateTime property
@@ -19,9 +18,9 @@ use
  * cases represent a DATE value. This is because it's a common usecase to be
  * able to change a DATE-TIME into a DATE.
  *
- * @copyright Copyright (C) 2007-2013 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class DateTime extends Property {
 
@@ -111,17 +110,38 @@ class DateTime extends Property {
     }
 
     /**
+     * Returns true if this is a floating DATE or DATE-TIME.
+     *
+     * Note that DATE is always floating.
+     */
+    public function isFloating() {
+
+        return
+            !$this->hasTime() ||
+            (
+                !isset($this['TZID']) &&
+                strpos($this->getValue(),'Z')===false
+            );
+
+    }
+
+    /**
      * Returns a date-time value.
      *
      * Note that if this property contained more than 1 date-time, only the
      * first will be returned. To get an array with multiple values, call
      * getDateTimes.
      *
+     * If no timezone information is known, because it's either an all-day
+     * property or floating time, we will use the DateTimeZone argument to
+     * figure out the exact date.
+     *
+     * @param DateTimeZone $timeZone
      * @return \DateTime
      */
-    public function getDateTime() {
+    public function getDateTime(DateTimeZone $timeZone = null) {
 
-        $dt = $this->getDateTimes();
+        $dt = $this->getDateTimes($timeZone);
         if (!$dt) return null;
 
         return $dt[0];
@@ -131,20 +151,25 @@ class DateTime extends Property {
     /**
      * Returns multiple date-time values.
      *
+     * If no timezone information is known, because it's either an all-day
+     * property or floating time, we will use the DateTimeZone argument to
+     * figure out the exact date.
+     *
+     * @param DateTimeZone $timeZone
      * @return \DateTime[]
      */
-    public function getDateTimes() {
+    public function getDateTimes(DateTimeZone $timeZone = null) {
 
-        // Finding the timezone.
-        $tz = $this['TZID'];
+        // Does the property have a TZID?
+        $tzid = $this['TZID'];
 
-        if ($tz) {
-            $tz = TimeZoneUtil::getTimeZone((string)$tz, $this->root);
+        if ($tzid) {
+            $timeZone = TimeZoneUtil::getTimeZone((string)$tzid, $this->root);
         }
 
         $dts = array();
         foreach($this->getParts() as $part) {
-            $dts[] = DateTimeParser::parse($part, $tz);
+            $dts[] = DateTimeParser::parse($part, $timeZone);
         }
         return $dts;
 
@@ -249,19 +274,23 @@ class DateTime extends Property {
 
         $dts = $this->getDateTimes();
         $hasTime = $this->hasTime();
+        $isFloating = $this->isFloating();
 
         $tz = $dts[0]->getTimeZone();
-        $isUtc = in_array($tz->getName() , array('UTC', 'GMT', 'Z'));
+        $isUtc = $isFloating ? false : in_array($tz->getName() , array('UTC', 'GMT', 'Z'));
 
-        return array_map(function($dt) use ($hasTime, $isUtc) {
+        return array_map(
+            function($dt) use ($hasTime, $isUtc) {
 
-            if ($hasTime) {
-                return $dt->format('Y-m-d\\TH:i:s') . ($isUtc?'Z':'');
-            } else {
-                return $dt->format('Y-m-d');
-            }
+                if ($hasTime) {
+                    return $dt->format('Y-m-d\\TH:i:s') . ($isUtc?'Z':'');
+                } else {
+                    return $dt->format('Y-m-d');
+                }
 
-        }, $dts);
+            },
+            $dts
+        );
 
     }
 
@@ -279,11 +308,16 @@ class DateTime extends Property {
         // iCalendar. In jCal date-parts are separated by dashes, and
         // time-parts are separated by colons. It makes sense to just remove
         // those.
-        $this->setValue(array_map(function($item) {
+        $this->setValue(
+            array_map(
+                function($item) {
 
-            return strtr($item, array(':'=>'', '-'=>''));
+                    return strtr($item, array(':'=>'', '-'=>''));
 
-        }, $value));
+                },
+                $value
+            )
+        );
 
     }
     /**
@@ -303,6 +337,54 @@ class DateTime extends Property {
 
         // This will ensure that dates are correctly encoded.
         $this->setDateTimes($this->getDateTimes());
+
+    }
+
+    /**
+     * Validates the node for correctness.
+     *
+     * The following options are supported:
+     *   Node::REPAIR - May attempt to automatically repair the problem.
+     *
+     * This method returns an array with detected problems.
+     * Every element has the following properties:
+     *
+     *  * level - problem level.
+     *  * message - A human-readable string describing the issue.
+     *  * node - A reference to the problematic node.
+     *
+     * The level means:
+     *   1 - The issue was repaired (only happens if REPAIR was turned on)
+     *   2 - An inconsequential issue
+     *   3 - A severe issue.
+     *
+     * @param int $options
+     * @return array
+     */
+    public function validate($options = 0) {
+
+        $messages = parent::validate($options);
+        $valueType = $this->getValueType();
+        $values = $this->getParts();
+        try {
+            foreach($values as $value) {
+                switch($valueType) {
+                    case 'DATE' :
+                        $foo = DateTimeParser::parseDate($value);
+                        break;
+                    case 'DATE-TIME' :
+                        $foo = DateTimeParser::parseDateTime($value);
+                        break;
+                }
+            }
+        } catch (\LogicException $e) {
+            $messages[] = array(
+                'level' => 3,
+                'message' => 'The supplied value (' . $value . ') is not a correct ' . $valueType,
+                'node' => $this,
+            );
+        }
+        return $messages;
 
     }
 }
