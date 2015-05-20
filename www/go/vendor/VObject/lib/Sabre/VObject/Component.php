@@ -8,9 +8,9 @@ namespace Sabre\VObject;
  * A component represents a group of properties, such as VCALENDAR, VEVENT, or
  * VCARD.
  *
- * @copyright Copyright (C) 2007-2013 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class Component extends Node {
 
@@ -47,24 +47,45 @@ class Component extends Node {
      * @param bool $defaults
      * @return void
      */
-    public function __construct(Document $root, $name, array $children = array(), $defaults = true) {
+    function __construct(Document $root, $name, array $children = array(), $defaults = true) {
 
         $this->name = strtoupper($name);
         $this->root = $root;
 
         if ($defaults) {
-            $children = array_merge($this->getDefaults(), $children);
-        }
+            // This is a terribly convoluted way to do this, but this ensures
+            // that the order of properties as they are specified in both
+            // defaults and the childrens list, are inserted in the object in a
+            // natural way.
+            $list = $this->getDefaults();
+            $nodes = array();
+            foreach($children as $key=>$value) {
+                if ($value instanceof Node) {
+                    if (isset($list[$value->name])) {
+                        unset($list[$value->name]);
+                    }
+                    $nodes[] = $value;
+                } else {
+                    $list[$key] = $value;
+                }
+            }
+            foreach($list as $key=>$value) {
+                $this->add($key, $value);
+            }
+            foreach($nodes as $node) {
+                $this->add($node);
+            }
+        } else {
+            foreach($children as $k=>$child) {
+                if ($child instanceof Node) {
 
-        foreach($children as $k=>$child) {
-            if ($child instanceof Node) {
+                    // Component or Property
+                    $this->add($child);
+                } else {
 
-                // Component or Property
-                $this->add($child);
-            } else {
-
-                // Property key=>value
-                $this->add($k, $child);
+                    // Property key=>value
+                    $this->add($k, $child);
+                }
             }
         }
 
@@ -83,7 +104,7 @@ class Component extends Node {
      *
      * @return Node
      */
-    public function add($a1, $a2 = null, $a3 = null) {
+    function add($a1, $a2 = null, $a3 = null) {
 
         if ($a1 instanceof Node) {
             if (!is_null($a2)) {
@@ -124,7 +145,7 @@ class Component extends Node {
      * @param mixed $item
      * @return void
      */
-    public function remove($item) {
+    function remove($item) {
 
         if (is_string($item)) {
             $children = $this->select($item);
@@ -151,7 +172,7 @@ class Component extends Node {
      *
      * @return array
      */
-    public function children() {
+    function children() {
 
         return $this->children;
 
@@ -163,7 +184,7 @@ class Component extends Node {
      *
      * @return array
      */
-    public function getComponents() {
+    function getComponents() {
 
         $result = array();
         foreach($this->children as $child) {
@@ -192,7 +213,7 @@ class Component extends Node {
      * @param string $name
      * @return array
      */
-    public function select($name) {
+    function select($name) {
 
         $group = null;
         $name = strtoupper($name);
@@ -204,8 +225,14 @@ class Component extends Node {
         foreach($this->children as $key=>$child) {
 
             if (
-                strtoupper($child->name) === $name &&
-                (is_null($group) || ( $child instanceof Property && strtoupper($child->group) === $group))
+                (
+                    strtoupper($child->name) === $name
+                    && (is_null($group) || ( $child instanceof Property && strtoupper($child->group) === $group))
+                )
+                ||
+                (
+                    $name === '' && $child instanceof Property && strtoupper($child->group) === $group
+                )
             ) {
 
                 $result[$key] = $child;
@@ -223,7 +250,7 @@ class Component extends Node {
      *
      * @return string
      */
-    public function serialize() {
+    function serialize() {
 
         $str = "BEGIN:" . $this->name . "\r\n";
 
@@ -272,14 +299,17 @@ class Component extends Node {
         };
 
         $tmp = $this->children;
-        uksort($this->children, function($a, $b) use ($sortScore, $tmp) {
+        uksort(
+            $this->children,
+            function($a, $b) use ($sortScore, $tmp) {
 
-            $sA = $sortScore($a, $tmp);
-            $sB = $sortScore($b, $tmp);
+                $sA = $sortScore($a, $tmp);
+                $sB = $sortScore($b, $tmp);
 
-            return $sA - $sB;
+                return $sA - $sB;
 
-        });
+            }
+        );
 
         foreach($this->children as $child) $str.=$child->serialize();
         $str.= "END:" . $this->name . "\r\n";
@@ -294,7 +324,7 @@ class Component extends Node {
      *
      * @return array
      */
-    public function jsonSerialize() {
+    function jsonSerialize() {
 
         $components = array();
         $properties = array();
@@ -341,7 +371,7 @@ class Component extends Node {
      * @param string $name
      * @return Property
      */
-    public function __get($name) {
+    function __get($name) {
 
         $matches = $this->select($name);
         if (count($matches)===0) {
@@ -361,7 +391,7 @@ class Component extends Node {
      * @param string $name
      * @return bool
      */
-    public function __isset($name) {
+    function __isset($name) {
 
         $matches = $this->select($name);
         return count($matches)>0;
@@ -381,7 +411,7 @@ class Component extends Node {
      * @param mixed $value
      * @return void
      */
-    public function __set($name, $value) {
+    function __set($name, $value) {
 
         $matches = $this->select($name);
         $overWrite = count($matches)?key($matches):null;
@@ -393,7 +423,7 @@ class Component extends Node {
             } else {
                 $this->children[] = $value;
             }
-        } elseif (is_scalar($value) || is_array($value) || is_null($value)) {
+        } else {
             $property = $this->root->create($name,$value);
             $property->parent = $this;
             if (!is_null($overWrite)) {
@@ -401,10 +431,7 @@ class Component extends Node {
             } else {
                 $this->children[] = $property;
             }
-        } else {
-            throw new \InvalidArgumentException('You must pass a \\Sabre\\VObject\\Component, \\Sabre\\VObject\\Property or scalar type');
         }
-
     }
 
     /**
@@ -414,7 +441,7 @@ class Component extends Node {
      * @param string $name
      * @return void
      */
-    public function __unset($name) {
+    function __unset($name) {
 
         $matches = $this->select($name);
         foreach($matches as $k=>$child) {
@@ -434,7 +461,7 @@ class Component extends Node {
      *
      * @return void
      */
-    public function __clone() {
+    function __clone() {
 
         foreach($this->children as $key=>$child) {
             $this->children[$key] = clone $child;
@@ -444,29 +471,124 @@ class Component extends Node {
     }
 
     /**
+     * A simple list of validation rules.
+     *
+     * This is simply a list of properties, and how many times they either
+     * must or must not appear.
+     *
+     * Possible values per property:
+     *   * 0 - Must not appear.
+     *   * 1 - Must appear exactly once.
+     *   * + - Must appear at least once.
+     *   * * - Can appear any number of times.
+     *   * ? - May appear, but not more than once.
+     *
+     * It is also possible to specify defaults and severity levels for
+     * violating the rule.
+     *
+     * See the VEVENT implementation for getValidationRules for a more complex
+     * example.
+     *
+     * @var array
+     */
+    function getValidationRules() {
+
+        return array();
+
+    }
+
+    /**
      * Validates the node for correctness.
      *
      * The following options are supported:
-     *   - Node::REPAIR - If something is broken, an automatic repair may
-     *                    be attempted.
+     *   Node::REPAIR - May attempt to automatically repair the problem.
+     *   Node::PROFILE_CARDDAV - Validate the vCard for CardDAV purposes.
+     *   Node::PROFILE_CALDAV - Validate the iCalendar for CalDAV purposes.
      *
-     * An array is returned with warnings.
+     * This method returns an array with detected problems.
+     * Every element has the following properties:
      *
-     * Every item in the array has the following properties:
-     *    * level - (number between 1 and 3 with severity information)
-     *    * message - (human readable message)
-     *    * node - (reference to the offending node)
+     *  * level - problem level.
+     *  * message - A human-readable string describing the issue.
+     *  * node - A reference to the problematic node.
+     *
+     * The level means:
+     *   1 - The issue was repaired (only happens if REPAIR was turned on).
+     *   2 - A warning.
+     *   3 - An error.
      *
      * @param int $options
      * @return array
      */
-    public function validate($options = 0) {
+    function validate($options = 0) {
 
-        $result = array();
+        $rules = $this->getValidationRules();
+        $defaults = $this->getDefaults();
+
+        $propertyCounters = array();
+
+        $messages = array();
+
         foreach($this->children as $child) {
-            $result = array_merge($result, $child->validate($options));
+            $name = strtoupper($child->name);
+            if (!isset($propertyCounters[$name])) {
+                $propertyCounters[$name] = 1;
+            } else {
+                $propertyCounters[$name]++;
+            }
+            $messages = array_merge($messages, $child->validate($options));
         }
-        return $result;
+
+        foreach($rules as $propName => $rule) {
+
+            switch($rule) {
+                case '0' :
+                    if (isset($propertyCounters[$propName])) {
+                        $messages[] = array(
+                            'level' => 3,
+                            'message' => $propName . ' MUST NOT appear in a ' . $this->name . ' component',
+                            'node' => $this,
+                        );
+                    }
+                    break;
+                case '1' :
+                    if (!isset($propertyCounters[$propName]) || $propertyCounters[$propName]!==1) {
+                        $repaired = false;
+                        if ($options & self::REPAIR && isset($defaults[$propName])) {
+                            $this->add($propName, $defaults[$propName]);
+                        }
+                        $messages[] = array(
+                            'level' => $repaired?1:3,
+                            'message' => $propName . ' MUST appear exactly once in a ' . $this->name . ' component',
+                            'node' => $this,
+                        );
+                    }
+                    break;
+                case '+' :
+                    if (!isset($propertyCounters[$propName]) || $propertyCounters[$propName] < 1) {
+                        $messages[] = array(
+                            'level' => 3,
+                            'message' => $propName . ' MUST appear at least once in a ' . $this->name . ' component',
+                            'node' => $this,
+                        );
+                    }
+                    break;
+                case '*' :
+                    break;
+                case '?' :
+                    if (isset($propertyCounters[$propName]) && $propertyCounters[$propName] > 1) {
+                        $messages[] = array(
+                            'level' => 3,
+                            'message' => $propName . ' MUST NOT appear more than once in a ' . $this->name . ' component',
+                            'node' => $this,
+                        );
+                    }
+                    break;
+
+            }
+
+        }
+        return $messages;
 
     }
 

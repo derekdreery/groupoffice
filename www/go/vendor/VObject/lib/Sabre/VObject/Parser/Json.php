@@ -13,9 +13,9 @@ use
  *
  * This parser parses both the jCal and jCard formats.
  *
- * @copyright Copyright (C) 2007-2013 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class Json extends Parser {
 
@@ -94,21 +94,27 @@ class Json extends Parser {
         // We can remove $self from PHP 5.4 onward.
         $self = $this;
 
-        $properties = array_map(function($jProp) use ($self) {
-            return $self->parseProperty($jProp);
-        }, $jComp[1]);
+        $properties = array_map(
+            function($jProp) use ($self) {
+                return $self->parseProperty($jProp);
+            },
+            $jComp[1]
+        );
 
         if (isset($jComp[2])) {
 
-            $components = array_map(function($jComp) use ($self) {
-                return $self->parseComponent($jComp);
-            }, $jComp[2]);
+            $components = array_map(
+                function($jComp) use ($self) {
+                    return $self->parseComponent($jComp);
+                },
+                $jComp[2]
+            );
 
         } else $components = array();
 
         return $this->root->createComponent(
             $jComp[0],
-            array_merge( $properties, $components),
+            array_merge($properties, $components),
             $defaults = false
         );
 

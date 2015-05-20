@@ -9,11 +9,11 @@ use Sabre\VObject\Property;
  *
  * This object encodes URI values. vCard 2.1 calls these URL.
  *
- * @copyright Copyright (C) 2007-2013 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
-class Uri extends Property {
+class Uri extends Text {
 
     /**
      * In case this is a multi-value property. This string will be used as a
@@ -48,7 +48,32 @@ class Uri extends Property {
      */
     public function setRawMimeDirValue($val) {
 
-        $this->value = $val;
+        // Normally we don't need to do any type of unescaping for these
+        // properties, however.. we've noticed that Google Contacts
+        // specifically escapes the colon (:) with a blackslash. While I have
+        // no clue why they thought that was a good idea, I'm unescaping it
+        // anyway.
+        //
+        // Good thing backslashes are not allowed in urls. Makes it easy to
+        // assume that a backslash is always intended as an escape character.
+        if ($this->name === 'URL') {
+            $regex = '#  (?: (\\\\ (?: \\\\ | : ) ) ) #x';
+            $matches = preg_split($regex, $val, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+            $newVal = '';
+            foreach($matches as $match) {
+                switch($match) {
+                    case '\:' :
+                        $newVal.=':';
+                        break;
+                    default :
+                        $newVal.=$match;
+                        break;
+                }
+            }
+            $this->value = $newVal;
+        } else {
+            $this->value = $val;
+        }
 
     }
 

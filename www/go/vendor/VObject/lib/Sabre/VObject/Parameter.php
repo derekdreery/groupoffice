@@ -13,9 +13,9 @@ use
  *   DTSTART;VALUE=DATE:20101108
  * VALUE=DATE would be the parameter name and value.
  *
- * @copyright Copyright (C) 2007-2013 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class Parameter extends Node {
 
@@ -58,14 +58,24 @@ class Parameter extends Node {
             $this->noName = true;
             $this->name = static::guessParameterNameByValue($value);
         }
-        $this->setValue($value);
+
+        // If guessParameterNameByValue() returns an empty string
+        // above, we're actually dealing with a parameter that has no value.
+        // In that case we have to move the value to the name.
+        if ($this->name === '') {
+            $this->noName = false;
+            $this->name = strtoupper($value);
+        } else {
+            $this->setValue($value);
+        }
+
     }
 
     /**
      * Try to guess property name by value, can be used for vCard 2.1 nameless parameters.
      *
      * Figuring out what the name should have been. Note that a ton of
-     * these are rather silly in 2013 and would probably rarely be
+     * these are rather silly in 2014 and would probably rarely be
      * used, but we like to be complete.
      *
      * @param string $value
@@ -271,7 +281,7 @@ class Parameter extends Node {
         $value = $this->getParts();
 
         if (count($value)===0) {
-            return $this->name;
+            return $this->name . '=';
         }
 
         if ($this->root->getDocumentType() === Document::VCARD21 && $this->noName) {
@@ -280,26 +290,46 @@ class Parameter extends Node {
 
         }
 
-        return $this->name . '=' . array_reduce($value, function($out, $item) {
+        return $this->name . '=' . array_reduce(
+            $value,
+            function($out, $item) {
 
-            if (!is_null($out)) $out.=',';
+                if (!is_null($out)) $out.=',';
 
-            // If there's no special characters in the string, we'll use the simple
-            // format
-            if (!preg_match('#(?: [\n":;\^,] )#x', $item)) {
-                return $out.$item;
-            } else {
-                // Enclosing in double-quotes, and using RFC6868 for encoding any
-                // special characters
-                $out.='"' . strtr($item, array(
-                    '^'  => '^^',
-                    "\n" => '^n',
-                    '"'  => '^\'',
-                )) . '"';
-                return $out;
+                // If there's no special characters in the string, we'll use the simple
+                // format.
+                //
+                // The list of special characters is defined as:
+                //
+                // Any character except CONTROL, DQUOTE, ";", ":", ","
+                //
+                // by the iCalendar spec:
+                // https://tools.ietf.org/html/rfc5545#section-3.1
+                //
+                // And we add ^ to that because of:
+                // https://tools.ietf.org/html/rfc6868
+                //
+                // But we've found that iCal (7.0, shipped with OSX 10.9)
+                // severaly trips on + characters not being quoted, so we
+                // added + as well.
+                if (!preg_match('#(?: [\n":;\^,\+] )#x', $item)) {
+                    return $out.$item;
+                } else {
+                    // Enclosing in double-quotes, and using RFC6868 for encoding any
+                    // special characters
+                    $out.='"' . strtr(
+                        $item,
+                        array(
+                            '^'  => '^^',
+                            "\n" => '^n',
+                            '"'  => '^\'',
+                        )
+                    ) . '"';
+                    return $out;
+                }
+
             }
-
-        });
+        );
 
     }
 
@@ -322,7 +352,7 @@ class Parameter extends Node {
      */
     public function __toString() {
 
-        return $this->getValue();
+        return (string)$this->getValue();
 
     }
 

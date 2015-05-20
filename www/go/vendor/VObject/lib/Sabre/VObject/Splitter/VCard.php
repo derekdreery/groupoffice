@@ -15,10 +15,10 @@ use
  * class checks for BEGIN:VCARD and END:VCARD and parses each encountered
  * component individually.
  *
- * @copyright Copyright (C) 2007-2013 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Dominik Tobschall
  * @author Armin Hackmann
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class VCard implements SplitterInterface {
 
@@ -63,6 +63,11 @@ class VCard implements SplitterInterface {
 
         try {
             $object = $this->parser->parse();
+
+            if (!$object instanceof VObject\Component\VCard) {
+                throw new VObject\ParseException('The supplied input contained non-VCARD data.');
+            }
+
         } catch (VObject\EofException $e) {
             return null;
         }
