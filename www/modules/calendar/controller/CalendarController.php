@@ -320,8 +320,8 @@ class CalendarController extends \GO\Base\Controller\AbstractModelController {
 		if(!$calendar->public && !$calendar->checkPermissionLevel(\GO\Base\Model\Acl::READ_PERMISSION))
 			throw new \GO\Base\Exception\AccessDenied();
 		
-		$c = new \GO\Base\VObject\VCalendar();				
-		$c->add(new \GO\Base\VObject\VTimezone());
+//		$c = new \GO\Base\VObject\VCalendar();				
+//		$c->add(new \GO\Base\VObject\VTimezone());
 		
 		$months_in_past = isset($params['months_in_past']) ? intval($params['months_in_past']) : 0;
 		
