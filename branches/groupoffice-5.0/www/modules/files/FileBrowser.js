@@ -856,7 +856,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	/*
 	 * cut or copy
 	 */
-	pasteMode : 'cut',
+//	pasteMode : 'cut',
 
 	path : '',
 
@@ -1292,7 +1292,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	onCutCopy : function(pasteMode, records){
 		GO.files.pasteSelections=records;
-		this.pasteMode=pasteMode;
+		GO.files.pasteMode=pasteMode;
 		if(GO.files.pasteSelections.length)
 		{
 			this.pasteButton.setDisabled(false);
@@ -1301,7 +1301,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	onPaste : function(){
             if (GO.util.empty(this.gridStore.baseParams['query']))
-		this.paste(this.pasteMode, this.folder_id, GO.files.pasteSelections);
+		this.paste(GO.files.pasteMode, this.folder_id, GO.files.pasteSelections);
             else
                 Ext.MessageBox.alert('', GO.files.lang['notInSearchMode']);
 	},
@@ -2155,3 +2155,4 @@ GO.moduleManager.addModule('files', GO.files.FileBrowser, {
 });
 
 GO.files.pasteSelections = new Array();
+GO.files.pasteMode = 'copy';
