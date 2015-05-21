@@ -408,8 +408,11 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 			{
 				GO.tasks.categoriesStore.loadData(result.categories);
 				this.taskListsStore.loadData(result.tasklists);				
-				if (!GO.util.empty(result.tasks))
-					this.gridPanel.store.loadData(result.tasks);
+				if(result.tasks.success) {
+						this.gridPanel.store.loadData(result.tasks);
+				} else {
+						Ext.Msg.alert(result.tasks.feedback);
+				}
 			},
 			scope:this
 		});               
