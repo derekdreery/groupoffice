@@ -1,3 +1,4 @@
+- Reminders: order the list on the vtime property
 - Files: Fixed copy and paste functionality over different file browser dialogs/windows
 
 06-05-2015 5.0.100

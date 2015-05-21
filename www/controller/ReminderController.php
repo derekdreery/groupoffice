@@ -28,6 +28,7 @@ class GO_Core_Controller_Reminder extends GO_Base_Controller_AbstractController 
 	
 	protected function actionStore($params){
 		$params = GO_Base_Db_FindParams::newInstance()
+						->order('vtime')
 						->select('t.*')
 						->join(GO_Base_Model_ReminderUser::model()->tableName(),
 									GO_Base_Db_FindCriteria::newInstance()
