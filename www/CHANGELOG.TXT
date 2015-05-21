@@ -1,3 +1,4 @@
+- Reminders: order the list on the vtime property
 - Files: Fixed copy and paste functionality over different file browser dialogs/windows
 - Invalid utf8 when creating short usernames in the calendar
 
