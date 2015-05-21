@@ -1,5 +1,10 @@
 <?php
+
 $string =  json_encode($data);
+
+if($string === false) {
+	throw new \Exception("JSON encoding error");
+}
 
 if(strpos($string,'startjs:')!==false){
 	preg_match_all('/"startjs:(.*?):endjs"/usi', $string, $matches, PREG_SET_ORDER);

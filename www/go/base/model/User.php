@@ -501,10 +501,10 @@ class User extends \GO\Base\Db\ActiveRecord {
 	public function getShortName() {
 		
 		if(!empty($this->first_name))
-			$short = substr($this->first_name,0,1);  
+			$short = \GO\Base\Util\String::substr($this->first_name,0,1);  
 		
 		if(!empty($this->last_name))
-			$short .= substr($this->last_name,0,1);  
+			$short .= \GO\Base\Util\String::substr($this->last_name,0,1);  
 		
 		return strtoupper($short);
 	}
