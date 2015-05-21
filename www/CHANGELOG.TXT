@@ -1,3 +1,5 @@
+- Files: Fixed copy and paste functionality over different file browser dialogs/windows
+
 06-05-2015 5.0.100
 - Bookmarks: Categories can now become start menu items
 
