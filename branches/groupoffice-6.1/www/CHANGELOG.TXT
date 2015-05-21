@@ -1,3 +1,5 @@
+- Invalid utf8 when creating short usernames in the calendar
+
 20-05-2015 6.1.34
 - Updated VObject lib to 3.4.3
 - Fixed DTSTART value in VTIMEZONE object when exporting to ICS
