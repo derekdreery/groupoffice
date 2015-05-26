@@ -981,7 +981,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			var coords = e.getXY();
 
 			var selectedMailboxFolder = this.treePanel.getSelectionModel().getSelectedNode();
-			this.contextMenuLabels.setVisible(selectedMailboxFolder.attributes.permittedFlags);
+			// show the labels context menu when
+			this.contextMenuLabels.setVisible(selectedMailboxFolder.attributes.permittedFlags || selectedMailboxFolder.attributes.isAccount);
 
 			if(this.messagesGrid.store.reader.jsonData.permission_level <= GO.permissionLevels.read || this.messagesGrid.store.reader.jsonData.multipleFolders)
 			  this.gridReadOnlyContextMenu.showAt([coords[0], coords[1]], grid.getSelectionModel().getSelections());
