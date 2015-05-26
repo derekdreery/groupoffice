@@ -31,7 +31,7 @@ class Imap extends ImapBodyStruct {
 
 	var $delimiter=false;
 
-	var $sort_count = false;
+	var $sort_count = 0;
 
 	var $gmail_server = false;
 
@@ -1061,36 +1061,36 @@ class Imap extends ImapBodyStruct {
 			if ($sort == 'THREAD_O') {
 				if (stristr($this->capability, 'ORDEREDSUBJECT')) {
 					$ret =  $this->thread_sort($sort, $filter);
-					$this->sort_count = $ret['total'];
+					$this->sort_count += $ret['total'];
 					return $ret;
 				}
 				else {
 					$uids=$this->server_side_sort('ARRIVAL', false, $filter);
-					$this->sort_count = count($uids);
+					$this->sort_count += count($uids);
 					return $uids;
 				}
 			}
 			if ($sort == 'THREAD_R') {
 				if (stristr($this->capability, 'THREAD')) {
 					$ret = $this->thread_sort($sort, $filter);
-					$this->sort_count = $ret['total'];
+					$this->sort_count += $ret['total'];
 					return $ret;
 				}
 				else {
 					$uids=$this->server_side_sort('ARRIVAL', false, $filter);
-					$this->sort_count = count($uids);
+					$this->sort_count += count($uids);
 					return $uids;
 				}
 			}
 		}
 		elseif (stristr($this->capability, 'SORT')) {
 			$uids=$this->server_side_sort($sort, $reverse, $filter);
-			$this->sort_count = count($uids);
+			$this->sort_count += count($uids); // <-- BAD
 			return $uids;
 		}
 		else {
 			$uids=$this->client_side_sort($sort, $reverse, $filter);
-			$this->sort_count = count($uids);
+			$this->sort_count += count($uids);
 			return $uids;
 		}
 	}
