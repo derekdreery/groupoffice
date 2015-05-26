@@ -1,7 +1,7 @@
 <?php
 namespace GO\Dropbox;
 
-class DropboxModule extends \GO\Professional\Module {
+class DropboxModule extends \GO\Base\Module{
 	
 	public function package() {
 		return self::PACKAGE_UNSUPPORTED;
