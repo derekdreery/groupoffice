@@ -29,7 +29,7 @@ GO.tasks.TasklistDialog = function(config)
 			name: 'name',
 			allowBlank:false,
 			anchor: '100%'
-		},this.exportButton = new Ext.Button({			
+		},/*this.exportButton = new Ext.Button({			
 				text:GO.lang.cmdExport,
 				disabled:true,
 				handler:function(){
@@ -37,7 +37,7 @@ GO.tasks.TasklistDialog = function(config)
 					document.location=GO.settings.modules.tasks.url+'export.php?tasklist_id='+this.tasklist_id;
 				},
 				scope:this
-			}),
+			}),*/
 			this.deleteAllItemsButton = new Ext.Button({
 				style:'margin-top:10px',
 				xtype:'button',
