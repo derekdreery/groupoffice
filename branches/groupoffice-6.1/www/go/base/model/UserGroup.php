@@ -62,12 +62,12 @@ class UserGroup extends \GO\Base\Db\ActiveRecord {
 		
 		$this->updateAclMtime();
 		
-		parent::afterSave($wasNew);
+		return parent::afterSave($wasNew);
 	}
 	
 	protected function afterDelete() {
 		$this->updateAclMtime();
 		
-		parent::afterDelete();
+		return parent::afterDelete();
 	}
 }
