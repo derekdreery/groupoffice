@@ -184,7 +184,7 @@ class TaskController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected function formatColumns(\GO\Base\Data\ColumnModel $columnModel) {
 		
-		$columnModel->formatColumn('completion_time','$model->getAttribute("completion_time","formatted")',array(),array('incomplete','completion_time'));
+		$columnModel->formatColumn('completion_time','$model->getAttribute("completion_time","formatted")',array(),'completion_time');
 		$columnModel->formatColumn('completed','$model->status=="COMPLETED" ? 1 : 0');
 		$columnModel->formatColumn('is_active','$model->isActive()');
 //		$columnModel->formatColumn('status', '$l["statuses[\'".$model->status."\']"');
