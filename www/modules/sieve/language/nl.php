@@ -132,5 +132,9 @@ $l['deactivateAt']='Tot en met';
 
 $l['scheduleText']='Hier kunt u instellen wanneer de "Out of office" melding geactiveerd moet worden.';
 $l['messageText']='Geef hieronder uw bericht in';
+$l['subjectText']='Geef het onderwerp voor de melding in het onderstaande veld op';
 $l['aliassesText']='Geef hieronder de aliassen in waarvoor u deze melding ook weer wilt geven. Als u meerdere aliassen heeft, scheid ze dan met een komma (,).';
 $l['activateText']='Activeer de melding door onderstaande checkbox aan te zetten.';
+
+$l['advancedOptions'] = 'Geavanceerde opties';
+$l['standardvacationsubject']='Ik ben niet aanwezig';

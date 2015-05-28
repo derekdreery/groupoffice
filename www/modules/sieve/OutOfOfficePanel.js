@@ -65,6 +65,20 @@ GO.sieve.OutOfOfficePanel = Ext.extend(Ext.Panel,{
 			items:[this.activateText,this.activateCheck]
 		});
 		
+//		this.subjectText = new GO.form.HtmlComponent({
+//			html:GO.sieve.lang.subjectText,
+//			style:'padding:5px 0px'
+//		});
+//		
+//		this.subjectField = new Ext.form.TextArea({
+//			name: 'ooo_subject',
+//			allowBlank:false,
+//			anchor:'100%',
+//			height:20,
+//			width: 300,
+//			hideLabel: true
+//		});
+		
 		this.messageText = new GO.form.HtmlComponent({
 			html:GO.sieve.lang.messageText,
 			style:'padding:5px 0px'
@@ -84,7 +98,9 @@ GO.sieve.OutOfOfficePanel = Ext.extend(Ext.Panel,{
 			autoHeight: true,
 			border: true,
 			collapsed: false,
-			items:[this.messageText,this.messageField]
+			items:[
+//				this.subjectText,this.subjectField,
+				this.messageText,this.messageField]
 		});
 		
 		
@@ -97,17 +113,32 @@ GO.sieve.OutOfOfficePanel = Ext.extend(Ext.Panel,{
 			name: 'ooo_aliasses',
 			allowBlank:true,
 			anchor:'100%',
-			height:70,
+			height:40,
 			width: 300,
 			hideLabel: true
 		});
+			
+		this.nDaysText = new GO.form.HtmlComponent({
+			html:GO.sieve.lang.nDaysText,
+			style:'padding:5px 0px'
+		});
 		
-		this.aliassesFieldset = new Ext.form.FieldSet({
-			title: GO.sieve.lang.aliasses,
+		this.nDaysField = new GO.form.NumberField({
+			name: 'ooo_days',
+			value: 3,
+			allowBlank:false,
+			width:70,
+			decimals:0,
+			fieldLabel:GO.sieve.lang.days
+		});
+		
+		this.advancedFieldset = new Ext.form.FieldSet({
+			title: GO.sieve.lang.advancedOptions,
 			autoHeight: true,
 			border: true,
-			collapsed: false,
-			items:[this.aliassesText,this.aliassesField]
+			collapsed: true,
+			collapsible: true,
+			items:[this.aliassesText,this.aliassesField,this.nDaysText,this.nDaysField]
 		});
 			
 		this.scriptNameField = new Ext.form.Hidden({
@@ -135,7 +166,7 @@ GO.sieve.OutOfOfficePanel = Ext.extend(Ext.Panel,{
 				]
 			},
 			this.messageFieldset,
-			this.aliassesFieldset
+			this.advancedFieldset
 		];
 
 		GO.sieve.OutOfOfficePanel.superclass.initComponent.call(this,config);
@@ -150,8 +181,16 @@ GO.sieve.OutOfOfficePanel = Ext.extend(Ext.Panel,{
 		this.ruleNameField.setDisabled(disable);
 		this.activateCheck.setDisabled(disable);
 		this.indexField.setDisabled(disable);
+		this.nDaysField.setDisabled(disable);
+//		this.subjectField.setDisabled(disable);
+//
+//
+//		if(GO.config.){
+//			this.daysFieldset.setVisible();
+//		}
+
 	},
-	
+		
 	setAccountId : function(account_id){
 		this.setDisabled(!account_id);
 		this.accountId=account_id;
