@@ -1,3 +1,6 @@
+- Sieve: Added default alias always to the sieve alias(:addresses) line
+- Sieve: Added reply time to the out of office panel.
+- Sieve: Restyled  out of office panel with an advanced properties section
 - Fixed missing 'incomplete' column when sorting tasks on 'completed at'
 - Added "length" parameter to the debug action so a longer log can be requested if needed
 - Fixed namespace problem with Exception class in Store.php file.
