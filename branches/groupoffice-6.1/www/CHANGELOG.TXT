@@ -1,3 +1,4 @@
+- Fixed missing 'incomplete' column when sorting tasks on 'completed at'
 - Added "length" parameter to the debug action so a longer log can be requested if needed
 - Fixed namespace problem with Exception class in Store.php file.
 
