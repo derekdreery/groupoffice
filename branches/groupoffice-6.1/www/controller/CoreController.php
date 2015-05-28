@@ -41,6 +41,11 @@ class CoreController extends \GO\Base\Controller\AbstractController {
 		
 		GO::session()->values['debugSql']=!empty($params['debugSql']);
 		
+		// The default length of the tail command, when passing the "length" parameter this can be increased or decreased
+		$length = 300;
+		if(isset($params['length'])){
+			$length = $params['length'];
+		}
 		
 		$debugFile = new \GO\Base\Fs\File(GO::config()->file_storage_path.'log/debug.log');
 		if(!$debugFile->exists())
@@ -50,13 +55,13 @@ class CoreController extends \GO\Base\Controller\AbstractController {
 		if(!$errorFile->exists())
 			$errorFile->touch(true);
 		
-		$debugLog = nl2br(str_replace('['.GO::user()->username.'] ','',  htmlspecialchars($debugFile->tail(300))));
+		$debugLog = nl2br(str_replace('['.GO::user()->username.'] ','',  htmlspecialchars($debugFile->tail($length))));
 		$debugLog = str_replace('--------------------','<hr />', $debugLog);
 		
 		return array(
 				'success'=>true, 
 				'debugLog'=>$debugLog,
-				'errorLog'=>str_replace('----------------','<hr />', nl2br(htmlspecialchars($errorFile->tail(300))))
+				'errorLog'=>str_replace('----------------','<hr />', nl2br(htmlspecialchars($errorFile->tail($length))))
 				);
 	}
 	
