@@ -98,6 +98,10 @@ class SieveModule extends Module{
 						foreach($outOfOfficeRule['actions'] as $action){
 							if($action['type'] === "vacation"){
 
+								
+								
+								$rule['ooo_days'] = isset($action['days'])?$action['days']:3;
+//								$rule['ooo_subject'] = isset($action['subject'])?$action['subject']:\GO::t('standardvacationsubject','sieve');
 								$rule['ooo_message'] = $action['reason'];
 
 								if(!empty($action['addresses'])){
@@ -126,7 +130,9 @@ class SieveModule extends Module{
 					'ooo_activate'=>date(\GO::user()->completeDateFormat),
 					'ooo_deactivate'=>date(\GO::user()->completeDateFormat),
 					'ooo_message'=> \GO::t('standardvacationmessage','sieve'),
+//					'ooo_subject'=> \GO::t('standardvacationsubject','sieve'),
 					'ooo_aliasses'=>'',
+					'ooo_days' =>	3
 				));
 			} else {
 				// Add the found rule to the response
@@ -151,6 +157,33 @@ class SieveModule extends Module{
 		
 		// Check if the ooo_ fields are posted
 		if(isset($params['ooo_message'])){
+			
+//			if(!isset($params['ooo_subject'])){
+//				$params['ooo_subject'] = \GO::t('standardvacationsubject','sieve');
+//			}
+			
+			if(!isset($params['ooo_days'])){
+				$params['ooo_days'] = 3;
+			}
+			
+			// Check the aliasses
+			$alias = $model->getDefaultAlias();
+			if(!empty($alias)){
+				if(empty($params['ooo_aliasses'])){
+					// Add the default account email address
+					$params['ooo_aliasses'] = $alias->email;
+				} else {
+					// Check if the default account email address is present.
+					// If not then add it to the list
+					if (strpos($params['ooo_aliasses'],$alias->email) !== false) {
+							// Email is found
+					} else {
+						// Email is not found, add it as first of the list.
+						$params['ooo_aliasses'] =$alias->email.','.$params['ooo_aliasses'];
+					}
+				}
+			}
+			
 			
 			$sieve = new \GO\Sieve\Util\Sieve();
 			
@@ -178,6 +211,7 @@ class SieveModule extends Module{
 //			$params['ooo_message']				I am on vacation
 //			$params['ooo_rule_name']			Out of office
 //			$params['ooo_script_name']		default
+//			$params['ooo_days']						3			
 						
 			$activateDate = date('Y-m-d',\GO\Base\Util\Date::to_unixtime($params['ooo_activate']));
 			$deactivateDate = date('Y-m-d',\GO\Base\Util\Date::to_unixtime($params['ooo_deactivate']));
@@ -205,7 +239,8 @@ class SieveModule extends Module{
 					0=>array(
 						"type"=>"vacation",
 						"reason"=>$params['ooo_message'],
-						"days"=>"3",
+						"days"=>$params['ooo_days'],
+//						"subject"=>$params['ooo_subject'],
 						"addresses"=>$params['ooo_aliasses']
 					),
 					1=>array(
