@@ -1,3 +1,4 @@
+- Set combobox text in contact field on the Schedule call dialog
 - Projects2: Added Duplicate button to Project Panel, added Edit button to Tree ContextMenu
 - Groups: Fixed error message "Failed to run delete from model" problem with deleting users from groups.
 - Sieve: Added default alias always to the sieve alias(:addresses) line
