@@ -372,7 +372,6 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		this.setContact(contact_id,this.getNameFromContactDialog(dialog));
 	},
 	setContact : function(contact_id, contact_name){
-		console.log(contact_name);
 		this.selectContact.selectContactById(contact_id,function(combo,record){
 
 			this.contactIdField.setValue(contact_id);
