@@ -291,7 +291,7 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					this.selectContact,
 					this.phoneNumberField,
 					this.savePhoneNumberField,
-					this.btnAddContact,
+					this.btnAddContact
 				]}
 			]			
 		});
@@ -371,15 +371,21 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	setContactFromDialog : function(dialog,contact_id){
 		this.setContact(contact_id,this.getNameFromContactDialog(dialog));
 	},
-	setContact : function(contact_id){
+	setContact : function(contact_id, contact_name){
+		console.log(contact_name);
 		this.selectContact.selectContactById(contact_id,function(combo,record){
 
 			this.contactIdField.setValue(contact_id);
 			this.populatePhoneFields();
 			this.btnAddContact.setDisabled(true);
 			this.disableSavePhoneNumberField();
+			
+			var f = this.formPanel.form.findField('contact_name');
+			f.setRemoteText(contact_name);
 		},this);
-
+		
+		
+		
 		this.btnAddContact.setDisabled(true);
 		this.disableSavePhoneNumberField();
 	},
