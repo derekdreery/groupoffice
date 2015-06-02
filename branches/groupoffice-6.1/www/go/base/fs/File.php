@@ -293,7 +293,7 @@ class File extends Base{
 	 * @return boolean 
 	 */
 	public function isImage(){
-		switch($this->extension()){
+		switch(strtolower($this->extension())){
 			case 'ico':
 			case 'jpg':
 			case 'jpeg':
