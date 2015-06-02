@@ -1,3 +1,5 @@
+- Fixed isImage detection for uppercase extensions
+
 27-05-2015 5.0.101
 - Reminders: order the list on the vtime property
 - Files: Fixed copy and paste functionality over different file browser dialogs/windows
