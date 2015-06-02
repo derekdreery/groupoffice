@@ -1,3 +1,4 @@
+- Fixed isImage detection for uppercase extensions
 - Projects2: Added invoiceable option for project income. With exclamation mark in grid
 - Set combobox text in contact field on the Schedule call dialog
 - Projects2: Added Duplicate button to Project Panel, added Edit button to Tree ContextMenu
