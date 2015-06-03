@@ -373,8 +373,7 @@ abstract class Message extends \GO\Base\Model {
 
 		foreach($attachments as $att){
 			
-			if($html) {
-				//echo $att->mime;
+			if($html && $att->disposition != 'attachment') {				
 				if($att->mime == 'text/html') {
 					$htmlPartStr = $att->getData();
 					$htmlPartStr = \GO\Base\Util\String::convertLinks($htmlPartStr);
