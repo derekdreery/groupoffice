@@ -1,3 +1,4 @@
+- Duplicating a project saved to soon, causing validation errors with unique custom fields
 - Projects2 analyzer: ACL permissions would cause total time entry duration values to multiply
 - Fixed isImage detection for uppercase extensions
 - Projects2: Added invoiceable option for project income. With exclamation mark in grid
