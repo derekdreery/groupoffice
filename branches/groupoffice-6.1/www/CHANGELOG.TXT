@@ -1,3 +1,4 @@
+- Billing: Items Grid: Disabled "getEditorParent" because of problem with Chrome browsers for not being able to open the texeditor anymore
 - Duplicating a project saved to soon, causing validation errors with unique custom fields
 - Projects2 analyzer: ACL permissions would cause total time entry duration values to multiply
 - Fixed isImage detection for uppercase extensions
