@@ -1,3 +1,4 @@
+- Projects2 analyzer: ACL permissions would cause total time entry duration values to multiply
 - Fixed isImage detection for uppercase extensions
 - Projects2: Added invoiceable option for project income. With exclamation mark in grid
 - Set combobox text in contact field on the Schedule call dialog
