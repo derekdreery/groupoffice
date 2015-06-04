@@ -1,3 +1,4 @@
+- Tasks: Removed references of old export button in the tasklist dialog
 - Fixed isImage detection for uppercase extensions
 
 27-05-2015 5.0.101
