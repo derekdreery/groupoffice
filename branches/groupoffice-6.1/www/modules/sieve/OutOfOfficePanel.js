@@ -42,6 +42,7 @@ GO.sieve.OutOfOfficePanel = Ext.extend(Ext.Panel,{
 			height:130,
 			border: true,
 			collapsed: false,
+			labelWidth: 180,
 			items:[this.scheduleText,this.scheduleActivateField,this.scheduleDeactivateField],
 			style: 'margin-right:10px; margin-bottom:5px;'
 		});
