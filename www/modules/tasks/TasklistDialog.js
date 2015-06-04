@@ -222,7 +222,7 @@ Ext.extend(GO.tasks.TasklistDialog, Ext.Window, {
 
 			this.readPermissionsTab.setDisabled(true);
 
-			this.exportButton.setDisabled(true);
+//			this.exportButton.setDisabled(true);
 			this.importTab.setDisabled(true);
 		
 
@@ -244,7 +244,7 @@ Ext.extend(GO.tasks.TasklistDialog, Ext.Window, {
 				this.selectUser.setRemoteText(action.result.remoteComboTexts.user_name);
 				this.readPermissionsTab.setAcl(action.result.data.acl_id);
 				
-				this.exportButton.setDisabled(false);
+//				this.exportButton.setDisabled(false);
 				this.importTab.setDisabled(false);
 				GO.tasks.TasklistDialog.superclass.show.call(this);
 			},
@@ -273,7 +273,7 @@ Ext.extend(GO.tasks.TasklistDialog, Ext.Window, {
 					this.tasklist_id=action.result.id;
 					this.readPermissionsTab.setAcl(action.result.acl_id);
 					
-					this.exportButton.setDisabled(false);
+//					this.exportButton.setDisabled(false);
 					this.importTab.setDisabled(false);
 				}
 				
