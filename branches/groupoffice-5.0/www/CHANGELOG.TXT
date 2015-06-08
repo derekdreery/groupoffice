@@ -1,3 +1,5 @@
+08-06-2015 5.0.102
+- Error in creating projects folders
 - Tasks: Removed references of old export button in the tasklist dialog
 - Fixed isImage detection for uppercase extensions
 
