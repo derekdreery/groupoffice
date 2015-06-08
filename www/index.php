@@ -37,8 +37,10 @@ if(!\GO::user())
 
 //try with HTTP auth
 if(!\GO::user() && !empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])){
-	\GO::session()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-	$_REQUEST['security_token'] = \GO::session()->securityToken();
+	if(\GO::session()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {	
+		//security token not requireed when using basic auth.
+		$_REQUEST['security_token'] = \GO::session()->securityToken();
+	}
 }
 
 
