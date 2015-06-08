@@ -1,5 +1,5 @@
-groupoffice-mailserver (5.0.101) fivezero; urgency=low
+groupoffice-mailserver (5.0.102) fivezero; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Wed, 27 May 2015 09:13:59 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Mon, 8 Jun 2015 08:18:44 +0200
