@@ -408,6 +408,7 @@ GO.email.EmailClient = function(config){
 			iconCls: 'btn-labels',
 			text: GO.email.lang.labels,
 			menu: this.labelsContextMenu = new GO.menu.JsonMenu({
+				id: 'email-messages-labels-menu',
 				store: new GO.data.JsonStore({
 					url: GO.url("email/label/store"),
 					baseParams: {
@@ -424,8 +425,7 @@ GO.email.EmailClient = function(config){
 					},
 
 					beforeshow: function() {
-						var isDefined = Ext.isDefined(this.labelsContextMenu.store.baseParams.account_id);
-
+						var isDefined = Ext.isDefined(this.labelsContextMenu.store.baseParams.account_id) && this.labelsContextMenu.store.baseParams.account_id !== null;
 						if (!isDefined || (isDefined && this.labelsContextMenu.store.baseParams.account_id != this.messagesStore.baseParams.account_id)) {
 							this.labelsContextMenu.store.loaded = true; //hack - ignore initial store load
 							this.labelsContextMenu.store.baseParams.account_id = this.messagesStore.baseParams.account_id
@@ -433,7 +433,7 @@ GO.email.EmailClient = function(config){
 						}
 					},
 
-					show: function() {						
+					show: function() {
 						this.setCheckStateOnLabelsMenu();
 					},
 

@@ -578,7 +578,11 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 					// this.foldersTab.setDisabled(false);
 					this.loadAccount(action.result.id);
 				}
-
+				
+				//This will reload the signature when it is changed
+				if(GO.email.composers && GO.email.composers[0]) {
+					GO.email.composers[0].fromCombo.store.reload();
+				}
 				this.refreshNeeded = false;
 				this.fireEvent('save', this, action.result);
 

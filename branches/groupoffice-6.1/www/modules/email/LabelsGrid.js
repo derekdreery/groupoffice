@@ -11,6 +11,12 @@ GO.email.LabelsGrid = Ext.extend(GO.grid.GridPanel, {
                 baseParams : {
                     account_id : 0
                 },
+				listeners: {
+					load: function() { 
+						Ext.ComponentMgr.get('email-messages-labels-menu').store.baseParams.account_id = null; //this.store.baseParams.account_id;
+					},
+					scope:this
+				},
                 fields : ['id', 'name', 'flag', 'color', 'default'],
                 remoteSort : false
             }),
