@@ -242,9 +242,9 @@ class SieveModule extends Module{
 						"days"=>$params['ooo_days'],
 //						"subject"=>$params['ooo_subject'],
 						"addresses"=>$params['ooo_aliasses']
-					),
-					1=>array(
-						"type"=>"stop"
+//					),
+//					1=>array(
+//						"type"=>"stop"
 					)
 				),
 				"join"=>true,
