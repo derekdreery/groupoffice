@@ -1,3 +1,5 @@
+- Email: Composer will reload signature without full reload
+- Email: Labels context menu will change when Labels are changed without full reload
 - Sieve: Removed "Stop" from default "Out of office" rule
 - Billing Order item description field autocompletes the description of a product as well
 
