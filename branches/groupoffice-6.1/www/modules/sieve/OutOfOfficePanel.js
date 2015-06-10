@@ -139,6 +139,7 @@ GO.sieve.OutOfOfficePanel = Ext.extend(Ext.Panel,{
 			border: true,
 			collapsed: true,
 			collapsible: true,
+			labelWidth: 180,
 			items:[this.aliassesText,this.aliassesField,this.nDaysText,this.nDaysField]
 		});
 			
