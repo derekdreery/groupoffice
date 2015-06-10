@@ -1,3 +1,4 @@
+- Calendar: Undo the recurrence not correct exception because it causes the calendar for not being loaded at all.
 - Tasks: Fixed loading problem of the tasks grid. (Sometimes the loadingmask kept hanging)
 - Email: Composer will reload signature without full reload
 - Email: Labels context menu will change when Labels are changed without full reload
