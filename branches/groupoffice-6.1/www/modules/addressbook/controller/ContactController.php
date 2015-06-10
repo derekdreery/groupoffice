@@ -554,11 +554,22 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 		
 		$tmpFile =\GO\Base\Fs\File::tempFile($params['filename'], 'vcf');
 		$imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
-				
-
-		GO\Base\Util\Http::outputDownloadHeaders($tmpFile);
 		
-		echo $tmpFile->getContents();
+		$options = \Sabre\VObject\Reader::OPTION_FORGIVING + \Sabre\VObject\Reader::OPTION_IGNORE_INVALID_LINES;
+		$card = \Sabre\VObject\Reader::read($tmpFile->getContents(),$options);
+		$contact = new \GO\Addressbook\Model\Contact();
+		$contact->importVObject($card, array(), false);
+		
+		//format utf-8 attributes
+		foreach($contact->getAttributes('raw') as $key => $value) {
+			try {
+				$contact->{$key} = utf8_decode($value);
+			} catch (\Exception $e) {}
+		}
+		
+		//GO\Base\Util\Http::outputDownloadHeaders($tmpFile);
+		return array('success'=>true, 'contacts'=>array($contact->getAttributes()));
+		//echo $tmpFile->getContents();
 
 	}
 	
