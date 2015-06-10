@@ -552,8 +552,14 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 		$account = \GO\Email\Model\Account::model()->findByPk($params['account_id']);
 		$imap = $account->openImapConnection($params['mailbox']);
 		
-		$tmpFile =\GO\Base\Fs\File::tempFile($params['filename'], 'vcf');
+		$tmpFile =\GO\Base\Fs\File::tempFile($params['filename']);
 		$imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
+		
+		if(!isset($params['importVCard'])) {
+			\GO\Base\Util\Http::outputDownloadHeaders($tmpFile);
+			echo $tmpFile->getContents();
+			return;
+		}
 		
 		$options = \Sabre\VObject\Reader::OPTION_FORGIVING + \Sabre\VObject\Reader::OPTION_IGNORE_INVALID_LINES;
 		$card = \Sabre\VObject\Reader::read($tmpFile->getContents(),$options);
