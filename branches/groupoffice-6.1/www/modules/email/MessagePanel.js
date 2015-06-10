@@ -718,7 +718,7 @@ GO.email.readVCard = function(url) {
 			callback: function(options, success, response)
 			{
 				var responseData = Ext.decode(response.responseText);
-				if(!success)
+				if(!success || !responseData.success)
 				{
 					Ext.MessageBox.alert(GO.lang['strError'], responseData['feedback']);
 				} else {
