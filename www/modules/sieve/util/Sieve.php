@@ -143,6 +143,8 @@ class Sieve {
 		if (!$name)
 			$name = $this->current;
 
+		$this->_moveOutOfOfficeToEnd();
+		
 		$script = $this->script->as_text();
 		
 		if (!$script)
@@ -157,6 +159,22 @@ class Sieve {
 		}
 
 		return true;
+	}
+	
+	/**
+	 * Move the "Out of office" rule to the end of the sieve file.
+	 */
+	private function _moveOutOfOfficeToEnd(){
+		// De out of office rule altijd als laatste.
+			foreach($this->script->content as $key => $val) {
+
+				if($val['name'] == 'Out of office') {
+					$item = $this->script->content[$key];
+					unset($this->script->content[$key]);
+					array_push($this->script->content, $item); 
+					break;
+				}
+			}
 	}
 
 	/**
