@@ -1,3 +1,5 @@
+- Sieve: Move the "Out of office" rule always to the end of the sieve file.
+
 10-06-2015 6.1.39
 - Email: fixed importing VCards in Email attachment
 - Calendar: Undo the recurrence not correct exception because it causes the calendar for not being loaded at all.
