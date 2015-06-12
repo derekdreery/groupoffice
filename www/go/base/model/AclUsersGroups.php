@@ -80,13 +80,12 @@ class AclUsersGroups extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	protected function afterSave($wasNew) {
-		
-		//Add log message for activitylog here
-		if(\GO::modules()->isInstalled("log")){
-			\GO\Log\Model\Log::create("acl", $this->aclItem->description,$this->aclItem->className(),$this->aclItem->id);
-		}
-
 		if($this->aclItem){
+			//Add log message for activitylog here
+			if(\GO::modules()->isInstalled("log")){
+				\GO\Log\Model\Log::create("acl", $this->aclItem->description,$this->aclItem->className(),$this->aclItem->id);
+			}
+		
 			$this->aclItem->touch();
 		}
 		
