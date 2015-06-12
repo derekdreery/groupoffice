@@ -171,15 +171,19 @@ class SieveModule extends Module{
 			if(!empty($alias)){
 				if(empty($params['ooo_aliasses'])){
 					// Add the default account email address
-					$params['ooo_aliasses'] = $alias->email;
+					$params['ooo_aliasses'] = array($alias->email);
 				} else {
+					
+					if(!is_array($params['ooo_aliasses'])){
+						$params['ooo_aliasses'] = explode(',',$params['ooo_aliasses']);
+					}
 					// Check if the default account email address is present.
 					// If not then add it to the list
-					if (strpos($params['ooo_aliasses'],$alias->email) !== false) {
-							// Email is found
+					if(in_array($alias->email, $params['ooo_aliasses'])){
+						// Email is found
 					} else {
 						// Email is not found, add it as first of the list.
-						$params['ooo_aliasses'] =$alias->email.','.$params['ooo_aliasses'];
+						array_unshift($params['ooo_aliasses'],$alias->email);
 					}
 				}
 			}
