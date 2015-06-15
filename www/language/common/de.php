@@ -75,7 +75,7 @@ $l["attributeGreater"]="Feld '%s' muß größer als '%s' sein";
 $l["attributeGreaterOrEqual"]="Feld '%s' muß größer oder gleich '%s' sein";
 $l["failedImportItems"]="Import der Einträge fehlgeschlagen";
 $l["birthdayFormatMustBe"]="Das Geburtstagsfeld muß im folgenden Format sein";
-$l["updateWithMatchingAttributes"]='Update Artikel mit den folgenden Attributen';
+
 
 $l["exportHiddenColumns"]='Auch versteckte Spalten exportieren';
 $l["searchQuery"]='Suchbegriff';
@@ -668,3 +668,6 @@ $l['manageSavedExports']= 'Gespeicherte Exporte verwalten';
 $l['noSavedExports']= 'Keine gespeicherten Exporte vorhanden';
 $l['overwriteAcl']= 'Standardberechtigungen für dieses Objekt überschreiben (Zum Aktivieren auf Übernehmen klicken)';
 $l['cantDeleteDefault']= "Das Standardobjekt kann nicht gelöscht werden.";
+
+$l['updateWithMatchingAttributes']= 'Einträge erneuern (anstatt neu zu erzeugen) mit den folgenden zutreffenden Attributen';
+$l['zipFilesizeTooBig']= 'Die Gesamtgröße der ausgewählten Dateien ist zu groß um sie zu archivieren. (Erlaubt sind %s.)';

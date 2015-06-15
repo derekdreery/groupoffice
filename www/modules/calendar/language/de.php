@@ -262,5 +262,5 @@ $l['moveEventResourceError']= 'Konnte den Termin nicht verschieben, weil die fol
 $l['allTogetherForParticipants']= 'Alle Teilnehmer';
 $l['allTogetherForResources']= 'Alle Ressourcen';
 
-$l['resourceUsedIn']= 'Benutzte Ressourcen in';
-$l['exportAsIcs'] ='Als ICS exportieren';
+$l['resourceUsedIn']= 'Resourcen benutzt in';
+$l['exportAsIcs']= 'Exportieren als ICS';
