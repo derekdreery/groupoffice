@@ -101,7 +101,7 @@ color:#000;
 		}
 		
 		if(!empty(\GO::config()->tcpdf_ttf_font)){
-			$this->font=  TCPDF_FONTS::addTTFfont(\GO::config()->tcpdf_ttf_font);
+			$this->font = \TCPDF_FONTS::addTTFfont(\GO::config()->tcpdf_ttf_font);
 			//$this->font=  TCPDF_FONTS::addTTFfont(\GO::config()->tcpdf_ttf_font,'TrueType'); // 2nd parameter is normally autodetected but sometimes this goes wrong. 
 		}		
 		
