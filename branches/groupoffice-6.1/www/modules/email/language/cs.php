@@ -303,3 +303,6 @@ $l['moveToInboxMsg'] = 'Jste si jisti, že chcete odstranit spam značku a přes
 
 $l['showCcByDefault']='Zobrazit CC pole (kopie) ve výchozím nastavení';
 $l['showBccByDefault']='Zobrazit BCC pole (skrytá kopie) ve výchozím nastavení';
+
+
+$l['saveToPersonal'] = 'Uložit do osobních složek';

@@ -132,3 +132,7 @@ $l['activateText']='Aktivieren Sie diese Filterregel durch Auswahl der Checkbox.
 
 $l['bodycontainsnot']= 'Body enthält nicht';
 $l['bodycontains']= 'Body enthält';
+
+$l['standardvacationsubject']='Ich bin nicht am Platze';
+$l['subjectText']='Betreff der Antwort im unten stehenden Feld ausfüllen.';
+$l['advancedOptions']= 'Erweiterte Optionen';

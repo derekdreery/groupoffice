@@ -133,3 +133,5 @@ $l['scheduleText']='Zde můžete naplánovat kdy má být zpráva "Mimo Kancelá
 $l['messageText']='Vyplňte svoji zprávu do následujícího pole';
 $l['aliassesText']='Vyplňte aliasy pro které má být zpráva také aktivní. Více adres oddělte čárkou (,).';
 $l['activateText']='Aktivujte zprávu zatržítkem';
+
+$l['advancedOptions'] = 'Pokročilé volby';

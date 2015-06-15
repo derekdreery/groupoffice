@@ -135,3 +135,6 @@ $l['show_addresslists_panel'] = 'Zobrazit seznam adresářů';
 $l['enabled_cf_tabs'] = 'Povolit záložky vlastních oblastí';
 
 $l['cmdFormLabelHolidaySet'] = 'Svátky';
+
+$l['noReminders'] = 'Vypnout upomínky';
+$l['transferData'] = 'Přenos dat';

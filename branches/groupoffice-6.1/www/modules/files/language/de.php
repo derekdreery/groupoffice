@@ -129,3 +129,5 @@ $l['deleteExpiredDescription']='Dateien löschen, deren Download-Link nicht mehr
 
 $l['deleteWhenExpired'] = 'Datei(en) automatisch löschen, wenn der Download-Link zeitlich abgelaufen ist';
 $l['automaticallyDeleted'] = 'Datei wird automatisch gelöscht, wenn der Download-Link zeitlich abgelaufen ist';
+
+$l['downloadSelected']= 'Ausgewählte herunterladen';
