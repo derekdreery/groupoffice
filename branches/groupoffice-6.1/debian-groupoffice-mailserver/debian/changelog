@@ -1,5 +1,5 @@
-groupoffice-mailserver (6.1.39) sixone; urgency=low
+groupoffice-mailserver (6.1.40) sixone; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Wed, 10 Jun 2015 16:57:16 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Mon, 15 Jun 2015 13:12:52 +0200
