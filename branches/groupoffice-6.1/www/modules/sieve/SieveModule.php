@@ -260,12 +260,24 @@ class SieveModule extends Module{
 				$rule['actions'][0]['subject']=\GO::config()->sieve_vacation_subject;
 				
 			$response['sieve_after'] = $rule;
-			
-			// Het script ophalen en terugzetten
-			if($params['ooo_script_index']>-1 && isset($sieve->script->content[$params['ooo_script_index']])){
-				$sieve->script->update_rule($params['ooo_script_index'],$rule);
-			} else {
-				$sieve->script->add_rule($rule);
+
+			// Search for the correct index of the Out of office script again.
+			if(!empty($sieve->script->content)) {
+				$index=0;
+				foreach($sieve->script->content as $item){
+					// Get the "Out of office" script because it need to be loaded here
+					if(isset($item['name']) && $item['name']=='Out of office'){
+						break; // will leave the foreach loop and also "break" the if statement
+					}
+					$index++;
+				}
+				
+				if($index>-1 && isset($sieve->script->content[$index])){
+					$sieve->script->update_rule($index,$rule);
+				} else {
+					$sieve->script->add_rule($rule);
+				}
+				
 			}
 
 			// Het script opslaan
