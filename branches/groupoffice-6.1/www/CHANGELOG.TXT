@@ -1,3 +1,5 @@
+- Sieve: Fixed index problem with sieve rules
+
 15-06-2015 6.1.40
 - Updated Czech and German translations
 - Billing: Added tax_code display to the tax column in the items grid
