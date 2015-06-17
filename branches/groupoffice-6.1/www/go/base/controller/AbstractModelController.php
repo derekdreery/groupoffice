@@ -783,6 +783,7 @@ class AbstractModelController extends AbstractController {
 		$store->getColumnModel()
 						->setFormatRecordFunction(array($this, 'formatTaskLinkRecord'))
 						->formatColumn('late','$model->due_time<time() ? 1 : 0;')
+						->formatColumn('is_active','$model->isActive()')
 						->formatColumn('tasklist_name', '$model->tasklist->name')
 						->formatColumn('link_count','$model->countLinks()')
 						->formatColumn('description','GO\Base\Util\string::cut_string($model->description,500)')
