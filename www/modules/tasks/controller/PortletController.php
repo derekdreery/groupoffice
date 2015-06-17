@@ -94,6 +94,7 @@ class PortletController extends \GO\Base\Controller\AbstractMultiSelectModelCont
 		$store->setStatement($stmt);
 		$store->getColumnModel()->formatColumn('tasklist_name', '$model->tasklist_name');
 		$store->getColumnModel()->formatColumn('late','$model->isLate();');
+		$store->getColumnModel()->formatColumn('is_active','$model->isActive()');
 		
 		return $store->getData();
 		

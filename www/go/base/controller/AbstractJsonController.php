@@ -596,6 +596,7 @@ abstract class AbstractJsonController extends AbstractController {
 
 		$store->getColumnModel()
 						->setFormatRecordFunction(array($this, 'formatTaskLinkRecord'))
+						->formatColumn('is_active','$model->isActive()')
 						->formatColumn('late', '$model->due_time<time() ? 1 : 0;')
 						->formatColumn('tasklist_name', '$model->tasklist->name')
 						->formatColumn('link_count', '$model->countLinks()')
