@@ -1485,9 +1485,9 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		
 		$dateType = $this->all_day_event ? "DATE" : "DATETIME";
 		
-		if($this->all_day_event){
-			$e->{"X-FUNAMBOL-ALLDAY"}=1;
-		}
+//		if($this->all_day_event){
+//			$e->{"X-FUNAMBOL-ALLDAY"}=1;
+//		}
 		
 		if($this->exception_for_event_id>0){
 			//this is an exception
@@ -1698,10 +1698,10 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		$substractOnEnd=0;
 		
 		//funambol sends this special parameter
-		if((string) $vobject->{"X-FUNAMBOL-ALLDAY"}=="1"){
-			$this->all_day_event=1;
-		}else
-		{
+//		if((string) $vobject->{"X-FUNAMBOL-ALLDAY"}=="1"){
+//			$this->all_day_event=1;
+//		}else
+//		{
 			$this->all_day_event = isset($vobject->dtstart['VALUE']) && $vobject->dtstart['VALUE']=='DATE' ? 1 : 0;
 			
 			//ios sends start and end date at 00:00 hour
@@ -1713,7 +1713,7 @@ class Event extends \GO\Base\Db\ActiveRecord {
 				$substractOnEnd=60;
 			}
 
-		}
+//		}
 		
 		if($this->all_day_event){
 			if($dtstart->getTimezone()->getName()=='UTC'){
