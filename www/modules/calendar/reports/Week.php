@@ -24,12 +24,6 @@ class Week extends Calendar {
 	protected $notes = array('Note1', 'Note2', 'Note3');
 	protected $tasks = array('Task1', 'Task2', 'Task3');
 	
-	/**
-	 *
-	 * @var integer A unixtimestamp of the day to display
-	 */
-	public $day;
-	
 	protected $dayCount = 7; //the amount of days to render in week view
 	
 	public function Header() {
