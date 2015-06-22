@@ -9,8 +9,8 @@ GO.base.CurrentGridExportDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			title:GO.lang.exportScreen,
 			goDialogId:'current-grid-export-dialog',
 			formControllerUrl: 'core/export',
-			height:400,
-			width:500,
+			height:600,
+			width:800,
 			enableOkButton : true,
 			enableApplyButton : false,
 			enableCloseButton : true
@@ -20,18 +20,8 @@ GO.base.CurrentGridExportDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	},
 	buildForm : function () {
 
-		this.columnsPanel= new GO.grid.MultiSelectGrid({
-			title: GO.lang.columns,
-			extraColumns : [{
-				header: GO.lang.strLabel,
-				dataIndex: "label",
-				id: "label",
-				width: 250
-			}],
-			region:'center',
-			loadMask:true,
-			allowNoSelection : true,
-			store: new Ext.data.JsonStore({fields: ['name','label']})
+		this.columnsPanel = new GO.base.ColumnSelectPanel({
+			region:'center'
 		});
 
 		this.viewCombo = new Ext.form.ComboBox({
@@ -141,14 +131,22 @@ GO.base.CurrentGridExportDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	},
 	
 	afterLoad : function(remoteModelId, config, action){
-
+		
 		this.viewCombo.store.loadData(action.result.supportedViews);
 		
 		if(action.result.data.savedExport.attributes.view)
 			this.viewCombo.setValue(action.result.data.savedExport.attributes.view);
+		
+		if(action.result.data.savedExport.attributes.include_column_names)
+			this.includeColumnNames.setValue(action.result.data.savedExport.attributes.include_column_names);
+		
+		if(action.result.data.savedExport.attributes.use_db_column_names)
+			this.useDbColumnNames.setValue(action.result.data.savedExport.attributes.use_db_column_names);
 
-		this.columnsPanel.store.loadData(action.result.columns);
-		this.columnsPanel.applyFilter(action.result.data.savedExport.attributes.export_columns,true);
+		this.columnsPanel.reset();
+		this.columnsPanel.loadData(action.result.columns);
+		if(action.result.data.savedExport.attributes.export_columns)
+			this.columnsPanel.setSelected(action.result.data.savedExport.attributes.export_columns,true);
 	},
 		
 	setClass : function(className){

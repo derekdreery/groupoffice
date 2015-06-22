@@ -1,6 +1,7 @@
 GO.base.ExportMenu = Ext.extend(Ext.Button,{
 	
 	className : null,
+	currentGridColumns:false,
 	
 	constructor : function(config){
 		
@@ -71,6 +72,27 @@ GO.base.ExportMenu = Ext.extend(Ext.Button,{
 		this.className = className;
 		this.savedExportMenu.store.baseParams.className = className;
 		this.savedExportMenu.store.load();
+	},
+	
+	setColumnModel : function(columnModel){
+		var cgColumns = [];
+		var columns = columnModel.getColumnsBy(function(c){
+			return !c.hidden;
+		});
+		
+		for(var i = 0; i < columns.length; i++){
+			
+			var colName = columns[i].dataIndex.toString();
+			
+			if(colName.substring(0, 4) == "col_"){
+				var cfColname = 'customfields.'+columns[i].dataIndex;
+				cgColumns.push(cfColname);
+			} else {
+				cgColumns.push(columns[i].dataIndex);
+			}
+		}
+		
+		this.currentGridColumns = cgColumns.join();
 	},
 	
 	initComponent : function(){
@@ -152,7 +174,8 @@ GO.base.ExportMenu = Ext.extend(Ext.Button,{
 				GO.base.currentGridExportDialog.setClass(this.className);
 				GO.base.currentGridExportDialog.show(0,{
 					loadParams:{
-						className:this.className
+						className:this.className,
+						exportColumns:this.currentGridColumns
 					}
 				});
 			},

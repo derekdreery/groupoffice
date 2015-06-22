@@ -111,11 +111,14 @@ class Company extends \GO\Base\Db\ActiveRecord {
 	}
 	
 	public function attributeLabels() {
-		$attr = parent::attributeLabels();
+		$labels = parent::attributeLabels();
 		
-		$attr['postAddressIsEqual']="Post address is equal to visit address";
+		$labels['postAddressIsEqual']="Post address is equal to visit address";
+		$labels['link_id'] = \GO::t('cmdLink');
+		$labels['invoice_email'] = \GO::t('email');
+		$labels['photo'] = \GO::t('photo','addressbook');
 		
-		return $attr;
+		return $labels;
 	}
 	
 	public function validate() {

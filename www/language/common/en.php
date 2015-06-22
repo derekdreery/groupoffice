@@ -707,3 +707,7 @@ $l['cantDeleteDefault'] = "Can't delete the default item.";
 $l['updateWithMatchingAttributes'] = 'Update items (instead of create new items) with the following matching attributes';
 
 $l['zipFilesizeTooBig'] = 'The total size of the files that are selected to be zipped is too big. (Only %s is allowed.)';
+
+$l['selectedColumns'] = 'Selected Columns';
+$l['availableColumns'] = 'Available columns';
+$l['exportSelectHelpText'] = 'Drag the columns (Or doubleclick) that you want to export form the left grid to the right.';

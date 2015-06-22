@@ -189,6 +189,7 @@ views/Extjs3/javascript/SortableDataView.js
 
 views/Extjs3/javascript/panels/AccordeonPanel.js
 
+views/Extjs3/javascript/base/ColumnSelectPanel.js
 views/Extjs3/javascript/base/CurrentGridExportDialog.js
 views/Extjs3/javascript/base/SavedExportDialog.js
 views/Extjs3/javascript/base/SavedExportGrid.js

@@ -138,6 +138,20 @@ abstract class AbstractExport {
 			$colModel->formatColumn($col, $format, array(), '', $this->getLabel($col));
 			
 		}
+
+		$colModel->sort($columns);
+		
+		
+		
+		$colModel = $this->formatColumns($colModel);
+		$formattedColumns = $colModel->getColumns();
+		
+		
+		foreach ($formattedColumns as $formattedCol){
+			if(!in_array($formattedCol->getDataIndex(),$columns)){
+				$colModel->removeColumn($formattedCol->getDataIndex());
+			}
+		}	
 		
 		return $colModel;
 	}
@@ -231,14 +245,21 @@ abstract class AbstractExport {
 			
 		$availableColumns = array();
 		foreach($aColumns as $name=>$column){
-			//if(!$this->_checkRelatedColumn($name,$relatedColumns)){
-				$availableColumns[] = array('id'=>$name,'name'=>$name,'label'=>$this->_model->getAttributeLabel($name));
-			//}
+			$availableColumns[] = array('id'=>$name,'name'=>$name,'label'=>$this->_model->getAttributeLabel($name));
 		}
 		
-		//var_dump($availableColumns);
-		
 		$availableColumns = array_merge($availableColumns,  array_values($relatedColumns));		
+		
+		// Get the columnModel columns and the columns that are added through the formatColumns function.
+		$cm = $this->getColumnModel();
+		$cm = $this->formatColumns($cm);
+		$cmCols = $cm->getColumns();
+		$cmColumns = array();
+		foreach($cmCols as $cmCol){
+			$cmColumns[] = array('id'=>$cmCol->getDataIndex(),'name'=>$cmCol->getDataIndex(),'label'=>$cmCol->getLabel());
+		}
+		
+		$availableColumns = array_merge($availableColumns, array_values($cmColumns));	
 		
 		// Remove columns that are not exportable
 		foreach($this->notExportableColumns as $notExp){
@@ -273,5 +294,16 @@ abstract class AbstractExport {
 		
 		return false;
 	}
+	
+	/**
+   * Override this function to format columns if necessary.
+   * You can also use formatColumn to add extra columns
+   * 
+   * @param \GO\Base\Data\ColumnModel $columnModel
+   * @return \GO\Base\Data\ColumnModel 
+   */
+  public function formatColumns(\GO\Base\Data\ColumnModel $columnModel){
+    return $columnModel;
+  }
 	
 }

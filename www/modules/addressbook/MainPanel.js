@@ -443,6 +443,8 @@ GO.addressbook.MainPanel = function(config)
 				this.exportMenu.setClassName('GO\\Addressbook\\Export\\CurrentGridCompany');
 			}
 			
+			this.exportMenu.setColumnModel(activetab.getColumnModel());
+			
 		}, this);
 		
 		tbar.push(this.exportMenu);
