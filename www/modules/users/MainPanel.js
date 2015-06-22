@@ -95,7 +95,7 @@ GO.users.MainPanel = function(config)
 				},
 				scope:this
 			},
-			new GO.base.ExportMenu({className:'GO\\Users\\Export\\CurrentGrid'}),
+			this.exportMenu = new GO.base.ExportMenu({className:'GO\\Users\\Export\\CurrentGrid'}),
 			{
 				iconCls: 'bsync-btn-sync',
 				text: GO.users.lang['transferData'],
@@ -121,6 +121,8 @@ GO.users.MainPanel = function(config)
 		         GO.lang['strSearch']+':',
 		        this.searchField
 		    ]});
+			
+	this.exportMenu.setColumnModel(this.usersGridPanel.getColumnModel());
 	
 	config.items= [
 		this.groupsGrid,

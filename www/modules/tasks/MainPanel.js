@@ -325,7 +325,7 @@ this.gridPanel.store.on('load', function(store, records, options)
 //				},
 //				scope: this
 //			},
-			new GO.base.ExportMenu({className:'GO\\Tasks\\Export\\CurrentGrid'}),
+			this.exportMenu = new GO.base.ExportMenu({className:'GO\\Tasks\\Export\\CurrentGrid'}),
 			{
 				iconCls: 'btn-refresh',
 				text: GO.lang['cmdRefresh'],
@@ -338,6 +338,8 @@ this.gridPanel.store.on('load', function(store, records, options)
 			}
 			]
 		});
+	
+	this.exportMenu.setColumnModel(this.gridPanel.getColumnModel());
 	
 	GO.tasks.MainPanel.superclass.constructor.call(this, config);
 	
