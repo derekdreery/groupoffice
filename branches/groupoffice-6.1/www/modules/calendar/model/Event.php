@@ -470,6 +470,9 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			throw new \Exception("Exception event ID can't be set to ID");
 		}
 		
+		if($this->exception_for_event_id > 0 && !empty($this->rrule)) {
+			throw new \Exception("Can't create exception with RRULE");
+		}
 
 		$resourceConflicts = $this->hasResourceConflicts();
 
