@@ -26,7 +26,7 @@ function generateLangKeys($className){
 	
 	$model = new $className();
 	
-	$name = explode('_',$className);
+	$name = explode('\\',$className);
 	$modelName = strtolower(end($name));
 	$columns = $model->getColumns();
 	

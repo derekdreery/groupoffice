@@ -115,6 +115,20 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 		return true;
 	}
 	
+	public function attributeLabels() {
+		
+		$labels = parent::attributeLabels();
+		
+		$labels['url_facebook'] = \GO::t('facebookUrl','addressbook');
+		$labels['url_linkedin'] = \GO::t('linkedinUrl','addressbook');
+		$labels['url_twitter'] = \GO::t('twitterUrl','addressbook');
+		$labels['skype_name'] = \GO::t('skypeName','addressbook');
+		$labels['photo'] = \GO::t('photo','addressbook');
+		$labels['action_date'] = \GO::t('actionDate','addressbook');
+		
+		return $labels;
+	}
+	
 	public function defaultAttributes() {
 		return array(
 				'country'=>\GO::config()->default_country

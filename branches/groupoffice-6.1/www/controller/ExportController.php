@@ -133,11 +133,16 @@ class ExportController extends AbstractController {
 	/**
 	 * Creates a SavedExport
 	 */
-	protected function actionCreate($className) {
+	protected function actionCreate($className,$exportColumns=false) {
 
 		$model = new SavedExport();
 		
 		$currentGrid = new $className;
+		
+		// Which columns need to be exported
+		if(!empty($exportColumns)){
+			$model->export_columns = $exportColumns;
+		}
 		
 		$sViews = $currentGrid->getSupportedViews();
 		$supportedViews = array();

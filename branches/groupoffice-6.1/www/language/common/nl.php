@@ -661,3 +661,7 @@ $l['cantDeleteDefault'] = "Standaard item kan niet worden verwijderd.";
 $l['updateWithMatchingAttributes'] = 'Update items (i.p.v. nieuwe items creëren) op basis van de volgende matchende attributen';
 
 $l['zipFilesizeTooBig'] = 'De totale grootte van de bestanden is te hoog. (Het maximum dat is toegestaan is: %s)';
+
+$l['selectedColumns'] = 'Geselecteerde kolommen';
+$l['availableColumns'] = 'Beschikbare kolommen';
+$l['exportSelectHelpText'] = 'Sleep de kolommen(Of dubbelklik) die geexporteerd moeten worden van de linker lijst naar de rechter lijst.';
