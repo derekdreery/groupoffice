@@ -1,3 +1,4 @@
+- Fixed bug in calendar week print when an event would run from before 19:00 till after 07:00 the next day
 - Fixed bug where event duplicated on recurring events with exceptions
 - Improved etag values for caldav everywhere
 

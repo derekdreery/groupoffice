@@ -23,12 +23,6 @@ class Month extends Calendar {
 	 */
 	protected $events = array();
 	
-	/**
-	 *
-	 * @var integer A unixtimestamp of the day to display
-	 */
-	public $day;
-	
 	private $right;
 	
 	protected function init() {

@@ -27,12 +27,6 @@ class Day extends Calendar {
 	protected $leftCol = 135;
 	protected $rightCol = 60;
 	
-	/**
-	 *
-	 * @var integer A unixtimestamp of the day to display
-	 */
-	public $day = null;
-	
 	public function Header() {
 		//A4 = 21 x 29.7
 		$this->setXY($this->leftMargin+2,12);
@@ -72,6 +66,7 @@ class Day extends Calendar {
 	 */
 	public function render($day) {
 		$this->day = \GO\Base\Util\Date::clear_time($day);
+		$this->currentDay = $this->day;
 		//$this->events = $this->orderEvents($events);
 		$this->AddPage();
 		$this->calculateOverlap();

@@ -39,6 +39,13 @@ class Calendar extends \GO\Base\Util\Pdf {
 	
 	public $calendarName;
 	
+	/**
+	 *
+	 * @var integer A unixtimestamp of the day to display
+	 */
+	public $day;
+	protected $currentDay;
+	
 	protected function init() {
 		parent::init();
 		$this->font_size--;
@@ -119,6 +126,7 @@ class Calendar extends \GO\Base\Util\Pdf {
 	protected function calculateOverlap($w=0) {
 		
 		$day = $this->day+($w*24*3600);
+		$this->currentDay = $day;
 		
 		if(!isset($this->events[$day]['part']))
 			return;
@@ -128,27 +136,27 @@ class Calendar extends \GO\Base\Util\Pdf {
 		// place in rows per quarter
 		foreach($this->events[$day]['part'] as $key => $event) {
 			list($start, $end) = $this->_getStartEndRow($event);
-			$this->eventOptions[$event->id] = array('start'=>$start, 'end'=>$end, 'span'=>1);
+			$this->eventOptions[$event->id.'-'.$this->currentDay] = array('start'=>$start, 'end'=>$end, 'span'=>1);
 			for($it=$start; $it<$end; $it++) {
-				$rows[$it][$event->id]=$event;
+				$rows[$it][$event->id.'-'.$this->currentDay]=$event;
 			}
 		}
 		
 		// located connections (events at the same time)
 		foreach($this->events[$day]['part'] as $key => $event) {
 			$max = 1;
-			list($start, $end) = array_values($this->eventOptions[$event->id]);
+			list($start, $end) = array_values($this->eventOptions[$event->id.'-'.$this->currentDay]);
 			for($it=$start; $it<$end; $it++) {
 				$max = max($max,count($rows[$it]));
 			}
-			$this->eventOptions[$event->id]['max'] = $max;	
+			$this->eventOptions[$event->id.'-'.$this->currentDay]['max'] = $max;	
 		}
 		
 		$position=0;
 		$prevMax=1;
 		$previousCols = array();
 		foreach($this->events[$day]['part'] as $key => $event) {
-			list($start, $end, $span, $max) = array_values($this->eventOptions[$event->id]);
+			list($start, $end, $span, $max) = array_values($this->eventOptions[$event->id.'-'.$this->currentDay]);
 
 			$col = $position % $prevMax;
 			
@@ -164,7 +172,7 @@ class Calendar extends \GO\Base\Util\Pdf {
 					$pcol = $ppos % $prevMax;
 					continue;
 				}
-				$previous = $this->eventOptions[$previousCols[$pcol]->id];
+				$previous = $this->eventOptions[$previousCols[$pcol]->id.'-'.$this->currentDay];
 
 				//collision detection
 				if($previous['end'] > $start && $pcol == $col) {
@@ -185,20 +193,36 @@ class Calendar extends \GO\Base\Util\Pdf {
 			
 			$col = $position % $max;
 
-			$this->eventOptions[$event->id]['max']=$max;
-			$this->eventOptions[$event->id]['col']=$col;
-			//$this->eventOptions[$event->id]['span']=$span;
+			$this->eventOptions[$event->id.'-'.$this->currentDay]['max']=$max;
+			$this->eventOptions[$event->id.'-'.$this->currentDay]['col']=$col;
+			//$this->eventOptions[$event->id.'-'.$this->currentDay]['span']=$span;
 
 			$previousCols[$col] = $event;
 			$prevMax = $max;
 		}
 	}
 	
+	/**
+	 * Start is the quester of the day this event should be rendered
+	 * @param type $event
+	 * @return type
+	 */
 	protected function _getStartEndRow($event) {
-
 		$day = \GO\Base\Util\Date::clear_time($event->start_time);
+		$startedToday = true;
+		if($day < $this->currentDay) {
+			$day = $this->currentDay;
+			$startedToday = false;
+		}
+		
 		$start = round(($event->start_time - $day) / 60 / 15); //= seconds in quarter
 		$end = round(($event->end_time - $day) / 60 / 15); //= seconds in quarter
+		if(!$startedToday) {
+			$start = 28; // 07:00
+		}
+		if($this->currentDay < \GO\Base\Util\Date::clear_time($event->end_time)) {
+			$end = 76; // 19:00
+		}
 		return array($start, $end);
 	}
 	
@@ -269,7 +293,7 @@ class Calendar extends \GO\Base\Util\Pdf {
 	}
 	
 	public function drawEvent($startx, $colWidth, $event, $topPadding=-1) {
-		$o = $this->eventOptions[$event->id];
+		$o = $this->eventOptions[$event->id.'-'.$this->day];
 
 		$length = $o['end'] - $o['start'];
 		$start = $o['start']-12; //padding
