@@ -134,6 +134,8 @@ GO.notes.MainPanel = function(config){
 		]
 	});
 
+	this.exportMenu.setColumnModel(this.centerPanel.getColumnModel());
+
 	config.items=[
 	this.westPanel,
 	this.centerPanel,
