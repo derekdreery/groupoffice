@@ -89,7 +89,7 @@ class CertificateController extends \GO\Base\Controller\AbstractController {
 					$senderEmailStr = !empty($arr['extensions']['subjectAltName']) ? $arr['extensions']['subjectAltName'] : $arr['subject']['emailAddress'];
 					
 					$senderEmails = explode(',', $senderEmailStr);
-					$emails = [];
+					$emails = array();
 					
 					foreach($senderEmails as $emailRaw) {
 						$email = strtolower(\GO\Base\Util\String::get_email_from_string($emailRaw));
@@ -116,7 +116,7 @@ class CertificateController extends \GO\Base\Controller\AbstractController {
 			$arr = openssl_x509_parse($certData);			
 
 			$senderEmailStr = !empty($arr['extensions']['subjectAltName']) ? $arr['extensions']['subjectAltName'] : $arr['subject']['emailAddress'];
-			$emails = [];
+			$emails = array();
 
 				foreach($senderEmails as $emailRaw) {
 					$email = strtolower(\GO\Base\Util\String::get_email_from_string($emailRaw));
