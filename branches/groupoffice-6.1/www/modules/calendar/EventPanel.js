@@ -56,6 +56,10 @@ GO.calendar.EventPanel = Ext.extend(GO.DisplayPanel,{
 		if(GO.tasks)
 			this.template +=GO.tasks.TaskTemplate;
 
+		if(GO.workflow){
+			this.template +=GO.workflow.WorkflowTemplate;
+		}
+		
 		if(GO.calendar)
 			this.template += GO.calendar.EventTemplate;
 
