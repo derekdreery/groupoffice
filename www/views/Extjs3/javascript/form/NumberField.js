@@ -55,9 +55,17 @@ GO.form.NumberField = Ext.extend(Ext.form.TextField, {
 			this.fixPrecision();
 			input.focus(true);
 		});
+		
 	}
 	,
 	beforeBlur : function(){
+		if(GO.settings.config.accept_dot_for_decimal) { //accept comma as decimals
+			var val = this.getValue();
+			if(val.indexOf(GO.settings.decimal_separator) == -1) {
+				val = val.replace('.', GO.settings.decimal_separator);
+			}
+			this.setValue(val);
+		}
 		this.fixPrecision();
 	},
 	fixPrecision : function(){
