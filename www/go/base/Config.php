@@ -1230,6 +1230,14 @@ class GO_Base_Config {
 	 */
 	public $files_show_projects = true;
 	
+	/**
+	 * If this is true the numberfield will accept dot as decimals no matter
+	 * what the decimal seporator is.
+	 * This is only applied if the default decimal seporator is not found
+	 * in the number entered in the number field
+	 * @var boolean
+	 */
+	public $accept_dot_for_decimal = false;
 
 	/**
 	 * Constructor. Initialises all public variables.
