@@ -1,3 +1,4 @@
+- Added workflow information to the event display dialog
 - Removed PHP5.4 short array declaration method from smime CertificatControlller
 - Fixed bug in calendar week print when an event would run from before 19:00 till after 07:00 the next day
 - Fixed bug where event duplicated on recurring events with exceptions
