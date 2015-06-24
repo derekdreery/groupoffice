@@ -90,6 +90,7 @@ $settings['config']['nav_page_size']=intval(GO::config()->nav_page_size);
 $settings['config']['session_inactivity_timeout']=intval(GO::config()->session_inactivity_timeout);
 
 $settings['config']['tickets_no_email_required']=GO::config()->tickets_no_email_required;
+$settings['config']['accept_dot_for_decimal']=GO::config()->accept_dot_for_decimal;
 
 $settings['config']['default_country'] = GO::config()->default_country;
 $settings['config']['checker_interval'] = (int)GO::config()->checker_interval;
