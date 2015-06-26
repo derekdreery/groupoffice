@@ -17,7 +17,7 @@ GO.email.SettingsPanel = function(config) {
 		xtype:'fieldset',
 		title:GO.email.lang.defaultProgram,
 		autoHeight:true,		
-		html:GO.email.lang.defaultProgramInstructions.replace('{url}', GO.url("email/register/download")).replace('{product_name}', GO.settings.config.product_name)
+		html:GO.email.lang.defaultProgramInstructions.replace('{url}', GO.url("email/register/downloadWin7")).replace('{product_name}', GO.settings.config.product_name)
 	},
 	this.sortBySendMailTime = new Ext.form.Checkbox({
 		boxLabel:GO.email.lang.sortAddressesByMailTime,
