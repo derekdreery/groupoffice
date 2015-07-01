@@ -10,6 +10,11 @@ class SettingsController extends \GO\Base\Controller\AbstractController {
 	
 	protected function actionSubmit($params){
 			
+		// Fix for branding of Group-Office (Group-Office is replaced with branding name and then the theme is also renamed.)
+		if(isset(\GO::config()->product_name) && !empty($params['theme']) && \GO::config()->product_name == $params['theme']){
+			 $params['theme'] = 'Group-Office';
+		}
+		
 		if(!empty($params["dateformat"])){
 			$dateparts = explode(':',$params["dateformat"]);
 			$params['date_separator'] = $dateparts[0];
@@ -51,7 +56,7 @@ class SettingsController extends \GO\Base\Controller\AbstractController {
 			
 			$response['validationErrors']=$user->getValidationErrors();
 		}
-		
+				
 		\GO::modules()->callModuleMethod('submitSettings', array(&$this, &$params, &$response, $user), false);
 		
 
