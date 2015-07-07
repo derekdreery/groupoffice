@@ -1597,7 +1597,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		{
 			for(var r=0;r<eventRows;r++)
 			{
-				if(typeof(this.rows[startRowId+r][rowPosition])!='undefined')
+				if(typeof(this.rows[startRowId+r]) != 'undefined' && typeof(this.rows[startRowId+r][rowPosition]) != 'undefined')
 				{
 					return eventWidth-2;
 				}
