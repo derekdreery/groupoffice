@@ -77,7 +77,7 @@ class Transporter {
 		if(GO::modules()->isInstalled('projects2')) {
 			$class=Project2::className();
 		} elseif(GO::modules()->isInstalled('projects')) {
-			$class=Project2::className();
+			$class=Project::className();
 		} else {
 			return true;
 		}
