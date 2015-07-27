@@ -20,9 +20,7 @@ GO.comments.CommentPanel = Ext.extend(GO.DisplayPanel,{
 	editGoDialogId : 'comment',
 	
 	editHandler : function(){
-		GO.comments.showCommentDialog(this.model_id,{});
-//		GO.comments.showCommentDialog(this.model_id, {model_name:this.store.baseParams.model_name,model_id:this.store.baseParams.model_id,action_date:this.actionDate});
-//		GO.comments.showCommentDialog(this.model_id,{model_name:this.store.baseParams['model_name'],model_id:this.store.baseParams.model_id,action_date:this.actionDate});
+		GO.comments.showCommentDialog(this.model_id, {model_name:this.data.model_name,model_id:this.data.model_id,action_date:this.actionDate});
 	},	
 	
 	initComponent : function(){	
@@ -54,7 +52,7 @@ GO.comments.CommentPanel = Ext.extend(GO.DisplayPanel,{
 						'<td valign="top">'+GO.comments.lang.parent+'</td>'+
 						//'<td valign="top"><a href="#" onclick="GO.linkHandlers[\'{values.parent.model_type}\'].call(this, {values.parent.model_id});">{values.parent.name}</a></td>'+
 						'<td style="width:16px;"><div class="display-panel-link-icon go-model-icon-{[this.replaceWithUnderscore(values.parent.model_type)]}"></div></td>'+
-						'<td valign="top"><a href="#" onclick="GO.linkHandlers[\'{values.parent.model_type}\'].call(this, {values.parent.model_id});">{values.parent.name}</a></td>'+
+						'<td valign="top"><a href="#" onclick="GO.linkHandlers[\'{[this.addSlashes(values.parent.model_type)]}\'].call(this, {values.parent.model_id});">{values.parent.name}</a></td>'+
 					'</tr>' +
 				'</table>';
 			
@@ -67,7 +65,9 @@ GO.comments.CommentPanel = Ext.extend(GO.DisplayPanel,{
 			},
 			
 			replaceWithUnderscore: function(str){
-				str = str.replace(/\\\\/g,"_");
+				if(!GO.util.empty(str)){
+					str = str.replace(/\\/g,"_");
+				}
 				return str;
 			}
 			
