@@ -1743,9 +1743,6 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		if($vobject->description)
 			$this->description = (string) $vobject->description;
 		
-		//TODO needs improving
-		if($this->all_day_event)
-			$this->end_time-=60;
 		
 		if((string) $vobject->rrule != ""){			
 			$rrule = new \GO\Base\Util\Icalendar\Rrule();
@@ -2063,8 +2060,13 @@ class Event extends \GO\Base\Db\ActiveRecord {
 			//Add exception dates to Event
 			foreach($vobject->select('EXDATE') as $i => $exdate) {
 				try {
-					$dt = $exdate->getDateTime();
-					$this->addException($dt->format('U'));
+					$dts = $exdate->getDateTimes();
+					if($dts === null) {
+						continue;
+					}
+					foreach($dts as $dt) {
+						$this->addException($dt->format('U'));
+					}
 				} catch (Exception $e) {
 					trigger_error($e->getMessage(),E_USER_NOTICE);
 				}

@@ -296,3 +296,4 @@ $l['callOnSkype']= 'Skype anrop';
 $l['userDefaultTemplate']= 'Bruker standardmal';
 $l['exportContactsWithCompanies']= 'Personer sammen med firmaer';
 $l['cmdFieldsetCompany']= 'Firmaopplysninger';
+$l['mustBeSameAddressbook']= 'Firma må være i samme adressebok som personen. Personen ble ikke lagret.';

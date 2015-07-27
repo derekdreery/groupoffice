@@ -634,3 +634,7 @@ $l['relationDeleteRestrict']="Du kan ikke slette denne %s fordi den inneholder '
 $l['pspell_lang']='nb';
 $l['dependenciesCannotDelete']="Du kan ikke slette denne modulen, fordi følgende (installerte) moduler er avhengig av den: %s.";
 $l['MailboxNotFoundException']= "Kan ikke åpne mappen \"%s\". Sjekk kontoinnstillingene for e-post.";
+$l['hu']= 'Ungarsk';
+$l['pt_BR']='Portugisisk - Brasil';
+$l['cantDeleteDefault']= "Kan ikke slette standardelementet.";
+$l['updateWithMatchingAttributes']= 'Endre elementeme ( i stedet for å legge til nye ) basert på at følgende attributer matcher';

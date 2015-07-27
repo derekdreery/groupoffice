@@ -122,7 +122,11 @@ class ContactController extends \GO\Base\Controller\AbstractModelController{
 	
 	protected function actionPhoto($params){
 		//fetching contact will check read permission
-		$contact = \GO\Addressbook\Model\Contact::model()->findByPk($params['id']);
+		$contact = \GO\Addressbook\Model\Contact::model()->findByPk($params['id'], false, true);
+		
+		if($contact->go_user_id != \GO::user()->id && !$contact->getPermissionLevel()) {
+			throw new \GO\Base\Exception\AccessDenied();
+		}
 		
 		\GO\Base\Util\Http::outputDownloadHeaders($contact->getPhotoFile(), true, true);
 		$contact->getPhotoFile()->output();

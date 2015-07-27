@@ -1,3 +1,4 @@
+modules/comments/CommentPanel.js
 modules/comments/Stores.js
 modules/comments/CommentDialog.js
 modules/comments/CommentsGrid.js

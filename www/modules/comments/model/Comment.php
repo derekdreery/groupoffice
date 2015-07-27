@@ -54,7 +54,14 @@ class Comment extends \GO\Base\Db\ActiveRecord{
 		
 		return parent::init();
 	}
-
+	
+	protected function getCacheAttributes() {
+		return array(
+				'name' => $this->comments,
+				'description'=>''
+		);
+	}
+	
 	public function tableName(){
 		return 'co_comments';
 	}

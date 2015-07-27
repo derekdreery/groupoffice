@@ -15,3 +15,4 @@ $l['readMore']="Read more";
 $l['enableReadMore']="Enable read more links";
 
 $l['actionDate']='Action date';
+$l['parent']='Parent';

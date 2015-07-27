@@ -1,3 +1,11 @@
+17-07-2015 6.1.42
+- Fixed bug in billing items autocomplete
+- Brought back new sub item in projects2
+- Added start date to sub projects grid
+- Fixed full view of profile image
+- Added URL to vcard export
+- Double substraction of a minute on all day event bug fixed
+- Support for multiple EXDATE values comma separated in ICS files
 - Theme selection: Fix for when Group-Office is branded that the Group-Office theme is not found anymore.
 - Billing: Itemsgrid - Height of items description editor in the items grid is automatically changed to the height of the cell.
 - Added workflow information to the event display dialog
