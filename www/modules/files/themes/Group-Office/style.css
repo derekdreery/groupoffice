@@ -46,9 +46,9 @@ cursor:pointer;
 }
 
 
-.btn-download {
+/*.btn-download {
 	background-image:url('images/download.png') !important;
-}
+}*/
 
 .btn-download-gota {
 	background-image:url('images/gota.gif') !important;
