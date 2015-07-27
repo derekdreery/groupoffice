@@ -439,7 +439,7 @@ abstract class AbstractController extends Observable {
 
 			return $response;
 			
-		} catch (Exception$e) {
+		} catch (Exception $e) {
 			
 			
 			$this->_unlockAction();
