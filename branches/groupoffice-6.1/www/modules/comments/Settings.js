@@ -41,3 +41,8 @@ GO.mainLayout.onReady(function() {
 	GO.moduleManager.addSettingsPanel('comments',
 		GO.comments.SettingsPanel);
 });
+
+GO.linkPreviewPanels["GO\\Comments\\Model\\Comment"]=function(config){
+	config = config || {};
+	return new GO.comments.CommentPanel(config);
+}

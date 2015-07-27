@@ -9,3 +9,12 @@ $updates["201209181100"][]="CREATE TABLE IF NOT EXISTS `co_categories` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 $updates["201209181100"][]="ALTER TABLE `co_comments` ADD `category_id` int(11) NOT NULL DEFAULT '0';";
+
+
+$updates["201506291333"][]="INSERT INTO `go_model_types` (
+`id` ,
+`model_name`
+)
+VALUES (
+null, 'GO\\\\Comments\\\\Model\\\\Comment'
+);";

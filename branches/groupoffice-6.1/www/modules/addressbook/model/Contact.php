@@ -979,6 +979,10 @@ class Contact extends \GO\Base\Db\ActiveRecord {
 			$e->add('BDAY',$this->birthday);
 		}
 		
+		if (!empty($this->homepage)) {
+			$e->add('URL',$this->homepage);
+		}
+		
 		if (!empty($this->company)) {
 //			$e->add('ORG',$this->company->name,$this->department,$this->company->name2);
 //			$p = new Sabre\VObject\Property('ADR',';;'.$this->company->address.' '.$this->company->address_no,

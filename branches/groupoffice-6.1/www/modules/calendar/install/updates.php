@@ -241,3 +241,5 @@ $updates['201503181443'][]="insert ignore into go_acl (acl_id, user_id, level) s
 
 $updates['201504291209'][]="ALTER TABLE `cal_categories` ADD `user_id` INT NOT NULL ; ";
 $updates['201504291209'][]="update cal_categories set user_id = (select user_id from cal_calendars where id=cal_categories.calendar_id) where calendar_id>0;";
+
+$updates['201507161208'][]="update cal_events set end_time=end_time+60 where all_day_event=1 and date_format(from_unixtime(end_time), '%H:%i')='23:58';";
