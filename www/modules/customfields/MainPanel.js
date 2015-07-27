@@ -223,7 +223,7 @@ GO.customfields.displayPanelBlocksTemplate =
 			'<tpl for="items">'+
 				'<tr>'+
 				'<td class="table_header_links" style="width:30px;">'+
-					'<div class="display-panel-link-icon go-model-icon-{values.model_name}" ext:qtip="{values.type}">'+'</div>'+
+					'<div class="display-panel-link-icon go-model-icon-{[this.replaceWithUnderscore(values.model_name)]}" ext:qtip="{values.type}">'+'</div>'+
 				'</td>'+
 				'<td class="table_header_links">'+
 					'<a href="#" onclick="GO.linkHandlers[\'{model_name}\'].call(this,{model_id});">{item_name}</a>'+
