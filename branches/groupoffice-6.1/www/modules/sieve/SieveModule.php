@@ -158,6 +158,8 @@ class SieveModule extends Module{
 		// Check if the ooo_ fields are posted
 		if(isset($params['ooo_message'])){
 			
+			\GO::debug('PROCESS OUT OF OFFICE SIEVE');
+			
 //			if(!isset($params['ooo_subject'])){
 //				$params['ooo_subject'] = \GO::t('standardvacationsubject','sieve');
 //			}
@@ -175,8 +177,14 @@ class SieveModule extends Module{
 				} else {
 					
 					if(!is_array($params['ooo_aliasses'])){
+						// Replace new lines from the aliasses and replace them with a comma.
+						$params['ooo_aliasses'] = preg_replace('#\s+#',',',trim($params['ooo_aliasses']));
+						// Make an array of the aliasses
 						$params['ooo_aliasses'] = explode(',',$params['ooo_aliasses']);
 					}
+					// Remove any empty values from the array
+					$params['ooo_aliasses'] = array_filter($params['ooo_aliasses']);
+					
 					// Check if the default account email address is present.
 					// If not then add it to the list
 					if(in_array($alias->email, $params['ooo_aliasses'])){
@@ -272,13 +280,22 @@ class SieveModule extends Module{
 					$index++;
 				}
 				
+				\GO::debug('*****SIEVE OOO GET INDEX FOR OOO: '.$index);
+				
 				if($index>-1 && isset($sieve->script->content[$index])){
+					\GO::debug('*****SIEVE OOO ADD OOO RULE (INDEX:'.$index.'):'. var_export($rule,true));
 					$sieve->script->update_rule($index,$rule);
 				} else {
+					\GO::debug('*****SIEVE OOO ADD OOO RULE:'. var_export($rule,true));
 					$sieve->script->add_rule($rule);
 				}
 				
-			}
+			} else {
+				\GO::debug('*****SIEVE OOO ADD OOO RULE:'. var_export($rule,true));
+				$sieve->script->add_rule($rule);
+			}		
+			
+			\GO::debug(var_export($sieve->script->content,true));
 
 			// Het script opslaan
 			if($sieve->save()) {
