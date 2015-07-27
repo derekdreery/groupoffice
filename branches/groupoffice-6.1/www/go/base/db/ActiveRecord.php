@@ -3454,7 +3454,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 			$model->mtime=0;
 
-			$acl_id =$this->findAclId();
+			$acl_id = !empty($attr['acl_id']) ? $attr['acl_id'] : $this->findAclId();
 
 			//if model doesn't have an acl we use the acl of the module it belongs to.
 			if(!$acl_id)
