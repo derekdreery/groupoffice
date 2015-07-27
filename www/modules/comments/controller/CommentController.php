@@ -112,15 +112,27 @@ class CommentController extends \GO\Base\Controller\AbstractModelController{
 		
 		$modelType = \GO\Base\Model\ModelType::model()->findByPk($model->model_type_id);
 		
+		$scModel = \GO\Base\Model\SearchCacheRecord::model()->findByPk(array(
+			'model_id'=>$model->model_id,
+			'model_type_id'=>$model->model_type_id
+		));
+		
+		if(!isset($response['data']['parent'])){
+			$response['data']['parent'] = array();
+		}
+		
+		if($scModel){
+			$response['data']['parent']['name'] = $scModel->name;
+		} 
+		
+		$response['data']['parent']['model_type']= $modelType?$modelType->model_name:false;
+		$response['data']['parent']['model_id'] = $model->model_id;
 		
 		$response['data']['comments']= $model->comments;
 		$response['data']['category_name']= $model->category?$model->category->name:'';
-		$response['data']['parent'] = $model->getAttachedObject()?$model->getAttachedObject()->getAttributes():'';
 
 		$response['data']['short'] = (strlen($model->comments) > 13) ? substr($model->comments,0,10).'...' : $model->comments;
 		
-		$response['data']['parent']['model_type']= $modelType?str_replace("\\", "\\\\", $modelType->model_name):false;
-		$response['data']['parent']['model_id'] = $model->model_id;
 		return $response;
 	}	
 }

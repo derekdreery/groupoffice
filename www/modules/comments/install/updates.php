@@ -16,5 +16,5 @@ $updates["201506291333"][]="INSERT INTO `go_model_types` (
 `model_name`
 )
 VALUES (
-null, 'GO\\\\Comments\\\\Model\\\\Comment'
+null, 'GO\\Comments\\Model\\Comment'
 );";
