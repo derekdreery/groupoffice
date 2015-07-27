@@ -43,9 +43,10 @@ GO.customfields.getMatchingFieldNamesMap = function(sourceLinkId, targetLinkId){
 GO.customfields.getFormField = function(customfield, config){
 
 	config = config || {};
-
-	if(!GO.customfields.dataTypes[customfield.datatype])
+	if(!GO.customfields.dataTypes[customfield.datatype]){
+		GO.log("Could not find custom field of type: "+customfield.datatype+". Is this module installed?");
 		return false;
+	}
 
 	return GO.customfields.dataTypes[customfield.datatype].getFormField(customfield, config);
 
