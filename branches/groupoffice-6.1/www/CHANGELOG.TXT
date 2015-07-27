@@ -1,3 +1,5 @@
+- Fixed Softaculous issue with installing
+
 27-07-2015 6.1.42
 - Select the first visible item in a multi select list when none selected (Tasklists, Notebooks)
 - GOTA Login dialog did not appear anymore when logged out in Group-Office
