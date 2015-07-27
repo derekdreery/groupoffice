@@ -1,6 +1,7 @@
 <?php
 require(\GO::view()->getTheme()->getPath().'header.php');
 ?>
+<div id="sound"></div>
 <div id="loading-mask" style="width:100%;height:100%;background:#f1f1f1;position:absolute;z-index:20000;left:0;top:0;">&#160;</div>
 <div id="loading">
 	<div class="loading-indicator">
@@ -90,20 +91,5 @@ if(\GO::user())
 	
 	<?php	
 }
-
-if(\GO::user() && !\GO::user()->mute_sound)
-{
-?>
-	<object width="0" height="0" id="alarmSound">
-	<param name="movie" value="<?php echo \GO::view()->getTheme()->getUrl(); ?>reminder.swf" />
-	<param name="loop" value="false" />
-	<param name="autostart" value="false" />
-	<embed src="<?php echo \GO::view()->getTheme()->getUrl(); ?>reminder.swf" autostart=false loop="false" width="0" height="0" name="alarmSound"></embed>
-	</object>
-<?php
-} 
-
-
-
 
 require(\GO::view()->getTheme()->getPath().'footer.php');

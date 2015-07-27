@@ -120,6 +120,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		this.fireEvent('ready', this);
 	 	this.ready=true;
 		this.initLogoutTimer();
+//		GO.playAlarm('desktop-login');
 	},
 	
 	/**
