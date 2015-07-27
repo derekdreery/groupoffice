@@ -1793,6 +1793,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		if($vobject->valarm && $vobject->valarm->trigger) {
 			$date = $vobject->valarm->getEffectiveTriggerTime();
 			if($date) {
+				if($this->all_day_event)
+					$this->_utcToLocal($date);
 				$this->reminder = $this->start_time-$date->format('U');
 			}
 		}elseif($vobject->aalarm){ //funambol sends old vcalendar 1.0 format
@@ -1862,6 +1864,8 @@ class Event extends \GO\Base\Db\ActiveRecord {
 		if($vobject->valarm && $vobject->valarm->trigger){
 			$reminderTime = $vobject->valarm->getEffectiveTriggerTime();
 			//echo $reminderTime->format('c');
+			if($this->all_day_event)
+				$this->_utcToLocal($reminderTime);
 			$seconds = $reminderTime->format('U');
 			$this->reminder = $this->start_time-$seconds;
 			if($this->reminder<0)

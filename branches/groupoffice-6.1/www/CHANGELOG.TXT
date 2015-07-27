@@ -1,4 +1,5 @@
 17-07-2015 6.1.42
+- Fixed issue where the VALARM of a VEVENT was missing the hours in the local timezone difference on full day events
 - Fixed bug in billing items autocomplete
 - Brought back new sub item in projects2
 - Added start date to sub projects grid

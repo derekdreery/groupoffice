@@ -13,7 +13,7 @@
  */
 
 namespace GO\Dav\Fs;
-
+use Sabre;
 
 class SharedDirectory extends \Sabre\DAV\FS\Directory {
 
