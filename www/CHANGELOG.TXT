@@ -1,4 +1,5 @@
 27-07-2015 6.1.42
+- GOTA Login dialog did not appear anymore when logged out in Group-Office
 - WebDAV locks stored in database for better performance.
 - Fixed issue where the VALARM of a VEVENT was missing the hours in the local timezone difference on full day events
 - Fixed bug in billing items autocomplete
