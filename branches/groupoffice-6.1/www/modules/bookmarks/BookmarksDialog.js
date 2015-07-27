@@ -178,7 +178,10 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 				allowBlank: false,
 				validator: function(value) {
 					// The following allows also URLs like 'https://wiki:username@wiki.mydomain.org'
-					var urlRegexp = /(((^https?)|(^ftp)):\/\/(([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)|([\-\w]+\:)+([\-\w]+\@)+([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)/i;
+//					var urlRegexp = /(((^https?)|(^ftp)):\/\/(([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)|([\-\w]+\:)+([\-\w]+\@)+([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)/i;
+					// The following also accepts: http://intranet/foo/bar
+					var urlRegexp = /(((^https?)|(^ftp)):\/\/(\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)|([\-\w]+\:)+([\-\w]+\@)+([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)/i;
+					
 					return urlRegexp.test(value);
 				},
 				listeners:{
