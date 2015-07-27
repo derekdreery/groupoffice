@@ -10,9 +10,10 @@ GO.files.filesTemplate =
 			'<td class="table_header_links" style="width:100%">' + GO.lang['strName'] + '</td>'+							
 			'<td class="table_header_links" style="white-space:nowrap">' + GO.lang['strMtime'] + '</td>'+
 			'<td class="table_header_links">&nbsp;</td>'+
+			'<td class="table_header_links">&nbsp;</td>'+
 		'</tr>'+
 		'<tpl if="!files.length">'+
-			'<tr><td colspan="4">'+GO.lang.strNoItems+'</td></tr>'+
+			'<tr><td colspan="5">'+GO.lang.strNoItems+'</td></tr>'+
 		'</tpl>'+
 		'<tpl for="files">'+
 			'<tr>'+											
@@ -35,6 +36,9 @@ GO.files.filesTemplate =
 							'<a style="display:block" class="go-icon btn-edit" href="#files_{[xindex-1]}">&nbsp;</a>'+
 						'</td>'+
 					'</tpl>'+
+					'<td>'+
+						'<a style="display:block" class="go-icon btn-download" href="{[GO.files.filesTemplateConfig.getDownloadUrl(values.id,false)]}">&nbsp;</a>'+
+					'</td>'+
 				'</tpl>'+
 				'<tpl if="extension==\'folder\'">'+
 					'<td style="white-space:nowrap">'+					
@@ -63,5 +67,16 @@ GO.files.filesTemplateConfig={
 	getPath : function(path)
 	{
 		return path.replace(/\'/g,'\\\'');
+	},
+	getDownloadUrl : function(id,inline){
+
+		if(GO.util.empty(inline)){
+			inline=false;
+		} else {
+			inline=true;
+		}
+		
+		return GO.url("files/file/download",{id:id,inline:inline})
 	}
+	
 };
