@@ -169,3 +169,4 @@ ADD `suffix` VARCHAR( 32 ) NOT NULL DEFAULT '';";
 $updates['201503311128'][]="ALTER TABLE `cf_fields` CHANGE `category_id` `category_id` INT(11) NOT NULL DEFAULT '0';";
 
 $updates['201506241200'][]="update `cf_enabled_blocks` set `model_type_name` = replace(`model_type_name`,'_','\\\\');";
+$updates['201506271325'][]="update `cf_enabled_categories` set `model_name` = replace(`model_name`,'_','\\\\');";
