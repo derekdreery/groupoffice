@@ -96,7 +96,8 @@ class Group extends \GO\Base\Db\ActiveRecord {
     
     return array(
 				'users' => array('type'=>self::MANY_MANY, 'model'=>'GO\Base\Model\User', 'field'=>'group_id', 'linkModel' => 'GO\Base\Model\UserGroup'),
-		);
+				'user_group' => array('type'=>self::HAS_MANY, 'model'=>'GO\Base\Model\UserGroup', 'field'=>'group_id'),
+			);
   }
   
   public function addUser($user_id){
