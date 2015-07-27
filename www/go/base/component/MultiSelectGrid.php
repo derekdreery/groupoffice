@@ -79,14 +79,14 @@ class MultiSelectGrid {
 	 * @param boolean $selectAll 
 	 */
 	public function setFindParamsForDefaultSelection(\GO\Base\Db\FindParams $findParams, $selectAll=false){
-
 		if(empty($this->selectedIds)){
 			$findParamsCopy = clone $findParams;
-			$findParamsCopy->ignoreAcl(false);
+			$findParamsCopy->ignoreAcl(false)->debugSql();
 			if(!$selectAll){				
 				
-				$findParamsCopy->limit(1)->single();
-				$model = \GO::getModel($this->_modelName)->find($findParamsCopy);
+				$findParamsCopy->limit(1);
+				$model = \GO::getModel($this->_modelName)->find($findParamsCopy)->fetch();
+
 				if($model)
 					$this->selectedIds=array($model->pk);		
 			}else{
