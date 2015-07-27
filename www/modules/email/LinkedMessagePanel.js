@@ -163,8 +163,11 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 					path:attachment.tmp_file,
 					isTempFile:true
 				});
-			}else
-			{
+//			} else if(attachment.extension == 'vcf') {
+//			// Not possible at the moment
+//				GO.url('/addressbook/contact/handleAttachedVCard')
+//				GO.email.readVCard(attachment.url+'&importVCard=1');
+			} else {
 				window.open(attachment.url);
 			}
 		}
