@@ -16,6 +16,12 @@
 - Fixed bug in calendar week print when an event would run from before 19:00 till after 07:00 the next day
 - Fixed bug where event duplicated on recurring events with exceptions
 - Improved etag values for caldav everywhere
+- Replaced Flash notification sound player with a HTML5 version.
+- Files: Added a download button to the files grid.
+- Sieve: Fixed problem with saving of Out of office tab when sieve file was empty initially.
+- Added relational data to Group.php and UserGroup.php
+- Sieve: Fixed problem with the Out of office tab "Aliasses" field when putting in multiple addresses on multiple lines.
+- Bookmarks: Make local urls also available to add as a bookmark.
 
 17-06-2015 6.1.41
 - Improved etag values for caldav
