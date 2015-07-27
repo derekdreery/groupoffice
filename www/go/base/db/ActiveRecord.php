@@ -3153,14 +3153,22 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			}
 
 			$this->_dbInsert();
-
-			if(!is_array($this->primaryKey()) && empty($this->pk)){
-				$this->{$this->primaryKey()} = $this->getDbConnection()->lastInsertId();
-				$this->castMySqlValues(array($this->primaryKey()));
-			}
-
-			if(!$this->pk)
-				return false;
+			$lastInsertId = $this->getDbConnection()->lastInsertId();
+			
+			if(!is_array($this->primaryKey())){				
+				if(empty($this->{$this->primaryKey()})){
+					
+					if(!$lastInsertId) {
+						throw new \Exception("Could not get insert ID: $lastInsertId in ".$this->className()."; attributes: ".var_export($this->_attributes, true));
+					}
+					$this->{$this->primaryKey()} = $lastInsertId;
+					$this->castMySqlValues(array($this->primaryKey()));
+				}
+				
+				if(empty($this->{$this->primaryKey()})){
+					return false;
+				}
+			}			
 
 			$this->setIsNew(false);
 
@@ -3215,8 +3223,9 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			return false;
 		}
 
-		if(!$wasNew)
+		if(!$wasNew){
 			$this->_fixLinkedEmailAcls();
+		}
 
 		/**
 		 * Useful event for modules. For example custom fields can be loaded or a files folder.
@@ -3355,7 +3364,9 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$acl = new \GO\Base\Model\Acl();
 		$acl->description=$this->tableName().'.'.$this->aclField();
 		$acl->user_id=$user_id;
-		$acl->save();
+		if(!$acl->save()) {
+			throw new \Exception("Could not save ACL: ".var_export($this->getValidationErrors(), true));
+		}
 
 		$this->{$this->aclField()}=$acl->id;
 
