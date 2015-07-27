@@ -64,7 +64,7 @@ class Comment extends \GO\Base\Db\ActiveRecord{
 		return array(
 				'name' => $this->comments,
 				'description'=>'',
-				'acl_id' => $this->getAttachedObject()->acl_id
+				'acl_id' => $this->getAttachedObject()->findAclId()
 		);
 	}
 	
