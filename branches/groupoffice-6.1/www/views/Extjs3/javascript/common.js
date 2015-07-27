@@ -223,19 +223,21 @@ GO.util.getFileExtension = function(filename)
 	return extension.toLowerCase();
 }
 
-GO.playAlarm = function(){
+GO.playAlarm = function(filename){
+	
+	// Check if the user has not muted all GO sounds
 	if(GO.util.empty(GO.settings.mute_sound))
 	{
-		var flashMovie= GO.util.getFlashMovieObject("alarmSound");
-		if(flashMovie)
-		{
-			try{
-				flashMovie.Play();
-			}
-			catch(e){
-				//fails if flash is not loaded. Ignore that.
-			}
+		// The folder (From the GO root) in where the soundfiles are stored
+		var soundsfolder = 'sounds/';
+		
+		// Set the default sound when no filename is given
+		if(GO.util.empty(filename)){
+			filename = 'dialog-question';
 		}
+		
+		// Search for the div with the id "sound" and append the HTML5 sound code.
+		document.getElementById("sound").innerHTML='<audio autoplay="autoplay"><source src="' + soundsfolder + filename + '.mp3" type="audio/mpeg" /><source src="' + soundsfolder + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + soundsfolder + filename +'.mp3" /></audio>';
 	}	
 }
 
@@ -923,5 +925,20 @@ if(GO.settings && GO.settings.time_format){
 					['40', '40'], ['45', '45'], ['50', '50'], ['55', '55']];
 }
 
+/**
+ * Log data to the console window.
+ * Only logs when using debug mode (CTRL+F7)
+ * 
+ * 
+ * @param string data
+ * @returns 
+ */
+GO.log = function(data) {
 
+	if(GO.debug){
+		if(console.log) {
+			console.log(data);
+		}
+	}
+}
 

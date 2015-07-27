@@ -477,7 +477,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 			}
 
 			if(data.alarm && GO.util.empty(GO.settings.mute_reminder_sound)){
-				GO.playAlarm();				
+				GO.playAlarm('message-new-email');				
 			}
 			
 			if(data.popup && !GO.util.empty(GO.settings.popup_reminders)){
