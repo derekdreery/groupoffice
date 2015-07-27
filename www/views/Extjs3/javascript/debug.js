@@ -1,5 +1,5 @@
 GO.mainLayout.onReady(function(){
-	
+	GO.debug = false;
 	var map = new Ext.KeyMap(document, {
 		stopEvent:true,
 		key:Ext.EventObject.F7,
@@ -10,6 +10,7 @@ GO.mainLayout.onReady(function(){
 				}
 
 				GO.debugWindow.show();
+				GO.debug = true;
 			}
 		});
 });
