@@ -26,7 +26,7 @@ class BlockFieldController extends \GO\Base\Controller\AbstractJsonController{
 						array(
 							'GO\Addressbook\Model\Contact',
 							'GO\Addressbook\Model\Company',
-							'GO\Projects\Model\Project',
+							'GO\Projects2\Model\Project',
 							'GO\Base\Model\User'
 						),
 						'c'

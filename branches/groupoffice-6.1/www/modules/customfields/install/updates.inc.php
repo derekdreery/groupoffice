@@ -167,3 +167,5 @@ $updates['201409161000'][]="ALTER TABLE `cf_fields` ADD `prefix` VARCHAR( 32 ) N
 ADD `suffix` VARCHAR( 32 ) NOT NULL DEFAULT '';";
 
 $updates['201503311128'][]="ALTER TABLE `cf_fields` CHANGE `category_id` `category_id` INT(11) NOT NULL DEFAULT '0';";
+
+$updates['201506241200'][]="update `cf_enabled_blocks` set `model_type_name` = replace(`model_type_name`,'_','\\\\');";
