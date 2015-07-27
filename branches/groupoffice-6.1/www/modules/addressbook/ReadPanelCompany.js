@@ -310,6 +310,12 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			this.template +=GO.linksTemplate;
 			
 	  Ext.apply(this.templateConfig,{
+			replaceWithUnderscore: function(str){
+				if(!GO.util.empty(str)){
+					str = str.replace(/\\/g,"_");
+				}
+				return str;
+			},
 		  addSlashes : function(str)
 			{
 				str = GO.util.html_entity_decode(str, 'ENT_QUOTES');
