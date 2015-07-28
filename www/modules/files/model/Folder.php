@@ -696,7 +696,9 @@ class Folder extends \GO\Base\Db\ActiveRecord {
 						}else
 						{
 							//this will update timestamp and size of file
-							$file->save();
+							if($file->mtime != $file->fsFile->mtime()){
+								$file->save();
+							}
 						}
 
 					}else
