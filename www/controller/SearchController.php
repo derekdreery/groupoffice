@@ -55,6 +55,8 @@ class SearchController extends \GO\Base\Controller\AbstractModelController{
 			$filesupport = $params['filesupport']==="true" || $params['filesupport']==="1"?true:false;
 		}
 		
+		$forLinks = isset($params['for_links']) && ($params['for_links'] === "true" || $params['for_links'] === "1");
+		
 		$storeParams = FindParams::newInstance();
 		
 		if(isset($params['model_names'])){
@@ -78,13 +80,13 @@ class SearchController extends \GO\Base\Controller\AbstractModelController{
 			
 			//only search for available types. eg. don't search for contacts if the user doesn't have access to the addressbook
 			if(empty($types))
-					$types=$this->_getAllModelTypes($filesupport);
+					$types=$this->_getAllModelTypes($filesupport, $forLinks);
 			
 			if(!isset($params['no_filter_save']) && isset($params['types']))
 				\GO::config()->save_setting ('link_type_filter', implode(',',$types), \GO::user()->id);
 		}else
 		{
-			$types=$this->_getAllModelTypes();
+			$types=$this->_getAllModelTypes($filesupport, $forLinks);
 		}		
 		
 		$storeParams->getCriteria()->addInCondition('model_type_id', $types);
@@ -107,7 +109,7 @@ class SearchController extends \GO\Base\Controller\AbstractModelController{
 		return $storeParams;
 	}
 	
-	private function _getAllModelTypes($filesupport=false){
+	private function _getAllModelTypes($filesupport=false, $forLinks=false){
 		$types=array();
 		$stmt = ModelType::model()->find();
 		while($modelType = $stmt->fetch()){
@@ -115,8 +117,9 @@ class SearchController extends \GO\Base\Controller\AbstractModelController{
 				$model = \GO::getModel($modelType->model_name);
 				$module = $modelType->model_name == "GO\Base\Model\User" ? "users" : $model->module;
 				if(GO::modules()->{$module}){
-					if(!$filesupport || $filesupport && $model->hasFiles())
+					if((!$filesupport || $filesupport && $model->hasFiles()) && (!$forLinks || $modelType->model_name != 'GO\\Comments\\Model\\Comment')) {
 						$types[]=$modelType->id;
+					}
 				}
 			}
 		}
@@ -139,6 +142,9 @@ class SearchController extends \GO\Base\Controller\AbstractModelController{
 		if(isset($params['filesupport']))
 			$filesupport = $params['filesupport']==="true" || $params['filesupport']==="1"?true:false;
 		
+		$forLinks = isset($params['for_links']) && ($params['for_links'] === "true" || $params['for_links'] === "1");
+
+		
 		$stmt = ModelType::model()->find();
 		
 		$typesString = \GO::config()->get_setting('link_type_filter',\GO::user()->id);
@@ -153,8 +159,9 @@ class SearchController extends \GO\Base\Controller\AbstractModelController{
 
 				if(GO::modules()->{$module}){
 					
-					if(!$filesupport || $filesupport && $model->hasFiles())					
+					if((!$filesupport || $filesupport && $model->hasFiles()) && (!$forLinks || $modelType->model_name != 'GO\\Comments\\Model\\Comment')) {
 						$types[$model->localizedName.$modelType->id]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
+					}
 				}
 			}else
 			{

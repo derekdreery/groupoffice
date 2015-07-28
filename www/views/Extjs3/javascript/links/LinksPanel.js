@@ -210,6 +210,7 @@ GO.grid.LinksPanel = function(config){
 	});
 
 	this.linkTypeFilter = new GO.LinkTypeFilterPanel({
+		for_links: true,
 		region:'south',
 		height:300
 	//		region:'west',

@@ -20,11 +20,15 @@ GO.LinkTypeFilterPanel = function(config)
 
 	if(!config.filesupport) // Load only the models that can handle files then set to true else false
 		config.filesupport = false;
+	
+	if(!config.for_links) // Load only the models that can handle files then set to true else false
+		config.for_links = false;
 
 	config.store = new GO.data.JsonStore({				
 		fields: ['id','name','model', 'checked'],
 		baseParams:{
-			filesupport:config.filesupport
+			filesupport:config.filesupport,
+			for_links: config.for_links
 		},
 		url:GO.url('search/modelTypes'),
 		autoLoad:true

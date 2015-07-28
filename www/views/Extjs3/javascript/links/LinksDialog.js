@@ -21,6 +21,7 @@ GO.dialog.LinksDialog = function(config){
 	
 	this.grid = new GO.grid.SearchPanel({
 			filesupport: config.filesupport,
+			for_links: true,
 			noTitle:true,
 			noOpenLinks:true,
 			hideDescription:config.hideDescription,
