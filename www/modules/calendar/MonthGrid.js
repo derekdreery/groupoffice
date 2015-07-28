@@ -431,7 +431,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
 				var actionData = {
 					offsetDays:offsetDays,
-					dragDate: data.dragDate
+					dragDate: data.ddel.eventData.startDate //data.dragDate
 					};
 
 				var remoteEvent = this._elementIdToEvent(data.item.id);
@@ -1126,6 +1126,8 @@ Ext.extend(GO.calendar.dd.MonthDragZone, Ext.dd.DragZone, {
 			this.ddel.className = this.dragData.item.dom.className;
 			this.ddel.style.width = this.dragData.item.getWidth() + "px";
 			this.proxy.update(this.ddel);
+			
+			this.ddel.eventData = this.monthGrid.remoteEvents[this.dragData.item.id];
 
 			this.eventDomElements = this.monthGrid.getRelatedDomElements(this.dragData.item.id);
 
