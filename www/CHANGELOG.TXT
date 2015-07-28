@@ -1,3 +1,4 @@
+- Drag multiday event in month grid for second day will create correct exception
 - Fixed Softaculous issue with installing
 
 27-07-2015 6.1.42
