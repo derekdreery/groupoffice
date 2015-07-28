@@ -7,7 +7,7 @@ GO::router()->getController()->fireEvent('headstart');
 ?>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <meta name="robots" content="noindex" />
-<meta http-equiv="x-ua-compatible" content="IE=8">
+<!--<meta http-equiv="x-ua-compatible" content="IE=8">-->
 <?php
 $favicon = !empty(\GO::config()->favicon) ? \GO::config()->favicon : \GO::view()->getTheme()->getUrl()."images/groupoffice.ico?";
 ?>
