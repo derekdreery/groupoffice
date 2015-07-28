@@ -35,8 +35,13 @@ GO.grid.SearchPanel = function(config){
 
 	if(!config.filesupport) // Load only the models that can handle files then set to true else false
 		config.filesupport = false;
+	
+	if(!config.for_links) // Load only the models that can handle files then set to true else false
+		config.for_links = false;
+
 
 	this.filterPanel = new GO.LinkTypeFilterPanel({
+		for_links: config.for_links,
 		filesupport:config.filesupport,
 		region:'west',		
 		split:true,
