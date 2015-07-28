@@ -258,3 +258,7 @@ $l['cannotHandleInvitation']='Kalenderen som er knyttet til e-postkontoen er "%s
 $l['cannotHandleInvitation2']='Kan ikke oppdatere hendelsen fordu du mangler tilstrekkelige rettigheter til kalenderen som er knyttet til e-potskontoen. (kalender: "%s"). Ettersom avtalen ligger i denne kalenderen er status ikke blitt endre nå.';
 $l['tooltip']= 'Verktøytips';
 $l['moveEventResourceError']= 'Kan ikke flytte hendelsen fordi følgende ressurser ikke er tilgjengelige:';
+$l['allTogetherForParticipants']= 'Alle deltagere samlet';
+$l['allTogetherForResources']= 'Alle ressurser samlet';
+$l['resourceUsedIn']= 'Ressursen brukes i ';
+$l['exportAsIcs']= 'Eksporter som ICS';

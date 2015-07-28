@@ -1,3 +1,5 @@
+- Updated norwegian language
+- Removed x-ua-compatible meta tag from all themes
 - Drag multiday event in month grid for second day will create correct exception
 - Fixed Softaculous issue with installing
 

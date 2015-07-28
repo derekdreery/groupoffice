@@ -25,3 +25,4 @@ $l["type"]='Type';
 $l["summaryType"]='Sammendrag';
 $l["rssFeeds"]='RSS strømmer';
 $l["noRssFeeds"]='Ingen RSS strømmer er lagt inn!<br />Trykk på knappen for innstillinger, i øverste høyre hjørne av dette dialogvinduet, for å legge til nyhetsstrømmer.';
+$l['latestReadAnnouncementRecord']= 'Kvittering for siste leste kunngjøring';

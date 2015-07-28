@@ -14,3 +14,4 @@ $l['newCommentText']='Skriv ny kommentar her ...';
 $l['readMore']="Les mer";
 $l['enableReadMore']="Bruk les mer-lenker ";
 $l['actionDate']='Oppfølgingsdato';
+$l['parent']='Forelder';
