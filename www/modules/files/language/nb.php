@@ -126,3 +126,4 @@ $l['deleteExpiredLabel']='Slette filer med utløpte nedlastingslenker';
 $l['deleteExpiredDescription']='Sletter filer hvor nedlastingslenken er utløpt.';
 $l['deleteWhenExpired']= 'Automatisk slette filer når nedlastingslenken utløper';
 $l['automaticallyDeleted']= 'Filene vil bli slettet automatisk når nedlastingslenken er utløpt';
+$l['downloadSelected']= 'Last ned valgte';
