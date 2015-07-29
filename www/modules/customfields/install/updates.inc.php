@@ -170,3 +170,4 @@ $updates['201503311128'][]="ALTER TABLE `cf_fields` CHANGE `category_id` `catego
 
 $updates['201506241200'][]="update `cf_enabled_blocks` set `model_type_name` = replace(`model_type_name`,'_','\\\\');";
 $updates['201506271325'][]="update `cf_enabled_categories` set `model_name` = replace(`model_name`,'_','\\\\');";
+$updates['201506291410'][]="update `cf_disable_categories` set `model_name` = replace(`model_name`,'_','\\\\');";
