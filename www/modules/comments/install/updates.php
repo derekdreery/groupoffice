@@ -18,3 +18,5 @@ $updates["201506291333"][]="INSERT INTO `go_model_types` (
 VALUES (
 null, 'GO\\Comments\\Model\\Comment'
 );";
+
+$updates["201507300945"][]="DELETE FROM `go_model_types` WHERE `model_name` = 'GO\\Comments\\Model\\Comment';";
