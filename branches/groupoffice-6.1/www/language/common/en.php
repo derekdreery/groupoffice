@@ -710,4 +710,4 @@ $l['zipFilesizeTooBig'] = 'The total size of the files that are selected to be z
 
 $l['selectedColumns'] = 'Selected Columns';
 $l['availableColumns'] = 'Available columns';
-$l['exportSelectHelpText'] = 'Drag the columns (Or doubleclick) that you want to export form the left grid to the right.';
+$l['exportSelectHelpText'] = 'Drag or double-click the columns you want to export from the left grid to the right.';
