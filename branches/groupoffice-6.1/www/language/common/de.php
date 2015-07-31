@@ -671,3 +671,7 @@ $l['cantDeleteDefault']= "Das Standardobjekt kann nicht gelöscht werden.";
 
 $l['updateWithMatchingAttributes']= 'Einträge erneuern (anstatt neu zu erzeugen) mit den folgenden zutreffenden Attributen';
 $l['zipFilesizeTooBig']= 'Die Gesamtgröße der ausgewählten Dateien ist zu groß um sie zu archivieren. (Erlaubt sind %s.)';
+
+$l['selectedColumns']= 'Ausgewählte Spalten';
+$l['availableColumns']= 'Verfügbare Spalten';
+$l['exportSelectHelpText']= 'Per Ziehen oder Doppelklick können Sie die Spalten, die exportiert werden sollen, aus dem linken in den rechten Bereich übertragen.';
