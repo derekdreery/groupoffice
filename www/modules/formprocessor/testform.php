@@ -1,5 +1,5 @@
 <?php
-require('../../Group-Office.php');
+//require('../../Group-Office.php');
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -29,8 +29,8 @@ require('../../Group-Office.php');
 		<form method="POST" action="submit.php" enctype="multipart/form-data">
 
 			<input type="hidden" name="return_to" value="<?php echo $_SERVER['PHP_SELF']; ?>" />
-			<input type="hidden" name="addressbook" value="Test Addressbook"  />
-			<input type="hidden" name="confirmation_email" value="testConfirmationEmail.eml"  />
+			<input type="hidden" name="addressbook" value="Elmer Fudd"  />
+			<!--<input type="hidden" name="confirmation_email" value="testConfirmationEmail.eml"  />-->
 <!--			<input type="hidden" name="contact_id" value="22290"  />-->
 			<input type="hidden" name="mailings[]" value="Test Adreslijst"  />
 			<!-- <input type="hidden" name="mailings[]" value="blabla" /> -->
