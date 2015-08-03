@@ -1,3 +1,5 @@
+- Added "Show Mine Only" button to Projects V2
+
 03-08-2015 6.1.43
 - Comment option removed from link dialog
 - Updated norwegian language
