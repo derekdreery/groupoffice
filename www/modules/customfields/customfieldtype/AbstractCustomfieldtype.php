@@ -3,7 +3,7 @@
 namespace GO\Customfields\Customfieldtype;
 
 
-abstract class AbstractCustomfieldtype{
+abstract class AbstractCustomfieldtype extends \GO\Base\Observable{
 	
 	/**
 	 * The field model that this datatype will be used for.
@@ -176,5 +176,11 @@ abstract class AbstractCustomfieldtype{
 		return array();
 	}
 	
-	
+	/**
+	 * 
+	 * @return \GO\Customfields\Model\Field
+	 */
+	public function getField(){
+		return $this->field;
+	}
 }
