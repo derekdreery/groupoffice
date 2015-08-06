@@ -3838,7 +3838,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 								);
 				$stmt->callOnEach('delete');
 				unset($stmt);
-			}
+			}			
 		}
 
 		//Set the foreign fields of the deleted relations to 0 because the relation doesn't exist anymore.
@@ -3931,6 +3931,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 		if(!$this->afterDelete())
 			return false;
+		
+		if($this->hasLinks() && !is_array($this->pk)) {
+			$this->deleteReminders();
+		}
 
 		$this->fireEvent('delete', array(&$this));
 
