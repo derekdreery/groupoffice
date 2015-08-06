@@ -3584,6 +3584,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(!$this->afterDelete())
 			return false;
 		
+		
+		if($this->hasLinks() && !is_array($this->pk)) {
+			$this->deleteReminders();
+		}
+		
 		$this->fireEvent('delete', array(&$this));
 		
 		return true;
