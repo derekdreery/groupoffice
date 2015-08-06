@@ -145,10 +145,12 @@ GO.CheckerPanel = Ext.extend(function(config){
 			]
 		}),
 		groupField:'type',
-		sortInfo: {
-			field: 'time',
-			direction: 'ASC'
-		}
+		remoteSort: true,
+		remoteGroup: true
+//		sortInfo: {
+//			field: 'time',
+//			direction: 'ASC'
+//		}
 	});
 
 	var action = new Ext.ux.grid.RowActions({
