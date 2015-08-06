@@ -14,6 +14,9 @@ class FunctionField extends AbstractCustomfieldtype {
 		$result_string = '';
 
 		if (!empty($this->field->function)) {
+			
+			$this->fireEvent('formatformoutput',array($this, $column, &$attributes, $model));
+			
 			$f = $this->field->function;
 			preg_match_all('/\{([^}]*)\}/',$f,$matches);
 			if (!empty($matches[1])) {
@@ -26,7 +29,7 @@ class FunctionField extends AbstractCustomfieldtype {
 				}
 			}
 			$f = preg_replace('/\{[^}]*\}/', '0',$f);
-
+			
 			eval("\$result_string=" . $f . ";");
 			
 //			\GO::debug("Function ($column): ".$this->field->function.' => '.$f.' = '.$result_string);
