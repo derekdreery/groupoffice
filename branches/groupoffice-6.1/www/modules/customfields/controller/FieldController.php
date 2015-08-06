@@ -85,8 +85,11 @@ class FieldController extends \GO\Base\Controller\AbstractModelController {
 	
 	protected function actionSelectOptions($params) {
 		
-		$findParams = \GO\Base\Db\FindParams::newInstance()->order('sort_order');
+		$findParams = \GO\Base\Db\FindParams::newInstance()->order('sort_order')->debugSql();
 		$findParams->getCriteria()->addCondition('field_id', $params["field_id"]);
+		if(isset($params['query'])) {
+			$findParams->searchQuery('%'.preg_replace ('/[\s*]+/','%', $params['query']).'%');
+		}
 		
 		$stmt = \GO\Customfields\Model\FieldSelectOption::model()->find($findParams);
 
