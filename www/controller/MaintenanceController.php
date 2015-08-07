@@ -9,9 +9,11 @@ namespace GO\Core\Controller;
 
 use Exception;
 use GO;
+use GO\Base\Controller\AbstractController;
 use GO\Base\Db\PDO;
 use PDOException;
-use GO\Base\Controller\AbstractController;
+use ReflectionClass;
+use String;
 
 class MaintenanceController extends AbstractController {
 	
@@ -312,9 +314,9 @@ class MaintenanceController extends AbstractController {
 		
 		$response = array();
 		
-		if(empty($params['keepexisting']))
-			\GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
-		
+//		if(empty($params['keepexisting']))
+//			\GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
+//		
 		//inserting is much faster without full text index. It's faster to add it again afterwards.
 //		echo "Dropping full text search index\n";
 //		try{
@@ -323,7 +325,22 @@ class MaintenanceController extends AbstractController {
 //			echo $e->getMessage()."\n";
 //		}
 				
-		$models=\GO::findClasses('model');
+		if(!empty($params['modelName'])){
+			$modelName = $params['modelName'];
+			
+			if(empty($params['keepexisting'])){
+				$query = 'DELETE FROM go_search_cache WHERE model_name='.\GO::getDbConnection()->quote($modelName);
+				\GO::getDbConnection()->query($query);
+			}
+
+			$models = array(new ReflectionClass($modelName));
+		} else {
+			if(empty($params['keepexisting']))
+			\GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
+			
+			$models=\GO::findClasses('model');
+		}
+		
 		foreach($models as $model){
 			if($model->isSubclassOf("GO\Base\Db\ActiveRecord") && !$model->isAbstract()){
 				echo "Processing ".$model->getName()."\n";
@@ -332,7 +349,9 @@ class MaintenanceController extends AbstractController {
 			}
 		}
 		
-		\GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
+		if(empty($params['modelName'])){
+			\GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
+		}
 		
 //		echo "Adding full text search index\n";
 //		\GO::getDbConnection()->query("ALTER TABLE `go_search_cache` ADD FULLTEXT ft_keywords(`name` ,`keywords`);");

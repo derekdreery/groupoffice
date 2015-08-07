@@ -4622,9 +4622,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 
 	public function rebuildSearchCache(){
-		$attr = $this->getCacheAttributes();
-
-		if($attr){
+		
+		$rc = new \GO\Base\Util\ReflectionClass($this);
+		$overriddenMethods = $rc->getOverriddenMethods();
+		if(in_array("getCacheAttributes", $overriddenMethods)){
 			$stmt = $this->find(FindParams::newInstance()->ignoreAcl()->select('t.*'));
 			$stmt->callOnEach('cacheSearchRecord', true);
 		}
