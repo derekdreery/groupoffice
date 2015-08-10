@@ -1,3 +1,4 @@
+- Creating invoice from time entries (post calculation) can insert comments in invoice item using {comments} tag
 - Change Z-Push install script to download the latest 2.2.2 version
 - Added "Show Mine Only" button to Projects V2
 
