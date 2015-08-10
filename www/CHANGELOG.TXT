@@ -1,3 +1,4 @@
+- Year Credit can be created if you have manage permissions on the leavedays module
 - Sieve: Removed auto adding of "Stop" for rules other than "Spam".
 - Sieve: Make sure "Spam" rules are always the first.
 - Creating invoice from time entries (post calculation) can insert comments in invoice item using {comments} tag
