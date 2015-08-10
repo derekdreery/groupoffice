@@ -165,9 +165,11 @@ class Sieve {
 	 * Move the "Out of office" rule to the end of the sieve file.
 	 */
 	private function _moveOutOfOfficeToEnd(){
+		
+	
 		// De out of office rule altijd als laatste.
 			foreach($this->script->content as $key => $val) {
-
+				
 				if($val['name'] == 'Out of office') {
 					$item = $this->script->content[$key];
 					unset($this->script->content[$key]);
@@ -613,11 +615,16 @@ class go_sieve_script
      *
      * @return int The index of the new rule
      */
-    public function add_rule($content)
+    public function add_rule($content,$index=-1)
     {
-        // TODO: check this->supported
+			if($index > -1){
+				// Insert the rule at the 
+				array_splice($this->content, $index,0,array($content));
+			} else {
+//				TODO: check this->supported
         array_push($this->content, $content);
-        return sizeof($this->content)-1;
+			}
+      return sizeof($this->content)-1;
     }
 
     public function delete_rule($index)

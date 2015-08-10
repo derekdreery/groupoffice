@@ -122,28 +122,26 @@ Ext.extend(GO.sieve.ActionGrid, GO.grid.GridPanel,{
 			record = new GO.sieve.ActionRecord(values);
 			var insertId = this.store.getCount();
 
-			if(this.store.getCount() > 0 && this.store.getAt(this.store.getCount()-1).data.type == 'stop'){
-				insertId = this.store.getCount()-1;
-			}else
-			{
-				if (!(values.type=='redirect' && values.copy==true) && values.type!='vacation') {
-					var stopRecord = new GO.sieve.ActionRecord({
-								type:"stop",
-								copy: false,
-								target:"",
-								days:"",
-								addresses:"",
-								reason:"",
-								text : GO.sieve.lang.stop
-							});
-
-					this.store.insert(insertId, stopRecord);
-				}
-			}
+//			if(this.store.getCount() > 0 && this.store.getAt(this.store.getCount()-1).data.type == 'stop'){
+//				insertId = this.store.getCount()-1;
+//			}else
+//			{
+//				if (!(values.type=='redirect' && values.copy==true) && values.type!='vacation') {
+//					var stopRecord = new GO.sieve.ActionRecord({
+//								type:"stop",
+//								copy: false,
+//								target:"",
+//								days:"",
+//								addresses:"",
+//								reason:"",
+//								text : GO.sieve.lang.stop
+//							});
+//
+//					this.store.insert(insertId, stopRecord);
+//				}
+//			}
 			//}
-			if(values.type=='vacation')
-				insertId = 0;
-
+			
 			record.data.id = insertId;
 
 			this.store.insert(insertId, record);
