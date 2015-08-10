@@ -202,12 +202,35 @@ Ext.extend(GO.sieve.SieveDialog, GO.Window, {
 	
 	saveAll : function() {
 
+		var criteriaData = this.criteriumGrid.getGridData();
+		var actionData = this.actionGrid.getGridData();
+		
+		// Check for spam
+		if(this.checkIsSpamRule(criteriaData,actionData)){
+			
+			// Check if a STOP is already applied.
+			if(!this.checkHasStopAction(actionData)){
+				//Add a STOP action at the end
+				var stopAction = {
+					addresses:'',
+					days:'',
+					id:1,
+					reason:'',
+					target:'',
+					text:'Stop',
+					type:'stop',
+				};
+				
+				actionData.push(stopAction);
+			}
+			
+		}
+
 		this.formPanel.form.submit({
 			url: GO.url('sieve/sieve/submitRules'),
 			params : {
-//				'task' : 'save_sieve_rules',
-				'criteria' : Ext.encode(this.criteriumGrid.getGridData()),
-				'actions' : Ext.encode(this.actionGrid.getGridData())
+				'criteria' : Ext.encode(criteriaData),
+				'actions' : Ext.encode(actionData)
 			},
 			success : function(form, action) {
 					this.hide();
@@ -225,6 +248,47 @@ Ext.extend(GO.sieve.SieveDialog, GO.Window, {
 			scope : this
 		});
 	},
+	
+	/**
+	 * Check if the current rule is a spam message test
+	 * 
+	 * @param array criteria
+	 * @param array action
+	 * @returns {Boolean}
+	 */
+	checkIsSpamRule : function(criteria,action){
+		var isSpam = false;
+		
+		for(var i=0, tot=criteria.length; i < tot; i++) {
+			if(criteria[i].test == 'header' && criteria[i].type == 'contains' && criteria[i].arg1 == 'X-Spam-Flag'){
+				isSpam = true;
+			}
+			if(criteria[i].test == 'header' && criteria[i].type == 'contains' && criteria[i].arg1 == 'Subject' && criteria[i].arg2 == 'spam'){
+				isSpam = true;
+			}
+		}
+		return isSpam;
+	},
+	
+	/**
+	 * Check if the current action has a "STOP"
+	 * 
+	 * @param array action
+	 * @returns {Boolean} 
+	 */
+	checkHasStopAction : function(action){
+		
+		var hasStop = false;
+		
+		for(var i=0, tot=action.length; i < tot; i++) {
+			if(action[i].text == "Stop" && action[i].type == "stop"){
+				hasStop = true;
+			}
+		}
+				
+		return hasStop;
+	},
+	
 
 	resetGrids : function(){
 		this.actionGrid.store.removeAll();

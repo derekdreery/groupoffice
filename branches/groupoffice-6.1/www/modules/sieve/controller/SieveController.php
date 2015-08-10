@@ -220,7 +220,13 @@ class SieveController extends \GO\Base\Controller\AbstractModelController{
 			if($params['script_index']>-1 && isset($this->_sieve->script->content[$params['script_index']]))
 				$this->_sieve->script->update_rule($params['script_index'],$rule);
 			else {
-				$this->_sieve->script->add_rule($rule);
+				
+				// If the rule is a spam rule then it needs to be placed at the top.
+				if($this->_checkIsSpam($rule)){
+					$this->_sieve->script->add_rule($rule,0);
+				} else {
+					$this->_sieve->script->add_rule($rule);
+				}
 			}
 			
 			// Het script opslaan
@@ -235,6 +241,35 @@ class SieveController extends \GO\Base\Controller\AbstractModelController{
 			$response['feedback'] = nl2br($e->getMessage()); //.'<br>'.$e->getTraceAsString();
 		}
 		return $response;
+	}
+	
+	/**
+	 * Check if the tests in the given rule are spam message tests
+	 * 
+	 * @param array $rule
+	 * @return boolean
+	 * @throws \Exception
+	 */
+	private function _checkIsSpam($rule){
+		
+		if(!is_array($rule) || !is_array($rule['tests'])){
+			Throw new \Exception('Rule is not an array');
+		}
+		
+		$isSpam = false;
+
+		foreach($rule['tests'] as $test){
+			if($test['test'] == 'header' && $test['type'] == 'contains' && $test['arg1'] == 'X-Spam-Flag'){
+				$isSpam = true;
+			}
+			
+			if($test['test'] == 'header' && $test['type'] == 'contains' && $test['arg1'] == 'Subject' && $test['arg2'] == 'spam'){
+				$isSpam = true;
+			}
+		}
+		
+		return $isSpam;
+
 	}
 	
 	protected function actionAccountAliases($params) {
