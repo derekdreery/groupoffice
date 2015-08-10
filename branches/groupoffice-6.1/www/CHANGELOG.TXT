@@ -1,3 +1,9 @@
+10-08-2015 6.1.44
+- Select all users as project manager
+- Autocomplete in custom select field
+- Delete reminders with their parent object
+- reminder sorting fixed
+- Use search query in total value for invoicable projects
 - Year Credit can be created if you have manage permissions on the leavedays module
 - Sieve: Removed auto adding of "Stop" for rules other than "Spam".
 - Sieve: Make sure "Spam" rules are always the first.
