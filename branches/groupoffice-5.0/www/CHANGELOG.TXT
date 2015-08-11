@@ -1,3 +1,6 @@
+- Search within billing items
+- Delete reminders with their parent object
+- reminder sorting fixed
 - Timeregistration approve hours will show in green
 - Project Select Dropdown has over writable hiddenName field
 - Ticket dialog can change status
