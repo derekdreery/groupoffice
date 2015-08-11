@@ -1,3 +1,4 @@
+- Fixed problem with panel states of order panel
 - Search within billing items
 - Delete reminders with their parent object
 - reminder sorting fixed
